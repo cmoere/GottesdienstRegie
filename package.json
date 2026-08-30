@@ -1,0 +1,59 @@
+{
+  "name": "gottesdienstregie",
+  "version": "0.2.0",
+  "description": "Desktop-Regiesoftware für Gottesdienstpräsentationen der Philippusgemeinde.",
+  "author": "Philippusgemeinde Ev. Freikirche",
+  "private": true,
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev": "concurrently -k \"vite\" \"wait-on http://localhost:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "build": "tsc -b && vite build && tsc -p electron/tsconfig.json",
+    "start": "electron .",
+    "typecheck": "tsc -b --pretty false",
+    "installer": "npm run build && electron-builder --win nsis --publish never"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@fontsource/inter": "^5.2.6",
+    "bcryptjs": "^3.0.2",
+    "electron-updater": "^6.6.2",
+    "firebase": "^12.2.1",
+    "material-symbols": "^0.30.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.2",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.0.0",
+    "electron": "^37.4.0",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.3",
+    "wait-on": "^8.0.4"
+  },
+  "build": {
+    "appId": "de.philippusgemeinde.gottesdienstregie2",
+    "productName": "GottesdienstRegie",
+    "asar": true,
+    "directories": { "output": "release" },
+    "publish": [{ "provider": "github", "owner": "cmoere", "repo": "GottesdienstRegie", "releaseType": "release" }],
+    "files": ["dist/**/*", "dist-electron/**/*", "package.json"],
+    "extraResources": [{ "from": "build/icon.png", "to": "icon.png" }],
+    "win": { "icon": "build/icon.png", "target": [{ "target": "nsis", "arch": ["x64"] }], "artifactName": "GottesdienstRegie-Setup-${version}.${ext}" },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "GottesdienstRegie",
+      "deleteAppDataOnUninstall": false
+    }
+  }
+}
