@@ -13,8 +13,12 @@ GottesdienstRegie ist die Windows-Desktopsoftware der Philippusgemeinde für Got
 - verschlüsselte lokale Sitzung über Windows DPAPI
 - integrierte GitHub-Updateprüfung, Download und Installation
 - integrierte Versionshinweise
-- wechselnde, offline mitgelieferte Login-Motive
-- Hilfe- und Supportbereich sowie zusätzliche Barrierefreiheitsoptionen
+- insgesamt 30 wechselnde, offline mitgelieferte Login-Motive
+- Updateansicht mit Installationsdatum, Dateidatum, Dateigröße, grünem Fortschritt und Rückkehr zur vorherigen Version
+- Audioeinstellungen für echte Lautsprecher und Mikrofone einschließlich Test und Pegelanzeige
+- Hilfe- und Supportbereich sowie erweiterte Barrierefreiheit für Kontrast, Größe, Tastaturfokus und Lesbarkeit
+- stabiles Präsentationsmodell mit mehreren Folien, UUIDs, Drag-and-drop, Undo/Redo und lokaler JSON-Sicherung
+- getrennte Editor-, Vorschau- und `ON AIR`-Zustände mit unabhängigem Live-Snapshot
 
 ## Installation
 

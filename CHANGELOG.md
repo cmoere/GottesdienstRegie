@@ -1,5 +1,34 @@
 # Versionshinweise / Release notes
 
+## 0.4.0 – 2026-08-31
+
+### Deutsch
+
+- 30 lokal mitgelieferte Login-Motive aus Bielefeld, deutschen Städten und Landschaften
+- Versionsdetails mit Installationszeit, Dateidatum, Programmdatei und Dateigröße
+- grüner, echter Download-Fortschrittsbalken für Updates und Rückkehr zu einer früheren Version
+- Lautsprecher- und Mikrofon-Auswahl mit Gerätetest, Pegel, Lautstärke, Eingangsverstärkung, Rausch- und Echo-Unterdrückung
+- zusätzliche Barrierefreiheit: hoher Kontrast, größere Oberfläche, deutlicher Tastaturfokus und lesefreundliche Schrift
+- `ON AIR` wird sprachunabhängig verwendet; MAIN darf niemals auf den primären Bedienmonitor ausweichen
+- getrennte Editor-, Vorschau- und Live-Zustände mit eigenem Live-Snapshot
+- stabiles Präsentationsmodell mit UUIDs, mehreren Folien, Filmstrip-Aktionen, Drag-and-drop sowie Undo/Redo
+- lokale Präsentationssicherung als JSON-Datei mit debounced Autosave
+- erweiterte Hilfe und längere, einzeln aufklappbare Versionshinweise
+- grünes „Angemeldet bleiben“ und rotes „Jetzt abmelden“
+
+### English
+
+- 30 locally bundled sign-in scenes featuring Bielefeld, German cities and landscapes
+- version metadata including installation time, file date, executable and file size
+- real green progress bar for updates and rollback to an earlier installable release
+- speaker and microphone selection with device tests, meters, volume, input gain, noise and echo suppression
+- additional accessibility options for contrast, interface size, focus visibility and readability
+- language-independent `ON AIR`; MAIN never falls back to the primary control display
+- separate editor, preview and live state with an independent live snapshot
+- stable presentation model with UUIDs, multiple slides, filmstrip actions, drag-and-drop and undo/redo
+- local JSON presentation storage with debounced autosave
+- expanded Help and longer individually expandable release notes
+
 ## 0.3.1 – 2026-08-31
 
 ### Deutsch

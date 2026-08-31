@@ -11,12 +11,32 @@ interface PreferencesState {
   reduceMotion:boolean;
   compactMode:boolean;
   showLoginBackgrounds:boolean;
+  highContrast:boolean;
+  largeText:boolean;
+  strongFocus:boolean;
+  dyslexiaFriendly:boolean;
+  audioOutputDevice:string;
+  audioInputDevice:string;
+  outputVolume:number;
+  inputGain:number;
+  noiseSuppression:boolean;
+  echoCancellation:boolean;
   setLanguage:(language:Language)=>void;
   setTheme:(theme:ThemeMode)=>void;
   setBlackWhite:(blackWhite:boolean)=>void;
   setReduceMotion:(reduceMotion:boolean)=>void;
   setCompactMode:(compactMode:boolean)=>void;
   setShowLoginBackgrounds:(showLoginBackgrounds:boolean)=>void;
+  setHighContrast:(value:boolean)=>void;
+  setLargeText:(value:boolean)=>void;
+  setStrongFocus:(value:boolean)=>void;
+  setDyslexiaFriendly:(value:boolean)=>void;
+  setAudioOutputDevice:(value:string)=>void;
+  setAudioInputDevice:(value:string)=>void;
+  setOutputVolume:(value:number)=>void;
+  setInputGain:(value:number)=>void;
+  setNoiseSuppression:(value:boolean)=>void;
+  setEchoCancellation:(value:boolean)=>void;
 }
 
 function detectedLanguage():Language{
@@ -33,10 +53,30 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   reduceMotion:false,
   compactMode:false,
   showLoginBackgrounds:true,
+  highContrast:false,
+  largeText:false,
+  strongFocus:true,
+  dyslexiaFriendly:false,
+  audioOutputDevice:'default',
+  audioInputDevice:'default',
+  outputVolume:80,
+  inputGain:100,
+  noiseSuppression:true,
+  echoCancellation:true,
   setLanguage:language=>set({language}),
   setTheme:theme=>set({theme}),
   setBlackWhite:blackWhite=>set({blackWhite}),
   setReduceMotion:reduceMotion=>set({reduceMotion}),
   setCompactMode:compactMode=>set({compactMode}),
-  setShowLoginBackgrounds:showLoginBackgrounds=>set({showLoginBackgrounds})
+  setShowLoginBackgrounds:showLoginBackgrounds=>set({showLoginBackgrounds}),
+  setHighContrast:highContrast=>set({highContrast}),
+  setLargeText:largeText=>set({largeText}),
+  setStrongFocus:strongFocus=>set({strongFocus}),
+  setDyslexiaFriendly:dyslexiaFriendly=>set({dyslexiaFriendly}),
+  setAudioOutputDevice:audioOutputDevice=>set({audioOutputDevice}),
+  setAudioInputDevice:audioInputDevice=>set({audioInputDevice}),
+  setOutputVolume:outputVolume=>set({outputVolume}),
+  setInputGain:inputGain=>set({inputGain}),
+  setNoiseSuppression:noiseSuppression=>set({noiseSuppression}),
+  setEchoCancellation:echoCancellation=>set({echoCancellation})
 }),{name:'gottesdienstregie.preferences'}));
