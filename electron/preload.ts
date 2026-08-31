@@ -3,10 +3,13 @@ import { contextBridge, ipcRenderer } from 'electron';
 contextBridge.exposeInMainWorld('desktop', {
   displays: () => ipcRenderer.invoke('displays:list'),
   onDisplaysChanged: (callback:(displays:unknown)=>void) => {const listener=(_event:Electron.IpcRendererEvent,displays:unknown)=>callback(displays);ipcRenderer.on('displays:changed',listener);return()=>ipcRenderer.removeListener('displays:changed',listener)},
-  goOnAir: (displayId: number,payload:unknown) => ipcRenderer.invoke('outputs:on-air', displayId,payload),
+  identifyDisplays:(assignments:Record<string,string>)=>ipcRenderer.invoke('displays:identify',assignments),
+  preflight:(assignments:Record<string,string>,presentation:unknown)=>ipcRenderer.invoke('outputs:preflight',assignments,presentation),
+  goOnAir: (assignments:Record<string,string>,payload:unknown) => ipcRenderer.invoke('outputs:on-air',assignments,payload),
   goOffAir: () => ipcRenderer.invoke('outputs:off-air'),
   sendLiveSlide:(payload:unknown)=>ipcRenderer.invoke('outputs:send-slide',payload),
   onLiveSlide:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:slide',listener);return()=>ipcRenderer.removeListener('outputs:slide',listener)},
+  onOutputStatus:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:status',listener);return()=>ipcRenderer.removeListener('outputs:status',listener)},
   presentation:{save:(document:unknown)=>ipcRenderer.invoke('presentation:save',document),load:()=>ipcRenderer.invoke('presentation:load')},
   session: {
     read: () => ipcRenderer.invoke('session:read'),

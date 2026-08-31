@@ -4,9 +4,10 @@ import fs from 'node:fs/promises';
 import { createHash, createHmac, pbkdf2Sync, randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import { compare as bcryptCompare } from 'bcryptjs';
 import { autoUpdater, type UpdateInfo } from 'electron-updater';
+import { DisplayManager, type DisplayAssignments, type OutputRole } from './DisplayManager';
+import { OutputWindowManager } from './OutputWindowManager';
 
 let controlWindow: BrowserWindow | null = null;
-const outputWindows = new Map<number, BrowserWindow>();
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 
 type UpdateStatus={state:'idle'|'checking'|'available'|'not-available'|'downloading'|'downloaded'|'rollback-downloading'|'rollback-ready'|'error'|'development';version?:string;percent?:number;releaseNotes?:string;message?:string};
@@ -56,6 +57,9 @@ function olderThan(candidate:string,current:string){const a=versionParts(candida
 
 app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
+  const displayManager=new DisplayManager();
+  const publishOutputStatus=(role:OutputRole,state:'ready'|'missing'|'closed')=>{if(controlWindow&&!controlWindow.isDestroyed())controlWindow.webContents.send('outputs:status',{role,state})};
+  const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
   const sessionFile = path.join(app.getPath('userData'), 'community-session.bin');
   const presentationDirectory=path.join(app.getPath('userData'),'presentations');
   const presentationFile=path.join(presentationDirectory,'default-presentation.json');
@@ -167,23 +171,15 @@ app.whenReady().then(() => {
   async function previousRelease(){const response=await fetch('https://api.github.com/repos/cmoere/GottesdienstRegie/releases?per_page=20',{headers:{'user-agent':`GottesdienstRegie/${app.getVersion()}`},signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error(`GitHub ${response.status}`);const releases=await response.json() as any[];for(const release of releases){if(release.draft||release.prerelease||!olderThan(String(release.tag_name),app.getVersion()))continue;const asset=(release.assets??[]).find((entry:any)=>/GottesdienstRegie-Setup-.*\.exe$/i.test(String(entry.name)));if(asset)return{version:String(release.tag_name).replace(/^v/,''),publishedAt:String(release.published_at??''),size:Number(asset.size??0),url:String(asset.browser_download_url)}}return null}
   ipcMain.handle('updates:previous',()=>previousRelease());
   ipcMain.handle('updates:rollback',async()=>{try{const previous=await previousRelease();if(!previous)throw new Error('NO_PREVIOUS_VERSION');const response=await fetch(previous.url,{signal:AbortSignal.timeout(120000)});if(!response.ok||!response.body)throw new Error(`DOWNLOAD_${response.status}`);const total=Number(response.headers.get('content-length')??previous.size),target=path.join(app.getPath('temp'),`GottesdienstRegie-Setup-${previous.version}.exe`),file=await fs.open(target,'w');let received=0;try{const reader=response.body.getReader();for(;;){const{done,value}=await reader.read();if(done)break;await file.write(value);received+=value.byteLength;publishUpdateStatus({state:'rollback-downloading',version:previous.version,percent:total?Math.round(received/total*100):0})}}finally{await file.close()}publishUpdateStatus({state:'rollback-ready',version:previous.version,percent:100});const opened=await shell.openPath(target);if(opened)throw new Error(opened);setTimeout(()=>app.quit(),1200);return true}catch(error){publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)});return false}});
-  const displayInfo=()=>screen.getAllDisplays().map((d,index)=>({id:d.id,label:d.label||`Anzeige ${index+1}`,bounds:d.bounds,workArea:d.workArea,scaleFactor:d.scaleFactor,rotation:d.rotation,touchSupport:d.touchSupport,primary:d.id===screen.getPrimaryDisplay().id}));
+  const displayInfo=()=>displayManager.list();
   ipcMain.handle('displays:list',displayInfo);
   const notifyDisplays=()=>controlWindow&&!controlWindow.isDestroyed()&&controlWindow.webContents.send('displays:changed',displayInfo());
-  screen.on('display-added',notifyDisplays);screen.on('display-removed',notifyDisplays);screen.on('display-metrics-changed',notifyDisplays);
-  ipcMain.handle('outputs:on-air', (_event, displayId: number, payload:unknown) => {
-    const display = screen.getAllDisplays().find(d => d.id === displayId);
-    if (!display) throw new Error('Die gewählte Anzeige ist nicht mehr verfügbar.');
-    if(display.id===screen.getPrimaryDisplay().id)throw new Error('MAIN darf nicht auf dem primären Bedienbildschirm geöffnet werden.');
-    if (outputWindows.has(displayId)) return true;
-    const win = new BrowserWindow({ x: display.bounds.x, y: display.bounds.y, width: display.bounds.width, height: display.bounds.height, frame: false, fullscreen: true, show: false, backgroundColor: '#000', autoHideMenuBar:true, webPreferences: { preload:path.join(__dirname,'preload.js'),contextIsolation: true,nodeIntegration:false } });
-    outputWindows.set(displayId, win);
-    win.on('closed', () => outputWindows.delete(displayId));
-    void load(win, '#output').then(()=>{win.webContents.send('outputs:slide',payload);win.show()});
-    return true;
-  });
-  ipcMain.handle('outputs:send-slide',(_event,payload:unknown)=>{outputWindows.forEach(win=>{if(!win.isDestroyed())win.webContents.send('outputs:slide',payload)});return true});
-  ipcMain.handle('outputs:off-air', () => { outputWindows.forEach(win => win.close()); outputWindows.clear(); return true; });
+  screen.on('display-added',notifyDisplays);screen.on('display-removed',(_event,display)=>{outputManager.handleRemoved(display.id);notifyDisplays()});screen.on('display-metrics-changed',notifyDisplays);
+  ipcMain.handle('displays:identify',(_event,assignments:DisplayAssignments)=>outputManager.identify(assignments));
+  ipcMain.handle('outputs:preflight',(_event,assignments:DisplayAssignments,presentation:{hasPresentation?:boolean;activeSlideCount?:number;media?:string[]})=>displayManager.preflight(assignments,presentation));
+  ipcMain.handle('outputs:on-air',async(_event,assignments:DisplayAssignments,payload:unknown)=>{const preflight=displayManager.preflight(assignments,{hasPresentation:true,activeSlideCount:1});if(!preflight.ok)throw new Error(preflight.errors.join('\n'));return outputManager.start(assignments,payload)});
+  ipcMain.handle('outputs:send-slide',(_event,payload:unknown)=>{outputManager.send(payload);return true});
+  ipcMain.handle('outputs:off-air',()=>outputManager.stop());
   createControlWindow();
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createControlWindow(); });
 });

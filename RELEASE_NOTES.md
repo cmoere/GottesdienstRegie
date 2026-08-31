@@ -1,4 +1,30 @@
-# GottesdienstRegie 0.4.0
+# GottesdienstRegie 0.5.0
+
+## Folienübersicht
+
+- professionelles Raster nach Vorprogramm, Ankommen, Gottesdienst und Nachprogramm
+- Ablaufelemente mit ihren echten Folien-Thumbnails statt einer Listen- oder Demoansicht
+- zentrale SlideRenderer-Engine für Editor, Filmstrip, Einzelvorschau, Raster und MAIN
+- Thumbnailgröße lokal gespeichert, ohne Inhalt oder Präsentationsauflösung zu verändern
+- voneinander unabhängige Preview- und Live-Auswahl mit türkiser und roter Markierung
+- Hover-Aktionen für Vorschau und Bearbeiten
+- Lazy Rendering und `content-visibility` für große Gottesdienste mit mehreren hundert Folien
+
+## Echte ON-AIR-Ausgabe
+
+- DisplayManager, OutputWindowManager und LiveEngine als getrennte Kernkomponenten
+- frei zuordenbare physische Displays für Bedienoberfläche, MAIN, STAGE, NOTES, LIVESTREAM und LOBBY
+- Bildschirmidentifizierung zeigt Nummer und Rolle direkt auf jedem angeschlossenen Monitor
+- Preflight prüft Präsentation, aktive Folien und vorhandene MAIN-Zuordnung
+- rahmenlose, schwarze Vollbildausgabe ohne Menü, Scrollleisten oder sichtbaren Cursor
+- Ausgabe erscheint erst nach geladenem Renderer; kein weißes Aufblitzen
+- Monitorverlust führt zu `MAIN FEHLT` oder `STAGE FEHLT` und niemals zu einer Ausgabe auf dem Bedienmonitor
+- Nächste/Vorherige Folie überspringt deaktivierte Folien und Ablauf-Elemente
+- OFF AIR beendet alle Ausgabefenster sofort und ohne Sicherheitsabfrage
+
+## Korrektur
+
+- Online-Versionshinweise werden sicher in lesbaren Text umgewandelt; HTML-Tags sind nicht mehr sichtbar
 
 ## Präsentationskern
 

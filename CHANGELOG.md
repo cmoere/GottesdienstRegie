@@ -1,5 +1,31 @@
 # Versionshinweise / Release notes
 
+## 0.5.0 – 2026-08-31
+
+### Deutsch
+
+- professionelle Folienübersicht nach Vorprogramm, Ankommen, Gottesdienst und Nachprogramm
+- echte, lazy gerenderte Thumbnails mit derselben SlideRenderer-Engine wie Editor, Einzelvorschau und MAIN
+- lokal gespeicherte Thumbnailgröße sowie getrennte Preview- und Live-Markierungen
+- Hover-Aktionen für Vorschau und direktes Bearbeiten, ohne laufende MAIN-Ausgabe zu verändern
+- unabhängige Preview- und Live-Auswahl; Thumbnail-Klick schaltet nur bei aktivem ON AIR live
+- DisplayManager mit Monitorname, Auflösung, Position, Skalierung, Rotation und Primärstatus
+- frei zuordenbare Rollen für Bedienoberfläche, MAIN, STAGE, NOTES, LIVESTREAM und LOBBY
+- Bildschirmidentifizierung mit großer Nummer und zugeordneter Rolle auf jedem Monitor
+- Preflight-Prüfung und echte rahmenlose Vollbild-Ausgabefenster mit schwarzem Startbild
+- sichere Hotplug-Behandlung: fehlende Ausgaben werden markiert und niemals auf den Bedienmonitor verschoben
+- Online-Versionshinweise werden als lesbarer Text statt als HTML-Quelltext angezeigt
+
+### English
+
+- professional slide grid grouped by pre-show, arrival, service and post-show
+- lazy real thumbnails using the same SlideRenderer engine as editor, single preview and MAIN
+- locally persisted thumbnail size and independent preview/live indicators
+- hover actions for preview and edit without changing the current live output
+- real display role mapping, identification overlays, preflight checks and borderless fullscreen outputs
+- safe display hotplug handling without ever falling back to the operator monitor
+- online release notes are converted into readable text instead of exposing HTML source
+
 ## 0.4.0 – 2026-08-31
 
 ### Deutsch
