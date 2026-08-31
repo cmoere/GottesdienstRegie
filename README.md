@@ -6,13 +6,15 @@ GottesdienstRegie ist die Windows-Desktopsoftware der Philippusgemeinde für Got
 
 - PGB-Kontoanmeldung einschließlich Zwei-Faktor-Anmeldung
 - rollenbasierte Freigaben aus Firebase
-- Bedienoberfläche auf Deutsch, Englisch, Niederländisch, Dänisch und Norwegisch
+- Bedienoberfläche auf Deutsch, Schweizerdeutsch, Englisch, Niederländisch, Dänisch, Norwegisch, Spanisch, Ukrainisch, Russisch, Türkisch, Arabisch und Polnisch
 - System-, Hell-, Dunkel- und optionaler Schwarz-Weiß-Modus
 - Ablauf, Folieneditor, Filmstreifen und Vorschau
 - echte Vollbildausgabe auf einem zugewiesenen Bildschirm
 - verschlüsselte lokale Sitzung über Windows DPAPI
 - integrierte GitHub-Updateprüfung, Download und Installation
 - integrierte Versionshinweise
+- wechselnde, offline mitgelieferte Login-Motive
+- Hilfe- und Supportbereich sowie zusätzliche Barrierefreiheitsoptionen
 
 ## Installation
 
@@ -49,4 +51,3 @@ Die installierte App prüft nach dem Start automatisch auf neue öffentliche Git
 Zugangsdaten, Benutzerexporte, Admin-Schlüssel und Backend-Deploymentdateien gehören nicht in dieses Repository. Sicherheitsprobleme bitte nicht öffentlich melden; Hinweise stehen in [SECURITY.md](SECURITY.md).
 
 Copyright © Philippusgemeinde Ev. Freikirche. Alle Rechte vorbehalten.
-
