@@ -21,8 +21,16 @@ jobs:
           cache: npm
       - name: Abhängigkeiten installieren
         run: npm ci
-      - name: Anwendung bauen und Release veröffentlichen
-        run: npm run build && npx electron-builder --win nsis --publish always
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      - name: Anwendung bauen
+        run: npm run build
+      - name: Windows-Installer erstellen
+        run: npx electron-builder --win nsis --publish never
+      - name: Release samt Update-Dateien veröffentlichen
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE_NOTES.md
+          fail_on_unmatched_files: true
+          files: |
+            release/GottesdienstRegie-Setup-*.exe
+            release/GottesdienstRegie-Setup-*.exe.blockmap
+            release/latest.yml

@@ -1,5 +1,17 @@
 # Versionshinweise / Release notes
 
+## 0.3.1 – 2026-08-31
+
+### Deutsch
+
+- Windows-Installer und Update-Metadaten werden nun in einem getrennten, geprüften Release-Schritt veröffentlicht
+- automatische Update-Suche und Installation von GitHub Releases dadurch zuverlässig verfügbar
+
+### English
+
+- Windows installer and update metadata are now published in a separate, verified release step
+- automatic update checks and installation from GitHub Releases are therefore reliably available
+
 ## 0.3.0 – 2026-08-31
 
 ### Deutsch

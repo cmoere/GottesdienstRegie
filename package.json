@@ -1,6 +1,6 @@
 {
   "name": "gottesdienstregie",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Desktop-Regiesoftware für Gottesdienstpräsentationen der Philippusgemeinde.",
   "author": "Philippusgemeinde Ev. Freikirche",
   "private": true,
@@ -42,11 +42,40 @@
     "appId": "de.philippusgemeinde.gottesdienstregie2",
     "productName": "GottesdienstRegie",
     "asar": true,
-    "directories": { "output": "release" },
-    "publish": [{ "provider": "github", "owner": "cmoere", "repo": "GottesdienstRegie", "releaseType": "release" }],
-    "files": ["dist/**/*", "dist-electron/**/*", "package.json"],
-    "extraResources": [{ "from": "build/icon.png", "to": "icon.png" }],
-    "win": { "icon": "build/icon.png", "target": [{ "target": "nsis", "arch": ["x64"] }], "artifactName": "GottesdienstRegie-Setup-${version}.${ext}" },
+    "directories": {
+      "output": "release"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "cmoere",
+        "repo": "GottesdienstRegie",
+        "releaseType": "release"
+      }
+    ],
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "build/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "GottesdienstRegie-Setup-${version}.${ext}"
+    },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
