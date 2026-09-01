@@ -1,5 +1,30 @@
 # Versionshinweise / Release notes
 
+## 0.6.0 – 2026-09-01
+
+### Deutsch
+
+- Einstellung für wechselnde Login-Hintergründe von Barrierefreiheit nach Allgemein verschoben
+- Sprachen werden immer mit ihrem Eigennamen angezeigt, beispielsweise Deutsch, Dansk und Türkçe
+- zuverlässige, in CSS gezeichnete Flaggen statt länderabhängiger Buchstaben-Ersatzdarstellung
+- nicht anklickbare Fotodetails mit Motiv und Aufnahmeort direkt auf dem Login
+- komplette aufklappbare Versionshistorie von 0.1.0 bis 0.6.0; neueste Version standardmäßig geöffnet
+- deutlich erweiterter Hilfe- und Supportbereich für Benutzeroberfläche, Vorschau, ON AIR, Anzeigen, Updates, Audio, Sicherheit und Barrierefreiheit
+- echter Initialisierungsladescreen mit Sitzungs-, Display-, Präsentations-, Update- und Verbindungstests
+- Mindestanzeigezeit des Startbildschirms von zehn Sekunden mit echtem Fortschritt
+- grüner Updatefortschritt direkt als Hintergrund der Statusbox bei weiterhin gut lesbarem Text
+
+### English
+
+- changing sign-in backgrounds moved from Accessibility to General
+- language names always remain in their native form
+- reliable CSS-rendered flags instead of operating-system letter fallbacks
+- non-clickable scene and location details on the sign-in screen
+- expandable complete version history with the newest version open by default
+- substantially expanded Help and Support documentation
+- real ten-second startup initialization with session, display, presentation, update and connection checks
+- green update progress rendered behind the readable status text
+
 ## 0.5.0 – 2026-08-31
 
 ### Deutsch

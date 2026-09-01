@@ -1,4 +1,24 @@
-# GottesdienstRegie 0.5.0
+# GottesdienstRegie 0.6.0
+
+## Login und Allgemein
+
+- wechselnde Login-Hintergründe befinden sich jetzt unter Einstellungen → Allgemein
+- jede Sprache wird unabhängig von der aktiven Oberflächensprache mit ihrem Eigennamen angezeigt
+- Flaggen sind betriebssystemunabhängig als CSS-Grafiken umgesetzt
+- jedes Motiv zeigt unten den Aufnahmeort; die Anzeige ist kein Link
+
+## Start und Updates
+
+- beim Programmstart werden Sitzung, Displays, Präsentation, Programmversion und Verbindung wirklich geprüft
+- der Initialisierungsbildschirm bleibt mindestens zehn Sekunden sichtbar und zeigt den Fortschritt
+- beim Update liegt der grüne Fortschrittsbalken direkt hinter dem weiterhin lesbaren Statustext
+
+## Versionen und Hilfe
+
+- alle Versionen von 0.1.0 bis 0.6.0 sind einzeln mit Plus und Minus aufklappbar
+- die neueste Version ist beim Öffnen bereits ausgeklappt
+- ausgeklappte Versionen zeigen gegliederte Unterpunkte
+- Hilfe und Support erklärt jetzt Benutzeroberfläche, Ablauf, Folien, Vorschau, ON AIR, MAIN/STAGE, Updates, Sicherheit, Audio, Barrierefreiheit und Login-Motive
 
 ## Folienübersicht
 
