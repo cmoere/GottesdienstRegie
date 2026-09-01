@@ -9,8 +9,10 @@ import { DisplayManager, type DisplayAssignments, type OutputRole } from './Disp
 import { OutputWindowManager } from './OutputWindowManager';
 import { PresentationRepository } from './PresentationRepository';
 import { MediaRepository } from './MediaRepository';
+import { AppPreferences, type AppPreferencesData } from './AppPreferences';
 
 let controlWindow: BrowserWindow | null = null;
+let appPreferences:AppPreferences;
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 
@@ -46,21 +48,37 @@ function load(win: BrowserWindow, route = '') {
   return win.loadFile(path.join(__dirname, '../dist/index.html'), { hash: route.replace(/^#/, '') });
 }
 
-function createControlWindow() {
+function createControlWindow(preferences:AppPreferencesData) {
+  const displays=screen.getAllDisplays(),primary=screen.getPrimaryDisplay();
+  const remembered=preferences.operatorDisplayTarget==='last'?displays.find(display=>display.id===preferences.lastDisplayId):undefined;
+  const target=remembered??primary,stored=preferences.bounds;
+  const visible=stored&&displays.some(display=>stored.x<display.bounds.x+display.bounds.width&&stored.x+stored.width>display.bounds.x&&stored.y<display.bounds.y+display.bounds.height&&stored.y+stored.height>display.bounds.y);
+  const bounds=visible?stored!:{x:target.workArea.x+Math.round(target.workArea.width*.05),y:target.workArea.y+Math.round(target.workArea.height*.05),width:Math.max(960,Math.round(target.workArea.width*.9)),height:Math.max(620,Math.round(target.workArea.height*.9))};
   controlWindow = new BrowserWindow({
-    width: 1500, height: 920, minWidth: 1120, minHeight: 700,
+    ...bounds,show:false,minWidth: 960, minHeight: 620,
     backgroundColor: '#282832', icon: app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.join(app.getAppPath(), 'build/icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   });
+  controlWindow.setMenu(null);
+  const configured=preferences.windowStartMode==='restore'?(preferences.lastWindowState??'fullscreen'):preferences.windowStartMode;
+  if(configured==='fullscreen')controlWindow.setFullScreen(true);else if(configured==='maximized')controlWindow.maximize();
+  controlWindow.once('ready-to-show',()=>controlWindow?.show());
+  controlWindow.webContents.on('before-input-event',(event,input)=>{if(input.type==='keyDown'&&input.key==='F11'){event.preventDefault();controlWindow?.setFullScreen(!controlWindow.isFullScreen())}});
+  let saveTimer:NodeJS.Timeout|undefined;
+  const saveWindowState=()=>{if(!controlWindow||controlWindow.isDestroyed())return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{if(!controlWindow||controlWindow.isDestroyed())return;const state=controlWindow.isFullScreen()?'fullscreen':controlWindow.isMaximized()?'maximized':'window',display=screen.getDisplayMatching(controlWindow.getBounds()),patch:Partial<AppPreferencesData>={lastWindowState:state,lastDisplayId:display.id};if(state==='window')patch.bounds=controlWindow.getBounds();void appPreferences.update(patch)},250)};
+  controlWindow.on('move',saveWindowState);controlWindow.on('resize',saveWindowState);controlWindow.on('maximize',saveWindowState);controlWindow.on('unmaximize',saveWindowState);controlWindow.on('enter-full-screen',saveWindowState);controlWindow.on('leave-full-screen',saveWindowState);
   void load(controlWindow);
-  controlWindow.webContents.once('did-finish-load',()=>{setTimeout(()=>void checkForUpdates(),5000)});
+  controlWindow.webContents.once('did-finish-load',()=>{if(appPreferences.get().automaticUpdates)setTimeout(()=>void checkForUpdates(),5000)});
 }
 
 function versionParts(value:string){return value.replace(/^v/,'').split('.').map(part=>Number(part)||0)}
 function olderThan(candidate:string,current:string){const a=versionParts(candidate),b=versionParts(current);for(let i=0;i<Math.max(a.length,b.length);i++){if((a[i]??0)<(b[i]??0))return true;if((a[i]??0)>(b[i]??0))return false}return false}
 
-app.whenReady().then(() => {
+app.whenReady().then(async() => {
   Menu.setApplicationMenu(null);
+  appPreferences=new AppPreferences(path.join(app.getPath('userData'),'app-preferences.json'));
+  const initialPreferences=await appPreferences.load();
+  autoUpdater.autoDownload=initialPreferences.autoDownloadUpdates;
   const displayManager=new DisplayManager();
   const publishOutputStatus=(role:OutputRole,state:'ready'|'missing'|'closed')=>{if(controlWindow&&!controlWindow.isDestroyed())controlWindow.webContents.send('outputs:status',{role,state})};
   const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
@@ -124,6 +142,9 @@ app.whenReady().then(() => {
     await saveStored(session);
     return {user:session.user,permissions:session.permissions,expiresAt};
   }
+  ipcMain.handle('window-preferences:get',()=>appPreferences.get());
+  ipcMain.handle('window-preferences:set',async(_event,patch:Partial<AppPreferencesData>)=>{const allowed:Partial<AppPreferencesData>={};if(['fullscreen','maximized','window','restore'].includes(String(patch.windowStartMode)))allowed.windowStartMode=patch.windowStartMode;if(['primary','last'].includes(String(patch.operatorDisplayTarget)))allowed.operatorDisplayTarget=patch.operatorDisplayTarget;if(typeof patch.automaticUpdates==='boolean')allowed.automaticUpdates=patch.automaticUpdates;if(typeof patch.autoDownloadUpdates==='boolean'){allowed.autoDownloadUpdates=patch.autoDownloadUpdates;autoUpdater.autoDownload=patch.autoDownloadUpdates}return appPreferences.update(allowed)});
+  ipcMain.handle('window:toggle-fullscreen',()=>{if(!controlWindow)return false;controlWindow.setFullScreen(!controlWindow.isFullScreen());return controlWindow.isFullScreen()});
   ipcMain.handle('session:read', async () => {
     try {
       if (!safeStorage.isEncryptionAvailable()) return null;
@@ -209,11 +230,12 @@ app.whenReady().then(() => {
   ipcMain.handle('outputs:on-air',async(_event,assignments:DisplayAssignments,payload:unknown)=>{const preflight=displayManager.preflight(assignments,{hasPresentation:true,activeSlideCount:1});if(!preflight.ok)throw new Error(preflight.errors.join('\n'));return outputManager.start(assignments,payload)});
   ipcMain.handle('outputs:send-slide',(_event,payload:unknown)=>{outputManager.send(payload);return true});
   ipcMain.handle('outputs:send-role',(_event,role:OutputRole,payload:unknown)=>outputManager.sendTo(role,payload));
+  ipcMain.handle('outputs:send-quick',(_event,roles:OutputRole[],payload:unknown)=>outputManager.sendQuick(roles,payload));
   ipcMain.handle('outputs:off-air',()=>outputManager.stop());
-  createControlWindow();
+  createControlWindow(initialPreferences);
   let cleanQuit=false;
   app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();void presentationRepository.setState({cleanShutdown:true}).finally(()=>{cleanQuit=true;app.quit()})});
-  app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createControlWindow(); });
+  app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createControlWindow(appPreferences.get()); });
 });
 
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });

@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { Slide, SlideElement } from './store';
 
 export type SlideRendererMode='editor'|'preview'|'thumbnail'|'live';
@@ -15,11 +15,14 @@ function elementStyle(element:SlideElement):CSSProperties{
   };
 }
 
+function LiveVideoInput({element,mode,style}:{element:SlideElement;mode:SlideRendererMode;style:CSSProperties}){const ref=useRef<HTMLVideoElement>(null),[error,setError]=useState(false),properties=element.properties;useEffect(()=>{if(mode==='thumbnail'||!properties.deviceId)return;let active=true,stream:MediaStream|undefined;void navigator.mediaDevices.getUserMedia({video:{deviceId:{exact:String(properties.deviceId)},width:{ideal:Number(properties.width??1920)},height:{ideal:Number(properties.height??1080)},frameRate:{ideal:Number(properties.frameRate??30)}},audio:properties.audioEnabled===true}).then(value=>{if(!active){value.getTracks().forEach(track=>track.stop());return}stream=value;if(ref.current){ref.current.srcObject=value;ref.current.volume=Number(properties.volume??100)/100;void ref.current.play()}setError(false)}).catch(()=>setError(true));return()=>{active=false;stream?.getTracks().forEach(track=>track.stop())}},[mode,properties.deviceId,properties.width,properties.height,properties.frameRate,properties.audioEnabled,properties.volume]);if(mode==='thumbnail')return <div className="slide-renderer-element web-placeholder" style={style}>LIVE</div>;return <div className="slide-renderer-element video-input-frame" style={{...style,overflow:'hidden',display:'grid',placeItems:'center',background:'#000'}}>{error?<strong>KEIN SIGNAL</strong>:<video ref={ref} autoPlay playsInline muted={mode!=='live'||properties.audioEnabled!==true} style={{width:'100%',height:'100%',objectFit:String(properties.fit??'contain') as CSSProperties['objectFit'],clipPath:`inset(${Number(properties.cropTop??0)}% ${Number(properties.cropRight??0)}% ${Number(properties.cropBottom??0)}% ${Number(properties.cropLeft??0)}%)`,filter:`brightness(${Number(properties.brightness??100)}%) contrast(${Number(properties.contrast??100)}%) saturate(${Number(properties.saturation??100)}%) hue-rotate(${Number(properties.hue??0)}deg)`}}/>}</div>}
+
 function RenderElement({element,mode}:{element:SlideElement;mode:SlideRendererMode}){
   if(!element.visible)return null;
   const style=elementStyle(element),properties=element.properties,src=String(properties.src??properties.url??'');
   if(element.type==='image'&&src)return <img className="slide-renderer-element media" style={style} src={src} alt="" loading={mode==='thumbnail'?'lazy':'eager'}/>;
   if(element.type==='video'&&src)return <video className="slide-renderer-element media" style={style} src={src} autoPlay={mode==='live'&&properties.autoplay!==false} loop={properties.loop===true} muted={properties.muted===true||mode==='thumbnail'} controls={mode==='editor'||mode==='preview'} playsInline preload={mode==='thumbnail'?'none':'metadata'}/>;
+  if(element.type==='videoInput')return <LiveVideoInput element={element} mode={mode} style={style}/>;
   if(element.type==='web'&&src)return mode==='thumbnail'?<div className="slide-renderer-element web-placeholder" style={style}>WEB</div>:<iframe className="slide-renderer-element web" style={{...style,zoom:`${Number(properties.zoom??100)}%`}} src={src} title="Web content" allow="autoplay; fullscreen; picture-in-picture" sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups"/>;
   if(element.type==='shape')return <div className="slide-renderer-element shape" style={{...style,background:String(properties.fill??properties.color??'#fff')}}/>;
   if(element.type==='line')return <div className="slide-renderer-element line" style={{...style,background:String(properties.color??'#fff'),height:`${Math.max(1,Number(properties.strokeWidth??4))/19.2}cqw`}}/>;

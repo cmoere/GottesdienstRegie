@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('desktop', {
+  operator:{getPreferences:()=>ipcRenderer.invoke('window-preferences:get'),setPreferences:(patch:unknown)=>ipcRenderer.invoke('window-preferences:set',patch),toggleFullscreen:()=>ipcRenderer.invoke('window:toggle-fullscreen')},
   displays: () => ipcRenderer.invoke('displays:list'),
   onDisplaysChanged: (callback:(displays:unknown)=>void) => {const listener=(_event:Electron.IpcRendererEvent,displays:unknown)=>callback(displays);ipcRenderer.on('displays:changed',listener);return()=>ipcRenderer.removeListener('displays:changed',listener)},
   identifyDisplays:(assignments:Record<string,string>)=>ipcRenderer.invoke('displays:identify',assignments),
@@ -9,7 +10,9 @@ contextBridge.exposeInMainWorld('desktop', {
   goOffAir: () => ipcRenderer.invoke('outputs:off-air'),
   sendLiveSlide:(payload:unknown)=>ipcRenderer.invoke('outputs:send-slide',payload),
   sendOutputRole:(role:string,payload:unknown)=>ipcRenderer.invoke('outputs:send-role',role,payload),
+  sendQuick:(roles:string[],payload:unknown)=>ipcRenderer.invoke('outputs:send-quick',roles,payload),
   onLiveSlide:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:slide',listener);return()=>ipcRenderer.removeListener('outputs:slide',listener)},
+  onQuick:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:quick',listener);return()=>ipcRenderer.removeListener('outputs:quick',listener)},
   onOutputStatus:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:status',listener);return()=>ipcRenderer.removeListener('outputs:status',listener)},
   presentation:{
     list:(options?:{archived?:boolean;trashed?:boolean})=>ipcRenderer.invoke('presentation:list',options),
