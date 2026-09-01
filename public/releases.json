@@ -5,9 +5,31 @@
     {
       "line": "0.9",
       "builds": [{
-        "version": "0.9.0",
+        "version": "0.9.1",
         "releaseDate": "2026-09-01",
         "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Beta-Update-Kanal","en":"Beta update channel"},"text":{"de":"Unter Einstellungen → Updates können Vorabversionen jetzt gezielt aktiviert werden. Ohne Aktivierung berücksichtigt GottesdienstRegie weiterhin ausschließlich stabile Veröffentlichungen.","en":"Prerelease updates can now be enabled explicitly under Settings → Updates. Without opt-in, GottesdienstRegie continues to consider stable releases only."}},
+            {"label":{"de":"Mehrere Servicezeiten","en":"Multiple service times"},"text":{"de":"Für den Gottesdienst lassen sich mehrere Startzeiten hinzufügen, einzeln bearbeiten, entfernen und dauerhaft mit der Präsentation speichern.","en":"Multiple service start times can now be added, edited individually, removed and stored permanently with the presentation."}}
+          ],
+          "improved": [
+            {"label":{"de":"Beta-Hinweis","en":"Beta notice"},"text":{"de":"Beim ersten Aktivieren erklärt ein einmaliger, verständlicher Dialog die möglichen Einschränkungen von Beta-Versionen. Der aktuelle Kanal und Beta-Versionen werden klar, aber nicht alarmierend gekennzeichnet.","en":"A one-time plain-language dialog explains the possible limitations of beta versions when first enabled. The current channel and beta releases are marked clearly without alarm styling."}},
+            {"label":{"de":"Versionshinweise","en":"Release notes"},"text":{"de":"Vorabversionen werden als „Version … Beta“ beziehungsweise RC dargestellt und können zusätzlich die Kategorie „Bekannte Probleme“ enthalten.","en":"Prereleases are shown as Version … Beta or RC and can include an additional Known issues category."}},
+            {"label":{"de":"Rückkehr zu Stabil","en":"Return to stable"},"text":{"de":"Bei installierter Beta-Version wird die Rückkehr zur stabilen Ausgabe eindeutig angeboten; Präsentationskompatibilität und Backup-Möglichkeit bleiben Teil der Sicherheitsprüfung.","en":"When a beta is installed, returning to the stable release is offered clearly while presentation compatibility and backup remain part of the safety check."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Zeit festlegen","en":"Set service time"},"text":{"de":"Ein Klick auf „ZEIT FESTLEGEN“ oder eine vorhandene Startzeit öffnet jetzt ausschließlich die Zeitbearbeitung und klappt den Bereich GOTTESDIENST nicht mehr unbeabsichtigt ein oder aus.","en":"Clicking Set service time or an existing start time now opens only the time editor and no longer collapses or expands the SERVICE section unintentionally."}},
+            {"label":{"de":"Header-Aktionen","en":"Header actions"},"text":{"de":"Pfeil, Abschnittstitel, Zeitfeld und Hinzufügen-Schaltfläche besitzen getrennte Klickbereiche und lösen durch Event Bubbling keine zweite Aktion mehr aus.","en":"The arrow, section title, time field and add control now have separate click targets and no longer trigger a second action through event bubbling."}},
+            {"label":{"de":"Collapse-Zustand","en":"Collapse state"},"text":{"de":"Der Ein-/Ausklappzustand der Ablaufbereiche wird unabhängig von den Servicezeiten lokal gespeichert und bleibt bei Zeitänderungen exakt erhalten.","en":"Section collapse state is stored locally and independently from service times, remaining unchanged when times are edited."}}
+          ],
+          "knownIssues": [],
+          "security": []
+        }
+      },{
+        "version": "0.9.0",
+        "releaseDate": "2026-09-01",
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Ablaufzeiten","en":"Service timing"},"text":{"de":"Elemente und einzelne Folien besitzen jetzt echte Wiedergabezeiten; Abschnittssummen werden automatisch berechnet und Zeiten lassen sich direkt im Ablauf oder im Eigenschaftenbereich bearbeiten.","en":"Items and individual slides now have real playback timing; section totals are calculated automatically and timing can be edited in the service order or inspector."}},

@@ -8,12 +8,14 @@ export interface AppPreferencesData{
   operatorDisplayTarget:OperatorDisplayTarget;
   automaticUpdates:boolean;
   autoDownloadUpdates:boolean;
+  betaUpdates:boolean;
+  betaWarningAccepted:boolean;
   lastDisplayId?:number;
   lastWindowState?:'fullscreen'|'maximized'|'window';
   bounds?:{x:number;y:number;width:number;height:number};
 }
 
-const defaults:AppPreferencesData={windowStartMode:'fullscreen',operatorDisplayTarget:'primary',automaticUpdates:true,autoDownloadUpdates:true};
+const defaults:AppPreferencesData={windowStartMode:'fullscreen',operatorDisplayTarget:'primary',automaticUpdates:true,autoDownloadUpdates:true,betaUpdates:false,betaWarningAccepted:false};
 
 export class AppPreferences{
   private value:AppPreferencesData={...defaults};

@@ -5,7 +5,7 @@ interface DesktopVersionMetadata{version:string;installedAt:string;modifiedAt:st
 interface DesktopPreviousVersion{version:string;publishedAt:string;size:number;url:string}
 interface DesktopOutputStatus{role:string;state:'ready'|'missing'|'closed'}
 interface DesktopPreflight{ok:boolean;errors:string[];warnings:string[];displays?:DesktopDisplay[]}
-interface DesktopOperatorPreferences{windowStartMode:'fullscreen'|'maximized'|'window'|'restore';operatorDisplayTarget:'primary'|'last';automaticUpdates:boolean;autoDownloadUpdates:boolean}
+interface DesktopOperatorPreferences{windowStartMode:'fullscreen'|'maximized'|'window'|'restore';operatorDisplayTarget:'primary'|'last';automaticUpdates:boolean;autoDownloadUpdates:boolean;betaUpdates:boolean;betaWarningAccepted:boolean}
 interface PresentationSummary{id:string;title:string;date:string;createdAt:string;updatedAt:string;archived:boolean;trashed:boolean;itemCount:number;slideCount:number}
 interface MediaAsset{id:string;name:string;fileName:string;url:string;kind:'image'|'video'|'audio'|'pdf';extension:string;size:number;checksum:string;createdAt:string;updatedAt:string;favorite:boolean;tags:string[];syncState:'local-only'|'uploading'|'synced'|'error';github?:{repository:string;path:string;sha:string;downloadUrl:string}}
 interface OnlineMediaAsset{id:string;name:string;path:string;kind:'image'|'video'|'audio'|'pdf';size:number;checksum:string;downloadUrl:string;updatedAt?:string}

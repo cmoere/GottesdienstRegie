@@ -41,7 +41,7 @@ autoUpdater.on('error',error=>publishUpdateStatus({state:'error',message:error.m
 
 async function checkForUpdates(){
   if(!app.isPackaged)return publishUpdateStatus({state:'development',version:app.getVersion()});
-  try{await autoUpdater.checkForUpdates();return lastUpdateStatus}catch(error){return publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)})}
+  try{autoUpdater.allowPrerelease=appPreferences.get().betaUpdates;await autoUpdater.checkForUpdates();return lastUpdateStatus}catch(error){return publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)})}
 }
 
 function load(win: BrowserWindow, route = '') {
@@ -80,6 +80,7 @@ app.whenReady().then(async() => {
   appPreferences=new AppPreferences(path.join(app.getPath('userData'),'app-preferences.json'));
   const initialPreferences=await appPreferences.load();
   autoUpdater.autoDownload=initialPreferences.autoDownloadUpdates;
+  autoUpdater.allowPrerelease=initialPreferences.betaUpdates;
   const displayManager=new DisplayManager();
   const publishOutputStatus=(role:OutputRole,state:'ready'|'missing'|'closed')=>{if(controlWindow&&!controlWindow.isDestroyed())controlWindow.webContents.send('outputs:status',{role,state})};
   const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
@@ -145,7 +146,7 @@ app.whenReady().then(async() => {
     return {user:session.user,permissions:session.permissions,expiresAt};
   }
   ipcMain.handle('window-preferences:get',()=>appPreferences.get());
-  ipcMain.handle('window-preferences:set',async(_event,patch:Partial<AppPreferencesData>)=>{const allowed:Partial<AppPreferencesData>={};if(['fullscreen','maximized','window','restore'].includes(String(patch.windowStartMode)))allowed.windowStartMode=patch.windowStartMode;if(['primary','last'].includes(String(patch.operatorDisplayTarget)))allowed.operatorDisplayTarget=patch.operatorDisplayTarget;if(typeof patch.automaticUpdates==='boolean')allowed.automaticUpdates=patch.automaticUpdates;if(typeof patch.autoDownloadUpdates==='boolean'){allowed.autoDownloadUpdates=patch.autoDownloadUpdates;autoUpdater.autoDownload=patch.autoDownloadUpdates}return appPreferences.update(allowed)});
+  ipcMain.handle('window-preferences:set',async(_event,patch:Partial<AppPreferencesData>)=>{const allowed:Partial<AppPreferencesData>={};if(['fullscreen','maximized','window','restore'].includes(String(patch.windowStartMode)))allowed.windowStartMode=patch.windowStartMode;if(['primary','last'].includes(String(patch.operatorDisplayTarget)))allowed.operatorDisplayTarget=patch.operatorDisplayTarget;if(typeof patch.automaticUpdates==='boolean')allowed.automaticUpdates=patch.automaticUpdates;if(typeof patch.autoDownloadUpdates==='boolean'){allowed.autoDownloadUpdates=patch.autoDownloadUpdates;autoUpdater.autoDownload=patch.autoDownloadUpdates}if(typeof patch.betaUpdates==='boolean'){allowed.betaUpdates=patch.betaUpdates;autoUpdater.allowPrerelease=patch.betaUpdates}if(typeof patch.betaWarningAccepted==='boolean')allowed.betaWarningAccepted=patch.betaWarningAccepted;return appPreferences.update(allowed)});
   ipcMain.handle('window:toggle-fullscreen',()=>{if(!controlWindow)return false;controlWindow.setFullScreen(!controlWindow.isFullScreen());return controlWindow.isFullScreen()});
   ipcMain.handle('session:read', async () => {
     try {
