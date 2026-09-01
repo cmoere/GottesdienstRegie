@@ -9,6 +9,7 @@ import { DisplayManager, type DisplayAssignments, type OutputRole } from './Disp
 import { OutputWindowManager } from './OutputWindowManager';
 import { PresentationRepository } from './PresentationRepository';
 import { MediaRepository } from './MediaRepository';
+import { GitHubStorageProvider } from './storage/GitHubStorageProvider';
 import { AppPreferences, type AppPreferencesData } from './AppPreferences';
 
 let controlWindow: BrowserWindow | null = null;
@@ -86,6 +87,7 @@ app.whenReady().then(async() => {
   const legacyPresentationFile=path.join(app.getPath('userData'),'presentations','default-presentation.json');
   const presentationRepository=new PresentationRepository(path.join(app.getPath('userData'),'library'));
   const mediaRepository=new MediaRepository(path.join(app.getPath('userData'),'media-library'));
+  const onlineMedia=new GitHubStorageProvider('cmoere','GottesdienstRegie-Media');
   void presentationRepository.initialize();
   void mediaRepository.initialize();
   protocol.handle('gottesdienst-media',request=>{const url=new URL(request.url),fileName=path.basename(decodeURIComponent(url.pathname));return net.fetch(pathToFileURL(path.join(mediaRepository.directory,fileName)).toString())});
@@ -213,6 +215,9 @@ app.whenReady().then(async() => {
   ipcMain.handle('media:import',async()=>{const picked=await dialog.showOpenDialog(controlWindow!,{title:'Medien importieren',properties:['openFile','multiSelections'],filters:[{name:'Medien',extensions:['png','jpg','jpeg','webp','gif','svg','mp4','mov','webm','m4v','mp3','wav','m4a','ogg','flac','pdf']}]});if(picked.canceled)return[];return mediaRepository.import(picked.filePaths)});
   ipcMain.handle('media:update',(_event,id:string,patch:any)=>mediaRepository.update(id,patch));
   ipcMain.handle('media:remove',(_event,id:string)=>mediaRepository.remove(id));
+  ipcMain.handle('media:online-status',()=>onlineMedia.status());
+  ipcMain.handle('media:online-list',()=>onlineMedia.list());
+  ipcMain.handle('media:sync',async(_event,id:string)=>{const{asset,data}=await mediaRepository.data(id);await mediaRepository.update(id,{syncState:'uploading'});try{const uploaded=await onlineMedia.upload({name:`${asset.name}.${asset.extension.toLowerCase()}`,kind:asset.kind,checksum:asset.checksum,data});return await mediaRepository.update(id,{syncState:'synced',github:{repository:'cmoere/GottesdienstRegie-Media',path:uploaded.path,sha:uploaded.id,downloadUrl:uploaded.downloadUrl}})}catch(error){await mediaRepository.update(id,{syncState:'error'});throw error}});
   ipcMain.handle('updates:current-version',()=>app.getVersion());
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});
   ipcMain.handle('updates:check',()=>checkForUpdates());
@@ -229,6 +234,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('outputs:preflight',(_event,assignments:DisplayAssignments,presentation:{hasPresentation?:boolean;activeSlideCount?:number;media?:string[]})=>displayManager.preflight(assignments,presentation));
   ipcMain.handle('outputs:on-air',async(_event,assignments:DisplayAssignments,payload:unknown)=>{const preflight=displayManager.preflight(assignments,{hasPresentation:true,activeSlideCount:1});if(!preflight.ok)throw new Error(preflight.errors.join('\n'));return outputManager.start(assignments,payload)});
   ipcMain.handle('outputs:send-slide',(_event,payload:unknown)=>{outputManager.send(payload);return true});
+  ipcMain.on('outputs:media-ended',(_event,behavior:string)=>{if(controlWindow&&!controlWindow.isDestroyed())controlWindow.webContents.send('outputs:media-ended',behavior)});
   ipcMain.handle('outputs:send-role',(_event,role:OutputRole,payload:unknown)=>outputManager.sendTo(role,payload));
   ipcMain.handle('outputs:send-quick',(_event,roles:OutputRole[],payload:unknown)=>outputManager.sendQuick(roles,payload));
   ipcMain.handle('outputs:off-air',()=>outputManager.stop());

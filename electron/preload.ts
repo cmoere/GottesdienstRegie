@@ -14,6 +14,8 @@ contextBridge.exposeInMainWorld('desktop', {
   onLiveSlide:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:slide',listener);return()=>ipcRenderer.removeListener('outputs:slide',listener)},
   onQuick:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:quick',listener);return()=>ipcRenderer.removeListener('outputs:quick',listener)},
   onOutputStatus:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:status',listener);return()=>ipcRenderer.removeListener('outputs:status',listener)},
+  notifyMediaEnded:(behavior:string)=>ipcRenderer.send('outputs:media-ended',behavior),
+  onMediaEnded:(callback:(behavior:string)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,behavior:string)=>callback(behavior);ipcRenderer.on('outputs:media-ended',listener);return()=>ipcRenderer.removeListener('outputs:media-ended',listener)},
   presentation:{
     list:(options?:{archived?:boolean;trashed?:boolean})=>ipcRenderer.invoke('presentation:list',options),
     create:(input:{title?:string;date?:string;template?:unknown})=>ipcRenderer.invoke('presentation:create',input),
@@ -25,7 +27,7 @@ contextBridge.exposeInMainWorld('desktop', {
     recovery:()=>ipcRenderer.invoke('presentation:recovery'),markClean:()=>ipcRenderer.invoke('presentation:mark-clean')
   },
   openExternal:(url:string)=>ipcRenderer.invoke('external:open',url),
-  media:{list:()=>ipcRenderer.invoke('media:list'),import:()=>ipcRenderer.invoke('media:import'),update:(id:string,patch:unknown)=>ipcRenderer.invoke('media:update',id,patch),remove:(id:string)=>ipcRenderer.invoke('media:remove',id)},
+  media:{list:()=>ipcRenderer.invoke('media:list'),import:()=>ipcRenderer.invoke('media:import'),update:(id:string,patch:unknown)=>ipcRenderer.invoke('media:update',id,patch),remove:(id:string)=>ipcRenderer.invoke('media:remove',id),onlineStatus:()=>ipcRenderer.invoke('media:online-status'),onlineList:()=>ipcRenderer.invoke('media:online-list'),sync:(id:string)=>ipcRenderer.invoke('media:sync',id)},
   session: {
     read: () => ipcRenderer.invoke('session:read'),
     write: (token: string) => ipcRenderer.invoke('session:write', token),

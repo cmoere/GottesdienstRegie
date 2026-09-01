@@ -3,11 +3,43 @@
   "supportedLocales": ["de","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR"],
   "versions": [
     {
+      "line": "0.9",
+      "builds": [{
+        "version": "0.9.0",
+        "releaseDate": "2026-09-01",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Ablaufzeiten","en":"Service timing"},"text":{"de":"Elemente und einzelne Folien besitzen jetzt echte Wiedergabezeiten; Abschnittssummen werden automatisch berechnet und Zeiten lassen sich direkt im Ablauf oder im Eigenschaftenbereich bearbeiten.","en":"Items and individual slides now have real playback timing; section totals are calculated automatically and timing can be edited in the service order or inspector."}},
+            {"label":{"de":"WARM-UP","en":"WARM-UP"},"text":{"de":"Der Ablauf verwendet jetzt die vier klar getrennten Bereiche VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM; ältere ANKOMMEN-Inhalte werden automatisch übernommen.","en":"The service order now uses the four distinct sections PRE-SERVICE, WARM-UP, SERVICE and POST-SERVICE; older arrival content is migrated automatically."}},
+            {"label":{"de":"Zeitgesteuerter Übergang","en":"Scheduled handoff"},"text":{"de":"Wenn ON AIR bereits aktiv ist, wechselt das Vorprogramm passend zur berechneten WARM-UP-Dauer und der hinterlegten Servicezeit in WARM-UP und anschließend in den Gottesdienst.","en":"When ON AIR is already active, pre-service hands off to WARM-UP based on its calculated duration and then enters the service at the configured service time."}},
+            {"label":{"de":"GitHub-Medienbibliothek","en":"GitHub media library"},"text":{"de":"Lokale Medien können prüfsummenbasiert in das öffentliche Repository GottesdienstRegie-Media synchronisiert werden; der Online- und Uploadstatus ist direkt in der Medienbibliothek sichtbar.","en":"Local media can be synchronized by checksum to the public GottesdienstRegie-Media repository, with online and upload status shown directly in the media library."}},
+            {"label":{"de":"Medien-Provider","en":"Media providers"},"text":{"de":"Eine erweiterbare StorageProvider-Schnittstelle trennt lokalen Cache und GitHub-Speicher und bereitet weitere kostenlose oder selbst gehostete Speicherziele vor.","en":"An extensible StorageProvider interface separates the local cache from GitHub storage and prepares additional free or self-hosted storage targets."}},
+            {"label":{"de":"Echte Audioelemente","en":"Real audio items"},"text":{"de":"Importierte Audiodateien werden als echte Player-Elemente gerendert, starten im Live-Ausgang automatisch und können nach dem Ende zur nächsten Folie wechseln.","en":"Imported audio files render as real player elements, start automatically in live output and can advance when playback ends."}},
+            {"label":{"de":"Live-Timer","en":"Live timers"},"text":{"de":"Timer und Countdowns zählen in der tatsächlichen MAIN-Ausgabe sekundengenau und zeigen nach Ablauf den konfigurierten Endtext.","en":"Timers and countdowns now count down accurately in the actual MAIN output and show the configured end text when complete."}}
+          ],
+          "improved": [
+            {"label":{"de":"Bearbeiten/Vorschau","en":"Edit/Preview"},"text":{"de":"Die Umschaltung entspricht jetzt dem kompakten Referenzdesign mit zwei Beschriftungen, zentralem Schiebeschalter und gelber Markierung des aktiven Modus.","en":"Mode switching now follows the compact reference design with two labels, a central slider and a yellow indication for the active mode."}},
+            {"label":{"de":"Startbildschirm","en":"Startup screen"},"text":{"de":"Der echte mindestens zehnsekündige Startvorgang verwendet jetzt einen ruhigen Spinner ohne Fortschrittsbalken und ohne Prozentanzeige.","en":"The real minimum ten-second startup sequence now uses a calm spinner without a progress bar or percentage."}},
+            {"label":{"de":"Ablaufdarstellung","en":"Service order"},"text":{"de":"Kompakte echte Folienvorschaubilder, Typ-Symbole, Schleifenstatus, einklappbare Bereiche und bearbeitbare Dauern verbessern die Übersicht bei langen Gottesdiensten.","en":"Compact real slide thumbnails, type icons, loop state, collapsible sections and editable durations improve clarity in long services."}},
+            {"label":{"de":"Elemente hinzufügen","en":"Adding items"},"text":{"de":"Bild, Video, Audio, PDF, Slideshow, Timer, Countdown, Ankündigung, Stage-Nachricht und Schnellanzeige erzeugen jetzt typgerechte Daten und Wiedergabeelemente statt leerer Platzhalter.","en":"Image, video, audio, PDF, slideshow, timer, countdown, announcement, stage message and Quick Screen now create type-specific data and playback elements instead of empty placeholders."}},
+            {"label":{"de":"Medienende","en":"Media completion"},"text":{"de":"Das Ende eines Videos oder einer Audiodatei wird sicher vom Output-Fenster an die Bedienoberfläche gemeldet und führt bei entsprechender Einstellung zur nächsten aktiven Folie.","en":"Video and audio completion is securely reported from the output window to the control interface and advances to the next active slide when configured."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Lokale Videodatei","en":"Local video file"},"text":{"de":"Die Auswahl „Datei“ öffnet jetzt tatsächlich den Medien-Dateidialog und erzeugt ein vollflächiges Videoelement.","en":"Selecting File now opens the actual media picker and creates a full-frame video element."}},
+            {"label":{"de":"Schleifenwechsel","en":"Loop navigation"},"text":{"de":"Vor- und Nachprogramm springen nach ihrer letzten aktiven Folie zuverlässig an den Anfang des jeweiligen Bereichs zurück, ohne deaktivierte Inhalte einzubeziehen.","en":"Pre- and post-service reliably return to the start of their section after the last active slide while skipping disabled content."}},
+            {"label":{"de":"Zugangsdaten","en":"Credentials"},"text":{"de":"GitHub-Zugangsdaten bleiben vollständig im Electron-Hauptprozess und werden weder an den Renderer noch an Präsentations- oder Mediendaten weitergegeben.","en":"GitHub credentials remain entirely in the Electron main process and are never exposed to the renderer, presentation data or media metadata."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.8",
       "builds": [{
         "version": "0.8.0",
         "releaseDate": "2026-09-01",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Fensterstart","en":"Window startup","da":"Vinduesstart","sv":"Fönsterstart","no":"Vindusstart","fi":"Ikkunan käynnistys","nl":"Vensterstart","fr":"Démarrage de la fenêtre","es":"Inicio de ventana","it":"Avvio finestra","pl":"Uruchamianie okna","pt-BR":"Inicialização da janela"},"text":{"de":"Die Bedienoberfläche startet standardmäßig im Vollbildmodus und kann alternativ maximiert, als Fenster oder im zuletzt verwendeten Zustand geöffnet werden.","en":"The control interface now starts in full-screen mode by default and can alternatively open maximized, windowed or in its last state."}},
