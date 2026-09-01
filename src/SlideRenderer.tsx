@@ -19,7 +19,8 @@ function RenderElement({element,mode}:{element:SlideElement;mode:SlideRendererMo
   if(!element.visible)return null;
   const style=elementStyle(element),properties=element.properties,src=String(properties.src??properties.url??'');
   if(element.type==='image'&&src)return <img className="slide-renderer-element media" style={style} src={src} alt="" loading={mode==='thumbnail'?'lazy':'eager'}/>;
-  if(element.type==='video'&&src)return <video className="slide-renderer-element media" style={style} src={src} muted playsInline preload={mode==='thumbnail'?'none':'metadata'}/>;
+  if(element.type==='video'&&src)return <video className="slide-renderer-element media" style={style} src={src} autoPlay={mode==='live'&&properties.autoplay!==false} loop={properties.loop===true} muted={properties.muted===true||mode==='thumbnail'} controls={mode==='editor'||mode==='preview'} playsInline preload={mode==='thumbnail'?'none':'metadata'}/>;
+  if(element.type==='web'&&src)return mode==='thumbnail'?<div className="slide-renderer-element web-placeholder" style={style}>WEB</div>:<iframe className="slide-renderer-element web" style={{...style,zoom:`${Number(properties.zoom??100)}%`}} src={src} title="Web content" allow="autoplay; fullscreen; picture-in-picture" sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups"/>;
   if(element.type==='shape')return <div className="slide-renderer-element shape" style={{...style,background:String(properties.fill??properties.color??'#fff')}}/>;
   if(element.type==='line')return <div className="slide-renderer-element line" style={{...style,background:String(properties.color??'#fff'),height:`${Math.max(1,Number(properties.strokeWidth??4))/19.2}cqw`}}/>;
   if(element.type==='qr')return <div className="slide-renderer-element qr" style={style}>{String(properties.text??properties.value??'QR')}</div>;

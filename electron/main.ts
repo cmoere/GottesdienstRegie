@@ -1,13 +1,17 @@
-import { app, BrowserWindow, ipcMain, screen, safeStorage, Menu, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, screen, safeStorage, Menu, shell, dialog, protocol, net } from 'electron';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import fs from 'node:fs/promises';
 import { createHash, createHmac, pbkdf2Sync, randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import { compare as bcryptCompare } from 'bcryptjs';
 import { autoUpdater, type UpdateInfo } from 'electron-updater';
 import { DisplayManager, type DisplayAssignments, type OutputRole } from './DisplayManager';
 import { OutputWindowManager } from './OutputWindowManager';
+import { PresentationRepository } from './PresentationRepository';
+import { MediaRepository } from './MediaRepository';
 
 let controlWindow: BrowserWindow | null = null;
+protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 
 type UpdateStatus={state:'idle'|'checking'|'available'|'not-available'|'downloading'|'downloaded'|'rollback-downloading'|'rollback-ready'|'error'|'development';version?:string;percent?:number;releaseNotes?:string;message?:string};
@@ -61,8 +65,12 @@ app.whenReady().then(() => {
   const publishOutputStatus=(role:OutputRole,state:'ready'|'missing'|'closed')=>{if(controlWindow&&!controlWindow.isDestroyed())controlWindow.webContents.send('outputs:status',{role,state})};
   const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
   const sessionFile = path.join(app.getPath('userData'), 'community-session.bin');
-  const presentationDirectory=path.join(app.getPath('userData'),'presentations');
-  const presentationFile=path.join(presentationDirectory,'default-presentation.json');
+  const legacyPresentationFile=path.join(app.getPath('userData'),'presentations','default-presentation.json');
+  const presentationRepository=new PresentationRepository(path.join(app.getPath('userData'),'library'));
+  const mediaRepository=new MediaRepository(path.join(app.getPath('userData'),'media-library'));
+  void presentationRepository.initialize();
+  void mediaRepository.initialize();
+  protocol.handle('gottesdienst-media',request=>{const url=new URL(request.url),fileName=path.basename(decodeURIComponent(url.pathname));return net.fetch(pathToFileURL(path.join(mediaRepository.directory,fileName)).toString())});
   const databaseUrl = 'https://philippusgemeindebie-default-rtdb.europe-west1.firebasedatabase.app';
   const gasUrl = 'https://script.google.com/macros/s/AKfycbxU-k7Ch6bHRnOWUp8SxM7bCQ7GBZe_OyDnnegBB2DxwX928--9caHi3Elwc38XABxz/exec';
   const servicePermissionKeys=['presentationView','presentationCreate','presentationEdit','presentationDelete','presentationLive','previewUse','quickScreensUse','stageMessagesUse','bibleUse','songsEdit','mediaUpload','mediaDelete','recordingManage','outputSettings','appSettings'];
@@ -161,8 +169,29 @@ app.whenReady().then(() => {
   ipcMain.handle('auth:restore',async()=>{const stored=await readStored();if(!stored||Number(stored.expiresAt??0)<Date.now()){try{await fs.unlink(sessionFile)}catch{}return null}try{const [sessionResponse,userResponse]=await Promise.all([fetch(`${databaseUrl}/users/${encodeURIComponent(stored.user.uid)}/sessions/${encodeURIComponent(stored.sessionId)}.json`,{signal:AbortSignal.timeout(8000),cache:'no-store'}),fetch(`${databaseUrl}/users/${encodeURIComponent(stored.user.uid)}.json`,{signal:AbortSignal.timeout(8000),cache:'no-store'})]);if(!sessionResponse.ok||!userResponse.ok)throw new Error('SESSION_CHECK_NETWORK');const remoteSession=await sessionResponse.json(),user=await userResponse.json(),access=normalizedAccess(user);const tokenValid=stored.serverSession===true?true:(typeof stored.secret==='string'&&same(createHash('sha256').update(stored.secret).digest('hex'),String(remoteSession?.tokenHash??'')));const accountDisabled=String(user?.status??'active').toLowerCase()==='disabled'||user?.anmeldungErlaubt===false||user?.forceLogout===true||user?.deletion?.pending===true;if(!remoteSession||remoteSession.revoked===true||Number(remoteSession.expiresAt??stored.expiresAt)<=Date.now()||!tokenValid||accountDisabled||!access.enabled){await fs.unlink(sessionFile).catch(()=>{});return null}const expiresAt=Number(remoteSession.expiresAt??stored.expiresAt);return {user:safeUser(stored.user.uid,user),permissions:Object.entries(access.permissions).filter(([,enabled])=>enabled).map(([key])=>key),expiresAt}}catch{return {user:stored.user,permissions:stored.permissions,expiresAt:stored.expiresAt,offline:true}}});
   ipcMain.handle('auth:logout',async()=>{const stored=await readStored();if(stored?.sessionId&&stored?.user?.uid)await fetch(`${databaseUrl}/users/${encodeURIComponent(stored.user.uid)}/sessions/${encodeURIComponent(stored.sessionId)}.json`,{method:'PATCH',headers:{'content-type':'application/json'},body:JSON.stringify({revoked:true,revokedAt:Date.now()})}).catch(()=>{});try{await fs.unlink(sessionFile)}catch{}return true});
   ipcMain.handle('auth:connection',async()=>{try{const response=await fetch(`${databaseUrl}/.json?shallow=true`,{signal:AbortSignal.timeout(6000)});return response.ok}catch{return false}});
-  ipcMain.handle('presentation:save',async(_event,document:unknown)=>{await fs.mkdir(presentationDirectory,{recursive:true});await fs.writeFile(presentationFile,JSON.stringify(document,null,2),'utf8');return true});
-  ipcMain.handle('presentation:load',async()=>{try{return JSON.parse(await fs.readFile(presentationFile,'utf8'))}catch{return null}});
+  ipcMain.handle('presentation:list',(_event,options?:{archived?:boolean;trashed?:boolean})=>presentationRepository.list(options?.archived===true,options?.trashed===true));
+  ipcMain.handle('presentation:create',(_event,input:{title?:string;date?:string;template?:unknown})=>presentationRepository.create(input??{}));
+  ipcMain.handle('presentation:save',(_event,document:unknown)=>presentationRepository.save(document));
+  ipcMain.handle('presentation:load',async(_event,id?:string)=>{
+    if(id)return presentationRepository.read(id);
+    const state=await presentationRepository.getState();
+    if(state.lastPresentationId){const current=await presentationRepository.read(state.lastPresentationId);if(current)return current}
+    try{return JSON.parse(await fs.readFile(legacyPresentationFile,'utf8'))}catch{return null}
+  });
+  ipcMain.handle('presentation:duplicate',(_event,id:string)=>presentationRepository.duplicate(id));
+  ipcMain.handle('presentation:rename',(_event,id:string,title:string)=>presentationRepository.rename(id,title));
+  ipcMain.handle('presentation:archive',(_event,id:string,value:boolean)=>presentationRepository.setFlag(id,'archived',value));
+  ipcMain.handle('presentation:trash',(_event,id:string,value:boolean)=>presentationRepository.setFlag(id,'trashed',value));
+  ipcMain.handle('presentation:recovery',()=>presentationRepository.recoveryInfo());
+  ipcMain.handle('presentation:mark-clean',()=>presentationRepository.setState({cleanShutdown:true}));
+  ipcMain.handle('presentation:import',async()=>{const picked=await dialog.showOpenDialog(controlWindow!,{title:'Präsentation importieren',properties:['openFile'],filters:[{name:'GottesdienstRegie',extensions:['json','grpresentation','grbackup']}]});if(picked.canceled||!picked.filePaths[0])return null;return presentationRepository.importDocument(picked.filePaths[0])});
+  ipcMain.handle('presentation:export',async(_event,id:string)=>{const doc=await presentationRepository.read(id);if(!doc)return null;const picked=await dialog.showSaveDialog(controlWindow!,{title:'Präsentation exportieren',defaultPath:`${String(doc.title||'Praesentation').replace(/[<>:"/\\|?*]/g,'-')}.grpresentation`,filters:[{name:'GottesdienstRegie Präsentation',extensions:['grpresentation']}]});if(picked.canceled||!picked.filePath)return null;return presentationRepository.exportDocument(id,picked.filePath)});
+  ipcMain.handle('presentation:backup',(_event,id:string)=>presentationRepository.backup(id));
+  ipcMain.handle('external:open',async(_event,url:string)=>{if(!/^https:\/\/(github\.com\/cmoere\/GottesdienstRegie|cmoere\.github\.io\/GottesdienstRegie)/i.test(url))throw new Error('EXTERNAL_URL_NOT_ALLOWED');await shell.openExternal(url);return true});
+  ipcMain.handle('media:list',()=>mediaRepository.list());
+  ipcMain.handle('media:import',async()=>{const picked=await dialog.showOpenDialog(controlWindow!,{title:'Medien importieren',properties:['openFile','multiSelections'],filters:[{name:'Medien',extensions:['png','jpg','jpeg','webp','gif','svg','mp4','mov','webm','m4v','mp3','wav','m4a','ogg','flac','pdf']}]});if(picked.canceled)return[];return mediaRepository.import(picked.filePaths)});
+  ipcMain.handle('media:update',(_event,id:string,patch:any)=>mediaRepository.update(id,patch));
+  ipcMain.handle('media:remove',(_event,id:string)=>mediaRepository.remove(id));
   ipcMain.handle('updates:current-version',()=>app.getVersion());
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});
   ipcMain.handle('updates:check',()=>checkForUpdates());
@@ -179,8 +208,11 @@ app.whenReady().then(() => {
   ipcMain.handle('outputs:preflight',(_event,assignments:DisplayAssignments,presentation:{hasPresentation?:boolean;activeSlideCount?:number;media?:string[]})=>displayManager.preflight(assignments,presentation));
   ipcMain.handle('outputs:on-air',async(_event,assignments:DisplayAssignments,payload:unknown)=>{const preflight=displayManager.preflight(assignments,{hasPresentation:true,activeSlideCount:1});if(!preflight.ok)throw new Error(preflight.errors.join('\n'));return outputManager.start(assignments,payload)});
   ipcMain.handle('outputs:send-slide',(_event,payload:unknown)=>{outputManager.send(payload);return true});
+  ipcMain.handle('outputs:send-role',(_event,role:OutputRole,payload:unknown)=>outputManager.sendTo(role,payload));
   ipcMain.handle('outputs:off-air',()=>outputManager.stop());
   createControlWindow();
+  let cleanQuit=false;
+  app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();void presentationRepository.setState({cleanShutdown:true}).finally(()=>{cleanQuit=true;app.quit()})});
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createControlWindow(); });
 });
 

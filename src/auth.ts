@@ -62,8 +62,8 @@ export function authMessage(raw:string,t:Translator){
     INVALID_CREDENTIALS:'authInvalid'
   };
   const code=Object.keys(messages).find(key=>raw.includes(key));
-  if(code)return `${t(messages[code])} (${code})`;
-  const cleaned=cleanedRemoteError(raw).slice(0,240);
-  return t('authTechnical',{detail:cleaned||t('authUnknown')});
+  if(code)return t(messages[code]);
+  console.error('[auth]',{code:'AUTH_UNKNOWN',timestamp:new Date().toISOString(),detail:cleanedRemoteError(raw).slice(0,240)});
+  return t('authTechnical',{detail:''}).replace(/:\s*$/,'');
 }
 import type { TranslationKey, Translator } from './i18n';

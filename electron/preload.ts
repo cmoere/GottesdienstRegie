@@ -8,9 +8,21 @@ contextBridge.exposeInMainWorld('desktop', {
   goOnAir: (assignments:Record<string,string>,payload:unknown) => ipcRenderer.invoke('outputs:on-air',assignments,payload),
   goOffAir: () => ipcRenderer.invoke('outputs:off-air'),
   sendLiveSlide:(payload:unknown)=>ipcRenderer.invoke('outputs:send-slide',payload),
+  sendOutputRole:(role:string,payload:unknown)=>ipcRenderer.invoke('outputs:send-role',role,payload),
   onLiveSlide:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:slide',listener);return()=>ipcRenderer.removeListener('outputs:slide',listener)},
   onOutputStatus:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:status',listener);return()=>ipcRenderer.removeListener('outputs:status',listener)},
-  presentation:{save:(document:unknown)=>ipcRenderer.invoke('presentation:save',document),load:()=>ipcRenderer.invoke('presentation:load')},
+  presentation:{
+    list:(options?:{archived?:boolean;trashed?:boolean})=>ipcRenderer.invoke('presentation:list',options),
+    create:(input:{title?:string;date?:string;template?:unknown})=>ipcRenderer.invoke('presentation:create',input),
+    save:(document:unknown)=>ipcRenderer.invoke('presentation:save',document),
+    load:(id?:string)=>ipcRenderer.invoke('presentation:load',id),
+    duplicate:(id:string)=>ipcRenderer.invoke('presentation:duplicate',id),rename:(id:string,title:string)=>ipcRenderer.invoke('presentation:rename',id,title),
+    archive:(id:string,value:boolean)=>ipcRenderer.invoke('presentation:archive',id,value),trash:(id:string,value:boolean)=>ipcRenderer.invoke('presentation:trash',id,value),
+    import:()=>ipcRenderer.invoke('presentation:import'),export:(id:string)=>ipcRenderer.invoke('presentation:export',id),backup:(id:string)=>ipcRenderer.invoke('presentation:backup',id),
+    recovery:()=>ipcRenderer.invoke('presentation:recovery'),markClean:()=>ipcRenderer.invoke('presentation:mark-clean')
+  },
+  openExternal:(url:string)=>ipcRenderer.invoke('external:open',url),
+  media:{list:()=>ipcRenderer.invoke('media:list'),import:()=>ipcRenderer.invoke('media:import'),update:(id:string,patch:unknown)=>ipcRenderer.invoke('media:update',id,patch),remove:(id:string)=>ipcRenderer.invoke('media:remove',id)},
   session: {
     read: () => ipcRenderer.invoke('session:read'),
     write: (token: string) => ipcRenderer.invoke('session:write', token),
