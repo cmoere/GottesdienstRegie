@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 interface DesktopDisplay { id:number;label:string;primary:boolean;bounds:{x:number;y:number;width:number;height:number};workArea:{x:number;y:number;width:number;height:number};scaleFactor:number;rotation:number;touchSupport:string }
-interface DesktopUpdateStatus { state:'idle'|'checking'|'available'|'not-available'|'downloading'|'downloaded'|'rollback-downloading'|'rollback-ready'|'error'|'development';version?:string;percent?:number;releaseNotes?:string;message?:string }
+interface DesktopUpdateStatus { state:'idle'|'checking'|'available'|'not-available'|'downloading'|'downloaded'|'rollback-downloading'|'rollback-ready'|'error'|'development';version?:string;percent?:number;releaseNotes?:string;message?:string;transferred?:number;total?:number;bytesPerSecond?:number;etaSeconds?:number }
 interface DesktopVersionMetadata{version:string;installedAt:string;modifiedAt:string;fileSize:number;executable:string}
 interface DesktopPreviousVersion{version:string;publishedAt:string;size:number;url:string}
 interface DesktopOutputStatus{role:string;state:'ready'|'missing'|'closed'}

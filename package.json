@@ -1,6 +1,6 @@
 {
   "name": "gottesdienstregie",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "description": "Desktop-Regiesoftware für Gottesdienstpräsentationen der Philippusgemeinde.",
   "author": "Philippusgemeinde Ev. Freikirche",
   "private": true,
@@ -75,6 +75,23 @@
         }
       ],
       "artifactName": "GottesdienstRegie-Setup-${version}.${ext}"
+    },
+    "mac": {
+      "icon": "build/icon.png",
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] },
+        { "target": "zip", "arch": ["x64", "arm64"] }
+      ],
+      "artifactName": "GottesdienstRegie-${version}-${arch}.${ext}"
+    },
+    "linux": {
+      "icon": "build/icon.png",
+      "target": [
+        { "target": "AppImage", "arch": ["x64"] },
+        { "target": "deb", "arch": ["x64"] }
+      ],
+      "category": "AudioVideo",
+      "artifactName": "GottesdienstRegie-${version}-${arch}.${ext}"
     },
     "nsis": {
       "oneClick": false,

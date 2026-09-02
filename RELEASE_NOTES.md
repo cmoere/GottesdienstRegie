@@ -1,3 +1,30 @@
+# GottesdienstRegie 0.10.0
+
+Veröffentlicht am 2. September 2026.
+
+## Neu
+
+- **Produktionsarbeitsbereich:** Ablauf, spezialisierter Kontexteditor und große Ausgabenvorschau bilden eine dichte professionelle Arbeitsfläche. Output-Tabs und Formatierungsleiste bleiben sichtbar.
+- **Songeditor:** Arrangement, Tonart, Lyrics-Abschnitte, Metadaten, CCLI-Optionen und mehrere echte Folienvorschauen sind gleichzeitig bearbeitbar.
+- **Timeline:** Die Timeline zeigt aktive Elemente samt Dauer und Liveposition. Sie lässt sich aufklappen und in der Höhe anpassen.
+- **Startbildschirm:** Das konfigurierte Loginmotiv füllt den Hintergrund; eine eigene dunkle Startkarte zeigt echte Ladephasen mit ruhigem Spinner.
+
+## Verbessert
+
+- **Ablauf:** Echte Miniaturansichten, kompakte Dauern, Wiederholung, Auswahl und Livezustand benötigen deutlich weniger Platz.
+- **Updates:** Die voraussichtliche Restdauer basiert auf übertragenen Bytes und einer geglätteten realen Downloadgeschwindigkeit.
+- **Tastatur:** Escape schließt im Haupteditor stets das oberste Menü oder Dialogfenster und bricht Sicherheitsdialoge ab.
+
+## Geändert
+
+- **Servicezeit:** Jede Präsentation besitzt exakt eine Servicezeit. Sie erscheint als `10:30 (VORM.)` beziehungsweise `15:30 (NACHM.)`.
+
+## Behoben
+
+- **Zeit festlegen:** Der Zeitdialog verändert den Aufklappzustand des Gottesdienstbereichs nicht; Escape verwirft die Änderung.
+
+---
+
 # GottesdienstRegie 0.9.2
 
 Veröffentlicht am 2. September 2026.

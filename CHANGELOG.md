@@ -1,5 +1,15 @@
 # Versionshinweise / Release notes
 
+## 0.10.0 – 2026-09-02
+
+- Dunkler, dichter Produktionsarbeitsbereich mit Output-Tabs, Formatleiste, Kontexteditor und großer Vorschau
+- Spezialisierter Songeditor für Arrangement, Tonart, Lyrics, Metadaten und CCLI
+- Aufklappbare Timeline mit Elementdauern und Liveposition
+- Exakt eine Servicezeit mit VORM./NACHM.-Darstellung
+- Full-Bleed-Startbildschirm mit echten Ladephasen
+- Geglättete, aus echten Downloadwerten berechnete Update-Restzeit
+- Buildziele für Windows, macOS (Intel/Apple Silicon) und Linux
+
 ## 0.6.0 – 2026-09-01
 
 ### Deutsch

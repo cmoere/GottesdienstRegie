@@ -3,11 +3,39 @@
   "supportedLocales": ["de","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR"],
   "versions": [
     {
+      "line": "0.10",
+      "builds": [{
+        "version": "0.10.0",
+        "releaseDate": "2026-09-02",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Produktionsarbeitsbereich","en":"Production workspace"},"text":{"de":"Ablauf, spezialisierter Kontexteditor und große Ausgabenvorschau bilden jetzt eine dichte professionelle Arbeitsfläche mit dauerhaft sichtbaren Output-Tabs und Formatierungsleiste.","en":"The order of service, specialized context editor and large output preview now form a dense professional workspace with persistent output tabs and formatting controls."}},
+            {"label":{"de":"Songeditor","en":"Song editor"},"text":{"de":"Songs zeigen Arrangement, Tonart, direkt bearbeitbare Abschnitte, Metadaten, CCLI-Optionen und mehrere echte Folienvorschauen gleichzeitig.","en":"Songs now show arrangement, key, directly editable sections, metadata, CCLI options and multiple real slide previews at the same time."}},
+            {"label":{"de":"Timeline","en":"Timeline"},"text":{"de":"Eine aufklappbare und in der Höhe anpassbare Timeline visualisiert alle aktiven Elemente mit Dauer und Liveposition.","en":"An expandable, height-adjustable timeline visualizes every active item with duration and live position."}},
+            {"label":{"de":"Startbildschirm","en":"Startup screen"},"text":{"de":"Der Startvorgang verwendet das konfigurierte Loginmotiv als Vollbildhintergrund und zeigt in einer eigenen dunklen Karte ausschließlich echte Ladephasen mit ruhigem Spinner.","en":"Startup uses the configured sign-in image as a full-bleed background and shows only real loading phases in a dedicated dark panel with a calm spinner."}}
+          ],
+          "improved": [
+            {"label":{"de":"Ablauf","en":"Order of service"},"text":{"de":"Abschnitte, echte Miniaturansichten, Dauern, Wiederholung, Auswahl und Livezustand sind kompakter und bei 1920 × 1080 gleichzeitig mit Editor und Vorschau sichtbar.","en":"Sections, real thumbnails, durations, repeat, selection and live state are more compact and remain visible with the editor and preview at 1920 × 1080."}},
+            {"label":{"de":"Updates","en":"Updates"},"text":{"de":"Beim Herunterladen wird die Restzeit aus übertragenen Bytes und einer geglätteten realen Downloadgeschwindigkeit berechnet.","en":"During download, remaining time is calculated from transferred bytes and a smoothed real download speed."}},
+            {"label":{"de":"Tastaturbedienung","en":"Keyboard operation"},"text":{"de":"Escape schließt im Haupteditor das jeweils oberste Menü oder Dialogfenster; Sicherheitsdialoge werden dabei immer abgebrochen.","en":"Escape closes the topmost menu or dialog in the main editor and always cancels destructive confirmation dialogs."}}
+          ],
+          "changed": [
+            {"label":{"de":"Servicezeit","en":"Service time"},"text":{"de":"Jede Präsentation besitzt jetzt exakt eine Servicezeit. Sie wird im Ablauf als 24-Stunden-Zeit mit dem Zusatz VORM. oder NACHM. angezeigt.","en":"Each presentation now has exactly one service time, shown in 24-hour format with a morning or afternoon indicator."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Zeit festlegen","en":"Set service time"},"text":{"de":"Der kompakte Zeitdialog verändert den Aufklappzustand des Gottesdienstbereichs nicht und verwirft Änderungen mit Escape.","en":"The compact time dialog no longer changes the service section expansion state and discards changes with Escape."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.9",
       "builds": [{
         "version": "0.9.2",
         "releaseDate": "2026-09-02",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [],
           "improved": [

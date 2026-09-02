@@ -17,7 +17,7 @@ let appPreferences:AppPreferences;
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 
-type UpdateStatus={state:'idle'|'checking'|'available'|'not-available'|'downloading'|'downloaded'|'rollback-downloading'|'rollback-ready'|'error'|'development';version?:string;percent?:number;releaseNotes?:string;message?:string};
+type UpdateStatus={state:'idle'|'checking'|'available'|'not-available'|'downloading'|'downloaded'|'rollback-downloading'|'rollback-ready'|'error'|'development';version?:string;percent?:number;releaseNotes?:string;message?:string;transferred?:number;total?:number;bytesPerSecond?:number;etaSeconds?:number};
 let lastUpdateStatus:UpdateStatus={state:'idle'};
 function releaseNotes(info:UpdateInfo){
   if(typeof info.releaseNotes==='string')return info.releaseNotes;
@@ -35,7 +35,8 @@ autoUpdater.autoInstallOnAppQuit=true;
 autoUpdater.on('checking-for-update',()=>publishUpdateStatus({state:'checking'}));
 autoUpdater.on('update-available',info=>publishUpdateStatus({state:'available',version:info.version,releaseNotes:releaseNotes(info)}));
 autoUpdater.on('update-not-available',info=>publishUpdateStatus({state:'not-available',version:info.version}));
-autoUpdater.on('download-progress',progress=>publishUpdateStatus({state:'downloading',percent:Math.round(progress.percent)}));
+let smoothedDownloadSpeed=0;
+autoUpdater.on('download-progress',progress=>{const speed=Math.max(0,progress.bytesPerSecond||0);smoothedDownloadSpeed=smoothedDownloadSpeed?smoothedDownloadSpeed*.72+speed*.28:speed;const remaining=Math.max(0,progress.total-progress.transferred),etaSeconds=smoothedDownloadSpeed>0&&progress.percent>=3?Math.round(remaining/smoothedDownloadSpeed):undefined;publishUpdateStatus({state:'downloading',percent:Math.round(progress.percent),transferred:progress.transferred,total:progress.total,bytesPerSecond:Math.round(smoothedDownloadSpeed),etaSeconds})});
 autoUpdater.on('update-downloaded',info=>publishUpdateStatus({state:'downloaded',version:info.version,releaseNotes:releaseNotes(info)}));
 autoUpdater.on('error',error=>publishUpdateStatus({state:'error',message:error.message}));
 

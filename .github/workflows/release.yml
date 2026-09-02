@@ -1,4 +1,4 @@
-name: Windows-Release
+name: Cross-platform release
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  windows:
     runs-on: windows-latest
     steps:
       - name: Quellcode laden
@@ -34,3 +34,39 @@ jobs:
             release/GottesdienstRegie-Setup-*.exe
             release/GottesdienstRegie-Setup-*.exe.blockmap
             release/latest.yml
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx electron-builder --mac dmg zip --x64 --arm64 --publish never
+      - uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE_NOTES.md
+          files: |
+            release/GottesdienstRegie-*.dmg
+            release/GottesdienstRegie-*.zip
+            release/latest-mac.yml
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx electron-builder --linux AppImage deb --x64 --publish never
+      - uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE_NOTES.md
+          files: |
+            release/GottesdienstRegie-*.AppImage
+            release/GottesdienstRegie-*.deb
+            release/latest-linux.yml

@@ -9,6 +9,7 @@ import { App } from './App';
 import './styles.css';
 import './settings-v08.css';
 import './v09.css';
+import './v010.css';
 import './auth.css';
 
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);
