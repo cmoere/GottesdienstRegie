@@ -1,0 +1,33 @@
+name: Complete Linux assets for 0.10.0
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/linux-v010-repair.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx electron-builder --linux AppImage deb --x64 --publish never
+      - name: Linux-Pakete an Version 0.10.0 anhängen
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.10.0
+          fail_on_unmatched_files: true
+          files: |
+            release/GottesdienstRegie-*.AppImage
+            release/GottesdienstRegie-*.deb
+            release/latest-linux.yml
