@@ -1,3 +1,27 @@
+# GottesdienstRegie 0.11.0
+
+Veröffentlicht am 2. September 2026.
+
+## Neu
+
+- **Hintergrund-Menü:** Medien durchsuchen, Bilder direkt importieren, zuletzt verwendete Motive auswählen und Füllfarben sofort anwenden.
+- **Bildanpassung:** Hintergrundbilder weichzeichnen, drehen, an Höhe oder Breite anpassen, ausfüllen, einpassen und positionieren.
+- **Hilfslinien:** Canvas Smart Guides, Randhilfen und Drittelregel lassen sich unabhängig ein- und ausschalten und bleiben auf den Editor beschränkt.
+- **Anordnen:** Elemente nach vorn oder hinten legen, an sechs Positionen ausrichten, drehen, spiegeln sowie sperren und entsperren.
+
+## Verbessert
+
+- **Zentraler Renderer:** Hintergrundbilder, Bildposition, Unschärfe, Rotation, Spiegelung und Kursivschrift erscheinen in Editor, Vorschau, Thumbnails und MAIN identisch.
+- **Medienbibliothek:** Aus dem Hintergrund-Menü ausgewählte Bilder ändern ausschließlich die aktuelle Folie und erzeugen kein neues Ablauf-Element.
+- **Folienübersicht:** Der gespeicherte Thumbnail-Regler verändert nun sichtbar die Rastergröße, ohne Folieninhalt oder Canvas-Auflösung anzupassen.
+
+## Behoben
+
+- **Kleine Fenster:** Alle sechs Ausrichtungen sowie Drehen, Spiegeln und Sperren bleiben auch in einer kompakten Bedienoberfläche sichtbar.
+- **Textformatierung:** Kursiv wird vom gemeinsamen Renderer tatsächlich dargestellt.
+
+---
+
 # GottesdienstRegie 0.10.0
 
 Veröffentlicht am 2. September 2026.

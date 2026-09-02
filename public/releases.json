@@ -3,11 +3,37 @@
   "supportedLocales": ["de","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR"],
   "versions": [
     {
+      "line": "0.11",
+      "builds": [{
+        "version": "0.11.0",
+        "releaseDate": "2026-09-02",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Hintergrund-Menü","en":"Background menu"},"text":{"de":"Ein kompaktes Produktionsmenü ermöglicht Medienauswahl, direkten Bildimport, zuletzt verwendete Bilder und eine sofort anwendbare Farbpalette.","en":"A compact production menu now provides media browsing, direct image import, recently used images and an immediately applicable color palette."}},
+            {"label":{"de":"Bildanpassung","en":"Image fitting"},"text":{"de":"Hintergrundbilder lassen sich weichzeichnen, drehen, an Höhe oder Breite anpassen, ausfüllen, einpassen und exakt ausrichten.","en":"Background images can now be blurred, rotated, fitted to height or width, filled, contained and positioned precisely."}},
+            {"label":{"de":"Hilfslinien","en":"Guides"},"text":{"de":"Canvas Smart Guides, Randhilfen und die Drittelregel können unabhängig aktiviert werden und erscheinen ausschließlich im Editor.","en":"Canvas smart guides, margin guides and the rule of thirds can be enabled independently and appear only in the editor."}},
+            {"label":{"de":"Anordnen","en":"Arrange"},"text":{"de":"Elemente können nach vorn oder hinten gelegt, an allen sechs Kanten und Mittellinien ausgerichtet, gedreht, gespiegelt und gesperrt werden.","en":"Elements can be moved to the front or back, aligned to all six edges and centers, rotated, mirrored and locked."}}
+          ],
+          "improved": [
+            {"label":{"de":"Zentraler Renderer","en":"Shared renderer"},"text":{"de":"Hintergrundfarbe, Bild, Position, Unschärfe, Rotation sowie gespiegelte und kursive Elemente werden in Editor, Vorschau, Miniaturen und Live-Ausgabe identisch gerendert.","en":"Background color, image, position, blur, rotation, mirrored and italic elements now render identically in editor, preview, thumbnails and live output."}},
+            {"label":{"de":"Medienauswahl","en":"Media selection"},"text":{"de":"Wird die Medienbibliothek über das Hintergrund-Menü geöffnet, setzt die Auswahl den Folienhintergrund und erzeugt kein zusätzliches Ablauf-Element.","en":"When the media library is opened from the background menu, selecting an image sets the slide background without creating another service item."}},
+            {"label":{"de":"Folienübersicht","en":"Slide grid"},"text":{"de":"Der gespeicherte Regler für die Miniaturgröße verändert nun sichtbar die Rastergröße, ohne Inhalte oder Canvas-Auflösung zu beeinflussen.","en":"The persisted thumbnail-size control now visibly changes the grid size without affecting content or canvas resolution."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Kleine Fenster","en":"Small windows"},"text":{"de":"Eine ältere Responsive-Regel blendet Ausrichtungs- und Drehbefehle in kompakten Fenstergrößen nicht mehr versehentlich aus.","en":"A legacy responsive rule no longer hides alignment and rotation actions at compact window sizes."}},
+            {"label":{"de":"Textformatierung","en":"Text formatting"},"text":{"de":"Die Kursiv-Schaltfläche wirkt jetzt sichtbar im gemeinsamen Folienrenderer.","en":"The italic control now visibly affects text in the shared slide renderer."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.10",
       "builds": [{
         "version": "0.10.0",
         "releaseDate": "2026-09-02",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Produktionsarbeitsbereich","en":"Production workspace"},"text":{"de":"Ablauf, spezialisierter Kontexteditor und große Ausgabenvorschau bilden jetzt eine dichte professionelle Arbeitsfläche mit dauerhaft sichtbaren Output-Tabs und Formatierungsleiste.","en":"The order of service, specialized context editor and large output preview now form a dense professional workspace with persistent output tabs and formatting controls."}},

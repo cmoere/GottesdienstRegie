@@ -1,5 +1,16 @@
 # Versionshinweise / Release notes
 
+## 0.11.0 – 2026-09-02
+
+- Funktionales Hintergrund-Menü mit Medienwahl, Import, Farbpalette, Unschärfe, Rotation, Anpassung und Positionierung
+- Ein- und ausschaltbare Smart Guides, Randhilfen und Drittelregel ausschließlich im Editor
+- Anordnen-Menü für Ebenen, sechs Ausrichtungen, Drehen, Spiegeln und Sperren
+- Identische Darstellung der neuen Eigenschaften in Editor, Vorschau, Miniaturen und Live-Ausgabe
+- Hintergrundwahl aus der Medienbibliothek ohne zusätzliches Ablauf-Element
+- Wirksamer Miniaturgrößen-Regler in der Folienübersicht
+- Responsive-Ausblendung einzelner Menübefehle behoben
+- Kursivformatierung im zentralen Renderer behoben
+
 ## 0.10.0 – 2026-09-02
 
 - Dunkler, dichter Produktionsarbeitsbereich mit Output-Tabs, Formatleiste, Kontexteditor und großer Vorschau

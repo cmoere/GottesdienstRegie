@@ -7,8 +7,8 @@ function elementStyle(element:SlideElement):CSSProperties{
   const value=element.properties;
   return {
     left:`${element.x/19.2}%`,top:`${element.y/10.8}%`,width:`${element.width/19.2}%`,height:`${element.height/10.8}%`,
-    opacity:element.opacity,transform:`rotate(${element.rotation}deg)`,zIndex:element.zIndex,
-    color:String(value.color??'#fff'),fontFamily:String(value.fontFamily??'Inter'),fontWeight:Number(value.fontWeight??400),
+    opacity:element.opacity,transform:`rotate(${element.rotation}deg) scaleX(${value.flipX===true?-1:1}) scaleY(${value.flipY===true?-1:1})`,zIndex:element.zIndex,
+    color:String(value.color??'#fff'),fontFamily:String(value.fontFamily??'Inter'),fontWeight:Number(value.fontWeight??400),fontStyle:String(value.fontStyle??'normal') as CSSProperties['fontStyle'],
     fontSize:`${Number(value.fontSize??48)/19.2}cqw`,lineHeight:Number(value.lineHeight??1.15),letterSpacing:`${Number(value.letterSpacing??0)/19.2}cqw`,
     textAlign:(value.align??'center') as CSSProperties['textAlign'],padding:`${Number(value.padding??0)/19.2}cqw`,
     alignItems:value.verticalAlign==='top'?'flex-start':value.verticalAlign==='bottom'?'flex-end':'center'
@@ -36,7 +36,9 @@ function RenderElement({element,mode}:{element:SlideElement;mode:SlideRendererMo
 
 export function SlideRenderer({slide,mode='preview'}:{slide:Slide;mode?:SlideRendererMode}){
   const hasVisibleElements=slide.elements?.some(element=>element.visible);
-  return <div className={`slide-renderer ${mode}`} style={{background:slide.background}} data-slide-id={slide.id}>
+  const backgroundStyle:CSSProperties={backgroundColor:slide.background,backgroundImage:slide.backgroundImage?`url("${slide.backgroundImage}")`:undefined,backgroundSize:slide.backgroundFit??'cover',backgroundPosition:`${slide.backgroundPositionX??'center'} ${slide.backgroundPositionY??'center'}`};
+  return <div className={`slide-renderer ${mode}`} style={{backgroundColor:slide.background}} data-slide-id={slide.id}>
+    <div className="slide-background-layer" style={{...backgroundStyle,filter:slide.backgroundBlur?`blur(${slide.backgroundBlur}px)`:undefined,transform:`rotate(${slide.backgroundRotation??0}deg) scale(${slide.backgroundBlur?1.06:1})`}}/>
     {hasVisibleElements
       ?slide.elements.slice().sort((a,b)=>a.zIndex-b.zIndex).map(element=><RenderElement key={element.id} element={element} mode={mode}/>)
       :<div className="slide-renderer-fallback"><strong>{slide.title}</strong><p>{slide.body}</p></div>}
