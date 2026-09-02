@@ -40,3 +40,9 @@
 .beta-confirm-dialog>footer{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 .beta-confirm-dialog button{padding:8px 11px}
 .settings-content .rollback-box{display:none}
+
+/* Dialogs must always form the top application layer. Canvas handles use their
+   own high z-index inside the editor and must never paint through a modal. */
+.modal-backdrop{z-index:1000!important;isolation:isolate;overflow:hidden}
+.modal-backdrop>.modal,.modal-backdrop>.help-dialog,.modal-backdrop>.library-dialog,.modal-backdrop>.media-dialog,.modal-backdrop>.confirm-dialog,.modal-backdrop>.beta-confirm-dialog{position:relative;z-index:1}
+.beta-confirm-layer{z-index:1100!important}

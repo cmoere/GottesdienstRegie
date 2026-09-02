@@ -68,7 +68,7 @@ function detectedLanguage():Language{
 
 export const usePreferences=create<PreferencesState>()(persist(set=>({
   language:detectedLanguage(),
-  theme:'system',
+  theme:'dark',
   blackWhite:false,
   reduceMotion:false,
   compactMode:false,

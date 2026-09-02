@@ -5,9 +5,27 @@
     {
       "line": "0.9",
       "builds": [{
+        "version": "0.9.2",
+        "releaseDate": "2026-09-02",
+        "current": true,
+        "sections": {
+          "new": [],
+          "improved": [
+            {"label":{"de":"Professioneller Standardmodus","en":"Professional default mode"},"text":{"de":"Bei neuen Installationen verwendet die Produktionsoberfläche standardmäßig das dunkle Design; bereits gespeicherte persönliche Einstellungen bleiben unverändert.","en":"New installations now use the dark production interface by default while existing personal preferences remain unchanged."}},
+            {"label":{"de":"Kompakte Ablaufzeiten","en":"Compact service timing"},"text":{"de":"Dauern unter einer Minute werden als 7s, 10s oder 45s angezeigt; ab einer Minute verwendet GottesdienstRegie weiterhin das Format 1:00 oder 3:06.","en":"Durations below one minute are shown as 7s, 10s or 45s, while durations of one minute or more continue to use formats such as 1:00 or 3:06."}},
+            {"label":{"de":"Tastaturbedienung","en":"Keyboard operation"},"text":{"de":"Das Einstellungsfenster kann jetzt mit Escape geschlossen werden; ein geöffneter Beta-Hinweis wird dabei zuerst geschlossen.","en":"Settings can now be closed with Escape, with an open beta notice being dismissed first."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Einstellungsfenster","en":"Settings window"},"text":{"de":"Der Auswahlrahmen eines Textfelds oder anderen Canvas-Elements kann nicht mehr vor dem Einstellungsfenster dargestellt werden.","en":"The selection outline of a text field or other canvas element can no longer appear in front of Settings."}},
+            {"label":{"de":"Dialogebenen","en":"Dialog layers"},"text":{"de":"Einstellungen, Hilfe, Medien- und Präsentationsbibliothek sowie Bestätigungsdialoge verwenden eine gemeinsame geschützte oberste Ebene.","en":"Settings, Help, media and presentation libraries, and confirmation dialogs now share a protected top application layer."}},
+            {"label":{"de":"Zeitbearbeitung","en":"Timing editor"},"text":{"de":"Kurze Zeitwerte mit Sekundenkürzel lassen sich weiterhin direkt bearbeiten und werden korrekt gespeichert.","en":"Short timing values using the seconds suffix remain directly editable and are saved correctly."}}
+          ],
+          "security": []
+        }
+      },{
         "version": "0.9.1",
         "releaseDate": "2026-09-01",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Beta-Update-Kanal","en":"Beta update channel"},"text":{"de":"Unter Einstellungen → Updates können Vorabversionen jetzt gezielt aktiviert werden. Ohne Aktivierung berücksichtigt GottesdienstRegie weiterhin ausschließlich stabile Veröffentlichungen.","en":"Prerelease updates can now be enabled explicitly under Settings → Updates. Without opt-in, GottesdienstRegie continues to consider stable releases only."}},

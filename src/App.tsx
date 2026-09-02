@@ -294,6 +294,7 @@ function SettingsModal({close,canConfigure}:{close:()=>void;canConfigure:boolean
   const {language,theme,blackWhite,reduceMotion,compactMode,showLoginBackgrounds,reopenLastPresentation,highContrast,largeText,strongFocus,dyslexiaFriendly,audioOutputDevice,audioInputDevice,outputVolume,inputGain,noiseSuppression,echoCancellation}=prefs;
   const {setLanguage,setTheme,setBlackWhite,setReduceMotion,setCompactMode,setShowLoginBackgrounds}=prefs;
   const L=extraLabels[language]??extraLabels.en!;
+  useEffect(()=>{const onKey=(event:KeyboardEvent)=>{if(event.key!=='Escape')return;if(betaConfirm)setBetaConfirm(false);else close()};addEventListener('keydown',onKey);return()=>removeEventListener('keydown',onKey)},[betaConfirm,close]);
   useEffect(()=>{
     void window.desktop?.displays().then(setDisplays);
     void window.desktop?.updates.currentVersion().then(setCurrentVersion);
