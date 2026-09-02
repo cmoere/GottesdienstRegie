@@ -1,5 +1,11 @@
 # Versionshinweise / Release notes
 
+## 0.11.1 – 2026-09-02
+
+- Helles Farbschema auf die gesamte Produktionsoberfläche erweitert
+- Kontrast von Titeln, Überschriften und Schließen-Schaltfläche im Einstellungsfenster korrigiert
+- Dunkles Farbschema unverändert beibehalten
+
 ## 0.11.0 – 2026-09-02
 
 - Funktionales Hintergrund-Menü mit Medienwahl, Import, Farbpalette, Unschärfe, Rotation, Anpassung und Positionierung

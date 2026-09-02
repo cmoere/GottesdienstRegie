@@ -21,3 +21,41 @@
 .format-toolbar{position:relative;z-index:80;overflow:visible}.format-toolbar>input{width:52px}.format-toolbar button.active{background:#4b4a56;border-color:#5a5965}.toolbar-menu-host{position:relative;display:flex;height:27px}
 .toolbar-popover{position:absolute;z-index:120;right:0;top:31px;width:250px;max-height:min(650px,calc(100vh - 150px));overflow:auto;padding:7px;background:#393842;border:1px solid #1d1c23;box-shadow:0 16px 40px #000b;color:#e7e6eb}.toolbar-popover>button{width:100%;justify-content:flex-start;background:transparent}.toolbar-popover>button:hover,.toolbar-popover button.active{background:#52515d}.toolbar-popover h4{margin:9px 5px 5px;padding-top:7px;border-top:1px solid #55535f;color:#bbb9c3;font-size:9px;letter-spacing:.07em}.toolbar-popover strong{display:block;margin:8px 4px 4px;color:#cbc9d1;font-size:9px}.toolbar-popover .menu-close{margin-top:8px;border-top:1px solid #55535f;color:#aaa8b2}.guides-menu{width:205px}.guides-menu>button{display:grid;grid-template-columns:20px 1fr;text-align:left}.menu-grid,.position-grid,.fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}.menu-grid button,.position-grid button,.fit-grid button{justify-content:flex-start;min-width:0;height:32px;background:#302f39}.icon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}.icon-grid button{justify-content:center;background:#302f39}.arrange-menu{width:280px}.background-menu{width:310px}.background-recents{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;min-height:35px}.background-recents button{height:auto;aspect-ratio:16/9;padding:0;border:1px solid #5b5965;background:#222}.background-recents img{width:100%;height:100%;object-fit:cover}.background-recents small{grid-column:1/-1;padding:8px;color:#96949e}.color-swatches{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:2px 4px}.color-swatches button{height:auto;aspect-ratio:1;padding:0;border:1px solid #777}.color-swatches button.active{outline:2px solid #69adb6;outline-offset:1px}.blur-control{display:grid;grid-template-columns:1fr 100px 34px;align-items:center;gap:5px;padding:10px 4px;color:#c5c3cb;font-size:9px}.blur-control input{width:100%;accent-color:#64a8b1}.blur-control output{text-align:right}.position-grid{grid-template-columns:repeat(3,1fr)}.position-grid button,.fit-grid button{justify-content:center}.scope-note{display:block;margin-top:8px;padding:7px;background:#302f39;color:#aaa8b2}
 .production-slide>span,.production-slide>i{z-index:8}.production-slide.guide-margins:after{content:"";position:absolute;z-index:6;inset:7%;border:1px dashed #65d1ddaa;pointer-events:none}.production-slide.guide-thirds:before{content:"";position:absolute;z-index:5;inset:0;background:linear-gradient(90deg,transparent 33.2%,#fff8 33.25%,#fff8 33.45%,transparent 33.5%,transparent 66.5%,#fff8 66.55%,#fff8 66.75%,transparent 66.8%),linear-gradient(0deg,transparent 33.2%,#fff8 33.25%,#fff8 33.45%,transparent 33.5%,transparent 66.5%,#fff8 66.55%,#fff8 66.75%,transparent 66.8%);pointer-events:none}.production-slide.guide-smart.active .slide-renderer:after{content:"";position:absolute;z-index:5;left:50%;top:0;bottom:0;border-left:1px dashed #65d1dd88;pointer-events:none}.production-slide.guide-smart.active .slide-renderer:before{content:"";position:absolute;z-index:5;left:0;right:0;top:50%;border-top:1px dashed #65d1dd88;pointer-events:none}
+
+/* 0.11.1: Light Theme für die vollständige Produktionsoberfläche */
+:root[data-theme="light"] .production-app{--production-bg:var(--app);--production-bar:var(--toolbar);--production-oos:var(--panel);--production-editor:var(--panel);--production-workspace:var(--workspace);--production-border:var(--border);color:var(--text-primary)}
+:root[data-theme="light"] .production-app .menubar{background:var(--menubar);border-color:var(--border)}
+:root[data-theme="light"] .output-tabs{background:var(--panel);border-color:var(--border)}
+:root[data-theme="light"] .output-tabs button{color:var(--text2)}
+:root[data-theme="light"] .output-tabs button:hover{background:var(--hover)}
+:root[data-theme="light"] .output-tabs button.active{background:var(--selected)}
+:root[data-theme="light"] .format-toolbar,:root[data-theme="light"] .preview-mode-toolbar{background:var(--toolbar);border-color:var(--border)}
+:root[data-theme="light"] .format-toolbar select,:root[data-theme="light"] .format-toolbar input,:root[data-theme="light"] .format-toolbar button{background:var(--panel2);color:var(--text2);border-color:var(--border)}
+:root[data-theme="light"] .format-toolbar button:hover,:root[data-theme="light"] .format-toolbar button.active{background:var(--hover);border-color:var(--control-border)}
+:root[data-theme="light"] .production-app .quick-toolbar{background:var(--panel);border-color:var(--border)}
+:root[data-theme="light"] .production-app .quick-toolbar button{color:var(--text2);border-color:var(--border)}
+:root[data-theme="light"] .production-app .service{border-color:var(--border)}
+:root[data-theme="light"] .production-app .service>header{background:var(--panel2)}
+:root[data-theme="light"] .production-app .section-label{background:var(--panel2);border-color:var(--border)}
+:root[data-theme="light"] .production-app .section-title{color:var(--text-primary)}
+:root[data-theme="light"] .production-app .service-item.active{background:var(--selected);color:var(--active-text)}
+:root[data-theme="light"] .production-app .service-time-popover{background:var(--popover);color:var(--text-primary)}
+:root[data-theme="light"] .production-workspace,:root[data-theme="light"] .large-output-preview{background:var(--workspace)}
+:root[data-theme="light"] .context-editor{background:var(--panel);border-color:var(--border)}
+:root[data-theme="light"] .song-context>header input,:root[data-theme="light"] .lyrics-editor input{color:var(--text-primary)}
+:root[data-theme="light"] .song-context label,:root[data-theme="light"] .arrangement-actions button,:root[data-theme="light"] .content-tools button,:root[data-theme="light"] .item-playback,:root[data-theme="light"] .song-options{color:var(--text2)}
+:root[data-theme="light"] .song-context select,:root[data-theme="light"] .song-context input,:root[data-theme="light"] .song-context textarea,:root[data-theme="light"] .content-context>textarea{background:var(--input);border-color:var(--control-border);color:var(--text-primary)}
+:root[data-theme="light"] .arrangement-head>button{color:var(--text-primary);border-color:var(--border)}
+:root[data-theme="light"] .arrangement-sequence button{background:var(--panel2);border-color:var(--border);color:var(--text2)}
+:root[data-theme="light"] .arrangement-sequence button.active{background:var(--accent);color:#132326}
+:root[data-theme="light"] .lyrics-editor{background:var(--input);border-color:var(--border)}
+:root[data-theme="light"] .lyrics-editor section.active{background:var(--selected)}
+:root[data-theme="light"] .content-context>header,:root[data-theme="light"] .content-tools,:root[data-theme="light"] .item-playback,:root[data-theme="light"] .song-options{border-color:var(--border)}
+:root[data-theme="light"] .preview-mode-toolbar button,:root[data-theme="light"] .preview-mode-toolbar label,:root[data-theme="light"] .production-grid h2{color:var(--text2)}
+:root[data-theme="light"] .production-timeline,:root[data-theme="light"] .production-app .status{background:var(--menubar);border-color:var(--border)}
+:root[data-theme="light"] .timeline-toggle{color:var(--text2)}
+:root[data-theme="light"] .timeline-track{background:var(--workspace);border-color:var(--border)}
+:root[data-theme="light"] .timeline-track button{background:var(--panel2);color:var(--text-primary)}
+:root[data-theme="light"] .toolbar-popover{background:var(--popover);border-color:var(--border);color:var(--text-primary);box-shadow:0 16px 40px #0004}
+:root[data-theme="light"] .toolbar-popover h4,:root[data-theme="light"] .toolbar-popover strong,:root[data-theme="light"] .toolbar-popover .menu-close{color:var(--text2);border-color:var(--border)}
+:root[data-theme="light"] .menu-grid button,:root[data-theme="light"] .position-grid button,:root[data-theme="light"] .fit-grid button,:root[data-theme="light"] .icon-grid button,:root[data-theme="light"] .scope-note{background:var(--panel2);color:var(--text2)}

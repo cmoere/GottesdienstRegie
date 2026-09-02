@@ -5,9 +5,23 @@
     {
       "line": "0.11",
       "builds": [{
-        "version": "0.11.0",
+        "version": "0.11.1",
         "releaseDate": "2026-09-02",
         "current": true,
+        "sections": {
+          "new": [],
+          "improved": [],
+          "fixed": [
+            {"label":{"de":"Heller Modus","en":"Light theme"},"text":{"de":"Menü, Ablauf, Editor, Timeline und Werkzeugbereiche übernehmen nun vollständig das helle Farbschema und bleiben kontrastreich lesbar.","en":"Menus, service order, editor, timeline and tool areas now fully follow the light theme and remain clearly readable."}},
+            {"label":{"de":"Einstellungen","en":"Settings"},"text":{"de":"Titel, Bereichsüberschriften und die Schließen-Schaltfläche erben keine helle Produktionsschrift mehr und sind auf dem weißen Dialoghintergrund wieder deutlich sichtbar.","en":"Titles, section headings and the close control no longer inherit the light production text color and are clearly visible on the white dialog background."}},
+            {"label":{"de":"Dunkler Modus","en":"Dark theme"},"text":{"de":"Die Korrektur ist auf das helle Farbschema begrenzt; die bewährten dunklen Produktionsfarben bleiben unverändert.","en":"The correction is limited to the light theme, leaving the established dark production colors unchanged."}}
+          ],
+          "security": []
+        }
+      },{
+        "version": "0.11.0",
+        "releaseDate": "2026-09-02",
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Hintergrund-Menü","en":"Background menu"},"text":{"de":"Ein kompaktes Produktionsmenü ermöglicht Medienauswahl, direkten Bildimport, zuletzt verwendete Bilder und eine sofort anwendbare Farbpalette.","en":"A compact production menu now provides media browsing, direct image import, recently used images and an immediately applicable color palette."}},

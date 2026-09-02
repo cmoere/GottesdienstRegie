@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.11.1
+
+Veröffentlicht am 2. September 2026.
+
+## Behoben
+
+- **Heller Modus:** Die vollständige Produktionsoberfläche übernimmt nun das helle Farbschema. Menü-, Ablauf-, Editor-, Timeline- und Werkzeugbereiche bleiben dadurch kontrastreich lesbar.
+- **Einstellungen:** Titel, Bereichsüberschriften und Schließen-Schaltfläche erben keine helle Produktionsschrift mehr und sind auf dem weißen Dialoghintergrund wieder deutlich sichtbar.
+- **Dunkler Modus:** Die bisherigen dunklen Produktionsfarben bleiben unverändert erhalten.
+
+---
+
 # GottesdienstRegie 0.11.0
 
 Veröffentlicht am 2. September 2026.
