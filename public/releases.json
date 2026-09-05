@@ -3,11 +3,36 @@
   "supportedLocales": ["de","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR"],
   "versions": [
     {
+      "line": "0.12",
+      "builds": [{
+        "version": "0.12.0",
+        "releaseDate": "2026-09-06",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Datei-Menü","en":"File menu"},"text":{"de":"Ein mehrstufiges Datei-Menü bündelt Neu, Öffnen, zuletzt verwendete Präsentationen, Duplizieren, Import, Sicherung, Wiederherstellung, Drucken, Teilen und Beenden.","en":"A multi-level File menu now combines New, Open, recent presentations, Duplicate, Import, Backup, Restore, Print, Share and Exit."}},
+            {"label":{"de":"Präsentationsdialoge","en":"Presentation dialogs"},"text":{"de":"Neue Präsentationen erfassen Titel, Datum, Servicezeit, Team und Vorlage; Öffnen und Duplizieren bieten Suche, Sortierung, Metadaten und echte Folienminiaturen.","en":"New presentations capture title, date, service time, team and template; Open and Duplicate provide search, sorting, metadata and real slide thumbnails."}},
+            {"label":{"de":"Duplizieroptionen","en":"Duplicate options"},"text":{"de":"Beim Duplizieren können Servicezeit, Medienreferenzen und Zielzeiten gezielt übernommen werden.","en":"Duplicating can selectively preserve service time, media references and target start times."}}
+          ],
+          "improved": [
+            {"label":{"de":"Eindeutige Kopien","en":"Unique copies"},"text":{"de":"Kopien erhalten neue IDs für Präsentation, Bereiche, Ablauf-Elemente, Folien und Canvas-Elemente.","en":"Copies receive new IDs for the presentation, sections, service items, slides and canvas elements."}},
+            {"label":{"de":"Tastaturbedienung","en":"Keyboard operation"},"text":{"de":"Pfeiltasten navigieren im Datei-Menü; Escape schließt Untermenü, Hauptmenü und Dialoge in der richtigen Reihenfolge.","en":"Arrow keys navigate the File menu, while Escape closes submenus, the main menu and dialogs in the correct order."}},
+            {"label":{"de":"Live-Sicherheit","en":"Live safety"},"text":{"de":"Beim Beenden während ON AIR warnt die Anwendung und beendet aktive Ausgaben erst nach ausdrücklicher Bestätigung.","en":"When exiting during ON AIR, the application warns first and stops active outputs only after explicit confirmation."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Zuletzt duplizieren","en":"Duplicate recent"},"text":{"de":"Der ausgewählte Eintrag wird nun im Duplizieren-Dialog korrekt vorausgewählt.","en":"The selected recent entry is now correctly preselected in the Duplicate dialog."}},
+            {"label":{"de":"Menüfokus","en":"Menu focus"},"text":{"de":"Nach dem Schließen eines Datei-Dialogs kehrt der Tastaturfokus zuverlässig zum Datei-Menü zurück.","en":"After closing a File dialog, keyboard focus now reliably returns to the File menu."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.11",
       "builds": [{
         "version": "0.11.1",
         "releaseDate": "2026-09-02",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [],
           "improved": [],

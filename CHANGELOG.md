@@ -1,5 +1,15 @@
 # Versionshinweise / Release notes
 
+## 0.12.0 – 2026-09-06
+
+- Mehrstufiges professionelles Datei-Menü mit echten Flyouts
+- Dialog für neue Präsentationen mit Datum, Servicezeit, Team und Vorlage
+- Durchsuchbare und sortierbare Präsentationsauswahl mit echten Miniaturen
+- Konfigurierbares Duplizieren mit vollständig neuen Objekt-IDs
+- Import, Sicherung, Wiederherstellung, Drucken und Teilen klar zusammengeführt
+- Gestuftes Escape-Verhalten und Pfeiltasten-Navigation
+- Sicherer Beenden-Dialog bei aktiver ON-AIR-Ausgabe
+
 ## 0.11.1 – 2026-09-02
 
 - Helles Farbschema auf die gesamte Produktionsoberfläche erweitert

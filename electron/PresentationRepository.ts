@@ -7,6 +7,14 @@ export interface PresentationSummary {
   archived:boolean; trashed:boolean; itemCount:number; slideCount:number;
 }
 
+export interface DuplicatePresentationOptions {
+  title?:string;
+  date?:string;
+  keepServiceTime?:boolean;
+  keepMediaReferences?:boolean;
+  keepTargetStartTimes?:boolean;
+}
+
 const safeName=(value:string)=>value.replace(/[^a-zA-Z0-9_-]/g,'');
 const now=()=>new Date().toISOString();
 
@@ -33,7 +41,16 @@ export class PresentationRepository {
   async read(id:string){try{return JSON.parse(await fs.readFile(this.file(id),'utf8'))}catch(error:any){if(error?.code==='ENOENT')return null;throw error}}
   async save(document:any){await this.initialize();if(!document?.presentationId)throw new Error('PRESENTATION_ID_REQUIRED');const existing=await this.read(String(document.presentationId));const value={...document,createdAt:existing?.createdAt??document.createdAt??now(),updatedAt:now(),archived:document.archived===true,trashed:document.trashed===true};await this.atomicWrite(this.file(value.presentationId),value);await this.atomicWrite(path.join(this.recovery,`${safeName(value.presentationId)}.json`),value);await this.setState({lastPresentationId:value.presentationId,cleanShutdown:false});return this.summary(value)}
   async create(input:{title?:string;date?:string;template?:any}){const stamp=now(),id=randomUUID(),template=input.template??{};const document={...template,presentationId:id,title:String(input.title||'Neue Präsentation'),date:String(input.date||stamp.slice(0,10)),createdAt:stamp,updatedAt:stamp,archived:false,trashed:false};await this.save(document);return document}
-  async duplicate(id:string){const source=await this.read(id);if(!source)throw new Error('PRESENTATION_NOT_FOUND');return this.create({title:`${source.title} – Kopie`,date:source.date,template:{...source,presentationId:undefined,createdAt:undefined,updatedAt:undefined}})}
+  async duplicate(id:string,options:DuplicatePresentationOptions={}){
+    const source=await this.read(id);if(!source)throw new Error('PRESENTATION_NOT_FOUND');
+    const sectionIds=new Map<string,string>();
+    const sections=(Array.isArray(source.sections)?source.sections:[]).map((section:any)=>{const nextId=randomUUID();sectionIds.set(String(section.id),nextId);return{...section,id:nextId}});
+    const items=(Array.isArray(source.items)?source.items:[]).map((item:any)=>{const nextId=randomUUID();return{...item,id:nextId,sectionId:sectionIds.get(String(item.sectionId))??item.sectionId,metadata:options.keepMediaReferences===false?{...item.metadata,assetId:undefined,url:undefined}:item.metadata,slides:(Array.isArray(item.slides)?item.slides:[]).map((slide:any)=>({...slide,id:randomUUID(),itemId:nextId,elements:(Array.isArray(slide.elements)?slide.elements:[]).map((element:any)=>({...element,id:randomUUID()}))}))}});
+    const template={...source,sections,items,presentationId:undefined,createdAt:undefined,updatedAt:undefined,selectedItemId:undefined,selectedSlideId:undefined,previewItemId:undefined,previewSlideId:undefined};
+    if(options.keepServiceTime===false)template.serviceTime='10:30';
+    if(options.keepTargetStartTimes===false)template.targetStartTimes=undefined;
+    return this.create({title:options.title||`${source.title} – Kopie`,date:options.date||source.date,template});
+  }
   async rename(id:string,title:string){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');doc.title=String(title).trim()||doc.title;await this.save(doc);return this.summary(doc)}
   async setFlag(id:string,flag:'archived'|'trashed',value:boolean){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');doc[flag]=value;await this.save(doc);return this.summary(doc)}
   async importDocument(sourcePath:string){const parsed=JSON.parse(await fs.readFile(sourcePath,'utf8'));const id=randomUUID();return this.create({title:parsed.title||path.basename(sourcePath,path.extname(sourcePath)),date:parsed.date,template:{...parsed,presentationId:id,createdAt:undefined,updatedAt:undefined}})}

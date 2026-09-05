@@ -7,7 +7,7 @@ import { compare as bcryptCompare } from 'bcryptjs';
 import { autoUpdater, type UpdateInfo } from 'electron-updater';
 import { DisplayManager, type DisplayAssignments, type OutputRole } from './DisplayManager';
 import { OutputWindowManager } from './OutputWindowManager';
-import { PresentationRepository } from './PresentationRepository';
+import { PresentationRepository, type DuplicatePresentationOptions } from './PresentationRepository';
 import { MediaRepository } from './MediaRepository';
 import { GitHubStorageProvider } from './storage/GitHubStorageProvider';
 import { AppPreferences, type AppPreferencesData } from './AppPreferences';
@@ -203,7 +203,7 @@ app.whenReady().then(async() => {
     if(state.lastPresentationId){const current=await presentationRepository.read(state.lastPresentationId);if(current)return current}
     try{return JSON.parse(await fs.readFile(legacyPresentationFile,'utf8'))}catch{return null}
   });
-  ipcMain.handle('presentation:duplicate',(_event,id:string)=>presentationRepository.duplicate(id));
+  ipcMain.handle('presentation:duplicate',(_event,id:string,options?:DuplicatePresentationOptions)=>presentationRepository.duplicate(id,options));
   ipcMain.handle('presentation:rename',(_event,id:string,title:string)=>presentationRepository.rename(id,title));
   ipcMain.handle('presentation:archive',(_event,id:string,value:boolean)=>presentationRepository.setFlag(id,'archived',value));
   ipcMain.handle('presentation:trash',(_event,id:string,value:boolean)=>presentationRepository.setFlag(id,'trashed',value));

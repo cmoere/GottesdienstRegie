@@ -1,3 +1,27 @@
+# GottesdienstRegie 0.12.0
+
+Veröffentlicht am 6. September 2026.
+
+## Neu
+
+- **Professionelles Datei-Menü:** Neu, Öffnen, zuletzt verwendete Präsentationen, Duplizieren, Import, Sicherung, Wiederherstellung, Drucken, Teilen und Beenden sind in einer klar gegliederten Menühierarchie verfügbar.
+- **Neue Präsentation:** Titel, Datum, Servicezeit, Team und Vorlage werden in einem kompakten Dialog erfasst; die vier Standardbereiche werden automatisch angelegt.
+- **Präsentationsauswahl:** Die Öffnen- und Duplizieren-Dialoge bieten Suche, Sortierung, echte Folienminiaturen, Metadaten und Doppelklick.
+- **Duplizieroptionen:** Servicezeit, Medienreferenzen und Zielzeiten können gezielt übernommen werden.
+
+## Verbessert
+
+- **Tastaturbedienung:** Pfeiltasten navigieren im Datei-Menü; Escape schließt zuerst das Untermenü, danach das Hauptmenü und schließlich geöffnete Datei-Dialoge.
+- **Eindeutige Kopien:** Duplizierte Präsentationen erhalten neue IDs für Präsentation, Bereiche, Ablauf-Elemente, Folien und Canvas-Elemente.
+- **Live-Sicherheit:** Beim Beenden während ON AIR erscheint eine klare Warnung; nach Bestätigung werden Ausgaben kontrolliert beendet und der Stand gespeichert.
+
+## Behoben
+
+- **Zuletzt duplizieren:** Die im Untermenü gewählte Präsentation wird im Duplizieren-Dialog korrekt vorausgewählt.
+- **Menüfokus:** Nach dem Schließen eines Dialogs kehrt der Tastaturfokus zum Datei-Menü zurück.
+
+---
+
 # GottesdienstRegie 0.11.1
 
 Veröffentlicht am 2. September 2026.

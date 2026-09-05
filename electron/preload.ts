@@ -21,7 +21,7 @@ contextBridge.exposeInMainWorld('desktop', {
     create:(input:{title?:string;date?:string;template?:unknown})=>ipcRenderer.invoke('presentation:create',input),
     save:(document:unknown)=>ipcRenderer.invoke('presentation:save',document),
     load:(id?:string)=>ipcRenderer.invoke('presentation:load',id),
-    duplicate:(id:string)=>ipcRenderer.invoke('presentation:duplicate',id),rename:(id:string,title:string)=>ipcRenderer.invoke('presentation:rename',id,title),
+    duplicate:(id:string,options?:{title?:string;date?:string;keepServiceTime?:boolean;keepMediaReferences?:boolean;keepTargetStartTimes?:boolean})=>ipcRenderer.invoke('presentation:duplicate',id,options),rename:(id:string,title:string)=>ipcRenderer.invoke('presentation:rename',id,title),
     archive:(id:string,value:boolean)=>ipcRenderer.invoke('presentation:archive',id,value),trash:(id:string,value:boolean)=>ipcRenderer.invoke('presentation:trash',id,value),
     import:()=>ipcRenderer.invoke('presentation:import'),export:(id:string)=>ipcRenderer.invoke('presentation:export',id),backup:(id:string)=>ipcRenderer.invoke('presentation:backup',id),
     recovery:()=>ipcRenderer.invoke('presentation:recovery'),markClean:()=>ipcRenderer.invoke('presentation:mark-clean')
