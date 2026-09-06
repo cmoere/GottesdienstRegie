@@ -1,5 +1,11 @@
 # Versionshinweise / Release notes
 
+## 0.17.1 – 2026-09-06
+
+- Servicezeit-Popup bleibt vollständig innerhalb der Ablaufspalte
+- Keine abgeschnittene Überschrift, Beschriftung oder Schaltfläche mehr am linken Fensterrand
+- Responsive Breite berücksichtigt auch kleinere App-Fenster
+
 ## 0.17.0 – 2026-09-06
 
 - Echte, frei gestaltbare Antwortfolie mit Live-Auswertung und geschützter Freitext-Moderation

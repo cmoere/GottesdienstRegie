@@ -5,9 +5,21 @@
     {
       "line": "0.17",
       "builds": [{
-        "version": "0.17.0",
+        "version": "0.17.1",
         "releaseDate": "2026-09-06",
         "current": true,
+        "sections": {
+          "new": [],
+          "improved": [],
+          "fixed": [
+            {"label":{"de":"Servicezeit-Popup vollständig sichtbar","en":"Service time popup fully visible"},"text":{"de":"Das Servicezeit-Popup bleibt jetzt vollständig innerhalb der Ablaufspalte und wird am linken Fensterrand nicht mehr abgeschnitten.","en":"The service time popup now remains fully inside the order-of-service column and is no longer clipped at the left edge of the window."}}
+          ],
+          "security": []
+        }
+      },{
+        "version": "0.17.0",
+        "releaseDate": "2026-09-06",
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Antwortfolie für LiveQuiz","en":"LiveQuiz answer slide"},"text":{"de":"Jedes Quiz besitzt jetzt eine echte, frei gestaltbare Antwortfolie. Während einer Sitzung zeigt sie die Auswertung der aktiven Auswahlfrage oder freigegebene Freitextantworten.","en":"Every quiz now includes a real, freely editable answer slide. During a session it shows results for the active choice question or released free-text answers."}},

@@ -1,3 +1,14 @@
+# GottesdienstRegie 0.17.1
+
+Veröffentlicht am 6. September 2026.
+
+## Behoben
+
+- **Servicezeit:** Das Popup zum Festlegen der Startzeit bleibt vollständig innerhalb der Ablaufspalte. Überschrift, Zeitfeld und Schaltflächen werden am linken Fensterrand nicht mehr abgeschnitten.
+- **Kleine Fenster:** Die Popupbreite passt sich bei schmalen App-Fenstern an, ohne den Inhalt zu überdecken.
+
+---
+
 # GottesdienstRegie 0.17.0
 
 Veröffentlicht am 6. September 2026.
