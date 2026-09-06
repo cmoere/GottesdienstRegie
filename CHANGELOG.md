@@ -1,5 +1,12 @@
 # Versionshinweise / Release notes
 
+## 0.17.2 – 2026-09-06
+
+- Gefundene Updates zeigen direkt in der Statusbox eine kurze Änderungsübersicht
+- Kategorien wie Neu, Verbessert und Fehlerbehebungen werden kompakt zusammengefasst
+- Ausführliche Informationen bleiben weiterhin in den Versionshinweisen
+- Mehrsprachige Kategorien und englischer Fallback für zukünftige Versionen
+
 ## 0.17.1 – 2026-09-06
 
 - Servicezeit-Popup bleibt vollständig innerhalb der Ablaufspalte

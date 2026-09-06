@@ -5,9 +5,21 @@
     {
       "line": "0.17",
       "builds": [{
-        "version": "0.17.1",
+        "version": "0.17.2",
         "releaseDate": "2026-09-06",
         "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Kurzinfo zum verfügbaren Update","en":"Update summary"},"text":{"de":"Bei einem gefundenen Update zeigt die Statusbox jetzt eine kurze Übersicht der wichtigsten Neuerungen, Verbesserungen und Fehlerbehebungen. Die vollständigen Details bleiben in den Versionshinweisen.","en":"When an update is found, the status box now shows a concise overview of its most important new features, improvements and fixes. Full details remain in the release notes."}}
+          ],
+          "improved": [],
+          "fixed": [],
+          "security": []
+        }
+      },{
+        "version": "0.17.1",
+        "releaseDate": "2026-09-06",
+        "current": false,
         "sections": {
           "new": [],
           "improved": [],

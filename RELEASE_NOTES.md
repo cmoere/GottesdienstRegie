@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.17.2
+
+Veröffentlicht am 6. September 2026.
+
+## Neu
+
+- **Update-Kurzinfo:** Sobald eine neue Version gefunden wurde, steht direkt unter der Verfügbarkeitsmeldung eine kurze Zusammenfassung der wichtigsten Änderungen.
+
+## Verbessert
+
+- Die Kurzinfo nennt kompakt Kategorien wie „Neu“, „Verbessert“ und „Fehlerbehebungen“.
+- Pro Kategorie erscheinen höchstens zwei kurze Punkte; ausführliche Beschreibungen bleiben in den Versionshinweisen.
+- Die Kategorien werden passend zur gewählten Sprache angezeigt. Bei noch nicht lokal bekannten zukünftigen Versionen dient die GitHub-Zusammenfassung als Fallback.
+
+---
+
 # GottesdienstRegie 0.17.1
 
 Veröffentlicht am 6. September 2026.
