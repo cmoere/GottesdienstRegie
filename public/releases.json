@@ -3,11 +3,34 @@
   "supportedLocales": ["de","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR"],
   "versions": [
     {
+      "line": "0.14",
+      "builds": [{
+        "version": "0.14.0",
+        "releaseDate": "2026-09-06",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"LiveQuiz im Ablauf","en":"LiveQuiz in the service order"},"text":{"de":"LiveQuiz kann über Element hinzufügen und das Plus im Ablauf als eigener ServiceItem-Typ erstellt werden.","en":"LiveQuiz can now be created as a dedicated service item from Add Item and the plus control in the service order."}},
+            {"label":{"de":"Quizeditor","en":"Quiz editor"},"text":{"de":"Der spezialisierte Editor verwaltet mehrere Fragen, Antwortoptionen, richtige Lösungen, Zeitlimits, Punkte und die Teilnahmeart.","en":"The specialized editor manages multiple questions, answer options, correct answers, time limits, points and participation mode."}},
+            {"label":{"de":"Fragetypen","en":"Question types"},"text":{"de":"Single Choice, Multiple Choice, Richtig/Falsch, Ja/Nein, Freitext, Skala und Umfrage stehen im Editor bereit.","en":"Single choice, multiple choice, true/false, yes/no, free text, scale and poll are available in the editor."}}
+          ],
+          "improved": [
+            {"label":{"de":"Gemeinsamer Renderer","en":"Shared renderer"},"text":{"de":"Quizfragen werden als echte Folien in Editor, Vorschau, Raster und MAIN identisch dargestellt.","en":"Quiz questions are rendered as real slides consistently in the editor, preview, grid and MAIN."}},
+            {"label":{"de":"Speicherung und Historie","en":"Persistence and history"},"text":{"de":"Quizdefinitionen bleiben in der Präsentation erhalten und sind in Autosave sowie Undo/Redo eingebunden.","en":"Quiz definitions persist with the presentation and participate in autosave as well as undo and redo."}}
+          ],
+          "fixed": [],
+          "security": [
+            {"label":{"de":"Ehrlicher Live-Status","en":"Honest live status"},"text":{"de":"Ohne echten Audience-Dienst zeigt die Anwendung keine erfundenen Teilnehmer, Ergebnisse oder Teilnahmecodes an.","en":"Without a real audience service, the application does not display fabricated participants, results or join codes."}}
+          ]
+        }
+      }]
+    },
+    {
       "line": "0.12",
       "builds": [{
         "version": "0.12.0",
         "releaseDate": "2026-09-06",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Datei-Menü","en":"File menu"},"text":{"de":"Ein mehrstufiges Datei-Menü bündelt Neu, Öffnen, zuletzt verwendete Präsentationen, Duplizieren, Import, Sicherung, Wiederherstellung, Drucken, Teilen und Beenden.","en":"A multi-level File menu now combines New, Open, recent presentations, Duplicate, Import, Backup, Restore, Print, Share and Exit."}},

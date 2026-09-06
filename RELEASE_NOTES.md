@@ -1,3 +1,28 @@
+# GottesdienstRegie 0.14.0
+
+Veröffentlicht am 6. September 2026.
+
+## Neu
+
+- **LiveQuiz im Ablauf:** LiveQuiz ist jetzt über das Hauptmenü „Element hinzufügen“ und über das Plus im Order of Service erreichbar. Beide Wege erzeugen einen eigenen LiveQuiz-ServiceItem-Typ mit passendem Material Symbol.
+- **Sicherer Erstellungsdialog:** Vor dem Anlegen werden Titel, Quiz oder Umfrage sowie anonyme oder namentliche Teilnahme ausgewählt. Abbrechen erzeugt weder ein Ablauf-Element noch eine Quizdefinition.
+- **Spezialisierter Quizeditor:** Fragen, Antwortoptionen, korrekte Antworten, Zeitlimit, Punkte und nachträgliche Antwortänderung lassen sich unmittelbar bearbeiten.
+- **Fragetypen:** Der Editor unterstützt Single Choice, Multiple Choice, Richtig/Falsch, Ja/Nein, Freitext, Skala und reine Umfragen.
+- **Mehrere Fragen:** Ein LiveQuiz bleibt genau ein Ablauf-Element und kann darin beliebig viele interne Fragen verwalten. Die Fragenleiste ermöglicht das gezielte Auswählen, Hinzufügen und Löschen.
+
+## Verbessert
+
+- **Gemeinsame Darstellung:** Jede Quizfrage erzeugt eine echte Folie und verwendet denselben SlideRenderer wie Editor, Vorschau, Folienübersicht und MAIN.
+- **Ablaufanzeige:** Statt einer generischen Folienzahl zeigt das LiveQuiz-Element seine tatsächliche Fragenanzahl.
+- **Speicherung:** Quizdefinition, Teilnahmeart, Fragen, Antworten und Einstellungen werden gemeinsam mit der Präsentation gespeichert und durch Autosave erfasst.
+- **Undo/Redo:** Erstellen und redaktionelle Änderungen laufen durch den zentralen History-Mechanismus. Eine neue Änderung verwirft den nicht mehr passenden Redo-Zweig.
+
+## Sicherheit
+
+- **Keine erfundene Teilnahme:** Ohne eingerichteten Audience-Dienst werden weder fingierte Besucher noch scheinbare Live-Ergebnisse oder Teilnahmecodes angezeigt. Freitextantworten dürfen später nur nach Moderation auf MAIN erscheinen.
+
+---
+
 # GottesdienstRegie 0.13.1
 
 Veröffentlicht am 6. September 2026.

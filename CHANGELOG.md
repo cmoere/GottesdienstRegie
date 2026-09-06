@@ -1,5 +1,18 @@
 # Versionshinweise / Release notes
 
+## 0.14.0 – 2026-09-06
+
+- LiveQuiz ist über „Element hinzufügen“ und das Plus im Ablauf erreichbar
+- Erstellungsdialog für Titel, Quiz oder Umfrage sowie anonyme oder namentliche Teilnahme
+- Eigener ServiceItem-Typ `liveQuiz` mit Quizsymbol und echter Fragenanzahl im Ablauf
+- Spezialisierter LiveQuiz-Editor für Fragen, Antwortoptionen, richtige Lösungen, Zeitlimit und Punkte
+- Single Choice, Multiple Choice, Richtig/Falsch, Ja/Nein, Freitext, Skala und Umfrage vorbereitet
+- Fragen lassen sich hinzufügen, auswählen, bearbeiten und sicher wieder löschen
+- Quizfragen werden als echte Folien durch den gemeinsamen SlideRenderer dargestellt
+- Quizdefinition und Fragen bleiben Bestandteil der gespeicherten Präsentation
+- Erstellen und Bearbeiten sind in den zentralen Undo-/Redo- und Autosave-Ablauf eingebunden
+- Keine fingierte Live-Session: Teilnahmecode und Audience-Verbindung werden erst mit dem echten Audience-Dienst aktiviert
+
 ## 0.13.1 – 2026-09-06
 
 - Cloud-Migration zeigt nun die konkrete, verständliche Ursache statt einer pauschalen Abbruchmeldung
