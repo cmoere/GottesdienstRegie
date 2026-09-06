@@ -1,3 +1,21 @@
+# GottesdienstRegie 0.18.0
+
+Veröffentlicht am 6. September 2026.
+
+## Neu
+
+- **Präsentationen umbenennen:** Im Datei-Menü kann die aktuell geöffnete Präsentation umbenannt werden. Der Name bleibt gespeichert und wird in der Bibliothek sowie beim erneuten Öffnen verwendet.
+- **PowerPoint und OpenDocument:** `.pptx`- und `.odp`-Dateien werden folienweise importiert. Erkannte Textinhalte entstehen als bearbeitbare Folien in GottesdienstRegie.
+- **Keynote:** `.key`-Dateien werden über eine enthaltene Vorschaugrafik übernommen. Für vollständig editierbare Inhalte weist die App auf den Export als `.pptx` hin.
+- **Text und Markdown:** Absätze aus `.txt` und `.md` werden automatisch als einzelne Folien angelegt.
+
+## Verbessert
+
+- Der Bearbeiten-/Vorschau-Umschalter ist abgerundet und steht direkt links neben ON AIR.
+- Die öffentliche Release-Notes-Seite besitzt ein neues responsives Design, eine Suchfunktion, Sprachwahl und eine gemeinsame Auf-/Zuklappfunktion.
+
+---
+
 # GottesdienstRegie 0.17.2
 
 Veröffentlicht am 6. September 2026.

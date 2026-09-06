@@ -1,5 +1,14 @@
 # Versionshinweise / Release notes
 
+## 0.18.0 – 2026-09-06
+
+- Abgerundeter Bearbeiten-/Vorschau-Umschalter unmittelbar links neben ON AIR
+- Geöffnete Präsentationen können über das Datei-Menü dauerhaft umbenannt werden
+- PowerPoint (`.pptx`) und OpenDocument (`.odp`) werden folienweise mit bearbeitbaren Texten importiert
+- Keynote (`.key`) kann über die eingebettete Vorschau importiert werden; für vollständig editierbare Inhalte wird PPTX empfohlen
+- Text- und Markdown-Dateien werden absatzweise in Folien umgewandelt
+- Release-Notes-Webseite mit modernem responsivem Design, Suche, Sprachwahl und Auf-/Zuklappen
+
 ## 0.17.2 – 2026-09-06
 
 - Gefundene Updates zeigen direkt in der Statusbox eine kurze Änderungsübersicht

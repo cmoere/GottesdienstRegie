@@ -1,13 +1,35 @@
 {
   "schemaVersion": 1,
-  "supportedLocales": ["de","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR"],
+  "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
+    {
+      "line": "0.18",
+      "builds": [{
+        "version": "0.18.0",
+        "releaseDate": "2026-09-06",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Präsentationen umbenennen","en":"Rename presentations"},"text":{"de":"Die aktuell geöffnete Präsentation kann jetzt im Datei-Menü umbenannt werden. Der neue Name wird dauerhaft gespeichert und erscheint auch in der Präsentationsbibliothek.","en":"The currently open presentation can now be renamed from the File menu. Its new name is saved permanently and also appears in the presentation library."}},
+            {"label":{"de":"PowerPoint- und OpenDocument-Import","en":"PowerPoint and OpenDocument import"},"text":{"de":"PPTX- und ODP-Dateien werden folienweise eingelesen. Erkannte Texte werden als bearbeitbare GottesdienstRegie-Folien angelegt.","en":"PPTX and ODP files are imported slide by slide. Recognised text is created as editable GottesdienstRegie slides."}},
+            {"label":{"de":"Keynote-Import","en":"Keynote import"},"text":{"de":"Keynote-Dateien können über ihre eingebettete Vorschau importiert werden. Für vollständig bearbeitbare Inhalte empfiehlt die Anwendung den vorherigen Export als PowerPoint-Datei.","en":"Keynote files can be imported using their embedded preview. For fully editable content, the app recommends exporting to PowerPoint first."}},
+            {"label":{"de":"Text und Markdown importieren","en":"Import text and Markdown"},"text":{"de":"Absätze aus TXT- und Markdown-Dateien können automatisch in einzelne Präsentationsfolien umgewandelt werden.","en":"Paragraphs from TXT and Markdown files can now be converted automatically into individual presentation slides."}}
+          ],
+          "improved": [
+            {"label":{"de":"Abgerundeter Modus-Umschalter","en":"Rounded mode switch"},"text":{"de":"Der Umschalter zwischen Bearbeiten und Vorschau ist jetzt abgerundet und befindet sich unmittelbar links neben ON AIR.","en":"The Edit and Preview switch is now rounded and positioned directly to the left of ON AIR."}},
+            {"label":{"de":"Neue Release-Notes-Webseite","en":"Redesigned release notes website"},"text":{"de":"Die öffentliche Versionsübersicht besitzt ein modernes responsives Design, Suche, Sprachwahl sowie Schaltflächen zum gemeinsamen Auf- und Zuklappen aller Versionen.","en":"The public release history now has a modern responsive design, search, language selection and controls to expand or collapse all versions."}}
+          ],
+          "fixed": [],
+          "security": []
+        }
+      }]
+    },
     {
       "line": "0.17",
       "builds": [{
         "version": "0.17.2",
         "releaseDate": "2026-09-06",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Kurzinfo zum verfügbaren Update","en":"Update summary"},"text":{"de":"Bei einem gefundenen Update zeigt die Statusbox jetzt eine kurze Übersicht der wichtigsten Neuerungen, Verbesserungen und Fehlerbehebungen. Die vollständigen Details bleiben in den Versionshinweisen.","en":"When an update is found, the status box now shows a concise overview of its most important new features, improvements and fixes. Full details remain in the release notes."}}
