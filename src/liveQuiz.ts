@@ -3,7 +3,7 @@ import { get, onValue, ref, remove, set, update, type Unsubscribe } from 'fireba
 import { communityAuth, communityDatabase } from './firebase';
 
 export type LiveQuizPublicOption={id:string;text:string};
-export type LiveQuizPublicQuestion={id:string;type:string;question:string;options:LiveQuizPublicOption[];durationSeconds:number;points:number;allowAnswerChange:boolean};
+export type LiveQuizPublicQuestion={id:string;type:string;question:string;options:LiveQuizPublicOption[];durationSeconds:number;points:number;allowAnswerChange:boolean;holdTextAnswers:boolean};
 export type LiveQuizSession={id:string;code:string;ownerUid:string;quizId:string;title:string;description:string;quizType:'quiz'|'poll';participation:'anonymous'|'name';status:'lobby'|'open'|'ended';activeQuestionId:string;questions:LiveQuizPublicQuestion[];questionPermissions:Record<string,{allowAnswerChange:boolean}>;createdAt:number;expiresAt:number};
 export type LiveQuizAnswer={questionId:string;participantId:string;displayName:string;answer:string|string[];submittedAt:number};
 
@@ -25,9 +25,9 @@ async function unusedCode(){
 
 export function quizJoinUrl(code:string){return `${JOIN_BASE}?code=${encodeURIComponent(code)}`}
 
-export async function createLiveQuizSession(definition:{id:string;title:string;description:string;quizType:'quiz'|'poll';participation:'anonymous'|'name';questions:Array<{id:string;type:string;question:string;options:Array<{id:string;text:string}>;durationSeconds:number;points:number;allowAnswerChange:boolean;disabled:boolean}>}){
+export async function createLiveQuizSession(definition:{id:string;title:string;description:string;quizType:'quiz'|'poll';participation:'anonymous'|'name';questions:Array<{id:string;type:string;question:string;options:Array<{id:string;text:string}>;durationSeconds:number;points:number;allowAnswerChange:boolean;holdTextAnswers?:boolean;disabled:boolean}>}){
   const ownerUid=await signedInUid(),code=await unusedCode(),id=crypto.randomUUID(),now=Date.now();
-  const enabled=definition.questions.filter(question=>!question.disabled),questions=enabled.map(question=>({id:question.id,type:question.type,question:question.question,options:question.options,durationSeconds:question.durationSeconds,points:question.points,allowAnswerChange:question.allowAnswerChange}));
+  const enabled=definition.questions.filter(question=>!question.disabled),questions=enabled.map(question=>({id:question.id,type:question.type,question:question.question,options:question.options,durationSeconds:question.durationSeconds,points:question.points,allowAnswerChange:question.allowAnswerChange,holdTextAnswers:question.holdTextAnswers!==false}));
   const questionPermissions=Object.fromEntries(enabled.map(question=>[question.id,{allowAnswerChange:question.allowAnswerChange}]));
   const session:LiveQuizSession={id,code,ownerUid,quizId:definition.id,title:definition.title,description:definition.description,quizType:definition.quizType,participation:definition.participation,status:'lobby',activeQuestionId:'',questions,questionPermissions,createdAt:now,expiresAt:now+4*60*60*1000};
   await update(ref(communityDatabase),{[`quizSessions/${id}`]:session,[`quizCodes/${code}`]:{sessionId:id,ownerUid,expiresAt:session.expiresAt}});

@@ -3,11 +3,35 @@
   "supportedLocales": ["de","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR"],
   "versions": [
     {
+      "line": "0.16",
+      "builds": [{
+        "version": "0.16.0",
+        "releaseDate": "2026-09-06",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Bearbeitbare Quiz-Teilnahmefolie","en":"Editable quiz participation slide"},"text":{"de":"Jedes Quiz besitzt jetzt als erste Folie eine echte Teilnahmefolie mit Link, Teilnahmecode und QR-Code. Texte, Farben, Hintergrund und Positionen lassen sich mit denselben Werkzeugen wie bei anderen Folien gestalten.","en":"Every quiz now begins with a real participation slide containing the link, join code and QR code. Text, colours, background and positions can be designed with the same tools as other slides."}},
+            {"label":{"de":"Automatischer LiveQuiz-Start","en":"Automatic LiveQuiz start"},"text":{"de":"Wird während ON AIR zu einem Quiz gewechselt, startet die Sitzung automatisch und die Teilnahmefolie wird zuerst live geschaltet.","en":"When an operator enters a quiz while ON AIR, the session starts automatically and its participation slide is taken live first."}},
+            {"label":{"de":"Freitext zurückhalten","en":"Hold free-text answers"},"text":{"de":"Für jede Freitextfrage kann festgelegt werden, ob eingehende Antworten bis zur Freigabe ausschließlich beim Bediener bleiben.","en":"Each free-text question can define whether incoming answers remain visible only to the operator until approved."}}
+          ],
+          "improved": [
+            {"label":{"de":"QR-Code im gemeinsamen Renderer","en":"QR code in the shared renderer"},"text":{"de":"Der echte QR-Code wird in Editor, Vorschau und MAIN durch dieselbe Folien-Engine dargestellt; das gewählte Foliendesign bleibt dabei erhalten.","en":"The real QR code is rendered in the editor, preview and MAIN by the same slide engine while preserving the selected slide design."}},
+            {"label":{"de":"Versionsverlauf","en":"Version history"},"text":{"de":"Version 0.13 mit den Builds 0.13.0 und 0.13.1 ist wieder vollständig in den Versionshinweisen enthalten.","en":"Version 0.13, including builds 0.13.0 and 0.13.1, is now present in the version history again."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Fotomotiv-Beschreibung","en":"Photo description"},"text":{"de":"Login-Fotomotive werden nicht mehr anhand ihrer zufälligen Listenposition mit einem möglicherweise falschen Aufnahmeort beschriftet.","en":"Login photo motifs are no longer assigned a potentially incorrect location based on their random list position."}},
+            {"label":{"de":"Werkzeuge in der Vorschau","en":"Tools in preview"},"text":{"de":"Die Bearbeitungs- und Formatwerkzeuge werden im Vorschau-Modus vollständig ausgeblendet.","en":"Editing and formatting tools are now completely hidden in preview mode."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.15",
       "builds": [{
         "version": "0.15.4",
         "releaseDate": "2026-09-06",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Animierte Updatesuche","en":"Animated update check"},"text":{"de":"Die Punkte hinter der Updatesuche werden während der Prüfung fortlaufend animiert.","en":"The dots following the update-check message are now animated continuously while checking."}},
@@ -101,6 +125,44 @@
           "security": [
             {"label":{"de":"Ehrlicher Live-Status","en":"Honest live status"},"text":{"de":"Ohne echten Audience-Dienst zeigt die Anwendung keine erfundenen Teilnehmer, Ergebnisse oder Teilnahmecodes an.","en":"Without a real audience service, the application does not display fabricated participants, results or join codes."}}
           ]
+        }
+      }]
+    },
+    {
+      "line": "0.13",
+      "builds": [{
+        "version": "0.13.1",
+        "releaseDate": "2026-09-06",
+        "current": false,
+        "sections": {
+          "new": [],
+          "improved": [
+            {"label":{"de":"Cloud-Migration","en":"Cloud migration"},"text":{"de":"Lokale Medien lassen sich kontrolliert in die private GitHub-Medienbibliothek übertragen, während die Quelldateien erhalten bleiben.","en":"Local media can be transferred safely to the private GitHub media library while source files remain intact."}},
+            {"label":{"de":"Medienfenster","en":"Media window"},"text":{"de":"Status, Upload und Verwaltung der Medienbibliothek reagieren auch bei unterbrochenen Übertragungen verständlich.","en":"Status, upload and media-library management now respond clearly when transfers are interrupted."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Unterbrochene Übertragung","en":"Interrupted transfer"},"text":{"de":"Bereits übertragene Medien bleiben erhalten und übrige Dateien können später erneut hochgeladen werden.","en":"Previously transferred media remains available and remaining files can be uploaded again later."}},
+            {"label":{"de":"Präsentationsmenü","en":"Presentation menu"},"text":{"de":"Die Befehle im Präsentationsmenü öffnen wieder zuverlässig die vorgesehenen Ansichten.","en":"Commands in the presentation menu once again open their intended views reliably."}}
+          ],
+          "security": []
+        }
+      },{
+        "version": "0.13.0",
+        "releaseDate": "2026-09-06",
+        "current": false,
+        "sections": {
+          "new": [
+            {"label":{"de":"Private Cloud-Medienbibliothek","en":"Private cloud media library"},"text":{"de":"Bilder, Videos und Audiodateien können zusätzlich zur lokalen Bibliothek sicher in einer privaten GitHub-Ablage verwaltet werden.","en":"Images, videos and audio files can now be managed securely in a private GitHub-backed library alongside local media."}},
+            {"label":{"de":"Eigenständiges Medienfenster","en":"Dedicated media window"},"text":{"de":"Die Medienbibliothek steht als eigenes Desktop-Fenster mit Suche, Filtern und Medienaktionen bereit.","en":"The media library is available as a dedicated desktop window with search, filters and media actions."}}
+          ],
+          "improved": [
+            {"label":{"de":"Medienraster","en":"Media grid"},"text":{"de":"Vorschaubilder, Metadaten und Aktionen sind in einem übersichtlichen Raster zusammengeführt.","en":"Previews, metadata and actions are combined in a clearer media grid."}},
+            {"label":{"de":"Speicherstatus","en":"Storage status"},"text":{"de":"Die Oberfläche unterscheidet lokale Dateien und Cloud-Medien eindeutig und zeigt den tatsächlichen Übertragungszustand.","en":"The interface clearly distinguishes local files from cloud media and shows the real transfer state."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Irreführende Cloud-Anzeige","en":"Misleading cloud state"},"text":{"de":"Medien werden nicht mehr als online verfügbar dargestellt, bevor ihre Übertragung erfolgreich abgeschlossen wurde.","en":"Media is no longer shown as available online before its transfer has completed successfully."}}
+          ],
+          "security": []
         }
       }]
     },

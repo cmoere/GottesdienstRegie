@@ -1,3 +1,20 @@
+# GottesdienstRegie 0.16.0
+
+Veröffentlicht am 6. September 2026.
+
+## Neu
+
+- **Quiz-Teilnahmefolie:** Jedes Quiz beginnt mit einer echten Folie für QR-Code, Link und Teilnahmecode. Hintergrund, Texte, Farben und Positionen bleiben vollständig bearbeitbar.
+- **Automatischer Start:** Beim Wechsel zu einem Quiz während ON AIR startet die Live-Sitzung und zeigt zuerst die Teilnahmefolie.
+- **Freitext-Moderation:** Eine Checkbox pro Freitextfrage legt fest, ob Antworten bis zur Freigabe zurückgehalten werden.
+
+## Verbessert und behoben
+
+- QR-Codes werden durch die zentrale SlideRenderer-Engine in Editor, Vorschau und MAIN identisch dargestellt.
+- Im Vorschau-Modus bleiben Format- und Bearbeitungswerkzeuge ausgeblendet.
+- Login-Fotos erhalten keine falschen Ortsangaben mehr durch eine zufällige Dateireihenfolge.
+- Version 0.13.0 und 0.13.1 erscheinen wieder vollständig im Versionsverlauf.
+
 # GottesdienstRegie 0.15.4
 
 Veröffentlicht am 6. September 2026.

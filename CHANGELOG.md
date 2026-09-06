@@ -1,5 +1,13 @@
 # Versionshinweise / Release notes
 
+## 0.16.0 – 2026-09-06
+
+- Echte, frei gestaltbare Quiz-Teilnahmefolie mit dynamischem QR-Code, Link und sechsstelliger Kennung
+- Automatischer LiveQuiz-Start beim Wechsel zum Quiz während ON AIR
+- Option zum Zurückhalten von Freitextantworten bis zur Freigabe
+- Bearbeitungswerkzeuge im Vorschau-Modus ausgeblendet und Fotomotiv-Beschreibungen korrigiert
+- Version 0.13 vollständig im Versionsverlauf wiederhergestellt
+
 ## 0.15.4 – 2026-09-06
 
 - Animierte Updatesuche: „Suche nach Updates“, „.“, „..“, „...“ und wieder von vorn

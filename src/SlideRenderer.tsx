@@ -29,7 +29,7 @@ function RenderElement({element,mode}:{element:SlideElement;mode:SlideRendererMo
   if(element.type==='web'&&src)return mode==='thumbnail'?<div className="slide-renderer-element web-placeholder" style={style}>WEB</div>:<iframe className="slide-renderer-element web" style={{...style,zoom:`${Number(properties.zoom??100)}%`}} src={src} title="Web content" allow="autoplay; fullscreen; picture-in-picture" sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups"/>;
   if(element.type==='shape')return <div className="slide-renderer-element shape" style={{...style,background:String(properties.fill??properties.color??'#fff')}}/>;
   if(element.type==='line')return <div className="slide-renderer-element line" style={{...style,background:String(properties.color??'#fff'),height:`${Math.max(1,Number(properties.strokeWidth??4))/19.2}cqw`}}/>;
-  if(element.type==='qr')return <div className="slide-renderer-element qr" style={style}>{String(properties.text??properties.value??'QR')}</div>;
+  if(element.type==='qr')return src?<img className="slide-renderer-element qr" style={{...style,objectFit:'contain',background:'#fff'}} src={src} alt="QR-Code"/>:<div className="slide-renderer-element qr" style={{...style,display:'grid',placeItems:'center',background:'#fff',color:'#102029'}}>{String(properties.text??properties.value??'QR-CODE')}</div>;
   if(element.type==='text'&&Number(properties.timerDurationSeconds??0)>0)return <TimedText element={element} mode={mode} style={style}/>;
   return <div className="slide-renderer-element text" style={style}>{String(properties.text??'')}</div>;
 }
