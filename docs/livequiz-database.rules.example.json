@@ -1,0 +1,30 @@
+{
+  "rules": {
+    "quizCodes": {
+      "$code": {
+        ".read": "auth != null && data.child('expiresAt').val() > now",
+        ".write": "auth != null && ((!data.exists() && newData.child('ownerUid').val() === auth.uid && root.child('quizSessions').child(newData.child('sessionId').val()).child('ownerUid').val() === auth.uid) || data.child('ownerUid').val() === auth.uid)"
+      }
+    },
+    "quizSessions": {
+      "$sessionId": {
+        ".read": "auth != null && data.child('expiresAt').val() > now",
+        ".write": "auth != null && ((!data.exists() && newData.child('ownerUid').val() === auth.uid) || data.child('ownerUid').val() === auth.uid)",
+        ".validate": "newData.hasChildren(['id','code','ownerUid','quizId','title','quizType','participation','status','questions','expiresAt']) && newData.child('expiresAt').val() <= now + 14400000"
+      }
+    },
+    "quizResponses": {
+      "$sessionId": {
+        ".read": "auth != null && root.child('quizSessions').child($sessionId).child('ownerUid').val() === auth.uid",
+        "$questionId": {
+          "$participantId": {
+            ".write": "auth != null && auth.uid === $participantId && root.child('quizSessions').child($sessionId).child('status').val() === 'open' && root.child('quizSessions').child($sessionId).child('activeQuestionId').val() === $questionId && (!data.exists() || root.child('quizSessions').child($sessionId).child('questionPermissions').child($questionId).child('allowAnswerChange').val() === true)",
+            ".validate": "newData.hasChildren(['participantId','answer','submittedAt']) && newData.child('participantId').val() === auth.uid && newData.child('submittedAt').isNumber() && newData.child('submittedAt').val() <= now + 10000"
+          }
+        }
+      }
+    },
+    ".read": false,
+    ".write": false
+  }
+}

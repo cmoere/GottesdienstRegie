@@ -1,5 +1,17 @@
 # Versionshinweise / Release notes
 
+## 0.15.0 – 2026-09-06
+
+- Echte LiveQuiz-Sitzungen mit zufälligem sechsstelligen Teilnahmecode
+- Lokal erzeugter QR-Code ohne externen QR-Bilddienst
+- Mobile Teilnahme-Seite als eigenständige HTML-, CSS- und JavaScript-Anwendung
+- Anonyme Teilnahme oder Teilnahme mit Anzeigenamen
+- Fragen lassen sich kontrolliert einzeln öffnen und wieder schließen
+- Live-Zähler für Teilnehmer und eingegangene Antworten
+- Teilnahmecode wird beim Beenden unmittelbar ungültig
+- Richtige Antworten bleiben ausschließlich in der Desktop-Präsentation
+- Beispielregeln für getrennte Sitzungs-, Code- und Antwortberechtigungen
+
 ## 0.14.0 – 2026-09-06
 
 - LiveQuiz ist über „Element hinzufügen“ und das Plus im Ablauf erreichbar

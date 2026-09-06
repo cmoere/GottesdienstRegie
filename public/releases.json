@@ -3,11 +3,33 @@
   "supportedLocales": ["de","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR"],
   "versions": [
     {
+      "line": "0.15",
+      "builds": [{
+        "version": "0.15.0",
+        "releaseDate": "2026-09-06",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Teilnahmecode und QR-Code","en":"Join code and QR code"},"text":{"de":"Ein bewusster LiveQuiz-Start erzeugt einen echten sechsstelligen Teilnahmecode und einen lokal gerenderten QR-Code.","en":"Starting a LiveQuiz deliberately creates a real six-digit join code and a locally rendered QR code."}},
+            {"label":{"de":"Mobile Teilnahme","en":"Mobile participation"},"text":{"de":"Eine responsive HTML-, CSS- und JavaScript-Seite ermöglicht die anonyme oder namentliche Teilnahme per Smartphone.","en":"A responsive HTML, CSS and JavaScript page enables anonymous or named participation from a phone."}},
+            {"label":{"de":"Live-Steuerung","en":"Live controls"},"text":{"de":"Der Bediener kann Fragen einzeln öffnen, Antworten schließen und die Sitzung kontrolliert beenden.","en":"The operator can open questions individually, close answers and end the session in a controlled way."}}
+          ],
+          "improved": [
+            {"label":{"de":"Echte Zähler","en":"Real counters"},"text":{"de":"Teilnehmer und Antworten auf die aktive Frage werden aus Firebase in Echtzeit gezählt.","en":"Participants and answers to the active question are counted from Firebase in real time."}}
+          ],
+          "fixed": [],
+          "security": [
+            {"label":{"de":"Geschützte Antworten","en":"Protected answers"},"text":{"de":"Teilnehmer schreiben nur ihre eigene Antwort zur aktiven Frage; korrekte Lösungen werden nicht an Browser ausgeliefert.","en":"Participants can only write their own answer to the active question; correct answers are not delivered to browsers."}}
+          ]
+        }
+      }]
+    },
+    {
       "line": "0.14",
       "builds": [{
         "version": "0.14.0",
         "releaseDate": "2026-09-06",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"LiveQuiz im Ablauf","en":"LiveQuiz in the service order"},"text":{"de":"LiveQuiz kann über Element hinzufügen und das Plus im Ablauf als eigener ServiceItem-Typ erstellt werden.","en":"LiveQuiz can now be created as a dedicated service item from Add Item and the plus control in the service order."}},

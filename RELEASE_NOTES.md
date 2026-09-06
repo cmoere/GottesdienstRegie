@@ -1,3 +1,29 @@
+# GottesdienstRegie 0.15.0
+
+Veröffentlicht am 6. September 2026.
+
+## Neu
+
+- **Teilnahmecode:** Beim bewussten Start eines LiveQuiz erzeugt GottesdienstRegie eine echte, zufällige sechsstellige Sitzungskennung.
+- **QR-Code:** Die Desktop-App erstellt den QR-Code lokal. Es werden keine Quizdaten an einen externen QR-Bilddienst gesendet.
+- **Mobile Join-Seite:** Eine responsive Teilnahmeoberfläche aus HTML, CSS und JavaScript steht auf der öffentlichen GottesdienstRegie-Seite bereit.
+- **Echtzeitteilnahme:** Besucher können anonym oder mit Anzeigenamen beitreten und auf die jeweils vom Bediener geöffnete Frage antworten.
+- **Live-Steuerung:** Fragen werden gezielt gestartet, Antworten geschlossen und die gesamte Sitzung kontrolliert beendet.
+
+## Verbessert
+
+- **Live-Status:** Der Editor zeigt die tatsächliche Teilnehmerzahl und die Zahl der Antworten auf die aktuell geöffnete Frage.
+- **Sitzungsschutz:** Die Quizdefinition wird während einer laufenden Sitzung gesperrt, damit Desktop und Teilnehmer dieselben Inhalte verwenden.
+- **Ablauf:** Ein beendeter Teilnahmecode wird sofort aus der Codezuordnung entfernt und kann nicht erneut betreten werden.
+
+## Sicherheit
+
+- **Getrennte Datenbereiche:** Quizsitzungen, Codezuordnungen und Antworten besitzen getrennte Firebase-Regeln. Teilnehmer schreiben ausschließlich ihre eigene Antwort zur aktiven Frage.
+- **Keine Lösungen im Browser:** Korrekte Antwortkennungen bleiben in der Desktop-Präsentation und werden nicht an die mobile Teilnahme-Seite ausgeliefert.
+- **Keine geheimen Schlüssel:** Die Join-Seite enthält nur die vorgesehene öffentliche Firebase-Webkonfiguration, keine Administrator- oder Secret-Schlüssel.
+
+---
+
 # GottesdienstRegie 0.14.0
 
 Veröffentlicht am 6. September 2026.

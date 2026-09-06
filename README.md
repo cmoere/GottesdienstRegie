@@ -24,6 +24,7 @@ GottesdienstRegie ist die Windows-Desktopsoftware der Philippusgemeinde für Got
 - echte Canvas-Bearbeitung mit Elementauswahl, Ziehen, Skalieren, Ebenen, Sperre und Sichtbarkeit
 - Webseiten sowie lokale, direkte, YouTube- und Vimeo-Videos als Ablauf-Inhalte
 - durchsuchbare integrierte Hilfe und mehrsprachige Release-Notes-Webseite aus derselben Datenquelle
+- LiveQuiz mit sechsstelligen Teilnahmecodes, lokal erzeugten QR-Codes und mobiler Echtzeit-Teilnahme
 
 ## Installation
 
