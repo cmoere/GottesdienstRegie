@@ -15,7 +15,7 @@ import { AppPreferences, type AppPreferencesData } from './AppPreferences';
 let controlWindow: BrowserWindow | null = null;
 let mediaWindow: BrowserWindow | null = null;
 let appPreferences:AppPreferences;
-protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
+protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}},{scheme:'gottesdienst-cloud',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 
 type UpdateStatus={state:'idle'|'checking'|'available'|'not-available'|'downloading'|'downloaded'|'rollback-downloading'|'rollback-ready'|'error'|'development';version?:string;percent?:number;releaseNotes?:string;message?:string;transferred?:number;total?:number;bytesPerSecond?:number;etaSeconds?:number};
@@ -77,7 +77,7 @@ function createControlWindow(preferences:AppPreferencesData) {
 function openMediaWindow(context:'manage'|'select'='manage',purpose:'item'|'background'='item'){
   if(mediaWindow&&!mediaWindow.isDestroyed()){mediaWindow.focus();mediaWindow.webContents.send('media-window:context',{context,purpose});return true}
   const saved=appPreferences.get(),fallback={width:1400,height:850},bounds=saved.mediaBounds??fallback;
-  mediaWindow=new BrowserWindow({...bounds,show:false,minWidth:1000,minHeight:650,resizable:true,maximizable:true,backgroundColor:'#f4f7f8',title:'Medienbibliothek',icon:app.isPackaged?path.join(process.resourcesPath,'icon.png'):path.join(app.getAppPath(),'build/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
+  mediaWindow=new BrowserWindow({...bounds,show:false,minWidth:1000,minHeight:650,resizable:true,minimizable:true,maximizable:true,closable:true,skipTaskbar:false,alwaysOnTop:false,backgroundColor:'#f4f7f8',title:'GottesdienstRegie – Medienbibliothek',icon:app.isPackaged?path.join(process.resourcesPath,'icon.png'):path.join(app.getAppPath(),'build/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
   mediaWindow.setMenu(null);if(saved.mediaMaximized)mediaWindow.maximize();
   const save=()=>{if(!mediaWindow||mediaWindow.isDestroyed())return;const patch:Partial<AppPreferencesData>={mediaMaximized:mediaWindow.isMaximized()};if(!mediaWindow.isMaximized())patch.mediaBounds=mediaWindow.getBounds();void appPreferences.update(patch)};
   mediaWindow.on('move',save);mediaWindow.on('resize',save);mediaWindow.on('maximize',save);mediaWindow.on('unmaximize',save);mediaWindow.on('closed',()=>{mediaWindow=null});
@@ -104,6 +104,7 @@ app.whenReady().then(async() => {
   void presentationRepository.initialize();
   void mediaRepository.initialize();
   protocol.handle('gottesdienst-media',request=>{const url=new URL(request.url),fileName=path.basename(decodeURIComponent(url.pathname));return net.fetch(pathToFileURL(path.join(mediaRepository.directory,fileName)).toString())});
+  protocol.handle('gottesdienst-cloud',async request=>{const url=new URL(request.url),remotePath=decodeURIComponent(url.pathname.replace(/^\//,'')),extension=path.extname(remotePath).toLowerCase(),mime:Record<string,string>={'.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.gif':'image/gif','.svg':'image/svg+xml','.mp4':'video/mp4','.webm':'video/webm','.mov':'video/quicktime','.mp3':'audio/mpeg','.wav':'audio/wav','.m4a':'audio/mp4','.ogg':'audio/ogg','.pdf':'application/pdf'};try{return new Response(await onlineMedia.download(remotePath),{status:200,headers:{'content-type':mime[extension]??'application/octet-stream','cache-control':'private, max-age=3600'}})}catch{return new Response('Medium nicht verfügbar.',{status:404,headers:{'content-type':'text/plain; charset=utf-8'}})}});
   const databaseUrl = 'https://philippusgemeindebie-default-rtdb.europe-west1.firebasedatabase.app';
   const gasUrl = 'https://script.google.com/macros/s/AKfycbxU-k7Ch6bHRnOWUp8SxM7bCQ7GBZe_OyDnnegBB2DxwX928--9caHi3Elwc38XABxz/exec';
   const servicePermissionKeys=['presentationView','presentationCreate','presentationEdit','presentationDelete','presentationLive','previewUse','quickScreensUse','stageMessagesUse','bibleUse','songsEdit','mediaUpload','mediaDelete','recordingManage','outputSettings','appSettings'];

@@ -1,3 +1,22 @@
+# GottesdienstRegie 0.13.1
+
+Veröffentlicht am 6. September 2026.
+
+## Behoben
+
+- **Cloud-Migration:** Statt der bisherigen allgemeinen Abbruchmeldung wird jetzt verständlich angezeigt, ob das Medien-Repository nicht privat ist, die GitHub-Berechtigung fehlt, die Verbindung unterbrochen wurde oder eine Datei nicht akzeptiert werden konnte.
+- **Private Team-Medien:** Auflisten, Vorschau, Upload und Löschen verwenden einen authentifizierten Zugriff. Private Medien-URLs werden nicht als ungeschützte öffentliche Roh-Links an den Renderer weitergegeben.
+- **Fortsetzen nach Fehlern:** Bereits erfolgreich migrierte Medien bleiben synchronisiert; nur die noch offenen Quelldateien werden bei einem weiteren Versuch erneut verarbeitet.
+- **Präsentationsmenü:** Präsentationsinformationen, Servicezeit und ON AIR befinden sich wieder in genau einem zusammenhängenden Dropdown. ON AIR erscheint nicht mehr in einem abgesetzten zweiten Kasten.
+
+## Verbessert
+
+- **Medienfenster:** Das native Arbeitsfenster heißt nun eindeutig „GottesdienstRegie – Medienbibliothek“ und bleibt normal minimierbar, maximierbar sowie über den Windows-Fensterwechsel erreichbar.
+- **Rückgängig/Wiederholen:** Beide Befehle bleiben an ihrer festen Position sichtbar. Ohne passenden History-Eintrag sind sie technisch und visuell deaktiviert und werden für Hilfstechnologien als nicht verfügbar bezeichnet.
+- **Upload-Stabilität:** Vorübergehende Netzwerk- und Serverfehler werden begrenzt wiederholt, ohne eine Endlosschleife zu erzeugen.
+
+---
+
 # GottesdienstRegie 0.13.0
 
 Veröffentlicht am 6. September 2026.

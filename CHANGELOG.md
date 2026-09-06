@@ -1,5 +1,15 @@
 # Versionshinweise / Release notes
 
+## 0.13.1 – 2026-09-06
+
+- Cloud-Migration zeigt nun die konkrete, verständliche Ursache statt einer pauschalen Abbruchmeldung
+- GitHub-Medienzugriff authentifiziert private Team-Medien beim Hochladen, Auflisten, Anzeigen und Löschen
+- Uploads in ein versehentlich öffentliches Medien-Repository werden aus Datenschutzgründen blockiert
+- Netzwerkfehler beim Upload werden kontrolliert wiederholt; bereits erfolgreich übertragene Medien bleiben erhalten
+- Das Medienfenster trägt den eindeutigen Systemtitel „GottesdienstRegie – Medienbibliothek“
+- Das Präsentationsmenü zeigt Informationen, Servicezeit und ON AIR in einer zusammenhängenden Menüfläche
+- Rückgängig und Wiederholen bleiben sichtbar, sind ohne verfügbare Aktion aber korrekt deaktiviert
+
 ## 0.13.0 – 2026-09-06
 
 - Eigenständiges, skalierbares Medienfenster mit gespeicherter Größe
