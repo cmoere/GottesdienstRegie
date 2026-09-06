@@ -5,9 +5,23 @@
     {
       "line": "0.15",
       "builds": [{
-        "version": "0.15.1",
+        "version": "0.15.2",
         "releaseDate": "2026-09-06",
         "current": true,
+        "sections": {
+          "new": [],
+          "improved": [
+            {"label":{"de":"Zentraler Shutdown","en":"Central shutdown"},"text":{"de":"Normales Schließen, Alt+F4 und Programmbeendigungen verwenden jetzt denselben sicheren Output-Shutdown.","en":"Normal closing, Alt+F4 and application shutdowns now use the same safe output shutdown."}}
+          ],
+          "fixed": [
+            {"label":{"de":"ON AIR bei Alt+F4","en":"ON AIR on Alt+F4"},"text":{"de":"MAIN, STAGE und weitere Ausgabefenster werden geschlossen, bevor die Bedienoberfläche beendet wird.","en":"MAIN, STAGE and other output windows are closed before the operator interface exits."}}
+          ],
+          "security": []
+        }
+      },{
+        "version": "0.15.1",
+        "releaseDate": "2026-09-06",
+        "current": false,
         "sections": {
           "new": [],
           "improved": [

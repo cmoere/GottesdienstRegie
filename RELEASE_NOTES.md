@@ -1,3 +1,18 @@
+# GottesdienstRegie 0.15.2
+
+Veröffentlicht am 6. September 2026.
+
+## Behoben
+
+- **Alt+F4 während ON AIR:** Wird die Bedienoberfläche mit Alt+F4 oder dem Windows-X geschlossen, beendet der Main Process zuerst MAIN, STAGE, NOTES, LIVESTREAM und LOBBY.
+- **Verwaiste Ausgabefenster:** Präsentationsfenster bleiben nicht mehr sichtbar, nachdem das Bedienfenster geschlossen wurde.
+
+## Verbessert
+
+- **Zentraler Shutdown:** Auch eine Programmbeendigung durch Update oder Betriebssystem verwendet denselben Output-Shutdown und markiert die Präsentationsbibliothek anschließend als sauber beendet.
+
+---
+
 # GottesdienstRegie 0.15.1
 
 Veröffentlicht am 6. September 2026.

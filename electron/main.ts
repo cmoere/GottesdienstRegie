@@ -15,6 +15,8 @@ import { AppPreferences, type AppPreferencesData } from './AppPreferences';
 let controlWindow: BrowserWindow | null = null;
 let mediaWindow: BrowserWindow | null = null;
 let appPreferences:AppPreferences;
+let controlCloseInProgress=false;
+let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}},{scheme:'gottesdienst-cloud',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 
@@ -70,6 +72,17 @@ function createControlWindow(preferences:AppPreferencesData) {
   let saveTimer:NodeJS.Timeout|undefined;
   const saveWindowState=()=>{if(!controlWindow||controlWindow.isDestroyed())return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{if(!controlWindow||controlWindow.isDestroyed())return;const state=controlWindow.isFullScreen()?'fullscreen':controlWindow.isMaximized()?'maximized':'window',display=screen.getDisplayMatching(controlWindow.getBounds()),patch:Partial<AppPreferencesData>={lastWindowState:state,lastDisplayId:display.id};if(state==='window')patch.bounds=controlWindow.getBounds();void appPreferences.update(patch)},250)};
   controlWindow.on('move',saveWindowState);controlWindow.on('resize',saveWindowState);controlWindow.on('maximize',saveWindowState);controlWindow.on('unmaximize',saveWindowState);controlWindow.on('enter-full-screen',saveWindowState);controlWindow.on('leave-full-screen',saveWindowState);
+  controlWindow.on('close',event=>{
+    if(controlCloseInProgress)return;
+    event.preventDefault();
+    controlCloseInProgress=true;
+    const closingWindow=controlWindow;
+    void stopPresentationOutputs().finally(()=>{
+      controlWindow=null;
+      if(closingWindow&&!closingWindow.isDestroyed())closingWindow.destroy();
+      app.quit();
+    });
+  });
   void load(controlWindow);
   controlWindow.webContents.once('did-finish-load',()=>{if(appPreferences.get().automaticUpdates)setTimeout(()=>void checkForUpdates(),5000)});
 }
@@ -96,6 +109,7 @@ app.whenReady().then(async() => {
   const displayManager=new DisplayManager();
   const publishOutputStatus=(role:OutputRole,state:'ready'|'missing'|'closed')=>{if(controlWindow&&!controlWindow.isDestroyed())controlWindow.webContents.send('outputs:status',{role,state})};
   const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
+  stopPresentationOutputs=()=>outputManager.stop();
   const sessionFile = path.join(app.getPath('userData'), 'community-session.bin');
   const legacyPresentationFile=path.join(app.getPath('userData'),'presentations','default-presentation.json');
   const presentationRepository=new PresentationRepository(path.join(app.getPath('userData'),'library'));
@@ -260,7 +274,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('outputs:off-air',()=>outputManager.stop());
   createControlWindow(initialPreferences);
   let cleanQuit=false;
-  app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();void presentationRepository.setState({cleanShutdown:true}).finally(()=>{cleanQuit=true;app.quit()})});
+  app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();controlCloseInProgress=true;void Promise.all([outputManager.stop(),presentationRepository.setState({cleanShutdown:true})]).finally(()=>{cleanQuit=true;app.quit()})});
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createControlWindow(appPreferences.get()); });
 });
 

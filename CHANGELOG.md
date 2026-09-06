@@ -1,5 +1,11 @@
 # Versionshinweise / Release notes
 
+## 0.15.2 – 2026-09-06
+
+- Alt+F4 und das Windows-Schließen beenden zuerst alle aktiven Präsentationsausgaben
+- MAIN, STAGE, NOTES, LIVESTREAM und LOBBY bleiben nach dem Schließen der Bedienoberfläche nicht mehr offen
+- Auch Update-, System- und andere App-Beendigungen verwenden denselben zentralen Output-Shutdown
+
 ## 0.15.1 – 2026-09-06
 
 - QR-Code und Teilnahmelink verwenden jetzt `https://pgbielefeld.neocities.org/quiz`
