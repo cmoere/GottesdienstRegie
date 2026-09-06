@@ -13,5 +13,6 @@ import './v010.css';
 import './auth.css';
 import './media-browser.css';
 import './media-browser-fixes.css';
+import './update-controls.css';
 
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);

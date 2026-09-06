@@ -5,9 +5,24 @@
     {
       "line": "0.15",
       "builds": [{
-        "version": "0.15.3",
+        "version": "0.15.4",
         "releaseDate": "2026-09-06",
         "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Animierte Updatesuche","en":"Animated update check"},"text":{"de":"Die Punkte hinter der Updatesuche werden während der Prüfung fortlaufend animiert.","en":"The dots following the update-check message are now animated continuously while checking."}},
+            {"label":{"de":"Download abbrechen","en":"Cancel download"},"text":{"de":"Ein X rechts im Fortschrittsbalken beendet den laufenden Update-Download.","en":"An X on the right side of the progress bar stops the active update download."}}
+          ],
+          "improved": [
+            {"label":{"de":"Echter Netzwerkabbruch","en":"Real network cancellation"},"text":{"de":"Der Download wird technisch über einen CancellationToken gestoppt und kann anschließend erneut gestartet werden.","en":"The download is technically stopped through a cancellation token and can be started again afterwards."}}
+          ],
+          "fixed": [],
+          "security": []
+        }
+      },{
+        "version": "0.15.3",
+        "releaseDate": "2026-09-06",
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Quizteilnahme auf MAIN","en":"Quiz participation on MAIN"},"text":{"de":"Quizname, QR-Code, Webadresse und sechsstelliger Teilnahmecode können direkt auf MAIN angezeigt werden.","en":"The quiz name, QR code, web address and six-digit join code can now be shown directly on MAIN."}},

@@ -47,6 +47,7 @@ contextBridge.exposeInMainWorld('desktop', {
     metadata:()=>ipcRenderer.invoke('updates:metadata'),
     check: () => ipcRenderer.invoke('updates:check'),
     download: () => ipcRenderer.invoke('updates:download'),
+    cancelDownload: () => ipcRenderer.invoke('updates:cancel-download'),
     install: () => ipcRenderer.invoke('updates:install'),
     previous:()=>ipcRenderer.invoke('updates:previous'),
     rollback:()=>ipcRenderer.invoke('updates:rollback'),

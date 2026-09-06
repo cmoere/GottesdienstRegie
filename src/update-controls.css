@@ -1,0 +1,29 @@
+.update-state > span {
+  padding-right: 38px;
+}
+
+.update-cancel {
+  position: absolute;
+  z-index: 2;
+  right: 5px;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  transform: translateY(-50%);
+  border: 1px solid color-mix(in srgb, var(--text-primary) 35%, transparent);
+  background: color-mix(in srgb, var(--panel) 78%, transparent);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.update-cancel:hover {
+  border-color: var(--danger);
+  background: var(--danger);
+  color: #fff;
+}
+
+.update-cancel .material-symbols-outlined {
+  font-size: 18px;
+}

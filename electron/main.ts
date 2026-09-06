@@ -5,6 +5,7 @@ import fs from 'node:fs/promises';
 import { createHash, createHmac, pbkdf2Sync, randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import { compare as bcryptCompare } from 'bcryptjs';
 import { autoUpdater, type UpdateInfo } from 'electron-updater';
+import { CancellationToken } from 'builder-util-runtime';
 import { DisplayManager, type DisplayAssignments, type OutputRole } from './DisplayManager';
 import { OutputWindowManager } from './OutputWindowManager';
 import { PresentationRepository, type DuplicatePresentationOptions } from './PresentationRepository';
@@ -20,8 +21,10 @@ let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}},{scheme:'gottesdienst-cloud',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 
-type UpdateStatus={state:'idle'|'checking'|'available'|'not-available'|'downloading'|'downloaded'|'rollback-downloading'|'rollback-ready'|'error'|'development';version?:string;percent?:number;releaseNotes?:string;message?:string;transferred?:number;total?:number;bytesPerSecond?:number;etaSeconds?:number};
+type UpdateStatus={state:'idle'|'checking'|'available'|'not-available'|'downloading'|'cancelled'|'downloaded'|'rollback-downloading'|'rollback-ready'|'error'|'development';version?:string;percent?:number;releaseNotes?:string;message?:string;transferred?:number;total?:number;bytesPerSecond?:number;etaSeconds?:number};
 let lastUpdateStatus:UpdateStatus={state:'idle'};
+let updateCancellationToken:CancellationToken|null=null;
+let pendingUpdateVersion='';
 function releaseNotes(info:UpdateInfo){
   if(typeof info.releaseNotes==='string')return info.releaseNotes;
   if(Array.isArray(info.releaseNotes))return info.releaseNotes.map(note=>typeof note==='string'?note:note.note).filter(Boolean).join('\n\n');
@@ -36,12 +39,12 @@ function publishUpdateStatus(status:UpdateStatus){
 autoUpdater.autoDownload=false;
 autoUpdater.autoInstallOnAppQuit=true;
 autoUpdater.on('checking-for-update',()=>publishUpdateStatus({state:'checking'}));
-autoUpdater.on('update-available',info=>publishUpdateStatus({state:'available',version:info.version,releaseNotes:releaseNotes(info)}));
-autoUpdater.on('update-not-available',info=>publishUpdateStatus({state:'not-available',version:info.version}));
+autoUpdater.on('update-available',info=>{pendingUpdateVersion=info.version;publishUpdateStatus({state:'available',version:info.version,releaseNotes:releaseNotes(info)})});
+autoUpdater.on('update-not-available',info=>{pendingUpdateVersion='';publishUpdateStatus({state:'not-available',version:info.version})});
 let smoothedDownloadSpeed=0;
-autoUpdater.on('download-progress',progress=>{const speed=Math.max(0,progress.bytesPerSecond||0);smoothedDownloadSpeed=smoothedDownloadSpeed?smoothedDownloadSpeed*.72+speed*.28:speed;const remaining=Math.max(0,progress.total-progress.transferred),etaSeconds=smoothedDownloadSpeed>0&&progress.percent>=3?Math.round(remaining/smoothedDownloadSpeed):undefined;publishUpdateStatus({state:'downloading',percent:Math.round(progress.percent),transferred:progress.transferred,total:progress.total,bytesPerSecond:Math.round(smoothedDownloadSpeed),etaSeconds})});
-autoUpdater.on('update-downloaded',info=>publishUpdateStatus({state:'downloaded',version:info.version,releaseNotes:releaseNotes(info)}));
-autoUpdater.on('error',error=>publishUpdateStatus({state:'error',message:error.message}));
+autoUpdater.on('download-progress',progress=>{const speed=Math.max(0,progress.bytesPerSecond||0);smoothedDownloadSpeed=smoothedDownloadSpeed?smoothedDownloadSpeed*.72+speed*.28:speed;const remaining=Math.max(0,progress.total-progress.transferred),etaSeconds=smoothedDownloadSpeed>0&&progress.percent>=3?Math.round(remaining/smoothedDownloadSpeed):undefined;publishUpdateStatus({state:'downloading',version:pendingUpdateVersion,percent:Math.round(progress.percent),transferred:progress.transferred,total:progress.total,bytesPerSecond:Math.round(smoothedDownloadSpeed),etaSeconds})});
+autoUpdater.on('update-downloaded',info=>{updateCancellationToken=null;publishUpdateStatus({state:'downloaded',version:info.version,releaseNotes:releaseNotes(info)})});
+autoUpdater.on('error',error=>{if(updateCancellationToken?.cancelled)return;publishUpdateStatus({state:'error',message:error.message})});
 
 async function checkForUpdates(){
   if(!app.isPackaged)return publishUpdateStatus({state:'development',version:app.getVersion()});
@@ -255,7 +258,8 @@ app.whenReady().then(async() => {
   ipcMain.handle('updates:current-version',()=>app.getVersion());
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});
   ipcMain.handle('updates:check',()=>checkForUpdates());
-  ipcMain.handle('updates:download',async()=>{if(lastUpdateStatus.state!=='available')return false;try{await autoUpdater.downloadUpdate();return true}catch(error){publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)});return false}});
+  ipcMain.handle('updates:download',async()=>{if(lastUpdateStatus.state!=='available'&&lastUpdateStatus.state!=='cancelled')return false;updateCancellationToken=new CancellationToken();smoothedDownloadSpeed=0;try{await autoUpdater.downloadUpdate(updateCancellationToken);updateCancellationToken=null;return true}catch(error){if(updateCancellationToken?.cancelled){updateCancellationToken=null;publishUpdateStatus({state:'cancelled',version:pendingUpdateVersion,message:'Der Update-Download wurde abgebrochen.'});return true}updateCancellationToken=null;publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)});return false}});
+  ipcMain.handle('updates:cancel-download',()=>{if(!updateCancellationToken||lastUpdateStatus.state!=='downloading')return false;updateCancellationToken.cancel();publishUpdateStatus({state:'cancelled',version:pendingUpdateVersion,message:'Der Update-Download wurde abgebrochen.'});return true});
   ipcMain.handle('updates:install',()=>{if(lastUpdateStatus.state!=='downloaded')return false;setImmediate(()=>autoUpdater.quitAndInstall(false,true));return true});
   async function previousRelease(){const response=await fetch('https://api.github.com/repos/cmoere/GottesdienstRegie/releases?per_page=20',{headers:{'user-agent':`GottesdienstRegie/${app.getVersion()}`},signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error(`GitHub ${response.status}`);const releases=await response.json() as any[];for(const release of releases){if(release.draft||release.prerelease||!olderThan(String(release.tag_name),app.getVersion()))continue;const asset=(release.assets??[]).find((entry:any)=>/GottesdienstRegie-Setup-.*\.exe$/i.test(String(entry.name)));if(asset)return{version:String(release.tag_name).replace(/^v/,''),publishedAt:String(release.published_at??''),size:Number(asset.size??0),url:String(asset.browser_download_url)}}return null}
   ipcMain.handle('updates:previous',()=>previousRelease());

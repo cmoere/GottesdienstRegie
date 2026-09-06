@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.15.4
+
+Veröffentlicht am 6. September 2026.
+
+## Neu
+
+- **Animierte Updatesuche:** Während der Prüfung wechselt die Anzeige fortlaufend zwischen „Suche nach Updates“, „Suche nach Updates .“, „Suche nach Updates ..“ und „Suche nach Updates ...“.
+- **Download abbrechen:** Rechts im grünen Download-Fortschrittsbalken befindet sich jetzt eine gut erreichbare X-Schaltfläche.
+
+## Verbessert
+
+- **Echter Abbruch:** Das X beendet die laufende Netzwerkübertragung über einen CancellationToken. Anschließend kann der Update-Download erneut gestartet werden.
+- **Verständlicher Status:** Nach dem Abbruch zeigt die Anwendung eine klare Meldung, ohne einen technischen Fehlercode auszugeben.
+
+---
+
 # GottesdienstRegie 0.15.3
 
 Veröffentlicht am 6. September 2026.

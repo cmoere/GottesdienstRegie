@@ -1,5 +1,11 @@
 # Versionshinweise / Release notes
 
+## 0.15.4 – 2026-09-06
+
+- Animierte Updatesuche: „Suche nach Updates“, „.“, „..“, „...“ und wieder von vorn
+- X-Schaltfläche rechts im Fortschrittsbalken zum Abbrechen eines laufenden Downloads
+- Der Abbruch stoppt die tatsächliche Netzwerkübertragung und ermöglicht einen erneuten Download
+
 ## 0.15.3 – 2026-09-06
 
 - LiveQuiz-Teilnahmeansicht mit Quizname, QR-Code, URL und sechsstelligen Code auf MAIN
