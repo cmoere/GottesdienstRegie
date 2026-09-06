@@ -1,5 +1,19 @@
 # Versionshinweise / Release notes
 
+## 0.17.0 – 2026-09-06
+
+- Echte, frei gestaltbare Antwortfolie mit Live-Auswertung und geschützter Freitext-Moderation
+- Vorschau-QR-Code bereits vor Quizstart; echter Code wird beim automatischen Start eingesetzt
+- Quizbeschreibung wird zuverlässig auf der Teilnahmefolie angezeigt
+- Quizfragen lassen sich per Ziehen neu anordnen
+- Acht feste Thumbnail-Größen bis zu einer deutlich größeren Rastervorschau
+- Deutlich mehr Schriftarten mit Vorschau im Texteditor
+- Schnellanzeigen erscheinen ausschließlich im Vorschau-Modus
+- Hauptmenüs bleiben zuverlässig über Canvas, Editor und Popovern
+- Updatesuche bleibt mindestens drei Sekunden sichtbar
+- Erweiterte Hilfetexte und schematische Darstellungen für Oberfläche und LiveQuiz
+- Dezente, barrierearme Animationen für Ansichten, Folien und Live-Status
+
 ## 0.16.0 – 2026-09-06
 
 - Echte, frei gestaltbare Quiz-Teilnahmefolie mit dynamischem QR-Code, Link und sechsstelliger Kennung

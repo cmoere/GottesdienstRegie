@@ -3,11 +3,40 @@
   "supportedLocales": ["de","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR"],
   "versions": [
     {
+      "line": "0.17",
+      "builds": [{
+        "version": "0.17.0",
+        "releaseDate": "2026-09-06",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Antwortfolie für LiveQuiz","en":"LiveQuiz answer slide"},"text":{"de":"Jedes Quiz besitzt jetzt eine echte, frei gestaltbare Antwortfolie. Während einer Sitzung zeigt sie die Auswertung der aktiven Auswahlfrage oder freigegebene Freitextantworten.","en":"Every quiz now includes a real, freely editable answer slide. During a session it shows results for the active choice question or released free-text answers."}},
+            {"label":{"de":"QR-Code-Vorschau","en":"QR code preview"},"text":{"de":"Die Teilnahmefolie zeigt bereits vor dem Start einen Vorschau-QR-Code. Beim automatischen Start wird dieser ohne Designverlust durch den echten Link und Code ersetzt.","en":"The participation slide now shows a preview QR code before the session starts. Automatic start replaces it with the real link and code without changing the design."}},
+            {"label":{"de":"Erweiterte Schriftarten","en":"Expanded font selection"},"text":{"de":"Der Texteditor bietet eine deutlich größere Auswahl verbreiteter Präsentations- und Systemschriftarten mit direkter Vorschau.","en":"The text editor now offers a much larger selection of common presentation and system fonts with direct previews."}}
+          ],
+          "improved": [
+            {"label":{"de":"Acht Thumbnail-Stufen","en":"Eight thumbnail steps"},"text":{"de":"Die Folienübersicht besitzt jetzt acht feste Größenstufen und erlaubt deutlich größere Vorschaubilder, ohne die eigentliche Folie zu skalieren.","en":"The slide overview now has eight fixed size steps and supports significantly larger thumbnails without scaling the actual slide."}},
+            {"label":{"de":"Fragen neu anordnen","en":"Reorder questions"},"text":{"de":"Quizfragen können direkt an ihren Reitern gezogen und neu angeordnet werden. Die zugehörigen Folien und Antwortauswertung folgen derselben Reihenfolge.","en":"Quiz questions can be dragged by their tabs into a new order. Their slides and answer summary follow the same order."}},
+            {"label":{"de":"Ruhigere Vorschau","en":"Cleaner preview"},"text":{"de":"Logo, Schwarz, Ohne Text, Amen und weitere Schnellanzeigen erscheinen ausschließlich im Vorschau-Modus. Die Bearbeitungsansicht bleibt auf die Inhaltserstellung konzentriert.","en":"Logo, Black, No Text, Amen and other quick screens now appear only in preview mode, keeping the editing view focused on content creation."}},
+            {"label":{"de":"Hilfe zur Oberfläche und zum Quiz","en":"Interface and quiz help"},"text":{"de":"Die integrierte Hilfe erklärt Menüs, Bearbeitung, Vorschau sowie den Ablauf von Teilnahme über Fragen bis zur Auswertung mit zusätzlichen schematischen Darstellungen.","en":"The integrated help now explains menus, editing, preview and the flow from joining through questions to results with additional interface diagrams."}},
+            {"label":{"de":"Sanfte Oberflächenanimationen","en":"Subtle interface animations"},"text":{"de":"Ansichten, Live-Status und Folien-Thumbnails verwenden dezente Animationen unter Beachtung der Systemeinstellung für reduzierte Bewegung.","en":"Views, live status and slide thumbnails use subtle animations while respecting the system reduced-motion preference."}},
+            {"label":{"de":"Mindestens drei Sekunden Updatesuche","en":"Minimum three-second update check"},"text":{"de":"Die animierte Updatesuche bleibt mindestens drei Sekunden sichtbar, damit der Prüfstatus klar wahrgenommen werden kann.","en":"The animated update check remains visible for at least three seconds so its progress can be clearly perceived."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Quizbeschreibung sichtbar","en":"Quiz description visible"},"text":{"de":"Die im Editor eingegebene Quizbeschreibung wird jetzt zuverlässig auf der Teilnahmefolie dargestellt und live aktualisiert.","en":"The quiz description entered in the editor is now reliably shown on the participation slide and updated live."}},
+            {"label":{"de":"Menüs im Vordergrund","en":"Menus above content"},"text":{"de":"Die Dropdown-Menüs der Hauptnavigation werden nicht mehr durch Editor, Canvas, Popover oder andere Arbeitsbereiche verdeckt.","en":"Main navigation dropdowns are no longer covered by the editor, canvas, popovers or other workspace areas."}},
+            {"label":{"de":"Freitext-Moderation angewendet","en":"Free-text moderation applied"},"text":{"de":"Zurückgehaltene Freitextantworten werden auf MAIN nicht offengelegt. Der Bediener sieht stattdessen die Anzahl der geschützten Antworten.","en":"Held free-text answers are no longer exposed on MAIN. The operator sees the number of protected answers instead."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.16",
       "builds": [{
         "version": "0.16.0",
         "releaseDate": "2026-09-06",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Bearbeitbare Quiz-Teilnahmefolie","en":"Editable quiz participation slide"},"text":{"de":"Jedes Quiz besitzt jetzt als erste Folie eine echte Teilnahmefolie mit Link, Teilnahmecode und QR-Code. Texte, Farben, Hintergrund und Positionen lassen sich mit denselben Werkzeugen wie bei anderen Folien gestalten.","en":"Every quiz now begins with a real participation slide containing the link, join code and QR code. Text, colours, background and positions can be designed with the same tools as other slides."}},

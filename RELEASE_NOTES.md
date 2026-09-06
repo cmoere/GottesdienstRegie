@@ -1,3 +1,30 @@
+# GottesdienstRegie 0.17.0
+
+Veröffentlicht am 6. September 2026.
+
+## Neu
+
+- **Live-Antwortfolie:** Jedes Quiz besitzt eine echte Abschlussfolie. Sie zeigt Stimmen je Auswahlmöglichkeit oder – sofern freigegeben – eingehende Freitextantworten und kann wie jede andere Folie gestaltet werden.
+- **QR-Code vor dem Start:** Die Teilnahmefolie ist schon beim Erstellen vollständig sichtbar. Ein Vorschaucode wird beim automatischen Quizstart durch den gültigen Teilnahmecode ersetzt.
+- **Mehr Schriftarten:** Der Texteditor enthält zahlreiche zusätzliche Präsentations- und Systemschriftarten samt Vorschau.
+
+## Verbessert
+
+- Quizfragen können per Drag-and-drop neu angeordnet werden; Fragenfolien und Auswertung bleiben synchron.
+- Die Folienübersicht bietet acht feste Thumbnail-Stufen von 160 bis 440 Pixeln.
+- Schnellanzeigen wie Logo, Schwarz, Ohne Text und Amen sind auf den Vorschau-Modus begrenzt.
+- Die Hilfe erklärt die Benutzeroberfläche und den gesamten LiveQuiz-Ablauf ausführlicher mit schematischen Darstellungen.
+- Dezente Einblend-, Hover- und Live-Animationen respektieren die Systemeinstellung für reduzierte Bewegung.
+- Die animierte Updatesuche bleibt mindestens drei Sekunden sichtbar.
+
+## Behoben
+
+- Die Quizbeschreibung erscheint zuverlässig auf der Teilnahmefolie.
+- Hauptmenüs liegen stets über Canvas, Editor, Popovern und weiteren Arbeitsbereichen.
+- Zurückgehaltene Freitextantworten werden nicht auf MAIN ausgegeben; sichtbar bleibt nur ihre Anzahl.
+
+---
+
 # GottesdienstRegie 0.16.0
 
 Veröffentlicht am 6. September 2026.
