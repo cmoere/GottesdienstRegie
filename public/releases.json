@@ -5,9 +5,21 @@
     {
       "line": "0.15",
       "builds": [{
-        "version": "0.15.0",
+        "version": "0.15.1",
         "releaseDate": "2026-09-06",
         "current": true,
+        "sections": {
+          "new": [],
+          "improved": [
+            {"label":{"de":"Eigene Quizadresse","en":"Dedicated quiz address"},"text":{"de":"Teilnahmelinks und QR-Codes verwenden jetzt https://pgbielefeld.neocities.org/quiz.","en":"Join links and QR codes now use https://pgbielefeld.neocities.org/quiz."}}
+          ],
+          "fixed": [],
+          "security": []
+        }
+      },{
+        "version": "0.15.0",
+        "releaseDate": "2026-09-06",
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Teilnahmecode und QR-Code","en":"Join code and QR code"},"text":{"de":"Ein bewusster LiveQuiz-Start erzeugt einen echten sechsstelligen Teilnahmecode und einen lokal gerenderten QR-Code.","en":"Starting a LiveQuiz deliberately creates a real six-digit join code and a locally rendered QR code."}},

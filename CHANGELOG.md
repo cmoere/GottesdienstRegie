@@ -1,5 +1,10 @@
 # Versionshinweise / Release notes
 
+## 0.15.1 – 2026-09-06
+
+- QR-Code und Teilnahmelink verwenden jetzt `https://pgbielefeld.neocities.org/quiz`
+- Firebase-Einrichtung nennt die passende autorisierte Neocities-Domain
+
 ## 0.15.0 – 2026-09-06
 
 - Echte LiveQuiz-Sitzungen mit zufälligem sechsstelligen Teilnahmecode

@@ -7,7 +7,7 @@ export type LiveQuizPublicQuestion={id:string;type:string;question:string;option
 export type LiveQuizSession={id:string;code:string;ownerUid:string;quizId:string;title:string;description:string;quizType:'quiz'|'poll';participation:'anonymous'|'name';status:'lobby'|'open'|'ended';activeQuestionId:string;questions:LiveQuizPublicQuestion[];questionPermissions:Record<string,{allowAnswerChange:boolean}>;createdAt:number;expiresAt:number};
 export type LiveQuizAnswer={questionId:string;participantId:string;displayName:string;answer:string|string[];submittedAt:number};
 
-const JOIN_BASE='https://cmoere.github.io/GottesdienstRegie/quiz/';
+const JOIN_BASE='https://pgbielefeld.neocities.org/quiz';
 const sessionKey=(quizId:string)=>`gottesdienstregie.liveQuiz.${quizId}`;
 
 async function signedInUid(){

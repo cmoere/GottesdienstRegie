@@ -1,3 +1,14 @@
+# GottesdienstRegie 0.15.1
+
+Veröffentlicht am 6. September 2026.
+
+## Verbessert
+
+- **Eigene Quizadresse:** Teilnahmelinks und lokal erzeugte QR-Codes verwenden jetzt dauerhaft `https://pgbielefeld.neocities.org/quiz`.
+- **Firebase-Domain:** Die Einrichtungsanleitung nennt die Neocities-Domain, die für die anonyme Firebase-Anmeldung freigegeben werden muss.
+
+---
+
 # GottesdienstRegie 0.15.0
 
 Veröffentlicht am 6. September 2026.
