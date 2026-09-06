@@ -5,8 +5,8 @@ export type Language='de'|'gsw'|'en'|'nl'|'da'|'no'|'sv'|'fi'|'fr'|'it'|'es'|'uk
 export type ThemeMode='system'|'light'|'dark';
 export type VideoFit='contain'|'cover'|'fill';
 export interface VideoInputSource{id:string;deviceId:string;name:string;enabled:boolean;width:number;height:number;frameRate:number;audioEnabled:boolean;audioDeviceId:string;volume:number;monitoring:'off'|'operator'|'live';fit:VideoFit;crop:{left:number;right:number;top:number;bottom:number};brightness:number;contrast:number;saturation:number;hue:number}
-export type QuickScreenType='logo'|'black'|'empty'|'noText'|'amen'|'countdown'|'bible'|'custom';
-export interface QuickScreenConfig{id:string;type:QuickScreenType;name:string;enabled:boolean;targets:string[];text?:string;background?:string;duration?:number;endText?:string;order:number}
+export type QuickScreenType='logo'|'black'|'empty'|'noText'|'amen'|'countdown'|'bible'|'custom'|'quizJoin';
+export interface QuickScreenConfig{id:string;type:QuickScreenType;name:string;enabled:boolean;targets:string[];text?:string;background?:string;duration?:number;endText?:string;order:number;imageUrl?:string;joinUrl?:string;joinCode?:string}
 const defaultQuickScreens:QuickScreenConfig[]=[
   {id:'logo',type:'logo',name:'Logo',enabled:true,targets:['main'],background:'#000000',order:0},
   {id:'black',type:'black',name:'Schwarz',enabled:true,targets:['main'],order:1},

@@ -5,9 +5,25 @@
     {
       "line": "0.15",
       "builds": [{
-        "version": "0.15.2",
+        "version": "0.15.3",
         "releaseDate": "2026-09-06",
         "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Quizteilnahme auf MAIN","en":"Quiz participation on MAIN"},"text":{"de":"Quizname, QR-Code, Webadresse und sechsstelliger Teilnahmecode können direkt auf MAIN angezeigt werden.","en":"The quiz name, QR code, web address and six-digit join code can now be shown directly on MAIN."}},
+            {"label":{"de":"Mehrere Ausgänge","en":"Multiple outputs"},"text":{"de":"Die Teilnahmeansicht kann optional gleichzeitig an MAIN, STAGE, LIVESTREAM und LOBBY gesendet werden.","en":"The participation screen can optionally be sent to MAIN, STAGE, LIVESTREAM and LOBBY at the same time."}},
+            {"label":{"de":"Teilnahmelink kopieren","en":"Copy join link"},"text":{"de":"Der vollständige Teilnahmelink lässt sich direkt aus der Quizsteuerung kopieren.","en":"The complete join link can be copied directly from the quiz controls."}}
+          ],
+          "improved": [
+            {"label":{"de":"LAST SHOWN","en":"LAST SHOWN"},"text":{"de":"Die Teilnahmeansicht verändert die Livefolie nicht; LAST SHOWN stellt den vorherigen Zustand exakt wieder her.","en":"The participation screen does not modify the live slide; LAST SHOWN restores the previous state exactly."}}
+          ],
+          "fixed": [],
+          "security": []
+        }
+      },{
+        "version": "0.15.2",
+        "releaseDate": "2026-09-06",
+        "current": false,
         "sections": {
           "new": [],
           "improved": [

@@ -1,5 +1,12 @@
 # Versionshinweise / Release notes
 
+## 0.15.3 – 2026-09-06
+
+- LiveQuiz-Teilnahmeansicht mit Quizname, QR-Code, URL und sechsstelligen Code auf MAIN
+- Optionale Ausgabe gleichzeitig auf MAIN, STAGE, LIVESTREAM und LOBBY
+- Teilnahmelink kann direkt aus der Quizsteuerung kopiert werden
+- LAST SHOWN stellt nach der Teilnahmeansicht die vorherige Livefolie wieder her
+
 ## 0.15.2 – 2026-09-06
 
 - Alt+F4 und das Windows-Schließen beenden zuerst alle aktiven Präsentationsausgaben

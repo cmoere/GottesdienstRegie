@@ -1,3 +1,20 @@
+# GottesdienstRegie 0.15.3
+
+Veröffentlicht am 6. September 2026.
+
+## Neu
+
+- **Quizteilnahme auf MAIN:** Der Bediener kann eine fertige Teilnahmeansicht mit Quizname, QR-Code, Webadresse und sechsstelligen Code direkt auf MAIN anzeigen.
+- **Weitere Ausgänge:** Auf Wunsch erscheint dieselbe Teilnahmeansicht gleichzeitig auf MAIN, STAGE, LIVESTREAM und LOBBY.
+- **Link kopieren:** Der vollständige Teilnahmelink lässt sich direkt aus der laufenden Quizsitzung in die Zwischenablage kopieren.
+
+## Verbessert
+
+- **Live-Zustand bleibt erhalten:** Die Teilnahmeansicht arbeitet als temporäre Schnellanzeige. LAST SHOWN entfernt sie und stellt die zuvor laufende Livefolie unverändert wieder her.
+- **Sichere Bedienung:** Die Ausgabeschaltflächen sind erst aktiv, wenn ON AIR läuft und der QR-Code vollständig erzeugt wurde.
+
+---
+
 # GottesdienstRegie 0.15.2
 
 Veröffentlicht am 6. September 2026.
