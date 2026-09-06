@@ -3,11 +3,33 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.19",
+      "builds": [{
+        "version": "0.19.0",
+        "releaseDate": "2026-09-07",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Anpassbare Tastenkürzel","en":"Custom keyboard shortcuts"},"text":{"de":"Unter Einstellungen → Tastenkürzel können Speichern, Rückgängig, Wiederholen, Live-Navigation, Moduswechsel, Vollbild und ON AIR neu belegt werden. Änderungen werden lokal gespeichert und sofort angewendet.","en":"Settings → Keyboard shortcuts now allows Save, Undo, Redo, live navigation, mode switching, fullscreen and ON AIR to be reassigned. Changes are saved locally and applied immediately."}},
+            {"label":{"de":"Echte Screenshots in der Hilfe","en":"Real screenshots in Help"},"text":{"de":"Die integrierte Hilfe zeigt jetzt echte Aufnahmen von Arbeitsbereich, Einstellungsfenster und Medienbibliothek mit passenden Beschreibungen.","en":"The integrated help now shows real captures of the workspace, settings window and media library with matching explanations."}}
+          ],
+          "improved": [
+            {"label":{"de":"Ausführlichere Hilfe","en":"Expanded help"},"text":{"de":"Zusätzliche Hilfekapitel erklären Einstellungen, Songs, Bibel, STAGE, Schnellanzeigen, Timer, Fernsteuerung und Tastenkürzel ausführlich und praxisnah.","en":"Additional help chapters provide detailed, practical guidance for settings, songs, Bible, STAGE, quick screens, timers, remote control and keyboard shortcuts."}},
+            {"label":{"de":"Sichere Kürzelbearbeitung","en":"Safe shortcut editing"},"text":{"de":"Doppelte Tastenkombinationen werden erkannt und abgewiesen. Eine laufende Eingabe kann mit Escape abgebrochen und die gesamte Belegung auf Standard zurückgesetzt werden.","en":"Duplicate key combinations are detected and rejected. Recording can be cancelled with Escape and all assignments can be reset to their defaults."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Konfigurierbares Vollbild","en":"Configurable fullscreen"},"text":{"de":"F11 ist nicht mehr fest im Desktop-Prozess verdrahtet. Das Bedienfenster reagiert nun ausschließlich auf das in den Einstellungen festgelegte Vollbild-Kürzel.","en":"F11 is no longer hard-coded in the desktop process. The operator window now responds exclusively to the fullscreen shortcut selected in Settings."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.18",
       "builds": [{
         "version": "0.18.0",
         "releaseDate": "2026-09-06",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Präsentationen umbenennen","en":"Rename presentations"},"text":{"de":"Die aktuell geöffnete Präsentation kann jetzt im Datei-Menü umbenannt werden. Der neue Name wird dauerhaft gespeichert und erscheint auch in der Präsentationsbibliothek.","en":"The currently open presentation can now be renamed from the File menu. Its new name is saved permanently and also appears in the presentation library."}},

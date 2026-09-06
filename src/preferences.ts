@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { defaultKeyboardShortcuts, type KeyboardShortcuts, type ShortcutAction } from './shortcuts';
 
 export type Language='de'|'gsw'|'en'|'nl'|'da'|'no'|'sv'|'fi'|'fr'|'it'|'es'|'uk'|'ru'|'tr'|'ar'|'pl'|'pt-BR';
 export type ThemeMode='system'|'light'|'dark';
@@ -37,6 +38,7 @@ interface PreferencesState {
   echoCancellation:boolean;
   videoInputSources:VideoInputSource[];
   quickScreens:QuickScreenConfig[];
+  keyboardShortcuts:KeyboardShortcuts;
   setLanguage:(language:Language)=>void;
   setTheme:(theme:ThemeMode)=>void;
   setBlackWhite:(blackWhite:boolean)=>void;
@@ -56,6 +58,8 @@ interface PreferencesState {
   setEchoCancellation:(value:boolean)=>void;
   setVideoInputSources:(value:VideoInputSource[])=>void;
   setQuickScreens:(value:QuickScreenConfig[])=>void;
+  setKeyboardShortcut:(action:ShortcutAction,value:string)=>void;
+  resetKeyboardShortcuts:()=>void;
 }
 
 function detectedLanguage():Language{
@@ -86,6 +90,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   echoCancellation:true,
   videoInputSources:[],
   quickScreens:defaultQuickScreens,
+  keyboardShortcuts:defaultKeyboardShortcuts,
   setLanguage:language=>set({language}),
   setTheme:theme=>set({theme}),
   setBlackWhite:blackWhite=>set({blackWhite}),
@@ -104,5 +109,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setNoiseSuppression:noiseSuppression=>set({noiseSuppression}),
   setEchoCancellation:echoCancellation=>set({echoCancellation}),
   setVideoInputSources:videoInputSources=>set({videoInputSources}),
-  setQuickScreens:quickScreens=>set({quickScreens})
+  setQuickScreens:quickScreens=>set({quickScreens}),
+  setKeyboardShortcut:(action,value)=>set(state=>({keyboardShortcuts:{...defaultKeyboardShortcuts,...state.keyboardShortcuts,[action]:value}})),
+  resetKeyboardShortcuts:()=>set({keyboardShortcuts:{...defaultKeyboardShortcuts}})
 }),{name:'gottesdienstregie.preferences'}));

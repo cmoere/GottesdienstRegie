@@ -1,3 +1,24 @@
+# GottesdienstRegie 0.19.0
+
+Veröffentlicht am 7. September 2026.
+
+## Neu
+
+- **Tastenkürzel anpassen:** Unter Einstellungen → Tastenkürzel lassen sich Speichern, Rückgängig, Wiederholen, nächste und vorherige Live-Folie, Bearbeiten/Vorschau, Vollbild sowie ON AIR/OFF AIR neu belegen.
+- **Echte Softwareaufnahmen:** Die Hilfe enthält echte Screenshots des Arbeitsbereichs, des Einstellungsfensters und der Medienbibliothek mit erklärenden Bildunterschriften.
+
+## Verbessert
+
+- Neue und erweiterte Hilfekapitel erklären Einstellungen, Songs, Bibel, STAGE, Schnellanzeigen, Timer, Fernsteuerung und Tastaturbedienung.
+- Geänderte Kürzel werden auf dem Gerät gespeichert und sofort angewendet.
+- Doppelte Belegungen werden verhindert; Escape bricht eine Aufnahme ab und die Standardbelegung kann vollständig wiederhergestellt werden.
+
+## Behoben
+
+- F11 wird nicht mehr unabhängig von den Einstellungen im Electron-Hauptprozess abgefangen. Die Vollbildfunktion folgt jetzt zuverlässig der gewählten Belegung.
+
+---
+
 # GottesdienstRegie 0.18.0
 
 Veröffentlicht am 6. September 2026.

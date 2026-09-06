@@ -71,7 +71,6 @@ function createControlWindow(preferences:AppPreferencesData) {
   const configured=preferences.windowStartMode==='restore'?(preferences.lastWindowState??'fullscreen'):preferences.windowStartMode;
   if(configured==='fullscreen')controlWindow.setFullScreen(true);else if(configured==='maximized')controlWindow.maximize();
   controlWindow.once('ready-to-show',()=>controlWindow?.show());
-  controlWindow.webContents.on('before-input-event',(event,input)=>{if(input.type==='keyDown'&&input.key==='F11'){event.preventDefault();controlWindow?.setFullScreen(!controlWindow.isFullScreen())}});
   let saveTimer:NodeJS.Timeout|undefined;
   const saveWindowState=()=>{if(!controlWindow||controlWindow.isDestroyed())return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{if(!controlWindow||controlWindow.isDestroyed())return;const state=controlWindow.isFullScreen()?'fullscreen':controlWindow.isMaximized()?'maximized':'window',display=screen.getDisplayMatching(controlWindow.getBounds()),patch:Partial<AppPreferencesData>={lastWindowState:state,lastDisplayId:display.id};if(state==='window')patch.bounds=controlWindow.getBounds();void appPreferences.update(patch)},250)};
   controlWindow.on('move',saveWindowState);controlWindow.on('resize',saveWindowState);controlWindow.on('maximize',saveWindowState);controlWindow.on('unmaximize',saveWindowState);controlWindow.on('enter-full-screen',saveWindowState);controlWindow.on('leave-full-screen',saveWindowState);

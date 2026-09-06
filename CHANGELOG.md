@@ -1,5 +1,14 @@
 # Versionshinweise / Release notes
 
+## 0.19.0 – 2026-09-07
+
+- Echte Screenshots von Arbeitsbereich, Einstellungen und Medienbibliothek in der integrierten Hilfe
+- Ausführliche neue Hilfekapitel für Einstellungen, Songs, Bibel, STAGE, Schnellanzeigen, Timer und Fernsteuerung
+- Tastenkürzel für Speichern, Undo/Redo, Live-Navigation, Moduswechsel, Vollbild und ON AIR frei anpassbar
+- Kürzel werden lokal gespeichert und unmittelbar angewendet
+- Konflikterkennung, Abbruch mit Escape und Zurücksetzen auf Standard
+- F11 ist nicht mehr fest verdrahtet, sondern folgt der gewählten Vollbild-Belegung
+
 ## 0.18.0 – 2026-09-06
 
 - Abgerundeter Bearbeiten-/Vorschau-Umschalter unmittelbar links neben ON AIR
