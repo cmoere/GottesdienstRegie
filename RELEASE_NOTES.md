@@ -1,3 +1,23 @@
+# GottesdienstRegie 0.13.0
+
+Veröffentlicht am 6. September 2026.
+
+## Cloud-Medienbibliothek
+
+Die Medienbibliothek ist jetzt ein eigener Desktop-Arbeitsbereich mit drei klar getrennten Quellen, einer professionellen Rasteransicht und einem Detailbereich. Die bisherige Anzeige lokaler Bestände sowie der dauerhafte technische GitHub-Status entfallen.
+
+Lokale Dateien werden ausschließlich zum Hochladen ausgewählt. Erst nach erfolgreicher Übertragung steht das Cloud-Medium zur Verwendung in Präsentationen bereit. Vorhandene Altmedien können über einen sicheren Migrationshinweis übertragen werden.
+
+## Sicheres Verwalten
+
+Der Verwaltungsmodus zeigt keine irreführenden „Verwenden“-Schaltflächen. Im Auswahlmodus kann ein Medium gezielt als Inhalt oder Hintergrund übernommen werden. Medien, die gerade live oder in gespeicherten Präsentationen verwendet werden, sind vor versehentlichem Löschen geschützt.
+
+## Darstellung
+
+Suche, Filter und Sortierung bleiben kompakt. Das Raster reagiert auf die Fenstergröße, der Detailbereich bleibt erreichbar und echte Leer-, Lade- und Offline-Zustände ersetzen Platzhalter oder erfundene Inhalte.
+
+---
+
 # GottesdienstRegie 0.12.0
 
 Veröffentlicht am 6. September 2026.

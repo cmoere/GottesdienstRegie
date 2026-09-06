@@ -13,6 +13,7 @@ import { GitHubStorageProvider } from './storage/GitHubStorageProvider';
 import { AppPreferences, type AppPreferencesData } from './AppPreferences';
 
 let controlWindow: BrowserWindow | null = null;
+let mediaWindow: BrowserWindow | null = null;
 let appPreferences:AppPreferences;
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
@@ -71,6 +72,16 @@ function createControlWindow(preferences:AppPreferencesData) {
   controlWindow.on('move',saveWindowState);controlWindow.on('resize',saveWindowState);controlWindow.on('maximize',saveWindowState);controlWindow.on('unmaximize',saveWindowState);controlWindow.on('enter-full-screen',saveWindowState);controlWindow.on('leave-full-screen',saveWindowState);
   void load(controlWindow);
   controlWindow.webContents.once('did-finish-load',()=>{if(appPreferences.get().automaticUpdates)setTimeout(()=>void checkForUpdates(),5000)});
+}
+
+function openMediaWindow(context:'manage'|'select'='manage',purpose:'item'|'background'='item'){
+  if(mediaWindow&&!mediaWindow.isDestroyed()){mediaWindow.focus();mediaWindow.webContents.send('media-window:context',{context,purpose});return true}
+  const saved=appPreferences.get(),fallback={width:1400,height:850},bounds=saved.mediaBounds??fallback;
+  mediaWindow=new BrowserWindow({...bounds,show:false,minWidth:1000,minHeight:650,resizable:true,maximizable:true,backgroundColor:'#f4f7f8',title:'Medienbibliothek',icon:app.isPackaged?path.join(process.resourcesPath,'icon.png'):path.join(app.getAppPath(),'build/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
+  mediaWindow.setMenu(null);if(saved.mediaMaximized)mediaWindow.maximize();
+  const save=()=>{if(!mediaWindow||mediaWindow.isDestroyed())return;const patch:Partial<AppPreferencesData>={mediaMaximized:mediaWindow.isMaximized()};if(!mediaWindow.isMaximized())patch.mediaBounds=mediaWindow.getBounds();void appPreferences.update(patch)};
+  mediaWindow.on('move',save);mediaWindow.on('resize',save);mediaWindow.on('maximize',save);mediaWindow.on('unmaximize',save);mediaWindow.on('closed',()=>{mediaWindow=null});
+  mediaWindow.once('ready-to-show',()=>mediaWindow?.show());void load(mediaWindow,`#media?context=${context}&purpose=${purpose}`);return true
 }
 
 function versionParts(value:string){return value.replace(/^v/,'').split('.').map(part=>Number(part)||0)}
@@ -214,12 +225,18 @@ app.whenReady().then(async() => {
   ipcMain.handle('presentation:backup',(_event,id:string)=>presentationRepository.backup(id));
   ipcMain.handle('external:open',async(_event,url:string)=>{if(!/^https:\/\/(github\.com\/cmoere\/GottesdienstRegie|cmoere\.github\.io\/GottesdienstRegie)/i.test(url))throw new Error('EXTERNAL_URL_NOT_ALLOWED');await shell.openExternal(url);return true});
   ipcMain.handle('media:list',()=>mediaRepository.list());
-  ipcMain.handle('media:import',async()=>{const picked=await dialog.showOpenDialog(controlWindow!,{title:'Medien importieren',properties:['openFile','multiSelections'],filters:[{name:'Medien',extensions:['png','jpg','jpeg','webp','gif','svg','mp4','mov','webm','m4v','mp3','wav','m4a','ogg','flac','pdf']}]});if(picked.canceled)return[];return mediaRepository.import(picked.filePaths)});
+  ipcMain.handle('media:import',async(event)=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!;const picked=await dialog.showOpenDialog(owner,{title:'Medien zum Hochladen auswählen',properties:['openFile','multiSelections'],filters:[{name:'Medien',extensions:['png','jpg','jpeg','webp','gif','svg','mp4','mov','webm','m4v','mp3','wav','m4a','ogg','flac','pdf']}]});if(picked.canceled)return[];return mediaRepository.import(picked.filePaths)});
   ipcMain.handle('media:update',(_event,id:string,patch:any)=>mediaRepository.update(id,patch));
   ipcMain.handle('media:remove',(_event,id:string)=>mediaRepository.remove(id));
   ipcMain.handle('media:online-status',()=>onlineMedia.status());
   ipcMain.handle('media:online-list',()=>onlineMedia.list());
   ipcMain.handle('media:sync',async(_event,id:string)=>{const{asset,data}=await mediaRepository.data(id);await mediaRepository.update(id,{syncState:'uploading'});try{const uploaded=await onlineMedia.upload({name:`${asset.name}.${asset.extension.toLowerCase()}`,kind:asset.kind,checksum:asset.checksum,data});return await mediaRepository.update(id,{syncState:'synced',github:{repository:'cmoere/GottesdienstRegie-Media',path:uploaded.path,sha:uploaded.id,downloadUrl:uploaded.downloadUrl}})}catch(error){await mediaRepository.update(id,{syncState:'error'});throw error}});
+  ipcMain.handle('media:cloud-list',async()=>{const [remote,local]=await Promise.all([onlineMedia.list(),mediaRepository.list()]);return remote.map(item=>{const match=local.find(asset=>asset.github?.path===item.path||asset.checksum===item.checksum);return{...item,id:match?.id??item.id,name:match?.name??item.name.replace(/^[a-f0-9]{40,64}-/i,'').replace(/\.[^.]+$/,''),favorite:match?.favorite??false,tags:match?.tags??[],createdAt:match?.createdAt,updatedAt:match?.updatedAt??item.updatedAt,extension:item.path.split('.').at(-1)?.toUpperCase()??'',visibility:'team'}})});
+  ipcMain.handle('media:legacy-list',async()=>(await mediaRepository.list()).filter(asset=>asset.syncState!=='synced'));
+  ipcMain.handle('media:cloud-remove',async(_event,id:string)=>{if(outputManager.isActive())throw new Error('MEDIA_IN_LIVE_USE');const local=(await mediaRepository.list()).find(asset=>asset.id===id);const remote=(await onlineMedia.list()).find(item=>item.path===local?.github?.path||item.id===id);if(!remote)throw new Error('MEDIA_NOT_FOUND');const references:any[]=[];for(const summary of await presentationRepository.list(true,true)){const doc=await presentationRepository.read(summary.id),raw=JSON.stringify(doc);if(raw.includes(id)||raw.includes(remote.path)||raw.includes(remote.downloadUrl))references.push(summary)}if(references.length)throw new Error(`MEDIA_IN_PRESENTATIONS:${references.map(entry=>entry.title).join('|')}`);await onlineMedia.remove(remote.path,remote.id);if(local)await mediaRepository.remove(local.id);return true});
+  ipcMain.handle('media-window:open',(_event,context:'manage'|'select',purpose:'item'|'background')=>openMediaWindow(context,purpose));
+  ipcMain.handle('media-window:close',()=>{mediaWindow?.close();return true});
+  ipcMain.handle('media-window:select',(_event,asset:unknown,purpose:string)=>{if(controlWindow&&!controlWindow.isDestroyed()){controlWindow.webContents.send('media:selected',{asset,purpose});controlWindow.focus()}mediaWindow?.close();return true});
   ipcMain.handle('updates:current-version',()=>app.getVersion());
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});
   ipcMain.handle('updates:check',()=>checkForUpdates());

@@ -1,5 +1,17 @@
 # Versionshinweise / Release notes
 
+## 0.13.0 – 2026-09-06
+
+- Eigenständiges, skalierbares Medienfenster mit gespeicherter Größe
+- Getrennte Bereiche für eigene Medien, Community und Unsplash
+- Cloud-Raster mit Suche, Typfilter, Sortierung und Detailbereich
+- Getrennte Verwaltungs- und Auswahlmodi
+- Geprüfter Upload mit Vorschau, Metadaten und ausdrücklicher Bestätigung
+- Sichere Migration vorhandener Altmedien in die Cloud
+- Schutz vor Löschen während Live-Ausgabe oder bei Verwendung in Präsentationen
+- Keine lokale Bestandszählung und kein technischer Provider-Text mehr
+- Vollflächiges Layout ohne den bisherigen großen Leerraum
+
 ## 0.12.0 – 2026-09-06
 
 - Mehrstufiges professionelles Datei-Menü mit echten Flyouts

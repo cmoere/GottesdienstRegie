@@ -13,6 +13,8 @@ export interface AppPreferencesData{
   lastDisplayId?:number;
   lastWindowState?:'fullscreen'|'maximized'|'window';
   bounds?:{x:number;y:number;width:number;height:number};
+  mediaBounds?:{x:number;y:number;width:number;height:number};
+  mediaMaximized?:boolean;
 }
 
 const defaults:AppPreferencesData={windowStartMode:'fullscreen',operatorDisplayTarget:'primary',automaticUpdates:true,autoDownloadUpdates:true,betaUpdates:false,betaWarningAccepted:false};

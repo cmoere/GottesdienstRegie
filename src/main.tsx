@@ -11,5 +11,7 @@ import './settings-v08.css';
 import './v09.css';
 import './v010.css';
 import './auth.css';
+import './media-browser.css';
+import './media-browser-fixes.css';
 
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);
