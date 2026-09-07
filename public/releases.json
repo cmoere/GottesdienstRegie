@@ -3,11 +3,36 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.28",
+      "builds": [{
+        "version": "0.28.0",
+        "releaseDate": "2026-09-08",
+        "releaseTime": "00:40",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Firebase-Veranstaltungen","en":"Firebase events"},"text":{"de":"Präsentationen werden über den dauerhaften eventKey mit veranstaltungen/<eventKey> verknüpft; Auswahl, Suche und kompakter Kopf sind integriert.","en":"Presentations link to veranstaltungen/<eventKey> through the durable eventKey, with integrated search, selection and compact header."}},
+            {"label":{"de":"Cera Pro eingebettet","en":"Embedded Cera Pro"},"text":{"de":"Eine lizenzierte Cera-Pro-Datei kann in den Schriftarten-Einstellungen eingebettet und ohne Systeminstallation verwendet werden.","en":"A licensed Cera Pro file can be embedded in font settings and used without a system installation."}},
+            {"label":{"de":"Unsplash und Cloud-Medien","en":"Unsplash and cloud media"},"text":{"de":"Die Medienbibliothek arbeitet als Cloud-Bibliothek und kann Unsplash nach lokaler Eingabe eines Access Keys durchsuchen.","en":"The media library now operates as a cloud library and can search Unsplash after a local access key is supplied."}}
+          ],
+          "improved": [
+            {"label":{"de":"Präsentationskopf","en":"Presentation header"},"text":{"de":"Titel lassen sich inline bearbeiten; verknüpfte Veranstaltung, aktuelle Servicezeit und Verspätung erscheinen kompakt über dem Ablauf.","en":"Titles can be edited inline; linked event, current service time and delay appear compactly above the order of service."}},
+            {"label":{"de":"Logo und Webauftritt","en":"Logo and web presentation"},"text":{"de":"Die Logo-Schnellanzeige nutzt das Philippus-Gemeindelogo, kann angepasst werden und die App sowie Versionshinweise besitzen ein Favicon.","en":"The logo quick screen uses the Philippus church logo, can be customized, and the app and release notes now include a favicon."}},
+            {"label":{"de":"Eindeutige Beschriftungen","en":"Clear labels"},"text":{"de":"MAIN LIVE heißt jetzt EINZELVORSCHAU und Hinweise verwenden eine freundlichere Bitte-Formulierung.","en":"MAIN LIVE is now labeled SINGLE PREVIEW and prompts use friendlier wording."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Planzeit bleibt erhalten","en":"Planned time is preserved"},"text":{"de":"Servicezeitänderungen überschreiben nicht mehr die planmäßigen start_/ende_-Felder, sondern aktualisieren ausschließlich die vorhandenen Verspaetungs*-Felder bei gleicher Dauer.","en":"Service time changes no longer overwrite planned start_/end_ fields and update only the existing Verspaetungs* fields while preserving duration."}}
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.27",
       "builds": [{
         "version": "0.27.0",
         "releaseDate": "2026-09-07",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Cera Pro als Standard","en":"Cera Pro by default"},"text":{"de":"Neue Folien und Texte starten mit Cera Pro; zentrale Schriftarten-Einstellungen steuern Familie, Größe und Gewicht.","en":"New slides and text start with Cera Pro; central font settings control family, size and weight."}},

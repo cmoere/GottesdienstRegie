@@ -42,6 +42,8 @@ interface PreferencesState {
   defaultFont:string;
   defaultFontSize:number;
   defaultFontWeight:number;
+  ceraProFileName:string;
+  unsplashAccessKey:string;
   setLanguage:(language:Language)=>void;
   setTheme:(theme:ThemeMode)=>void;
   setBlackWhite:(blackWhite:boolean)=>void;
@@ -66,6 +68,8 @@ interface PreferencesState {
   setDefaultFont:(value:string)=>void;
   setDefaultFontSize:(value:number)=>void;
   setDefaultFontWeight:(value:number)=>void;
+  setCeraProFileName:(value:string)=>void;
+  setUnsplashAccessKey:(value:string)=>void;
 }
 
 function detectedLanguage():Language{
@@ -100,6 +104,8 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   defaultFont:'Cera Pro',
   defaultFontSize:72,
   defaultFontWeight:600,
+  ceraProFileName:'',
+  unsplashAccessKey:'',
   setLanguage:language=>set({language}),
   setTheme:theme=>set({theme}),
   setBlackWhite:blackWhite=>set({blackWhite}),
@@ -123,5 +129,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   resetKeyboardShortcuts:()=>set({keyboardShortcuts:{...defaultKeyboardShortcuts}}),
   setDefaultFont:defaultFont=>set({defaultFont}),
   setDefaultFontSize:defaultFontSize=>set({defaultFontSize:Math.max(12,Math.min(240,defaultFontSize))}),
-  setDefaultFontWeight:defaultFontWeight=>set({defaultFontWeight})
+  setDefaultFontWeight:defaultFontWeight=>set({defaultFontWeight}),
+  setCeraProFileName:ceraProFileName=>set({ceraProFileName}),
+  setUnsplashAccessKey:unsplashAccessKey=>set({unsplashAccessKey})
 }),{name:'gottesdienstregie.preferences'}));
