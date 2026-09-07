@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { SlideRenderer } from './SlideRenderer';
 import { defaultTransition, type DisplayRole, type ServiceItem, type Slide, type SlideTransition } from './store';
 
-export const transitionLabels={cut:'Kein Übergang',fade:'Überblenden',crossfade:'Kreuzblende',dissolve:'Auflösen',slide:'Schieben',wipe:'Wischen'} as const;
+export const transitionLabels={cut:'Kein Übergang',fade:'Überblenden',crossfade:'Kreuzblende',dissolve:'Auflösen',slide:'Schieben',wipe:'Wischen',zoom:'Zoomen',blur:'Unschärfe',circle:'Kreis aufdecken',flip:'Drehen',push:'Schieben mit Verdrängen'} as const;
 
 export function itemTransitionDefault(item?:ServiceItem,presentationDefault:SlideTransition=defaultTransition):SlideTransition{
   if(item?.transitionDefault)return item.transitionDefault;
@@ -32,7 +32,7 @@ export function TransitionStage({slide,transition,role='main',previewToken=0}:{s
   const backwards=leaving?.itemId===shown.itemId&&shown.order<leaving.order&&effective.reverseOnPrevious;
   const direction=backwards?opposite[effective.direction]:effective.direction;
   const style=useMemo(()=>({'--transition-duration':`${effective.durationMs}ms`,'--transition-easing':easing[effective.easing]}) as CSSProperties,[effective.durationMs,effective.easing]);
-  return <div className={`transition-stage transition-${effective.type} direction-${direction} ${active?'active':''}`} style={style}>
+  return <div className={`transition-stage transition-${effective.type} direction-${direction} ${leaving?'transitioning':''} ${active?'active':''}`} style={style}>
     {leaving&&<div className="transition-layer leaving"><SlideRenderer slide={leaving} mode={role==='operator'?'preview':'live'}/></div>}
     <div className="transition-layer entering"><SlideRenderer slide={shown} mode={role==='operator'?'preview':'live'}/></div>
   </div>;

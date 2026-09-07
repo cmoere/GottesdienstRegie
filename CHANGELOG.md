@@ -1,5 +1,15 @@
 # Versionshinweise / Release notes
 
+## 0.25.0 – 2026-09-07
+
+- Übergänge bleiben nach dem Animationsende sichtbar; der Schwarzbildfehler ist behoben
+- Neue Effekte Zoomen, Unschärfe, Kreis-Aufdecken, Drehen und Schieben mit Verdrängen
+- Einzelansicht mit großen Navigationspfeilen, Links-/Rechts-Tastatursteuerung und abbrechbarem Folientimer
+- Thumbnailregler erscheint ausschließlich in der Folienübersicht; acht feste Größenstufen bleiben erhalten
+- Schriftartenauswahl auf mehr als 65 verbreitete Systemschriften erweitert
+- Ablauf kann als eigene Vorlage gespeichert, beim Erstellen gewählt und als selbst angelegte Vorlage wieder gelöscht werden
+- Präsentationsinformationen zeigen Ersteller, Zeitpunkte, Umfang, Dauer, IDs, Vorlagenherkunft und bis zu 60 Bearbeitungen
+
 ## 0.24.0 – 2026-09-07
 
 - Vorschau-Modus als dichter Drei-Bereich-Arbeitsplatz mit Ablauf, gruppierter Folienübersicht und rechter Live-/Schnellanzeigenleiste neu aufgebaut

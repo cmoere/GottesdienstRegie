@@ -3,11 +3,33 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.25",
+      "builds": [{
+        "version": "0.25.0",
+        "releaseDate": "2026-09-07",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Gesteuerte Einzelansicht","en":"Controlled single-slide view"},"text":{"de":"Große Pfeile, Links-/Rechts-Tastatursteuerung und ein anklickbarer Folientimer ermöglichen eine konzentrierte, sichere Vorschau.","en":"Large arrows, left/right keyboard navigation and a clickable slide timer provide a focused and reliable preview."}},
+            {"label":{"de":"Eigene Ablaufvorlagen","en":"Custom service templates"},"text":{"de":"Abläufe lassen sich als eigene Vorlage speichern, für neue Präsentationen auswählen und bei Bedarf wieder löschen.","en":"Service plans can be saved as custom templates, selected for new presentations and removed when no longer needed."}},
+            {"label":{"de":"Präsentationsinformationen","en":"Presentation information"},"text":{"de":"Metadaten, Umfang, Dauer und bis zu 60 Bearbeitungen sind in einem übersichtlichen Informationsfenster zusammengefasst.","en":"Metadata, scope, duration and up to 60 edits are collected in a clear information dialog."}}
+          ],
+          "improved": [
+            {"label":{"de":"Mehr Übergänge und Schriften","en":"More transitions and fonts"},"text":{"de":"Fünf zusätzliche Übergangseffekte und mehr als 65 Systemschriften erweitern die Gestaltungsmöglichkeiten.","en":"Five additional transition effects and more than 65 system fonts expand design options."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Kein Schwarzbild nach Übergängen","en":"No black frame after transitions"},"text":{"de":"Die neue Folie bleibt nach dem Ende einer Animation vollständig sichtbar.","en":"The incoming slide now remains fully visible after an animation completes."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.24",
       "builds": [{
         "version": "0.24.0",
         "releaseDate": "2026-09-07",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Professioneller Vorschau-Arbeitsplatz","en":"Professional preview workspace"},"text":{"de":"Ablauf, vollständige gruppierte Folienübersicht und rechte Live-/Schnellanzeigenleiste sind jetzt gleichzeitig in einem dichten Drei-Bereich-Layout sichtbar.","en":"The order of service, complete grouped slide overview and right-hand live/quick-screen rail are now visible together in a dense three-pane layout."}},

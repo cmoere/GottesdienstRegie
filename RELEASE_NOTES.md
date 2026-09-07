@@ -1,3 +1,26 @@
+# GottesdienstRegie 0.25.0
+
+Veröffentlicht am 7. September 2026.
+
+## Neu
+
+- **Erweiterte Übergänge:** Zusätzlich zu den bisherigen Effekten stehen Zoomen, Unschärfe, Kreis-Aufdecken, Drehen und Schieben mit Verdrängen bereit.
+- **Gesteuerte Einzelansicht:** Große Pfeile und die Tastaturtasten Links/Rechts navigieren durch alle aktiven Folien. Zeitgesteuerte Folien zeigen einen Countdown, der per Klick für eine dauerhafte Anzeige gestoppt werden kann.
+- **Eigene Ablaufvorlagen:** Der aktuelle Ablauf kann als Vorlage gespeichert und beim Erstellen einer Präsentation wiederverwendet werden. Nur eigene Vorlagen lassen sich löschen.
+- **Präsentationsinformationen:** Ein neues Fenster bündelt Ersteller, Erstellungs- und Änderungszeit, Inhaltsumfang, Dauer, Kennungen und bis zu 60 Einträge Bearbeitungshistorie.
+
+## Verbessert
+
+- Die Einzelansicht konzentriert sich vollständig auf die Folie; der Thumbnailgrößen-Regler wird nur noch in der Folienübersicht angezeigt.
+- Mehr als 65 verbreitete Systemschriftarten stehen im Editor zur Auswahl.
+- Die Folienübersicht reagiert ebenfalls auf die Pfeiltasten und verwendet weiterhin acht klar definierte Thumbnailgrößen.
+
+## Behoben
+
+- Nach einem Übergang wird die neue Folie nicht mehr schwarz. Der abgeschlossene Animationszustand bleibt ausdrücklich vollständig sichtbar.
+
+---
+
 # GottesdienstRegie 0.24.0
 
 Veröffentlicht am 7. September 2026.
