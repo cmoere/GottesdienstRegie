@@ -3,11 +3,35 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.20",
+      "builds": [{
+        "version": "0.20.0",
+        "releaseDate": "2026-09-07",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Background Audio für Abschnitte","en":"Section background audio"},"text":{"de":"VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM können eigene Cloud-Playlists besitzen. Visuelle Schleifen laufen unabhängig und starten die Musik nicht erneut.","en":"PRE-SERVICE, WARM-UP, SERVICE and POST-SERVICE can each use cloud playlists. Visual loops run independently and do not restart the music."}},
+            {"label":{"de":"Audio für Ablauf-Elemente","en":"Item background audio"},"text":{"de":"Ein Ablauf-Element kann die Abschnittsmusik vorübergehend ersetzen. Audio-Stop-Cues beenden die Wiedergabe gezielt und sind über Rückgängig wiederherstellbar.","en":"An order-of-service item can temporarily override section music. Audio stop cues end playback deliberately and support Undo."}},
+            {"label":{"de":"Eigener Audio Browser","en":"Dedicated Audio Browser"},"text":{"de":"Das neue Systemfenster zeigt ausschließlich echte Audiodateien aus dem Team-Cloudspeicher, unterstützt Mehrfachauswahl, Hörprobe und eine sortierbare Auswahlleiste.","en":"The new system window shows real audio files from team cloud storage only, with multi-selection, preview and a sortable selection tray."}},
+            {"label":{"de":"Live-Audiocontroller","en":"Live audio controller"},"text":{"de":"Während der Wiedergabe stehen Titelanzeige, Zeit, Pause, Fortsetzen, nächster Titel, Stop, Stummschaltung und Lautstärke direkt in der Operator-Oberfläche bereit.","en":"During playback the operator interface provides title, time, pause, resume, next, stop, mute and volume controls."}}
+          ],
+          "improved": [
+            {"label":{"de":"Professionelle Wiedergaberegeln","en":"Professional playback rules"},"text":{"de":"Playlists unterstützen Wiederholung, Zufallswiedergabe, Ein- und Ausblenden, Übergänge, Fortsetzungsregeln und automatische Absenkung bei Videos mit Ton.","en":"Playlists support repeat, shuffle, fades, transitions, continuation rules and automatic ducking for videos with sound."}},
+            {"label":{"de":"Audio-Preflight","en":"Audio preflight"},"text":{"de":"Vor ON AIR werden nicht vorbereitete oder fehlende Background-Audio-Dateien verständlich gemeldet. Dauerhafte lokale Dateipfade werden nicht als Cloudquelle ausgegeben.","en":"Before ON AIR, missing or unprepared background audio files are reported clearly. Permanent local paths are not treated as cloud sources."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Musik bleibt bei Folienloops stabil","en":"Music remains stable during slide loops"},"text":{"de":"Der Neustart eines PRE- oder POST-Folienloops setzt den laufenden Audiotitel nicht mehr auf den Anfang zurück.","en":"Restarting a PRE- or POST-service slide loop no longer resets the current audio track."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.19",
       "builds": [{
         "version": "0.19.0",
         "releaseDate": "2026-09-07",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Anpassbare Tastenkürzel","en":"Custom keyboard shortcuts"},"text":{"de":"Unter Einstellungen → Tastenkürzel können Speichern, Rückgängig, Wiederholen, Live-Navigation, Moduswechsel, Vollbild und ON AIR neu belegt werden. Änderungen werden lokal gespeichert und sofort angewendet.","en":"Settings → Keyboard shortcuts now allows Save, Undo, Redo, live navigation, mode switching, fullscreen and ON AIR to be reassigned. Changes are saved locally and applied immediately."}},

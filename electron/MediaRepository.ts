@@ -3,7 +3,7 @@ import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 
 export interface MediaAsset{id:string;name:string;fileName:string;url:string;kind:'image'|'video'|'audio'|'pdf';extension:string;size:number;checksum:string;createdAt:string;updatedAt:string;favorite:boolean;tags:string[];syncState:'local-only'|'uploading'|'synced'|'error';github?:{repository:string;path:string;sha:string;downloadUrl:string}}
-const kindFor=(extension:string):MediaAsset['kind']=>['.mp4','.mov','.webm','.m4v'].includes(extension)?'video':['.mp3','.wav','.m4a','.ogg','.flac'].includes(extension)?'audio':extension==='.pdf'?'pdf':'image';
+const kindFor=(extension:string):MediaAsset['kind']=>['.mp4','.mov','.webm','.m4v'].includes(extension)?'video':['.mp3','.wav','.m4a','.aac','.ogg','.flac'].includes(extension)?'audio':extension==='.pdf'?'pdf':'image';
 export class MediaRepository{
   readonly directory:string;private readonly indexFile:string;
   constructor(root:string){this.directory=path.join(root,'files');this.indexFile=path.join(root,'index.json')}

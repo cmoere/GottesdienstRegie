@@ -12,6 +12,8 @@ import './v09.css';
 import './v010.css';
 import './auth.css';
 import './media-browser.css';
+import './audio-browser.css';
+import './background-audio.css';
 import './media-browser-fixes.css';
 import './update-controls.css';
 

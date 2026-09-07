@@ -1,5 +1,16 @@
 # Versionshinweise / Release notes
 
+## 0.20.0 – 2026-09-07
+
+- Background-Audio-Playlists für VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM
+- Visuelle PRE-/POST-Loops starten einen laufenden Musiktitel nicht erneut
+- Eigenes Background Audio pro Ablauf-Element sowie rückgängig-fähige Audio-Stop-Cues
+- Separates Audio-Browser-Systemfenster mit Cloud-Quellen, Mehrfachauswahl, Hörprobe und sortierbarer Auswahl
+- Wiederholung, Zufallswiedergabe, Lautstärke, Ein-/Ausblenden, Übergänge und Fortsetzungsregeln
+- Automatische Musikabsenkung bei Live-Videos mit Ton
+- Live-Controller für Pause, Fortsetzen, nächsten Titel, Stop, Stumm und Lautstärke
+- Audio-Preflight meldet fehlende oder noch nicht vorbereitete Cloudtitel verständlich
+
 ## 0.19.0 – 2026-09-07
 
 - Echte Screenshots von Arbeitsbereich, Einstellungen und Medienbibliothek in der integrierten Hilfe

@@ -1,3 +1,27 @@
+# GottesdienstRegie 0.20.0
+
+Veröffentlicht am 7. September 2026.
+
+## Neu
+
+- **Abschnittsmusik:** VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM erhalten eigene Background-Audio-Playlists. Folienwechsel und visuelle Schleifen bleiben von der Audio-Wiedergabe getrennt.
+- **Element-Audio und Stop-Cues:** Einzelne Ablauf-Elemente können Abschnittsmusik ersetzen oder die Wiedergabe gezielt beenden. Änderungen sind in Rückgängig/Wiederholen enthalten.
+- **Audio Browser:** Ein separates Desktopfenster zeigt die echten Audiodateien des Team-Cloudspeichers. Mehrere Titel können gewählt, angehört und vor dem Einfügen sortiert werden.
+- **Live-Controller:** Der Operator kann den aktuellen Titel pausieren, fortsetzen, überspringen, stoppen, stummschalten und dessen Lautstärke verändern.
+
+## Verbessert
+
+- Playlists bieten Zufallswiedergabe, Wiederholung, Ein- und Ausblendzeiten, Titelübergänge sowie unterschiedliche Regeln für das Wiedergabeende.
+- Videos mit hörbarem Ton können die Hintergrundmusik automatisch absenken und anschließend wieder anheben.
+- Der Preflight prüft Background-Audio-Abhängigkeiten und nennt fehlende oder noch nicht vorbereitete Titel verständlich.
+- Der konfigurierte Audioausgang aus den Einstellungen wird auch für Background Audio verwendet.
+
+## Behoben
+
+- Ein Neustart der Folienfolge in VORPROGRAMM oder NACHPROGRAMM beginnt einen bereits laufenden Audiotitel nicht erneut.
+
+---
+
 # GottesdienstRegie 0.19.0
 
 Veröffentlicht am 7. September 2026.
