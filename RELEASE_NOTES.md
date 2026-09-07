@@ -1,3 +1,27 @@
+# GottesdienstRegie 0.22.0
+
+Veröffentlicht am 7. September 2026.
+
+## Neu
+
+- **Vorschau-Audio:** Background Audio kann jetzt im Vorschaumodus anhand des dort ausgewählten Elements beziehungsweise Abschnitts kontrolliert werden. Im Bearbeitungsmodus bleibt es stumm.
+- **Kompaktes Lautsprechermenü:** Ein inaktives Lautsprecher-Icon öffnet direkt an der Ablaufzeile die Aktionen „Audio durchsuchen“, „Importieren“ und – bei Ablauf-Elementen – „Background Audio stoppen“.
+- **Autoplay:** Jede Playlist kann vorbereitet werden, ohne automatisch zu starten. Für normale PRE-/POST-Loop-Playlists ist Autoplay weiterhin standardmäßig aktiviert.
+
+## Verbessert
+
+- Background Audio verwendet im Ablauf, Playlist-Panel und Live-Controller ausschließlich Lautsprecher- und Wiedergabesymbole. Das Musiknoten-Symbol bleibt echten Songs vorbehalten.
+- Das kompakte Playlist-Panel bietet Track-Hörprobe, Dauer, Drag-and-drop-Sortierung, Lautstärke, Fade In, Fade Out, Crossfade, Ducking sowie verständliche Regeln für Playlist-, Element-, Abschnitts- und OFF-AIR-Ende.
+- Abschnittsmusik läuft unabhängig von visuellen PRE-/POST-Loops weiter. Item-Audio besitzt Vorrang und kann Abschnittsmusik entsprechend der gespeicherten Zielregel ersetzen oder fortführen.
+
+## Behoben
+
+- **OFF AIR:** Das Beenden der Ausgabe stoppt laufende Background-Musik zuverlässig und verhindert einen unmittelbaren Neustart durch den weiterhin sichtbaren Vorschaumodus.
+- Beim Wechsel in den Bearbeitungsmodus wird eine laufende Vorschau-Wiedergabe beendet.
+- Die Regel „Ende der Section“ berücksichtigt nun auch bei Item-Audio den tatsächlichen Abschnittswechsel.
+
+---
+
 # GottesdienstRegie 0.21.0
 
 Veröffentlicht am 7. September 2026.

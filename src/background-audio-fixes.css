@@ -1,0 +1,74 @@
+.audio-header-button,
+.item-audio-button {
+  display: grid !important;
+  place-items: center;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: #7d898d;
+  opacity: .62;
+}
+
+.audio-header-button .material-symbols-outlined,
+.item-audio-button .material-symbols-outlined {
+  font-size: 17px !important;
+}
+
+.audio-header-button:hover,
+.item-audio-button:hover {
+  color: #a9bcc1 !important;
+  opacity: 1;
+}
+
+.audio-header-button.configured,
+.item-audio-button.configured {
+  color: #25a6b8;
+  opacity: 1;
+}
+
+.audio-header-button.muted { color: #7d898d; }
+.audio-header-button.missing { color: #d89521; opacity: 1; }
+.audio-stop-cue { color: #c85b5b !important; opacity: 1; }
+
+.audio-context-menu {
+  position: fixed;
+  z-index: 280;
+  width: 242px;
+  padding: 4px;
+  background: #2d2d34;
+  color: #f0f0f3;
+  border: 1px solid #55545f;
+  box-shadow: 0 12px 35px #000a;
+}
+
+.audio-context-menu button {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  width: 100%;
+  min-height: 33px;
+  padding: 6px 8px;
+  text-align: left;
+  font-size: 11px;
+}
+
+.audio-context-menu button:hover { background: #44434d; }
+.audio-context-menu button.separator { margin-top: 4px; border-top: 1px solid #55545f; }
+.audio-context-menu .material-symbols-outlined { font-size: 17px; }
+.audio-track-preview { display: grid !important; place-items: center; color: #25a6b8; }
+.audio-track-preview .material-symbols-outlined { font-size: 20px; }
+.background-audio-tracks > div { grid-template-columns: 22px 24px minmax(0,1fr) 38px 32px; }
+.audio-track-duration { text-align: right; font-variant-numeric: tabular-nums; }
+.production-app .service-item { grid-template-columns: 11px 42px minmax(0,1fr) 30px auto !important; }
+
+:root[data-theme="light"] .audio-context-menu {
+  background: #fff;
+  color: #273238;
+  border-color: #aebbc0;
+  box-shadow: 0 12px 35px #0003;
+}
+
+:root[data-theme="light"] .audio-context-menu button:hover { background: #e5edef; }

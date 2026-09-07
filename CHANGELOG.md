@@ -1,5 +1,16 @@
 # Versionshinweise / Release notes
 
+## 0.22.0 – 2026-09-07
+
+- Background Audio wird ausschließlich in der Vorschau oder während ON AIR wiedergegeben
+- OFF AIR beendet die laufende Musik auch dann zuverlässig, wenn die Vorschau geöffnet bleibt
+- Bearbeitungsmodus stoppt Background Audio und startet es nicht durch reine Editor-Auswahl
+- Durchgängige Lautsprecher-Icons für Abschnitts-, Element- und Live-Audio; Musiknoten bleiben echten Songs vorbehalten
+- Kompaktes Lautsprecher-Kontextmenü für Audio Browser, Import und Audio-Stop-Cue
+- Separate Playlist-Verwaltung mit Autoplay, Shuffle, Wiederholung, Zielregel, Lautstärke, Fade, Crossfade und Ducking
+- Wiedergaberegeln für Element- und Abschnittsgrenzen korrigiert
+- Trackliste zeigt Hörprobe, Metadaten, Dauer, Sortierung und Entfernen
+
 ## 0.21.0 – 2026-09-07
 
 - Release-Notes-Webseite im Stil einer professionellen Entwicklerdokumentation neu aufgebaut

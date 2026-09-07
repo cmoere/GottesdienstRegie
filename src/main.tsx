@@ -14,6 +14,7 @@ import './auth.css';
 import './media-browser.css';
 import './audio-browser.css';
 import './background-audio.css';
+import './background-audio-fixes.css';
 import './menu-help-fixes.css';
 import './media-browser-fixes.css';
 import './update-controls.css';
