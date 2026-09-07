@@ -3,11 +3,34 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.27",
+      "builds": [{
+        "version": "0.27.0",
+        "releaseDate": "2026-09-07",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Cera Pro als Standard","en":"Cera Pro by default"},"text":{"de":"Neue Folien und Texte starten mit Cera Pro; zentrale Schriftarten-Einstellungen steuern Familie, Größe und Gewicht.","en":"New slides and text start with Cera Pro; central font settings control family, size and weight."}},
+            {"label":{"de":"MAIN-Liveansicht","en":"MAIN live view"},"text":{"de":"Die Einzelansicht zeigt MAIN und schaltet ON AIR mit großen Pfeilen oder den Links-/Rechts-Tasten direkt live weiter.","en":"Single view mirrors MAIN and advances live while ON AIR using large arrows or the left/right keys."}},
+            {"label":{"de":"Animiertes Amen","en":"Animated Amen"},"text":{"de":"Die neu gestaltete Amen-Schnellanzeige erscheint sechs Sekunden mit dynamischer Typografie und stellt danach die MAIN-Folie wieder her.","en":"The redesigned Amen quick screen uses dynamic typography for six seconds and then restores the MAIN slide."}}
+          ],
+          "improved": [
+            {"label":{"de":"Übergang und Synchronisation","en":"Transitions and synchronization"},"text":{"de":"Der Standardübergang besitzt eine kleine Vorschau; Autosave läuft alle 15 Sekunden und das Wolkensymbol zeigt vier Sync-Schritte.","en":"The default transition includes a small preview; autosave runs every 15 seconds and the cloud icon reports four sync steps."}},
+            {"label":{"de":"Konsequent auf MAIN","en":"Focused on MAIN"},"text":{"de":"Weitere Ausgangsreiter und die Karte „Ausgewählt“ entfallen, während Datei-Untermenüs sauber am jeweiligen Eintrag ausgerichtet sind.","en":"Other output tabs and the Selected card are removed, while File submenus align with their source rows."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Saubere Bedienabläufe","en":"Cleaner interactions"},"text":{"de":"Element hinzufügen schließt nach dem Anlegen automatisch, die Dauerneingabe ist nicht mehr eingeengt und Pfeiltasten wechseln nicht doppelt.","en":"Add Item closes after creation, the duration input is no longer cramped and arrow keys no longer advance twice."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.26",
       "builds": [{
         "version": "0.26.0",
         "releaseDate": "2026-09-07",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Mehr Übergänge","en":"More transitions"},"text":{"de":"Iris, Vorhang, Würfel, Einschwingen, Lichtblitz und Aufskalieren erweitern die Animationsauswahl.","en":"Iris, curtain, cube, swing, flash and scale expand the transition selection."}},

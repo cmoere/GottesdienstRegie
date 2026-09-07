@@ -1,3 +1,29 @@
+# GottesdienstRegie 0.27.0
+
+Veröffentlicht am 7. September 2026.
+
+## Neu
+
+- **Cera Pro als Standard:** Neue Texte und Folien verwenden Cera Pro. Ist die proprietäre Schrift auf einem Gerät nicht installiert, greift eine passende Kette aus Aptos, Inter und Segoe UI.
+- **Schriftarten-Einstellungen:** Standardschrift, Schriftgröße und Gewicht lassen sich zentral einstellen, direkt ansehen und auf alle Texte der aktuellen Folie anwenden.
+- **MAIN-Liveansicht:** Die Einzelansicht bildet die tatsächliche MAIN-Ausgabe ab. Im ON-AIR-Betrieb schalten große Pfeile sowie Links/Rechts direkt live weiter.
+- **Animiertes Amen:** Die Amen-Schnellanzeige nutzt Ringe, Lichtstrahlen und eine dynamische Typo-Animation, bleibt sechs Sekunden sichtbar und stellt danach automatisch die MAIN-Folie wieder her.
+
+## Verbessert
+
+- Die Vorschau konzentriert sich auf MAIN; weitere Ausgangsreiter und die bisherige „Ausgewählt“-Karte wurden entfernt.
+- Unter Einstellungen → Präsentation zeigt STANDARDÜBERGANG eine kleine Folienvorschau mit eigenem Abspielknopf.
+- Die Übergangsdauer hat ein deutlich breiteres, gut lesbares Eingabefeld.
+- Untermenüs für „Zuletzt öffnen“, „Zuletzt duplizieren“ und den Präsentationsimport öffnen auf Höhe ihres jeweiligen Menüeintrags.
+- Alle geänderten Inhalte werden spätestens alle 15 Sekunden gespeichert. Das Wolkensymbol neben Abmelden löst den Vorgang manuell aus und zeigt vier Fortschrittsstufen.
+
+## Behoben
+
+- Nach dem Erstellen eines Elements schließt sich das Menü „Element hinzufügen“ automatisch.
+- Tastaturbefehle in der MAIN-Einzelansicht lösen keinen doppelten Folienwechsel mehr aus.
+
+---
+
 # GottesdienstRegie 0.26.0
 
 Veröffentlicht am 7. September 2026.

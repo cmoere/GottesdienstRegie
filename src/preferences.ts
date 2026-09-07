@@ -13,7 +13,7 @@ const defaultQuickScreens:QuickScreenConfig[]=[
   {id:'black',type:'black',name:'Schwarz',enabled:true,targets:['main'],order:1},
   {id:'empty',type:'empty',name:'Leer',enabled:true,targets:['main'],background:'#000000',order:2},
   {id:'no-text',type:'noText',name:'Ohne Text',enabled:true,targets:['main'],order:3},
-  {id:'amen',type:'amen',name:'Amen',enabled:true,targets:['main'],text:'Amen',background:'#162d36',order:4},
+  {id:'amen',type:'amen',name:'Amen',enabled:true,targets:['main'],text:'Amen!',background:'#162d36',duration:6,order:4},
   {id:'countdown',type:'countdown',name:'Countdown',enabled:true,targets:['main'],duration:300,endText:'Wir beginnen gleich',background:'#000000',order:5},
   {id:'bible',type:'bible',name:'Bibel einblenden',enabled:false,targets:['main'],order:6}
 ];
@@ -39,6 +39,9 @@ interface PreferencesState {
   videoInputSources:VideoInputSource[];
   quickScreens:QuickScreenConfig[];
   keyboardShortcuts:KeyboardShortcuts;
+  defaultFont:string;
+  defaultFontSize:number;
+  defaultFontWeight:number;
   setLanguage:(language:Language)=>void;
   setTheme:(theme:ThemeMode)=>void;
   setBlackWhite:(blackWhite:boolean)=>void;
@@ -60,6 +63,9 @@ interface PreferencesState {
   setQuickScreens:(value:QuickScreenConfig[])=>void;
   setKeyboardShortcut:(action:ShortcutAction,value:string)=>void;
   resetKeyboardShortcuts:()=>void;
+  setDefaultFont:(value:string)=>void;
+  setDefaultFontSize:(value:number)=>void;
+  setDefaultFontWeight:(value:number)=>void;
 }
 
 function detectedLanguage():Language{
@@ -91,6 +97,9 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   videoInputSources:[],
   quickScreens:defaultQuickScreens,
   keyboardShortcuts:defaultKeyboardShortcuts,
+  defaultFont:'Cera Pro',
+  defaultFontSize:72,
+  defaultFontWeight:600,
   setLanguage:language=>set({language}),
   setTheme:theme=>set({theme}),
   setBlackWhite:blackWhite=>set({blackWhite}),
@@ -111,5 +120,8 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setVideoInputSources:videoInputSources=>set({videoInputSources}),
   setQuickScreens:quickScreens=>set({quickScreens}),
   setKeyboardShortcut:(action,value)=>set(state=>({keyboardShortcuts:{...defaultKeyboardShortcuts,...state.keyboardShortcuts,[action]:value}})),
-  resetKeyboardShortcuts:()=>set({keyboardShortcuts:{...defaultKeyboardShortcuts}})
+  resetKeyboardShortcuts:()=>set({keyboardShortcuts:{...defaultKeyboardShortcuts}}),
+  setDefaultFont:defaultFont=>set({defaultFont}),
+  setDefaultFontSize:defaultFontSize=>set({defaultFontSize:Math.max(12,Math.min(240,defaultFontSize))}),
+  setDefaultFontWeight:defaultFontWeight=>set({defaultFontWeight})
 }),{name:'gottesdienstregie.preferences'}));

@@ -1,5 +1,16 @@
 # Versionshinweise / Release notes
 
+## 0.27.0 – 2026-09-07
+
+- Cera Pro ist die Standardschrift für neue Folien und Texte, mit sicheren Ersatzschriften falls sie lokal nicht installiert ist
+- Neuer Einstellungsbereich für Standardschrift, Größe, Gewicht, Live-Vorschau und Übernahme auf die aktuelle Folie
+- Vorschau-Einzelansicht bildet MAIN ab und schaltet ON AIR direkt mit Pfeiltasten oder den großen Navigationstasten weiter
+- Amen-Schnellanzeige erscheint als animierte 6-Sekunden-Grafik und blendet sich anschließend automatisch aus
+- Vorschauoberfläche und Schnellanzeigen sind konsequent auf MAIN reduziert
+- Standardübergang besitzt eine kleine Vorschau und einen eigenen Vorschau-Button; die Dauerneingabe wurde verbreitert
+- Element-hinzufügen-Menü schließt nach dem Anlegen automatisch; Datei-Untermenüs stehen auf Höhe ihres Auslösers
+- Automatische Speicherung alle 15 Sekunden sowie anklickbarer Sync-Status mit vier verständlichen Fortschrittsstufen
+
 ## 0.26.0 – 2026-09-07
 
 - Schriftartenauswahl auf mehr als 120 Systemschriften erweitert
