@@ -3,11 +3,33 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.26",
+      "builds": [{
+        "version": "0.26.0",
+        "releaseDate": "2026-09-07",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Mehr Übergänge","en":"More transitions"},"text":{"de":"Iris, Vorhang, Würfel, Einschwingen, Lichtblitz und Aufskalieren erweitern die Animationsauswahl.","en":"Iris, curtain, cube, swing, flash and scale expand the transition selection."}},
+            {"label":{"de":"Mehr als 120 Schriften","en":"More than 120 fonts"},"text":{"de":"Zusätzliche Systemschriften für Fließtext, Überschriften, Handschrift und Monospace stehen im Editor bereit.","en":"Additional system fonts for body text, headings, handwriting and monospace are available in the editor."}}
+          ],
+          "improved": [
+            {"label":{"de":"Konzentrierte Vorschau","en":"Focused preview"},"text":{"de":"Ausgangsauswahl und Bearbeitungswerkzeuge bleiben im Vorschaumodus verborgen; die Einzelansicht folgt der hellen oder dunklen Darstellung.","en":"Output selection and editing tools stay hidden in Preview, while single-slide view follows the light or dark appearance."}},
+            {"label":{"de":"Sofortige Bearbeitungsvorschau","en":"Instant editing preview"},"text":{"de":"Änderungen an der ausgewählten Folie werden ohne Verzögerung rechts angezeigt.","en":"Changes to the selected slide are shown immediately on the right."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Bereitschaftsanzeige entfernt","en":"Ready indicator removed"},"text":{"de":"Symbol und Text „BEREIT“ belegen in der Vorschau keinen Platz mehr.","en":"The ready icon and label no longer occupy space in Preview."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.25",
       "builds": [{
         "version": "0.25.0",
         "releaseDate": "2026-09-07",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Gesteuerte Einzelansicht","en":"Controlled single-slide view"},"text":{"de":"Große Pfeile, Links-/Rechts-Tastatursteuerung und ein anklickbarer Folientimer ermöglichen eine konzentrierte, sichere Vorschau.","en":"Large arrows, left/right keyboard navigation and a clickable slide timer provide a focused and reliable preview."}},

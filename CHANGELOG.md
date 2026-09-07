@@ -1,5 +1,14 @@
 # Versionshinweise / Release notes
 
+## 0.26.0 – 2026-09-07
+
+- Schriftartenauswahl auf mehr als 120 Systemschriften erweitert
+- Sechs zusätzliche Übergänge: Iris, Vorhang, Würfel, Einschwingen, Lichtblitz und Aufskalieren
+- Im Vorschaumodus sind die Bearbeitungs-Ausgangsauswahl und die Formatierungswerkzeuge vollständig ausgeblendet
+- Bereitschaftssymbol und Text „BEREIT“ aus der Vorschau entfernt
+- Die Einzelansicht verwendet passend zur gewählten Darstellung einen hellen oder dunklen Hintergrund
+- Änderungen an der aktiven Folie werden im Bearbeitungsmodus ohne Verzögerung rechts dargestellt
+
 ## 0.25.0 – 2026-09-07
 
 - Übergänge bleiben nach dem Animationsende sichtbar; der Schwarzbildfehler ist behoben

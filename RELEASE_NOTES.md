@@ -1,3 +1,24 @@
+# GottesdienstRegie 0.26.0
+
+Veröffentlicht am 7. September 2026.
+
+## Neu
+
+- **Noch mehr Übergänge:** Iris öffnen, Vorhang öffnen, Würfel drehen, Einschwingen, Lichtblitz und Aufskalieren ergänzen die vorhandenen Animationen.
+- **Große Schriftauswahl:** Der Editor bietet jetzt mehr als 120 verbreitete Systemschriften, darunter zusätzliche serifenlose, Serif-, Schreib-, Display- und Monospace-Schriften.
+
+## Verbessert
+
+- Der Vorschaumodus konzentriert sich vollständig auf die Präsentationssteuerung. Ausgangsauswahl und Textformatierungswerkzeuge aus dem Bearbeitungsmodus werden dort nicht mehr angezeigt.
+- Die Einzelansicht übernimmt einen hellen oder dunklen Arbeitsflächenhintergrund passend zur gewählten Darstellung – einschließlich der Systemeinstellung.
+- Änderungen an Titel, Inhalt und Gestaltung der ausgewählten Folie erscheinen während der Bearbeitung sofort in der rechten Vorschau.
+
+## Behoben
+
+- Bereitschaftssymbol und Text „BEREIT“ wurden aus der Vorschau entfernt und belegen dort keinen unnötigen Platz mehr.
+
+---
+
 # GottesdienstRegie 0.25.0
 
 Veröffentlicht am 7. September 2026.
