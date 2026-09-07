@@ -25,7 +25,8 @@ export function TransitionStage({slide,transition,role='main',previewToken=0}:{s
   useEffect(()=>{
     const old=previous.current,next=slide;previous.current=next;window.clearTimeout(timer.current);
     if(effective.type==='cut'||old.id===next.id&&previewToken===0){setLeaving(null);setShown(next);setActive(false);return}
-    setLeaving(old);setShown(next);setActive(false);const frame=requestAnimationFrame(()=>requestAnimationFrame(()=>setActive(true)));
+    const previewLeaving=previewToken>0&&old.id===next.id?{...old,id:`${old.id}-preview-${previewToken}`,background:old.background.toLowerCase()==='#162d36'?'#6a4d32':'#162d36'}:old;
+    setLeaving(previewLeaving);setShown(next);setActive(false);const frame=requestAnimationFrame(()=>requestAnimationFrame(()=>setActive(true)));
     timer.current=window.setTimeout(()=>{setLeaving(null);setActive(false)},effective.durationMs+80);
     return()=>{cancelAnimationFrame(frame);window.clearTimeout(timer.current)};
   },[slide.id,previewToken,effective.type,effective.durationMs]);

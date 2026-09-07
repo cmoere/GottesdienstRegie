@@ -1,2 +1,3 @@
 .media-commandbar .primary{width:auto;flex:none;white-space:nowrap}
 .media-browser-body{grid-row:-2/-1}
+.media-cloud-status{display:flex;align-items:center;gap:7px;color:#7b8b91;font-size:11px;font-weight:650}.media-cloud-status .material-symbols-outlined{font-size:19px}.media-cloud-status.online{color:#429b43}.detail-empty span{font-size:12px!important}.detail-empty span:after{content:none!important}

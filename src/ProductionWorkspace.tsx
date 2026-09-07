@@ -6,7 +6,7 @@ import { itemTransitionDefault, resolveTransition, transitionLabels, TransitionS
 import { createLiveQuizSession, endLiveQuizSession, openLiveQuizQuestion, quizJoinUrl, returnLiveQuizToLobby, storedLiveQuizSessionId, watchLiveQuizAnswers, watchLiveQuizSession, type LiveQuizAnswer, type LiveQuizSession } from './liveQuiz';
 import type { QuickScreenConfig } from './preferences';
 import logoWhite from './assets/logo-white.png';
-import { editorFonts, fontStack } from './fonts';
+import { allEditorFonts as editorFonts, fontStack } from './fonts';
 import { QuickOverlay } from './QuickOverlay';
 
 const Icon=({name}:{name:string})=><span className="material-symbols-outlined" aria-hidden="true">{name}</span>;

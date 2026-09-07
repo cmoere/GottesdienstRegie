@@ -3,12 +3,40 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.29",
+      "builds": [{
+        "version": "0.29.0",
+        "releaseDate": "2026-09-08",
+        "releaseTime": "01:26",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Cera Pro vollständig mitgeliefert","en":"Complete bundled Cera Pro"},"text":{"de":"Alle zwölf bereitgestellten Schnitte von Thin bis Black, jeweils normal und kursiv, sind direkt in der Anwendung enthalten und benötigen keine Systeminstallation.","en":"All twelve supplied faces from Thin through Black, in regular and italic styles, are bundled directly and require no system installation."}},
+            {"label":{"de":"Mehr moderne Schriften","en":"More modern fonts"},"text":{"de":"Über 40 zusätzliche moderne Sans-, Serif-, Display- und Monospace-Familien erweitern die Schriftartenauswahl.","en":"More than 40 additional modern sans, serif, display and monospace families expand the font selector."}},
+            {"label":{"de":"Cloudstatus im Kopf","en":"Cloud status in the header"},"text":{"de":"Ein grünes Cloudsymbol oben rechts zeigt sofort, wenn der Medien-Cloudspeicher erreichbar ist.","en":"A green cloud icon in the top-right immediately indicates that cloud media storage is reachable."}}
+          ],
+          "improved": [
+            {"label":{"de":"Medienbibliothek und Unsplash","en":"Media library and Unsplash"},"text":{"de":"Öffentliche Cloud-Repositories lassen sich jetzt lesen, authentifizierte Uploads bleiben geschützt und Unsplash-Suchen laufen zuverlässig über den Desktop-Prozess.","en":"Public cloud repositories can now be read, authenticated uploads remain protected, and Unsplash searches reliably use the desktop process."}},
+            {"label":{"de":"Sicherer ON-AIR-Start","en":"Safer ON AIR start"},"text":{"de":"ON AIR kann erst gestartet werden, wenn die Präsentation dauerhaft mit einer Firebase-Veranstaltung verknüpft ist.","en":"ON AIR can only start after the presentation is durably linked to a Firebase event."}},
+            {"label":{"de":"Ausführlichere Hilfe","en":"Expanded help"},"text":{"de":"Erste Schritte führt jetzt detailliert durch Präsentation, Veranstaltung, Ablauf, Medien, Displays, Vorschau, ON AIR und sichere Speicherung.","en":"Getting Started now provides detailed guidance for presentations, events, service order, media, displays, preview, ON AIR and safe saving."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Servicezeit bleibt sichtbar","en":"Service time stays visible"},"text":{"de":"Das Servicezeit-Popup wird nicht mehr links abgeschnitten und passt sich vollständig in die Ablaufspalte ein.","en":"The service time popover is no longer clipped on the left and fits inside the order-of-service column."}},
+            {"label":{"de":"Übergangsvorschau reagiert","en":"Transition preview responds"},"text":{"de":"VORSCHAU ANSEHEN zeigt nun einen klar erkennbaren Übergang statt dieselbe Folie unmerklich gegen sich selbst zu wechseln.","en":"PREVIEW now shows a clearly visible transition instead of imperceptibly transitioning a slide into itself."}},
+            {"label":{"de":"Sauberer Medien-Leerzustand","en":"Clean media empty state"},"text":{"de":"Der doppelte und abgeschnittene Hinweis wurde entfernt; es erscheint nur noch „Wähle bitte ein Medium aus.“.","en":"The duplicated and clipped hint was removed; only the concise media-selection prompt remains."}},
+            {"label":{"de":"Eigenständiges Medienfenster","en":"Standalone media window"},"text":{"de":"Der überflüssige zweite Schließen-Button entfällt und Fenstertitel folgen dem Schema „GottesdienstRegie - Medienbibliothek“.","en":"The redundant second close button is gone and window titles use the GottesdienstRegie - Media Library pattern."}}
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.28",
       "builds": [{
         "version": "0.28.0",
         "releaseDate": "2026-09-08",
         "releaseTime": "00:40",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Firebase-Veranstaltungen","en":"Firebase events"},"text":{"de":"Präsentationen werden über den dauerhaften eventKey mit veranstaltungen/<eventKey> verknüpft; Auswahl, Suche und kompakter Kopf sind integriert.","en":"Presentations link to veranstaltungen/<eventKey> through the durable eventKey, with integrated search, selection and compact header."}},
