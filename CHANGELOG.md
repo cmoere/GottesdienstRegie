@@ -1,5 +1,17 @@
 # Versionshinweise / Release notes
 
+## 0.24.0 – 2026-09-07
+
+- Vorschau-Modus als dichter Drei-Bereich-Arbeitsplatz mit Ablauf, gruppierter Folienübersicht und rechter Live-/Schnellanzeigenleiste neu aufgebaut
+- Responsive Folienraster nutzt die vorhandene Breite und den gespeicherten Regler mit acht klaren Thumbnailstufen
+- Ausgewählte und live gezeigte Folie bleiben strikt getrennt und werden gleichzeitig eindeutig markiert
+- Rechte Seitenleiste zeigt die ausgewählte Folie, die tatsächlich aktuelle Live-Folie sowie echte konfigurierte Schnellanzeigen
+- MAIN, LIVESTREAM, STAGE, NOTIZEN und SIGNALE sind als persistente Arbeitsansichten verbunden
+- Leere Abschnitte bleiben kompakt; Abschnitts- und Elementdauern werden aus den vorhandenen Zeitdaten aggregiert
+- Pfeiltastennavigation, Scrollen zur Auswahl, sichtbare Fokuszustände und zugängliche Tab-/Statusattribute ergänzt
+- Reine Editor-Platzhalter werden nicht mehr als echter Präsentationsinhalt in der Vorschau gezeigt
+- Große Präsentationen werden durch verzögertes Rendern außerhalb des sichtbaren Bereichs entlastet
+
 ## 0.23.0 – 2026-09-07
 
 - Echte Folienübergänge für MAIN, LIVESTREAM und LOBBY: Schnitt, Überblenden, Kreuzblende, Auflösen, Schieben und Wischen

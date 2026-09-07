@@ -1,3 +1,29 @@
+# GottesdienstRegie 0.24.0
+
+Veröffentlicht am 7. September 2026.
+
+## Neu
+
+- **Professioneller Vorschau-Arbeitsplatz:** Ablauf, vollständige gruppierte Folienübersicht und eine rechte Leiste für Auswahl, Live-Folie und Schnellanzeigen sind gleichzeitig sichtbar.
+- **Echte Virtual-Screen-Ansichten:** MAIN, LIVESTREAM, STAGE, NOTIZEN und SIGNALE wechseln ohne Neuladen und behalten den gewählten Arbeitsbereich bei.
+- **Live-Kontrolle rechts:** Die ausgewählte Folie bleibt navigierbar, während die tatsächlich live gezeigte Folie separat als AKTUELL gekennzeichnet wird.
+
+## Verbessert
+
+- Das responsive Raster verteilt je nach Fensterbreite und einer von acht Thumbnailstufen automatisch mehr oder weniger Folien pro Reihe.
+- Sections und Ablauf-Elemente zeigen kompakte Gruppen, Folienanzahl, echte Dauern, Wiederholung und vorhandene Übergangsmarkierungen.
+- Leere Sections belegen nur noch eine schmale Zeile. Die rechte Seitenleiste kann eingeklappt werden und gibt der Folienübersicht dann den Platz frei.
+- Auswahl per Ablauf, Thumbnail und Pfeiltaste verwendet denselben Zustand. Beim Wechsel zwischen Bearbeiten und Vorschau bleibt die aktuelle Auswahl erhalten.
+- Nicht sichtbare Gruppen werden browserseitig verzögert gerendert, damit auch große Präsentationen flüssiger scrollen.
+
+## Behoben
+
+- Das Auswählen einer Folie im Vorschaumodus verändert die Live-Ausgabe nicht mehr. Auswahl und ON-AIR-Zustand können sichtbar voneinander abweichen.
+- Reine Editor-Hinweise wie „Inhalt bearbeiten“ erscheinen nicht länger als echter Inhalt in den Preview-Thumbnails.
+- Die bisher große ungenutzte Fläche im Vorschau-Modus wird durch das responsive Raster und die Live-Seitenleiste sinnvoll genutzt.
+
+---
+
 # GottesdienstRegie 0.23.0
 
 Veröffentlicht am 7. September 2026.

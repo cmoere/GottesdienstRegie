@@ -3,11 +3,33 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.24",
+      "builds": [{
+        "version": "0.24.0",
+        "releaseDate": "2026-09-07",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Professioneller Vorschau-Arbeitsplatz","en":"Professional preview workspace"},"text":{"de":"Ablauf, vollständige gruppierte Folienübersicht und rechte Live-/Schnellanzeigenleiste sind jetzt gleichzeitig in einem dichten Drei-Bereich-Layout sichtbar.","en":"The order of service, complete grouped slide overview and right-hand live/quick-screen rail are now visible together in a dense three-pane layout."}},
+            {"label":{"de":"Getrennte Auswahl und Live-Folie","en":"Separate selection and live slide"},"text":{"de":"Eine Folie kann vorbereitet und navigiert werden, während die tatsächlich aktuelle ON-AIR-Folie separat und eindeutig markiert bleibt.","en":"A slide can be selected and navigated while the actual ON-AIR slide remains separately and clearly marked."}}
+          ],
+          "improved": [
+            {"label":{"de":"Responsive Folienübersicht","en":"Responsive slide overview"},"text":{"de":"Acht gespeicherte Thumbnailstufen, kompakte leere Sections, echte Dauern und verzögertes Rendern nutzen kleine wie große Bildschirme effizienter.","en":"Eight persisted thumbnail steps, compact empty sections, real durations and deferred rendering make better use of both small and large displays."}},
+            {"label":{"de":"Virtual Screens und Schnellanzeigen","en":"Virtual screens and quick screens"},"text":{"de":"MAIN, LIVESTREAM, STAGE, NOTIZEN und SIGNALE sind verbunden; konfigurierte Schnellanzeigen erscheinen als echte bedienbare Vorschaukacheln.","en":"MAIN, LIVESTREAM, STAGE, NOTES and SIGNALS are connected, while configured quick screens appear as real actionable preview tiles."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Keine Editor-Platzhalter in Preview","en":"No editor placeholders in Preview"},"text":{"de":"Reine Bearbeitungshinweise werden nicht mehr als Präsentationsinhalt gerendert, und eine Preview-Auswahl verändert MAIN nicht.","en":"Editor-only hints are no longer rendered as presentation content, and selecting a preview never changes MAIN."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.23",
       "builds": [{
         "version": "0.23.0",
         "releaseDate": "2026-09-07",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Professionelle Folienübergänge","en":"Professional slide transitions"},"text":{"de":"Schnitt, Überblenden, Kreuzblende, Auflösen, Schieben und Wischen stehen für MAIN, LIVESTREAM und LOBBY bereit. Richtung, Dauer und Bewegung lassen sich präzise einstellen.","en":"Cut, fade, crossfade, dissolve, slide and wipe are available for MAIN, LIVESTREAM and LOBBY, with precise direction, duration and easing controls."}},
