@@ -1,3 +1,25 @@
+# GottesdienstRegie 0.21.0
+
+Veröffentlicht am 7. September 2026.
+
+## Neu
+
+- **Fehler melden:** Der Hilfe-Bereich besitzt einen strukturierten, in allen vorhandenen Oberflächensprachen vorbereiteten Fehlerdialog. Kurztitel, beobachtetes Verhalten, Reproduktionsschritte und erwartetes Verhalten werden als vollständiger GitHub-Bericht vorbereitet.
+- **Bereinigte Diagnose:** Versionsnummer, Plattform und Sprache können optional ergänzt werden. Passwörter, Zwei-Faktor-Codes und vertrauliche Inhalte werden ausdrücklich ausgeschlossen.
+
+## Verbessert
+
+- Die öffentliche Release-Notes-Seite orientiert sich jetzt an einer professionellen Entwicklerdokumentation: feste Dokumentationsnavigation, Versionsleiste, Suche, Direktlinks, aktuelle Version, Downloadzugang und responsive Darstellung.
+- Alle Bedientexte der Release-Notes-Webseite sind für Deutsch, Schweizerdeutsch, Englisch, Dänisch, Schwedisch, Norwegisch, Finnisch, Niederländisch, Französisch, Spanisch, Italienisch, Polnisch, Portugiesisch (Brasilien), Ukrainisch, Russisch, Türkisch und Arabisch vorbereitet.
+- PowerPoint/Keynote/OpenDocument, Text/Markdown und GottesdienstRegie-Dateien öffnen nun jeweils einen passenden Dateifilter.
+
+## Behoben
+
+- Das Import-Untermenü erscheint nun auf Höhe von „Präsentation importieren“ statt am oberen Rand des Datei-Menüs.
+- Das Hilfe-Dropdown ist breiter, besitzt klare Material-Symbole und zerlegt kurze Bezeichnungen nicht mehr in unleserliche Einzelzeilen.
+
+---
+
 # GottesdienstRegie 0.20.0
 
 Veröffentlicht am 7. September 2026.

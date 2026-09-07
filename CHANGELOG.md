@@ -1,5 +1,15 @@
 # Versionshinweise / Release notes
 
+## 0.21.0 – 2026-09-07
+
+- Release-Notes-Webseite im Stil einer professionellen Entwicklerdokumentation neu aufgebaut
+- Versionsnavigation, Volltextsuche, Direktlinks, Sprachwahl, responsive Ansicht sowie Hell-/Dunkelmodus
+- Import-Untermenü auf Höhe von „Präsentation importieren“ positioniert
+- Getrennte Dateifilter für Office-Präsentationen, Text/Markdown und GottesdienstRegie-Dateien
+- Breiteres Hilfe-Menü mit eindeutigen Symbolen und sauberen Zeilenumbrüchen
+- Strukturierter, mehrsprachiger Dialog zum Melden von Fehlern
+- Optionale bereinigte Diagnoseinformationen ohne Passwörter oder Anmeldecodes
+
 ## 0.20.0 – 2026-09-07
 
 - Background-Audio-Playlists für VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM

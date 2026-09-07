@@ -3,11 +3,32 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.21",
+      "builds": [{
+        "version": "0.21.0",
+        "releaseDate": "2026-09-07",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Strukturierte Fehlerberichte","gsw":"Strukturierti Fählerbricht","en":"Structured bug reports","da":"Strukturerede fejlrapporter","sv":"Strukturerade felrapporter","no":"Strukturerte feilrapporter","fi":"Jäsennellyt virheraportit","nl":"Gestructureerde foutrapporten","fr":"Rapports de bogue structurés","es":"Informes de errores estructurados","it":"Segnalazioni strutturate","pl":"Uporządkowane zgłoszenia błędów","pt-BR":"Relatórios de erro estruturados","uk":"Структуровані звіти про помилки","ru":"Структурированные отчёты об ошибках","tr":"Yapılandırılmış hata raporları","ar":"بلاغات أخطاء منظّمة"},"text":{"de":"Der Hilfe-Bereich erstellt jetzt einen vollständigen Bericht mit Beschreibung, Reproduktionsschritten, erwartetem Verhalten und optionalen bereinigten Diagnosedaten.","en":"Help can now create a complete report with a description, reproduction steps, expected behaviour and optional sanitised diagnostics."}}
+          ],
+          "improved": [
+            {"label":{"de":"Neue Release-Notes-Webseite","gsw":"Neui Release-Notes-Siite","en":"New release notes website","da":"Ny side med versionsnoter","sv":"Ny sida för versionsinformation","no":"Ny side for versjonsmerknader","fi":"Uusi julkaisutietosivu","nl":"Nieuwe pagina met releaseopmerkingen","fr":"Nouvelle page de notes de version","es":"Nueva página de notas de la versión","it":"Nuova pagina delle note di rilascio","pl":"Nowa strona informacji o wersji","pt-BR":"Nova página de notas da versão","uk":"Нова сторінка приміток до випуску","ru":"Новая страница примечаний к выпуску","tr":"Yeni sürüm notları sayfası","ar":"صفحة جديدة لملاحظات الإصدار"},"text":{"de":"Die öffentliche Dokumentation verwendet jetzt eine klare, an professionelle Entwicklerdokumentation angelehnte Navigation mit Versionsleiste, Suche, Direktlinks, Sprachwahl, Hell-/Dunkelmodus und responsiver Darstellung.","en":"The public documentation now uses clear professional documentation navigation with a version sidebar, search, deep links, language selection, light and dark modes and responsive layout."}},
+            {"label":{"de":"Gezielter Präsentationsimport","gsw":"Gezielte Präsentationsimport","en":"Targeted presentation import","da":"Målrettet præsentationsimport","sv":"Riktad presentationsimport","no":"Målrettet presentasjonsimport","fi":"Kohdennettu esitystuonti","nl":"Gerichte presentatie-import","fr":"Importation ciblée","es":"Importación específica","it":"Importazione mirata","pl":"Ukierunkowany import prezentacji","pt-BR":"Importação direcionada","uk":"Цільовий імпорт презентацій","ru":"Выборочный импорт презентаций","tr":"Hedefli sunum içe aktarma","ar":"استيراد عروض محدد"},"text":{"de":"PowerPoint, Keynote und OpenDocument, Text und Markdown sowie GottesdienstRegie-Dateien besitzen getrennte Importaktionen und passende Dateifilter.","en":"PowerPoint, Keynote and OpenDocument, Text and Markdown, and GottesdienstRegie files now have separate import actions and matching file filters."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Menüposition und Hilfe-Layout","gsw":"Menüposition und Hilfe-Layout","en":"Menu positioning and Help layout","da":"Menuplacering og hjælpelayout","sv":"Menyplacering och hjälplayout","no":"Menyplassering og hjelpelayout","fi":"Valikon sijainti ja ohjeasettelu","nl":"Menupositie en Help-indeling","fr":"Position des menus et mise en page de l’aide","es":"Posición del menú y diseño de Ayuda","it":"Posizione menu e layout della Guida","pl":"Pozycja menu i układ Pomocy","pt-BR":"Posição do menu e layout da Ajuda","uk":"Позиція меню та макет довідки","ru":"Позиция меню и макет справки","tr":"Menü konumu ve Yardım düzeni","ar":"موضع القائمة وتخطيط المساعدة"},"text":{"de":"Das Import-Untermenü öffnet auf Höhe der gewählten Zeile. Das Hilfe-Menü ist breiter, zeigt eindeutige Symbole und bricht kurze Bezeichnungen nicht mehr unschön um.","en":"The import submenu now opens level with its selected row. Help is wider, uses clear icons and no longer breaks short labels awkwardly."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.20",
       "builds": [{
         "version": "0.20.0",
         "releaseDate": "2026-09-07",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Background Audio für Abschnitte","en":"Section background audio"},"text":{"de":"VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM können eigene Cloud-Playlists besitzen. Visuelle Schleifen laufen unabhängig und starten die Musik nicht erneut.","en":"PRE-SERVICE, WARM-UP, SERVICE and POST-SERVICE can each use cloud playlists. Visual loops run independently and do not restart the music."}},
