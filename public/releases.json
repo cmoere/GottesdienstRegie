@@ -3,11 +3,33 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.23",
+      "builds": [{
+        "version": "0.23.0",
+        "releaseDate": "2026-09-07",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Professionelle Folienübergänge","en":"Professional slide transitions"},"text":{"de":"Schnitt, Überblenden, Kreuzblende, Auflösen, Schieben und Wischen stehen für MAIN, LIVESTREAM und LOBBY bereit. Richtung, Dauer und Bewegung lassen sich präzise einstellen.","en":"Cut, fade, crossfade, dissolve, slide and wipe are available for MAIN, LIVESTREAM and LOBBY, with precise direction, duration and easing controls."}},
+            {"label":{"de":"Übergangs-Vorschau im Editor","en":"Transition preview in the editor"},"text":{"de":"Ein eigener Vorschau-Button spielt den Effekt im Editor ab, ohne MAIN oder die aktive Live-Folie zu verändern.","en":"A dedicated Preview button plays the effect in the editor without changing MAIN or the active live slide."}}
+          ],
+          "improved": [
+            {"label":{"de":"Klare Standard-Hierarchie","en":"Clear default hierarchy"},"text":{"de":"Präsentationsstandard, Ablauf-Element und einzelne Folie greifen nachvollziehbar ineinander. Überschreibungen können jederzeit auf den übergeordneten Standard zurückgesetzt werden.","en":"Presentation, service-item and individual-slide defaults now form a predictable hierarchy, and overrides can be reset at any time."}},
+            {"label":{"de":"Sichere Live-Wiedergabe","en":"Reliable live playback"},"text":{"de":"Schnelles Weiterschalten ersetzt einen laufenden Effekt sofort. STAGE bleibt beim direkten Schnitt und Background Audio läuft unabhängig weiter.","en":"Rapid navigation immediately replaces an active effect. STAGE continues to use a cut and background audio remains independent."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Kompatibilität bestehender Präsentationen","en":"Existing presentation compatibility"},"text":{"de":"Bisherige Übergangsfelder werden beim Laden automatisch in das neue Modell übertragen.","en":"Legacy transition fields are automatically migrated into the new model when a presentation is loaded."}}
+          ],
+          "security": []
+        }
+      }]
+    },
+    {
       "line": "0.22",
       "builds": [{
         "version": "0.22.0",
         "releaseDate": "2026-09-07",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Audio nur in Vorschau und ON AIR","gsw":"Audio nur i de Vorschau und ON AIR","en":"Audio only in Preview and ON AIR","da":"Lyd kun i forhåndsvisning og ON AIR","sv":"Ljud endast i förhandsvisning och ON AIR","no":"Lyd bare i forhåndsvisning og ON AIR","fi":"Ääni vain esikatselussa ja ON AIR -tilassa","nl":"Audio alleen in Voorbeeld en ON AIR","fr":"Audio uniquement en aperçu et ON AIR","es":"Audio solo en vista previa y ON AIR","it":"Audio solo in anteprima e ON AIR","pl":"Dźwięk tylko w podglądzie i ON AIR","pt-BR":"Áudio somente na prévia e ON AIR","uk":"Аудіо лише в попередньому перегляді та ON AIR","ru":"Аудио только в предпросмотре и ON AIR","tr":"Ses yalnızca Önizleme ve ON AIR modunda","ar":"الصوت فقط في المعاينة ووضع ON AIR"},"text":{"de":"Background Audio wird nur im Vorschaumodus oder während einer aktiven Ausgabe wiedergegeben. Der Bearbeitungsmodus bleibt stumm.","gsw":"Background Audio lauft nur i de Vorschau oder während ere aktive Usgab. De Bearbeitigsmodus bliibt stumm.","en":"Background audio now plays only in Preview or during an active output. Edit mode remains silent.","da":"Baggrundslyd afspilles kun i forhåndsvisning eller under en aktiv udsendelse. Redigeringstilstand forbliver lydløs.","sv":"Bakgrundsljud spelas endast i förhandsvisning eller under en aktiv utsändning. Redigeringsläget förblir tyst.","no":"Bakgrunnslyd spilles bare i forhåndsvisning eller under en aktiv sending. Redigeringsmodus forblir stille.","fi":"Taustaääni toistetaan vain esikatselussa tai aktiivisen lähetyksen aikana. Muokkaustila pysyy äänettömänä.","nl":"Achtergrondaudio speelt alleen in Voorbeeld of tijdens een actieve uitvoer. De bewerkingsmodus blijft stil.","fr":"L’audio d’arrière-plan n’est lu qu’en mode aperçu ou pendant une sortie active. Le mode édition reste silencieux.","es":"El audio de fondo solo se reproduce en la vista previa o durante una salida activa. El modo de edición permanece en silencio.","it":"L’audio di sottofondo viene riprodotto solo in anteprima o durante un’uscita attiva. La modalità di modifica resta silenziosa.","pl":"Dźwięk tła jest odtwarzany tylko w podglądzie lub podczas aktywnego wyjścia. Tryb edycji pozostaje wyciszony.","pt-BR":"O áudio de fundo é reproduzido apenas na prévia ou durante uma saída ativa. O modo de edição permanece silencioso.","uk":"Фонове аудіо відтворюється лише в попередньому перегляді або під час активного виводу. Режим редагування залишається беззвучним.","ru":"Фоновое аудио воспроизводится только в предпросмотре или во время активного вывода. Режим редактирования остаётся без звука.","tr":"Arka plan sesi yalnızca önizlemede veya etkin çıkış sırasında çalınır. Düzenleme modu sessiz kalır.","ar":"يُشغّل صوت الخلفية فقط في المعاينة أو أثناء وجود إخراج نشط. يظل وضع التحرير صامتًا."}}

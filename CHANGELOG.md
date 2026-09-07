@@ -1,5 +1,15 @@
 # Versionshinweise / Release notes
 
+## 0.23.0 – 2026-09-07
+
+- Echte Folienübergänge für MAIN, LIVESTREAM und LOBBY: Schnitt, Überblenden, Kreuzblende, Auflösen, Schieben und Wischen
+- Übergänge mit Dauer von 0,1 bis 5 Sekunden, Richtung, Bewegungskurve und optional umgekehrter Richtung beim Zurückschalten
+- Hierarchie aus Präsentationsstandard, Standard des Ablauf-Elements und Überschreibung einer einzelnen Folie
+- Eigener Vorschau-Button im Editor, der niemals die Live-Ausgabe verändert
+- STAGE verwendet zur sicheren Lesbarkeit weiterhin einen direkten Schnitt
+- Laufende Übergänge werden bei schnellem Weiterschalten abgebrochen statt in einer Warteschlange gesammelt
+- Bestehende Präsentationen mit alten Übergangsfeldern werden automatisch kompatibel übernommen
+
 ## 0.22.0 – 2026-09-07
 
 - Background Audio wird ausschließlich in der Vorschau oder während ON AIR wiedergegeben

@@ -1,3 +1,27 @@
+# GottesdienstRegie 0.23.0
+
+Veröffentlicht am 7. September 2026.
+
+## Neu
+
+- **Übergangseffekte:** Folien unterstützen jetzt Schnitt, Überblenden, Kreuzblende, Auflösen, Schieben und Wischen. Schieben und Wischen lassen sich nach links, rechts, oben oder unten ausrichten.
+- **Hierarchische Standards:** Ein Präsentationsstandard kann pro Ablauf-Element und anschließend pro einzelner Folie überschrieben werden. „Auf Standard zurücksetzen“ entfernt nur die Folienüberschreibung.
+- **Editor-Vorschau:** Der neue Vorschau-Button spielt den gewählten Übergang ausschließlich im Editor ab und verändert weder MAIN noch die aktuelle Live-Folie.
+
+## Verbessert
+
+- Dauer, Bewegungskurve und die Umkehrung der Richtung beim Zurückschalten sind direkt am Übergang einstellbar.
+- MAIN, LIVESTREAM und LOBBY verwenden die gestalteten Übergänge. STAGE schaltet bewusst ohne Animation, damit Hinweise jederzeit sofort lesbar bleiben.
+- Die Ausgabe verwendet GPU-freundliche Deckkraft-, Transformations- und Maskenanimationen. Bei schnellem Weiterschalten wird der laufende Übergang sauber ersetzt und nicht aufgestaut.
+
+## Behoben
+
+- Alte Präsentationen mit den bisherigen Feldern `transition` und `transitionDuration` werden beim Öffnen automatisch in das neue Modell übernommen.
+- Hintergrund-Audio wird von visuellen Folienübergängen nicht neu gestartet oder verändert.
+- Schnellanzeigen bleiben von der Übergangsauswahl getrennt und Schwarz erscheint weiterhin unmittelbar.
+
+---
+
 # GottesdienstRegie 0.22.0
 
 Veröffentlicht am 7. September 2026.
