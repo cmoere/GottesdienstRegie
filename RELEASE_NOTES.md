@@ -1,3 +1,32 @@
+# GottesdienstRegie 0.30.0
+
+Veröffentlicht am 8. September 2026.
+
+## Neu
+
+- **Professionelles Audio-Routing:** Videos, Background Audio, Systembenachrichtigungen, Vorhören und LiveQuiz-Soundeffekte besitzen getrennte, gerätebezogene Ausgänge.
+- **Ausgangskontrolle:** Jede Route bietet eigene Lautstärke, Stummschaltung, echten Gerätenamen und einen isolierten Testton.
+- **Vollständiges Hilfezentrum:** Schnellstart, Livebetrieb, Audio, Präsentation und System enthalten ausführliche Bedien-, Preflight- und Problemlösungshilfen.
+- **Timeline-Vorschaubilder:** Die aufgeklappte Timeline kann echte kleine Folienvorschaubilder anzeigen; die Funktion lässt sich in den Präsentationseinstellungen ein- oder ausschalten.
+
+## Verbessert
+
+- Audiogeräte werden dynamisch vom Betriebssystem erkannt und anhand ihrer stabilen Device-ID lokal gespeichert.
+- Fehlende Ausgänge bleiben gespeichert, werden sichtbar als nicht verfügbar markiert und verwenden vorübergehend den Systemstandard.
+- Änderungen an Audioausgängen während ON AIR starten laufende Videos oder Playlists nicht neu.
+- Preflight prüft benötigte Video- und Background-Audio-Ausgänge sowie die nicht blockierenden Preview- und Benachrichtigungswege.
+- Abgesagte Firebase-Veranstaltungen bleiben chronologisch sichtbar, tragen den roten Hinweis „Fällt aus!“ und sind für neue Verknüpfungen gesperrt.
+- Wird eine bereits verknüpfte Veranstaltung später abgesagt, bleibt die Verbindung erhalten und der Präsentationskopf zeigt eine Warnung.
+- Kontextbezogene Hilfe ist direkt an Preflight, Audioausgängen, Servicezeit und Veranstaltungsverknüpfung erreichbar.
+
+## Behoben
+
+- Die alte globale Audioauswahl überschreibt die neue Background-Audio-Route nicht mehr.
+- Eine erreichbare Medien-Cloud wird bei einer leeren oder vorübergehend nicht lesbaren Medienliste nicht mehr fälschlich als offline angezeigt.
+- Präsentationstitel sind beim Erstellen, Laden, Umbenennen und Speichern zuverlässig auf maximal 500 Zeichen begrenzt.
+
+---
+
 # GottesdienstRegie 0.27.0
 
 Veröffentlicht am 7. September 2026.

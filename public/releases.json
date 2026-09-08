@@ -3,12 +3,39 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.30",
+      "builds": [{
+        "version": "0.30.0",
+        "releaseDate": "2026-09-08",
+        "releaseTime": "21:34",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Professionelles Audio-Routing","en":"Professional audio routing"},"text":{"de":"Videos, Background Audio, Systembenachrichtigungen, Vorhören und LiveQuiz-Soundeffekte besitzen getrennte, gerätebezogene Ausgänge mit Lautstärke, Mute und Testton.","en":"Videos, background audio, system notifications, preview listening and LiveQuiz sound effects now have separate device-specific outputs with volume, mute and test tone."}},
+            {"label":{"de":"Vollständiges Hilfezentrum","en":"Complete help center"},"text":{"de":"Schnellstart, Livebetrieb, Audio, Präsentation und System enthalten ausführliche Bedien-, Preflight-, Fehler- und Problemlösungshilfen sowie kontextbezogene Hilfe-Schaltflächen.","en":"Quick start, live operation, audio, presentation and system now include detailed usage, preflight, error and troubleshooting guidance plus contextual help buttons."}},
+            {"label":{"de":"Timeline-Vorschaubilder","en":"Timeline thumbnails"},"text":{"de":"Die aufgeklappte Timeline kann kleine echte Folienvorschaubilder anzeigen; die Darstellung lässt sich in den Präsentationseinstellungen deaktivieren.","en":"The expanded timeline can show small real slide thumbnails, which can be disabled in presentation settings."}}
+          ],
+          "improved": [
+            {"label":{"de":"Sicheres Geräte-Fallback","en":"Safe device fallback"},"text":{"de":"Getrennte Audiogeräte werden anhand stabiler IDs wiedererkannt; getrennte oder fehlende Geräte werden sichtbar gemeldet und sicher durch Systemstandard ersetzt.","en":"Separate audio devices are remembered by stable IDs; disconnected or missing devices are visibly reported and safely fall back to the system default."}},
+            {"label":{"de":"Ausfallende Veranstaltungen","en":"Cancelled events"},"text":{"de":"Ausfallende Firebase-Veranstaltungen bleiben chronologisch sichtbar, tragen „Fällt aus!“ und sind für neue Verknüpfungen per Maus und Tastatur gesperrt; bestehende Verbindungen bleiben mit Warnung erhalten.","en":"Cancelled Firebase events remain visible chronologically, show a cancellation badge and are blocked for new mouse or keyboard linking; existing links remain with a warning."}},
+            {"label":{"de":"Preflight prüft Audiowege","en":"Preflight checks audio routes"},"text":{"de":"Preflight kontrolliert benötigte Video- und Background-Ausgänge sowie nicht blockierende Preview- und Benachrichtigungsausgänge und zeigt den Fallback verständlich an.","en":"Preflight checks required video and background outputs as well as non-blocking preview and notification outputs and clearly reports fallback behavior."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Cloudstatus stabilisiert","en":"Stabilized cloud status"},"text":{"de":"Eine erreichbare Medien-Cloud bleibt als verbunden sichtbar, selbst wenn eine leere oder vorübergehend nicht lesbare Medienliste zurückkommt; der Status wird regelmäßig neu geprüft.","en":"A reachable media cloud remains shown as connected even when an empty or temporarily unreadable media list is returned, and status is refreshed regularly."}},
+            {"label":{"de":"Audio-Routen überschreiben sich nicht","en":"Audio routes no longer override each other"},"text":{"de":"Die frühere globale Audioauswahl überschreibt die neue Background-Audio-Route nicht mehr; laufende Wiedergabe wird bei Änderungen nicht neu gestartet.","en":"The legacy global audio selection no longer overrides the new background audio route, and current playback is not restarted when settings change."}},
+            {"label":{"de":"Präsentationstitel begrenzt","en":"Presentation title limit"},"text":{"de":"Titel sind beim Erstellen, Laden, Umbenennen und Speichern konsistent auf maximal 500 Zeichen begrenzt.","en":"Titles are consistently limited to 500 characters when creating, loading, renaming and saving."}}
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.29",
       "builds": [{
         "version": "0.29.0",
         "releaseDate": "2026-09-08",
         "releaseTime": "01:26",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Cera Pro vollständig mitgeliefert","en":"Complete bundled Cera Pro"},"text":{"de":"Alle zwölf bereitgestellten Schnitte von Thin bis Black, jeweils normal und kursiv, sind direkt in der Anwendung enthalten und benötigen keine Systeminstallation.","en":"All twelve supplied faces from Thin through Black, in regular and italic styles, are bundled directly and require no system installation."}},

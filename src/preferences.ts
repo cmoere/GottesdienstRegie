@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { defaultKeyboardShortcuts, type KeyboardShortcuts, type ShortcutAction } from './shortcuts';
+import { defaultAudioRouting, type AudioRoute, type AudioRouteConfig, type AudioRouting } from './audioRouting';
 
 export type Language='de'|'gsw'|'en'|'nl'|'da'|'no'|'sv'|'fi'|'fr'|'it'|'es'|'uk'|'ru'|'tr'|'ar'|'pl'|'pt-BR';
 export type ThemeMode='system'|'light'|'dark';
@@ -36,6 +37,8 @@ interface PreferencesState {
   inputGain:number;
   noiseSuppression:boolean;
   echoCancellation:boolean;
+  audioRouting:AudioRouting;
+  timelineThumbnails:boolean;
   videoInputSources:VideoInputSource[];
   quickScreens:QuickScreenConfig[];
   keyboardShortcuts:KeyboardShortcuts;
@@ -61,6 +64,9 @@ interface PreferencesState {
   setInputGain:(value:number)=>void;
   setNoiseSuppression:(value:boolean)=>void;
   setEchoCancellation:(value:boolean)=>void;
+  setAudioDefaultOutput:(deviceId:string)=>void;
+  setAudioRoute:(route:AudioRoute,patch:Partial<AudioRouteConfig>)=>void;
+  setTimelineThumbnails:(value:boolean)=>void;
   setVideoInputSources:(value:VideoInputSource[])=>void;
   setQuickScreens:(value:QuickScreenConfig[])=>void;
   setKeyboardShortcut:(action:ShortcutAction,value:string)=>void;
@@ -98,6 +104,8 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   inputGain:100,
   noiseSuppression:true,
   echoCancellation:true,
+  audioRouting:defaultAudioRouting,
+  timelineThumbnails:true,
   videoInputSources:[],
   quickScreens:defaultQuickScreens,
   keyboardShortcuts:defaultKeyboardShortcuts,
@@ -123,6 +131,9 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setInputGain:inputGain=>set({inputGain}),
   setNoiseSuppression:noiseSuppression=>set({noiseSuppression}),
   setEchoCancellation:echoCancellation=>set({echoCancellation}),
+  setAudioDefaultOutput:deviceId=>set(state=>({audioRouting:{...defaultAudioRouting,...state.audioRouting,defaultOutputDeviceId:deviceId}})),
+  setAudioRoute:(route,patch)=>set(state=>({audioRouting:{...defaultAudioRouting,...state.audioRouting,[route]:{...defaultAudioRouting[route],...state.audioRouting?.[route],...patch}}})),
+  setTimelineThumbnails:timelineThumbnails=>set({timelineThumbnails}),
   setVideoInputSources:videoInputSources=>set({videoInputSources}),
   setQuickScreens:quickScreens=>set({quickScreens}),
   setKeyboardShortcut:(action,value)=>set(state=>({keyboardShortcuts:{...defaultKeyboardShortcuts,...state.keyboardShortcuts,[action]:value}})),

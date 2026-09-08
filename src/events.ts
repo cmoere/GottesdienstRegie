@@ -4,8 +4,11 @@ import { communityAuth, communityDatabase } from './firebase';
 
 export interface ChurchEvent{
   eventKey:string;titel:string;start_datum:string;start_uhrzeit:string;ende_datum:string;ende_uhrzeit:string;ganztag?:boolean;trash?:boolean;trashAt?:unknown;
+  cancel?:{enabled?:boolean}|boolean;cancelled?:boolean|string;
   Verspaetungsanfangsdatum?:string;Verspaetungsanfangsuhrzeit?:string;Verspaetungsenddatum?:string;Verspaetungsenduhrzeit?:string;
 }
+
+export function isCancelled(event:ChurchEvent|null|undefined){if(!event)return false;const compatible=event.cancelled===true||String(event.cancelled).toLowerCase()==='true';return event.cancel===true||typeof event.cancel==='object'&&event.cancel?.enabled===true||compatible}
 
 async function authenticated(){if(!communityAuth.currentUser)await signInAnonymously(communityAuth)}
 const eventRef=(eventKey='')=>ref(communityDatabase,`veranstaltungen${eventKey?`/${eventKey}`:''}`);
