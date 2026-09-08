@@ -1,5 +1,15 @@
 # Versionshinweise / Release notes
 
+## 0.31.0 – 2026-09-08
+
+- Neues natives ServiceItem-Kontextmenü mit kontextabhängigen Befehlen, Desktop-Tastatursteuerung und korrekten Windows-/macOS-Shortcuts
+- Mehrfachauswahl, verknüpfte Elemente, Gruppierung, Ausblenden sowie atomare Undo-/Redo-Transaktionen
+- Gerenderte Folien können in die Systemzwischenablage kopiert oder über den Betriebssystemdialog als PNG gespeichert werden
+- Veranstaltungsauswahl mit HEUTE, MORGEN und KOMMEND, bewusstem Speichern sowie Schließen per Escape und Außenklick
+- Layoutfehler bei Servicezeit und Veranstaltungskopf korrigiert
+- Schwarz ist wirklich textlos; Amen lässt den Folienhintergrund sichtbar
+- Neutraler Startbildschirm ohne vollflächiges Hintergrundfoto und deutlich erweiterte kontextbezogene Hilfe
+
 ## 0.27.0 – 2026-09-07
 
 - Cera Pro ist die Standardschrift für neue Folien und Texte, mit sicheren Ersatzschriften falls sie lokal nicht installiert ist

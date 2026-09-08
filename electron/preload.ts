@@ -15,6 +15,8 @@ contextBridge.exposeInMainWorld('desktop', {
   onQuick:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:quick',listener);return()=>ipcRenderer.removeListener('outputs:quick',listener)},
   onOutputStatus:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:status',listener);return()=>ipcRenderer.removeListener('outputs:status',listener)},
   notifyMediaEnded:(behavior:string)=>ipcRenderer.send('outputs:media-ended',behavior),
+  serviceContext:{open:(position:{x:number;y:number},entries:unknown[])=>ipcRenderer.invoke('service-context:open',position,entries),onCommand:(callback:(id:string)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,id:string)=>callback(id);ipcRenderer.on('service-context:command',listener);return()=>ipcRenderer.removeListener('service-context:command',listener)}},
+  slideExport:{copy:(dataUrl:string)=>ipcRenderer.invoke('slide-export:copy',dataUrl),save:(dataUrl:string,suggestedName:string,format:'png'|'jpeg'='png')=>ipcRenderer.invoke('slide-export:save',dataUrl,suggestedName,format)},
   onMediaEnded:(callback:(behavior:string)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,behavior:string)=>callback(behavior);ipcRenderer.on('outputs:media-ended',listener);return()=>ipcRenderer.removeListener('outputs:media-ended',listener)},
   presentation:{
     list:(options?:{archived?:boolean;trashed?:boolean})=>ipcRenderer.invoke('presentation:list',options),

@@ -3,12 +3,39 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.31",
+      "builds": [{
+        "version": "0.31.0",
+        "releaseDate": "2026-09-08",
+        "releaseTime": "23:18",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Professionelles ServiceItem-Kontextmenü","en":"Professional service-item context menu"},"text":{"de":"Das native Desktop-Menü unterstützt Ausschneiden, Kopieren, Einfügen, Duplizieren, Löschen, Verknüpfen, Gruppieren, Ausblenden, Undo/Redo, Umbenennen, Folienexport und ON AIR mit passenden Zuständen.","en":"The native desktop menu supports cut, copy, paste, duplicate, delete, linking, grouping, hiding, undo/redo, rename, slide export and On Air with contextual states."}},
+            {"label":{"de":"Mehrfachauswahl und verknüpfte Elemente","en":"Multi-selection and linked items"},"text":{"de":"Strg-/Cmd-Klick wählt mehrere Ablauf-Elemente; Gruppen bewegen sich gemeinsam und verknüpfte Instanzen behalten eigene IDs bei gemeinsamer Inhaltszuordnung.","en":"Ctrl/Cmd-click selects multiple service items; groups move together and linked instances keep independent IDs with shared content association."}},
+            {"label":{"de":"Folie als Bild","en":"Slide as image"},"text":{"de":"Gerenderte Folien lassen sich ohne Bedienoberfläche in die Systemzwischenablage kopieren oder über einen echten Speichern-Dialog als PNG exportieren.","en":"Rendered slides can be copied without editor chrome to the system clipboard or exported as PNG through a native save dialog."}}
+          ],
+          "improved": [
+            {"label":{"de":"Veranstaltungsauswahl","en":"Event selection"},"text":{"de":"Termine sind einmalig nach HEUTE, MORGEN und KOMMEND gruppiert; Auswahl und Übernahme sind getrennt, Änderungen werden bewusst gespeichert und der Dialog schließt per Escape oder Außenklick.","en":"Events are grouped once under Today, Tomorrow and Upcoming; selection is separate from saving and the dialog closes with Escape or an outside click."}},
+            {"label":{"de":"Hilfe und Präsentationskopf","en":"Help and presentation header"},"text":{"de":"Hilfeartikel erklären Bedienabläufe ohne interne Speichertechnik, verwenden mehr echte Softwareaufnahmen und der kompakte Veranstaltungskopf besitzt eine kollisionsfreie Hilfe-Schaltfläche.","en":"Help articles explain operator workflows without internal storage details, reuse more real software screenshots and the compact event header no longer overlaps its help control."}},
+            {"label":{"de":"Live-Sicherheit","en":"Live safety"},"text":{"de":"Editoraktionen bleiben von MAIN getrennt; ON AIR aus dem Kontextmenü verwendet die vorhandene Preflight- und Take-Logik.","en":"Editor actions remain isolated from Main; On Air from the context menu uses the existing preflight and take logic."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Servicezeit nicht mehr abgeschnitten","en":"Service time no longer clipped"},"text":{"de":"Der enge Abschnittskopf zeigt die Uhrzeit ohne abgeschnittenen Vormittags-/Nachmittagszusatz.","en":"The compact section header shows the time without a clipped AM/PM suffix."}},
+            {"label":{"de":"Schwarz und Amen","en":"Black and Amen"},"text":{"de":"Die Schwarz-Schnellanzeige enthält keinen Text mehr; Amen liegt transparent über dem sichtbaren Folienhintergrund.","en":"The black quick screen no longer contains text, while Amen transparently overlays the visible slide background."}},
+            {"label":{"de":"Ruhiger Programmstart","en":"Clean application startup"},"text":{"de":"Beim Start erscheint nur noch der Ladebereich auf neutralem Hintergrund und kein vollflächiges Fotomotiv.","en":"Startup now shows only the loading panel on a neutral background without a full-window photograph."}}
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.30",
       "builds": [{
         "version": "0.30.0",
         "releaseDate": "2026-09-08",
         "releaseTime": "21:34",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Professionelles Audio-Routing","en":"Professional audio routing"},"text":{"de":"Videos, Background Audio, Systembenachrichtigungen, Vorhören und LiveQuiz-Soundeffekte besitzen getrennte, gerätebezogene Ausgänge mit Lautstärke, Mute und Testton.","en":"Videos, background audio, system notifications, preview listening and LiveQuiz sound effects now have separate device-specific outputs with volume, mute and test tone."}},

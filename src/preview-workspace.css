@@ -62,3 +62,4 @@
 
 @media(max-width:850px){.transition-setting-layout{grid-template-columns:1fr}.font-default-grid{grid-template-columns:1fr}.file-popup .file-flyout{top:33px}}
 @media(prefers-reduced-motion:reduce){.amen-burst,.amen-burst:after,.amen-burst i,.amen-burst>span,.amen-burst>strong,.sync-control.syncing>button .material-symbols-outlined{animation:none!important}}
+.quick-overlay.amen{background:radial-gradient(circle at 50% 50%,#2d7381aa 0,#183e4988 34%,#08191f44 72%,transparent 100%)}
