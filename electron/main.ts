@@ -74,6 +74,7 @@ function createControlWindow(preferences:AppPreferencesData) {
   let saveTimer:NodeJS.Timeout|undefined;
   const saveWindowState=()=>{if(!controlWindow||controlWindow.isDestroyed())return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{if(!controlWindow||controlWindow.isDestroyed())return;const state=controlWindow.isFullScreen()?'fullscreen':controlWindow.isMaximized()?'maximized':'window',display=screen.getDisplayMatching(controlWindow.getBounds()),patch:Partial<AppPreferencesData>={lastWindowState:state,lastDisplayId:display.id};if(state==='window')patch.bounds=controlWindow.getBounds();void appPreferences.update(patch)},250)};
   controlWindow.on('move',saveWindowState);controlWindow.on('resize',saveWindowState);controlWindow.on('maximize',saveWindowState);controlWindow.on('unmaximize',saveWindowState);controlWindow.on('enter-full-screen',saveWindowState);controlWindow.on('leave-full-screen',saveWindowState);
+  controlWindow.webContents.on('before-input-event',(event,input)=>{if((input.control||input.meta)&&['+','=','-','0'].includes(input.key)){event.preventDefault();controlWindow?.webContents.setZoomFactor(1)}});
   controlWindow.on('close',event=>{
     if(controlCloseInProgress)return;
     event.preventDefault();
@@ -86,7 +87,7 @@ function createControlWindow(preferences:AppPreferencesData) {
     });
   });
   void load(controlWindow);
-  controlWindow.webContents.once('did-finish-load',()=>{if(appPreferences.get().automaticUpdates)setTimeout(()=>void checkForUpdates(),5000)});
+  controlWindow.webContents.once('did-finish-load',()=>{controlWindow?.webContents.setZoomFactor(1);void controlWindow?.webContents.setVisualZoomLevelLimits(1,1);if(appPreferences.get().automaticUpdates)setTimeout(()=>void checkForUpdates(),5000)});
 }
 
 function openMediaWindow(context:'manage'|'select'='manage',purpose:'item'|'background'|'audio'='item',targetType?:'section'|'serviceItem',targetId?:string){

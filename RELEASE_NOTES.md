@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.34.1
+
+Veröffentlicht am 9. September 2026 um 23:14 Uhr.
+
+## Verbessert
+
+- Das Bedienfenster setzt die Oberflächenskalierung bei jedem Start zuverlässig auf 100 Prozent.
+- Browser-Zoomtasten verändern die Produktionsoberfläche nicht mehr unbeabsichtigt.
+
+## Behoben
+
+- Menü-, Präsentations- und Formatleiste werden nicht mehr auf halbe Höhe zusammengedrückt.
+- Die obere Bedienoberfläche überlagert sich nicht mehr direkt unter der Windows-Titelleiste.
+
+---
+
 # GottesdienstRegie 0.34.0
 
 Veröffentlicht am 9. September 2026 um 22:39 Uhr.

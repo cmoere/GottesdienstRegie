@@ -5,10 +5,30 @@
     {
       "line": "0.34",
       "builds": [{
+        "version": "0.34.1",
+        "releaseDate": "2026-09-09",
+        "releaseTime": "23:14",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.34.1.png",
+          "alt": {"de":"Zusammengedrückte Bedienleiste vor dem Hotfix","en":"Compressed application header before the hotfix"},
+          "caption": {"de":"Der gemeldete Skalierungsfehler der oberen Bedienleiste wurde behoben.","en":"The reported scaling issue affecting the application header has been fixed."}
+        },
+        "sections": {
+          "new": [],
+          "improved": [
+            {"label":{"de":"Stabile Oberflächenskalierung","en":"Stable interface scaling"},"text":{"de":"Das Bedienfenster startet jetzt immer mit 100 Prozent Zoom. Browser-Zoomtasten können die Produktionsoberfläche nicht mehr unbeabsichtigt verkleinern oder vergrößern.","en":"The operator window now always starts at 100 percent zoom. Browser zoom shortcuts can no longer resize the production interface accidentally."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Zusammengedrückte obere Leiste","en":"Compressed application header"},"text":{"de":"Menü-, Präsentations- und Formatleiste behalten wieder ihre vorgesehenen Höhen und überlagern sich nicht mehr direkt unter der Windows-Titelleiste.","en":"Menu, presentation and formatting bars retain their intended heights and no longer overlap directly below the Windows title bar."}}
+          ],
+          "known": []
+        }
+      },{
         "version": "0.34.0",
         "releaseDate": "2026-09-09",
         "releaseTime": "22:39",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.34.0.png",
           "alt": {"de":"Medienverwaltung und Editor in GottesdienstRegie","en":"Media management and editor in GottesdienstRegie"},
