@@ -273,7 +273,7 @@ function PresentationEventHeader(){
 
 function OrderOfService({canEdit,onTake}:{canEdit:boolean;onTake:(itemId:string,slideId:string)=>void}){
   const {t}=useI18n(),state=usePresentation(),items=state.items,selected=state.selectedItemId,live=state.liveItemId;
-  const theme=usePreferences(value=>value.theme),serviceShortcuts=usePreferences(value=>({...defaultKeyboardShortcuts,...value.keyboardShortcuts}));
+  const theme=usePreferences(value=>value.theme),storedServiceShortcuts=usePreferences(value=>value.keyboardShortcuts),serviceShortcuts=useMemo(()=>({...defaultKeyboardShortcuts,...storedServiceShortcuts}),[storedServiceShortcuts]);
   const [adding,setAdding]=useState(false),[timeEditor,setTimeEditor]=useState(false),[renameTarget,setRenameTarget]=useState<ServiceItem|null>(null),[audioPanel,setAudioPanel]=useState<{targetType:'section'|'serviceItem';targetId:string}|null>(null),[audioMenu,setAudioMenu]=useState<{targetType:'section'|'serviceItem';targetId:string;x:number;y:number}|null>(null),[collapsed,setCollapsed]=useState<Record<string,boolean>>(()=>{try{return JSON.parse(localStorage.getItem('gottesdienstregie.section-collapse')??'{}')}catch{return{}}});
   const contextIds=useRef<string[]>([]);
   useEffect(()=>localStorage.setItem('gottesdienstregie.section-collapse',JSON.stringify(collapsed)),[collapsed]);

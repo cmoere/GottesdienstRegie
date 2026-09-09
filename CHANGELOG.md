@@ -1,5 +1,11 @@
 # Versionshinweise / Release notes
 
+## 0.33.1 – 2026-09-09
+
+- Kritischen Startfehler aus 0.33.0 behoben: Nach dem Ladescreen erscheint die Bedienoberfläche wieder vollständig
+- Instabilen Tastenkürzel-Selektor im Ablauf durch einen gecachten Zustandswert ersetzt
+- Globale Fehlerabsicherung ergänzt, damit ein unerwarteter Oberflächenfehler nicht mehr als leerer Bildschirm erscheint
+
 ## 0.33.0 – 2026-09-09
 
 - Neuer bebilderter Einführungsrundgang; jederzeit erneut über Hilfe → Benutzeroberfläche kennenlernen erreichbar

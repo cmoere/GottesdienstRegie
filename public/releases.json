@@ -5,10 +5,30 @@
     {
       "line": "0.33",
       "builds": [{
+        "version": "0.33.1",
+        "releaseDate": "2026-09-09",
+        "releaseTime": "21:08",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.33.1.png",
+          "alt": {"de":"Gemeldeter leerer Bildschirm nach dem Ladescreen","en":"Reported blank screen after the loading screen"},
+          "caption": {"de":"Der in 0.33.0 gemeldete leere Bildschirm wurde in 0.33.1 behoben.","en":"The blank screen reported in 0.33.0 has been fixed in 0.33.1."}
+        },
+        "sections": {
+          "new": [],
+          "improved": [
+            {"label":{"de":"Sichtbare Fehlerabsicherung","en":"Visible error recovery"},"text":{"de":"Falls zukünftig ein unerwarteter Darstellungsfehler auftritt, zeigt GottesdienstRegie eine verständliche Meldung und einen Button zum erneuten Laden statt einer leeren Fläche.","en":"If an unexpected rendering error occurs in the future, GottesdienstRegie now shows a clear message and reload action instead of a blank surface."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Bedienoberfläche nach dem Start","en":"Interface after startup"},"text":{"de":"Ein instabil erzeugtes Tastenkürzel-Objekt verursachte eine endlose React-Aktualisierung. Der Zustand wird jetzt stabil gecacht und die vollständige Oberfläche erscheint wieder nach dem Ladescreen.","en":"An unstable keyboard-shortcut object caused an endless React update. The state is now cached correctly and the full interface appears again after the loading screen."}}
+          ],
+          "known": []
+        }
+      },{
         "version": "0.33.0",
         "releaseDate": "2026-09-09",
         "releaseTime": "11:29",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.33.0.png",
           "alt": {"de":"Unsplash-Kennzeichnung in GottesdienstRegie","en":"Unsplash identification in GottesdienstRegie"},

@@ -25,4 +25,11 @@ import './refinements.css';
 import './help-v032.css';
 import './v033.css';
 
-createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);
+class AppErrorBoundary extends React.Component<React.PropsWithChildren,{error:string|null}>{
+  state:{error:string|null}={error:null};
+  static getDerivedStateFromError(error:unknown){return {error:error instanceof Error?error.message:String(error)}}
+  componentDidCatch(error:unknown){console.error('GottesdienstRegie renderer error',error)}
+  render(){return this.state.error?<main className="fatal-render-error"><div><span className="material-symbols-outlined">error</span><h1>GottesdienstRegie konnte die Oberfläche nicht laden</h1><p>{this.state.error}</p><button onClick={()=>location.reload()}>ERNEUT LADEN</button></div></main>:this.props.children}
+}
+
+createRoot(document.getElementById('root')!).render(<React.StrictMode><AppErrorBoundary><App /></AppErrorBoundary></React.StrictMode>);
