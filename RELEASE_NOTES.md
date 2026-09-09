@@ -1,3 +1,28 @@
+# GottesdienstRegie 0.34.0
+
+Veröffentlicht am 9. September 2026 um 22:39 Uhr.
+
+## Neu
+
+- **Bearbeitbare 2D-Objekte:** Rechtecke, abgerundete Rechtecke, Ellipsen, Dreiecke, Rauten, Sterne und Pfeile lassen sich frei gestalten und anordnen.
+- **Medien sicher löschen:** Team-Medien können über einen eindeutigen Bestätigungsdialog entfernt werden. Verwendete und live aktive Dateien bleiben geschützt.
+- **LiveQuiz-Belohnungen:** Preise für die ersten drei Plätze und eine automatisch berechnete Rangliste ergänzen den Quizbetrieb.
+- **Schnelle Änderungsanzeige:** Die letzte Bearbeitung und die vollständige Änderungshistorie sind direkt am Arbeitsbereich erreichbar.
+
+## Verbessert
+
+- Der Medienbrowser zeigt Ergebnisanzahl, veränderbare Kachelgrößen, Favoriten sowie „Mehr laden“ und „Weniger anzeigen“.
+- `Strg+F`, `Entf` und `Esc` unterstützen die schnelle Tastaturbedienung im Medienbrowser.
+- Die Veranstaltungsauswahl zeigt chronologisch sortiert nur heutige und kommende Termine der nächsten drei Jahre.
+- Textstile, Textfarbe, Textschatten und die Live-Animation „Fade in Text“ funktionieren direkt im Editor.
+
+## Behoben
+
+- „Arrangement duplizieren“ führt nun eine echte Editoraktion mit Undo-Unterstützung aus.
+- Jede Medien-Löschaktion verwendet denselben sicheren App-Dialog.
+
+---
+
 # GottesdienstRegie 0.30.0
 
 Veröffentlicht am 8. September 2026.

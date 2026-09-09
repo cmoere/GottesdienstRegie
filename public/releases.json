@@ -3,12 +3,44 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.34",
+      "builds": [{
+        "version": "0.34.0",
+        "releaseDate": "2026-09-09",
+        "releaseTime": "22:39",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.34.0.png",
+          "alt": {"de":"Medienverwaltung und Editor in GottesdienstRegie","en":"Media management and editor in GottesdienstRegie"},
+          "caption": {"de":"Medien lassen sich sicher verwalten; neue 2D-Objekte erweitern den Folieneditor.","en":"Media can now be managed safely, while new 2D objects extend the slide editor."}
+        },
+        "sections": {
+          "new": [
+            {"label":{"de":"Bearbeitbare 2D-Objekte","en":"Editable 2D objects"},"text":{"de":"Rechteck, abgerundetes Rechteck, Ellipse, Dreieck, Raute, Stern und Pfeil können eingefügt, verschoben, skaliert, gedreht und mit Füllung, Kontur sowie Deckkraft gestaltet werden.","en":"Rectangles, rounded rectangles, ellipses, triangles, diamonds, stars and arrows can be inserted, moved, resized, rotated and styled with fill, stroke and opacity."}},
+            {"label":{"de":"Medien sicher löschen","en":"Safely delete media"},"text":{"de":"Team-Medien können über einen klaren Bestätigungsdialog dauerhaft gelöscht werden. In Präsentationen oder im Livebetrieb verwendete Dateien bleiben geschützt.","en":"Team media can be permanently deleted through a clear confirmation dialog. Files referenced by presentations or live output remain protected."}},
+            {"label":{"de":"LiveQuiz-Belohnungen","en":"LiveQuiz rewards"},"text":{"de":"Für Quizze können Belohnungen für die ersten drei Plätze hinterlegt werden. Eine Rangliste berechnet die Punkte aus den richtigen Antworten.","en":"Rewards can be configured for the top three quiz positions. A leaderboard calculates points from correct answers."}},
+            {"label":{"de":"Schnelle Änderungsanzeige","en":"Quick change history"},"text":{"de":"Eine kompakte Anzeige informiert über die letzte Änderung und öffnet direkt die vollständige Bearbeitungshistorie.","en":"A compact indicator shows the latest change and opens the complete edit history directly."}}
+          ],
+          "improved": [
+            {"label":{"de":"Professioneller Medienbrowser","en":"Professional media browser"},"text":{"de":"Ergebnisanzahl, veränderbare Kachelgröße, Favoriten, Mehr-/Weniger-Laden sowie Tastaturbefehle für Suche, Löschen und Schließen beschleunigen die Medienverwaltung.","en":"Result counts, adjustable tile sizing, favourites, load-more controls and keyboard commands for search, delete and close make media management faster."}},
+            {"label":{"de":"Veranstaltungen bis drei Jahre","en":"Events up to three years"},"text":{"de":"Die Verknüpfung zeigt heutige und kommende Veranstaltungen für maximal drei Jahre, chronologisch sortiert und verständlich gruppiert. Eine klare Leermeldung erklärt fehlende Treffer.","en":"Event linking shows today and upcoming events for up to three years, sorted chronologically and grouped clearly. A useful empty state explains missing results."}},
+            {"label":{"de":"Textgestaltung","en":"Text styling"},"text":{"de":"Titel-, Untertitel- und Normalstil wirken jetzt direkt. Textfarbe, Textschatten und die Live-Einblendung „Fade in Text“ sind funktionsfähig.","en":"Title, subtitle and normal presets now apply directly. Text colour, shadow and the Fade in Text live animation are functional."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Arrangement duplizieren","en":"Duplicate arrangement"},"text":{"de":"Der bisher wirkungslose Button dupliziert nun die aktuelle Folie über die vorhandene Editor- und Undo-Logik.","en":"The previously inactive button now duplicates the current slide through the existing editor and undo logic."}},
+            {"label":{"de":"Sicherer Löschablauf","en":"Safe deletion flow"},"text":{"de":"Alle sichtbaren Löschaktionen öffnen denselben App-Dialog; ein versehentliches sofortiges Löschen über die Detailansicht ist ausgeschlossen.","en":"All visible delete actions now open the same in-app dialog, preventing accidental immediate deletion from the details panel."}}
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.33",
       "builds": [{
         "version": "0.33.1",
         "releaseDate": "2026-09-09",
         "releaseTime": "21:08",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.33.1.png",
           "alt": {"de":"Gemeldeter leerer Bildschirm nach dem Ladescreen","en":"Reported blank screen after the loading screen"},
