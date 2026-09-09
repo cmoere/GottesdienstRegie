@@ -1,5 +1,13 @@
 # Versionshinweise / Release notes
 
+## 0.32.0 – 2026-09-09
+
+- Kontextmenü folgt dem Hell-/Dunkelmodus; „Mit dieser Folie ON AIR gehen“, Umschalt+F5 und Strg+R ergänzt
+- Dauerhaften Cloudfehler behoben: nicht vorhandenes Medien-Repository ersetzt, API-Fallback und sicherer Lesemodus ergänzt
+- Unsplash-App-Zugang vorkonfiguriert; keine erneute Schlüsselabfrage nötig
+- Hilfezentrum verbreitert, Navigation ohne horizontales Abschneiden, themenspezifische Screenshot-Ausschnitte und neue Cloud-/Unsplash-Anleitungen
+- Eigene öffentliche Fehlerseite im GottesdienstRegie-Design mit sicherer Übergabe per URL-Fragment, Kopieren, Download und Systemfreigabe
+
 ## 0.31.0 – 2026-09-08
 
 - Neues natives ServiceItem-Kontextmenü mit kontextabhängigen Befehlen, Desktop-Tastatursteuerung und korrekten Windows-/macOS-Shortcuts

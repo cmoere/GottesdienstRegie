@@ -3,12 +3,36 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.32",
+      "builds": [{
+        "version": "0.32.0",
+        "releaseDate": "2026-09-09",
+        "releaseTime": "10:30",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Eigene Fehlerseite","en":"Dedicated issue report page"},"text":{"de":"Fehlerberichte werden auf einer eigenen GottesdienstRegie-Seite geprüft, kopiert, gespeichert oder über die Systemfreigabe versendet – ohne direkte Weiterleitung auf eine GitHub-Eingabeseite.","en":"Issue reports are reviewed, copied, saved or shared from a dedicated GottesdienstRegie page without redirecting directly to a GitHub form."}},
+            {"label":{"de":"Cloud- und Unsplash-Hilfe","en":"Cloud and Unsplash help"},"text":{"de":"Neue Unterthemen erklären Suche, Lesemodus, Berechtigungen, Preload und konkrete Schritte bei Verbindungsproblemen.","en":"New subtopics explain search, read-only mode, permissions, preload and concrete troubleshooting steps."}}
+          ],
+          "improved": [
+            {"label":{"de":"Kontextmenü und Shortcuts","en":"Context menu and shortcuts"},"text":{"de":"Das ServiceItem-Menü folgt dem App-Farbschema, benennt die Live-Aktion eindeutig und verwendet Umschalt+F5 für ON AIR sowie Strg+R zum Umbenennen.","en":"The service-item menu follows the app color scheme, clearly names its live action and uses Shift+F5 for On Air and Ctrl+R for rename."}},
+            {"label":{"de":"Breiteres Hilfezentrum","en":"Wider help center"},"text":{"de":"Navigation und Artikel nutzen mehr Platz, vermeiden horizontales Abschneiden und zeigen fokussierte Ausschnitte echter Softwareaufnahmen.","en":"Navigation and articles use more space, avoid horizontal clipping and show focused crops of real software screenshots."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Medien-Cloud erreichbar","en":"Media cloud reachable"},"text":{"de":"Die falsche, nicht vorhandene Repository-Adresse wurde durch einen abgegrenzten Medienbereich des erreichbaren Projekts ersetzt; API-Fehler erhalten einen sicheren Lese-Fallback.","en":"The invalid repository address was replaced with an isolated media area in the reachable project, with a safe read fallback for API failures."}},
+            {"label":{"de":"Unsplash ohne Schlüsselabfrage","en":"Unsplash without key prompt"},"text":{"de":"Der eingerichtete App-Zugang wird automatisch genutzt und die Suche zeigt verständlichere Netzwerk- und Dienstfehler.","en":"The configured app access is used automatically and search reports clearer network and service errors."}}
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.31",
       "builds": [{
         "version": "0.31.0",
         "releaseDate": "2026-09-08",
         "releaseTime": "23:18",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Professionelles ServiceItem-Kontextmenü","en":"Professional service-item context menu"},"text":{"de":"Das native Desktop-Menü unterstützt Ausschneiden, Kopieren, Einfügen, Duplizieren, Löschen, Verknüpfen, Gruppieren, Ausblenden, Undo/Redo, Umbenennen, Folienexport und ON AIR mit passenden Zuständen.","en":"The native desktop menu supports cut, copy, paste, duplicate, delete, linking, grouping, hiding, undo/redo, rename, slide export and On Air with contextual states."}},
