@@ -3,12 +3,43 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.33",
+      "builds": [{
+        "version": "0.33.0",
+        "releaseDate": "2026-09-09",
+        "releaseTime": "11:29",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.33.0.png",
+          "alt": {"de":"Unsplash-Kennzeichnung in GottesdienstRegie","en":"Unsplash identification in GottesdienstRegie"},
+          "caption": {"de":"Neue eindeutige Unsplash-Kennzeichnung in der Medienbibliothek.","en":"New clear Unsplash identification in the media library."}
+        },
+        "sections": {
+          "new": [
+            {"label":{"de":"Bebilderte Einführung","en":"Illustrated introduction"},"text":{"de":"Ein neuer mehrstufiger Rundgang erklärt Arbeitsbereich, Ablauf, Medien, Einstellungen, Vorschau und Livebetrieb mit echten Softwareaufnahmen; er lässt sich jederzeit im Hilfe-Menü erneut starten.","en":"A new multi-step tour explains the workspace, service order, media, settings, preview and live operation using real software captures and can be replayed from Help at any time."}},
+            {"label":{"de":"Medien komfortabel nachladen","en":"Load more media"},"text":{"de":"Große Ergebnislisten lassen sich mit „Mehr laden“ schrittweise erweitern und mit „Weniger anzeigen“ wieder kompakt darstellen.","en":"Large result sets can be progressively expanded with Load more and compacted again with Show less."}}
+          ],
+          "improved": [
+            {"label":{"de":"Medienbibliothek","en":"Media library"},"text":{"de":"Cloud, Community und Unsplash sind jetzt getrennte, korrekt wechselnde Bereiche; Bibliotheksfilter funktionieren und Unsplash ist eindeutig gekennzeichnet.","en":"Cloud, Community and Unsplash are now distinct, correctly switching areas; library filters work and Unsplash is clearly identified."}},
+            {"label":{"de":"Tastenkürzel","en":"Keyboard shortcuts"},"text":{"de":"Zusätzliche Befehle öffnen Hilfe, Einstellungen, Präsentations- und Medienbibliothek, Folienübersicht und Preflight. Vor dem Zurücksetzen erscheint eine Bestätigung.","en":"Additional commands open Help, Settings, presentation and media libraries, slide overview and Preflight. Reset now requires confirmation."}},
+            {"label":{"de":"Versionsbilder","en":"Release images"},"text":{"de":"Neue Versionen erhalten ab jetzt ein eigenes Bild direkt in den Web-Versionshinweisen.","en":"New versions now receive their own image directly in the web release notes."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Element umbenennen","en":"Rename item"},"text":{"de":"Das Umbenennen verwendet nun einen eigenen zuverlässigen App-Dialog mit Enter, Escape, Undo, Autosave und Sync statt eines blockierten Browserdialogs.","en":"Rename now uses a reliable in-app dialog with Enter, Escape, undo, autosave and sync instead of a blocked browser prompt."}},
+            {"label":{"de":"Übergangsvorschau","en":"Transition preview"},"text":{"de":"Die Vorschau des Standardübergangs funktioniert auch ohne ausgewählte Folie mit einer eingebauten Testfolie und verändert MAIN nicht.","en":"Default transition preview now works without a selected slide using a built-in test slide and does not affect MAIN."}},
+            {"label":{"de":"Filter ohne Treffer","en":"Filters without results"},"text":{"de":"Bei null Treffern erscheint eine passende Erklärung mit direktem Button zum Zurücksetzen statt der irreführenden Meldung „Noch keine Medien“.","en":"When filters return no matches, a clear explanation and reset button replace the misleading No media yet message."}}
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.32",
       "builds": [{
         "version": "0.32.0",
         "releaseDate": "2026-09-09",
         "releaseTime": "10:30",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Eigene Fehlerseite","en":"Dedicated issue report page"},"text":{"de":"Fehlerberichte werden auf einer eigenen GottesdienstRegie-Seite geprüft, kopiert, gespeichert oder über die Systemfreigabe versendet – ohne direkte Weiterleitung auf eine GitHub-Eingabeseite.","en":"Issue reports are reviewed, copied, saved or shared from a dedicated GottesdienstRegie page without redirecting directly to a GitHub form."}},

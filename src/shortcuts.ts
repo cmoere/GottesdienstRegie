@@ -1,4 +1,4 @@
-export type ShortcutAction='save'|'undo'|'redo'|'nextLive'|'previousLive'|'toggleMode'|'toggleFullscreen'|'toggleOnAir'|'renameServiceItem';
+export type ShortcutAction='save'|'undo'|'redo'|'nextLive'|'previousLive'|'toggleMode'|'toggleFullscreen'|'toggleOnAir'|'renameServiceItem'|'openHelp'|'openSettings'|'openLibrary'|'openMediaLibrary'|'previewGrid'|'preflight';
 export type KeyboardShortcuts=Record<ShortcutAction,string>;
 
 export const defaultKeyboardShortcuts:KeyboardShortcuts={
@@ -10,7 +10,13 @@ export const defaultKeyboardShortcuts:KeyboardShortcuts={
   toggleMode:'Ctrl+Shift+P',
   toggleFullscreen:'F11',
   toggleOnAir:'Shift+F5',
-  renameServiceItem:'Ctrl+R'
+  renameServiceItem:'Ctrl+R',
+  openHelp:'F1',
+  openSettings:'Ctrl+,',
+  openLibrary:'Ctrl+O',
+  openMediaLibrary:'Ctrl+Shift+M',
+  previewGrid:'Ctrl+Shift+G',
+  preflight:'Ctrl+Shift+F5'
 };
 
 const keyNames:Record<string,string>={' ':'Space',Control:'Ctrl',Meta:'Meta',Alt:'Alt',Shift:'Shift',Esc:'Escape'};

@@ -1,5 +1,14 @@
 # Versionshinweise / Release notes
 
+## 0.33.0 – 2026-09-09
+
+- Neuer bebilderter Einführungsrundgang; jederzeit erneut über Hilfe → Benutzeroberfläche kennenlernen erreichbar
+- Medienbibliothek mit funktionierenden Cloud-, Community- und Unsplash-Bereichen, eigenem Unsplash-Hinweis sowie echten Bibliotheksfiltern
+- „Mehr laden“ und „Weniger anzeigen“ für große Mediensammlungen; treffende Leermeldung mit Filter-zurücksetzen-Aktion
+- Ladeanzeige für Veranstaltungen, deutlich erweiterte Tastenkürzel und Sicherheitsabfrage vor dem Zurücksetzen
+- Element-Umbenennen als zuverlässiger App-Dialog und reparierte Vorschau des Standardübergangs
+- Versionshinweise erhalten ab dieser Version ein neues, versionsbezogenes Bild
+
 ## 0.32.0 – 2026-09-09
 
 - Kontextmenü folgt dem Hell-/Dunkelmodus; „Mit dieser Folie ON AIR gehen“, Umschalt+F5 und Strg+R ergänzt
