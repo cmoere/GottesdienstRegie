@@ -13,7 +13,7 @@ function elementStyle(element:SlideElement):CSSProperties{
     opacity:element.opacity,transform:`rotate(${element.rotation}deg) scaleX(${value.flipX===true?-1:1}) scaleY(${value.flipY===true?-1:1})`,zIndex:element.zIndex,
     color:String(value.color??'#fff'),fontFamily:fontStack(String(value.fontFamily??'Cera Pro')),fontWeight:Number(value.fontWeight??400),fontStyle:String(value.fontStyle??'normal') as CSSProperties['fontStyle'],
     fontSize:`${Number(value.fontSize??48)/19.2}cqw`,lineHeight:Number(value.lineHeight??1.15),letterSpacing:`${Number(value.letterSpacing??0)/19.2}cqw`,
-    textAlign:(value.align??'center') as CSSProperties['textAlign'],padding:`${Number(value.padding??0)/19.2}cqw`,
+    textAlign:(value.align??'center') as CSSProperties['textAlign'],textShadow:String(value.textShadow??'none'),padding:`${Number(value.padding??0)/19.2}cqw`,
     alignItems:value.verticalAlign==='top'?'flex-start':value.verticalAlign==='bottom'?'flex-end':'center'
   };
 }
@@ -34,11 +34,11 @@ function RenderElement({element,mode}:{element:SlideElement;mode:SlideRendererMo
   if(element.type==='audio'&&src)return mode==='thumbnail'?<div className="slide-renderer-element web-placeholder" style={style}>AUDIO</div>:<RoutedMedia kind="audio" element={element} mode={mode} style={style} src={src}/>;
   if(element.type==='videoInput')return <LiveVideoInput element={element} mode={mode} style={style}/>;
   if(element.type==='web'&&src)return mode==='thumbnail'?<div className="slide-renderer-element web-placeholder" style={style}>WEB</div>:<iframe className="slide-renderer-element web" style={{...style,zoom:`${Number(properties.zoom??100)}%`}} src={src} title="Web content" allow="autoplay; fullscreen; picture-in-picture" sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups"/>;
-  if(element.type==='shape')return <div className="slide-renderer-element shape" style={{...style,background:String(properties.fill??properties.color??'#fff')}}/>;
+  if(element.type==='shape'){const kind=String(properties.shapeKind??'rectangle'),clipPath=kind==='triangle'?'polygon(50% 0,100% 100%,0 100%)':kind==='diamond'?'polygon(50% 0,100% 50%,50% 100%,0 50%)':kind==='star'?'polygon(50% 0,61% 34%,98% 35%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,2% 35%,39% 34%)':kind==='arrow'?'polygon(0 32%,62% 32%,62% 8%,100% 50%,62% 92%,62% 68%,0 68%)':undefined;return <div className={`slide-renderer-element shape shape-${kind}`} style={{...style,background:String(properties.fill??properties.color??'#fff'),border:`${Math.max(0,Number(properties.strokeWidth??0))/19.2}cqw solid ${String(properties.stroke??'transparent')}`,borderRadius:kind==='ellipse'?'50%':kind==='rounded'?`${Number(properties.radius??42)/19.2}cqw`:0,clipPath,boxSizing:'border-box'}}/>}
   if(element.type==='line')return <div className="slide-renderer-element line" style={{...style,background:String(properties.color??'#fff'),height:`${Math.max(1,Number(properties.strokeWidth??4))/19.2}cqw`}}/>;
   if(element.type==='qr')return src?<img className="slide-renderer-element qr" style={{...style,objectFit:'contain',background:'#fff'}} src={src} alt="QR-Code"/>:<div className="slide-renderer-element qr" style={{...style,display:'grid',placeItems:'center',background:'#fff',color:'#102029'}}>{String(properties.text??properties.value??'QR-CODE')}</div>;
   if(element.type==='text'&&Number(properties.timerDurationSeconds??0)>0)return <TimedText element={element} mode={mode} style={style}/>;
-  return <div className="slide-renderer-element text" style={style}>{String(properties.text??'')}</div>;
+  return <div className={`slide-renderer-element text ${properties.animation==='fade-in'&&mode==='live'?'element-animation-fade-in':''}`} style={style}>{String(properties.text??'')}</div>;
 }
 
 export function SlideRenderer({slide,mode='preview'}:{slide:Slide;mode?:SlideRendererMode}){
