@@ -205,7 +205,9 @@ export function MediaBrowser() {
     [generatorDuration, setGeneratorDuration] = useState(30),
     [generating, setGenerating] = useState(false),
     [unsplashPage, setUnsplashPage] = useState(1),
-    [unsplashHasMore, setUnsplashHasMore] = useState(true);
+    [unsplashHasMore, setUnsplashHasMore] = useState(true),
+    [unsplashQuery, setUnsplashQuery] = useState(""),
+    [unsplashLoadingMore, setUnsplashLoadingMore] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null),
     api = (window.desktop as any)?.media,
     mediaWindow = (window.desktop as any)?.mediaWindow,
@@ -249,12 +251,18 @@ export function MediaBrowser() {
     }
   }
   async function searchUnsplash(search = query, page = 1, append = false) {
-    setLoading(true);
+    const normalizedSearch = search.trim();
+    if (append) setUnsplashLoadingMore(true);
+    else {
+      setLoading(true);
+      setVisibleCount(30);
+      setUnsplashQuery(normalizedSearch);
+    }
     setOffline(false);
     try {
       const key = usePreferences.getState().unsplashAccessKey,
         results: CloudMediaAsset[] =
-          (await api?.unsplashSearch(search, key, page)) ?? [];
+          (await api?.unsplashSearch(normalizedSearch, key, page)) ?? [];
       setItems((current) =>
         append
           ? [
@@ -267,14 +275,15 @@ export function MediaBrowser() {
       );
       setUnsplashPage(page);
       setUnsplashHasMore(results.length === 30);
-      setSelected(null);
+      if (!append) setSelected(null);
     } catch (error) {
       setOffline(true);
       alert(
         `Unsplash konnte nicht geladen werden. Bitte prüfe die Internetverbindung und versuche es erneut.\n\n${String(error).replace(/^Error invoking remote method '[^']+':\s*/, "")}`,
       );
     } finally {
-      setLoading(false);
+      if (append) setUnsplashLoadingMore(false);
+      else setLoading(false);
     }
   }
   useEffect(() => {
@@ -348,18 +357,21 @@ export function MediaBrowser() {
             (!isAudio || item.kind === "audio") &&
             (libraryFilter !== "favorites" || item.favorite) &&
             (libraryFilter !== "recent" || Boolean(item.updatedAt)) &&
-            `${item.name} ${(item.tags ?? []).join(" ")}`
-              .toLowerCase()
-              .includes(query.toLowerCase()),
+            (tab === "unsplash" ||
+              `${item.name} ${(item.tags ?? []).join(" ")}`
+                .toLowerCase()
+                .includes(query.toLowerCase())),
         )
         .sort((a, b) =>
-          sort === "name"
-            ? a.name.localeCompare(b.name)
-            : sort === "size"
-              ? b.size - a.size
-              : String(b.updatedAt ?? "").localeCompare(
-                  String(a.updatedAt ?? ""),
-                ),
+          tab === "unsplash"
+            ? 0
+            : sort === "name"
+              ? a.name.localeCompare(b.name)
+              : sort === "size"
+                ? b.size - a.size
+                : String(b.updatedAt ?? "").localeCompare(
+                    String(a.updatedAt ?? ""),
+                  ),
         )
         .slice(
           0,
@@ -367,7 +379,17 @@ export function MediaBrowser() {
             ? Math.min(20, visibleCount)
             : visibleCount,
         ),
-    [items, kind, purpose, isAudio, query, sort, libraryFilter, visibleCount],
+    [
+      items,
+      kind,
+      purpose,
+      isAudio,
+      query,
+      sort,
+      libraryFilter,
+      visibleCount,
+      tab,
+    ],
   );
   const totalMatches = useMemo(
     () =>
@@ -381,9 +403,10 @@ export function MediaBrowser() {
           (!isAudio || item.kind === "audio") &&
           (libraryFilter !== "favorites" || item.favorite) &&
           (libraryFilter !== "recent" || Boolean(item.updatedAt)) &&
-          `${item.name} ${(item.tags ?? []).join(" ")}`
-            .toLowerCase()
-            .includes(query.toLowerCase()),
+          (tab === "unsplash" ||
+            `${item.name} ${(item.tags ?? []).join(" ")}`
+              .toLowerCase()
+              .includes(query.toLowerCase())),
       ).length + (tab === "unsplash" && unsplashHasMore ? 1 : 0),
     [items, kind, purpose, isAudio, query, libraryFilter, tab, unsplashHasMore],
   );
@@ -395,8 +418,8 @@ export function MediaBrowser() {
       visibleCount <= items.length
     )
       return;
-    void searchUnsplash(query, unsplashPage + 1, true);
-  }, [tab, visibleCount]);
+    void searchUnsplash(unsplashQuery, unsplashPage + 1, true);
+  }, [tab, visibleCount, items.length, unsplashHasMore]);
   function switchTab(next: "cloud" | "community" | "unsplash") {
     setGeneratorOpen(false);
     setTab(next);
@@ -415,6 +438,7 @@ export function MediaBrowser() {
     } else {
       setItems([]);
       setUnsplashPage(1);
+      setUnsplashQuery("");
       void searchUnsplash("", 1);
     }
   }
@@ -800,7 +824,7 @@ export function MediaBrowser() {
           />
         </label>
         {tab === "unsplash" && (
-          <button onClick={() => void searchUnsplash()}>
+          <button onClick={() => void searchUnsplash(query, 1, false)}>
             <Icon name="search" /> SUCHEN
           </button>
         )}
@@ -1015,9 +1039,10 @@ export function MediaBrowser() {
               <div className="media-load-controls">
                 {totalMatches > visibleCount && (
                   <button
+                    disabled={unsplashLoadingMore}
                     onClick={() => setVisibleCount((value) => value + 30)}
                   >
-                    MEHR LADEN
+                    {unsplashLoadingMore ? "WIRD GELADEN …" : "MEHR LADEN"}
                   </button>
                 )}
                 {visibleCount > 30 && (
