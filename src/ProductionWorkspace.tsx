@@ -718,234 +718,298 @@ function ContentEditor({
   }
   return (
     <>
-    <div className="content-context">
-      <header>
-        <b>{item.title}</b>
-        <span>{item.type.toUpperCase()}</span>
-      </header>
-      <div className="content-tools">
-        <button disabled={!canEdit} onClick={() => state.addSlide()}>
-          <Icon name="splitscreen" /> SLIDE BREAK
-        </button>
-        <button disabled={!canEdit} onClick={addText}>
-          <Icon name="text_fields" /> TEXT
-        </button>
-        <select
-          aria-label="Vordergrundbild hinzufügen"
-          disabled={!canEdit}
-          value=""
-          onChange={(event) => foregroundAction(event.target.value)}
-        >
-          <option value="">＋ VORDERGRUNDBILD</option>
-          <option value="browse">Medien durchsuchen …</option>
-          <option value="import">Bild importieren …</option>
-        </select>
-        <button disabled={!canEdit} onClick={() => openQr()}>
-          <Icon name="qr_code_2" /> QR-CODE
-        </button>
-        <select
-          aria-label="2D-Objekt hinzufügen"
-          disabled={!canEdit}
-          value=""
-          onChange={(event) => {
-            const [kind, name] = event.target.value.split("|");
-            if (kind) state.addShape(kind, name);
-          }}
-        >
-          <option value="">＋ 2D-OBJEKT</option>
-          {[
-            ["rectangle", "Rechteck"],
-            ["rounded", "Abgerundetes Rechteck"],
-            ["ellipse", "Kreis / Ellipse"],
-            ["triangle", "Dreieck"],
-            ["diamond", "Raute"],
-            ["pentagon", "Fünfeck"],
-            ["hexagon", "Sechseck"],
-            ["octagon", "Achteck"],
-            ["star", "Stern"],
-            ["burst", "Strahlenform"],
-            ["arrow", "Pfeil"],
-            ["chevron", "Chevron"],
-            ["speech", "Sprechblase"],
-            ["cross", "Kreuz"],
-            ["parallelogram", "Parallelogramm"],
-            ["trapezoid", "Trapez"],
-            ["heart", "Herz"],
-            ["lightning", "Blitz"],
-            ["shield", "Schild"],
-            ["cloud", "Wolke"],
-            ["home", "Haus"],
-            ["moon", "Halbmond"],
-          ].map(([kind, name]) => (
-            <option key={kind} value={`${kind}|${name}`}>
-              {name}
-            </option>
-          ))}
-        </select>
-        <button
-          className={fadeActive ? "active" : ""}
-          disabled={!canEdit || !primaryText}
-          onClick={() =>
-            primaryText &&
-            state.updateElement(primaryText.id, {
-              properties: {
-                ...primaryText.properties,
-                animation: fadeActive ? "none" : "fade-in",
-              },
-            })
-          }
-        >
-          <Icon name="animation" /> FADE IN TEXT
-        </button>
-        <button
-          title="Hilfe zu Folieninhalten"
-          onClick={() =>
-            window.dispatchEvent(
-              new CustomEvent("open-help", { detail: "slides" }),
-            )
-          }
-        >
-          <Icon name="info" />
-        </button>
-      </div>
-      <textarea
-        aria-label="Folieninhalt"
-        disabled={!canEdit}
-        value={slide.body}
-        onChange={(event) => state.updateSlide({ body: event.target.value })}
-      />
-      {extras.length > 0 && <section className="additional-elements">
+      <div className="content-context">
         <header>
-          <b>ZUSÄTZLICHE EBENEN</b>
-          <small>
-            {extras.length} {extras.length === 1 ? "Element" : "Elemente"}
-          </small>
+          <b>{item.title}</b>
+          <span>{item.type.toUpperCase()}</span>
         </header>
-          <div>
-            {extras.map((element) => (
-              <article
-                className={
-                  state.selectedElementIds.includes(element.id) ? "active" : ""
-                }
-                key={element.id}
-              >
-                <button
-                  className="element-select"
-                  onClick={() => state.selectElements([element.id])}
-                >
-                  <Icon name={elementIcon(element.type)} />
-                  <span>
-                    <b>{element.name}</b>
-                    <small>
-                      {element.type === "shape"
-                        ? `2D-Objekt · ${String(element.properties.shapeKind ?? "Form")}`
-                        : element.type === "image"
-                          ? "Vordergrundbild"
-                          : element.type === "qr"
-                            ? "QR-Code"
-                            : element.type === "text"
-                              ? "Zusätzlicher Text"
-                              : element.type}
-                    </small>
-                  </span>
-                </button>
-                <button
-                  title={element.visible ? "Ausblenden" : "Einblenden"}
-                  onClick={() => state.toggleElementVisible(element.id)}
-                >
-                  <Icon
-                    name={element.visible ? "visibility" : "visibility_off"}
-                  />
-                </button>
-                <button
-                  title="Bearbeiten"
-                  onClick={() =>
-                    element.type === "qr"
-                      ? openQr(element.id)
-                      : state.selectElements([element.id])
-                  }
-                >
-                  <Icon name="edit" />
-                </button>
-                <button
-                  className="danger"
-                  title="Entfernen"
-                  onClick={() => state.removeElement(element.id)}
-                >
-                  <Icon name="close" />
-                </button>
-                {element.type === "text" &&
-                  state.selectedElementIds.includes(element.id) && (
-                    <label className="element-inline-editor">
-                      Text
-                      <textarea
-                        autoFocus
-                        value={String(element.properties.text ?? "")}
-                        onChange={(event) =>
-                          state.updateElement(element.id, {
-                            properties: {
-                              ...element.properties,
-                              text: event.target.value,
-                            },
-                          })
-                        }
-                      />
-                    </label>
-                  )}
-              </article>
+        <div className="content-tools">
+          <button disabled={!canEdit} onClick={() => state.addSlide()}>
+            <Icon name="splitscreen" /> SLIDE BREAK
+          </button>
+          <button disabled={!canEdit} onClick={addText}>
+            <Icon name="text_fields" /> TEXT
+          </button>
+          <select
+            aria-label="Vordergrundbild hinzufügen"
+            disabled={!canEdit}
+            value=""
+            onChange={(event) => foregroundAction(event.target.value)}
+          >
+            <option value="">＋ VORDERGRUNDBILD</option>
+            <option value="browse">Medien durchsuchen …</option>
+            <option value="import">Bild importieren …</option>
+          </select>
+          <button disabled={!canEdit} onClick={() => openQr()}>
+            <Icon name="qr_code_2" /> QR-CODE
+          </button>
+          <select
+            aria-label="2D-Objekt hinzufügen"
+            disabled={!canEdit}
+            value=""
+            onChange={(event) => {
+              const [kind, name] = event.target.value.split("|");
+              if (kind) state.addShape(kind, name);
+            }}
+          >
+            <option value="">＋ 2D-OBJEKT</option>
+            {[
+              ["rectangle", "Rechteck"],
+              ["rounded", "Abgerundetes Rechteck"],
+              ["ellipse", "Kreis / Ellipse"],
+              ["triangle", "Dreieck"],
+              ["diamond", "Raute"],
+              ["pentagon", "Fünfeck"],
+              ["hexagon", "Sechseck"],
+              ["octagon", "Achteck"],
+              ["star", "Stern"],
+              ["burst", "Strahlenform"],
+              ["arrow", "Pfeil"],
+              ["chevron", "Chevron"],
+              ["speech", "Sprechblase"],
+              ["cross", "Kreuz"],
+              ["parallelogram", "Parallelogramm"],
+              ["trapezoid", "Trapez"],
+              ["heart", "Herz"],
+              ["lightning", "Blitz"],
+              ["shield", "Schild"],
+              ["cloud", "Wolke"],
+              ["home", "Haus"],
+              ["moon", "Halbmond"],
+            ].map(([kind, name]) => (
+              <option key={kind} value={`${kind}|${name}`}>
+                {name}
+              </option>
             ))}
-          </div>
-      </section>}
-      <div className="item-playback">
-        <label>
-          <input
-            type="checkbox"
-            disabled={!canEdit}
-            checked={item.timing.autoAdvance}
-            onChange={(event) =>
-              state.updateItem(item.id, {
-                autoAdvance: event.target.checked,
-                timing: { ...item.timing, autoAdvance: event.target.checked },
+          </select>
+          <button
+            className={fadeActive ? "active" : ""}
+            disabled={!canEdit || !primaryText}
+            onClick={() =>
+              primaryText &&
+              state.updateElement(primaryText.id, {
+                properties: {
+                  ...primaryText.properties,
+                  animation: fadeActive ? "none" : "fade-in",
+                },
               })
             }
-          />{" "}
-          Jede Folie für{" "}
-          <button type="button">
-            {item.timing.slideDurationSeconds} Sekunden
-          </button>{" "}
-          anzeigen
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            disabled={!canEdit}
-            checked={item.timing.shuffle}
-            onChange={(event) =>
-              state.updateItem(item.id, {
-                timing: { ...item.timing, shuffle: event.target.checked },
-              })
+          >
+            <Icon name="animation" /> FADE IN TEXT
+          </button>
+          <button
+            title="Hilfe zu Folieninhalten"
+            onClick={() =>
+              window.dispatchEvent(
+                new CustomEvent("open-help", { detail: "slides" }),
+              )
             }
-          />{" "}
-          Zufällige Reihenfolge
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            disabled={!canEdit}
-            checked={item.timing.repeat}
-            onChange={(event) =>
-              state.updateItem(item.id, {
-                repeat: event.target.checked,
-                timing: { ...item.timing, repeat: event.target.checked },
-              })
-            }
-          />{" "}
-          Wiederholen
-        </label>
-        <span>Übergang: Kein Übergang</span>
+          >
+            <Icon name="info" />
+          </button>
+        </div>
+        <textarea
+          aria-label="Folieninhalt"
+          disabled={!canEdit}
+          value={slide.body}
+          onChange={(event) => state.updateSlide({ body: event.target.value })}
+        />
+        {extras.length > 0 && (
+          <section className="additional-elements">
+            <header>
+              <b>ZUSÄTZLICHE EBENEN</b>
+              <small>
+                {extras.length} {extras.length === 1 ? "Element" : "Elemente"}
+              </small>
+            </header>
+            <div>
+              {extras.map((element) => (
+                <article
+                  className={
+                    state.selectedElementIds.includes(element.id)
+                      ? "active"
+                      : ""
+                  }
+                  key={element.id}
+                >
+                  <button
+                    className="element-select"
+                    onClick={() => state.selectElements([element.id])}
+                  >
+                    <Icon name={elementIcon(element.type)} />
+                    <span>
+                      <b>{element.name}</b>
+                      <small>
+                        {element.type === "shape"
+                          ? `2D-Objekt · ${String(element.properties.shapeKind ?? "Form")}`
+                          : element.type === "image"
+                            ? "Vordergrundbild"
+                            : element.type === "qr"
+                              ? "QR-Code"
+                              : element.type === "text"
+                                ? "Zusätzlicher Text"
+                                : element.type}
+                      </small>
+                    </span>
+                  </button>
+                  <button
+                    title={element.visible ? "Ausblenden" : "Einblenden"}
+                    onClick={() => state.toggleElementVisible(element.id)}
+                  >
+                    <Icon
+                      name={element.visible ? "visibility" : "visibility_off"}
+                    />
+                  </button>
+                  <button
+                    title="Bearbeiten"
+                    onClick={() =>
+                      element.type === "qr"
+                        ? openQr(element.id)
+                        : state.selectElements([element.id])
+                    }
+                  >
+                    <Icon name="edit" />
+                  </button>
+                  <button
+                    className="danger"
+                    title="Entfernen"
+                    onClick={() => state.removeElement(element.id)}
+                  >
+                    <Icon name="close" />
+                  </button>
+                  {element.type === "text" &&
+                    state.selectedElementIds.includes(element.id) && (
+                      <label className="element-inline-editor">
+                        Text
+                        <textarea
+                          autoFocus
+                          value={String(element.properties.text ?? "")}
+                          onChange={(event) =>
+                            state.updateElement(element.id, {
+                              properties: {
+                                ...element.properties,
+                                text: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                      </label>
+                    )}
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+        <div className="item-playback">
+          <label>
+            <input
+              type="checkbox"
+              disabled={!canEdit}
+              checked={item.timing.autoAdvance}
+              onChange={(event) =>
+                state.updateItem(item.id, {
+                  autoAdvance: event.target.checked,
+                  timing: { ...item.timing, autoAdvance: event.target.checked },
+                })
+              }
+            />{" "}
+            Jede Folie für{" "}
+            <button type="button">
+              {item.timing.slideDurationSeconds} Sekunden
+            </button>{" "}
+            anzeigen
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              disabled={!canEdit}
+              checked={item.timing.shuffle}
+              onChange={(event) =>
+                state.updateItem(item.id, {
+                  timing: { ...item.timing, shuffle: event.target.checked },
+                })
+              }
+            />{" "}
+            Zufällige Reihenfolge
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              disabled={!canEdit}
+              checked={item.timing.repeat}
+              onChange={(event) =>
+                state.updateItem(item.id, {
+                  repeat: event.target.checked,
+                  timing: { ...item.timing, repeat: event.target.checked },
+                })
+              }
+            />{" "}
+            Wiederholen
+          </label>
+          <span>Übergang: Kein Übergang</span>
+        </div>
       </div>
-    </div>
-    {qrOpen && <div className="qr-editor-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setQrOpen(false)}><section className="qr-editor-dialog" role="dialog" aria-modal="true" aria-label="QR-Code hinzufügen"><header><div><Icon name="qr_code_2"/><span><b>{qrTargetId ? "QR-CODE BEARBEITEN" : "QR-CODE HINZUFÜGEN"}</b><small>Adresse oder Text eingeben</small></span></div><button onClick={() => setQrOpen(false)}><Icon name="close"/></button></header><main><label>URL oder Text<input autoFocus value={qrDraft} placeholder="https://www.beispiel.de" onChange={(event) => setQrDraft(event.target.value)} onKeyDown={(event) => {if(event.key === "Enter" && qrDraft.trim()) void saveQr()}}/></label><div className="qr-live-preview">{qrPreview ? <img src={qrPreview} alt="QR-Code-Vorschau"/> : <span>Bitte eine URL oder einen Text eingeben.</span>}</div></main><footer><button onClick={() => setQrOpen(false)}>ABBRECHEN</button><button className="primary" disabled={!qrDraft.trim()} onClick={() => void saveQr()}>{qrTargetId ? "ÄNDERUNG SPEICHERN" : "QR-CODE HINZUFÜGEN"}</button></footer></section></div>}
+      {qrOpen && (
+        <div
+          className="qr-editor-backdrop"
+          onMouseDown={(event) =>
+            event.target === event.currentTarget && setQrOpen(false)
+          }
+        >
+          <section
+            className="qr-editor-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-label="QR-Code hinzufügen"
+          >
+            <header>
+              <div>
+                <Icon name="qr_code_2" />
+                <span>
+                  <b>
+                    {qrTargetId ? "QR-CODE BEARBEITEN" : "QR-CODE HINZUFÜGEN"}
+                  </b>
+                  <small>Adresse oder Text eingeben</small>
+                </span>
+              </div>
+              <button onClick={() => setQrOpen(false)}>
+                <Icon name="close" />
+              </button>
+            </header>
+            <main>
+              <label>
+                URL oder Text
+                <input
+                  autoFocus
+                  value={qrDraft}
+                  placeholder="https://www.beispiel.de"
+                  onChange={(event) => setQrDraft(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && qrDraft.trim()) void saveQr();
+                  }}
+                />
+              </label>
+              <div className="qr-live-preview">
+                {qrPreview ? (
+                  <img src={qrPreview} alt="QR-Code-Vorschau" />
+                ) : (
+                  <span>Bitte eine URL oder einen Text eingeben.</span>
+                )}
+              </div>
+            </main>
+            <footer>
+              <button onClick={() => setQrOpen(false)}>ABBRECHEN</button>
+              <button
+                className="primary"
+                disabled={!qrDraft.trim()}
+                onClick={() => void saveQr()}
+              >
+                {qrTargetId ? "ÄNDERUNG SPEICHERN" : "QR-CODE HINZUFÜGEN"}
+              </button>
+            </footer>
+          </section>
+        </div>
+      )}
     </>
   );
 }
@@ -954,13 +1018,7 @@ type QuizOption = { id: string; text: string };
 type QuizQuestion = {
   id: string;
   type:
-    | "single"
-    | "multiple"
-    | "trueFalse"
-    | "yesNo"
-    | "text"
-    | "scale"
-    | "poll";
+    "single" | "multiple" | "trueFalse" | "yesNo" | "text" | "scale" | "poll";
   question: string;
   options: QuizOption[];
   correctOptionIds: string[];
@@ -1502,13 +1560,11 @@ function QuizEditor({
                       : element,
           ),
         };
-      usePresentation
-        .getState()
-        .updateItem(current.id, {
-          slides: current.slides.map((slide) =>
-            slide.id === updated.id ? updated : slide,
-          ),
-        });
+      usePresentation.getState().updateItem(current.id, {
+        slides: current.slides.map((slide) =>
+          slide.id === updated.id ? updated : slide,
+        ),
+      });
       if (session && usePresentation.getState().liveSlideId === updated.id)
         void window.desktop?.sendLiveSlide(updated);
     });
@@ -1839,13 +1895,11 @@ function QuizEditor({
             : element,
         ),
       };
-    usePresentation
-      .getState()
-      .updateItem(current.id, {
-        slides: current.slides.map((slide) =>
-          slide.id === updated.id ? updated : slide,
-        ),
-      });
+    usePresentation.getState().updateItem(current.id, {
+      slides: current.slides.map((slide) =>
+        slide.id === updated.id ? updated : slide,
+      ),
+    });
     if (usePresentation.getState().liveSlideId === updated.id)
       void window.desktop?.sendLiveSlide(updated);
   }, [session?.activeQuestionId, answers, answerSlideId]);
@@ -2261,17 +2315,80 @@ function PreviewStack({
   item,
   slide,
   previewToken,
+  canEdit,
 }: {
   item: ServiceItem;
   slide: Slide;
   previewToken: number;
+  canEdit: boolean;
 }) {
   const state = usePresentation(),
+    frame = useRef<HTMLDivElement>(null),
+    drag = useRef<{
+      id: string;
+      mode: "move" | "resize";
+      pointerX: number;
+      pointerY: number;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    } | null>(null),
     guideClass = `${state.smartGuides ? "guide-smart " : ""}${state.marginGuides ? "guide-margins " : ""}${state.ruleOfThirds ? "guide-thirds" : ""}`;
+  useEffect(() => {
+    const move = (event: PointerEvent) => {
+        const active = drag.current,
+          rect = frame.current?.getBoundingClientRect();
+        if (!active || !rect) return;
+        const dx = ((event.clientX - active.pointerX) / rect.width) * 1920,
+          dy = ((event.clientY - active.pointerY) / rect.height) * 1080;
+        if (active.mode === "move")
+          state.updateElement(active.id, {
+            x: Math.max(0, Math.min(1920 - active.width, active.x + dx)),
+            y: Math.max(0, Math.min(1080 - active.height, active.y + dy)),
+          });
+        else
+          state.updateElement(active.id, {
+            width: Math.max(32, Math.min(1920 - active.x, active.width + dx)),
+            height: Math.max(24, Math.min(1080 - active.y, active.height + dy)),
+          });
+      },
+      end = () => {
+        drag.current = null;
+      };
+    addEventListener("pointermove", move);
+    addEventListener("pointerup", end);
+    return () => {
+      removeEventListener("pointermove", move);
+      removeEventListener("pointerup", end);
+    };
+  }, []);
+  const begin = (
+    event: React.PointerEvent,
+    element: Slide["elements"][number],
+    mode: "move" | "resize",
+  ) => {
+    if (!canEdit || element.locked) return;
+    event.preventDefault();
+    event.stopPropagation();
+    state.selectElements([element.id]);
+    drag.current = {
+      id: element.id,
+      mode,
+      pointerX: event.clientX,
+      pointerY: event.clientY,
+      x: element.x,
+      y: element.y,
+      width: element.width,
+      height: element.height,
+    };
+  };
   return (
     <div className="production-preview-scroll transition-preview-host">
-      <button
+      <div
+        ref={frame}
         className={`production-slide ${guideClass} active ${slide.id === state.liveSlideId ? "live" : ""}`}
+        onPointerDown={() => state.selectElements([])}
       >
         <TransitionStage
           slide={slide}
@@ -2284,9 +2401,37 @@ function PreviewStack({
           role="operator"
           previewToken={previewToken}
         />
+        {slide.elements
+          .filter((element) => element.visible)
+          .map((element) => {
+            const active = state.selectedElementIds.includes(element.id);
+            return (
+              <div
+                key={element.id}
+                className={`production-element-hit ${active ? "selected" : ""} ${element.locked ? "locked" : ""}`}
+                style={{
+                  left: `${(element.x / 1920) * 100}%`,
+                  top: `${(element.y / 1080) * 100}%`,
+                  width: `${(element.width / 1920) * 100}%`,
+                  height: `${(element.height / 1080) * 100}%`,
+                  transform: `rotate(${element.rotation}deg)`,
+                  zIndex: 120 + element.zIndex,
+                }}
+                onPointerDown={(event) => begin(event, element, "move")}
+              >
+                {active && canEdit && !element.locked && (
+                  <i
+                    className="production-resize-handle"
+                    title="Zum Ändern der Größe ziehen"
+                    onPointerDown={(event) => begin(event, element, "resize")}
+                  />
+                )}
+              </div>
+            );
+          })}
         <span>{slide.title}</span>
         {slide.id === state.liveSlideId && <i />}
-      </button>
+      </div>
     </div>
   );
 }
@@ -2810,6 +2955,7 @@ export function ProductionWorkspace({
           item={item}
           slide={slide}
           previewToken={transitionPreview}
+          canEdit={canEdit}
         />
       </div>
     </section>
@@ -3313,6 +3459,72 @@ export function FormatToolbar({
             }
           />
         </label>
+        <label>
+          Deckkraft
+          <input
+            aria-label="Deckkraft"
+            type="range"
+            min="0"
+            max="100"
+            value={Math.round(element.opacity * 100)}
+            onChange={(event) =>
+              state.updateElement(element.id, {
+                opacity: Number(event.target.value) / 100,
+              })
+            }
+          />
+        </label>
+        <button
+          className={!element.visible ? "active" : ""}
+          title="Sichtbarkeit umschalten"
+          onClick={() => state.toggleElementVisible(element.id)}
+        >
+          <Icon name={element.visible ? "visibility" : "visibility_off"} />
+        </button>
+        <i />
+        <span className="toolbar-menu-host">
+          <button
+            className={menu === "arrange" ? "active" : ""}
+            onClick={() => toggle("arrange")}
+          >
+            Anordnen <Icon name="arrow_drop_down" />
+          </button>
+          {menu === "arrange" && <ArrangeMenu close={() => setMenu(null)} />}
+        </span>
+      </div>
+    );
+  if (element && element.type !== "text")
+    return (
+      <div className="format-toolbar element-format-toolbar" ref={root}>
+        <strong className="element-kind-label">
+          {element.type === "image"
+            ? "BILD"
+            : element.type === "qr"
+              ? "QR-CODE"
+              : element.type.toUpperCase()}
+        </strong>
+        {[
+          ["X", "x", element.x, -1920, 3840],
+          ["Y", "y", element.y, -1080, 2160],
+          ["Breite", "width", element.width, 1, 3840],
+          ["Höhe", "height", element.height, 1, 2160],
+          ["Drehung", "rotation", element.rotation, -360, 360],
+        ].map(([label, key, value, min, max]) => (
+          <label key={String(key)}>
+            {label}
+            <input
+              type="number"
+              min={Number(min)}
+              max={Number(max)}
+              value={Math.round(Number(value))}
+              onChange={(event) =>
+                state.updateElement(element.id, {
+                  [String(key)]: Number(event.target.value),
+                })
+              }
+            />
+          </label>
+        ))}
         <label>
           Deckkraft
           <input

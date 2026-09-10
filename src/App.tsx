@@ -1719,21 +1719,19 @@ function addLiveQuiz(value: QuizCreateValue, sectionId = "service") {
         },
       ],
     };
-  usePresentation
-    .getState()
-    .addItem("liveQuiz", {
-      title: value.title,
-      section: "",
-      sectionId,
-      body: `Neue Frage\n\n${definition.questions[0].options.map((option, index) => `${String.fromCharCode(65 + index)}  ${option.text}`).join("\n")}`,
-      metadata: {
-        quizId: definition.id,
-        quizType: value.quizType,
-        participation: value.participation,
-        questionCount: 1,
-        quizDefinition: JSON.stringify(definition),
-      },
-    });
+  usePresentation.getState().addItem("liveQuiz", {
+    title: value.title,
+    section: "",
+    sectionId,
+    body: `Neue Frage\n\n${definition.questions[0].options.map((option, index) => `${String.fromCharCode(65 + index)}  ${option.text}`).join("\n")}`,
+    metadata: {
+      quizId: definition.id,
+      quizType: value.quizType,
+      participation: value.participation,
+      questionCount: 1,
+      quizDefinition: JSON.stringify(definition),
+    },
+  });
 }
 
 function AddPopover({ close }: { close: () => void }) {
@@ -9847,6 +9845,11 @@ export function App() {
   );
   const [device, setDevice] = useRegisteredDevice();
   const [startupProgress, setStartupProgress] = useState(0);
+  const startupSkipped = useRef(false);
+  const startupTimer = useRef<ReturnType<typeof setInterval> | undefined>(
+    undefined,
+  );
+  const startupAuth = useRef<Promise<AuthSession | null> | null>(null);
   const language = usePreferences((state) => state.language),
     theme = usePreferences((state) => state.theme),
     blackWhite = usePreferences((state) => state.blackWhite),
@@ -9975,18 +9978,21 @@ export function App() {
         const elapsed = Date.now() - started;
         setStartupProgress(Math.min(94, Math.round((elapsed / 10000) * 94)));
       }, 100);
+    startupTimer.current = timer;
     void (async () => {
-      const reopen = usePreferences.getState().reopenLastPresentation,
-        [restored, loaded, recoveryCopy] = await Promise.all([
-          restore().catch(() => null),
-          reopen
-            ? window.desktop?.presentation.load().catch(() => null)
-            : Promise.resolve(null),
-          window.desktop?.presentation.recovery().catch(() => null),
-          window.desktop?.displays().catch(() => []),
-          window.desktop?.updates.currentVersion().catch(() => ""),
-          window.desktop?.auth.connection().catch(() => false),
-        ]);
+      const reopen = usePreferences.getState().reopenLastPresentation;
+      const restoredPromise = restore().catch(() => null);
+      startupAuth.current = restoredPromise;
+      const [restored, loaded, recoveryCopy] = await Promise.all([
+        restoredPromise,
+        reopen
+          ? window.desktop?.presentation.load().catch(() => null)
+          : Promise.resolve(null),
+        window.desktop?.presentation.recovery().catch(() => null),
+        window.desktop?.displays().catch(() => []),
+        window.desktop?.updates.currentVersion().catch(() => ""),
+        window.desktop?.auth.connection().catch(() => false),
+      ]);
       if (loaded) usePresentation.getState().loadDocument(loaded);
       if (
         restored &&
@@ -9998,15 +10004,18 @@ export function App() {
         usePresentation.getState().loadDocument(recoveryCopy.document);
       const remaining = Math.max(0, 10000 - (Date.now() - started));
       await new Promise((resolve) => setTimeout(resolve, remaining));
-      if (active) {
-        clearInterval(timer);
+      clearInterval(timer);
+      startupTimer.current = undefined;
+      if (active && !startupSkipped.current) {
         setStartupProgress(100);
         setSession(restored);
       }
+      startupAuth.current = null;
     })();
     return () => {
       active = false;
       clearInterval(timer);
+      startupAuth.current = null;
     };
   }, [output, historyWindow]);
   const signedIn = !!session;
@@ -10074,6 +10083,20 @@ export function App() {
                     ? "Arbeitsbereich wird vorbereitet …"
                     : "GottesdienstRegie wird gestartet …"}
           </p>
+          <button
+            type="button"
+            className="boot-skip"
+            onClick={() => {
+              startupSkipped.current = true;
+              if (startupTimer.current) clearInterval(startupTimer.current);
+              setStartupProgress(100);
+              const auth = startupAuth.current;
+              if (auth) void auth.then((restored) => setSession(restored));
+              else setSession(null);
+            }}
+          >
+            SYNCHRONISIERUNG ÜBERSPRINGEN
+          </button>
           <strong>GottesdienstRegie</strong>
         </div>
       </div>

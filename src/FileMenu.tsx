@@ -1,75 +1,1327 @@
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
-import { createPortal } from 'react-dom';
-import { SlideRenderer } from './SlideRenderer';
-import { blankPresentationDocument, type PresentationDocument } from './store';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
+import { createPortal } from "react-dom";
+import { SlideRenderer } from "./SlideRenderer";
+import {
+  blankPresentationDocument,
+  createServiceItem,
+  type ItemType,
+  type PresentationDocument,
+} from "./store";
 
-function Icon({name}:{name:string}){return <span className="material-symbols-outlined" aria-hidden="true">{name}</span>}
+function Icon({ name }: { name: string }) {
+  return (
+    <span className="material-symbols-outlined" aria-hidden="true">
+      {name}
+    </span>
+  );
+}
 
-type Flyout='new'|'recent-open'|'recent-duplicate'|'import'|null;
-type Dialog='new'|'open'|'duplicate'|'exit-live'|null;
-type SortMode='recommended'|'recent-opened'|'modified'|'newest'|'oldest'|'az'|'za';
+type Flyout = "new" | "recent-open" | "recent-duplicate" | "import" | null;
+type Dialog = "new" | "open" | "duplicate" | "exit-live" | null;
+type SortMode =
+  | "recommended"
+  | "recent-opened"
+  | "modified"
+  | "newest"
+  | "oldest"
+  | "az"
+  | "za";
 
 interface Props {
-  open:boolean;
-  label:string;
-  currentId:string;
-  currentTitle?:string;
-  onAir:boolean;
-  onToggle:()=>void;
-  onClose:()=>void;
-  onOpened:(document:PresentationDocument)=>void;
-  onRename?:(title:string)=>Promise<void>;
-  onSave:()=>Promise<void>;
-  onExit:()=>Promise<void>;
-  creatorName?:string;
+  open: boolean;
+  label: string;
+  currentId: string;
+  currentTitle?: string;
+  onAir: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+  onOpened: (document: PresentationDocument) => void;
+  onRename?: (title: string) => Promise<void>;
+  onSave: () => Promise<void>;
+  onExit: () => Promise<void>;
+  creatorName?: string;
 }
 
-interface UserTemplate{id:string;name:string;createdAt:string;document:PresentationDocument}
-const templateStorageKey='gottesdienstregie.userTemplates.v1';
-function readTemplates():UserTemplate[]{try{const value=JSON.parse(localStorage.getItem(templateStorageKey)??'[]');return Array.isArray(value)?value:[]}catch{return[]}}
-function writeTemplates(value:UserTemplate[]){localStorage.setItem(templateStorageKey,JSON.stringify(value))}
-
-function localDate(value:string,locale:string){const date=new Date(`${value||new Date().toISOString().slice(0,10)}T12:00:00`);return Number.isNaN(date.getTime())?value:date.toLocaleDateString(locale,{weekday:'short',day:'2-digit',month:'short',year:'numeric'})}
-function defaultTitle(date:string,locale:string){return `Sonntagsgottesdienst ${new Date(`${date}T12:00:00`).toLocaleDateString(locale)}`}
-function slideFor(document?:PresentationDocument){const item=document?.items.find(entry=>entry.sectionId==='service'&&entry.slides.some(slide=>slide.enabled))??document?.items.find(entry=>entry.slides.some(slide=>slide.enabled));return item?.slides.find(slide=>slide.enabled)??item?.slides[0]}
-
-function PresentationThumb({document}:{document?:PresentationDocument}){const slide=slideFor(document);return <span className="file-presentation-thumb">{slide?<SlideRenderer slide={slide} mode="thumbnail"/>:<Icon name="co_present"/>}</span>}
-
-function NewPresentationDialog({close,opened,templates,onDeleteTemplate,creatorName}:{close:()=>void;opened:(document:PresentationDocument)=>void;templates:UserTemplate[];onDeleteTemplate:(id:string)=>void;creatorName?:string}){
-  const date=new Date().toISOString().slice(0,10),locale=navigator.language||'de-DE';
-  const [title,setTitle]=useState(()=>defaultTitle(date,locale)),[chosenDate,setChosenDate]=useState(date),[serviceTime,setServiceTime]=useState('10:30'),[templateId,setTemplateId]=useState('standard'),[busy,setBusy]=useState(false);
-  async function create(){if(!title.trim()||busy)return;setBusy(true);try{const source=templates.find(entry=>entry.id===templateId),template=source?structuredClone(source.document):blankPresentationDocument(title.trim(),chosenDate),stamp=new Date().toISOString();template.presentationId=crypto.randomUUID();template.title=title.trim();template.date=chosenDate;template.serviceTime=serviceTime;template.templateId=source?.id??'';template.createdBy=creatorName??template.createdBy??'';template.createdAt=stamp;template.updatedAt=stamp;template.editHistory=[];template.selectedItemId='';template.selectedSlideId='';template.previewItemId='';template.previewSlideId='';const document=await window.desktop?.presentation.create({title:title.trim(),date:chosenDate,template}) as PresentationDocument|undefined;if(document){opened(document);close()}}finally{setBusy(false)}}
-  return <div className="modal-backdrop file-dialog-backdrop" onMouseDown={event=>event.target===event.currentTarget&&close()}><form className="file-form-dialog" role="dialog" aria-modal="true" aria-labelledby="new-presentation-title" onSubmit={event=>{event.preventDefault();void create()}}><header><h2 id="new-presentation-title">NEUE PRÄSENTATION</h2><button type="button" onClick={close} title="Schließen"><Icon name="close"/></button></header><main><label>Titel<input autoFocus value={title} onChange={event=>setTitle(event.target.value)} required/></label><div className="file-form-grid"><label>Datum<input type="date" value={chosenDate} onChange={event=>{setChosenDate(event.target.value);setTitle(current=>current.startsWith('Sonntagsgottesdienst ')?defaultTitle(event.target.value,locale):current)}}/></label><label>Servicezeit<input type="time" value={serviceTime} onChange={event=>setServiceTime(event.target.value)} required/></label></div><label>Team<select defaultValue="gottesdiensttechnik"><option value="gottesdiensttechnik">Gottesdiensttechnik</option></select></label><div className="file-template-choice"><label>Vorlage<select value={templateId} onChange={event=>setTemplateId(event.target.value)}><option value="standard">Standard</option>{templates.map(entry=><option key={entry.id} value={entry.id}>{entry.name}</option>)}</select></label>{templateId!=='standard'&&<button type="button" className="danger" title="Eigene Vorlage löschen" onClick={()=>{if(confirm('Diese selbst angelegte Vorlage wirklich löschen?')){onDeleteTemplate(templateId);setTemplateId('standard')}}}><Icon name="delete"/> LÖSCHEN</button>}</div><p>{templateId==='standard'?'Es werden die Bereiche Vorprogramm, Warm-Up, Gottesdienst und Nachprogramm angelegt.':'Der gespeicherte Ablauf wird als unabhängige neue Präsentation übernommen.'}</p></main><footer><button type="button" onClick={close}>ABBRECHEN</button><button className="primary" disabled={busy||!title.trim()}>{busy?'WIRD ERSTELLT …':'ERSTELLEN'}</button></footer></form></div>
+interface UserTemplate {
+  id: string;
+  name: string;
+  createdAt: string;
+  document: PresentationDocument;
+}
+interface BuiltInTemplate {
+  id: string;
+  name: string;
+  description: string;
+  items: Array<{
+    type: ItemType;
+    title: string;
+    sectionId: string;
+    body?: string;
+  }>;
+}
+const templateStorageKey = "gottesdienstregie.userTemplates.v1";
+function readTemplates(): UserTemplate[] {
+  try {
+    const value = JSON.parse(localStorage.getItem(templateStorageKey) ?? "[]");
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
+  }
+}
+function writeTemplates(value: UserTemplate[]) {
+  localStorage.setItem(templateStorageKey, JSON.stringify(value));
+}
+const builtInTemplates: BuiltInTemplate[] = [
+  {
+    id: "builtin-compact",
+    name: "Gottesdienst kompakt",
+    description:
+      "Kompakter Ablauf mit Willkommen, Lobpreis, Predigt, Gebet und Verabschiedung.",
+    items: [
+      {
+        type: "content",
+        title: "Willkommen",
+        sectionId: "warmup",
+        body: "Herzlich willkommen zum Gottesdienst",
+      },
+      {
+        type: "song",
+        title: "Lobpreis",
+        sectionId: "service",
+        body: "Liedtext vorbereiten",
+      },
+      {
+        type: "content",
+        title: "Predigt",
+        sectionId: "service",
+        body: "Predigttitel",
+      },
+      {
+        type: "content",
+        title: "Gebet & Segen",
+        sectionId: "service",
+        body: "Gebet und Segen",
+      },
+      {
+        type: "content",
+        title: "Verabschiedung",
+        sectionId: "post",
+        body: "Auf Wiedersehen und eine gesegnete Woche",
+      },
+    ],
+  },
+  {
+    id: "builtin-classic",
+    name: "Sonntagsgottesdienst klassisch",
+    description:
+      "Ausführlicher Sonntagsablauf mit Ankommen, Begrüßung, mehreren Liedblöcken, Lesung, Predigt und Nachprogramm.",
+    items: [
+      {
+        type: "slideshow",
+        title: "Ankommen",
+        sectionId: "warmup",
+        body: "Willkommen",
+      },
+      {
+        type: "content",
+        title: "Begrüßung",
+        sectionId: "service",
+        body: "Herzlich willkommen",
+      },
+      {
+        type: "song",
+        title: "Lobpreis 1",
+        sectionId: "service",
+        body: "Liedtext vorbereiten",
+      },
+      {
+        type: "bible",
+        title: "Lesung",
+        sectionId: "service",
+        body: "Bibelstelle vorbereiten",
+      },
+      {
+        type: "content",
+        title: "Predigt",
+        sectionId: "service",
+        body: "Predigttitel",
+      },
+      {
+        type: "song",
+        title: "Lobpreis 2",
+        sectionId: "service",
+        body: "Liedtext vorbereiten",
+      },
+      {
+        type: "content",
+        title: "Informationen",
+        sectionId: "service",
+        body: "Aktuelle Hinweise",
+      },
+      {
+        type: "content",
+        title: "Nachprogramm",
+        sectionId: "post",
+        body: "Danke fürs Dabeisein",
+      },
+    ],
+  },
+  {
+    id: "builtin-youth",
+    name: "Jugendgottesdienst",
+    description:
+      "Dynamischer Ablauf für Jugendabende mit Countdown, Intro, Musik, Message, Interaktion und Social-Media-Abschluss.",
+    items: [
+      {
+        type: "countdown",
+        title: "Start-Countdown",
+        sectionId: "warmup",
+        body: "05:00",
+      },
+      { type: "video", title: "Intro", sectionId: "service" },
+      {
+        type: "song",
+        title: "Worship",
+        sectionId: "service",
+        body: "Song vorbereiten",
+      },
+      {
+        type: "liveQuiz",
+        title: "Interaktion",
+        sectionId: "service",
+        body: "Frage vorbereiten",
+      },
+      {
+        type: "content",
+        title: "Message",
+        sectionId: "service",
+        body: "Thema des Abends",
+      },
+      {
+        type: "content",
+        title: "Next Steps",
+        sectionId: "post",
+        body: "Termine · Gruppen · Kontakt",
+      },
+    ],
+  },
+  {
+    id: "builtin-evening",
+    name: "Abendveranstaltung",
+    description:
+      "Ruhiger Ablauf für Lobpreisabend, Gebetsabend oder besondere Veranstaltungen.",
+    items: [
+      {
+        type: "slideshow",
+        title: "Einlass",
+        sectionId: "pre",
+        body: "Herzlich willkommen",
+      },
+      {
+        type: "content",
+        title: "Eröffnung",
+        sectionId: "service",
+        body: "Willkommen zum Abend",
+      },
+      {
+        type: "song",
+        title: "Musikblock",
+        sectionId: "service",
+        body: "Lieder vorbereiten",
+      },
+      {
+        type: "content",
+        title: "Impuls",
+        sectionId: "service",
+        body: "Thema und Bibelwort",
+      },
+      {
+        type: "content",
+        title: "Gebetszeit",
+        sectionId: "service",
+        body: "Gebetsanliegen",
+      },
+      {
+        type: "content",
+        title: "Ausklang",
+        sectionId: "post",
+        body: "Danke fürs Dabeisein",
+      },
+    ],
+  },
+];
+function builtInDocument(
+  template: BuiltInTemplate,
+  title: string,
+  date: string,
+) {
+  const document = blankPresentationDocument(title, date);
+  document.items = template.items.map((item, order) =>
+    createServiceItem(item.type, { ...item, order }),
+  );
+  return document;
 }
 
-function PresentationPicker({mode,initialId,close,opened}:{mode:'open'|'duplicate';initialId?:string;close:()=>void;opened:(document:PresentationDocument)=>void}){
-  const locale=navigator.language||'de-DE',[entries,setEntries]=useState<PresentationSummary[]>([]),[documents,setDocuments]=useState<Record<string,PresentationDocument>>({}),[query,setQuery]=useState(''),[sort,setSort]=useState<SortMode>(mode==='open'?'recommended':'recent-opened'),[selected,setSelected]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(false),[step,setStep]=useState<'choose'|'options'>('choose'),[copyTitle,setCopyTitle]=useState(''),[copyDate,setCopyDate]=useState(''),[keepServiceTime,setKeepServiceTime]=useState(true),[keepMedia,setKeepMedia]=useState(true),[keepTargets,setKeepTargets]=useState(true),[busy,setBusy]=useState(false);
-  async function refresh(){setLoading(true);setError(false);try{const list=await window.desktop?.presentation.list()??[];setEntries(list);const pairs=await Promise.all(list.slice(0,60).map(async entry=>[entry.id,await window.desktop?.presentation.load(entry.id)] as const)),loaded:Record<string,PresentationDocument>={};for(const [id,document] of pairs)if(document)loaded[id]=document as PresentationDocument;setDocuments(loaded);if(list[0])setSelected(current=>current||(initialId&&list.some(entry=>entry.id===initialId)?initialId:list[0].id))}catch{setError(true)}finally{setLoading(false)}}
-  useEffect(()=>{void refresh()},[]);
-  const shown=useMemo(()=>{const needle=query.trim().toLocaleLowerCase();const filtered=entries.filter(entry=>{const doc=documents[entry.id],haystack=[entry.title,entry.date,doc?.createdBy,doc?.eventId].filter(Boolean).join(' ').toLocaleLowerCase();return !needle||haystack.includes(needle)});return [...filtered].sort((a,b)=>sort==='az'?a.title.localeCompare(b.title):sort==='za'?b.title.localeCompare(a.title):sort==='oldest'?a.date.localeCompare(b.date):sort==='newest'?b.date.localeCompare(a.date):b.updatedAt.localeCompare(a.updatedAt))},[entries,documents,query,sort]);
-  async function act(id=selected){if(!id||busy)return;const entry=entries.find(item=>item.id===id);if(!entry)return;if(mode==='open'){setBusy(true);try{const document=await window.desktop?.presentation.load(id) as PresentationDocument|null;if(document){opened(document);close()}}finally{setBusy(false)}return}setSelected(id);setCopyTitle(`${entry.title} – Kopie`);setCopyDate(entry.date||new Date().toISOString().slice(0,10));setStep('options')}
-  async function duplicate(){if(!selected||!copyTitle.trim()||busy)return;setBusy(true);try{const document=await window.desktop?.presentation.duplicate(selected,{title:copyTitle.trim(),date:copyDate,keepServiceTime,keepMediaReferences:keepMedia,keepTargetStartTimes:keepTargets}) as PresentationDocument|undefined;if(document){opened(document);close()}}finally{setBusy(false)}}
-  return <div className="modal-backdrop file-dialog-backdrop"><div className="file-picker-dialog" role="dialog" aria-modal="true" aria-labelledby="file-picker-title"><header><h2 id="file-picker-title">{mode==='open'?'ÖFFNEN':'DUPLIZIEREN'}</h2><button onClick={close} title="Schließen"><Icon name="close"/></button></header>{step==='choose'?<><div className="file-picker-tools"><label><Icon name="search"/><input autoFocus placeholder="Präsentationen durchsuchen …" value={query} onChange={event=>setQuery(event.target.value)}/></label><select aria-label="Sortieren nach" value={sort} onChange={event=>setSort(event.target.value as SortMode)}><option value="recommended">Empfohlen</option><option value="recent-opened">Zuletzt geöffnet</option><option value="modified">Zuletzt geändert</option><option value="newest">Neueste zuerst</option><option value="oldest">Älteste zuerst</option><option value="az">Titel A–Z</option><option value="za">Titel Z–A</option></select></div><main className="file-picker-list">{loading?<div className="file-picker-state"><span className="spinner"/>Präsentationen werden geladen …</div>:error?<div className="file-picker-state"><Icon name="cloud_off"/><b>PRÄSENTATIONEN KONNTEN NICHT GELADEN WERDEN</b><button onClick={()=>void refresh()}>ERNEUT VERSUCHEN</button></div>:shown.length?shown.map(entry=><button key={entry.id} className={selected===entry.id?'selected':''} onClick={()=>setSelected(entry.id)} onDoubleClick={()=>void act(entry.id)}><PresentationThumb document={documents[entry.id]}/><span><b>{entry.title}</b><small>{entry.itemCount} Elemente · {entry.slideCount} Folien · geändert {new Date(entry.updatedAt).toLocaleString(locale)}</small></span><time>{localDate(entry.date||entry.updatedAt.slice(0,10),locale)}</time></button>):<div className="file-picker-state"><Icon name="folder_open"/><b>KEINE PRÄSENTATIONEN</b><span>Du hast noch keine passende Präsentation erstellt.</span></div>}</main><footer><button onClick={close}>ABBRECHEN</button><button className="primary" disabled={!selected||busy} onClick={()=>void act()}>{mode==='open'?'ÖFFNEN':'WEITER'}</button></footer></>:<form className="duplicate-options" onSubmit={event=>{event.preventDefault();void duplicate()}}><h3>PRÄSENTATION DUPLIZIEREN</h3><label>Name<input autoFocus value={copyTitle} onChange={event=>setCopyTitle(event.target.value)} required/></label><label>Datum<input type="date" value={copyDate} onChange={event=>setCopyDate(event.target.value)}/></label><label className="file-check"><input type="checkbox" checked={keepServiceTime} onChange={event=>setKeepServiceTime(event.target.checked)}/><span>Servicezeit übernehmen</span></label><label className="file-check"><input type="checkbox" checked={keepMedia} onChange={event=>setKeepMedia(event.target.checked)}/><span>Medienreferenzen übernehmen</span></label><label className="file-check"><input type="checkbox" checked={keepTargets} onChange={event=>setKeepTargets(event.target.checked)}/><span>Target Start Times übernehmen</span></label><p>Für die Kopie werden neue eindeutige IDs für Bereiche, Elemente, Folien und Canvas-Elemente erzeugt.</p><footer><button type="button" onClick={()=>setStep('choose')}>ZURÜCK</button><button type="button" onClick={close}>ABBRECHEN</button><button className="primary" disabled={busy||!copyTitle.trim()}>{busy?'WIRD DUPLIZIERT …':'DUPLIZIEREN'}</button></footer></form>}</div></div>
+function localDate(value: string, locale: string) {
+  const date = new Date(
+    `${value || new Date().toISOString().slice(0, 10)}T12:00:00`,
+  );
+  return Number.isNaN(date.getTime())
+    ? value
+    : date.toLocaleDateString(locale, {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+}
+function defaultTitle(date: string, locale: string) {
+  return `Sonntagsgottesdienst ${new Date(`${date}T12:00:00`).toLocaleDateString(locale)}`;
+}
+function slideFor(document?: PresentationDocument) {
+  const item =
+    document?.items.find(
+      (entry) =>
+        entry.sectionId === "service" &&
+        entry.slides.some((slide) => slide.enabled),
+    ) ??
+    document?.items.find((entry) =>
+      entry.slides.some((slide) => slide.enabled),
+    );
+  return item?.slides.find((slide) => slide.enabled) ?? item?.slides[0];
 }
 
-export function FileMenu({open,label,currentId,currentTitle,onAir,onToggle,onClose,onOpened,onRename,onSave,onExit,creatorName}:Props){
-  const trigger=useRef<HTMLButtonElement>(null),menu=useRef<HTMLDivElement>(null),hoverTimer=useRef<number|undefined>(undefined),[flyout,setFlyout]=useState<Flyout>(null),[dialog,setDialog]=useState<Dialog>(null),[duplicateInitialId,setDuplicateInitialId]=useState(''),[recent,setRecent]=useState<PresentationSummary[]>([]),[recentDocuments,setRecentDocuments]=useState<Record<string,PresentationDocument>>({}),[templates,setTemplates]=useState<UserTemplate[]>(readTemplates);
-  const closeMenu=()=>{setFlyout(null);onClose()};
-  const closeDialog=()=>{setDialog(null);setDuplicateInitialId('');requestAnimationFrame(()=>trigger.current?.focus())};
-  useEffect(()=>{if(!open)return;void (async()=>{const entries=(await window.desktop?.presentation.list()??[]).slice(0,8),loaded:Record<string,PresentationDocument>={};setRecent(entries);const pairs=await Promise.all(entries.map(async entry=>[entry.id,await window.desktop?.presentation.load(entry.id)] as const));for(const [id,document] of pairs)if(document)loaded[id]=document as PresentationDocument;setRecentDocuments(loaded)})()},[open]);
-  useEffect(()=>()=>{if(hoverTimer.current)window.clearTimeout(hoverTimer.current)},[]);
-  useEffect(()=>{if(!dialog)return;const handleEscape=(event:globalThis.KeyboardEvent)=>{if(event.key!=='Escape')return;event.preventDefault();event.stopPropagation();closeDialog()};window.addEventListener('keydown',handleEscape);return()=>window.removeEventListener('keydown',handleEscape)},[dialog]);
-  function openFlyout(value:Exclude<Flyout,null>){if(hoverTimer.current)window.clearTimeout(hoverTimer.current);hoverTimer.current=window.setTimeout(()=>setFlyout(value),130)}
-  function keys(event:KeyboardEvent<HTMLDivElement>){const buttons=Array.from(menu.current?.querySelectorAll<HTMLButtonElement>(':scope > button:not(:disabled)')??[]),index=buttons.indexOf(document.activeElement as HTMLButtonElement);if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();const start=index<0?(event.key==='ArrowDown'?-1:0):index;buttons[(start+(event.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length]?.focus()}else if(event.key==='ArrowRight'){const target=(document.activeElement as HTMLElement)?.dataset.flyout as Exclude<Flyout,null>|undefined;if(target){event.preventDefault();setFlyout(target)}}else if(event.key==='ArrowLeft'&&flyout){event.preventDefault();setFlyout(null)}else if(event.key==='Escape'){event.preventDefault();event.stopPropagation();if(flyout)setFlyout(null);else{closeMenu();trigger.current?.focus()}}}
-  function blockWhileLive(){if(!onAir)return false;closeMenu();alert('Diese Aktion ist während ON AIR gesperrt, damit die laufende MAIN-Ausgabe unverändert bleibt. Beende zuerst ON AIR.');return true}
-  function showDialog(value:Dialog){if(value!=='exit-live'&&blockWhileLive())return;closeMenu();setDialog(value)}
-  async function importPresentation(kind?:'office'|'text'|'gottesdienstregie'|'all'){if(blockWhileLive())return;const label=(document.activeElement?.textContent??'').toLowerCase(),selected=kind??(label.includes('powerpoint')?'office':label.includes('markdown')?'text':label.includes('gottesdienstregie')?'gottesdienstregie':'all');closeMenu();const imported=await window.desktop?.presentation.import(selected) as PresentationDocument|null;if(imported)onOpened(imported)}
-  async function renameCurrent(){if(blockWhileLive()||!currentId)return;closeMenu();await onSave();const current=await window.desktop?.presentation.load(currentId) as PresentationDocument|null,title=prompt('Neuer Name der Präsentation',currentTitle??current?.title??'');if(!title?.trim()||title.trim()===(currentTitle??current?.title))return;if(onRename)await onRename(title.trim());else{await window.desktop?.presentation.rename(currentId,title.trim());const renamed=await window.desktop?.presentation.load(currentId) as PresentationDocument|null;if(renamed)onOpened(renamed)}}
-  async function backup(){closeMenu();if(!currentId)return;const target=await window.desktop?.presentation.export(currentId);if(target)alert(`Präsentation gesichert:\n${target}`)}
-  async function restore(){if(blockWhileLive())return;closeMenu();const document=await window.desktop?.presentation.import() as PresentationDocument|null;if(document)onOpened(document)}
-  async function share(){closeMenu();const document=await window.desktop?.presentation.load(currentId) as PresentationDocument|null;if(!document)return;const lines=[document.title,localDate(document.date,navigator.language),`Servicezeit: ${document.serviceTime||'10:30'}`,'',...document.sections.flatMap(section=>[section.title.toUpperCase(),...document.items.filter(item=>item.sectionId===section.id).sort((a,b)=>a.order-b.order).map(item=>`• ${item.title}`),''])];try{await navigator.clipboard.writeText(lines.join('\n'));alert('Die Ablaufliste wurde als Text in die Zwischenablage kopiert.')}catch{alert(lines.join('\n'))}}
-  async function saveAsTemplate(){if(blockWhileLive()||!currentId)return;closeMenu();await onSave();const document=await window.desktop?.presentation.load(currentId) as PresentationDocument|null;if(!document)return;const name=prompt('Name der neuen Ablaufvorlage',`${document.title} – Vorlage`)?.trim();if(!name)return;const entry:UserTemplate={id:crypto.randomUUID(),name,createdAt:new Date().toISOString(),document:structuredClone(document)},next=[...templates,entry];try{writeTemplates(next);setTemplates(next);alert(`Die Ablaufvorlage „${name}“ wurde gespeichert.`)}catch{alert('Die Vorlage ist zu groß für den lokalen Vorlagenspeicher. Entferne große eingebettete Medien und versuche es erneut.')}}
-  function deleteTemplate(id:string){const next=templates.filter(entry=>entry.id!==id);writeTemplates(next);setTemplates(next)}
-  const recentFlyout=(mode:'open'|'duplicate')=><div className={`file-flyout recent-flyout recent-${mode}-flyout`} role="menu"><h3>{mode==='open'?'ZULETZT GEÖFFNET':'ZULETZT DUPLIZIERT'}</h3>{recent.length?recent.map(entry=><button key={entry.id} onClick={async()=>{if(blockWhileLive())return;if(mode==='duplicate'){closeMenu();setDuplicateInitialId(entry.id);setDialog('duplicate');return}const document=await window.desktop?.presentation.load(entry.id) as PresentationDocument|null;if(document){onOpened(document);closeMenu()}}}><PresentationThumb document={recentDocuments[entry.id]}/><span><b>{entry.title}</b><small>{localDate(entry.date,navigator.language)}</small></span></button>):<p>Keine zuletzt verwendeten Präsentationen.</p>}</div>;
-  return <><div className="menu-root file-menu-root"><button ref={trigger} aria-haspopup="menu" aria-expanded={open} onClick={event=>{event.stopPropagation();onToggle()}}>{label}</button>{open&&<div ref={menu} className="menu-popup file-menu" role="menu" onKeyDown={keys} onClick={event=>event.stopPropagation()}><button data-flyout="new" onMouseEnter={()=>openFlyout('new')} onClick={()=>setFlyout('new')}><Icon name="note_add"/><span>Neu</span><Icon name="chevron_right"/></button><button onClick={()=>showDialog('open')}><Icon name="folder_open"/><span>Öffnen …</span></button><button data-flyout="recent-open" onMouseEnter={()=>openFlyout('recent-open')} onClick={()=>setFlyout('recent-open')}><Icon name="history"/><span>Zuletzt öffnen</span><Icon name="chevron_right"/></button><button onClick={()=>showDialog('duplicate')}><Icon name="content_copy"/><span>Duplizieren …</span></button><button data-flyout="recent-duplicate" onMouseEnter={()=>openFlyout('recent-duplicate')} onClick={()=>setFlyout('recent-duplicate')}><Icon name="history_toggle_off"/><span>Zuletzt duplizieren</span><Icon name="chevron_right"/></button><button className="separator" disabled={!currentId} onClick={()=>void renameCurrent()}><Icon name="drive_file_rename_outline"/><span>Umbenennen …</span></button><button disabled={!currentId} onClick={()=>{void onSave();closeMenu()}}><Icon name="cloud_done"/><span>Speichern & synchronisieren</span><kbd>Strg+S</kbd></button><button className="separator" data-flyout="import" onMouseEnter={()=>openFlyout('import')} onClick={()=>setFlyout('import')}><Icon name="upload_file"/><span>Präsentation importieren</span><Icon name="chevron_right"/></button><button disabled={!currentId} onClick={()=>void backup()}><Icon name="archive"/><span>Präsentation sichern …</span></button><button onClick={()=>void restore()}><Icon name="settings_backup_restore"/><span>Präsentation wiederherstellen …</span></button><button className="separator" disabled={!currentId} onClick={()=>{closeMenu();window.print()}}><Icon name="print"/><span>Präsentation drucken</span><kbd>Strg+P</kbd></button><button disabled={!currentId} onClick={()=>void share()}><Icon name="share"/><span>Ablaufliste teilen</span></button><button disabled={!currentId} onClick={()=>void saveAsTemplate()}><Icon name="bookmark_add"/><span>Ablauf als Vorlage speichern …</span></button><button className="separator" onClick={()=>{if(onAir)showDialog('exit-live');else void onExit()}}><Icon name="power_settings_new"/><span>Beenden</span><kbd>Alt+F4</kbd></button>{flyout==='new'&&<div className="file-flyout new-file-flyout" role="menu" onMouseEnter={()=>hoverTimer.current&&window.clearTimeout(hoverTimer.current)}><h3>PRÄSENTATION</h3><button onClick={()=>showDialog('new')}><span className="file-template-icon"><Icon name="co_present"/></span><span><b>Präsentation</b><small>Erstelle eine neue Gottesdienst-Präsentation mit eigenen Elementen, Medien und Abläufen.</small></span></button></div>}{flyout==='recent-open'&&recentFlyout('open')}{flyout==='recent-duplicate'&&recentFlyout('duplicate')}{flyout==='import'&&<div className="file-flyout import-flyout" role="menu"><h3>PRÄSENTATIONEN</h3><button onClick={()=>void importPresentation()}><Icon name="slideshow"/><span><b>PowerPoint / Keynote / OpenDocument …</b><small>Importiert .pptx und .odp als Folien sowie die eingebettete Vorschau aus .key.</small></span></button><button onClick={()=>void importPresentation()}><Icon name="description"/><span><b>Text / Markdown …</b><small>Erstellt aus Absätzen in .txt und .md automatisch einzelne Folien.</small></span></button><button onClick={()=>void importPresentation()}><Icon name="data_object"/><span><b>GottesdienstRegie …</b><small>Importiert .json, .grpresentation und .grbackup als neue Präsentation.</small></span></button></div>}</div>}</div>{dialog==='new'&&createPortal(<NewPresentationDialog close={closeDialog} opened={onOpened} templates={templates} onDeleteTemplate={deleteTemplate} creatorName={creatorName}/>,document.body)}{(dialog==='open'||dialog==='duplicate')&&createPortal(<PresentationPicker mode={dialog} initialId={duplicateInitialId} close={closeDialog} opened={onOpened}/>,document.body)}{dialog==='exit-live'&&createPortal(<div className="modal-backdrop file-dialog-backdrop"><div className="confirm-dialog file-live-exit" role="alertdialog" aria-modal="true"><Icon name="cast_connected"/><h2>LIVE-AUSGABE AKTIV</h2><p>GottesdienstRegie ist derzeit ON AIR. Das Beenden würde die Live-Ausgabe unterbrechen.</p><div><button onClick={closeDialog}>ABBRECHEN</button><button className="danger" onClick={()=>void onExit()}>OFF AIR UND BEENDEN</button></div></div></div>,document.body)}</>
+function PresentationThumb({ document }: { document?: PresentationDocument }) {
+  const slide = slideFor(document);
+  return (
+    <span className="file-presentation-thumb">
+      {slide ? (
+        <SlideRenderer slide={slide} mode="thumbnail" />
+      ) : (
+        <Icon name="co_present" />
+      )}
+    </span>
+  );
+}
+
+function NewPresentationDialog({
+  close,
+  opened,
+  templates,
+  onDeleteTemplate,
+  creatorName,
+}: {
+  close: () => void;
+  opened: (document: PresentationDocument) => void;
+  templates: UserTemplate[];
+  onDeleteTemplate: (id: string) => void;
+  creatorName?: string;
+}) {
+  const date = new Date().toISOString().slice(0, 10),
+    locale = navigator.language || "de-DE";
+  const [title, setTitle] = useState(() => defaultTitle(date, locale)),
+    [chosenDate, setChosenDate] = useState(date),
+    [serviceTime, setServiceTime] = useState("10:30"),
+    [templateId, setTemplateId] = useState("standard"),
+    [busy, setBusy] = useState(false);
+  async function create() {
+    if (!title.trim() || busy) return;
+    setBusy(true);
+    try {
+      const source = templates.find((entry) => entry.id === templateId),
+        builtIn = builtInTemplates.find((entry) => entry.id === templateId),
+        template = source
+          ? structuredClone(source.document)
+          : builtIn
+            ? builtInDocument(builtIn, title.trim(), chosenDate)
+            : blankPresentationDocument(title.trim(), chosenDate),
+        stamp = new Date().toISOString(),
+        firstItem = template.items[0],
+        firstSlide = firstItem?.slides[0];
+      template.presentationId = crypto.randomUUID();
+      template.title = title.trim();
+      template.date = chosenDate;
+      template.serviceTime = serviceTime;
+      template.templateId = source?.id ?? builtIn?.id ?? "";
+      template.createdBy = creatorName ?? template.createdBy ?? "";
+      template.createdAt = stamp;
+      template.updatedAt = stamp;
+      template.editHistory = [];
+      template.selectedItemId = firstItem?.id ?? "";
+      template.selectedSlideId = firstSlide?.id ?? "";
+      template.previewItemId = firstItem?.id ?? "";
+      template.previewSlideId = firstSlide?.id ?? "";
+      const document = (await window.desktop?.presentation.create({
+        title: title.trim(),
+        date: chosenDate,
+        template,
+      })) as PresentationDocument | undefined;
+      if (document) {
+        opened(document);
+        close();
+      }
+    } finally {
+      setBusy(false);
+    }
+  }
+  const selectedBuiltIn = builtInTemplates.find(
+      (entry) => entry.id === templateId,
+    ),
+    selectedUser = templates.find((entry) => entry.id === templateId);
+  return (
+    <div
+      className="modal-backdrop file-dialog-backdrop"
+      onMouseDown={(event) => event.target === event.currentTarget && close()}
+    >
+      <form
+        className="file-form-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="new-presentation-title"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void create();
+        }}
+      >
+        <header>
+          <h2 id="new-presentation-title">NEUE PRÄSENTATION</h2>
+          <button type="button" onClick={close} title="Schließen">
+            <Icon name="close" />
+          </button>
+        </header>
+        <main>
+          <label>
+            Titel
+            <input
+              autoFocus
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              required
+            />
+          </label>
+          <div className="file-form-grid">
+            <label>
+              Datum
+              <input
+                type="date"
+                value={chosenDate}
+                onChange={(event) => {
+                  setChosenDate(event.target.value);
+                  setTitle((current) =>
+                    current.startsWith("Sonntagsgottesdienst ")
+                      ? defaultTitle(event.target.value, locale)
+                      : current,
+                  );
+                }}
+              />
+            </label>
+            <label>
+              Servicezeit
+              <input
+                type="time"
+                value={serviceTime}
+                onChange={(event) => setServiceTime(event.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <label>
+            Team
+            <select defaultValue="gottesdiensttechnik">
+              <option value="gottesdiensttechnik">Gottesdiensttechnik</option>
+            </select>
+          </label>
+          <div className="file-template-choice">
+            <label>
+              Vorlage
+              <select
+                value={templateId}
+                onChange={(event) => setTemplateId(event.target.value)}
+              >
+                <option value="standard">Standard</option>
+                <optgroup label="GottesdienstRegie Vorlagen">
+                  {builtInTemplates.map((entry) => (
+                    <option key={entry.id} value={entry.id}>
+                      {entry.name}
+                    </option>
+                  ))}
+                </optgroup>
+                {templates.length > 0 && (
+                  <optgroup label="Eigene Vorlagen">
+                    {templates.map((entry) => (
+                      <option key={entry.id} value={entry.id}>
+                        {entry.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+              </select>
+            </label>
+            {selectedUser && (
+              <button
+                type="button"
+                className="danger"
+                title="Eigene Vorlage löschen"
+                onClick={() => {
+                  if (
+                    confirm("Diese selbst angelegte Vorlage wirklich löschen?")
+                  ) {
+                    onDeleteTemplate(templateId);
+                    setTemplateId("standard");
+                  }
+                }}
+              >
+                <Icon name="delete" /> LÖSCHEN
+              </button>
+            )}
+          </div>
+          <p>
+            {selectedBuiltIn?.description ??
+              (selectedUser
+                ? "Der gespeicherte Ablauf wird als unabhängige neue Präsentation übernommen."
+                : "Es werden die Bereiche Vorprogramm, Warm-Up, Gottesdienst und Nachprogramm angelegt.")}
+          </p>
+        </main>
+        <footer>
+          <button type="button" onClick={close}>
+            ABBRECHEN
+          </button>
+          <button className="primary" disabled={busy || !title.trim()}>
+            {busy ? "WIRD ERSTELLT …" : "ERSTELLEN"}
+          </button>
+        </footer>
+      </form>
+    </div>
+  );
+}
+
+function PresentationPicker({
+  mode,
+  initialId,
+  close,
+  opened,
+}: {
+  mode: "open" | "duplicate";
+  initialId?: string;
+  close: () => void;
+  opened: (document: PresentationDocument) => void;
+}) {
+  const locale = navigator.language || "de-DE",
+    [entries, setEntries] = useState<PresentationSummary[]>([]),
+    [documents, setDocuments] = useState<Record<string, PresentationDocument>>(
+      {},
+    ),
+    [query, setQuery] = useState(""),
+    [sort, setSort] = useState<SortMode>(
+      mode === "open" ? "recommended" : "recent-opened",
+    ),
+    [selected, setSelected] = useState(""),
+    [loading, setLoading] = useState(true),
+    [error, setError] = useState(false),
+    [step, setStep] = useState<"choose" | "options">("choose"),
+    [copyTitle, setCopyTitle] = useState(""),
+    [copyDate, setCopyDate] = useState(""),
+    [keepServiceTime, setKeepServiceTime] = useState(true),
+    [keepMedia, setKeepMedia] = useState(true),
+    [keepTargets, setKeepTargets] = useState(true),
+    [busy, setBusy] = useState(false);
+  async function refresh() {
+    setLoading(true);
+    setError(false);
+    try {
+      const list = (await window.desktop?.presentation.list()) ?? [];
+      setEntries(list);
+      const pairs = await Promise.all(
+          list
+            .slice(0, 60)
+            .map(
+              async (entry) =>
+                [
+                  entry.id,
+                  await window.desktop?.presentation.load(entry.id),
+                ] as const,
+            ),
+        ),
+        loaded: Record<string, PresentationDocument> = {};
+      for (const [id, document] of pairs)
+        if (document) loaded[id] = document as PresentationDocument;
+      setDocuments(loaded);
+      if (list[0])
+        setSelected(
+          (current) =>
+            current ||
+            (initialId && list.some((entry) => entry.id === initialId)
+              ? initialId
+              : list[0].id),
+        );
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    void refresh();
+  }, []);
+  const shown = useMemo(() => {
+    const needle = query.trim().toLocaleLowerCase();
+    const filtered = entries.filter((entry) => {
+      const doc = documents[entry.id],
+        haystack = [entry.title, entry.date, doc?.createdBy, doc?.eventId]
+          .filter(Boolean)
+          .join(" ")
+          .toLocaleLowerCase();
+      return !needle || haystack.includes(needle);
+    });
+    return [...filtered].sort((a, b) =>
+      sort === "az"
+        ? a.title.localeCompare(b.title)
+        : sort === "za"
+          ? b.title.localeCompare(a.title)
+          : sort === "oldest"
+            ? a.date.localeCompare(b.date)
+            : sort === "newest"
+              ? b.date.localeCompare(a.date)
+              : b.updatedAt.localeCompare(a.updatedAt),
+    );
+  }, [entries, documents, query, sort]);
+  async function act(id = selected) {
+    if (!id || busy) return;
+    const entry = entries.find((item) => item.id === id);
+    if (!entry) return;
+    if (mode === "open") {
+      setBusy(true);
+      try {
+        const document = (await window.desktop?.presentation.load(
+          id,
+        )) as PresentationDocument | null;
+        if (document) {
+          opened(document);
+          close();
+        }
+      } finally {
+        setBusy(false);
+      }
+      return;
+    }
+    setSelected(id);
+    setCopyTitle(`${entry.title} – Kopie`);
+    setCopyDate(entry.date || new Date().toISOString().slice(0, 10));
+    setStep("options");
+  }
+  async function duplicate() {
+    if (!selected || !copyTitle.trim() || busy) return;
+    setBusy(true);
+    try {
+      const document = (await window.desktop?.presentation.duplicate(selected, {
+        title: copyTitle.trim(),
+        date: copyDate,
+        keepServiceTime,
+        keepMediaReferences: keepMedia,
+        keepTargetStartTimes: keepTargets,
+      })) as PresentationDocument | undefined;
+      if (document) {
+        opened(document);
+        close();
+      }
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <div className="modal-backdrop file-dialog-backdrop">
+      <div
+        className="file-picker-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="file-picker-title"
+      >
+        <header>
+          <h2 id="file-picker-title">
+            {mode === "open" ? "ÖFFNEN" : "DUPLIZIEREN"}
+          </h2>
+          <button onClick={close} title="Schließen">
+            <Icon name="close" />
+          </button>
+        </header>
+        {step === "choose" ? (
+          <>
+            <div className="file-picker-tools">
+              <label>
+                <Icon name="search" />
+                <input
+                  autoFocus
+                  placeholder="Präsentationen durchsuchen …"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                />
+              </label>
+              <select
+                aria-label="Sortieren nach"
+                value={sort}
+                onChange={(event) => setSort(event.target.value as SortMode)}
+              >
+                <option value="recommended">Empfohlen</option>
+                <option value="recent-opened">Zuletzt geöffnet</option>
+                <option value="modified">Zuletzt geändert</option>
+                <option value="newest">Neueste zuerst</option>
+                <option value="oldest">Älteste zuerst</option>
+                <option value="az">Titel A–Z</option>
+                <option value="za">Titel Z–A</option>
+              </select>
+            </div>
+            <main className="file-picker-list">
+              {loading ? (
+                <div className="file-picker-state">
+                  <span className="spinner" />
+                  Präsentationen werden geladen …
+                </div>
+              ) : error ? (
+                <div className="file-picker-state">
+                  <Icon name="cloud_off" />
+                  <b>PRÄSENTATIONEN KONNTEN NICHT GELADEN WERDEN</b>
+                  <button onClick={() => void refresh()}>
+                    ERNEUT VERSUCHEN
+                  </button>
+                </div>
+              ) : shown.length ? (
+                shown.map((entry) => (
+                  <button
+                    key={entry.id}
+                    className={selected === entry.id ? "selected" : ""}
+                    onClick={() => setSelected(entry.id)}
+                    onDoubleClick={() => void act(entry.id)}
+                  >
+                    <PresentationThumb document={documents[entry.id]} />
+                    <span>
+                      <b>{entry.title}</b>
+                      <small>
+                        {entry.itemCount} Elemente · {entry.slideCount} Folien ·
+                        geändert{" "}
+                        {new Date(entry.updatedAt).toLocaleString(locale)}
+                      </small>
+                    </span>
+                    <time>
+                      {localDate(
+                        entry.date || entry.updatedAt.slice(0, 10),
+                        locale,
+                      )}
+                    </time>
+                  </button>
+                ))
+              ) : (
+                <div className="file-picker-state">
+                  <Icon name="folder_open" />
+                  <b>KEINE PRÄSENTATIONEN</b>
+                  <span>
+                    Du hast noch keine passende Präsentation erstellt.
+                  </span>
+                </div>
+              )}
+            </main>
+            <footer>
+              <button onClick={close}>ABBRECHEN</button>
+              <button
+                className="primary"
+                disabled={!selected || busy}
+                onClick={() => void act()}
+              >
+                {mode === "open" ? "ÖFFNEN" : "WEITER"}
+              </button>
+            </footer>
+          </>
+        ) : (
+          <form
+            className="duplicate-options"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void duplicate();
+            }}
+          >
+            <h3>PRÄSENTATION DUPLIZIEREN</h3>
+            <label>
+              Name
+              <input
+                autoFocus
+                value={copyTitle}
+                onChange={(event) => setCopyTitle(event.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Datum
+              <input
+                type="date"
+                value={copyDate}
+                onChange={(event) => setCopyDate(event.target.value)}
+              />
+            </label>
+            <label className="file-check">
+              <input
+                type="checkbox"
+                checked={keepServiceTime}
+                onChange={(event) => setKeepServiceTime(event.target.checked)}
+              />
+              <span>Servicezeit übernehmen</span>
+            </label>
+            <label className="file-check">
+              <input
+                type="checkbox"
+                checked={keepMedia}
+                onChange={(event) => setKeepMedia(event.target.checked)}
+              />
+              <span>Medienreferenzen übernehmen</span>
+            </label>
+            <label className="file-check">
+              <input
+                type="checkbox"
+                checked={keepTargets}
+                onChange={(event) => setKeepTargets(event.target.checked)}
+              />
+              <span>Target Start Times übernehmen</span>
+            </label>
+            <p>
+              Für die Kopie werden neue eindeutige IDs für Bereiche, Elemente,
+              Folien und Canvas-Elemente erzeugt.
+            </p>
+            <footer>
+              <button type="button" onClick={() => setStep("choose")}>
+                ZURÜCK
+              </button>
+              <button type="button" onClick={close}>
+                ABBRECHEN
+              </button>
+              <button className="primary" disabled={busy || !copyTitle.trim()}>
+                {busy ? "WIRD DUPLIZIERT …" : "DUPLIZIEREN"}
+              </button>
+            </footer>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function FileMenu({
+  open,
+  label,
+  currentId,
+  currentTitle,
+  onAir,
+  onToggle,
+  onClose,
+  onOpened,
+  onRename,
+  onSave,
+  onExit,
+  creatorName,
+}: Props) {
+  const trigger = useRef<HTMLButtonElement>(null),
+    menu = useRef<HTMLDivElement>(null),
+    hoverTimer = useRef<number | undefined>(undefined),
+    [flyout, setFlyout] = useState<Flyout>(null),
+    [dialog, setDialog] = useState<Dialog>(null),
+    [duplicateInitialId, setDuplicateInitialId] = useState(""),
+    [recent, setRecent] = useState<PresentationSummary[]>([]),
+    [recentDocuments, setRecentDocuments] = useState<
+      Record<string, PresentationDocument>
+    >({}),
+    [templates, setTemplates] = useState<UserTemplate[]>(readTemplates);
+  const closeMenu = () => {
+    setFlyout(null);
+    onClose();
+  };
+  const closeDialog = () => {
+    setDialog(null);
+    setDuplicateInitialId("");
+    requestAnimationFrame(() => trigger.current?.focus());
+  };
+  useEffect(() => {
+    if (!open) return;
+    void (async () => {
+      const entries = ((await window.desktop?.presentation.list()) ?? []).slice(
+          0,
+          8,
+        ),
+        loaded: Record<string, PresentationDocument> = {};
+      setRecent(entries);
+      const pairs = await Promise.all(
+        entries.map(
+          async (entry) =>
+            [
+              entry.id,
+              await window.desktop?.presentation.load(entry.id),
+            ] as const,
+        ),
+      );
+      for (const [id, document] of pairs)
+        if (document) loaded[id] = document as PresentationDocument;
+      setRecentDocuments(loaded);
+    })();
+  }, [open]);
+  useEffect(
+    () => () => {
+      if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    },
+    [],
+  );
+  useEffect(() => {
+    if (!dialog) return;
+    const handleEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      event.stopPropagation();
+      closeDialog();
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [dialog]);
+  function openFlyout(value: Exclude<Flyout, null>) {
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setFlyout(value), 130);
+  }
+  function keys(event: KeyboardEvent<HTMLDivElement>) {
+    const buttons = Array.from(
+        menu.current?.querySelectorAll<HTMLButtonElement>(
+          ":scope > button:not(:disabled)",
+        ) ?? [],
+      ),
+      index = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const start = index < 0 ? (event.key === "ArrowDown" ? -1 : 0) : index;
+      buttons[
+        (start + (event.key === "ArrowDown" ? 1 : -1) + buttons.length) %
+          buttons.length
+      ]?.focus();
+    } else if (event.key === "ArrowRight") {
+      const target = (document.activeElement as HTMLElement)?.dataset.flyout as
+        Exclude<Flyout, null> | undefined;
+      if (target) {
+        event.preventDefault();
+        setFlyout(target);
+      }
+    } else if (event.key === "ArrowLeft" && flyout) {
+      event.preventDefault();
+      setFlyout(null);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (flyout) setFlyout(null);
+      else {
+        closeMenu();
+        trigger.current?.focus();
+      }
+    }
+  }
+  function blockWhileLive() {
+    if (!onAir) return false;
+    closeMenu();
+    alert(
+      "Diese Aktion ist während ON AIR gesperrt, damit die laufende MAIN-Ausgabe unverändert bleibt. Beende zuerst ON AIR.",
+    );
+    return true;
+  }
+  function showDialog(value: Dialog) {
+    if (value !== "exit-live" && blockWhileLive()) return;
+    closeMenu();
+    setDialog(value);
+  }
+  async function importPresentation(
+    kind?: "office" | "text" | "gottesdienstregie" | "all",
+  ) {
+    if (blockWhileLive()) return;
+    const label = (document.activeElement?.textContent ?? "").toLowerCase(),
+      selected =
+        kind ??
+        (label.includes("powerpoint")
+          ? "office"
+          : label.includes("markdown")
+            ? "text"
+            : label.includes("gottesdienstregie")
+              ? "gottesdienstregie"
+              : "all");
+    closeMenu();
+    const imported = (await window.desktop?.presentation.import(
+      selected,
+    )) as PresentationDocument | null;
+    if (imported) onOpened(imported);
+  }
+  async function renameCurrent() {
+    if (blockWhileLive() || !currentId) return;
+    closeMenu();
+    await onSave();
+    const current = (await window.desktop?.presentation.load(
+        currentId,
+      )) as PresentationDocument | null,
+      title = prompt(
+        "Neuer Name der Präsentation",
+        currentTitle ?? current?.title ?? "",
+      );
+    if (!title?.trim() || title.trim() === (currentTitle ?? current?.title))
+      return;
+    if (onRename) await onRename(title.trim());
+    else {
+      await window.desktop?.presentation.rename(currentId, title.trim());
+      const renamed = (await window.desktop?.presentation.load(
+        currentId,
+      )) as PresentationDocument | null;
+      if (renamed) onOpened(renamed);
+    }
+  }
+  async function backup() {
+    closeMenu();
+    if (!currentId) return;
+    const target = await window.desktop?.presentation.export(currentId);
+    if (target) alert(`Präsentation gesichert:\n${target}`);
+  }
+  async function restore() {
+    if (blockWhileLive()) return;
+    closeMenu();
+    const document =
+      (await window.desktop?.presentation.import()) as PresentationDocument | null;
+    if (document) onOpened(document);
+  }
+  async function share() {
+    closeMenu();
+    const document = (await window.desktop?.presentation.load(
+      currentId,
+    )) as PresentationDocument | null;
+    if (!document) return;
+    const lines = [
+      document.title,
+      localDate(document.date, navigator.language),
+      `Servicezeit: ${document.serviceTime || "10:30"}`,
+      "",
+      ...document.sections.flatMap((section) => [
+        section.title.toUpperCase(),
+        ...document.items
+          .filter((item) => item.sectionId === section.id)
+          .sort((a, b) => a.order - b.order)
+          .map((item) => `• ${item.title}`),
+        "",
+      ]),
+    ];
+    try {
+      await navigator.clipboard.writeText(lines.join("\n"));
+      alert("Die Ablaufliste wurde als Text in die Zwischenablage kopiert.");
+    } catch {
+      alert(lines.join("\n"));
+    }
+  }
+  async function saveAsTemplate() {
+    if (blockWhileLive() || !currentId) return;
+    closeMenu();
+    await onSave();
+    const document = (await window.desktop?.presentation.load(
+      currentId,
+    )) as PresentationDocument | null;
+    if (!document) return;
+    const name = prompt(
+      "Name der neuen Ablaufvorlage",
+      `${document.title} – Vorlage`,
+    )?.trim();
+    if (!name) return;
+    const entry: UserTemplate = {
+        id: crypto.randomUUID(),
+        name,
+        createdAt: new Date().toISOString(),
+        document: structuredClone(document),
+      },
+      next = [...templates, entry];
+    try {
+      writeTemplates(next);
+      setTemplates(next);
+      alert(`Die Ablaufvorlage „${name}“ wurde gespeichert.`);
+    } catch {
+      alert(
+        "Die Vorlage ist zu groß für den lokalen Vorlagenspeicher. Entferne große eingebettete Medien und versuche es erneut.",
+      );
+    }
+  }
+  function deleteTemplate(id: string) {
+    const next = templates.filter((entry) => entry.id !== id);
+    writeTemplates(next);
+    setTemplates(next);
+  }
+  const recentFlyout = (mode: "open" | "duplicate") => (
+    <div
+      className={`file-flyout recent-flyout recent-${mode}-flyout`}
+      role="menu"
+    >
+      <h3>{mode === "open" ? "ZULETZT GEÖFFNET" : "ZULETZT DUPLIZIERT"}</h3>
+      {recent.length ? (
+        recent.map((entry) => (
+          <button
+            key={entry.id}
+            onClick={async () => {
+              if (blockWhileLive()) return;
+              if (mode === "duplicate") {
+                closeMenu();
+                setDuplicateInitialId(entry.id);
+                setDialog("duplicate");
+                return;
+              }
+              const document = (await window.desktop?.presentation.load(
+                entry.id,
+              )) as PresentationDocument | null;
+              if (document) {
+                onOpened(document);
+                closeMenu();
+              }
+            }}
+          >
+            <PresentationThumb document={recentDocuments[entry.id]} />
+            <span>
+              <b>{entry.title}</b>
+              <small>{localDate(entry.date, navigator.language)}</small>
+            </span>
+          </button>
+        ))
+      ) : (
+        <p>Keine zuletzt verwendeten Präsentationen.</p>
+      )}
+    </div>
+  );
+  return (
+    <>
+      <div className="menu-root file-menu-root">
+        <button
+          ref={trigger}
+          aria-haspopup="menu"
+          aria-expanded={open}
+          onClick={(event) => {
+            event.stopPropagation();
+            onToggle();
+          }}
+        >
+          {label}
+        </button>
+        {open && (
+          <div
+            ref={menu}
+            className="menu-popup file-menu"
+            role="menu"
+            onKeyDown={keys}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              data-flyout="new"
+              onMouseEnter={() => openFlyout("new")}
+              onClick={() => setFlyout("new")}
+            >
+              <Icon name="note_add" />
+              <span>Neu</span>
+              <Icon name="chevron_right" />
+            </button>
+            <button onClick={() => showDialog("open")}>
+              <Icon name="folder_open" />
+              <span>Öffnen …</span>
+            </button>
+            <button
+              data-flyout="recent-open"
+              onMouseEnter={() => openFlyout("recent-open")}
+              onClick={() => setFlyout("recent-open")}
+            >
+              <Icon name="history" />
+              <span>Zuletzt öffnen</span>
+              <Icon name="chevron_right" />
+            </button>
+            <button onClick={() => showDialog("duplicate")}>
+              <Icon name="content_copy" />
+              <span>Duplizieren …</span>
+            </button>
+            <button
+              data-flyout="recent-duplicate"
+              onMouseEnter={() => openFlyout("recent-duplicate")}
+              onClick={() => setFlyout("recent-duplicate")}
+            >
+              <Icon name="history_toggle_off" />
+              <span>Zuletzt duplizieren</span>
+              <Icon name="chevron_right" />
+            </button>
+            <button
+              className="separator"
+              disabled={!currentId}
+              onClick={() => void renameCurrent()}
+            >
+              <Icon name="drive_file_rename_outline" />
+              <span>Umbenennen …</span>
+            </button>
+            <button
+              disabled={!currentId}
+              onClick={() => {
+                void onSave();
+                closeMenu();
+              }}
+            >
+              <Icon name="cloud_done" />
+              <span>Speichern & synchronisieren</span>
+              <kbd>Strg+S</kbd>
+            </button>
+            <button
+              className="separator"
+              data-flyout="import"
+              onMouseEnter={() => openFlyout("import")}
+              onClick={() => setFlyout("import")}
+            >
+              <Icon name="upload_file" />
+              <span>Präsentation importieren</span>
+              <Icon name="chevron_right" />
+            </button>
+            <button disabled={!currentId} onClick={() => void backup()}>
+              <Icon name="archive" />
+              <span>Präsentation sichern …</span>
+            </button>
+            <button onClick={() => void restore()}>
+              <Icon name="settings_backup_restore" />
+              <span>Präsentation wiederherstellen …</span>
+            </button>
+            <button
+              className="separator"
+              disabled={!currentId}
+              onClick={() => {
+                closeMenu();
+                window.print();
+              }}
+            >
+              <Icon name="print" />
+              <span>Präsentation drucken</span>
+              <kbd>Strg+P</kbd>
+            </button>
+            <button disabled={!currentId} onClick={() => void share()}>
+              <Icon name="share" />
+              <span>Ablaufliste teilen</span>
+            </button>
+            <button disabled={!currentId} onClick={() => void saveAsTemplate()}>
+              <Icon name="bookmark_add" />
+              <span>Ablauf als Vorlage speichern …</span>
+            </button>
+            <button
+              className="separator"
+              onClick={() => {
+                if (onAir) showDialog("exit-live");
+                else void onExit();
+              }}
+            >
+              <Icon name="power_settings_new" />
+              <span>Beenden</span>
+              <kbd>Alt+F4</kbd>
+            </button>
+            {flyout === "new" && (
+              <div
+                className="file-flyout new-file-flyout"
+                role="menu"
+                onMouseEnter={() =>
+                  hoverTimer.current && window.clearTimeout(hoverTimer.current)
+                }
+              >
+                <h3>PRÄSENTATION</h3>
+                <button onClick={() => showDialog("new")}>
+                  <span className="file-template-icon">
+                    <Icon name="co_present" />
+                  </span>
+                  <span>
+                    <b>Präsentation</b>
+                    <small>
+                      Erstelle eine neue Gottesdienst-Präsentation mit eigenen
+                      Elementen, Medien und Abläufen.
+                    </small>
+                  </span>
+                </button>
+              </div>
+            )}
+            {flyout === "recent-open" && recentFlyout("open")}
+            {flyout === "recent-duplicate" && recentFlyout("duplicate")}
+            {flyout === "import" && (
+              <div className="file-flyout import-flyout" role="menu">
+                <h3>PRÄSENTATIONEN</h3>
+                <button onClick={() => void importPresentation()}>
+                  <Icon name="slideshow" />
+                  <span>
+                    <b>PowerPoint / Keynote / OpenDocument …</b>
+                    <small>
+                      Importiert .pptx und .odp als Folien sowie die
+                      eingebettete Vorschau aus .key.
+                    </small>
+                  </span>
+                </button>
+                <button onClick={() => void importPresentation()}>
+                  <Icon name="description" />
+                  <span>
+                    <b>Text / Markdown …</b>
+                    <small>
+                      Erstellt aus Absätzen in .txt und .md automatisch einzelne
+                      Folien.
+                    </small>
+                  </span>
+                </button>
+                <button onClick={() => void importPresentation()}>
+                  <Icon name="data_object" />
+                  <span>
+                    <b>GottesdienstRegie …</b>
+                    <small>
+                      Importiert .json, .grpresentation und .grbackup als neue
+                      Präsentation.
+                    </small>
+                  </span>
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      {dialog === "new" &&
+        createPortal(
+          <NewPresentationDialog
+            close={closeDialog}
+            opened={onOpened}
+            templates={templates}
+            onDeleteTemplate={deleteTemplate}
+            creatorName={creatorName}
+          />,
+          document.body,
+        )}
+      {(dialog === "open" || dialog === "duplicate") &&
+        createPortal(
+          <PresentationPicker
+            mode={dialog}
+            initialId={duplicateInitialId}
+            close={closeDialog}
+            opened={onOpened}
+          />,
+          document.body,
+        )}
+      {dialog === "exit-live" &&
+        createPortal(
+          <div className="modal-backdrop file-dialog-backdrop">
+            <div
+              className="confirm-dialog file-live-exit"
+              role="alertdialog"
+              aria-modal="true"
+            >
+              <Icon name="cast_connected" />
+              <h2>LIVE-AUSGABE AKTIV</h2>
+              <p>
+                GottesdienstRegie ist derzeit ON AIR. Das Beenden würde die
+                Live-Ausgabe unterbrechen.
+              </p>
+              <div>
+                <button onClick={closeDialog}>ABBRECHEN</button>
+                <button className="danger" onClick={() => void onExit()}>
+                  OFF AIR UND BEENDEN
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+    </>
+  );
 }

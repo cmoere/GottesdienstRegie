@@ -204,6 +204,7 @@ export function MediaBrowser() {
     ),
     [generatorDuration, setGeneratorDuration] = useState(30),
     [generating, setGenerating] = useState(false),
+    [generatorError, setGeneratorError] = useState(""),
     [unsplashPage, setUnsplashPage] = useState(1),
     [unsplashHasMore, setUnsplashHasMore] = useState(true),
     [unsplashQuery, setUnsplashQuery] = useState(""),
@@ -526,17 +527,6 @@ export function MediaBrowser() {
       setBusy("");
     }
   }
-  async function toggleFavorite() {
-    if (!selected || tab === "unsplash") return;
-    setBusy(selected.id);
-    try {
-      await api.update(selected.id, { favorite: !selected.favorite });
-      setSelected({ ...selected, favorite: !selected.favorite });
-      await refresh(tab);
-    } finally {
-      setBusy("");
-    }
-  }
   function choose(item: CloudMediaAsset) {
     setSelected(item);
     if (isAudio && context === "select")
@@ -602,6 +592,7 @@ export function MediaBrowser() {
     };
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="hsl(${hue} ${light ? 28 : 55}% ${dark ? 11 : light ? 88 : 30}%)"/><stop offset="1" stop-color="hsl(${hue2} ${light ? 38 : 68}% ${dark ? 24 : light ? 72 : 54}%)"/></linearGradient><filter id="b"><feGaussianBlur stdDeviation="${generatorStyle === "minimal" ? 120 : 75}"/></filter></defs><rect width="1920" height="1080" fill="url(#g)"/>${geometry}<g opacity="${generatorStyle === "minimal" ? ".22" : ".52"}" filter="url(#b)"><circle cx="${240 + (seed % 620)}" cy="${160 + (seed % 260)}" r="${260 + (seed % 180)}" fill="hsl(${(hue + 130) % 360} 72% 64%)"/><circle cx="${1250 + (seed % 400)}" cy="${480 + (seed % 310)}" r="${340 + (seed % 170)}" fill="hsl(${(hue2 + 90) % 360} 72% 56%)"/></g>${scenes[generatorScene] ?? ""}<path d="M0 850 Q480 ${500 + (seed % 210)} 960 820 T1920 ${620 + (seed % 150)} V1080 H0Z" fill="${light ? "#fff" : "#000"}" opacity=".12"/><metadata>${safe}</metadata></svg>`;
     setGenerating(true);
+    setGeneratorError("");
     try {
       if (generatorOutput === "video") {
         const canvas = document.createElement("canvas");
@@ -743,9 +734,38 @@ export function MediaBrowser() {
         setItems((current) => [asset, ...current]);
         setSelected(asset);
       }
+      setTab("cloud");
+      setQuery("");
+      setLibraryFilter("all");
       setGeneratorOpen(false);
+    } catch (error) {
+      setGeneratorError(
+        `Das ${generatorOutput === "video" ? "Video" : "Motiv"} konnte nicht erstellt werden. Bitte versuche es erneut. (${error instanceof Error ? error.message : String(error)})`,
+      );
     } finally {
       setGenerating(false);
+    }
+  }
+  async function toggleFavorite(item: CloudMediaAsset) {
+    const favorite = !item.favorite;
+    setBusy(item.id);
+    try {
+      if (tab === "unsplash") await api?.setRemoteFavorite?.(item, favorite);
+      else await api?.update?.(item.id, { favorite });
+      setItems((current) =>
+        current.map((entry) =>
+          entry.id === item.id ? { ...entry, favorite } : entry,
+        ),
+      );
+      setSelected((current) =>
+        current?.id === item.id ? { ...current, favorite } : current,
+      );
+    } catch {
+      alert(
+        "Der Favorit konnte nicht gespeichert werden. Bitte versuche es erneut.",
+      );
+    } finally {
+      setBusy("");
     }
   }
   return (
@@ -874,22 +894,24 @@ export function MediaBrowser() {
           />
           <Icon name="photo_size_select_large" />
         </label>
-        {selected && tab !== "unsplash" && (
+        {selected && (
           <>
             <button
-              onClick={() => void toggleFavorite()}
+              onClick={() => void toggleFavorite(selected)}
               disabled={busy === selected.id}
             >
               <Icon name={selected.favorite ? "star" : "star_outline"} />{" "}
               {selected.favorite ? "FAVORIT ENTFERNEN" : "ALS FAVORIT"}
             </button>
-            <button
-              className="danger"
-              onClick={() => setDeleteTarget(selected)}
-              disabled={busy === selected.id}
-            >
-              <Icon name="delete" /> MEDIUM LÖSCHEN
-            </button>
+            {tab !== "unsplash" && (
+              <button
+                className="danger"
+                onClick={() => setDeleteTarget(selected)}
+                disabled={busy === selected.id}
+              >
+                <Icon name="delete" /> MEDIUM LÖSCHEN
+              </button>
+            )}
           </>
         )}
       </div>
@@ -1128,6 +1150,14 @@ export function MediaBrowser() {
                 <dd>{tab === "unsplash" ? "Unsplash" : "Team-Cloud"}</dd>
               </dl>
               <div className="detail-actions">
+                <button
+                  disabled={busy === selected.id}
+                  className={selected.favorite ? "favorite active" : "favorite"}
+                  onClick={() => void toggleFavorite(selected)}
+                >
+                  <Icon name={selected.favorite ? "star" : "star_outline"} />
+                  {selected.favorite ? "FAVORIT ENTFERNEN" : "ALS FAVORIT"}
+                </button>
                 {context === "select" && !isAudio && (
                   <button className="primary" onClick={useSelected}>
                     VERWENDEN
@@ -1376,6 +1406,11 @@ export function MediaBrowser() {
             )}
           </div>
           <footer>
+            {generatorError && (
+              <p className="generator-error" role="alert">
+                <Icon name="error" /> {generatorError}
+              </p>
+            )}
             <button
               className="primary"
               disabled={!generatorPrompt.trim() || generating}
