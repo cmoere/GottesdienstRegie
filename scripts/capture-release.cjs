@@ -14,12 +14,11 @@ app.whenReady().then(async()=>{
   const state={presentationId,title:'Sonntagsgottesdienst',date:now.toISOString().slice(0,10),createdAt:now.toISOString(),updatedAt:now.toISOString(),createdBy:'Corbin',historyUserId:'corbin',historyDisplayName:'Corbin',editHistory:entries,restorePoints:[],sections:[],items:[],selectedItemId:'',selectedServiceItemIds:[],selectedSlideId:'',previewItemId:'',previewSlideId:'',liveItemId:'',liveSlideId:'',mode:'edit',previewLayout:'single',activeVirtualScreen:'main',gridSize:200,smartGuides:true,marginGuides:false,ruleOfThirds:false,onAir:false,displayRoles:{},saveState:'saved',history:[],future:[],selectedElementIds:[],title:'Sonntagsgottesdienst',date:now.toISOString().slice(0,10),eventId:'',templateId:'',serviceTime:'10:38',archived:false,trashed:false,transitionDefault:{type:'fade',durationMs:500,direction:'left',easing:'standard',reverseOnPrevious:true}};
   await window.webContents.executeJavaScript(`localStorage.setItem('gottesdienstregie2.presentation',${JSON.stringify(JSON.stringify({state,version:14}))});location.hash='#media?context=manage';location.reload()`);
   await new Promise(resolve=>setTimeout(resolve,1800));
-  window.webContents.sendInputEvent({type:'mouseDown',x:785,y:95,button:'left',clickCount:1});
-  window.webContents.sendInputEvent({type:'mouseUp',x:785,y:95,button:'left',clickCount:1});
+  await window.webContents.executeJavaScript(`document.querySelectorAll('.media-tabs button')[3]?.click()`);
   await new Promise(resolve=>setTimeout(resolve,500));
   await window.webContents.executeJavaScript(`document.querySelector('.generator-output-tabs button:last-child')?.click()`);
   await new Promise(resolve=>setTimeout(resolve,250));
   const image=await window.webContents.capturePage();
-  await fs.writeFile(path.join(__dirname,'..','public','help','release-0.36.4.png'),image.toPNG());
+  await fs.writeFile(path.join(__dirname,'..','public','help','release-0.36.5.png'),image.toPNG());
   app.quit();
 });

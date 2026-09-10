@@ -1,3 +1,29 @@
+# GottesdienstRegie 0.36.5
+
+Veröffentlicht am 10. September 2026 um 23:06 Uhr.
+
+## Neu
+
+- **Meine Präsentationen:** Das persönliche Profil enthält eine durchsuchbare und filterbare Präsentationsübersicht mit Titelbild, Datum, Umfang, Dateigröße und Änderungszeit. Ein Klick öffnet die Präsentation direkt.
+- **QR-Code-Editor:** URL oder Text werden in einem eigenen Dialog eingegeben, live als QR-Code angezeigt und können später erneut bearbeitet werden.
+- **Medien in Fehlerberichten:** Bis zu vier Screenshots, Bilder oder kurze Videos lassen sich einem Fehlerbericht beifügen.
+
+## Verbessert
+
+- KI-Motive werden als vollständiger Bereich der Medienbibliothek angezeigt und nicht mehr in einem Popup.
+- Vordergrundbilder besitzen ein kompaktes Dropdown für die Medienbibliothek und den direkten Bildimport.
+- Zusatztexte können sofort eingegeben und anschließend direkt in ihrer Ebenenbox bearbeitet werden.
+- Unsplash lädt weitere Ergebnisse seitenweise und bietet „Mehr laden“ sowie „Weniger anzeigen“.
+- Die Servicezeit steht rechts im Abschnittskopf, ist größer und kennzeichnet Vormittag oder Nachmittag.
+
+## Behoben
+
+- Die leere Box „Zusätzliche Ebenen“ wird nicht mehr angezeigt; vorhandene Ebenenfunktionen bleiben vollständig erhalten.
+- QR-Codes speichern nun ein tatsächlich gerendertes QR-Bild statt eines bloßen Textplatzhalters.
+- Die unerwünschten Erklärungssätze im Profil, KI-Videobereich und Fehlerdialog wurden entfernt.
+
+---
+
 # GottesdienstRegie 0.36.4
 
 Veröffentlicht am 10. September 2026 um 21:00 Uhr.

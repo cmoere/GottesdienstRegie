@@ -1,207 +1,3704 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import QRCode from 'qrcode';
-import { SlideRenderer } from './SlideRenderer';
-import { defaultTransition, formatDuration, itemDurationSeconds, usePresentation, type ServiceItem, type Slide, type SlideTransition, type TransitionDirection, type TransitionEasing, type TransitionType } from './store';
-import { itemTransitionDefault, resolveTransition, transitionLabels, TransitionStage } from './transitions';
-import { createLiveQuizSession, endLiveQuizSession, openLiveQuizQuestion, quizJoinUrl, returnLiveQuizToLobby, storedLiveQuizSessionId, watchLiveQuizAnswers, watchLiveQuizSession, type LiveQuizAnswer, type LiveQuizSession } from './liveQuiz';
-import type { QuickScreenConfig } from './preferences';
-import logoWhite from './assets/logo-white.png';
-import { allEditorFonts as editorFonts, fontStack } from './fonts';
-import { QuickOverlay } from './QuickOverlay';
-import {usePreferences} from './preferences';
-import {defaultAudioRouting,playRoutedTone} from './audioRouting';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
+import QRCode from "qrcode";
+import { SlideRenderer } from "./SlideRenderer";
+import {
+  defaultTransition,
+  formatDuration,
+  itemDurationSeconds,
+  usePresentation,
+  type ServiceItem,
+  type Slide,
+  type SlideTransition,
+  type TransitionDirection,
+  type TransitionEasing,
+  type TransitionType,
+} from "./store";
+import {
+  itemTransitionDefault,
+  resolveTransition,
+  transitionLabels,
+  TransitionStage,
+} from "./transitions";
+import {
+  createLiveQuizSession,
+  endLiveQuizSession,
+  openLiveQuizQuestion,
+  quizJoinUrl,
+  returnLiveQuizToLobby,
+  storedLiveQuizSessionId,
+  watchLiveQuizAnswers,
+  watchLiveQuizSession,
+  type LiveQuizAnswer,
+  type LiveQuizSession,
+} from "./liveQuiz";
+import type { QuickScreenConfig } from "./preferences";
+import logoWhite from "./assets/logo-white.png";
+import { allEditorFonts as editorFonts, fontStack } from "./fonts";
+import { QuickOverlay } from "./QuickOverlay";
+import { usePreferences } from "./preferences";
+import { defaultAudioRouting, playRoutedTone } from "./audioRouting";
 
-const Icon=({name}:{name:string})=><span className="material-symbols-outlined" aria-hidden="true">{name}</span>;
+const Icon = ({ name }: { name: string }) => (
+  <span className="material-symbols-outlined" aria-hidden="true">
+    {name}
+  </span>
+);
 
-function selected(state:ReturnType<typeof usePresentation.getState>){
-  const item=state.items.find(entry=>entry.id===state.selectedItemId)??state.items[0];
-  const slide=item?.slides.find(entry=>entry.id===state.selectedSlideId)??item?.slides[0];
-  return {item,slide};
+function selected(state: ReturnType<typeof usePresentation.getState>) {
+  const item =
+    state.items.find((entry) => entry.id === state.selectedItemId) ??
+    state.items[0];
+  const slide =
+    item?.slides.find((entry) => entry.id === state.selectedSlideId) ??
+    item?.slides[0];
+  return { item, slide };
 }
 
-function slideLabel(slide:Slide,index:number){return slide.title?.trim()||`Folie ${index+1}`}
-
-function previewSlide(slide:Slide){
-  const placeholders=new Set(['inhalt bearbeiten','edit content','type text here']);
-  if(!placeholders.has(slide.body.trim().toLowerCase()))return slide;
-  return{...slide,body:'',elements:slide.elements.map(element=>element.type==='text'&&placeholders.has(String(element.properties.text??'').trim().toLowerCase())?{...element,properties:{...element.properties,text:''}}:element)};
+function slideLabel(slide: Slide, index: number) {
+  return slide.title?.trim() || `Folie ${index + 1}`;
 }
 
-function TransitionControls({item,slide,canEdit,onPreview}:{item:ServiceItem;slide:Slide;canEdit:boolean;onPreview:()=>void}){
-  const state=usePresentation(),override=slide.transitionOverride??null,value=override??itemTransitionDefault(item,state.transitionDefault),change=(patch:Partial<SlideTransition>)=>state.updateSlide({transitionOverride:{...value,...patch}}),itemChange=(patch:Partial<SlideTransition>)=>state.updateItem(item.id,{transitionDefault:{...itemTransitionDefault(item,state.transitionDefault),...patch}});
-  return <section className="transition-controls"><header><div><Icon name="animation"/><b>ÜBERGANG</b></div><button type="button" onClick={onPreview}><Icon name="play_arrow"/> VORSCHAU</button></header><label className="transition-scope"><input type="checkbox" disabled={!canEdit} checked={!!override} onChange={event=>state.updateSlide({transitionOverride:event.target.checked?{...value}:null})}/><span>Für diese Folie überschreiben</span></label><div className="transition-grid"><label>Effekt<select disabled={!canEdit} value={value.type} onChange={event=>(override?change:itemChange)({type:event.target.value as TransitionType})}>{Object.entries(transitionLabels).map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></label><label>Dauer<input disabled={!canEdit||value.type==='cut'} type="number" min="0.1" max="5" step="0.1" value={(value.durationMs/1000).toFixed(1)} onChange={event=>(override?change:itemChange)({durationMs:Math.max(100,Math.min(5000,Number(event.target.value)*1000))})}/><small>Sekunden</small></label>{(['slide','wipe','push','cube'] as TransitionType[]).includes(value.type)&&<label>Richtung<select disabled={!canEdit} value={value.direction} onChange={event=>(override?change:itemChange)({direction:event.target.value as TransitionDirection})}><option value="left">Nach links</option><option value="right">Nach rechts</option><option value="up">Nach oben</option><option value="down">Nach unten</option></select></label>}<label>Bewegung<select disabled={!canEdit||value.type==='cut'} value={value.easing} onChange={event=>(override?change:itemChange)({easing:event.target.value as TransitionEasing})}><option value="standard">Standard</option><option value="linear">Linear</option><option value="ease-in">Sanft starten</option><option value="ease-out">Sanft enden</option><option value="ease-in-out">Sanft starten &amp; enden</option></select></label></div><label className="transition-scope"><input type="checkbox" disabled={!canEdit||value.type==='cut'} checked={value.reverseOnPrevious} onChange={event=>(override?change:itemChange)({reverseOnPrevious:event.target.checked})}/><span>Beim Zurückschalten Richtung umkehren</span></label><footer><span>Gilt für: {override?'nur diese Folie':'dieses Ablauf-Element'}</span>{override&&<button type="button" onClick={()=>state.updateSlide({transitionOverride:null})}>AUF STANDARD ZURÜCKSETZEN</button>}</footer></section>;
+function previewSlide(slide: Slide) {
+  const placeholders = new Set([
+    "inhalt bearbeiten",
+    "edit content",
+    "type text here",
+  ]);
+  if (!placeholders.has(slide.body.trim().toLowerCase())) return slide;
+  return {
+    ...slide,
+    body: "",
+    elements: slide.elements.map((element) =>
+      element.type === "text" &&
+      placeholders.has(
+        String(element.properties.text ?? "")
+          .trim()
+          .toLowerCase(),
+      )
+        ? { ...element, properties: { ...element.properties, text: "" } }
+        : element,
+    ),
+  };
 }
 
-function SongEditor({item,canEdit}:{item:ServiceItem;canEdit:boolean}){
-  const state=usePresentation();
-  const arrangement=item.slides.map((slide,index)=>slideLabel(slide,index));
-  const metadata=item.metadata;
-  const changeMeta=(patch:Record<string,string|number|boolean>)=>state.updateItem(item.id,{metadata:{...metadata,...patch}});
-  return <div className="song-context">
-    <header><div><input aria-label="Songtitel" disabled={!canEdit} value={item.title} onChange={event=>state.updateItem(item.id,{title:event.target.value})}/><small>{String(metadata.originalTitle??'')}</small></div><label>Team<select disabled={!canEdit} value={String(metadata.team??'Lobpreis-Team')} onChange={event=>changeMeta({team:event.target.value})}><option>Lobpreis-Team</option><option>Technik-Team</option></select></label></header>
-    <div className="arrangement-head"><button><Icon name="expand_more"/> Hauptarrangement</button><div className="arrangement-actions"><button title="Arrangement duplizieren" onClick={()=>state.duplicateSlide()} disabled={!canEdit}><Icon name="content_copy"/></button><button title="Abschnitt hinzufügen" onClick={()=>state.addSlide()} disabled={!canEdit}><Icon name="add"/></button></div><label>Tonart<select disabled={!canEdit} value={String(metadata.key??'–')} onChange={event=>changeMeta({key:event.target.value})}><option>–</option>{['C','D','E','F','G','A','B'].map(key=><option key={key}>{key}</option>)}</select></label></div>
-    <div className="arrangement-sequence" aria-label="Arrangement">{arrangement.map((name,index)=><button key={`${name}-${index}`} className={item.slides[index].id===state.selectedSlideId?'active':''} onClick={()=>state.select(item.id,item.slides[index].id)}>{name}</button>)}</div>
-    <div className="lyrics-editor">{item.slides.map((slide,index)=><section key={slide.id} className={slide.id===state.selectedSlideId?'active':''} onClick={()=>state.select(item.id,slide.id)}><input disabled={!canEdit} value={slide.title} aria-label={`Abschnitt ${index+1}`} onChange={event=>{state.select(item.id,slide.id);state.updateSlide({title:event.target.value})}}/><textarea disabled={!canEdit} value={slide.body} rows={Math.max(3,slide.body.split('\n').length+1)} onChange={event=>{state.select(item.id,slide.id);state.updateSlide({body:event.target.value})}}/><button disabled={!canEdit} onClick={()=>{state.select(item.id,slide.id);state.addSlide()}}><Icon name="horizontal_rule"/> FOLIENUMBRUCH</button></section>)}</div>
-    <div className="song-meta"><label>Autoren<input disabled={!canEdit} value={String(metadata.author??'')} onChange={event=>changeMeta({author:event.target.value})}/></label><label>Publisher / Copyright<input disabled={!canEdit} value={String(metadata.copyright??'')} onChange={event=>changeMeta({copyright:event.target.value})}/></label><label>CCLI Song Number<input disabled={!canEdit} value={String(metadata.ccli??'')} onChange={event=>changeMeta({ccli:event.target.value})}/></label></div>
-    <div className="song-options"><label><input type="checkbox" disabled={!canEdit} checked={metadata.ccliLicensed!==false} onChange={event=>changeMeta({ccliLicensed:event.target.checked})}/> Unter CCLI-Lizenz</label><label><input type="checkbox" disabled={!canEdit} checked={metadata.showTitle===true} onChange={event=>changeMeta({showTitle:event.target.checked})}/> Titel auf Titelfolie</label><label><input type="checkbox" disabled={!canEdit} checked={metadata.showCredits!==false} onChange={event=>changeMeta({showCredits:event.target.checked})}/> Credits auf Titelfolie</label><span>Übergang: Überblenden · 0,5 Sekunden</span></div>
-  </div>
+function TransitionControls({
+  item,
+  slide,
+  canEdit,
+  onPreview,
+}: {
+  item: ServiceItem;
+  slide: Slide;
+  canEdit: boolean;
+  onPreview: () => void;
+}) {
+  const state = usePresentation(),
+    override = slide.transitionOverride ?? null,
+    value = override ?? itemTransitionDefault(item, state.transitionDefault),
+    change = (patch: Partial<SlideTransition>) =>
+      state.updateSlide({ transitionOverride: { ...value, ...patch } }),
+    itemChange = (patch: Partial<SlideTransition>) =>
+      state.updateItem(item.id, {
+        transitionDefault: {
+          ...itemTransitionDefault(item, state.transitionDefault),
+          ...patch,
+        },
+      });
+  return (
+    <section className="transition-controls">
+      <header>
+        <div>
+          <Icon name="animation" />
+          <b>ÜBERGANG</b>
+        </div>
+        <button type="button" onClick={onPreview}>
+          <Icon name="play_arrow" /> VORSCHAU
+        </button>
+      </header>
+      <label className="transition-scope">
+        <input
+          type="checkbox"
+          disabled={!canEdit}
+          checked={!!override}
+          onChange={(event) =>
+            state.updateSlide({
+              transitionOverride: event.target.checked ? { ...value } : null,
+            })
+          }
+        />
+        <span>Für diese Folie überschreiben</span>
+      </label>
+      <div className="transition-grid">
+        <label>
+          Effekt
+          <select
+            disabled={!canEdit}
+            value={value.type}
+            onChange={(event) =>
+              (override ? change : itemChange)({
+                type: event.target.value as TransitionType,
+              })
+            }
+          >
+            {Object.entries(transitionLabels).map(([key, label]) => (
+              <option key={key} value={key}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Dauer
+          <input
+            disabled={!canEdit || value.type === "cut"}
+            type="number"
+            min="0.1"
+            max="5"
+            step="0.1"
+            value={(value.durationMs / 1000).toFixed(1)}
+            onChange={(event) =>
+              (override ? change : itemChange)({
+                durationMs: Math.max(
+                  100,
+                  Math.min(5000, Number(event.target.value) * 1000),
+                ),
+              })
+            }
+          />
+          <small>Sekunden</small>
+        </label>
+        {(["slide", "wipe", "push", "cube"] as TransitionType[]).includes(
+          value.type,
+        ) && (
+          <label>
+            Richtung
+            <select
+              disabled={!canEdit}
+              value={value.direction}
+              onChange={(event) =>
+                (override ? change : itemChange)({
+                  direction: event.target.value as TransitionDirection,
+                })
+              }
+            >
+              <option value="left">Nach links</option>
+              <option value="right">Nach rechts</option>
+              <option value="up">Nach oben</option>
+              <option value="down">Nach unten</option>
+            </select>
+          </label>
+        )}
+        <label>
+          Bewegung
+          <select
+            disabled={!canEdit || value.type === "cut"}
+            value={value.easing}
+            onChange={(event) =>
+              (override ? change : itemChange)({
+                easing: event.target.value as TransitionEasing,
+              })
+            }
+          >
+            <option value="standard">Standard</option>
+            <option value="linear">Linear</option>
+            <option value="ease-in">Sanft starten</option>
+            <option value="ease-out">Sanft enden</option>
+            <option value="ease-in-out">Sanft starten &amp; enden</option>
+          </select>
+        </label>
+      </div>
+      <label className="transition-scope">
+        <input
+          type="checkbox"
+          disabled={!canEdit || value.type === "cut"}
+          checked={value.reverseOnPrevious}
+          onChange={(event) =>
+            (override ? change : itemChange)({
+              reverseOnPrevious: event.target.checked,
+            })
+          }
+        />
+        <span>Beim Zurückschalten Richtung umkehren</span>
+      </label>
+      <footer>
+        <span>
+          Gilt für: {override ? "nur diese Folie" : "dieses Ablauf-Element"}
+        </span>
+        {override && (
+          <button
+            type="button"
+            onClick={() => state.updateSlide({ transitionOverride: null })}
+          >
+            AUF STANDARD ZURÜCKSETZEN
+          </button>
+        )}
+      </footer>
+    </section>
+  );
 }
 
-function ContentEditor({item,slide,canEdit}:{item:ServiceItem;slide:Slide;canEdit:boolean}){
-  const state=usePresentation();
-  const primaryText=slide.elements.find(element=>element.type==='text'),fadeActive=primaryText?.properties.animation==='fade-in',extras=slide.elements.filter(element=>element.id!==primaryText?.id);
-  const elementIcon=(type:string)=>type==='text'?'text_fields':type==='image'?'image':type==='video'?'movie':type==='qr'?'qr_code_2':type==='shape'?'category':'layers';
-  const addForeground=async()=>{const imported=await window.desktop?.media.import()??[],image=imported.find(asset=>asset.kind==='image');if(!image)return;state.addElement('image');const current=usePresentation.getState(),element=current.items.flatMap(entry=>entry.slides).find(entry=>entry.id===current.selectedSlideId)?.elements.at(-1);if(element)current.updateElement(element.id,{name:'Vordergrundbild',x:1180,y:160,width:600,height:760,properties:{...element.properties,src:image.url,fit:'contain'}})};
-  const addQr=()=>{const value=prompt('Welche Adresse oder welcher Text soll im QR-Code gespeichert werden?','https://');if(!value?.trim())return;state.addElement('qr');const current=usePresentation.getState(),element=current.items.flatMap(entry=>entry.slides).find(entry=>entry.id===current.selectedSlideId)?.elements.at(-1);if(element)current.updateElement(element.id,{name:'QR-Code',x:1460,y:700,width:300,height:300,properties:{...element.properties,value:value.trim()}})};
-  if(item.type==='web'){const web=slide.elements.find(element=>element.type==='web'),url=String(web?.properties.src??item.metadata.url??''),change=(patch:Record<string,string|number|boolean>)=>{state.updateItem(item.id,{metadata:{...item.metadata,...patch}});if(web)state.updateElement(web.id,{properties:{...web.properties,...patch}})},zoom=Number(web?.properties.zoom??item.metadata.zoom??100);return <div className="content-context web-content-editor"><header><b>{item.title}</b><span>WEBSITE</span></header><div className="content-tools"><Icon name="language"/><b>WEB-INHALT</b></div><div className="web-editor-fields"><label>Webadresse<input autoFocus disabled={!canEdit} type="url" placeholder="https://www.beispiel.de" value={url} onChange={event=>change({url:event.target.value,src:event.target.value})}/></label><div className="web-zoom-row"><label>Zoom<input disabled={!canEdit} type="range" min="50" max="200" value={zoom} onChange={event=>change({zoom:Number(event.target.value)})}/><output>{zoom} %</output></label><button disabled={!canEdit||zoom===100} onClick={()=>change({zoom:100})}><Icon name="center_focus_strong"/> AUF 100 %</button></div><label><input disabled={!canEdit} type="checkbox" checked={item.metadata.reloadOnLive!==false} onChange={event=>change({reloadOnLive:event.target.checked})}/> Beim Live-Schalten neu laden</label><label><input disabled={!canEdit} type="checkbox" checked={item.metadata.allowInteraction===true} onChange={event=>change({allowInteraction:event.target.checked})}/> Interaktion mit der Webseite erlauben</label><label><input disabled={!canEdit} type="checkbox" checked={item.metadata.webAudio===true} onChange={event=>change({webAudio:event.target.checked})}/> Webseiten-Audio erlauben</label><label><input disabled={!canEdit} type="checkbox" checked={item.metadata.allowPopups===true} onChange={event=>change({allowPopups:event.target.checked})}/> Pop-up-Fenster erlauben</label><label><input disabled={!canEdit} type="checkbox" checked={item.metadata.proxyEnabled===true} onChange={event=>change({proxyEnabled:event.target.checked})}/> Proxy nur für dieses Element verwenden</label>{item.metadata.proxyEnabled===true&&<><label>Proxy-Adresse<input disabled={!canEdit} value={String(item.metadata.proxyUrl??'')} placeholder="https://proxy.beispiel.de/?url={url}" onChange={event=>change({proxyUrl:event.target.value})}/></label><small>Verwende bitte <b>{'{url}'}</b> als Platzhalter. Ohne Platzhalter wird die codierte Zieladresse automatisch angehängt.</small></>}<label>Automatisch aktualisieren<select disabled={!canEdit} value={Number(item.metadata.refreshSeconds??0)} onChange={event=>change({refreshSeconds:Number(event.target.value)})}><option value="0">Nicht automatisch</option><option value="30">Alle 30 Sekunden</option><option value="60">Jede Minute</option><option value="300">Alle 5 Minuten</option><option value="900">Alle 15 Minuten</option></select></label><small>{url?'Die Webvorschau wird rechts sofort aktualisiert. Alle Einstellungen gelten ausschließlich für dieses Element.':'Bitte gib eine vollständige Webadresse ein. Das Element wurde bereits erstellt und kann normal gespeichert, dupliziert oder rückgängig gemacht werden.'}</small></div></div>}
-  return <div className="content-context"><header><b>{item.title}</b><span>{item.type.toUpperCase()}</span></header><div className="content-tools"><button disabled={!canEdit} onClick={()=>state.addSlide()}><Icon name="splitscreen"/> SLIDE BREAK</button><button disabled={!canEdit} onClick={()=>state.addElement('text')}><Icon name="text_fields"/> TEXT</button><button disabled={!canEdit} onClick={()=>void addForeground()}><Icon name="add_photo_alternate"/> VORDERGRUNDBILD</button><button disabled={!canEdit} onClick={addQr}><Icon name="qr_code_2"/> QR-CODE</button><select aria-label="2D-Objekt hinzufügen" disabled={!canEdit} value="" onChange={event=>{const [kind,name]=event.target.value.split('|');if(kind)state.addShape(kind,name)}}><option value="">＋ 2D-OBJEKT</option>{[['rectangle','Rechteck'],['rounded','Abgerundetes Rechteck'],['ellipse','Kreis / Ellipse'],['triangle','Dreieck'],['diamond','Raute'],['pentagon','Fünfeck'],['hexagon','Sechseck'],['octagon','Achteck'],['star','Stern'],['burst','Strahlenform'],['arrow','Pfeil'],['chevron','Chevron'],['speech','Sprechblase'],['cross','Kreuz'],['parallelogram','Parallelogramm'],['trapezoid','Trapez'],['heart','Herz'],['lightning','Blitz'],['shield','Schild'],['cloud','Wolke'],['home','Haus'],['moon','Halbmond']].map(([kind,name])=><option key={kind} value={`${kind}|${name}`}>{name}</option>)}</select><button className={fadeActive?'active':''} disabled={!canEdit||!primaryText} onClick={()=>primaryText&&state.updateElement(primaryText.id,{properties:{...primaryText.properties,animation:fadeActive?'none':'fade-in'}})}><Icon name="animation"/> FADE IN TEXT</button><button title="Hilfe zu Folieninhalten" onClick={()=>window.dispatchEvent(new CustomEvent('open-help',{detail:'slides'}))}><Icon name="info"/></button></div><textarea aria-label="Folieninhalt" disabled={!canEdit} value={slide.body} onChange={event=>state.updateSlide({body:event.target.value})}/><section className="additional-elements"><header><b>ZUSÄTZLICHE EBENEN</b><small>{extras.length} {extras.length===1?'Element':'Elemente'}</small></header>{extras.length?<div>{extras.map(element=><article className={state.selectedElementIds.includes(element.id)?'active':''} key={element.id}><button className="element-select" onClick={()=>state.selectElements([element.id])}><Icon name={elementIcon(element.type)}/><span><b>{element.name}</b><small>{element.type==='shape'?`2D-Objekt · ${String(element.properties.shapeKind??'Form')}`:element.type==='image'?'Vordergrundbild':element.type==='qr'?'QR-Code':element.type==='text'?'Zusätzlicher Text':element.type}</small></span></button><button title={element.visible?'Ausblenden':'Einblenden'} onClick={()=>state.toggleElementVisible(element.id)}><Icon name={element.visible?'visibility':'visibility_off'}/></button><button title="Bearbeiten" onClick={()=>state.selectElements([element.id])}><Icon name="edit"/></button><button className="danger" title="Entfernen" onClick={()=>state.removeElement(element.id)}><Icon name="close"/></button></article>)}</div>:<p>Noch keine zusätzlichen Ebenen. Füge bitte Text, Vordergrundbild, QR-Code oder ein 2D-Objekt hinzu.</p>}</section><div className="item-playback"><label><input type="checkbox" disabled={!canEdit} checked={item.timing.autoAdvance} onChange={event=>state.updateItem(item.id,{autoAdvance:event.target.checked,timing:{...item.timing,autoAdvance:event.target.checked}})}/> Jede Folie für <button type="button">{item.timing.slideDurationSeconds} Sekunden</button> anzeigen</label><label><input type="checkbox" disabled={!canEdit} checked={item.timing.shuffle} onChange={event=>state.updateItem(item.id,{timing:{...item.timing,shuffle:event.target.checked}})}/> Zufällige Reihenfolge</label><label><input type="checkbox" disabled={!canEdit} checked={item.timing.repeat} onChange={event=>state.updateItem(item.id,{repeat:event.target.checked,timing:{...item.timing,repeat:event.target.checked}})}/> Wiederholen</label><span>Übergang: Kein Übergang</span></div></div>
+function SongEditor({
+  item,
+  canEdit,
+}: {
+  item: ServiceItem;
+  canEdit: boolean;
+}) {
+  const state = usePresentation();
+  const arrangement = item.slides.map((slide, index) =>
+    slideLabel(slide, index),
+  );
+  const metadata = item.metadata;
+  const changeMeta = (patch: Record<string, string | number | boolean>) =>
+    state.updateItem(item.id, { metadata: { ...metadata, ...patch } });
+  return (
+    <div className="song-context">
+      <header>
+        <div>
+          <input
+            aria-label="Songtitel"
+            disabled={!canEdit}
+            value={item.title}
+            onChange={(event) =>
+              state.updateItem(item.id, { title: event.target.value })
+            }
+          />
+          <small>{String(metadata.originalTitle ?? "")}</small>
+        </div>
+        <label>
+          Team
+          <select
+            disabled={!canEdit}
+            value={String(metadata.team ?? "Lobpreis-Team")}
+            onChange={(event) => changeMeta({ team: event.target.value })}
+          >
+            <option>Lobpreis-Team</option>
+            <option>Technik-Team</option>
+          </select>
+        </label>
+      </header>
+      <div className="arrangement-head">
+        <button>
+          <Icon name="expand_more" /> Hauptarrangement
+        </button>
+        <div className="arrangement-actions">
+          <button
+            title="Arrangement duplizieren"
+            onClick={() => state.duplicateSlide()}
+            disabled={!canEdit}
+          >
+            <Icon name="content_copy" />
+          </button>
+          <button
+            title="Abschnitt hinzufügen"
+            onClick={() => state.addSlide()}
+            disabled={!canEdit}
+          >
+            <Icon name="add" />
+          </button>
+        </div>
+        <label>
+          Tonart
+          <select
+            disabled={!canEdit}
+            value={String(metadata.key ?? "–")}
+            onChange={(event) => changeMeta({ key: event.target.value })}
+          >
+            <option>–</option>
+            {["C", "D", "E", "F", "G", "A", "B"].map((key) => (
+              <option key={key}>{key}</option>
+            ))}
+          </select>
+        </label>
+      </div>
+      <div className="arrangement-sequence" aria-label="Arrangement">
+        {arrangement.map((name, index) => (
+          <button
+            key={`${name}-${index}`}
+            className={
+              item.slides[index].id === state.selectedSlideId ? "active" : ""
+            }
+            onClick={() => state.select(item.id, item.slides[index].id)}
+          >
+            {name}
+          </button>
+        ))}
+      </div>
+      <div className="lyrics-editor">
+        {item.slides.map((slide, index) => (
+          <section
+            key={slide.id}
+            className={slide.id === state.selectedSlideId ? "active" : ""}
+            onClick={() => state.select(item.id, slide.id)}
+          >
+            <input
+              disabled={!canEdit}
+              value={slide.title}
+              aria-label={`Abschnitt ${index + 1}`}
+              onChange={(event) => {
+                state.select(item.id, slide.id);
+                state.updateSlide({ title: event.target.value });
+              }}
+            />
+            <textarea
+              disabled={!canEdit}
+              value={slide.body}
+              rows={Math.max(3, slide.body.split("\n").length + 1)}
+              onChange={(event) => {
+                state.select(item.id, slide.id);
+                state.updateSlide({ body: event.target.value });
+              }}
+            />
+            <button
+              disabled={!canEdit}
+              onClick={() => {
+                state.select(item.id, slide.id);
+                state.addSlide();
+              }}
+            >
+              <Icon name="horizontal_rule" /> FOLIENUMBRUCH
+            </button>
+          </section>
+        ))}
+      </div>
+      <div className="song-meta">
+        <label>
+          Autoren
+          <input
+            disabled={!canEdit}
+            value={String(metadata.author ?? "")}
+            onChange={(event) => changeMeta({ author: event.target.value })}
+          />
+        </label>
+        <label>
+          Publisher / Copyright
+          <input
+            disabled={!canEdit}
+            value={String(metadata.copyright ?? "")}
+            onChange={(event) => changeMeta({ copyright: event.target.value })}
+          />
+        </label>
+        <label>
+          CCLI Song Number
+          <input
+            disabled={!canEdit}
+            value={String(metadata.ccli ?? "")}
+            onChange={(event) => changeMeta({ ccli: event.target.value })}
+          />
+        </label>
+      </div>
+      <div className="song-options">
+        <label>
+          <input
+            type="checkbox"
+            disabled={!canEdit}
+            checked={metadata.ccliLicensed !== false}
+            onChange={(event) =>
+              changeMeta({ ccliLicensed: event.target.checked })
+            }
+          />{" "}
+          Unter CCLI-Lizenz
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            disabled={!canEdit}
+            checked={metadata.showTitle === true}
+            onChange={(event) =>
+              changeMeta({ showTitle: event.target.checked })
+            }
+          />{" "}
+          Titel auf Titelfolie
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            disabled={!canEdit}
+            checked={metadata.showCredits !== false}
+            onChange={(event) =>
+              changeMeta({ showCredits: event.target.checked })
+            }
+          />{" "}
+          Credits auf Titelfolie
+        </label>
+        <span>Übergang: Überblenden · 0,5 Sekunden</span>
+      </div>
+    </div>
+  );
 }
 
-type QuizOption={id:string;text:string};
-type QuizQuestion={id:string;type:'single'|'multiple'|'trueFalse'|'yesNo'|'text'|'scale'|'poll';question:string;options:QuizOption[];correctOptionIds:string[];durationSeconds:number;points:number;allowAnswerChange:boolean;holdTextAnswers:boolean;disabled:boolean};
-type QuizDefinition={id:string;title:string;description:string;quizType:'quiz'|'poll';participation:'anonymous'|'name';points:boolean;defaultDurationSeconds:number;resultVisibility:string;rewardEnabled:boolean;rewards:[string,string,string];questions:QuizQuestion[]};
-function quizDefinition(item:ServiceItem):QuizDefinition{
-  try{const parsed=JSON.parse(String(item.metadata.quizDefinition??''));if(parsed&&Array.isArray(parsed.questions))return{...parsed,rewardEnabled:parsed.rewardEnabled===true,rewards:Array.isArray(parsed.rewards)?[String(parsed.rewards[0]??''),String(parsed.rewards[1]??''),String(parsed.rewards[2]??'')]:['','',''],questions:parsed.questions.map((question:QuizQuestion)=>({...question,holdTextAnswers:question.holdTextAnswers!==false}))}}catch{}
-  return{id:String(item.metadata.quizId??crypto.randomUUID()),title:item.title,description:'',quizType:item.metadata.quizType==='poll'?'poll':'quiz',participation:item.metadata.participation==='name'?'name':'anonymous',points:true,defaultDurationSeconds:30,resultVisibility:'operator',rewardEnabled:false,rewards:['','',''],questions:[]}
-}
-function QuizRewards({definition,answers,canEdit,locked,onChange}:{definition:QuizDefinition;answers:LiveQuizAnswer[];canEdit:boolean;locked:boolean;onChange:(patch:Partial<QuizDefinition>)=>void}){
-  const scores=new Map<string,{name:string;points:number}>();for(const answer of answers){const question=definition.questions.find(entry=>entry.id===answer.questionId);if(!question||question.type==='text'||question.type==='poll'||!question.correctOptionIds.length)continue;const submitted=(Array.isArray(answer.answer)?answer.answer:[answer.answer]).map(String).sort(),correct=[...question.correctOptionIds].sort(),isCorrect=submitted.length===correct.length&&submitted.every((value,index)=>value===correct[index]);const current=scores.get(answer.participantId)??{name:answer.displayName||`Teilnehmer ${answer.participantId.slice(-4)}`,points:0};if(isCorrect)current.points+=question.points;scores.set(answer.participantId,current)}const ranking=[...scores.values()].sort((a,b)=>b.points-a.points).slice(0,3);
-  const updateReward=(index:number,value:string)=>{const rewards=[...definition.rewards] as [string,string,string];rewards[index]=value;onChange({rewards})};
-  if(definition.quizType==='poll')return null;
-  return <section className="quiz-rewards"><header><span><Icon name="emoji_events"/><b>BELOHNUNGEN & RANGLISTE</b></span><label><input type="checkbox" disabled={!canEdit||locked} checked={definition.rewardEnabled} onChange={event=>onChange({rewardEnabled:event.target.checked})}/> Belohnungen verwenden</label></header>{definition.rewardEnabled&&<div className="quiz-reward-grid">{definition.rewards.map((reward,index)=><label key={index}><b>{index+1}. PLATZ</b><input disabled={!canEdit||locked} value={reward} placeholder={index===0?'z. B. Hauptpreis':'Preis oder Anerkennung'} onChange={event=>updateReward(index,event.target.value)}/><span>{ranking[index]?`${ranking[index].name} · ${ranking[index].points} Punkte`:'Noch nicht vergeben'}</span></label>)}</div>}{!definition.rewardEnabled&&<p>Optional können für die drei besten Ergebnisse Preise oder Anerkennungen hinterlegt werden. Die Rangliste wird aus den richtigen Antworten und den Punkten je Frage berechnet.</p>}</section>
-}
-function QuizRewardsPanel({item,canEdit}:{item:ServiceItem;canEdit:boolean}){const state=usePresentation(),definition=quizDefinition(item),sessionId=storedLiveQuizSessionId(definition.id),[answers,setAnswers]=useState<LiveQuizAnswer[]>([]);useEffect(()=>{if(!sessionId){setAnswers([]);return}return watchLiveQuizAnswers(sessionId,setAnswers)},[sessionId]);const change=(patch:Partial<QuizDefinition>)=>{const next={...definition,...patch};state.updateItem(item.id,{metadata:{...item.metadata,quizDefinition:JSON.stringify(next)}})};return <QuizRewards definition={definition} answers={answers} canEdit={canEdit} locked={!!sessionId} onChange={change}/>}
-function quizSlideText(question:QuizQuestion){const answers=question.options.map((option,index)=>`${String.fromCharCode(65+index)}  ${option.text}`).join('\n');return `${question.question}${answers?`\n\n${answers}`:''}`}
-function makeQuizJoinSlide(item:ServiceItem,base:Slide):Slide{
-  const text=(name:string,value:string,x:number,y:number,width:number,height:number,fontSize:number,zIndex:number)=>({id:crypto.randomUUID(),type:'text' as const,name,x,y,width,height,rotation:0,opacity:1,locked:false,visible:true,zIndex,properties:{text:value,fontFamily:'Inter',fontSize,fontWeight:700,color:'#ffffff',align:'center',verticalAlign:'center',lineHeight:1.15,letterSpacing:0,padding:18}});
-  return{...structuredClone(base),id:crypto.randomUUID(),itemId:item.id,title:'Teilnahme',body:'Jetzt mitmachen',background:'#102029',backgroundImage:undefined,order:0,elements:[text('Quizname',item.title,90,60,1740,130,68,1),text('Quizbeschreibung',String(item.metadata.quizDescription??'Jetzt live mitmachen'),120,185,980,100,34,2),text('Teilnahmehinweis','QR-Code scannen oder pgbielefeld.neocities.org/quiz öffnen',110,300,1020,150,38,3),{id:crypto.randomUUID(),type:'qr',name:'Quiz-QR-Code',x:1270,y:215,width:480,height:480,rotation:0,opacity:1,locked:false,visible:true,zIndex:4,properties:{text:'QR-CODE',color:'#102029',background:'#ffffff'}},text('Teilnahmecode','TEILNAHMECODE\n123 456',140,610,980,210,54,5)]}
-}
-function quizAnswerText(definition:QuizDefinition){return definition.questions.map((question,index)=>{const correct=question.options.filter(option=>question.correctOptionIds.includes(option.id)).map(option=>option.text).join(', ');return `${index+1}. ${question.question}\n${correct||'Ergebnis wird live ausgewertet'}`}).join('\n\n')||'Antworten und Ergebnisse erscheinen hier.'}
-function liveQuizAnswerText(definition:QuizDefinition,session:LiveQuizSession,answers:LiveQuizAnswer[]){
-  const question=definition.questions.find(entry=>entry.id===session.activeQuestionId);
-  if(!question)return quizAnswerText(definition);
-  if(question.type==='text'){
-    if(question.holdTextAnswers!==false)return `${question.question}\n\n${answers.length} ${answers.length===1?'Antwort wird':'Antworten werden'} bis zur Freigabe zurückgehalten.`;
-    const visible=answers.flatMap(answer=>Array.isArray(answer.answer)?answer.answer:[answer.answer]).map((answer,index)=>`${index+1}. ${String(answer)}`).filter(line=>line.trim().length>3);
-    return `${question.question}\n\n${visible.join('\n')||'Noch keine Antworten.'}`;
+function ContentEditor({
+  item,
+  slide,
+  canEdit,
+}: {
+  item: ServiceItem;
+  slide: Slide;
+  canEdit: boolean;
+}) {
+  const state = usePresentation();
+  const primaryText = slide.elements.find((element) => element.type === "text"),
+    fadeActive = primaryText?.properties.animation === "fade-in",
+    extras = slide.elements.filter((element) => element.id !== primaryText?.id);
+  const [qrOpen, setQrOpen] = useState(false),
+    [qrDraft, setQrDraft] = useState("https://"),
+    [qrPreview, setQrPreview] = useState(""),
+    [qrTargetId, setQrTargetId] = useState("");
+  const elementIcon = (type: string) =>
+    type === "text"
+      ? "text_fields"
+      : type === "image"
+        ? "image"
+        : type === "video"
+          ? "movie"
+          : type === "qr"
+            ? "qr_code_2"
+            : type === "shape"
+              ? "category"
+              : "layers";
+  const addText = () => {
+    const value = prompt("Text hinzufügen", "Neuer Text");
+    if (!value?.trim()) return;
+    state.addElement("text");
+    const current = usePresentation.getState(),
+      element = current.items
+        .flatMap((entry) => entry.slides)
+        .find((entry) => entry.id === current.selectedSlideId)
+        ?.elements.at(-1);
+    if (element)
+      current.updateElement(element.id, {
+        name: "Zusätzlicher Text",
+        properties: { ...element.properties, text: value.trim() },
+      });
+  };
+  const importForeground = async () => {
+    const imported = (await window.desktop?.media.import()) ?? [],
+      image = imported.find((asset) => asset.kind === "image");
+    if (!image) return;
+    state.addElement("image");
+    const current = usePresentation.getState(),
+      element = current.items
+        .flatMap((entry) => entry.slides)
+        .find((entry) => entry.id === current.selectedSlideId)
+        ?.elements.at(-1);
+    if (element)
+      current.updateElement(element.id, {
+        name: "Vordergrundbild",
+        x: 1180,
+        y: 160,
+        width: 600,
+        height: 760,
+        properties: { ...element.properties, src: image.url, fit: "contain" },
+      });
+  };
+  const foregroundAction = (value: string) => {
+    if (value === "browse")
+      void (window.desktop as any)?.mediaWindow?.open("select", "foreground");
+    if (value === "import") void importForeground();
+  };
+  const openQr = (elementId = "") => {
+    const element = slide.elements.find((entry) => entry.id === elementId);
+    setQrTargetId(elementId);
+    setQrDraft(
+      String(
+        element?.properties.value ?? element?.properties.text ?? "https://",
+      ),
+    );
+    setQrOpen(true);
+  };
+  useEffect(() => {
+    let active = true;
+    if (!qrOpen || !qrDraft.trim()) {
+      setQrPreview("");
+      return;
+    }
+    void QRCode.toDataURL(qrDraft.trim(), {
+      width: 260,
+      margin: 1,
+      color: { dark: "#102029", light: "#ffffff" },
+    }).then((value) => active && setQrPreview(value));
+    return () => {
+      active = false;
+    };
+  }, [qrOpen, qrDraft]);
+  const saveQr = async () => {
+    const value = qrDraft.trim();
+    if (!value) return;
+    const src = await QRCode.toDataURL(value, {
+      width: 700,
+      margin: 1,
+      color: { dark: "#102029", light: "#ffffff" },
+    });
+    const current = usePresentation.getState();
+    if (qrTargetId) {
+      const existing = current.items
+        .flatMap((entry) => entry.slides)
+        .find((entry) => entry.id === current.selectedSlideId)
+        ?.elements.find((entry) => entry.id === qrTargetId);
+      if (existing)
+        current.updateElement(existing.id, {
+          properties: { ...existing.properties, value, text: value, src },
+        });
+    } else {
+      current.addElement("qr");
+      const next = usePresentation.getState(),
+        element = next.items
+          .flatMap((entry) => entry.slides)
+          .find((entry) => entry.id === next.selectedSlideId)
+          ?.elements.at(-1);
+      if (element)
+        next.updateElement(element.id, {
+          name: "QR-Code",
+          x: 1460,
+          y: 700,
+          width: 300,
+          height: 300,
+          properties: { ...element.properties, value, text: value, src },
+        });
+    }
+    setQrOpen(false);
+  };
+  if (item.type === "web") {
+    const web = slide.elements.find((element) => element.type === "web"),
+      url = String(web?.properties.src ?? item.metadata.url ?? ""),
+      change = (patch: Record<string, string | number | boolean>) => {
+        state.updateItem(item.id, { metadata: { ...item.metadata, ...patch } });
+        if (web)
+          state.updateElement(web.id, {
+            properties: { ...web.properties, ...patch },
+          });
+      },
+      zoom = Number(web?.properties.zoom ?? item.metadata.zoom ?? 100);
+    return (
+      <div className="content-context web-content-editor">
+        <header>
+          <b>{item.title}</b>
+          <span>WEBSITE</span>
+        </header>
+        <div className="content-tools">
+          <Icon name="language" />
+          <b>WEB-INHALT</b>
+        </div>
+        <div className="web-editor-fields">
+          <label>
+            Webadresse
+            <input
+              autoFocus
+              disabled={!canEdit}
+              type="url"
+              placeholder="https://www.beispiel.de"
+              value={url}
+              onChange={(event) =>
+                change({ url: event.target.value, src: event.target.value })
+              }
+            />
+          </label>
+          <div className="web-zoom-row">
+            <label>
+              Zoom
+              <input
+                disabled={!canEdit}
+                type="range"
+                min="50"
+                max="200"
+                value={zoom}
+                onChange={(event) =>
+                  change({ zoom: Number(event.target.value) })
+                }
+              />
+              <output>{zoom} %</output>
+            </label>
+            <button
+              disabled={!canEdit || zoom === 100}
+              onClick={() => change({ zoom: 100 })}
+            >
+              <Icon name="center_focus_strong" /> AUF 100 %
+            </button>
+          </div>
+          <label>
+            <input
+              disabled={!canEdit}
+              type="checkbox"
+              checked={item.metadata.reloadOnLive !== false}
+              onChange={(event) =>
+                change({ reloadOnLive: event.target.checked })
+              }
+            />{" "}
+            Beim Live-Schalten neu laden
+          </label>
+          <label>
+            <input
+              disabled={!canEdit}
+              type="checkbox"
+              checked={item.metadata.allowInteraction === true}
+              onChange={(event) =>
+                change({ allowInteraction: event.target.checked })
+              }
+            />{" "}
+            Interaktion mit der Webseite erlauben
+          </label>
+          <label>
+            <input
+              disabled={!canEdit}
+              type="checkbox"
+              checked={item.metadata.webAudio === true}
+              onChange={(event) => change({ webAudio: event.target.checked })}
+            />{" "}
+            Webseiten-Audio erlauben
+          </label>
+          <label>
+            <input
+              disabled={!canEdit}
+              type="checkbox"
+              checked={item.metadata.allowPopups === true}
+              onChange={(event) =>
+                change({ allowPopups: event.target.checked })
+              }
+            />{" "}
+            Pop-up-Fenster erlauben
+          </label>
+          <label>
+            <input
+              disabled={!canEdit}
+              type="checkbox"
+              checked={item.metadata.proxyEnabled === true}
+              onChange={(event) =>
+                change({ proxyEnabled: event.target.checked })
+              }
+            />{" "}
+            Proxy nur für dieses Element verwenden
+          </label>
+          {item.metadata.proxyEnabled === true && (
+            <>
+              <label>
+                Proxy-Adresse
+                <input
+                  disabled={!canEdit}
+                  value={String(item.metadata.proxyUrl ?? "")}
+                  placeholder="https://proxy.beispiel.de/?url={url}"
+                  onChange={(event) => change({ proxyUrl: event.target.value })}
+                />
+              </label>
+              <small>
+                Verwende bitte <b>{"{url}"}</b> als Platzhalter. Ohne
+                Platzhalter wird die codierte Zieladresse automatisch angehängt.
+              </small>
+            </>
+          )}
+          <label>
+            Automatisch aktualisieren
+            <select
+              disabled={!canEdit}
+              value={Number(item.metadata.refreshSeconds ?? 0)}
+              onChange={(event) =>
+                change({ refreshSeconds: Number(event.target.value) })
+              }
+            >
+              <option value="0">Nicht automatisch</option>
+              <option value="30">Alle 30 Sekunden</option>
+              <option value="60">Jede Minute</option>
+              <option value="300">Alle 5 Minuten</option>
+              <option value="900">Alle 15 Minuten</option>
+            </select>
+          </label>
+          <small>
+            {url
+              ? "Die Webvorschau wird rechts sofort aktualisiert. Alle Einstellungen gelten ausschließlich für dieses Element."
+              : "Bitte gib eine vollständige Webadresse ein. Das Element wurde bereits erstellt und kann normal gespeichert, dupliziert oder rückgängig gemacht werden."}
+          </small>
+        </div>
+      </div>
+    );
   }
-  const counts=new Map<string,number>();
-  answers.flatMap(answer=>Array.isArray(answer.answer)?answer.answer:[answer.answer]).forEach(value=>counts.set(String(value),(counts.get(String(value))??0)+1));
-  return `${question.question}\n\n${question.options.map(option=>`${option.text}: ${counts.get(option.id)??0}`).join('\n')}`;
+  return (
+    <>
+    <div className="content-context">
+      <header>
+        <b>{item.title}</b>
+        <span>{item.type.toUpperCase()}</span>
+      </header>
+      <div className="content-tools">
+        <button disabled={!canEdit} onClick={() => state.addSlide()}>
+          <Icon name="splitscreen" /> SLIDE BREAK
+        </button>
+        <button disabled={!canEdit} onClick={addText}>
+          <Icon name="text_fields" /> TEXT
+        </button>
+        <select
+          aria-label="Vordergrundbild hinzufügen"
+          disabled={!canEdit}
+          value=""
+          onChange={(event) => foregroundAction(event.target.value)}
+        >
+          <option value="">＋ VORDERGRUNDBILD</option>
+          <option value="browse">Medien durchsuchen …</option>
+          <option value="import">Bild importieren …</option>
+        </select>
+        <button disabled={!canEdit} onClick={() => openQr()}>
+          <Icon name="qr_code_2" /> QR-CODE
+        </button>
+        <select
+          aria-label="2D-Objekt hinzufügen"
+          disabled={!canEdit}
+          value=""
+          onChange={(event) => {
+            const [kind, name] = event.target.value.split("|");
+            if (kind) state.addShape(kind, name);
+          }}
+        >
+          <option value="">＋ 2D-OBJEKT</option>
+          {[
+            ["rectangle", "Rechteck"],
+            ["rounded", "Abgerundetes Rechteck"],
+            ["ellipse", "Kreis / Ellipse"],
+            ["triangle", "Dreieck"],
+            ["diamond", "Raute"],
+            ["pentagon", "Fünfeck"],
+            ["hexagon", "Sechseck"],
+            ["octagon", "Achteck"],
+            ["star", "Stern"],
+            ["burst", "Strahlenform"],
+            ["arrow", "Pfeil"],
+            ["chevron", "Chevron"],
+            ["speech", "Sprechblase"],
+            ["cross", "Kreuz"],
+            ["parallelogram", "Parallelogramm"],
+            ["trapezoid", "Trapez"],
+            ["heart", "Herz"],
+            ["lightning", "Blitz"],
+            ["shield", "Schild"],
+            ["cloud", "Wolke"],
+            ["home", "Haus"],
+            ["moon", "Halbmond"],
+          ].map(([kind, name]) => (
+            <option key={kind} value={`${kind}|${name}`}>
+              {name}
+            </option>
+          ))}
+        </select>
+        <button
+          className={fadeActive ? "active" : ""}
+          disabled={!canEdit || !primaryText}
+          onClick={() =>
+            primaryText &&
+            state.updateElement(primaryText.id, {
+              properties: {
+                ...primaryText.properties,
+                animation: fadeActive ? "none" : "fade-in",
+              },
+            })
+          }
+        >
+          <Icon name="animation" /> FADE IN TEXT
+        </button>
+        <button
+          title="Hilfe zu Folieninhalten"
+          onClick={() =>
+            window.dispatchEvent(
+              new CustomEvent("open-help", { detail: "slides" }),
+            )
+          }
+        >
+          <Icon name="info" />
+        </button>
+      </div>
+      <textarea
+        aria-label="Folieninhalt"
+        disabled={!canEdit}
+        value={slide.body}
+        onChange={(event) => state.updateSlide({ body: event.target.value })}
+      />
+      {extras.length > 0 && <section className="additional-elements">
+        <header>
+          <b>ZUSÄTZLICHE EBENEN</b>
+          <small>
+            {extras.length} {extras.length === 1 ? "Element" : "Elemente"}
+          </small>
+        </header>
+          <div>
+            {extras.map((element) => (
+              <article
+                className={
+                  state.selectedElementIds.includes(element.id) ? "active" : ""
+                }
+                key={element.id}
+              >
+                <button
+                  className="element-select"
+                  onClick={() => state.selectElements([element.id])}
+                >
+                  <Icon name={elementIcon(element.type)} />
+                  <span>
+                    <b>{element.name}</b>
+                    <small>
+                      {element.type === "shape"
+                        ? `2D-Objekt · ${String(element.properties.shapeKind ?? "Form")}`
+                        : element.type === "image"
+                          ? "Vordergrundbild"
+                          : element.type === "qr"
+                            ? "QR-Code"
+                            : element.type === "text"
+                              ? "Zusätzlicher Text"
+                              : element.type}
+                    </small>
+                  </span>
+                </button>
+                <button
+                  title={element.visible ? "Ausblenden" : "Einblenden"}
+                  onClick={() => state.toggleElementVisible(element.id)}
+                >
+                  <Icon
+                    name={element.visible ? "visibility" : "visibility_off"}
+                  />
+                </button>
+                <button
+                  title="Bearbeiten"
+                  onClick={() =>
+                    element.type === "qr"
+                      ? openQr(element.id)
+                      : state.selectElements([element.id])
+                  }
+                >
+                  <Icon name="edit" />
+                </button>
+                <button
+                  className="danger"
+                  title="Entfernen"
+                  onClick={() => state.removeElement(element.id)}
+                >
+                  <Icon name="close" />
+                </button>
+                {element.type === "text" &&
+                  state.selectedElementIds.includes(element.id) && (
+                    <label className="element-inline-editor">
+                      Text
+                      <textarea
+                        autoFocus
+                        value={String(element.properties.text ?? "")}
+                        onChange={(event) =>
+                          state.updateElement(element.id, {
+                            properties: {
+                              ...element.properties,
+                              text: event.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </label>
+                  )}
+              </article>
+            ))}
+          </div>
+      </section>}
+      <div className="item-playback">
+        <label>
+          <input
+            type="checkbox"
+            disabled={!canEdit}
+            checked={item.timing.autoAdvance}
+            onChange={(event) =>
+              state.updateItem(item.id, {
+                autoAdvance: event.target.checked,
+                timing: { ...item.timing, autoAdvance: event.target.checked },
+              })
+            }
+          />{" "}
+          Jede Folie für{" "}
+          <button type="button">
+            {item.timing.slideDurationSeconds} Sekunden
+          </button>{" "}
+          anzeigen
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            disabled={!canEdit}
+            checked={item.timing.shuffle}
+            onChange={(event) =>
+              state.updateItem(item.id, {
+                timing: { ...item.timing, shuffle: event.target.checked },
+              })
+            }
+          />{" "}
+          Zufällige Reihenfolge
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            disabled={!canEdit}
+            checked={item.timing.repeat}
+            onChange={(event) =>
+              state.updateItem(item.id, {
+                repeat: event.target.checked,
+                timing: { ...item.timing, repeat: event.target.checked },
+              })
+            }
+          />{" "}
+          Wiederholen
+        </label>
+        <span>Übergang: Kein Übergang</span>
+      </div>
+    </div>
+    {qrOpen && <div className="qr-editor-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setQrOpen(false)}><section className="qr-editor-dialog" role="dialog" aria-modal="true" aria-label="QR-Code hinzufügen"><header><div><Icon name="qr_code_2"/><span><b>{qrTargetId ? "QR-CODE BEARBEITEN" : "QR-CODE HINZUFÜGEN"}</b><small>Adresse oder Text eingeben</small></span></div><button onClick={() => setQrOpen(false)}><Icon name="close"/></button></header><main><label>URL oder Text<input autoFocus value={qrDraft} placeholder="https://www.beispiel.de" onChange={(event) => setQrDraft(event.target.value)} onKeyDown={(event) => {if(event.key === "Enter" && qrDraft.trim()) void saveQr()}}/></label><div className="qr-live-preview">{qrPreview ? <img src={qrPreview} alt="QR-Code-Vorschau"/> : <span>Bitte eine URL oder einen Text eingeben.</span>}</div></main><footer><button onClick={() => setQrOpen(false)}>ABBRECHEN</button><button className="primary" disabled={!qrDraft.trim()} onClick={() => void saveQr()}>{qrTargetId ? "ÄNDERUNG SPEICHERN" : "QR-CODE HINZUFÜGEN"}</button></footer></section></div>}
+    </>
+  );
 }
-function makeQuizAnswerSlide(item:ServiceItem,base:Slide,definition:QuizDefinition):Slide{
-  const title={id:crypto.randomUUID(),type:'text' as const,name:'Antworttitel',x:120,y:70,width:1680,height:130,rotation:0,opacity:1,locked:false,visible:true,zIndex:1,properties:{text:'Antworten',fontFamily:'Inter',fontSize:68,fontWeight:700,color:'#ffffff',align:'center',verticalAlign:'center',lineHeight:1.1,padding:18}};
-  const body={...title,id:crypto.randomUUID(),name:'Antwortinhalt',x:190,y:230,width:1540,height:700,zIndex:2,properties:{...title.properties,text:quizAnswerText(definition),fontSize:38,fontWeight:500,align:'left',verticalAlign:'top',lineHeight:1.3}};
-  return{...structuredClone(base),id:crypto.randomUUID(),itemId:item.id,title:'Antworten',body:quizAnswerText(definition),background:'#15343b',backgroundImage:undefined,order:definition.questions.length+1,elements:[title,body]}
+
+type QuizOption = { id: string; text: string };
+type QuizQuestion = {
+  id: string;
+  type:
+    | "single"
+    | "multiple"
+    | "trueFalse"
+    | "yesNo"
+    | "text"
+    | "scale"
+    | "poll";
+  question: string;
+  options: QuizOption[];
+  correctOptionIds: string[];
+  durationSeconds: number;
+  points: number;
+  allowAnswerChange: boolean;
+  holdTextAnswers: boolean;
+  disabled: boolean;
+};
+type QuizDefinition = {
+  id: string;
+  title: string;
+  description: string;
+  quizType: "quiz" | "poll";
+  participation: "anonymous" | "name";
+  points: boolean;
+  defaultDurationSeconds: number;
+  resultVisibility: string;
+  rewardEnabled: boolean;
+  rewards: [string, string, string];
+  questions: QuizQuestion[];
+};
+function quizDefinition(item: ServiceItem): QuizDefinition {
+  try {
+    const parsed = JSON.parse(String(item.metadata.quizDefinition ?? ""));
+    if (parsed && Array.isArray(parsed.questions))
+      return {
+        ...parsed,
+        rewardEnabled: parsed.rewardEnabled === true,
+        rewards: Array.isArray(parsed.rewards)
+          ? [
+              String(parsed.rewards[0] ?? ""),
+              String(parsed.rewards[1] ?? ""),
+              String(parsed.rewards[2] ?? ""),
+            ]
+          : ["", "", ""],
+        questions: parsed.questions.map((question: QuizQuestion) => ({
+          ...question,
+          holdTextAnswers: question.holdTextAnswers !== false,
+        })),
+      };
+  } catch {}
+  return {
+    id: String(item.metadata.quizId ?? crypto.randomUUID()),
+    title: item.title,
+    description: "",
+    quizType: item.metadata.quizType === "poll" ? "poll" : "quiz",
+    participation:
+      item.metadata.participation === "name" ? "name" : "anonymous",
+    points: true,
+    defaultDurationSeconds: 30,
+    resultVisibility: "operator",
+    rewardEnabled: false,
+    rewards: ["", "", ""],
+    questions: [],
+  };
 }
-function QuizEditor({item,canEdit}:{item:ServiceItem;canEdit:boolean}){
-  const state=usePresentation(),definition=quizDefinition(item),joinSlideId=String(item.metadata.quizJoinSlideId??''),answerSlideId=String(item.metadata.quizAnswerSlideId??''),joinSlide=item.slides.find(slide=>slide.id===joinSlideId),answerSlide=item.slides.find(slide=>slide.id===answerSlideId),questionSlides=item.slides.filter(slide=>slide.id!==joinSlideId&&slide.id!==answerSlideId),isJoinSelected=!!joinSlide&&state.selectedSlideId===joinSlide.id,isAnswerSelected=!!answerSlide&&state.selectedSlideId===answerSlide.id,selectedIndex=Math.max(0,questionSlides.findIndex(slide=>slide.id===state.selectedSlideId)),question=definition.questions[selectedIndex]??definition.questions[0];
-  const [sessionId,setSessionId]=useState(()=>storedLiveQuizSessionId(definition.id)),[session,setSession]=useState<LiveQuizSession|null>(null),[answers,setAnswers]=useState<LiveQuizAnswer[]>([]),[qr,setQr]=useState(''),[sessionBusy,setSessionBusy]=useState(false),[sessionError,setSessionError]=useState('');
-  useEffect(()=>{if((joinSlide&&answerSlide)||!item.slides[0])return;const createdJoin=joinSlide??makeQuizJoinSlide(item,item.slides[0]),createdAnswer=answerSlide??makeQuizAnswerSlide(item,item.slides.at(-1)??item.slides[0],definition),questions=item.slides.filter(slide=>slide.id!==createdJoin.id&&slide.id!==createdAnswer.id);state.updateItem(item.id,{metadata:{...item.metadata,quizJoinSlideId:createdJoin.id,quizAnswerSlideId:createdAnswer.id,quizDescription:definition.description},slides:[{...createdJoin,order:0},...questions.map((slide,index)=>({...slide,order:index+1})),{...createdAnswer,order:questions.length+1}]});if(!joinSlide)queueMicrotask(()=>usePresentation.getState().select(item.id,createdJoin.id))},[item.id,joinSlideId,answerSlideId]);
-  useEffect(()=>{if(!sessionId){setSession(null);setAnswers([]);return}const stopSession=watchLiveQuizSession(sessionId,setSession),stopAnswers=watchLiveQuizAnswers(sessionId,setAnswers);return()=>{stopSession();stopAnswers()}},[sessionId]);
-  useEffect(()=>{const rawCode=session?.code??'123456',url=quizJoinUrl(rawCode);void QRCode.toDataURL(url,{width:600,margin:1,color:{dark:'#102029',light:'#ffffff'}}).then(image=>{setQr(image);const current=usePresentation.getState().items.find(entry=>entry.id===item.id),join=current?.slides.find(slide=>slide.id===String(current.metadata.quizJoinSlideId??''));if(!current||!join)return;const code=`${rawCode.slice(0,3)} ${rawCode.slice(3)}`,updated={...join,elements:join.elements.map(element=>element.name==='Quiz-QR-Code'?{...element,properties:{...element.properties,src:image,text:url}}:element.name==='Quizname'?{...element,properties:{...element.properties,text:definition.title}}:element.name==='Quizbeschreibung'?{...element,properties:{...element.properties,text:definition.description||'Jetzt live mitmachen'}}:element.name==='Teilnahmehinweis'?{...element,properties:{...element.properties,text:`QR-Code scannen oder ${url} öffnen`}}:element.name==='Teilnahmecode'?{...element,properties:{...element.properties,text:`TEILNAHMECODE\n${code}`}}:element)};usePresentation.getState().updateItem(current.id,{slides:current.slides.map(slide=>slide.id===updated.id?updated:slide)});if(session&&usePresentation.getState().liveSlideId===updated.id)void window.desktop?.sendLiveSlide(updated)})},[session?.code,joinSlideId]);
-  const commit=(next:QuizDefinition,focusIndex=selectedIndex)=>{const base=questionSlides[0]??joinSlide??item.slides[0],slides=next.questions.map((entry,index)=>{const current=questionSlides[index]??{...structuredClone(base),id:crypto.randomUUID(),itemId:item.id};const body=quizSlideText(entry);return{...current,title:`Frage ${index+1}`,body,order:index+1,elements:current.elements.map((element,elementIndex)=>elementIndex===0&&element.type==='text'?{...element,properties:{...element.properties,text:body,fontSize:entry.options.length>4?50:60}}:element)};});const preservedJoin=joinSlide?{...joinSlide,order:0,elements:joinSlide.elements.map(element=>element.name==='Quizname'?{...element,properties:{...element.properties,text:next.title}}:element.name==='Quizbeschreibung'?{...element,properties:{...element.properties,text:next.description||'Jetzt live mitmachen'}}:element)}:undefined,answerText=quizAnswerText(next),preservedAnswer=answerSlide?{...answerSlide,order:slides.length+1,body:answerText,elements:answerSlide.elements.map(element=>element.name==='Antwortinhalt'?{...element,properties:{...element.properties,text:answerText}}:element)}:undefined;state.updateItem(item.id,{title:next.title,metadata:{...item.metadata,quizId:next.id,quizType:next.quizType,participation:next.participation,quizDescription:next.description,questionCount:next.questions.length,quizDefinition:JSON.stringify(next)},slides:[...(preservedJoin?[preservedJoin]:[]),...slides,...(preservedAnswer?[preservedAnswer]:[])]});const focused=slides[Math.min(focusIndex,slides.length-1)];if(focused&&!isJoinSelected&&!isAnswerSelected)queueMicrotask(()=>usePresentation.getState().select(item.id,focused.id))};
-  const changeGeneral=(patch:Partial<QuizDefinition>)=>commit({...definition,...patch});
-  const changeQuestion=(patch:Partial<QuizQuestion>)=>{if(!question)return;const questions=definition.questions.map(entry=>entry.id===question.id?{...entry,...patch}:entry);commit({...definition,questions})};
-  const addQuestion=()=>{const first=crypto.randomUUID(),second=crypto.randomUUID(),next:QuizQuestion={id:crypto.randomUUID(),type:definition.quizType==='poll'?'poll':'single',question:'Neue Frage',options:[{id:first,text:'Antwort 1'},{id:second,text:'Antwort 2'}],correctOptionIds:definition.quizType==='quiz'?[first]:[],durationSeconds:definition.defaultDurationSeconds||30,points:100,allowAnswerChange:false,holdTextAnswers:true,disabled:false};commit({...definition,questions:[...definition.questions,next]},definition.questions.length)};
-  const moveQuestion=(from:number,to:number)=>{if(!canEdit||session||from===to||from<0||to<0||from>=definition.questions.length||to>=definition.questions.length)return;const questions=[...definition.questions],[movedQuestion]=questions.splice(from,1);questions.splice(to,0,movedQuestion);const slides=[...questionSlides],[movedSlide]=slides.splice(from,1);slides.splice(to,0,movedSlide);const next={...definition,questions},answerText=quizAnswerText(next),nextAnswer=answerSlide?{...answerSlide,order:slides.length+1,body:answerText,elements:answerSlide.elements.map(element=>element.name==='Antwortinhalt'?{...element,properties:{...element.properties,text:answerText}}:element)}:undefined;state.updateItem(item.id,{metadata:{...item.metadata,quizDefinition:JSON.stringify(next)},slides:[...(joinSlide?[{...joinSlide,order:0}]:[]),...slides.map((slide,index)=>({...slide,title:`Frage ${index+1}`,order:index+1})),...(nextAnswer?[nextAnswer]:[])]});queueMicrotask(()=>usePresentation.getState().select(item.id,movedSlide.id))};
-  const removeQuestion=()=>{if(!question||definition.questions.length<=1)return;const index=definition.questions.findIndex(entry=>entry.id===question.id);commit({...definition,questions:definition.questions.filter(entry=>entry.id!==question.id)},Math.max(0,index-1))};
-  const setCorrect=(optionId:string,checked:boolean)=>{if(!question||definition.quizType==='poll')return;changeQuestion({correctOptionIds:question.type==='multiple'?(checked?[...new Set([...question.correctOptionIds,optionId])]:question.correctOptionIds.filter(id=>id!==optionId)):[optionId]})};
-  const startSession=async(takeLive=false)=>{setSessionBusy(true);setSessionError('');try{const created=await createLiveQuizSession(definition);setSession(created);setSessionId(created.id);if(takeLive&&joinSlide)state.goLive(item.id,joinSlide.id)}catch(error){setSessionError(error instanceof Error?error.message:'Die LiveQuiz-Sitzung konnte nicht gestartet werden.')}finally{setSessionBusy(false)}};
-  useEffect(()=>{if(!state.onAir||state.selectedItemId!==item.id||sessionBusy||!definition.questions.length||!joinSlide)return;if(session){if(state.liveSlideId!==joinSlide.id)state.goLive(item.id,joinSlide.id);return}if(!sessionId)void startSession(true)},[state.onAir,state.selectedItemId,item.id,joinSlide?.id,session?.id,sessionId,sessionBusy]);
-  const takeQuestionLive=async()=>{if(!session||!question)return;setSessionBusy(true);setSessionError('');try{await openLiveQuizQuestion(session.id,question.id);const questionSlide=questionSlides[selectedIndex];if(state.onAir&&questionSlide)state.goLive(item.id,questionSlide.id);const saved=usePreferences.getState().audioRouting,routing={...defaultAudioRouting,...saved,soundEffects:{...defaultAudioRouting.soundEffects,...saved?.soundEffects}};void playRoutedTone(routing,'soundEffects',659.25,.18).catch(()=>{})}catch{setSessionError('Die Frage konnte nicht live geschaltet werden.')}finally{setSessionBusy(false)}};
-  const finishSession=async()=>{if(!session)return;setSessionBusy(true);try{await endLiveQuizSession(session);setSession(null);setSessionId('');setAnswers([])}finally{setSessionBusy(false)}};
-  const showJoin=(targets:string[])=>{if(!session||!qr)return;window.dispatchEvent(new CustomEvent('gottesdienstregie:show-quiz-join',{detail:{id:`quiz-join-${session.id}`,type:'quizJoin',name:'Quizteilnahme',enabled:true,targets,text:definition.title,background:'#102029',imageUrl:qr,joinUrl:quizJoinUrl(session.code),joinCode:`${session.code.slice(0,3)} ${session.code.slice(3)}`,order:0}}))};
-  const copyJoin=async()=>{if(session)await navigator.clipboard.writeText(quizJoinUrl(session.code))};
-  const activeAnswers=session?.activeQuestionId?answers.filter(answer=>answer.questionId===session.activeQuestionId):[],participants=new Set(answers.map(answer=>answer.participantId)).size;
-  useEffect(()=>{if(!session?.activeQuestionId||!answerSlideId)return;const current=usePresentation.getState().items.find(entry=>entry.id===item.id),answer=current?.slides.find(slide=>slide.id===String(current.metadata.quizAnswerSlideId??''));if(!current||!answer)return;const text=liveQuizAnswerText(definition,session,activeAnswers),updated={...answer,body:text,elements:answer.elements.map(element=>element.name==='Antwortinhalt'?{...element,properties:{...element.properties,text}}:element)};usePresentation.getState().updateItem(current.id,{slides:current.slides.map(slide=>slide.id===updated.id?updated:slide)});if(usePresentation.getState().liveSlideId===updated.id)void window.desktop?.sendLiveSlide(updated)},[session?.activeQuestionId,answers,answerSlideId]);
-  return <div className="quiz-context"><header><div><Icon name="quiz"/><input aria-label="Quiztitel" disabled={!canEdit||!!session} value={definition.title} onChange={event=>changeGeneral({title:event.target.value})}/></div><span>{definition.questions.length} {definition.questions.length===1?'Frage':'Fragen'}</span></header>{session?<section className="quiz-live-session"><div className="quiz-session-code"><span>TEILNAHMECODE</span><strong>{session.code.slice(0,3)} {session.code.slice(3)}</strong><small>{quizJoinUrl(session.code)}</small><div><b>{participants}</b> Teilnehmer · <b>{activeAnswers.length}</b> Antworten{activeAnswers.some(answer=>answer.held)&&<> · <b>{activeAnswers.filter(answer=>answer.held).length}</b> zurückgehalten</>}</div></div>{qr&&<img src={qr} alt={`QR-Code für Teilnahmecode ${session.code}`}/>}<div className="quiz-session-actions"><button disabled={!state.onAir||!qr} title={!state.onAir?'Zuerst ON AIR starten':''} onClick={()=>showJoin(['main'])}><Icon name="present_to_all"/> AUF MAIN ANZEIGEN</button><button disabled={!state.onAir||!qr} title={!state.onAir?'Zuerst ON AIR starten':''} onClick={()=>showJoin(['main','stage','livestream','lobby'])}><Icon name="connected_tv"/> AUF AUSGÄNGEN ANZEIGEN</button><button disabled={!qr} onClick={()=>void copyJoin()}><Icon name="content_copy"/> LINK KOPIEREN</button><button disabled={sessionBusy||!question} onClick={takeQuestionLive}><Icon name="podcasts"/> AKTUELLE FRAGE STARTEN</button><button disabled={sessionBusy||session.status==='lobby'} onClick={()=>void returnLiveQuizToLobby(session.id)}><Icon name="pause"/> ANTWORTEN SCHLIESSEN</button><button className="danger" disabled={sessionBusy} onClick={finishSession}><Icon name="stop_circle"/> QUIZ BEENDEN</button></div></section>:null}{sessionError&&<p className="quiz-session-error">{sessionError}</p>}<div className="quiz-general"><label>Typ<select disabled={!canEdit||!!session} value={definition.quizType} onChange={event=>changeGeneral({quizType:event.target.value as QuizDefinition['quizType']})}><option value="quiz">Quiz</option><option value="poll">Umfrage</option></select></label><label>Teilnahme<select disabled={!canEdit||!!session} value={definition.participation} onChange={event=>changeGeneral({participation:event.target.value as QuizDefinition['participation']})}><option value="anonymous">Anonym</option><option value="name">Mit Name</option></select></label><label>Beschreibung<input disabled={!canEdit||!!session} value={definition.description} onChange={event=>changeGeneral({description:event.target.value})}/></label></div><div className="quiz-question-tabs">{joinSlide&&<button className={isJoinSelected?'active':''} onClick={()=>state.select(item.id,joinSlide.id)}><Icon name="qr_code_2"/> Teilnahme</button>}{definition.questions.map((entry,index)=><button key={entry.id} draggable={canEdit&&!session} className={`${!isJoinSelected&&!isAnswerSelected&&index===selectedIndex?'active':''} quiz-drag-tab`} onDragStart={event=>{event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/quiz-question-index',String(index))}} onDragOver={event=>{if(canEdit&&!session)event.preventDefault()}} onDrop={event=>{event.preventDefault();moveQuestion(Number(event.dataTransfer.getData('text/quiz-question-index')),index)}} onClick={()=>state.select(item.id,questionSlides[index]?.id)}><Icon name="drag_indicator"/> Frage {index+1}</button>)}<button title="Frage hinzufügen" disabled={!canEdit||!!session} onClick={addQuestion}><Icon name="add"/></button>{answerSlide&&<button className={isAnswerSelected?'active':''} onClick={()=>state.select(item.id,answerSlide.id)}><Icon name="fact_check"/> Antworten</button>}</div>{isJoinSelected?<div className="quiz-join-editor"><Icon name="qr_code_2"/><b>Teilnahmefolie</b><p>Diese echte erste Folie zeigt Quizname, Beschreibung, Link, Teilnahmecode und QR-Code. Klicke die Elemente auf der Folie an, um sie frei zu verschieben, zu skalieren und zu gestalten.</p><small>Vor dem Start erscheint ein deutlich erkennbarer Vorschaucode. ON AIR ersetzt ihn automatisch durch den echten Code.</small></div>:isAnswerSelected?<div className="quiz-join-editor"><Icon name="fact_check"/><b>Antwortenfolie</b><p>Diese echte Abschlussfolie fasst richtige Antworten beziehungsweise Live-Ergebnisse zusammen. Alle Elemente lassen sich auf der Folie frei positionieren und gestalten.</p><small>Änderungen an Fragen und richtigen Lösungen werden automatisch übernommen.</small></div>:question?<div className="quiz-question-editor"><label>Fragetyp<select disabled={!canEdit||!!session} value={question.type} onChange={event=>changeQuestion({type:event.target.value as QuizQuestion['type'],correctOptionIds:event.target.value==='poll'||event.target.value==='text'?[]:question.correctOptionIds})}><option value="single">Single Choice</option><option value="multiple">Multiple Choice</option><option value="trueFalse">Richtig / Falsch</option><option value="yesNo">Ja / Nein</option><option value="poll">Umfrage</option><option value="text">Freitext</option><option value="scale">Skala</option></select></label><label>Frage<textarea disabled={!canEdit||!!session} value={question.question} onChange={event=>changeQuestion({question:event.target.value})}/></label><div className="quiz-options"><b>ANTWORTEN</b>{question.options.map((option,index)=><div key={option.id}><input aria-label={`Antwort ${index+1} ist richtig`} disabled={!canEdit||!!session||definition.quizType==='poll'||question.type==='poll'||question.type==='text'} type={question.type==='multiple'?'checkbox':'radio'} name={`correct-${question.id}`} checked={question.correctOptionIds.includes(option.id)} onChange={event=>setCorrect(option.id,event.target.checked)}/><input aria-label={`Antwort ${index+1}`} disabled={!canEdit||!!session} value={option.text} onChange={event=>changeQuestion({options:question.options.map(entry=>entry.id===option.id?{...entry,text:event.target.value}:entry)})}/><button title="Antwort entfernen" disabled={!canEdit||!!session||question.options.length<=2} onClick={()=>changeQuestion({options:question.options.filter(entry=>entry.id!==option.id),correctOptionIds:question.correctOptionIds.filter(id=>id!==option.id)})}><Icon name="close"/></button></div>)}<button disabled={!canEdit||!!session||question.options.length>=8||question.type==='text'} onClick={()=>changeQuestion({options:[...question.options,{id:crypto.randomUUID(),text:`Antwort ${question.options.length+1}`}]})}><Icon name="add"/> ANTWORT HINZUFÜGEN</button></div><div className="quiz-question-settings"><label>Zeitlimit<input type="number" min="5" max="300" disabled={!canEdit||!!session} value={question.durationSeconds} onChange={event=>changeQuestion({durationSeconds:Number(event.target.value)})}/><span>Sekunden</span></label><label>Punkte<input type="number" min="0" max="10000" disabled={!canEdit||!!session||definition.quizType==='poll'} value={question.points} onChange={event=>changeQuestion({points:Number(event.target.value)})}/></label><label><input type="checkbox" disabled={!canEdit||!!session} checked={question.allowAnswerChange} onChange={event=>changeQuestion({allowAnswerChange:event.target.checked})}/> Antwort darf geändert werden</label>{question.type==='text'&&<label><input type="checkbox" disabled={!canEdit||!!session} checked={question.holdTextAnswers!==false} onChange={event=>changeQuestion({holdTextAnswers:event.target.checked})}/> Freitextantworten bis zur Freigabe zurückhalten</label>}<button className="quiz-delete" disabled={!canEdit||!!session||definition.questions.length<=1} onClick={removeQuestion}><Icon name="delete"/> FRAGE LÖSCHEN</button></div></div>:<div className="quiz-empty"><Icon name="quiz"/><p>Noch keine Frage vorhanden.</p><button disabled={!canEdit||!!session} onClick={addQuestion}>ERSTE FRAGE HINZUFÜGEN</button></div>}<footer><Icon name="info"/><span>{session?'Die Quizdefinition ist während der laufenden Sitzung gesperrt, damit alle Teilnehmer dieselben Fragen sehen.':'Beim Wechsel zu diesem Quiz während ON AIR wird die Sitzung gestartet und zuerst die Teilnahmefolie live angezeigt. Zurückgehaltene Freitextantworten erscheinen nicht auf MAIN.'}</span></footer></div>
+function QuizRewards({
+  definition,
+  answers,
+  canEdit,
+  locked,
+  onChange,
+}: {
+  definition: QuizDefinition;
+  answers: LiveQuizAnswer[];
+  canEdit: boolean;
+  locked: boolean;
+  onChange: (patch: Partial<QuizDefinition>) => void;
+}) {
+  const scores = new Map<string, { name: string; points: number }>();
+  for (const answer of answers) {
+    const question = definition.questions.find(
+      (entry) => entry.id === answer.questionId,
+    );
+    if (
+      !question ||
+      question.type === "text" ||
+      question.type === "poll" ||
+      !question.correctOptionIds.length
+    )
+      continue;
+    const submitted = (
+        Array.isArray(answer.answer) ? answer.answer : [answer.answer]
+      )
+        .map(String)
+        .sort(),
+      correct = [...question.correctOptionIds].sort(),
+      isCorrect =
+        submitted.length === correct.length &&
+        submitted.every((value, index) => value === correct[index]);
+    const current = scores.get(answer.participantId) ?? {
+      name:
+        answer.displayName || `Teilnehmer ${answer.participantId.slice(-4)}`,
+      points: 0,
+    };
+    if (isCorrect) current.points += question.points;
+    scores.set(answer.participantId, current);
+  }
+  const ranking = [...scores.values()]
+    .sort((a, b) => b.points - a.points)
+    .slice(0, 3);
+  const updateReward = (index: number, value: string) => {
+    const rewards = [...definition.rewards] as [string, string, string];
+    rewards[index] = value;
+    onChange({ rewards });
+  };
+  if (definition.quizType === "poll") return null;
+  return (
+    <section className="quiz-rewards">
+      <header>
+        <span>
+          <Icon name="emoji_events" />
+          <b>BELOHNUNGEN & RANGLISTE</b>
+        </span>
+        <label>
+          <input
+            type="checkbox"
+            disabled={!canEdit || locked}
+            checked={definition.rewardEnabled}
+            onChange={(event) =>
+              onChange({ rewardEnabled: event.target.checked })
+            }
+          />{" "}
+          Belohnungen verwenden
+        </label>
+      </header>
+      {definition.rewardEnabled && (
+        <div className="quiz-reward-grid">
+          {definition.rewards.map((reward, index) => (
+            <label key={index}>
+              <b>{index + 1}. PLATZ</b>
+              <input
+                disabled={!canEdit || locked}
+                value={reward}
+                placeholder={
+                  index === 0 ? "z. B. Hauptpreis" : "Preis oder Anerkennung"
+                }
+                onChange={(event) => updateReward(index, event.target.value)}
+              />
+              <span>
+                {ranking[index]
+                  ? `${ranking[index].name} · ${ranking[index].points} Punkte`
+                  : "Noch nicht vergeben"}
+              </span>
+            </label>
+          ))}
+        </div>
+      )}
+      {!definition.rewardEnabled && (
+        <p>
+          Optional können für die drei besten Ergebnisse Preise oder
+          Anerkennungen hinterlegt werden. Die Rangliste wird aus den richtigen
+          Antworten und den Punkten je Frage berechnet.
+        </p>
+      )}
+    </section>
+  );
+}
+function QuizRewardsPanel({
+  item,
+  canEdit,
+}: {
+  item: ServiceItem;
+  canEdit: boolean;
+}) {
+  const state = usePresentation(),
+    definition = quizDefinition(item),
+    sessionId = storedLiveQuizSessionId(definition.id),
+    [answers, setAnswers] = useState<LiveQuizAnswer[]>([]);
+  useEffect(() => {
+    if (!sessionId) {
+      setAnswers([]);
+      return;
+    }
+    return watchLiveQuizAnswers(sessionId, setAnswers);
+  }, [sessionId]);
+  const change = (patch: Partial<QuizDefinition>) => {
+    const next = { ...definition, ...patch };
+    state.updateItem(item.id, {
+      metadata: { ...item.metadata, quizDefinition: JSON.stringify(next) },
+    });
+  };
+  return (
+    <QuizRewards
+      definition={definition}
+      answers={answers}
+      canEdit={canEdit}
+      locked={!!sessionId}
+      onChange={change}
+    />
+  );
+}
+function quizSlideText(question: QuizQuestion) {
+  const answers = question.options
+    .map(
+      (option, index) => `${String.fromCharCode(65 + index)}  ${option.text}`,
+    )
+    .join("\n");
+  return `${question.question}${answers ? `\n\n${answers}` : ""}`;
+}
+function makeQuizJoinSlide(item: ServiceItem, base: Slide): Slide {
+  const text = (
+    name: string,
+    value: string,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    fontSize: number,
+    zIndex: number,
+  ) => ({
+    id: crypto.randomUUID(),
+    type: "text" as const,
+    name,
+    x,
+    y,
+    width,
+    height,
+    rotation: 0,
+    opacity: 1,
+    locked: false,
+    visible: true,
+    zIndex,
+    properties: {
+      text: value,
+      fontFamily: "Inter",
+      fontSize,
+      fontWeight: 700,
+      color: "#ffffff",
+      align: "center",
+      verticalAlign: "center",
+      lineHeight: 1.15,
+      letterSpacing: 0,
+      padding: 18,
+    },
+  });
+  return {
+    ...structuredClone(base),
+    id: crypto.randomUUID(),
+    itemId: item.id,
+    title: "Teilnahme",
+    body: "Jetzt mitmachen",
+    background: "#102029",
+    backgroundImage: undefined,
+    order: 0,
+    elements: [
+      text("Quizname", item.title, 90, 60, 1740, 130, 68, 1),
+      text(
+        "Quizbeschreibung",
+        String(item.metadata.quizDescription ?? "Jetzt live mitmachen"),
+        120,
+        185,
+        980,
+        100,
+        34,
+        2,
+      ),
+      text(
+        "Teilnahmehinweis",
+        "QR-Code scannen oder pgbielefeld.neocities.org/quiz öffnen",
+        110,
+        300,
+        1020,
+        150,
+        38,
+        3,
+      ),
+      {
+        id: crypto.randomUUID(),
+        type: "qr",
+        name: "Quiz-QR-Code",
+        x: 1270,
+        y: 215,
+        width: 480,
+        height: 480,
+        rotation: 0,
+        opacity: 1,
+        locked: false,
+        visible: true,
+        zIndex: 4,
+        properties: {
+          text: "QR-CODE",
+          color: "#102029",
+          background: "#ffffff",
+        },
+      },
+      text(
+        "Teilnahmecode",
+        "TEILNAHMECODE\n123 456",
+        140,
+        610,
+        980,
+        210,
+        54,
+        5,
+      ),
+    ],
+  };
+}
+function quizAnswerText(definition: QuizDefinition) {
+  return (
+    definition.questions
+      .map((question, index) => {
+        const correct = question.options
+          .filter((option) => question.correctOptionIds.includes(option.id))
+          .map((option) => option.text)
+          .join(", ");
+        return `${index + 1}. ${question.question}\n${correct || "Ergebnis wird live ausgewertet"}`;
+      })
+      .join("\n\n") || "Antworten und Ergebnisse erscheinen hier."
+  );
+}
+function liveQuizAnswerText(
+  definition: QuizDefinition,
+  session: LiveQuizSession,
+  answers: LiveQuizAnswer[],
+) {
+  const question = definition.questions.find(
+    (entry) => entry.id === session.activeQuestionId,
+  );
+  if (!question) return quizAnswerText(definition);
+  if (question.type === "text") {
+    if (question.holdTextAnswers !== false)
+      return `${question.question}\n\n${answers.length} ${answers.length === 1 ? "Antwort wird" : "Antworten werden"} bis zur Freigabe zurückgehalten.`;
+    const visible = answers
+      .flatMap((answer) =>
+        Array.isArray(answer.answer) ? answer.answer : [answer.answer],
+      )
+      .map((answer, index) => `${index + 1}. ${String(answer)}`)
+      .filter((line) => line.trim().length > 3);
+    return `${question.question}\n\n${visible.join("\n") || "Noch keine Antworten."}`;
+  }
+  const counts = new Map<string, number>();
+  answers
+    .flatMap((answer) =>
+      Array.isArray(answer.answer) ? answer.answer : [answer.answer],
+    )
+    .forEach((value) =>
+      counts.set(String(value), (counts.get(String(value)) ?? 0) + 1),
+    );
+  return `${question.question}\n\n${question.options.map((option) => `${option.text}: ${counts.get(option.id) ?? 0}`).join("\n")}`;
+}
+function makeQuizAnswerSlide(
+  item: ServiceItem,
+  base: Slide,
+  definition: QuizDefinition,
+): Slide {
+  const title = {
+    id: crypto.randomUUID(),
+    type: "text" as const,
+    name: "Antworttitel",
+    x: 120,
+    y: 70,
+    width: 1680,
+    height: 130,
+    rotation: 0,
+    opacity: 1,
+    locked: false,
+    visible: true,
+    zIndex: 1,
+    properties: {
+      text: "Antworten",
+      fontFamily: "Inter",
+      fontSize: 68,
+      fontWeight: 700,
+      color: "#ffffff",
+      align: "center",
+      verticalAlign: "center",
+      lineHeight: 1.1,
+      padding: 18,
+    },
+  };
+  const body = {
+    ...title,
+    id: crypto.randomUUID(),
+    name: "Antwortinhalt",
+    x: 190,
+    y: 230,
+    width: 1540,
+    height: 700,
+    zIndex: 2,
+    properties: {
+      ...title.properties,
+      text: quizAnswerText(definition),
+      fontSize: 38,
+      fontWeight: 500,
+      align: "left",
+      verticalAlign: "top",
+      lineHeight: 1.3,
+    },
+  };
+  return {
+    ...structuredClone(base),
+    id: crypto.randomUUID(),
+    itemId: item.id,
+    title: "Antworten",
+    body: quizAnswerText(definition),
+    background: "#15343b",
+    backgroundImage: undefined,
+    order: definition.questions.length + 1,
+    elements: [title, body],
+  };
+}
+function QuizEditor({
+  item,
+  canEdit,
+}: {
+  item: ServiceItem;
+  canEdit: boolean;
+}) {
+  const state = usePresentation(),
+    definition = quizDefinition(item),
+    joinSlideId = String(item.metadata.quizJoinSlideId ?? ""),
+    answerSlideId = String(item.metadata.quizAnswerSlideId ?? ""),
+    joinSlide = item.slides.find((slide) => slide.id === joinSlideId),
+    answerSlide = item.slides.find((slide) => slide.id === answerSlideId),
+    questionSlides = item.slides.filter(
+      (slide) => slide.id !== joinSlideId && slide.id !== answerSlideId,
+    ),
+    isJoinSelected = !!joinSlide && state.selectedSlideId === joinSlide.id,
+    isAnswerSelected =
+      !!answerSlide && state.selectedSlideId === answerSlide.id,
+    selectedIndex = Math.max(
+      0,
+      questionSlides.findIndex((slide) => slide.id === state.selectedSlideId),
+    ),
+    question = definition.questions[selectedIndex] ?? definition.questions[0];
+  const [sessionId, setSessionId] = useState(() =>
+      storedLiveQuizSessionId(definition.id),
+    ),
+    [session, setSession] = useState<LiveQuizSession | null>(null),
+    [answers, setAnswers] = useState<LiveQuizAnswer[]>([]),
+    [qr, setQr] = useState(""),
+    [sessionBusy, setSessionBusy] = useState(false),
+    [sessionError, setSessionError] = useState("");
+  useEffect(() => {
+    if ((joinSlide && answerSlide) || !item.slides[0]) return;
+    const createdJoin = joinSlide ?? makeQuizJoinSlide(item, item.slides[0]),
+      createdAnswer =
+        answerSlide ??
+        makeQuizAnswerSlide(
+          item,
+          item.slides.at(-1) ?? item.slides[0],
+          definition,
+        ),
+      questions = item.slides.filter(
+        (slide) => slide.id !== createdJoin.id && slide.id !== createdAnswer.id,
+      );
+    state.updateItem(item.id, {
+      metadata: {
+        ...item.metadata,
+        quizJoinSlideId: createdJoin.id,
+        quizAnswerSlideId: createdAnswer.id,
+        quizDescription: definition.description,
+      },
+      slides: [
+        { ...createdJoin, order: 0 },
+        ...questions.map((slide, index) => ({ ...slide, order: index + 1 })),
+        { ...createdAnswer, order: questions.length + 1 },
+      ],
+    });
+    if (!joinSlide)
+      queueMicrotask(() =>
+        usePresentation.getState().select(item.id, createdJoin.id),
+      );
+  }, [item.id, joinSlideId, answerSlideId]);
+  useEffect(() => {
+    if (!sessionId) {
+      setSession(null);
+      setAnswers([]);
+      return;
+    }
+    const stopSession = watchLiveQuizSession(sessionId, setSession),
+      stopAnswers = watchLiveQuizAnswers(sessionId, setAnswers);
+    return () => {
+      stopSession();
+      stopAnswers();
+    };
+  }, [sessionId]);
+  useEffect(() => {
+    const rawCode = session?.code ?? "123456",
+      url = quizJoinUrl(rawCode);
+    void QRCode.toDataURL(url, {
+      width: 600,
+      margin: 1,
+      color: { dark: "#102029", light: "#ffffff" },
+    }).then((image) => {
+      setQr(image);
+      const current = usePresentation
+          .getState()
+          .items.find((entry) => entry.id === item.id),
+        join = current?.slides.find(
+          (slide) =>
+            slide.id === String(current.metadata.quizJoinSlideId ?? ""),
+        );
+      if (!current || !join) return;
+      const code = `${rawCode.slice(0, 3)} ${rawCode.slice(3)}`,
+        updated = {
+          ...join,
+          elements: join.elements.map((element) =>
+            element.name === "Quiz-QR-Code"
+              ? {
+                  ...element,
+                  properties: { ...element.properties, src: image, text: url },
+                }
+              : element.name === "Quizname"
+                ? {
+                    ...element,
+                    properties: {
+                      ...element.properties,
+                      text: definition.title,
+                    },
+                  }
+                : element.name === "Quizbeschreibung"
+                  ? {
+                      ...element,
+                      properties: {
+                        ...element.properties,
+                        text: definition.description || "Jetzt live mitmachen",
+                      },
+                    }
+                  : element.name === "Teilnahmehinweis"
+                    ? {
+                        ...element,
+                        properties: {
+                          ...element.properties,
+                          text: `QR-Code scannen oder ${url} öffnen`,
+                        },
+                      }
+                    : element.name === "Teilnahmecode"
+                      ? {
+                          ...element,
+                          properties: {
+                            ...element.properties,
+                            text: `TEILNAHMECODE\n${code}`,
+                          },
+                        }
+                      : element,
+          ),
+        };
+      usePresentation
+        .getState()
+        .updateItem(current.id, {
+          slides: current.slides.map((slide) =>
+            slide.id === updated.id ? updated : slide,
+          ),
+        });
+      if (session && usePresentation.getState().liveSlideId === updated.id)
+        void window.desktop?.sendLiveSlide(updated);
+    });
+  }, [session?.code, joinSlideId]);
+  const commit = (next: QuizDefinition, focusIndex = selectedIndex) => {
+    const base = questionSlides[0] ?? joinSlide ?? item.slides[0],
+      slides = next.questions.map((entry, index) => {
+        const current = questionSlides[index] ?? {
+          ...structuredClone(base),
+          id: crypto.randomUUID(),
+          itemId: item.id,
+        };
+        const body = quizSlideText(entry);
+        return {
+          ...current,
+          title: `Frage ${index + 1}`,
+          body,
+          order: index + 1,
+          elements: current.elements.map((element, elementIndex) =>
+            elementIndex === 0 && element.type === "text"
+              ? {
+                  ...element,
+                  properties: {
+                    ...element.properties,
+                    text: body,
+                    fontSize: entry.options.length > 4 ? 50 : 60,
+                  },
+                }
+              : element,
+          ),
+        };
+      });
+    const preservedJoin = joinSlide
+        ? {
+            ...joinSlide,
+            order: 0,
+            elements: joinSlide.elements.map((element) =>
+              element.name === "Quizname"
+                ? {
+                    ...element,
+                    properties: { ...element.properties, text: next.title },
+                  }
+                : element.name === "Quizbeschreibung"
+                  ? {
+                      ...element,
+                      properties: {
+                        ...element.properties,
+                        text: next.description || "Jetzt live mitmachen",
+                      },
+                    }
+                  : element,
+            ),
+          }
+        : undefined,
+      answerText = quizAnswerText(next),
+      preservedAnswer = answerSlide
+        ? {
+            ...answerSlide,
+            order: slides.length + 1,
+            body: answerText,
+            elements: answerSlide.elements.map((element) =>
+              element.name === "Antwortinhalt"
+                ? {
+                    ...element,
+                    properties: { ...element.properties, text: answerText },
+                  }
+                : element,
+            ),
+          }
+        : undefined;
+    state.updateItem(item.id, {
+      title: next.title,
+      metadata: {
+        ...item.metadata,
+        quizId: next.id,
+        quizType: next.quizType,
+        participation: next.participation,
+        quizDescription: next.description,
+        questionCount: next.questions.length,
+        quizDefinition: JSON.stringify(next),
+      },
+      slides: [
+        ...(preservedJoin ? [preservedJoin] : []),
+        ...slides,
+        ...(preservedAnswer ? [preservedAnswer] : []),
+      ],
+    });
+    const focused = slides[Math.min(focusIndex, slides.length - 1)];
+    if (focused && !isJoinSelected && !isAnswerSelected)
+      queueMicrotask(() =>
+        usePresentation.getState().select(item.id, focused.id),
+      );
+  };
+  const changeGeneral = (patch: Partial<QuizDefinition>) =>
+    commit({ ...definition, ...patch });
+  const changeQuestion = (patch: Partial<QuizQuestion>) => {
+    if (!question) return;
+    const questions = definition.questions.map((entry) =>
+      entry.id === question.id ? { ...entry, ...patch } : entry,
+    );
+    commit({ ...definition, questions });
+  };
+  const addQuestion = () => {
+    const first = crypto.randomUUID(),
+      second = crypto.randomUUID(),
+      next: QuizQuestion = {
+        id: crypto.randomUUID(),
+        type: definition.quizType === "poll" ? "poll" : "single",
+        question: "Neue Frage",
+        options: [
+          { id: first, text: "Antwort 1" },
+          { id: second, text: "Antwort 2" },
+        ],
+        correctOptionIds: definition.quizType === "quiz" ? [first] : [],
+        durationSeconds: definition.defaultDurationSeconds || 30,
+        points: 100,
+        allowAnswerChange: false,
+        holdTextAnswers: true,
+        disabled: false,
+      };
+    commit(
+      { ...definition, questions: [...definition.questions, next] },
+      definition.questions.length,
+    );
+  };
+  const moveQuestion = (from: number, to: number) => {
+    if (
+      !canEdit ||
+      session ||
+      from === to ||
+      from < 0 ||
+      to < 0 ||
+      from >= definition.questions.length ||
+      to >= definition.questions.length
+    )
+      return;
+    const questions = [...definition.questions],
+      [movedQuestion] = questions.splice(from, 1);
+    questions.splice(to, 0, movedQuestion);
+    const slides = [...questionSlides],
+      [movedSlide] = slides.splice(from, 1);
+    slides.splice(to, 0, movedSlide);
+    const next = { ...definition, questions },
+      answerText = quizAnswerText(next),
+      nextAnswer = answerSlide
+        ? {
+            ...answerSlide,
+            order: slides.length + 1,
+            body: answerText,
+            elements: answerSlide.elements.map((element) =>
+              element.name === "Antwortinhalt"
+                ? {
+                    ...element,
+                    properties: { ...element.properties, text: answerText },
+                  }
+                : element,
+            ),
+          }
+        : undefined;
+    state.updateItem(item.id, {
+      metadata: { ...item.metadata, quizDefinition: JSON.stringify(next) },
+      slides: [
+        ...(joinSlide ? [{ ...joinSlide, order: 0 }] : []),
+        ...slides.map((slide, index) => ({
+          ...slide,
+          title: `Frage ${index + 1}`,
+          order: index + 1,
+        })),
+        ...(nextAnswer ? [nextAnswer] : []),
+      ],
+    });
+    queueMicrotask(() =>
+      usePresentation.getState().select(item.id, movedSlide.id),
+    );
+  };
+  const removeQuestion = () => {
+    if (!question || definition.questions.length <= 1) return;
+    const index = definition.questions.findIndex(
+      (entry) => entry.id === question.id,
+    );
+    commit(
+      {
+        ...definition,
+        questions: definition.questions.filter(
+          (entry) => entry.id !== question.id,
+        ),
+      },
+      Math.max(0, index - 1),
+    );
+  };
+  const setCorrect = (optionId: string, checked: boolean) => {
+    if (!question || definition.quizType === "poll") return;
+    changeQuestion({
+      correctOptionIds:
+        question.type === "multiple"
+          ? checked
+            ? [...new Set([...question.correctOptionIds, optionId])]
+            : question.correctOptionIds.filter((id) => id !== optionId)
+          : [optionId],
+    });
+  };
+  const startSession = async (takeLive = false) => {
+    setSessionBusy(true);
+    setSessionError("");
+    try {
+      const created = await createLiveQuizSession(definition);
+      setSession(created);
+      setSessionId(created.id);
+      if (takeLive && joinSlide) state.goLive(item.id, joinSlide.id);
+    } catch (error) {
+      setSessionError(
+        error instanceof Error
+          ? error.message
+          : "Die LiveQuiz-Sitzung konnte nicht gestartet werden.",
+      );
+    } finally {
+      setSessionBusy(false);
+    }
+  };
+  useEffect(() => {
+    if (
+      !state.onAir ||
+      state.selectedItemId !== item.id ||
+      sessionBusy ||
+      !definition.questions.length ||
+      !joinSlide
+    )
+      return;
+    if (session) {
+      if (state.liveSlideId !== joinSlide.id)
+        state.goLive(item.id, joinSlide.id);
+      return;
+    }
+    if (!sessionId) void startSession(true);
+  }, [
+    state.onAir,
+    state.selectedItemId,
+    item.id,
+    joinSlide?.id,
+    session?.id,
+    sessionId,
+    sessionBusy,
+  ]);
+  const takeQuestionLive = async () => {
+    if (!session || !question) return;
+    setSessionBusy(true);
+    setSessionError("");
+    try {
+      await openLiveQuizQuestion(session.id, question.id);
+      const questionSlide = questionSlides[selectedIndex];
+      if (state.onAir && questionSlide) state.goLive(item.id, questionSlide.id);
+      const saved = usePreferences.getState().audioRouting,
+        routing = {
+          ...defaultAudioRouting,
+          ...saved,
+          soundEffects: {
+            ...defaultAudioRouting.soundEffects,
+            ...saved?.soundEffects,
+          },
+        };
+      void playRoutedTone(routing, "soundEffects", 659.25, 0.18).catch(
+        () => {},
+      );
+    } catch {
+      setSessionError("Die Frage konnte nicht live geschaltet werden.");
+    } finally {
+      setSessionBusy(false);
+    }
+  };
+  const finishSession = async () => {
+    if (!session) return;
+    setSessionBusy(true);
+    try {
+      await endLiveQuizSession(session);
+      setSession(null);
+      setSessionId("");
+      setAnswers([]);
+    } finally {
+      setSessionBusy(false);
+    }
+  };
+  const showJoin = (targets: string[]) => {
+    if (!session || !qr) return;
+    window.dispatchEvent(
+      new CustomEvent("gottesdienstregie:show-quiz-join", {
+        detail: {
+          id: `quiz-join-${session.id}`,
+          type: "quizJoin",
+          name: "Quizteilnahme",
+          enabled: true,
+          targets,
+          text: definition.title,
+          background: "#102029",
+          imageUrl: qr,
+          joinUrl: quizJoinUrl(session.code),
+          joinCode: `${session.code.slice(0, 3)} ${session.code.slice(3)}`,
+          order: 0,
+        },
+      }),
+    );
+  };
+  const copyJoin = async () => {
+    if (session) await navigator.clipboard.writeText(quizJoinUrl(session.code));
+  };
+  const activeAnswers = session?.activeQuestionId
+      ? answers.filter(
+          (answer) => answer.questionId === session.activeQuestionId,
+        )
+      : [],
+    participants = new Set(answers.map((answer) => answer.participantId)).size;
+  useEffect(() => {
+    if (!session?.activeQuestionId || !answerSlideId) return;
+    const current = usePresentation
+        .getState()
+        .items.find((entry) => entry.id === item.id),
+      answer = current?.slides.find(
+        (slide) =>
+          slide.id === String(current.metadata.quizAnswerSlideId ?? ""),
+      );
+    if (!current || !answer) return;
+    const text = liveQuizAnswerText(definition, session, activeAnswers),
+      updated = {
+        ...answer,
+        body: text,
+        elements: answer.elements.map((element) =>
+          element.name === "Antwortinhalt"
+            ? { ...element, properties: { ...element.properties, text } }
+            : element,
+        ),
+      };
+    usePresentation
+      .getState()
+      .updateItem(current.id, {
+        slides: current.slides.map((slide) =>
+          slide.id === updated.id ? updated : slide,
+        ),
+      });
+    if (usePresentation.getState().liveSlideId === updated.id)
+      void window.desktop?.sendLiveSlide(updated);
+  }, [session?.activeQuestionId, answers, answerSlideId]);
+  return (
+    <div className="quiz-context">
+      <header>
+        <div>
+          <Icon name="quiz" />
+          <input
+            aria-label="Quiztitel"
+            disabled={!canEdit || !!session}
+            value={definition.title}
+            onChange={(event) => changeGeneral({ title: event.target.value })}
+          />
+        </div>
+        <span>
+          {definition.questions.length}{" "}
+          {definition.questions.length === 1 ? "Frage" : "Fragen"}
+        </span>
+      </header>
+      {session ? (
+        <section className="quiz-live-session">
+          <div className="quiz-session-code">
+            <span>TEILNAHMECODE</span>
+            <strong>
+              {session.code.slice(0, 3)} {session.code.slice(3)}
+            </strong>
+            <small>{quizJoinUrl(session.code)}</small>
+            <div>
+              <b>{participants}</b> Teilnehmer · <b>{activeAnswers.length}</b>{" "}
+              Antworten
+              {activeAnswers.some((answer) => answer.held) && (
+                <>
+                  {" "}
+                  ·{" "}
+                  <b>
+                    {activeAnswers.filter((answer) => answer.held).length}
+                  </b>{" "}
+                  zurückgehalten
+                </>
+              )}
+            </div>
+          </div>
+          {qr && (
+            <img src={qr} alt={`QR-Code für Teilnahmecode ${session.code}`} />
+          )}
+          <div className="quiz-session-actions">
+            <button
+              disabled={!state.onAir || !qr}
+              title={!state.onAir ? "Zuerst ON AIR starten" : ""}
+              onClick={() => showJoin(["main"])}
+            >
+              <Icon name="present_to_all" /> AUF MAIN ANZEIGEN
+            </button>
+            <button
+              disabled={!state.onAir || !qr}
+              title={!state.onAir ? "Zuerst ON AIR starten" : ""}
+              onClick={() => showJoin(["main", "stage", "livestream", "lobby"])}
+            >
+              <Icon name="connected_tv" /> AUF AUSGÄNGEN ANZEIGEN
+            </button>
+            <button disabled={!qr} onClick={() => void copyJoin()}>
+              <Icon name="content_copy" /> LINK KOPIEREN
+            </button>
+            <button
+              disabled={sessionBusy || !question}
+              onClick={takeQuestionLive}
+            >
+              <Icon name="podcasts" /> AKTUELLE FRAGE STARTEN
+            </button>
+            <button
+              disabled={sessionBusy || session.status === "lobby"}
+              onClick={() => void returnLiveQuizToLobby(session.id)}
+            >
+              <Icon name="pause" /> ANTWORTEN SCHLIESSEN
+            </button>
+            <button
+              className="danger"
+              disabled={sessionBusy}
+              onClick={finishSession}
+            >
+              <Icon name="stop_circle" /> QUIZ BEENDEN
+            </button>
+          </div>
+        </section>
+      ) : null}
+      {sessionError && <p className="quiz-session-error">{sessionError}</p>}
+      <div className="quiz-general">
+        <label>
+          Typ
+          <select
+            disabled={!canEdit || !!session}
+            value={definition.quizType}
+            onChange={(event) =>
+              changeGeneral({
+                quizType: event.target.value as QuizDefinition["quizType"],
+              })
+            }
+          >
+            <option value="quiz">Quiz</option>
+            <option value="poll">Umfrage</option>
+          </select>
+        </label>
+        <label>
+          Teilnahme
+          <select
+            disabled={!canEdit || !!session}
+            value={definition.participation}
+            onChange={(event) =>
+              changeGeneral({
+                participation: event.target
+                  .value as QuizDefinition["participation"],
+              })
+            }
+          >
+            <option value="anonymous">Anonym</option>
+            <option value="name">Mit Name</option>
+          </select>
+        </label>
+        <label>
+          Beschreibung
+          <input
+            disabled={!canEdit || !!session}
+            value={definition.description}
+            onChange={(event) =>
+              changeGeneral({ description: event.target.value })
+            }
+          />
+        </label>
+      </div>
+      <div className="quiz-question-tabs">
+        {joinSlide && (
+          <button
+            className={isJoinSelected ? "active" : ""}
+            onClick={() => state.select(item.id, joinSlide.id)}
+          >
+            <Icon name="qr_code_2" /> Teilnahme
+          </button>
+        )}
+        {definition.questions.map((entry, index) => (
+          <button
+            key={entry.id}
+            draggable={canEdit && !session}
+            className={`${!isJoinSelected && !isAnswerSelected && index === selectedIndex ? "active" : ""} quiz-drag-tab`}
+            onDragStart={(event) => {
+              event.dataTransfer.effectAllowed = "move";
+              event.dataTransfer.setData(
+                "text/quiz-question-index",
+                String(index),
+              );
+            }}
+            onDragOver={(event) => {
+              if (canEdit && !session) event.preventDefault();
+            }}
+            onDrop={(event) => {
+              event.preventDefault();
+              moveQuestion(
+                Number(event.dataTransfer.getData("text/quiz-question-index")),
+                index,
+              );
+            }}
+            onClick={() => state.select(item.id, questionSlides[index]?.id)}
+          >
+            <Icon name="drag_indicator" /> Frage {index + 1}
+          </button>
+        ))}
+        <button
+          title="Frage hinzufügen"
+          disabled={!canEdit || !!session}
+          onClick={addQuestion}
+        >
+          <Icon name="add" />
+        </button>
+        {answerSlide && (
+          <button
+            className={isAnswerSelected ? "active" : ""}
+            onClick={() => state.select(item.id, answerSlide.id)}
+          >
+            <Icon name="fact_check" /> Antworten
+          </button>
+        )}
+      </div>
+      {isJoinSelected ? (
+        <div className="quiz-join-editor">
+          <Icon name="qr_code_2" />
+          <b>Teilnahmefolie</b>
+          <p>
+            Diese echte erste Folie zeigt Quizname, Beschreibung, Link,
+            Teilnahmecode und QR-Code. Klicke die Elemente auf der Folie an, um
+            sie frei zu verschieben, zu skalieren und zu gestalten.
+          </p>
+          <small>
+            Vor dem Start erscheint ein deutlich erkennbarer Vorschaucode. ON
+            AIR ersetzt ihn automatisch durch den echten Code.
+          </small>
+        </div>
+      ) : isAnswerSelected ? (
+        <div className="quiz-join-editor">
+          <Icon name="fact_check" />
+          <b>Antwortenfolie</b>
+          <p>
+            Diese echte Abschlussfolie fasst richtige Antworten beziehungsweise
+            Live-Ergebnisse zusammen. Alle Elemente lassen sich auf der Folie
+            frei positionieren und gestalten.
+          </p>
+          <small>
+            Änderungen an Fragen und richtigen Lösungen werden automatisch
+            übernommen.
+          </small>
+        </div>
+      ) : question ? (
+        <div className="quiz-question-editor">
+          <label>
+            Fragetyp
+            <select
+              disabled={!canEdit || !!session}
+              value={question.type}
+              onChange={(event) =>
+                changeQuestion({
+                  type: event.target.value as QuizQuestion["type"],
+                  correctOptionIds:
+                    event.target.value === "poll" ||
+                    event.target.value === "text"
+                      ? []
+                      : question.correctOptionIds,
+                })
+              }
+            >
+              <option value="single">Single Choice</option>
+              <option value="multiple">Multiple Choice</option>
+              <option value="trueFalse">Richtig / Falsch</option>
+              <option value="yesNo">Ja / Nein</option>
+              <option value="poll">Umfrage</option>
+              <option value="text">Freitext</option>
+              <option value="scale">Skala</option>
+            </select>
+          </label>
+          <label>
+            Frage
+            <textarea
+              disabled={!canEdit || !!session}
+              value={question.question}
+              onChange={(event) =>
+                changeQuestion({ question: event.target.value })
+              }
+            />
+          </label>
+          <div className="quiz-options">
+            <b>ANTWORTEN</b>
+            {question.options.map((option, index) => (
+              <div key={option.id}>
+                <input
+                  aria-label={`Antwort ${index + 1} ist richtig`}
+                  disabled={
+                    !canEdit ||
+                    !!session ||
+                    definition.quizType === "poll" ||
+                    question.type === "poll" ||
+                    question.type === "text"
+                  }
+                  type={question.type === "multiple" ? "checkbox" : "radio"}
+                  name={`correct-${question.id}`}
+                  checked={question.correctOptionIds.includes(option.id)}
+                  onChange={(event) =>
+                    setCorrect(option.id, event.target.checked)
+                  }
+                />
+                <input
+                  aria-label={`Antwort ${index + 1}`}
+                  disabled={!canEdit || !!session}
+                  value={option.text}
+                  onChange={(event) =>
+                    changeQuestion({
+                      options: question.options.map((entry) =>
+                        entry.id === option.id
+                          ? { ...entry, text: event.target.value }
+                          : entry,
+                      ),
+                    })
+                  }
+                />
+                <button
+                  title="Antwort entfernen"
+                  disabled={
+                    !canEdit || !!session || question.options.length <= 2
+                  }
+                  onClick={() =>
+                    changeQuestion({
+                      options: question.options.filter(
+                        (entry) => entry.id !== option.id,
+                      ),
+                      correctOptionIds: question.correctOptionIds.filter(
+                        (id) => id !== option.id,
+                      ),
+                    })
+                  }
+                >
+                  <Icon name="close" />
+                </button>
+              </div>
+            ))}
+            <button
+              disabled={
+                !canEdit ||
+                !!session ||
+                question.options.length >= 8 ||
+                question.type === "text"
+              }
+              onClick={() =>
+                changeQuestion({
+                  options: [
+                    ...question.options,
+                    {
+                      id: crypto.randomUUID(),
+                      text: `Antwort ${question.options.length + 1}`,
+                    },
+                  ],
+                })
+              }
+            >
+              <Icon name="add" /> ANTWORT HINZUFÜGEN
+            </button>
+          </div>
+          <div className="quiz-question-settings">
+            <label>
+              Zeitlimit
+              <input
+                type="number"
+                min="5"
+                max="300"
+                disabled={!canEdit || !!session}
+                value={question.durationSeconds}
+                onChange={(event) =>
+                  changeQuestion({
+                    durationSeconds: Number(event.target.value),
+                  })
+                }
+              />
+              <span>Sekunden</span>
+            </label>
+            <label>
+              Punkte
+              <input
+                type="number"
+                min="0"
+                max="10000"
+                disabled={
+                  !canEdit || !!session || definition.quizType === "poll"
+                }
+                value={question.points}
+                onChange={(event) =>
+                  changeQuestion({ points: Number(event.target.value) })
+                }
+              />
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                disabled={!canEdit || !!session}
+                checked={question.allowAnswerChange}
+                onChange={(event) =>
+                  changeQuestion({ allowAnswerChange: event.target.checked })
+                }
+              />{" "}
+              Antwort darf geändert werden
+            </label>
+            {question.type === "text" && (
+              <label>
+                <input
+                  type="checkbox"
+                  disabled={!canEdit || !!session}
+                  checked={question.holdTextAnswers !== false}
+                  onChange={(event) =>
+                    changeQuestion({ holdTextAnswers: event.target.checked })
+                  }
+                />{" "}
+                Freitextantworten bis zur Freigabe zurückhalten
+              </label>
+            )}
+            <button
+              className="quiz-delete"
+              disabled={
+                !canEdit || !!session || definition.questions.length <= 1
+              }
+              onClick={removeQuestion}
+            >
+              <Icon name="delete" /> FRAGE LÖSCHEN
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="quiz-empty">
+          <Icon name="quiz" />
+          <p>Noch keine Frage vorhanden.</p>
+          <button disabled={!canEdit || !!session} onClick={addQuestion}>
+            ERSTE FRAGE HINZUFÜGEN
+          </button>
+        </div>
+      )}
+      <footer>
+        <Icon name="info" />
+        <span>
+          {session
+            ? "Die Quizdefinition ist während der laufenden Sitzung gesperrt, damit alle Teilnehmer dieselben Fragen sehen."
+            : "Beim Wechsel zu diesem Quiz während ON AIR wird die Sitzung gestartet und zuerst die Teilnahmefolie live angezeigt. Zurückgehaltene Freitextantworten erscheinen nicht auf MAIN."}
+        </span>
+      </footer>
+    </div>
+  );
 }
 
-function PreviewStack({item,slide,previewToken}:{item:ServiceItem;slide:Slide;previewToken:number}){
-  const state=usePresentation(),guideClass=`${state.smartGuides?'guide-smart ':''}${state.marginGuides?'guide-margins ':''}${state.ruleOfThirds?'guide-thirds':''}`;
-  return <div className="production-preview-scroll transition-preview-host"><button className={`production-slide ${guideClass} active ${slide.id===state.liveSlideId?'live':''}`}><TransitionStage slide={slide} transition={resolveTransition(slide,item,'operator',state.transitionDefault)} role="operator" previewToken={previewToken}/><span>{slide.title}</span>{slide.id===state.liveSlideId&&<i/>}</button></div>
+function PreviewStack({
+  item,
+  slide,
+  previewToken,
+}: {
+  item: ServiceItem;
+  slide: Slide;
+  previewToken: number;
+}) {
+  const state = usePresentation(),
+    guideClass = `${state.smartGuides ? "guide-smart " : ""}${state.marginGuides ? "guide-margins " : ""}${state.ruleOfThirds ? "guide-thirds" : ""}`;
+  return (
+    <div className="production-preview-scroll transition-preview-host">
+      <button
+        className={`production-slide ${guideClass} active ${slide.id === state.liveSlideId ? "live" : ""}`}
+      >
+        <TransitionStage
+          slide={slide}
+          transition={resolveTransition(
+            slide,
+            item,
+            "operator",
+            state.transitionDefault,
+          )}
+          role="operator"
+          previewToken={previewToken}
+        />
+        <span>{slide.title}</span>
+        {slide.id === state.liveSlideId && <i />}
+      </button>
+    </div>
+  );
 }
 
-function PreviewSlideCard({item,slide,index}:{item:ServiceItem;slide:Slide;index:number}){
-  const state=usePresentation(),selected=slide.id===state.previewSlideId&&item.id===state.previewItemId,live=slide.id===state.liveSlideId&&item.id===state.liveItemId,transition=resolveTransition(slide,item,'operator',state.transitionDefault),rendered=previewSlide(slide);
-  return <button data-preview-slide={slide.id} aria-label={`${item.title}, Folie ${index+1}`} aria-selected={selected} aria-current={live?'true':undefined} title={`${slide.title||`Folie ${index+1}`}${slide.transitionOverride?` · ${transitionLabels[transition.type]} · ${(transition.durationMs/1000).toFixed(1)} s`:''}`} className={`preview-slide-card ${selected?'active':''} ${live?'live':''}`} onClick={()=>state.selectPreview(item.id,slide.id)}><SlideRenderer slide={rendered} mode="thumbnail"/><span className="preview-slide-number">{index+1}</span>{slide.transitionOverride&&<i className="preview-transition-icon"><Icon name="animation"/></i>}{live&&<b className="preview-live-badge">LIVE</b>}</button>
+function PreviewSlideCard({
+  item,
+  slide,
+  index,
+}: {
+  item: ServiceItem;
+  slide: Slide;
+  index: number;
+}) {
+  const state = usePresentation(),
+    selected =
+      slide.id === state.previewSlideId && item.id === state.previewItemId,
+    live = slide.id === state.liveSlideId && item.id === state.liveItemId,
+    transition = resolveTransition(
+      slide,
+      item,
+      "operator",
+      state.transitionDefault,
+    ),
+    rendered = previewSlide(slide);
+  return (
+    <button
+      data-preview-slide={slide.id}
+      aria-label={`${item.title}, Folie ${index + 1}`}
+      aria-selected={selected}
+      aria-current={live ? "true" : undefined}
+      title={`${slide.title || `Folie ${index + 1}`}${slide.transitionOverride ? ` · ${transitionLabels[transition.type]} · ${(transition.durationMs / 1000).toFixed(1)} s` : ""}`}
+      className={`preview-slide-card ${selected ? "active" : ""} ${live ? "live" : ""}`}
+      onClick={() => state.selectPreview(item.id, slide.id)}
+    >
+      <SlideRenderer slide={rendered} mode="thumbnail" />
+      <span className="preview-slide-number">{index + 1}</span>
+      {slide.transitionOverride && (
+        <i className="preview-transition-icon">
+          <Icon name="animation" />
+        </i>
+      )}
+      {live && <b className="preview-live-badge">LIVE</b>}
+    </button>
+  );
 }
 
-function PreviewCenter({activeQuick}:{activeQuick:QuickScreenConfig|null}){
-  const state=usePresentation(),root=useRef<HTMLDivElement>(null),deadline=useRef(0),previewItem=state.items.find(entry=>entry.id===state.previewItemId)??state.items[0],liveItem=state.items.find(entry=>entry.id===state.liveItemId),item=state.previewLayout==='single'&&state.onAir?(liveItem??previewItem):previewItem,activeSlideId=state.previewLayout==='single'&&state.onAir?state.liveSlideId:state.previewSlideId,slide=item?.slides.find(entry=>entry.id===activeSlideId)??item?.slides[0],all=state.items.filter(entry=>entry.enabled&&!entry.disabled).flatMap(entry=>entry.slides.filter(current=>current.enabled).map(current=>({item:entry,slide:current}))),currentIndex=all.findIndex(entry=>entry.item.id===item?.id&&entry.slide.id===slide?.id),timedSeconds=slide?.timing?.durationSeconds??(item?.timing.autoAdvance?item.timing.slideDurationSeconds:0),[pausedSlideId,setPausedSlideId]=useState(''),[remaining,setRemaining]=useState(0),livePaused=state.liveTimerPausedSlideId===slide?.id;
-  useEffect(()=>{root.current?.querySelector(`[data-preview-slide="${CSS.escape(state.previewSlideId)}"]`)?.scrollIntoView({block:'nearest',inline:'nearest'})},[state.previewSlideId]);
-  const move=(delta:number)=>{if(state.onAir&&state.previewLayout==='single'){if(delta>0)state.nextLive();else state.previousLive();return}const index=all.findIndex(entry=>entry.slide.id===state.previewSlideId),next=all[Math.max(0,Math.min(all.length-1,index+delta))];if(next)state.selectPreview(next.item.id,next.slide.id)};
-  useEffect(()=>{setPausedSlideId('');setRemaining(timedSeconds);deadline.current=Date.now()+timedSeconds*1000},[slide?.id,timedSeconds]);
-  useEffect(()=>{if(state.previewLayout!=='single'||!slide||timedSeconds<=0||pausedSlideId===slide.id||livePaused)return;const tick=()=>{const next=Math.max(0,(deadline.current-Date.now())/1000);setRemaining(next);if(!state.onAir&&next<=0){if(currentIndex>=0&&currentIndex<all.length-1)move(1);else setPausedSlideId(slide.id)}};tick();const timer=window.setInterval(tick,200);return()=>window.clearInterval(timer)},[state.previewLayout,state.onAir,slide?.id,timedSeconds,pausedSlideId,livePaused,currentIndex,all.length]);
-  if(!item||!slide)return <div className="preview-empty"><Icon name="slideshow"/><b>NOCH KEINE ELEMENTE</b><span>Füge den ersten Inhalt zum Ablauf hinzu.</span><button onClick={()=>state.addItem('content',{title:'Neuer Inhalt',section:'',body:''})}><Icon name="add"/> ELEMENT HINZUFÜGEN</button></div>;
-  if(state.previewLayout==='single')return <div className="production-single" ref={root} tabIndex={0} aria-label="MAIN-Liveansicht. Mit linker und rechter Pfeiltaste live weiterschalten." onKeyDown={event=>{if(event.key==='ArrowRight'){event.preventDefault();move(1)}if(event.key==='ArrowLeft'){event.preventDefault();move(-1)}}}><button className="preview-nav previous" disabled={currentIndex<=0} title="Vorherige MAIN-Folie" onClick={()=>move(-1)}><Icon name="chevron_left"/></button><div><TransitionStage slide={previewSlide(slide)} transition={resolveTransition(slide,item,'operator',state.transitionDefault)} role="operator"/><QuickOverlay quick={activeQuick}/>{timedSeconds>0&&<button className={`preview-slide-timer ${(state.onAir?livePaused:pausedSlideId===slide.id)?'paused':''}`} title="Timer anklicken, damit diese MAIN-Folie dauerhaft stehen bleibt" onClick={()=>state.onAir?state.setLiveTimerPaused(livePaused?undefined:slide.id):setPausedSlideId(slide.id)}><Icon name={(state.onAir?livePaused:pausedSlideId===slide.id)?'keep':'timer'}/>{(state.onAir?livePaused:pausedSlideId===slide.id)?'DAUERHAFT':`${Math.max(0,Math.ceil(remaining))} s`}</button>}<b className={`main-live-state ${state.onAir?'on-air':'off-air'}`}>{state.onAir?'MAIN · ON AIR':'MAIN · VORSCHAU'}</b></div><button className="preview-nav next" disabled={currentIndex<0||currentIndex>=all.length-1} title="Nächste MAIN-Folie" onClick={()=>move(1)}><Icon name="chevron_right"/></button></div>;
-  return <div className="production-grid" ref={root} tabIndex={0} style={{'--grid-size':`${state.gridSize}px`} as CSSProperties} onKeyDown={event=>{if(event.key==='ArrowRight'||event.key==='ArrowDown'){event.preventDefault();move(1)}if(event.key==='ArrowLeft'||event.key==='ArrowUp'){event.preventDefault();move(-1)}}}>{state.sections.map(section=>{const entries=state.items.filter(entry=>entry.sectionId===section.id),duration=entries.reduce((sum,entry)=>sum+itemDurationSeconds(entry),0);return <section key={section.id} className={entries.length?'':'empty'}><h2><span>{section.title}</span><small>{formatDuration(duration)}</small></h2>{entries.length?entries.map(entry=><div className="preview-item-group" data-preview-item={entry.id} key={entry.id}><h3><span>{entry.title}</span><small>{entry.slides.length} {entry.slides.length===1?'Folie':'Folien'} · {formatDuration(itemDurationSeconds(entry))}{entry.timing.repeat&&<> · <Icon name="repeat"/></>}</small></h3><div>{entry.slides.map((current,index)=><PreviewSlideCard key={current.id} item={entry} slide={current} index={index}/>)}</div></div>):<p>Keine Elemente</p>}</section>})}</div>;
+function PreviewCenter({
+  activeQuick,
+}: {
+  activeQuick: QuickScreenConfig | null;
+}) {
+  const state = usePresentation(),
+    root = useRef<HTMLDivElement>(null),
+    deadline = useRef(0),
+    previewItem =
+      state.items.find((entry) => entry.id === state.previewItemId) ??
+      state.items[0],
+    liveItem = state.items.find((entry) => entry.id === state.liveItemId),
+    item =
+      state.previewLayout === "single" && state.onAir
+        ? (liveItem ?? previewItem)
+        : previewItem,
+    activeSlideId =
+      state.previewLayout === "single" && state.onAir
+        ? state.liveSlideId
+        : state.previewSlideId,
+    slide =
+      item?.slides.find((entry) => entry.id === activeSlideId) ??
+      item?.slides[0],
+    all = state.items
+      .filter((entry) => entry.enabled && !entry.disabled)
+      .flatMap((entry) =>
+        entry.slides
+          .filter((current) => current.enabled)
+          .map((current) => ({ item: entry, slide: current })),
+      ),
+    currentIndex = all.findIndex(
+      (entry) => entry.item.id === item?.id && entry.slide.id === slide?.id,
+    ),
+    timedSeconds =
+      slide?.timing?.durationSeconds ??
+      (item?.timing.autoAdvance ? item.timing.slideDurationSeconds : 0),
+    [pausedSlideId, setPausedSlideId] = useState(""),
+    [remaining, setRemaining] = useState(0),
+    livePaused = state.liveTimerPausedSlideId === slide?.id;
+  useEffect(() => {
+    root.current
+      ?.querySelector(
+        `[data-preview-slide="${CSS.escape(state.previewSlideId)}"]`,
+      )
+      ?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [state.previewSlideId]);
+  const move = (delta: number) => {
+    if (state.onAir && state.previewLayout === "single") {
+      if (delta > 0) state.nextLive();
+      else state.previousLive();
+      return;
+    }
+    const index = all.findIndex(
+        (entry) => entry.slide.id === state.previewSlideId,
+      ),
+      next = all[Math.max(0, Math.min(all.length - 1, index + delta))];
+    if (next) state.selectPreview(next.item.id, next.slide.id);
+  };
+  useEffect(() => {
+    setPausedSlideId("");
+    setRemaining(timedSeconds);
+    deadline.current = Date.now() + timedSeconds * 1000;
+  }, [slide?.id, timedSeconds]);
+  useEffect(() => {
+    if (
+      state.previewLayout !== "single" ||
+      !slide ||
+      timedSeconds <= 0 ||
+      pausedSlideId === slide.id ||
+      livePaused
+    )
+      return;
+    const tick = () => {
+      const next = Math.max(0, (deadline.current - Date.now()) / 1000);
+      setRemaining(next);
+      if (!state.onAir && next <= 0) {
+        if (currentIndex >= 0 && currentIndex < all.length - 1) move(1);
+        else setPausedSlideId(slide.id);
+      }
+    };
+    tick();
+    const timer = window.setInterval(tick, 200);
+    return () => window.clearInterval(timer);
+  }, [
+    state.previewLayout,
+    state.onAir,
+    slide?.id,
+    timedSeconds,
+    pausedSlideId,
+    livePaused,
+    currentIndex,
+    all.length,
+  ]);
+  if (!item || !slide)
+    return (
+      <div className="preview-empty">
+        <Icon name="slideshow" />
+        <b>NOCH KEINE ELEMENTE</b>
+        <span>Füge den ersten Inhalt zum Ablauf hinzu.</span>
+        <button
+          onClick={() =>
+            state.addItem("content", {
+              title: "Neuer Inhalt",
+              section: "",
+              body: "",
+            })
+          }
+        >
+          <Icon name="add" /> ELEMENT HINZUFÜGEN
+        </button>
+      </div>
+    );
+  if (state.previewLayout === "single")
+    return (
+      <div
+        className="production-single"
+        ref={root}
+        tabIndex={0}
+        aria-label="MAIN-Liveansicht. Mit linker und rechter Pfeiltaste live weiterschalten."
+        onKeyDown={(event) => {
+          if (event.key === "ArrowRight") {
+            event.preventDefault();
+            move(1);
+          }
+          if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            move(-1);
+          }
+        }}
+      >
+        <button
+          className="preview-nav previous"
+          disabled={currentIndex <= 0}
+          title="Vorherige MAIN-Folie"
+          onClick={() => move(-1)}
+        >
+          <Icon name="chevron_left" />
+        </button>
+        <div>
+          <TransitionStage
+            slide={previewSlide(slide)}
+            transition={resolveTransition(
+              slide,
+              item,
+              "operator",
+              state.transitionDefault,
+            )}
+            role="operator"
+          />
+          <QuickOverlay quick={activeQuick} />
+          {timedSeconds > 0 && (
+            <button
+              className={`preview-slide-timer ${(state.onAir ? livePaused : pausedSlideId === slide.id) ? "paused" : ""}`}
+              title="Timer anklicken, damit diese MAIN-Folie dauerhaft stehen bleibt"
+              onClick={() =>
+                state.onAir
+                  ? state.setLiveTimerPaused(livePaused ? undefined : slide.id)
+                  : setPausedSlideId(slide.id)
+              }
+            >
+              <Icon
+                name={
+                  (state.onAir ? livePaused : pausedSlideId === slide.id)
+                    ? "keep"
+                    : "timer"
+                }
+              />
+              {(state.onAir ? livePaused : pausedSlideId === slide.id)
+                ? "DAUERHAFT"
+                : `${Math.max(0, Math.ceil(remaining))} s`}
+            </button>
+          )}
+          <b
+            className={`main-live-state ${state.onAir ? "on-air" : "off-air"}`}
+          >
+            {state.onAir ? "MAIN · ON AIR" : "MAIN · VORSCHAU"}
+          </b>
+        </div>
+        <button
+          className="preview-nav next"
+          disabled={currentIndex < 0 || currentIndex >= all.length - 1}
+          title="Nächste MAIN-Folie"
+          onClick={() => move(1)}
+        >
+          <Icon name="chevron_right" />
+        </button>
+      </div>
+    );
+  return (
+    <div
+      className="production-grid"
+      ref={root}
+      tabIndex={0}
+      style={{ "--grid-size": `${state.gridSize}px` } as CSSProperties}
+      onKeyDown={(event) => {
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+          event.preventDefault();
+          move(1);
+        }
+        if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+          event.preventDefault();
+          move(-1);
+        }
+      }}
+    >
+      {state.sections.map((section) => {
+        const entries = state.items.filter(
+            (entry) => entry.sectionId === section.id,
+          ),
+          duration = entries.reduce(
+            (sum, entry) => sum + itemDurationSeconds(entry),
+            0,
+          );
+        return (
+          <section key={section.id} className={entries.length ? "" : "empty"}>
+            <h2>
+              <span>{section.title}</span>
+              <small>{formatDuration(duration)}</small>
+            </h2>
+            {entries.length ? (
+              entries.map((entry) => (
+                <div
+                  className="preview-item-group"
+                  data-preview-item={entry.id}
+                  key={entry.id}
+                >
+                  <h3>
+                    <span>{entry.title}</span>
+                    <small>
+                      {entry.slides.length}{" "}
+                      {entry.slides.length === 1 ? "Folie" : "Folien"} ·{" "}
+                      {formatDuration(itemDurationSeconds(entry))}
+                      {entry.timing.repeat && (
+                        <>
+                          {" "}
+                          · <Icon name="repeat" />
+                        </>
+                      )}
+                    </small>
+                  </h3>
+                  <div>
+                    {entry.slides.map((current, index) => (
+                      <PreviewSlideCard
+                        key={current.id}
+                        item={entry}
+                        slide={current}
+                        index={index}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>Keine Elemente</p>
+            )}
+          </section>
+        );
+      })}
+    </div>
+  );
 }
 
-function QuickScreenThumb({quick}:{quick:QuickScreenConfig}){return <div className={`quick-screen-thumb quick-${quick.type}`} style={{background:quick.background??(quick.type==='black'?'#000':'#162d36')}}>{quick.type==='logo'?<img src={quick.imageUrl||logoWhite} alt="Philippus Gemeinde Bielefeld e. V."/>:quick.imageUrl?<img src={quick.imageUrl} alt=""/>:<>{quick.type==='noText'?<Icon name="text_fields_off"/>:quick.type==='countdown'?<strong>05:00</strong>:quick.type==='empty'||quick.type==='black'?null:<strong>{quick.text||quick.name}</strong>}</>}</div>}
-
-function PreviewRightSidebar({quickScreens,activeQuick,onQuick}:{quickScreens:QuickScreenConfig[];activeQuick:QuickScreenConfig|null;onQuick:(quick:QuickScreenConfig|null)=>void}){
-  const state=usePresentation(),[collapsed,setCollapsed]=useState(()=>localStorage.getItem('gottesdienstregie.preview.rightCollapsed')==='true'),liveItem=state.items.find(item=>item.id===state.liveItemId),live=liveItem?.slides.find(slide=>slide.id===state.liveSlideId);
-  const toggle=()=>setCollapsed(value=>{localStorage.setItem('gottesdienstregie.preview.rightCollapsed',String(!value));return!value});
-  if(collapsed)return <aside className="preview-right collapsed"><button title="Vorschauleiste einblenden" onClick={toggle}><Icon name="chevron_left"/></button></aside>;
-  return <aside className="preview-right"><header><b>MAIN</b><button title="MAIN-Leiste ausblenden" onClick={toggle}><Icon name="chevron_right"/></button></header><section className="live-slide-panel"><h2>LIVE AUF MAIN</h2>{live?<><div><SlideRenderer slide={previewSlide(live)} mode="thumbnail"/><b>LIVE</b></div><p>{liveItem?.title} · {live.title||'Live-Folie'}</p></>:<p>MAIN ist derzeit OFF AIR.</p>}</section><section className="quick-screens-panel"><h2>MAIN-SCHNELLANZEIGEN</h2><div>{quickScreens.filter(quick=>quick.enabled).sort((a,b)=>a.order-b.order).map(quick=><button key={quick.id} aria-pressed={activeQuick?.id===quick.id} className={activeQuick?.id===quick.id?'active':''} title={`${quick.name}${state.onAir?' sofort auf MAIN anzeigen':' für MAIN vorbereiten'}`} onClick={()=>onQuick(activeQuick?.id===quick.id?null:quick)}><QuickScreenThumb quick={quick}/><span>{quick.name}</span></button>)}</div>{activeQuick&&<button className="restore-last" onClick={()=>onQuick(null)}><Icon name="restore"/> MAIN-FOLIE WIEDERHERSTELLEN</button>}</section></aside>;
+function QuickScreenThumb({ quick }: { quick: QuickScreenConfig }) {
+  return (
+    <div
+      className={`quick-screen-thumb quick-${quick.type}`}
+      style={{
+        background:
+          quick.background ?? (quick.type === "black" ? "#000" : "#162d36"),
+      }}
+    >
+      {quick.type === "logo" ? (
+        <img
+          src={quick.imageUrl || logoWhite}
+          alt="Philippus Gemeinde Bielefeld e. V."
+        />
+      ) : quick.imageUrl ? (
+        <img src={quick.imageUrl} alt="" />
+      ) : (
+        <>
+          {quick.type === "noText" ? (
+            <Icon name="text_fields_off" />
+          ) : quick.type === "countdown" ? (
+            <strong>05:00</strong>
+          ) : quick.type === "empty" || quick.type === "black" ? null : (
+            <strong>{quick.text || quick.name}</strong>
+          )}
+        </>
+      )}
+    </div>
+  );
 }
 
-export function ProductionWorkspace({canEdit,quickScreens=[],activeQuick=null,onQuick=()=>{}}:{canEdit:boolean;quickScreens?:QuickScreenConfig[];activeQuick?:QuickScreenConfig|null;onQuick?:(quick:QuickScreenConfig|null)=>void}){
-  const state=usePresentation(),{item,slide}=selected(state),[transitionPreview,setTransitionPreview]=useState(0);
-  if(state.mode==='preview')return <section className="production-workspace preview-mode"><div className="preview-mode-toolbar"><button className={state.previewLayout==='single'?'active':''} aria-pressed={state.previewLayout==='single'} onClick={()=>state.setPreviewLayout('single')}><Icon name="cast_connected"/> MAIN LIVE</button><button className={state.previewLayout==='grid'?'active':''} aria-pressed={state.previewLayout==='grid'} onClick={()=>state.setPreviewLayout('grid')}><Icon name="grid_view"/> FOLIENÜBERSICHT</button>{state.previewLayout==='grid'&&<label>Thumbnailgröße <Icon name="zoom_out"/><input type="range" min="160" max="440" step="40" list="thumbnail-steps" value={state.gridSize} onChange={event=>state.setGridSize(Number(event.target.value))}/><datalist id="thumbnail-steps">{[160,200,240,280,320,360,400,440].map(value=><option key={value} value={value}/>)}</datalist><Icon name="zoom_in"/></label>}</div><div className="preview-work-area"><PreviewCenter activeQuick={activeQuick}/><PreviewRightSidebar quickScreens={quickScreens} activeQuick={activeQuick} onQuick={onQuick}/></div></section>;
-  if(!item||!slide)return <section className="production-workspace production-empty">Wähle ein Element im Ablauf aus.</section>;
-  return <section className="production-workspace"><div className="context-editor">{item.type==='song'?<SongEditor item={item} canEdit={canEdit}/>:item.type==='liveQuiz'?<><QuizEditor item={item} canEdit={canEdit}/><QuizRewardsPanel item={item} canEdit={canEdit}/></>:<ContentEditor item={item} slide={slide} canEdit={canEdit}/>}<TransitionControls item={item} slide={slide} canEdit={canEdit} onPreview={()=>setTransitionPreview(value=>value+1)}/></div><div className="large-output-preview"><PreviewStack item={item} slide={slide} previewToken={transitionPreview}/></div></section>;
+function PreviewRightSidebar({
+  quickScreens,
+  activeQuick,
+  onQuick,
+}: {
+  quickScreens: QuickScreenConfig[];
+  activeQuick: QuickScreenConfig | null;
+  onQuick: (quick: QuickScreenConfig | null) => void;
+}) {
+  const state = usePresentation(),
+    [collapsed, setCollapsed] = useState(
+      () =>
+        localStorage.getItem("gottesdienstregie.preview.rightCollapsed") ===
+        "true",
+    ),
+    liveItem = state.items.find((item) => item.id === state.liveItemId),
+    live = liveItem?.slides.find((slide) => slide.id === state.liveSlideId);
+  const toggle = () =>
+    setCollapsed((value) => {
+      localStorage.setItem(
+        "gottesdienstregie.preview.rightCollapsed",
+        String(!value),
+      );
+      return !value;
+    });
+  if (collapsed)
+    return (
+      <aside className="preview-right collapsed">
+        <button title="Vorschauleiste einblenden" onClick={toggle}>
+          <Icon name="chevron_left" />
+        </button>
+      </aside>
+    );
+  return (
+    <aside className="preview-right">
+      <header>
+        <b>MAIN</b>
+        <button title="MAIN-Leiste ausblenden" onClick={toggle}>
+          <Icon name="chevron_right" />
+        </button>
+      </header>
+      <section className="live-slide-panel">
+        <h2>LIVE AUF MAIN</h2>
+        {live ? (
+          <>
+            <div>
+              <SlideRenderer slide={previewSlide(live)} mode="thumbnail" />
+              <b>LIVE</b>
+            </div>
+            <p>
+              {liveItem?.title} · {live.title || "Live-Folie"}
+            </p>
+          </>
+        ) : (
+          <p>MAIN ist derzeit OFF AIR.</p>
+        )}
+      </section>
+      <section className="quick-screens-panel">
+        <h2>MAIN-SCHNELLANZEIGEN</h2>
+        <div>
+          {quickScreens
+            .filter((quick) => quick.enabled)
+            .sort((a, b) => a.order - b.order)
+            .map((quick) => (
+              <button
+                key={quick.id}
+                aria-pressed={activeQuick?.id === quick.id}
+                className={activeQuick?.id === quick.id ? "active" : ""}
+                title={`${quick.name}${state.onAir ? " sofort auf MAIN anzeigen" : " für MAIN vorbereiten"}`}
+                onClick={() =>
+                  onQuick(activeQuick?.id === quick.id ? null : quick)
+                }
+              >
+                <QuickScreenThumb quick={quick} />
+                <span>{quick.name}</span>
+              </button>
+            ))}
+        </div>
+        {activeQuick && (
+          <button className="restore-last" onClick={() => onQuick(null)}>
+            <Icon name="restore" /> MAIN-FOLIE WIEDERHERSTELLEN
+          </button>
+        )}
+      </section>
+    </aside>
+  );
 }
 
-type ToolbarMenu='guides'|'arrange'|'background'|null;
-const palette=['#000000','#ffffff','#3b4652','#736f7b','#d9534f','#e6b94c','#cddd42','#69a83f','#25a9c2','#b595d5','#e58b35','#442d2d','#1d3557','#285943','#6c3b75','#8b5e34'];
-
-function GuidesMenu({close}:{close:()=>void}){const state=usePresentation();const row=(key:'smartGuides'|'marginGuides'|'ruleOfThirds',label:string)=><button onClick={()=>state.setGuide(key,!state[key])}><Icon name={state[key]?'check_box':'check_box_outline_blank'}/>{label}</button>;return <div className="toolbar-popover guides-menu" role="menu">{row('smartGuides','Intelligente Hilfslinien')}{row('marginGuides','Rand-Hilfslinien')}{row('ruleOfThirds','Drittelraster')}<button className="menu-close" onClick={close}><Icon name="close"/> Schließen</button></div>}
-
-function ArrangeMenu({close}:{close:()=>void}){const state=usePresentation(),{slide}=selected(state),element=slide?.elements.find(entry=>state.selectedElementIds.includes(entry.id))??slide?.elements[0];const change=(patch:Parameters<typeof state.updateElement>[1])=>element&&state.updateElement(element.id,patch),align=(x?:number,y?:number)=>element&&change({x:x===undefined?element.x:x,y:y===undefined?element.y:y});const layer=(front:boolean)=>element&&slide&&change({zIndex:(front?Math.max(...slide.elements.map(entry=>entry.zIndex)):Math.min(...slide.elements.map(entry=>entry.zIndex)))+(front?1:-1)});return <div className="toolbar-popover arrange-menu" role="menu"><h4>EBENEN</h4><div className="menu-grid"><button disabled={!element} onClick={()=>layer(true)}><Icon name="flip_to_front"/>Ganz nach vorn</button><button disabled={!element} onClick={()=>layer(false)}><Icon name="flip_to_back"/>Ganz nach hinten</button></div><h4>AUSRICHTEN</h4><div className="icon-grid"><button disabled={!element} title="Links" onClick={()=>align(0)}><Icon name="align_horizontal_left"/></button><button disabled={!element} title="Horizontal zentrieren" onClick={()=>element&&align((1920-element.width)/2)}><Icon name="align_horizontal_center"/></button><button disabled={!element} title="Rechts" onClick={()=>element&&align(1920-element.width)}><Icon name="align_horizontal_right"/></button><button disabled={!element} title="Oben" onClick={()=>align(undefined,0)}><Icon name="align_vertical_top"/></button><button disabled={!element} title="Vertikal zentrieren" onClick={()=>element&&align(undefined,(1080-element.height)/2)}><Icon name="align_vertical_center"/></button><button disabled={!element} title="Unten" onClick={()=>element&&align(undefined,1080-element.height)}><Icon name="align_vertical_bottom"/></button></div><h4>TRANSFORMIEREN</h4><div className="menu-grid"><button disabled={!element} onClick={()=>element&&change({rotation:(element.rotation+90)%360})}><Icon name="rotate_right"/>Drehen</button><button disabled={!element} onClick={()=>element&&change({properties:{...element.properties,flipX:element.properties.flipX!==true}})}><Icon name="flip"/>Spiegeln</button><button disabled={!element} onClick={()=>element&&state.toggleElementLocked(element.id)}><Icon name={element?.locked?'lock_open':'lock'}/>{element?.locked?'Entsperren':'Sperren'}</button></div><button className="menu-close" onClick={close}><Icon name="close"/> Schließen</button></div>}
-
-function BackgroundMenu({close,browse}:{close:()=>void;browse:()=>void}){const state=usePresentation(),{slide}=selected(state),[assets,setAssets]=useState<MediaAsset[]>([]);useEffect(()=>{void window.desktop?.media.list().then(items=>setAssets(items.filter(item=>item.kind==='image').slice(0,10)))},[]);if(!slide)return null;const update=(patch:Partial<Slide>)=>state.updateSlide(patch),choose=(url:string)=>update({backgroundImage:url});const importImage=async()=>{const imported=await window.desktop?.media.import()??[],image=imported.find(item=>item.kind==='image');if(image)choose(image.url)};return <div className="toolbar-popover background-menu" role="menu"><button onClick={browse}><Icon name="photo_library"/>Medien durchsuchen</button><button onClick={()=>void importImage()}><Icon name="upload"/>Importieren …</button><h4>BILD</h4><div className="background-recents">{assets.length?assets.map(asset=><button key={asset.id} title={asset.name} onClick={()=>choose(asset.url)}><img src={asset.url} alt=""/></button>):<small>Noch keine Bilder verwendet.</small>}</div><h4>FÜLLFARBE</h4><div className="color-swatches">{palette.map(color=><button key={color} title={color} style={{background:color}} className={slide.background===color?'active':''} onClick={()=>update({background:color})}/>)}</div><label className="blur-control"><span>Bild weichzeichnen</span><input type="range" min="0" max="24" value={slide.backgroundBlur??0} disabled={!slide.backgroundImage} onChange={event=>update({backgroundBlur:Number(event.target.value)})}/><output>{slide.backgroundBlur??0}px</output></label><h4>BILDPOSITION</h4><button onClick={()=>update({backgroundRotation:((slide.backgroundRotation??0)+90)%360})}><Icon name="rotate_right"/>Drehen</button><strong>An Höhe anpassen</strong><div className="position-grid">{(['left','center','right'] as const).map(value=><button key={value} className={slide.backgroundFit==='auto 100%'&&slide.backgroundPositionX===value?'active':''} onClick={()=>update({backgroundFit:'auto 100%',backgroundPositionX:value})}>{value==='left'?'Links':value==='right'?'Rechts':'Mitte'}</button>)}</div><strong>An Breite anpassen</strong><div className="position-grid">{(['top','center','bottom'] as const).map(value=><button key={value} className={slide.backgroundFit==='100% auto'&&slide.backgroundPositionY===value?'active':''} onClick={()=>update({backgroundFit:'100% auto',backgroundPositionY:value})}>{value==='top'?'Oben':value==='bottom'?'Unten':'Mitte'}</button>)}</div><div className="fit-grid"><button className={slide.backgroundFit==='cover'?'active':''} onClick={()=>update({backgroundFit:'cover'})}>Ausfüllen</button><button className={slide.backgroundFit==='contain'?'active':''} onClick={()=>update({backgroundFit:'contain'})}>Anpassen</button><button className={slide.backgroundFit==='auto'?'active':''} onClick={()=>update({backgroundFit:'auto'})}>Originalgröße</button></div><small className="scope-note">Gilt für: Nur diese Folie</small><button className="menu-close" onClick={close}><Icon name="close"/> Schließen</button></div>}
-
-export function FormatToolbar({openBackgroundMedia}:{openBackgroundMedia:()=>void}){
-  const state=usePresentation(),{slide}=selected(state),element=slide?.elements.find(entry=>state.selectedElementIds.includes(entry.id))??slide?.elements.find(entry=>entry.type==='text'),[menu,setMenu]=useState<ToolbarMenu>(null),root=useRef<HTMLDivElement>(null);
-  const update=(patch:Record<string,string|number|boolean>)=>element&&state.updateElement(element.id,{properties:{...element.properties,...patch}});
-  useEffect(()=>{const key=(event:KeyboardEvent)=>{if(event.key==='Escape'&&menu){event.stopImmediatePropagation();setMenu(null)}},outside=(event:PointerEvent)=>{if(menu&&!root.current?.contains(event.target as Node))setMenu(null)};addEventListener('keydown',key);addEventListener('pointerdown',outside);return()=>{removeEventListener('keydown',key);removeEventListener('pointerdown',outside)}},[menu]);
-  const toggle=(value:Exclude<ToolbarMenu,null>)=>setMenu(current=>current===value?null:value);
-  if(element?.type==='shape')return <div className="format-toolbar shape-format-toolbar" ref={root}>
-    <label>2D-Objekt<select aria-label="Form" value={String(element.properties.shapeKind??'rectangle')} onChange={event=>update({shapeKind:event.target.value})}><option value="rectangle">Rechteck</option><option value="rounded">Abgerundetes Rechteck</option><option value="ellipse">Ellipse / Kreis</option><option value="triangle">Dreieck</option><option value="diamond">Raute</option><option value="pentagon">Fünfeck</option><option value="hexagon">Sechseck</option><option value="octagon">Achteck</option><option value="star">Stern</option><option value="burst">Sternenkranz</option><option value="arrow">Pfeil</option><option value="chevron">Chevron</option><option value="speech">Sprechblase</option><option value="cross">Kreuz</option><option value="parallelogram">Parallelogramm</option><option value="trapezoid">Trapez</option><option value="heart">Herz</option><option value="lightning">Blitz</option><option value="shield">Schild</option><option value="cloud">Wolke</option><option value="home">Haus</option><option value="moon">Halbmond</option></select></label>
-    <label>Füllung<input aria-label="Füllfarbe" type="color" value={String(element.properties.fill??'#ffffff')} onChange={event=>update({fill:event.target.value})}/></label>
-    <label>Kontur<input aria-label="Konturfarbe" type="color" value={String(element.properties.stroke??'#000000')} onChange={event=>update({stroke:event.target.value})}/></label>
-    <label>Stärke<input aria-label="Konturstärke" type="number" min="0" max="40" value={Number(element.properties.strokeWidth??0)} onChange={event=>update({strokeWidth:Number(event.target.value)})}/></label>
-    <label>X<input aria-label="X-Position" type="number" min="-1920" max="3840" value={Math.round(element.x)} onChange={event=>state.updateElement(element.id,{x:Number(event.target.value)})}/></label>
-    <label>Y<input aria-label="Y-Position" type="number" min="-1080" max="2160" value={Math.round(element.y)} onChange={event=>state.updateElement(element.id,{y:Number(event.target.value)})}/></label>
-    <label>Breite<input aria-label="Breite" type="number" min="1" max="3840" value={Math.round(element.width)} onChange={event=>state.updateElement(element.id,{width:Math.max(1,Number(event.target.value))})}/></label>
-    <label>Höhe<input aria-label="Höhe" type="number" min="1" max="2160" value={Math.round(element.height)} onChange={event=>state.updateElement(element.id,{height:Math.max(1,Number(event.target.value))})}/></label>
-    <label>Drehung<input aria-label="Drehung" type="number" min="-360" max="360" value={Math.round(element.rotation)} onChange={event=>state.updateElement(element.id,{rotation:Number(event.target.value)})}/></label>
-    <label>Deckkraft<input aria-label="Deckkraft" type="range" min="0" max="100" value={Math.round(element.opacity*100)} onChange={event=>state.updateElement(element.id,{opacity:Number(event.target.value)/100})}/></label>
-    <button className={!element.visible?'active':''} title="Sichtbarkeit umschalten" onClick={()=>state.toggleElementVisible(element.id)}><Icon name={element.visible?'visibility':'visibility_off'}/></button><i/>
-    <span className="toolbar-menu-host"><button className={menu==='arrange'?'active':''} onClick={()=>toggle('arrange')}>Anordnen <Icon name="arrow_drop_down"/></button>{menu==='arrange'&&<ArrangeMenu close={()=>setMenu(null)}/>}</span>
-  </div>;
-  return <div className="format-toolbar" ref={root}>
-    <select aria-label="Schriftart" value={String(element?.properties.fontFamily??'Cera Pro')} onChange={event=>update({fontFamily:event.target.value})}>{editorFonts.map(font=><option key={font} value={font} style={{fontFamily:fontStack(font)}}>{font}</option>)}</select>
-    <select aria-label="Textvorlage" value={String(element?.properties.textPreset??'normal')} onChange={event=>{const preset=event.target.value;update(preset==='hero'?{textPreset:preset,fontSize:132,fontWeight:900,letterSpacing:-2}:preset==='title'?{textPreset:preset,fontSize:96,fontWeight:700,letterSpacing:-1}:preset==='subtitle'?{textPreset:preset,fontSize:48,fontWeight:400,letterSpacing:1}:preset==='caption'?{textPreset:preset,fontSize:28,fontWeight:500,letterSpacing:.5}:{textPreset:preset,fontSize:72,fontWeight:500,letterSpacing:0})}}><option value="normal">Normal</option><option value="hero">Große Überschrift</option><option value="title">Titel</option><option value="subtitle">Untertitel</option><option value="caption">Bildunterschrift</option></select>
-    <select aria-label="Schriftgewicht" value={String(element?.properties.fontWeight??500)} onChange={event=>update({fontWeight:Number(event.target.value)})}><option value="100">Dünn</option><option value="200">Extra leicht</option><option value="300">Leicht</option><option value="400">Normal</option><option value="500">Medium</option><option value="600">Halbfett</option><option value="700">Fett</option><option value="800">Extra fett</option><option value="900">Schwarz</option></select>
-    <input aria-label="Textgröße" type="number" min="12" max="240" value={Number(element?.properties.fontSize??72)} onChange={event=>update({fontSize:Number(event.target.value)})}/><input aria-label="Zeilenhöhe" type="number" min="0.7" max="2" step="0.05" value={Number(element?.properties.lineHeight??1.15)} onChange={event=>update({lineHeight:Number(event.target.value)})}/>
-    <button title="Fett" onClick={()=>update({fontWeight:Number(element?.properties.fontWeight??600)>=700?500:700})}><b>B</b></button><button title="Kursiv" onClick={()=>update({fontStyle:element?.properties.fontStyle==='italic'?'normal':'italic'})}><i>I</i></button><button title="Ausrichtung" onClick={()=>update({align:element?.properties.align==='left'?'center':element?.properties.align==='center'?'right':'left'})}><Icon name={`format_align_${String(element?.properties.align??'center')}`}/></button><i/>
-    <button className={element?.properties.textShadow?'active':''} title="Textschatten ein-/ausschalten" onClick={()=>update({textShadow:element?.properties.textShadow?'':'0 0.08em 0.28em rgba(0,0,0,.72)'})}>Schatten</button><button className={element?.properties.textOutline?'active':''} title="Textkontur ein-/ausschalten" onClick={()=>update({textOutline:element?.properties.textOutline?'':'.035em #000'})}>Kontur</button><button className={element?.properties.textGlow?'active':''} title="Leuchteffekt ein-/ausschalten" onClick={()=>update({textGlow:element?.properties.textGlow?'':'0 0 .24em rgba(255,255,255,.9)'})}>Leuchten</button><label>Deckkraft<input aria-label="Textdeckkraft" type="range" min="0" max="100" value={Math.round((element?.opacity??1)*100)} onChange={event=>element&&state.updateElement(element.id,{opacity:Number(event.target.value)/100})}/></label><label className="toolbar-color">Textfarbe<input aria-label="Textfarbe" type="color" value={String(element?.properties.color??'#ffffff')} onChange={event=>update({color:event.target.value})}/></label>
-    <span className="toolbar-menu-host"><button className={menu==='guides'?'active':''} onClick={()=>toggle('guides')}>Hilfslinien <Icon name="arrow_drop_down"/></button>{menu==='guides'&&<GuidesMenu close={()=>setMenu(null)}/>}</span><span className="toolbar-menu-host"><button className={menu==='arrange'?'active':''} onClick={()=>toggle('arrange')}>Anordnen <Icon name="arrow_drop_down"/></button>{menu==='arrange'&&<ArrangeMenu close={()=>setMenu(null)}/>}</span><span className="toolbar-menu-host"><button className={menu==='background'?'active':''} onClick={()=>toggle('background')}>Hintergrund <Icon name="arrow_drop_down"/></button>{menu==='background'&&<BackgroundMenu close={()=>setMenu(null)} browse={()=>{setMenu(null);openBackgroundMedia()}}/>}</span>
-  </div>;
+export function ProductionWorkspace({
+  canEdit,
+  quickScreens = [],
+  activeQuick = null,
+  onQuick = () => {},
+}: {
+  canEdit: boolean;
+  quickScreens?: QuickScreenConfig[];
+  activeQuick?: QuickScreenConfig | null;
+  onQuick?: (quick: QuickScreenConfig | null) => void;
+}) {
+  const state = usePresentation(),
+    { item, slide } = selected(state),
+    [transitionPreview, setTransitionPreview] = useState(0);
+  if (state.mode === "preview")
+    return (
+      <section className="production-workspace preview-mode">
+        <div className="preview-mode-toolbar">
+          <button
+            className={state.previewLayout === "single" ? "active" : ""}
+            aria-pressed={state.previewLayout === "single"}
+            onClick={() => state.setPreviewLayout("single")}
+          >
+            <Icon name="cast_connected" /> MAIN LIVE
+          </button>
+          <button
+            className={state.previewLayout === "grid" ? "active" : ""}
+            aria-pressed={state.previewLayout === "grid"}
+            onClick={() => state.setPreviewLayout("grid")}
+          >
+            <Icon name="grid_view" /> FOLIENÜBERSICHT
+          </button>
+          {state.previewLayout === "grid" && (
+            <label>
+              Thumbnailgröße <Icon name="zoom_out" />
+              <input
+                type="range"
+                min="160"
+                max="440"
+                step="40"
+                list="thumbnail-steps"
+                value={state.gridSize}
+                onChange={(event) =>
+                  state.setGridSize(Number(event.target.value))
+                }
+              />
+              <datalist id="thumbnail-steps">
+                {[160, 200, 240, 280, 320, 360, 400, 440].map((value) => (
+                  <option key={value} value={value} />
+                ))}
+              </datalist>
+              <Icon name="zoom_in" />
+            </label>
+          )}
+        </div>
+        <div className="preview-work-area">
+          <PreviewCenter activeQuick={activeQuick} />
+          <PreviewRightSidebar
+            quickScreens={quickScreens}
+            activeQuick={activeQuick}
+            onQuick={onQuick}
+          />
+        </div>
+      </section>
+    );
+  if (!item || !slide)
+    return (
+      <section className="production-workspace production-empty">
+        Wähle ein Element im Ablauf aus.
+      </section>
+    );
+  return (
+    <section className="production-workspace">
+      <div className="context-editor">
+        {item.type === "song" ? (
+          <SongEditor item={item} canEdit={canEdit} />
+        ) : item.type === "liveQuiz" ? (
+          <>
+            <QuizEditor item={item} canEdit={canEdit} />
+            <QuizRewardsPanel item={item} canEdit={canEdit} />
+          </>
+        ) : (
+          <ContentEditor item={item} slide={slide} canEdit={canEdit} />
+        )}
+        <TransitionControls
+          item={item}
+          slide={slide}
+          canEdit={canEdit}
+          onPreview={() => setTransitionPreview((value) => value + 1)}
+        />
+      </div>
+      <div className="large-output-preview">
+        <PreviewStack
+          item={item}
+          slide={slide}
+          previewToken={transitionPreview}
+        />
+      </div>
+    </section>
+  );
 }
 
-export function OutputTabs(){const state=usePresentation(),item=state.items.find(entry=>entry.id===state.selectedItemId);return <div className="output-tabs main-only" role="tablist"><button role="tab" aria-selected="true" className="active" onClick={()=>state.setActiveVirtualScreen('main')}>MAIN ({item?.type==='song'?'Lyrics':'Inhalt'})</button></div>}
+type ToolbarMenu = "guides" | "arrange" | "background" | null;
+const palette = [
+  "#000000",
+  "#ffffff",
+  "#3b4652",
+  "#736f7b",
+  "#d9534f",
+  "#e6b94c",
+  "#cddd42",
+  "#69a83f",
+  "#25a9c2",
+  "#b595d5",
+  "#e58b35",
+  "#442d2d",
+  "#1d3557",
+  "#285943",
+  "#6c3b75",
+  "#8b5e34",
+];
 
-export function ProductionTimeline(){
-  const state=usePresentation(),showThumbnails=usePreferences(value=>value.timelineThumbnails),[expanded,setExpanded]=useState(()=>localStorage.getItem('gottesdienstregie.timeline.expanded')==='true'),[height,setHeight]=useState(()=>Number(localStorage.getItem('gottesdienstregie.timeline.height')||190));
-  const blocks=useMemo(()=>{let cursor=0;return state.items.filter(item=>item.enabled&&!item.disabled).map(item=>{const duration=Math.max(7,itemDurationSeconds(item));const result={item,start:cursor,duration};cursor+=duration;return result})},[state.items]);
-  const total=Math.max(1,blocks.reduce((sum,entry)=>sum+entry.duration,0));
-  const toggle=()=>setExpanded(value=>{localStorage.setItem('gottesdienstregie.timeline.expanded',String(!value));return !value});
-  return <div className={`production-timeline ${expanded?'expanded':''} ${showThumbnails?'with-thumbnails':''}`} style={expanded?{height}:undefined}><button className="timeline-toggle" onClick={toggle}><b>TIMELINE</b><span>{state.serviceTime&&`SERVICE ${formatServiceTime(state.serviceTime)}`}</span><Icon name={expanded?'expand_more':'expand_less'}/></button>{expanded&&<><input className="timeline-resize" aria-label="Timeline-Höhe" type="range" min="120" max="360" value={height} onChange={event=>{const next=Number(event.target.value);setHeight(next);localStorage.setItem('gottesdienstregie.timeline.height',String(next))}}/><div className="timeline-track">{blocks.map(({item,start,duration})=><button key={item.id} className={item.id===state.liveItemId?'live':''} style={{left:`${start/total*100}%`,width:`${Math.max(2,duration/total*100)}%`}} onClick={()=>state.select(item.id)}>{showThumbnails&&item.slides[0]&&<span className="timeline-thumb"><SlideRenderer slide={previewSlide(item.slides[0])} mode="thumbnail"/></span>}<b>{item.title}</b><small>{formatDuration(duration)}</small></button>)}{state.onAir&&<i className="timeline-live-marker"/>}</div></>}</div>
+function GuidesMenu({ close }: { close: () => void }) {
+  const state = usePresentation();
+  const row = (
+    key: "smartGuides" | "marginGuides" | "ruleOfThirds",
+    label: string,
+  ) => (
+    <button onClick={() => state.setGuide(key, !state[key])}>
+      <Icon name={state[key] ? "check_box" : "check_box_outline_blank"} />
+      {label}
+    </button>
+  );
+  return (
+    <div className="toolbar-popover guides-menu" role="menu">
+      {row("smartGuides", "Intelligente Hilfslinien")}
+      {row("marginGuides", "Rand-Hilfslinien")}
+      {row("ruleOfThirds", "Drittelraster")}
+      <button className="menu-close" onClick={close}>
+        <Icon name="close" /> Schließen
+      </button>
+    </div>
+  );
 }
 
-function formatServiceTime(value:string){const hour=Number(value.split(':')[0]);return `${value} (${hour<12?'VORM.':'NACHM.'})`}
+function ArrangeMenu({ close }: { close: () => void }) {
+  const state = usePresentation(),
+    { slide } = selected(state),
+    element =
+      slide?.elements.find((entry) =>
+        state.selectedElementIds.includes(entry.id),
+      ) ?? slide?.elements[0];
+  const change = (patch: Parameters<typeof state.updateElement>[1]) =>
+      element && state.updateElement(element.id, patch),
+    align = (x?: number, y?: number) =>
+      element &&
+      change({
+        x: x === undefined ? element.x : x,
+        y: y === undefined ? element.y : y,
+      });
+  const layer = (front: boolean) =>
+    element &&
+    slide &&
+    change({
+      zIndex:
+        (front
+          ? Math.max(...slide.elements.map((entry) => entry.zIndex))
+          : Math.min(...slide.elements.map((entry) => entry.zIndex))) +
+        (front ? 1 : -1),
+    });
+  return (
+    <div className="toolbar-popover arrange-menu" role="menu">
+      <h4>EBENEN</h4>
+      <div className="menu-grid">
+        <button disabled={!element} onClick={() => layer(true)}>
+          <Icon name="flip_to_front" />
+          Ganz nach vorn
+        </button>
+        <button disabled={!element} onClick={() => layer(false)}>
+          <Icon name="flip_to_back" />
+          Ganz nach hinten
+        </button>
+      </div>
+      <h4>AUSRICHTEN</h4>
+      <div className="icon-grid">
+        <button disabled={!element} title="Links" onClick={() => align(0)}>
+          <Icon name="align_horizontal_left" />
+        </button>
+        <button
+          disabled={!element}
+          title="Horizontal zentrieren"
+          onClick={() => element && align((1920 - element.width) / 2)}
+        >
+          <Icon name="align_horizontal_center" />
+        </button>
+        <button
+          disabled={!element}
+          title="Rechts"
+          onClick={() => element && align(1920 - element.width)}
+        >
+          <Icon name="align_horizontal_right" />
+        </button>
+        <button
+          disabled={!element}
+          title="Oben"
+          onClick={() => align(undefined, 0)}
+        >
+          <Icon name="align_vertical_top" />
+        </button>
+        <button
+          disabled={!element}
+          title="Vertikal zentrieren"
+          onClick={() =>
+            element && align(undefined, (1080 - element.height) / 2)
+          }
+        >
+          <Icon name="align_vertical_center" />
+        </button>
+        <button
+          disabled={!element}
+          title="Unten"
+          onClick={() => element && align(undefined, 1080 - element.height)}
+        >
+          <Icon name="align_vertical_bottom" />
+        </button>
+      </div>
+      <h4>TRANSFORMIEREN</h4>
+      <div className="menu-grid">
+        <button
+          disabled={!element}
+          onClick={() =>
+            element && change({ rotation: (element.rotation + 90) % 360 })
+          }
+        >
+          <Icon name="rotate_right" />
+          Drehen
+        </button>
+        <button
+          disabled={!element}
+          onClick={() =>
+            element &&
+            change({
+              properties: {
+                ...element.properties,
+                flipX: element.properties.flipX !== true,
+              },
+            })
+          }
+        >
+          <Icon name="flip" />
+          Spiegeln
+        </button>
+        <button
+          disabled={!element}
+          onClick={() => element && state.toggleElementLocked(element.id)}
+        >
+          <Icon name={element?.locked ? "lock_open" : "lock"} />
+          {element?.locked ? "Entsperren" : "Sperren"}
+        </button>
+      </div>
+      <button className="menu-close" onClick={close}>
+        <Icon name="close" /> Schließen
+      </button>
+    </div>
+  );
+}
+
+function BackgroundMenu({
+  close,
+  browse,
+}: {
+  close: () => void;
+  browse: () => void;
+}) {
+  const state = usePresentation(),
+    { slide } = selected(state),
+    [assets, setAssets] = useState<MediaAsset[]>([]);
+  useEffect(() => {
+    void window.desktop?.media
+      .list()
+      .then((items) =>
+        setAssets(items.filter((item) => item.kind === "image").slice(0, 10)),
+      );
+  }, []);
+  if (!slide) return null;
+  const update = (patch: Partial<Slide>) => state.updateSlide(patch),
+    choose = (url: string) => update({ backgroundImage: url });
+  const importImage = async () => {
+    const imported = (await window.desktop?.media.import()) ?? [],
+      image = imported.find((item) => item.kind === "image");
+    if (image) choose(image.url);
+  };
+  return (
+    <div className="toolbar-popover background-menu" role="menu">
+      <button onClick={browse}>
+        <Icon name="photo_library" />
+        Medien durchsuchen
+      </button>
+      <button onClick={() => void importImage()}>
+        <Icon name="upload" />
+        Importieren …
+      </button>
+      <h4>BILD</h4>
+      <div className="background-recents">
+        {assets.length ? (
+          assets.map((asset) => (
+            <button
+              key={asset.id}
+              title={asset.name}
+              onClick={() => choose(asset.url)}
+            >
+              <img src={asset.url} alt="" />
+            </button>
+          ))
+        ) : (
+          <small>Noch keine Bilder verwendet.</small>
+        )}
+      </div>
+      <h4>FÜLLFARBE</h4>
+      <div className="color-swatches">
+        {palette.map((color) => (
+          <button
+            key={color}
+            title={color}
+            style={{ background: color }}
+            className={slide.background === color ? "active" : ""}
+            onClick={() => update({ background: color })}
+          />
+        ))}
+      </div>
+      <label className="blur-control">
+        <span>Bild weichzeichnen</span>
+        <input
+          type="range"
+          min="0"
+          max="24"
+          value={slide.backgroundBlur ?? 0}
+          disabled={!slide.backgroundImage}
+          onChange={(event) =>
+            update({ backgroundBlur: Number(event.target.value) })
+          }
+        />
+        <output>{slide.backgroundBlur ?? 0}px</output>
+      </label>
+      <h4>BILDPOSITION</h4>
+      <button
+        onClick={() =>
+          update({
+            backgroundRotation: ((slide.backgroundRotation ?? 0) + 90) % 360,
+          })
+        }
+      >
+        <Icon name="rotate_right" />
+        Drehen
+      </button>
+      <strong>An Höhe anpassen</strong>
+      <div className="position-grid">
+        {(["left", "center", "right"] as const).map((value) => (
+          <button
+            key={value}
+            className={
+              slide.backgroundFit === "auto 100%" &&
+              slide.backgroundPositionX === value
+                ? "active"
+                : ""
+            }
+            onClick={() =>
+              update({ backgroundFit: "auto 100%", backgroundPositionX: value })
+            }
+          >
+            {value === "left"
+              ? "Links"
+              : value === "right"
+                ? "Rechts"
+                : "Mitte"}
+          </button>
+        ))}
+      </div>
+      <strong>An Breite anpassen</strong>
+      <div className="position-grid">
+        {(["top", "center", "bottom"] as const).map((value) => (
+          <button
+            key={value}
+            className={
+              slide.backgroundFit === "100% auto" &&
+              slide.backgroundPositionY === value
+                ? "active"
+                : ""
+            }
+            onClick={() =>
+              update({ backgroundFit: "100% auto", backgroundPositionY: value })
+            }
+          >
+            {value === "top" ? "Oben" : value === "bottom" ? "Unten" : "Mitte"}
+          </button>
+        ))}
+      </div>
+      <div className="fit-grid">
+        <button
+          className={slide.backgroundFit === "cover" ? "active" : ""}
+          onClick={() => update({ backgroundFit: "cover" })}
+        >
+          Ausfüllen
+        </button>
+        <button
+          className={slide.backgroundFit === "contain" ? "active" : ""}
+          onClick={() => update({ backgroundFit: "contain" })}
+        >
+          Anpassen
+        </button>
+        <button
+          className={slide.backgroundFit === "auto" ? "active" : ""}
+          onClick={() => update({ backgroundFit: "auto" })}
+        >
+          Originalgröße
+        </button>
+      </div>
+      <small className="scope-note">Gilt für: Nur diese Folie</small>
+      <button className="menu-close" onClick={close}>
+        <Icon name="close" /> Schließen
+      </button>
+    </div>
+  );
+}
+
+export function FormatToolbar({
+  openBackgroundMedia,
+}: {
+  openBackgroundMedia: () => void;
+}) {
+  const state = usePresentation(),
+    { slide } = selected(state),
+    element =
+      slide?.elements.find((entry) =>
+        state.selectedElementIds.includes(entry.id),
+      ) ?? slide?.elements.find((entry) => entry.type === "text"),
+    [menu, setMenu] = useState<ToolbarMenu>(null),
+    root = useRef<HTMLDivElement>(null);
+  const update = (patch: Record<string, string | number | boolean>) =>
+    element &&
+    state.updateElement(element.id, {
+      properties: { ...element.properties, ...patch },
+    });
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => {
+        if (event.key === "Escape" && menu) {
+          event.stopImmediatePropagation();
+          setMenu(null);
+        }
+      },
+      outside = (event: PointerEvent) => {
+        if (menu && !root.current?.contains(event.target as Node))
+          setMenu(null);
+      };
+    addEventListener("keydown", key);
+    addEventListener("pointerdown", outside);
+    return () => {
+      removeEventListener("keydown", key);
+      removeEventListener("pointerdown", outside);
+    };
+  }, [menu]);
+  const toggle = (value: Exclude<ToolbarMenu, null>) =>
+    setMenu((current) => (current === value ? null : value));
+  if (element?.type === "shape")
+    return (
+      <div className="format-toolbar shape-format-toolbar" ref={root}>
+        <label>
+          2D-Objekt
+          <select
+            aria-label="Form"
+            value={String(element.properties.shapeKind ?? "rectangle")}
+            onChange={(event) => update({ shapeKind: event.target.value })}
+          >
+            <option value="rectangle">Rechteck</option>
+            <option value="rounded">Abgerundetes Rechteck</option>
+            <option value="ellipse">Ellipse / Kreis</option>
+            <option value="triangle">Dreieck</option>
+            <option value="diamond">Raute</option>
+            <option value="pentagon">Fünfeck</option>
+            <option value="hexagon">Sechseck</option>
+            <option value="octagon">Achteck</option>
+            <option value="star">Stern</option>
+            <option value="burst">Sternenkranz</option>
+            <option value="arrow">Pfeil</option>
+            <option value="chevron">Chevron</option>
+            <option value="speech">Sprechblase</option>
+            <option value="cross">Kreuz</option>
+            <option value="parallelogram">Parallelogramm</option>
+            <option value="trapezoid">Trapez</option>
+            <option value="heart">Herz</option>
+            <option value="lightning">Blitz</option>
+            <option value="shield">Schild</option>
+            <option value="cloud">Wolke</option>
+            <option value="home">Haus</option>
+            <option value="moon">Halbmond</option>
+          </select>
+        </label>
+        <label>
+          Füllung
+          <input
+            aria-label="Füllfarbe"
+            type="color"
+            value={String(element.properties.fill ?? "#ffffff")}
+            onChange={(event) => update({ fill: event.target.value })}
+          />
+        </label>
+        <label>
+          Kontur
+          <input
+            aria-label="Konturfarbe"
+            type="color"
+            value={String(element.properties.stroke ?? "#000000")}
+            onChange={(event) => update({ stroke: event.target.value })}
+          />
+        </label>
+        <label>
+          Stärke
+          <input
+            aria-label="Konturstärke"
+            type="number"
+            min="0"
+            max="40"
+            value={Number(element.properties.strokeWidth ?? 0)}
+            onChange={(event) =>
+              update({ strokeWidth: Number(event.target.value) })
+            }
+          />
+        </label>
+        <label>
+          X
+          <input
+            aria-label="X-Position"
+            type="number"
+            min="-1920"
+            max="3840"
+            value={Math.round(element.x)}
+            onChange={(event) =>
+              state.updateElement(element.id, { x: Number(event.target.value) })
+            }
+          />
+        </label>
+        <label>
+          Y
+          <input
+            aria-label="Y-Position"
+            type="number"
+            min="-1080"
+            max="2160"
+            value={Math.round(element.y)}
+            onChange={(event) =>
+              state.updateElement(element.id, { y: Number(event.target.value) })
+            }
+          />
+        </label>
+        <label>
+          Breite
+          <input
+            aria-label="Breite"
+            type="number"
+            min="1"
+            max="3840"
+            value={Math.round(element.width)}
+            onChange={(event) =>
+              state.updateElement(element.id, {
+                width: Math.max(1, Number(event.target.value)),
+              })
+            }
+          />
+        </label>
+        <label>
+          Höhe
+          <input
+            aria-label="Höhe"
+            type="number"
+            min="1"
+            max="2160"
+            value={Math.round(element.height)}
+            onChange={(event) =>
+              state.updateElement(element.id, {
+                height: Math.max(1, Number(event.target.value)),
+              })
+            }
+          />
+        </label>
+        <label>
+          Drehung
+          <input
+            aria-label="Drehung"
+            type="number"
+            min="-360"
+            max="360"
+            value={Math.round(element.rotation)}
+            onChange={(event) =>
+              state.updateElement(element.id, {
+                rotation: Number(event.target.value),
+              })
+            }
+          />
+        </label>
+        <label>
+          Deckkraft
+          <input
+            aria-label="Deckkraft"
+            type="range"
+            min="0"
+            max="100"
+            value={Math.round(element.opacity * 100)}
+            onChange={(event) =>
+              state.updateElement(element.id, {
+                opacity: Number(event.target.value) / 100,
+              })
+            }
+          />
+        </label>
+        <button
+          className={!element.visible ? "active" : ""}
+          title="Sichtbarkeit umschalten"
+          onClick={() => state.toggleElementVisible(element.id)}
+        >
+          <Icon name={element.visible ? "visibility" : "visibility_off"} />
+        </button>
+        <i />
+        <span className="toolbar-menu-host">
+          <button
+            className={menu === "arrange" ? "active" : ""}
+            onClick={() => toggle("arrange")}
+          >
+            Anordnen <Icon name="arrow_drop_down" />
+          </button>
+          {menu === "arrange" && <ArrangeMenu close={() => setMenu(null)} />}
+        </span>
+      </div>
+    );
+  return (
+    <div className="format-toolbar" ref={root}>
+      <select
+        aria-label="Schriftart"
+        value={String(element?.properties.fontFamily ?? "Cera Pro")}
+        onChange={(event) => update({ fontFamily: event.target.value })}
+      >
+        {editorFonts.map((font) => (
+          <option
+            key={font}
+            value={font}
+            style={{ fontFamily: fontStack(font) }}
+          >
+            {font}
+          </option>
+        ))}
+      </select>
+      <select
+        aria-label="Textvorlage"
+        value={String(element?.properties.textPreset ?? "normal")}
+        onChange={(event) => {
+          const preset = event.target.value;
+          update(
+            preset === "hero"
+              ? {
+                  textPreset: preset,
+                  fontSize: 132,
+                  fontWeight: 900,
+                  letterSpacing: -2,
+                }
+              : preset === "title"
+                ? {
+                    textPreset: preset,
+                    fontSize: 96,
+                    fontWeight: 700,
+                    letterSpacing: -1,
+                  }
+                : preset === "subtitle"
+                  ? {
+                      textPreset: preset,
+                      fontSize: 48,
+                      fontWeight: 400,
+                      letterSpacing: 1,
+                    }
+                  : preset === "caption"
+                    ? {
+                        textPreset: preset,
+                        fontSize: 28,
+                        fontWeight: 500,
+                        letterSpacing: 0.5,
+                      }
+                    : {
+                        textPreset: preset,
+                        fontSize: 72,
+                        fontWeight: 500,
+                        letterSpacing: 0,
+                      },
+          );
+        }}
+      >
+        <option value="normal">Normal</option>
+        <option value="hero">Große Überschrift</option>
+        <option value="title">Titel</option>
+        <option value="subtitle">Untertitel</option>
+        <option value="caption">Bildunterschrift</option>
+      </select>
+      <select
+        aria-label="Schriftgewicht"
+        value={String(element?.properties.fontWeight ?? 500)}
+        onChange={(event) => update({ fontWeight: Number(event.target.value) })}
+      >
+        <option value="100">Dünn</option>
+        <option value="200">Extra leicht</option>
+        <option value="300">Leicht</option>
+        <option value="400">Normal</option>
+        <option value="500">Medium</option>
+        <option value="600">Halbfett</option>
+        <option value="700">Fett</option>
+        <option value="800">Extra fett</option>
+        <option value="900">Schwarz</option>
+      </select>
+      <input
+        aria-label="Textgröße"
+        type="number"
+        min="12"
+        max="240"
+        value={Number(element?.properties.fontSize ?? 72)}
+        onChange={(event) => update({ fontSize: Number(event.target.value) })}
+      />
+      <input
+        aria-label="Zeilenhöhe"
+        type="number"
+        min="0.7"
+        max="2"
+        step="0.05"
+        value={Number(element?.properties.lineHeight ?? 1.15)}
+        onChange={(event) => update({ lineHeight: Number(event.target.value) })}
+      />
+      <button
+        title="Fett"
+        onClick={() =>
+          update({
+            fontWeight:
+              Number(element?.properties.fontWeight ?? 600) >= 700 ? 500 : 700,
+          })
+        }
+      >
+        <b>B</b>
+      </button>
+      <button
+        title="Kursiv"
+        onClick={() =>
+          update({
+            fontStyle:
+              element?.properties.fontStyle === "italic" ? "normal" : "italic",
+          })
+        }
+      >
+        <i>I</i>
+      </button>
+      <button
+        title="Ausrichtung"
+        onClick={() =>
+          update({
+            align:
+              element?.properties.align === "left"
+                ? "center"
+                : element?.properties.align === "center"
+                  ? "right"
+                  : "left",
+          })
+        }
+      >
+        <Icon
+          name={`format_align_${String(element?.properties.align ?? "center")}`}
+        />
+      </button>
+      <i />
+      <button
+        className={element?.properties.textShadow ? "active" : ""}
+        title="Textschatten ein-/ausschalten"
+        onClick={() =>
+          update({
+            textShadow: element?.properties.textShadow
+              ? ""
+              : "0 0.08em 0.28em rgba(0,0,0,.72)",
+          })
+        }
+      >
+        Schatten
+      </button>
+      <button
+        className={element?.properties.textOutline ? "active" : ""}
+        title="Textkontur ein-/ausschalten"
+        onClick={() =>
+          update({
+            textOutline: element?.properties.textOutline ? "" : ".035em #000",
+          })
+        }
+      >
+        Kontur
+      </button>
+      <button
+        className={element?.properties.textGlow ? "active" : ""}
+        title="Leuchteffekt ein-/ausschalten"
+        onClick={() =>
+          update({
+            textGlow: element?.properties.textGlow
+              ? ""
+              : "0 0 .24em rgba(255,255,255,.9)",
+          })
+        }
+      >
+        Leuchten
+      </button>
+      <label>
+        Deckkraft
+        <input
+          aria-label="Textdeckkraft"
+          type="range"
+          min="0"
+          max="100"
+          value={Math.round((element?.opacity ?? 1) * 100)}
+          onChange={(event) =>
+            element &&
+            state.updateElement(element.id, {
+              opacity: Number(event.target.value) / 100,
+            })
+          }
+        />
+      </label>
+      <label className="toolbar-color">
+        Textfarbe
+        <input
+          aria-label="Textfarbe"
+          type="color"
+          value={String(element?.properties.color ?? "#ffffff")}
+          onChange={(event) => update({ color: event.target.value })}
+        />
+      </label>
+      <span className="toolbar-menu-host">
+        <button
+          className={menu === "guides" ? "active" : ""}
+          onClick={() => toggle("guides")}
+        >
+          Hilfslinien <Icon name="arrow_drop_down" />
+        </button>
+        {menu === "guides" && <GuidesMenu close={() => setMenu(null)} />}
+      </span>
+      <span className="toolbar-menu-host">
+        <button
+          className={menu === "arrange" ? "active" : ""}
+          onClick={() => toggle("arrange")}
+        >
+          Anordnen <Icon name="arrow_drop_down" />
+        </button>
+        {menu === "arrange" && <ArrangeMenu close={() => setMenu(null)} />}
+      </span>
+      <span className="toolbar-menu-host">
+        <button
+          className={menu === "background" ? "active" : ""}
+          onClick={() => toggle("background")}
+        >
+          Hintergrund <Icon name="arrow_drop_down" />
+        </button>
+        {menu === "background" && (
+          <BackgroundMenu
+            close={() => setMenu(null)}
+            browse={() => {
+              setMenu(null);
+              openBackgroundMedia();
+            }}
+          />
+        )}
+      </span>
+    </div>
+  );
+}
+
+export function OutputTabs() {
+  const state = usePresentation(),
+    item = state.items.find((entry) => entry.id === state.selectedItemId);
+  return (
+    <div className="output-tabs main-only" role="tablist">
+      <button
+        role="tab"
+        aria-selected="true"
+        className="active"
+        onClick={() => state.setActiveVirtualScreen("main")}
+      >
+        MAIN ({item?.type === "song" ? "Lyrics" : "Inhalt"})
+      </button>
+    </div>
+  );
+}
+
+export function ProductionTimeline() {
+  const state = usePresentation(),
+    showThumbnails = usePreferences((value) => value.timelineThumbnails),
+    [expanded, setExpanded] = useState(
+      () =>
+        localStorage.getItem("gottesdienstregie.timeline.expanded") === "true",
+    ),
+    [height, setHeight] = useState(() =>
+      Number(localStorage.getItem("gottesdienstregie.timeline.height") || 190),
+    );
+  const blocks = useMemo(() => {
+    let cursor = 0;
+    return state.items
+      .filter((item) => item.enabled && !item.disabled)
+      .map((item) => {
+        const duration = Math.max(7, itemDurationSeconds(item));
+        const result = { item, start: cursor, duration };
+        cursor += duration;
+        return result;
+      });
+  }, [state.items]);
+  const total = Math.max(
+    1,
+    blocks.reduce((sum, entry) => sum + entry.duration, 0),
+  );
+  const toggle = () =>
+    setExpanded((value) => {
+      localStorage.setItem(
+        "gottesdienstregie.timeline.expanded",
+        String(!value),
+      );
+      return !value;
+    });
+  return (
+    <div
+      className={`production-timeline ${expanded ? "expanded" : ""} ${showThumbnails ? "with-thumbnails" : ""}`}
+      style={expanded ? { height } : undefined}
+    >
+      <button className="timeline-toggle" onClick={toggle}>
+        <b>TIMELINE</b>
+        <span>
+          {state.serviceTime &&
+            `SERVICE ${formatServiceTime(state.serviceTime)}`}
+        </span>
+        <Icon name={expanded ? "expand_more" : "expand_less"} />
+      </button>
+      {expanded && (
+        <>
+          <input
+            className="timeline-resize"
+            aria-label="Timeline-Höhe"
+            type="range"
+            min="120"
+            max="360"
+            value={height}
+            onChange={(event) => {
+              const next = Number(event.target.value);
+              setHeight(next);
+              localStorage.setItem(
+                "gottesdienstregie.timeline.height",
+                String(next),
+              );
+            }}
+          />
+          <div className="timeline-track">
+            {blocks.map(({ item, start, duration }) => (
+              <button
+                key={item.id}
+                className={item.id === state.liveItemId ? "live" : ""}
+                style={{
+                  left: `${(start / total) * 100}%`,
+                  width: `${Math.max(2, (duration / total) * 100)}%`,
+                }}
+                onClick={() => state.select(item.id)}
+              >
+                {showThumbnails && item.slides[0] && (
+                  <span className="timeline-thumb">
+                    <SlideRenderer
+                      slide={previewSlide(item.slides[0])}
+                      mode="thumbnail"
+                    />
+                  </span>
+                )}
+                <b>{item.title}</b>
+                <small>{formatDuration(duration)}</small>
+              </button>
+            ))}
+            {state.onAir && <i className="timeline-live-marker" />}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function formatServiceTime(value: string) {
+  const hour = Number(value.split(":")[0]);
+  return `${value} (${hour < 12 ? "VORM." : "NACHM."})`;
+}

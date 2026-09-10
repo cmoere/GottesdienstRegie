@@ -5,10 +5,37 @@
     {
       "line": "0.36",
       "builds": [{
+        "version": "0.36.5",
+        "releaseDate": "2026-09-10",
+        "releaseTime": "23:06",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.36.5.png",
+          "alt": {"de":"KI-Motive als integrierter Bereich der Medienbibliothek","en":"AI artwork as an integrated media-library workspace"},
+          "caption": {"de":"KI-Motive, Videolänge, Szenen und Gestaltungsstile werden ohne Popup direkt im Medienarbeitsbereich bearbeitet.","en":"AI artwork, video duration, scenes and visual styles are edited directly in the media workspace without a popup."}
+        },
+        "sections": {
+          "new": [
+            {"label":{"de":"Meine Präsentationen","en":"My presentations"},"text":{"de":"Das Profil zeigt eine durchsuchbare Präsentationsübersicht mit Titelbild, Datum, Umfang, Größe und direktem Öffnen.","en":"The profile shows a searchable presentation overview with cover image, date, scope, size and direct opening."}},
+            {"label":{"de":"QR-Code-Editor","en":"QR code editor"},"text":{"de":"Ein eigener Dialog erzeugt aus URL oder Text eine Live-Vorschau und einen echten QR-Code für die Folie.","en":"A dedicated dialog creates a live preview and real slide QR code from a URL or text."}},
+            {"label":{"de":"Medienanhänge","en":"Media attachments"},"text":{"de":"Fehlerberichte unterstützen bis zu vier Screenshots, Bilder oder kurze Videos.","en":"Bug reports support up to four screenshots, images or short videos."}}
+          ],
+          "improved": [
+            {"label":{"de":"KI-Motive ohne Popup","en":"AI artwork without a popup"},"text":{"de":"Die Gestaltung erfolgt als ruhiger, vollständiger Arbeitsbereich innerhalb der Medienbibliothek.","en":"Artwork creation now uses a calm, full workspace inside the media library."}},
+            {"label":{"de":"Unsplash-Seiten","en":"Unsplash pages"},"text":{"de":"Mehr und weniger Ergebnisse lassen sich über sichtbare Ladebuttons steuern.","en":"More or fewer results can be controlled through visible load buttons."}},
+            {"label":{"de":"Vordergrund und Zusatztext","en":"Foreground and extra text"},"text":{"de":"Vordergrundbilder bieten Medienauswahl oder Import; Zusatztexte bleiben in ihrer Ebenenbox direkt bearbeitbar.","en":"Foreground images offer browsing or importing; additional text remains directly editable in its layer box."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Echte QR-Codes","en":"Real QR codes"},"text":{"de":"QR-Elemente zeigen nun das generierte QR-Bild und nicht mehr nur einen Textplatzhalter.","en":"QR elements now show the generated QR image instead of a text placeholder."}},
+            {"label":{"de":"Servicezeit ausgerichtet","en":"Aligned service time"},"text":{"de":"Die Servicezeit bleibt rechts im Abschnittskopf und zeigt VORM. oder NACHM.","en":"Service time stays on the right side of the section header and shows AM or PM."}}
+          ],
+          "known": []
+        }
+      },{
         "version": "0.36.4",
         "releaseDate": "2026-09-10",
         "releaseTime": "21:00",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.36.4.png",
           "alt": {"de":"Erweiterter Mediengenerator und persönliche Profilansicht","en":"Expanded media generator and personal profile view"},

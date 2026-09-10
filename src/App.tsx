@@ -1,208 +1,1824 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
-import { DndContext, closestCenter, type DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { defaultTransition, usePresentation, presentationDocument, blankPresentationDocument, formatDuration, itemDurationSeconds, parseDuration, type BackgroundAudioTrack, type DisplayRole, type ElementType, type ItemType, type PresentationDocument, type ServiceItem, type Slide, type TransitionDirection, type TransitionEasing, type TransitionType } from './store';
-import { SlideRenderer } from './SlideRenderer';
-import { liveEngine } from './LiveEngine';
-import { authMessage, cancelTwoFactor, isTwoFactorChallenge, login, logout, restore, twoFactorMessage, verifyTwoFactor, type AuthSession, type TwoFactorChallenge } from './auth';
-import { useI18n, type TranslationKey, type Translator } from './i18n';
-import { usePreferences, type Language, type ThemeMode, type QuickScreenConfig } from './preferences';
-import { VideoInputSettings } from './VideoInputSettings';
-import { QuickScreenSettings } from './QuickScreenSettings';
-import { FormatToolbar, OutputTabs, ProductionTimeline, ProductionWorkspace } from './ProductionWorkspace';
-import { FileMenu } from './FileMenu';
-import { MediaBrowser } from './MediaBrowser';
-import { BackgroundAudioPanel, defaultBackgroundAudio } from './BackgroundAudioPanel';
-import { backgroundAudioEngine, type BackgroundAudioState } from './BackgroundAudioEngine';
-import { defaultKeyboardShortcuts, matchesShortcut, shortcutFromEvent, type ShortcutAction } from './shortcuts';
-import logoWhite from './assets/logo-white.png';
-import { resolveTransition, transitionLabels, TransitionStage } from './transitions';
-import { QuickOverlay } from './QuickOverlay';
-import { allEditorFonts as editorFonts, fontStack } from './fonts';
-import { getChurchEvent, listChurchEvents, updateEventDelay, type ChurchEvent } from './events';
-import { isCancelled } from './events';
-import { AudioRoutingSettings, normalizedAudioRouting } from './AudioRoutingSettings';
-import { playRoutedTone, routeAvailable } from './audioRouting';
-import { installCeraPro, removeCeraPro, saveCeraPro } from './customFonts';
-import { serviceItemCommands, slideSvgDataUrl } from './serviceItemCommands';
-import { ChangeHistoryWindow } from './ChangeHistoryWindow';
-import { awardReward, RewardProfile, RewardSettingsPanel, RewardToastHost } from './rewards';
-import { DeviceSetup, SharedDeviceSecurity, useRegisteredDevice, type RegisteredDevice } from './SharedDevice';
-import { RemoteCenter } from './RemoteCenter';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
+import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import {
+  defaultTransition,
+  usePresentation,
+  presentationDocument,
+  blankPresentationDocument,
+  formatDuration,
+  itemDurationSeconds,
+  parseDuration,
+  type BackgroundAudioTrack,
+  type DisplayRole,
+  type ElementType,
+  type ItemType,
+  type PresentationDocument,
+  type ServiceItem,
+  type Slide,
+  type TransitionDirection,
+  type TransitionEasing,
+  type TransitionType,
+} from "./store";
+import { SlideRenderer } from "./SlideRenderer";
+import { liveEngine } from "./LiveEngine";
+import {
+  authMessage,
+  cancelTwoFactor,
+  isTwoFactorChallenge,
+  login,
+  logout,
+  restore,
+  twoFactorMessage,
+  verifyTwoFactor,
+  type AuthSession,
+  type TwoFactorChallenge,
+} from "./auth";
+import { useI18n, type TranslationKey, type Translator } from "./i18n";
+import {
+  usePreferences,
+  type Language,
+  type ThemeMode,
+  type QuickScreenConfig,
+} from "./preferences";
+import { VideoInputSettings } from "./VideoInputSettings";
+import { QuickScreenSettings } from "./QuickScreenSettings";
+import {
+  FormatToolbar,
+  OutputTabs,
+  ProductionTimeline,
+  ProductionWorkspace,
+} from "./ProductionWorkspace";
+import { FileMenu } from "./FileMenu";
+import { MediaBrowser } from "./MediaBrowser";
+import {
+  BackgroundAudioPanel,
+  defaultBackgroundAudio,
+} from "./BackgroundAudioPanel";
+import {
+  backgroundAudioEngine,
+  type BackgroundAudioState,
+} from "./BackgroundAudioEngine";
+import {
+  defaultKeyboardShortcuts,
+  matchesShortcut,
+  shortcutFromEvent,
+  type ShortcutAction,
+} from "./shortcuts";
+import logoWhite from "./assets/logo-white.png";
+import {
+  resolveTransition,
+  transitionLabels,
+  TransitionStage,
+} from "./transitions";
+import { QuickOverlay } from "./QuickOverlay";
+import { allEditorFonts as editorFonts, fontStack } from "./fonts";
+import {
+  getChurchEvent,
+  listChurchEvents,
+  updateEventDelay,
+  type ChurchEvent,
+} from "./events";
+import { isCancelled } from "./events";
+import {
+  AudioRoutingSettings,
+  normalizedAudioRouting,
+} from "./AudioRoutingSettings";
+import { playRoutedTone, routeAvailable } from "./audioRouting";
+import { installCeraPro, removeCeraPro, saveCeraPro } from "./customFonts";
+import { serviceItemCommands, slideSvgDataUrl } from "./serviceItemCommands";
+import { ChangeHistoryWindow } from "./ChangeHistoryWindow";
+import {
+  awardReward,
+  RewardProfile,
+  RewardSettingsPanel,
+  RewardToastHost,
+} from "./rewards";
+import {
+  DeviceSetup,
+  SharedDeviceSecurity,
+  useRegisteredDevice,
+  type RegisteredDevice,
+} from "./SharedDevice";
+import { RemoteCenter } from "./RemoteCenter";
 
-function Icon({name}:{name:string}){return <span className="material-symbols-outlined" aria-hidden="true">{name}</span>}
-const X=()=> <Icon name="close"/>;
-const LogOut=()=> <Icon name="logout"/>;
-const languageOptions:{value:Language;label:TranslationKey;nativeName:string;flag:string}[]=[
-  {value:'de',label:'languageGerman',nativeName:'Deutsch',flag:'de'},{value:'gsw',label:'languageSwissGerman',nativeName:'Schwiizerdütsch',flag:'ch'},{value:'en',label:'languageEnglish',nativeName:'English',flag:'gb'},
-  {value:'nl',label:'languageDutch',nativeName:'Nederlands',flag:'nl'},{value:'da',label:'languageDanish',nativeName:'Dansk',flag:'dk'},{value:'no',label:'languageNorwegian',nativeName:'Norsk',flag:'no'},
-  {value:'sv',label:'languageEnglish',nativeName:'Svenska',flag:'se'},{value:'fi',label:'languageEnglish',nativeName:'Suomi',flag:'fi'},{value:'fr',label:'languageEnglish',nativeName:'Français',flag:'fr'},{value:'it',label:'languageEnglish',nativeName:'Italiano',flag:'it'},
-  {value:'es',label:'languageSpanish',nativeName:'Español',flag:'es'},{value:'uk',label:'languageUkrainian',nativeName:'Українська',flag:'ua'},{value:'ru',label:'languageRussian',nativeName:'Русский',flag:'ru'},
-  {value:'tr',label:'languageTurkish',nativeName:'Türkçe',flag:'tr'},{value:'ar',label:'languageArabic',nativeName:'العربية',flag:'sa'},{value:'pl',label:'languagePolish',nativeName:'Polski',flag:'pl'},{value:'pt-BR',label:'languageEnglish',nativeName:'Português (Brasil)',flag:'br'}
+function Icon({ name }: { name: string }) {
+  return (
+    <span className="material-symbols-outlined" aria-hidden="true">
+      {name}
+    </span>
+  );
+}
+const X = () => <Icon name="close" />;
+const LogOut = () => <Icon name="logout" />;
+const languageOptions: {
+  value: Language;
+  label: TranslationKey;
+  nativeName: string;
+  flag: string;
+}[] = [
+  { value: "de", label: "languageGerman", nativeName: "Deutsch", flag: "de" },
+  {
+    value: "gsw",
+    label: "languageSwissGerman",
+    nativeName: "Schwiizerdütsch",
+    flag: "ch",
+  },
+  { value: "en", label: "languageEnglish", nativeName: "English", flag: "gb" },
+  { value: "nl", label: "languageDutch", nativeName: "Nederlands", flag: "nl" },
+  { value: "da", label: "languageDanish", nativeName: "Dansk", flag: "dk" },
+  { value: "no", label: "languageNorwegian", nativeName: "Norsk", flag: "no" },
+  { value: "sv", label: "languageEnglish", nativeName: "Svenska", flag: "se" },
+  { value: "fi", label: "languageEnglish", nativeName: "Suomi", flag: "fi" },
+  { value: "fr", label: "languageEnglish", nativeName: "Français", flag: "fr" },
+  { value: "it", label: "languageEnglish", nativeName: "Italiano", flag: "it" },
+  { value: "es", label: "languageSpanish", nativeName: "Español", flag: "es" },
+  {
+    value: "uk",
+    label: "languageUkrainian",
+    nativeName: "Українська",
+    flag: "ua",
+  },
+  { value: "ru", label: "languageRussian", nativeName: "Русский", flag: "ru" },
+  { value: "tr", label: "languageTurkish", nativeName: "Türkçe", flag: "tr" },
+  { value: "ar", label: "languageArabic", nativeName: "العربية", flag: "sa" },
+  { value: "pl", label: "languagePolish", nativeName: "Polski", flag: "pl" },
+  {
+    value: "pt-BR",
+    label: "languageEnglish",
+    nativeName: "Português (Brasil)",
+    flag: "br",
+  },
 ];
-function Flag({country}:{country:string}){return <span className={`css-flag flag-${country}`} aria-hidden="true"/>}
+function Flag({ country }: { country: string }) {
+  return <span className={`css-flag flag-${country}`} aria-hidden="true" />;
+}
 
-const extraLabels:Partial<Record<Language,Record<string,string>>>={
-  de:{versionDetails:'Versionsdetails',installedAt:'Installiert am',modifiedAt:'Dateidatum',fileSize:'Dateigröße',executable:'Programmdatei',previousVersion:'Vorherige Version',rollback:'VORHERIGE VERSION INSTALLIEREN',rollbackConfirm:'Die vorherige Version wird heruntergeladen und anschließend installiert. Fortfahren?',noPrevious:'Keine frühere installierbare Version gefunden.',audioHelp:'Wähle echte Lautsprecher- und Mikrofon-Geräte und teste den Signalweg.',speakers:'Lautsprecher',microphone:'Mikrofon',systemDefault:'Systemstandard',volume:'Ausgabelautstärke',inputGain:'Eingangsverstärkung',noiseSuppression:'Rauschunterdrückung',echoCancellation:'Echo-Unterdrückung',testSpeaker:'LAUTSPRECHER TESTEN',testMicrophone:'MIKROFON TESTEN',stopTest:'TEST STOPPEN',micLevel:'Mikrofonpegel',highContrast:'Hoher Kontrast',highContrastHelp:'Verstärkt Kontraste und Abgrenzungen.',largeText:'Größere Bedienoberfläche',largeTextHelp:'Vergrößert Texte und Bedienelemente.',strongFocus:'Deutlicher Tastaturfokus',strongFocusHelp:'Zeigt einen gut sichtbaren Fokusrahmen.',dyslexia:'Lesefreundliche Schrift',dyslexiaHelp:'Vergrößert Abstände und verbessert die Lesbarkeit.',rollbackDownloading:'Vorherige Version wird geladen'},
-  gsw:{versionDetails:'Versionsdetails',installedAt:'Installiert am',modifiedAt:'Dateidatum',fileSize:'Dateigrössi',executable:'Programmdatei',previousVersion:'Vorherigi Version',rollback:'VORHERIGI VERSION INSTALLIERE',rollbackConfirm:'D vorherigi Version wird glade und denn installiert. Wiitermache?',noPrevious:'Kei früehneri installierbari Version gfunde.',audioHelp:'Wähl Lautsprecher und Mikrofon und test de Signalwäg.',speakers:'Lautsprecher',microphone:'Mikrofon',systemDefault:'Systemstandard',volume:'Usgabeluutstärchi',inputGain:'Iigangsverstärkig',noiseSuppression:'Ruschunterdrückig',echoCancellation:'Echo-Unterdrückig',testSpeaker:'LAUTSPRECHER TESTE',testMicrophone:'MIKROFON TESTE',stopTest:'TEST STOPPE',micLevel:'Mikrofonpegel',highContrast:'Hoche Kontrast',highContrastHelp:'Verstärkt Kontrast und Abgränzige.',largeText:'Grössri Bedienoberflächi',largeTextHelp:'Vergrössert Text und Bedienelement.',strongFocus:'Dütliche Tastaturfokus',strongFocusHelp:'Zeigt en guet sichtbare Fokusrahme.',dyslexia:'Läsfründlichi Schrift',dyslexiaHelp:'Vergrössert Abständ und verbessert d Läsbarkeit.',rollbackDownloading:'Vorherigi Version wird glade'},
-  en:{versionDetails:'Version details',installedAt:'Installed',modifiedAt:'File date',fileSize:'File size',executable:'Application file',previousVersion:'Previous version',rollback:'INSTALL PREVIOUS VERSION',rollbackConfirm:'The previous version will be downloaded and installed. Continue?',noPrevious:'No earlier installable version was found.',audioHelp:'Select real speaker and microphone devices and test the signal path.',speakers:'Speakers',microphone:'Microphone',systemDefault:'System default',volume:'Output volume',inputGain:'Input gain',noiseSuppression:'Noise suppression',echoCancellation:'Echo cancellation',testSpeaker:'TEST SPEAKERS',testMicrophone:'TEST MICROPHONE',stopTest:'STOP TEST',micLevel:'Microphone level',highContrast:'High contrast',highContrastHelp:'Strengthens contrast and boundaries.',largeText:'Larger interface',largeTextHelp:'Enlarges text and controls.',strongFocus:'Strong keyboard focus',strongFocusHelp:'Shows a clearly visible focus ring.',dyslexia:'Reading-friendly type',dyslexiaHelp:'Increases spacing and improves readability.',rollbackDownloading:'Downloading previous version'},
-  nl:{versionDetails:'Versiedetails',installedAt:'Geïnstalleerd',modifiedAt:'Bestandsdatum',fileSize:'Bestandsgrootte',executable:'Programmabestand',previousVersion:'Vorige versie',rollback:'VORIGE VERSIE INSTALLEREN',rollbackConfirm:'De vorige versie wordt gedownload en geïnstalleerd. Doorgaan?',noPrevious:'Geen eerdere installeerbare versie gevonden.',audioHelp:'Kies echte luidsprekers en microfoons en test het signaal.',speakers:'Luidsprekers',microphone:'Microfoon',systemDefault:'Systeemstandaard',volume:'Uitvoervolume',inputGain:'Ingangsversterking',noiseSuppression:'Ruisonderdrukking',echoCancellation:'Echo-onderdrukking',testSpeaker:'LUIDSPREKERS TESTEN',testMicrophone:'MICROFOON TESTEN',stopTest:'TEST STOPPEN',micLevel:'Microfoonniveau',highContrast:'Hoog contrast',highContrastHelp:'Versterkt contrasten en randen.',largeText:'Grotere interface',largeTextHelp:'Vergroot tekst en bediening.',strongFocus:'Duidelijke toetsenbordfocus',strongFocusHelp:'Toont een zichtbare focusrand.',dyslexia:'Leesvriendelijk lettertype',dyslexiaHelp:'Vergroot afstanden en leesbaarheid.',rollbackDownloading:'Vorige versie downloaden'},
-  da:{versionDetails:'Versionsdetaljer',installedAt:'Installeret',modifiedAt:'Fildato',fileSize:'Filstørrelse',executable:'Programfil',previousVersion:'Forrige version',rollback:'INSTALLER FORRIGE VERSION',rollbackConfirm:'Den forrige version downloades og installeres. Fortsæt?',noPrevious:'Ingen tidligere installerbar version fundet.',audioHelp:'Vælg højttalere og mikrofon, og test signalet.',speakers:'Højttalere',microphone:'Mikrofon',systemDefault:'Systemstandard',volume:'Udgangslydstyrke',inputGain:'Indgangsforstærkning',noiseSuppression:'Støjreduktion',echoCancellation:'Ekkoreduktion',testSpeaker:'TEST HØJTTALERE',testMicrophone:'TEST MIKROFON',stopTest:'STOP TEST',micLevel:'Mikrofonniveau',highContrast:'Høj kontrast',highContrastHelp:'Forstærker kontraster og kanter.',largeText:'Større brugerflade',largeTextHelp:'Forstørrer tekst og knapper.',strongFocus:'Tydeligt tastaturfokus',strongFocusHelp:'Viser en tydelig fokusramme.',dyslexia:'Læsevenlig skrift',dyslexiaHelp:'Øger afstand og læsbarhed.',rollbackDownloading:'Downloader forrige version'},
-  no:{versionDetails:'Versjonsdetaljer',installedAt:'Installert',modifiedAt:'Fildato',fileSize:'Filstørrelse',executable:'Programfil',previousVersion:'Forrige versjon',rollback:'INSTALLER FORRIGE VERSJON',rollbackConfirm:'Forrige versjon lastes ned og installeres. Fortsette?',noPrevious:'Ingen tidligere installerbar versjon funnet.',audioHelp:'Velg høyttalere og mikrofon, og test signalet.',speakers:'Høyttalere',microphone:'Mikrofon',systemDefault:'Systemstandard',volume:'Utgangsvolum',inputGain:'Inngangsforsterkning',noiseSuppression:'Støyreduksjon',echoCancellation:'Ekkoreduksjon',testSpeaker:'TEST HØYTTALERE',testMicrophone:'TEST MIKROFON',stopTest:'STOPP TEST',micLevel:'Mikrofonnivå',highContrast:'Høy kontrast',highContrastHelp:'Forsterker kontraster og kanter.',largeText:'Større grensesnitt',largeTextHelp:'Forstørrer tekst og kontroller.',strongFocus:'Tydelig tastaturfokus',strongFocusHelp:'Viser en tydelig fokusramme.',dyslexia:'Lesevennlig skrift',dyslexiaHelp:'Øker avstand og lesbarhet.',rollbackDownloading:'Laster ned forrige versjon'},
-  es:{versionDetails:'Detalles de versión',installedAt:'Instalado',modifiedAt:'Fecha del archivo',fileSize:'Tamaño del archivo',executable:'Archivo de aplicación',previousVersion:'Versión anterior',rollback:'INSTALAR VERSIÓN ANTERIOR',rollbackConfirm:'Se descargará e instalará la versión anterior. ¿Continuar?',noPrevious:'No se encontró una versión anterior instalable.',audioHelp:'Selecciona altavoces y micrófono reales y prueba la señal.',speakers:'Altavoces',microphone:'Micrófono',systemDefault:'Predeterminado del sistema',volume:'Volumen de salida',inputGain:'Ganancia de entrada',noiseSuppression:'Supresión de ruido',echoCancellation:'Cancelación de eco',testSpeaker:'PROBAR ALTAVOCES',testMicrophone:'PROBAR MICRÓFONO',stopTest:'DETENER PRUEBA',micLevel:'Nivel del micrófono',highContrast:'Alto contraste',highContrastHelp:'Refuerza contrastes y límites.',largeText:'Interfaz más grande',largeTextHelp:'Amplía textos y controles.',strongFocus:'Foco de teclado visible',strongFocusHelp:'Muestra un marco de foco claro.',dyslexia:'Tipografía de fácil lectura',dyslexiaHelp:'Aumenta el espaciado y la legibilidad.',rollbackDownloading:'Descargando versión anterior'},
-  uk:{versionDetails:'Відомості про версію',installedAt:'Встановлено',modifiedAt:'Дата файлу',fileSize:'Розмір файлу',executable:'Файл програми',previousVersion:'Попередня версія',rollback:'ВСТАНОВИТИ ПОПЕРЕДНЮ ВЕРСІЮ',rollbackConfirm:'Попередню версію буде завантажено й встановлено. Продовжити?',noPrevious:'Попередньої версії для встановлення не знайдено.',audioHelp:'Виберіть динаміки й мікрофон та перевірте сигнал.',speakers:'Динаміки',microphone:'Мікрофон',systemDefault:'Системний пристрій',volume:'Гучність виходу',inputGain:'Підсилення входу',noiseSuppression:'Шумозаглушення',echoCancellation:'Приглушення відлуння',testSpeaker:'ПЕРЕВІРИТИ ДИНАМІКИ',testMicrophone:'ПЕРЕВІРИТИ МІКРОФОН',stopTest:'ЗУПИНИТИ ТЕСТ',micLevel:'Рівень мікрофона',highContrast:'Високий контраст',highContrastHelp:'Посилює контрасти й межі.',largeText:'Збільшений інтерфейс',largeTextHelp:'Збільшує текст і елементи.',strongFocus:'Помітний фокус клавіатури',strongFocusHelp:'Показує чітку рамку фокусу.',dyslexia:'Шрифт для легкого читання',dyslexiaHelp:'Збільшує інтервали й читабельність.',rollbackDownloading:'Завантаження попередньої версії'},
-  ru:{versionDetails:'Сведения о версии',installedAt:'Установлено',modifiedAt:'Дата файла',fileSize:'Размер файла',executable:'Файл программы',previousVersion:'Предыдущая версия',rollback:'УСТАНОВИТЬ ПРЕДЫДУЩУЮ ВЕРСИЮ',rollbackConfirm:'Предыдущая версия будет загружена и установлена. Продолжить?',noPrevious:'Предыдущая устанавливаемая версия не найдена.',audioHelp:'Выберите динамики и микрофон и проверьте сигнал.',speakers:'Динамики',microphone:'Микрофон',systemDefault:'Системное устройство',volume:'Громкость выхода',inputGain:'Усиление входа',noiseSuppression:'Шумоподавление',echoCancellation:'Подавление эха',testSpeaker:'ПРОВЕРИТЬ ДИНАМИКИ',testMicrophone:'ПРОВЕРИТЬ МИКРОФОН',stopTest:'ОСТАНОВИТЬ ТЕСТ',micLevel:'Уровень микрофона',highContrast:'Высокий контраст',highContrastHelp:'Усиливает контрасты и границы.',largeText:'Увеличенный интерфейс',largeTextHelp:'Увеличивает текст и элементы.',strongFocus:'Заметный фокус клавиатуры',strongFocusHelp:'Показывает чёткую рамку фокуса.',dyslexia:'Удобный для чтения шрифт',dyslexiaHelp:'Увеличивает интервалы и читаемость.',rollbackDownloading:'Загрузка предыдущей версии'},
-  tr:{versionDetails:'Sürüm ayrıntıları',installedAt:'Kurulum tarihi',modifiedAt:'Dosya tarihi',fileSize:'Dosya boyutu',executable:'Uygulama dosyası',previousVersion:'Önceki sürüm',rollback:'ÖNCEKİ SÜRÜMÜ KUR',rollbackConfirm:'Önceki sürüm indirilecek ve kurulacak. Devam edilsin mi?',noPrevious:'Kurulabilir önceki sürüm bulunamadı.',audioHelp:'Gerçek hoparlör ve mikrofonları seçip sinyali test edin.',speakers:'Hoparlörler',microphone:'Mikrofon',systemDefault:'Sistem varsayılanı',volume:'Çıkış sesi',inputGain:'Giriş kazancı',noiseSuppression:'Gürültü azaltma',echoCancellation:'Yankı giderme',testSpeaker:'HOPARLÖRÜ TEST ET',testMicrophone:'MİKROFONU TEST ET',stopTest:'TESTİ DURDUR',micLevel:'Mikrofon seviyesi',highContrast:'Yüksek kontrast',highContrastHelp:'Kontrastları ve sınırları güçlendirir.',largeText:'Daha büyük arayüz',largeTextHelp:'Metinleri ve kontrolleri büyütür.',strongFocus:'Belirgin klavye odağı',strongFocusHelp:'Belirgin bir odak çerçevesi gösterir.',dyslexia:'Okuma dostu yazı',dyslexiaHelp:'Aralığı ve okunabilirliği artırır.',rollbackDownloading:'Önceki sürüm indiriliyor'},
-  ar:{versionDetails:'تفاصيل الإصدار',installedAt:'تاريخ التثبيت',modifiedAt:'تاريخ الملف',fileSize:'حجم الملف',executable:'ملف التطبيق',previousVersion:'الإصدار السابق',rollback:'تثبيت الإصدار السابق',rollbackConfirm:'سيتم تنزيل الإصدار السابق وتثبيته. هل تريد المتابعة؟',noPrevious:'لم يتم العثور على إصدار سابق قابل للتثبيت.',audioHelp:'اختر مكبرات الصوت والميكروفون الفعلية واختبر الإشارة.',speakers:'مكبرات الصوت',microphone:'الميكروفون',systemDefault:'افتراضي النظام',volume:'مستوى صوت الخرج',inputGain:'كسب الإدخال',noiseSuppression:'تقليل الضوضاء',echoCancellation:'إلغاء الصدى',testSpeaker:'اختبار مكبرات الصوت',testMicrophone:'اختبار الميكروفون',stopTest:'إيقاف الاختبار',micLevel:'مستوى الميكروفون',highContrast:'تباين عالٍ',highContrastHelp:'يقوي التباين والحدود.',largeText:'واجهة أكبر',largeTextHelp:'يكبر النص وعناصر التحكم.',strongFocus:'تركيز لوحة مفاتيح واضح',strongFocusHelp:'يعرض إطار تركيز واضحًا.',dyslexia:'خط سهل القراءة',dyslexiaHelp:'يزيد التباعد ويحسن القراءة.',rollbackDownloading:'جارٍ تنزيل الإصدار السابق'},
-  pl:{versionDetails:'Szczegóły wersji',installedAt:'Zainstalowano',modifiedAt:'Data pliku',fileSize:'Rozmiar pliku',executable:'Plik aplikacji',previousVersion:'Poprzednia wersja',rollback:'ZAINSTALUJ POPRZEDNIĄ WERSJĘ',rollbackConfirm:'Poprzednia wersja zostanie pobrana i zainstalowana. Kontynuować?',noPrevious:'Nie znaleziono wcześniejszej wersji do instalacji.',audioHelp:'Wybierz głośniki i mikrofon oraz przetestuj sygnał.',speakers:'Głośniki',microphone:'Mikrofon',systemDefault:'Domyślne systemowe',volume:'Głośność wyjścia',inputGain:'Wzmocnienie wejścia',noiseSuppression:'Redukcja szumów',echoCancellation:'Redukcja echa',testSpeaker:'TESTUJ GŁOŚNIKI',testMicrophone:'TESTUJ MIKROFON',stopTest:'ZATRZYMAJ TEST',micLevel:'Poziom mikrofonu',highContrast:'Wysoki kontrast',highContrastHelp:'Wzmacnia kontrasty i granice.',largeText:'Większy interfejs',largeTextHelp:'Powiększa tekst i elementy.',strongFocus:'Wyraźny fokus klawiatury',strongFocusHelp:'Pokazuje widoczną ramkę fokusu.',dyslexia:'Krój ułatwiający czytanie',dyslexiaHelp:'Zwiększa odstępy i czytelność.',rollbackDownloading:'Pobieranie poprzedniej wersji'}
+const extraLabels: Partial<Record<Language, Record<string, string>>> = {
+  de: {
+    versionDetails: "Versionsdetails",
+    installedAt: "Installiert am",
+    modifiedAt: "Dateidatum",
+    fileSize: "Dateigröße",
+    executable: "Programmdatei",
+    previousVersion: "Vorherige Version",
+    rollback: "VORHERIGE VERSION INSTALLIEREN",
+    rollbackConfirm:
+      "Die vorherige Version wird heruntergeladen und anschließend installiert. Fortfahren?",
+    noPrevious: "Keine frühere installierbare Version gefunden.",
+    audioHelp:
+      "Wähle echte Lautsprecher- und Mikrofon-Geräte und teste den Signalweg.",
+    speakers: "Lautsprecher",
+    microphone: "Mikrofon",
+    systemDefault: "Systemstandard",
+    volume: "Ausgabelautstärke",
+    inputGain: "Eingangsverstärkung",
+    noiseSuppression: "Rauschunterdrückung",
+    echoCancellation: "Echo-Unterdrückung",
+    testSpeaker: "LAUTSPRECHER TESTEN",
+    testMicrophone: "MIKROFON TESTEN",
+    stopTest: "TEST STOPPEN",
+    micLevel: "Mikrofonpegel",
+    highContrast: "Hoher Kontrast",
+    highContrastHelp: "Verstärkt Kontraste und Abgrenzungen.",
+    largeText: "Größere Bedienoberfläche",
+    largeTextHelp: "Vergrößert Texte und Bedienelemente.",
+    strongFocus: "Deutlicher Tastaturfokus",
+    strongFocusHelp: "Zeigt einen gut sichtbaren Fokusrahmen.",
+    dyslexia: "Lesefreundliche Schrift",
+    dyslexiaHelp: "Vergrößert Abstände und verbessert die Lesbarkeit.",
+    rollbackDownloading: "Vorherige Version wird geladen",
+  },
+  gsw: {
+    versionDetails: "Versionsdetails",
+    installedAt: "Installiert am",
+    modifiedAt: "Dateidatum",
+    fileSize: "Dateigrössi",
+    executable: "Programmdatei",
+    previousVersion: "Vorherigi Version",
+    rollback: "VORHERIGI VERSION INSTALLIERE",
+    rollbackConfirm:
+      "D vorherigi Version wird glade und denn installiert. Wiitermache?",
+    noPrevious: "Kei früehneri installierbari Version gfunde.",
+    audioHelp: "Wähl Lautsprecher und Mikrofon und test de Signalwäg.",
+    speakers: "Lautsprecher",
+    microphone: "Mikrofon",
+    systemDefault: "Systemstandard",
+    volume: "Usgabeluutstärchi",
+    inputGain: "Iigangsverstärkig",
+    noiseSuppression: "Ruschunterdrückig",
+    echoCancellation: "Echo-Unterdrückig",
+    testSpeaker: "LAUTSPRECHER TESTE",
+    testMicrophone: "MIKROFON TESTE",
+    stopTest: "TEST STOPPE",
+    micLevel: "Mikrofonpegel",
+    highContrast: "Hoche Kontrast",
+    highContrastHelp: "Verstärkt Kontrast und Abgränzige.",
+    largeText: "Grössri Bedienoberflächi",
+    largeTextHelp: "Vergrössert Text und Bedienelement.",
+    strongFocus: "Dütliche Tastaturfokus",
+    strongFocusHelp: "Zeigt en guet sichtbare Fokusrahme.",
+    dyslexia: "Läsfründlichi Schrift",
+    dyslexiaHelp: "Vergrössert Abständ und verbessert d Läsbarkeit.",
+    rollbackDownloading: "Vorherigi Version wird glade",
+  },
+  en: {
+    versionDetails: "Version details",
+    installedAt: "Installed",
+    modifiedAt: "File date",
+    fileSize: "File size",
+    executable: "Application file",
+    previousVersion: "Previous version",
+    rollback: "INSTALL PREVIOUS VERSION",
+    rollbackConfirm:
+      "The previous version will be downloaded and installed. Continue?",
+    noPrevious: "No earlier installable version was found.",
+    audioHelp:
+      "Select real speaker and microphone devices and test the signal path.",
+    speakers: "Speakers",
+    microphone: "Microphone",
+    systemDefault: "System default",
+    volume: "Output volume",
+    inputGain: "Input gain",
+    noiseSuppression: "Noise suppression",
+    echoCancellation: "Echo cancellation",
+    testSpeaker: "TEST SPEAKERS",
+    testMicrophone: "TEST MICROPHONE",
+    stopTest: "STOP TEST",
+    micLevel: "Microphone level",
+    highContrast: "High contrast",
+    highContrastHelp: "Strengthens contrast and boundaries.",
+    largeText: "Larger interface",
+    largeTextHelp: "Enlarges text and controls.",
+    strongFocus: "Strong keyboard focus",
+    strongFocusHelp: "Shows a clearly visible focus ring.",
+    dyslexia: "Reading-friendly type",
+    dyslexiaHelp: "Increases spacing and improves readability.",
+    rollbackDownloading: "Downloading previous version",
+  },
+  nl: {
+    versionDetails: "Versiedetails",
+    installedAt: "Geïnstalleerd",
+    modifiedAt: "Bestandsdatum",
+    fileSize: "Bestandsgrootte",
+    executable: "Programmabestand",
+    previousVersion: "Vorige versie",
+    rollback: "VORIGE VERSIE INSTALLEREN",
+    rollbackConfirm:
+      "De vorige versie wordt gedownload en geïnstalleerd. Doorgaan?",
+    noPrevious: "Geen eerdere installeerbare versie gevonden.",
+    audioHelp: "Kies echte luidsprekers en microfoons en test het signaal.",
+    speakers: "Luidsprekers",
+    microphone: "Microfoon",
+    systemDefault: "Systeemstandaard",
+    volume: "Uitvoervolume",
+    inputGain: "Ingangsversterking",
+    noiseSuppression: "Ruisonderdrukking",
+    echoCancellation: "Echo-onderdrukking",
+    testSpeaker: "LUIDSPREKERS TESTEN",
+    testMicrophone: "MICROFOON TESTEN",
+    stopTest: "TEST STOPPEN",
+    micLevel: "Microfoonniveau",
+    highContrast: "Hoog contrast",
+    highContrastHelp: "Versterkt contrasten en randen.",
+    largeText: "Grotere interface",
+    largeTextHelp: "Vergroot tekst en bediening.",
+    strongFocus: "Duidelijke toetsenbordfocus",
+    strongFocusHelp: "Toont een zichtbare focusrand.",
+    dyslexia: "Leesvriendelijk lettertype",
+    dyslexiaHelp: "Vergroot afstanden en leesbaarheid.",
+    rollbackDownloading: "Vorige versie downloaden",
+  },
+  da: {
+    versionDetails: "Versionsdetaljer",
+    installedAt: "Installeret",
+    modifiedAt: "Fildato",
+    fileSize: "Filstørrelse",
+    executable: "Programfil",
+    previousVersion: "Forrige version",
+    rollback: "INSTALLER FORRIGE VERSION",
+    rollbackConfirm: "Den forrige version downloades og installeres. Fortsæt?",
+    noPrevious: "Ingen tidligere installerbar version fundet.",
+    audioHelp: "Vælg højttalere og mikrofon, og test signalet.",
+    speakers: "Højttalere",
+    microphone: "Mikrofon",
+    systemDefault: "Systemstandard",
+    volume: "Udgangslydstyrke",
+    inputGain: "Indgangsforstærkning",
+    noiseSuppression: "Støjreduktion",
+    echoCancellation: "Ekkoreduktion",
+    testSpeaker: "TEST HØJTTALERE",
+    testMicrophone: "TEST MIKROFON",
+    stopTest: "STOP TEST",
+    micLevel: "Mikrofonniveau",
+    highContrast: "Høj kontrast",
+    highContrastHelp: "Forstærker kontraster og kanter.",
+    largeText: "Større brugerflade",
+    largeTextHelp: "Forstørrer tekst og knapper.",
+    strongFocus: "Tydeligt tastaturfokus",
+    strongFocusHelp: "Viser en tydelig fokusramme.",
+    dyslexia: "Læsevenlig skrift",
+    dyslexiaHelp: "Øger afstand og læsbarhed.",
+    rollbackDownloading: "Downloader forrige version",
+  },
+  no: {
+    versionDetails: "Versjonsdetaljer",
+    installedAt: "Installert",
+    modifiedAt: "Fildato",
+    fileSize: "Filstørrelse",
+    executable: "Programfil",
+    previousVersion: "Forrige versjon",
+    rollback: "INSTALLER FORRIGE VERSJON",
+    rollbackConfirm: "Forrige versjon lastes ned og installeres. Fortsette?",
+    noPrevious: "Ingen tidligere installerbar versjon funnet.",
+    audioHelp: "Velg høyttalere og mikrofon, og test signalet.",
+    speakers: "Høyttalere",
+    microphone: "Mikrofon",
+    systemDefault: "Systemstandard",
+    volume: "Utgangsvolum",
+    inputGain: "Inngangsforsterkning",
+    noiseSuppression: "Støyreduksjon",
+    echoCancellation: "Ekkoreduksjon",
+    testSpeaker: "TEST HØYTTALERE",
+    testMicrophone: "TEST MIKROFON",
+    stopTest: "STOPP TEST",
+    micLevel: "Mikrofonnivå",
+    highContrast: "Høy kontrast",
+    highContrastHelp: "Forsterker kontraster og kanter.",
+    largeText: "Større grensesnitt",
+    largeTextHelp: "Forstørrer tekst og kontroller.",
+    strongFocus: "Tydelig tastaturfokus",
+    strongFocusHelp: "Viser en tydelig fokusramme.",
+    dyslexia: "Lesevennlig skrift",
+    dyslexiaHelp: "Øker avstand og lesbarhet.",
+    rollbackDownloading: "Laster ned forrige versjon",
+  },
+  es: {
+    versionDetails: "Detalles de versión",
+    installedAt: "Instalado",
+    modifiedAt: "Fecha del archivo",
+    fileSize: "Tamaño del archivo",
+    executable: "Archivo de aplicación",
+    previousVersion: "Versión anterior",
+    rollback: "INSTALAR VERSIÓN ANTERIOR",
+    rollbackConfirm:
+      "Se descargará e instalará la versión anterior. ¿Continuar?",
+    noPrevious: "No se encontró una versión anterior instalable.",
+    audioHelp: "Selecciona altavoces y micrófono reales y prueba la señal.",
+    speakers: "Altavoces",
+    microphone: "Micrófono",
+    systemDefault: "Predeterminado del sistema",
+    volume: "Volumen de salida",
+    inputGain: "Ganancia de entrada",
+    noiseSuppression: "Supresión de ruido",
+    echoCancellation: "Cancelación de eco",
+    testSpeaker: "PROBAR ALTAVOCES",
+    testMicrophone: "PROBAR MICRÓFONO",
+    stopTest: "DETENER PRUEBA",
+    micLevel: "Nivel del micrófono",
+    highContrast: "Alto contraste",
+    highContrastHelp: "Refuerza contrastes y límites.",
+    largeText: "Interfaz más grande",
+    largeTextHelp: "Amplía textos y controles.",
+    strongFocus: "Foco de teclado visible",
+    strongFocusHelp: "Muestra un marco de foco claro.",
+    dyslexia: "Tipografía de fácil lectura",
+    dyslexiaHelp: "Aumenta el espaciado y la legibilidad.",
+    rollbackDownloading: "Descargando versión anterior",
+  },
+  uk: {
+    versionDetails: "Відомості про версію",
+    installedAt: "Встановлено",
+    modifiedAt: "Дата файлу",
+    fileSize: "Розмір файлу",
+    executable: "Файл програми",
+    previousVersion: "Попередня версія",
+    rollback: "ВСТАНОВИТИ ПОПЕРЕДНЮ ВЕРСІЮ",
+    rollbackConfirm:
+      "Попередню версію буде завантажено й встановлено. Продовжити?",
+    noPrevious: "Попередньої версії для встановлення не знайдено.",
+    audioHelp: "Виберіть динаміки й мікрофон та перевірте сигнал.",
+    speakers: "Динаміки",
+    microphone: "Мікрофон",
+    systemDefault: "Системний пристрій",
+    volume: "Гучність виходу",
+    inputGain: "Підсилення входу",
+    noiseSuppression: "Шумозаглушення",
+    echoCancellation: "Приглушення відлуння",
+    testSpeaker: "ПЕРЕВІРИТИ ДИНАМІКИ",
+    testMicrophone: "ПЕРЕВІРИТИ МІКРОФОН",
+    stopTest: "ЗУПИНИТИ ТЕСТ",
+    micLevel: "Рівень мікрофона",
+    highContrast: "Високий контраст",
+    highContrastHelp: "Посилює контрасти й межі.",
+    largeText: "Збільшений інтерфейс",
+    largeTextHelp: "Збільшує текст і елементи.",
+    strongFocus: "Помітний фокус клавіатури",
+    strongFocusHelp: "Показує чітку рамку фокусу.",
+    dyslexia: "Шрифт для легкого читання",
+    dyslexiaHelp: "Збільшує інтервали й читабельність.",
+    rollbackDownloading: "Завантаження попередньої версії",
+  },
+  ru: {
+    versionDetails: "Сведения о версии",
+    installedAt: "Установлено",
+    modifiedAt: "Дата файла",
+    fileSize: "Размер файла",
+    executable: "Файл программы",
+    previousVersion: "Предыдущая версия",
+    rollback: "УСТАНОВИТЬ ПРЕДЫДУЩУЮ ВЕРСИЮ",
+    rollbackConfirm:
+      "Предыдущая версия будет загружена и установлена. Продолжить?",
+    noPrevious: "Предыдущая устанавливаемая версия не найдена.",
+    audioHelp: "Выберите динамики и микрофон и проверьте сигнал.",
+    speakers: "Динамики",
+    microphone: "Микрофон",
+    systemDefault: "Системное устройство",
+    volume: "Громкость выхода",
+    inputGain: "Усиление входа",
+    noiseSuppression: "Шумоподавление",
+    echoCancellation: "Подавление эха",
+    testSpeaker: "ПРОВЕРИТЬ ДИНАМИКИ",
+    testMicrophone: "ПРОВЕРИТЬ МИКРОФОН",
+    stopTest: "ОСТАНОВИТЬ ТЕСТ",
+    micLevel: "Уровень микрофона",
+    highContrast: "Высокий контраст",
+    highContrastHelp: "Усиливает контрасты и границы.",
+    largeText: "Увеличенный интерфейс",
+    largeTextHelp: "Увеличивает текст и элементы.",
+    strongFocus: "Заметный фокус клавиатуры",
+    strongFocusHelp: "Показывает чёткую рамку фокуса.",
+    dyslexia: "Удобный для чтения шрифт",
+    dyslexiaHelp: "Увеличивает интервалы и читаемость.",
+    rollbackDownloading: "Загрузка предыдущей версии",
+  },
+  tr: {
+    versionDetails: "Sürüm ayrıntıları",
+    installedAt: "Kurulum tarihi",
+    modifiedAt: "Dosya tarihi",
+    fileSize: "Dosya boyutu",
+    executable: "Uygulama dosyası",
+    previousVersion: "Önceki sürüm",
+    rollback: "ÖNCEKİ SÜRÜMÜ KUR",
+    rollbackConfirm: "Önceki sürüm indirilecek ve kurulacak. Devam edilsin mi?",
+    noPrevious: "Kurulabilir önceki sürüm bulunamadı.",
+    audioHelp: "Gerçek hoparlör ve mikrofonları seçip sinyali test edin.",
+    speakers: "Hoparlörler",
+    microphone: "Mikrofon",
+    systemDefault: "Sistem varsayılanı",
+    volume: "Çıkış sesi",
+    inputGain: "Giriş kazancı",
+    noiseSuppression: "Gürültü azaltma",
+    echoCancellation: "Yankı giderme",
+    testSpeaker: "HOPARLÖRÜ TEST ET",
+    testMicrophone: "MİKROFONU TEST ET",
+    stopTest: "TESTİ DURDUR",
+    micLevel: "Mikrofon seviyesi",
+    highContrast: "Yüksek kontrast",
+    highContrastHelp: "Kontrastları ve sınırları güçlendirir.",
+    largeText: "Daha büyük arayüz",
+    largeTextHelp: "Metinleri ve kontrolleri büyütür.",
+    strongFocus: "Belirgin klavye odağı",
+    strongFocusHelp: "Belirgin bir odak çerçevesi gösterir.",
+    dyslexia: "Okuma dostu yazı",
+    dyslexiaHelp: "Aralığı ve okunabilirliği artırır.",
+    rollbackDownloading: "Önceki sürüm indiriliyor",
+  },
+  ar: {
+    versionDetails: "تفاصيل الإصدار",
+    installedAt: "تاريخ التثبيت",
+    modifiedAt: "تاريخ الملف",
+    fileSize: "حجم الملف",
+    executable: "ملف التطبيق",
+    previousVersion: "الإصدار السابق",
+    rollback: "تثبيت الإصدار السابق",
+    rollbackConfirm: "سيتم تنزيل الإصدار السابق وتثبيته. هل تريد المتابعة؟",
+    noPrevious: "لم يتم العثور على إصدار سابق قابل للتثبيت.",
+    audioHelp: "اختر مكبرات الصوت والميكروفون الفعلية واختبر الإشارة.",
+    speakers: "مكبرات الصوت",
+    microphone: "الميكروفون",
+    systemDefault: "افتراضي النظام",
+    volume: "مستوى صوت الخرج",
+    inputGain: "كسب الإدخال",
+    noiseSuppression: "تقليل الضوضاء",
+    echoCancellation: "إلغاء الصدى",
+    testSpeaker: "اختبار مكبرات الصوت",
+    testMicrophone: "اختبار الميكروفون",
+    stopTest: "إيقاف الاختبار",
+    micLevel: "مستوى الميكروفون",
+    highContrast: "تباين عالٍ",
+    highContrastHelp: "يقوي التباين والحدود.",
+    largeText: "واجهة أكبر",
+    largeTextHelp: "يكبر النص وعناصر التحكم.",
+    strongFocus: "تركيز لوحة مفاتيح واضح",
+    strongFocusHelp: "يعرض إطار تركيز واضحًا.",
+    dyslexia: "خط سهل القراءة",
+    dyslexiaHelp: "يزيد التباعد ويحسن القراءة.",
+    rollbackDownloading: "جارٍ تنزيل الإصدار السابق",
+  },
+  pl: {
+    versionDetails: "Szczegóły wersji",
+    installedAt: "Zainstalowano",
+    modifiedAt: "Data pliku",
+    fileSize: "Rozmiar pliku",
+    executable: "Plik aplikacji",
+    previousVersion: "Poprzednia wersja",
+    rollback: "ZAINSTALUJ POPRZEDNIĄ WERSJĘ",
+    rollbackConfirm:
+      "Poprzednia wersja zostanie pobrana i zainstalowana. Kontynuować?",
+    noPrevious: "Nie znaleziono wcześniejszej wersji do instalacji.",
+    audioHelp: "Wybierz głośniki i mikrofon oraz przetestuj sygnał.",
+    speakers: "Głośniki",
+    microphone: "Mikrofon",
+    systemDefault: "Domyślne systemowe",
+    volume: "Głośność wyjścia",
+    inputGain: "Wzmocnienie wejścia",
+    noiseSuppression: "Redukcja szumów",
+    echoCancellation: "Redukcja echa",
+    testSpeaker: "TESTUJ GŁOŚNIKI",
+    testMicrophone: "TESTUJ MIKROFON",
+    stopTest: "ZATRZYMAJ TEST",
+    micLevel: "Poziom mikrofonu",
+    highContrast: "Wysoki kontrast",
+    highContrastHelp: "Wzmacnia kontrasty i granice.",
+    largeText: "Większy interfejs",
+    largeTextHelp: "Powiększa tekst i elementy.",
+    strongFocus: "Wyraźny fokus klawiatury",
+    strongFocusHelp: "Pokazuje widoczną ramkę fokusu.",
+    dyslexia: "Krój ułatwiający czytanie",
+    dyslexiaHelp: "Zwiększa odstępy i czytelność.",
+    rollbackDownloading: "Pobieranie poprzedniej wersji",
+  },
 };
 
-const loginImageModules=import.meta.glob<string>('./assets/login-backgrounds/*.png',{eager:true,query:'?url',import:'default'});
-const knownLoginImageDetails:Record<string,string>={'bielefeld.png':'Stadtmotiv, Bielefeld, Deutschland','german-city-night.png':'Deutsches Stadtmotiv bei Nacht','german-lake.png':'Deutsche Seenlandschaft'};
-const allLoginImages=Object.entries(loginImageModules).map(([file,src])=>{const name=file.split('/').at(-1)??'';return{src,details:knownLoginImageDetails[name]??'Stadt- und Naturmotiv, Deutschland'}});
-function randomLoginImage(theme:ThemeMode){
-  const dark=theme==='dark'||(theme==='system'&&typeof matchMedia!=='undefined'&&matchMedia('(prefers-color-scheme: dark)').matches);
-  const themed=allLoginImages.filter((_image,index)=>dark?index%2===0:index%2===1);
-  const images=themed.length?themed:allLoginImages;
-  return images[Math.floor(Math.random()*images.length)];
+const loginImageModules = import.meta.glob<string>(
+  "./assets/login-backgrounds/*.png",
+  { eager: true, query: "?url", import: "default" },
+);
+const knownLoginImageDetails: Record<string, string> = {
+  "bielefeld.png": "Stadtmotiv, Bielefeld, Deutschland",
+  "german-city-night.png": "Deutsches Stadtmotiv bei Nacht",
+  "german-lake.png": "Deutsche Seenlandschaft",
+};
+const allLoginImages = Object.entries(loginImageModules).map(([file, src]) => {
+  const name = file.split("/").at(-1) ?? "";
+  return {
+    src,
+    details:
+      knownLoginImageDetails[name] ?? "Stadt- und Naturmotiv, Deutschland",
+  };
+});
+function randomLoginImage(theme: ThemeMode) {
+  const dark =
+    theme === "dark" ||
+    (theme === "system" &&
+      typeof matchMedia !== "undefined" &&
+      matchMedia("(prefers-color-scheme: dark)").matches);
+  const themed = allLoginImages.filter((_image, index) =>
+    dark ? index % 2 === 0 : index % 2 === 1,
+  );
+  const images = themed.length ? themed : allLoginImages;
+  return images[Math.floor(Math.random() * images.length)];
 }
 
-function Login({authenticated,device}:{authenticated:(session:AuthSession)=>void;device:RegisteredDevice}){
-  const {t}=useI18n();
-  const language=usePreferences(state=>state.language),setLanguage=usePreferences(state=>state.setLanguage);
-  const theme=usePreferences(state=>state.theme),showLoginBackgrounds=usePreferences(state=>state.showLoginBackgrounds);
-  const [email,setEmail]=useState('');
-  const [password,setPassword]=useState('');
-  const [showPassword,setShowPassword]=useState(false);
-  const [remember,setRemember]=useState(device.type!=='shared');
-  const [error,setError]=useState('');
-  const [busy,setBusy]=useState(false);
-  const [connected,setConnected]=useState<boolean|null>(null);
-  const [twoFactor,setTwoFactor]=useState<TwoFactorChallenge|null>(null);
-  const [twoFactorCode,setTwoFactorCode]=useState('');
-  const [recoveryMode,setRecoveryMode]=useState(false);
-  const [twoFactorError,setTwoFactorError]=useState('');
-  const [verifyBusy,setVerifyBusy]=useState(false);
-  const [languageOpen,setLanguageOpen]=useState(false);
-  const [backgroundImage]=useState(()=>randomLoginImage(theme));
+function Login({
+  authenticated,
+  device,
+}: {
+  authenticated: (session: AuthSession) => void;
+  device: RegisteredDevice;
+}) {
+  const { t } = useI18n();
+  const language = usePreferences((state) => state.language),
+    setLanguage = usePreferences((state) => state.setLanguage);
+  const theme = usePreferences((state) => state.theme),
+    showLoginBackgrounds = usePreferences(
+      (state) => state.showLoginBackgrounds,
+    );
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [remember, setRemember] = useState(device.type !== "shared");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [connected, setConnected] = useState<boolean | null>(null);
+  const [twoFactor, setTwoFactor] = useState<TwoFactorChallenge | null>(null);
+  const [twoFactorCode, setTwoFactorCode] = useState("");
+  const [recoveryMode, setRecoveryMode] = useState(false);
+  const [twoFactorError, setTwoFactorError] = useState("");
+  const [verifyBusy, setVerifyBusy] = useState(false);
+  const [languageOpen, setLanguageOpen] = useState(false);
+  const [backgroundImage] = useState(() => randomLoginImage(theme));
 
-  useEffect(()=>{
-    let active=true;
-    const check=()=>void window.desktop?.auth.connection().then(value=>active&&setConnected(value)).catch(()=>active&&setConnected(false));
+  useEffect(() => {
+    let active = true;
+    const check = () =>
+      void window.desktop?.auth
+        .connection()
+        .then((value) => active && setConnected(value))
+        .catch(() => active && setConnected(false));
     check();
-    const timer=setInterval(check,15000);
-    return()=>{active=false;clearInterval(timer)};
-  },[]);
+    const timer = setInterval(check, 15000);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
+  }, []);
 
-  async function submit(e:React.FormEvent){
-    e.preventDefault();setBusy(true);setError('');
-    try{
-      const result=await login(email,password,device.type==='shared'?false:remember);setPassword('');
-      if(isTwoFactorChallenge(result)){setTwoFactor(result);setTwoFactorCode('');setRecoveryMode(false);setTwoFactorError('');return}
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    setError("");
+    try {
+      const result = await login(
+        email,
+        password,
+        device.type === "shared" ? false : remember,
+      );
+      setPassword("");
+      if (isTwoFactorChallenge(result)) {
+        setTwoFactor(result);
+        setTwoFactorCode("");
+        setRecoveryMode(false);
+        setTwoFactorError("");
+        return;
+      }
       authenticated(result);
-    }catch(error){setPassword('');setError(authMessage(error instanceof Error?error.message:'SERVER',t))}
-    finally{setBusy(false)}
+    } catch (error) {
+      setPassword("");
+      setError(
+        authMessage(error instanceof Error ? error.message : "SERVER", t),
+      );
+    } finally {
+      setBusy(false);
+    }
   }
 
-  async function confirmTwoFactor(e?:React.FormEvent){
-    e?.preventDefault();if(!twoFactor||verifyBusy)return;
-    const normalized=recoveryMode?twoFactorCode.toUpperCase().replace(/[^A-Z2-9]/g,''):twoFactorCode.replace(/\D/g,'');
-    if((recoveryMode&&normalized.length!==12)||(!recoveryMode&&normalized.length!==6)){setTwoFactorError(t(recoveryMode?'recoveryIncomplete':'codeIncomplete'));return}
-    setVerifyBusy(true);setTwoFactorError('');
-    try{authenticated(await verifyTwoFactor(twoFactor.challengeId,twoFactorCode,recoveryMode));setTwoFactor(null)}
-    catch(error){setTwoFactorError(twoFactorMessage(error instanceof Error?error.message:'SERVER',t));if(!recoveryMode)setTwoFactorCode('')}
-    finally{setVerifyBusy(false)}
+  async function confirmTwoFactor(e?: React.FormEvent) {
+    e?.preventDefault();
+    if (!twoFactor || verifyBusy) return;
+    const normalized = recoveryMode
+      ? twoFactorCode.toUpperCase().replace(/[^A-Z2-9]/g, "")
+      : twoFactorCode.replace(/\D/g, "");
+    if (
+      (recoveryMode && normalized.length !== 12) ||
+      (!recoveryMode && normalized.length !== 6)
+    ) {
+      setTwoFactorError(
+        t(recoveryMode ? "recoveryIncomplete" : "codeIncomplete"),
+      );
+      return;
+    }
+    setVerifyBusy(true);
+    setTwoFactorError("");
+    try {
+      authenticated(
+        await verifyTwoFactor(
+          twoFactor.challengeId,
+          twoFactorCode,
+          recoveryMode,
+        ),
+      );
+      setTwoFactor(null);
+    } catch (error) {
+      setTwoFactorError(
+        twoFactorMessage(error instanceof Error ? error.message : "SERVER", t),
+      );
+      if (!recoveryMode) setTwoFactorCode("");
+    } finally {
+      setVerifyBusy(false);
+    }
   }
 
-  async function cancelChallenge(){
-    if(twoFactor)await cancelTwoFactor(twoFactor.challengeId);
-    setTwoFactor(null);setTwoFactorCode('');setRecoveryMode(false);setTwoFactorError('');
+  async function cancelChallenge() {
+    if (twoFactor) await cancelTwoFactor(twoFactor.challengeId);
+    setTwoFactor(null);
+    setTwoFactorCode("");
+    setRecoveryMode(false);
+    setTwoFactorError("");
   }
 
-  const twoFactorText=twoFactor?.method==='totp'?t('twoFactorTotp'):t('twoFactorSent',{destination:twoFactor?.destination||t('securityChannel')});
-  useEffect(()=>{if(!twoFactor||recoveryMode||twoFactorCode.length!==6||verifyBusy)return;const timer=setTimeout(()=>void confirmTwoFactor(),220);return()=>clearTimeout(timer)},[twoFactorCode,recoveryMode,twoFactor,verifyBusy]);
-  const selectedLanguage=languageOptions.find(option=>option.value===language)??languageOptions[0];
-  return <>
-    <main className={`login ${showLoginBackgrounds?'with-background':''}`} style={showLoginBackgrounds?{'--login-image':`url("${backgroundImage.src}")`} as React.CSSProperties:undefined}>
-      <div className="login-language-menu"><button type="button" className="language-flag" onClick={()=>setLanguageOpen(value=>!value)} title={t('language')} aria-expanded={languageOpen}><Flag country={selectedLanguage.flag}/></button>{languageOpen&&<div className="language-menu" role="menu">{languageOptions.map(option=><button type="button" role="menuitem" className={option.value===language?'active':''} key={option.value} onClick={()=>{setLanguage(option.value);setLanguageOpen(false)}}><Flag country={option.flag}/><span>{option.nativeName}</span></button>)}</div>}</div>
-      <form onSubmit={submit} className="login-panel">
-        <div className="brand-mark">GR</div><h1>GottesdienstRegie</h1><p className="login-device"><b>{device.organizationName}</b><span>{device.name}</span></p><h2>Wer verwendet GottesdienstRegie?</h2>
-        <label>{t('email')}<input autoFocus type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} required/></label>
-        <label>{t('password')}<div className="password-field"><input type={showPassword?'text':'password'} autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} required/><button type="button" onClick={()=>setShowPassword(value=>!value)} title={t(showPassword?'hidePassword':'showPassword')}><Icon name={showPassword?'visibility_off':'visibility'}/></button></div></label>
-        {device.type!=='shared'&&<label className="remember"><input type="checkbox" checked={remember} onChange={e=>setRemember(e.target.checked)}/> {t('remember')}</label>}
-        {error&&<div className="error"><Icon name="error"/><span>{error}</span></div>}
-        <button className="primary" disabled={busy}>{t(busy?'signingIn':'signIn')}</button>
-        <button type="button" className="forgot" disabled title={t('notAvailable')}>{t('forgotPassword')}</button>
+  const twoFactorText =
+    twoFactor?.method === "totp"
+      ? t("twoFactorTotp")
+      : t("twoFactorSent", {
+          destination: twoFactor?.destination || t("securityChannel"),
+        });
+  useEffect(() => {
+    if (!twoFactor || recoveryMode || twoFactorCode.length !== 6 || verifyBusy)
+      return;
+    const timer = setTimeout(() => void confirmTwoFactor(), 220);
+    return () => clearTimeout(timer);
+  }, [twoFactorCode, recoveryMode, twoFactor, verifyBusy]);
+  const selectedLanguage =
+    languageOptions.find((option) => option.value === language) ??
+    languageOptions[0];
+  return (
+    <>
+      <main
+        className={`login ${showLoginBackgrounds ? "with-background" : ""}`}
+        style={
+          showLoginBackgrounds
+            ? ({
+                "--login-image": `url("${backgroundImage.src}")`,
+              } as React.CSSProperties)
+            : undefined
+        }
+      >
+        <div className="login-language-menu">
+          <button
+            type="button"
+            className="language-flag"
+            onClick={() => setLanguageOpen((value) => !value)}
+            title={t("language")}
+            aria-expanded={languageOpen}
+          >
+            <Flag country={selectedLanguage.flag} />
+          </button>
+          {languageOpen && (
+            <div className="language-menu" role="menu">
+              {languageOptions.map((option) => (
+                <button
+                  type="button"
+                  role="menuitem"
+                  className={option.value === language ? "active" : ""}
+                  key={option.value}
+                  onClick={() => {
+                    setLanguage(option.value);
+                    setLanguageOpen(false);
+                  }}
+                >
+                  <Flag country={option.flag} />
+                  <span>{option.nativeName}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <form onSubmit={submit} className="login-panel">
+          <div className="brand-mark">GR</div>
+          <h1>GottesdienstRegie</h1>
+          <p className="login-device">
+            <b>{device.organizationName}</b>
+            <span>{device.name}</span>
+          </p>
+          <h2>Wer verwendet GottesdienstRegie?</h2>
+          <label>
+            {t("email")}
+            <input
+              autoFocus
+              type="email"
+              autoComplete="username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            {t("password")}
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((value) => !value)}
+                title={t(showPassword ? "hidePassword" : "showPassword")}
+              >
+                <Icon name={showPassword ? "visibility_off" : "visibility"} />
+              </button>
+            </div>
+          </label>
+          {device.type !== "shared" && (
+            <label className="remember">
+              <input
+                type="checkbox"
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
+              />{" "}
+              {t("remember")}
+            </label>
+          )}
+          {error && (
+            <div className="error">
+              <Icon name="error" />
+              <span>{error}</span>
+            </div>
+          )}
+          <button className="primary" disabled={busy}>
+            {t(busy ? "signingIn" : "signIn")}
+          </button>
+          <button
+            type="button"
+            className="forgot"
+            disabled
+            title={t("notAvailable")}
+          >
+            {t("forgotPassword")}
+          </button>
+        </form>
+        <div
+          className={`firebase-status ${connected === true ? "connected" : connected === false ? "disconnected" : ""}`}
+        >
+          <span />
+          {t(
+            connected === null
+              ? "firebaseChecking"
+              : connected
+                ? "firebaseConnected"
+                : "firebaseDisconnected",
+          )}
+        </div>
+        {showLoginBackgrounds && (
+          <span className="image-credit">
+            <Icon name="photo_camera" /> {backgroundImage.details}
+          </span>
+        )}
+      </main>
+      {twoFactor && (
+        <div className="two-factor-backdrop">
+          <form
+            className="two-factor-dialog"
+            onSubmit={confirmTwoFactor}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="two-factor-title"
+          >
+            <header>
+              <div className="two-factor-icon">
+                <Icon name="verified_user" />
+              </div>
+              <div>
+                <h2 id="two-factor-title">{t("twoFactorTitle")}</h2>
+                <span>{t("twoFactorSubtitle")}</span>
+              </div>
+            </header>
+            <p>{recoveryMode ? t("recoveryIntro") : twoFactorText}</p>
+            <label>
+              {t(recoveryMode ? "recoveryCode" : "verificationCode")}
+              <input
+                autoFocus
+                inputMode={recoveryMode ? "text" : "numeric"}
+                autoComplete="one-time-code"
+                maxLength={recoveryMode ? 14 : 6}
+                placeholder={recoveryMode ? "XXXX-XXXX-XXXX" : "000000"}
+                value={twoFactorCode}
+                onChange={(e) => {
+                  const value = recoveryMode
+                    ? e.target.value
+                        .toUpperCase()
+                        .replace(/[^A-Z2-9-]/g, "")
+                        .slice(0, 14)
+                    : e.target.value.replace(/\D/g, "").slice(0, 6);
+                  setTwoFactorCode(value);
+                  setTwoFactorError("");
+                }}
+              />
+            </label>
+            {twoFactorError && (
+              <div className="error">
+                <Icon name="error" />
+                <span>{twoFactorError}</span>
+              </div>
+            )}
+            <button
+              className="recovery-toggle"
+              type="button"
+              onClick={() => {
+                setRecoveryMode((value) => !value);
+                setTwoFactorCode("");
+                setTwoFactorError("");
+              }}
+            >
+              {t(recoveryMode ? "useNormalCode" : "useRecoveryCode")}
+            </button>
+            <div className="two-factor-actions">
+              <button type="button" onClick={() => void cancelChallenge()}>
+                {t("cancel")}
+              </button>
+              <button className="primary" disabled={verifyBusy}>
+                {t(verifyBusy ? "verifying" : "confirm")}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+    </>
+  );
+}
+
+function PresentationLibrary({
+  close,
+  opened,
+}: {
+  close: () => void;
+  opened: (document: PresentationDocument) => void;
+}) {
+  const { locale } = useI18n(),
+    [entries, setEntries] = useState<PresentationSummary[]>([]),
+    [query, setQuery] = useState(""),
+    [showArchived, setShowArchived] = useState(false),
+    [busy, setBusy] = useState(false);
+  const refresh = async () =>
+    setEntries(
+      (await window.desktop?.presentation.list({ archived: showArchived })) ??
+        [],
+    );
+  useEffect(() => {
+    void refresh();
+  }, [showArchived]);
+  async function open(id: string) {
+    const document = (await window.desktop?.presentation.load(
+      id,
+    )) as PresentationDocument | null;
+    if (document) {
+      opened(document);
+      close();
+    }
+  }
+  async function createNew() {
+    const title = prompt("Name der Präsentation", "Sonntagsgottesdienst");
+    if (!title) return;
+    setBusy(true);
+    try {
+      const document = (await window.desktop?.presentation.create({
+        title,
+        date: new Date().toISOString().slice(0, 10),
+        template: blankPresentationDocument(title),
+      })) as PresentationDocument;
+      opened(document);
+      close();
+    } finally {
+      setBusy(false);
+    }
+  }
+  const shown = entries.filter((entry) =>
+    entry.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+  );
+  return (
+    <div className="modal-backdrop">
+      <div className="library-dialog" role="dialog" aria-modal="true">
+        <header>
+          <div>
+            <h2>Präsentationen</h2>
+            <p>Lokale Präsentationsbibliothek</p>
+          </div>
+          <button onClick={close}>
+            <X />
+          </button>
+        </header>
+        <div className="library-tools">
+          <input
+            autoFocus
+            placeholder="Präsentationen durchsuchen"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <label>
+            <input
+              type="checkbox"
+              checked={showArchived}
+              onChange={(e) => setShowArchived(e.target.checked)}
+            />{" "}
+            Archiv anzeigen
+          </label>
+          <button
+            className="primary"
+            disabled={busy}
+            onClick={() => void createNew()}
+          >
+            <Icon name="add" /> NEUE PRÄSENTATION
+          </button>
+          <button
+            onClick={async () => {
+              const doc =
+                (await window.desktop?.presentation.import()) as PresentationDocument | null;
+              if (doc) {
+                opened(doc);
+                close();
+              }
+            }}
+          >
+            <Icon name="upload_file" /> IMPORTIEREN
+          </button>
+        </div>
+        <div className="library-list">
+          {shown.length ? (
+            shown.map((entry) => (
+              <article key={entry.id}>
+                <button
+                  className="library-open"
+                  onDoubleClick={() => void open(entry.id)}
+                  onClick={() => void open(entry.id)}
+                >
+                  <b>{entry.title}</b>
+                  <span>
+                    {new Date(entry.date || entry.updatedAt).toLocaleDateString(
+                      locale,
+                    )}
+                  </span>
+                  <small>
+                    {entry.itemCount} Elemente · {entry.slideCount} Folien ·
+                    geändert {new Date(entry.updatedAt).toLocaleString(locale)}
+                  </small>
+                </button>
+                <div>
+                  <button
+                    title="Duplizieren"
+                    onClick={async () => {
+                      await window.desktop?.presentation.duplicate(entry.id);
+                      await refresh();
+                    }}
+                  >
+                    <Icon name="content_copy" />
+                  </button>
+                  <button
+                    title="Umbenennen"
+                    onClick={async () => {
+                      const title = prompt("Neuer Name", entry.title);
+                      if (title) {
+                        await window.desktop?.presentation.rename(
+                          entry.id,
+                          title,
+                        );
+                        await refresh();
+                      }
+                    }}
+                  >
+                    <Icon name="edit" />
+                  </button>
+                  <button
+                    title={entry.archived ? "Wiederherstellen" : "Archivieren"}
+                    onClick={async () => {
+                      await window.desktop?.presentation.archive(
+                        entry.id,
+                        !entry.archived,
+                      );
+                      await refresh();
+                    }}
+                  >
+                    <Icon name={entry.archived ? "unarchive" : "archive"} />
+                  </button>
+                  <button
+                    title="Papierkorb"
+                    onClick={async () => {
+                      await window.desktop?.presentation.trash(entry.id, true);
+                      await refresh();
+                    }}
+                  >
+                    <Icon name="delete" />
+                  </button>
+                </div>
+              </article>
+            ))
+          ) : (
+            <div className="library-empty">
+              <Icon name="folder_open" />
+              <b>Keine Präsentationen gefunden</b>
+              <span>
+                Erstelle eine neue Präsentation oder importiere eine vorhandene
+                Datei.
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MediaLibrary({
+  close,
+  purpose = "item",
+}: {
+  close: () => void;
+  purpose?: "item" | "background";
+}) {
+  const state = usePresentation(),
+    [assets, setAssets] = useState<MediaAsset[]>([]),
+    [query, setQuery] = useState(""),
+    [kind, setKind] = useState<"all" | MediaAsset["kind"]>(
+      purpose === "background" ? "image" : "all",
+    ),
+    [storage, setStorage] = useState<MediaStorageStatus | null>(null),
+    [onlineCount, setOnlineCount] = useState(0),
+    [busyId, setBusyId] = useState("");
+  const refresh = async () => {
+    setAssets((await window.desktop?.media.list()) ?? []);
+    setStorage(
+      (await window.desktop?.media.onlineStatus().catch(() => null)) ?? null,
+    );
+    setOnlineCount(
+      (await window.desktop?.media.onlineList().catch(() => []))?.length ?? 0,
+    );
+  };
+  useEffect(() => {
+    void refresh();
+  }, []);
+  async function importFiles() {
+    await window.desktop?.media.import();
+    await refresh();
+  }
+  function useAsset(asset: MediaAsset) {
+    if (purpose === "background") {
+      if (asset.kind === "image")
+        state.updateSlide({
+          backgroundImage: asset.url,
+          backgroundFit: "cover",
+          backgroundPositionX: "center",
+          backgroundPositionY: "center",
+        });
+      if (asset.kind === "video") {
+        state.addElement("video");
+        const current = usePresentation.getState(),
+          element = current.items
+            .flatMap((item) => item.slides)
+            .find((entry) => entry.id === current.selectedSlideId)
+            ?.elements.at(-1);
+        if (element)
+          current.updateElement(element.id, {
+            name: "Videohintergrund",
+            x: 0,
+            y: 0,
+            width: 1920,
+            height: 1080,
+            properties: {
+              ...element.properties,
+              src: asset.url,
+              fit: "cover",
+              autoplay: true,
+              loop: true,
+              volume: 0,
+            },
+          });
+      }
+      close();
+      return;
+    }
+    state.addItem(
+      asset.kind === "video"
+        ? "video"
+        : asset.kind === "audio"
+          ? "audio"
+          : asset.kind === "pdf"
+            ? "pdf"
+            : "image",
+      {
+        title: asset.name,
+        section: "",
+        body: "",
+        metadata: {
+          assetId: asset.id,
+          url: asset.url,
+          size: asset.size,
+          checksum: asset.checksum,
+          sourceType: "file",
+        },
+      },
+    );
+    const current = usePresentation.getState();
+    if (asset.kind !== "pdf") {
+      current.addElement(asset.kind);
+      const next = usePresentation.getState(),
+        element = next.items
+          .flatMap((item) => item.slides)
+          .find((entry) => entry.id === next.selectedSlideId)
+          ?.elements.at(-1);
+      if (element)
+        next.updateElement(element.id, {
+          x: 0,
+          y: 0,
+          width: 1920,
+          height: 1080,
+          properties: {
+            ...element.properties,
+            src: asset.url,
+            fit: asset.kind === "image" ? "cover" : "contain",
+            autoplay: asset.kind !== "image",
+            volume: 100,
+          },
+        });
+    }
+    close();
+  }
+  async function sync(asset: MediaAsset) {
+    setBusyId(asset.id);
+    try {
+      await window.desktop?.media.sync(asset.id);
+    } catch (error) {
+      alert(
+        error instanceof Error && error.message.includes("TOO_LARGE")
+          ? "Diese Videodatei ist für die kostenlose GitHub-Medienbibliothek zu groß und bleibt lokal."
+          : "Das Medium konnte nicht synchronisiert werden. Prüfe GitHub-Anmeldung und Internetverbindung.",
+      );
+    } finally {
+      setBusyId("");
+      await refresh();
+    }
+  }
+  const shown = assets.filter(
+    (asset) =>
+      (kind === "all" || asset.kind === kind) &&
+      asset.name.toLowerCase().includes(query.toLowerCase()),
+  );
+  return (
+    <div className="modal-backdrop">
+      <div className="media-dialog">
+        <header>
+          <div>
+            <h2>
+              {purpose === "background"
+                ? "Hintergrund auswählen"
+                : "Medienbibliothek"}
+            </h2>
+            <p>
+              {assets.length} lokal · {onlineCount} in der Cloud
+            </p>
+          </div>
+          <div
+            className={`media-sync-status ${storage?.online ? "online" : "offline"}`}
+          >
+            <Icon name={storage?.online ? "cloud_done" : "cloud_off"} />
+            <span>{storage?.message ?? "Online-Status wird geprüft …"}</span>
+          </div>
+          <button onClick={close}>
+            <X />
+          </button>
+        </header>
+        <div className="media-toolbar">
+          <input
+            placeholder="Medien durchsuchen"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <select
+            value={kind}
+            disabled={purpose === "background"}
+            onChange={(e) => setKind(e.target.value as typeof kind)}
+          >
+            <option value="all">Alle Medien</option>
+            <option value="image">Bilder</option>
+            <option value="video">Videos</option>
+            <option value="audio">Audio</option>
+            <option value="pdf">PDF</option>
+          </select>
+          <button className="primary" onClick={() => void importFiles()}>
+            <Icon name="add" /> MEDIEN IMPORTIEREN
+          </button>
+        </div>
+        <div className="media-grid">
+          {shown.map((asset) => (
+            <article key={asset.id}>
+              {asset.kind === "image" ? (
+                <img src={asset.url} alt="" />
+              ) : (
+                <div className="media-placeholder">
+                  <Icon
+                    name={
+                      asset.kind === "video"
+                        ? "movie"
+                        : asset.kind === "audio"
+                          ? "audio_file"
+                          : "picture_as_pdf"
+                    }
+                  />
+                </div>
+              )}
+              <div>
+                <b>{asset.name}</b>
+                <small>
+                  {asset.extension} · {(asset.size / 1024 / 1024).toFixed(1)} MB
+                  ·{" "}
+                  {asset.syncState === "synced"
+                    ? "Cloud ✓"
+                    : asset.syncState === "error"
+                      ? "Synchronisationsfehler"
+                      : "Wird vorbereitet"}
+                </small>
+              </div>
+              <button className="media-use" onClick={() => useAsset(asset)}>
+                {purpose === "background" ? "ALS HINTERGRUND" : "VERWENDEN"}
+              </button>
+              <button
+                title="Mit Cloud synchronisieren"
+                disabled={
+                  busyId === asset.id ||
+                  asset.syncState === "synced" ||
+                  !storage?.writable
+                }
+                onClick={() => void sync(asset)}
+              >
+                <Icon
+                  name={
+                    asset.syncState === "synced"
+                      ? "cloud_done"
+                      : busyId === asset.id
+                        ? "sync"
+                        : "cloud_upload"
+                  }
+                />
+              </button>
+              <button
+                title="Favorit"
+                onClick={async () => {
+                  await window.desktop?.media.update(asset.id, {
+                    favorite: !asset.favorite,
+                  });
+                  await refresh();
+                }}
+              >
+                <Icon name={asset.favorite ? "star" : "star_outline"} />
+              </button>
+              <button
+                title="Löschen"
+                onClick={async () => {
+                  if (
+                    confirm(
+                      "Medium dauerhaft aus der Medienbibliothek löschen?",
+                    )
+                  ) {
+                    await window.desktop?.media.remove(asset.id);
+                    await refresh();
+                  }
+                }}
+              >
+                <Icon name="delete" />
+              </button>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SortableItem({
+  item,
+  active,
+  live,
+  onSelect,
+  onContext,
+  onAudio,
+  canEdit,
+}: {
+  item: ServiceItem;
+  active: boolean;
+  live: boolean;
+  onSelect: (event: React.MouseEvent | React.KeyboardEvent) => void;
+  onContext: (event: React.MouseEvent) => void;
+  onAudio: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  canEdit: boolean;
+}) {
+  const { t } = useI18n();
+  const state = usePresentation(),
+    [editingDuration, setEditingDuration] = useState(false),
+    [durationValue, setDurationValue] = useState("");
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id, disabled: !canEdit });
+  const icon: Record<ItemType, string> = {
+    song: "music_note",
+    bible: "menu_book",
+    content: "title",
+    image: "image",
+    video: "movie",
+    videoInput: "videocam",
+    audio: "audio_file",
+    web: "language",
+    pdf: "picture_as_pdf",
+    timer: "timer",
+    countdown: "hourglass_bottom",
+    announcement: "campaign",
+    slideshow: "slideshow",
+    stageMessage: "speaker_notes",
+    quickScreen: "bolt",
+    liveQuiz: "quiz",
+  };
+  const commit = () => {
+    const seconds = parseDuration(durationValue);
+    if (seconds !== null)
+      state.updateItem(item.id, {
+        plannedDuration: seconds,
+        autoAdvance: true,
+        timing: {
+          ...item.timing,
+          mode: "slide-duration",
+          slideDurationSeconds: Math.max(
+            1,
+            Math.round(
+              seconds /
+                Math.max(
+                  1,
+                  item.slides.filter((slide) => slide.enabled).length,
+                ),
+            ),
+          ),
+          totalDurationSeconds: seconds,
+          autoAdvance: true,
+        },
+      });
+    setEditingDuration(false);
+  };
+  const quizQuestions =
+    item.type === "liveQuiz" ? Number(item.metadata.questionCount ?? 0) : 0;
+  return (
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      role="button"
+      tabIndex={0}
+      aria-selected={active}
+      className={`service-item ${active ? "active" : ""} ${live ? "live-item" : ""} ${!item.enabled ? "disabled-slide" : ""} ${isDragging ? "dragging" : ""}`}
+      onClick={onSelect}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") onSelect(event);
+      }}
+      onContextMenu={onContext}
+    >
+      <span className="drag" {...attributes} {...listeners}>
+        <Icon name="drag_indicator" />
+      </span>
+      <span className="service-thumb">
+        {item.slides[0] && <LazyThumbnail slide={item.slides[0]} />}
+      </span>
+      <span className="service-copy">
+        <b>
+          <Icon name={icon[item.type]} />
+          {item.title}
+          {item.linkedContentId && <Icon name="link" />}
+        </b>
+        <small>
+          {item.type === "liveQuiz" ? (
+            `${quizQuestions} ${quizQuestions === 1 ? "Frage" : "Fragen"}`
+          ) : (
+            <>
+              {item.slides.length}{" "}
+              {t(item.slides.length === 1 ? "slidesOne" : "slidesMany")}
+            </>
+          )}
+          {item.timing?.repeat && (
+            <>
+              {" "}
+              · <Icon name="repeat" />
+            </>
+          )}
+        </small>
+      </span>
+      <button
+        className={`item-audio-button ${item.backgroundAudio?.tracks.length ? "configured" : ""} ${item.audioStopCue ? "audio-stop-cue" : ""}`}
+        title={
+          item.audioStopCue
+            ? "Background Audio wird hier gestoppt"
+            : item.backgroundAudio?.tracks.length
+              ? `${item.backgroundAudio.tracks.length} Titel · Background Audio`
+              : "Background Audio für dieses Element"
+        }
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          onAudio(event);
+        }}
+      >
+        <Icon name={item.audioStopCue ? "volume_off" : "volume_up"} />
+      </button>
+      {editingDuration ? (
+        <input
+          className="duration-editor"
+          autoFocus
+          value={durationValue}
+          onClick={(event) => event.stopPropagation()}
+          onChange={(event) => setDurationValue(event.target.value)}
+          onBlur={commit}
+          onKeyDown={(event) => {
+            event.stopPropagation();
+            if (event.key === "Enter") commit();
+            if (event.key === "Escape") setEditingDuration(false);
+          }}
+        />
+      ) : (
+        <button
+          className="item-duration"
+          title="Dauer bearbeiten"
+          onClick={(event) => {
+            event.stopPropagation();
+            setDurationValue(formatDuration(itemDurationSeconds(item) || 7));
+            setEditingDuration(true);
+          }}
+        >
+          {formatDuration(itemDurationSeconds(item))}
+        </button>
+      )}
+      {live && <i className="live-dot" />}
+    </div>
+  );
+}
+
+function addConfiguredVideoInput(sectionId: string, close: () => void) {
+  const source = usePreferences
+    .getState()
+    .videoInputSources.find((item) => item.enabled && item.deviceId);
+  if (!source) {
+    alert(
+      "Es ist keine verfügbare Videoquelle konfiguriert. Wähle zuerst unter Einstellungen → Videoeingang eine Kamera oder Capture Card aus.",
+    );
+    return;
+  }
+  const state = usePresentation.getState();
+  state.addItem("videoInput", {
+    title: source.name,
+    section: "",
+    sectionId,
+    body: "",
+    metadata: { sourceId: source.id, deviceId: source.deviceId },
+  });
+  usePresentation.getState().addElement("videoInput");
+  const latest = usePresentation.getState(),
+    element = latest.items
+      .flatMap((item) => item.slides)
+      .find((slide) => slide.id === latest.selectedSlideId)
+      ?.elements.at(-1);
+  if (element)
+    latest.updateElement(element.id, {
+      x: 0,
+      y: 0,
+      width: 1920,
+      height: 1080,
+      properties: {
+        deviceId: source.deviceId,
+        width: source.width,
+        height: source.height,
+        frameRate: source.frameRate,
+        audioEnabled: source.audioEnabled,
+        volume: source.volume,
+        fit: source.fit,
+        cropLeft: source.crop.left,
+        cropRight: source.crop.right,
+        cropTop: source.crop.top,
+        cropBottom: source.crop.bottom,
+        brightness: source.brightness,
+        contrast: source.contrast,
+        saturation: source.saturation,
+        hue: source.hue,
+      },
+    });
+  close();
+}
+
+type QuizCreateValue = {
+  title: string;
+  quizType: "quiz" | "poll";
+  participation: "anonymous" | "name";
+};
+function QuizCreateDialog({
+  cancel,
+  create,
+}: {
+  cancel: () => void;
+  create: (value: QuizCreateValue) => void;
+}) {
+  const [title, setTitle] = useState("Bibelquiz"),
+    [quizType, setQuizType] = useState<QuizCreateValue["quizType"]>("quiz"),
+    [participation, setParticipation] =
+      useState<QuizCreateValue["participation"]>("anonymous");
+  const submit = (event: React.FormEvent) => {
+    event.preventDefault();
+    const normalized = title.trim();
+    if (normalized) create({ title: normalized, quizType, participation });
+  };
+  return (
+    <div
+      className="modal-backdrop quiz-create-backdrop"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) cancel();
+      }}
+    >
+      <form
+        className="quiz-create-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="quiz-create-title"
+        onSubmit={submit}
+      >
+        <header>
+          <div>
+            <Icon name="quiz" />
+            <h2 id="quiz-create-title">NEUES LIVEQUIZ</h2>
+          </div>
+          <button type="button" title="Schließen" onClick={cancel}>
+            <Icon name="close" />
+          </button>
+        </header>
+        <main>
+          <label>
+            Titel *
+            <input
+              autoFocus
+              required
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            />
+          </label>
+          <label>
+            Typ
+            <select
+              value={quizType}
+              onChange={(event) =>
+                setQuizType(event.target.value as QuizCreateValue["quizType"])
+              }
+            >
+              <option value="quiz">Quiz</option>
+              <option value="poll">Umfrage</option>
+            </select>
+          </label>
+          <label>
+            Teilnahme
+            <select
+              value={participation}
+              onChange={(event) =>
+                setParticipation(
+                  event.target.value as QuizCreateValue["participation"],
+                )
+              }
+            >
+              <option value="anonymous">Anonym</option>
+              <option value="name">Mit Name</option>
+            </select>
+          </label>
+          <p>
+            Beim Erstellen wird nur die Quizdefinition angelegt. Eine
+            Live-Session und ein Teilnahmecode entstehen erst beim bewussten
+            Live-Start.
+          </p>
+        </main>
+        <footer>
+          <button type="button" onClick={cancel}>
+            ABBRECHEN
+          </button>
+          <button className="primary" type="submit" disabled={!title.trim()}>
+            ERSTELLEN
+          </button>
+        </footer>
       </form>
-      <div className={`firebase-status ${connected===true?'connected':connected===false?'disconnected':''}`}><span/>{t(connected===null?'firebaseChecking':connected?'firebaseConnected':'firebaseDisconnected')}</div>
-      {showLoginBackgrounds&&<span className="image-credit"><Icon name="photo_camera"/> {backgroundImage.details}</span>}
-    </main>
-    {twoFactor&&<div className="two-factor-backdrop"><form className="two-factor-dialog" onSubmit={confirmTwoFactor} role="dialog" aria-modal="true" aria-labelledby="two-factor-title">
-      <header><div className="two-factor-icon"><Icon name="verified_user"/></div><div><h2 id="two-factor-title">{t('twoFactorTitle')}</h2><span>{t('twoFactorSubtitle')}</span></div></header>
-      <p>{recoveryMode?t('recoveryIntro'):twoFactorText}</p>
-      <label>{t(recoveryMode?'recoveryCode':'verificationCode')}<input autoFocus inputMode={recoveryMode?'text':'numeric'} autoComplete="one-time-code" maxLength={recoveryMode?14:6} placeholder={recoveryMode?'XXXX-XXXX-XXXX':'000000'} value={twoFactorCode} onChange={e=>{const value=recoveryMode?e.target.value.toUpperCase().replace(/[^A-Z2-9-]/g,'').slice(0,14):e.target.value.replace(/\D/g,'').slice(0,6);setTwoFactorCode(value);setTwoFactorError('')}}/></label>
-      {twoFactorError&&<div className="error"><Icon name="error"/><span>{twoFactorError}</span></div>}
-      <button className="recovery-toggle" type="button" onClick={()=>{setRecoveryMode(value=>!value);setTwoFactorCode('');setTwoFactorError('')}}>{t(recoveryMode?'useNormalCode':'useRecoveryCode')}</button>
-      <div className="two-factor-actions"><button type="button" onClick={()=>void cancelChallenge()}>{t('cancel')}</button><button className="primary" disabled={verifyBusy}>{t(verifyBusy?'verifying':'confirm')}</button></div>
-    </form></div>}
-  </>;
+    </div>
+  );
 }
 
-function PresentationLibrary({close,opened}:{close:()=>void;opened:(document:PresentationDocument)=>void}){
-  const {locale}=useI18n(),[entries,setEntries]=useState<PresentationSummary[]>([]),[query,setQuery]=useState(''),[showArchived,setShowArchived]=useState(false),[busy,setBusy]=useState(false);
-  const refresh=async()=>setEntries(await window.desktop?.presentation.list({archived:showArchived})??[]);
-  useEffect(()=>{void refresh()},[showArchived]);
-  async function open(id:string){const document=await window.desktop?.presentation.load(id) as PresentationDocument|null;if(document){opened(document);close()}}
-  async function createNew(){const title=prompt('Name der Präsentation','Sonntagsgottesdienst');if(!title)return;setBusy(true);try{const document=await window.desktop?.presentation.create({title,date:new Date().toISOString().slice(0,10),template:blankPresentationDocument(title)}) as PresentationDocument;opened(document);close()}finally{setBusy(false)}}
-  const shown=entries.filter(entry=>entry.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
-  return <div className="modal-backdrop"><div className="library-dialog" role="dialog" aria-modal="true"><header><div><h2>Präsentationen</h2><p>Lokale Präsentationsbibliothek</p></div><button onClick={close}><X/></button></header><div className="library-tools"><input autoFocus placeholder="Präsentationen durchsuchen" value={query} onChange={e=>setQuery(e.target.value)}/><label><input type="checkbox" checked={showArchived} onChange={e=>setShowArchived(e.target.checked)}/> Archiv anzeigen</label><button className="primary" disabled={busy} onClick={()=>void createNew()}><Icon name="add"/> NEUE PRÄSENTATION</button><button onClick={async()=>{const doc=await window.desktop?.presentation.import() as PresentationDocument|null;if(doc){opened(doc);close()}}}><Icon name="upload_file"/> IMPORTIEREN</button></div><div className="library-list">{shown.length?shown.map(entry=><article key={entry.id}><button className="library-open" onDoubleClick={()=>void open(entry.id)} onClick={()=>void open(entry.id)}><b>{entry.title}</b><span>{new Date(entry.date||entry.updatedAt).toLocaleDateString(locale)}</span><small>{entry.itemCount} Elemente · {entry.slideCount} Folien · geändert {new Date(entry.updatedAt).toLocaleString(locale)}</small></button><div><button title="Duplizieren" onClick={async()=>{await window.desktop?.presentation.duplicate(entry.id);await refresh()}}><Icon name="content_copy"/></button><button title="Umbenennen" onClick={async()=>{const title=prompt('Neuer Name',entry.title);if(title){await window.desktop?.presentation.rename(entry.id,title);await refresh()}}}><Icon name="edit"/></button><button title={entry.archived?'Wiederherstellen':'Archivieren'} onClick={async()=>{await window.desktop?.presentation.archive(entry.id,!entry.archived);await refresh()}}><Icon name={entry.archived?'unarchive':'archive'}/></button><button title="Papierkorb" onClick={async()=>{await window.desktop?.presentation.trash(entry.id,true);await refresh()}}><Icon name="delete"/></button></div></article>):<div className="library-empty"><Icon name="folder_open"/><b>Keine Präsentationen gefunden</b><span>Erstelle eine neue Präsentation oder importiere eine vorhandene Datei.</span></div>}</div></div></div>
+function addLiveQuiz(value: QuizCreateValue, sectionId = "service") {
+  const questionId = crypto.randomUUID(),
+    optionIds = [
+      crypto.randomUUID(),
+      crypto.randomUUID(),
+      crypto.randomUUID(),
+      crypto.randomUUID(),
+    ],
+    definition = {
+      id: crypto.randomUUID(),
+      title: value.title,
+      description: "",
+      quizType: value.quizType,
+      participation: value.participation,
+      points: value.quizType === "quiz",
+      defaultDurationSeconds: 30,
+      resultVisibility: "operator",
+      questions: [
+        {
+          id: questionId,
+          type: value.quizType === "poll" ? "poll" : "single",
+          question: "Neue Frage",
+          options: optionIds.map((id, index) => ({
+            id,
+            text: `Antwort ${index + 1}`,
+          })),
+          correctOptionIds: value.quizType === "quiz" ? [optionIds[0]] : [],
+          durationSeconds: 30,
+          points: 100,
+          allowAnswerChange: false,
+          holdTextAnswers: true,
+          disabled: false,
+        },
+      ],
+    };
+  usePresentation
+    .getState()
+    .addItem("liveQuiz", {
+      title: value.title,
+      section: "",
+      sectionId,
+      body: `Neue Frage\n\n${definition.questions[0].options.map((option, index) => `${String.fromCharCode(65 + index)}  ${option.text}`).join("\n")}`,
+      metadata: {
+        quizId: definition.id,
+        quizType: value.quizType,
+        participation: value.participation,
+        questionCount: 1,
+        quizDefinition: JSON.stringify(definition),
+      },
+    });
 }
 
-function MediaLibrary({close,purpose='item'}:{close:()=>void;purpose?:'item'|'background'}){
-  const state=usePresentation(),[assets,setAssets]=useState<MediaAsset[]>([]),[query,setQuery]=useState(''),[kind,setKind]=useState<'all'|MediaAsset['kind']>(purpose==='background'?'image':'all'),[storage,setStorage]=useState<MediaStorageStatus|null>(null),[onlineCount,setOnlineCount]=useState(0),[busyId,setBusyId]=useState('');
-  const refresh=async()=>{setAssets(await window.desktop?.media.list()??[]);setStorage(await window.desktop?.media.onlineStatus().catch(()=>null)??null);setOnlineCount((await window.desktop?.media.onlineList().catch(()=>[]))?.length??0)};
-  useEffect(()=>{void refresh()},[]);
-  async function importFiles(){await window.desktop?.media.import();await refresh()}
-  function useAsset(asset:MediaAsset){if(purpose==='background'){if(asset.kind==='image')state.updateSlide({backgroundImage:asset.url,backgroundFit:'cover',backgroundPositionX:'center',backgroundPositionY:'center'});if(asset.kind==='video'){state.addElement('video');const current=usePresentation.getState(),element=current.items.flatMap(item=>item.slides).find(entry=>entry.id===current.selectedSlideId)?.elements.at(-1);if(element)current.updateElement(element.id,{name:'Videohintergrund',x:0,y:0,width:1920,height:1080,properties:{...element.properties,src:asset.url,fit:'cover',autoplay:true,loop:true,volume:0}})}close();return}state.addItem(asset.kind==='video'?'video':asset.kind==='audio'?'audio':asset.kind==='pdf'?'pdf':'image',{title:asset.name,section:'',body:'',metadata:{assetId:asset.id,url:asset.url,size:asset.size,checksum:asset.checksum,sourceType:'file'}});const current=usePresentation.getState();if(asset.kind!=='pdf'){current.addElement(asset.kind);const next=usePresentation.getState(),element=next.items.flatMap(item=>item.slides).find(entry=>entry.id===next.selectedSlideId)?.elements.at(-1);if(element)next.updateElement(element.id,{x:0,y:0,width:1920,height:1080,properties:{...element.properties,src:asset.url,fit:asset.kind==='image'?'cover':'contain',autoplay:asset.kind!=='image',volume:100}})}close()}
-  async function sync(asset:MediaAsset){setBusyId(asset.id);try{await window.desktop?.media.sync(asset.id)}catch(error){alert(error instanceof Error&&error.message.includes('TOO_LARGE')?'Diese Videodatei ist für die kostenlose GitHub-Medienbibliothek zu groß und bleibt lokal.':'Das Medium konnte nicht synchronisiert werden. Prüfe GitHub-Anmeldung und Internetverbindung.')}finally{setBusyId('');await refresh()}}
-  const shown=assets.filter(asset=>(kind==='all'||asset.kind===kind)&&asset.name.toLowerCase().includes(query.toLowerCase()));
-  return <div className="modal-backdrop"><div className="media-dialog"><header><div><h2>{purpose==='background'?'Hintergrund auswählen':'Medienbibliothek'}</h2><p>{assets.length} lokal · {onlineCount} in der Cloud</p></div><div className={`media-sync-status ${storage?.online?'online':'offline'}`}><Icon name={storage?.online?'cloud_done':'cloud_off'}/><span>{storage?.message??'Online-Status wird geprüft …'}</span></div><button onClick={close}><X/></button></header><div className="media-toolbar"><input placeholder="Medien durchsuchen" value={query} onChange={e=>setQuery(e.target.value)}/><select value={kind} disabled={purpose==='background'} onChange={e=>setKind(e.target.value as typeof kind)}><option value="all">Alle Medien</option><option value="image">Bilder</option><option value="video">Videos</option><option value="audio">Audio</option><option value="pdf">PDF</option></select><button className="primary" onClick={()=>void importFiles()}><Icon name="add"/> MEDIEN IMPORTIEREN</button></div><div className="media-grid">{shown.map(asset=><article key={asset.id}>{asset.kind==='image'?<img src={asset.url} alt=""/>:<div className="media-placeholder"><Icon name={asset.kind==='video'?'movie':asset.kind==='audio'?'audio_file':'picture_as_pdf'}/></div>}<div><b>{asset.name}</b><small>{asset.extension} · {(asset.size/1024/1024).toFixed(1)} MB · {asset.syncState==='synced'?'Cloud ✓':asset.syncState==='error'?'Synchronisationsfehler':'Wird vorbereitet'}</small></div><button className="media-use" onClick={()=>useAsset(asset)}>{purpose==='background'?'ALS HINTERGRUND':'VERWENDEN'}</button><button title="Mit Cloud synchronisieren" disabled={busyId===asset.id||asset.syncState==='synced'||!storage?.writable} onClick={()=>void sync(asset)}><Icon name={asset.syncState==='synced'?'cloud_done':busyId===asset.id?'sync':'cloud_upload'}/></button><button title="Favorit" onClick={async()=>{await window.desktop?.media.update(asset.id,{favorite:!asset.favorite});await refresh()}}><Icon name={asset.favorite?'star':'star_outline'}/></button><button title="Löschen" onClick={async()=>{if(confirm('Medium dauerhaft aus der Medienbibliothek löschen?')){await window.desktop?.media.remove(asset.id);await refresh()}}}><Icon name="delete"/></button></article>)}</div></div></div>
-}
-
-function SortableItem({item,active,live,onSelect,onContext,onAudio,canEdit}:{item:ServiceItem;active:boolean;live:boolean;onSelect:(event:React.MouseEvent|React.KeyboardEvent)=>void;onContext:(event:React.MouseEvent)=>void;onAudio:(event:React.MouseEvent<HTMLButtonElement>)=>void;canEdit:boolean}){
-  const {t}=useI18n();
-  const state=usePresentation(),[editingDuration,setEditingDuration]=useState(false),[durationValue,setDurationValue]=useState('');
-  const {attributes,listeners,setNodeRef,transform,transition,isDragging}=useSortable({id:item.id,disabled:!canEdit});
-  const icon:Record<ItemType,string>={song:'music_note',bible:'menu_book',content:'title',image:'image',video:'movie',videoInput:'videocam',audio:'audio_file',web:'language',pdf:'picture_as_pdf',timer:'timer',countdown:'hourglass_bottom',announcement:'campaign',slideshow:'slideshow',stageMessage:'speaker_notes',quickScreen:'bolt',liveQuiz:'quiz'};
-  const commit=()=>{const seconds=parseDuration(durationValue);if(seconds!==null)state.updateItem(item.id,{plannedDuration:seconds,autoAdvance:true,timing:{...item.timing,mode:'slide-duration',slideDurationSeconds:Math.max(1,Math.round(seconds/Math.max(1,item.slides.filter(slide=>slide.enabled).length))),totalDurationSeconds:seconds,autoAdvance:true}});setEditingDuration(false)};
-  const quizQuestions=item.type==='liveQuiz'?Number(item.metadata.questionCount??0):0;
-  return <div ref={setNodeRef} style={{transform:CSS.Transform.toString(transform),transition}} role="button" tabIndex={0} aria-selected={active} className={`service-item ${active?'active':''} ${live?'live-item':''} ${!item.enabled?'disabled-slide':''} ${isDragging?'dragging':''}`} onClick={onSelect} onKeyDown={event=>{if(event.key==='Enter')onSelect(event)}} onContextMenu={onContext}><span className="drag" {...attributes} {...listeners}><Icon name="drag_indicator"/></span><span className="service-thumb">{item.slides[0]&&<LazyThumbnail slide={item.slides[0]}/>}</span><span className="service-copy"><b><Icon name={icon[item.type]}/>{item.title}{item.linkedContentId&&<Icon name="link"/>}</b><small>{item.type==='liveQuiz'?`${quizQuestions} ${quizQuestions===1?'Frage':'Fragen'}`:<>{item.slides.length} {t(item.slides.length===1?'slidesOne':'slidesMany')}</>}{item.timing?.repeat&&<> · <Icon name="repeat"/></>}</small></span><button className={`item-audio-button ${item.backgroundAudio?.tracks.length?'configured':''} ${item.audioStopCue?'audio-stop-cue':''}`} title={item.audioStopCue?'Background Audio wird hier gestoppt':item.backgroundAudio?.tracks.length?`${item.backgroundAudio.tracks.length} Titel · Background Audio`:'Background Audio für dieses Element'} onClick={event=>{event.preventDefault();event.stopPropagation();onAudio(event)}}><Icon name={item.audioStopCue?'volume_off':'volume_up'}/></button>{editingDuration?<input className="duration-editor" autoFocus value={durationValue} onClick={event=>event.stopPropagation()} onChange={event=>setDurationValue(event.target.value)} onBlur={commit} onKeyDown={event=>{event.stopPropagation();if(event.key==='Enter')commit();if(event.key==='Escape')setEditingDuration(false)}}/>:<button className="item-duration" title="Dauer bearbeiten" onClick={event=>{event.stopPropagation();setDurationValue(formatDuration(itemDurationSeconds(item)||7));setEditingDuration(true)}}>{formatDuration(itemDurationSeconds(item))}</button>}{live&&<i className="live-dot"/>}</div>;
-}
-
-function addConfiguredVideoInput(sectionId:string,close:()=>void){const source=usePreferences.getState().videoInputSources.find(item=>item.enabled&&item.deviceId);if(!source){alert('Es ist keine verfügbare Videoquelle konfiguriert. Wähle zuerst unter Einstellungen → Videoeingang eine Kamera oder Capture Card aus.');return}const state=usePresentation.getState();state.addItem('videoInput',{title:source.name,section:'',sectionId,body:'',metadata:{sourceId:source.id,deviceId:source.deviceId}});usePresentation.getState().addElement('videoInput');const latest=usePresentation.getState(),element=latest.items.flatMap(item=>item.slides).find(slide=>slide.id===latest.selectedSlideId)?.elements.at(-1);if(element)latest.updateElement(element.id,{x:0,y:0,width:1920,height:1080,properties:{deviceId:source.deviceId,width:source.width,height:source.height,frameRate:source.frameRate,audioEnabled:source.audioEnabled,volume:source.volume,fit:source.fit,cropLeft:source.crop.left,cropRight:source.crop.right,cropTop:source.crop.top,cropBottom:source.crop.bottom,brightness:source.brightness,contrast:source.contrast,saturation:source.saturation,hue:source.hue}});close()}
-
-type QuizCreateValue={title:string;quizType:'quiz'|'poll';participation:'anonymous'|'name'};
-function QuizCreateDialog({cancel,create}:{cancel:()=>void;create:(value:QuizCreateValue)=>void}){
-  const [title,setTitle]=useState('Bibelquiz'),[quizType,setQuizType]=useState<QuizCreateValue['quizType']>('quiz'),[participation,setParticipation]=useState<QuizCreateValue['participation']>('anonymous');
-  const submit=(event:React.FormEvent)=>{event.preventDefault();const normalized=title.trim();if(normalized)create({title:normalized,quizType,participation})};
-  return <div className="modal-backdrop quiz-create-backdrop" onMouseDown={event=>{if(event.target===event.currentTarget)cancel()}}><form className="quiz-create-dialog" role="dialog" aria-modal="true" aria-labelledby="quiz-create-title" onSubmit={submit}><header><div><Icon name="quiz"/><h2 id="quiz-create-title">NEUES LIVEQUIZ</h2></div><button type="button" title="Schließen" onClick={cancel}><Icon name="close"/></button></header><main><label>Titel *<input autoFocus required value={title} onChange={event=>setTitle(event.target.value)}/></label><label>Typ<select value={quizType} onChange={event=>setQuizType(event.target.value as QuizCreateValue['quizType'])}><option value="quiz">Quiz</option><option value="poll">Umfrage</option></select></label><label>Teilnahme<select value={participation} onChange={event=>setParticipation(event.target.value as QuizCreateValue['participation'])}><option value="anonymous">Anonym</option><option value="name">Mit Name</option></select></label><p>Beim Erstellen wird nur die Quizdefinition angelegt. Eine Live-Session und ein Teilnahmecode entstehen erst beim bewussten Live-Start.</p></main><footer><button type="button" onClick={cancel}>ABBRECHEN</button><button className="primary" type="submit" disabled={!title.trim()}>ERSTELLEN</button></footer></form></div>
-}
-
-function addLiveQuiz(value:QuizCreateValue,sectionId='service'){
-  const questionId=crypto.randomUUID(),optionIds=[crypto.randomUUID(),crypto.randomUUID(),crypto.randomUUID(),crypto.randomUUID()],definition={id:crypto.randomUUID(),title:value.title,description:'',quizType:value.quizType,participation:value.participation,points:value.quizType==='quiz',defaultDurationSeconds:30,resultVisibility:'operator',questions:[{id:questionId,type:value.quizType==='poll'?'poll':'single',question:'Neue Frage',options:optionIds.map((id,index)=>({id,text:`Antwort ${index+1}`})),correctOptionIds:value.quizType==='quiz'?[optionIds[0]]:[],durationSeconds:30,points:100,allowAnswerChange:false,holdTextAnswers:true,disabled:false}]};
-  usePresentation.getState().addItem('liveQuiz',{title:value.title,section:'',sectionId,body:`Neue Frage\n\n${definition.questions[0].options.map((option,index)=>`${String.fromCharCode(65+index)}  ${option.text}`).join('\n')}`,metadata:{quizId:definition.id,quizType:value.quizType,participation:value.participation,questionCount:1,quizDefinition:JSON.stringify(definition)}})
-}
-
-function AddPopover({close}:{close:()=>void}){
-  const {t}=useI18n();
-  const state=usePresentation(),sectionId=state.items.find(item=>item.id===state.selectedItemId)?.sectionId??'service',[quizOpen,setQuizOpen]=useState(false);
-  const options:{type:ItemType;label:string;title:string;icon:string}[]=[
-    {type:'content',label:t('content'),title:t('newContent'),icon:'title'},{type:'image',label:'Bild',title:'Neues Bild',icon:'image'},{type:'video',label:'Video',title:'Neues Video',icon:'movie'},{type:'videoInput',label:'Videoeingang',title:'Neuer Videoeingang',icon:'videocam'},{type:'audio',label:'Audio',title:'Neues Audio',icon:'audio_file'},{type:'song',label:t('song'),title:t('newSong'),icon:'music_note'},{type:'bible',label:t('bible'),title:t('newBible'),icon:'menu_book'},{type:'liveQuiz',label:'LiveQuiz',title:'Neues LiveQuiz',icon:'quiz'},{type:'web',label:'Webseite',title:'Neue Webseite',icon:'language'},{type:'pdf',label:'PDF',title:'Neues PDF',icon:'picture_as_pdf'},{type:'timer',label:'Timer',title:'Neuer Timer',icon:'timer'},{type:'countdown',label:'Countdown',title:'Neuer Countdown',icon:'hourglass_bottom'},{type:'announcement',label:'Ankündigung',title:'Neue Ankündigung',icon:'campaign'},{type:'slideshow',label:'Slideshow',title:'Neue Slideshow',icon:'slideshow'},{type:'stageMessage',label:'Stage-Nachricht',title:'Neue Stage-Nachricht',icon:'speaker_notes'},{type:'quickScreen',label:'Schnellanzeige',title:'Neue Schnellanzeige',icon:'bolt'}
+function AddPopover({ close }: { close: () => void }) {
+  const { t } = useI18n();
+  const state = usePresentation(),
+    sectionId =
+      state.items.find((item) => item.id === state.selectedItemId)?.sectionId ??
+      "service",
+    [quizOpen, setQuizOpen] = useState(false);
+  const options: {
+    type: ItemType;
+    label: string;
+    title: string;
+    icon: string;
+  }[] = [
+    {
+      type: "content",
+      label: t("content"),
+      title: t("newContent"),
+      icon: "title",
+    },
+    { type: "image", label: "Bild", title: "Neues Bild", icon: "image" },
+    { type: "video", label: "Video", title: "Neues Video", icon: "movie" },
+    {
+      type: "videoInput",
+      label: "Videoeingang",
+      title: "Neuer Videoeingang",
+      icon: "videocam",
+    },
+    { type: "audio", label: "Audio", title: "Neues Audio", icon: "audio_file" },
+    { type: "song", label: t("song"), title: t("newSong"), icon: "music_note" },
+    {
+      type: "bible",
+      label: t("bible"),
+      title: t("newBible"),
+      icon: "menu_book",
+    },
+    {
+      type: "liveQuiz",
+      label: "LiveQuiz",
+      title: "Neues LiveQuiz",
+      icon: "quiz",
+    },
+    {
+      type: "web",
+      label: "Webseite",
+      title: "Neue Webseite",
+      icon: "language",
+    },
+    { type: "pdf", label: "PDF", title: "Neues PDF", icon: "picture_as_pdf" },
+    { type: "timer", label: "Timer", title: "Neuer Timer", icon: "timer" },
+    {
+      type: "countdown",
+      label: "Countdown",
+      title: "Neuer Countdown",
+      icon: "hourglass_bottom",
+    },
+    {
+      type: "announcement",
+      label: "Ankündigung",
+      title: "Neue Ankündigung",
+      icon: "campaign",
+    },
+    {
+      type: "slideshow",
+      label: "Slideshow",
+      title: "Neue Slideshow",
+      icon: "slideshow",
+    },
+    {
+      type: "stageMessage",
+      label: "Stage-Nachricht",
+      title: "Neue Stage-Nachricht",
+      icon: "speaker_notes",
+    },
+    {
+      type: "quickScreen",
+      label: "Schnellanzeige",
+      title: "Neue Schnellanzeige",
+      icon: "bolt",
+    },
   ];
-  async function addImported(option:typeof options[number]){
+  async function addImported(option: (typeof options)[number]) {
     void option;
-    await (window.desktop as any)?.mediaWindow?.open('select','item');
+    await (window.desktop as any)?.mediaWindow?.open("select", "item");
     close();
     return;
     /* Legacy-Direktimport entfernt: Dateien werden ausschließlich über den Cloud-Upload übernommen.
@@ -213,494 +1829,8263 @@ function AddPopover({close}:{close:()=>void}){
     if(option.type==='slideshow'){accepted.forEach((asset,index)=>{if(index)usePresentation.getState().addSlide();usePresentation.getState().updateSlide({title:asset.name,body:'',timing:{durationSeconds:7}});addVisual(asset)});const current=usePresentation.getState(),item=current.items.find(entry=>entry.id===current.selectedItemId);if(item)current.updateItem(item.id,{plannedDuration:accepted.length*7,autoAdvance:true,repeat:true,timing:{...item.timing,mode:'slide-duration',slideDurationSeconds:7,totalDurationSeconds:accepted.length*7,autoAdvance:true,repeat:true}})}else if(option.type==='pdf'){const range=prompt('PDF-Seiten (z. B. 1-5 oder 1)','1');if(range===null)return;const match=range.match(/^(\d+)(?:\s*-\s*(\d+))?$/),from=Math.max(1,Number(match?.[1]??1)),to=Math.max(from,Math.min(500,Number(match?.[2]??from)));for(let page=from;page<=to;page++){if(page>from)usePresentation.getState().addSlide();usePresentation.getState().updateSlide({title:`${first.name} · Seite ${page}`,body:''});addVisual(first,page)}}else addVisual(first);
     close(); */
   }
-  function addStructured(option:typeof options[number]){
-    if(option.type==='timer'||option.type==='countdown'){const duration=parseDuration(prompt('Dauer (Sekunden oder MM:SS)','05:00')??'');if(duration===null)return;const endText=option.type==='countdown'?prompt('Endtext','Wir beginnen gleich')??'':'';state.addItem(option.type,{title:option.title,section:'',sectionId,body:formatDuration(duration),metadata:{durationSeconds:duration,endText,mode:'countdown',target:'main',endBehavior:'hold'}});const current=usePresentation.getState(),item=current.items.find(entry=>entry.id===current.selectedItemId),text=item?.slides[0]?.elements.find(element=>element.type==='text');if(item)current.updateItem(item.id,{plannedDuration:duration,autoAdvance:true,timing:{...item.timing,mode:'scheduled',slideDurationSeconds:duration,totalDurationSeconds:duration,autoAdvance:true}});if(text)current.updateElement(text.id,{properties:{...text.properties,timerDurationSeconds:duration,timerEndText:endText,timerMode:'countdown'}});close();return}
-    if(option.type==='announcement'){const title=prompt('Titel der Ankündigung','Veranstaltung');if(!title)return;const description=prompt('Beschreibung','Herzliche Einladung')??'',date=prompt('Datum und Uhrzeit','Sonntag, 18:00 Uhr')??'',location=prompt('Ort','Philippusgemeinde Bielefeld')??'',link=prompt('Link für QR-Code (optional)','')??'';state.addItem('announcement',{title,section:'',sectionId,body:`${description}\n${date}\n${location}`,metadata:{description,date,location,link}});if(link){usePresentation.getState().addElement('qr');const current=usePresentation.getState(),element=current.items.flatMap(item=>item.slides).find(slide=>slide.id===current.selectedSlideId)?.elements.at(-1);if(element)current.updateElement(element.id,{x:1500,y:720,width:260,height:260,properties:{...element.properties,value:link}})}close();return}
-    if(option.type==='stageMessage'){const message=prompt('Nachricht für die Bühne','Bitte zur Bühne kommen');if(!message)return;const seconds=parseDuration(prompt('Anzeigedauer in Sekunden','10')??'')??10;state.addItem('stageMessage',{title:'Stage-Nachricht',section:'',sectionId,body:message,metadata:{target:'stage',durationSeconds:seconds}});close();return}
-    if(option.type==='quickScreen'){const enabled=usePreferences.getState().quickScreens.filter(entry=>entry.enabled);const name=prompt(`Schnellanzeige auswählen:\n${enabled.map(entry=>entry.name).join(', ')}`,enabled[0]?.name??'Schwarz');if(!name)return;const quick=enabled.find(entry=>entry.name.toLowerCase()===name.toLowerCase())??enabled[0];if(!quick)return;state.addItem('quickScreen',{title:quick.name,section:'',sectionId,body:quick.text??'',metadata:{quickScreenId:quick.id,quickScreenType:quick.type,targets:quick.targets.join(',')}});close();return}
+  function addStructured(option: (typeof options)[number]) {
+    if (option.type === "timer" || option.type === "countdown") {
+      const duration = parseDuration(
+        prompt("Dauer (Sekunden oder MM:SS)", "05:00") ?? "",
+      );
+      if (duration === null) return;
+      const endText =
+        option.type === "countdown"
+          ? (prompt("Endtext", "Wir beginnen gleich") ?? "")
+          : "";
+      state.addItem(option.type, {
+        title: option.title,
+        section: "",
+        sectionId,
+        body: formatDuration(duration),
+        metadata: {
+          durationSeconds: duration,
+          endText,
+          mode: "countdown",
+          target: "main",
+          endBehavior: "hold",
+        },
+      });
+      const current = usePresentation.getState(),
+        item = current.items.find(
+          (entry) => entry.id === current.selectedItemId,
+        ),
+        text = item?.slides[0]?.elements.find(
+          (element) => element.type === "text",
+        );
+      if (item)
+        current.updateItem(item.id, {
+          plannedDuration: duration,
+          autoAdvance: true,
+          timing: {
+            ...item.timing,
+            mode: "scheduled",
+            slideDurationSeconds: duration,
+            totalDurationSeconds: duration,
+            autoAdvance: true,
+          },
+        });
+      if (text)
+        current.updateElement(text.id, {
+          properties: {
+            ...text.properties,
+            timerDurationSeconds: duration,
+            timerEndText: endText,
+            timerMode: "countdown",
+          },
+        });
+      close();
+      return;
+    }
+    if (option.type === "announcement") {
+      const title = prompt("Titel der Ankündigung", "Veranstaltung");
+      if (!title) return;
+      const description = prompt("Beschreibung", "Herzliche Einladung") ?? "",
+        date = prompt("Datum und Uhrzeit", "Sonntag, 18:00 Uhr") ?? "",
+        location = prompt("Ort", "Philippusgemeinde Bielefeld") ?? "",
+        link = prompt("Link für QR-Code (optional)", "") ?? "";
+      state.addItem("announcement", {
+        title,
+        section: "",
+        sectionId,
+        body: `${description}\n${date}\n${location}`,
+        metadata: { description, date, location, link },
+      });
+      if (link) {
+        usePresentation.getState().addElement("qr");
+        const current = usePresentation.getState(),
+          element = current.items
+            .flatMap((item) => item.slides)
+            .find((slide) => slide.id === current.selectedSlideId)
+            ?.elements.at(-1);
+        if (element)
+          current.updateElement(element.id, {
+            x: 1500,
+            y: 720,
+            width: 260,
+            height: 260,
+            properties: { ...element.properties, value: link },
+          });
+      }
+      close();
+      return;
+    }
+    if (option.type === "stageMessage") {
+      const message = prompt(
+        "Nachricht für die Bühne",
+        "Bitte zur Bühne kommen",
+      );
+      if (!message) return;
+      const seconds =
+        parseDuration(prompt("Anzeigedauer in Sekunden", "10") ?? "") ?? 10;
+      state.addItem("stageMessage", {
+        title: "Stage-Nachricht",
+        section: "",
+        sectionId,
+        body: message,
+        metadata: { target: "stage", durationSeconds: seconds },
+      });
+      close();
+      return;
+    }
+    if (option.type === "quickScreen") {
+      const enabled = usePreferences
+        .getState()
+        .quickScreens.filter((entry) => entry.enabled);
+      const name = prompt(
+        `Schnellanzeige auswählen:\n${enabled.map((entry) => entry.name).join(", ")}`,
+        enabled[0]?.name ?? "Schwarz",
+      );
+      if (!name) return;
+      const quick =
+        enabled.find(
+          (entry) => entry.name.toLowerCase() === name.toLowerCase(),
+        ) ?? enabled[0];
+      if (!quick) return;
+      state.addItem("quickScreen", {
+        title: quick.name,
+        section: "",
+        sectionId,
+        body: quick.text ?? "",
+        metadata: {
+          quickScreenId: quick.id,
+          quickScreenType: quick.type,
+          targets: quick.targets.join(","),
+        },
+      });
+      close();
+      return;
+    }
     addOption(option);
   }
-  function addOption(option:typeof options[number]){
-    const metadata:Record<string,string|number|boolean>={};
-    if(option.type==='web'){metadata.url='';metadata.zoom=100;metadata.reloadOnLive=true;metadata.interaction=false;metadata.audio=false}
-    if(option.type==='video'){const source=prompt('Videoquelle: Datei, direkte URL, YouTube oder Vimeo','Direkte URL');if(!source)return;metadata.sourceType=source.toLowerCase().includes('youtube')?'youtube':source.toLowerCase().includes('vimeo')?'vimeo':source.toLowerCase().includes('datei')?'file':'url';if(metadata.sourceType==='file'){void addImported(option);return}const url=prompt('Video-URL','https://');if(!url)return;metadata.url=url;metadata.autoplay=true;metadata.volume=100;metadata.endBehavior='nextSlide'}
-    state.addItem(option.type,{title:option.title,section:'',sectionId,body:option.type==='content'?t('editContent'):'',metadata});
-    if(option.type==='web'){const current=usePresentation.getState();current.addElement('web');const latest=usePresentation.getState(),element=latest.items.flatMap(item=>item.slides).find(slide=>slide.id===latest.selectedSlideId)?.elements.at(-1);if(element)latest.updateElement(element.id,{x:0,y:0,width:1920,height:1080,properties:{src:'',zoom:100}})}
-    if(option.type==='video'&&metadata.url){const raw=String(metadata.url),sourceType=String(metadata.sourceType),youtube=raw.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{6,})/)?.[1],vimeo=raw.match(/vimeo\.com\/(?:video\/)?(\d+)/)?.[1],embedded=sourceType==='youtube'&&youtube?`https://www.youtube-nocookie.com/embed/${youtube}?autoplay=1&controls=0`:sourceType==='vimeo'&&vimeo?`https://player.vimeo.com/video/${vimeo}?autoplay=1`:raw,current=usePresentation.getState();current.addElement(sourceType==='youtube'||sourceType==='vimeo'?'web':'video');const latest=usePresentation.getState(),element=latest.items.flatMap(item=>item.slides).find(slide=>slide.id===latest.selectedSlideId)?.elements.at(-1);if(element)latest.updateElement(element.id,{x:0,y:0,width:1920,height:1080,properties:{src:embedded,autoplay:true,volume:100}})}
-    close()
+  function addOption(option: (typeof options)[number]) {
+    const metadata: Record<string, string | number | boolean> = {};
+    if (option.type === "web") {
+      metadata.url = "";
+      metadata.zoom = 100;
+      metadata.reloadOnLive = true;
+      metadata.interaction = false;
+      metadata.audio = false;
+    }
+    if (option.type === "video") {
+      const source = prompt(
+        "Videoquelle: Datei, direkte URL, YouTube oder Vimeo",
+        "Direkte URL",
+      );
+      if (!source) return;
+      metadata.sourceType = source.toLowerCase().includes("youtube")
+        ? "youtube"
+        : source.toLowerCase().includes("vimeo")
+          ? "vimeo"
+          : source.toLowerCase().includes("datei")
+            ? "file"
+            : "url";
+      if (metadata.sourceType === "file") {
+        void addImported(option);
+        return;
+      }
+      const url = prompt("Video-URL", "https://");
+      if (!url) return;
+      metadata.url = url;
+      metadata.autoplay = true;
+      metadata.volume = 100;
+      metadata.endBehavior = "nextSlide";
+    }
+    state.addItem(option.type, {
+      title: option.title,
+      section: "",
+      sectionId,
+      body: option.type === "content" ? t("editContent") : "",
+      metadata,
+    });
+    if (option.type === "web") {
+      const current = usePresentation.getState();
+      current.addElement("web");
+      const latest = usePresentation.getState(),
+        element = latest.items
+          .flatMap((item) => item.slides)
+          .find((slide) => slide.id === latest.selectedSlideId)
+          ?.elements.at(-1);
+      if (element)
+        latest.updateElement(element.id, {
+          x: 0,
+          y: 0,
+          width: 1920,
+          height: 1080,
+          properties: { src: "", zoom: 100 },
+        });
+    }
+    if (option.type === "video" && metadata.url) {
+      const raw = String(metadata.url),
+        sourceType = String(metadata.sourceType),
+        youtube = raw.match(
+          /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{6,})/,
+        )?.[1],
+        vimeo = raw.match(/vimeo\.com\/(?:video\/)?(\d+)/)?.[1],
+        embedded =
+          sourceType === "youtube" && youtube
+            ? `https://www.youtube-nocookie.com/embed/${youtube}?autoplay=1&controls=0`
+            : sourceType === "vimeo" && vimeo
+              ? `https://player.vimeo.com/video/${vimeo}?autoplay=1`
+              : raw,
+        current = usePresentation.getState();
+      current.addElement(
+        sourceType === "youtube" || sourceType === "vimeo" ? "web" : "video",
+      );
+      const latest = usePresentation.getState(),
+        element = latest.items
+          .flatMap((item) => item.slides)
+          .find((slide) => slide.id === latest.selectedSlideId)
+          ?.elements.at(-1);
+      if (element)
+        latest.updateElement(element.id, {
+          x: 0,
+          y: 0,
+          width: 1920,
+          height: 1080,
+          properties: { src: embedded, autoplay: true, volume: 100 },
+        });
+    }
+    close();
   }
-  function addSong(){const title=prompt('Songtitel','Neuer Song');if(!title)return;const lyrics=prompt('Songtext – Strophen durch eine Leerzeile trennen','Strophe 1\nSongtext\n\nRefrain\nSongtext');if(lyrics===null)return;const parts=lyrics.split(/\n\s*\n/).filter(Boolean);state.addItem('song',{title,section:'',sectionId,body:parts[0]??''});parts.slice(1).forEach((part,index)=>{usePresentation.getState().addSlide();usePresentation.getState().updateSlide({title:`Abschnitt ${index+2}`,body:part})});const author=prompt('Autor / Rechteinhaber (optional)','');usePresentation.getState().updateItem(usePresentation.getState().selectedItemId,{metadata:{author:author??'',copyright:'',source:'Lokale Songbibliothek'}});close()}
-  function addBible(){const reference=prompt('Bibelstelle','Johannes 3,16–18');if(!reference)return;const text=prompt('Bibeltext','Denn also hat Gott die Welt geliebt, dass er seinen eingeborenen Sohn gab, auf dass alle, die an ihn glauben, nicht verloren werden, sondern das ewige Leben haben.\n\nDenn Gott hat seinen Sohn nicht gesandt in die Welt, dass er die Welt richte, sondern dass die Welt durch ihn selig werde.\n\nWer an ihn glaubt, der wird nicht gerichtet; wer aber nicht glaubt, der ist schon gerichtet, denn er glaubt nicht an den Namen des eingeborenen Sohnes Gottes.');if(text===null)return;const verses=text.split(/\n\s*\n/).filter(Boolean);state.addItem('bible',{title:reference,section:'',sectionId,body:verses[0]??'',metadata:{reference,translation:'Luther 1912',offline:true}});verses.slice(1).forEach((verse,index)=>{usePresentation.getState().addSlide();usePresentation.getState().updateSlide({title:`${reference} · ${index+2}`,body:verse})});close()}
-  function createQuiz(value:QuizCreateValue){addLiveQuiz(value,sectionId);setQuizOpen(false);close()}
-  return <><div className="popover add-content-popover"><header><b>{t('addItem')}</b><button onClick={close}><Icon name="close"/></button></header>{options.map(option=><button key={option.type} onClick={()=>option.type==='liveQuiz'?setQuizOpen(true):option.type==='song'?addSong():option.type==='bible'?addBible():option.type==='videoInput'?addConfiguredVideoInput(sectionId,close):(['image','audio','pdf'].includes(option.type)?void addImported(option):addStructured(option))}><Icon name={option.icon}/><span>{option.label}</span></button>)}</div>{quizOpen&&<QuizCreateDialog cancel={()=>setQuizOpen(false)} create={createQuiz}/>}</>;
+  function addSong() {
+    const title = prompt("Songtitel", "Neuer Song");
+    if (!title) return;
+    const lyrics = prompt(
+      "Songtext – Strophen durch eine Leerzeile trennen",
+      "Strophe 1\nSongtext\n\nRefrain\nSongtext",
+    );
+    if (lyrics === null) return;
+    const parts = lyrics.split(/\n\s*\n/).filter(Boolean);
+    state.addItem("song", {
+      title,
+      section: "",
+      sectionId,
+      body: parts[0] ?? "",
+    });
+    parts.slice(1).forEach((part, index) => {
+      usePresentation.getState().addSlide();
+      usePresentation
+        .getState()
+        .updateSlide({ title: `Abschnitt ${index + 2}`, body: part });
+    });
+    const author = prompt("Autor / Rechteinhaber (optional)", "");
+    usePresentation
+      .getState()
+      .updateItem(usePresentation.getState().selectedItemId, {
+        metadata: {
+          author: author ?? "",
+          copyright: "",
+          source: "Lokale Songbibliothek",
+        },
+      });
+    close();
+  }
+  function addBible() {
+    const reference = prompt("Bibelstelle", "Johannes 3,16–18");
+    if (!reference) return;
+    const text = prompt(
+      "Bibeltext",
+      "Denn also hat Gott die Welt geliebt, dass er seinen eingeborenen Sohn gab, auf dass alle, die an ihn glauben, nicht verloren werden, sondern das ewige Leben haben.\n\nDenn Gott hat seinen Sohn nicht gesandt in die Welt, dass er die Welt richte, sondern dass die Welt durch ihn selig werde.\n\nWer an ihn glaubt, der wird nicht gerichtet; wer aber nicht glaubt, der ist schon gerichtet, denn er glaubt nicht an den Namen des eingeborenen Sohnes Gottes.",
+    );
+    if (text === null) return;
+    const verses = text.split(/\n\s*\n/).filter(Boolean);
+    state.addItem("bible", {
+      title: reference,
+      section: "",
+      sectionId,
+      body: verses[0] ?? "",
+      metadata: { reference, translation: "Luther 1912", offline: true },
+    });
+    verses.slice(1).forEach((verse, index) => {
+      usePresentation.getState().addSlide();
+      usePresentation
+        .getState()
+        .updateSlide({ title: `${reference} · ${index + 2}`, body: verse });
+    });
+    close();
+  }
+  function createQuiz(value: QuizCreateValue) {
+    addLiveQuiz(value, sectionId);
+    setQuizOpen(false);
+    close();
+  }
+  return (
+    <>
+      <div className="popover add-content-popover">
+        <header>
+          <b>{t("addItem")}</b>
+          <button onClick={close}>
+            <Icon name="close" />
+          </button>
+        </header>
+        {options.map((option) => (
+          <button
+            key={option.type}
+            onClick={() =>
+              option.type === "liveQuiz"
+                ? setQuizOpen(true)
+                : option.type === "song"
+                  ? addSong()
+                  : option.type === "bible"
+                    ? addBible()
+                    : option.type === "videoInput"
+                      ? addConfiguredVideoInput(sectionId, close)
+                      : ["image", "audio", "pdf"].includes(option.type)
+                        ? void addImported(option)
+                        : addStructured(option)
+            }
+          >
+            <Icon name={option.icon} />
+            <span>{option.label}</span>
+          </button>
+        ))}
+      </div>
+      {quizOpen && (
+        <QuizCreateDialog
+          cancel={() => setQuizOpen(false)}
+          create={createQuiz}
+        />
+      )}
+    </>
+  );
 }
 
-function minutesBetween(planned:string,current:string){const [ph,pm]=planned.split(':').map(Number),[ch,cm]=current.split(':').map(Number);return ch*60+cm-ph*60-pm}
-function ServiceTimePopover({time,onCancel,onSave}:{time:string;onCancel:()=>void;onSave:(time:string)=>void}){
-  const state=usePresentation(),[event,setEvent]=useState<ChurchEvent|null>(null);
-  const [draft,setDraft]=useState(time||'10:30');
-  const valid=/^([01]\d|2[0-3]):[0-5]\d$/.test(draft);
-  useEffect(()=>{if(!state.eventLink?.eventKey){setEvent(null);return}void getChurchEvent(state.eventLink.eventKey).then(setEvent).catch(()=>setEvent(null))},[state.eventLink?.eventKey]);
-  const save=()=>{onSave(draft);if(state.eventLink?.eventKey){state.markSaving();void updateEventDelay(state.eventLink.eventKey,draft).then(()=>state.markSaved()).catch(error=>{state.markSaveError();alert(`Die Veranstaltung konnte nicht synchronisiert werden.\n\n${String(error)}`)})}};
-  useEffect(()=>{const escape=(event:KeyboardEvent)=>{if(event.key==='Escape'){event.preventDefault();onCancel()}};addEventListener('keydown',escape);return()=>removeEventListener('keydown',escape)},[onCancel]);
-  return <div className="service-time-popover" role="dialog" aria-label="Servicezeit" onClick={event=>event.stopPropagation()} onPointerDown={event=>event.stopPropagation()}>
-    <header><Icon name="schedule"/><b>SERVICEZEIT</b><button className="help-dot" type="button" title="Hilfe: Servicezeit" onClick={()=>window.dispatchEvent(new CustomEvent('gottesdienstregie:open-help',{detail:'Servicezeit & Verspätung'}))}>?</button></header>
-    {event&&<p><b>Planmäßig:</b> {event.start_uhrzeit} Uhr</p>}
-    <label htmlFor="service-time-value">{event?'Neue Servicezeit':'Startzeit'}</label>
-    <div className="service-time-list"><div><input id="service-time-value" autoFocus type="time" step="60" value={draft} onChange={event=>setDraft(event.target.value)} onKeyDown={event=>{if(event.key==='Enter'&&valid)save()}}/></div></div>
-    {event&&valid&&<div className="service-delay-summary"><span>Verspätung:</span><b>{minutesBetween(event.start_uhrzeit,draft)>=0?'+':''}{minutesBetween(event.start_uhrzeit,draft)} Min.</b><span>Voraussichtliches Ende:</span><b>{(()=>{const [h,m]=event.ende_uhrzeit.split(':').map(Number),total=h*60+m+minutesBetween(event.start_uhrzeit,draft);return `${String(Math.floor((total+1440)%1440/60)).padStart(2,'0')}:${String((total+1440)%60).padStart(2,'0')} Uhr`})()}</b></div>}
-    <footer><button type="button" onClick={event=>{event.preventDefault();event.stopPropagation();onCancel()}}>ABBRECHEN</button><button className="primary" type="button" disabled={!valid} onClick={event=>{event.preventDefault();event.stopPropagation();save()}}>ÜBERNEHMEN</button></footer>
-  </div>
+function minutesBetween(planned: string, current: string) {
+  const [ph, pm] = planned.split(":").map(Number),
+    [ch, cm] = current.split(":").map(Number);
+  return ch * 60 + cm - ph * 60 - pm;
 }
-
-function formatServiceTime(value:string){return value||'ZEIT FESTLEGEN'}
-
-function PresentationEventHeader(){
-  const state=usePresentation(),root=useRef<HTMLElement>(null),[editing,setEditing]=useState(false),[draft,setDraft]=useState(state.title),[open,setOpen]=useState(false),[events,setEvents]=useState<ChurchEvent[]>([]),[linked,setLinked]=useState<ChurchEvent|null>(null),[pending,setPending]=useState<ChurchEvent|null>(null),[query,setQuery]=useState(''),[loading,setLoading]=useState(false),[error,setError]=useState('');
-  useEffect(()=>setDraft(state.title),[state.title]);
-  useEffect(()=>{if(!state.eventLink?.eventKey){setLinked(null);return}void getChurchEvent(state.eventLink.eventKey).then(setLinked).catch(()=>setLinked(null))},[state.eventLink?.eventKey,state.serviceTime]);
-  const saveTitle=()=>{const title=draft.trim().slice(0,500);if(title&&title!==state.title)state.updatePresentation({title});else setDraft(state.title);setEditing(false)};
-  const showPicker=()=>{setPending(linked);setOpen(true);setLoading(true);setError('');void listChurchEvents().then(setEvents).catch(()=>setError('Veranstaltungen konnten nicht geladen werden. Bitte prüfe die Verbindung und versuche es erneut.')).finally(()=>setLoading(false))};
-  const saveLink=()=>{if(!pending||isCancelled(pending))return;state.updatePresentation({eventId:pending.eventKey,eventLink:{eventKey:pending.eventKey,titleSnapshot:pending.titel,linkedAt:new Date().toISOString()},date:pending.start_datum,serviceTime:pending.start_uhrzeit});setLinked(pending);setOpen(false)};
-  useEffect(()=>{if(!open)return;const close=(event:PointerEvent)=>{if(root.current&&!root.current.contains(event.target as Node))setOpen(false)},escape=(event:KeyboardEvent)=>{if(event.key==='Escape')setOpen(false)};addEventListener('pointerdown',close);addEventListener('keydown',escape);return()=>{removeEventListener('pointerdown',close);removeEventListener('keydown',escape)}},[open]);
-  const todayDate=new Date(),today=todayDate.toLocaleDateString('sv-SE'),latestDate=new Date(todayDate);latestDate.setFullYear(latestDate.getFullYear()+3);const latest=latestDate.toLocaleDateString('sv-SE'),visible=events.filter(event=>event.start_datum>=today&&event.start_datum<=latest&&`${event.titel} ${event.start_datum} ${event.start_uhrzeit}`.toLowerCase().includes(query.toLowerCase())).sort((a,b)=>`${a.start_datum}T${a.start_uhrzeit||'00:00'}`.localeCompare(`${b.start_datum}T${b.start_uhrzeit||'00:00'}`));
-  const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);const tomorrowKey=tomorrow.toLocaleDateString('sv-SE'),group=(event:ChurchEvent)=>event.start_datum===today?'HEUTE':event.start_datum===tomorrowKey?'MORGEN':'KOMMEND';
-  const delay=linked?minutesBetween(linked.start_uhrzeit,state.serviceTime):0,format=(event:ChurchEvent)=>new Intl.DateTimeFormat('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date(`${event.start_datum}T12:00:00`));
-  return <section className="presentation-event-header" ref={root} onClick={event=>event.stopPropagation()}>
-    {editing?<input className="presentation-title-input" autoFocus maxLength={500} value={draft} onChange={event=>setDraft(event.target.value.slice(0,500))} onBlur={saveTitle} onKeyDown={event=>{if(event.key==='Enter')saveTitle();if(event.key==='Escape'){setDraft(state.title);setEditing(false)}}}/>:<button className="presentation-title-button" title="Präsentationstitel bearbeiten · maximal 500 Zeichen" onClick={()=>setEditing(true)}>{state.title}</button>}
-    <div className="event-link-row"><button className={`event-link-button ${isCancelled(linked)?'cancelled':''}`} title={linked?`Planmäßig: ${linked.start_uhrzeit} Uhr\nAktuell: ${state.serviceTime} Uhr${isCancelled(linked)?'\nDiese Veranstaltung fällt aus.':''}`:'Bitte eine Veranstaltung verknüpfen'} onClick={()=>open?setOpen(false):showPicker()}><Icon name={isCancelled(linked)?'warning':'calendar_month'}/><span>{linked?.titel??'Veranstaltung verknüpfen'}{linked&&` · ${state.serviceTime} Uhr`}{delay!==0&&` · ${delay>0?'+':''}${delay} Min.`}{isCancelled(linked)&&<b className="event-cancelled-label">Fällt aus!</b>}</span><Icon name="arrow_drop_down"/></button>
-    <button className="event-help-button help-dot" title="Hilfe: Veranstaltungsverknüpfung" onClick={()=>window.dispatchEvent(new CustomEvent('gottesdienstregie:open-help',{detail:'Veranstaltung verknüpfen'}))}>?</button>
+function ServiceTimePopover({
+  time,
+  onCancel,
+  onSave,
+}: {
+  time: string;
+  onCancel: () => void;
+  onSave: (time: string) => void;
+}) {
+  const state = usePresentation(),
+    [event, setEvent] = useState<ChurchEvent | null>(null);
+  const [draft, setDraft] = useState(time || "10:30");
+  const valid = /^([01]\d|2[0-3]):[0-5]\d$/.test(draft);
+  useEffect(() => {
+    if (!state.eventLink?.eventKey) {
+      setEvent(null);
+      return;
+    }
+    void getChurchEvent(state.eventLink.eventKey)
+      .then(setEvent)
+      .catch(() => setEvent(null));
+  }, [state.eventLink?.eventKey]);
+  const save = () => {
+    onSave(draft);
+    if (state.eventLink?.eventKey) {
+      state.markSaving();
+      void updateEventDelay(state.eventLink.eventKey, draft)
+        .then(() => state.markSaved())
+        .catch((error) => {
+          state.markSaveError();
+          alert(
+            `Die Veranstaltung konnte nicht synchronisiert werden.\n\n${String(error)}`,
+          );
+        });
+    }
+  };
+  useEffect(() => {
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onCancel();
+      }
+    };
+    addEventListener("keydown", escape);
+    return () => removeEventListener("keydown", escape);
+  }, [onCancel]);
+  return (
+    <div
+      className="service-time-popover"
+      role="dialog"
+      aria-label="Servicezeit"
+      onClick={(event) => event.stopPropagation()}
+      onPointerDown={(event) => event.stopPropagation()}
+    >
+      <header>
+        <Icon name="schedule" />
+        <b>SERVICEZEIT</b>
+        <button
+          className="help-dot"
+          type="button"
+          title="Hilfe: Servicezeit"
+          onClick={() =>
+            window.dispatchEvent(
+              new CustomEvent("gottesdienstregie:open-help", {
+                detail: "Servicezeit & Verspätung",
+              }),
+            )
+          }
+        >
+          ?
+        </button>
+      </header>
+      {event && (
+        <p>
+          <b>Planmäßig:</b> {event.start_uhrzeit} Uhr
+        </p>
+      )}
+      <label htmlFor="service-time-value">
+        {event ? "Neue Servicezeit" : "Startzeit"}
+      </label>
+      <div className="service-time-list">
+        <div>
+          <input
+            id="service-time-value"
+            autoFocus
+            type="time"
+            step="60"
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && valid) save();
+            }}
+          />
+        </div>
+      </div>
+      {event && valid && (
+        <div className="service-delay-summary">
+          <span>Verspätung:</span>
+          <b>
+            {minutesBetween(event.start_uhrzeit, draft) >= 0 ? "+" : ""}
+            {minutesBetween(event.start_uhrzeit, draft)} Min.
+          </b>
+          <span>Voraussichtliches Ende:</span>
+          <b>
+            {(() => {
+              const [h, m] = event.ende_uhrzeit.split(":").map(Number),
+                total = h * 60 + m + minutesBetween(event.start_uhrzeit, draft);
+              return `${String(Math.floor(((total + 1440) % 1440) / 60)).padStart(2, "0")}:${String((total + 1440) % 60).padStart(2, "0")} Uhr`;
+            })()}
+          </b>
+        </div>
+      )}
+      <footer>
+        <button
+          type="button"
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onCancel();
+          }}
+        >
+          ABBRECHEN
+        </button>
+        <button
+          className="primary"
+          type="button"
+          disabled={!valid}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            save();
+          }}
+        >
+          ÜBERNEHMEN
+        </button>
+      </footer>
     </div>
-    {open&&<div className="event-picker"><header><b>VERANSTALTUNG VERKNÜPFEN</b><button onClick={()=>setOpen(false)}><Icon name="close"/></button></header>{linked&&<div className="linked-event-actions"><button onClick={()=>alert(`${linked.titel}\n${format(linked)} · ${linked.start_uhrzeit}–${linked.ende_uhrzeit} Uhr${isCancelled(linked)?'\n\nWARNUNG: Diese Veranstaltung fällt aus.':''}`)}>VERANSTALTUNG ANZEIGEN</button><button onClick={()=>{state.updatePresentation({eventId:'',eventLink:undefined});setLinked(null);setPending(null)}}>VERKNÜPFUNG LÖSEN</button></div>}<label><Icon name="search"/><input autoFocus placeholder="Veranstaltung suchen" value={query} onChange={event=>setQuery(event.target.value)}/></label>{loading?<p className="event-loading"><span className="media-loading"/> Veranstaltungen werden geladen …</p>:error?<p className="error">{error}</p>:visible.length?<div className="event-results">{visible.map((event,index)=>{const cancelled=isCancelled(event),heading=group(event),previous=index?group(visible[index-1]):'';return <div key={event.eventKey}>{heading!==previous&&<b>{heading}</b>}<button className={`${cancelled?'cancelled ':''}${pending?.eventKey===event.eventKey?'selected':''}`} disabled={cancelled} aria-disabled={cancelled} title={cancelled?'Diese Veranstaltung fällt aus und kann nicht mit einer Präsentation verknüpft werden.':''} onClick={()=>setPending(event)}><strong>{event.titel}{cancelled&&<em className="event-cancelled-label">Fällt aus!</em>}</strong><small>{format(event)} · {event.ganztag?'Ganztägig':`${event.start_uhrzeit} Uhr`}</small></button></div>})}</div>:<p className="event-empty">Keine passende Veranstaltung gefunden.</p>}<footer><button type="button" onClick={()=>setOpen(false)}>ABBRECHEN</button><button className="primary" type="button" disabled={!pending||isCancelled(pending)||pending.eventKey===linked?.eventKey} onClick={saveLink}>ÄNDERUNG SPEICHERN</button></footer></div>}
-  </section>
+  );
 }
 
-function OrderOfService({canEdit,onTake}:{canEdit:boolean;onTake:(itemId:string,slideId:string)=>void}){
-  const {t}=useI18n(),state=usePresentation(),items=state.items,selected=state.selectedItemId,live=state.liveItemId;
-  const theme=usePreferences(value=>value.theme),storedServiceShortcuts=usePreferences(value=>value.keyboardShortcuts),serviceShortcuts=useMemo(()=>({...defaultKeyboardShortcuts,...storedServiceShortcuts}),[storedServiceShortcuts]);
-  const [adding,setAdding]=useState(false),[timeEditor,setTimeEditor]=useState(false),[renameTarget,setRenameTarget]=useState<ServiceItem|null>(null),[audioPanel,setAudioPanel]=useState<{targetType:'section'|'serviceItem';targetId:string}|null>(null),[audioMenu,setAudioMenu]=useState<{targetType:'section'|'serviceItem';targetId:string;x:number;y:number}|null>(null),[collapsed,setCollapsed]=useState<Record<string,boolean>>(()=>{try{return JSON.parse(localStorage.getItem('gottesdienstregie.section-collapse')??'{}')}catch{return{}}});
-  const contextIds=useRef<string[]>([]);
-  useEffect(()=>localStorage.setItem('gottesdienstregie.section-collapse',JSON.stringify(collapsed)),[collapsed]);
-  function end(e:DragEndEvent){if(canEdit&&e.over&&e.active.id!==e.over.id)state.reorder(String(e.active.id),String(e.over.id))}
-  function toggleSection(event:React.MouseEvent,sectionId:string){event.preventDefault();event.stopPropagation();setCollapsed(value=>({...value,[sectionId]:!value[sectionId]}))}
-  function openTimes(event:React.MouseEvent){event.preventDefault();event.stopPropagation();if(canEdit)setTimeEditor(true)}
-  function openAudio(event:React.MouseEvent<HTMLButtonElement>,targetType:'section'|'serviceItem',targetId:string,configured:boolean){event.preventDefault();event.stopPropagation();if(!canEdit)return;if(configured){setAudioMenu(null);setAudioPanel({targetType,targetId});return}const rect=event.currentTarget.getBoundingClientRect();setAudioMenu({targetType,targetId,x:Math.max(8,Math.min(rect.left,window.innerWidth-250)),y:Math.min(rect.bottom+3,window.innerHeight-130)})}
-  async function execute(command:string){const ids=contextIds.current,item=items.find(entry=>entry.id===ids[0]);if(!item)return;if(command==='cut')serviceItemCommands.cut(ids);else if(command==='copy')serviceItemCommands.copy(ids);else if(command==='paste')serviceItemCommands.paste(item.id);else if(command==='duplicate')serviceItemCommands.duplicate(ids);else if(command==='delete'){if(ids.length===1||confirm(`${ids.length} Elemente wirklich löschen?`))serviceItemCommands.remove(ids)}else if(command==='hide')serviceItemCommands.hide(ids,true);else if(command==='show')serviceItemCommands.hide(ids,false);else if(command==='group')serviceItemCommands.group(ids);else if(command==='ungroup')serviceItemCommands.ungroup(ids);else if(command==='undo')serviceItemCommands.undo();else if(command==='redo')serviceItemCommands.redo();else if(command==='rename')setRenameTarget(item);else if(command==='link')serviceItemCommands.linked(item.id);else if(command.startsWith('link:'))serviceItemCommands.linked(item.id,command.slice(5));else if(command==='copy-image'){const slide=serviceItemCommands.slideFor(item.id);if(slide)await (window.desktop as any)?.slideExport?.copy(slideSvgDataUrl(slide))}else if(command==='save-image'){const slide=serviceItemCommands.slideFor(item.id);if(slide)await (window.desktop as any)?.slideExport?.save(slideSvgDataUrl(slide),`${state.title}_${item.title}_Folie-${String(slide.order+1).padStart(2,'0')}`,'png')}else if(command==='on-air'){const slide=serviceItemCommands.slideFor(item.id);if(slide)onTake(item.id,slide.id)}}
-  useEffect(()=>(window.desktop as any)?.serviceContext?.onCommand((id:string)=>void execute(id)),[items,state.history.length,state.future.length]);
-  useEffect(()=>{const key=(event:KeyboardEvent)=>{const target=event.target as HTMLElement|null;if(!canEdit||target?.matches('input,textarea,select,[contenteditable="true"]'))return;const mod=event.ctrlKey||event.metaKey,ids=state.selectedServiceItemIds.length?state.selectedServiceItemIds:[state.selectedItemId].filter(Boolean);if(!ids.length)return;if(mod&&event.key.toLowerCase()==='x'){event.preventDefault();serviceItemCommands.cut(ids)}else if(mod&&event.key.toLowerCase()==='c'){event.preventDefault();serviceItemCommands.copy(ids)}else if(mod&&event.key.toLowerCase()==='v'){event.preventDefault();serviceItemCommands.paste(state.selectedItemId)}else if(mod&&event.key.toLowerCase()==='d'){event.preventDefault();serviceItemCommands.duplicate(ids)}else if(matchesShortcut(event,serviceShortcuts.renameServiceItem)&&ids.length===1){event.preventDefault();const item=items.find(entry=>entry.id===ids[0]);if(item)setRenameTarget(item)}};addEventListener('keydown',key);return()=>removeEventListener('keydown',key)},[canEdit,state.selectedItemId,state.selectedServiceItemIds,items,serviceShortcuts.renameServiceItem]);
-  function selectItem(event:React.MouseEvent|React.KeyboardEvent,item:ServiceItem){if(('ctrlKey'in event&&(event.ctrlKey||event.metaKey))){const next=state.selectedServiceItemIds.includes(item.id)?state.selectedServiceItemIds.filter(id=>id!==item.id):[...state.selectedServiceItemIds,item.id];state.selectServiceItems(next,item.id);return}state.select(item.id)}
-  function openContext(event:React.MouseEvent,item:ServiceItem){event.preventDefault();event.stopPropagation();if(!canEdit)return;const current=state.selectedServiceItemIds.includes(item.id)&&state.selectedServiceItemIds.length?state.selectedServiceItemIds:[item.id];if(!state.selectedServiceItemIds.includes(item.id))state.selectServiceItems(current,item.id);contextIds.current=current;const multiple=current.length>1,selectedItems=items.filter(entry=>current.includes(entry.id)),sameSection=new Set(selectedItems.map(entry=>entry.sectionId)).size===1,allHidden=selectedItems.every(entry=>!entry.enabled),hasGroup=selectedItems.some(entry=>entry.groupId),visual=!['video','audio','videoInput','stageMessage','quickScreen'].includes(item.type)&&!item.audioStopCue,linkable=['content','image','song','bible','announcement','slideshow'].includes(item.type),sep={type:'separator' as const};const entries:any[]=[];if(multiple)entries.push({label:`${current.length} ELEMENTE AUSGEWÄHLT`,enabled:false},sep);entries.push({id:'cut',label:'Ausschneiden',accelerator:'CmdOrCtrl+X'},{id:'copy',label:'Kopieren',accelerator:'CmdOrCtrl+C'},{id:'paste',label:'Einfügen',accelerator:'CmdOrCtrl+V',enabled:serviceItemCommands.canPaste()},{id:'duplicate',label:multiple?`${current.length} Elemente duplizieren`:'Duplizieren',accelerator:'CmdOrCtrl+D'},{id:'delete',label:multiple?`${current.length} Elemente löschen`:'Löschen'},sep);if(!multiple&&linkable){entries.push({id:'link',label:'Verknüpftes Element erstellen'},{label:'Verknüpftes Element in',submenu:state.sections.filter(section=>section.id!==item.sectionId).map(section=>({id:`link:${section.id}`,label:section.title}))},sep)}entries.push({id:hasGroup?'ungroup':'group',label:hasGroup?'Gruppierung aufheben':'Gruppieren',enabled:hasGroup||(multiple&&sameSection)},{id:allHidden?'show':'hide',label:allHidden?'Einblenden':'Ausblenden'},sep,{id:'undo',label:state.history.length?'Rückgängig: Präsentation bearbeiten':'Rückgängig',accelerator:'CmdOrCtrl+Z',enabled:state.history.length>0},{id:'redo',label:state.future.length?'Wiederholen: Präsentation bearbeiten':'Wiederholen',accelerator:/Mac|iPhone|iPad/.test(navigator.platform)?'Cmd+Shift+Z':'Ctrl+Y',enabled:state.future.length>0});if(!multiple){entries.push(sep,{id:'rename',label:'Element umbenennen …',accelerator:'CmdOrCtrl+R'});if(visual)entries.push({id:'copy-image',label:'Als Bild kopieren'},{id:'save-image',label:'Als Bild speichern …'});entries.push(sep,{id:'on-air',label:'Mit dieser Folie ON AIR gehen'})}void (window.desktop as any)?.serviceContext?.open({x:event.clientX,y:event.clientY},entries,theme)}
-  const audioTarget=audioPanel?.targetType==='section'?state.sections.find(section=>section.id===audioPanel.targetId):items.find(item=>item.id===audioPanel?.targetId),audioConfig=audioTarget?.backgroundAudio;
-  return <aside className="service" onClick={()=>{setAudioMenu(null);setTimeEditor(false)}}><PresentationEventHeader/>
-    <header><b>{t('orderOfService')}</b><button className="icon-button" disabled={!canEdit} onClick={event=>{event.preventDefault();event.stopPropagation();setAdding(value=>!value)}} title={t(canEdit?'addItem':'noEditPermission')}><Icon name="add"/></button>{adding&&canEdit&&<AddPopover close={()=>setAdding(false)}/>}</header>
-    <div className="service-list"><DndContext collisionDetection={closestCenter} onDragEnd={end}><SortableContext items={items.map(item=>item.id)} strategy={verticalListSortingStrategy}>{state.sections.map(section=>{const sectionItems=items.filter(item=>item.sectionId===section.id).sort((a,b)=>a.order-b.order),duration=sectionItems.reduce((sum,item)=>sum+itemDurationSeconds(item),0),isCollapsed=collapsed[section.id]===true,audio=section.backgroundAudio,missing=audio?.tracks.some(track=>track.status==='missing');return <section className="service-section" key={section.id}><div className="section-label"><button className="section-collapse" type="button" title={isCollapsed?'Abschnitt aufklappen':'Abschnitt einklappen'} onClick={event=>toggleSection(event,section.id)}><Icon name={isCollapsed?'arrow_right':'arrow_drop_down'}/></button><button className="section-title" type="button" onClick={event=>toggleSection(event,section.id)}>{section.title}</button><button className={`audio-header-button ${audio?.tracks.length?'configured':''} ${audio?.muted?'muted':''} ${missing?'missing':''}`} title={missing?'Audio konnte nicht vorbereitet werden':audio?.tracks.length?`${audio.tracks.length} Titel · Background Audio`:'Background Audio hinzufügen'} onClick={event=>openAudio(event,'section',section.id,Boolean(audio?.tracks.length))}><Icon name={missing?'warning':audio?.muted?'volume_off':'volume_up'}/></button>{section.id==='service'?<div className="service-time-host"><button className="service-time-control" type="button" disabled={!canEdit} onClick={openTimes}><Icon name="schedule"/><span>{formatServiceTime(state.serviceTime)}</span></button>{timeEditor&&<ServiceTimePopover time={state.serviceTime} onCancel={()=>setTimeEditor(false)} onSave={serviceTime=>{state.updatePresentation({serviceTime});setTimeEditor(false)}}/>}</div>:<output>{formatDuration(duration)}</output>}</div>{!isCollapsed&&sectionItems.map(item=><SortableItem key={item.id} item={item} active={state.selectedServiceItemIds.includes(item.id)||selected===item.id} live={live===item.id} canEdit={canEdit} onSelect={event=>selectItem(event,item)} onAudio={event=>openAudio(event,'serviceItem',item.id,Boolean(item.backgroundAudio?.tracks.length))} onContext={event=>openContext(event,item)}/>)}</section>})}</SortableContext></DndContext></div>
-    {audioMenu&&<div className="audio-context-menu" style={{left:audioMenu.x,top:audioMenu.y}} onClick={event=>event.stopPropagation()}><button onClick={()=>{void (window.desktop as any)?.mediaWindow?.open('select','audio',audioMenu.targetType,audioMenu.targetId);setAudioMenu(null)}}><Icon name="audio_file"/> AUDIO DURCHSUCHEN</button><button onClick={()=>{void (window.desktop as any)?.mediaWindow?.open('select','audio',audioMenu.targetType,audioMenu.targetId);setAudioMenu(null)}}><Icon name="upload_file"/> IMPORTIEREN …</button>{audioMenu.targetType==='serviceItem'&&<button className="separator" onClick={()=>{state.toggleAudioStopCue(audioMenu.targetId);setAudioMenu(null)}}><Icon name="volume_off"/> {items.find(item=>item.id===audioMenu.targetId)?.audioStopCue?'STOP-CUE ENTFERNEN':'BACKGROUND AUDIO STOPPEN'}</button>}</div>}
-    {audioPanel&&audioTarget&&<BackgroundAudioPanel title={audioTarget.title} targetType={audioPanel.targetType} targetId={audioPanel.targetId} value={audioConfig} onChange={value=>audioPanel.targetType==='section'?state.updateSectionAudio(audioPanel.targetId,value):state.updateItemAudio(audioPanel.targetId,value)} onClose={()=>setAudioPanel(null)}/>} {renameTarget&&<ServiceItemRenameDialog item={renameTarget} close={()=>setRenameTarget(null)}/>}</aside>;
+function formatServiceTime(value: string) {
+  if (!value) return "ZEIT FESTLEGEN";
+  const hour = Number(value.split(":")[0]);
+  return `${value} (${hour < 12 ? "VORM." : "NACHM."})`;
 }
 
-function LazyThumbnail({slide}:{slide:Slide}){
-  const ref=useRef<HTMLDivElement>(null),[visible,setVisible]=useState(false);
-  useEffect(()=>{const node=ref.current;if(!node)return;const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){setVisible(true);observer.disconnect()}},{rootMargin:'360px'});observer.observe(node);return()=>observer.disconnect()},[]);
-  return <div ref={ref} className="lazy-thumbnail">{visible&&<SlideRenderer slide={slide} mode="thumbnail"/>}</div>;
+function PresentationEventHeader() {
+  const state = usePresentation(),
+    root = useRef<HTMLElement>(null),
+    [editing, setEditing] = useState(false),
+    [draft, setDraft] = useState(state.title),
+    [open, setOpen] = useState(false),
+    [events, setEvents] = useState<ChurchEvent[]>([]),
+    [linked, setLinked] = useState<ChurchEvent | null>(null),
+    [pending, setPending] = useState<ChurchEvent | null>(null),
+    [query, setQuery] = useState(""),
+    [loading, setLoading] = useState(false),
+    [error, setError] = useState("");
+  useEffect(() => setDraft(state.title), [state.title]);
+  useEffect(() => {
+    if (!state.eventLink?.eventKey) {
+      setLinked(null);
+      return;
+    }
+    void getChurchEvent(state.eventLink.eventKey)
+      .then(setLinked)
+      .catch(() => setLinked(null));
+  }, [state.eventLink?.eventKey, state.serviceTime]);
+  const saveTitle = () => {
+    const title = draft.trim().slice(0, 500);
+    if (title && title !== state.title) state.updatePresentation({ title });
+    else setDraft(state.title);
+    setEditing(false);
+  };
+  const showPicker = () => {
+    setPending(linked);
+    setOpen(true);
+    setLoading(true);
+    setError("");
+    void listChurchEvents()
+      .then(setEvents)
+      .catch(() =>
+        setError(
+          "Veranstaltungen konnten nicht geladen werden. Bitte prüfe die Verbindung und versuche es erneut.",
+        ),
+      )
+      .finally(() => setLoading(false));
+  };
+  const saveLink = () => {
+    if (!pending || isCancelled(pending)) return;
+    state.updatePresentation({
+      eventId: pending.eventKey,
+      eventLink: {
+        eventKey: pending.eventKey,
+        titleSnapshot: pending.titel,
+        linkedAt: new Date().toISOString(),
+      },
+      date: pending.start_datum,
+      serviceTime: pending.start_uhrzeit,
+    });
+    setLinked(pending);
+    setOpen(false);
+  };
+  useEffect(() => {
+    if (!open) return;
+    const close = (event: PointerEvent) => {
+        if (root.current && !root.current.contains(event.target as Node))
+          setOpen(false);
+      },
+      escape = (event: KeyboardEvent) => {
+        if (event.key === "Escape") setOpen(false);
+      };
+    addEventListener("pointerdown", close);
+    addEventListener("keydown", escape);
+    return () => {
+      removeEventListener("pointerdown", close);
+      removeEventListener("keydown", escape);
+    };
+  }, [open]);
+  const todayDate = new Date(),
+    today = todayDate.toLocaleDateString("sv-SE"),
+    latestDate = new Date(todayDate);
+  latestDate.setFullYear(latestDate.getFullYear() + 3);
+  const latest = latestDate.toLocaleDateString("sv-SE"),
+    visible = events
+      .filter(
+        (event) =>
+          event.start_datum >= today &&
+          event.start_datum <= latest &&
+          `${event.titel} ${event.start_datum} ${event.start_uhrzeit}`
+            .toLowerCase()
+            .includes(query.toLowerCase()),
+      )
+      .sort((a, b) =>
+        `${a.start_datum}T${a.start_uhrzeit || "00:00"}`.localeCompare(
+          `${b.start_datum}T${b.start_uhrzeit || "00:00"}`,
+        ),
+      );
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowKey = tomorrow.toLocaleDateString("sv-SE"),
+    group = (event: ChurchEvent) =>
+      event.start_datum === today
+        ? "HEUTE"
+        : event.start_datum === tomorrowKey
+          ? "MORGEN"
+          : "KOMMEND";
+  const delay = linked
+      ? minutesBetween(linked.start_uhrzeit, state.serviceTime)
+      : 0,
+    format = (event: ChurchEvent) =>
+      new Intl.DateTimeFormat("de-DE", {
+        weekday: "short",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }).format(new Date(`${event.start_datum}T12:00:00`));
+  return (
+    <section
+      className="presentation-event-header"
+      ref={root}
+      onClick={(event) => event.stopPropagation()}
+    >
+      {editing ? (
+        <input
+          className="presentation-title-input"
+          autoFocus
+          maxLength={500}
+          value={draft}
+          onChange={(event) => setDraft(event.target.value.slice(0, 500))}
+          onBlur={saveTitle}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") saveTitle();
+            if (event.key === "Escape") {
+              setDraft(state.title);
+              setEditing(false);
+            }
+          }}
+        />
+      ) : (
+        <button
+          className="presentation-title-button"
+          title="Präsentationstitel bearbeiten · maximal 500 Zeichen"
+          onClick={() => setEditing(true)}
+        >
+          {state.title}
+        </button>
+      )}
+      <div className="event-link-row">
+        <button
+          className={`event-link-button ${isCancelled(linked) ? "cancelled" : ""}`}
+          title={
+            linked
+              ? `Planmäßig: ${linked.start_uhrzeit} Uhr\nAktuell: ${state.serviceTime} Uhr${isCancelled(linked) ? "\nDiese Veranstaltung fällt aus." : ""}`
+              : "Bitte eine Veranstaltung verknüpfen"
+          }
+          onClick={() => (open ? setOpen(false) : showPicker())}
+        >
+          <Icon name={isCancelled(linked) ? "warning" : "calendar_month"} />
+          <span>
+            {linked?.titel ?? "Veranstaltung verknüpfen"}
+            {linked && ` · ${state.serviceTime} Uhr`}
+            {delay !== 0 && ` · ${delay > 0 ? "+" : ""}${delay} Min.`}
+            {isCancelled(linked) && (
+              <b className="event-cancelled-label">Fällt aus!</b>
+            )}
+          </span>
+          <Icon name="arrow_drop_down" />
+        </button>
+        <button
+          className="event-help-button help-dot"
+          title="Hilfe: Veranstaltungsverknüpfung"
+          onClick={() =>
+            window.dispatchEvent(
+              new CustomEvent("gottesdienstregie:open-help", {
+                detail: "Veranstaltung verknüpfen",
+              }),
+            )
+          }
+        >
+          ?
+        </button>
+      </div>
+      {open && (
+        <div className="event-picker">
+          <header>
+            <b>VERANSTALTUNG VERKNÜPFEN</b>
+            <button onClick={() => setOpen(false)}>
+              <Icon name="close" />
+            </button>
+          </header>
+          {linked && (
+            <div className="linked-event-actions">
+              <button
+                onClick={() =>
+                  alert(
+                    `${linked.titel}\n${format(linked)} · ${linked.start_uhrzeit}–${linked.ende_uhrzeit} Uhr${isCancelled(linked) ? "\n\nWARNUNG: Diese Veranstaltung fällt aus." : ""}`,
+                  )
+                }
+              >
+                VERANSTALTUNG ANZEIGEN
+              </button>
+              <button
+                onClick={() => {
+                  state.updatePresentation({
+                    eventId: "",
+                    eventLink: undefined,
+                  });
+                  setLinked(null);
+                  setPending(null);
+                }}
+              >
+                VERKNÜPFUNG LÖSEN
+              </button>
+            </div>
+          )}
+          <label>
+            <Icon name="search" />
+            <input
+              autoFocus
+              placeholder="Veranstaltung suchen"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+          </label>
+          {loading ? (
+            <p className="event-loading">
+              <span className="media-loading" /> Veranstaltungen werden geladen
+              …
+            </p>
+          ) : error ? (
+            <p className="error">{error}</p>
+          ) : visible.length ? (
+            <div className="event-results">
+              {visible.map((event, index) => {
+                const cancelled = isCancelled(event),
+                  heading = group(event),
+                  previous = index ? group(visible[index - 1]) : "";
+                return (
+                  <div key={event.eventKey}>
+                    {heading !== previous && <b>{heading}</b>}
+                    <button
+                      className={`${cancelled ? "cancelled " : ""}${pending?.eventKey === event.eventKey ? "selected" : ""}`}
+                      disabled={cancelled}
+                      aria-disabled={cancelled}
+                      title={
+                        cancelled
+                          ? "Diese Veranstaltung fällt aus und kann nicht mit einer Präsentation verknüpft werden."
+                          : ""
+                      }
+                      onClick={() => setPending(event)}
+                    >
+                      <strong>
+                        {event.titel}
+                        {cancelled && (
+                          <em className="event-cancelled-label">Fällt aus!</em>
+                        )}
+                      </strong>
+                      <small>
+                        {format(event)} ·{" "}
+                        {event.ganztag
+                          ? "Ganztägig"
+                          : `${event.start_uhrzeit} Uhr`}
+                      </small>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="event-empty">
+              Keine passende Veranstaltung gefunden.
+            </p>
+          )}
+          <footer>
+            <button type="button" onClick={() => setOpen(false)}>
+              ABBRECHEN
+            </button>
+            <button
+              className="primary"
+              type="button"
+              disabled={
+                !pending ||
+                isCancelled(pending) ||
+                pending.eventKey === linked?.eventKey
+              }
+              onClick={saveLink}
+            >
+              ÄNDERUNG SPEICHERN
+            </button>
+          </footer>
+        </div>
+      )}
+    </section>
+  );
 }
 
-function CanvasEditor({slide,canEdit}:{slide:Slide;canEdit:boolean}){
-  const state=usePresentation(),frame=useRef<HTMLDivElement>(null),drag=useRef<{id:string;kind:'move'|'resize';x:number;y:number;startX:number;startY:number;startW:number;startH:number}|null>(null),[shapeMenu,setShapeMenu]=useState(false);
-  useEffect(()=>{const move=(event:PointerEvent)=>{const active=drag.current,rect=frame.current?.getBoundingClientRect();if(!active||!rect)return;const dx=(event.clientX-active.x)/rect.width*1920,dy=(event.clientY-active.y)/rect.height*1080;if(active.kind==='move')state.updateElement(active.id,{x:Math.max(0,Math.min(1920-active.startW,active.startX+dx)),y:Math.max(0,Math.min(1080-active.startH,active.startY+dy))});else state.updateElement(active.id,{width:Math.max(32,Math.min(1920-active.startX,active.startW+dx)),height:Math.max(20,Math.min(1080-active.startY,active.startH+dy))})};const up=()=>{drag.current=null};addEventListener('pointermove',move);addEventListener('pointerup',up);return()=>{removeEventListener('pointermove',move);removeEventListener('pointerup',up)}},[]);
-  function begin(event:React.PointerEvent,id:string,kind:'move'|'resize'){if(!canEdit)return;event.preventDefault();event.stopPropagation();const element=slide.elements.find(entry=>entry.id===id);if(!element||element.locked)return;state.selectElements(event.shiftKey?[...new Set([...state.selectedElementIds,id])]:[id]);drag.current={id,kind,x:event.clientX,y:event.clientY,startX:element.x,startY:element.y,startW:element.width,startH:element.height}}
-  const tool:{type:ElementType;icon:string;label:string}[]=[{type:'text',icon:'text_fields',label:'Text'},{type:'image',icon:'image',label:'Bild'},{type:'line',icon:'horizontal_rule',label:'Linie'},{type:'video',icon:'movie',label:'Video'},{type:'qr',icon:'qr_code_2',label:'QR-Code'}];
-  const shapes=[['rectangle','Rechteck','rectangle'],['rounded','Abgerundet','rounded_corner'],['ellipse','Kreis / Ellipse','circle'],['triangle','Dreieck','change_history'],['diamond','Raute','diamond'],['pentagon','Fünfeck','pentagon'],['hexagon','Sechseck','hexagon'],['octagon','Achteck','stop'],['star','Stern','star'],['burst','Strahlenform','brightness_7'],['arrow','Pfeil','arrow_right_alt'],['chevron','Chevron','chevron_right'],['speech','Sprechblase','chat_bubble'],['cross','Kreuz','add'],['parallelogram','Parallelogramm','view_week'],['trapezoid','Trapez','details'],['heart','Herz','favorite'],['lightning','Blitz','bolt'],['shield','Schild','shield'],['cloud','Wolke','cloud'],['home','Haus','home'],['moon','Halbmond','dark_mode']] as const;
-  function addShape(kind:typeof shapes[number][0],name:string){state.addShape(kind,name);setShapeMenu(false)}
-  return <div className="editor-shell"><div className="canvas-tools">{tool.slice(0,2).map(entry=><button disabled={!canEdit} key={entry.type} title={`${entry.label} hinzufügen`} onClick={()=>state.addElement(entry.type)}><Icon name={entry.icon}/><span>{entry.label}</span></button>)}<span className="shape-tool-host"><button disabled={!canEdit} className={shapeMenu?'active':''} title="2D-Objekt hinzufügen" onClick={()=>setShapeMenu(value=>!value)}><Icon name="category"/><span>2D-Objekt</span><Icon name="arrow_drop_down"/></button>{shapeMenu&&<div className="shape-palette">{shapes.map(([kind,name,icon])=><button key={kind} onClick={()=>addShape(kind,name)}><Icon name={icon}/><span>{name}</span></button>)}</div>}</span>{tool.slice(2).map(entry=><button disabled={!canEdit} key={entry.type} title={`${entry.label} hinzufügen`} onClick={()=>state.addElement(entry.type)}><Icon name={entry.icon}/><span>{entry.label}</span></button>)}<i/><button disabled={!state.selectedElementIds.length} onClick={state.removeElements} title="Auswahl löschen"><Icon name="delete"/></button></div><div className="canvas-stage"><div className="canvas-wrap canvas-editor" ref={frame} onPointerDown={()=>{setShapeMenu(false);state.selectElements([])}}><SlideRenderer slide={slide} mode="editor"/>{slide.elements.filter(element=>element.visible).map(element=>{const selected=state.selectedElementIds.includes(element.id);return <div key={element.id} className={`element-hit ${selected?'selected':''} ${element.locked?'locked':''}`} style={{left:`${element.x/19.2}%`,top:`${element.y/10.8}%`,width:`${element.width/19.2}%`,height:`${element.height/10.8}%`,zIndex:100+element.zIndex,transform:`rotate(${element.rotation}deg)`}} onPointerDown={event=>begin(event,element.id,'move')}>{selected&&!element.locked&&<i className="resize-handle" onPointerDown={event=>begin(event,element.id,'resize')}/>}</div>})}</div></div></div>
+function OrderOfService({
+  canEdit,
+  onTake,
+}: {
+  canEdit: boolean;
+  onTake: (itemId: string, slideId: string) => void;
+}) {
+  const { t } = useI18n(),
+    state = usePresentation(),
+    items = state.items,
+    selected = state.selectedItemId,
+    live = state.liveItemId;
+  const theme = usePreferences((value) => value.theme),
+    storedServiceShortcuts = usePreferences((value) => value.keyboardShortcuts),
+    serviceShortcuts = useMemo(
+      () => ({ ...defaultKeyboardShortcuts, ...storedServiceShortcuts }),
+      [storedServiceShortcuts],
+    );
+  const [adding, setAdding] = useState(false),
+    [timeEditor, setTimeEditor] = useState(false),
+    [renameTarget, setRenameTarget] = useState<ServiceItem | null>(null),
+    [audioPanel, setAudioPanel] = useState<{
+      targetType: "section" | "serviceItem";
+      targetId: string;
+    } | null>(null),
+    [audioMenu, setAudioMenu] = useState<{
+      targetType: "section" | "serviceItem";
+      targetId: string;
+      x: number;
+      y: number;
+    } | null>(null),
+    [collapsed, setCollapsed] = useState<Record<string, boolean>>(() => {
+      try {
+        return JSON.parse(
+          localStorage.getItem("gottesdienstregie.section-collapse") ?? "{}",
+        );
+      } catch {
+        return {};
+      }
+    });
+  const contextIds = useRef<string[]>([]);
+  useEffect(
+    () =>
+      localStorage.setItem(
+        "gottesdienstregie.section-collapse",
+        JSON.stringify(collapsed),
+      ),
+    [collapsed],
+  );
+  function end(e: DragEndEvent) {
+    if (canEdit && e.over && e.active.id !== e.over.id)
+      state.reorder(String(e.active.id), String(e.over.id));
+  }
+  function toggleSection(event: React.MouseEvent, sectionId: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    setCollapsed((value) => ({ ...value, [sectionId]: !value[sectionId] }));
+  }
+  function openTimes(event: React.MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (canEdit) setTimeEditor(true);
+  }
+  function openAudio(
+    event: React.MouseEvent<HTMLButtonElement>,
+    targetType: "section" | "serviceItem",
+    targetId: string,
+    configured: boolean,
+  ) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!canEdit) return;
+    if (configured) {
+      setAudioMenu(null);
+      setAudioPanel({ targetType, targetId });
+      return;
+    }
+    const rect = event.currentTarget.getBoundingClientRect();
+    setAudioMenu({
+      targetType,
+      targetId,
+      x: Math.max(8, Math.min(rect.left, window.innerWidth - 250)),
+      y: Math.min(rect.bottom + 3, window.innerHeight - 130),
+    });
+  }
+  async function execute(command: string) {
+    const ids = contextIds.current,
+      item = items.find((entry) => entry.id === ids[0]);
+    if (!item) return;
+    if (command === "cut") serviceItemCommands.cut(ids);
+    else if (command === "copy") serviceItemCommands.copy(ids);
+    else if (command === "paste") serviceItemCommands.paste(item.id);
+    else if (command === "duplicate") serviceItemCommands.duplicate(ids);
+    else if (command === "delete") {
+      if (
+        ids.length === 1 ||
+        confirm(`${ids.length} Elemente wirklich löschen?`)
+      )
+        serviceItemCommands.remove(ids);
+    } else if (command === "hide") serviceItemCommands.hide(ids, true);
+    else if (command === "show") serviceItemCommands.hide(ids, false);
+    else if (command === "group") serviceItemCommands.group(ids);
+    else if (command === "ungroup") serviceItemCommands.ungroup(ids);
+    else if (command === "undo") serviceItemCommands.undo();
+    else if (command === "redo") serviceItemCommands.redo();
+    else if (command === "rename") setRenameTarget(item);
+    else if (command === "link") serviceItemCommands.linked(item.id);
+    else if (command.startsWith("link:"))
+      serviceItemCommands.linked(item.id, command.slice(5));
+    else if (command === "copy-image") {
+      const slide = serviceItemCommands.slideFor(item.id);
+      if (slide)
+        await (window.desktop as any)?.slideExport?.copy(
+          slideSvgDataUrl(slide),
+        );
+    } else if (command === "save-image") {
+      const slide = serviceItemCommands.slideFor(item.id);
+      if (slide)
+        await (window.desktop as any)?.slideExport?.save(
+          slideSvgDataUrl(slide),
+          `${state.title}_${item.title}_Folie-${String(slide.order + 1).padStart(2, "0")}`,
+          "png",
+        );
+    } else if (command === "on-air") {
+      const slide = serviceItemCommands.slideFor(item.id);
+      if (slide) onTake(item.id, slide.id);
+    }
+  }
+  useEffect(
+    () =>
+      (window.desktop as any)?.serviceContext?.onCommand(
+        (id: string) => void execute(id),
+      ),
+    [items, state.history.length, state.future.length],
+  );
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (
+        !canEdit ||
+        target?.matches('input,textarea,select,[contenteditable="true"]')
+      )
+        return;
+      const mod = event.ctrlKey || event.metaKey,
+        ids = state.selectedServiceItemIds.length
+          ? state.selectedServiceItemIds
+          : [state.selectedItemId].filter(Boolean);
+      if (!ids.length) return;
+      if (mod && event.key.toLowerCase() === "x") {
+        event.preventDefault();
+        serviceItemCommands.cut(ids);
+      } else if (mod && event.key.toLowerCase() === "c") {
+        event.preventDefault();
+        serviceItemCommands.copy(ids);
+      } else if (mod && event.key.toLowerCase() === "v") {
+        event.preventDefault();
+        serviceItemCommands.paste(state.selectedItemId);
+      } else if (mod && event.key.toLowerCase() === "d") {
+        event.preventDefault();
+        serviceItemCommands.duplicate(ids);
+      } else if (
+        matchesShortcut(event, serviceShortcuts.renameServiceItem) &&
+        ids.length === 1
+      ) {
+        event.preventDefault();
+        const item = items.find((entry) => entry.id === ids[0]);
+        if (item) setRenameTarget(item);
+      }
+    };
+    addEventListener("keydown", key);
+    return () => removeEventListener("keydown", key);
+  }, [
+    canEdit,
+    state.selectedItemId,
+    state.selectedServiceItemIds,
+    items,
+    serviceShortcuts.renameServiceItem,
+  ]);
+  function selectItem(
+    event: React.MouseEvent | React.KeyboardEvent,
+    item: ServiceItem,
+  ) {
+    if ("ctrlKey" in event && (event.ctrlKey || event.metaKey)) {
+      const next = state.selectedServiceItemIds.includes(item.id)
+        ? state.selectedServiceItemIds.filter((id) => id !== item.id)
+        : [...state.selectedServiceItemIds, item.id];
+      state.selectServiceItems(next, item.id);
+      return;
+    }
+    state.select(item.id);
+  }
+  function openContext(event: React.MouseEvent, item: ServiceItem) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!canEdit) return;
+    const current =
+      state.selectedServiceItemIds.includes(item.id) &&
+      state.selectedServiceItemIds.length
+        ? state.selectedServiceItemIds
+        : [item.id];
+    if (!state.selectedServiceItemIds.includes(item.id))
+      state.selectServiceItems(current, item.id);
+    contextIds.current = current;
+    const multiple = current.length > 1,
+      selectedItems = items.filter((entry) => current.includes(entry.id)),
+      sameSection =
+        new Set(selectedItems.map((entry) => entry.sectionId)).size === 1,
+      allHidden = selectedItems.every((entry) => !entry.enabled),
+      hasGroup = selectedItems.some((entry) => entry.groupId),
+      visual =
+        ![
+          "video",
+          "audio",
+          "videoInput",
+          "stageMessage",
+          "quickScreen",
+        ].includes(item.type) && !item.audioStopCue,
+      linkable = [
+        "content",
+        "image",
+        "song",
+        "bible",
+        "announcement",
+        "slideshow",
+      ].includes(item.type),
+      sep = { type: "separator" as const };
+    const entries: any[] = [];
+    if (multiple)
+      entries.push(
+        { label: `${current.length} ELEMENTE AUSGEWÄHLT`, enabled: false },
+        sep,
+      );
+    entries.push(
+      { id: "cut", label: "Ausschneiden", accelerator: "CmdOrCtrl+X" },
+      { id: "copy", label: "Kopieren", accelerator: "CmdOrCtrl+C" },
+      {
+        id: "paste",
+        label: "Einfügen",
+        accelerator: "CmdOrCtrl+V",
+        enabled: serviceItemCommands.canPaste(),
+      },
+      {
+        id: "duplicate",
+        label: multiple
+          ? `${current.length} Elemente duplizieren`
+          : "Duplizieren",
+        accelerator: "CmdOrCtrl+D",
+      },
+      {
+        id: "delete",
+        label: multiple ? `${current.length} Elemente löschen` : "Löschen",
+      },
+      sep,
+    );
+    if (!multiple && linkable) {
+      entries.push(
+        { id: "link", label: "Verknüpftes Element erstellen" },
+        {
+          label: "Verknüpftes Element in",
+          submenu: state.sections
+            .filter((section) => section.id !== item.sectionId)
+            .map((section) => ({
+              id: `link:${section.id}`,
+              label: section.title,
+            })),
+        },
+        sep,
+      );
+    }
+    entries.push(
+      {
+        id: hasGroup ? "ungroup" : "group",
+        label: hasGroup ? "Gruppierung aufheben" : "Gruppieren",
+        enabled: hasGroup || (multiple && sameSection),
+      },
+      {
+        id: allHidden ? "show" : "hide",
+        label: allHidden ? "Einblenden" : "Ausblenden",
+      },
+      sep,
+      {
+        id: "undo",
+        label: state.history.length
+          ? "Rückgängig: Präsentation bearbeiten"
+          : "Rückgängig",
+        accelerator: "CmdOrCtrl+Z",
+        enabled: state.history.length > 0,
+      },
+      {
+        id: "redo",
+        label: state.future.length
+          ? "Wiederholen: Präsentation bearbeiten"
+          : "Wiederholen",
+        accelerator: /Mac|iPhone|iPad/.test(navigator.platform)
+          ? "Cmd+Shift+Z"
+          : "Ctrl+Y",
+        enabled: state.future.length > 0,
+      },
+    );
+    if (!multiple) {
+      entries.push(sep, {
+        id: "rename",
+        label: "Element umbenennen …",
+        accelerator: "CmdOrCtrl+R",
+      });
+      if (visual)
+        entries.push(
+          { id: "copy-image", label: "Als Bild kopieren" },
+          { id: "save-image", label: "Als Bild speichern …" },
+        );
+      entries.push(sep, {
+        id: "on-air",
+        label: "Mit dieser Folie ON AIR gehen",
+      });
+    }
+    void (window.desktop as any)?.serviceContext?.open(
+      { x: event.clientX, y: event.clientY },
+      entries,
+      theme,
+    );
+  }
+  const audioTarget =
+      audioPanel?.targetType === "section"
+        ? state.sections.find((section) => section.id === audioPanel.targetId)
+        : items.find((item) => item.id === audioPanel?.targetId),
+    audioConfig = audioTarget?.backgroundAudio;
+  return (
+    <aside
+      className="service"
+      onClick={() => {
+        setAudioMenu(null);
+        setTimeEditor(false);
+      }}
+    >
+      <PresentationEventHeader />
+      <header>
+        <b>{t("orderOfService")}</b>
+        <button
+          className="icon-button"
+          disabled={!canEdit}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            setAdding((value) => !value);
+          }}
+          title={t(canEdit ? "addItem" : "noEditPermission")}
+        >
+          <Icon name="add" />
+        </button>
+        {adding && canEdit && <AddPopover close={() => setAdding(false)} />}
+      </header>
+      <div className="service-list">
+        <DndContext collisionDetection={closestCenter} onDragEnd={end}>
+          <SortableContext
+            items={items.map((item) => item.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {state.sections.map((section) => {
+              const sectionItems = items
+                  .filter((item) => item.sectionId === section.id)
+                  .sort((a, b) => a.order - b.order),
+                duration = sectionItems.reduce(
+                  (sum, item) => sum + itemDurationSeconds(item),
+                  0,
+                ),
+                isCollapsed = collapsed[section.id] === true,
+                audio = section.backgroundAudio,
+                missing = audio?.tracks.some(
+                  (track) => track.status === "missing",
+                );
+              return (
+                <section className="service-section" key={section.id}>
+                  <div className="section-label">
+                    <button
+                      className="section-collapse"
+                      type="button"
+                      title={
+                        isCollapsed
+                          ? "Abschnitt aufklappen"
+                          : "Abschnitt einklappen"
+                      }
+                      onClick={(event) => toggleSection(event, section.id)}
+                    >
+                      <Icon
+                        name={isCollapsed ? "arrow_right" : "arrow_drop_down"}
+                      />
+                    </button>
+                    <button
+                      className="section-title"
+                      type="button"
+                      onClick={(event) => toggleSection(event, section.id)}
+                    >
+                      {section.title}
+                    </button>
+                    <button
+                      className={`audio-header-button ${audio?.tracks.length ? "configured" : ""} ${audio?.muted ? "muted" : ""} ${missing ? "missing" : ""}`}
+                      title={
+                        missing
+                          ? "Audio konnte nicht vorbereitet werden"
+                          : audio?.tracks.length
+                            ? `${audio.tracks.length} Titel · Background Audio`
+                            : "Background Audio hinzufügen"
+                      }
+                      onClick={(event) =>
+                        openAudio(
+                          event,
+                          "section",
+                          section.id,
+                          Boolean(audio?.tracks.length),
+                        )
+                      }
+                    >
+                      <Icon
+                        name={
+                          missing
+                            ? "warning"
+                            : audio?.muted
+                              ? "volume_off"
+                              : "volume_up"
+                        }
+                      />
+                    </button>
+                    {section.id === "service" ? (
+                      <div className="service-time-host">
+                        <button
+                          className="service-time-control"
+                          type="button"
+                          disabled={!canEdit}
+                          onClick={openTimes}
+                        >
+                          <Icon name="schedule" />
+                          <span>{formatServiceTime(state.serviceTime)}</span>
+                        </button>
+                        {timeEditor && (
+                          <ServiceTimePopover
+                            time={state.serviceTime}
+                            onCancel={() => setTimeEditor(false)}
+                            onSave={(serviceTime) => {
+                              state.updatePresentation({ serviceTime });
+                              setTimeEditor(false);
+                            }}
+                          />
+                        )}
+                      </div>
+                    ) : (
+                      <output>{formatDuration(duration)}</output>
+                    )}
+                  </div>
+                  {!isCollapsed &&
+                    sectionItems.map((item) => (
+                      <SortableItem
+                        key={item.id}
+                        item={item}
+                        active={
+                          state.selectedServiceItemIds.includes(item.id) ||
+                          selected === item.id
+                        }
+                        live={live === item.id}
+                        canEdit={canEdit}
+                        onSelect={(event) => selectItem(event, item)}
+                        onAudio={(event) =>
+                          openAudio(
+                            event,
+                            "serviceItem",
+                            item.id,
+                            Boolean(item.backgroundAudio?.tracks.length),
+                          )
+                        }
+                        onContext={(event) => openContext(event, item)}
+                      />
+                    ))}
+                </section>
+              );
+            })}
+          </SortableContext>
+        </DndContext>
+      </div>
+      {audioMenu && (
+        <div
+          className="audio-context-menu"
+          style={{ left: audioMenu.x, top: audioMenu.y }}
+          onClick={(event) => event.stopPropagation()}
+        >
+          <button
+            onClick={() => {
+              void (window.desktop as any)?.mediaWindow?.open(
+                "select",
+                "audio",
+                audioMenu.targetType,
+                audioMenu.targetId,
+              );
+              setAudioMenu(null);
+            }}
+          >
+            <Icon name="audio_file" /> AUDIO DURCHSUCHEN
+          </button>
+          <button
+            onClick={() => {
+              void (window.desktop as any)?.mediaWindow?.open(
+                "select",
+                "audio",
+                audioMenu.targetType,
+                audioMenu.targetId,
+              );
+              setAudioMenu(null);
+            }}
+          >
+            <Icon name="upload_file" /> IMPORTIEREN …
+          </button>
+          {audioMenu.targetType === "serviceItem" && (
+            <button
+              className="separator"
+              onClick={() => {
+                state.toggleAudioStopCue(audioMenu.targetId);
+                setAudioMenu(null);
+              }}
+            >
+              <Icon name="volume_off" />{" "}
+              {items.find((item) => item.id === audioMenu.targetId)
+                ?.audioStopCue
+                ? "STOP-CUE ENTFERNEN"
+                : "BACKGROUND AUDIO STOPPEN"}
+            </button>
+          )}
+        </div>
+      )}
+      {audioPanel && audioTarget && (
+        <BackgroundAudioPanel
+          title={audioTarget.title}
+          targetType={audioPanel.targetType}
+          targetId={audioPanel.targetId}
+          value={audioConfig}
+          onChange={(value) =>
+            audioPanel.targetType === "section"
+              ? state.updateSectionAudio(audioPanel.targetId, value)
+              : state.updateItemAudio(audioPanel.targetId, value)
+          }
+          onClose={() => setAudioPanel(null)}
+        />
+      )}{" "}
+      {renameTarget && (
+        <ServiceItemRenameDialog
+          item={renameTarget}
+          close={() => setRenameTarget(null)}
+        />
+      )}
+    </aside>
+  );
 }
 
-function Workspace({canEdit,quick=null}:{canEdit:boolean;quick?:QuickScreenConfig|null}){
-  const {t}=useI18n();const state=usePresentation();const itemId=state.mode==='preview'?state.previewItemId:state.selectedItemId,slideId=state.mode==='preview'?state.previewSlideId:state.selectedSlideId;const item=state.items.find(entry=>entry.id===itemId)??state.items[0];const slide=item?.slides.find(entry=>entry.id===slideId)??item?.slides[0];
-  if(!slide)return <section className="workspace empty">{t('noSlides')}</section>;
-  if(state.mode==='preview')return <section className={`workspace preview-workspace ${state.previewLayout==='grid'?'preview-grid':''}`} style={{'--grid-size':`${state.gridSize}px`} as React.CSSProperties}>
-    <div className="preview-toolbar"><div><button className={state.previewLayout==='single'?'active':''} onClick={()=>state.setPreviewLayout('single')}>{t('singleView')}</button><button className={state.previewLayout==='grid'?'active':''} onClick={()=>state.setPreviewLayout('grid')}>{t('slideOverview')}</button></div><label>MAIN <select aria-label="MAIN"><option>MAIN</option></select></label><label className="thumbnail-size"><span>{t('previewSize')}</span><Icon name="zoom_out"/><input type="range" min="160" max="440" step="40" list="thumbnail-steps" value={state.gridSize} onChange={event=>state.setGridSize(Number(event.target.value))}/><datalist id="thumbnail-steps">{[160,200,240,280,320,360,400,440].map(value=><option key={value} value={value}/>)}</datalist><Icon name="zoom_in"/></label></div>
-    {state.previewLayout==='single'?<div className="preview-single"><div className="canvas-wrap"><SlideRenderer slide={slide} mode="preview"/></div></div>:<div className="preview-scroll">{state.sections.map(section=>{const entries=state.items.filter(entry=>entry.sectionId===section.id);return entries.length?<div className="preview-section" key={section.id}><h2>{section.title}</h2>{entries.map(entry=><div className="grid-item" key={entry.id}><h3>{entry.title}</h3><div className="grid-slides">{entry.slides.map((current,index)=>{const preview=current.id===state.previewSlideId&&entry.id===state.previewItemId,live=current.id===state.liveSlideId&&entry.id===state.liveItemId,canTakeLive=entry.enabled&&!entry.disabled&&current.enabled;return <div key={current.id} className={`grid-slide ${preview?'selected':''} ${live?'live-slide':''} ${!canTakeLive?'disabled-slide':''}`}><button className="thumbnail-hit" onClick={()=>state.onAir?(canTakeLive&&state.goLive(entry.id,current.id)):state.selectPreview(entry.id,current.id)} aria-label={`${entry.title}, ${t('slide')} ${index+1}`}><LazyThumbnail slide={current}/></button><span className="thumbnail-number">{index+1}</span>{live&&<i className="live-dot"/>}<div className="thumbnail-actions"><button onClick={()=>state.selectPreview(entry.id,current.id)}>{t('preview')}</button><button disabled={!canEdit} onClick={()=>{state.select(entry.id,current.id);state.setMode('edit')}}>{t('edit')}</button></div></div>})}</div></div>)}</div>:null})}</div>}
-  </section>;
-  return <section className="workspace editor-workspace"><CanvasEditor slide={slide} canEdit={canEdit}/></section>;
+function LazyThumbnail({ slide }: { slide: Slide }) {
+  const ref = useRef<HTMLDivElement>(null),
+    [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "360px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <div ref={ref} className="lazy-thumbnail">
+      {visible && <SlideRenderer slide={slide} mode="thumbnail" />}
+    </div>
+  );
 }
 
-function Inspector({canEdit}:{canEdit:boolean}){
-  const {t}=useI18n(),state=usePresentation(),[tab,setTab]=useState<'properties'|'layers'>('properties'),item=state.items.find(entry=>entry.id===state.selectedItemId),slide=item?.slides.find(entry=>entry.id===state.selectedSlideId),selectedElement=slide?.elements.find(element=>state.selectedElementIds.includes(element.id));
-  if(!slide)return <aside className="inspector"><header><b>{t('properties')}</b></header></aside>;
-  return <aside className="inspector"><header><button className={tab==='properties'?'active':''} onClick={()=>setTab('properties')}><b>{t('properties')}</b></button><button className={tab==='layers'?'active':''} onClick={()=>setTab('layers')}>{t('layers')}</button></header>{tab==='properties'?<div className="fields">{item&&<><label>Elementname<input disabled={!canEdit} value={item.title} onChange={e=>state.updateItem(item.id,{title:e.target.value})}/></label><label>Abschnitt<select disabled={!canEdit} value={item.sectionId} onChange={e=>state.moveItemToSection(item.id,e.target.value)}>{state.sections.map(section=><option key={section.id} value={section.id}>{section.title}</option>)}</select></label></>}{selectedElement?<><h4>{selectedElement.name}</h4>{selectedElement.type==='text'&&<label>{t('text')}<textarea disabled={!canEdit} rows={6} value={String(selectedElement.properties.text??'')} onChange={e=>state.updateElement(selectedElement.id,{properties:{...selectedElement.properties,text:e.target.value}})}/></label>}<div className="field-grid"><label>X<input type="number" value={Math.round(selectedElement.x)} onChange={e=>state.updateElement(selectedElement.id,{x:Number(e.target.value)})}/></label><label>Y<input type="number" value={Math.round(selectedElement.y)} onChange={e=>state.updateElement(selectedElement.id,{y:Number(e.target.value)})}/></label><label>Breite<input type="number" value={Math.round(selectedElement.width)} onChange={e=>state.updateElement(selectedElement.id,{width:Number(e.target.value)})}/></label><label>Höhe<input type="number" value={Math.round(selectedElement.height)} onChange={e=>state.updateElement(selectedElement.id,{height:Number(e.target.value)})}/></label></div></>:<><label>{t('title')}<input disabled={!canEdit} value={slide.title} onChange={e=>state.updateSlide({title:e.target.value})}/></label><label>{t('text')}<textarea disabled={!canEdit} rows={5} value={slide.body} onChange={e=>state.updateSlide({body:e.target.value})}/></label><label>{t('background')}<input disabled={!canEdit} type="color" value={slide.background} onChange={e=>state.updateSlide({background:e.target.value})}/></label></>}{item&&<div className="timing-fields"><h4>WIEDERGABE &amp; ZEIT</h4><label>Modus<select disabled={!canEdit} value={item.timing.mode} onChange={e=>state.updateItem(item.id,{timing:{...item.timing,mode:e.target.value as ServiceItem['timing']['mode']}})}><option value="manual">Manuell</option><option value="slide-duration">Folienzeit</option><option value="media-duration">Mediendauer</option><option value="scheduled">Zeitgesteuert</option></select></label><label>Standard-Folienzeit<input disabled={!canEdit} type="number" min="1" value={item.timing.slideDurationSeconds} onChange={e=>state.updateItem(item.id,{plannedDuration:Number(e.target.value)*Math.max(1,item.slides.length),timing:{...item.timing,slideDurationSeconds:Math.max(1,Number(e.target.value))}})}/></label><label className="setting-check"><input disabled={!canEdit} type="checkbox" checked={item.timing.autoAdvance} onChange={e=>state.updateItem(item.id,{autoAdvance:e.target.checked,timing:{...item.timing,autoAdvance:e.target.checked}})}/><span>Automatisch weiterschalten</span></label><label className="setting-check"><input disabled={!canEdit} type="checkbox" checked={item.timing.repeat} onChange={e=>state.updateItem(item.id,{repeat:e.target.checked,timing:{...item.timing,repeat:e.target.checked}})}/><span>Wiederholen</span></label><label className="setting-check"><input disabled={!canEdit} type="checkbox" checked={item.timing.shuffle} onChange={e=>state.updateItem(item.id,{timing:{...item.timing,shuffle:e.target.checked}})}/><span>Zufällige Reihenfolge</span></label><label>Diese Folie (Sekunden)<input disabled={!canEdit} type="number" min="1" value={slide.timing?.durationSeconds??''} placeholder={String(item.timing.slideDurationSeconds)} onChange={e=>state.updateSlide({timing:{durationSeconds:e.target.value?Math.max(1,Number(e.target.value)):undefined}})}/></label></div>}{item?.type==='web'&&<><label>URL<input value={String(item.metadata.url??'')} onChange={e=>state.updateItem(item.id,{metadata:{...item.metadata,url:e.target.value}})}/></label><label>Zoom<input type="number" min="25" max="300" value={Number(item.metadata.zoom??100)} onChange={e=>state.updateItem(item.id,{metadata:{...item.metadata,zoom:Number(e.target.value)}})}/></label></>}{(item?.type==='video'||item?.type==='audio')&&<><label>Medienquelle<input value={String(item.metadata.url??'')} onChange={e=>state.updateItem(item.id,{metadata:{...item.metadata,url:e.target.value}})}/></label><label>Lautstärke<input type="range" min="0" max="100" value={Number(item.metadata.volume??100)} onChange={e=>state.updateItem(item.id,{metadata:{...item.metadata,volume:Number(e.target.value)}})}/></label></>}</div>:<div className="layers-list">{[...slide.elements].sort((a,b)=>b.zIndex-a.zIndex).map(element=><div className={state.selectedElementIds.includes(element.id)?'active':''} key={element.id} onClick={()=>state.selectElements([element.id])}><Icon name={element.type==='text'?'text_fields':element.type==='image'?'image':element.type==='video'?'movie':element.type==='qr'?'qr_code_2':'category'}/><span>{element.name}</span><button title="Sichtbarkeit" onClick={event=>{event.stopPropagation();state.toggleElementVisible(element.id)}}><Icon name={element.visible?'visibility':'visibility_off'}/></button><button title="Sperren" onClick={event=>{event.stopPropagation();state.toggleElementLocked(element.id)}}><Icon name={element.locked?'lock':'lock_open'}/></button><button title="Nach vorn" onClick={event=>{event.stopPropagation();state.moveElementLayer(element.id,1)}}><Icon name="arrow_upward"/></button><button title="Nach hinten" onClick={event=>{event.stopPropagation();state.moveElementLayer(element.id,-1)}}><Icon name="arrow_downward"/></button></div>)}</div>}</aside>;
+function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
+  const state = usePresentation(),
+    frame = useRef<HTMLDivElement>(null),
+    drag = useRef<{
+      id: string;
+      kind: "move" | "resize";
+      x: number;
+      y: number;
+      startX: number;
+      startY: number;
+      startW: number;
+      startH: number;
+    } | null>(null),
+    [shapeMenu, setShapeMenu] = useState(false);
+  useEffect(() => {
+    const move = (event: PointerEvent) => {
+      const active = drag.current,
+        rect = frame.current?.getBoundingClientRect();
+      if (!active || !rect) return;
+      const dx = ((event.clientX - active.x) / rect.width) * 1920,
+        dy = ((event.clientY - active.y) / rect.height) * 1080;
+      if (active.kind === "move")
+        state.updateElement(active.id, {
+          x: Math.max(0, Math.min(1920 - active.startW, active.startX + dx)),
+          y: Math.max(0, Math.min(1080 - active.startH, active.startY + dy)),
+        });
+      else
+        state.updateElement(active.id, {
+          width: Math.max(
+            32,
+            Math.min(1920 - active.startX, active.startW + dx),
+          ),
+          height: Math.max(
+            20,
+            Math.min(1080 - active.startY, active.startH + dy),
+          ),
+        });
+    };
+    const up = () => {
+      drag.current = null;
+    };
+    addEventListener("pointermove", move);
+    addEventListener("pointerup", up);
+    return () => {
+      removeEventListener("pointermove", move);
+      removeEventListener("pointerup", up);
+    };
+  }, []);
+  function begin(
+    event: React.PointerEvent,
+    id: string,
+    kind: "move" | "resize",
+  ) {
+    if (!canEdit) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const element = slide.elements.find((entry) => entry.id === id);
+    if (!element || element.locked) return;
+    state.selectElements(
+      event.shiftKey ? [...new Set([...state.selectedElementIds, id])] : [id],
+    );
+    drag.current = {
+      id,
+      kind,
+      x: event.clientX,
+      y: event.clientY,
+      startX: element.x,
+      startY: element.y,
+      startW: element.width,
+      startH: element.height,
+    };
+  }
+  const tool: { type: ElementType; icon: string; label: string }[] = [
+    { type: "text", icon: "text_fields", label: "Text" },
+    { type: "image", icon: "image", label: "Bild" },
+    { type: "line", icon: "horizontal_rule", label: "Linie" },
+    { type: "video", icon: "movie", label: "Video" },
+    { type: "qr", icon: "qr_code_2", label: "QR-Code" },
+  ];
+  const shapes = [
+    ["rectangle", "Rechteck", "rectangle"],
+    ["rounded", "Abgerundet", "rounded_corner"],
+    ["ellipse", "Kreis / Ellipse", "circle"],
+    ["triangle", "Dreieck", "change_history"],
+    ["diamond", "Raute", "diamond"],
+    ["pentagon", "Fünfeck", "pentagon"],
+    ["hexagon", "Sechseck", "hexagon"],
+    ["octagon", "Achteck", "stop"],
+    ["star", "Stern", "star"],
+    ["burst", "Strahlenform", "brightness_7"],
+    ["arrow", "Pfeil", "arrow_right_alt"],
+    ["chevron", "Chevron", "chevron_right"],
+    ["speech", "Sprechblase", "chat_bubble"],
+    ["cross", "Kreuz", "add"],
+    ["parallelogram", "Parallelogramm", "view_week"],
+    ["trapezoid", "Trapez", "details"],
+    ["heart", "Herz", "favorite"],
+    ["lightning", "Blitz", "bolt"],
+    ["shield", "Schild", "shield"],
+    ["cloud", "Wolke", "cloud"],
+    ["home", "Haus", "home"],
+    ["moon", "Halbmond", "dark_mode"],
+  ] as const;
+  function addShape(kind: (typeof shapes)[number][0], name: string) {
+    state.addShape(kind, name);
+    setShapeMenu(false);
+  }
+  return (
+    <div className="editor-shell">
+      <div className="canvas-tools">
+        {tool.slice(0, 2).map((entry) => (
+          <button
+            disabled={!canEdit}
+            key={entry.type}
+            title={`${entry.label} hinzufügen`}
+            onClick={() => state.addElement(entry.type)}
+          >
+            <Icon name={entry.icon} />
+            <span>{entry.label}</span>
+          </button>
+        ))}
+        <span className="shape-tool-host">
+          <button
+            disabled={!canEdit}
+            className={shapeMenu ? "active" : ""}
+            title="2D-Objekt hinzufügen"
+            onClick={() => setShapeMenu((value) => !value)}
+          >
+            <Icon name="category" />
+            <span>2D-Objekt</span>
+            <Icon name="arrow_drop_down" />
+          </button>
+          {shapeMenu && (
+            <div className="shape-palette">
+              {shapes.map(([kind, name, icon]) => (
+                <button key={kind} onClick={() => addShape(kind, name)}>
+                  <Icon name={icon} />
+                  <span>{name}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </span>
+        {tool.slice(2).map((entry) => (
+          <button
+            disabled={!canEdit}
+            key={entry.type}
+            title={`${entry.label} hinzufügen`}
+            onClick={() => state.addElement(entry.type)}
+          >
+            <Icon name={entry.icon} />
+            <span>{entry.label}</span>
+          </button>
+        ))}
+        <i />
+        <button
+          disabled={!state.selectedElementIds.length}
+          onClick={state.removeElements}
+          title="Auswahl löschen"
+        >
+          <Icon name="delete" />
+        </button>
+      </div>
+      <div className="canvas-stage">
+        <div
+          className="canvas-wrap canvas-editor"
+          ref={frame}
+          onPointerDown={() => {
+            setShapeMenu(false);
+            state.selectElements([]);
+          }}
+        >
+          <SlideRenderer slide={slide} mode="editor" />
+          {slide.elements
+            .filter((element) => element.visible)
+            .map((element) => {
+              const selected = state.selectedElementIds.includes(element.id);
+              return (
+                <div
+                  key={element.id}
+                  className={`element-hit ${selected ? "selected" : ""} ${element.locked ? "locked" : ""}`}
+                  style={{
+                    left: `${element.x / 19.2}%`,
+                    top: `${element.y / 10.8}%`,
+                    width: `${element.width / 19.2}%`,
+                    height: `${element.height / 10.8}%`,
+                    zIndex: 100 + element.zIndex,
+                    transform: `rotate(${element.rotation}deg)`,
+                  }}
+                  onPointerDown={(event) => begin(event, element.id, "move")}
+                >
+                  {selected && !element.locked && (
+                    <i
+                      className="resize-handle"
+                      onPointerDown={(event) =>
+                        begin(event, element.id, "resize")
+                      }
+                    />
+                  )}
+                </div>
+              );
+            })}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-function SortableSlide({slide,index,itemId}:{slide:Slide;index:number;itemId:string}){const state=usePresentation(),{attributes,listeners,setNodeRef,transform,transition,isDragging}=useSortable({id:slide.id});return <button ref={setNodeRef} style={{transform:CSS.Transform.toString(transform),transition}} className={`${slide.id===state.selectedSlideId?'active':''} ${slide.id===state.liveSlideId?'live-slide':''} ${!slide.enabled?'disabled-slide':''} ${isDragging?'dragging':''}`} onClick={()=>state.select(itemId,slide.id)} {...attributes} {...listeners}><SlideRenderer slide={slide} mode="thumbnail"/><span>{index+1}</span>{slide.id===state.liveSlideId&&<i className="live-dot"/>}</button>}
-function Filmstrip(){const {t}=useI18n(),state=usePresentation(),item=state.items.find(entry=>entry.id===state.selectedItemId);function end(event:DragEndEvent){if(event.over&&event.active.id!==event.over.id)state.reorderSlides(String(event.active.id),String(event.over.id))}return <div className="filmstrip"><header><b>{t('slides')}</b><div className="slide-actions"><button onClick={state.addSlide} title="Neue Folie"><Icon name="add"/></button><button onClick={state.duplicateSlide} title="Duplizieren"><Icon name="content_copy"/></button><button onClick={state.copySlide} title="Kopieren"><Icon name="file_copy"/></button><button onClick={state.pasteSlide} disabled={!state.clipboard} title="Einfügen"><Icon name="content_paste"/></button><button onClick={()=>state.moveSlide(-1)} title="Nach links"><Icon name="arrow_back"/></button><button onClick={()=>state.moveSlide(1)} title="Nach rechts"><Icon name="arrow_forward"/></button><button onClick={state.toggleSlide} title="Aktivieren/Deaktivieren"><Icon name="visibility"/></button><button className="danger-icon" onClick={state.removeSlide} title="Löschen"><Icon name="delete"/></button></div></header><DndContext collisionDetection={closestCenter} onDragEnd={end}><SortableContext items={item?.slides.map(slide=>slide.id)??[]}><div>{item?.slides.map((slide,index)=><SortableSlide key={slide.id} slide={slide} index={index} itemId={item.id}/>)}</div></SortableContext></DndContext></div>}
+function Workspace({
+  canEdit,
+  quick = null,
+}: {
+  canEdit: boolean;
+  quick?: QuickScreenConfig | null;
+}) {
+  const { t } = useI18n();
+  const state = usePresentation();
+  const itemId =
+      state.mode === "preview" ? state.previewItemId : state.selectedItemId,
+    slideId =
+      state.mode === "preview" ? state.previewSlideId : state.selectedSlideId;
+  const item =
+    state.items.find((entry) => entry.id === itemId) ?? state.items[0];
+  const slide =
+    item?.slides.find((entry) => entry.id === slideId) ?? item?.slides[0];
+  if (!slide)
+    return <section className="workspace empty">{t("noSlides")}</section>;
+  if (state.mode === "preview")
+    return (
+      <section
+        className={`workspace preview-workspace ${state.previewLayout === "grid" ? "preview-grid" : ""}`}
+        style={{ "--grid-size": `${state.gridSize}px` } as React.CSSProperties}
+      >
+        <div className="preview-toolbar">
+          <div>
+            <button
+              className={state.previewLayout === "single" ? "active" : ""}
+              onClick={() => state.setPreviewLayout("single")}
+            >
+              {t("singleView")}
+            </button>
+            <button
+              className={state.previewLayout === "grid" ? "active" : ""}
+              onClick={() => state.setPreviewLayout("grid")}
+            >
+              {t("slideOverview")}
+            </button>
+          </div>
+          <label>
+            MAIN{" "}
+            <select aria-label="MAIN">
+              <option>MAIN</option>
+            </select>
+          </label>
+          <label className="thumbnail-size">
+            <span>{t("previewSize")}</span>
+            <Icon name="zoom_out" />
+            <input
+              type="range"
+              min="160"
+              max="440"
+              step="40"
+              list="thumbnail-steps"
+              value={state.gridSize}
+              onChange={(event) =>
+                state.setGridSize(Number(event.target.value))
+              }
+            />
+            <datalist id="thumbnail-steps">
+              {[160, 200, 240, 280, 320, 360, 400, 440].map((value) => (
+                <option key={value} value={value} />
+              ))}
+            </datalist>
+            <Icon name="zoom_in" />
+          </label>
+        </div>
+        {state.previewLayout === "single" ? (
+          <div className="preview-single">
+            <div className="canvas-wrap">
+              <SlideRenderer slide={slide} mode="preview" />
+            </div>
+          </div>
+        ) : (
+          <div className="preview-scroll">
+            {state.sections.map((section) => {
+              const entries = state.items.filter(
+                (entry) => entry.sectionId === section.id,
+              );
+              return entries.length ? (
+                <div className="preview-section" key={section.id}>
+                  <h2>{section.title}</h2>
+                  {entries.map((entry) => (
+                    <div className="grid-item" key={entry.id}>
+                      <h3>{entry.title}</h3>
+                      <div className="grid-slides">
+                        {entry.slides.map((current, index) => {
+                          const preview =
+                              current.id === state.previewSlideId &&
+                              entry.id === state.previewItemId,
+                            live =
+                              current.id === state.liveSlideId &&
+                              entry.id === state.liveItemId,
+                            canTakeLive =
+                              entry.enabled &&
+                              !entry.disabled &&
+                              current.enabled;
+                          return (
+                            <div
+                              key={current.id}
+                              className={`grid-slide ${preview ? "selected" : ""} ${live ? "live-slide" : ""} ${!canTakeLive ? "disabled-slide" : ""}`}
+                            >
+                              <button
+                                className="thumbnail-hit"
+                                onClick={() =>
+                                  state.onAir
+                                    ? canTakeLive &&
+                                      state.goLive(entry.id, current.id)
+                                    : state.selectPreview(entry.id, current.id)
+                                }
+                                aria-label={`${entry.title}, ${t("slide")} ${index + 1}`}
+                              >
+                                <LazyThumbnail slide={current} />
+                              </button>
+                              <span className="thumbnail-number">
+                                {index + 1}
+                              </span>
+                              {live && <i className="live-dot" />}
+                              <div className="thumbnail-actions">
+                                <button
+                                  onClick={() =>
+                                    state.selectPreview(entry.id, current.id)
+                                  }
+                                >
+                                  {t("preview")}
+                                </button>
+                                <button
+                                  disabled={!canEdit}
+                                  onClick={() => {
+                                    state.select(entry.id, current.id);
+                                    state.setMode("edit");
+                                  }}
+                                >
+                                  {t("edit")}
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : null;
+            })}
+          </div>
+        )}
+      </section>
+    );
+  return (
+    <section className="workspace editor-workspace">
+      <CanvasEditor slide={slide} canEdit={canEdit} />
+    </section>
+  );
+}
 
-function ExpandableItem({title,body}:{title:string;body:string}){const [open,setOpen]=useState(false);return <div className="expandable-item"><button type="button" onClick={()=>setOpen(value=>!value)} aria-expanded={open}><b>{open?'−':'+'}</b><span>{title}</span></button>{open&&<p>{body}</p>}</div>}
-function VersionItem({version,items,latest=false}:{version:string;items:{title:string;details:string[]}[];latest?:boolean}){const [open,setOpen]=useState(latest);return <div className={`version-item ${latest?'latest':''}`}><button type="button" onClick={()=>setOpen(value=>!value)} aria-expanded={open}><b>{open?'−':'+'}</b><span>Version {version}</span>{latest&&<Icon name="new_releases"/>}</button>{open&&<div className="version-item-content">{items.map(item=><section key={item.title}><h5>{item.title}</h5><ul>{item.details.map(detail=><li key={detail}>{detail}</li>)}</ul></section>)}</div>}</div>}
-type ReleaseText=Record<string,string>;type ReleaseEntry={label:ReleaseText;text:ReleaseText};type ReleaseBuild={version:string;releaseDate:string;current?:boolean;sections:Record<string,ReleaseEntry[]>};type ReleaseFile={versions:{line:string;builds:ReleaseBuild[]}[]};
-const updateCategoryLabels:Partial<Record<Language,Record<string,string>>>={
-  de:{new:'Neu',improved:'Verbessert',fixed:'Fehlerbehebungen',security:'Sicherheit'},gsw:{new:'Neu',improved:'Verbesseret',fixed:'Fehlerbehebige',security:'Sicherheit'},en:{new:'New',improved:'Improved',fixed:'Bug fixes',security:'Security'},nl:{new:'Nieuw',improved:'Verbeterd',fixed:'Foutoplossingen',security:'Beveiliging'},da:{new:'Nyt',improved:'Forbedret',fixed:'Fejlrettelser',security:'Sikkerhed'},no:{new:'Nytt',improved:'Forbedret',fixed:'Feilrettinger',security:'Sikkerhet'},sv:{new:'Nytt',improved:'Förbättrat',fixed:'Felkorrigeringar',security:'Säkerhet'},fi:{new:'Uutta',improved:'Parannettu',fixed:'Korjaukset',security:'Tietoturva'},fr:{new:'Nouveautés',improved:'Améliorations',fixed:'Corrections',security:'Sécurité'},es:{new:'Novedades',improved:'Mejoras',fixed:'Correcciones',security:'Seguridad'},it:{new:'Novità',improved:'Miglioramenti',fixed:'Correzioni',security:'Sicurezza'},pl:{new:'Nowości',improved:'Ulepszenia',fixed:'Poprawki błędów',security:'Bezpieczeństwo'},'pt-BR':{new:'Novidades',improved:'Melhorias',fixed:'Correções',security:'Segurança'},uk:{new:'Нове',improved:'Покращено',fixed:'Виправлення',security:'Безпека'},ru:{new:'Новое',improved:'Улучшено',fixed:'Исправления',security:'Безопасность'},tr:{new:'Yenilikler',improved:'İyileştirmeler',fixed:'Hata düzeltmeleri',security:'Güvenlik'},ar:{new:'الجديد',improved:'تحسينات',fixed:'إصلاحات',security:'الأمان'}
+function Inspector({ canEdit }: { canEdit: boolean }) {
+  const { t } = useI18n(),
+    state = usePresentation(),
+    [tab, setTab] = useState<"properties" | "layers">("properties"),
+    item = state.items.find((entry) => entry.id === state.selectedItemId),
+    slide = item?.slides.find((entry) => entry.id === state.selectedSlideId),
+    selectedElement = slide?.elements.find((element) =>
+      state.selectedElementIds.includes(element.id),
+    );
+  if (!slide)
+    return (
+      <aside className="inspector">
+        <header>
+          <b>{t("properties")}</b>
+        </header>
+      </aside>
+    );
+  return (
+    <aside className="inspector">
+      <header>
+        <button
+          className={tab === "properties" ? "active" : ""}
+          onClick={() => setTab("properties")}
+        >
+          <b>{t("properties")}</b>
+        </button>
+        <button
+          className={tab === "layers" ? "active" : ""}
+          onClick={() => setTab("layers")}
+        >
+          {t("layers")}
+        </button>
+      </header>
+      {tab === "properties" ? (
+        <div className="fields">
+          {item && (
+            <>
+              <label>
+                Elementname
+                <input
+                  disabled={!canEdit}
+                  value={item.title}
+                  onChange={(e) =>
+                    state.updateItem(item.id, { title: e.target.value })
+                  }
+                />
+              </label>
+              <label>
+                Abschnitt
+                <select
+                  disabled={!canEdit}
+                  value={item.sectionId}
+                  onChange={(e) =>
+                    state.moveItemToSection(item.id, e.target.value)
+                  }
+                >
+                  {state.sections.map((section) => (
+                    <option key={section.id} value={section.id}>
+                      {section.title}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </>
+          )}
+          {selectedElement ? (
+            <>
+              <h4>{selectedElement.name}</h4>
+              {selectedElement.type === "text" && (
+                <label>
+                  {t("text")}
+                  <textarea
+                    disabled={!canEdit}
+                    rows={6}
+                    value={String(selectedElement.properties.text ?? "")}
+                    onChange={(e) =>
+                      state.updateElement(selectedElement.id, {
+                        properties: {
+                          ...selectedElement.properties,
+                          text: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </label>
+              )}
+              <div className="field-grid">
+                <label>
+                  X
+                  <input
+                    type="number"
+                    value={Math.round(selectedElement.x)}
+                    onChange={(e) =>
+                      state.updateElement(selectedElement.id, {
+                        x: Number(e.target.value),
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  Y
+                  <input
+                    type="number"
+                    value={Math.round(selectedElement.y)}
+                    onChange={(e) =>
+                      state.updateElement(selectedElement.id, {
+                        y: Number(e.target.value),
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  Breite
+                  <input
+                    type="number"
+                    value={Math.round(selectedElement.width)}
+                    onChange={(e) =>
+                      state.updateElement(selectedElement.id, {
+                        width: Number(e.target.value),
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  Höhe
+                  <input
+                    type="number"
+                    value={Math.round(selectedElement.height)}
+                    onChange={(e) =>
+                      state.updateElement(selectedElement.id, {
+                        height: Number(e.target.value),
+                      })
+                    }
+                  />
+                </label>
+              </div>
+            </>
+          ) : (
+            <>
+              <label>
+                {t("title")}
+                <input
+                  disabled={!canEdit}
+                  value={slide.title}
+                  onChange={(e) => state.updateSlide({ title: e.target.value })}
+                />
+              </label>
+              <label>
+                {t("text")}
+                <textarea
+                  disabled={!canEdit}
+                  rows={5}
+                  value={slide.body}
+                  onChange={(e) => state.updateSlide({ body: e.target.value })}
+                />
+              </label>
+              <label>
+                {t("background")}
+                <input
+                  disabled={!canEdit}
+                  type="color"
+                  value={slide.background}
+                  onChange={(e) =>
+                    state.updateSlide({ background: e.target.value })
+                  }
+                />
+              </label>
+            </>
+          )}
+          {item && (
+            <div className="timing-fields">
+              <h4>WIEDERGABE &amp; ZEIT</h4>
+              <label>
+                Modus
+                <select
+                  disabled={!canEdit}
+                  value={item.timing.mode}
+                  onChange={(e) =>
+                    state.updateItem(item.id, {
+                      timing: {
+                        ...item.timing,
+                        mode: e.target.value as ServiceItem["timing"]["mode"],
+                      },
+                    })
+                  }
+                >
+                  <option value="manual">Manuell</option>
+                  <option value="slide-duration">Folienzeit</option>
+                  <option value="media-duration">Mediendauer</option>
+                  <option value="scheduled">Zeitgesteuert</option>
+                </select>
+              </label>
+              <label>
+                Standard-Folienzeit
+                <input
+                  disabled={!canEdit}
+                  type="number"
+                  min="1"
+                  value={item.timing.slideDurationSeconds}
+                  onChange={(e) =>
+                    state.updateItem(item.id, {
+                      plannedDuration:
+                        Number(e.target.value) *
+                        Math.max(1, item.slides.length),
+                      timing: {
+                        ...item.timing,
+                        slideDurationSeconds: Math.max(
+                          1,
+                          Number(e.target.value),
+                        ),
+                      },
+                    })
+                  }
+                />
+              </label>
+              <label className="setting-check">
+                <input
+                  disabled={!canEdit}
+                  type="checkbox"
+                  checked={item.timing.autoAdvance}
+                  onChange={(e) =>
+                    state.updateItem(item.id, {
+                      autoAdvance: e.target.checked,
+                      timing: { ...item.timing, autoAdvance: e.target.checked },
+                    })
+                  }
+                />
+                <span>Automatisch weiterschalten</span>
+              </label>
+              <label className="setting-check">
+                <input
+                  disabled={!canEdit}
+                  type="checkbox"
+                  checked={item.timing.repeat}
+                  onChange={(e) =>
+                    state.updateItem(item.id, {
+                      repeat: e.target.checked,
+                      timing: { ...item.timing, repeat: e.target.checked },
+                    })
+                  }
+                />
+                <span>Wiederholen</span>
+              </label>
+              <label className="setting-check">
+                <input
+                  disabled={!canEdit}
+                  type="checkbox"
+                  checked={item.timing.shuffle}
+                  onChange={(e) =>
+                    state.updateItem(item.id, {
+                      timing: { ...item.timing, shuffle: e.target.checked },
+                    })
+                  }
+                />
+                <span>Zufällige Reihenfolge</span>
+              </label>
+              <label>
+                Diese Folie (Sekunden)
+                <input
+                  disabled={!canEdit}
+                  type="number"
+                  min="1"
+                  value={slide.timing?.durationSeconds ?? ""}
+                  placeholder={String(item.timing.slideDurationSeconds)}
+                  onChange={(e) =>
+                    state.updateSlide({
+                      timing: {
+                        durationSeconds: e.target.value
+                          ? Math.max(1, Number(e.target.value))
+                          : undefined,
+                      },
+                    })
+                  }
+                />
+              </label>
+            </div>
+          )}
+          {item?.type === "web" && (
+            <>
+              <label>
+                URL
+                <input
+                  value={String(item.metadata.url ?? "")}
+                  onChange={(e) =>
+                    state.updateItem(item.id, {
+                      metadata: { ...item.metadata, url: e.target.value },
+                    })
+                  }
+                />
+              </label>
+              <label>
+                Zoom
+                <input
+                  type="number"
+                  min="25"
+                  max="300"
+                  value={Number(item.metadata.zoom ?? 100)}
+                  onChange={(e) =>
+                    state.updateItem(item.id, {
+                      metadata: {
+                        ...item.metadata,
+                        zoom: Number(e.target.value),
+                      },
+                    })
+                  }
+                />
+              </label>
+            </>
+          )}
+          {(item?.type === "video" || item?.type === "audio") && (
+            <>
+              <label>
+                Medienquelle
+                <input
+                  value={String(item.metadata.url ?? "")}
+                  onChange={(e) =>
+                    state.updateItem(item.id, {
+                      metadata: { ...item.metadata, url: e.target.value },
+                    })
+                  }
+                />
+              </label>
+              <label>
+                Lautstärke
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={Number(item.metadata.volume ?? 100)}
+                  onChange={(e) =>
+                    state.updateItem(item.id, {
+                      metadata: {
+                        ...item.metadata,
+                        volume: Number(e.target.value),
+                      },
+                    })
+                  }
+                />
+              </label>
+            </>
+          )}
+        </div>
+      ) : (
+        <div className="layers-list">
+          {[...slide.elements]
+            .sort((a, b) => b.zIndex - a.zIndex)
+            .map((element) => (
+              <div
+                className={
+                  state.selectedElementIds.includes(element.id) ? "active" : ""
+                }
+                key={element.id}
+                onClick={() => state.selectElements([element.id])}
+              >
+                <Icon
+                  name={
+                    element.type === "text"
+                      ? "text_fields"
+                      : element.type === "image"
+                        ? "image"
+                        : element.type === "video"
+                          ? "movie"
+                          : element.type === "qr"
+                            ? "qr_code_2"
+                            : "category"
+                  }
+                />
+                <span>{element.name}</span>
+                <button
+                  title="Sichtbarkeit"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    state.toggleElementVisible(element.id);
+                  }}
+                >
+                  <Icon
+                    name={element.visible ? "visibility" : "visibility_off"}
+                  />
+                </button>
+                <button
+                  title="Sperren"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    state.toggleElementLocked(element.id);
+                  }}
+                >
+                  <Icon name={element.locked ? "lock" : "lock_open"} />
+                </button>
+                <button
+                  title="Nach vorn"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    state.moveElementLayer(element.id, 1);
+                  }}
+                >
+                  <Icon name="arrow_upward" />
+                </button>
+                <button
+                  title="Nach hinten"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    state.moveElementLayer(element.id, -1);
+                  }}
+                >
+                  <Icon name="arrow_downward" />
+                </button>
+              </div>
+            ))}
+        </div>
+      )}
+    </aside>
+  );
+}
+
+function SortableSlide({
+  slide,
+  index,
+  itemId,
+}: {
+  slide: Slide;
+  index: number;
+  itemId: string;
+}) {
+  const state = usePresentation(),
+    { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+      useSortable({ id: slide.id });
+  return (
+    <button
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      className={`${slide.id === state.selectedSlideId ? "active" : ""} ${slide.id === state.liveSlideId ? "live-slide" : ""} ${!slide.enabled ? "disabled-slide" : ""} ${isDragging ? "dragging" : ""}`}
+      onClick={() => state.select(itemId, slide.id)}
+      {...attributes}
+      {...listeners}
+    >
+      <SlideRenderer slide={slide} mode="thumbnail" />
+      <span>{index + 1}</span>
+      {slide.id === state.liveSlideId && <i className="live-dot" />}
+    </button>
+  );
+}
+function Filmstrip() {
+  const { t } = useI18n(),
+    state = usePresentation(),
+    item = state.items.find((entry) => entry.id === state.selectedItemId);
+  function end(event: DragEndEvent) {
+    if (event.over && event.active.id !== event.over.id)
+      state.reorderSlides(String(event.active.id), String(event.over.id));
+  }
+  return (
+    <div className="filmstrip">
+      <header>
+        <b>{t("slides")}</b>
+        <div className="slide-actions">
+          <button onClick={state.addSlide} title="Neue Folie">
+            <Icon name="add" />
+          </button>
+          <button onClick={state.duplicateSlide} title="Duplizieren">
+            <Icon name="content_copy" />
+          </button>
+          <button onClick={state.copySlide} title="Kopieren">
+            <Icon name="file_copy" />
+          </button>
+          <button
+            onClick={state.pasteSlide}
+            disabled={!state.clipboard}
+            title="Einfügen"
+          >
+            <Icon name="content_paste" />
+          </button>
+          <button onClick={() => state.moveSlide(-1)} title="Nach links">
+            <Icon name="arrow_back" />
+          </button>
+          <button onClick={() => state.moveSlide(1)} title="Nach rechts">
+            <Icon name="arrow_forward" />
+          </button>
+          <button onClick={state.toggleSlide} title="Aktivieren/Deaktivieren">
+            <Icon name="visibility" />
+          </button>
+          <button
+            className="danger-icon"
+            onClick={state.removeSlide}
+            title="Löschen"
+          >
+            <Icon name="delete" />
+          </button>
+        </div>
+      </header>
+      <DndContext collisionDetection={closestCenter} onDragEnd={end}>
+        <SortableContext items={item?.slides.map((slide) => slide.id) ?? []}>
+          <div>
+            {item?.slides.map((slide, index) => (
+              <SortableSlide
+                key={slide.id}
+                slide={slide}
+                index={index}
+                itemId={item.id}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
+    </div>
+  );
+}
+
+function ExpandableItem({ title, body }: { title: string; body: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="expandable-item">
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+      >
+        <b>{open ? "−" : "+"}</b>
+        <span>{title}</span>
+      </button>
+      {open && <p>{body}</p>}
+    </div>
+  );
+}
+function VersionItem({
+  version,
+  items,
+  latest = false,
+}: {
+  version: string;
+  items: { title: string; details: string[] }[];
+  latest?: boolean;
+}) {
+  const [open, setOpen] = useState(latest);
+  return (
+    <div className={`version-item ${latest ? "latest" : ""}`}>
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+      >
+        <b>{open ? "−" : "+"}</b>
+        <span>Version {version}</span>
+        {latest && <Icon name="new_releases" />}
+      </button>
+      {open && (
+        <div className="version-item-content">
+          {items.map((item) => (
+            <section key={item.title}>
+              <h5>{item.title}</h5>
+              <ul>
+                {item.details.map((detail) => (
+                  <li key={detail}>{detail}</li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+type ReleaseText = Record<string, string>;
+type ReleaseEntry = { label: ReleaseText; text: ReleaseText };
+type ReleaseBuild = {
+  version: string;
+  releaseDate: string;
+  current?: boolean;
+  sections: Record<string, ReleaseEntry[]>;
 };
-function conciseReleaseSummary(data:ReleaseFile,version:string,language:Language){const build=data.versions.flatMap(line=>line.builds).find(entry=>entry.version===version);if(!build)return'';const labels=updateCategoryLabels[language]??updateCategoryLabels.en!,local=(value:ReleaseText)=>value[language]??value.en??value.de??'';return Object.entries(build.sections).filter(([,entries])=>entries.length).slice(0,3).map(([key,entries])=>`${labels[key]??key}: ${entries.slice(0,2).map(entry=>local(entry.label)).join(', ')}`).join(' · ')}
-function conciseRemoteSummary(value:string){const lines=plainReleaseNotes(value).split(/\r?\n/).map(line=>line.replace(/^\s*[-*•#>]+\s*/,'').replace(/[*_`]/g,'').trim()).filter(line=>line&&!/^GottesdienstRegie\s+\d/i.test(line)&&!/^Veröffentlicht|^Released/i.test(line));return lines.slice(0,2).join(' · ').slice(0,220)}
-function isPrerelease(version:string){return /-(?:beta|rc)\.\d+$/i.test(version)}
-function versionLabel(version:string){const match=version.match(/^(\d+\.\d+\.\d+)-(beta|rc)\.(\d+)$/i);return match?`Version ${match[1]} ${match[2].toLowerCase()==='beta'?'Beta':'RC'} ${match[3]}`:`Version ${version}`}
-function ReleaseNotesView({webAction=true}:{webAction?:boolean}){const {language,locale}=useI18n(),[data,setData]=useState<ReleaseFile|null>(null);useEffect(()=>{void fetch('./releases.json').then(response=>response.json()).then(setData)},[]);const local=(value:ReleaseText)=>value[language]??value.en??value.de??'',categories:Record<string,string>={new:language==='de'?'Neu':'New',improved:language==='de'?'Verbessert':'Improved',fixed:language==='de'?'Behoben':'Fixed',security:language==='de'?'Sicherheit':'Security',knownIssues:language==='de'?'Bekannte Probleme':'Known issues'};if(!data)return <p>Versionsinformationen werden geladen …</p>;return <div className="structured-releases">{webAction&&<button className="external-action" onClick={()=>void window.desktop?.openExternal(`https://cmoere.github.io/GottesdienstRegie/release-notes/?lang=${encodeURIComponent(language)}`)}>RELEASE NOTES IM WEB ÖFFNEN <Icon name="open_in_new"/></button>}{data.versions.map((line,lineIndex)=><details key={line.line} open={lineIndex===0} className="release-line"><summary>Version {line.line}</summary>{line.builds.map((build,buildIndex)=><details key={build.version} open={build.current===true||lineIndex===0&&buildIndex===0} className="release-build"><summary><span>{versionLabel(build.version)}{isPrerelease(build.version)&&<em className="beta-badge">BETA</em>}</span><small>{new Date(build.releaseDate).toLocaleDateString(locale)}{build.current?' · Aktuelle Version':''}</small></summary>{Object.entries(build.sections).filter(([,entries])=>entries.length).map(([key,entries])=><section key={key}><h4>{categories[key]??key}</h4>{entries.map((entry,index)=><p key={index}><b>{local(entry.label)}:</b><span>{local(entry.text)}</span></p>)}</section>)}</details>)}</details>)}</div>}
+type ReleaseFile = { versions: { line: string; builds: ReleaseBuild[] }[] };
+const updateCategoryLabels: Partial<Record<Language, Record<string, string>>> =
+  {
+    de: {
+      new: "Neu",
+      improved: "Verbessert",
+      fixed: "Fehlerbehebungen",
+      security: "Sicherheit",
+    },
+    gsw: {
+      new: "Neu",
+      improved: "Verbesseret",
+      fixed: "Fehlerbehebige",
+      security: "Sicherheit",
+    },
+    en: {
+      new: "New",
+      improved: "Improved",
+      fixed: "Bug fixes",
+      security: "Security",
+    },
+    nl: {
+      new: "Nieuw",
+      improved: "Verbeterd",
+      fixed: "Foutoplossingen",
+      security: "Beveiliging",
+    },
+    da: {
+      new: "Nyt",
+      improved: "Forbedret",
+      fixed: "Fejlrettelser",
+      security: "Sikkerhed",
+    },
+    no: {
+      new: "Nytt",
+      improved: "Forbedret",
+      fixed: "Feilrettinger",
+      security: "Sikkerhet",
+    },
+    sv: {
+      new: "Nytt",
+      improved: "Förbättrat",
+      fixed: "Felkorrigeringar",
+      security: "Säkerhet",
+    },
+    fi: {
+      new: "Uutta",
+      improved: "Parannettu",
+      fixed: "Korjaukset",
+      security: "Tietoturva",
+    },
+    fr: {
+      new: "Nouveautés",
+      improved: "Améliorations",
+      fixed: "Corrections",
+      security: "Sécurité",
+    },
+    es: {
+      new: "Novedades",
+      improved: "Mejoras",
+      fixed: "Correcciones",
+      security: "Seguridad",
+    },
+    it: {
+      new: "Novità",
+      improved: "Miglioramenti",
+      fixed: "Correzioni",
+      security: "Sicurezza",
+    },
+    pl: {
+      new: "Nowości",
+      improved: "Ulepszenia",
+      fixed: "Poprawki błędów",
+      security: "Bezpieczeństwo",
+    },
+    "pt-BR": {
+      new: "Novidades",
+      improved: "Melhorias",
+      fixed: "Correções",
+      security: "Segurança",
+    },
+    uk: {
+      new: "Нове",
+      improved: "Покращено",
+      fixed: "Виправлення",
+      security: "Безпека",
+    },
+    ru: {
+      new: "Новое",
+      improved: "Улучшено",
+      fixed: "Исправления",
+      security: "Безопасность",
+    },
+    tr: {
+      new: "Yenilikler",
+      improved: "İyileştirmeler",
+      fixed: "Hata düzeltmeleri",
+      security: "Güvenlik",
+    },
+    ar: {
+      new: "الجديد",
+      improved: "تحسينات",
+      fixed: "إصلاحات",
+      security: "الأمان",
+    },
+  };
+function conciseReleaseSummary(
+  data: ReleaseFile,
+  version: string,
+  language: Language,
+) {
+  const build = data.versions
+    .flatMap((line) => line.builds)
+    .find((entry) => entry.version === version);
+  if (!build) return "";
+  const labels = updateCategoryLabels[language] ?? updateCategoryLabels.en!,
+    local = (value: ReleaseText) =>
+      value[language] ?? value.en ?? value.de ?? "";
+  return Object.entries(build.sections)
+    .filter(([, entries]) => entries.length)
+    .slice(0, 3)
+    .map(
+      ([key, entries]) =>
+        `${labels[key] ?? key}: ${entries
+          .slice(0, 2)
+          .map((entry) => local(entry.label))
+          .join(", ")}`,
+    )
+    .join(" · ");
+}
+function conciseRemoteSummary(value: string) {
+  const lines = plainReleaseNotes(value)
+    .split(/\r?\n/)
+    .map((line) =>
+      line
+        .replace(/^\s*[-*•#>]+\s*/, "")
+        .replace(/[*_`]/g, "")
+        .trim(),
+    )
+    .filter(
+      (line) =>
+        line &&
+        !/^GottesdienstRegie\s+\d/i.test(line) &&
+        !/^Veröffentlicht|^Released/i.test(line),
+    );
+  return lines.slice(0, 2).join(" · ").slice(0, 220);
+}
+function isPrerelease(version: string) {
+  return /-(?:beta|rc)\.\d+$/i.test(version);
+}
+function versionLabel(version: string) {
+  const match = version.match(/^(\d+\.\d+\.\d+)-(beta|rc)\.(\d+)$/i);
+  return match
+    ? `Version ${match[1]} ${match[2].toLowerCase() === "beta" ? "Beta" : "RC"} ${match[3]}`
+    : `Version ${version}`;
+}
+function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
+  const { language, locale } = useI18n(),
+    [data, setData] = useState<ReleaseFile | null>(null);
+  useEffect(() => {
+    void fetch("./releases.json")
+      .then((response) => response.json())
+      .then(setData);
+  }, []);
+  const local = (value: ReleaseText) =>
+      value[language] ?? value.en ?? value.de ?? "",
+    categories: Record<string, string> = {
+      new: language === "de" ? "Neu" : "New",
+      improved: language === "de" ? "Verbessert" : "Improved",
+      fixed: language === "de" ? "Behoben" : "Fixed",
+      security: language === "de" ? "Sicherheit" : "Security",
+      knownIssues: language === "de" ? "Bekannte Probleme" : "Known issues",
+    };
+  if (!data) return <p>Versionsinformationen werden geladen …</p>;
+  return (
+    <div className="structured-releases">
+      {webAction && (
+        <button
+          className="external-action"
+          onClick={() =>
+            void window.desktop?.openExternal(
+              `https://cmoere.github.io/GottesdienstRegie/release-notes/?lang=${encodeURIComponent(language)}`,
+            )
+          }
+        >
+          RELEASE NOTES IM WEB ÖFFNEN <Icon name="open_in_new" />
+        </button>
+      )}
+      {data.versions.map((line, lineIndex) => (
+        <details
+          key={line.line}
+          open={lineIndex === 0}
+          className="release-line"
+        >
+          <summary>Version {line.line}</summary>
+          {line.builds.map((build, buildIndex) => (
+            <details
+              key={build.version}
+              open={
+                build.current === true || (lineIndex === 0 && buildIndex === 0)
+              }
+              className="release-build"
+            >
+              <summary>
+                <span>
+                  {versionLabel(build.version)}
+                  {isPrerelease(build.version) && (
+                    <em className="beta-badge">BETA</em>
+                  )}
+                </span>
+                <small>
+                  {new Date(build.releaseDate).toLocaleDateString(locale)}
+                  {build.current ? " · Aktuelle Version" : ""}
+                </small>
+              </summary>
+              {Object.entries(build.sections)
+                .filter(([, entries]) => entries.length)
+                .map(([key, entries]) => (
+                  <section key={key}>
+                    <h4>{categories[key] ?? key}</h4>
+                    {entries.map((entry, index) => (
+                      <p key={index}>
+                        <b>{local(entry.label)}:</b>
+                        <span>{local(entry.text)}</span>
+                      </p>
+                    ))}
+                  </section>
+                ))}
+            </details>
+          ))}
+        </details>
+      ))}
+    </div>
+  );
+}
 
-function versionHistory(t:Translator,L:Record<string,string>){return[
-  {version:'0.6.0',items:[{title:t('showLoginBackgrounds'),details:[t('showLoginBackgroundsHelp'),t('language'),t('helpTitle')]},{title:t('updatesTitle'),details:[t('releaseNotes'),t('updateDownloading',{percent:100})]}]},
-  {version:'0.5.0',items:[{title:t('slideOverview'),details:[t('previewSize'),t('preview'),t('edit')]},{title:t('displayTitle'),details:[t('displayHelp'),'DisplayManager · OutputWindowManager · LiveEngine']}]},
-  {version:'0.4.0',items:[{title:t('presentation'),details:[t('slides'),t('helpShortcutsBody')]},{title:t('audio'),details:[L.audioHelp,L.noiseSuppression,L.echoCancellation]},{title:t('accessibility'),details:[L.highContrast,L.largeText,L.strongFocus,L.dyslexia]}]},
-  {version:'0.3.1',items:[{title:t('updatesTitle'),details:[t('updateInstall'),t('onlineReleaseNotes')]}]},
-  {version:'0.3.0',items:[{title:t('language'),details:[t('releaseNoteLanguagesBody')]},{title:t('helpSecurity'),details:[t('releaseNoteSecurityBody')]}]},
-  {version:'0.2.0',items:[{title:t('updatesTitle'),details:[t('checkUpdates'),t('updateDownload'),t('updateInstall')]}]},
-  {version:'0.1.0',items:[{title:'GottesdienstRegie',details:[t('loginSubtitle'),t('orderOfService'),t('presentation')]}]}
-]}
+function versionHistory(t: Translator, L: Record<string, string>) {
+  return [
+    {
+      version: "0.6.0",
+      items: [
+        {
+          title: t("showLoginBackgrounds"),
+          details: [
+            t("showLoginBackgroundsHelp"),
+            t("language"),
+            t("helpTitle"),
+          ],
+        },
+        {
+          title: t("updatesTitle"),
+          details: [
+            t("releaseNotes"),
+            t("updateDownloading", { percent: 100 }),
+          ],
+        },
+      ],
+    },
+    {
+      version: "0.5.0",
+      items: [
+        {
+          title: t("slideOverview"),
+          details: [t("previewSize"), t("preview"), t("edit")],
+        },
+        {
+          title: t("displayTitle"),
+          details: [
+            t("displayHelp"),
+            "DisplayManager · OutputWindowManager · LiveEngine",
+          ],
+        },
+      ],
+    },
+    {
+      version: "0.4.0",
+      items: [
+        {
+          title: t("presentation"),
+          details: [t("slides"), t("helpShortcutsBody")],
+        },
+        {
+          title: t("audio"),
+          details: [L.audioHelp, L.noiseSuppression, L.echoCancellation],
+        },
+        {
+          title: t("accessibility"),
+          details: [L.highContrast, L.largeText, L.strongFocus, L.dyslexia],
+        },
+      ],
+    },
+    {
+      version: "0.3.1",
+      items: [
+        {
+          title: t("updatesTitle"),
+          details: [t("updateInstall"), t("onlineReleaseNotes")],
+        },
+      ],
+    },
+    {
+      version: "0.3.0",
+      items: [
+        { title: t("language"), details: [t("releaseNoteLanguagesBody")] },
+        { title: t("helpSecurity"), details: [t("releaseNoteSecurityBody")] },
+      ],
+    },
+    {
+      version: "0.2.0",
+      items: [
+        {
+          title: t("updatesTitle"),
+          details: [t("checkUpdates"), t("updateDownload"), t("updateInstall")],
+        },
+      ],
+    },
+    {
+      version: "0.1.0",
+      items: [
+        {
+          title: "GottesdienstRegie",
+          details: [t("loginSubtitle"), t("orderOfService"), t("presentation")],
+        },
+      ],
+    },
+  ];
+}
 
-function plainReleaseNotes(value:string){if(!/<[a-z][\s\S]*>/i.test(value))return value;const document=new DOMParser().parseFromString(value,'text/html');document.querySelectorAll('br').forEach(node=>node.replaceWith('\n'));document.querySelectorAll('li').forEach(node=>node.prepend('• '));document.querySelectorAll('h1,h2,h3,h4,p,li').forEach(node=>node.append('\n'));return (document.body.textContent??value).replace(/\n\s*\n\s*\n/g,'\n\n').trim()}
+function plainReleaseNotes(value: string) {
+  if (!/<[a-z][\s\S]*>/i.test(value)) return value;
+  const document = new DOMParser().parseFromString(value, "text/html");
+  document.querySelectorAll("br").forEach((node) => node.replaceWith("\n"));
+  document.querySelectorAll("li").forEach((node) => node.prepend("• "));
+  document
+    .querySelectorAll("h1,h2,h3,h4,p,li")
+    .forEach((node) => node.append("\n"));
+  return (document.body.textContent ?? value)
+    .replace(/\n\s*\n\s*\n/g, "\n\n")
+    .trim();
+}
 
-type SettingsTab='general'|'ai'|'security'|'accessibility'|'shortcuts'|'updates'|'rewards'|'display'|'audio'|'audioRouting'|'videoInput'|'presentation'|'quickScreens'|'fonts'|'defaultMedia'|'defaultStage'|'remote'|'lightingMidi'|'midiInput';
+type SettingsTab =
+  | "general"
+  | "ai"
+  | "security"
+  | "accessibility"
+  | "shortcuts"
+  | "updates"
+  | "rewards"
+  | "display"
+  | "audio"
+  | "audioRouting"
+  | "videoInput"
+  | "presentation"
+  | "quickScreens"
+  | "fonts"
+  | "defaultMedia"
+  | "defaultStage"
+  | "remote"
+  | "lightingMidi"
+  | "midiInput";
 
-const shortcutRows:Array<{action:ShortcutAction;label:string;description:string}>=[
-  {action:'save',label:'Speichern',description:'Speichert die geöffnete Präsentation sofort.'},
-  {action:'undo',label:'Rückgängig',description:'Nimmt die letzte Änderung im Editor zurück.'},
-  {action:'redo',label:'Wiederholen',description:'Stellt eine zurückgenommene Änderung wieder her.'},
-  {action:'nextLive',label:'Nächste Live-Folie',description:'Schaltet während ON AIR zur nächsten aktiven Folie.'},
-  {action:'previousLive',label:'Vorherige Live-Folie',description:'Schaltet während ON AIR zur vorherigen aktiven Folie.'},
-  {action:'toggleMode',label:'Bearbeiten / Vorschau',description:'Wechselt zwischen Bearbeitungs- und Vorschau-Modus.'},
-  {action:'toggleFullscreen',label:'Vollbild',description:'Schaltet das Bedienfenster vorübergehend in den Vollbildmodus.'},
-  {action:'toggleOnAir',label:'ON AIR / OFF AIR',description:'Startet oder beendet die echte Präsentationsausgabe.'},
-  {action:'renameServiceItem',label:'Element umbenennen',description:'Benennt das ausgewählte Ablauf-Element um.'},
-  {action:'openHelp',label:'Hilfe öffnen',description:'Öffnet das integrierte Hilfezentrum.'},
-  {action:'openSettings',label:'Einstellungen öffnen',description:'Öffnet die Anwendungseinstellungen.'},
-  {action:'openLibrary',label:'Präsentationsbibliothek',description:'Öffnet die vorhandenen Präsentationen.'},
-  {action:'openMediaLibrary',label:'Medienbibliothek',description:'Öffnet die zentrale Medienbibliothek.'},
-  {action:'previewGrid',label:'Folienübersicht',description:'Wechselt in Vorschau und öffnet die Folienübersicht.'},
-  {action:'preflight',label:'Preflight prüfen',description:'Prüft Ausgänge und Inhalte, ohne ON AIR zu starten.'}
+const shortcutRows: Array<{
+  action: ShortcutAction;
+  label: string;
+  description: string;
+}> = [
+  {
+    action: "save",
+    label: "Speichern",
+    description: "Speichert die geöffnete Präsentation sofort.",
+  },
+  {
+    action: "undo",
+    label: "Rückgängig",
+    description: "Nimmt die letzte Änderung im Editor zurück.",
+  },
+  {
+    action: "redo",
+    label: "Wiederholen",
+    description: "Stellt eine zurückgenommene Änderung wieder her.",
+  },
+  {
+    action: "nextLive",
+    label: "Nächste Live-Folie",
+    description: "Schaltet während ON AIR zur nächsten aktiven Folie.",
+  },
+  {
+    action: "previousLive",
+    label: "Vorherige Live-Folie",
+    description: "Schaltet während ON AIR zur vorherigen aktiven Folie.",
+  },
+  {
+    action: "toggleMode",
+    label: "Bearbeiten / Vorschau",
+    description: "Wechselt zwischen Bearbeitungs- und Vorschau-Modus.",
+  },
+  {
+    action: "toggleFullscreen",
+    label: "Vollbild",
+    description:
+      "Schaltet das Bedienfenster vorübergehend in den Vollbildmodus.",
+  },
+  {
+    action: "toggleOnAir",
+    label: "ON AIR / OFF AIR",
+    description: "Startet oder beendet die echte Präsentationsausgabe.",
+  },
+  {
+    action: "renameServiceItem",
+    label: "Element umbenennen",
+    description: "Benennt das ausgewählte Ablauf-Element um.",
+  },
+  {
+    action: "openHelp",
+    label: "Hilfe öffnen",
+    description: "Öffnet das integrierte Hilfezentrum.",
+  },
+  {
+    action: "openSettings",
+    label: "Einstellungen öffnen",
+    description: "Öffnet die Anwendungseinstellungen.",
+  },
+  {
+    action: "openLibrary",
+    label: "Präsentationsbibliothek",
+    description: "Öffnet die vorhandenen Präsentationen.",
+  },
+  {
+    action: "openMediaLibrary",
+    label: "Medienbibliothek",
+    description: "Öffnet die zentrale Medienbibliothek.",
+  },
+  {
+    action: "previewGrid",
+    label: "Folienübersicht",
+    description: "Wechselt in Vorschau und öffnet die Folienübersicht.",
+  },
+  {
+    action: "preflight",
+    label: "Preflight prüfen",
+    description: "Prüft Ausgänge und Inhalte, ohne ON AIR zu starten.",
+  },
 ];
 
-function KeyboardShortcutSettings(){
-  const storedShortcuts=usePreferences(state=>state.keyboardShortcuts),shortcuts=useMemo(()=>({...defaultKeyboardShortcuts,...storedShortcuts}),[storedShortcuts]),setShortcut=usePreferences(state=>state.setKeyboardShortcut),reset=usePreferences(state=>state.resetKeyboardShortcuts),[recording,setRecording]=useState<ShortcutAction|null>(null),[confirmReset,setConfirmReset]=useState(false);
-  const capture=(event:ReactKeyboardEvent<HTMLButtonElement>,action:ShortcutAction)=>{event.preventDefault();event.stopPropagation();if(event.key==='Escape'){setRecording(null);return}const value=shortcutFromEvent(event);if(!value)return;const conflict=shortcutRows.find(row=>row.action!==action&&shortcuts[row.action]===value);if(conflict){alert(`„${value}“ wird bereits für „${conflict.label}“ verwendet.`);return}setShortcut(action,value);setRecording(null)};
-  return <section className="shortcut-settings"><h3>Tastenkürzel</h3><p>Klicke auf ein Kürzel und drücke anschließend die gewünschte Tastenkombination. Änderungen werden auf diesem Gerät gespeichert und sofort angewendet. Escape beendet die Eingabe ohne Änderung.</p><div className="shortcut-list">{shortcutRows.map(row=><div className="shortcut-row" key={row.action}><span><b>{row.label}</b><small>{row.description}</small></span><button className={recording===row.action?'recording':''} onClick={()=>setRecording(row.action)} onKeyDown={event=>recording===row.action&&capture(event,row.action)}>{recording===row.action?'TASTEN DRÜCKEN …':shortcuts[row.action]}</button></div>)}</div><div className="shortcut-actions"><button onClick={()=>setConfirmReset(true)}>AUF STANDARD ZURÜCKSETZEN</button></div><p className="shortcut-note"><Icon name="warning"/> Das Kürzel für ON AIR sollte bewusst gewählt werden. Der Live-Start führt weiterhin den normalen Preflight durch.</p>{confirmReset&&<div className="modal-backdrop shortcut-reset-confirm"><div className="confirm-dialog" role="alertdialog" aria-modal="true"><div className="confirm-icon"><Icon name="keyboard"/></div><h2>TASTENKÜRZEL ZURÜCKSETZEN?</h2><p>Alle eigenen Belegungen werden durch die Standardkürzel ersetzt. Diese Änderung betrifft nur diesen Rechner.</p><div><button onClick={()=>setConfirmReset(false)}>ABBRECHEN</button><button className="primary" onClick={()=>{reset();setConfirmReset(false)}}>JETZT ZURÜCKSETZEN</button></div></div></div>}</section>;
+function KeyboardShortcutSettings() {
+  const storedShortcuts = usePreferences((state) => state.keyboardShortcuts),
+    shortcuts = useMemo(
+      () => ({ ...defaultKeyboardShortcuts, ...storedShortcuts }),
+      [storedShortcuts],
+    ),
+    setShortcut = usePreferences((state) => state.setKeyboardShortcut),
+    reset = usePreferences((state) => state.resetKeyboardShortcuts),
+    [recording, setRecording] = useState<ShortcutAction | null>(null),
+    [confirmReset, setConfirmReset] = useState(false);
+  const capture = (
+    event: ReactKeyboardEvent<HTMLButtonElement>,
+    action: ShortcutAction,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.key === "Escape") {
+      setRecording(null);
+      return;
+    }
+    const value = shortcutFromEvent(event);
+    if (!value) return;
+    const conflict = shortcutRows.find(
+      (row) => row.action !== action && shortcuts[row.action] === value,
+    );
+    if (conflict) {
+      alert(`„${value}“ wird bereits für „${conflict.label}“ verwendet.`);
+      return;
+    }
+    setShortcut(action, value);
+    setRecording(null);
+  };
+  return (
+    <section className="shortcut-settings">
+      <h3>Tastenkürzel</h3>
+      <p>
+        Klicke auf ein Kürzel und drücke anschließend die gewünschte
+        Tastenkombination. Änderungen werden auf diesem Gerät gespeichert und
+        sofort angewendet. Escape beendet die Eingabe ohne Änderung.
+      </p>
+      <div className="shortcut-list">
+        {shortcutRows.map((row) => (
+          <div className="shortcut-row" key={row.action}>
+            <span>
+              <b>{row.label}</b>
+              <small>{row.description}</small>
+            </span>
+            <button
+              className={recording === row.action ? "recording" : ""}
+              onClick={() => setRecording(row.action)}
+              onKeyDown={(event) =>
+                recording === row.action && capture(event, row.action)
+              }
+            >
+              {recording === row.action
+                ? "TASTEN DRÜCKEN …"
+                : shortcuts[row.action]}
+            </button>
+          </div>
+        ))}
+      </div>
+      <div className="shortcut-actions">
+        <button onClick={() => setConfirmReset(true)}>
+          AUF STANDARD ZURÜCKSETZEN
+        </button>
+      </div>
+      <p className="shortcut-note">
+        <Icon name="warning" /> Das Kürzel für ON AIR sollte bewusst gewählt
+        werden. Der Live-Start führt weiterhin den normalen Preflight durch.
+      </p>
+      {confirmReset && (
+        <div className="modal-backdrop shortcut-reset-confirm">
+          <div className="confirm-dialog" role="alertdialog" aria-modal="true">
+            <div className="confirm-icon">
+              <Icon name="keyboard" />
+            </div>
+            <h2>TASTENKÜRZEL ZURÜCKSETZEN?</h2>
+            <p>
+              Alle eigenen Belegungen werden durch die Standardkürzel ersetzt.
+              Diese Änderung betrifft nur diesen Rechner.
+            </p>
+            <div>
+              <button onClick={() => setConfirmReset(false)}>ABBRECHEN</button>
+              <button
+                className="primary"
+                onClick={() => {
+                  reset();
+                  setConfirmReset(false);
+                }}
+              >
+                JETZT ZURÜCKSETZEN
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
 }
 
-function CeraFontSettings(){const prefs=usePreferences();const pick=async(event:React.ChangeEvent<HTMLInputElement>)=>{const file=event.target.files?.[0];if(!file)return;try{await saveCeraPro(file);prefs.setCeraProFileName(file.name)}catch(error){alert(`Die Schrift konnte nicht eingebettet werden.\n\n${String(error)}`)}};return <section className="cera-font-settings"><h3>Cera Pro</h3><p><b>Mit der Anwendung bereitgestellt:</b> Thin, Light, Regular, Medium, Bold und Black – jeweils normal und kursiv. Cera Pro funktioniert damit auf jedem Rechner auch ohne Systeminstallation.</p><p>Optional kannst du bitte eine andere lizenzierte Cera-Pro-Datei nur für dieses Gerät hinterlegen.</p><label className="font-file-button"><Icon name="font_download"/> EIGENE CERA-PRO-DATEI AUSWÄHLEN<input type="file" accept=".woff2,.woff,.ttf,.otf" onChange={event=>void pick(event)}/></label><p>{prefs.ceraProFileName?`Lokale Ergänzung aktiv: ${prefs.ceraProFileName}`:'Die mitgelieferte vollständige Schriftfamilie ist aktiv.'}</p>{prefs.ceraProFileName&&<button onClick={()=>void removeCeraPro().then(()=>prefs.setCeraProFileName(''))}>LOKALE ERGÄNZUNG ENTFERNEN</button>}</section>}
-
-function FontSettings(){
-  const prefs=usePreferences(),state=usePresentation(),{defaultFont,defaultFontSize,defaultFontWeight,defaultFontStyle}=prefs,slide=state.items.flatMap(item=>item.slides).find(entry=>entry.id===state.selectedSlideId);
-  const applyToSlide=()=>{for(const element of slide?.elements.filter(entry=>entry.type==='text')??[])state.updateElement(element.id,{properties:{...element.properties,fontFamily:defaultFont,fontSize:defaultFontSize,fontWeight:defaultFontWeight,fontStyle:defaultFontStyle}})};
-  return <section className="font-settings"><h3>Schriftarten</h3><p>Lege fest, wie neue Texte und neue Folien beginnen. Cera Pro ist die Standardschrift. Ist sie auf einem Gerät nicht installiert, verwendet GottesdienstRegie automatisch Aptos, Inter oder Segoe UI.</p><div className="settings-group"><h4>STANDARD FÜR NEUE TEXTE</h4><label>Standardschrift<select value={defaultFont} onChange={event=>prefs.setDefaultFont(event.target.value)}>{editorFonts.map(font=><option value={font} key={font} style={{fontFamily:fontStack(font)}}>{font}</option>)}</select></label><div className="font-default-grid"><label>Schriftgröße<input type="number" min="12" max="240" value={defaultFontSize} onChange={event=>prefs.setDefaultFontSize(Number(event.target.value))}/></label><label>Schriftgewicht<select value={defaultFontWeight} onChange={event=>prefs.setDefaultFontWeight(Number(event.target.value))}><option value="100">Dünn</option><option value="300">Leicht</option><option value="400">Normal</option><option value="500">Medium</option><option value="600">Halbfett</option><option value="700">Fett</option><option value="800">Extra fett</option><option value="900">Schwarz</option></select></label><label>Schriftstil<select value={defaultFontStyle} onChange={event=>prefs.setDefaultFontStyle(event.target.value as 'normal'|'italic')}><option value="normal">Normal</option><option value="italic">Kursiv</option></select></label></div><div className="font-settings-preview" style={{fontFamily:fontStack(defaultFont),fontSize:`${Math.min(46,Math.max(22,defaultFontSize/2))}px`,fontWeight:defaultFontWeight,fontStyle:defaultFontStyle}}><span>Cera Pro · GottesdienstRegie</span><small>So sehen neue Texte in der Präsentation aus.</small></div><button className="primary" disabled={!slide?.elements.some(entry=>entry.type==='text')} onClick={applyToSlide}>AUF ALLE TEXTE DER AKTUELLEN FOLIE ANWENDEN</button></div><div className="settings-group"><h4>VERFÜGBARE SCHRIFTEN</h4><p>{editorFonts.length} auswählbare Schriftfamilien. Systemschriften werden verwendet, wenn sie auf diesem Gerät installiert sind.</p><div className="font-chip-list">{editorFonts.map(font=><span key={font} style={{fontFamily:fontStack(font)}}>{font}</span>)}</div></div></section>;
+function CeraFontSettings() {
+  const prefs = usePreferences();
+  const pick = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    try {
+      await saveCeraPro(file);
+      prefs.setCeraProFileName(file.name);
+    } catch (error) {
+      alert(`Die Schrift konnte nicht eingebettet werden.\n\n${String(error)}`);
+    }
+  };
+  return (
+    <section className="cera-font-settings">
+      <h3>Cera Pro</h3>
+      <p>
+        <b>Mit der Anwendung bereitgestellt:</b> Thin, Light, Regular, Medium,
+        Bold und Black – jeweils normal und kursiv. Cera Pro funktioniert damit
+        auf jedem Rechner auch ohne Systeminstallation.
+      </p>
+      <p>
+        Optional kannst du bitte eine andere lizenzierte Cera-Pro-Datei nur für
+        dieses Gerät hinterlegen.
+      </p>
+      <label className="font-file-button">
+        <Icon name="font_download" /> EIGENE CERA-PRO-DATEI AUSWÄHLEN
+        <input
+          type="file"
+          accept=".woff2,.woff,.ttf,.otf"
+          onChange={(event) => void pick(event)}
+        />
+      </label>
+      <p>
+        {prefs.ceraProFileName
+          ? `Lokale Ergänzung aktiv: ${prefs.ceraProFileName}`
+          : "Die mitgelieferte vollständige Schriftfamilie ist aktiv."}
+      </p>
+      {prefs.ceraProFileName && (
+        <button
+          onClick={() =>
+            void removeCeraPro().then(() => prefs.setCeraProFileName(""))
+          }
+        >
+          LOKALE ERGÄNZUNG ENTFERNEN
+        </button>
+      )}
+    </section>
+  );
 }
 
-function TimelineSettings(){const enabled=usePreferences(state=>state.timelineThumbnails),setEnabled=usePreferences(state=>state.setTimelineThumbnails);return <section className="settings-group timeline-settings"><h3>TIMELINE</h3><label className="setting-check"><input type="checkbox" checked={enabled} onChange={event=>setEnabled(event.target.checked)}/><span><b>Kleine Folienvorschaubilder anzeigen</b><small>Zeigt die erste Folie jedes Ablauf-Elements in der aufgeklappten Timeline. Ausschalten spart Platz und Rechenleistung.</small></span></label></section>}
-
-function PresentationTransitionSettings(){
-  const state=usePresentation(),transition=state.transitionDefault,slide=state.items.flatMap(item=>item.slides).find(entry=>entry.id===state.selectedSlideId),[previewToken,setPreviewToken]=useState(0),update=(patch:Partial<typeof transition>)=>state.updatePresentation({transitionDefault:{...transition,...patch}});
-  const previewSlide:Slide=slide??{id:'settings-transition-preview',itemId:'settings',order:0,enabled:true,title:'Übergangsvorschau',body:'GottesdienstRegie',background:'#35626b',elements:[],transition:'fade',transitionDuration:500,notes:''};
-  return <section><h3>Präsentation</h3><p>Lege den Standardübergang für MAIN fest. Einzelne Ablauf-Elemente und Folien können ihn im Editor überschreiben.</p><div className="settings-group transition-default-settings"><h4>STANDARDÜBERGANG</h4><div className="transition-setting-layout"><div className="transition-setting-fields"><label>Effekt<select value={transition.type} onChange={event=>update({type:event.target.value as TransitionType})}>{Object.entries(transitionLabels).map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></label><label>Dauer<div className="duration-input"><input aria-label="Übergangsdauer in Sekunden" type="number" inputMode="decimal" min="0.1" max="5" step="0.1" disabled={transition.type==='cut'} value={Number((transition.durationMs/1000).toFixed(1))} onChange={event=>{const seconds=Number(event.target.value);if(Number.isFinite(seconds))update({durationMs:Math.round(Math.max(.1,Math.min(5,seconds))*1000)})}}/><span>Sek.</span></div></label>{(['slide','wipe','push','cube'] as TransitionType[]).includes(transition.type)&&<label>Richtung<select value={transition.direction} onChange={event=>update({direction:event.target.value as TransitionDirection})}><option value="left">Nach links</option><option value="right">Nach rechts</option><option value="up">Nach oben</option><option value="down">Nach unten</option></select></label>}<label>Bewegung<select disabled={transition.type==='cut'} value={transition.easing} onChange={event=>update({easing:event.target.value as TransitionEasing})}><option value="standard">Standard</option><option value="linear">Linear</option><option value="ease-in">Sanft starten</option><option value="ease-out">Sanft enden</option><option value="ease-in-out">Sanft starten &amp; enden</option></select></label><label className="setting-check"><input type="checkbox" checked={transition.reverseOnPrevious} onChange={event=>update({reverseOnPrevious:event.target.checked})}/><span><b>Richtung beim Zurückschalten umkehren</b></span></label></div><div className="settings-transition-preview"><b>KLEINE VORSCHAU</b><div><TransitionStage slide={previewSlide} transition={transition} role="operator" previewToken={previewToken}/></div><button disabled={transition.type==='cut'} onClick={()=>setPreviewToken(value=>value+1)}><Icon name="play_arrow"/> VORSCHAU ANSEHEN</button></div></div><button onClick={()=>state.updatePresentation({transitionDefault:{...defaultTransition}})}>AUF STANDARD ZURÜCKSETZEN</button><p>Die Vorschau funktioniert auch ohne ausgewählte Folie und verändert MAIN nicht.</p></div></section>;
+function FontSettings() {
+  const prefs = usePreferences(),
+    state = usePresentation(),
+    { defaultFont, defaultFontSize, defaultFontWeight, defaultFontStyle } =
+      prefs,
+    slide = state.items
+      .flatMap((item) => item.slides)
+      .find((entry) => entry.id === state.selectedSlideId);
+  const applyToSlide = () => {
+    for (const element of slide?.elements.filter(
+      (entry) => entry.type === "text",
+    ) ?? [])
+      state.updateElement(element.id, {
+        properties: {
+          ...element.properties,
+          fontFamily: defaultFont,
+          fontSize: defaultFontSize,
+          fontWeight: defaultFontWeight,
+          fontStyle: defaultFontStyle,
+        },
+      });
+  };
+  return (
+    <section className="font-settings">
+      <h3>Schriftarten</h3>
+      <p>
+        Lege fest, wie neue Texte und neue Folien beginnen. Cera Pro ist die
+        Standardschrift. Ist sie auf einem Gerät nicht installiert, verwendet
+        GottesdienstRegie automatisch Aptos, Inter oder Segoe UI.
+      </p>
+      <div className="settings-group">
+        <h4>STANDARD FÜR NEUE TEXTE</h4>
+        <label>
+          Standardschrift
+          <select
+            value={defaultFont}
+            onChange={(event) => prefs.setDefaultFont(event.target.value)}
+          >
+            {editorFonts.map((font) => (
+              <option
+                value={font}
+                key={font}
+                style={{ fontFamily: fontStack(font) }}
+              >
+                {font}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className="font-default-grid">
+          <label>
+            Schriftgröße
+            <input
+              type="number"
+              min="12"
+              max="240"
+              value={defaultFontSize}
+              onChange={(event) =>
+                prefs.setDefaultFontSize(Number(event.target.value))
+              }
+            />
+          </label>
+          <label>
+            Schriftgewicht
+            <select
+              value={defaultFontWeight}
+              onChange={(event) =>
+                prefs.setDefaultFontWeight(Number(event.target.value))
+              }
+            >
+              <option value="100">Dünn</option>
+              <option value="300">Leicht</option>
+              <option value="400">Normal</option>
+              <option value="500">Medium</option>
+              <option value="600">Halbfett</option>
+              <option value="700">Fett</option>
+              <option value="800">Extra fett</option>
+              <option value="900">Schwarz</option>
+            </select>
+          </label>
+          <label>
+            Schriftstil
+            <select
+              value={defaultFontStyle}
+              onChange={(event) =>
+                prefs.setDefaultFontStyle(
+                  event.target.value as "normal" | "italic",
+                )
+              }
+            >
+              <option value="normal">Normal</option>
+              <option value="italic">Kursiv</option>
+            </select>
+          </label>
+        </div>
+        <div
+          className="font-settings-preview"
+          style={{
+            fontFamily: fontStack(defaultFont),
+            fontSize: `${Math.min(46, Math.max(22, defaultFontSize / 2))}px`,
+            fontWeight: defaultFontWeight,
+            fontStyle: defaultFontStyle,
+          }}
+        >
+          <span>Cera Pro · GottesdienstRegie</span>
+          <small>So sehen neue Texte in der Präsentation aus.</small>
+        </div>
+        <button
+          className="primary"
+          disabled={!slide?.elements.some((entry) => entry.type === "text")}
+          onClick={applyToSlide}
+        >
+          AUF ALLE TEXTE DER AKTUELLEN FOLIE ANWENDEN
+        </button>
+      </div>
+      <div className="settings-group">
+        <h4>VERFÜGBARE SCHRIFTEN</h4>
+        <p>
+          {editorFonts.length} auswählbare Schriftfamilien. Systemschriften
+          werden verwendet, wenn sie auf diesem Gerät installiert sind.
+        </p>
+        <div className="font-chip-list">
+          {editorFonts.map((font) => (
+            <span key={font} style={{ fontFamily: fontStack(font) }}>
+              {font}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
-function useUpdateSearchDots(active:boolean){const[dots,setDots]=useState(0);useEffect(()=>{if(!active){setDots(0);return}const timer=setInterval(()=>setDots(value=>(value+1)%4),450);return()=>clearInterval(timer)},[active]);return dots}
+function TimelineSettings() {
+  const enabled = usePreferences((state) => state.timelineThumbnails),
+    setEnabled = usePreferences((state) => state.setTimelineThumbnails);
+  return (
+    <section className="settings-group timeline-settings">
+      <h3>TIMELINE</h3>
+      <label className="setting-check">
+        <input
+          type="checkbox"
+          checked={enabled}
+          onChange={(event) => setEnabled(event.target.checked)}
+        />
+        <span>
+          <b>Kleine Folienvorschaubilder anzeigen</b>
+          <small>
+            Zeigt die erste Folie jedes Ablauf-Elements in der aufgeklappten
+            Timeline. Ausschalten spart Platz und Rechenleistung.
+          </small>
+        </span>
+      </label>
+    </section>
+  );
+}
 
-function SettingsModal({close,canConfigure,device=null}:{close:()=>void;canConfigure:boolean;device?:RegisteredDevice|null}){
-  const [registeredDevice]=useRegisteredDevice();device=device??registeredDevice??null;
-  const {t,locale}=useI18n();
-  const [tab,setTab]=useState<SettingsTab>('general');
-  const [displays,setDisplays]=useState<DesktopDisplay[]>([]);
-  const [currentVersion,setCurrentVersion]=useState('…');
-  const [versionMetadata,setVersionMetadata]=useState<DesktopVersionMetadata|null>(null);
-  const [previousVersion,setPreviousVersion]=useState<DesktopPreviousVersion|null|undefined>(undefined);
-  const [updateStatus,setUpdateStatus]=useState<DesktopUpdateStatus>({state:'idle'});
-  const [updateSummary,setUpdateSummary]=useState('');
-  const updateSearchDots=useUpdateSearchDots(updateStatus.state==='checking');
-  const [audioDevices,setAudioDevices]=useState<MediaDeviceInfo[]>([]);
-  const [micLevel,setMicLevel]=useState(0);
-  const [micTesting,setMicTesting]=useState(false);
-  const [operatorPrefs,setOperatorPrefs]=useState<DesktopOperatorPreferences>({windowStartMode:'fullscreen',operatorDisplayTarget:'primary',automaticUpdates:true,autoDownloadUpdates:true,betaUpdates:false,betaWarningAccepted:false});
-  const [betaConfirm,setBetaConfirm]=useState(false);
-  const microphoneStream=useRef<MediaStream|null>(null);
-  const contentRef=useRef<HTMLElement|null>(null);
-  const minimumUpdateCheckUntil=useRef(0);
-  const pendingUpdateStatus=useRef<DesktopUpdateStatus|null>(null);
-  const displayRoles=usePresentation(state=>state.displayRoles),setDisplayRole=usePresentation(state=>state.setDisplayRole);
-  const prefs=usePreferences();
-  const {language,theme,blackWhite,reduceMotion,compactMode,showLoginBackgrounds,reopenLastPresentation,highContrast,largeText,strongFocus,dyslexiaFriendly,audioOutputDevice,audioInputDevice,outputVolume,inputGain,noiseSuppression,echoCancellation}=prefs;
-  const {setLanguage,setTheme,setBlackWhite,setReduceMotion,setCompactMode,setShowLoginBackgrounds}=prefs;
-  const L=extraLabels[language]??extraLabels.en!;
-  useEffect(()=>{const onKey=(event:KeyboardEvent)=>{if(event.key!=='Escape')return;if(betaConfirm)setBetaConfirm(false);else close()};addEventListener('keydown',onKey);return()=>removeEventListener('keydown',onKey)},[betaConfirm,close]);
-  useEffect(()=>{
+function PresentationTransitionSettings() {
+  const state = usePresentation(),
+    transition = state.transitionDefault,
+    slide = state.items
+      .flatMap((item) => item.slides)
+      .find((entry) => entry.id === state.selectedSlideId),
+    [previewToken, setPreviewToken] = useState(0),
+    update = (patch: Partial<typeof transition>) =>
+      state.updatePresentation({
+        transitionDefault: { ...transition, ...patch },
+      });
+  const previewSlide: Slide = slide ?? {
+    id: "settings-transition-preview",
+    itemId: "settings",
+    order: 0,
+    enabled: true,
+    title: "Übergangsvorschau",
+    body: "GottesdienstRegie",
+    background: "#35626b",
+    elements: [],
+    transition: "fade",
+    transitionDuration: 500,
+    notes: "",
+  };
+  return (
+    <section>
+      <h3>Präsentation</h3>
+      <p>
+        Lege den Standardübergang für MAIN fest. Einzelne Ablauf-Elemente und
+        Folien können ihn im Editor überschreiben.
+      </p>
+      <div className="settings-group transition-default-settings">
+        <h4>STANDARDÜBERGANG</h4>
+        <div className="transition-setting-layout">
+          <div className="transition-setting-fields">
+            <label>
+              Effekt
+              <select
+                value={transition.type}
+                onChange={(event) =>
+                  update({ type: event.target.value as TransitionType })
+                }
+              >
+                {Object.entries(transitionLabels).map(([key, label]) => (
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Dauer
+              <div className="duration-input">
+                <input
+                  aria-label="Übergangsdauer in Sekunden"
+                  type="number"
+                  inputMode="decimal"
+                  min="0.1"
+                  max="5"
+                  step="0.1"
+                  disabled={transition.type === "cut"}
+                  value={Number((transition.durationMs / 1000).toFixed(1))}
+                  onChange={(event) => {
+                    const seconds = Number(event.target.value);
+                    if (Number.isFinite(seconds))
+                      update({
+                        durationMs: Math.round(
+                          Math.max(0.1, Math.min(5, seconds)) * 1000,
+                        ),
+                      });
+                  }}
+                />
+                <span>Sek.</span>
+              </div>
+            </label>
+            {(["slide", "wipe", "push", "cube"] as TransitionType[]).includes(
+              transition.type,
+            ) && (
+              <label>
+                Richtung
+                <select
+                  value={transition.direction}
+                  onChange={(event) =>
+                    update({
+                      direction: event.target.value as TransitionDirection,
+                    })
+                  }
+                >
+                  <option value="left">Nach links</option>
+                  <option value="right">Nach rechts</option>
+                  <option value="up">Nach oben</option>
+                  <option value="down">Nach unten</option>
+                </select>
+              </label>
+            )}
+            <label>
+              Bewegung
+              <select
+                disabled={transition.type === "cut"}
+                value={transition.easing}
+                onChange={(event) =>
+                  update({ easing: event.target.value as TransitionEasing })
+                }
+              >
+                <option value="standard">Standard</option>
+                <option value="linear">Linear</option>
+                <option value="ease-in">Sanft starten</option>
+                <option value="ease-out">Sanft enden</option>
+                <option value="ease-in-out">Sanft starten &amp; enden</option>
+              </select>
+            </label>
+            <label className="setting-check">
+              <input
+                type="checkbox"
+                checked={transition.reverseOnPrevious}
+                onChange={(event) =>
+                  update({ reverseOnPrevious: event.target.checked })
+                }
+              />
+              <span>
+                <b>Richtung beim Zurückschalten umkehren</b>
+              </span>
+            </label>
+          </div>
+          <div className="settings-transition-preview">
+            <b>KLEINE VORSCHAU</b>
+            <div>
+              <TransitionStage
+                slide={previewSlide}
+                transition={transition}
+                role="operator"
+                previewToken={previewToken}
+              />
+            </div>
+            <button
+              disabled={transition.type === "cut"}
+              onClick={() => setPreviewToken((value) => value + 1)}
+            >
+              <Icon name="play_arrow" /> VORSCHAU ANSEHEN
+            </button>
+          </div>
+        </div>
+        <button
+          onClick={() =>
+            state.updatePresentation({
+              transitionDefault: { ...defaultTransition },
+            })
+          }
+        >
+          AUF STANDARD ZURÜCKSETZEN
+        </button>
+        <p>
+          Die Vorschau funktioniert auch ohne ausgewählte Folie und verändert
+          MAIN nicht.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function useUpdateSearchDots(active: boolean) {
+  const [dots, setDots] = useState(0);
+  useEffect(() => {
+    if (!active) {
+      setDots(0);
+      return;
+    }
+    const timer = setInterval(() => setDots((value) => (value + 1) % 4), 450);
+    return () => clearInterval(timer);
+  }, [active]);
+  return dots;
+}
+
+function SettingsModal({
+  close,
+  canConfigure,
+  device = null,
+}: {
+  close: () => void;
+  canConfigure: boolean;
+  device?: RegisteredDevice | null;
+}) {
+  const [registeredDevice] = useRegisteredDevice();
+  device = device ?? registeredDevice ?? null;
+  const { t, locale } = useI18n();
+  const [tab, setTab] = useState<SettingsTab>("general");
+  const [displays, setDisplays] = useState<DesktopDisplay[]>([]);
+  const [currentVersion, setCurrentVersion] = useState("…");
+  const [versionMetadata, setVersionMetadata] =
+    useState<DesktopVersionMetadata | null>(null);
+  const [previousVersion, setPreviousVersion] = useState<
+    DesktopPreviousVersion | null | undefined
+  >(undefined);
+  const [updateStatus, setUpdateStatus] = useState<DesktopUpdateStatus>({
+    state: "idle",
+  });
+  const [updateSummary, setUpdateSummary] = useState("");
+  const updateSearchDots = useUpdateSearchDots(
+    updateStatus.state === "checking",
+  );
+  const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
+  const [micLevel, setMicLevel] = useState(0);
+  const [micTesting, setMicTesting] = useState(false);
+  const [operatorPrefs, setOperatorPrefs] =
+    useState<DesktopOperatorPreferences>({
+      windowStartMode: "fullscreen",
+      operatorDisplayTarget: "primary",
+      automaticUpdates: true,
+      autoDownloadUpdates: true,
+      betaUpdates: false,
+      betaWarningAccepted: false,
+    });
+  const [betaConfirm, setBetaConfirm] = useState(false);
+  const microphoneStream = useRef<MediaStream | null>(null);
+  const contentRef = useRef<HTMLElement | null>(null);
+  const minimumUpdateCheckUntil = useRef(0);
+  const pendingUpdateStatus = useRef<DesktopUpdateStatus | null>(null);
+  const displayRoles = usePresentation((state) => state.displayRoles),
+    setDisplayRole = usePresentation((state) => state.setDisplayRole);
+  const prefs = usePreferences();
+  const {
+    language,
+    theme,
+    blackWhite,
+    reduceMotion,
+    compactMode,
+    showLoginBackgrounds,
+    reopenLastPresentation,
+    highContrast,
+    largeText,
+    strongFocus,
+    dyslexiaFriendly,
+    audioOutputDevice,
+    audioInputDevice,
+    outputVolume,
+    inputGain,
+    noiseSuppression,
+    echoCancellation,
+  } = prefs;
+  const {
+    setLanguage,
+    setTheme,
+    setBlackWhite,
+    setReduceMotion,
+    setCompactMode,
+    setShowLoginBackgrounds,
+  } = prefs;
+  const L = extraLabels[language] ?? extraLabels.en!;
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      if (betaConfirm) setBetaConfirm(false);
+      else close();
+    };
+    addEventListener("keydown", onKey);
+    return () => removeEventListener("keydown", onKey);
+  }, [betaConfirm, close]);
+  useEffect(() => {
     void window.desktop?.displays().then(setDisplays);
     void window.desktop?.updates.currentVersion().then(setCurrentVersion);
     void window.desktop?.updates.metadata().then(setVersionMetadata);
-    void window.desktop?.updates.previous().then(setPreviousVersion).catch(()=>setPreviousVersion(null));
-    void navigator.mediaDevices?.enumerateDevices().then(setAudioDevices).catch(()=>setAudioDevices([]));
-    void (window.desktop as any)?.operator?.getPreferences().then(setOperatorPrefs);
-    const displayDispose=window.desktop?.onDisplaysChanged(setDisplays);
-    const dispose=window.desktop?.updates.onStatus(status=>{if(Date.now()<minimumUpdateCheckUntil.current&&status.state!=='checking'){pendingUpdateStatus.current=status;return}setUpdateStatus(status)});
-    return()=>{dispose?.();displayDispose?.();microphoneStream.current?.getTracks().forEach(track=>track.stop())};
-  },[]);
-  useEffect(()=>{const version=updateStatus.version;if(updateStatus.state!=='available'||!version){setUpdateSummary('');return}let active=true;void fetch('./releases.json').then(response=>response.json() as Promise<ReleaseFile>).then(data=>{if(active)setUpdateSummary(conciseReleaseSummary(data,version,language)||conciseRemoteSummary(updateStatus.releaseNotes??''))}).catch(()=>{if(active)setUpdateSummary(conciseRemoteSummary(updateStatus.releaseNotes??''))});return()=>{active=false}},[updateStatus.state,updateStatus.version,updateStatus.releaseNotes,language]);
-  async function testSpeakers(){const context=new AudioContext(),oscillator=context.createOscillator(),gain=context.createGain(),destination=context.createMediaStreamDestination(),audio=new Audio(),sinkAudio=audio as HTMLAudioElement&{setSinkId?:(id:string)=>Promise<void>};gain.gain.value=Math.max(0,Math.min(1,outputVolume/100));oscillator.frequency.value=523.25;oscillator.connect(gain).connect(destination);audio.srcObject=destination.stream;if(audioOutputDevice!=='default'&&sinkAudio.setSinkId)await sinkAudio.setSinkId(audioOutputDevice);await audio.play();oscillator.start();oscillator.stop(context.currentTime+0.65);setTimeout(()=>{audio.pause();void context.close()},900)}
-  async function toggleMicrophone(){if(microphoneStream.current){microphoneStream.current.getTracks().forEach(track=>track.stop());microphoneStream.current=null;setMicTesting(false);setMicLevel(0);return}const stream=await navigator.mediaDevices.getUserMedia({audio:{deviceId:audioInputDevice==='default'?undefined:{exact:audioInputDevice},noiseSuppression,echoCancellation,autoGainControl:false}});microphoneStream.current=stream;setAudioDevices(await navigator.mediaDevices.enumerateDevices());setMicTesting(true);const context=new AudioContext(),source=context.createMediaStreamSource(stream),analyser=context.createAnalyser(),values=new Uint8Array(analyser.frequencyBinCount);source.connect(analyser);const tick=()=>{if(microphoneStream.current!==stream){void context.close();return}analyser.getByteTimeDomainData(values);let sum=0;for(const value of values){const normalized=(value-128)/128;sum+=normalized*normalized}setMicLevel(Math.min(100,Math.round(Math.sqrt(sum/values.length)*inputGain)));requestAnimationFrame(tick)};tick()}
-  const themeOptions:{value:ThemeMode;label:TranslationKey}[]=[{value:'system',label:'themeSystem'},{value:'light',label:'themeLight'},{value:'dark',label:'themeDark'}];
-  const etaText=updateStatus.etaSeconds===undefined?'Restzeit wird berechnet …':updateStatus.etaSeconds<60?`ca. ${Math.max(1,updateStatus.etaSeconds)} Sek. verbleibend`:`ca. ${Math.max(1,Math.ceil(updateStatus.etaSeconds/60))} Min. verbleibend`;
-  const updateText=updateStatus.state==='checking'?`${t('updateChecking').replace(/[\s.…]+$/,'')}${'.'.repeat(updateSearchDots)}`
-    :updateStatus.state==='available'?t('updateAvailable',{version:updateStatus.version??''})
-    :updateStatus.state==='not-available'?t('updateCurrent')
-    :updateStatus.state==='downloading'?`${t('updateDownloading',{percent:updateStatus.percent??0})} · ${etaText}`
-    :updateStatus.state==='rollback-downloading'?`${L.rollbackDownloading}: ${updateStatus.percent??0} %`
-    :updateStatus.state==='cancelled'?(updateStatus.message??'Der Update-Download wurde abgebrochen.')
-    :updateStatus.state==='downloaded'?t('updateDownloaded',{version:updateStatus.version??''})
-    :updateStatus.state==='error'?t('updateError',{detail:updateStatus.message??t('authUnknown')})
-    :updateStatus.state==='development'?t('updateDevelopment'):'';
-  const setOperatorPreference=async(patch:Partial<DesktopOperatorPreferences>)=>{setOperatorPrefs(value=>({...value,...patch}));const saved=await (window.desktop as any)?.operator?.setPreferences(patch);if(saved)setOperatorPrefs(saved)};
-  const switchTab=(next:SettingsTab)=>{setTab(next);requestAnimationFrame(()=>contentRef.current?.scrollTo({top:0}))};
-  const installedIsBeta=isPrerelease(currentVersion);
-  const safeRollback=async()=>{if(!previousVersion)return;const incompatible=usePresentation.getState().items.some(item=>item.type==='videoInput'||item.type==='web');if(incompatible){const backup=confirm('Diese Präsentation verwendet Funktionen, die die ältere Version eventuell nicht versteht. Vor dem Wechsel wird dringend ein Backup empfohlen. Jetzt Backup erstellen?');if(!backup)return;const id=usePresentation.getState().presentationId;if(id)await window.desktop?.presentation.backup(id)}if(confirm(`${installedIsBeta?'ZUR STABILEN VERSION ZURÜCKKEHREN':'VORHERIGE VERSION INSTALLIEREN'}\n\nDu möchtest GottesdienstRegie ${previousVersion.version} installieren.\n\nDeine Präsentationen und Medien bleiben erhalten. Die Anwendung wird anschließend neu gestartet.`))await window.desktop?.updates.rollback()};
-  const checkForUpdates=async()=>{if(!window.desktop)return;minimumUpdateCheckUntil.current=Date.now()+3000;pendingUpdateStatus.current=null;setUpdateStatus({state:'checking'});const result=await window.desktop.updates.check();const remaining=Math.max(0,minimumUpdateCheckUntil.current-Date.now());if(remaining)await new Promise(resolve=>setTimeout(resolve,remaining));minimumUpdateCheckUntil.current=0;setUpdateStatus(pendingUpdateStatus.current??result);pendingUpdateStatus.current=null};
-  const settingGroups:{title:string;tabs:SettingsTab[]}[]=[{title:'ALLGEMEIN',tabs:['general','ai','security','accessibility','shortcuts','rewards','updates']},{title:'AUSGABE',tabs:['display','remote','videoInput']},{title:'AUDIO',tabs:['audio','audioRouting']},{title:'PRÄSENTATION',tabs:['presentation','quickScreens','fonts','defaultMedia','defaultStage']},{title:'VERBINDUNGEN & STEUERUNG',tabs:['lightingMidi','midiInput']}];
-  const tabName=(key:SettingsTab)=>key==='midiInput'?'MIDI Input':key==='shortcuts'?'Tastenkürzel':key==='audioRouting'?'Audioausgänge':key==='rewards'?'Belohnungen':key==='security'?'Sicherheit':key==='ai'?'KI-Funktionen':key==='remote'?'Personal Monitore & Web-Steuerung':t(key as TranslationKey);
-  return <><div className="modal-backdrop"><div className="modal settings-modal"><header><h2>{t('settings')}</h2><button onClick={close} title={t('cancel')}><X/></button></header><div className="modal-body"><nav>{settingGroups.map(group=><div className="settings-nav-group" key={group.title}><b>{group.title}</b>{group.tabs.map(key=><button className={tab===key?'active':''} key={key} onClick={()=>switchTab(key)}>{tabName(key)}</button>)}</div>)}</nav><main ref={contentRef} className="settings-content">
-    {tab==='general'?<section><h3>{t('general')}</h3><p>{t('generalHelp')}</p><div className="settings-group"><h4>{t('language')}</h4><label>{t('language')}<select value={language} onChange={e=>setLanguage(e.target.value as Language)}>{languageOptions.map(option=><option value={option.value} key={option.value}>{option.nativeName}</option>)}</select></label></div><div className="settings-group"><h4>{t('appearance')}</h4><label>{t('theme')}<select value={theme} onChange={e=>setTheme(e.target.value as ThemeMode)}>{themeOptions.map(option=><option value={option.value} key={option.value}>{t(option.label)}</option>)}</select></label><label className="setting-check"><input type="checkbox" checked={blackWhite} onChange={e=>setBlackWhite(e.target.checked)}/><span><b>{t('blackWhite')}</b><small>{t('blackWhiteHelp')}</small></span></label><label className="setting-check"><input type="checkbox" checked={showLoginBackgrounds} onChange={e=>setShowLoginBackgrounds(e.target.checked)}/><span><b>{t('showLoginBackgrounds')}</b><small>{t('showLoginBackgroundsHelp')}</small></span></label><label className="setting-check"><input type="checkbox" checked={reopenLastPresentation} onChange={e=>prefs.setReopenLastPresentation(e.target.checked)}/><span><b>Zuletzt geöffnete Präsentation wieder öffnen</b><small>Öffnet beim nächsten Programmstart automatisch das zuletzt verwendete lokale Dokument.</small></span></label></div></section>
-    :tab==='accessibility'?<section><h3>{t('accessibility')}</h3><p>{t('accessibilityHelp')}</p><label className="setting-check"><input type="checkbox" checked={reduceMotion} onChange={e=>setReduceMotion(e.target.checked)}/><span><b>{t('reduceMotion')}</b><small>{t('reduceMotionHelp')}</small></span></label><label className="setting-check"><input type="checkbox" checked={compactMode} onChange={e=>setCompactMode(e.target.checked)}/><span><b>{t('compactMode')}</b><small>{t('compactModeHelp')}</small></span></label><label className="setting-check"><input type="checkbox" checked={highContrast} onChange={e=>prefs.setHighContrast(e.target.checked)}/><span><b>{L.highContrast}</b><small>{L.highContrastHelp}</small></span></label><label className="setting-check"><input type="checkbox" checked={largeText} onChange={e=>prefs.setLargeText(e.target.checked)}/><span><b>{L.largeText}</b><small>{L.largeTextHelp}</small></span></label><label className="setting-check"><input type="checkbox" checked={strongFocus} onChange={e=>prefs.setStrongFocus(e.target.checked)}/><span><b>{L.strongFocus}</b><small>{L.strongFocusHelp}</small></span></label><label className="setting-check"><input type="checkbox" checked={dyslexiaFriendly} onChange={e=>prefs.setDyslexiaFriendly(e.target.checked)}/><span><b>{L.dyslexia}</b><small>{L.dyslexiaHelp}</small></span></label></section>
-    :tab==='security'?<><SharedDeviceSecurity device={device}/><section className="settings-group"><h4>AUTOMATISCHES ABMELDEN</h4><label className="setting-check"><input type="checkbox" checked={prefs.sharedDeviceAutoLogout} onChange={e=>prefs.setSharedDeviceSecurity({sharedDeviceAutoLogout:e.target.checked})}/><span><b>Benutzer bei Inaktivität automatisch abmelden</b><small>Nie während ON AIR, Recording, Background Audio oder kritischen Vorgängen.</small></span></label><label>Nach<select value={prefs.sharedDeviceTimeoutMinutes} onChange={e=>prefs.setSharedDeviceSecurity({sharedDeviceTimeoutMinutes:Number(e.target.value)})}><option value="15">15 Minuten</option><option value="30">30 Minuten</option><option value="60">60 Minuten</option><option value="120">2 Stunden</option></select></label><label className="setting-check"><input type="checkbox" checked={prefs.logoutAfterOffAir} onChange={e=>prefs.setSharedDeviceSecurity({logoutAfterOffAir:e.target.checked})}/><span><b>Nach Ende des Livebetriebs automatisch abmelden</b><small>Der Timer beginnt erst nach OFF AIR und nur ohne laufende kritische Wiedergabe.</small></span></label></section></>
-    :tab==='ai'?<section><h3>Künstliche Intelligenz</h3><p>Steuert KI-Assistent, KI-Motive und weitere KI-gestützte Funktionen zentral. Bereits gespeicherte Medien bleiben erhalten.</p><div className="settings-group"><label className="setting-check"><input type="checkbox" checked={prefs.aiEnabled} onChange={e=>{prefs.setAiEnabled(e.target.checked);alert(usePresentation.getState().onAir?'Die Änderung wird nach dem nächsten sicheren Neustart wirksam.':'Neustart erforderlich. Die Änderung wird beim nächsten Programmstart vollständig angewendet.')}}/><span><b>KI-Funktionen aktivieren</b><small>Aktiviert KI-Assistent, KI-Motive und weitere KI-gestützte Funktionen in GottesdienstRegie.</small></span></label></div></section>
-    :tab==='shortcuts'?<KeyboardShortcutSettings/>
-    :tab==='rewards'?<RewardSettingsPanel/>
-    :tab==='updates'?<section><h3>{t('updatesTitle')}</h3><p>{t('currentVersion')}: <b>{currentVersion}</b></p>{versionMetadata&&<div className="version-details"><h4>{L.versionDetails}</h4><dl><dt>{L.installedAt}</dt><dd>{new Date(versionMetadata.installedAt).toLocaleString(locale)}</dd><dt>{L.modifiedAt}</dt><dd>{new Date(versionMetadata.modifiedAt).toLocaleString(locale)}</dd><dt>{L.fileSize}</dt><dd>{new Intl.NumberFormat(locale,{style:'unit',unit:'megabyte',maximumFractionDigits:1}).format(versionMetadata.fileSize/1024/1024)}</dd><dt>{L.executable}</dt><dd>{versionMetadata.executable}</dd></dl></div>}{updateText&&<div className={`update-state ${updateStatus.state}`} role={updateStatus.state.includes('downloading')?'progressbar':undefined} aria-valuenow={updateStatus.percent}><i style={{width:`${updateStatus.percent??0}%`}}/><span>{updateText}</span>{updateStatus.state==='available'&&updateSummary&&<small className="update-brief">{updateSummary}</small>}{updateStatus.state==='downloading'&&<button className="update-cancel" title="Download abbrechen" aria-label="Update-Download abbrechen" onClick={()=>void window.desktop?.updates.cancelDownload()}><Icon name="close"/></button>}</div>}<div className="update-actions"><button className="primary" disabled={updateStatus.state==='checking'||updateStatus.state==='downloading'||updateStatus.state==='rollback-downloading'} onClick={()=>void checkForUpdates()}>{t('checkUpdates')}</button>{(updateStatus.state==='available'||updateStatus.state==='cancelled')&&<button className="primary" onClick={()=>void window.desktop?.updates.download()}>{t('updateDownload')}</button>}{updateStatus.state==='downloaded'&&<button className="primary" onClick={()=>void window.desktop?.updates.install()}>{t('updateInstall')}</button>}</div><div className="rollback-box"><h4>{L.previousVersion}</h4>{previousVersion?<><p><b>{previousVersion.version}</b> · {new Date(previousVersion.publishedAt).toLocaleDateString(locale)} · {new Intl.NumberFormat(locale,{style:'unit',unit:'megabyte',maximumFractionDigits:1}).format(previousVersion.size/1024/1024)}</p><button disabled={updateStatus.state==='rollback-downloading'} onClick={()=>{if(confirm(L.rollbackConfirm))void window.desktop?.updates.rollback()}}>{L.rollback}</button></>:previousVersion===null?<p>{L.noPrevious}</p>:<p>…</p>}</div><h4>{t('releaseNotes')}</h4><ReleaseNotesView/>{updateStatus.releaseNotes&&<div className="remote-release-notes"><h4>{t('onlineReleaseNotes')}</h4><p>{plainReleaseNotes(updateStatus.releaseNotes)}</p></div>}</section>
-    :tab==='audio'?<section><h3>{t('audio')}</h3><p>{L.audioHelp}</p><div className="audio-settings"><label>{L.speakers}<select value={audioOutputDevice} onChange={e=>prefs.setAudioOutputDevice(e.target.value)}><option value="default">{L.systemDefault}</option>{audioDevices.filter(device=>device.kind==='audiooutput'&&device.deviceId!=='default').map((device,index)=><option key={device.deviceId} value={device.deviceId}>{device.label||`${L.speakers} ${index+1}`}</option>)}</select></label><label>{L.microphone}<select value={audioInputDevice} onChange={e=>prefs.setAudioInputDevice(e.target.value)}><option value="default">{L.systemDefault}</option>{audioDevices.filter(device=>device.kind==='audioinput'&&device.deviceId!=='default').map((device,index)=><option key={device.deviceId} value={device.deviceId}>{device.label||`${L.microphone} ${index+1}`}</option>)}</select></label><label>{L.volume}<input type="range" min="0" max="100" value={outputVolume} onChange={e=>prefs.setOutputVolume(Number(e.target.value))}/><output>{outputVolume}%</output></label><label>{L.inputGain}<input type="range" min="0" max="200" value={inputGain} onChange={e=>prefs.setInputGain(Number(e.target.value))}/><output>{inputGain}%</output></label><label className="setting-check"><input type="checkbox" checked={noiseSuppression} onChange={e=>prefs.setNoiseSuppression(e.target.checked)}/><span><b>{L.noiseSuppression}</b></span></label><label className="setting-check"><input type="checkbox" checked={echoCancellation} onChange={e=>prefs.setEchoCancellation(e.target.checked)}/><span><b>{L.echoCancellation}</b></span></label><div className="audio-test"><button onClick={()=>void testSpeakers()}>{L.testSpeaker}</button><button className={micTesting?'danger-button':''} onClick={()=>void toggleMicrophone()}>{micTesting?L.stopTest:L.testMicrophone}</button></div><label>{L.micLevel}<div className="mic-meter"><i style={{width:`${micLevel}%`}}/></div></label></div></section>
-    :tab==='display'?<section><h3>{t('displayTitle')}</h3><p>{t('displayHelp')}</p><div className="display-heading"><h4>Bildschirme</h4><button title="Anzeigen identifizieren" disabled={!window.desktop} onClick={()=>void window.desktop?.identifyDisplays(displayRoles)}><Icon name="desktop_windows"/> ANZEIGEN IDENTIFIZIEREN</button></div><div className="display-list">{displays.map((display,index)=>{const current=(display.primary?'operator':displayRoles[String(display.id)]??'unused') as DisplayRole;return <article className="display-card" key={display.id}><b>{index+1}</b><div><strong>{display.label||t('displayNumber',{number:index+1})}</strong><span>{display.bounds.width} × {display.bounds.height} · {display.scaleFactor}× · X {display.bounds.x} / Y {display.bounds.y} · {display.rotation}°</span>{display.primary&&<small>{t('controlSurface')}</small>}</div><label>Verwendung<select disabled={!canConfigure||display.primary} value={current} onChange={event=>setDisplayRole(display.id,event.target.value as DisplayRole)}><option value="unused">{t('unassigned')}</option><option value="operator">{t('controlSurface')}</option><option value="main">MAIN</option><option value="stage">STAGE</option><option value="notes">NOTES</option><option value="livestream">LIVESTREAM</option><option value="lobby">LOBBY</option></select></label></article>})}</div>{!canConfigure&&<div className="notice">{t('noPermission')}</div>}{!window.desktop&&<div className="notice">{t('displayDesktopOnly')}</div>}</section>
-    :tab==='audioRouting'?<AudioRoutingSettings/>
-    :tab==='presentation'?<><PresentationTransitionSettings/><TimelineSettings/></>
-    :tab==='remote'?<RemoteCenter/>
-    :tab==='videoInput'?<VideoInputSettings/>
-    :tab==='quickScreens'?<QuickScreenSettings/>
-    :tab==='fonts'?<><CeraFontSettings/><FontSettings/></>
-    :<section><h3>{tabName(tab)}</h3><p>{t('sectionUnavailable')}</p></section>}
-    {tab==='general'&&<section className="settings-group window-start-settings"><h4>FENSTER &amp; START</h4><label>Startmodus<select value={operatorPrefs.windowStartMode} onChange={e=>void setOperatorPreference({windowStartMode:e.target.value as DesktopOperatorPreferences['windowStartMode']})}><option value="fullscreen">Vollbild</option><option value="maximized">Maximiert</option><option value="window">Fenster</option><option value="restore">Letzten Fensterzustand wiederherstellen</option></select></label><label>Bedienoberfläche beim Programmstart auf<select value={operatorPrefs.operatorDisplayTarget} onChange={e=>void setOperatorPreference({operatorDisplayTarget:e.target.value as DesktopOperatorPreferences['operatorDisplayTarget']})}><option value="primary">Primärer Bildschirm</option><option value="last">Letzter Bedienbildschirm</option></select></label><p>F11 schaltet das Bedienfenster vorübergehend in den Vollbildmodus oder zurück. MAIN, STAGE, Videos und Timer bleiben dabei unverändert.</p></section>}
-    {tab==='updates'&&<section className="update-product-details">
-      <div className="settings-group"><h4>AKTUELLE VERSION</h4><dl><dt>Produkt</dt><dd>{versionLabel(currentVersion)} {installedIsBeta&&<em className="beta-badge">BETA</em>}</dd><dt>Veröffentlicht</dt><dd>01.09.2026</dd><dt>Update-Kanal</dt><dd>{operatorPrefs.betaUpdates?'Beta':'Stabil'}</dd><dt>Status</dt><dd>Aktuell</dd></dl><label className="setting-check"><input type="checkbox" checked={operatorPrefs.automaticUpdates} onChange={e=>void setOperatorPreference({automaticUpdates:e.target.checked})}/><span><b>Automatisch nach Updates suchen</b></span></label><label className="setting-check"><input type="checkbox" checked={operatorPrefs.autoDownloadUpdates} onChange={e=>void setOperatorPreference({autoDownloadUpdates:e.target.checked})}/><span><b>Updates automatisch herunterladen</b></span></label></div>
-      <div className="settings-group update-channel"><h4>UPDATE-KANAL</h4><div className="channel-row"><span><b>Stabile Updates</b><small>Standardmäßig aktiviert</small></span></div><label className="setting-check"><input type="checkbox" checked={operatorPrefs.betaUpdates} onChange={event=>{if(!event.target.checked)void setOperatorPreference({betaUpdates:false});else if(operatorPrefs.betaWarningAccepted)void setOperatorPreference({betaUpdates:true});else setBetaConfirm(true)}}/><span><b>Beta-Updates erhalten</b><small>Erhalte Vorabversionen mit neuen Funktionen und Verbesserungen, bevor sie regulär veröffentlicht werden. Beta-Versionen können noch Fehler enthalten.</small></span></label><dl><dt>Aktueller Kanal</dt><dd>{operatorPrefs.betaUpdates?'Beta':'Stabil'} {operatorPrefs.betaUpdates&&<em className="beta-badge">BETA</em>}</dd></dl></div>
-      {previousVersion&&<div className="settings-group previous-version-detail"><h4>{installedIsBeta?'STABILE VERSION':'VORHERIGE VERSION'}</h4><dl><dt>Version</dt><dd>{previousVersion.version}</dd><dt>Veröffentlicht</dt><dd>{new Date(previousVersion.publishedAt).toLocaleDateString(locale)}</dd><dt>Build</dt><dd>{previousVersion.version}</dd><dt>Downloadgröße</dt><dd>{new Intl.NumberFormat(locale,{style:'unit',unit:'megabyte',maximumFractionDigits:1}).format(previousVersion.size/1024/1024)}</dd><dt>Installierte Architektur</dt><dd>Windows x64</dd><dt>Veröffentlichungskanal</dt><dd>Stabil</dd><dt>Status</dt><dd>Für eine Wiederherstellung verfügbar</dd></dl><p>Diese Version kann installiert werden, wenn nach einem Update Probleme auftreten. Vor dem Wechsel werden Kompatibilität und Präsentationsformat geprüft; bei möglichen Einschränkungen wird ein Backup angeboten.</p><button disabled={updateStatus.state==='rollback-downloading'} onClick={()=>void safeRollback()}>{installedIsBeta?'ZUR STABILEN VERSION ZURÜCKKEHREN':'VORHERIGE VERSION INSTALLIEREN'}</button></div>}
-    </section>}
-  </main></div></div></div>{betaConfirm&&<div className="modal-backdrop beta-confirm-layer"><div className="beta-confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="beta-confirm-title"><header><Icon name="experiment"/><h2 id="beta-confirm-title">BETA-UPDATES AKTIVIEREN</h2></header><p>Beta-Versionen enthalten neue Funktionen früher, können aber noch Fehler oder unfertige Bereiche enthalten.</p><p>Du kannst jederzeit wieder zum stabilen Update-Kanal wechseln.</p><footer><button onClick={()=>setBetaConfirm(false)}>ABBRECHEN</button><button className="primary" onClick={()=>{setBetaConfirm(false);void setOperatorPreference({betaUpdates:true,betaWarningAccepted:true})}}>BETA-UPDATES AKTIVIEREN</button></footer></div></div>}</>;
-}
-
-function roleLabel(t:Translator,role:string){const labels:Record<string,TranslationKey>={viewer:'roleViewer',presenter:'rolePresenter',editor:'roleEditor',admin:'roleAdmin'};return labels[role]?t(labels[role]):role.toUpperCase()}
-
-function HelpModal({close}:{close:()=>void}){
-  const {t,language}=useI18n(),[query,setQuery]=useState(''),[selected,setSelected]=useState(()=>localStorage.getItem('gottesdienstregie.help-topic')||'Erste Schritte');
-  useEffect(()=>{const key=(event:KeyboardEvent)=>{if(event.key==='Escape')close()};addEventListener('keydown',key);return()=>removeEventListener('keydown',key)},[close]);
-  const topics=['SCHNELLSTART','Erste Schritte','Gemeinsame Gemeinde-PCs','Anmelden & Abmelden','Veranstaltung verknüpfen','Inhalte hinzufügen','Medien','Cloud-Medien','Unsplash','KI-Motive','Songs','Virtual Screens & Displays','Persönliche Monitore','Websteuerung','Audioausgänge','Preflight','ON AIR','LIVE-BETRIEB','Vorschau','MAIN / STAGE / LIVESTREAM','Quick Screens','Current / Next','Recording','Servicezeit & Verspätung','Pre-Service & Post-Service','AUDIO','Videos','Background Audio','Vorhören','Systembenachrichtigungen','Audio Browser','Stop Background Audio','Routing-Probleme','PRÄSENTATION','Präsentationen','Ablauf','Folien','Übergänge & Auto-Advance','Bibel','LiveQuiz','SYSTEM','Sync / Offline / Preload','Updates','Tastenkürzel','Benutzeroberfläche','Einstellungen','Webseiten','Timer','Remote','Fehlerbehebung','Support','Versionsinformationen','Über GottesdienstRegie'];
-  const articles:Record<string,string>={
-    'Erste Schritte':'Willkommen bei GottesdienstRegie. Die Anwendung verbindet Ablaufplanung, Foliengestaltung, Medien, LiveQuiz und die echte Bildschirmausgabe.\n\n1. Präsentation vorbereiten\nÖffne über Datei eine vorhandene Präsentation oder erstelle eine neue. Klicke oben links auf den Titel, um ihn direkt umzubenennen. Verknüpfe darunter zwingend die passende Firebase-Veranstaltung. Dabei werden Datum und planmäßige Servicezeit übernommen; spätere Verzögerungen verändern die ursprüngliche Planzeit nicht.\n\n2. Ablauf aufbauen\nKlicke links neben ABLAUF auf Plus oder öffne Element hinzufügen. Ergänze Inhalte, Songs, Bibelstellen, Bilder, Videos, Webinhalte oder ein LiveQuiz. Elemente lassen sich ziehen, per Rechtsklick duplizieren und nur bei selbst erstellten Vorlagen wieder löschen.\n\n3. Folien gestalten\nWähle im Ablauf ein Element und danach unten eine Folie. Im Bearbeitungsmodus kannst du Text, Schrift, Größe, Ausrichtung, Farbe, Ebenen, Hintergrund und Übergang ändern. Die rechte Darstellung aktualisiert sich sofort. Cera Pro ist vollständig eingebettet und muss auf dem Rechner nicht installiert sein.\n\n4. Medien verwenden\nÖffne Medien → Medienbibliothek. Cloud-Medien werden zentral geladen; bei Unsplash gibst du einmal den Access Key dieses Geräts ein, suchst per Enter oder SUCHEN und wählst anschließend ein Bild aus. Uploads benötigen zusätzlich Schreibberechtigung für den GitHub-Medienspeicher.\n\n5. Anzeige einrichten\nÖffne Einstellungen → Anzeige und ordne MAIN einem angeschlossenen Ausgabebildschirm zu. Der primäre Bildschirm bleibt die Bedienoberfläche. Nutze ANZEIGEN IDENTIFIZIEREN, wenn du die Monitore nicht eindeutig zuordnen kannst.\n\n6. Vorschau prüfen\nSchalte oben auf VORSCHAU. In EINZELVORSCHAU navigierst du mit den großen Pfeilen oder den Pfeiltasten; die Folienübersicht zeigt den gesamten Ablauf. Vorschau und Live-Ausgabe bleiben getrennt.\n\n7. ON AIR starten\nKontrolliere, dass die Veranstaltung verknüpft, MAIN zugeordnet und die benötigten Medien erreichbar sind. Starte den Preflight. Erst danach gehst du ON AIR. Ein Klick auf OFF AIR oder das Schließen der Anwendung beendet alle Ausgabefenster und die Hintergrundmusik sicher.\n\n8. Sicher arbeiten\nÄnderungen werden alle 15 Sekunden automatisch gespeichert. Das Cloudsymbol oben rechts ist grün, sobald der Mediendienst erreichbar ist. Ein Klick auf das Synchronisationssymbol speichert sofort und zeigt die einzelnen Schritte. Nutze vor größeren Änderungen zusätzlich Datei → Backup erstellen.',
-    'Benutzeroberfläche':'Die Menüleiste enthält Datei, Element hinzufügen, Medien, Songbibliothek, Präsentation, Ansicht, Werkzeuge, Einstellungen und Hilfe. Diese Menüs liegen immer über Arbeitsbereich, Canvas und Dialoginhalten. Darunter zeigt der Präsentationskopf den geöffneten Gottesdienst, den Modus BEARBEITEN oder VORSCHAU sowie ON AIR.\n\nLinks liegt der Ablauf mit VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM. In der Mitte befinden sich Kontexteditor und Folienfläche. Elemente auf der Folie lassen sich anklicken, ziehen und am Griff unten rechts skalieren. Eigenschaften und Ebenen steuern exakte Werte, Sichtbarkeit, Sperre und Reihenfolge.\n\nIm Modus BEARBEITEN erscheinen Format- und Canvaswerkzeuge. Im Modus VORSCHAU verschwinden diese Werkzeuge; stattdessen stehen Einzelansicht, Folienübersicht und die Schnellanzeigen wie LOGO, SCHWARZ, OHNE TEXT oder AMEN bereit.\n\nDie Statusleiste unten meldet Speichern, Cloud, MAIN, STAGE sowie aktuelle Element- und Folienposition. Wenn MAIN beim Bearbeiten unverändert bleibt, ist das beabsichtigt: Editor-, Vorschau- und Live-Zustand sind voneinander unabhängig.',
-    'Einstellungen':'Das Einstellungsfenster ist in Allgemein, Ausgabe, Präsentation sowie Verbindungen & Steuerung gegliedert. Die linke Navigation bleibt sichtbar, während nur der Inhalt rechts scrollt. Beim Wechsel zu einem anderen Bereich beginnt die Seite wieder oben.\n\nUnter Allgemein bestimmst du Sprache, Farbschema, Barrierefreiheit, Startmodus und Tastenkürzel. Unter Ausgabe werden reale Monitore, Audio und Videoeingänge eingerichtet. Präsentation enthält Schnellanzeigen, Schriftarten und Standardmedien. Änderungen werden lokal auf diesem Gerät gespeichert und – sofern sinnvoll – sofort angewendet.\n\nVor einem Gottesdienst sollten insbesondere Anzeige, Audio und Videoeingang kontrolliert werden. Änderungen am Bedienfenster beeinflussen eine bereits laufende MAIN- oder STAGE-Ausgabe nicht.',
-    'Präsentationen':'Die lokale Bibliothek speichert jede Präsentation als eigenständiges Dokument. Unter Datei kannst du neue Präsentationen erstellen, vorhandene öffnen, duplizieren, umbenennen, importieren, exportieren, sichern, archivieren oder schließen. Änderungen werden verzögert und atomar gespeichert.\n\nNach einem unerwarteten Programmende bietet GottesdienstRegie die letzte Wiederherstellungskopie an. Exporte verwenden eine portable GottesdienstRegie-Datei; Backups landen im geschützten Anwendungsdatenordner.',
-    'Ablauf':'Der Ablauf besteht aus Abschnitten, ServiceItems und deren Folien. Ein normaler Klick wählt ein Element aus; Strg- beziehungsweise Cmd-Klick erweitert die Auswahl. Ein Rechtsklick auf ein nicht ausgewähltes Element wählt genau dieses Element. Bei einem bereits markierten Element bleibt eine Mehrfachauswahl bestehen.\n\nDas Kontextmenü arbeitet wie ein Desktop-Menü: Pfeil hoch und runter bewegen den Fokus, Enter führt den Befehl aus, Esc oder ein Klick außerhalb schließt es. Ausschneiden, Kopieren, Einfügen, Duplizieren, Löschen, Gruppieren, Ausblenden, Undo und Redo nutzen dieselbe Command- und Undo-Engine wie Tastatur und Werkzeugleiste. Eine Mehrfachaktion ist genau ein Undo-Schritt.\n\nAusblenden erhält das Element im Editor, überspringt es aber beim normalen Advance. Verknüpfte Elemente besitzen eigene Positionen und IDs, teilen jedoch ihre inhaltliche Zuordnung. Das Link-Symbol weist auf diese Beziehung hin. Export als Bild rendert nur die tatsächliche Folie, niemals Seitenleisten oder Bedienoberfläche.\n\nWährend ON AIR bleibt der aktive Live-Snapshot geschützt. Löschen, Verschieben oder Umbenennen im Editor verändert MAIN nicht rückwirkend. Erst der nächste bewusste Take verwendet den neuen Ablaufstand.',
-    'Pre-Service & Post-Service':'VORPROGRAMM und NACHPROGRAMM sind vollständige Service-Abschnitte. Beide können beliebig viele Elemente mit beliebig vielen Folien enthalten. Auto Advance bestimmt den Wechsel statischer Folien, Loop beginnt nach dem letzten aktiven Inhalt wieder beim ersten. Videos können bis zum Ende spielen oder gemäß ihrer Ende-Aktion fortschalten.',
-    'Folien':'Wähle eine Folie im Filmstrip. Über die Werkzeugleiste kannst du Text, Bild, Form, Linie, Video oder QR-Code hinzufügen. Elemente lassen sich auf der Bühne ziehen und über den Griff skalieren. Eigenschaften ändern Position, Größe und Inhalt; Ebenen steuern Reihenfolge, Sichtbarkeit und Sperre. Rückgängig und Wiederholen funktionieren mit Strg+Z und Strg+Umschalt+Z.',
-    'Vorschau':'Die Einzelansicht zeigt eine Folie groß. Die Folienübersicht gruppiert echte Thumbnails nach Ablaufabschnitt. Der Größenregler ändert nur die Thumbnailgröße. OFF AIR wählt ein Thumbnail ausschließlich als Vorschau; ON AIR schaltet ein angeklicktes aktives Thumbnail direkt live.',
-    'ON AIR':'ON AIR führt einen Preflight durch, öffnet MAIN rahmenlos auf dem zugeordneten Bildschirm und übernimmt die aktuelle Vorschau als Startfolie. Pfeil rechts beziehungsweise Bild ab schaltet zur nächsten aktiven Folie, Pfeil links beziehungsweise Bild auf zurück. Ein erneuter Klick beendet die Ausgabe sofort, ohne die Präsentation zu schließen.',
-    'Displays':'Unter Einstellungen → Anzeige siehst du tatsächlich angeschlossene Monitore als Anzeige 1, Anzeige 2 und so weiter. Weise MAIN, STAGE, NOTES, LIVESTREAM oder LOBBY nur passenden Ausgabebildschirmen zu. ANZEIGEN IDENTIFIZIEREN blendet Nummer, Verwendung, Gerätename und Auflösung auf jedem Monitor ein. Fehlt MAIN während ON AIR, wird niemals automatisch der Bedienbildschirm verwendet.',
-    'Virtual Screens & Displays':'Virtual Screens bestimmen, welche Inhalte MAIN, STAGE und LIVESTREAM erhalten; Displays sind die tatsächlich angeschlossenen Monitore. Richte die Zuordnung unter Einstellungen → Anzeige ein. MAIN gehört zur Publikumsausgabe, STAGE zur Bühne und LIVESTREAM zum Stream. Ein getrennter Nebenmonitor beendet MAIN nicht und wird niemals automatisch durch den Bedienmonitor ersetzt.',
-    'Medien':'Die Medienbibliothek lädt Bilder, Videos und Audio aus dem Team-Cloudspeicher. Uploads werden erst nach bestätigter Übertragung verwendbar; die Quelldatei bleibt währenddessen erhalten. Unsplash-Bilder werden über die Suche eingebunden. Preflight meldet fehlende oder noch nicht geladene Dateien vor ON AIR.',
-    'Cloud-Medien':'Cloud-Medien stehen allen berechtigten Arbeitsplätzen als gemeinsame Bibliothek zur Verfügung. Öffne Medien → Medienbibliothek und bleibe im Reiter CLOUD-MEDIEN. Die Suche filtert nach Dateiname und Schlagwort; Typ und Sortierung grenzen die Treffer weiter ein. Ein grüner Cloudstatus bedeutet, dass die Bibliothek tatsächlich erreicht wurde.\n\nWas geschieht bei einer Störung? GottesdienstRegie versucht zuerst die direkte Team-Cloud und danach automatisch einen sicheren öffentlichen Lesekanal. Dadurch bleiben vorhandene Bilder, Videos und Audiodateien auch bei einer vorübergehenden Begrenzung des Hauptdienstes abrufbar. Upload und Löschen benötigen weiterhin Schreibberechtigung und werden im Lesemodus nicht vorgetäuscht.\n\nWenn weiterhin „Cloud nicht erreichbar“ erscheint, kontrolliere bitte Internetzugang, Firewall und Systemzeit. Wähle ERNEUT VERSUCHEN. Bereits vorgeladene Live-Medien bleiben davon unberührt; MAIN wird nicht geleert. Öffne vor ON AIR den Preflight und kontrolliere den Abschnitt MEDIEN.',
-    'Unsplash':'Unsplash stellt durchsuchbare Fotos innerhalb der Medienbibliothek bereit. Öffne Medien → Medienbibliothek → UNSPLASH, gib einen konkreten Suchbegriff ein und drücke Enter oder SUCHEN. Der Zugangsschlüssel wird sicher lokal auf dem jeweiligen Gerät konfiguriert oder von der Systemadministration über UNSPLASH_ACCESS_KEY bereitgestellt und niemals in veröffentlichte Programmdateien geschrieben.\n\nWähle ein Ergebnis einmal an, um Quelle und Vorschau zu prüfen, und bestätige anschließend VERWENDEN. Die Urheberangabe bleibt am Medium erhalten. Suchergebnisse werden nicht automatisch in die Team-Cloud kopiert. Prüfe Bildausschnitt, Lesbarkeit und Nutzungshinweise, bevor du das Bild live einsetzt.\n\nFalls keine Treffer erscheinen, formuliere den Begriff allgemeiner oder prüfe die Internetverbindung. Bei einer Dienstbegrenzung zeigt GottesdienstRegie eine konkrete Fehlermeldung. Eine laufende MAIN-Ausgabe und Background Audio werden durch die Suche niemals verändert.',
-    'Videos':'Beim Hinzufügen eines Videos wählst du lokale Datei, direkte URL, YouTube oder Vimeo. GottesdienstRegie lädt keine geschützten Onlinevideos herunter, sondern verwendet zulässige eingebettete Wiedergabe. Autoplay, Loop, Lautstärke und Verhalten nach Ende werden im Element gespeichert. Netzwerkquellen erscheinen im Preflight.',
-    'Webseiten':'Webseiten sind eigenständige Ablauf-Elemente mit URL, Zoom, Interaktion, Audio, automatischem Neuladen und Fallback. MAIN zeigt bei Fehlern keine Chromium-Standardseite. Prüfe Netzwerkseiten vor dem Gottesdienst und hinterlege für kritische Inhalte ein lokales Ersatzbild.',
-    'Songs':'Songs bestehen aus benannten Teilen wie Strophe, Refrain oder Bridge. Die Reihenfolge kann als Arrangement gespeichert werden; wiederholte Teile müssen dadurch nicht mehrfach gepflegt werden. Prüfe Textumbrüche in der Vorschau und verwende für MAIN eine ausreichend große, kontrastreiche Schrift. Urheber- und Lizenzangaben gehören in die dafür vorgesehenen Felder und können auf Titel- oder Abschlussfolien erscheinen.',
-    'Bibel':'Ein Bibel-Element enthält Referenz, Übersetzung und die daraus erzeugten Versfolien. Lange Abschnitte sollten auf mehrere gut lesbare Folien verteilt werden. Prüfe vor ON AIR die gewünschte Übersetzung, Versnummern und Textgröße. Eine spontane Bibel-Schnellanzeige verändert den geplanten Ablauf nicht und kann mit LAST SHOWN wieder verlassen werden.',
-    'LiveQuiz':'Füge ein LiveQuiz über Element hinzufügen hinzu. Als erste Folie wird automatisch eine bearbeitbare Teilnahmefolie mit Quizname, Beschreibung, QR-Code, Webadresse und sechsstelliger Kennung erzeugt. Die letzte Systemfolie zeigt Antworten beziehungsweise Ergebnisse. Beide Folien verwenden den normalen Folieneditor: Wähle ein Element auf der Bühne, ziehe es an die gewünschte Stelle und ändere seine Größe am Griff unten rechts.\n\nWährend ON AIR startet das Quiz automatisch, sobald du das Quiz auswählst. Zuerst erscheint die Teilnahmefolie. AKTUELLE FRAGE STARTEN öffnet die gewählte Frage für Smartphones und schaltet gleichzeitig ihre Folie auf MAIN. Fragen können über den Griff in den Reitern neu angeordnet werden.\n\nBei Freitextfragen entscheidet die Option „Freitextantworten bis zur Freigabe zurückhalten“, ob Beiträge zunächst nur dem Bediener vorliegen. Prüfe freie Texte vor einer öffentlichen Anzeige. Die Vorschau zeigt einen Beispielcode; erst beim echten Start wird er durch den gültigen Code ersetzt.',
-    'Stage':'STAGE ist eine eigene logische Ausgabe für Mitwirkende und darf einem anderen physischen Bildschirm als MAIN zugeordnet werden. Sie kann aktuelle und nächste Inhalte, Notizen oder Zeitinformationen zeigen. Wird der STAGE-Monitor getrennt, bleibt MAIN aktiv; die Statusleiste meldet STAGE FEHLT. GottesdienstRegie verschiebt Ausgaben niemals automatisch auf den Bedienbildschirm.',
-    'Quick Screens':'Schnellanzeigen blenden vorübergehend Logo, Schwarz, einen leeren Hintergrund, den aktuellen Hintergrund ohne Text, Amen oder einen Countdown ein. Sie verändern weder Ablauf noch ausgewählte Live-Folie. LAST SHOWN stellt exakt den zuvor sichtbaren Zustand wieder her. Reihenfolge, Aktivierung und Zielausgänge werden unter Einstellungen → Schnellanzeigen festgelegt.',
-    'Current / Next':'Current zeigt den aktuell live ausgegebenen Inhalt, Next den nächsten aktiven Inhalt des Ablaufs. Die Anzeige dient vor allem STAGE und der Bedienkontrolle. Deaktivierte Folien und Elemente werden übersprungen. Das bloße Anwählen einer Vorschau ändert Current während ON AIR nicht.',
-    'Recording':'Recording steuert eine angeschlossene oder integrierte Aufzeichnung unabhängig von der Folienauswahl. Prüfe vor dem Gottesdienst Speicherziel, Eingang und freien Speicher. Ein Anzeigewechsel darf eine laufende Aufnahme nicht automatisch beenden; beende sie bewusst und kontrolliere danach die erzeugte Datei.',
-    'Timer':'Timer und Countdowns besitzen eine Dauer, einen Endtext und eine Aktion für 00:00. Lege vor ON AIR fest, ob der Timer stehen bleibt, ausgeblendet wird oder zur nächsten Folie wechselt. Ein Timer läuft unabhängig davon weiter, ob das Bedienfenster maximiert oder in den Fenstermodus geschaltet wird.',
-    'SCHNELLSTART':'Beginne mit einer neuen Präsentation, verknüpfe die passende Veranstaltung, baue den Ablauf auf und richte unter Einstellungen zuerst Displays und Audioausgänge ein. Prüfe Medien und Vorschau, führe Preflight aus und starte erst danach ON AIR. Die Unterseiten führen dich Schritt für Schritt durch jeden Punkt.',
-    'Inhalte hinzufügen':'Öffne Element hinzufügen oder das Plus neben ABLAUF. Wähle Inhalt, Song, Bibel, Medium, Video, Webseite, Timer oder LiveQuiz. Das Element landet im aktiven Abschnitt und kann per Ziehen sortiert, per Rechtsklick dupliziert und im Editor gestaltet werden. Während ON AIR verändert das bloße Hinzufügen MAIN nicht.',
-    'Veranstaltung verknüpfen':'Klicke unter dem Präsentationstitel auf „Veranstaltung verknüpfen“. Die Auswahl zeigt Termine chronologisch in den Gruppen HEUTE, MORGEN und KOMMEND. Jede Gruppenüberschrift erscheint nur einmal; feine Linien trennen die Bereiche. Nutze die Suche, wenn die Liste länger ist.\n\nWähle den gewünschten Termin zunächst aus und kontrolliere Titel, Datum und Uhrzeit. Erst „Änderung speichern“ übernimmt die Verknüpfung und die planmäßige Servicezeit. „Abbrechen“, Escape oder ein Klick neben das Fenster verwirft die noch nicht gespeicherte Auswahl.\n\nAusfallende Termine bleiben an ihrer zeitlich richtigen Stelle sichtbar. Der kleine rote Hinweis „Fällt aus!“ erklärt, warum der Eintrag nicht gewählt werden kann. Wird eine bereits verknüpfte Veranstaltung später abgesagt, bleibt die Verbindung bestehen und GottesdienstRegie zeigt eine deutliche Warnung. Eine andere Veranstaltung wird niemals automatisch gewählt.\n\nVor ON AIR muss eine Veranstaltung verknüpft sein. Das verhindert, dass versehentlich die falsche Präsentation live geschaltet wird.',
-    'Audioausgänge':'Unter Einstellungen → Audioausgänge werden echte Betriebssystemgeräte anhand ihrer stabilen Device-ID getrennt für Medien/Videos, Background Audio, Systembenachrichtigungen, Preview/Vorhören und Soundeffekte gewählt. Standardausgang verwenden folgt dem zentralen Fallback. TESTEN spielt einen neutralen Ton ausschließlich über die gewählte Route. Lautstärke und Mute gelten nur für diese Route. Fehlt ein Gerät, bleibt seine ID gespeichert und Systemstandard übernimmt sichtbar. Änderungen während ON AIR starten laufende Player nicht neu.',
-    'Preflight':'Preflight ist die technische Prüfung unmittelbar vor dem Livebetrieb. Sie kontrolliert Präsentation, aktive Folien, MAIN und weitere Ausgänge, Medien, Videos, Background Audio, Audio-Routing, Cloud, Veranstaltung, LiveQuiz, Webinhalte und Preload.\n\n✓ BEREIT bedeutet: Alles Wesentliche ist einsatzbereit. ⚠ WARNUNG bedeutet: Live ist möglich, aber ein Punkt sollte geprüft werden. ✕ FEHLER bedeutet: Ein kritisches Problem verhindert sicheren Livebetrieb.\n\nBei Audiofehlern öffne Einstellungen → Audioausgänge, kontrolliere die Device-ID beziehungsweise Kabelverbindung, nutze TESTEN und starte Preflight erneut. Fehlende Preview- oder Benachrichtigungsausgänge blockieren MAIN nicht; ein tatsächlich benötigter Video- oder Background-Ausgang wird deutlich gemeldet.',
-    'LIVE-BETRIEB':'ON AIR ist der aktive Livebetrieb. Selected beziehungsweise Vorschau ist nicht automatisch Live. MAIN zeigt die Publikumsausgabe, STAGE die Confidence-Ansicht und LIVESTREAM den eigenen Streamoutput. Quick Screens überlagern sicher und vorübergehend. LIVE hat bei allen Änderungen Vorrang.',
-    'MAIN / STAGE / LIVESTREAM':'MAIN ist die Saalausgabe, STAGE die unabhängige Bühnen-/Confidence-Ausgabe und LIVESTREAM ein eigener Streamoutput. Jeder Ausgang benötigt eine eindeutige Zuordnung. Ein fehlender Neben-Ausgang darf MAIN nicht ungefragt auf den Bedienbildschirm verschieben.',
-    'Servicezeit & Verspätung':'Die Servicezeit wird beim Verknüpfen aus der planmäßigen Startzeit übernommen. Öffne die Zeit direkt im Abschnitt GOTTESDIENST. Der Dialog zeigt Planzeit, neue Servicezeit, Abweichung in Minuten und das daraus folgende voraussichtliche Ende.\n\nEine spätere Servicezeit verändert die ursprüngliche Planung nicht. GottesdienstRegie speichert die Verzögerung getrennt und verschiebt das voraussichtliche Ende um dieselbe Differenz. Setzt du die Servicezeit exakt auf die Planzeit zurück, wird eine nicht mehr benötigte Verzögerung entfernt. Ausfallende Termine bleiben sichtbar, sind aber nicht neu auswählbar.',
-    'AUDIO':'Getrennte Audiowege verhindern, dass das Publikum interne Geräusche hört: Videos und Background Audio können zur Saalanlage gehen, Vorhören zum Kopfhörer und Systembenachrichtigungen zum Technik-PC. Jede Wiedergabeinstanz behält ihre feste Route.',
-    'Background Audio':'Background Audio läuft unabhängig von visuellen Folien und Loops. ENDE DER PLAYLIST spielt einmal vollständig. ENDE DER SECTION wiederholt bis zum Abschnittsende. GESTOPPT läuft über Abschnittsgrenzen, bis Stop Background Audio ausgeführt wird. Ein visueller Loop-Neustart startet die Playlist nicht neu. Ducking senkt die Musik kontrolliert, wenn Medienaudio Vorrang erhält.',
-    'Vorhören':'Preview/Vorhören ist ausschließlich für den Bediener. Audio aus Vorschau und Audio Browser verwendet die Preview-Route und verändert weder MAIN noch Background Audio noch deren Wiedergabeposition. Verwende für diesen Weg vorzugsweise Kopfhörer.',
-    'Systembenachrichtigungen':'Interne Warnungen, Fehler und Bedienhinweise verwenden einen getrennten Ausgang und standardmäßig eine niedrigere Lautstärke. Route sie auf den Technik-PC, damit sie nicht versehentlich über die Saalanlage hörbar werden.',
-    'Audio Browser':'Der Audiobrowser verwaltet Cloud-Audio und Playlists. Die Wiedergabe im Detailbereich ist echtes Vorhören und nutzt ausschließlich die Preview-Route. Auswählen, Sortieren und Vorhören greifen nicht in eine laufende Live-Playlist ein.',
-    'Stop Background Audio':'Ein Stop-Cue beendet Background Audio an der festgelegten Ablaufposition mit der konfigurierten Ausblendzeit. Es verändert weder Video-Audio noch Preview. Entferne oder verschiebe den Cue per Kontextmenü des Ablauf-Elements.',
-    'Routing-Probleme':'„Audioausgang nicht verfügbar“ bedeutet, dass die gespeicherte Device-ID derzeit nicht vom Betriebssystem gemeldet wird. Prüfe Strom, USB/HDMI, Treiber und Betriebssystemauswahl. GottesdienstRegie fällt sicher auf Systemstandard zurück und erkennt dasselbe Gerät nach erneutem Anschließen automatisch. Nutze TESTEN, ohne laufende Quellen zu verändern.',
-    'Übergänge & Auto-Advance':'Übergänge steuern den visuellen Wechsel, Auto-Advance den Zeitpunkt. Beide beeinflussen Background Audio nicht. In der Übergangsvorschau kannst du Effekt und Dauer prüfen. Zeitgesteuerte Folien lassen sich in der Einzelvorschau anhalten.',
-    'SYSTEM':'Systemthemen umfassen Preflight, Sync, Offlinebetrieb, Displays, Ausgänge, Updates, Preload und Diagnose. Prüfe Statusleiste und Preflight vor jedem Livebetrieb; ein Update erzwingt während ON AIR keinen Neustart.',
-    'Sync / Offline / Preload':'SYNCED bedeutet echte Serverbestätigung, SYNCING laufende Übertragung, PENDING eine wartende Änderung, OFFLINE fehlende Verbindung und ERROR einen Fehler. Der grüne Haken erscheint erst nach Bestätigung. Preload lädt kritische Medien vor ON AIR. Bereits vorgeladene Inhalte sollen bei Internetverlust weiterlaufen; MAIN wird nicht absichtlich geleert.',
-    'Updates':'Updates werden gesucht und heruntergeladen, ohne ON AIR zu unterbrechen. Eine Installation oder ein Neustart erfolgt niemals erzwungen während des Livebetriebs. Prüfe Versionshinweise und erstelle vor großen Versionswechseln ein Backup.',
-    'Remote':'Die Fernsteuerung ist für Geräte im freigegebenen Netzwerk vorgesehen. Prüfe Verbindung, Berechtigung und den angezeigten Status, bevor du dich auf eine mobile Steuerung verlässt. Verwende keine öffentlich erreichbare Freigabe ohne Zugriffsschutz. Eine getrennte Fernsteuerung verändert MAIN erst, wenn sie eine ausdrückliche Live-Aktion sendet.',
-    'Tastenkürzel':'Unter Einstellungen → Tastenkürzel kann jede unterstützte Aktion neu belegt werden. Klicke auf das derzeitige Kürzel und drücke die gewünschte Kombination. Doppelte Belegungen werden abgewiesen; Escape bricht die Aufnahme ab. „Auf Standard zurücksetzen“ stellt alle ursprünglichen Kombinationen wieder her.\n\nSpeichern, Rückgängig und Wiederholen funktionieren auch im Editor. Nächste und vorherige Live-Folie reagieren nur während ON AIR. Der Moduswechsel betrifft ausschließlich Bearbeiten und Vorschau. Vollbild ändert nur das Bedienfenster. Für ON AIR sollte eine bewusste Kombination mit Strg oder Umschalt verwendet werden, damit die Live-Ausgabe nicht versehentlich gestartet wird.',
-    'Fehlerbehebung':'Wenn ON AIR nicht startet, öffne Preflight und prüfe Präsentation, aktive Folien, MAIN-Zuordnung und fehlende Medien. Wenn die Anmeldung fehlschlägt, prüfe Verbindung, Kontofreigabe und den aktuellen Zwei-Faktor-Code. Technische Codes werden aus Sicherheitsgründen nur in der Diagnose protokolliert.\n\nWenn ein Monitor fehlt, verbinde ihn erneut und öffne Einstellungen → Anzeige. GottesdienstRegie legt MAIN niemals ungefragt auf den Bedienmonitor.',
-    'Support':'Notiere bei einer Supportanfrage Zeitpunkt, installierte Version, Betriebssystem, betroffenen Bereich und die Schritte bis zum Fehler. Füge keine Passwörter, Codes, Hashes, Salts, Sitzungs- oder SSO-Token bei. Über Werkzeuge → Diagnose können später bereinigte technische Informationen exportiert werden.',
-    'Über GottesdienstRegie':'GottesdienstRegie ist eine eigenständige mehrsprachige Desktop-Präsentationssoftware für Gottesdienste der Philippusgemeinde. Sie verbindet lokale Ausfallsicherheit, eine zentrale Folienwiedergabe und getrennte Editor-, Vorschau- und Live-Zustände.'
-  };
-  Object.assign(articles,{
-    'Gemeinsame Gemeinde-PCs':'Beim ersten Start wird dieser Rechner einmalig als Gerät registriert. Ein gemeinsam genutzter Gemeinde-PC merkt sich Organisation, Gerätename und lokale Geräteausstattung, aber niemals dauerhaft die angemeldete Person. Deshalb erscheint bei jedem Programmstart die persönliche Anmeldung.\n\nBeim Abmelden werden Benutzer-Sitzung und persönliche Daten dieses Durchgangs entfernt. Präsentationen und gerätebezogene Konfigurationen wie Displays und Audioausgänge bleiben erhalten. Die Änderungshistorie zeichnet Benutzer und Gerätenamen getrennt auf.\n\nDie automatische Abmeldung wartet bei ON AIR, Recording, laufendem Background Audio und kritischen Vorgängen. Ein Gottesdienst wird dadurch niemals unterbrochen.',
-    'Anmelden & Abmelden':'Melde dich auf einem gemeinsamen Gerät immer mit deinem persönlichen Konto an. Rollen und Rechte stammen ausschließlich aus deinem Benutzerkonto und nicht vom Level oder Gerätenamen. Auf gemeinsam genutzten Rechnern gibt es absichtlich kein dauerhaftes Angemeldetbleiben.\n\nVerlasse den Arbeitsplatz über Abmelden. Ist ON AIR oder eine kritische Wiedergabe aktiv, wird eine automatische Abmeldung bis zum sicheren Ende zurückgestellt.',
-    'Persönliche Monitore':'Unter Einstellungen → Anzeige → Persönliche Monitore legst du feste, nur lesende Monitoradressen an. Öffne die angezeigte Adresse auf Smartphone, Tablet oder Notebook im selben Netzwerk. Die Seite verbindet sich automatisch neu und zeigt bei einer kurzen Unterbrechung den letzten bestätigten Stand.\n\nPersönliche Monitore steuern MAIN nicht. Für jedes Display lassen sich Name, Sprache und Inhalt getrennt konfigurieren. Die Adresse bleibt stabil, bis ein berechtigter Benutzer den Monitor entfernt.',
-    'Websteuerung':'Unter Einstellungen → Anzeige → Websteuerung erstellst du eine zeitlich und funktional begrenzte Bedienadresse. Vergib nur die notwendigen Rechte. Jeder Befehl wird im Desktopprogramm erneut geprüft und benutzt dieselbe NEXT-/ZURÜCK-Logik wie die lokale Bedienung.\n\nWiderrufe eine nicht mehr benötigte Sitzung sofort. Bei Verbindungsabbruch bleibt die laufende Ausgabe unverändert; nach der Wiederverbindung wird zuerst der aktuelle Zustand geladen.',
-    'KI-Motive':'KI-Motive erzeugen grafische Motive direkt in GottesdienstRegie, ohne dass du einen eigenen API-Schlüssel eintragen musst. Öffne Medien → Medienbibliothek → KI-MOTIVE, beschreibe das Motiv und wähle Format sowie Stil.\n\nPrüfe das Ergebnis vor ON AIR wie jedes andere Medium. Der globale Schalter unter Einstellungen → Künstliche Intelligenz kann die Funktion deaktivieren; die Umstellung wird nach einem sicheren Neustart vollständig wirksam.'
-  });
-  for(const key of Object.keys(articles))articles[key]=articles[key].replace(/Firebase[- ]?/gi,'').replace(/veranstaltungen\/<eventKey>/gi,'Veranstaltungsdienst');
-  const filtered=topics.filter(topic=>`${topic} ${articles[topic]??''}`.toLowerCase().includes(query.toLowerCase()));
-  const screenshot=['Benutzeroberfläche','Ablauf','Vorschau','ON AIR','Preflight','Veranstaltung verknüpfen'].includes(selected)?{src:'./help/operator-workspace.png',title:selected==='Ablauf'?'Ablauf und ServiceItems':selected==='ON AIR'?'Live-Steuerung und ON AIR':selected==='Veranstaltung verknüpfen'?'Präsentationskopf und Veranstaltung':selected==='Preflight'?'Ausgänge vor dem Livebetrieb prüfen':'GottesdienstRegie-Arbeitsbereich',caption:`Echte Aufnahme der Software mit Fokus auf ${selected}. Die Beschriftungen entsprechen dem tatsächlich sichtbaren Arbeitsbereich.`,focus:selected==='Ablauf'||selected==='Veranstaltung verknüpfen'?'left':selected==='ON AIR'?'top-right':'center'}:selected==='Einstellungen'||selected==='Audioausgänge'?{src:'./help/settings-window.png',title:'Das Einstellungsfenster',caption:'Echte Aufnahme der Einstellungen. Navigation und aktuell geöffneter Bereich werden gemeinsam gezeigt.',focus:'center'}:['Medien','Cloud-Medien','Unsplash','Videos','Audio Browser','Background Audio'].includes(selected)?{src:'./help/media-library.png',title:selected==='Unsplash'?'Unsplash-Suche in der Medienbibliothek':'Die Medienbibliothek',caption:`Echte Aufnahme der Medienbibliothek mit Fokus auf ${selected}.`,focus:selected==='Unsplash'?'top':'center'}:null;
-  return <div className="modal-backdrop"><div className="help-dialog documentation"><header><h2>HILFE</h2><label><Icon name="search"/><input placeholder="Hilfe durchsuchen" value={query} onChange={e=>setQuery(e.target.value)}/></label><button onClick={close} title={t('close')}><X/></button></header><div className="help-layout"><nav>{filtered.map(topic=><button className={`${selected===topic?'active ':''}${topic===topic.toUpperCase()?'help-section-title':''}`} key={topic} onClick={()=>setSelected(topic)}>{topic}</button>)}</nav><article><h2>{selected}</h2>{screenshot&&<figure className={`help-screenshot focus-${screenshot.focus}`}><div><img src={screenshot.src} alt={screenshot.title}/></div><figcaption><b>{screenshot.title}</b><span>{screenshot.caption}</span></figcaption></figure>}{selected==='LiveQuiz'&&<div className="help-quiz-flow"><span><Icon name="qr_code_2"/> Teilnahme</span><i>→</i><span><Icon name="quiz"/> Fragen</span><i>→</i><span><Icon name="fact_check"/> Antworten</span></div>}{selected==='Versionsinformationen'?<ReleaseNotesView/>:<>{(articles[selected]??`${selected} ist als integrierter Arbeitsbereich verfügbar. Öffne den entsprechenden Bereich über Menü, Ablauf oder Einstellungen. Verwende Preflight vor ON AIR und prüfe bei Problemen zuerst Statusleiste, Berechtigungen und lokale Verfügbarkeit.`).split('\n\n').map((paragraph,index)=><p key={index}>{paragraph}</p>)}{selected==='Support'&&<button onClick={()=>void window.desktop?.openExternal(`https://cmoere.github.io/GottesdienstRegie/report/`)}>FEHLERSEITE ÖFFNEN <Icon name="open_in_new"/></button>}</>}</article></div></div></div>;
-}
-
-function LogoutDialog({cancel,confirm}:{cancel:()=>void;confirm:()=>void}){const {t}=useI18n();return <div className="modal-backdrop"><div className="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="logout-title"><div className="confirm-icon"><Icon name="logout"/></div><h2 id="logout-title">{t('logoutConfirmTitle')}</h2><p>{t('logoutConfirmText')}</p><div><button onClick={cancel}>{t('staySignedIn')}</button><button className="danger-button" onClick={confirm}>{t('logoutNow')}</button></div></div></div>}
-
-function ServiceItemRenameDialog({item,close}:{item:ServiceItem;close:()=>void}){const [title,setTitle]=useState(item.title);const save=()=>{const value=title.trim();if(!value)return;usePresentation.getState().updateItem(item.id,{title:value});close()};useEffect(()=>{const key=(event:KeyboardEvent)=>{if(event.key==='Escape')close()};addEventListener('keydown',key);return()=>removeEventListener('keydown',key)},[close]);return <div className="modal-backdrop" onMouseDown={event=>{if(event.target===event.currentTarget)close()}}><form className="rename-item-dialog" onSubmit={event=>{event.preventDefault();save()}}><h2>ELEMENT UMBENENNEN</h2><p>Der neue Name erscheint sofort im Ablauf und wird über Autosave und Synchronisation gespeichert.</p><label>ELEMENTNAME<input autoFocus maxLength={160} value={title} onChange={event=>setTitle(event.target.value)} onFocus={event=>event.currentTarget.select()}/></label><footer><button type="button" onClick={close}>ABBRECHEN</button><button className="primary" disabled={!title.trim()}>UMBENENNEN</button></footer></form></div>}
-
-const tourSteps=[
-  {title:'Willkommen in GottesdienstRegie',image:'./help/operator-workspace.png',focus:'center',text:'Hier planst du den vollständigen Gottesdienst, bereitest Folien vor und steuerst die getrennte Publikumsausgabe. Auswahl, Vorschau und MAIN sind bewusst voneinander getrennt.',points:['Links: Ablauf mit Vor-, Haupt- und Nachprogramm','Mitte: Folien und große Arbeitsvorschau','Oben: Bearbeiten, Vorschau, Preflight und ON AIR']},
-  {title:'Präsentation und Veranstaltung',image:'./help/operator-workspace.png',focus:'left',text:'Der Präsentationskopf verbindet den geöffneten Ablauf mit dem passenden Termin. Die Verknüpfung ist Voraussetzung für ON AIR und übernimmt Datum sowie planmäßige Servicezeit.',points:['Titel anklicken, um ihn direkt zu bearbeiten','Veranstaltung auswählen und Änderung speichern','Ausfallende Termine bleiben sichtbar, sind aber gesperrt']},
-  {title:'Inhalte sicher vorbereiten',image:'./help/operator-workspace.png',focus:'left',text:'ServiceItems lassen sich auswählen, ziehen, gruppieren, ausblenden oder über das Rechtsklickmenü bearbeiten. Editoränderungen verändern eine bereits live sichtbare Folie nicht rückwirkend.',points:['Strg-Klick für Mehrfachauswahl','Strg+R öffnet den eigenen Umbenennen-Dialog','Rechtsklick bietet nur passende Aktionen']},
-  {title:'Medien finden und verwenden',image:'./help/media-library.png',focus:'center',text:'Die Medienbibliothek trennt Team-Cloud, Community und Unsplash. Suche, Dateityp, Favoriten und zuletzt verwendete Medien können kombiniert werden.',points:['Unsplash besitzt einen eingerichteten App-Zugang','Filter ohne Treffer lassen sich mit einem Klick zurücksetzen','Mehr laden erweitert die Ergebnisliste in überschaubaren Schritten']},
-  {title:'Ausgänge und Audio prüfen',image:'./help/settings-window.png',focus:'center',text:'Richte MAIN und die getrennten Audioausgänge vor dem Gottesdienst ein. Preflight meldet fehlende Geräte, Medien und Verknüpfungen, bevor etwas live geschaltet wird.',points:['MAIN ist die Publikumsausgabe','Preview/Vorhören gehört auf den Bedienkopfhörer','Ein grüner Status erscheint erst nach echter Bestätigung']},
-  {title:'Vorschau und ON AIR',image:'./help/operator-workspace.png',focus:'top',text:'In der Vorschau kontrollierst du Folien, ohne MAIN zu verändern. Erst ON AIR beziehungsweise „Mit dieser Folie ON AIR gehen“ übernimmt den Inhalt in die Live-Ausgabe.',points:['Umschalt+F5 startet oder beendet ON AIR','Pfeiltasten navigieren während des Livebetriebs','OFF AIR beendet auch Background Audio sicher']}
-];
-function InterfaceTour({close}:{close:()=>void}){const [step,setStep]=useState(0),current=tourSteps[step];const finish=()=>{localStorage.setItem('gottesdienstregie.interface-tour','done');close()};useEffect(()=>{const key=(event:KeyboardEvent)=>{if(event.key==='Escape')finish();if(event.key==='ArrowRight')setStep(value=>Math.min(tourSteps.length-1,value+1));if(event.key==='ArrowLeft')setStep(value=>Math.max(0,value-1))};addEventListener('keydown',key);return()=>removeEventListener('keydown',key)},[]);return <div className="modal-backdrop"><section className="tour-dialog"><header><div><Icon name="explore"/><h2>BENUTZEROBERFLÄCHE KENNENLERNEN</h2></div><small>{step+1} / {tourSteps.length}</small></header><div className="tour-body"><div className={`tour-visual tour-focus-${current.focus}`}><img src={current.image} alt="Echte Aufnahme der GottesdienstRegie-Oberfläche"/></div><article className="tour-copy"><span className="eyebrow">SCHRITT {step+1}</span><h3>{current.title}</h3><p>{current.text}</p><ul>{current.points.map(point=><li key={point}>{point}</li>)}</ul><p><b>Tipp:</b> Öffne später Hilfe → Benutzeroberfläche kennenlernen, um diese Einführung jederzeit erneut anzusehen.</p></article></div><footer><div className="tour-dots">{tourSteps.map((_,index)=><i className={index===step?'active':''} key={index}/>)}</div><button onClick={finish}>ÜBERSPRINGEN</button><button disabled={step===0} onClick={()=>setStep(value=>value-1)}>ZURÜCK</button>{step<tourSteps.length-1?<button className="primary" onClick={()=>setStep(value=>value+1)}>WEITER</button>:<button className="primary" onClick={finish}>FERTIG</button>}</footer></section></div>}
-
-const reportText:Record<Language,[string,string,string,string,string,string,string,string,string]>={
- de:['FEHLER MELDEN','Beschreibe das Problem so genau, dass es nachvollzogen werden kann. Passwörter, Anmeldecodes und vertrauliche Inhalte dürfen nicht enthalten sein.','Kurztitel','Was ist passiert?','Schritte zum Nachstellen','Was sollte stattdessen passieren?','Diagnoseinformationen beifügen','ABBRECHEN','BERICHT AUF GITHUB ÖFFNEN'],gsw:['FÄHLER MELDE','Beschriib s Problem möglichst genau. Kei Passwörter oder Amäldecode iifüege.','Kurztitel','Was isch passiert?','Schritt zum Nachstelle','Was sött passiere?','Diagnoseinformatione aahänge','ABBRÄCHE','BERICHT UF GITHUB ÖFFNE'],en:['REPORT A BUG','Describe the problem clearly enough to reproduce it. Never include passwords, sign-in codes or confidential content.','Short title','What happened?','Steps to reproduce','What should have happened?','Include diagnostics','CANCEL','OPEN REPORT ON GITHUB'],da:['RAPPORTÉR EN FEJL','Beskriv problemet, så det kan genskabes. Medtag aldrig adgangskoder eller fortrolige oplysninger.','Kort titel','Hvad skete der?','Trin til at genskabe','Hvad skulle der ske?','Medtag diagnostik','ANNULLER','ÅBN RAPPORT PÅ GITHUB'],sv:['RAPPORTERA ETT FEL','Beskriv problemet så att det kan återskapas. Ta aldrig med lösenord eller känsliga uppgifter.','Kort titel','Vad hände?','Steg för att återskapa','Vad skulle ha hänt?','Inkludera diagnostik','AVBRYT','ÖPPNA RAPPORT PÅ GITHUB'],no:['RAPPORTER EN FEIL','Beskriv problemet slik at det kan gjenskapes. Ikke ta med passord eller fortrolige data.','Kort tittel','Hva skjedde?','Trinn for å gjenskape','Hva skulle ha skjedd?','Ta med diagnostikk','AVBRYT','ÅPNE RAPPORT PÅ GITHUB'],fi:['ILMOITA VIRHEESTÄ','Kuvaile ongelma niin, että se voidaan toistaa. Älä lisää salasanoja tai luottamuksellisia tietoja.','Lyhyt otsikko','Mitä tapahtui?','Toistamisvaiheet','Mitä olisi pitänyt tapahtua?','Liitä diagnostiikka','PERUUTA','AVAA RAPORTTI GITHUBISSA'],nl:['FOUT MELDEN','Beschrijf het probleem zodat het kan worden gereproduceerd. Voeg nooit wachtwoorden of vertrouwelijke gegevens toe.','Korte titel','Wat is er gebeurd?','Stappen om te reproduceren','Wat had er moeten gebeuren?','Diagnostiek toevoegen','ANNULEREN','RAPPORT OP GITHUB OPENEN'],fr:['SIGNALER UN BUG','Décrivez le problème afin de pouvoir le reproduire. N’ajoutez jamais de mots de passe ni de données confidentielles.','Titre court','Que s’est-il passé ?','Étapes de reproduction','Que devait-il se passer ?','Joindre le diagnostic','ANNULER','OUVRIR SUR GITHUB'],es:['INFORMAR DE UN ERROR','Describe el problema para poder reproducirlo. No incluyas contraseñas ni datos confidenciales.','Título breve','¿Qué ocurrió?','Pasos para reproducirlo','¿Qué debería haber ocurrido?','Incluir diagnóstico','CANCELAR','ABRIR INFORME EN GITHUB'],it:['SEGNALA UN ERRORE','Descrivi il problema in modo riproducibile. Non includere password o dati riservati.','Titolo breve','Che cosa è successo?','Passaggi per riprodurre','Che cosa doveva succedere?','Includi diagnostica','ANNULLA','APRI SU GITHUB'],pl:['ZGŁOŚ BŁĄD','Opisz problem tak, aby można go było odtworzyć. Nie podawaj haseł ani poufnych danych.','Krótki tytuł','Co się stało?','Kroki odtworzenia','Co powinno się stać?','Dołącz diagnostykę','ANULUJ','OTWÓRZ W GITHUB'],'pt-BR':['RELATAR UM ERRO','Descreva o problema para que possa ser reproduzido. Não inclua senhas nem dados confidenciais.','Título curto','O que aconteceu?','Etapas para reproduzir','O que deveria acontecer?','Incluir diagnóstico','CANCELAR','ABRIR NO GITHUB'],uk:['ПОВІДОМИТИ ПРО ПОМИЛКУ','Опишіть проблему так, щоб її можна було відтворити. Не додавайте паролі чи конфіденційні дані.','Короткий заголовок','Що сталося?','Кроки відтворення','Що мало статися?','Додати діагностику','СКАСУВАТИ','ВІДКРИТИ В GITHUB'],ru:['СООБЩИТЬ ОБ ОШИБКЕ','Опишите проблему так, чтобы её можно было воспроизвести. Не добавляйте пароли и конфиденциальные данные.','Краткий заголовок','Что произошло?','Шаги воспроизведения','Что должно было произойти?','Добавить диагностику','ОТМЕНА','ОТКРЫТЬ В GITHUB'],tr:['HATA BİLDİR','Sorunu yeniden oluşturulabilecek şekilde açıklayın. Parola veya gizli bilgi eklemeyin.','Kısa başlık','Ne oldu?','Yeniden oluşturma adımları','Ne olması gerekiyordu?','Tanı bilgilerini ekle','İPTAL','GITHUB’DA AÇ'],ar:['الإبلاغ عن خطأ','صِف المشكلة بحيث يمكن إعادة إنتاجها. لا تُضف كلمات مرور أو بيانات سرية.','عنوان مختصر','ماذا حدث؟','خطوات إعادة الإنتاج','ماذا كان يجب أن يحدث؟','إرفاق معلومات التشخيص','إلغاء','فتح البلاغ على GITHUB']};
-type FeedbackType='bug'|'change'|'feature';
-function ReportIssueDialog({close,initialType='bug'}:{close:()=>void;initialType?:FeedbackType}){const language=usePreferences(state=>state.language),T=reportText[language]??reportText.en,[type,setType]=useState<FeedbackType>(initialType),[title,setTitle]=useState(''),[actual,setActual]=useState(''),[steps,setSteps]=useState(''),[expected,setExpected]=useState(''),[diagnostics,setDiagnostics]=useState(true),isBug=type==='bug';async function submit(){const version=await window.desktop?.updates.currentVersion().catch(()=>'?')??'?',payload={type,title:title.trim(),actual,steps,expected,description:actual,reason:steps,diagnostics:diagnostics?{version,platform:navigator.platform,language}:null},fragment=encodeURIComponent(JSON.stringify(payload)),url=`https://cmoere.github.io/GottesdienstRegie/report/#${fragment}`;await window.desktop?.openExternal(url);close()}return <div className="modal-backdrop report-issue-backdrop"><form className="report-issue-dialog" onSubmit={event=>{event.preventDefault();void submit()}}><header><div><Icon name={type==='bug'?'bug_report':type==='feature'?'lightbulb':'rate_review'}/><h2>{type==='bug'?T[0]:type==='feature'?'FEATUREWUNSCH EINREICHEN':'ÄNDERUNG VORSCHLAGEN'}</h2></div><button type="button" onClick={close}><Icon name="close"/></button></header><p>Dein Anliegen wird auf einer eigenen GottesdienstRegie-Seite geprüft; du wirst nicht direkt zu GitHub weitergeleitet.</p><div className="feedback-type-tabs"><button type="button" className={type==='bug'?'active':''} onClick={()=>setType('bug')}><Icon name="bug_report"/> FEHLER</button><button type="button" className={type==='change'?'active':''} onClick={()=>setType('change')}><Icon name="rate_review"/> ÄNDERUNG</button><button type="button" className={type==='feature'?'active':''} onClick={()=>setType('feature')}><Icon name="lightbulb"/> FEATUREWUNSCH</button></div><label>{isBug?T[2]:'Kurzer Titel'}<input autoFocus required maxLength={160} value={title} onChange={event=>setTitle(event.target.value)} placeholder={isBug?'Kurz zusammenfassen, was nicht funktioniert':type==='feature'?'Welche neue Funktion wünschst du dir?':'Was sollte geändert werden?'}/></label><label>{isBug?T[3]:'Beschreibe deinen Wunsch möglichst genau'}<textarea required rows={5} value={actual} onChange={event=>setActual(event.target.value)} placeholder={isBug?'Was hast du gesehen? Nenne bitte auch die betroffene Ansicht oder das Element.':'Was soll künftig möglich sein und wie soll es sich bedienen lassen?'}/></label><label>{isBug?T[4]:'Warum ist diese Änderung hilfreich?'}<textarea required rows={4} value={steps} onChange={event=>setSteps(event.target.value)} placeholder={isBug?'1. Ansicht öffnen\n2. Aktion ausführen\n3. Fehler beobachten':'Beschreibe bitte den konkreten Einsatzfall.'}/></label><label>{isBug?T[5]:'Gewünschtes Verhalten oder Beispiel'}<textarea rows={3} value={expected} onChange={event=>setExpected(event.target.value)} placeholder={isBug?'Was sollte nach dieser Aktion korrekt passieren?':'Optional: Beispiel, Ablauf oder gewünschte Darstellung'}/></label><label className="report-check"><input type="checkbox" checked={diagnostics} onChange={event=>setDiagnostics(event.target.checked)}/>{T[6]}</label><footer><button type="button" onClick={close}>{T[7]}</button><button className="primary" disabled={!title.trim()||!actual.trim()||!steps.trim()}>ANLIEGEN PRÜFEN UND SENDEN</button></footer></form></div>}
-
-function UserProfileDialog({user,close}:{user:AuthSession['user'];close:()=>void}){const displayName=[user.firstname,user.lastName].filter(Boolean).join(' ')||user.email,username=String(user.settings?.username??user.email.split('@')[0]??user.uid),photoUrl=String(user.profile?.photoUrl??'');return <div className="modal-backdrop" onMouseDown={event=>event.target===event.currentTarget&&close()}><section className="user-profile-dialog" role="dialog" aria-modal="true"><header><b>MEIN PROFIL</b><button onClick={close} aria-label="Schließen"><Icon name="close"/></button></header><div className="user-profile-hero">{photoUrl?<img src={photoUrl} alt="Profilbild"/>:<span>{displayName.slice(0,1).toUpperCase()}</span>}<div><h2>{displayName}</h2><p>@{username}</p></div></div><dl><dt>E-Mail-Adresse</dt><dd>{user.email}</dd><dt>Benutzername</dt><dd>@{username}</dd><dt>Rolle</dt><dd>{user.appAccess.gottesdienstRegie.role}</dd><dt>Organisation</dt><dd>Philippus Gemeinde Bielefeld e. V.</dd><dt>Benutzer-ID</dt><dd title={user.uid}>{user.uid}</dd></dl><p className="profile-note">Belohnungen, XP und Abzeichen werden getrennt über „Belohnungen &amp; Fortschritt“ angezeigt.</p><footer><button onClick={close}>SCHLIESSEN</button></footer></section></div>}
-
-type MenuAction={label:string;icon?:string;shortcut?:string;action:()=>void;disabled?:boolean;separator?:boolean;external?:boolean};
-function MenuPopup({items,close,className=''}:{items:MenuAction[];close:()=>void;className?:string}){return <div className={`menu-popup ${className} ${items.some(item=>item.icon==='bug_report')?'help-menu-popup':''}`} onClick={event=>event.stopPropagation()}>{items.map((item,index)=><button key={`${item.label}-${index}`} className={item.separator?'separator':''} disabled={item.disabled} onClick={()=>{close();item.action()}}>{item.icon&&<Icon name={item.icon}/>}<span>{item.label}</span>{item.shortcut?<kbd>{item.shortcut}</kbd>:item.external&&<Icon name="open_in_new"/>}</button>)}</div>}
-
-function BackgroundAudioController(){
-  const [audio,setAudio]=useState<BackgroundAudioState>(()=>backgroundAudioEngine.snapshot());
-  useEffect(()=>{const update=(event:Event)=>setAudio((event as CustomEvent<BackgroundAudioState>).detail);addEventListener('gottesdienstregie:background-audio',update);return()=>removeEventListener('gottesdienstregie:background-audio',update)},[]);
-  if(!audio.active&&!audio.track)return null;const time=(value:number)=>`${Math.floor(value/60)}:${String(Math.floor(value%60)).padStart(2,'0')}`;
-  return <div className="background-audio-controller"><Icon name="volume_up"/><span><b>{audio.track?.name??'Background Audio'}</b><small>{time(audio.currentTime)} / {time(audio.duration)}</small></span><button title={audio.paused?'Fortsetzen':'Pause'} onClick={()=>audio.paused?void backgroundAudioEngine.resume():backgroundAudioEngine.pause()}><Icon name={audio.paused?'play_arrow':'pause'}/></button><button title="Nächster Titel" onClick={()=>void backgroundAudioEngine.next()}><Icon name="skip_next"/></button><button title="Stoppen" onClick={()=>void backgroundAudioEngine.stop()}><Icon name="stop"/></button><button title="Stumm" onClick={()=>backgroundAudioEngine.setMuted(!audio.muted)}><Icon name={audio.muted?'volume_off':'volume_up'}/></button><input aria-label="Background-Audio-Lautstärke" type="range" min="0" max="100" value={audio.volume} onChange={event=>backgroundAudioEngine.setVolume(Number(event.target.value))}/>{audio.error&&<small>{audio.error}</small>}</div>
-}
-
-function PresentationInfoDialog({close}:{close:()=>void}){
-  const state=usePresentation(),[title,setTitle]=useState(state.title),[date,setDate]=useState(state.date),[createdBy,setCreatedBy]=useState(state.createdBy),[eventId,setEventId]=useState(state.eventId);
-  const slides=state.items.reduce((sum,item)=>sum+item.slides.length,0),duration=state.items.reduce((sum,item)=>sum+itemDurationSeconds(item),0),locale=navigator.language||'de-DE';
-  const format=(value:string)=>value?new Date(value).toLocaleString(locale):'—';
-  return <div className="modal-backdrop" onMouseDown={event=>event.target===event.currentTarget&&close()}><form className="presentation-info-dialog" role="dialog" aria-modal="true" aria-labelledby="presentation-info-title" onSubmit={event=>{event.preventDefault();state.updatePresentation({title:title.trim()||state.title,date,createdBy:createdBy.trim(),eventId:eventId.trim()});close()}}><header><div><Icon name="info"/><span><h2 id="presentation-info-title">PRÄSENTATIONSINFORMATIONEN</h2><small>Details und letzte Bearbeitungen</small></span></div><button type="button" onClick={close} title="Schließen"><X/></button></header><main><section className="presentation-info-fields"><label>Titel<input autoFocus value={title} onChange={event=>setTitle(event.target.value)}/></label><label>Datum<input type="date" value={date} onChange={event=>setDate(event.target.value)}/></label><label>Erstellt von<input value={createdBy} placeholder="Name des Erstellers" onChange={event=>setCreatedBy(event.target.value)}/></label><label>Veranstaltungs-ID<input value={eventId} placeholder="Optional" onChange={event=>setEventId(event.target.value)}/></label></section><section className="presentation-info-facts"><div><small>ERSTELLT AM</small><b>{format(state.createdAt)}</b></div><div><small>ZULETZT BEARBEITET</small><b>{format(state.updatedAt)}</b></div><div><small>INHALT</small><b>{state.items.length} Elemente · {slides} Folien</b></div><div><small>GEPLANTE DAUER</small><b>{formatDuration(duration)}</b></div><div><small>PRÄSENTATIONS-ID</small><b title={state.presentationId}>{state.presentationId||'—'}</b></div><div><small>VORLAGE</small><b>{state.templateId?'Eigene Vorlage':'Standard / keine'}</b></div></section><section className="presentation-history"><header><h3>BEARBEITUNGSHISTORIE</h3><span>{state.editHistory.length} von 60 Einträgen</span></header>{state.editHistory.length?<ol>{[...state.editHistory].reverse().map((entry,index)=><li key={`${entry.timestamp}-${index}`}><Icon name="edit_note"/><span><b>{entry.action}</b><small>{entry.actor} · {format(entry.timestamp)}</small></span></li>)}</ol>:<p>Noch keine Bearbeitungen in dieser Präsentation gespeichert.</p>}</section></main><footer><button type="button" onClick={close}>ABBRECHEN</button><button className="primary">ÄNDERUNGEN SPEICHERN</button></footer></form></div>
-}
-
-function CloudHealth({status}:{status:MediaStorageStatus|null}){return <div className={`top-cloud-health ${status?.online?'online':'offline'}`} title={status?.message??'Cloudstatus wird geprüft'} aria-label={status?.online?'Cloud verfügbar':'Cloud offline'}><Icon name={status?.online?'cloud_done':'cloud_off'}/></div>}
-
-function AppShell({session,onLogout,device}:{session:AuthSession;onLogout:()=>void;device:RegisteredDevice|null}){
-  const {t,locale}=useI18n();
-  const state=usePresentation();const quickScreens=usePreferences(s=>s.quickScreens),storedShortcuts=usePreferences(s=>s.keyboardShortcuts),shortcuts=useMemo(()=>({...defaultKeyboardShortcuts,...storedShortcuts}),[storedShortcuts]),[previewQuick,setPreviewQuick]=useState<QuickScreenConfig|null>(null),[settingsOpen,setSettingsOpen]=useState(false),[helpOpen,setHelpOpen]=useState(false),[tourOpen,setTourOpen]=useState(()=>localStorage.getItem('gottesdienstregie.interface-tour')!=='done'),[reportOpen,setReportOpen]=useState(false),[feedbackType,setFeedbackType]=useState<FeedbackType>('bug'),[presentationInfoOpen,setPresentationInfoOpen]=useState(false),[profileOpen,setProfileOpen]=useState(false),[rewardProfileOpen,setRewardProfileOpen]=useState(false),[libraryOpen,setLibraryOpen]=useState(!state.presentationId&&localStorage.getItem('gottesdienstregie.interface-tour')==='done'),[logoutConfirm,setLogoutConfirm]=useState(false),[quizCreateOpen,setQuizCreateOpen]=useState(false),[menuOpen,setMenuOpen]=useState<string|null>(null),[displays,setDisplays]=useState<DesktopDisplay[]>([]),[outputState,setOutputState]=useState<Record<string,string>>({}),[mediaStorage,setMediaStorage]=useState<MediaStorageStatus|null>(null),[syncProgress,setSyncProgress]=useState<{state:'idle'|'syncing'|'saved'|'error';step:number;text:string}>({state:'idle',step:0,text:''});
-  const audioSessionRef=useRef<{onAir:boolean;mode:'edit'|'preview';previewKey:string;previewSuppressed:boolean}>({onAir:false,mode:'edit',previewKey:'',previewSuppressed:false});
-  const previousTourOpen=useRef(tourOpen);
-  const syncingRef=useRef(false),syncMessageTimer=useRef<number|undefined>(undefined);
-  const openMedia=(purpose:'item'|'background'='item',context:'manage'|'select'='select')=>void (window.desktop as any)?.mediaWindow?.open(context,purpose);
-  const addVideo=async()=>{const imported:MediaAsset[]=await (window.desktop?.media as any)?.import('video')??[],asset=imported.find(entry=>entry.kind==='video');if(!asset)return;const current=usePresentation.getState();current.addItem('video',{title:asset.name,section:'',body:'',metadata:{assetId:asset.id,url:asset.url,sourceType:'file',autoplay:true,volume:100,endBehavior:'nextSlide'}});usePresentation.getState().addElement('video');const next=usePresentation.getState(),element=next.items.flatMap(item=>item.slides).find(slide=>slide.id===next.selectedSlideId)?.elements.at(-1);if(element)next.updateElement(element.id,{x:0,y:0,width:1920,height:1080,properties:{...element.properties,src:asset.url,fit:'contain',autoplay:true,volume:100}})};
-  const user=session.user,access=user.appAccess.gottesdienstRegie,can=(permission:string)=>session.permissions.includes(permission),canEdit=can('presentationEdit'),canConfigure=can('outputSettings')||can('appSettings');
-  const displayName=[user.firstname,user.lastName].filter(Boolean).join(' ')||user.email;
-  const selected=state.items.find(item=>item.id===state.selectedItemId),slideCount=selected?.slides.length??0,slideIndex=Math.max(0,selected?.slides.findIndex(slide=>slide.id===state.selectedSlideId)??0)+1;
-  const saveNow=useCallback(async()=>{const current=usePresentation.getState();if(!current.presentationId||syncingRef.current)return;syncingRef.current=true;if(syncMessageTimer.current)window.clearTimeout(syncMessageTimer.current);current.markSaving();try{setSyncProgress({state:'syncing',step:1,text:'Synchronisation … 1/4 · Änderungen vorbereiten'});await new Promise(resolve=>window.setTimeout(resolve,180));setSyncProgress({state:'syncing',step:2,text:'Synchronisation … 2/4 · Präsentation speichern'});await window.desktop?.presentation.save(presentationDocument(usePresentation.getState()));usePresentation.getState().markSaved();setSyncProgress({state:'syncing',step:3,text:'Synchronisation … 3/4 · Cloud-Verbindung prüfen'});const storage=await window.desktop?.media.onlineStatus().catch(()=>null);if(storage)setMediaStorage(storage);setSyncProgress({state:'syncing',step:4,text:'Synchronisation … 4/4 · Abschließen'});await new Promise(resolve=>window.setTimeout(resolve,180));setSyncProgress({state:'saved',step:4,text:storage?.online?'Gespeichert':'Gespeichert · Cloud offline'});syncMessageTimer.current=window.setTimeout(()=>setSyncProgress(value=>({...value,text:''})),2800)}catch{usePresentation.getState().markSaveError();setSyncProgress({state:'error',step:0,text:'Speichern fehlgeschlagen'})}finally{syncingRef.current=false}},[]);
-  useEffect(()=>{if(previousTourOpen.current&&!tourOpen&&!state.presentationId)setLibraryOpen(true);previousTourOpen.current=tourOpen},[tourOpen,state.presentationId]);
-  useEffect(()=>{const current=usePresentation.getState();current.setHistoryActor(user.uid,displayName,device?.id,device?.name);if(current.presentationId&&!current.createdBy)current.updatePresentation({createdBy:displayName})},[user.uid,displayName,device?.id,device?.name,state.presentationId]);
-  useEffect(()=>{if(!state.presentationId||state.createdBy!==displayName||Date.now()-Date.parse(state.createdAt)>120000)return;awardReward({userId:user.uid,type:'presentationCreated',presentationId:state.presentationId,scope:state.presentationId,points:5,title:'ERSTE SCHRITTE',description:'Präsentation erstellt.'})},[state.presentationId,state.createdAt,state.createdBy,user.uid,displayName]);
-  useEffect(()=>{const entry=state.editHistory.at(-1);if(!entry||entry.userId!==user.uid)return;if(entry.category==='SERVICEITEMS'&&entry.actionType==='ERSTELLT')awardReward({userId:user.uid,type:'serviceItemAdded',presentationId:state.presentationId,serviceItemId:entry.entityId,scope:entry.entityId,points:3,title:'Inhalt vorbereitet',description:'Ein ServiceItem wurde sinnvoll hinzugefügt.'});if(entry.category==='VERANSTALTUNG'&&entry.actionType==='VERKNÜPFT')awardReward({userId:user.uid,type:'eventLinked',presentationId:state.presentationId,scope:state.presentationId,points:10,title:'VERKNÜPFT',description:'Präsentation mit einer Veranstaltung verknüpft.'})},[state.editHistory.at(-1)?.id,user.uid,state.presentationId]);
-  useEffect(()=>{const latest=state.editHistory.at(-1);if(state.saveState==='saved'&&latest?.syncStatus==='SYNCED'&&latest.userId===user.uid)awardReward({userId:user.uid,type:'presentationSynced',presentationId:state.presentationId,scope:state.presentationId,points:2,title:'Synchronisiert',description:'Änderungen wurden erfolgreich gespeichert.'})},[state.saveState,state.editHistory.at(-1)?.syncStatus,user.uid,state.presentationId]);
-  useEffect(()=>{const roles=Object.values(state.displayRoles);if(roles.includes('stage'))awardReward({userId:user.uid,type:'stageSetup',presentationId:state.presentationId,scope:'account',points:5,title:'BÜHNENBLICK',description:'STAGE-Ausgabe eingerichtet.'});if(roles.includes('livestream'))awardReward({userId:user.uid,type:'streamSetup',presentationId:state.presentationId,scope:'account',points:5,title:'STREAM READY',description:'LIVESTREAM-Ausgabe eingerichtet.'})},[JSON.stringify(state.displayRoles),user.uid,state.presentationId]);
-  useEffect(()=>{const timer=window.setInterval(()=>{const current=usePresentation.getState();if(current.presentationId&&current.saveState==='dirty')void saveNow()},15_000);return()=>{window.clearInterval(timer);if(syncMessageTimer.current)window.clearTimeout(syncMessageTimer.current)}},[saveNow]);
-  useEffect(()=>{void window.desktop?.displays().then(setDisplays);const refreshCloud=()=>void window.desktop?.media.onlineStatus().then(setMediaStorage).catch(()=>setMediaStorage(null));refreshCloud();const cloudTimer=window.setInterval(refreshCloud,20000),disposeDisplays=window.desktop?.onDisplaysChanged(setDisplays),disposeOutputs=window.desktop?.onOutputStatus(status=>setOutputState(current=>({...current,[status.role]:status.state})));return()=>{window.clearInterval(cloudTimer);disposeDisplays?.();disposeOutputs?.()}},[]);
-  useEffect(()=>{const openHelp=(event:Event)=>{const topic=(event as CustomEvent<string>).detail||'Erste Schritte';localStorage.setItem('gottesdienstregie.help-topic',topic);setHelpOpen(true)};window.addEventListener('gottesdienstregie:open-help',openHelp);return()=>window.removeEventListener('gottesdienstregie:open-help',openHelp)},[]);
-  useEffect(()=>{const showQuizJoin=(event:Event)=>{const quick=(event as CustomEvent<QuickScreenConfig>).detail;if(!quick)return;setPreviewQuick(quick);if(usePresentation.getState().onAir)void (window.desktop as any)?.sendQuick(quick.targets,quick)};addEventListener('gottesdienstregie:show-quiz-join',showQuizJoin);return()=>removeEventListener('gottesdienstregie:show-quiz-join',showQuizJoin)},[]);
-  useEffect(()=>{if(previewQuick?.type!=='amen')return;const targets=previewQuick.targets,timer=window.setTimeout(()=>{setPreviewQuick(null);if(usePresentation.getState().onAir)void (window.desktop as any)?.sendQuick(targets,null)},Math.max(1,previewQuick.duration??6)*1000);return()=>window.clearTimeout(timer)},[previewQuick]);
-  useEffect(()=>(window.desktop as any)?.mediaWindow?.onSelected((payload:{asset?:CloudMediaAsset;assets?:CloudMediaAsset[];purpose:'item'|'background'|'audio';targetType?:'section'|'serviceItem';targetId?:string})=>{if(payload.purpose==='audio'&&payload.assets&&payload.targetId){const tracks:BackgroundAudioTrack[]=payload.assets.filter(asset=>asset.kind==='audio').map(asset=>({assetId:asset.id,name:asset.name,url:asset.downloadUrl,artist:asset.tags?.[0],format:asset.extension,size:asset.size,status:'ready'})),current=usePresentation.getState();if(payload.targetType==='section'){const existing=current.sections.find(section=>section.id===payload.targetId)?.backgroundAudio;current.updateSectionAudio(payload.targetId,{...(existing??defaultBackgroundAudio()),tracks:[...(existing?.tracks??[]),...tracks]})}else{const existing=current.items.find(item=>item.id===payload.targetId)?.backgroundAudio;current.updateItemAudio(payload.targetId,{...(existing??defaultBackgroundAudio()),tracks:[...(existing?.tracks??[]),...tracks]})}return}const asset=payload.asset;if(!asset)return;const url=asset.downloadUrl;if(payload.purpose==='background'){const current=usePresentation.getState();if(asset.kind==='image')current.updateSlide({backgroundImage:url,backgroundFit:'cover',backgroundPositionX:'center',backgroundPositionY:'center'});if(asset.kind==='video'){current.addElement('video');const next=usePresentation.getState(),element=next.items.flatMap(item=>item.slides).find(entry=>entry.id===next.selectedSlideId)?.elements.at(-1);if(element)next.updateElement(element.id,{name:'Videohintergrund',x:0,y:0,width:1920,height:1080,properties:{...element.properties,src:url,fit:'cover',autoplay:true,loop:true,volume:0}})}return}const current=usePresentation.getState();current.addItem(asset.kind==='video'?'video':asset.kind==='audio'?'audio':asset.kind==='pdf'?'pdf':'image',{title:asset.name,section:'',body:'',metadata:{assetId:asset.id,url,size:asset.size,checksum:asset.checksum,sourceType:'cloud'}});if(asset.kind!=='pdf'){usePresentation.getState().addElement(asset.kind);const next=usePresentation.getState(),element=next.items.flatMap(item=>item.slides).find(entry=>entry.id===next.selectedSlideId)?.elements.at(-1);if(element)next.updateElement(element.id,{x:0,y:0,width:1920,height:1080,properties:{...element.properties,src:url,fit:asset.kind==='image'?'cover':'contain',autoplay:asset.kind!=='image',volume:100}})}}),[]);
-  useEffect(()=>{if(!state.onAir||!state.liveSlideId)return;const item=state.items.find(entry=>entry.id===state.liveItemId),liveSlide=item?.slides.find(slide=>slide.id===state.liveSlideId);if(liveSlide)void liveEngine.show({...liveSlide,transitionOverride:resolveTransition(liveSlide,item,'main',state.transitionDefault)})},[state.liveSlideId,state.onAir]);
-  useEffect(()=>{const previous=audioSessionRef.current,previewKey=`${state.previewItemId}:${state.previewSlideId}`,wentOffAir=previous.onAir&&!state.onAir;if(state.onAir){const item=state.items.find(entry=>entry.id===state.liveItemId),section=state.sections.find(entry=>entry.id===item?.sectionId);void backgroundAudioEngine.sync(item,section);const slide=item?.slides.find(entry=>entry.id===state.liveSlideId),audibleVideo=Boolean(slide?.elements.some(element=>element.visible&&element.type==='video'&&Number(element.properties.volume??100)>0));void backgroundAudioEngine.setDucked(audibleVideo);audioSessionRef.current={onAir:true,mode:state.mode,previewKey,previewSuppressed:false};return}if(state.mode==='edit'){void backgroundAudioEngine.stop();audioSessionRef.current={onAir:false,mode:'edit',previewKey,previewSuppressed:false};return}let previewSuppressed=previous.previewSuppressed;if(!wentOffAir&&(previous.mode!=='preview'||previous.previewKey!==previewKey))previewSuppressed=false;if(wentOffAir)previewSuppressed=true;audioSessionRef.current={onAir:false,mode:'preview',previewKey,previewSuppressed};if(previewSuppressed){void backgroundAudioEngine.stop();return}const item=state.items.find(entry=>entry.id===state.previewItemId),section=state.sections.find(entry=>entry.id===item?.sectionId);void backgroundAudioEngine.sync(item,section);const slide=item?.slides.find(entry=>entry.id===state.previewSlideId),audibleVideo=Boolean(slide?.elements.some(element=>element.visible&&element.type==='video'&&Number(element.properties.volume??100)>0));void backgroundAudioEngine.setDucked(audibleVideo)},[state.onAir,state.mode,state.liveItemId,state.liveSlideId,state.previewItemId,state.previewSlideId,state.items,state.sections]);
-  useEffect(()=>{if(!state.onAir||state.liveTimerPausedSlideId===state.liveSlideId)return;const item=state.items.find(entry=>entry.id===state.liveItemId),slide=item?.slides.find(entry=>entry.id===state.liveSlideId);if(!item?.timing.autoAdvance||item.type==='video'||item.type==='audio')return;const seconds=Math.max(1,slide?.timing?.durationSeconds??item.timing.slideDurationSeconds??item.plannedDuration??8),timer=setTimeout(()=>usePresentation.getState().nextLive(),seconds*1000);return()=>clearTimeout(timer)},[state.onAir,state.liveItemId,state.liveSlideId,state.liveTimerPausedSlideId,state.items]);
-  useEffect(()=>(window.desktop as any)?.onMediaEnded((behavior:string)=>{if(usePresentation.getState().onAir&&behavior==='nextSlide')usePresentation.getState().nextLive()}),[]);
-  useEffect(()=>{if(!state.onAir||!state.serviceTime)return;const tick=()=>{const current=usePresentation.getState(),item=current.items.find(entry=>entry.id===current.liveItemId),match=current.serviceTime.match(/^(\d{1,2}):(\d{2})$/);if(!item||!match)return;const now=new Date(),serviceAt=new Date(`${current.date}T${String(match[1]).padStart(2,'0')}:${match[2]}:00`).getTime(),warmupSeconds=current.items.filter(entry=>entry.sectionId==='warmup'&&entry.enabled&&!entry.disabled).reduce((sum,entry)=>sum+itemDurationSeconds(entry),0),first=(sectionId:string)=>current.items.filter(entry=>entry.sectionId===sectionId&&entry.enabled&&!entry.disabled).sort((a,b)=>a.order-b.order).flatMap(entry=>entry.slides.filter(slide=>slide.enabled).map(slide=>({itemId:entry.id,slideId:slide.id})))[0];if(item.sectionId==='pre'&&now.getTime()>=serviceAt-warmupSeconds*1000&&now.getTime()<serviceAt){const target=first('warmup');if(target)current.goLive(target.itemId,target.slideId)}else if(item.sectionId==='warmup'&&now.getTime()>=serviceAt){const target=first('service');if(target)current.goLive(target.itemId,target.slideId)}};tick();const timer=setInterval(tick,1000);return()=>clearInterval(timer)},[state.onAir,state.serviceTime,state.date,state.items]);
-  useEffect(()=>{const key=(event:KeyboardEvent)=>{if(event.defaultPrevented)return;const target=event.target as HTMLElement|null,isInput=target?.matches('input,textarea,select,[contenteditable="true"]');if(matchesShortcut(event,shortcuts.save)){event.preventDefault();void saveNow();return}if(matchesShortcut(event,shortcuts.undo)){event.preventDefault();state.undo();return}if(matchesShortcut(event,shortcuts.redo)){event.preventDefault();state.redo();return}if(matchesShortcut(event,shortcuts.toggleFullscreen)){event.preventDefault();void (window.desktop as any)?.operator?.toggleFullscreen();return}if(isInput)return;if(matchesShortcut(event,shortcuts.openHelp)){event.preventDefault();setHelpOpen(true);return}if(matchesShortcut(event,shortcuts.openSettings)){event.preventDefault();setSettingsOpen(true);return}if(matchesShortcut(event,shortcuts.openLibrary)){event.preventDefault();setLibraryOpen(true);return}if(matchesShortcut(event,shortcuts.openMediaLibrary)){event.preventDefault();openMedia('item','manage');return}if(matchesShortcut(event,shortcuts.previewGrid)){event.preventDefault();state.setMode('preview');state.setPreviewLayout('grid');return}if(matchesShortcut(event,shortcuts.preflight)){event.preventDefault();void air(true);return}if(matchesShortcut(event,shortcuts.toggleMode)){event.preventDefault();state.setMode(state.mode==='edit'?'preview':'edit');return}if(matchesShortcut(event,shortcuts.toggleOnAir)){event.preventDefault();void air();return}if(!state.onAir)return;if(matchesShortcut(event,shortcuts.nextLive)){event.preventDefault();state.nextLive();return}if(matchesShortcut(event,shortcuts.previousLive)){event.preventDefault();state.previousLive()}};addEventListener('keydown',key);return()=>removeEventListener('keydown',key)},[shortcuts,state.onAir,state.mode,state.mainDisplayId,state.previewSlideId,state.selectedSlideId,saveNow]);
-  async function leave(){if(state.onAir){await backgroundAudioEngine.stop();await window.desktop?.goOffAir();state.setOnAir(false)}await logout();onLogout()}
-  useEffect(()=>{const api=(window.desktop as any)?.remote;if(!api)return;const dispose=api.onCommand((payload:{action:string})=>{if(!usePresentation.getState().onAir)return;if(payload.action==='next')usePresentation.getState().nextLive();if(payload.action==='previous')usePresentation.getState().previousLive()});return dispose},[]);
-  useEffect(()=>{void (window.desktop as any)?.remote?.updateLive({title:state.title,onAir:state.onAir,serviceTime:state.serviceTime,current:state.items.flatMap(item=>item.slides).find(slide=>slide.id===state.liveSlideId)??null,next:state.items.flatMap(item=>item.slides).find(slide=>slide.id===state.previewSlideId)??null})},[state.title,state.onAir,state.serviceTime,state.liveSlideId,state.previewSlideId,state.items]);
-  useEffect(()=>{if(device?.type!=='shared'||!usePreferences.getState().sharedDeviceAutoLogout)return;let last=Date.now();const active=()=>{last=Date.now()};for(const name of ['pointerdown','keydown','wheel'] as const)addEventListener(name,active,{passive:true});const timer=setInterval(()=>{const current=usePresentation.getState(),audio=backgroundAudioEngine.getState();if(current.onAir||audio.active){last=Date.now();return}if(Date.now()-last>=usePreferences.getState().sharedDeviceTimeoutMinutes*60000)void leave()},15000);return()=>{clearInterval(timer);for(const name of ['pointerdown','keydown','wheel'] as const)removeEventListener(name,active)}},[device?.type]);
-  const exitApplication=async()=>{if(state.onAir){await backgroundAudioEngine.stop();await liveEngine.stop();state.setOnAir(false)}await saveNow();await window.desktop?.presentation.markClean();window.close()};
-  const showTemporary=async(title:string,body:string,background:string,role?:string)=>{const slide:Slide={id:`temporary-${Date.now()}`,itemId:'temporary',order:0,enabled:true,title,body,background,elements:[],transition:'fade',transitionDuration:200,notes:''};if(role)await (window.desktop as any)?.sendOutputRole(role,slide);else await liveEngine.show(slide)};
-  const applyQuick=async(quick:QuickScreenConfig|null)=>{setPreviewQuick(quick);if(state.onAir)await (window.desktop as any)?.sendQuick((quick?.targets??['main']),quick)};
-  const menuItems:Record<string,MenuAction[]>={
-    file:[{label:'Neue Präsentation',icon:'note_add',action:async()=>{const title=prompt('Name der Präsentation','Sonntagsgottesdienst');if(!title)return;const doc=await window.desktop?.presentation.create({title,date:new Date().toISOString().slice(0,10),template:blankPresentationDocument(title)}) as PresentationDocument;state.loadDocument(doc)}},{label:'Präsentation öffnen',icon:'folder_open',action:()=>setLibraryOpen(true)},{label:'Duplizieren',icon:'content_copy',disabled:!state.presentationId,action:async()=>{const doc=await window.desktop?.presentation.duplicate(state.presentationId) as PresentationDocument;state.loadDocument(doc)}},{label:'Umbenennen',icon:'edit',disabled:!state.presentationId,action:async()=>{const title=prompt('Neuer Name',state.title);if(title){await window.desktop?.presentation.rename(state.presentationId,title);state.updatePresentation({title})}}},{label:'Importieren',icon:'upload_file',separator:true,action:async()=>{const doc=await window.desktop?.presentation.import() as PresentationDocument|null;if(doc)state.loadDocument(doc)}},{label:'Exportieren',icon:'download',disabled:!state.presentationId,action:()=>void window.desktop?.presentation.export(state.presentationId)},{label:'Backup erstellen',icon:'backup',disabled:!state.presentationId,action:async()=>{const target=await window.desktop?.presentation.backup(state.presentationId);alert(`Backup erstellt:\n${target}`)}},{label:'Präsentation schließen',icon:'close',separator:true,disabled:!state.presentationId,action:()=>{saveNow();state.loadDocument(blankPresentationDocument('',state.date));setLibraryOpen(true)}},{label:'Beenden',icon:'power_settings_new',action:()=>window.close()}],
-    media:[{label:'Medienbibliothek',icon:'photo_library',action:()=>openMedia('item','manage')},{label:'Medien hochladen',icon:'cloud_upload',action:()=>openMedia('item','manage')},{label:'Zuletzt verwendet',icon:'history',action:()=>openMedia('item','manage')},{label:'Favoriten',icon:'star',action:()=>openMedia('item','manage')},{label:'Fehlende Medien anzeigen',icon:'broken_image',action:()=>void air(true)},{label:'Medienverwaltung',icon:'settings',action:()=>openMedia('item','manage')}],
-    edit:[{label:'Rückgängig',icon:'undo',shortcut:'Strg+Z',disabled:!state.history.length,action:state.undo},{label:'Wiederholen',icon:'redo',shortcut:'Strg+Y',disabled:!state.future.length,action:state.redo},{label:'Ausschneiden',icon:'content_cut',shortcut:'Strg+X',separator:true,disabled:!state.selectedItemId,action:()=>serviceItemCommands.cut(state.selectedServiceItemIds.length?state.selectedServiceItemIds:[state.selectedItemId])},{label:'Kopieren',icon:'content_copy',shortcut:'Strg+C',disabled:!state.selectedItemId,action:()=>serviceItemCommands.copy(state.selectedServiceItemIds.length?state.selectedServiceItemIds:[state.selectedItemId])},{label:'Einfügen',icon:'content_paste',shortcut:'Strg+V',disabled:!state.selectedItemId||!serviceItemCommands.canPaste(),action:()=>serviceItemCommands.paste(state.selectedItemId)},{label:'Duplizieren',icon:'file_copy',shortcut:'Strg+D',disabled:!state.selectedItemId,action:()=>serviceItemCommands.duplicate(state.selectedServiceItemIds.length?state.selectedServiceItemIds:[state.selectedItemId])},{label:'Folie hinzufügen',icon:'add_to_photos',separator:true,disabled:!state.selectedItemId,action:state.addSlide},{label:'Folie duplizieren',icon:'control_point_duplicate',disabled:!state.selectedSlideId,action:state.duplicateSlide},{label:'Auswahl löschen',icon:'delete',disabled:!state.selectedItemId,action:()=>serviceItemCommands.remove(state.selectedServiceItemIds.length?state.selectedServiceItemIds:[state.selectedItemId])}],
-    add:[{label:'Inhalt',icon:'title',action:()=>state.addItem('content',{title:'Neuer Inhalt',section:'',body:''})},{label:'Ankündigung',icon:'campaign',action:()=>state.addItem('announcement',{title:'Neue Ankündigung',section:'',body:''})},{label:'Song',icon:'music_note',action:()=>state.addItem('song',{title:'Neuer Song',section:'',body:'Songtext'})},{label:'Bibel',icon:'menu_book',action:()=>state.addItem('bible',{title:'Bibelstelle',section:'',body:''})},{label:'Bild',icon:'image',separator:true,action:()=>openMedia()},{label:'Video',icon:'movie',action:()=>void addVideo()},{label:'Audio',icon:'audio_file',action:()=>openMedia()},{label:'Slideshow',icon:'slideshow',action:()=>state.addItem('slideshow',{title:'Neue Slideshow',section:'',body:''})},{label:'PDF',icon:'picture_as_pdf',action:()=>openMedia()},{label:'Webseite',icon:'language',separator:true,action:()=>{state.addItem('web',{title:'Neue Webseite',section:'',body:'',metadata:{url:'',zoom:100,reloadOnLive:true}});usePresentation.getState().addElement('web')}},{label:'Timer',icon:'timer',action:()=>state.addItem('timer',{title:'Neuer Timer',section:'',body:'05:00',metadata:{durationSeconds:300}})},{label:'Countdown',icon:'hourglass_bottom',action:()=>state.addItem('countdown',{title:'Neuer Countdown',section:'',body:'05:00',metadata:{durationSeconds:300}})},{label:'Videoeingang',icon:'videocam',action:()=>addConfiguredVideoInput('service',()=>{})},{label:'Stage-Nachricht',icon:'speaker_notes',action:()=>state.addItem('stageMessage',{title:'Neue Stage-Nachricht',section:'',body:'Bitte Nachricht eingeben'})},{label:'Schnellanzeige',icon:'bolt',action:()=>state.addItem('quickScreen',{title:'Neue Schnellanzeige',section:'',body:''})},{label:'LiveQuiz',icon:'quiz',action:()=>setQuizCreateOpen(true)}],
-    songs:[{label:'Songbibliothek öffnen',icon:'library_music',action:()=>{const first=state.items.find(item=>item.type==='song');if(first){state.select(first.id);state.setMode('edit')}else state.addItem('song',{title:'Neuer Song',section:'',body:'Strophe 1\nSongtext'})}},{label:'Neuen Song erstellen',icon:'add',action:()=>state.addItem('song',{title:'Neuer Song',section:'',body:'Strophe 1\nSongtext'})}],
-    presentation:[{label:'Präsentationsinformationen',icon:'info',action:()=>setPresentationInfoOpen(true)},{label:'Änderungshistorie',icon:'history',action:()=>void window.desktop?.historyWindow?.open()},{label:'Belohnungen & Fortschritt',icon:'workspace_premium',action:()=>setRewardProfileOpen(true)},{label:'Servicezeit',icon:'schedule',action:()=>{const value=prompt('Servicezeit (HH:MM)',state.serviceTime||'10:30');if(value!==null&&/^([01]\d|2[0-3]):[0-5]\d$/.test(value))state.updatePresentation({serviceTime:value})}},{label:state.onAir?'OFF AIR':'ON AIR',icon:'cast',separator:true,action:()=>void air()}],
-    view:[{label:'Bearbeiten',action:()=>state.setMode('edit')},{label:'Vorschau',action:()=>state.setMode('preview')},{label:'Folienübersicht',action:()=>{state.setMode('preview');state.setPreviewLayout('grid')}},{label:'Workspace maximieren',action:()=>document.documentElement.toggleAttribute('data-workspace-maximized')}],
-    tools:[{label:'Timer',icon:'timer',action:()=>state.addItem('timer',{title:'Timer',section:'',body:'00:05:00'})},{label:'Stage-Nachricht senden',icon:'speaker_notes',action:()=>{const message=prompt('Stage-Nachricht');if(message)void showTemporary('STAGE',message,'#162d36','stage')}},{label:'Quick Screen: Schwarz',icon:'contrast',action:()=>void showTemporary('','', '#000000')},{label:'Quick Screen: Logo',icon:'church',action:()=>void showTemporary('GottesdienstRegie','Philippusgemeinde','#35626b')},{label:'Schnellanzeige beenden',icon:'restore',action:()=>{const live=state.items.flatMap(item=>item.slides).find(slide=>slide.id===state.liveSlideId);if(live)void liveEngine.show(live)}},{label:'Preflight',icon:'fact_check',separator:true,action:()=>void air(true)},{label:'Ausgänge',icon:'desktop_windows',action:()=>setSettingsOpen(true)},{label:'Diagnose',icon:'troubleshoot',action:()=>alert(`GottesdienstRegie Diagnose\nVersion: 0.9.0\nPräsentation: ${state.title||'keine'}\nElemente: ${state.items.length}\nMAIN: ${state.mainDisplayId?'zugeordnet':'nicht zugeordnet'}\nGitHub-Medien: ${mediaStorage?.online?'verbunden':'offline'}\nKeine vertraulichen Anmeldeinformationen enthalten.`)}],
-    help:[{label:t('helpTitle'),icon:'help',action:()=>setHelpOpen(true)},{label:'Benutzeroberfläche kennenlernen',icon:'explore',action:()=>setTourOpen(true)},{label:t('helpShortcuts'),icon:'keyboard',action:()=>{localStorage.setItem('gottesdienstregie.help-topic','Tastenkürzel');setHelpOpen(true)}},{label:t('releaseNotes'),icon:'new_releases',separator:true,action:()=>setHelpOpen(true)},{label:t('onlineReleaseNotes'),icon:'open_in_new',external:true,action:()=>void window.desktop?.openExternal(`https://cmoere.github.io/GottesdienstRegie/release-notes/?lang=${usePreferences.getState().language}`)},{label:'Änderung vorschlagen …',icon:'rate_review',separator:true,action:()=>{setFeedbackType('change');setReportOpen(true)}},{label:'Feature wünschen …',icon:'lightbulb',action:()=>{setFeedbackType('feature');setReportOpen(true)}},{label:reportText[usePreferences.getState().language]?.[0]??reportText.en[0],icon:'bug_report',action:()=>{setFeedbackType('bug');setReportOpen(true)}},{label:'GottesdienstRegie',icon:'info',separator:true,action:()=>setHelpOpen(true)}],
-    profile:[{label:'Mein Profil',icon:'account_circle',action:()=>setProfileOpen(true)},{label:'Belohnungen & Fortschritt',icon:'workspace_premium',action:()=>setRewardProfileOpen(true)},{label:'Einstellungen',icon:'settings',separator:true,action:()=>setSettingsOpen(true)},{label:'Abmelden',icon:'logout',separator:true,action:()=>setLogoutConfirm(true)}]
-  };
-  useEffect(()=>{const escape=(event:KeyboardEvent)=>{if(event.key!=='Escape'||event.defaultPrevented)return;if(tourOpen){localStorage.setItem('gottesdienstregie.interface-tour','done');setTourOpen(false);return}if(logoutConfirm){setLogoutConfirm(false);return}if(reportOpen){setReportOpen(false);return}if(presentationInfoOpen){setPresentationInfoOpen(false);return}if(profileOpen){setProfileOpen(false);return}if(rewardProfileOpen){setRewardProfileOpen(false);return}if(quizCreateOpen){setQuizCreateOpen(false);return}if(libraryOpen){setLibraryOpen(false);return}if(helpOpen){setHelpOpen(false);return}if(settingsOpen){setSettingsOpen(false);return}if(menuOpen)setMenuOpen(null)};addEventListener('keydown',escape);return()=>removeEventListener('keydown',escape)},[tourOpen,logoutConfirm,reportOpen,presentationInfoOpen,profileOpen,rewardProfileOpen,quizCreateOpen,libraryOpen,helpOpen,settingsOpen,menuOpen]);
-  async function air(preflightOnly=false,target?:{itemId:string;slideId:string}){
-    if(!can('presentationLive')||!window.desktop)return;
-    if(state.onAir&&!preflightOnly){await backgroundAudioEngine.stop();await liveEngine.stop();state.setOnAir(false);setPreviewQuick(null);setOutputState({});return}
-    if(!state.eventLink?.eventKey){void playRoutedTone(normalizedAudioRouting(usePreferences.getState().audioRouting),'notification',392,.16).catch(()=>{});alert('Bitte verknüpfe diese Präsentation zuerst mit einer Veranstaltung. Erst danach kann ON AIR gestartet werden.');return}
-    const itemId=target?.itemId??state.previewItemId??state.selectedItemId,slideId=target?.slideId??state.previewSlideId??state.selectedSlideId,slide=state.items.find(item=>item.id===itemId)?.slides.find(entry=>entry.id===slideId);
-    const enabledSlides=state.items.filter(item=>item.enabled&&!item.disabled).flatMap(item=>item.slides.filter(entry=>entry.enabled));
-    const videoInputElements=enabledSlides.flatMap(entry=>entry.elements.filter(element=>element.visible&&element.type==='videoInput'));
-    const warnings:string[]=[],audioTracks=[...state.sections.flatMap(section=>section.backgroundAudio?.tracks??[]),...state.items.flatMap(item=>item.backgroundAudio?.tracks??[])];
-    const routing=normalizedAudioRouting(usePreferences.getState().audioRouting);let audioOutputs:MediaDeviceInfo[]=[];try{audioOutputs=(await navigator.mediaDevices.enumerateDevices()).filter(device=>device.kind==='audiooutput')}catch{}
-    const mediaWithAudio=enabledSlides.some(entry=>entry.elements.some(element=>element.visible&&(element.type==='video'||element.type==='audio'||element.type==='videoInput'&&element.properties.audioEnabled===true)));
-    if(mediaWithAudio&&!routeAvailable(routing,'video',audioOutputs))warnings.push('Audioausgang für Medien / Videos ist nicht verfügbar. Fallback: Systemstandard.');
-    if(audioTracks.length&&!routeAvailable(routing,'background',audioOutputs))warnings.push('Background-Audio-Ausgang ist nicht verfügbar. Fallback: Systemstandard.');
-    if(!routeAvailable(routing,'preview',audioOutputs))warnings.push('Preview-Ausgang ist nicht verfügbar. Dies blockiert MAIN nicht; Fallback: Systemstandard.');
-    if(!routeAvailable(routing,'notification',audioOutputs))warnings.push('Systembenachrichtigungsausgang ist nicht verfügbar. Dies blockiert MAIN nicht; Fallback: Systemstandard.');
-    const linkedEvent=state.eventLink?.eventKey?await getChurchEvent(state.eventLink.eventKey).catch(()=>null):null;if(isCancelled(linkedEvent))warnings.push('Die verknüpfte Veranstaltung fällt aus. Die Verbindung bleibt bestehen; bitte prüfe den Live-Start.');
-    for(const track of audioTracks)if(!track.url||track.status==='missing')warnings.push(`Background Audio „${track.name}“ ist nicht für die Live-Ausgabe verfügbar.`);
-    if(videoInputElements.length){try{const available=await navigator.mediaDevices.enumerateDevices(),ids=new Set(available.filter(device=>device.kind==='videoinput').map(device=>device.deviceId));for(const element of videoInputElements)if(!ids.has(String(element.properties.deviceId??'')))warnings.push(`Für den Videoeingang „${element.name}“ ist die konfigurierte Quelle derzeit nicht verfügbar.`)}catch{warnings.push('Die verfügbaren Videoeingänge konnten vor ON AIR nicht geprüft werden.')}}
-    const preflight=await liveEngine.preflight(state.displayRoles,{hasPresentation:!!state.presentationId&&state.items.length>0,activeSlideCount:enabledSlides.length,media:enabledSlides.flatMap(entry=>entry.elements.filter(element=>element.visible&&(element.type==='image'||element.type==='video')).map(element=>String(element.properties.src??element.properties.url??''))).filter(Boolean)});
-    preflight.warnings.push(...warnings);
-    if(preflight.ok)awardReward({userId:user.uid,type:'preflightReady',presentationId:state.presentationId,scope:state.presentationId,points:5,title:'BEREIT',description:'Preflight ohne kritische Fehler abgeschlossen.'});
-    if(!preflight.ok||preflightOnly){if(!preflight.ok||preflight.warnings.length)void playRoutedTone(routing,'notification',392,.16).catch(()=>{});alert(`${preflight.ok?'Preflight erfolgreich.':'Preflight nicht bestanden.'}${preflight.errors.length?`\n\n${preflight.errors.join('\n')}`:''}${preflight.warnings.length?`\n\nHinweise:\n${preflight.warnings.join('\n')}`:''}`);return}
-    if(preflight.warnings.length){void playRoutedTone(routing,'notification',392,.16).catch(()=>{});if(!confirm(`Preflight mit ${preflight.warnings.length} Warnung${preflight.warnings.length===1?'':'en'}:\n\n${preflight.warnings.join('\n')}\n\nTrotzdem ON AIR gehen?`))return}
-    if(!slide)return;const item=state.items.find(entry=>entry.id===itemId);await liveEngine.start(state.displayRoles,{...slide,transitionOverride:resolveTransition(slide,item,'main',state.transitionDefault)});state.goLive(itemId,slideId);state.setOnAir(true);awardReward({userId:user.uid,type:'firstOnAir',presentationId:state.presentationId,scope:'account',points:10,title:'ON AIR',description:'Erste Präsentation erfolgreich live verwendet.'})
+    void window.desktop?.updates
+      .previous()
+      .then(setPreviousVersion)
+      .catch(() => setPreviousVersion(null));
+    void navigator.mediaDevices
+      ?.enumerateDevices()
+      .then(setAudioDevices)
+      .catch(() => setAudioDevices([]));
+    void (window.desktop as any)?.operator
+      ?.getPreferences()
+      .then(setOperatorPrefs);
+    const displayDispose = window.desktop?.onDisplaysChanged(setDisplays);
+    const dispose = window.desktop?.updates.onStatus((status) => {
+      if (
+        Date.now() < minimumUpdateCheckUntil.current &&
+        status.state !== "checking"
+      ) {
+        pendingUpdateStatus.current = status;
+        return;
+      }
+      setUpdateStatus(status);
+    });
+    return () => {
+      dispose?.();
+      displayDispose?.();
+      microphoneStream.current?.getTracks().forEach((track) => track.stop());
+    };
+  }, []);
+  useEffect(() => {
+    const version = updateStatus.version;
+    if (updateStatus.state !== "available" || !version) {
+      setUpdateSummary("");
+      return;
+    }
+    let active = true;
+    void fetch("./releases.json")
+      .then((response) => response.json() as Promise<ReleaseFile>)
+      .then((data) => {
+        if (active)
+          setUpdateSummary(
+            conciseReleaseSummary(data, version, language) ||
+              conciseRemoteSummary(updateStatus.releaseNotes ?? ""),
+          );
+      })
+      .catch(() => {
+        if (active)
+          setUpdateSummary(
+            conciseRemoteSummary(updateStatus.releaseNotes ?? ""),
+          );
+      });
+    return () => {
+      active = false;
+    };
+  }, [
+    updateStatus.state,
+    updateStatus.version,
+    updateStatus.releaseNotes,
+    language,
+  ]);
+  async function testSpeakers() {
+    const context = new AudioContext(),
+      oscillator = context.createOscillator(),
+      gain = context.createGain(),
+      destination = context.createMediaStreamDestination(),
+      audio = new Audio(),
+      sinkAudio = audio as HTMLAudioElement & {
+        setSinkId?: (id: string) => Promise<void>;
+      };
+    gain.gain.value = Math.max(0, Math.min(1, outputVolume / 100));
+    oscillator.frequency.value = 523.25;
+    oscillator.connect(gain).connect(destination);
+    audio.srcObject = destination.stream;
+    if (audioOutputDevice !== "default" && sinkAudio.setSinkId)
+      await sinkAudio.setSinkId(audioOutputDevice);
+    await audio.play();
+    oscillator.start();
+    oscillator.stop(context.currentTime + 0.65);
+    setTimeout(() => {
+      audio.pause();
+      void context.close();
+    }, 900);
   }
-  const menuOrder:{label?:string;key?:TranslationKey;id:string}[]=[{label:'Bearbeiten',id:'edit'},{label:'Element hinzufügen',id:'add'},{key:'media',id:'media'},{label:'Songbibliothek',id:'songs'},{key:'presentation',id:'presentation'},{key:'view',id:'view'},{key:'tools',id:'tools'}];
-  const canUndo=state.history.length>0,canRedo=state.future.length>0,lastEdit=state.editHistory.at(-1);
-  return <div className={`app production-app mode-${state.mode} ${state.onAir?'is-on-air':''}`} onClick={()=>setMenuOpen(null)}><div className="menubar"><FileMenu open={menuOpen==='file'} label={t('file')} currentId={state.presentationId} currentTitle={state.title} onAir={state.onAir} onToggle={()=>setMenuOpen(value=>value==='file'?null:'file')} onClose={()=>setMenuOpen(null)} onOpened={document=>state.loadDocument(document)} onSave={saveNow} onExit={exitApplication} creatorName={[user.firstname,user.lastName].filter(Boolean).join(' ')||user.email}/>{menuOrder.map(menu=><div className="menu-root" key={menu.id}><button onClick={event=>{event.stopPropagation();setMenuOpen(value=>value===menu.id?null:menu.id)}}>{menu.label??t(menu.key!)}</button>{menuOpen===menu.id&&<MenuPopup items={menuItems[menu.id]} close={()=>setMenuOpen(null)}/>}</div>)}<button onClick={()=>setSettingsOpen(true)}>{t('settings')}</button><div className="menu-root"><button onClick={event=>{event.stopPropagation();setMenuOpen(value=>value==='help'?null:'help')}}>{t('help')}</button>{menuOpen==='help'&&<MenuPopup items={menuItems.help} close={()=>setMenuOpen(null)}/>}</div><button className="menu-icon" title={canUndo?'Rückgängig':'Rückgängig, nicht verfügbar'} aria-label={canUndo?'Rückgängig':'Rückgängig, nicht verfügbar'} disabled={!canUndo} onClick={state.undo}><Icon name="undo"/></button><button className="menu-icon" title={canRedo?'Wiederholen':'Wiederholen, nicht verfügbar'} aria-label={canRedo?'Wiederholen':'Wiederholen, nicht verfügbar'} disabled={!canRedo} onClick={state.redo}><Icon name="redo"/></button><span/><button className="menu-icon" title="Preflight" onClick={()=>void air(true)}><Icon name="fact_check"/></button><button className="menu-icon contextual-help" title="Hilfe zu Preflight" aria-label="Hilfe zu Preflight" onClick={()=>window.dispatchEvent(new CustomEvent('gottesdienstregie:open-help',{detail:'Preflight'}))}>?</button><div className={`sync-control ${syncProgress.state}`}><button className="menu-icon" title="Jetzt speichern und Synchronisationsstatus prüfen" aria-label="Speichern und synchronisieren" onClick={()=>void saveNow()}><Icon name={syncProgress.state==='syncing'?'sync':syncProgress.state==='error'?'sync_problem':'cloud_done'}/></button>{syncProgress.text&&<small><span>{syncProgress.text}</span>{syncProgress.state==='syncing'&&<i style={{width:`${syncProgress.step*25}%`}}/>}</small>}</div><button title={`GottesdienstRegie: ${roleLabel(t,access.role)} · ${t('logout')}`} onClick={()=>setLogoutConfirm(true)}><LogOut/> {user.firstname??user.email}</button></div>
-    <div className="top-profile-root"><button className="top-profile-button" title="Profil öffnen" onClick={event=>{event.stopPropagation();setMenuOpen(value=>value==='profile'?null:'profile')}}><Icon name="account_circle"/><span>{user.firstname??user.email}</span><Icon name="arrow_drop_down"/></button>{menuOpen==='profile'&&<MenuPopup items={menuItems.profile} close={()=>setMenuOpen(null)}/>}</div>
-    <button className="edit-history-quick" title="Änderungshistorie in eigenem Fenster öffnen" onClick={()=>void window.desktop?.historyWindow?.open()}><Icon name="history"/><span><b>ÄNDERUNGEN</b><small>{lastEdit?`${lastEdit.action} · ${new Date(lastEdit.timestamp).toLocaleTimeString(locale,{hour:'2-digit',minute:'2-digit'})}`:'Noch keine protokollierten Änderungen'}</small></span><em>{state.editHistory.length}</em></button>
-    <CloudHealth status={mediaStorage}/>
-    <div className="toolbar"><div><b>{state.title}</b><span> · {new Date().toLocaleDateString(locale)}</span></div><div className={`mode-switch ${state.mode}`} aria-label={`${t('edit')} / ${t('preview')}`}><button className={state.mode==='edit'?'active':''} onClick={()=>state.setMode('edit')}>{t('edit').toUpperCase()}</button><button className="mode-toggle" type="button" role="switch" aria-checked={state.mode==='preview'} aria-label={state.mode==='edit'?t('preview'):t('edit')} onClick={()=>state.setMode(state.mode==='edit'?'preview':'edit')}><i/></button><button className={state.mode==='preview'?'active':''} onClick={()=>state.setMode('preview')}>{t('preview').toUpperCase()}</button></div><button className={`onair ${state.onAir?'live':''}`} disabled={!can('presentationLive')||!state.mainDisplayId||!window.desktop||(!state.onAir&&!state.eventLink?.eventKey)} title={!can('presentationLive')?t('noLivePermission'):!state.mainDisplayId?t('assignMain'):!state.onAir&&!state.eventLink?.eventKey?'Bitte zuerst eine Veranstaltung verknüpfen':''} onClick={()=>void air()}><span/> {state.onAir?'OFF AIR':'ON AIR'}</button></div>
-    {state.mode==='edit'&&<><OutputTabs/><FormatToolbar openBackgroundMedia={()=>openMedia('background')}/></>}
-    <div className="main"><OrderOfService canEdit={canEdit} onTake={(itemId,slideId)=>{if(state.onAir)state.goLive(itemId,slideId);else void air(false,{itemId,slideId})}}/><div className={`workspace-quick-host ${previewQuick?.type==='noText'?'quick-no-text':''}`}><ProductionWorkspace canEdit={canEdit} quickScreens={quickScreens} activeQuick={previewQuick} onQuick={quick=>void applyQuick(quick)}/>{state.mode==='edit'&&<QuickOverlay quick={previewQuick}/>}</div></div><BackgroundAudioController/><ProductionTimeline/>
-    <div className="status"><span>{state.saveState==='error'?t('authUnknown'):t('ready')}</span><span>{state.saveState==='saving'?'SPEICHERT …':state.saveState==='error'?'SPEICHERFEHLER':'GESPEICHERT ✓'}</span><span>{mediaStorage?.online?'CLOUD ✓':'CLOUD OFFLINE'}</span><span>{t('main')} {state.mainDisplayId&&!displays.some(display=>display.id===state.mainDisplayId)?'FEHLT':state.onAir?(outputState.main==='missing'?'FEHLT':'ON AIR'):state.mainDisplayId?t('ready'):'—'}</span><span>STAGE {Object.entries(state.displayRoles).some(([,role])=>role==='stage')?(outputState.stage==='missing'?'FEHLT':t('ready')):'—'}</span><i/><span>{roleLabel(t,access.role)}</span><span>{t('item')} {Math.max(1,state.items.findIndex(item=>item.id===state.selectedItemId)+1)}/{state.items.length}</span><span>{t('slide')} {slideIndex}/{slideCount}</span><Clock locale={locale}/></div>
-    <RewardToastHost onAir={state.onAir}/>{profileOpen&&<UserProfileDialog user={user} close={()=>setProfileOpen(false)}/>} {rewardProfileOpen&&<RewardProfile userId={user.uid} displayName={displayName} close={()=>setRewardProfileOpen(false)}/>} {presentationInfoOpen&&<PresentationInfoDialog close={()=>setPresentationInfoOpen(false)}/>} {settingsOpen&&<SettingsModal canConfigure={canConfigure} close={()=>setSettingsOpen(false)}/>} {helpOpen&&<HelpModal close={()=>setHelpOpen(false)}/>} {tourOpen&&<InterfaceTour close={()=>setTourOpen(false)}/>} {reportOpen&&<ReportIssueDialog initialType={feedbackType} close={()=>setReportOpen(false)}/>} {libraryOpen&&<PresentationLibrary close={()=>setLibraryOpen(false)} opened={document=>state.loadDocument(document)}/>} {quizCreateOpen&&<QuizCreateDialog cancel={()=>setQuizCreateOpen(false)} create={value=>{addLiveQuiz(value);setQuizCreateOpen(false)}}/>} {logoutConfirm&&<LogoutDialog cancel={()=>setLogoutConfirm(false)} confirm={()=>void leave()}/>}</div>;
+  async function toggleMicrophone() {
+    if (microphoneStream.current) {
+      microphoneStream.current.getTracks().forEach((track) => track.stop());
+      microphoneStream.current = null;
+      setMicTesting(false);
+      setMicLevel(0);
+      return;
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        deviceId:
+          audioInputDevice === "default"
+            ? undefined
+            : { exact: audioInputDevice },
+        noiseSuppression,
+        echoCancellation,
+        autoGainControl: false,
+      },
+    });
+    microphoneStream.current = stream;
+    setAudioDevices(await navigator.mediaDevices.enumerateDevices());
+    setMicTesting(true);
+    const context = new AudioContext(),
+      source = context.createMediaStreamSource(stream),
+      analyser = context.createAnalyser(),
+      values = new Uint8Array(analyser.frequencyBinCount);
+    source.connect(analyser);
+    const tick = () => {
+      if (microphoneStream.current !== stream) {
+        void context.close();
+        return;
+      }
+      analyser.getByteTimeDomainData(values);
+      let sum = 0;
+      for (const value of values) {
+        const normalized = (value - 128) / 128;
+        sum += normalized * normalized;
+      }
+      setMicLevel(
+        Math.min(100, Math.round(Math.sqrt(sum / values.length) * inputGain)),
+      );
+      requestAnimationFrame(tick);
+    };
+    tick();
+  }
+  const themeOptions: { value: ThemeMode; label: TranslationKey }[] = [
+    { value: "system", label: "themeSystem" },
+    { value: "light", label: "themeLight" },
+    { value: "dark", label: "themeDark" },
+  ];
+  const etaText =
+    updateStatus.etaSeconds === undefined
+      ? "Restzeit wird berechnet …"
+      : updateStatus.etaSeconds < 60
+        ? `ca. ${Math.max(1, updateStatus.etaSeconds)} Sek. verbleibend`
+        : `ca. ${Math.max(1, Math.ceil(updateStatus.etaSeconds / 60))} Min. verbleibend`;
+  const updateText =
+    updateStatus.state === "checking"
+      ? `${t("updateChecking").replace(/[\s.…]+$/, "")}${".".repeat(updateSearchDots)}`
+      : updateStatus.state === "available"
+        ? t("updateAvailable", { version: updateStatus.version ?? "" })
+        : updateStatus.state === "not-available"
+          ? t("updateCurrent")
+          : updateStatus.state === "downloading"
+            ? `${t("updateDownloading", { percent: updateStatus.percent ?? 0 })} · ${etaText}`
+            : updateStatus.state === "rollback-downloading"
+              ? `${L.rollbackDownloading}: ${updateStatus.percent ?? 0} %`
+              : updateStatus.state === "cancelled"
+                ? (updateStatus.message ??
+                  "Der Update-Download wurde abgebrochen.")
+                : updateStatus.state === "downloaded"
+                  ? t("updateDownloaded", {
+                      version: updateStatus.version ?? "",
+                    })
+                  : updateStatus.state === "error"
+                    ? t("updateError", {
+                        detail: updateStatus.message ?? t("authUnknown"),
+                      })
+                    : updateStatus.state === "development"
+                      ? t("updateDevelopment")
+                      : "";
+  const setOperatorPreference = async (
+    patch: Partial<DesktopOperatorPreferences>,
+  ) => {
+    setOperatorPrefs((value) => ({ ...value, ...patch }));
+    const saved = await (window.desktop as any)?.operator?.setPreferences(
+      patch,
+    );
+    if (saved) setOperatorPrefs(saved);
+  };
+  const switchTab = (next: SettingsTab) => {
+    setTab(next);
+    requestAnimationFrame(() => contentRef.current?.scrollTo({ top: 0 }));
+  };
+  const installedIsBeta = isPrerelease(currentVersion);
+  const safeRollback = async () => {
+    if (!previousVersion) return;
+    const incompatible = usePresentation
+      .getState()
+      .items.some((item) => item.type === "videoInput" || item.type === "web");
+    if (incompatible) {
+      const backup = confirm(
+        "Diese Präsentation verwendet Funktionen, die die ältere Version eventuell nicht versteht. Vor dem Wechsel wird dringend ein Backup empfohlen. Jetzt Backup erstellen?",
+      );
+      if (!backup) return;
+      const id = usePresentation.getState().presentationId;
+      if (id) await window.desktop?.presentation.backup(id);
+    }
+    if (
+      confirm(
+        `${installedIsBeta ? "ZUR STABILEN VERSION ZURÜCKKEHREN" : "VORHERIGE VERSION INSTALLIEREN"}\n\nDu möchtest GottesdienstRegie ${previousVersion.version} installieren.\n\nDeine Präsentationen und Medien bleiben erhalten. Die Anwendung wird anschließend neu gestartet.`,
+      )
+    )
+      await window.desktop?.updates.rollback();
+  };
+  const checkForUpdates = async () => {
+    if (!window.desktop) return;
+    minimumUpdateCheckUntil.current = Date.now() + 3000;
+    pendingUpdateStatus.current = null;
+    setUpdateStatus({ state: "checking" });
+    const result = await window.desktop.updates.check();
+    const remaining = Math.max(0, minimumUpdateCheckUntil.current - Date.now());
+    if (remaining)
+      await new Promise((resolve) => setTimeout(resolve, remaining));
+    minimumUpdateCheckUntil.current = 0;
+    setUpdateStatus(pendingUpdateStatus.current ?? result);
+    pendingUpdateStatus.current = null;
+  };
+  const settingGroups: { title: string; tabs: SettingsTab[] }[] = [
+    {
+      title: "ALLGEMEIN",
+      tabs: [
+        "general",
+        "ai",
+        "security",
+        "accessibility",
+        "shortcuts",
+        "rewards",
+        "updates",
+      ],
+    },
+    { title: "AUSGABE", tabs: ["display", "remote", "videoInput"] },
+    { title: "AUDIO", tabs: ["audio", "audioRouting"] },
+    {
+      title: "PRÄSENTATION",
+      tabs: [
+        "presentation",
+        "quickScreens",
+        "fonts",
+        "defaultMedia",
+        "defaultStage",
+      ],
+    },
+    { title: "VERBINDUNGEN & STEUERUNG", tabs: ["lightingMidi", "midiInput"] },
+  ];
+  const tabName = (key: SettingsTab) =>
+    key === "midiInput"
+      ? "MIDI Input"
+      : key === "shortcuts"
+        ? "Tastenkürzel"
+        : key === "audioRouting"
+          ? "Audioausgänge"
+          : key === "rewards"
+            ? "Belohnungen"
+            : key === "security"
+              ? "Sicherheit"
+              : key === "ai"
+                ? "KI-Funktionen"
+                : key === "remote"
+                  ? "Personal Monitore & Web-Steuerung"
+                  : t(key as TranslationKey);
+  return (
+    <>
+      <div className="modal-backdrop">
+        <div className="modal settings-modal">
+          <header>
+            <h2>{t("settings")}</h2>
+            <button onClick={close} title={t("cancel")}>
+              <X />
+            </button>
+          </header>
+          <div className="modal-body">
+            <nav>
+              {settingGroups.map((group) => (
+                <div className="settings-nav-group" key={group.title}>
+                  <b>{group.title}</b>
+                  {group.tabs.map((key) => (
+                    <button
+                      className={tab === key ? "active" : ""}
+                      key={key}
+                      onClick={() => switchTab(key)}
+                    >
+                      {tabName(key)}
+                    </button>
+                  ))}
+                </div>
+              ))}
+            </nav>
+            <main ref={contentRef} className="settings-content">
+              {tab === "general" ? (
+                <section>
+                  <h3>{t("general")}</h3>
+                  <p>{t("generalHelp")}</p>
+                  <div className="settings-group">
+                    <h4>{t("language")}</h4>
+                    <label>
+                      {t("language")}
+                      <select
+                        value={language}
+                        onChange={(e) =>
+                          setLanguage(e.target.value as Language)
+                        }
+                      >
+                        {languageOptions.map((option) => (
+                          <option value={option.value} key={option.value}>
+                            {option.nativeName}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                  <div className="settings-group">
+                    <h4>{t("appearance")}</h4>
+                    <label>
+                      {t("theme")}
+                      <select
+                        value={theme}
+                        onChange={(e) => setTheme(e.target.value as ThemeMode)}
+                      >
+                        {themeOptions.map((option) => (
+                          <option value={option.value} key={option.value}>
+                            {t(option.label)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={blackWhite}
+                        onChange={(e) => setBlackWhite(e.target.checked)}
+                      />
+                      <span>
+                        <b>{t("blackWhite")}</b>
+                        <small>{t("blackWhiteHelp")}</small>
+                      </span>
+                    </label>
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={showLoginBackgrounds}
+                        onChange={(e) =>
+                          setShowLoginBackgrounds(e.target.checked)
+                        }
+                      />
+                      <span>
+                        <b>{t("showLoginBackgrounds")}</b>
+                        <small>{t("showLoginBackgroundsHelp")}</small>
+                      </span>
+                    </label>
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={reopenLastPresentation}
+                        onChange={(e) =>
+                          prefs.setReopenLastPresentation(e.target.checked)
+                        }
+                      />
+                      <span>
+                        <b>Zuletzt geöffnete Präsentation wieder öffnen</b>
+                        <small>
+                          Öffnet beim nächsten Programmstart automatisch das
+                          zuletzt verwendete lokale Dokument.
+                        </small>
+                      </span>
+                    </label>
+                  </div>
+                </section>
+              ) : tab === "accessibility" ? (
+                <section>
+                  <h3>{t("accessibility")}</h3>
+                  <p>{t("accessibilityHelp")}</p>
+                  <label className="setting-check">
+                    <input
+                      type="checkbox"
+                      checked={reduceMotion}
+                      onChange={(e) => setReduceMotion(e.target.checked)}
+                    />
+                    <span>
+                      <b>{t("reduceMotion")}</b>
+                      <small>{t("reduceMotionHelp")}</small>
+                    </span>
+                  </label>
+                  <label className="setting-check">
+                    <input
+                      type="checkbox"
+                      checked={compactMode}
+                      onChange={(e) => setCompactMode(e.target.checked)}
+                    />
+                    <span>
+                      <b>{t("compactMode")}</b>
+                      <small>{t("compactModeHelp")}</small>
+                    </span>
+                  </label>
+                  <label className="setting-check">
+                    <input
+                      type="checkbox"
+                      checked={highContrast}
+                      onChange={(e) => prefs.setHighContrast(e.target.checked)}
+                    />
+                    <span>
+                      <b>{L.highContrast}</b>
+                      <small>{L.highContrastHelp}</small>
+                    </span>
+                  </label>
+                  <label className="setting-check">
+                    <input
+                      type="checkbox"
+                      checked={largeText}
+                      onChange={(e) => prefs.setLargeText(e.target.checked)}
+                    />
+                    <span>
+                      <b>{L.largeText}</b>
+                      <small>{L.largeTextHelp}</small>
+                    </span>
+                  </label>
+                  <label className="setting-check">
+                    <input
+                      type="checkbox"
+                      checked={strongFocus}
+                      onChange={(e) => prefs.setStrongFocus(e.target.checked)}
+                    />
+                    <span>
+                      <b>{L.strongFocus}</b>
+                      <small>{L.strongFocusHelp}</small>
+                    </span>
+                  </label>
+                  <label className="setting-check">
+                    <input
+                      type="checkbox"
+                      checked={dyslexiaFriendly}
+                      onChange={(e) =>
+                        prefs.setDyslexiaFriendly(e.target.checked)
+                      }
+                    />
+                    <span>
+                      <b>{L.dyslexia}</b>
+                      <small>{L.dyslexiaHelp}</small>
+                    </span>
+                  </label>
+                </section>
+              ) : tab === "security" ? (
+                <>
+                  <SharedDeviceSecurity device={device} />
+                  <section className="settings-group">
+                    <h4>AUTOMATISCHES ABMELDEN</h4>
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={prefs.sharedDeviceAutoLogout}
+                        onChange={(e) =>
+                          prefs.setSharedDeviceSecurity({
+                            sharedDeviceAutoLogout: e.target.checked,
+                          })
+                        }
+                      />
+                      <span>
+                        <b>Benutzer bei Inaktivität automatisch abmelden</b>
+                        <small>
+                          Nie während ON AIR, Recording, Background Audio oder
+                          kritischen Vorgängen.
+                        </small>
+                      </span>
+                    </label>
+                    <label>
+                      Nach
+                      <select
+                        value={prefs.sharedDeviceTimeoutMinutes}
+                        onChange={(e) =>
+                          prefs.setSharedDeviceSecurity({
+                            sharedDeviceTimeoutMinutes: Number(e.target.value),
+                          })
+                        }
+                      >
+                        <option value="15">15 Minuten</option>
+                        <option value="30">30 Minuten</option>
+                        <option value="60">60 Minuten</option>
+                        <option value="120">2 Stunden</option>
+                      </select>
+                    </label>
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={prefs.logoutAfterOffAir}
+                        onChange={(e) =>
+                          prefs.setSharedDeviceSecurity({
+                            logoutAfterOffAir: e.target.checked,
+                          })
+                        }
+                      />
+                      <span>
+                        <b>Nach Ende des Livebetriebs automatisch abmelden</b>
+                        <small>
+                          Der Timer beginnt erst nach OFF AIR und nur ohne
+                          laufende kritische Wiedergabe.
+                        </small>
+                      </span>
+                    </label>
+                  </section>
+                </>
+              ) : tab === "ai" ? (
+                <section>
+                  <h3>Künstliche Intelligenz</h3>
+                  <p>
+                    Steuert KI-Assistent, KI-Motive und weitere KI-gestützte
+                    Funktionen zentral. Bereits gespeicherte Medien bleiben
+                    erhalten.
+                  </p>
+                  <div className="settings-group">
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={prefs.aiEnabled}
+                        onChange={(e) => {
+                          prefs.setAiEnabled(e.target.checked);
+                          alert(
+                            usePresentation.getState().onAir
+                              ? "Die Änderung wird nach dem nächsten sicheren Neustart wirksam."
+                              : "Neustart erforderlich. Die Änderung wird beim nächsten Programmstart vollständig angewendet.",
+                          );
+                        }}
+                      />
+                      <span>
+                        <b>KI-Funktionen aktivieren</b>
+                        <small>
+                          Aktiviert KI-Assistent, KI-Motive und weitere
+                          KI-gestützte Funktionen in GottesdienstRegie.
+                        </small>
+                      </span>
+                    </label>
+                  </div>
+                </section>
+              ) : tab === "shortcuts" ? (
+                <KeyboardShortcutSettings />
+              ) : tab === "rewards" ? (
+                <RewardSettingsPanel />
+              ) : tab === "updates" ? (
+                <section>
+                  <h3>{t("updatesTitle")}</h3>
+                  <p>
+                    {t("currentVersion")}: <b>{currentVersion}</b>
+                  </p>
+                  {versionMetadata && (
+                    <div className="version-details">
+                      <h4>{L.versionDetails}</h4>
+                      <dl>
+                        <dt>{L.installedAt}</dt>
+                        <dd>
+                          {new Date(versionMetadata.installedAt).toLocaleString(
+                            locale,
+                          )}
+                        </dd>
+                        <dt>{L.modifiedAt}</dt>
+                        <dd>
+                          {new Date(versionMetadata.modifiedAt).toLocaleString(
+                            locale,
+                          )}
+                        </dd>
+                        <dt>{L.fileSize}</dt>
+                        <dd>
+                          {new Intl.NumberFormat(locale, {
+                            style: "unit",
+                            unit: "megabyte",
+                            maximumFractionDigits: 1,
+                          }).format(versionMetadata.fileSize / 1024 / 1024)}
+                        </dd>
+                        <dt>{L.executable}</dt>
+                        <dd>{versionMetadata.executable}</dd>
+                      </dl>
+                    </div>
+                  )}
+                  {updateText && (
+                    <div
+                      className={`update-state ${updateStatus.state}`}
+                      role={
+                        updateStatus.state.includes("downloading")
+                          ? "progressbar"
+                          : undefined
+                      }
+                      aria-valuenow={updateStatus.percent}
+                    >
+                      <i style={{ width: `${updateStatus.percent ?? 0}%` }} />
+                      <span>{updateText}</span>
+                      {updateStatus.state === "available" && updateSummary && (
+                        <small className="update-brief">{updateSummary}</small>
+                      )}
+                      {updateStatus.state === "downloading" && (
+                        <button
+                          className="update-cancel"
+                          title="Download abbrechen"
+                          aria-label="Update-Download abbrechen"
+                          onClick={() =>
+                            void window.desktop?.updates.cancelDownload()
+                          }
+                        >
+                          <Icon name="close" />
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  <div className="update-actions">
+                    <button
+                      className="primary"
+                      disabled={
+                        updateStatus.state === "checking" ||
+                        updateStatus.state === "downloading" ||
+                        updateStatus.state === "rollback-downloading"
+                      }
+                      onClick={() => void checkForUpdates()}
+                    >
+                      {t("checkUpdates")}
+                    </button>
+                    {(updateStatus.state === "available" ||
+                      updateStatus.state === "cancelled") && (
+                      <button
+                        className="primary"
+                        onClick={() => void window.desktop?.updates.download()}
+                      >
+                        {t("updateDownload")}
+                      </button>
+                    )}
+                    {updateStatus.state === "downloaded" && (
+                      <button
+                        className="primary"
+                        onClick={() => void window.desktop?.updates.install()}
+                      >
+                        {t("updateInstall")}
+                      </button>
+                    )}
+                  </div>
+                  <div className="rollback-box">
+                    <h4>{L.previousVersion}</h4>
+                    {previousVersion ? (
+                      <>
+                        <p>
+                          <b>{previousVersion.version}</b> ·{" "}
+                          {new Date(
+                            previousVersion.publishedAt,
+                          ).toLocaleDateString(locale)}{" "}
+                          ·{" "}
+                          {new Intl.NumberFormat(locale, {
+                            style: "unit",
+                            unit: "megabyte",
+                            maximumFractionDigits: 1,
+                          }).format(previousVersion.size / 1024 / 1024)}
+                        </p>
+                        <button
+                          disabled={
+                            updateStatus.state === "rollback-downloading"
+                          }
+                          onClick={() => {
+                            if (confirm(L.rollbackConfirm))
+                              void window.desktop?.updates.rollback();
+                          }}
+                        >
+                          {L.rollback}
+                        </button>
+                      </>
+                    ) : previousVersion === null ? (
+                      <p>{L.noPrevious}</p>
+                    ) : (
+                      <p>…</p>
+                    )}
+                  </div>
+                  <h4>{t("releaseNotes")}</h4>
+                  <ReleaseNotesView />
+                  {updateStatus.releaseNotes && (
+                    <div className="remote-release-notes">
+                      <h4>{t("onlineReleaseNotes")}</h4>
+                      <p>{plainReleaseNotes(updateStatus.releaseNotes)}</p>
+                    </div>
+                  )}
+                </section>
+              ) : tab === "audio" ? (
+                <section>
+                  <h3>{t("audio")}</h3>
+                  <p>{L.audioHelp}</p>
+                  <div className="audio-settings">
+                    <label>
+                      {L.speakers}
+                      <select
+                        value={audioOutputDevice}
+                        onChange={(e) =>
+                          prefs.setAudioOutputDevice(e.target.value)
+                        }
+                      >
+                        <option value="default">{L.systemDefault}</option>
+                        {audioDevices
+                          .filter(
+                            (device) =>
+                              device.kind === "audiooutput" &&
+                              device.deviceId !== "default",
+                          )
+                          .map((device, index) => (
+                            <option
+                              key={device.deviceId}
+                              value={device.deviceId}
+                            >
+                              {device.label || `${L.speakers} ${index + 1}`}
+                            </option>
+                          ))}
+                      </select>
+                    </label>
+                    <label>
+                      {L.microphone}
+                      <select
+                        value={audioInputDevice}
+                        onChange={(e) =>
+                          prefs.setAudioInputDevice(e.target.value)
+                        }
+                      >
+                        <option value="default">{L.systemDefault}</option>
+                        {audioDevices
+                          .filter(
+                            (device) =>
+                              device.kind === "audioinput" &&
+                              device.deviceId !== "default",
+                          )
+                          .map((device, index) => (
+                            <option
+                              key={device.deviceId}
+                              value={device.deviceId}
+                            >
+                              {device.label || `${L.microphone} ${index + 1}`}
+                            </option>
+                          ))}
+                      </select>
+                    </label>
+                    <label>
+                      {L.volume}
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={outputVolume}
+                        onChange={(e) =>
+                          prefs.setOutputVolume(Number(e.target.value))
+                        }
+                      />
+                      <output>{outputVolume}%</output>
+                    </label>
+                    <label>
+                      {L.inputGain}
+                      <input
+                        type="range"
+                        min="0"
+                        max="200"
+                        value={inputGain}
+                        onChange={(e) =>
+                          prefs.setInputGain(Number(e.target.value))
+                        }
+                      />
+                      <output>{inputGain}%</output>
+                    </label>
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={noiseSuppression}
+                        onChange={(e) =>
+                          prefs.setNoiseSuppression(e.target.checked)
+                        }
+                      />
+                      <span>
+                        <b>{L.noiseSuppression}</b>
+                      </span>
+                    </label>
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={echoCancellation}
+                        onChange={(e) =>
+                          prefs.setEchoCancellation(e.target.checked)
+                        }
+                      />
+                      <span>
+                        <b>{L.echoCancellation}</b>
+                      </span>
+                    </label>
+                    <div className="audio-test">
+                      <button onClick={() => void testSpeakers()}>
+                        {L.testSpeaker}
+                      </button>
+                      <button
+                        className={micTesting ? "danger-button" : ""}
+                        onClick={() => void toggleMicrophone()}
+                      >
+                        {micTesting ? L.stopTest : L.testMicrophone}
+                      </button>
+                    </div>
+                    <label>
+                      {L.micLevel}
+                      <div className="mic-meter">
+                        <i style={{ width: `${micLevel}%` }} />
+                      </div>
+                    </label>
+                  </div>
+                </section>
+              ) : tab === "display" ? (
+                <section>
+                  <h3>{t("displayTitle")}</h3>
+                  <p>{t("displayHelp")}</p>
+                  <div className="display-heading">
+                    <h4>Bildschirme</h4>
+                    <button
+                      title="Anzeigen identifizieren"
+                      disabled={!window.desktop}
+                      onClick={() =>
+                        void window.desktop?.identifyDisplays(displayRoles)
+                      }
+                    >
+                      <Icon name="desktop_windows" /> ANZEIGEN IDENTIFIZIEREN
+                    </button>
+                  </div>
+                  <div className="display-list">
+                    {displays.map((display, index) => {
+                      const current = (
+                        display.primary
+                          ? "operator"
+                          : (displayRoles[String(display.id)] ?? "unused")
+                      ) as DisplayRole;
+                      return (
+                        <article className="display-card" key={display.id}>
+                          <b>{index + 1}</b>
+                          <div>
+                            <strong>
+                              {display.label ||
+                                t("displayNumber", { number: index + 1 })}
+                            </strong>
+                            <span>
+                              {display.bounds.width} × {display.bounds.height} ·{" "}
+                              {display.scaleFactor}× · X {display.bounds.x} / Y{" "}
+                              {display.bounds.y} · {display.rotation}°
+                            </span>
+                            {display.primary && (
+                              <small>{t("controlSurface")}</small>
+                            )}
+                          </div>
+                          <label>
+                            Verwendung
+                            <select
+                              disabled={!canConfigure || display.primary}
+                              value={current}
+                              onChange={(event) =>
+                                setDisplayRole(
+                                  display.id,
+                                  event.target.value as DisplayRole,
+                                )
+                              }
+                            >
+                              <option value="unused">{t("unassigned")}</option>
+                              <option value="operator">
+                                {t("controlSurface")}
+                              </option>
+                              <option value="main">MAIN</option>
+                              <option value="stage">STAGE</option>
+                              <option value="notes">NOTES</option>
+                              <option value="livestream">LIVESTREAM</option>
+                              <option value="lobby">LOBBY</option>
+                            </select>
+                          </label>
+                        </article>
+                      );
+                    })}
+                  </div>
+                  {!canConfigure && (
+                    <div className="notice">{t("noPermission")}</div>
+                  )}
+                  {!window.desktop && (
+                    <div className="notice">{t("displayDesktopOnly")}</div>
+                  )}
+                </section>
+              ) : tab === "audioRouting" ? (
+                <AudioRoutingSettings />
+              ) : tab === "presentation" ? (
+                <>
+                  <PresentationTransitionSettings />
+                  <TimelineSettings />
+                </>
+              ) : tab === "remote" ? (
+                <RemoteCenter />
+              ) : tab === "videoInput" ? (
+                <VideoInputSettings />
+              ) : tab === "quickScreens" ? (
+                <QuickScreenSettings />
+              ) : tab === "fonts" ? (
+                <>
+                  <CeraFontSettings />
+                  <FontSettings />
+                </>
+              ) : (
+                <section>
+                  <h3>{tabName(tab)}</h3>
+                  <p>{t("sectionUnavailable")}</p>
+                </section>
+              )}
+              {tab === "general" && (
+                <section className="settings-group window-start-settings">
+                  <h4>FENSTER &amp; START</h4>
+                  <label>
+                    Startmodus
+                    <select
+                      value={operatorPrefs.windowStartMode}
+                      onChange={(e) =>
+                        void setOperatorPreference({
+                          windowStartMode: e.target
+                            .value as DesktopOperatorPreferences["windowStartMode"],
+                        })
+                      }
+                    >
+                      <option value="fullscreen">Vollbild</option>
+                      <option value="maximized">Maximiert</option>
+                      <option value="window">Fenster</option>
+                      <option value="restore">
+                        Letzten Fensterzustand wiederherstellen
+                      </option>
+                    </select>
+                  </label>
+                  <label>
+                    Bedienoberfläche beim Programmstart auf
+                    <select
+                      value={operatorPrefs.operatorDisplayTarget}
+                      onChange={(e) =>
+                        void setOperatorPreference({
+                          operatorDisplayTarget: e.target
+                            .value as DesktopOperatorPreferences["operatorDisplayTarget"],
+                        })
+                      }
+                    >
+                      <option value="primary">Primärer Bildschirm</option>
+                      <option value="last">Letzter Bedienbildschirm</option>
+                    </select>
+                  </label>
+                  <p>
+                    F11 schaltet das Bedienfenster vorübergehend in den
+                    Vollbildmodus oder zurück. MAIN, STAGE, Videos und Timer
+                    bleiben dabei unverändert.
+                  </p>
+                </section>
+              )}
+              {tab === "updates" && (
+                <section className="update-product-details">
+                  <div className="settings-group">
+                    <h4>AKTUELLE VERSION</h4>
+                    <dl>
+                      <dt>Produkt</dt>
+                      <dd>
+                        {versionLabel(currentVersion)}{" "}
+                        {installedIsBeta && (
+                          <em className="beta-badge">BETA</em>
+                        )}
+                      </dd>
+                      <dt>Veröffentlicht</dt>
+                      <dd>01.09.2026</dd>
+                      <dt>Update-Kanal</dt>
+                      <dd>{operatorPrefs.betaUpdates ? "Beta" : "Stabil"}</dd>
+                      <dt>Status</dt>
+                      <dd>Aktuell</dd>
+                    </dl>
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={operatorPrefs.automaticUpdates}
+                        onChange={(e) =>
+                          void setOperatorPreference({
+                            automaticUpdates: e.target.checked,
+                          })
+                        }
+                      />
+                      <span>
+                        <b>Automatisch nach Updates suchen</b>
+                      </span>
+                    </label>
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={operatorPrefs.autoDownloadUpdates}
+                        onChange={(e) =>
+                          void setOperatorPreference({
+                            autoDownloadUpdates: e.target.checked,
+                          })
+                        }
+                      />
+                      <span>
+                        <b>Updates automatisch herunterladen</b>
+                      </span>
+                    </label>
+                  </div>
+                  <div className="settings-group update-channel">
+                    <h4>UPDATE-KANAL</h4>
+                    <div className="channel-row">
+                      <span>
+                        <b>Stabile Updates</b>
+                        <small>Standardmäßig aktiviert</small>
+                      </span>
+                    </div>
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={operatorPrefs.betaUpdates}
+                        onChange={(event) => {
+                          if (!event.target.checked)
+                            void setOperatorPreference({ betaUpdates: false });
+                          else if (operatorPrefs.betaWarningAccepted)
+                            void setOperatorPreference({ betaUpdates: true });
+                          else setBetaConfirm(true);
+                        }}
+                      />
+                      <span>
+                        <b>Beta-Updates erhalten</b>
+                        <small>
+                          Erhalte Vorabversionen mit neuen Funktionen und
+                          Verbesserungen, bevor sie regulär veröffentlicht
+                          werden. Beta-Versionen können noch Fehler enthalten.
+                        </small>
+                      </span>
+                    </label>
+                    <dl>
+                      <dt>Aktueller Kanal</dt>
+                      <dd>
+                        {operatorPrefs.betaUpdates ? "Beta" : "Stabil"}{" "}
+                        {operatorPrefs.betaUpdates && (
+                          <em className="beta-badge">BETA</em>
+                        )}
+                      </dd>
+                    </dl>
+                  </div>
+                  {previousVersion && (
+                    <div className="settings-group previous-version-detail">
+                      <h4>
+                        {installedIsBeta
+                          ? "STABILE VERSION"
+                          : "VORHERIGE VERSION"}
+                      </h4>
+                      <dl>
+                        <dt>Version</dt>
+                        <dd>{previousVersion.version}</dd>
+                        <dt>Veröffentlicht</dt>
+                        <dd>
+                          {new Date(
+                            previousVersion.publishedAt,
+                          ).toLocaleDateString(locale)}
+                        </dd>
+                        <dt>Build</dt>
+                        <dd>{previousVersion.version}</dd>
+                        <dt>Downloadgröße</dt>
+                        <dd>
+                          {new Intl.NumberFormat(locale, {
+                            style: "unit",
+                            unit: "megabyte",
+                            maximumFractionDigits: 1,
+                          }).format(previousVersion.size / 1024 / 1024)}
+                        </dd>
+                        <dt>Installierte Architektur</dt>
+                        <dd>Windows x64</dd>
+                        <dt>Veröffentlichungskanal</dt>
+                        <dd>Stabil</dd>
+                        <dt>Status</dt>
+                        <dd>Für eine Wiederherstellung verfügbar</dd>
+                      </dl>
+                      <p>
+                        Diese Version kann installiert werden, wenn nach einem
+                        Update Probleme auftreten. Vor dem Wechsel werden
+                        Kompatibilität und Präsentationsformat geprüft; bei
+                        möglichen Einschränkungen wird ein Backup angeboten.
+                      </p>
+                      <button
+                        disabled={updateStatus.state === "rollback-downloading"}
+                        onClick={() => void safeRollback()}
+                      >
+                        {installedIsBeta
+                          ? "ZUR STABILEN VERSION ZURÜCKKEHREN"
+                          : "VORHERIGE VERSION INSTALLIEREN"}
+                      </button>
+                    </div>
+                  )}
+                </section>
+              )}
+            </main>
+          </div>
+        </div>
+      </div>
+      {betaConfirm && (
+        <div className="modal-backdrop beta-confirm-layer">
+          <div
+            className="beta-confirm-dialog"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="beta-confirm-title"
+          >
+            <header>
+              <Icon name="experiment" />
+              <h2 id="beta-confirm-title">BETA-UPDATES AKTIVIEREN</h2>
+            </header>
+            <p>
+              Beta-Versionen enthalten neue Funktionen früher, können aber noch
+              Fehler oder unfertige Bereiche enthalten.
+            </p>
+            <p>
+              Du kannst jederzeit wieder zum stabilen Update-Kanal wechseln.
+            </p>
+            <footer>
+              <button onClick={() => setBetaConfirm(false)}>ABBRECHEN</button>
+              <button
+                className="primary"
+                onClick={() => {
+                  setBetaConfirm(false);
+                  void setOperatorPreference({
+                    betaUpdates: true,
+                    betaWarningAccepted: true,
+                  });
+                }}
+              >
+                BETA-UPDATES AKTIVIEREN
+              </button>
+            </footer>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
-function Clock({locale}:{locale:string}){const [now,setNow]=useState(new Date());useEffect(()=>{const timer=setInterval(()=>setNow(new Date()),1000);return()=>clearInterval(timer)},[]);return <span>{now.toLocaleTimeString(locale,{hour:'2-digit',minute:'2-digit',second:'2-digit'})}</span>}
-function Output(){const [slide,setSlide]=useState<Slide|null>(null),[quick,setQuick]=useState<QuickScreenConfig|null>(null),role=useMemo(()=>(new URLSearchParams(location.hash.split('?')[1]??'').get('role')??'main') as DisplayRole,[]);useEffect(()=>{const disposeSlide=window.desktop?.onLiveSlide(payload=>{setQuick(null);setSlide(payload as Slide)}),disposeQuick=(window.desktop as any)?.onQuick?.((payload:QuickScreenConfig|null)=>setQuick(payload));return()=>{disposeSlide?.();disposeQuick?.()}},[]);return <div className={`output ${quick?.type==='noText'?'quick-no-text':''}`}>{slide&&<TransitionStage slide={slide} transition={slide.transitionOverride??resolveTransition(slide,undefined,role)} role={role}/>}<QuickOverlay quick={quick}/></div>}
+function roleLabel(t: Translator, role: string) {
+  const labels: Record<string, TranslationKey> = {
+    viewer: "roleViewer",
+    presenter: "rolePresenter",
+    editor: "roleEditor",
+    admin: "roleAdmin",
+  };
+  return labels[role] ? t(labels[role]) : role.toUpperCase();
+}
 
-export function App(){
-  const [session,setSession]=useState<AuthSession|null|undefined>(undefined);
-  const [device,setDevice]=useRegisteredDevice();
-  const [startupProgress,setStartupProgress]=useState(0);
-  const language=usePreferences(state=>state.language),theme=usePreferences(state=>state.theme),blackWhite=usePreferences(state=>state.blackWhite),reduceMotion=usePreferences(state=>state.reduceMotion),compactMode=usePreferences(state=>state.compactMode),highContrast=usePreferences(state=>state.highContrast),largeText=usePreferences(state=>state.largeText),strongFocus=usePreferences(state=>state.strongFocus),dyslexiaFriendly=usePreferences(state=>state.dyslexiaFriendly);
-  const {t}=useI18n();
-  const output=useMemo(()=>location.hash.startsWith('#output'),[]),mediaBrowser=useMemo(()=>location.hash.startsWith('#media'),[]),historyWindow=useMemo(()=>location.hash.startsWith('#history'),[]);
-  useEffect(()=>{void installCeraPro().catch(()=>false)},[]);
-  useEffect(()=>{const syncPreferences=(event:StorageEvent)=>{if(event.key==='gottesdienstregie.preferences')void usePreferences.persist.rehydrate()};addEventListener('storage',syncPreferences);return()=>removeEventListener('storage',syncPreferences)},[]);
-  useEffect(()=>{document.documentElement.lang=language==='gsw'?'de-CH':language;document.documentElement.dir=language==='ar'?'rtl':'ltr';document.documentElement.dataset.theme=theme;document.documentElement.dataset.bw=String(blackWhite);document.documentElement.dataset.reduceMotion=String(!output&&reduceMotion);document.documentElement.dataset.compact=String(compactMode);document.documentElement.dataset.contrast=String(highContrast);document.documentElement.dataset.largeText=String(largeText);document.documentElement.dataset.strongFocus=String(strongFocus);document.documentElement.dataset.dyslexia=String(dyslexiaFriendly)},[language,theme,blackWhite,reduceMotion,compactMode,highContrast,largeText,strongFocus,dyslexiaFriendly,output]);
-  useEffect(()=>{if(output||historyWindow)return;if(import.meta.env.DEV&&new URLSearchParams(location.search).has('demo')){const presentation=usePresentation.getState();if(!presentation.items.length){presentation.newDocument('Sonntagsgottesdienst');presentation.addItem('content',{title:'Willkommen',section:'',sectionId:'pre',body:'Herzlich willkommen\nzum Gottesdienst'});presentation.addItem('video',{title:'Intro Video',section:'',sectionId:'warmup',body:''});presentation.addItem('song',{title:'Du großer Gott',section:'',sectionId:'service',body:'Du großer Gott, wenn ich die Welt betrachte'});presentation.addSlide();presentation.updateSlide({title:'Refrain 1',body:'Dann jauchzt mein Herz\ndir großer Herrscher, zu dir'});presentation.addSlide();presentation.updateSlide({title:'Strophe 2',body:'Blick ich empor zu jenen lichten Welten'});presentation.updatePresentation({serviceTime:'10:30'})}setSession({user:{uid:'demo',email:'demo@localhost',firstname:'Corbin',role:'admin',appAccess:{gottesdienstRegie:{enabled:true,authMode:'sso',role:'admin',permissions:{presentationView:true,presentationCreate:true,presentationEdit:true,presentationLive:true,outputSettings:true,appSettings:true}}}},permissions:['presentationView','presentationCreate','presentationEdit','presentationLive','outputSettings','appSettings'],expiresAt:Date.now()+3600000});return}let active=true;const started=Date.now(),timer=setInterval(()=>{const elapsed=Date.now()-started;setStartupProgress(Math.min(94,Math.round(elapsed/10000*94)))},100);void (async()=>{const reopen=usePreferences.getState().reopenLastPresentation,[restored,loaded,recoveryCopy]=await Promise.all([restore().catch(()=>null),reopen?window.desktop?.presentation.load().catch(()=>null):Promise.resolve(null),window.desktop?.presentation.recovery().catch(()=>null),window.desktop?.displays().catch(()=>[]),window.desktop?.updates.currentVersion().catch(()=>''),window.desktop?.auth.connection().catch(()=>false)]);if(loaded)usePresentation.getState().loadDocument(loaded);if(restored&&recoveryCopy&&confirm(`GottesdienstRegie wurde zuvor nicht ordnungsgemäß beendet.\n\nWiederherstellung für „${recoveryCopy.summary.title}“ öffnen?`))usePresentation.getState().loadDocument(recoveryCopy.document);const remaining=Math.max(0,10000-(Date.now()-started));await new Promise(resolve=>setTimeout(resolve,remaining));if(active){clearInterval(timer);setStartupProgress(100);setSession(restored)}})();return()=>{active=false;clearInterval(timer)}},[output,historyWindow]);
-  const signedIn=!!session;
-  useEffect(()=>{if(!signedIn)return;let active=true;const check=async()=>{const refreshed=await restore(true);if(!active)return;if(!refreshed){setSession(null);return}setSession(current=>{if(!current)return refreshed;const currentAccess=current.user.appAccess.gottesdienstRegie,nextAccess=refreshed.user.appAccess.gottesdienstRegie;const changed=current.expiresAt!==refreshed.expiresAt||current.user.uid!==refreshed.user.uid||currentAccess.enabled!==nextAccess.enabled||currentAccess.role!==nextAccess.role||JSON.stringify(current.permissions)!==JSON.stringify(refreshed.permissions);return changed?refreshed:current})};const timer=setInterval(()=>void check(),120_000);return()=>{active=false;clearInterval(timer)}},[signedIn]);
-  if(output)return <Output/>;
-  if(mediaBrowser)return <MediaBrowser/>;
-  if(historyWindow)return <ChangeHistoryWindow/>;
-  if(session===undefined||device===undefined)return <div className="boot production-boot"><div className="boot-panel"><button className="boot-close" title="Schließen" onClick={()=>window.close()}><Icon name="close"/></button><img src={logoWhite} alt="GottesdienstRegie"/><div className="boot-spinner" role="status" aria-live="polite" aria-label={t('accountLoading')}><i/></div><p>{startupProgress<20?'Konto wird geprüft …':startupProgress<42?'Cloud wird verbunden …':startupProgress<66?'Präsentationsdaten werden geladen …':startupProgress<86?'Arbeitsbereich wird vorbereitet …':'GottesdienstRegie wird gestartet …'}</p><strong>GottesdienstRegie</strong></div></div>;
-  if(!device)return <DeviceSetup complete={setDevice}/>;
-  return session?<AppShell session={session} device={device} onLogout={()=>setSession(null)}/>:<Login device={device} authenticated={setSession}/>;
+function HelpModal({ close }: { close: () => void }) {
+  const { t, language } = useI18n(),
+    [query, setQuery] = useState(""),
+    [selected, setSelected] = useState(
+      () =>
+        localStorage.getItem("gottesdienstregie.help-topic") ||
+        "Erste Schritte",
+    );
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => {
+      if (event.key === "Escape") close();
+    };
+    addEventListener("keydown", key);
+    return () => removeEventListener("keydown", key);
+  }, [close]);
+  const topics = [
+    "SCHNELLSTART",
+    "Erste Schritte",
+    "Gemeinsame Gemeinde-PCs",
+    "Anmelden & Abmelden",
+    "Veranstaltung verknüpfen",
+    "Inhalte hinzufügen",
+    "Medien",
+    "Cloud-Medien",
+    "Unsplash",
+    "KI-Motive",
+    "Songs",
+    "Virtual Screens & Displays",
+    "Persönliche Monitore",
+    "Websteuerung",
+    "Audioausgänge",
+    "Preflight",
+    "ON AIR",
+    "LIVE-BETRIEB",
+    "Vorschau",
+    "MAIN / STAGE / LIVESTREAM",
+    "Quick Screens",
+    "Current / Next",
+    "Recording",
+    "Servicezeit & Verspätung",
+    "Pre-Service & Post-Service",
+    "AUDIO",
+    "Videos",
+    "Background Audio",
+    "Vorhören",
+    "Systembenachrichtigungen",
+    "Audio Browser",
+    "Stop Background Audio",
+    "Routing-Probleme",
+    "PRÄSENTATION",
+    "Präsentationen",
+    "Ablauf",
+    "Folien",
+    "Übergänge & Auto-Advance",
+    "Bibel",
+    "LiveQuiz",
+    "SYSTEM",
+    "Sync / Offline / Preload",
+    "Updates",
+    "Tastenkürzel",
+    "Benutzeroberfläche",
+    "Einstellungen",
+    "Webseiten",
+    "Timer",
+    "Remote",
+    "Fehlerbehebung",
+    "Support",
+    "Versionsinformationen",
+    "Über GottesdienstRegie",
+  ];
+  const articles: Record<string, string> = {
+    "Erste Schritte":
+      "Willkommen bei GottesdienstRegie. Die Anwendung verbindet Ablaufplanung, Foliengestaltung, Medien, LiveQuiz und die echte Bildschirmausgabe.\n\n1. Präsentation vorbereiten\nÖffne über Datei eine vorhandene Präsentation oder erstelle eine neue. Klicke oben links auf den Titel, um ihn direkt umzubenennen. Verknüpfe darunter zwingend die passende Firebase-Veranstaltung. Dabei werden Datum und planmäßige Servicezeit übernommen; spätere Verzögerungen verändern die ursprüngliche Planzeit nicht.\n\n2. Ablauf aufbauen\nKlicke links neben ABLAUF auf Plus oder öffne Element hinzufügen. Ergänze Inhalte, Songs, Bibelstellen, Bilder, Videos, Webinhalte oder ein LiveQuiz. Elemente lassen sich ziehen, per Rechtsklick duplizieren und nur bei selbst erstellten Vorlagen wieder löschen.\n\n3. Folien gestalten\nWähle im Ablauf ein Element und danach unten eine Folie. Im Bearbeitungsmodus kannst du Text, Schrift, Größe, Ausrichtung, Farbe, Ebenen, Hintergrund und Übergang ändern. Die rechte Darstellung aktualisiert sich sofort. Cera Pro ist vollständig eingebettet und muss auf dem Rechner nicht installiert sein.\n\n4. Medien verwenden\nÖffne Medien → Medienbibliothek. Cloud-Medien werden zentral geladen; bei Unsplash gibst du einmal den Access Key dieses Geräts ein, suchst per Enter oder SUCHEN und wählst anschließend ein Bild aus. Uploads benötigen zusätzlich Schreibberechtigung für den GitHub-Medienspeicher.\n\n5. Anzeige einrichten\nÖffne Einstellungen → Anzeige und ordne MAIN einem angeschlossenen Ausgabebildschirm zu. Der primäre Bildschirm bleibt die Bedienoberfläche. Nutze ANZEIGEN IDENTIFIZIEREN, wenn du die Monitore nicht eindeutig zuordnen kannst.\n\n6. Vorschau prüfen\nSchalte oben auf VORSCHAU. In EINZELVORSCHAU navigierst du mit den großen Pfeilen oder den Pfeiltasten; die Folienübersicht zeigt den gesamten Ablauf. Vorschau und Live-Ausgabe bleiben getrennt.\n\n7. ON AIR starten\nKontrolliere, dass die Veranstaltung verknüpft, MAIN zugeordnet und die benötigten Medien erreichbar sind. Starte den Preflight. Erst danach gehst du ON AIR. Ein Klick auf OFF AIR oder das Schließen der Anwendung beendet alle Ausgabefenster und die Hintergrundmusik sicher.\n\n8. Sicher arbeiten\nÄnderungen werden alle 15 Sekunden automatisch gespeichert. Das Cloudsymbol oben rechts ist grün, sobald der Mediendienst erreichbar ist. Ein Klick auf das Synchronisationssymbol speichert sofort und zeigt die einzelnen Schritte. Nutze vor größeren Änderungen zusätzlich Datei → Backup erstellen.",
+    Benutzeroberfläche:
+      "Die Menüleiste enthält Datei, Element hinzufügen, Medien, Songbibliothek, Präsentation, Ansicht, Werkzeuge, Einstellungen und Hilfe. Diese Menüs liegen immer über Arbeitsbereich, Canvas und Dialoginhalten. Darunter zeigt der Präsentationskopf den geöffneten Gottesdienst, den Modus BEARBEITEN oder VORSCHAU sowie ON AIR.\n\nLinks liegt der Ablauf mit VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM. In der Mitte befinden sich Kontexteditor und Folienfläche. Elemente auf der Folie lassen sich anklicken, ziehen und am Griff unten rechts skalieren. Eigenschaften und Ebenen steuern exakte Werte, Sichtbarkeit, Sperre und Reihenfolge.\n\nIm Modus BEARBEITEN erscheinen Format- und Canvaswerkzeuge. Im Modus VORSCHAU verschwinden diese Werkzeuge; stattdessen stehen Einzelansicht, Folienübersicht und die Schnellanzeigen wie LOGO, SCHWARZ, OHNE TEXT oder AMEN bereit.\n\nDie Statusleiste unten meldet Speichern, Cloud, MAIN, STAGE sowie aktuelle Element- und Folienposition. Wenn MAIN beim Bearbeiten unverändert bleibt, ist das beabsichtigt: Editor-, Vorschau- und Live-Zustand sind voneinander unabhängig.",
+    Einstellungen:
+      "Das Einstellungsfenster ist in Allgemein, Ausgabe, Präsentation sowie Verbindungen & Steuerung gegliedert. Die linke Navigation bleibt sichtbar, während nur der Inhalt rechts scrollt. Beim Wechsel zu einem anderen Bereich beginnt die Seite wieder oben.\n\nUnter Allgemein bestimmst du Sprache, Farbschema, Barrierefreiheit, Startmodus und Tastenkürzel. Unter Ausgabe werden reale Monitore, Audio und Videoeingänge eingerichtet. Präsentation enthält Schnellanzeigen, Schriftarten und Standardmedien. Änderungen werden lokal auf diesem Gerät gespeichert und – sofern sinnvoll – sofort angewendet.\n\nVor einem Gottesdienst sollten insbesondere Anzeige, Audio und Videoeingang kontrolliert werden. Änderungen am Bedienfenster beeinflussen eine bereits laufende MAIN- oder STAGE-Ausgabe nicht.",
+    Präsentationen:
+      "Die lokale Bibliothek speichert jede Präsentation als eigenständiges Dokument. Unter Datei kannst du neue Präsentationen erstellen, vorhandene öffnen, duplizieren, umbenennen, importieren, exportieren, sichern, archivieren oder schließen. Änderungen werden verzögert und atomar gespeichert.\n\nNach einem unerwarteten Programmende bietet GottesdienstRegie die letzte Wiederherstellungskopie an. Exporte verwenden eine portable GottesdienstRegie-Datei; Backups landen im geschützten Anwendungsdatenordner.",
+    Ablauf:
+      "Der Ablauf besteht aus Abschnitten, ServiceItems und deren Folien. Ein normaler Klick wählt ein Element aus; Strg- beziehungsweise Cmd-Klick erweitert die Auswahl. Ein Rechtsklick auf ein nicht ausgewähltes Element wählt genau dieses Element. Bei einem bereits markierten Element bleibt eine Mehrfachauswahl bestehen.\n\nDas Kontextmenü arbeitet wie ein Desktop-Menü: Pfeil hoch und runter bewegen den Fokus, Enter führt den Befehl aus, Esc oder ein Klick außerhalb schließt es. Ausschneiden, Kopieren, Einfügen, Duplizieren, Löschen, Gruppieren, Ausblenden, Undo und Redo nutzen dieselbe Command- und Undo-Engine wie Tastatur und Werkzeugleiste. Eine Mehrfachaktion ist genau ein Undo-Schritt.\n\nAusblenden erhält das Element im Editor, überspringt es aber beim normalen Advance. Verknüpfte Elemente besitzen eigene Positionen und IDs, teilen jedoch ihre inhaltliche Zuordnung. Das Link-Symbol weist auf diese Beziehung hin. Export als Bild rendert nur die tatsächliche Folie, niemals Seitenleisten oder Bedienoberfläche.\n\nWährend ON AIR bleibt der aktive Live-Snapshot geschützt. Löschen, Verschieben oder Umbenennen im Editor verändert MAIN nicht rückwirkend. Erst der nächste bewusste Take verwendet den neuen Ablaufstand.",
+    "Pre-Service & Post-Service":
+      "VORPROGRAMM und NACHPROGRAMM sind vollständige Service-Abschnitte. Beide können beliebig viele Elemente mit beliebig vielen Folien enthalten. Auto Advance bestimmt den Wechsel statischer Folien, Loop beginnt nach dem letzten aktiven Inhalt wieder beim ersten. Videos können bis zum Ende spielen oder gemäß ihrer Ende-Aktion fortschalten.",
+    Folien:
+      "Wähle eine Folie im Filmstrip. Über die Werkzeugleiste kannst du Text, Bild, Form, Linie, Video oder QR-Code hinzufügen. Elemente lassen sich auf der Bühne ziehen und über den Griff skalieren. Eigenschaften ändern Position, Größe und Inhalt; Ebenen steuern Reihenfolge, Sichtbarkeit und Sperre. Rückgängig und Wiederholen funktionieren mit Strg+Z und Strg+Umschalt+Z.",
+    Vorschau:
+      "Die Einzelansicht zeigt eine Folie groß. Die Folienübersicht gruppiert echte Thumbnails nach Ablaufabschnitt. Der Größenregler ändert nur die Thumbnailgröße. OFF AIR wählt ein Thumbnail ausschließlich als Vorschau; ON AIR schaltet ein angeklicktes aktives Thumbnail direkt live.",
+    "ON AIR":
+      "ON AIR führt einen Preflight durch, öffnet MAIN rahmenlos auf dem zugeordneten Bildschirm und übernimmt die aktuelle Vorschau als Startfolie. Pfeil rechts beziehungsweise Bild ab schaltet zur nächsten aktiven Folie, Pfeil links beziehungsweise Bild auf zurück. Ein erneuter Klick beendet die Ausgabe sofort, ohne die Präsentation zu schließen.",
+    Displays:
+      "Unter Einstellungen → Anzeige siehst du tatsächlich angeschlossene Monitore als Anzeige 1, Anzeige 2 und so weiter. Weise MAIN, STAGE, NOTES, LIVESTREAM oder LOBBY nur passenden Ausgabebildschirmen zu. ANZEIGEN IDENTIFIZIEREN blendet Nummer, Verwendung, Gerätename und Auflösung auf jedem Monitor ein. Fehlt MAIN während ON AIR, wird niemals automatisch der Bedienbildschirm verwendet.",
+    "Virtual Screens & Displays":
+      "Virtual Screens bestimmen, welche Inhalte MAIN, STAGE und LIVESTREAM erhalten; Displays sind die tatsächlich angeschlossenen Monitore. Richte die Zuordnung unter Einstellungen → Anzeige ein. MAIN gehört zur Publikumsausgabe, STAGE zur Bühne und LIVESTREAM zum Stream. Ein getrennter Nebenmonitor beendet MAIN nicht und wird niemals automatisch durch den Bedienmonitor ersetzt.",
+    Medien:
+      "Die Medienbibliothek lädt Bilder, Videos und Audio aus dem Team-Cloudspeicher. Uploads werden erst nach bestätigter Übertragung verwendbar; die Quelldatei bleibt währenddessen erhalten. Unsplash-Bilder werden über die Suche eingebunden. Preflight meldet fehlende oder noch nicht geladene Dateien vor ON AIR.",
+    "Cloud-Medien":
+      "Cloud-Medien stehen allen berechtigten Arbeitsplätzen als gemeinsame Bibliothek zur Verfügung. Öffne Medien → Medienbibliothek und bleibe im Reiter CLOUD-MEDIEN. Die Suche filtert nach Dateiname und Schlagwort; Typ und Sortierung grenzen die Treffer weiter ein. Ein grüner Cloudstatus bedeutet, dass die Bibliothek tatsächlich erreicht wurde.\n\nWas geschieht bei einer Störung? GottesdienstRegie versucht zuerst die direkte Team-Cloud und danach automatisch einen sicheren öffentlichen Lesekanal. Dadurch bleiben vorhandene Bilder, Videos und Audiodateien auch bei einer vorübergehenden Begrenzung des Hauptdienstes abrufbar. Upload und Löschen benötigen weiterhin Schreibberechtigung und werden im Lesemodus nicht vorgetäuscht.\n\nWenn weiterhin „Cloud nicht erreichbar“ erscheint, kontrolliere bitte Internetzugang, Firewall und Systemzeit. Wähle ERNEUT VERSUCHEN. Bereits vorgeladene Live-Medien bleiben davon unberührt; MAIN wird nicht geleert. Öffne vor ON AIR den Preflight und kontrolliere den Abschnitt MEDIEN.",
+    Unsplash:
+      "Unsplash stellt durchsuchbare Fotos innerhalb der Medienbibliothek bereit. Öffne Medien → Medienbibliothek → UNSPLASH, gib einen konkreten Suchbegriff ein und drücke Enter oder SUCHEN. Der Zugangsschlüssel wird sicher lokal auf dem jeweiligen Gerät konfiguriert oder von der Systemadministration über UNSPLASH_ACCESS_KEY bereitgestellt und niemals in veröffentlichte Programmdateien geschrieben.\n\nWähle ein Ergebnis einmal an, um Quelle und Vorschau zu prüfen, und bestätige anschließend VERWENDEN. Die Urheberangabe bleibt am Medium erhalten. Suchergebnisse werden nicht automatisch in die Team-Cloud kopiert. Prüfe Bildausschnitt, Lesbarkeit und Nutzungshinweise, bevor du das Bild live einsetzt.\n\nFalls keine Treffer erscheinen, formuliere den Begriff allgemeiner oder prüfe die Internetverbindung. Bei einer Dienstbegrenzung zeigt GottesdienstRegie eine konkrete Fehlermeldung. Eine laufende MAIN-Ausgabe und Background Audio werden durch die Suche niemals verändert.",
+    Videos:
+      "Beim Hinzufügen eines Videos wählst du lokale Datei, direkte URL, YouTube oder Vimeo. GottesdienstRegie lädt keine geschützten Onlinevideos herunter, sondern verwendet zulässige eingebettete Wiedergabe. Autoplay, Loop, Lautstärke und Verhalten nach Ende werden im Element gespeichert. Netzwerkquellen erscheinen im Preflight.",
+    Webseiten:
+      "Webseiten sind eigenständige Ablauf-Elemente mit URL, Zoom, Interaktion, Audio, automatischem Neuladen und Fallback. MAIN zeigt bei Fehlern keine Chromium-Standardseite. Prüfe Netzwerkseiten vor dem Gottesdienst und hinterlege für kritische Inhalte ein lokales Ersatzbild.",
+    Songs:
+      "Songs bestehen aus benannten Teilen wie Strophe, Refrain oder Bridge. Die Reihenfolge kann als Arrangement gespeichert werden; wiederholte Teile müssen dadurch nicht mehrfach gepflegt werden. Prüfe Textumbrüche in der Vorschau und verwende für MAIN eine ausreichend große, kontrastreiche Schrift. Urheber- und Lizenzangaben gehören in die dafür vorgesehenen Felder und können auf Titel- oder Abschlussfolien erscheinen.",
+    Bibel:
+      "Ein Bibel-Element enthält Referenz, Übersetzung und die daraus erzeugten Versfolien. Lange Abschnitte sollten auf mehrere gut lesbare Folien verteilt werden. Prüfe vor ON AIR die gewünschte Übersetzung, Versnummern und Textgröße. Eine spontane Bibel-Schnellanzeige verändert den geplanten Ablauf nicht und kann mit LAST SHOWN wieder verlassen werden.",
+    LiveQuiz:
+      "Füge ein LiveQuiz über Element hinzufügen hinzu. Als erste Folie wird automatisch eine bearbeitbare Teilnahmefolie mit Quizname, Beschreibung, QR-Code, Webadresse und sechsstelliger Kennung erzeugt. Die letzte Systemfolie zeigt Antworten beziehungsweise Ergebnisse. Beide Folien verwenden den normalen Folieneditor: Wähle ein Element auf der Bühne, ziehe es an die gewünschte Stelle und ändere seine Größe am Griff unten rechts.\n\nWährend ON AIR startet das Quiz automatisch, sobald du das Quiz auswählst. Zuerst erscheint die Teilnahmefolie. AKTUELLE FRAGE STARTEN öffnet die gewählte Frage für Smartphones und schaltet gleichzeitig ihre Folie auf MAIN. Fragen können über den Griff in den Reitern neu angeordnet werden.\n\nBei Freitextfragen entscheidet die Option „Freitextantworten bis zur Freigabe zurückhalten“, ob Beiträge zunächst nur dem Bediener vorliegen. Prüfe freie Texte vor einer öffentlichen Anzeige. Die Vorschau zeigt einen Beispielcode; erst beim echten Start wird er durch den gültigen Code ersetzt.",
+    Stage:
+      "STAGE ist eine eigene logische Ausgabe für Mitwirkende und darf einem anderen physischen Bildschirm als MAIN zugeordnet werden. Sie kann aktuelle und nächste Inhalte, Notizen oder Zeitinformationen zeigen. Wird der STAGE-Monitor getrennt, bleibt MAIN aktiv; die Statusleiste meldet STAGE FEHLT. GottesdienstRegie verschiebt Ausgaben niemals automatisch auf den Bedienbildschirm.",
+    "Quick Screens":
+      "Schnellanzeigen blenden vorübergehend Logo, Schwarz, einen leeren Hintergrund, den aktuellen Hintergrund ohne Text, Amen oder einen Countdown ein. Sie verändern weder Ablauf noch ausgewählte Live-Folie. LAST SHOWN stellt exakt den zuvor sichtbaren Zustand wieder her. Reihenfolge, Aktivierung und Zielausgänge werden unter Einstellungen → Schnellanzeigen festgelegt.",
+    "Current / Next":
+      "Current zeigt den aktuell live ausgegebenen Inhalt, Next den nächsten aktiven Inhalt des Ablaufs. Die Anzeige dient vor allem STAGE und der Bedienkontrolle. Deaktivierte Folien und Elemente werden übersprungen. Das bloße Anwählen einer Vorschau ändert Current während ON AIR nicht.",
+    Recording:
+      "Recording steuert eine angeschlossene oder integrierte Aufzeichnung unabhängig von der Folienauswahl. Prüfe vor dem Gottesdienst Speicherziel, Eingang und freien Speicher. Ein Anzeigewechsel darf eine laufende Aufnahme nicht automatisch beenden; beende sie bewusst und kontrolliere danach die erzeugte Datei.",
+    Timer:
+      "Timer und Countdowns besitzen eine Dauer, einen Endtext und eine Aktion für 00:00. Lege vor ON AIR fest, ob der Timer stehen bleibt, ausgeblendet wird oder zur nächsten Folie wechselt. Ein Timer läuft unabhängig davon weiter, ob das Bedienfenster maximiert oder in den Fenstermodus geschaltet wird.",
+    SCHNELLSTART:
+      "Beginne mit einer neuen Präsentation, verknüpfe die passende Veranstaltung, baue den Ablauf auf und richte unter Einstellungen zuerst Displays und Audioausgänge ein. Prüfe Medien und Vorschau, führe Preflight aus und starte erst danach ON AIR. Die Unterseiten führen dich Schritt für Schritt durch jeden Punkt.",
+    "Inhalte hinzufügen":
+      "Öffne Element hinzufügen oder das Plus neben ABLAUF. Wähle Inhalt, Song, Bibel, Medium, Video, Webseite, Timer oder LiveQuiz. Das Element landet im aktiven Abschnitt und kann per Ziehen sortiert, per Rechtsklick dupliziert und im Editor gestaltet werden. Während ON AIR verändert das bloße Hinzufügen MAIN nicht.",
+    "Veranstaltung verknüpfen":
+      "Klicke unter dem Präsentationstitel auf „Veranstaltung verknüpfen“. Die Auswahl zeigt Termine chronologisch in den Gruppen HEUTE, MORGEN und KOMMEND. Jede Gruppenüberschrift erscheint nur einmal; feine Linien trennen die Bereiche. Nutze die Suche, wenn die Liste länger ist.\n\nWähle den gewünschten Termin zunächst aus und kontrolliere Titel, Datum und Uhrzeit. Erst „Änderung speichern“ übernimmt die Verknüpfung und die planmäßige Servicezeit. „Abbrechen“, Escape oder ein Klick neben das Fenster verwirft die noch nicht gespeicherte Auswahl.\n\nAusfallende Termine bleiben an ihrer zeitlich richtigen Stelle sichtbar. Der kleine rote Hinweis „Fällt aus!“ erklärt, warum der Eintrag nicht gewählt werden kann. Wird eine bereits verknüpfte Veranstaltung später abgesagt, bleibt die Verbindung bestehen und GottesdienstRegie zeigt eine deutliche Warnung. Eine andere Veranstaltung wird niemals automatisch gewählt.\n\nVor ON AIR muss eine Veranstaltung verknüpft sein. Das verhindert, dass versehentlich die falsche Präsentation live geschaltet wird.",
+    Audioausgänge:
+      "Unter Einstellungen → Audioausgänge werden echte Betriebssystemgeräte anhand ihrer stabilen Device-ID getrennt für Medien/Videos, Background Audio, Systembenachrichtigungen, Preview/Vorhören und Soundeffekte gewählt. Standardausgang verwenden folgt dem zentralen Fallback. TESTEN spielt einen neutralen Ton ausschließlich über die gewählte Route. Lautstärke und Mute gelten nur für diese Route. Fehlt ein Gerät, bleibt seine ID gespeichert und Systemstandard übernimmt sichtbar. Änderungen während ON AIR starten laufende Player nicht neu.",
+    Preflight:
+      "Preflight ist die technische Prüfung unmittelbar vor dem Livebetrieb. Sie kontrolliert Präsentation, aktive Folien, MAIN und weitere Ausgänge, Medien, Videos, Background Audio, Audio-Routing, Cloud, Veranstaltung, LiveQuiz, Webinhalte und Preload.\n\n✓ BEREIT bedeutet: Alles Wesentliche ist einsatzbereit. ⚠ WARNUNG bedeutet: Live ist möglich, aber ein Punkt sollte geprüft werden. ✕ FEHLER bedeutet: Ein kritisches Problem verhindert sicheren Livebetrieb.\n\nBei Audiofehlern öffne Einstellungen → Audioausgänge, kontrolliere die Device-ID beziehungsweise Kabelverbindung, nutze TESTEN und starte Preflight erneut. Fehlende Preview- oder Benachrichtigungsausgänge blockieren MAIN nicht; ein tatsächlich benötigter Video- oder Background-Ausgang wird deutlich gemeldet.",
+    "LIVE-BETRIEB":
+      "ON AIR ist der aktive Livebetrieb. Selected beziehungsweise Vorschau ist nicht automatisch Live. MAIN zeigt die Publikumsausgabe, STAGE die Confidence-Ansicht und LIVESTREAM den eigenen Streamoutput. Quick Screens überlagern sicher und vorübergehend. LIVE hat bei allen Änderungen Vorrang.",
+    "MAIN / STAGE / LIVESTREAM":
+      "MAIN ist die Saalausgabe, STAGE die unabhängige Bühnen-/Confidence-Ausgabe und LIVESTREAM ein eigener Streamoutput. Jeder Ausgang benötigt eine eindeutige Zuordnung. Ein fehlender Neben-Ausgang darf MAIN nicht ungefragt auf den Bedienbildschirm verschieben.",
+    "Servicezeit & Verspätung":
+      "Die Servicezeit wird beim Verknüpfen aus der planmäßigen Startzeit übernommen. Öffne die Zeit direkt im Abschnitt GOTTESDIENST. Der Dialog zeigt Planzeit, neue Servicezeit, Abweichung in Minuten und das daraus folgende voraussichtliche Ende.\n\nEine spätere Servicezeit verändert die ursprüngliche Planung nicht. GottesdienstRegie speichert die Verzögerung getrennt und verschiebt das voraussichtliche Ende um dieselbe Differenz. Setzt du die Servicezeit exakt auf die Planzeit zurück, wird eine nicht mehr benötigte Verzögerung entfernt. Ausfallende Termine bleiben sichtbar, sind aber nicht neu auswählbar.",
+    AUDIO:
+      "Getrennte Audiowege verhindern, dass das Publikum interne Geräusche hört: Videos und Background Audio können zur Saalanlage gehen, Vorhören zum Kopfhörer und Systembenachrichtigungen zum Technik-PC. Jede Wiedergabeinstanz behält ihre feste Route.",
+    "Background Audio":
+      "Background Audio läuft unabhängig von visuellen Folien und Loops. ENDE DER PLAYLIST spielt einmal vollständig. ENDE DER SECTION wiederholt bis zum Abschnittsende. GESTOPPT läuft über Abschnittsgrenzen, bis Stop Background Audio ausgeführt wird. Ein visueller Loop-Neustart startet die Playlist nicht neu. Ducking senkt die Musik kontrolliert, wenn Medienaudio Vorrang erhält.",
+    Vorhören:
+      "Preview/Vorhören ist ausschließlich für den Bediener. Audio aus Vorschau und Audio Browser verwendet die Preview-Route und verändert weder MAIN noch Background Audio noch deren Wiedergabeposition. Verwende für diesen Weg vorzugsweise Kopfhörer.",
+    Systembenachrichtigungen:
+      "Interne Warnungen, Fehler und Bedienhinweise verwenden einen getrennten Ausgang und standardmäßig eine niedrigere Lautstärke. Route sie auf den Technik-PC, damit sie nicht versehentlich über die Saalanlage hörbar werden.",
+    "Audio Browser":
+      "Der Audiobrowser verwaltet Cloud-Audio und Playlists. Die Wiedergabe im Detailbereich ist echtes Vorhören und nutzt ausschließlich die Preview-Route. Auswählen, Sortieren und Vorhören greifen nicht in eine laufende Live-Playlist ein.",
+    "Stop Background Audio":
+      "Ein Stop-Cue beendet Background Audio an der festgelegten Ablaufposition mit der konfigurierten Ausblendzeit. Es verändert weder Video-Audio noch Preview. Entferne oder verschiebe den Cue per Kontextmenü des Ablauf-Elements.",
+    "Routing-Probleme":
+      "„Audioausgang nicht verfügbar“ bedeutet, dass die gespeicherte Device-ID derzeit nicht vom Betriebssystem gemeldet wird. Prüfe Strom, USB/HDMI, Treiber und Betriebssystemauswahl. GottesdienstRegie fällt sicher auf Systemstandard zurück und erkennt dasselbe Gerät nach erneutem Anschließen automatisch. Nutze TESTEN, ohne laufende Quellen zu verändern.",
+    "Übergänge & Auto-Advance":
+      "Übergänge steuern den visuellen Wechsel, Auto-Advance den Zeitpunkt. Beide beeinflussen Background Audio nicht. In der Übergangsvorschau kannst du Effekt und Dauer prüfen. Zeitgesteuerte Folien lassen sich in der Einzelvorschau anhalten.",
+    SYSTEM:
+      "Systemthemen umfassen Preflight, Sync, Offlinebetrieb, Displays, Ausgänge, Updates, Preload und Diagnose. Prüfe Statusleiste und Preflight vor jedem Livebetrieb; ein Update erzwingt während ON AIR keinen Neustart.",
+    "Sync / Offline / Preload":
+      "SYNCED bedeutet echte Serverbestätigung, SYNCING laufende Übertragung, PENDING eine wartende Änderung, OFFLINE fehlende Verbindung und ERROR einen Fehler. Der grüne Haken erscheint erst nach Bestätigung. Preload lädt kritische Medien vor ON AIR. Bereits vorgeladene Inhalte sollen bei Internetverlust weiterlaufen; MAIN wird nicht absichtlich geleert.",
+    Updates:
+      "Updates werden gesucht und heruntergeladen, ohne ON AIR zu unterbrechen. Eine Installation oder ein Neustart erfolgt niemals erzwungen während des Livebetriebs. Prüfe Versionshinweise und erstelle vor großen Versionswechseln ein Backup.",
+    Remote:
+      "Die Fernsteuerung ist für Geräte im freigegebenen Netzwerk vorgesehen. Prüfe Verbindung, Berechtigung und den angezeigten Status, bevor du dich auf eine mobile Steuerung verlässt. Verwende keine öffentlich erreichbare Freigabe ohne Zugriffsschutz. Eine getrennte Fernsteuerung verändert MAIN erst, wenn sie eine ausdrückliche Live-Aktion sendet.",
+    Tastenkürzel:
+      "Unter Einstellungen → Tastenkürzel kann jede unterstützte Aktion neu belegt werden. Klicke auf das derzeitige Kürzel und drücke die gewünschte Kombination. Doppelte Belegungen werden abgewiesen; Escape bricht die Aufnahme ab. „Auf Standard zurücksetzen“ stellt alle ursprünglichen Kombinationen wieder her.\n\nSpeichern, Rückgängig und Wiederholen funktionieren auch im Editor. Nächste und vorherige Live-Folie reagieren nur während ON AIR. Der Moduswechsel betrifft ausschließlich Bearbeiten und Vorschau. Vollbild ändert nur das Bedienfenster. Für ON AIR sollte eine bewusste Kombination mit Strg oder Umschalt verwendet werden, damit die Live-Ausgabe nicht versehentlich gestartet wird.",
+    Fehlerbehebung:
+      "Wenn ON AIR nicht startet, öffne Preflight und prüfe Präsentation, aktive Folien, MAIN-Zuordnung und fehlende Medien. Wenn die Anmeldung fehlschlägt, prüfe Verbindung, Kontofreigabe und den aktuellen Zwei-Faktor-Code. Technische Codes werden aus Sicherheitsgründen nur in der Diagnose protokolliert.\n\nWenn ein Monitor fehlt, verbinde ihn erneut und öffne Einstellungen → Anzeige. GottesdienstRegie legt MAIN niemals ungefragt auf den Bedienmonitor.",
+    Support:
+      "Notiere bei einer Supportanfrage Zeitpunkt, installierte Version, Betriebssystem, betroffenen Bereich und die Schritte bis zum Fehler. Füge keine Passwörter, Codes, Hashes, Salts, Sitzungs- oder SSO-Token bei. Über Werkzeuge → Diagnose können später bereinigte technische Informationen exportiert werden.",
+    "Über GottesdienstRegie":
+      "GottesdienstRegie ist eine eigenständige mehrsprachige Desktop-Präsentationssoftware für Gottesdienste der Philippusgemeinde. Sie verbindet lokale Ausfallsicherheit, eine zentrale Folienwiedergabe und getrennte Editor-, Vorschau- und Live-Zustände.",
+  };
+  Object.assign(articles, {
+    "Gemeinsame Gemeinde-PCs":
+      "Beim ersten Start wird dieser Rechner einmalig als Gerät registriert. Ein gemeinsam genutzter Gemeinde-PC merkt sich Organisation, Gerätename und lokale Geräteausstattung, aber niemals dauerhaft die angemeldete Person. Deshalb erscheint bei jedem Programmstart die persönliche Anmeldung.\n\nBeim Abmelden werden Benutzer-Sitzung und persönliche Daten dieses Durchgangs entfernt. Präsentationen und gerätebezogene Konfigurationen wie Displays und Audioausgänge bleiben erhalten. Die Änderungshistorie zeichnet Benutzer und Gerätenamen getrennt auf.\n\nDie automatische Abmeldung wartet bei ON AIR, Recording, laufendem Background Audio und kritischen Vorgängen. Ein Gottesdienst wird dadurch niemals unterbrochen.",
+    "Anmelden & Abmelden":
+      "Melde dich auf einem gemeinsamen Gerät immer mit deinem persönlichen Konto an. Rollen und Rechte stammen ausschließlich aus deinem Benutzerkonto und nicht vom Level oder Gerätenamen. Auf gemeinsam genutzten Rechnern gibt es absichtlich kein dauerhaftes Angemeldetbleiben.\n\nVerlasse den Arbeitsplatz über Abmelden. Ist ON AIR oder eine kritische Wiedergabe aktiv, wird eine automatische Abmeldung bis zum sicheren Ende zurückgestellt.",
+    "Persönliche Monitore":
+      "Unter Einstellungen → Anzeige → Persönliche Monitore legst du feste, nur lesende Monitoradressen an. Öffne die angezeigte Adresse auf Smartphone, Tablet oder Notebook im selben Netzwerk. Die Seite verbindet sich automatisch neu und zeigt bei einer kurzen Unterbrechung den letzten bestätigten Stand.\n\nPersönliche Monitore steuern MAIN nicht. Für jedes Display lassen sich Name, Sprache und Inhalt getrennt konfigurieren. Die Adresse bleibt stabil, bis ein berechtigter Benutzer den Monitor entfernt.",
+    Websteuerung:
+      "Unter Einstellungen → Anzeige → Websteuerung erstellst du eine zeitlich und funktional begrenzte Bedienadresse. Vergib nur die notwendigen Rechte. Jeder Befehl wird im Desktopprogramm erneut geprüft und benutzt dieselbe NEXT-/ZURÜCK-Logik wie die lokale Bedienung.\n\nWiderrufe eine nicht mehr benötigte Sitzung sofort. Bei Verbindungsabbruch bleibt die laufende Ausgabe unverändert; nach der Wiederverbindung wird zuerst der aktuelle Zustand geladen.",
+    "KI-Motive":
+      "KI-Motive erzeugen grafische Motive direkt in GottesdienstRegie, ohne dass du einen eigenen API-Schlüssel eintragen musst. Öffne Medien → Medienbibliothek → KI-MOTIVE, beschreibe das Motiv und wähle Format sowie Stil.\n\nPrüfe das Ergebnis vor ON AIR wie jedes andere Medium. Der globale Schalter unter Einstellungen → Künstliche Intelligenz kann die Funktion deaktivieren; die Umstellung wird nach einem sicheren Neustart vollständig wirksam.",
+  });
+  for (const key of Object.keys(articles))
+    articles[key] = articles[key]
+      .replace(/Firebase[- ]?/gi, "")
+      .replace(/veranstaltungen\/<eventKey>/gi, "Veranstaltungsdienst");
+  const filtered = topics.filter((topic) =>
+    `${topic} ${articles[topic] ?? ""}`
+      .toLowerCase()
+      .includes(query.toLowerCase()),
+  );
+  const screenshot = [
+    "Benutzeroberfläche",
+    "Ablauf",
+    "Vorschau",
+    "ON AIR",
+    "Preflight",
+    "Veranstaltung verknüpfen",
+  ].includes(selected)
+    ? {
+        src: "./help/operator-workspace.png",
+        title:
+          selected === "Ablauf"
+            ? "Ablauf und ServiceItems"
+            : selected === "ON AIR"
+              ? "Live-Steuerung und ON AIR"
+              : selected === "Veranstaltung verknüpfen"
+                ? "Präsentationskopf und Veranstaltung"
+                : selected === "Preflight"
+                  ? "Ausgänge vor dem Livebetrieb prüfen"
+                  : "GottesdienstRegie-Arbeitsbereich",
+        caption: `Echte Aufnahme der Software mit Fokus auf ${selected}. Die Beschriftungen entsprechen dem tatsächlich sichtbaren Arbeitsbereich.`,
+        focus:
+          selected === "Ablauf" || selected === "Veranstaltung verknüpfen"
+            ? "left"
+            : selected === "ON AIR"
+              ? "top-right"
+              : "center",
+      }
+    : selected === "Einstellungen" || selected === "Audioausgänge"
+      ? {
+          src: "./help/settings-window.png",
+          title: "Das Einstellungsfenster",
+          caption:
+            "Echte Aufnahme der Einstellungen. Navigation und aktuell geöffneter Bereich werden gemeinsam gezeigt.",
+          focus: "center",
+        }
+      : [
+            "Medien",
+            "Cloud-Medien",
+            "Unsplash",
+            "Videos",
+            "Audio Browser",
+            "Background Audio",
+          ].includes(selected)
+        ? {
+            src: "./help/media-library.png",
+            title:
+              selected === "Unsplash"
+                ? "Unsplash-Suche in der Medienbibliothek"
+                : "Die Medienbibliothek",
+            caption: `Echte Aufnahme der Medienbibliothek mit Fokus auf ${selected}.`,
+            focus: selected === "Unsplash" ? "top" : "center",
+          }
+        : null;
+  return (
+    <div className="modal-backdrop">
+      <div className="help-dialog documentation">
+        <header>
+          <h2>HILFE</h2>
+          <label>
+            <Icon name="search" />
+            <input
+              placeholder="Hilfe durchsuchen"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </label>
+          <button onClick={close} title={t("close")}>
+            <X />
+          </button>
+        </header>
+        <div className="help-layout">
+          <nav>
+            {filtered.map((topic) => (
+              <button
+                className={`${selected === topic ? "active " : ""}${topic === topic.toUpperCase() ? "help-section-title" : ""}`}
+                key={topic}
+                onClick={() => setSelected(topic)}
+              >
+                {topic}
+              </button>
+            ))}
+          </nav>
+          <article>
+            <h2>{selected}</h2>
+            {screenshot && (
+              <figure className={`help-screenshot focus-${screenshot.focus}`}>
+                <div>
+                  <img src={screenshot.src} alt={screenshot.title} />
+                </div>
+                <figcaption>
+                  <b>{screenshot.title}</b>
+                  <span>{screenshot.caption}</span>
+                </figcaption>
+              </figure>
+            )}
+            {selected === "LiveQuiz" && (
+              <div className="help-quiz-flow">
+                <span>
+                  <Icon name="qr_code_2" /> Teilnahme
+                </span>
+                <i>→</i>
+                <span>
+                  <Icon name="quiz" /> Fragen
+                </span>
+                <i>→</i>
+                <span>
+                  <Icon name="fact_check" /> Antworten
+                </span>
+              </div>
+            )}
+            {selected === "Versionsinformationen" ? (
+              <ReleaseNotesView />
+            ) : (
+              <>
+                {(
+                  articles[selected] ??
+                  `${selected} ist als integrierter Arbeitsbereich verfügbar. Öffne den entsprechenden Bereich über Menü, Ablauf oder Einstellungen. Verwende Preflight vor ON AIR und prüfe bei Problemen zuerst Statusleiste, Berechtigungen und lokale Verfügbarkeit.`
+                )
+                  .split("\n\n")
+                  .map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+                {selected === "Support" && (
+                  <button
+                    onClick={() =>
+                      void window.desktop?.openExternal(
+                        `https://cmoere.github.io/GottesdienstRegie/report/`,
+                      )
+                    }
+                  >
+                    FEHLERSEITE ÖFFNEN <Icon name="open_in_new" />
+                  </button>
+                )}
+              </>
+            )}
+          </article>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LogoutDialog({
+  cancel,
+  confirm,
+}: {
+  cancel: () => void;
+  confirm: () => void;
+}) {
+  const { t } = useI18n();
+  return (
+    <div className="modal-backdrop">
+      <div
+        className="confirm-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="logout-title"
+      >
+        <div className="confirm-icon">
+          <Icon name="logout" />
+        </div>
+        <h2 id="logout-title">{t("logoutConfirmTitle")}</h2>
+        <p>{t("logoutConfirmText")}</p>
+        <div>
+          <button onClick={cancel}>{t("staySignedIn")}</button>
+          <button className="danger-button" onClick={confirm}>
+            {t("logoutNow")}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ServiceItemRenameDialog({
+  item,
+  close,
+}: {
+  item: ServiceItem;
+  close: () => void;
+}) {
+  const [title, setTitle] = useState(item.title);
+  const save = () => {
+    const value = title.trim();
+    if (!value) return;
+    usePresentation.getState().updateItem(item.id, { title: value });
+    close();
+  };
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => {
+      if (event.key === "Escape") close();
+    };
+    addEventListener("keydown", key);
+    return () => removeEventListener("keydown", key);
+  }, [close]);
+  return (
+    <div
+      className="modal-backdrop"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) close();
+      }}
+    >
+      <form
+        className="rename-item-dialog"
+        onSubmit={(event) => {
+          event.preventDefault();
+          save();
+        }}
+      >
+        <h2>ELEMENT UMBENENNEN</h2>
+        <p>
+          Der neue Name erscheint sofort im Ablauf und wird über Autosave und
+          Synchronisation gespeichert.
+        </p>
+        <label>
+          ELEMENTNAME
+          <input
+            autoFocus
+            maxLength={160}
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            onFocus={(event) => event.currentTarget.select()}
+          />
+        </label>
+        <footer>
+          <button type="button" onClick={close}>
+            ABBRECHEN
+          </button>
+          <button className="primary" disabled={!title.trim()}>
+            UMBENENNEN
+          </button>
+        </footer>
+      </form>
+    </div>
+  );
+}
+
+const tourSteps = [
+  {
+    title: "Willkommen in GottesdienstRegie",
+    image: "./help/operator-workspace.png",
+    focus: "center",
+    text: "Hier planst du den vollständigen Gottesdienst, bereitest Folien vor und steuerst die getrennte Publikumsausgabe. Auswahl, Vorschau und MAIN sind bewusst voneinander getrennt.",
+    points: [
+      "Links: Ablauf mit Vor-, Haupt- und Nachprogramm",
+      "Mitte: Folien und große Arbeitsvorschau",
+      "Oben: Bearbeiten, Vorschau, Preflight und ON AIR",
+    ],
+  },
+  {
+    title: "Präsentation und Veranstaltung",
+    image: "./help/operator-workspace.png",
+    focus: "left",
+    text: "Der Präsentationskopf verbindet den geöffneten Ablauf mit dem passenden Termin. Die Verknüpfung ist Voraussetzung für ON AIR und übernimmt Datum sowie planmäßige Servicezeit.",
+    points: [
+      "Titel anklicken, um ihn direkt zu bearbeiten",
+      "Veranstaltung auswählen und Änderung speichern",
+      "Ausfallende Termine bleiben sichtbar, sind aber gesperrt",
+    ],
+  },
+  {
+    title: "Inhalte sicher vorbereiten",
+    image: "./help/operator-workspace.png",
+    focus: "left",
+    text: "ServiceItems lassen sich auswählen, ziehen, gruppieren, ausblenden oder über das Rechtsklickmenü bearbeiten. Editoränderungen verändern eine bereits live sichtbare Folie nicht rückwirkend.",
+    points: [
+      "Strg-Klick für Mehrfachauswahl",
+      "Strg+R öffnet den eigenen Umbenennen-Dialog",
+      "Rechtsklick bietet nur passende Aktionen",
+    ],
+  },
+  {
+    title: "Medien finden und verwenden",
+    image: "./help/media-library.png",
+    focus: "center",
+    text: "Die Medienbibliothek trennt Team-Cloud, Community und Unsplash. Suche, Dateityp, Favoriten und zuletzt verwendete Medien können kombiniert werden.",
+    points: [
+      "Unsplash besitzt einen eingerichteten App-Zugang",
+      "Filter ohne Treffer lassen sich mit einem Klick zurücksetzen",
+      "Mehr laden erweitert die Ergebnisliste in überschaubaren Schritten",
+    ],
+  },
+  {
+    title: "Ausgänge und Audio prüfen",
+    image: "./help/settings-window.png",
+    focus: "center",
+    text: "Richte MAIN und die getrennten Audioausgänge vor dem Gottesdienst ein. Preflight meldet fehlende Geräte, Medien und Verknüpfungen, bevor etwas live geschaltet wird.",
+    points: [
+      "MAIN ist die Publikumsausgabe",
+      "Preview/Vorhören gehört auf den Bedienkopfhörer",
+      "Ein grüner Status erscheint erst nach echter Bestätigung",
+    ],
+  },
+  {
+    title: "Vorschau und ON AIR",
+    image: "./help/operator-workspace.png",
+    focus: "top",
+    text: "In der Vorschau kontrollierst du Folien, ohne MAIN zu verändern. Erst ON AIR beziehungsweise „Mit dieser Folie ON AIR gehen“ übernimmt den Inhalt in die Live-Ausgabe.",
+    points: [
+      "Umschalt+F5 startet oder beendet ON AIR",
+      "Pfeiltasten navigieren während des Livebetriebs",
+      "OFF AIR beendet auch Background Audio sicher",
+    ],
+  },
+];
+function InterfaceTour({ close }: { close: () => void }) {
+  const [step, setStep] = useState(0),
+    current = tourSteps[step];
+  const finish = () => {
+    localStorage.setItem("gottesdienstregie.interface-tour", "done");
+    close();
+  };
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => {
+      if (event.key === "Escape") finish();
+      if (event.key === "ArrowRight")
+        setStep((value) => Math.min(tourSteps.length - 1, value + 1));
+      if (event.key === "ArrowLeft") setStep((value) => Math.max(0, value - 1));
+    };
+    addEventListener("keydown", key);
+    return () => removeEventListener("keydown", key);
+  }, []);
+  return (
+    <div className="modal-backdrop">
+      <section className="tour-dialog">
+        <header>
+          <div>
+            <Icon name="explore" />
+            <h2>BENUTZEROBERFLÄCHE KENNENLERNEN</h2>
+          </div>
+          <small>
+            {step + 1} / {tourSteps.length}
+          </small>
+        </header>
+        <div className="tour-body">
+          <div className={`tour-visual tour-focus-${current.focus}`}>
+            <img
+              src={current.image}
+              alt="Echte Aufnahme der GottesdienstRegie-Oberfläche"
+            />
+          </div>
+          <article className="tour-copy">
+            <span className="eyebrow">SCHRITT {step + 1}</span>
+            <h3>{current.title}</h3>
+            <p>{current.text}</p>
+            <ul>
+              {current.points.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
+            </ul>
+            <p>
+              <b>Tipp:</b> Öffne später Hilfe → Benutzeroberfläche kennenlernen,
+              um diese Einführung jederzeit erneut anzusehen.
+            </p>
+          </article>
+        </div>
+        <footer>
+          <div className="tour-dots">
+            {tourSteps.map((_, index) => (
+              <i className={index === step ? "active" : ""} key={index} />
+            ))}
+          </div>
+          <button onClick={finish}>ÜBERSPRINGEN</button>
+          <button
+            disabled={step === 0}
+            onClick={() => setStep((value) => value - 1)}
+          >
+            ZURÜCK
+          </button>
+          {step < tourSteps.length - 1 ? (
+            <button
+              className="primary"
+              onClick={() => setStep((value) => value + 1)}
+            >
+              WEITER
+            </button>
+          ) : (
+            <button className="primary" onClick={finish}>
+              FERTIG
+            </button>
+          )}
+        </footer>
+      </section>
+    </div>
+  );
+}
+
+const reportText: Record<
+  Language,
+  [string, string, string, string, string, string, string, string, string]
+> = {
+  de: [
+    "FEHLER MELDEN",
+    "Beschreibe das Problem so genau, dass es nachvollzogen werden kann. Passwörter, Anmeldecodes und vertrauliche Inhalte dürfen nicht enthalten sein.",
+    "Kurztitel",
+    "Was ist passiert?",
+    "Schritte zum Nachstellen",
+    "Was sollte stattdessen passieren?",
+    "Diagnoseinformationen beifügen",
+    "ABBRECHEN",
+    "BERICHT AUF GITHUB ÖFFNEN",
+  ],
+  gsw: [
+    "FÄHLER MELDE",
+    "Beschriib s Problem möglichst genau. Kei Passwörter oder Amäldecode iifüege.",
+    "Kurztitel",
+    "Was isch passiert?",
+    "Schritt zum Nachstelle",
+    "Was sött passiere?",
+    "Diagnoseinformatione aahänge",
+    "ABBRÄCHE",
+    "BERICHT UF GITHUB ÖFFNE",
+  ],
+  en: [
+    "REPORT A BUG",
+    "Describe the problem clearly enough to reproduce it. Never include passwords, sign-in codes or confidential content.",
+    "Short title",
+    "What happened?",
+    "Steps to reproduce",
+    "What should have happened?",
+    "Include diagnostics",
+    "CANCEL",
+    "OPEN REPORT ON GITHUB",
+  ],
+  da: [
+    "RAPPORTÉR EN FEJL",
+    "Beskriv problemet, så det kan genskabes. Medtag aldrig adgangskoder eller fortrolige oplysninger.",
+    "Kort titel",
+    "Hvad skete der?",
+    "Trin til at genskabe",
+    "Hvad skulle der ske?",
+    "Medtag diagnostik",
+    "ANNULLER",
+    "ÅBN RAPPORT PÅ GITHUB",
+  ],
+  sv: [
+    "RAPPORTERA ETT FEL",
+    "Beskriv problemet så att det kan återskapas. Ta aldrig med lösenord eller känsliga uppgifter.",
+    "Kort titel",
+    "Vad hände?",
+    "Steg för att återskapa",
+    "Vad skulle ha hänt?",
+    "Inkludera diagnostik",
+    "AVBRYT",
+    "ÖPPNA RAPPORT PÅ GITHUB",
+  ],
+  no: [
+    "RAPPORTER EN FEIL",
+    "Beskriv problemet slik at det kan gjenskapes. Ikke ta med passord eller fortrolige data.",
+    "Kort tittel",
+    "Hva skjedde?",
+    "Trinn for å gjenskape",
+    "Hva skulle ha skjedd?",
+    "Ta med diagnostikk",
+    "AVBRYT",
+    "ÅPNE RAPPORT PÅ GITHUB",
+  ],
+  fi: [
+    "ILMOITA VIRHEESTÄ",
+    "Kuvaile ongelma niin, että se voidaan toistaa. Älä lisää salasanoja tai luottamuksellisia tietoja.",
+    "Lyhyt otsikko",
+    "Mitä tapahtui?",
+    "Toistamisvaiheet",
+    "Mitä olisi pitänyt tapahtua?",
+    "Liitä diagnostiikka",
+    "PERUUTA",
+    "AVAA RAPORTTI GITHUBISSA",
+  ],
+  nl: [
+    "FOUT MELDEN",
+    "Beschrijf het probleem zodat het kan worden gereproduceerd. Voeg nooit wachtwoorden of vertrouwelijke gegevens toe.",
+    "Korte titel",
+    "Wat is er gebeurd?",
+    "Stappen om te reproduceren",
+    "Wat had er moeten gebeuren?",
+    "Diagnostiek toevoegen",
+    "ANNULEREN",
+    "RAPPORT OP GITHUB OPENEN",
+  ],
+  fr: [
+    "SIGNALER UN BUG",
+    "Décrivez le problème afin de pouvoir le reproduire. N’ajoutez jamais de mots de passe ni de données confidentielles.",
+    "Titre court",
+    "Que s’est-il passé ?",
+    "Étapes de reproduction",
+    "Que devait-il se passer ?",
+    "Joindre le diagnostic",
+    "ANNULER",
+    "OUVRIR SUR GITHUB",
+  ],
+  es: [
+    "INFORMAR DE UN ERROR",
+    "Describe el problema para poder reproducirlo. No incluyas contraseñas ni datos confidenciales.",
+    "Título breve",
+    "¿Qué ocurrió?",
+    "Pasos para reproducirlo",
+    "¿Qué debería haber ocurrido?",
+    "Incluir diagnóstico",
+    "CANCELAR",
+    "ABRIR INFORME EN GITHUB",
+  ],
+  it: [
+    "SEGNALA UN ERRORE",
+    "Descrivi il problema in modo riproducibile. Non includere password o dati riservati.",
+    "Titolo breve",
+    "Che cosa è successo?",
+    "Passaggi per riprodurre",
+    "Che cosa doveva succedere?",
+    "Includi diagnostica",
+    "ANNULLA",
+    "APRI SU GITHUB",
+  ],
+  pl: [
+    "ZGŁOŚ BŁĄD",
+    "Opisz problem tak, aby można go było odtworzyć. Nie podawaj haseł ani poufnych danych.",
+    "Krótki tytuł",
+    "Co się stało?",
+    "Kroki odtworzenia",
+    "Co powinno się stać?",
+    "Dołącz diagnostykę",
+    "ANULUJ",
+    "OTWÓRZ W GITHUB",
+  ],
+  "pt-BR": [
+    "RELATAR UM ERRO",
+    "Descreva o problema para que possa ser reproduzido. Não inclua senhas nem dados confidenciais.",
+    "Título curto",
+    "O que aconteceu?",
+    "Etapas para reproduzir",
+    "O que deveria acontecer?",
+    "Incluir diagnóstico",
+    "CANCELAR",
+    "ABRIR NO GITHUB",
+  ],
+  uk: [
+    "ПОВІДОМИТИ ПРО ПОМИЛКУ",
+    "Опишіть проблему так, щоб її можна було відтворити. Не додавайте паролі чи конфіденційні дані.",
+    "Короткий заголовок",
+    "Що сталося?",
+    "Кроки відтворення",
+    "Що мало статися?",
+    "Додати діагностику",
+    "СКАСУВАТИ",
+    "ВІДКРИТИ В GITHUB",
+  ],
+  ru: [
+    "СООБЩИТЬ ОБ ОШИБКЕ",
+    "Опишите проблему так, чтобы её можно было воспроизвести. Не добавляйте пароли и конфиденциальные данные.",
+    "Краткий заголовок",
+    "Что произошло?",
+    "Шаги воспроизведения",
+    "Что должно было произойти?",
+    "Добавить диагностику",
+    "ОТМЕНА",
+    "ОТКРЫТЬ В GITHUB",
+  ],
+  tr: [
+    "HATA BİLDİR",
+    "Sorunu yeniden oluşturulabilecek şekilde açıklayın. Parola veya gizli bilgi eklemeyin.",
+    "Kısa başlık",
+    "Ne oldu?",
+    "Yeniden oluşturma adımları",
+    "Ne olması gerekiyordu?",
+    "Tanı bilgilerini ekle",
+    "İPTAL",
+    "GITHUB’DA AÇ",
+  ],
+  ar: [
+    "الإبلاغ عن خطأ",
+    "صِف المشكلة بحيث يمكن إعادة إنتاجها. لا تُضف كلمات مرور أو بيانات سرية.",
+    "عنوان مختصر",
+    "ماذا حدث؟",
+    "خطوات إعادة الإنتاج",
+    "ماذا كان يجب أن يحدث؟",
+    "إرفاق معلومات التشخيص",
+    "إلغاء",
+    "فتح البلاغ على GITHUB",
+  ],
+};
+type FeedbackType = "bug" | "change" | "feature";
+function ReportIssueDialog({
+  close,
+  initialType = "bug",
+}: {
+  close: () => void;
+  initialType?: FeedbackType;
+}) {
+  const language = usePreferences((state) => state.language),
+    T = reportText[language] ?? reportText.en,
+    [type, setType] = useState<FeedbackType>(initialType),
+    [title, setTitle] = useState(""),
+    [actual, setActual] = useState(""),
+    [steps, setSteps] = useState(""),
+    [expected, setExpected] = useState(""),
+    [diagnostics, setDiagnostics] = useState(true),
+    [media, setMedia] = useState<File[]>([]),
+    isBug = type === "bug";
+  async function submit() {
+    const version =
+        (await window.desktop?.updates.currentVersion().catch(() => "?")) ??
+        "?",
+      payload = {
+        type,
+        title: title.trim(),
+        actual,
+        steps,
+        expected,
+        description: actual,
+        reason: steps,
+        media: media.map((file) => ({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+        })),
+        diagnostics: diagnostics
+          ? { version, platform: navigator.platform, language }
+          : null,
+      },
+      fragment = encodeURIComponent(JSON.stringify(payload)),
+      url = `https://cmoere.github.io/GottesdienstRegie/report/#${fragment}`;
+    if (
+      media.length &&
+      navigator.canShare?.({ files: media }) &&
+      navigator.share
+    ) {
+      const text = `${title}\n\n${actual}\n\n${steps}\n\n${expected}`;
+      await navigator.share({
+        title: `GottesdienstRegie: ${title}`,
+        text,
+        files: media,
+      });
+      close();
+      return;
+    }
+    await window.desktop?.openExternal(url);
+    close();
+  }
+  return (
+    <div className="modal-backdrop report-issue-backdrop">
+      <form
+        className="report-issue-dialog"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void submit();
+        }}
+      >
+        <header>
+          <div>
+            <Icon
+              name={
+                type === "bug"
+                  ? "bug_report"
+                  : type === "feature"
+                    ? "lightbulb"
+                    : "rate_review"
+              }
+            />
+            <h2>
+              {type === "bug"
+                ? T[0]
+                : type === "feature"
+                  ? "FEATUREWUNSCH EINREICHEN"
+                  : "ÄNDERUNG VORSCHLAGEN"}
+            </h2>
+          </div>
+          <button type="button" onClick={close}>
+            <Icon name="close" />
+          </button>
+        </header>
+        <div className="feedback-type-tabs">
+          <button
+            type="button"
+            className={type === "bug" ? "active" : ""}
+            onClick={() => setType("bug")}
+          >
+            <Icon name="bug_report" /> FEHLER
+          </button>
+          <button
+            type="button"
+            className={type === "change" ? "active" : ""}
+            onClick={() => setType("change")}
+          >
+            <Icon name="rate_review" /> ÄNDERUNG
+          </button>
+          <button
+            type="button"
+            className={type === "feature" ? "active" : ""}
+            onClick={() => setType("feature")}
+          >
+            <Icon name="lightbulb" /> FEATUREWUNSCH
+          </button>
+        </div>
+        <label>
+          {isBug ? T[2] : "Kurzer Titel"}
+          <input
+            autoFocus
+            required
+            maxLength={160}
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder={
+              isBug
+                ? "Kurz zusammenfassen, was nicht funktioniert"
+                : type === "feature"
+                  ? "Welche neue Funktion wünschst du dir?"
+                  : "Was sollte geändert werden?"
+            }
+          />
+        </label>
+        <label>
+          {isBug ? T[3] : "Beschreibe deinen Wunsch möglichst genau"}
+          <textarea
+            required
+            rows={5}
+            value={actual}
+            onChange={(event) => setActual(event.target.value)}
+            placeholder={
+              isBug
+                ? "Was hast du gesehen? Nenne bitte auch die betroffene Ansicht oder das Element."
+                : "Was soll künftig möglich sein und wie soll es sich bedienen lassen?"
+            }
+          />
+        </label>
+        <label>
+          {isBug ? T[4] : "Warum ist diese Änderung hilfreich?"}
+          <textarea
+            required
+            rows={4}
+            value={steps}
+            onChange={(event) => setSteps(event.target.value)}
+            placeholder={
+              isBug
+                ? "1. Ansicht öffnen\n2. Aktion ausführen\n3. Fehler beobachten"
+                : "Beschreibe bitte den konkreten Einsatzfall."
+            }
+          />
+        </label>
+        <label>
+          {isBug ? T[5] : "Gewünschtes Verhalten oder Beispiel"}
+          <textarea
+            rows={3}
+            value={expected}
+            onChange={(event) => setExpected(event.target.value)}
+            placeholder={
+              isBug
+                ? "Was sollte nach dieser Aktion korrekt passieren?"
+                : "Optional: Beispiel, Ablauf oder gewünschte Darstellung"
+            }
+          />
+        </label>
+        <label className="report-media">
+          <span>
+            Medien beifügen <small>{media.length}/4</small>
+          </span>
+          <input
+            type="file"
+            accept="image/*,video/*"
+            multiple
+            onChange={(event) => {
+              const next = Array.from(event.target.files ?? []).slice(0, 4);
+              setMedia(next);
+              if ((event.target.files?.length ?? 0) > 4)
+                alert("Du kannst höchstens vier Medien beifügen.");
+            }}
+          />
+          <small>
+            Bis zu vier Screenshots, Bilder oder kurze Videos auswählen.
+          </small>
+        </label>
+        {media.length > 0 && (
+          <div className="report-media-list">
+            {media.map((file, index) => (
+              <span key={`${file.name}-${index}`}>
+                <Icon
+                  name={file.type.startsWith("video/") ? "movie" : "image"}
+                />
+                {file.name}
+                <button
+                  type="button"
+                  title="Entfernen"
+                  onClick={() =>
+                    setMedia((files) =>
+                      files.filter((_, fileIndex) => fileIndex !== index),
+                    )
+                  }
+                >
+                  <Icon name="close" />
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        <label className="report-check">
+          <input
+            type="checkbox"
+            checked={diagnostics}
+            onChange={(event) => setDiagnostics(event.target.checked)}
+          />
+          {T[6]}
+        </label>
+        <footer>
+          <button type="button" onClick={close}>
+            {T[7]}
+          </button>
+          <button
+            className="primary"
+            disabled={!title.trim() || !actual.trim() || !steps.trim()}
+          >
+            ANLIEGEN PRÜFEN UND SENDEN
+          </button>
+        </footer>
+      </form>
+    </div>
+  );
+}
+
+function UserProfileDialog({
+  user,
+  close,
+  opened,
+}: {
+  user: AuthSession["user"];
+  close: () => void;
+  opened: (document: PresentationDocument) => void;
+}) {
+  const displayName =
+      [user.firstname, user.lastName].filter(Boolean).join(" ") || user.email,
+    username = String(
+      user.settings?.username ?? user.email.split("@")[0] ?? user.uid,
+    ),
+    photoUrl = String(user.profile?.photoUrl ?? ""),
+    [showPresentations, setShowPresentations] = useState(false),
+    [entries, setEntries] = useState<PresentationSummary[]>([]),
+    [documents, setDocuments] = useState<Record<string, PresentationDocument>>(
+      {},
+    ),
+    [query, setQuery] = useState(""),
+    [filter, setFilter] = useState<"all" | "active" | "archived">("active"),
+    [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (!showPresentations) return;
+    setLoading(true);
+    void (async () => {
+      const list =
+        (await window.desktop?.presentation.list({ archived: true })) ?? [];
+      setEntries(list);
+      const pairs = await Promise.all(
+          list
+            .slice(0, 80)
+            .map(
+              async (entry) =>
+                [
+                  entry.id,
+                  await window.desktop?.presentation.load(entry.id),
+                ] as const,
+            ),
+        ),
+        loaded: Record<string, PresentationDocument> = {};
+      for (const [id, document] of pairs)
+        if (document) loaded[id] = document as PresentationDocument;
+      setDocuments(loaded);
+    })().finally(() => setLoading(false));
+  }, [showPresentations]);
+  const shown = entries
+    .filter(
+      (entry) =>
+        (filter === "all" ||
+          (filter === "archived" ? entry.archived : !entry.archived)) &&
+        entry.title.toLowerCase().includes(query.toLowerCase()),
+    )
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  const open = async (id: string) => {
+    const document =
+      documents[id] ??
+      ((await window.desktop?.presentation.load(
+        id,
+      )) as PresentationDocument | null);
+    if (document) {
+      opened(document);
+      close();
+    }
+  };
+  return (
+    <div
+      className="modal-backdrop"
+      onMouseDown={(event) => event.target === event.currentTarget && close()}
+    >
+      <section
+        className={`user-profile-dialog ${showPresentations ? "with-presentations" : ""}`}
+        role="dialog"
+        aria-modal="true"
+      >
+        <header>
+          <b>{showPresentations ? "MEINE PRÄSENTATIONEN" : "MEIN PROFIL"}</b>
+          <button onClick={close} aria-label="Schließen">
+            <Icon name="close" />
+          </button>
+        </header>
+        {!showPresentations ? (
+          <>
+            <div className="user-profile-hero">
+              {photoUrl ? (
+                <img src={photoUrl} alt="Profilbild" />
+              ) : (
+                <span>{displayName.slice(0, 1).toUpperCase()}</span>
+              )}
+              <div>
+                <h2>{displayName}</h2>
+                <p>@{username}</p>
+              </div>
+            </div>
+            <dl>
+              <dt>E-Mail-Adresse</dt>
+              <dd>{user.email}</dd>
+              <dt>Benutzername</dt>
+              <dd>@{username}</dd>
+              <dt>Rolle</dt>
+              <dd>{user.appAccess.gottesdienstRegie.role}</dd>
+              <dt>Organisation</dt>
+              <dd>Philippus Gemeinde Bielefeld e. V.</dd>
+              <dt>Benutzer-ID</dt>
+              <dd title={user.uid}>{user.uid}</dd>
+            </dl>
+            <div className="profile-actions">
+              <button
+                className="primary"
+                onClick={() => setShowPresentations(true)}
+              >
+                <Icon name="slideshow" /> MEINE PRÄSENTATIONEN
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="profile-presentation-tools">
+              <label>
+                <Icon name="search" />
+                <input
+                  autoFocus
+                  placeholder="Präsentationen durchsuchen"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                />
+              </label>
+              <select
+                value={filter}
+                onChange={(event) =>
+                  setFilter(event.target.value as typeof filter)
+                }
+              >
+                <option value="active">Aktive Präsentationen</option>
+                <option value="archived">Archivierte Präsentationen</option>
+                <option value="all">Alle Präsentationen</option>
+              </select>
+            </div>
+            {loading ? (
+              <div className="profile-presentations-empty">
+                <span className="media-loading" /> Präsentationen werden geladen
+                …
+              </div>
+            ) : shown.length ? (
+              <div className="profile-presentations">
+                {shown.map((entry) => {
+                  const document = documents[entry.id],
+                    firstSlide = document?.items
+                      .flatMap((item) => item.slides)
+                      .sort((a, b) => a.order - b.order)[0],
+                    size = document
+                      ? new TextEncoder().encode(JSON.stringify(document))
+                          .byteLength
+                      : 0;
+                  return (
+                    <button key={entry.id} onClick={() => void open(entry.id)}>
+                      <span className="profile-presentation-thumb">
+                        {firstSlide ? (
+                          <SlideRenderer slide={firstSlide} mode="thumbnail" />
+                        ) : (
+                          <Icon name="slideshow" />
+                        )}
+                      </span>
+                      <span>
+                        <b>{entry.title}</b>
+                        <small>
+                          {new Date(
+                            entry.date || entry.updatedAt,
+                          ).toLocaleDateString("de-DE")}{" "}
+                          · {entry.itemCount} Elemente · {entry.slideCount}{" "}
+                          Folien
+                        </small>
+                        <small>
+                          {size
+                            ? `${Math.max(1, Math.round(size / 1024))} KB · `
+                            : ""}
+                          Geändert $
+                          {new Date(entry.updatedAt).toLocaleString("de-DE")}
+                        </small>
+                      </span>
+                      <Icon name="arrow_forward" />
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="profile-presentations-empty">
+                <Icon name="search_off" /> Keine passende Präsentation gefunden.
+              </div>
+            )}
+          </>
+        )}
+        <footer>
+          {showPresentations && (
+            <button onClick={() => setShowPresentations(false)}>
+              ZURÜCK ZUM PROFIL
+            </button>
+          )}
+          <button onClick={close}>SCHLIESSEN</button>
+        </footer>
+      </section>
+    </div>
+  );
+}
+
+type MenuAction = {
+  label: string;
+  icon?: string;
+  shortcut?: string;
+  action: () => void;
+  disabled?: boolean;
+  separator?: boolean;
+  external?: boolean;
+};
+function MenuPopup({
+  items,
+  close,
+  className = "",
+}: {
+  items: MenuAction[];
+  close: () => void;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`menu-popup ${className} ${items.some((item) => item.icon === "bug_report") ? "help-menu-popup" : ""}`}
+      onClick={(event) => event.stopPropagation()}
+    >
+      {items.map((item, index) => (
+        <button
+          key={`${item.label}-${index}`}
+          className={item.separator ? "separator" : ""}
+          disabled={item.disabled}
+          onClick={() => {
+            close();
+            item.action();
+          }}
+        >
+          {item.icon && <Icon name={item.icon} />}
+          <span>{item.label}</span>
+          {item.shortcut ? (
+            <kbd>{item.shortcut}</kbd>
+          ) : (
+            item.external && <Icon name="open_in_new" />
+          )}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function BackgroundAudioController() {
+  const [audio, setAudio] = useState<BackgroundAudioState>(() =>
+    backgroundAudioEngine.snapshot(),
+  );
+  useEffect(() => {
+    const update = (event: Event) =>
+      setAudio((event as CustomEvent<BackgroundAudioState>).detail);
+    addEventListener("gottesdienstregie:background-audio", update);
+    return () =>
+      removeEventListener("gottesdienstregie:background-audio", update);
+  }, []);
+  if (!audio.active && !audio.track) return null;
+  const time = (value: number) =>
+    `${Math.floor(value / 60)}:${String(Math.floor(value % 60)).padStart(2, "0")}`;
+  return (
+    <div className="background-audio-controller">
+      <Icon name="volume_up" />
+      <span>
+        <b>{audio.track?.name ?? "Background Audio"}</b>
+        <small>
+          {time(audio.currentTime)} / {time(audio.duration)}
+        </small>
+      </span>
+      <button
+        title={audio.paused ? "Fortsetzen" : "Pause"}
+        onClick={() =>
+          audio.paused
+            ? void backgroundAudioEngine.resume()
+            : backgroundAudioEngine.pause()
+        }
+      >
+        <Icon name={audio.paused ? "play_arrow" : "pause"} />
+      </button>
+      <button
+        title="Nächster Titel"
+        onClick={() => void backgroundAudioEngine.next()}
+      >
+        <Icon name="skip_next" />
+      </button>
+      <button title="Stoppen" onClick={() => void backgroundAudioEngine.stop()}>
+        <Icon name="stop" />
+      </button>
+      <button
+        title="Stumm"
+        onClick={() => backgroundAudioEngine.setMuted(!audio.muted)}
+      >
+        <Icon name={audio.muted ? "volume_off" : "volume_up"} />
+      </button>
+      <input
+        aria-label="Background-Audio-Lautstärke"
+        type="range"
+        min="0"
+        max="100"
+        value={audio.volume}
+        onChange={(event) =>
+          backgroundAudioEngine.setVolume(Number(event.target.value))
+        }
+      />
+      {audio.error && <small>{audio.error}</small>}
+    </div>
+  );
+}
+
+function PresentationInfoDialog({ close }: { close: () => void }) {
+  const state = usePresentation(),
+    [title, setTitle] = useState(state.title),
+    [date, setDate] = useState(state.date),
+    [createdBy, setCreatedBy] = useState(state.createdBy),
+    [eventId, setEventId] = useState(state.eventId);
+  const slides = state.items.reduce((sum, item) => sum + item.slides.length, 0),
+    duration = state.items.reduce(
+      (sum, item) => sum + itemDurationSeconds(item),
+      0,
+    ),
+    locale = navigator.language || "de-DE";
+  const format = (value: string) =>
+    value ? new Date(value).toLocaleString(locale) : "—";
+  return (
+    <div
+      className="modal-backdrop"
+      onMouseDown={(event) => event.target === event.currentTarget && close()}
+    >
+      <form
+        className="presentation-info-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="presentation-info-title"
+        onSubmit={(event) => {
+          event.preventDefault();
+          state.updatePresentation({
+            title: title.trim() || state.title,
+            date,
+            createdBy: createdBy.trim(),
+            eventId: eventId.trim(),
+          });
+          close();
+        }}
+      >
+        <header>
+          <div>
+            <Icon name="info" />
+            <span>
+              <h2 id="presentation-info-title">PRÄSENTATIONSINFORMATIONEN</h2>
+              <small>Details und letzte Bearbeitungen</small>
+            </span>
+          </div>
+          <button type="button" onClick={close} title="Schließen">
+            <X />
+          </button>
+        </header>
+        <main>
+          <section className="presentation-info-fields">
+            <label>
+              Titel
+              <input
+                autoFocus
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+              />
+            </label>
+            <label>
+              Datum
+              <input
+                type="date"
+                value={date}
+                onChange={(event) => setDate(event.target.value)}
+              />
+            </label>
+            <label>
+              Erstellt von
+              <input
+                value={createdBy}
+                placeholder="Name des Erstellers"
+                onChange={(event) => setCreatedBy(event.target.value)}
+              />
+            </label>
+            <label>
+              Veranstaltungs-ID
+              <input
+                value={eventId}
+                placeholder="Optional"
+                onChange={(event) => setEventId(event.target.value)}
+              />
+            </label>
+          </section>
+          <section className="presentation-info-facts">
+            <div>
+              <small>ERSTELLT AM</small>
+              <b>{format(state.createdAt)}</b>
+            </div>
+            <div>
+              <small>ZULETZT BEARBEITET</small>
+              <b>{format(state.updatedAt)}</b>
+            </div>
+            <div>
+              <small>INHALT</small>
+              <b>
+                {state.items.length} Elemente · {slides} Folien
+              </b>
+            </div>
+            <div>
+              <small>GEPLANTE DAUER</small>
+              <b>{formatDuration(duration)}</b>
+            </div>
+            <div>
+              <small>PRÄSENTATIONS-ID</small>
+              <b title={state.presentationId}>{state.presentationId || "—"}</b>
+            </div>
+            <div>
+              <small>VORLAGE</small>
+              <b>{state.templateId ? "Eigene Vorlage" : "Standard / keine"}</b>
+            </div>
+          </section>
+          <section className="presentation-history">
+            <header>
+              <h3>BEARBEITUNGSHISTORIE</h3>
+              <span>{state.editHistory.length} von 60 Einträgen</span>
+            </header>
+            {state.editHistory.length ? (
+              <ol>
+                {[...state.editHistory].reverse().map((entry, index) => (
+                  <li key={`${entry.timestamp}-${index}`}>
+                    <Icon name="edit_note" />
+                    <span>
+                      <b>{entry.action}</b>
+                      <small>
+                        {entry.actor} · {format(entry.timestamp)}
+                      </small>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p>
+                Noch keine Bearbeitungen in dieser Präsentation gespeichert.
+              </p>
+            )}
+          </section>
+        </main>
+        <footer>
+          <button type="button" onClick={close}>
+            ABBRECHEN
+          </button>
+          <button className="primary">ÄNDERUNGEN SPEICHERN</button>
+        </footer>
+      </form>
+    </div>
+  );
+}
+
+function CloudHealth({ status }: { status: MediaStorageStatus | null }) {
+  return (
+    <div
+      className={`top-cloud-health ${status?.online ? "online" : "offline"}`}
+      title={status?.message ?? "Cloudstatus wird geprüft"}
+      aria-label={status?.online ? "Cloud verfügbar" : "Cloud offline"}
+    >
+      <Icon name={status?.online ? "cloud_done" : "cloud_off"} />
+    </div>
+  );
+}
+
+function AppShell({
+  session,
+  onLogout,
+  device,
+}: {
+  session: AuthSession;
+  onLogout: () => void;
+  device: RegisteredDevice | null;
+}) {
+  const { t, locale } = useI18n();
+  const state = usePresentation();
+  const quickScreens = usePreferences((s) => s.quickScreens),
+    storedShortcuts = usePreferences((s) => s.keyboardShortcuts),
+    shortcuts = useMemo(
+      () => ({ ...defaultKeyboardShortcuts, ...storedShortcuts }),
+      [storedShortcuts],
+    ),
+    [previewQuick, setPreviewQuick] = useState<QuickScreenConfig | null>(null),
+    [settingsOpen, setSettingsOpen] = useState(false),
+    [helpOpen, setHelpOpen] = useState(false),
+    [tourOpen, setTourOpen] = useState(
+      () => localStorage.getItem("gottesdienstregie.interface-tour") !== "done",
+    ),
+    [reportOpen, setReportOpen] = useState(false),
+    [feedbackType, setFeedbackType] = useState<FeedbackType>("bug"),
+    [presentationInfoOpen, setPresentationInfoOpen] = useState(false),
+    [profileOpen, setProfileOpen] = useState(false),
+    [rewardProfileOpen, setRewardProfileOpen] = useState(false),
+    [libraryOpen, setLibraryOpen] = useState(
+      !state.presentationId &&
+        localStorage.getItem("gottesdienstregie.interface-tour") === "done",
+    ),
+    [logoutConfirm, setLogoutConfirm] = useState(false),
+    [quizCreateOpen, setQuizCreateOpen] = useState(false),
+    [menuOpen, setMenuOpen] = useState<string | null>(null),
+    [displays, setDisplays] = useState<DesktopDisplay[]>([]),
+    [outputState, setOutputState] = useState<Record<string, string>>({}),
+    [mediaStorage, setMediaStorage] = useState<MediaStorageStatus | null>(null),
+    [syncProgress, setSyncProgress] = useState<{
+      state: "idle" | "syncing" | "saved" | "error";
+      step: number;
+      text: string;
+    }>({ state: "idle", step: 0, text: "" });
+  const audioSessionRef = useRef<{
+    onAir: boolean;
+    mode: "edit" | "preview";
+    previewKey: string;
+    previewSuppressed: boolean;
+  }>({ onAir: false, mode: "edit", previewKey: "", previewSuppressed: false });
+  const previousTourOpen = useRef(tourOpen);
+  const syncingRef = useRef(false),
+    syncMessageTimer = useRef<number | undefined>(undefined);
+  const openMedia = (
+    purpose: "item" | "background" = "item",
+    context: "manage" | "select" = "select",
+  ) => void (window.desktop as any)?.mediaWindow?.open(context, purpose);
+  const addVideo = async () => {
+    const imported: MediaAsset[] =
+        (await (window.desktop?.media as any)?.import("video")) ?? [],
+      asset = imported.find((entry) => entry.kind === "video");
+    if (!asset) return;
+    const current = usePresentation.getState();
+    current.addItem("video", {
+      title: asset.name,
+      section: "",
+      body: "",
+      metadata: {
+        assetId: asset.id,
+        url: asset.url,
+        sourceType: "file",
+        autoplay: true,
+        volume: 100,
+        endBehavior: "nextSlide",
+      },
+    });
+    usePresentation.getState().addElement("video");
+    const next = usePresentation.getState(),
+      element = next.items
+        .flatMap((item) => item.slides)
+        .find((slide) => slide.id === next.selectedSlideId)
+        ?.elements.at(-1);
+    if (element)
+      next.updateElement(element.id, {
+        x: 0,
+        y: 0,
+        width: 1920,
+        height: 1080,
+        properties: {
+          ...element.properties,
+          src: asset.url,
+          fit: "contain",
+          autoplay: true,
+          volume: 100,
+        },
+      });
+  };
+  const user = session.user,
+    access = user.appAccess.gottesdienstRegie,
+    can = (permission: string) => session.permissions.includes(permission),
+    canEdit = can("presentationEdit"),
+    canConfigure = can("outputSettings") || can("appSettings");
+  const displayName =
+    [user.firstname, user.lastName].filter(Boolean).join(" ") || user.email;
+  const selected = state.items.find((item) => item.id === state.selectedItemId),
+    slideCount = selected?.slides.length ?? 0,
+    slideIndex =
+      Math.max(
+        0,
+        selected?.slides.findIndex(
+          (slide) => slide.id === state.selectedSlideId,
+        ) ?? 0,
+      ) + 1;
+  const saveNow = useCallback(async () => {
+    const current = usePresentation.getState();
+    if (!current.presentationId || syncingRef.current) return;
+    syncingRef.current = true;
+    if (syncMessageTimer.current) window.clearTimeout(syncMessageTimer.current);
+    current.markSaving();
+    try {
+      setSyncProgress({
+        state: "syncing",
+        step: 1,
+        text: "Synchronisation … 1/4 · Änderungen vorbereiten",
+      });
+      await new Promise((resolve) => window.setTimeout(resolve, 180));
+      setSyncProgress({
+        state: "syncing",
+        step: 2,
+        text: "Synchronisation … 2/4 · Präsentation speichern",
+      });
+      await window.desktop?.presentation.save(
+        presentationDocument(usePresentation.getState()),
+      );
+      usePresentation.getState().markSaved();
+      setSyncProgress({
+        state: "syncing",
+        step: 3,
+        text: "Synchronisation … 3/4 · Cloud-Verbindung prüfen",
+      });
+      const storage = await window.desktop?.media
+        .onlineStatus()
+        .catch(() => null);
+      if (storage) setMediaStorage(storage);
+      setSyncProgress({
+        state: "syncing",
+        step: 4,
+        text: "Synchronisation … 4/4 · Abschließen",
+      });
+      await new Promise((resolve) => window.setTimeout(resolve, 180));
+      setSyncProgress({
+        state: "saved",
+        step: 4,
+        text: storage?.online ? "Gespeichert" : "Gespeichert · Cloud offline",
+      });
+      syncMessageTimer.current = window.setTimeout(
+        () => setSyncProgress((value) => ({ ...value, text: "" })),
+        2800,
+      );
+    } catch {
+      usePresentation.getState().markSaveError();
+      setSyncProgress({
+        state: "error",
+        step: 0,
+        text: "Speichern fehlgeschlagen",
+      });
+    } finally {
+      syncingRef.current = false;
+    }
+  }, []);
+  useEffect(() => {
+    if (previousTourOpen.current && !tourOpen && !state.presentationId)
+      setLibraryOpen(true);
+    previousTourOpen.current = tourOpen;
+  }, [tourOpen, state.presentationId]);
+  useEffect(() => {
+    const current = usePresentation.getState();
+    current.setHistoryActor(user.uid, displayName, device?.id, device?.name);
+    if (current.presentationId && !current.createdBy)
+      current.updatePresentation({ createdBy: displayName });
+  }, [user.uid, displayName, device?.id, device?.name, state.presentationId]);
+  useEffect(() => {
+    if (
+      !state.presentationId ||
+      state.createdBy !== displayName ||
+      Date.now() - Date.parse(state.createdAt) > 120000
+    )
+      return;
+    awardReward({
+      userId: user.uid,
+      type: "presentationCreated",
+      presentationId: state.presentationId,
+      scope: state.presentationId,
+      points: 5,
+      title: "ERSTE SCHRITTE",
+      description: "Präsentation erstellt.",
+    });
+  }, [
+    state.presentationId,
+    state.createdAt,
+    state.createdBy,
+    user.uid,
+    displayName,
+  ]);
+  useEffect(() => {
+    const entry = state.editHistory.at(-1);
+    if (!entry || entry.userId !== user.uid) return;
+    if (entry.category === "SERVICEITEMS" && entry.actionType === "ERSTELLT")
+      awardReward({
+        userId: user.uid,
+        type: "serviceItemAdded",
+        presentationId: state.presentationId,
+        serviceItemId: entry.entityId,
+        scope: entry.entityId,
+        points: 3,
+        title: "Inhalt vorbereitet",
+        description: "Ein ServiceItem wurde sinnvoll hinzugefügt.",
+      });
+    if (entry.category === "VERANSTALTUNG" && entry.actionType === "VERKNÜPFT")
+      awardReward({
+        userId: user.uid,
+        type: "eventLinked",
+        presentationId: state.presentationId,
+        scope: state.presentationId,
+        points: 10,
+        title: "VERKNÜPFT",
+        description: "Präsentation mit einer Veranstaltung verknüpft.",
+      });
+  }, [state.editHistory.at(-1)?.id, user.uid, state.presentationId]);
+  useEffect(() => {
+    const latest = state.editHistory.at(-1);
+    if (
+      state.saveState === "saved" &&
+      latest?.syncStatus === "SYNCED" &&
+      latest.userId === user.uid
+    )
+      awardReward({
+        userId: user.uid,
+        type: "presentationSynced",
+        presentationId: state.presentationId,
+        scope: state.presentationId,
+        points: 2,
+        title: "Synchronisiert",
+        description: "Änderungen wurden erfolgreich gespeichert.",
+      });
+  }, [
+    state.saveState,
+    state.editHistory.at(-1)?.syncStatus,
+    user.uid,
+    state.presentationId,
+  ]);
+  useEffect(() => {
+    const roles = Object.values(state.displayRoles);
+    if (roles.includes("stage"))
+      awardReward({
+        userId: user.uid,
+        type: "stageSetup",
+        presentationId: state.presentationId,
+        scope: "account",
+        points: 5,
+        title: "BÜHNENBLICK",
+        description: "STAGE-Ausgabe eingerichtet.",
+      });
+    if (roles.includes("livestream"))
+      awardReward({
+        userId: user.uid,
+        type: "streamSetup",
+        presentationId: state.presentationId,
+        scope: "account",
+        points: 5,
+        title: "STREAM READY",
+        description: "LIVESTREAM-Ausgabe eingerichtet.",
+      });
+  }, [JSON.stringify(state.displayRoles), user.uid, state.presentationId]);
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      const current = usePresentation.getState();
+      if (current.presentationId && current.saveState === "dirty")
+        void saveNow();
+    }, 15_000);
+    return () => {
+      window.clearInterval(timer);
+      if (syncMessageTimer.current)
+        window.clearTimeout(syncMessageTimer.current);
+    };
+  }, [saveNow]);
+  useEffect(() => {
+    void window.desktop?.displays().then(setDisplays);
+    const refreshCloud = () =>
+      void window.desktop?.media
+        .onlineStatus()
+        .then(setMediaStorage)
+        .catch(() => setMediaStorage(null));
+    refreshCloud();
+    const cloudTimer = window.setInterval(refreshCloud, 20000),
+      disposeDisplays = window.desktop?.onDisplaysChanged(setDisplays),
+      disposeOutputs = window.desktop?.onOutputStatus((status) =>
+        setOutputState((current) => ({
+          ...current,
+          [status.role]: status.state,
+        })),
+      );
+    return () => {
+      window.clearInterval(cloudTimer);
+      disposeDisplays?.();
+      disposeOutputs?.();
+    };
+  }, []);
+  useEffect(() => {
+    const openHelp = (event: Event) => {
+      const topic = (event as CustomEvent<string>).detail || "Erste Schritte";
+      localStorage.setItem("gottesdienstregie.help-topic", topic);
+      setHelpOpen(true);
+    };
+    window.addEventListener("gottesdienstregie:open-help", openHelp);
+    return () =>
+      window.removeEventListener("gottesdienstregie:open-help", openHelp);
+  }, []);
+  useEffect(() => {
+    const showQuizJoin = (event: Event) => {
+      const quick = (event as CustomEvent<QuickScreenConfig>).detail;
+      if (!quick) return;
+      setPreviewQuick(quick);
+      if (usePresentation.getState().onAir)
+        void (window.desktop as any)?.sendQuick(quick.targets, quick);
+    };
+    addEventListener("gottesdienstregie:show-quiz-join", showQuizJoin);
+    return () =>
+      removeEventListener("gottesdienstregie:show-quiz-join", showQuizJoin);
+  }, []);
+  useEffect(() => {
+    if (previewQuick?.type !== "amen") return;
+    const targets = previewQuick.targets,
+      timer = window.setTimeout(
+        () => {
+          setPreviewQuick(null);
+          if (usePresentation.getState().onAir)
+            void (window.desktop as any)?.sendQuick(targets, null);
+        },
+        Math.max(1, previewQuick.duration ?? 6) * 1000,
+      );
+    return () => window.clearTimeout(timer);
+  }, [previewQuick]);
+  useEffect(
+    () =>
+      (window.desktop as any)?.mediaWindow?.onSelected(
+        (payload: {
+          asset?: CloudMediaAsset;
+          assets?: CloudMediaAsset[];
+          purpose: "item" | "background" | "foreground" | "audio";
+          targetType?: "section" | "serviceItem";
+          targetId?: string;
+        }) => {
+          if (
+            payload.purpose === "audio" &&
+            payload.assets &&
+            payload.targetId
+          ) {
+            const tracks: BackgroundAudioTrack[] = payload.assets
+                .filter((asset) => asset.kind === "audio")
+                .map((asset) => ({
+                  assetId: asset.id,
+                  name: asset.name,
+                  url: asset.downloadUrl,
+                  artist: asset.tags?.[0],
+                  format: asset.extension,
+                  size: asset.size,
+                  status: "ready",
+                })),
+              current = usePresentation.getState();
+            if (payload.targetType === "section") {
+              const existing = current.sections.find(
+                (section) => section.id === payload.targetId,
+              )?.backgroundAudio;
+              current.updateSectionAudio(payload.targetId, {
+                ...(existing ?? defaultBackgroundAudio()),
+                tracks: [...(existing?.tracks ?? []), ...tracks],
+              });
+            } else {
+              const existing = current.items.find(
+                (item) => item.id === payload.targetId,
+              )?.backgroundAudio;
+              current.updateItemAudio(payload.targetId, {
+                ...(existing ?? defaultBackgroundAudio()),
+                tracks: [...(existing?.tracks ?? []), ...tracks],
+              });
+            }
+            return;
+          }
+          const asset = payload.asset;
+          if (!asset) return;
+          const url = asset.downloadUrl;
+          if (payload.purpose === "background") {
+            const current = usePresentation.getState();
+            if (asset.kind === "image")
+              current.updateSlide({
+                backgroundImage: url,
+                backgroundFit: "cover",
+                backgroundPositionX: "center",
+                backgroundPositionY: "center",
+              });
+            if (asset.kind === "video") {
+              current.addElement("video");
+              const next = usePresentation.getState(),
+                element = next.items
+                  .flatMap((item) => item.slides)
+                  .find((entry) => entry.id === next.selectedSlideId)
+                  ?.elements.at(-1);
+              if (element)
+                next.updateElement(element.id, {
+                  name: "Videohintergrund",
+                  x: 0,
+                  y: 0,
+                  width: 1920,
+                  height: 1080,
+                  properties: {
+                    ...element.properties,
+                    src: url,
+                    fit: "cover",
+                    autoplay: true,
+                    loop: true,
+                    volume: 0,
+                  },
+                });
+            }
+            return;
+          }
+          if (payload.purpose === "foreground") {
+            if (asset.kind !== "image") return;
+            const current = usePresentation.getState();
+            current.addElement("image");
+            const next = usePresentation.getState(),
+              element = next.items
+                .flatMap((item) => item.slides)
+                .find((entry) => entry.id === next.selectedSlideId)
+                ?.elements.at(-1);
+            if (element)
+              next.updateElement(element.id, {
+                name: "Vordergrundbild",
+                x: 1180,
+                y: 160,
+                width: 600,
+                height: 760,
+                properties: { ...element.properties, src: url, fit: "contain" },
+              });
+            return;
+          }
+          const current = usePresentation.getState();
+          current.addItem(
+            asset.kind === "video"
+              ? "video"
+              : asset.kind === "audio"
+                ? "audio"
+                : asset.kind === "pdf"
+                  ? "pdf"
+                  : "image",
+            {
+              title: asset.name,
+              section: "",
+              body: "",
+              metadata: {
+                assetId: asset.id,
+                url,
+                size: asset.size,
+                checksum: asset.checksum,
+                sourceType: "cloud",
+              },
+            },
+          );
+          if (asset.kind !== "pdf") {
+            usePresentation.getState().addElement(asset.kind);
+            const next = usePresentation.getState(),
+              element = next.items
+                .flatMap((item) => item.slides)
+                .find((entry) => entry.id === next.selectedSlideId)
+                ?.elements.at(-1);
+            if (element)
+              next.updateElement(element.id, {
+                x: 0,
+                y: 0,
+                width: 1920,
+                height: 1080,
+                properties: {
+                  ...element.properties,
+                  src: url,
+                  fit: asset.kind === "image" ? "cover" : "contain",
+                  autoplay: asset.kind !== "image",
+                  volume: 100,
+                },
+              });
+          }
+        },
+      ),
+    [],
+  );
+  useEffect(() => {
+    if (!state.onAir || !state.liveSlideId) return;
+    const item = state.items.find((entry) => entry.id === state.liveItemId),
+      liveSlide = item?.slides.find((slide) => slide.id === state.liveSlideId);
+    if (liveSlide)
+      void liveEngine.show({
+        ...liveSlide,
+        transitionOverride: resolveTransition(
+          liveSlide,
+          item,
+          "main",
+          state.transitionDefault,
+        ),
+      });
+  }, [state.liveSlideId, state.onAir]);
+  useEffect(() => {
+    const previous = audioSessionRef.current,
+      previewKey = `${state.previewItemId}:${state.previewSlideId}`,
+      wentOffAir = previous.onAir && !state.onAir;
+    if (state.onAir) {
+      const item = state.items.find((entry) => entry.id === state.liveItemId),
+        section = state.sections.find((entry) => entry.id === item?.sectionId);
+      void backgroundAudioEngine.sync(item, section);
+      const slide = item?.slides.find(
+          (entry) => entry.id === state.liveSlideId,
+        ),
+        audibleVideo = Boolean(
+          slide?.elements.some(
+            (element) =>
+              element.visible &&
+              element.type === "video" &&
+              Number(element.properties.volume ?? 100) > 0,
+          ),
+        );
+      void backgroundAudioEngine.setDucked(audibleVideo);
+      audioSessionRef.current = {
+        onAir: true,
+        mode: state.mode,
+        previewKey,
+        previewSuppressed: false,
+      };
+      return;
+    }
+    if (state.mode === "edit") {
+      void backgroundAudioEngine.stop();
+      audioSessionRef.current = {
+        onAir: false,
+        mode: "edit",
+        previewKey,
+        previewSuppressed: false,
+      };
+      return;
+    }
+    let previewSuppressed = previous.previewSuppressed;
+    if (
+      !wentOffAir &&
+      (previous.mode !== "preview" || previous.previewKey !== previewKey)
+    )
+      previewSuppressed = false;
+    if (wentOffAir) previewSuppressed = true;
+    audioSessionRef.current = {
+      onAir: false,
+      mode: "preview",
+      previewKey,
+      previewSuppressed,
+    };
+    if (previewSuppressed) {
+      void backgroundAudioEngine.stop();
+      return;
+    }
+    const item = state.items.find((entry) => entry.id === state.previewItemId),
+      section = state.sections.find((entry) => entry.id === item?.sectionId);
+    void backgroundAudioEngine.sync(item, section);
+    const slide = item?.slides.find(
+        (entry) => entry.id === state.previewSlideId,
+      ),
+      audibleVideo = Boolean(
+        slide?.elements.some(
+          (element) =>
+            element.visible &&
+            element.type === "video" &&
+            Number(element.properties.volume ?? 100) > 0,
+        ),
+      );
+    void backgroundAudioEngine.setDucked(audibleVideo);
+  }, [
+    state.onAir,
+    state.mode,
+    state.liveItemId,
+    state.liveSlideId,
+    state.previewItemId,
+    state.previewSlideId,
+    state.items,
+    state.sections,
+  ]);
+  useEffect(() => {
+    if (!state.onAir || state.liveTimerPausedSlideId === state.liveSlideId)
+      return;
+    const item = state.items.find((entry) => entry.id === state.liveItemId),
+      slide = item?.slides.find((entry) => entry.id === state.liveSlideId);
+    if (
+      !item?.timing.autoAdvance ||
+      item.type === "video" ||
+      item.type === "audio"
+    )
+      return;
+    const seconds = Math.max(
+        1,
+        slide?.timing?.durationSeconds ??
+          item.timing.slideDurationSeconds ??
+          item.plannedDuration ??
+          8,
+      ),
+      timer = setTimeout(
+        () => usePresentation.getState().nextLive(),
+        seconds * 1000,
+      );
+    return () => clearTimeout(timer);
+  }, [
+    state.onAir,
+    state.liveItemId,
+    state.liveSlideId,
+    state.liveTimerPausedSlideId,
+    state.items,
+  ]);
+  useEffect(
+    () =>
+      (window.desktop as any)?.onMediaEnded((behavior: string) => {
+        if (usePresentation.getState().onAir && behavior === "nextSlide")
+          usePresentation.getState().nextLive();
+      }),
+    [],
+  );
+  useEffect(() => {
+    if (!state.onAir || !state.serviceTime) return;
+    const tick = () => {
+      const current = usePresentation.getState(),
+        item = current.items.find((entry) => entry.id === current.liveItemId),
+        match = current.serviceTime.match(/^(\d{1,2}):(\d{2})$/);
+      if (!item || !match) return;
+      const now = new Date(),
+        serviceAt = new Date(
+          `${current.date}T${String(match[1]).padStart(2, "0")}:${match[2]}:00`,
+        ).getTime(),
+        warmupSeconds = current.items
+          .filter(
+            (entry) =>
+              entry.sectionId === "warmup" && entry.enabled && !entry.disabled,
+          )
+          .reduce((sum, entry) => sum + itemDurationSeconds(entry), 0),
+        first = (sectionId: string) =>
+          current.items
+            .filter(
+              (entry) =>
+                entry.sectionId === sectionId &&
+                entry.enabled &&
+                !entry.disabled,
+            )
+            .sort((a, b) => a.order - b.order)
+            .flatMap((entry) =>
+              entry.slides
+                .filter((slide) => slide.enabled)
+                .map((slide) => ({ itemId: entry.id, slideId: slide.id })),
+            )[0];
+      if (
+        item.sectionId === "pre" &&
+        now.getTime() >= serviceAt - warmupSeconds * 1000 &&
+        now.getTime() < serviceAt
+      ) {
+        const target = first("warmup");
+        if (target) current.goLive(target.itemId, target.slideId);
+      } else if (item.sectionId === "warmup" && now.getTime() >= serviceAt) {
+        const target = first("service");
+        if (target) current.goLive(target.itemId, target.slideId);
+      }
+    };
+    tick();
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, [state.onAir, state.serviceTime, state.date, state.items]);
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => {
+      if (event.defaultPrevented) return;
+      const target = event.target as HTMLElement | null,
+        isInput = target?.matches(
+          'input,textarea,select,[contenteditable="true"]',
+        );
+      if (matchesShortcut(event, shortcuts.save)) {
+        event.preventDefault();
+        void saveNow();
+        return;
+      }
+      if (matchesShortcut(event, shortcuts.undo)) {
+        event.preventDefault();
+        state.undo();
+        return;
+      }
+      if (matchesShortcut(event, shortcuts.redo)) {
+        event.preventDefault();
+        state.redo();
+        return;
+      }
+      if (matchesShortcut(event, shortcuts.toggleFullscreen)) {
+        event.preventDefault();
+        void (window.desktop as any)?.operator?.toggleFullscreen();
+        return;
+      }
+      if (isInput) return;
+      if (matchesShortcut(event, shortcuts.openHelp)) {
+        event.preventDefault();
+        setHelpOpen(true);
+        return;
+      }
+      if (matchesShortcut(event, shortcuts.openSettings)) {
+        event.preventDefault();
+        setSettingsOpen(true);
+        return;
+      }
+      if (matchesShortcut(event, shortcuts.openLibrary)) {
+        event.preventDefault();
+        setLibraryOpen(true);
+        return;
+      }
+      if (matchesShortcut(event, shortcuts.openMediaLibrary)) {
+        event.preventDefault();
+        openMedia("item", "manage");
+        return;
+      }
+      if (matchesShortcut(event, shortcuts.previewGrid)) {
+        event.preventDefault();
+        state.setMode("preview");
+        state.setPreviewLayout("grid");
+        return;
+      }
+      if (matchesShortcut(event, shortcuts.preflight)) {
+        event.preventDefault();
+        void air(true);
+        return;
+      }
+      if (matchesShortcut(event, shortcuts.toggleMode)) {
+        event.preventDefault();
+        state.setMode(state.mode === "edit" ? "preview" : "edit");
+        return;
+      }
+      if (matchesShortcut(event, shortcuts.toggleOnAir)) {
+        event.preventDefault();
+        void air();
+        return;
+      }
+      if (!state.onAir) return;
+      if (matchesShortcut(event, shortcuts.nextLive)) {
+        event.preventDefault();
+        state.nextLive();
+        return;
+      }
+      if (matchesShortcut(event, shortcuts.previousLive)) {
+        event.preventDefault();
+        state.previousLive();
+      }
+    };
+    addEventListener("keydown", key);
+    return () => removeEventListener("keydown", key);
+  }, [
+    shortcuts,
+    state.onAir,
+    state.mode,
+    state.mainDisplayId,
+    state.previewSlideId,
+    state.selectedSlideId,
+    saveNow,
+  ]);
+  async function leave() {
+    if (state.onAir) {
+      await backgroundAudioEngine.stop();
+      await window.desktop?.goOffAir();
+      state.setOnAir(false);
+    }
+    await logout();
+    onLogout();
+  }
+  useEffect(() => {
+    const api = (window.desktop as any)?.remote;
+    if (!api) return;
+    const dispose = api.onCommand((payload: { action: string }) => {
+      if (!usePresentation.getState().onAir) return;
+      if (payload.action === "next") usePresentation.getState().nextLive();
+      if (payload.action === "previous")
+        usePresentation.getState().previousLive();
+    });
+    return dispose;
+  }, []);
+  useEffect(() => {
+    void (window.desktop as any)?.remote?.updateLive({
+      title: state.title,
+      onAir: state.onAir,
+      serviceTime: state.serviceTime,
+      current:
+        state.items
+          .flatMap((item) => item.slides)
+          .find((slide) => slide.id === state.liveSlideId) ?? null,
+      next:
+        state.items
+          .flatMap((item) => item.slides)
+          .find((slide) => slide.id === state.previewSlideId) ?? null,
+    });
+  }, [
+    state.title,
+    state.onAir,
+    state.serviceTime,
+    state.liveSlideId,
+    state.previewSlideId,
+    state.items,
+  ]);
+  useEffect(() => {
+    if (
+      device?.type !== "shared" ||
+      !usePreferences.getState().sharedDeviceAutoLogout
+    )
+      return;
+    let last = Date.now();
+    const active = () => {
+      last = Date.now();
+    };
+    for (const name of ["pointerdown", "keydown", "wheel"] as const)
+      addEventListener(name, active, { passive: true });
+    const timer = setInterval(() => {
+      const current = usePresentation.getState(),
+        audio = backgroundAudioEngine.getState();
+      if (current.onAir || audio.active) {
+        last = Date.now();
+        return;
+      }
+      if (
+        Date.now() - last >=
+        usePreferences.getState().sharedDeviceTimeoutMinutes * 60000
+      )
+        void leave();
+    }, 15000);
+    return () => {
+      clearInterval(timer);
+      for (const name of ["pointerdown", "keydown", "wheel"] as const)
+        removeEventListener(name, active);
+    };
+  }, [device?.type]);
+  const exitApplication = async () => {
+    if (state.onAir) {
+      await backgroundAudioEngine.stop();
+      await liveEngine.stop();
+      state.setOnAir(false);
+    }
+    await saveNow();
+    await window.desktop?.presentation.markClean();
+    window.close();
+  };
+  const showTemporary = async (
+    title: string,
+    body: string,
+    background: string,
+    role?: string,
+  ) => {
+    const slide: Slide = {
+      id: `temporary-${Date.now()}`,
+      itemId: "temporary",
+      order: 0,
+      enabled: true,
+      title,
+      body,
+      background,
+      elements: [],
+      transition: "fade",
+      transitionDuration: 200,
+      notes: "",
+    };
+    if (role) await (window.desktop as any)?.sendOutputRole(role, slide);
+    else await liveEngine.show(slide);
+  };
+  const applyQuick = async (quick: QuickScreenConfig | null) => {
+    setPreviewQuick(quick);
+    if (state.onAir)
+      await (window.desktop as any)?.sendQuick(
+        quick?.targets ?? ["main"],
+        quick,
+      );
+  };
+  const menuItems: Record<string, MenuAction[]> = {
+    file: [
+      {
+        label: "Neue Präsentation",
+        icon: "note_add",
+        action: async () => {
+          const title = prompt("Name der Präsentation", "Sonntagsgottesdienst");
+          if (!title) return;
+          const doc = (await window.desktop?.presentation.create({
+            title,
+            date: new Date().toISOString().slice(0, 10),
+            template: blankPresentationDocument(title),
+          })) as PresentationDocument;
+          state.loadDocument(doc);
+        },
+      },
+      {
+        label: "Präsentation öffnen",
+        icon: "folder_open",
+        action: () => setLibraryOpen(true),
+      },
+      {
+        label: "Duplizieren",
+        icon: "content_copy",
+        disabled: !state.presentationId,
+        action: async () => {
+          const doc = (await window.desktop?.presentation.duplicate(
+            state.presentationId,
+          )) as PresentationDocument;
+          state.loadDocument(doc);
+        },
+      },
+      {
+        label: "Umbenennen",
+        icon: "edit",
+        disabled: !state.presentationId,
+        action: async () => {
+          const title = prompt("Neuer Name", state.title);
+          if (title) {
+            await window.desktop?.presentation.rename(
+              state.presentationId,
+              title,
+            );
+            state.updatePresentation({ title });
+          }
+        },
+      },
+      {
+        label: "Importieren",
+        icon: "upload_file",
+        separator: true,
+        action: async () => {
+          const doc =
+            (await window.desktop?.presentation.import()) as PresentationDocument | null;
+          if (doc) state.loadDocument(doc);
+        },
+      },
+      {
+        label: "Exportieren",
+        icon: "download",
+        disabled: !state.presentationId,
+        action: () =>
+          void window.desktop?.presentation.export(state.presentationId),
+      },
+      {
+        label: "Backup erstellen",
+        icon: "backup",
+        disabled: !state.presentationId,
+        action: async () => {
+          const target = await window.desktop?.presentation.backup(
+            state.presentationId,
+          );
+          alert(`Backup erstellt:\n${target}`);
+        },
+      },
+      {
+        label: "Präsentation schließen",
+        icon: "close",
+        separator: true,
+        disabled: !state.presentationId,
+        action: () => {
+          saveNow();
+          state.loadDocument(blankPresentationDocument("", state.date));
+          setLibraryOpen(true);
+        },
+      },
+      {
+        label: "Beenden",
+        icon: "power_settings_new",
+        action: () => window.close(),
+      },
+    ],
+    media: [
+      {
+        label: "Medienbibliothek",
+        icon: "photo_library",
+        action: () => openMedia("item", "manage"),
+      },
+      {
+        label: "Medien hochladen",
+        icon: "cloud_upload",
+        action: () => openMedia("item", "manage"),
+      },
+      {
+        label: "Zuletzt verwendet",
+        icon: "history",
+        action: () => openMedia("item", "manage"),
+      },
+      {
+        label: "Favoriten",
+        icon: "star",
+        action: () => openMedia("item", "manage"),
+      },
+      {
+        label: "Fehlende Medien anzeigen",
+        icon: "broken_image",
+        action: () => void air(true),
+      },
+      {
+        label: "Medienverwaltung",
+        icon: "settings",
+        action: () => openMedia("item", "manage"),
+      },
+    ],
+    edit: [
+      {
+        label: "Rückgängig",
+        icon: "undo",
+        shortcut: "Strg+Z",
+        disabled: !state.history.length,
+        action: state.undo,
+      },
+      {
+        label: "Wiederholen",
+        icon: "redo",
+        shortcut: "Strg+Y",
+        disabled: !state.future.length,
+        action: state.redo,
+      },
+      {
+        label: "Ausschneiden",
+        icon: "content_cut",
+        shortcut: "Strg+X",
+        separator: true,
+        disabled: !state.selectedItemId,
+        action: () =>
+          serviceItemCommands.cut(
+            state.selectedServiceItemIds.length
+              ? state.selectedServiceItemIds
+              : [state.selectedItemId],
+          ),
+      },
+      {
+        label: "Kopieren",
+        icon: "content_copy",
+        shortcut: "Strg+C",
+        disabled: !state.selectedItemId,
+        action: () =>
+          serviceItemCommands.copy(
+            state.selectedServiceItemIds.length
+              ? state.selectedServiceItemIds
+              : [state.selectedItemId],
+          ),
+      },
+      {
+        label: "Einfügen",
+        icon: "content_paste",
+        shortcut: "Strg+V",
+        disabled: !state.selectedItemId || !serviceItemCommands.canPaste(),
+        action: () => serviceItemCommands.paste(state.selectedItemId),
+      },
+      {
+        label: "Duplizieren",
+        icon: "file_copy",
+        shortcut: "Strg+D",
+        disabled: !state.selectedItemId,
+        action: () =>
+          serviceItemCommands.duplicate(
+            state.selectedServiceItemIds.length
+              ? state.selectedServiceItemIds
+              : [state.selectedItemId],
+          ),
+      },
+      {
+        label: "Folie hinzufügen",
+        icon: "add_to_photos",
+        separator: true,
+        disabled: !state.selectedItemId,
+        action: state.addSlide,
+      },
+      {
+        label: "Folie duplizieren",
+        icon: "control_point_duplicate",
+        disabled: !state.selectedSlideId,
+        action: state.duplicateSlide,
+      },
+      {
+        label: "Auswahl löschen",
+        icon: "delete",
+        disabled: !state.selectedItemId,
+        action: () =>
+          serviceItemCommands.remove(
+            state.selectedServiceItemIds.length
+              ? state.selectedServiceItemIds
+              : [state.selectedItemId],
+          ),
+      },
+    ],
+    add: [
+      {
+        label: "Inhalt",
+        icon: "title",
+        action: () =>
+          state.addItem("content", {
+            title: "Neuer Inhalt",
+            section: "",
+            body: "",
+          }),
+      },
+      {
+        label: "Ankündigung",
+        icon: "campaign",
+        action: () =>
+          state.addItem("announcement", {
+            title: "Neue Ankündigung",
+            section: "",
+            body: "",
+          }),
+      },
+      {
+        label: "Song",
+        icon: "music_note",
+        action: () =>
+          state.addItem("song", {
+            title: "Neuer Song",
+            section: "",
+            body: "Songtext",
+          }),
+      },
+      {
+        label: "Bibel",
+        icon: "menu_book",
+        action: () =>
+          state.addItem("bible", {
+            title: "Bibelstelle",
+            section: "",
+            body: "",
+          }),
+      },
+      {
+        label: "Bild",
+        icon: "image",
+        separator: true,
+        action: () => openMedia(),
+      },
+      { label: "Video", icon: "movie", action: () => void addVideo() },
+      { label: "Audio", icon: "audio_file", action: () => openMedia() },
+      {
+        label: "Slideshow",
+        icon: "slideshow",
+        action: () =>
+          state.addItem("slideshow", {
+            title: "Neue Slideshow",
+            section: "",
+            body: "",
+          }),
+      },
+      { label: "PDF", icon: "picture_as_pdf", action: () => openMedia() },
+      {
+        label: "Webseite",
+        icon: "language",
+        separator: true,
+        action: () => {
+          state.addItem("web", {
+            title: "Neue Webseite",
+            section: "",
+            body: "",
+            metadata: { url: "", zoom: 100, reloadOnLive: true },
+          });
+          usePresentation.getState().addElement("web");
+        },
+      },
+      {
+        label: "Timer",
+        icon: "timer",
+        action: () =>
+          state.addItem("timer", {
+            title: "Neuer Timer",
+            section: "",
+            body: "05:00",
+            metadata: { durationSeconds: 300 },
+          }),
+      },
+      {
+        label: "Countdown",
+        icon: "hourglass_bottom",
+        action: () =>
+          state.addItem("countdown", {
+            title: "Neuer Countdown",
+            section: "",
+            body: "05:00",
+            metadata: { durationSeconds: 300 },
+          }),
+      },
+      {
+        label: "Videoeingang",
+        icon: "videocam",
+        action: () => addConfiguredVideoInput("service", () => {}),
+      },
+      {
+        label: "Stage-Nachricht",
+        icon: "speaker_notes",
+        action: () =>
+          state.addItem("stageMessage", {
+            title: "Neue Stage-Nachricht",
+            section: "",
+            body: "Bitte Nachricht eingeben",
+          }),
+      },
+      {
+        label: "Schnellanzeige",
+        icon: "bolt",
+        action: () =>
+          state.addItem("quickScreen", {
+            title: "Neue Schnellanzeige",
+            section: "",
+            body: "",
+          }),
+      },
+      {
+        label: "LiveQuiz",
+        icon: "quiz",
+        action: () => setQuizCreateOpen(true),
+      },
+    ],
+    songs: [
+      {
+        label: "Songbibliothek öffnen",
+        icon: "library_music",
+        action: () => {
+          const first = state.items.find((item) => item.type === "song");
+          if (first) {
+            state.select(first.id);
+            state.setMode("edit");
+          } else
+            state.addItem("song", {
+              title: "Neuer Song",
+              section: "",
+              body: "Strophe 1\nSongtext",
+            });
+        },
+      },
+      {
+        label: "Neuen Song erstellen",
+        icon: "add",
+        action: () =>
+          state.addItem("song", {
+            title: "Neuer Song",
+            section: "",
+            body: "Strophe 1\nSongtext",
+          }),
+      },
+    ],
+    presentation: [
+      {
+        label: "Präsentationsinformationen",
+        icon: "info",
+        action: () => setPresentationInfoOpen(true),
+      },
+      {
+        label: "Änderungshistorie",
+        icon: "history",
+        action: () => void window.desktop?.historyWindow?.open(),
+      },
+      {
+        label: "Belohnungen & Fortschritt",
+        icon: "workspace_premium",
+        action: () => setRewardProfileOpen(true),
+      },
+      {
+        label: "Servicezeit",
+        icon: "schedule",
+        action: () => {
+          const value = prompt(
+            "Servicezeit (HH:MM)",
+            state.serviceTime || "10:30",
+          );
+          if (value !== null && /^([01]\d|2[0-3]):[0-5]\d$/.test(value))
+            state.updatePresentation({ serviceTime: value });
+        },
+      },
+      {
+        label: state.onAir ? "OFF AIR" : "ON AIR",
+        icon: "cast",
+        separator: true,
+        action: () => void air(),
+      },
+    ],
+    view: [
+      { label: "Bearbeiten", action: () => state.setMode("edit") },
+      { label: "Vorschau", action: () => state.setMode("preview") },
+      {
+        label: "Folienübersicht",
+        action: () => {
+          state.setMode("preview");
+          state.setPreviewLayout("grid");
+        },
+      },
+      {
+        label: "Workspace maximieren",
+        action: () =>
+          document.documentElement.toggleAttribute("data-workspace-maximized"),
+      },
+    ],
+    tools: [
+      {
+        label: "Timer",
+        icon: "timer",
+        action: () =>
+          state.addItem("timer", {
+            title: "Timer",
+            section: "",
+            body: "00:05:00",
+          }),
+      },
+      {
+        label: "Stage-Nachricht senden",
+        icon: "speaker_notes",
+        action: () => {
+          const message = prompt("Stage-Nachricht");
+          if (message) void showTemporary("STAGE", message, "#162d36", "stage");
+        },
+      },
+      {
+        label: "Quick Screen: Schwarz",
+        icon: "contrast",
+        action: () => void showTemporary("", "", "#000000"),
+      },
+      {
+        label: "Quick Screen: Logo",
+        icon: "church",
+        action: () =>
+          void showTemporary(
+            "GottesdienstRegie",
+            "Philippusgemeinde",
+            "#35626b",
+          ),
+      },
+      {
+        label: "Schnellanzeige beenden",
+        icon: "restore",
+        action: () => {
+          const live = state.items
+            .flatMap((item) => item.slides)
+            .find((slide) => slide.id === state.liveSlideId);
+          if (live) void liveEngine.show(live);
+        },
+      },
+      {
+        label: "Preflight",
+        icon: "fact_check",
+        separator: true,
+        action: () => void air(true),
+      },
+      {
+        label: "Ausgänge",
+        icon: "desktop_windows",
+        action: () => setSettingsOpen(true),
+      },
+      {
+        label: "Diagnose",
+        icon: "troubleshoot",
+        action: () =>
+          alert(
+            `GottesdienstRegie Diagnose\nVersion: 0.9.0\nPräsentation: ${state.title || "keine"}\nElemente: ${state.items.length}\nMAIN: ${state.mainDisplayId ? "zugeordnet" : "nicht zugeordnet"}\nGitHub-Medien: ${mediaStorage?.online ? "verbunden" : "offline"}\nKeine vertraulichen Anmeldeinformationen enthalten.`,
+          ),
+      },
+    ],
+    help: [
+      { label: t("helpTitle"), icon: "help", action: () => setHelpOpen(true) },
+      {
+        label: "Benutzeroberfläche kennenlernen",
+        icon: "explore",
+        action: () => setTourOpen(true),
+      },
+      {
+        label: t("helpShortcuts"),
+        icon: "keyboard",
+        action: () => {
+          localStorage.setItem("gottesdienstregie.help-topic", "Tastenkürzel");
+          setHelpOpen(true);
+        },
+      },
+      {
+        label: t("releaseNotes"),
+        icon: "new_releases",
+        separator: true,
+        action: () => setHelpOpen(true),
+      },
+      {
+        label: t("onlineReleaseNotes"),
+        icon: "open_in_new",
+        external: true,
+        action: () =>
+          void window.desktop?.openExternal(
+            `https://cmoere.github.io/GottesdienstRegie/release-notes/?lang=${usePreferences.getState().language}`,
+          ),
+      },
+      {
+        label: "Änderung vorschlagen …",
+        icon: "rate_review",
+        separator: true,
+        action: () => {
+          setFeedbackType("change");
+          setReportOpen(true);
+        },
+      },
+      {
+        label: "Feature wünschen …",
+        icon: "lightbulb",
+        action: () => {
+          setFeedbackType("feature");
+          setReportOpen(true);
+        },
+      },
+      {
+        label:
+          reportText[usePreferences.getState().language]?.[0] ??
+          reportText.en[0],
+        icon: "bug_report",
+        action: () => {
+          setFeedbackType("bug");
+          setReportOpen(true);
+        },
+      },
+      {
+        label: "GottesdienstRegie",
+        icon: "info",
+        separator: true,
+        action: () => setHelpOpen(true),
+      },
+    ],
+    profile: [
+      {
+        label: "Mein Profil",
+        icon: "account_circle",
+        action: () => setProfileOpen(true),
+      },
+      {
+        label: "Belohnungen & Fortschritt",
+        icon: "workspace_premium",
+        action: () => setRewardProfileOpen(true),
+      },
+      {
+        label: "Einstellungen",
+        icon: "settings",
+        separator: true,
+        action: () => setSettingsOpen(true),
+      },
+      {
+        label: "Abmelden",
+        icon: "logout",
+        separator: true,
+        action: () => setLogoutConfirm(true),
+      },
+    ],
+  };
+  useEffect(() => {
+    const escape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented) return;
+      if (tourOpen) {
+        localStorage.setItem("gottesdienstregie.interface-tour", "done");
+        setTourOpen(false);
+        return;
+      }
+      if (logoutConfirm) {
+        setLogoutConfirm(false);
+        return;
+      }
+      if (reportOpen) {
+        setReportOpen(false);
+        return;
+      }
+      if (presentationInfoOpen) {
+        setPresentationInfoOpen(false);
+        return;
+      }
+      if (profileOpen) {
+        setProfileOpen(false);
+        return;
+      }
+      if (rewardProfileOpen) {
+        setRewardProfileOpen(false);
+        return;
+      }
+      if (quizCreateOpen) {
+        setQuizCreateOpen(false);
+        return;
+      }
+      if (libraryOpen) {
+        setLibraryOpen(false);
+        return;
+      }
+      if (helpOpen) {
+        setHelpOpen(false);
+        return;
+      }
+      if (settingsOpen) {
+        setSettingsOpen(false);
+        return;
+      }
+      if (menuOpen) setMenuOpen(null);
+    };
+    addEventListener("keydown", escape);
+    return () => removeEventListener("keydown", escape);
+  }, [
+    tourOpen,
+    logoutConfirm,
+    reportOpen,
+    presentationInfoOpen,
+    profileOpen,
+    rewardProfileOpen,
+    quizCreateOpen,
+    libraryOpen,
+    helpOpen,
+    settingsOpen,
+    menuOpen,
+  ]);
+  async function air(
+    preflightOnly = false,
+    target?: { itemId: string; slideId: string },
+  ) {
+    if (!can("presentationLive") || !window.desktop) return;
+    if (state.onAir && !preflightOnly) {
+      await backgroundAudioEngine.stop();
+      await liveEngine.stop();
+      state.setOnAir(false);
+      setPreviewQuick(null);
+      setOutputState({});
+      return;
+    }
+    if (!state.eventLink?.eventKey) {
+      void playRoutedTone(
+        normalizedAudioRouting(usePreferences.getState().audioRouting),
+        "notification",
+        392,
+        0.16,
+      ).catch(() => {});
+      alert(
+        "Bitte verknüpfe diese Präsentation zuerst mit einer Veranstaltung. Erst danach kann ON AIR gestartet werden.",
+      );
+      return;
+    }
+    const itemId =
+        target?.itemId ?? state.previewItemId ?? state.selectedItemId,
+      slideId =
+        target?.slideId ?? state.previewSlideId ?? state.selectedSlideId,
+      slide = state.items
+        .find((item) => item.id === itemId)
+        ?.slides.find((entry) => entry.id === slideId);
+    const enabledSlides = state.items
+      .filter((item) => item.enabled && !item.disabled)
+      .flatMap((item) => item.slides.filter((entry) => entry.enabled));
+    const videoInputElements = enabledSlides.flatMap((entry) =>
+      entry.elements.filter(
+        (element) => element.visible && element.type === "videoInput",
+      ),
+    );
+    const warnings: string[] = [],
+      audioTracks = [
+        ...state.sections.flatMap(
+          (section) => section.backgroundAudio?.tracks ?? [],
+        ),
+        ...state.items.flatMap((item) => item.backgroundAudio?.tracks ?? []),
+      ];
+    const routing = normalizedAudioRouting(
+      usePreferences.getState().audioRouting,
+    );
+    let audioOutputs: MediaDeviceInfo[] = [];
+    try {
+      audioOutputs = (await navigator.mediaDevices.enumerateDevices()).filter(
+        (device) => device.kind === "audiooutput",
+      );
+    } catch {}
+    const mediaWithAudio = enabledSlides.some((entry) =>
+      entry.elements.some(
+        (element) =>
+          element.visible &&
+          (element.type === "video" ||
+            element.type === "audio" ||
+            (element.type === "videoInput" &&
+              element.properties.audioEnabled === true)),
+      ),
+    );
+    if (mediaWithAudio && !routeAvailable(routing, "video", audioOutputs))
+      warnings.push(
+        "Audioausgang für Medien / Videos ist nicht verfügbar. Fallback: Systemstandard.",
+      );
+    if (
+      audioTracks.length &&
+      !routeAvailable(routing, "background", audioOutputs)
+    )
+      warnings.push(
+        "Background-Audio-Ausgang ist nicht verfügbar. Fallback: Systemstandard.",
+      );
+    if (!routeAvailable(routing, "preview", audioOutputs))
+      warnings.push(
+        "Preview-Ausgang ist nicht verfügbar. Dies blockiert MAIN nicht; Fallback: Systemstandard.",
+      );
+    if (!routeAvailable(routing, "notification", audioOutputs))
+      warnings.push(
+        "Systembenachrichtigungsausgang ist nicht verfügbar. Dies blockiert MAIN nicht; Fallback: Systemstandard.",
+      );
+    const linkedEvent = state.eventLink?.eventKey
+      ? await getChurchEvent(state.eventLink.eventKey).catch(() => null)
+      : null;
+    if (isCancelled(linkedEvent))
+      warnings.push(
+        "Die verknüpfte Veranstaltung fällt aus. Die Verbindung bleibt bestehen; bitte prüfe den Live-Start.",
+      );
+    for (const track of audioTracks)
+      if (!track.url || track.status === "missing")
+        warnings.push(
+          `Background Audio „${track.name}“ ist nicht für die Live-Ausgabe verfügbar.`,
+        );
+    if (videoInputElements.length) {
+      try {
+        const available = await navigator.mediaDevices.enumerateDevices(),
+          ids = new Set(
+            available
+              .filter((device) => device.kind === "videoinput")
+              .map((device) => device.deviceId),
+          );
+        for (const element of videoInputElements)
+          if (!ids.has(String(element.properties.deviceId ?? "")))
+            warnings.push(
+              `Für den Videoeingang „${element.name}“ ist die konfigurierte Quelle derzeit nicht verfügbar.`,
+            );
+      } catch {
+        warnings.push(
+          "Die verfügbaren Videoeingänge konnten vor ON AIR nicht geprüft werden.",
+        );
+      }
+    }
+    const preflight = await liveEngine.preflight(state.displayRoles, {
+      hasPresentation: !!state.presentationId && state.items.length > 0,
+      activeSlideCount: enabledSlides.length,
+      media: enabledSlides
+        .flatMap((entry) =>
+          entry.elements
+            .filter(
+              (element) =>
+                element.visible &&
+                (element.type === "image" || element.type === "video"),
+            )
+            .map((element) =>
+              String(element.properties.src ?? element.properties.url ?? ""),
+            ),
+        )
+        .filter(Boolean),
+    });
+    preflight.warnings.push(...warnings);
+    if (preflight.ok)
+      awardReward({
+        userId: user.uid,
+        type: "preflightReady",
+        presentationId: state.presentationId,
+        scope: state.presentationId,
+        points: 5,
+        title: "BEREIT",
+        description: "Preflight ohne kritische Fehler abgeschlossen.",
+      });
+    if (!preflight.ok || preflightOnly) {
+      if (!preflight.ok || preflight.warnings.length)
+        void playRoutedTone(routing, "notification", 392, 0.16).catch(() => {});
+      alert(
+        `${preflight.ok ? "Preflight erfolgreich." : "Preflight nicht bestanden."}${preflight.errors.length ? `\n\n${preflight.errors.join("\n")}` : ""}${preflight.warnings.length ? `\n\nHinweise:\n${preflight.warnings.join("\n")}` : ""}`,
+      );
+      return;
+    }
+    if (preflight.warnings.length) {
+      void playRoutedTone(routing, "notification", 392, 0.16).catch(() => {});
+      if (
+        !confirm(
+          `Preflight mit ${preflight.warnings.length} Warnung${preflight.warnings.length === 1 ? "" : "en"}:\n\n${preflight.warnings.join("\n")}\n\nTrotzdem ON AIR gehen?`,
+        )
+      )
+        return;
+    }
+    if (!slide) return;
+    const item = state.items.find((entry) => entry.id === itemId);
+    await liveEngine.start(state.displayRoles, {
+      ...slide,
+      transitionOverride: resolveTransition(
+        slide,
+        item,
+        "main",
+        state.transitionDefault,
+      ),
+    });
+    state.goLive(itemId, slideId);
+    state.setOnAir(true);
+    awardReward({
+      userId: user.uid,
+      type: "firstOnAir",
+      presentationId: state.presentationId,
+      scope: "account",
+      points: 10,
+      title: "ON AIR",
+      description: "Erste Präsentation erfolgreich live verwendet.",
+    });
+  }
+  const menuOrder: { label?: string; key?: TranslationKey; id: string }[] = [
+    { label: "Bearbeiten", id: "edit" },
+    { label: "Element hinzufügen", id: "add" },
+    { key: "media", id: "media" },
+    { label: "Songbibliothek", id: "songs" },
+    { key: "presentation", id: "presentation" },
+    { key: "view", id: "view" },
+    { key: "tools", id: "tools" },
+  ];
+  const canUndo = state.history.length > 0,
+    canRedo = state.future.length > 0,
+    lastEdit = state.editHistory.at(-1);
+  return (
+    <div
+      className={`app production-app mode-${state.mode} ${state.onAir ? "is-on-air" : ""}`}
+      onClick={() => setMenuOpen(null)}
+    >
+      <div className="menubar">
+        <FileMenu
+          open={menuOpen === "file"}
+          label={t("file")}
+          currentId={state.presentationId}
+          currentTitle={state.title}
+          onAir={state.onAir}
+          onToggle={() =>
+            setMenuOpen((value) => (value === "file" ? null : "file"))
+          }
+          onClose={() => setMenuOpen(null)}
+          onOpened={(document) => state.loadDocument(document)}
+          onSave={saveNow}
+          onExit={exitApplication}
+          creatorName={
+            [user.firstname, user.lastName].filter(Boolean).join(" ") ||
+            user.email
+          }
+        />
+        {menuOrder.map((menu) => (
+          <div className="menu-root" key={menu.id}>
+            <button
+              onClick={(event) => {
+                event.stopPropagation();
+                setMenuOpen((value) => (value === menu.id ? null : menu.id));
+              }}
+            >
+              {menu.label ?? t(menu.key!)}
+            </button>
+            {menuOpen === menu.id && (
+              <MenuPopup
+                items={menuItems[menu.id]}
+                close={() => setMenuOpen(null)}
+              />
+            )}
+          </div>
+        ))}
+        <button onClick={() => setSettingsOpen(true)}>{t("settings")}</button>
+        <div className="menu-root">
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              setMenuOpen((value) => (value === "help" ? null : "help"));
+            }}
+          >
+            {t("help")}
+          </button>
+          {menuOpen === "help" && (
+            <MenuPopup items={menuItems.help} close={() => setMenuOpen(null)} />
+          )}
+        </div>
+        <button
+          className="menu-icon"
+          title={canUndo ? "Rückgängig" : "Rückgängig, nicht verfügbar"}
+          aria-label={canUndo ? "Rückgängig" : "Rückgängig, nicht verfügbar"}
+          disabled={!canUndo}
+          onClick={state.undo}
+        >
+          <Icon name="undo" />
+        </button>
+        <button
+          className="menu-icon"
+          title={canRedo ? "Wiederholen" : "Wiederholen, nicht verfügbar"}
+          aria-label={canRedo ? "Wiederholen" : "Wiederholen, nicht verfügbar"}
+          disabled={!canRedo}
+          onClick={state.redo}
+        >
+          <Icon name="redo" />
+        </button>
+        <span />
+        <button
+          className="menu-icon"
+          title="Preflight"
+          onClick={() => void air(true)}
+        >
+          <Icon name="fact_check" />
+        </button>
+        <button
+          className="menu-icon contextual-help"
+          title="Hilfe zu Preflight"
+          aria-label="Hilfe zu Preflight"
+          onClick={() =>
+            window.dispatchEvent(
+              new CustomEvent("gottesdienstregie:open-help", {
+                detail: "Preflight",
+              }),
+            )
+          }
+        >
+          ?
+        </button>
+        <div className={`sync-control ${syncProgress.state}`}>
+          <button
+            className="menu-icon"
+            title="Jetzt speichern und Synchronisationsstatus prüfen"
+            aria-label="Speichern und synchronisieren"
+            onClick={() => void saveNow()}
+          >
+            <Icon
+              name={
+                syncProgress.state === "syncing"
+                  ? "sync"
+                  : syncProgress.state === "error"
+                    ? "sync_problem"
+                    : "cloud_done"
+              }
+            />
+          </button>
+          {syncProgress.text && (
+            <small>
+              <span>{syncProgress.text}</span>
+              {syncProgress.state === "syncing" && (
+                <i style={{ width: `${syncProgress.step * 25}%` }} />
+              )}
+            </small>
+          )}
+        </div>
+        <button
+          title={`GottesdienstRegie: ${roleLabel(t, access.role)} · ${t("logout")}`}
+          onClick={() => setLogoutConfirm(true)}
+        >
+          <LogOut /> {user.firstname ?? user.email}
+        </button>
+      </div>
+      <div className="top-profile-root">
+        <button
+          className="top-profile-button"
+          title="Profil öffnen"
+          onClick={(event) => {
+            event.stopPropagation();
+            setMenuOpen((value) => (value === "profile" ? null : "profile"));
+          }}
+        >
+          <Icon name="account_circle" />
+          <span>{user.firstname ?? user.email}</span>
+          <Icon name="arrow_drop_down" />
+        </button>
+        {menuOpen === "profile" && (
+          <MenuPopup
+            items={menuItems.profile}
+            close={() => setMenuOpen(null)}
+          />
+        )}
+      </div>
+      <button
+        className="edit-history-quick"
+        title="Änderungshistorie in eigenem Fenster öffnen"
+        onClick={() => void window.desktop?.historyWindow?.open()}
+      >
+        <Icon name="history" />
+        <span>
+          <b>ÄNDERUNGEN</b>
+          <small>
+            {lastEdit
+              ? `${lastEdit.action} · ${new Date(lastEdit.timestamp).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}`
+              : "Noch keine protokollierten Änderungen"}
+          </small>
+        </span>
+        <em>{state.editHistory.length}</em>
+      </button>
+      <CloudHealth status={mediaStorage} />
+      <div className="toolbar">
+        <div>
+          <b>{state.title}</b>
+          <span> · {new Date().toLocaleDateString(locale)}</span>
+        </div>
+        <div
+          className={`mode-switch ${state.mode}`}
+          aria-label={`${t("edit")} / ${t("preview")}`}
+        >
+          <button
+            className={state.mode === "edit" ? "active" : ""}
+            onClick={() => state.setMode("edit")}
+          >
+            {t("edit").toUpperCase()}
+          </button>
+          <button
+            className="mode-toggle"
+            type="button"
+            role="switch"
+            aria-checked={state.mode === "preview"}
+            aria-label={state.mode === "edit" ? t("preview") : t("edit")}
+            onClick={() =>
+              state.setMode(state.mode === "edit" ? "preview" : "edit")
+            }
+          >
+            <i />
+          </button>
+          <button
+            className={state.mode === "preview" ? "active" : ""}
+            onClick={() => state.setMode("preview")}
+          >
+            {t("preview").toUpperCase()}
+          </button>
+        </div>
+        <button
+          className={`onair ${state.onAir ? "live" : ""}`}
+          disabled={
+            !can("presentationLive") ||
+            !state.mainDisplayId ||
+            !window.desktop ||
+            (!state.onAir && !state.eventLink?.eventKey)
+          }
+          title={
+            !can("presentationLive")
+              ? t("noLivePermission")
+              : !state.mainDisplayId
+                ? t("assignMain")
+                : !state.onAir && !state.eventLink?.eventKey
+                  ? "Bitte zuerst eine Veranstaltung verknüpfen"
+                  : ""
+          }
+          onClick={() => void air()}
+        >
+          <span /> {state.onAir ? "OFF AIR" : "ON AIR"}
+        </button>
+      </div>
+      {state.mode === "edit" && (
+        <>
+          <OutputTabs />
+          <FormatToolbar openBackgroundMedia={() => openMedia("background")} />
+        </>
+      )}
+      <div className="main">
+        <OrderOfService
+          canEdit={canEdit}
+          onTake={(itemId, slideId) => {
+            if (state.onAir) state.goLive(itemId, slideId);
+            else void air(false, { itemId, slideId });
+          }}
+        />
+        <div
+          className={`workspace-quick-host ${previewQuick?.type === "noText" ? "quick-no-text" : ""}`}
+        >
+          <ProductionWorkspace
+            canEdit={canEdit}
+            quickScreens={quickScreens}
+            activeQuick={previewQuick}
+            onQuick={(quick) => void applyQuick(quick)}
+          />
+          {state.mode === "edit" && <QuickOverlay quick={previewQuick} />}
+        </div>
+      </div>
+      <BackgroundAudioController />
+      <ProductionTimeline />
+      <div className="status">
+        <span>
+          {state.saveState === "error" ? t("authUnknown") : t("ready")}
+        </span>
+        <span>
+          {state.saveState === "saving"
+            ? "SPEICHERT …"
+            : state.saveState === "error"
+              ? "SPEICHERFEHLER"
+              : "GESPEICHERT ✓"}
+        </span>
+        <span>{mediaStorage?.online ? "CLOUD ✓" : "CLOUD OFFLINE"}</span>
+        <span>
+          {t("main")}{" "}
+          {state.mainDisplayId &&
+          !displays.some((display) => display.id === state.mainDisplayId)
+            ? "FEHLT"
+            : state.onAir
+              ? outputState.main === "missing"
+                ? "FEHLT"
+                : "ON AIR"
+              : state.mainDisplayId
+                ? t("ready")
+                : "—"}
+        </span>
+        <span>
+          STAGE{" "}
+          {Object.entries(state.displayRoles).some(
+            ([, role]) => role === "stage",
+          )
+            ? outputState.stage === "missing"
+              ? "FEHLT"
+              : t("ready")
+            : "—"}
+        </span>
+        <i />
+        <span>{roleLabel(t, access.role)}</span>
+        <span>
+          {t("item")}{" "}
+          {Math.max(
+            1,
+            state.items.findIndex((item) => item.id === state.selectedItemId) +
+              1,
+          )}
+          /{state.items.length}
+        </span>
+        <span>
+          {t("slide")} {slideIndex}/{slideCount}
+        </span>
+        <Clock locale={locale} />
+      </div>
+      <RewardToastHost onAir={state.onAir} />
+      {profileOpen && (
+        <UserProfileDialog
+          user={user}
+          close={() => setProfileOpen(false)}
+          opened={(document) => state.loadDocument(document)}
+        />
+      )}{" "}
+      {rewardProfileOpen && (
+        <RewardProfile
+          userId={user.uid}
+          displayName={displayName}
+          close={() => setRewardProfileOpen(false)}
+        />
+      )}{" "}
+      {presentationInfoOpen && (
+        <PresentationInfoDialog close={() => setPresentationInfoOpen(false)} />
+      )}{" "}
+      {settingsOpen && (
+        <SettingsModal
+          canConfigure={canConfigure}
+          close={() => setSettingsOpen(false)}
+        />
+      )}{" "}
+      {helpOpen && <HelpModal close={() => setHelpOpen(false)} />}{" "}
+      {tourOpen && <InterfaceTour close={() => setTourOpen(false)} />}{" "}
+      {reportOpen && (
+        <ReportIssueDialog
+          initialType={feedbackType}
+          close={() => setReportOpen(false)}
+        />
+      )}{" "}
+      {libraryOpen && (
+        <PresentationLibrary
+          close={() => setLibraryOpen(false)}
+          opened={(document) => state.loadDocument(document)}
+        />
+      )}{" "}
+      {quizCreateOpen && (
+        <QuizCreateDialog
+          cancel={() => setQuizCreateOpen(false)}
+          create={(value) => {
+            addLiveQuiz(value);
+            setQuizCreateOpen(false);
+          }}
+        />
+      )}{" "}
+      {logoutConfirm && (
+        <LogoutDialog
+          cancel={() => setLogoutConfirm(false)}
+          confirm={() => void leave()}
+        />
+      )}
+    </div>
+  );
+}
+
+function Clock({ locale }: { locale: string }) {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  return (
+    <span>
+      {now.toLocaleTimeString(locale, {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      })}
+    </span>
+  );
+}
+function Output() {
+  const [slide, setSlide] = useState<Slide | null>(null),
+    [quick, setQuick] = useState<QuickScreenConfig | null>(null),
+    role = useMemo(
+      () =>
+        (new URLSearchParams(location.hash.split("?")[1] ?? "").get("role") ??
+          "main") as DisplayRole,
+      [],
+    );
+  useEffect(() => {
+    const disposeSlide = window.desktop?.onLiveSlide((payload) => {
+        setQuick(null);
+        setSlide(payload as Slide);
+      }),
+      disposeQuick = (window.desktop as any)?.onQuick?.(
+        (payload: QuickScreenConfig | null) => setQuick(payload),
+      );
+    return () => {
+      disposeSlide?.();
+      disposeQuick?.();
+    };
+  }, []);
+  return (
+    <div
+      className={`output ${quick?.type === "noText" ? "quick-no-text" : ""}`}
+    >
+      {slide && (
+        <TransitionStage
+          slide={slide}
+          transition={
+            slide.transitionOverride ??
+            resolveTransition(slide, undefined, role)
+          }
+          role={role}
+        />
+      )}
+      <QuickOverlay quick={quick} />
+    </div>
+  );
+}
+
+export function App() {
+  const [session, setSession] = useState<AuthSession | null | undefined>(
+    undefined,
+  );
+  const [device, setDevice] = useRegisteredDevice();
+  const [startupProgress, setStartupProgress] = useState(0);
+  const language = usePreferences((state) => state.language),
+    theme = usePreferences((state) => state.theme),
+    blackWhite = usePreferences((state) => state.blackWhite),
+    reduceMotion = usePreferences((state) => state.reduceMotion),
+    compactMode = usePreferences((state) => state.compactMode),
+    highContrast = usePreferences((state) => state.highContrast),
+    largeText = usePreferences((state) => state.largeText),
+    strongFocus = usePreferences((state) => state.strongFocus),
+    dyslexiaFriendly = usePreferences((state) => state.dyslexiaFriendly);
+  const { t } = useI18n();
+  const output = useMemo(() => location.hash.startsWith("#output"), []),
+    mediaBrowser = useMemo(() => location.hash.startsWith("#media"), []),
+    historyWindow = useMemo(() => location.hash.startsWith("#history"), []);
+  useEffect(() => {
+    void installCeraPro().catch(() => false);
+  }, []);
+  useEffect(() => {
+    const syncPreferences = (event: StorageEvent) => {
+      if (event.key === "gottesdienstregie.preferences")
+        void usePreferences.persist.rehydrate();
+    };
+    addEventListener("storage", syncPreferences);
+    return () => removeEventListener("storage", syncPreferences);
+  }, []);
+  useEffect(() => {
+    document.documentElement.lang = language === "gsw" ? "de-CH" : language;
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.dataset.bw = String(blackWhite);
+    document.documentElement.dataset.reduceMotion = String(
+      !output && reduceMotion,
+    );
+    document.documentElement.dataset.compact = String(compactMode);
+    document.documentElement.dataset.contrast = String(highContrast);
+    document.documentElement.dataset.largeText = String(largeText);
+    document.documentElement.dataset.strongFocus = String(strongFocus);
+    document.documentElement.dataset.dyslexia = String(dyslexiaFriendly);
+  }, [
+    language,
+    theme,
+    blackWhite,
+    reduceMotion,
+    compactMode,
+    highContrast,
+    largeText,
+    strongFocus,
+    dyslexiaFriendly,
+    output,
+  ]);
+  useEffect(() => {
+    if (output || historyWindow) return;
+    if (
+      import.meta.env.DEV &&
+      new URLSearchParams(location.search).has("demo")
+    ) {
+      const presentation = usePresentation.getState();
+      if (!presentation.items.length) {
+        presentation.newDocument("Sonntagsgottesdienst");
+        presentation.addItem("content", {
+          title: "Willkommen",
+          section: "",
+          sectionId: "pre",
+          body: "Herzlich willkommen\nzum Gottesdienst",
+        });
+        presentation.addItem("video", {
+          title: "Intro Video",
+          section: "",
+          sectionId: "warmup",
+          body: "",
+        });
+        presentation.addItem("song", {
+          title: "Du großer Gott",
+          section: "",
+          sectionId: "service",
+          body: "Du großer Gott, wenn ich die Welt betrachte",
+        });
+        presentation.addSlide();
+        presentation.updateSlide({
+          title: "Refrain 1",
+          body: "Dann jauchzt mein Herz\ndir großer Herrscher, zu dir",
+        });
+        presentation.addSlide();
+        presentation.updateSlide({
+          title: "Strophe 2",
+          body: "Blick ich empor zu jenen lichten Welten",
+        });
+        presentation.updatePresentation({ serviceTime: "10:30" });
+      }
+      setSession({
+        user: {
+          uid: "demo",
+          email: "demo@localhost",
+          firstname: "Corbin",
+          role: "admin",
+          appAccess: {
+            gottesdienstRegie: {
+              enabled: true,
+              authMode: "sso",
+              role: "admin",
+              permissions: {
+                presentationView: true,
+                presentationCreate: true,
+                presentationEdit: true,
+                presentationLive: true,
+                outputSettings: true,
+                appSettings: true,
+              },
+            },
+          },
+        },
+        permissions: [
+          "presentationView",
+          "presentationCreate",
+          "presentationEdit",
+          "presentationLive",
+          "outputSettings",
+          "appSettings",
+        ],
+        expiresAt: Date.now() + 3600000,
+      });
+      return;
+    }
+    let active = true;
+    const started = Date.now(),
+      timer = setInterval(() => {
+        const elapsed = Date.now() - started;
+        setStartupProgress(Math.min(94, Math.round((elapsed / 10000) * 94)));
+      }, 100);
+    void (async () => {
+      const reopen = usePreferences.getState().reopenLastPresentation,
+        [restored, loaded, recoveryCopy] = await Promise.all([
+          restore().catch(() => null),
+          reopen
+            ? window.desktop?.presentation.load().catch(() => null)
+            : Promise.resolve(null),
+          window.desktop?.presentation.recovery().catch(() => null),
+          window.desktop?.displays().catch(() => []),
+          window.desktop?.updates.currentVersion().catch(() => ""),
+          window.desktop?.auth.connection().catch(() => false),
+        ]);
+      if (loaded) usePresentation.getState().loadDocument(loaded);
+      if (
+        restored &&
+        recoveryCopy &&
+        confirm(
+          `GottesdienstRegie wurde zuvor nicht ordnungsgemäß beendet.\n\nWiederherstellung für „${recoveryCopy.summary.title}“ öffnen?`,
+        )
+      )
+        usePresentation.getState().loadDocument(recoveryCopy.document);
+      const remaining = Math.max(0, 10000 - (Date.now() - started));
+      await new Promise((resolve) => setTimeout(resolve, remaining));
+      if (active) {
+        clearInterval(timer);
+        setStartupProgress(100);
+        setSession(restored);
+      }
+    })();
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
+  }, [output, historyWindow]);
+  const signedIn = !!session;
+  useEffect(() => {
+    if (!signedIn) return;
+    let active = true;
+    const check = async () => {
+      const refreshed = await restore(true);
+      if (!active) return;
+      if (!refreshed) {
+        setSession(null);
+        return;
+      }
+      setSession((current) => {
+        if (!current) return refreshed;
+        const currentAccess = current.user.appAccess.gottesdienstRegie,
+          nextAccess = refreshed.user.appAccess.gottesdienstRegie;
+        const changed =
+          current.expiresAt !== refreshed.expiresAt ||
+          current.user.uid !== refreshed.user.uid ||
+          currentAccess.enabled !== nextAccess.enabled ||
+          currentAccess.role !== nextAccess.role ||
+          JSON.stringify(current.permissions) !==
+            JSON.stringify(refreshed.permissions);
+        return changed ? refreshed : current;
+      });
+    };
+    const timer = setInterval(() => void check(), 120_000);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
+  }, [signedIn]);
+  if (output) return <Output />;
+  if (mediaBrowser) return <MediaBrowser />;
+  if (historyWindow) return <ChangeHistoryWindow />;
+  if (session === undefined || device === undefined)
+    return (
+      <div className="boot production-boot">
+        <div className="boot-panel">
+          <button
+            className="boot-close"
+            title="Schließen"
+            onClick={() => window.close()}
+          >
+            <Icon name="close" />
+          </button>
+          <img src={logoWhite} alt="GottesdienstRegie" />
+          <div
+            className="boot-spinner"
+            role="status"
+            aria-live="polite"
+            aria-label={t("accountLoading")}
+          >
+            <i />
+          </div>
+          <p>
+            {startupProgress < 20
+              ? "Konto wird geprüft …"
+              : startupProgress < 42
+                ? "Cloud wird verbunden …"
+                : startupProgress < 66
+                  ? "Präsentationsdaten werden geladen …"
+                  : startupProgress < 86
+                    ? "Arbeitsbereich wird vorbereitet …"
+                    : "GottesdienstRegie wird gestartet …"}
+          </p>
+          <strong>GottesdienstRegie</strong>
+        </div>
+      </div>
+    );
+  if (!device) return <DeviceSetup complete={setDevice} />;
+  return session ? (
+    <AppShell
+      session={session}
+      device={device}
+      onLogout={() => setSession(null)}
+    />
+  ) : (
+    <Login device={device} authenticated={setSession} />
+  );
 }
