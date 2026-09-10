@@ -5,10 +5,34 @@
     {
       "line": "0.36",
       "builds": [{
+        "version": "0.36.3",
+        "releaseDate": "2026-09-10",
+        "releaseTime": "19:26",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.36.3.png",
+          "alt": {"de":"GottesdienstRegie mit erweitertem Medien- und Hilfebereich","en":"GottesdienstRegie with expanded media and help areas"},
+          "caption": {"de":"Feedback, Szenenkategorien sowie Bild- und Videohintergründe sind direkt in der Anwendung erreichbar.","en":"Feedback, scene categories, and image and video backgrounds are available directly in the application."}
+        },
+        "sections": {
+          "new": [
+            {"label":{"de":"Feedback aus der Hilfe","en":"Feedback from Help"},"text":{"de":"Fehler, Änderungen und Featurewünsche werden in einem klaren eigenen Formular erfasst.","en":"Bugs, changes, and feature requests are captured in a clear dedicated form."}},
+            {"label":{"de":"KI-Videohintergründe","en":"AI video backgrounds"},"text":{"de":"Animierte sechssekündige WebM-Hintergründe lassen sich erzeugen, ansehen und als Hintergrund auswählen.","en":"Animated six-second WebM backgrounds can be created, previewed, and selected as backgrounds."}},
+            {"label":{"de":"Natur und Städte","en":"Nature and cities"},"text":{"de":"Acht Szenenkategorien umfassen Natur, Wald, Berge, Stadt, Meer, Himmel, Kirchenraum und abstrakte Motive.","en":"Eight scene categories cover nature, forest, mountains, city, ocean, sky, church interiors, and abstract artwork."}}
+          ],
+          "improved": [
+            {"label":{"de":"Kompatible Videoerzeugung","en":"Compatible video generation"},"text":{"de":"GottesdienstRegie wählt automatisch einen unterstützten WebM-Codec und zeigt erzeugte Videos direkt in der Medienvorschau.","en":"GottesdienstRegie automatically selects a supported WebM codec and previews generated videos directly in the media browser."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Webeditor-Layout","en":"Web editor layout"},"text":{"de":"Checkboxen und ihre Texte bleiben kompakt zusammen und werden nicht mehr über die gesamte Breite verteilt.","en":"Checkboxes and their labels stay together instead of stretching across the entire width."}}
+          ],
+          "known": []
+        }
+      },{
         "version": "0.36.2",
         "releaseDate": "2026-09-10",
         "releaseTime": "12:15",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.36.2.png",
           "alt": {"de":"Aktualisierte GottesdienstRegie-Arbeitsoberfläche","en":"Updated GottesdienstRegie workspace"},

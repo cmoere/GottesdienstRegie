@@ -1,3 +1,24 @@
+# GottesdienstRegie 0.36.3
+
+Veröffentlicht am 10. September 2026 um 19:26 Uhr.
+
+## Neu
+
+- **Feedback direkt aus der Hilfe:** Fehler, konkrete Änderungswünsche und neue Featurewünsche lassen sich getrennt erfassen und über die eigene GottesdienstRegie-Meldeseite einreichen.
+- **KI-Videohintergründe:** Neben Bildern entstehen nun sechs Sekunden lange animierte WebM-Hintergründe mit ruhiger Bewegung und echter Vorschau.
+- **Szenenkategorien:** Natur, Wald, Berge, Stadt, Meer, Himmel, Kirchenraum und abstrakte Motive stehen gezielt zur Auswahl.
+
+## Verbessert
+
+- Bild- und Videohintergründe sind gemeinsam in der Hintergrundauswahl verfügbar.
+- Die Videoerzeugung wählt automatisch einen unterstützten VP9-, VP8- oder WebM-Modus.
+
+## Behoben
+
+- Checkboxen und Beschriftungen im Webeditor werden nicht mehr über die gesamte Seitenbreite auseinandergezogen.
+
+---
+
 # GottesdienstRegie 0.36.2
 
 Veröffentlicht am 10. September 2026 um 12:15 Uhr.
