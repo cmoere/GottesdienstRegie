@@ -1,3 +1,20 @@
+# GottesdienstRegie 0.36.6
+
+Veröffentlicht am 11. September 2026 um 00:12 Uhr.
+
+## Verbessert
+
+- **Unsplash-Suche:** Suchbegriffe werden direkt an Unsplash übergeben; die gelieferten Bilder bleiben vollständig sichtbar und werden nicht noch einmal lokal nach ihrem Beschreibungstext gefiltert.
+- **Stabiles Nachladen:** „Mehr laden“ ergänzt die nächste Ergebnisseite, ohne das vorhandene Medienraster auszublenden, neu aufzubauen oder umzusortieren.
+- Beim seitenweisen Nachladen bleibt die aktuelle Auswahl erhalten und der Button zeigt den laufenden Vorgang deutlich an.
+
+## Behoben
+
+- Suchanfragen wie „natur“ melden nicht mehr fälschlich „Keine passenden Medien gefunden“, obwohl Unsplash Treffer geliefert hat.
+- Bereits geladene Bilder verschwinden beim Abrufen der nächsten Seite nicht mehr kurzzeitig.
+
+---
+
 # GottesdienstRegie 0.36.5
 
 Veröffentlicht am 10. September 2026 um 23:06 Uhr.

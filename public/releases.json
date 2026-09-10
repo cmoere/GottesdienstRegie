@@ -5,10 +5,31 @@
     {
       "line": "0.36",
       "builds": [{
+        "version": "0.36.6",
+        "releaseDate": "2026-09-11",
+        "releaseTime": "00:12",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.36.6.png",
+          "alt": {"de":"Unsplash-Suche in der Medienbibliothek","en":"Unsplash search in the media library"},
+          "caption": {"de":"Unsplash-Suchergebnisse bleiben beim seitenweisen Nachladen sichtbar und werden stabil ergänzt.","en":"Unsplash search results remain visible and are appended incrementally while loading more pages."}
+        },
+        "sections": {
+          "new": [],
+          "improved": [
+            {"label":{"de":"Echte Unsplash-Suche","en":"Real Unsplash search"},"text":{"de":"Der eingegebene Suchbegriff wird direkt von Unsplash verarbeitet; die zurückgegebenen Treffer werden vollständig angezeigt.","en":"The entered search term is processed directly by Unsplash and all returned results remain visible."}},
+            {"label":{"de":"Inkrementelles Nachladen","en":"Incremental loading"},"text":{"de":"Weitere Ergebnisse werden an das bestehende Raster angehängt, ohne vorhandene Karten auszublenden oder neu zu sortieren.","en":"Additional results are appended to the existing grid without hiding or reordering existing cards."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Keine falschen Leerergebnisse","en":"No false empty results"},"text":{"de":"Unsplash-Treffer verschwinden nicht mehr durch einen nachgelagerten lokalen Textfilter.","en":"Unsplash results no longer disappear because of a secondary local text filter."}}
+          ],
+          "known": []
+        }
+      },{
         "version": "0.36.5",
         "releaseDate": "2026-09-10",
         "releaseTime": "23:06",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.36.5.png",
           "alt": {"de":"KI-Motive als integrierter Bereich der Medienbibliothek","en":"AI artwork as an integrated media-library workspace"},
