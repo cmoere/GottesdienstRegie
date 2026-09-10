@@ -1,3 +1,25 @@
+# GottesdienstRegie 0.36.1
+
+Veröffentlicht am 10. September 2026 um 11:21 Uhr.
+
+## Neu
+
+- **Profil oben rechts:** Das neue Profilmenü öffnet Profil, XP, Level und Abzeichen und bietet direkten Zugriff auf Einstellungen und Abmelden.
+- **Vollständiges Bearbeiten-Menü:** Undo, Redo, Ausschneiden, Kopieren, Einfügen, Duplizieren sowie Folienbefehle verwenden die bestehenden zentralen Editoraktionen.
+
+## Verbessert
+
+- Mehr als 200 Schriftfamilien, neun Schriftgewichte sowie zusätzliche Textvorlagen stehen im Folieneditor bereit.
+- „Element hinzufügen“ zeigt alle 16 unterstützten ServiceItem-Typen übersichtlich und direkt erreichbar an.
+- Der rechte Kopfbereich besitzt klare Profil-, Cloud- und Bedienaktionen ohne überlappende Symbole.
+
+## Behoben
+
+- Der Organisationsname ist unveränderlich auf „Philippus Gemeinde Bielefeld e. V.“ festgelegt – auch für bereits registrierte Geräte.
+- Slideshow und bisher unvollständig erreichbare Elemente lassen sich über das Plus-Menü tatsächlich anlegen.
+
+---
+
 # GottesdienstRegie 0.36.0
 
 Veröffentlicht am 10. September 2026 um 03:35 Uhr.

@@ -5,10 +5,35 @@
     {
       "line": "0.36",
       "builds": [{
+        "version": "0.36.1",
+        "releaseDate": "2026-09-10",
+        "releaseTime": "11:21",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.36.1.png",
+          "alt": {"de":"Geräteregistrierung mit fest vorgegebener Organisation","en":"Device registration with a fixed organization"},
+          "caption": {"de":"Die Organisation ist unveränderlich festgelegt; nur Gerätename und Verwendungsart werden eingerichtet.","en":"The organization is fixed; only the device name and usage type are configured."}
+        },
+        "sections": {
+          "new": [
+            {"label":{"de":"Profilmenü","en":"Profile menu"},"text":{"de":"Profil, Belohnungen, Einstellungen und Abmelden sind oben rechts in einem klaren persönlichen Menü gebündelt.","en":"Profile, rewards, settings and sign-out are grouped in a clear personal menu at the top right."}},
+            {"label":{"de":"Bearbeiten-Menü","en":"Edit menu"},"text":{"de":"Zentrale Editor-, Zwischenablage- und Folienbefehle sind jetzt über ein vollständiges Bearbeiten-Menü erreichbar.","en":"Central editor, clipboard and slide commands are now available from a complete Edit menu."}}
+          ],
+          "improved": [
+            {"label":{"de":"Schriften und Stile","en":"Fonts and styles"},"text":{"de":"Mehr als 200 Schriftfamilien, neun Gewichte und zusätzliche Textvorlagen erweitern die Gestaltung.","en":"More than 200 font families, nine weights and additional text presets expand typography options."}},
+            {"label":{"de":"Alle Elementtypen","en":"All item types"},"text":{"de":"Alle 16 unterstützten ServiceItem-Typen sind über Element hinzufügen und das Plus-Menü erreichbar.","en":"All 16 supported service item types are accessible through Add Item and the plus menu."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Feste Organisation","en":"Fixed organization"},"text":{"de":"Der Organisationsname kann nicht mehr verändert oder durch einen alten Gerätewert überschrieben werden.","en":"The organization name can no longer be edited or replaced by an old device value."}},
+            {"label":{"de":"Elemente wirklich hinzufügen","en":"Actually add items"},"text":{"de":"Slideshow und weitere zuvor unvollständige Pfade erzeugen nun das gewählte Element zuverlässig.","en":"Slideshow and other previously incomplete paths now reliably create the selected item."}}
+          ],
+          "known": []
+        }
+      },{
         "version": "0.36.0",
         "releaseDate": "2026-09-10",
         "releaseTime": "03:35",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.36.0.png",
           "alt": {"de":"Änderungshistorie mit Benutzer- und Gerätebezug","en":"Change history with user and device context"},
