@@ -24,6 +24,7 @@ import './preview-workspace.css';
 import './refinements.css';
 import './help-v032.css';
 import './v033.css';
+import './history-rewards.css';
 
 class AppErrorBoundary extends React.Component<React.PropsWithChildren,{error:string|null}>{
   state:{error:string|null}={error:null};

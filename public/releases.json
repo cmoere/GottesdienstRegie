@@ -3,12 +3,42 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.35",
+      "builds": [{
+        "version": "0.35.0",
+        "releaseDate": "2026-09-10",
+        "releaseTime": "02:25",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.35.0.png",
+          "alt": {"de":"Neues Fenster für die dauerhafte Änderungshistorie","en":"New persistent change history window"},
+          "caption": {"de":"Strukturierte Revisionen, Benutzer, Syncstatus und Wiederherstellungspunkte in einem eigenen Systemfenster.","en":"Structured revisions, users, sync states and restore points in a dedicated system window."}
+        },
+        "sections": {
+          "new": [
+            {"label":{"de":"Dauerhafte Änderungshistorie","en":"Persistent change history"},"text":{"de":"Ein eigenes Systemfenster zeigt Revision, Benutzer, Bereich, Quelle, Synchronisierungsstatus und Vorher/Nachher. Sichere Wiederherstellungen erzeugen eine neue Revision.","en":"A dedicated system window shows revision, user, category, source, sync state and before/after values. Safe restores create a new revision."}},
+            {"label":{"de":"Belohnungen und Abzeichen","en":"Rewards and badges"},"text":{"de":"Das optionale XP-System bietet Level, Abzeichen, Fortschritt und Anti-Farming, ohne Funktionen oder Berechtigungen zu beeinflussen.","en":"The optional XP system provides levels, badges, progress and anti-farming without affecting features or permissions."}},
+            {"label":{"de":"Lokale KI-Motive","en":"Local AI artwork"},"text":{"de":"Individuelle 16:9-Hintergründe werden direkt im Medienbrowser ohne API-Schlüssel und ohne externen Prompt-Versand erzeugt.","en":"Custom 16:9 backgrounds are generated directly in the media browser without an API key or external prompt transmission."}},
+            {"label":{"de":"Erweiterte 2D-Formen","en":"Expanded 2D shapes"},"text":{"de":"Fünfeck, Sechseck, Achteck, Strahlenform, Chevron, Sprechblase und Kreuz ergänzen die bisherigen Objekte.","en":"Pentagon, hexagon, octagon, burst, chevron, speech bubble and cross expand the existing objects."}}
+          ],
+          "improved": [
+            {"label":{"de":"Schriftgestaltung","en":"Typography"},"text":{"de":"Mehr als 170 Schriftfamilien, zusätzliche Gewichte und ein normaler oder kursiver Standardstil stehen zur Auswahl.","en":"More than 170 font families, additional weights and normal or italic default styling are available."}},
+            {"label":{"de":"Automatischer Ersteller","en":"Automatic creator"},"text":{"de":"Neue Präsentationen übernehmen den Ersteller automatisch aus dem angemeldeten Konto.","en":"New presentations automatically use the signed-in account as their creator."}}
+          ],
+          "fixed": [
+            {"label":{"de":"2D-Objekte einfügen","en":"Insert 2D objects"},"text":{"de":"Formen werden atomar eingefügt und sofort ausgewählt; alle neuen Formen sind direkt bearbeitbar.","en":"Shapes are inserted atomically and selected immediately; every new shape can be edited directly."}}
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.34",
       "builds": [{
         "version": "0.34.1",
         "releaseDate": "2026-09-09",
         "releaseTime": "23:14",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.34.1.png",
           "alt": {"de":"Zusammengedrückte Bedienleiste vor dem Hotfix","en":"Compressed application header before the hotfix"},

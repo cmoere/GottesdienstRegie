@@ -1,3 +1,29 @@
+# GottesdienstRegie 0.35.0
+
+Veröffentlicht am 10. September 2026 um 02:25 Uhr.
+
+## Neu
+
+- **Dauerhafte Änderungshistorie:** Ein eigenes Systemfenster zeigt Revision, Benutzer, Bereich, Quelle, Synchronisierungsstatus sowie Vorher/Nachher und bietet sichere Wiederherstellungspunkte.
+- **Optionales Belohnungssystem:** XP, Level, Abzeichen, Anti-Farming und ein eigener Verlauf motivieren ohne Funktionen, Rollen oder Rechte zu sperren.
+- **Lokale KI-Motive:** Der Medienbrowser erzeugt ohne API-Schlüssel individuelle 16:9-Hintergründe direkt auf dem Gerät.
+- **Weitere 2D-Objekte:** Fünfeck, Sechseck, Achteck, Strahlenform, Chevron, Sprechblase und Kreuz ergänzen die Formbibliothek.
+
+## Verbessert
+
+- Historieneinträge werden logisch zusammengefasst, sensible Werte redigiert und nach echter Speicherung als synchronisiert markiert.
+- Gelöschte ServiceItems, Servicezeiten und geeignete Präsentationsstände lassen sich als neue Revision wiederherstellen; neuere Historie bleibt erhalten.
+- Mehr als 170 Schriftfamilien sowie Gewichte von Dünn bis Schwarz und normaler/kursiver Standardstil stehen bereit.
+- Der Ersteller einer Präsentation wird automatisch aus dem angemeldeten Konto übernommen.
+- Belohnungsbenachrichtigungen erscheinen nie auf MAIN, STAGE oder LIVESTREAM und werden während ON AIR zurückgehalten.
+
+## Behoben
+
+- 2D-Objekte werden nun atomar erstellt und sofort ausgewählt; der bisherige wirkungslose zweistufige Einfügevorgang entfällt.
+- Die redundante Erklärungszeile zum Drei-Jahres-Zeitraum wurde aus der Veranstaltungsauswahl entfernt.
+
+---
+
 # GottesdienstRegie 0.34.1
 
 Veröffentlicht am 9. September 2026 um 23:14 Uhr.

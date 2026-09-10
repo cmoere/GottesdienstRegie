@@ -15,6 +15,7 @@ import { AppPreferences, type AppPreferencesData } from './AppPreferences';
 
 let controlWindow: BrowserWindow | null = null;
 let mediaWindow: BrowserWindow | null = null;
+let historyWindow: BrowserWindow | null = null;
 let appPreferences:AppPreferences;
 let controlCloseInProgress=false;
 let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
@@ -98,6 +99,12 @@ function openMediaWindow(context:'manage'|'select'='manage',purpose:'item'|'back
   const save=()=>{if(!mediaWindow||mediaWindow.isDestroyed())return;const patch:Partial<AppPreferencesData>={mediaMaximized:mediaWindow.isMaximized()};if(!mediaWindow.isMaximized())patch.mediaBounds=mediaWindow.getBounds();void appPreferences.update(patch)};
   mediaWindow.on('move',save);mediaWindow.on('resize',save);mediaWindow.on('maximize',save);mediaWindow.on('unmaximize',save);mediaWindow.on('closed',()=>{mediaWindow=null});
   mediaWindow.once('ready-to-show',()=>mediaWindow?.show());void load(mediaWindow,`#media?context=${context}&purpose=${purpose}&targetType=${targetType??''}&targetId=${encodeURIComponent(targetId??'')}`);return true
+}
+
+function openHistoryWindow(){
+  if(historyWindow&&!historyWindow.isDestroyed()){historyWindow.focus();return true}
+  historyWindow=new BrowserWindow({width:1200,height:760,minWidth:900,minHeight:600,show:false,resizable:true,minimizable:true,maximizable:true,closable:true,skipTaskbar:false,backgroundColor:'#eef3f4',title:'GottesdienstRegie - Änderungshistorie',icon:app.isPackaged?path.join(process.resourcesPath,'icon.png'):path.join(app.getAppPath(),'build/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
+  historyWindow.setMenu(null);historyWindow.on('closed',()=>{historyWindow=null});historyWindow.once('ready-to-show',()=>historyWindow?.show());void load(historyWindow,'#history');return true
 }
 
 function versionParts(value:string){return value.replace(/^v/,'').split('.').map(part=>Number(part)||0)}
@@ -260,6 +267,8 @@ app.whenReady().then(async() => {
   ipcMain.handle('media-window:close',()=>{mediaWindow?.close();return true});
   ipcMain.handle('media-window:select',(_event,asset:unknown,purpose:string)=>{if(controlWindow&&!controlWindow.isDestroyed()){controlWindow.webContents.send('media:selected',{asset,purpose});controlWindow.focus()}mediaWindow?.close();return true});
   ipcMain.handle('media-window:select-audio',(_event,assets:unknown[],targetType:string,targetId:string)=>{if(controlWindow&&!controlWindow.isDestroyed()){controlWindow.webContents.send('media:selected',{assets,purpose:'audio',targetType,targetId});controlWindow.focus()}mediaWindow?.close();return true});
+  ipcMain.handle('history-window:open',()=>openHistoryWindow());
+  ipcMain.handle('history-window:close',()=>{historyWindow?.close();return true});
   ipcMain.handle('updates:current-version',()=>app.getVersion());
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});
   ipcMain.handle('updates:check',()=>checkForUpdates());

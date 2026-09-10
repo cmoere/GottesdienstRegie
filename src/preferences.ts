@@ -45,6 +45,7 @@ interface PreferencesState {
   defaultFont:string;
   defaultFontSize:number;
   defaultFontWeight:number;
+  defaultFontStyle:'normal'|'italic';
   ceraProFileName:string;
   unsplashAccessKey:string;
   setLanguage:(language:Language)=>void;
@@ -74,6 +75,7 @@ interface PreferencesState {
   setDefaultFont:(value:string)=>void;
   setDefaultFontSize:(value:number)=>void;
   setDefaultFontWeight:(value:number)=>void;
+  setDefaultFontStyle:(value:'normal'|'italic')=>void;
   setCeraProFileName:(value:string)=>void;
   setUnsplashAccessKey:(value:string)=>void;
 }
@@ -112,6 +114,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   defaultFont:'Cera Pro',
   defaultFontSize:72,
   defaultFontWeight:600,
+  defaultFontStyle:'normal',
   ceraProFileName:'',
   unsplashAccessKey:'',
   setLanguage:language=>set({language}),
@@ -141,6 +144,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setDefaultFont:defaultFont=>set({defaultFont}),
   setDefaultFontSize:defaultFontSize=>set({defaultFontSize:Math.max(12,Math.min(240,defaultFontSize))}),
   setDefaultFontWeight:defaultFontWeight=>set({defaultFontWeight}),
+  setDefaultFontStyle:defaultFontStyle=>set({defaultFontStyle}),
   setCeraProFileName:ceraProFileName=>set({ceraProFileName}),
   setUnsplashAccessKey:unsplashAccessKey=>set({unsplashAccessKey})
 }),{name:'gottesdienstregie.preferences'}));
