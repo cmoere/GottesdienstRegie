@@ -1,3 +1,26 @@
+# GottesdienstRegie 0.36.2
+
+Veröffentlicht am 10. September 2026 um 12:15 Uhr.
+
+## Neu
+
+- **Weboptionen je Element:** Zoom, 100-%-Reset, Interaktion, Audio, Pop-ups, automatisches Aktualisieren und ein optionaler Proxy werden direkt am jeweiligen Webelement eingestellt.
+- **Mehr 2D-Objekte:** Parallelogramm, Trapez, Herz, Blitz, Schild, Wolke, Haus und Halbmond ergänzen die Formen und lassen sich nun direkt im Bearbeiten-Bereich einfügen.
+
+## Verbessert
+
+- KI-Motive bieten zwölf Stile, ausführliche wechselnde Motivbeschreibungen und bei jeder Erzeugung eine neue visuelle Variante.
+- Die Schriftliste wurde erneut erweitert; Websteuerung und Uhr verwenden Cera Pro als bevorzugte Schrift und zeigen Sekunden an.
+- Der Sync-Schalter sitzt unmittelbar rechts neben dem Profil.
+
+## Behoben
+
+- Favoriten funktionieren nun auch für reine Cloud-Medien ohne vorherigen lokalen Indexeintrag.
+- Cloud-Medien lassen sich über ihre stabile Cloud-Referenz löschen; lokale Metadaten werden anschließend sauber entfernt.
+- „Element hinzufügen → Video“ öffnet einen passenden Videodialog und erzeugt ein vollständig abspielbares Videoelement.
+
+---
+
 # GottesdienstRegie 0.36.1
 
 Veröffentlicht am 10. September 2026 um 11:21 Uhr.

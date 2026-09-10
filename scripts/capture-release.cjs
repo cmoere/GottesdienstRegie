@@ -15,6 +15,6 @@ app.whenReady().then(async()=>{
   await window.webContents.executeJavaScript(`localStorage.setItem('gottesdienstregie2.presentation',${JSON.stringify(JSON.stringify({state,version:14}))});location.reload()`);
   await new Promise(resolve=>setTimeout(resolve,11800));
   const image=await window.webContents.capturePage();
-  await fs.writeFile(path.join(__dirname,'..','public','help','release-0.36.1.png'),image.toPNG());
+  await fs.writeFile(path.join(__dirname,'..','public','help','release-0.36.2.png'),image.toPNG());
   app.quit();
 });

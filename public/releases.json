@@ -5,10 +5,35 @@
     {
       "line": "0.36",
       "builds": [{
+        "version": "0.36.2",
+        "releaseDate": "2026-09-10",
+        "releaseTime": "12:15",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.36.2.png",
+          "alt": {"de":"Aktualisierte GottesdienstRegie-Arbeitsoberfläche","en":"Updated GottesdienstRegie workspace"},
+          "caption": {"de":"Neue Weboptionen, Formen und Medienfunktionen stehen im Bearbeiten- und Medienbereich bereit.","en":"New web options, shapes and media features are available in the editor and media workspace."}
+        },
+        "sections": {
+          "new": [
+            {"label":{"de":"Weboptionen je Element","en":"Per-item web options"},"text":{"de":"Zoom-Reset, Interaktion, Audio, Pop-ups, Aktualisierung und Proxy werden separat pro Webelement gespeichert.","en":"Zoom reset, interaction, audio, pop-ups, refresh and proxy are stored separately for each web item."}},
+            {"label":{"de":"Weitere 2D-Objekte","en":"More 2D objects"},"text":{"de":"Acht neue Formen lassen sich direkt im sichtbaren Bearbeiten-Bereich hinzufügen und gestalten.","en":"Eight new shapes can be added and styled directly in the visible editing workspace."}}
+          ],
+          "improved": [
+            {"label":{"de":"KI-Motive","en":"AI artwork"},"text":{"de":"Zwölf Stile und ausführliche wechselnde Motivbeschreibungen erzeugen bei jedem Öffnen und Generieren neue Varianten.","en":"Twelve styles and detailed rotating artwork descriptions create new variants each time."}},
+            {"label":{"de":"Schriften und Webuhr","en":"Fonts and web clock"},"text":{"de":"Die Schriftliste wurde erweitert; Webansichten bevorzugen Cera Pro und zeigen die Uhrzeit einschließlich Sekunden.","en":"The font list was expanded; web views prefer Cera Pro and show time including seconds."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Cloud-Favoriten und Löschen","en":"Cloud favorites and deletion"},"text":{"de":"Favoriten und Löschen funktionieren nun auch bei Medien, die ausschließlich in der Cloud liegen.","en":"Favorites and deletion now also work for cloud-only media."}},
+            {"label":{"de":"Video und 2D wirklich hinzufügen","en":"Actually add video and 2D"},"text":{"de":"Video verwendet einen passenden Dateidialog; 2D-Objekte sind im Bearbeiten-Bereich direkt erreichbar.","en":"Video uses a matching file dialog; 2D objects are directly accessible in editing mode."}}
+          ],
+          "known": []
+        }
+      },{
         "version": "0.36.1",
         "releaseDate": "2026-09-10",
         "releaseTime": "11:21",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.36.1.png",
           "alt": {"de":"Geräteregistrierung mit fest vorgegebener Organisation","en":"Device registration with a fixed organization"},
