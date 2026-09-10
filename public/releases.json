@@ -5,10 +5,37 @@
     {
       "line": "0.36",
       "builds": [{
+        "version": "0.36.4",
+        "releaseDate": "2026-09-10",
+        "releaseTime": "21:00",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.36.4.png",
+          "alt": {"de":"Erweiterter Mediengenerator und persönliche Profilansicht","en":"Expanded media generator and personal profile view"},
+          "caption": {"de":"Fotografische Szenen, längere Videohintergründe und eine eigene Verwaltung zusätzlicher Folienebenen erweitern den Bearbeiten-Bereich.","en":"Photographic scenes, longer video backgrounds, and dedicated management for additional slide layers expand the editing workspace."}
+        },
+        "sections": {
+          "new": [
+            {"label":{"de":"Zusätzliche Ebenen","en":"Additional layers"},"text":{"de":"Text, Vordergrundbild, QR-Code und 2D-Objekt besitzen eine eigene Auswahl mit Bearbeiten, Sichtbarkeit und Entfernen.","en":"Text, foreground images, QR codes and 2D objects have a dedicated list with edit, visibility and removal controls."}},
+            {"label":{"de":"Mehr Motive und Stile","en":"More scenes and styles"},"text":{"de":"Erweiterte Szenenkategorien und Gestaltungsstile werden durch lange wechselnde Motivbeschreibungen ergänzt.","en":"Expanded scene categories and visual styles are complemented by long rotating scene descriptions."}},
+            {"label":{"de":"Getrennte Profilansicht","en":"Separate profile view"},"text":{"de":"Profilbild, Kontodaten, Rolle und Organisation erscheinen unter Mein Profil; XP und Abzeichen bleiben im eigenen Fortschrittsbereich.","en":"Profile image, account details, role and organization appear under My Profile; XP and badges remain in their own progress area."}}
+          ],
+          "improved": [
+            {"label":{"de":"30–60 Sekunden Video","en":"30–60 second video"},"text":{"de":"Die Länge lokaler Videohintergründe ist in Fünf-Sekunden-Schritten von 30 bis 60 Sekunden einstellbar.","en":"Local video background duration can be selected from 30 to 60 seconds in five-second steps."}},
+            {"label":{"de":"Fotografische Natur","en":"Photographic nature"},"text":{"de":"Natur- und Stadtkategorien verwenden echte Bildmotive mit ruhiger Kamerabewegung statt abstrakter Ersatzformen.","en":"Nature and city categories use real imagery with calm camera movement instead of abstract substitutes."}},
+            {"label":{"de":"Kompakter Syncstatus","en":"Compact sync status"},"text":{"de":"Der Synchronisationsstatus befindet sich unmittelbar links neben dem Profil.","en":"Synchronization status is located directly to the left of the profile."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Unsplash-Zugang","en":"Unsplash access"},"text":{"de":"Die Bildsuche benötigt keine manuelle Access-Key-Eingabe mehr.","en":"Image search no longer requires manual access-key entry."}},
+            {"label":{"de":"Video als Hintergrund","en":"Video as background"},"text":{"de":"Erzeugte Videos werden von der Hintergrundauswahl übernommen und als vollflächige Videohintergründe angelegt.","en":"Generated videos are accepted by the background picker and created as full-screen video backgrounds."}}
+          ],
+          "known": []
+        }
+      },{
         "version": "0.36.3",
         "releaseDate": "2026-09-10",
         "releaseTime": "19:26",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.36.3.png",
           "alt": {"de":"GottesdienstRegie mit erweitertem Medien- und Hilfebereich","en":"GottesdienstRegie with expanded media and help areas"},

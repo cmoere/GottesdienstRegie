@@ -1,3 +1,28 @@
+# GottesdienstRegie 0.36.4
+
+Veröffentlicht am 10. September 2026 um 21:00 Uhr.
+
+## Neu
+
+- **Zusätzliche Ebenen:** Texte, Vordergrundbilder, QR-Codes und 2D-Objekte erhalten im Bearbeiten-Bereich eine eigene übersichtliche Ebenenbox zum Auswählen, Bearbeiten, Ein- und Ausblenden sowie Entfernen.
+- **Erweiterte Motivwelt:** Mehr Szenenkategorien, deutlich mehr Gestaltungsstile und ausführlichere wechselnde Motivbeschreibungen erweitern die lokale Hintergrunderzeugung.
+- **Persönliches Profil:** „Mein Profil“ zeigt Profilbild, Name, Benutzername, E-Mail-Adresse, Rolle und Organisation getrennt vom Belohnungsbereich.
+
+## Verbessert
+
+- KI-Videohintergründe sind zwischen 30 und 60 Sekunden einstellbar und lassen sich anschließend als echte Videohintergründe einsetzen.
+- Natur-, Wald-, Stadt- und Wetterszenen verwenden fotografische Ausgangsmotive mit ruhiger Kamerabewegung statt abstrakter Formen.
+- Der Synchronisationsstatus sitzt mit minimalem Abstand unmittelbar links vom Profil.
+- Fehler-, Änderungs- und Featureformulare erklären in jedem Eingabefeld kurz, welche Angaben benötigt werden.
+
+## Behoben
+
+- Unsplash funktioniert ohne manuelle Eingabe eines Access Keys in den Einstellungen.
+- Erzeugte Videos werden in der Hintergrundauswahl nicht mehr ignoriert.
+- Zusätzliche Folienelemente lassen sich nun gezielt einzeln entfernen, ohne andere ausgewählte Ebenen unbeabsichtigt zu löschen.
+
+---
+
 # GottesdienstRegie 0.36.3
 
 Veröffentlicht am 10. September 2026 um 19:26 Uhr.
