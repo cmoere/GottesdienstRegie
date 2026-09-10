@@ -15,6 +15,7 @@ export interface AppPreferencesData{
   bounds?:{x:number;y:number;width:number;height:number};
   mediaBounds?:{x:number;y:number;width:number;height:number};
   mediaMaximized?:boolean;
+  registeredDevice?:{id:string;organizationId:string;organizationName:string;name:string;type:'shared'|'personal';platform:string;registeredAt:string;lastSeenAt:string;status:'online'|'locked'};
 }
 
 const defaults:AppPreferencesData={windowStartMode:'fullscreen',operatorDisplayTarget:'primary',automaticUpdates:true,autoDownloadUpdates:true,betaUpdates:false,betaWarningAccepted:false};

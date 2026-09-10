@@ -1,3 +1,30 @@
+# GottesdienstRegie 0.36.0
+
+Veröffentlicht am 10. September 2026 um 03:35 Uhr.
+
+## Neu
+
+- **Gemeinsam genutzte Gemeinde-PCs:** Geräte werden einmalig registriert, während sich Benutzer auf gemeinsamen Rechnern bei jedem Start persönlich anmelden.
+- **Websteuerung im lokalen Netzwerk:** Zeitlich begrenzte, widerrufbare Sitzungen bedienen NEXT und ZURÜCK über dieselbe sichere Live-Logik wie der Operator-PC.
+- **Persönliche Monitore:** Feste, nur lesende URLs zeigen den bestätigten Live-Stand auf Smartphones, Tablets und weiteren Rechnern und verbinden sich automatisch neu.
+- **Zentrale KI-Steuerung:** KI-Funktionen lassen sich global ein- oder ausschalten; KI-Motive bleiben ohne eigenen API-Schlüssel verfügbar.
+
+## Verbessert
+
+- Die Änderungshistorie protokolliert Benutzer und verwendeten Gerätenamen getrennt und macht beides durchsuchbar.
+- 2D-Objekte besitzen zusätzliche Formen sowie direkte Felder für Position, Größe, Drehung, Sichtbarkeit und Deckkraft.
+- Text erhält getrennte Schalter für Schatten, Kontur, Leuchten und Deckkraft.
+- Webseiten werden ohne Eingabe-Popup sofort angelegt; URL und Zoom werden anschließend im normalen Editor bearbeitet.
+- Der Hilfebereich erklärt gemeinsam genutzte Geräte, persönliche Anmeldung, Websteuerung, persönliche Monitore und KI-Motive.
+
+## Behoben
+
+- Die schwebende Änderungsanzeige überlagert die Formatleiste nicht mehr.
+- Die Hauptoberfläche kann nach dem Ladescreen nicht mehr zu einem schmalen Streifen kollabieren.
+- Gespeicherte Geräteinformationen bleiben beim erneuten Laden älterer Historien erhalten.
+
+---
+
 # GottesdienstRegie 0.35.0
 
 Veröffentlicht am 10. September 2026 um 02:25 Uhr.

@@ -3,12 +3,40 @@
   "supportedLocales": ["de","gsw","en","da","sv","no","fi","nl","fr","es","it","pl","pt-BR","uk","ru","tr","ar"],
   "versions": [
     {
+      "line": "0.36",
+      "builds": [{
+        "version": "0.36.0",
+        "releaseDate": "2026-09-10",
+        "releaseTime": "03:35",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.36.0.png",
+          "alt": {"de":"Änderungshistorie mit Benutzer- und Gerätebezug","en":"Change history with user and device context"},
+          "caption": {"de":"Änderungen werden dauerhaft dem angemeldeten Benutzer und dem verwendeten Gemeinde-PC zugeordnet.","en":"Changes are permanently attributed to the signed-in user and the church computer in use."}
+        },
+        "sections": {
+          "new": [
+            {"label":{"de":"Gemeinsam genutzte Geräte","en":"Shared devices"},"text":{"de":"Einmalige Geräteregistrierung und persönliche Anmeldung trennen Rechner, Benutzer und lokale Geräteeinstellungen sauber voneinander.","en":"One-time device registration and personal sign-in cleanly separate computers, users and local device settings."}},
+            {"label":{"de":"Websteuerung und persönliche Monitore","en":"Web control and personal monitors"},"text":{"de":"Widerrufbare Steuersitzungen und feste Nur-Lese-Monitorseiten stehen im lokalen Netzwerk bereit und verwenden den bestätigten Live-Stand.","en":"Revocable control sessions and fixed read-only monitor pages are available on the local network and use the confirmed live state."}}
+          ],
+          "improved": [
+            {"label":{"de":"2D- und Textgestaltung","en":"2D and text styling"},"text":{"de":"Mehr Formen, direkte Transformationsfelder sowie Schatten, Kontur, Leuchten und Deckkraft erweitern den Folieneditor.","en":"More shapes, direct transform fields plus shadow, outline, glow and opacity extend the slide editor."}},
+            {"label":{"de":"Gerätebezogene Historie","en":"Device-aware history"},"text":{"de":"Historieneinträge enthalten nun Benutzer und Gerätenamen getrennt und bleiben danach durchsuchbar.","en":"History entries now contain user and device names separately and remain searchable."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Stabile Hauptoberfläche","en":"Stable main interface"},"text":{"de":"Die Oberfläche kollabiert nach dem Ladescreen nicht mehr, und die Änderungsanzeige verdeckt keine Werkzeugleiste mehr.","en":"The interface no longer collapses after the loading screen, and the change indicator no longer covers a toolbar."}}
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.35",
       "builds": [{
         "version": "0.35.0",
         "releaseDate": "2026-09-10",
         "releaseTime": "02:25",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.35.0.png",
           "alt": {"de":"Neues Fenster für die dauerhafte Änderungshistorie","en":"New persistent change history window"},

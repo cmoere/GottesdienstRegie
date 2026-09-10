@@ -14,7 +14,7 @@ export async function verifyTwoFactor(challengeId:string,code:string,recovery:bo
 }
 export async function cancelTwoFactor(challengeId:string){await window.desktop?.auth.cancelTwoFactor(challengeId)}
 export function isTwoFactorChallenge(result:LoginResult):result is TwoFactorChallenge{return 'twoFactorRequired' in result&&result.twoFactorRequired===true}
-export async function restore():Promise<AuthSession|null>{return window.desktop?.auth.restore()??null}
+export async function restore(activeSession=false):Promise<AuthSession|null>{return (window.desktop?.auth.restore as ((active?:boolean)=>Promise<AuthSession|null>)|undefined)?.(activeSession)??null}
 export async function logout(){await window.desktop?.auth.logout()}
 
 function cleanedRemoteError(raw:string){

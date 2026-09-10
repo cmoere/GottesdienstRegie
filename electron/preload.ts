@@ -41,10 +41,12 @@ contextBridge.exposeInMainWorld('desktop', {
     login: (email:string, password:string, remember:boolean) => ipcRenderer.invoke('auth:login', {email,password,remember}),
     verifyTwoFactor: (challengeId:string, code:string, recovery:boolean) => ipcRenderer.invoke('auth:2fa:verify', {challengeId,code,recovery}),
     cancelTwoFactor: (challengeId:string) => ipcRenderer.invoke('auth:2fa:cancel', challengeId),
-    restore: () => ipcRenderer.invoke('auth:restore'),
+    restore: (activeSession=false) => ipcRenderer.invoke('auth:restore',activeSession),
     logout: () => ipcRenderer.invoke('auth:logout'),
     connection: () => ipcRenderer.invoke('auth:connection'),
   },
+  device:{get:()=>ipcRenderer.invoke('device:get'),register:(input:unknown)=>ipcRenderer.invoke('device:register',input)},
+  remote:{get:()=>ipcRenderer.invoke('remote:get'),saveMonitor:(monitor:unknown)=>ipcRenderer.invoke('remote:save-monitor',monitor),removeMonitor:(id:string)=>ipcRenderer.invoke('remote:remove-monitor',id),createSession:(input:unknown)=>ipcRenderer.invoke('remote:create-session',input),revokeSession:(id:string)=>ipcRenderer.invoke('remote:revoke-session',id),updateLive:(state:unknown)=>ipcRenderer.invoke('remote:update-live',state),onCommand:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('remote:command',listener);return()=>ipcRenderer.removeListener('remote:command',listener)}},
   updates: {
     currentVersion: () => ipcRenderer.invoke('updates:current-version'),
     metadata:()=>ipcRenderer.invoke('updates:metadata'),

@@ -7,6 +7,7 @@ export interface BackgroundAudioState{active:boolean;paused:boolean;muted:boolea
 const emptyState:BackgroundAudioState={active:false,paused:false,muted:false,currentTime:0,duration:0,volume:70,sourceKey:''};
 
 class BackgroundAudioEngine{
+  getState(){return {...this.state}}
   private audio=new Audio();private config?:BackgroundAudioConfig;private index=-1;private sourceKey='';private sourceSectionId='';private state={...emptyState};private outputDevice='default';private routeVolume=.8;private routeMuted=false;private ducked=false;
   constructor(){this.audio.preload='auto';this.applyRouting(usePreferences.getState().audioRouting);usePreferences.subscribe(state=>this.applyRouting(state.audioRouting));this.audio.addEventListener('ended',()=>void this.advance());this.audio.addEventListener('play',()=>this.publish());this.audio.addEventListener('pause',()=>this.publish());this.audio.addEventListener('error',()=>{this.state.error='Der aktuelle Background-Audio-Titel konnte nicht wiedergegeben werden.';this.publish()});window.setInterval(()=>this.publish(),500)}
   snapshot(){return this.state}

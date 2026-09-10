@@ -8,12 +8,13 @@ export type SlideRendererMode='editor'|'preview'|'thumbnail'|'live';
 
 function elementStyle(element:SlideElement):CSSProperties{
   const value=element.properties;
+  const shadows=[String(value.textShadow??''),String(value.textGlow??'')].filter(Boolean).join(', ')||'none';
   return {
     left:`${element.x/19.2}%`,top:`${element.y/10.8}%`,width:`${element.width/19.2}%`,height:`${element.height/10.8}%`,
     opacity:element.opacity,transform:`rotate(${element.rotation}deg) scaleX(${value.flipX===true?-1:1}) scaleY(${value.flipY===true?-1:1})`,zIndex:element.zIndex,
     color:String(value.color??'#fff'),fontFamily:fontStack(String(value.fontFamily??'Cera Pro')),fontWeight:Number(value.fontWeight??400),fontStyle:String(value.fontStyle??'normal') as CSSProperties['fontStyle'],
     fontSize:`${Number(value.fontSize??48)/19.2}cqw`,lineHeight:Number(value.lineHeight??1.15),letterSpacing:`${Number(value.letterSpacing??0)/19.2}cqw`,
-    textAlign:(value.align??'center') as CSSProperties['textAlign'],textShadow:String(value.textShadow??'none'),padding:`${Number(value.padding??0)/19.2}cqw`,
+    textAlign:(value.align??'center') as CSSProperties['textAlign'],textShadow:shadows,WebkitTextStroke:String(value.textOutline??'')||undefined,padding:`${Number(value.padding??0)/19.2}cqw`,
     alignItems:value.verticalAlign==='top'?'flex-start':value.verticalAlign==='bottom'?'flex-end':'center'
   };
 }

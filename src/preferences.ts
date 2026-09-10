@@ -48,6 +48,11 @@ interface PreferencesState {
   defaultFontStyle:'normal'|'italic';
   ceraProFileName:string;
   unsplashAccessKey:string;
+  aiEnabled:boolean;
+  sharedDeviceAutoLogout:boolean;
+  sharedDeviceTimeoutMinutes:number;
+  logoutAfterOffAir:boolean;
+  logoutAfterOffAirMinutes:number;
   setLanguage:(language:Language)=>void;
   setTheme:(theme:ThemeMode)=>void;
   setBlackWhite:(blackWhite:boolean)=>void;
@@ -78,6 +83,8 @@ interface PreferencesState {
   setDefaultFontStyle:(value:'normal'|'italic')=>void;
   setCeraProFileName:(value:string)=>void;
   setUnsplashAccessKey:(value:string)=>void;
+  setAiEnabled:(value:boolean)=>void;
+  setSharedDeviceSecurity:(patch:Partial<Pick<PreferencesState,'sharedDeviceAutoLogout'|'sharedDeviceTimeoutMinutes'|'logoutAfterOffAir'|'logoutAfterOffAirMinutes'>>)=>void;
 }
 
 function detectedLanguage():Language{
@@ -117,6 +124,11 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   defaultFontStyle:'normal',
   ceraProFileName:'',
   unsplashAccessKey:'',
+  aiEnabled:true,
+  sharedDeviceAutoLogout:true,
+  sharedDeviceTimeoutMinutes:30,
+  logoutAfterOffAir:false,
+  logoutAfterOffAirMinutes:15,
   setLanguage:language=>set({language}),
   setTheme:theme=>set({theme}),
   setBlackWhite:blackWhite=>set({blackWhite}),
@@ -146,5 +158,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setDefaultFontWeight:defaultFontWeight=>set({defaultFontWeight}),
   setDefaultFontStyle:defaultFontStyle=>set({defaultFontStyle}),
   setCeraProFileName:ceraProFileName=>set({ceraProFileName}),
-  setUnsplashAccessKey:unsplashAccessKey=>set({unsplashAccessKey})
+  setUnsplashAccessKey:unsplashAccessKey=>set({unsplashAccessKey}),
+  setAiEnabled:aiEnabled=>set({aiEnabled}),
+  setSharedDeviceSecurity:patch=>set(patch)
 }),{name:'gottesdienstregie.preferences'}));
