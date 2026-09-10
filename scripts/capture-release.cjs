@@ -31,8 +31,10 @@ app.whenReady().then(async()=>{
   await window.webContents.executeJavaScript(`{const input=document.querySelector('.media-search input');const setter=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set;setter.call(input,'natur');input.dispatchEvent(new Event('input',{bubbles:true}));}`);
   await new Promise(resolve=>setTimeout(resolve,100));
   await window.webContents.executeJavaScript(`Array.from(document.querySelectorAll('.media-commandbar button')).find(button=>button.textContent?.includes('SUCHEN'))?.click()`);
-  await new Promise(resolve=>setTimeout(resolve,2500));
+  await new Promise(resolve=>setTimeout(resolve,4500));
+  await window.webContents.executeJavaScript(`{const card=document.querySelector('.cloud-media-grid > button');if(card)card.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));}`);
+  await new Promise(resolve=>setTimeout(resolve,1000));
   const image=await window.webContents.capturePage();
-  await fs.writeFile(path.join(__dirname,'..','public','help','release-0.36.6.png'),image.toPNG());
+  await fs.writeFile(path.join(__dirname,'..','public','help','release-0.36.7.png'),image.toPNG());
   app.quit();
 });

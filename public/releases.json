@@ -5,10 +5,36 @@
     {
       "line": "0.36",
       "builds": [{
+        "version": "0.36.7",
+        "releaseDate": "2026-09-11",
+        "releaseTime": "00:48",
+        "current": true,
+        "screenshot": {
+          "src": "../help/release-0.36.7.png",
+          "alt": {"de":"Unsplash-Foto mit Favoritenaktion in der Medienbibliothek","en":"Unsplash photo with favorite action in the media library"},
+          "caption": {"de":"Unsplash-Motive lassen sich direkt als Favorit speichern; Folienelemente können zusätzlich auf der Arbeitsfläche gezogen und skaliert werden.","en":"Unsplash artwork can be saved directly as a favorite; slide elements can also be dragged and resized on the canvas."}
+        },
+        "sections": {
+          "new": [
+            {"label":{"de":"Direkte Folienbearbeitung","en":"Direct slide editing"},"text":{"de":"Text, QR-Codes und Vordergrundmedien lassen sich auf der 16:9-Arbeitsfläche mit der Maus verschieben und skalieren.","en":"Text, QR codes and foreground media can be moved and resized with the mouse on the 16:9 canvas."}},
+            {"label":{"de":"Neue Ablaufvorlagen","en":"New service templates"},"text":{"de":"Vier vorbereitete Vorlagen decken kompakte, klassische, Jugend- und Abendgottesdienste ab.","en":"Four prepared templates cover compact, classic, youth and evening services."}},
+            {"label":{"de":"Unsplash-Favoriten","en":"Unsplash favorites"},"text":{"de":"Bilder aus der Unsplash-Suche können dauerhaft als Favorit gespeichert werden.","en":"Images from Unsplash search can be saved persistently as favorites."}}
+          ],
+          "improved": [
+            {"label":{"de":"Start überspringen","en":"Skip startup sync"},"text":{"de":"Die Start-Synchronisierung kann übersprungen werden, ohne die gespeicherte Anmeldung zu verlieren.","en":"Startup synchronization can be skipped without losing the saved sign-in."}},
+            {"label":{"de":"Präzise Elementwerte","en":"Precise element values"},"text":{"de":"Position, Größe, Drehung und Deckkraft ausgewählter Folienelemente sind direkt einstellbar.","en":"Position, size, rotation and opacity of selected slide elements can be adjusted directly."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Stabiler KI-Videobereich","en":"Stable AI video workspace"},"text":{"de":"Fehler bei der Videoerzeugung bleiben im Generator und führen nicht mehr zu Unsplash.","en":"Video-generation errors remain in the generator and no longer redirect to Unsplash."}},
+            {"label":{"de":"Saubere Werkzeugleisten","en":"Clean toolbars"},"text":{"de":"Die Inhaltswerkzeuge und der Deckkraftregler überlappen oder verrutschen nicht mehr.","en":"Content tools and the opacity control no longer overlap or become misaligned."}}
+          ],
+          "known": []
+        }
+      },{
         "version": "0.36.6",
         "releaseDate": "2026-09-11",
         "releaseTime": "00:12",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.36.6.png",
           "alt": {"de":"Unsplash-Suche in der Medienbibliothek","en":"Unsplash search in the media library"},

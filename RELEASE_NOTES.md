@@ -1,3 +1,27 @@
+# GottesdienstRegie 0.36.7
+
+Veröffentlicht am 11. September 2026 um 00:48 Uhr.
+
+## Neu
+
+- **Direkte Folienbearbeitung:** Text, QR-Codes, Vordergrundmedien und weitere Folienelemente lassen sich auf der 16:9-Arbeitsfläche mit der Maus verschieben und am sichtbaren Griff skalieren.
+- **Neue Präsentationsvorlagen:** Gottesdienst kompakt, Sonntagsgottesdienst klassisch, Jugendgottesdienst und Abendveranstaltung stehen beim Erstellen einer Präsentation bereit.
+- **Unsplash-Favoriten:** Bilder aus der Unsplash-Suche können als Favorit gespeichert und später wiedererkannt werden.
+
+## Verbessert
+
+- Die Start-Synchronisierung kann übersprungen werden, ohne die gespeicherte Anmeldung zu verwerfen.
+- Ausgewählte Bild-, Video- und QR-Elemente besitzen zusätzliche präzise Werte für Position, Größe, Drehung und Deckkraft.
+- Die Werkzeugleiste im Inhaltseditor bricht auf schmaleren Flächen sauber um.
+
+## Behoben
+
+- Ein Fehler bei der lokalen KI-Videoerzeugung öffnet nicht mehr unvermittelt den Unsplash-Bereich.
+- Nach erfolgreicher Medienerzeugung wird gezielt die Cloud-Medienansicht geöffnet.
+- Beschriftung und Regler für die Deckkraft sind wieder korrekt ausgerichtet.
+
+---
+
 # GottesdienstRegie 0.36.6
 
 Veröffentlicht am 11. September 2026 um 00:12 Uhr.

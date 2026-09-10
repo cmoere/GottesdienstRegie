@@ -1,5 +1,15 @@
 # Versionshinweise / Release notes
 
+## 0.36.7 – 2026-09-11
+
+- Start-Synchronisierung kann übersprungen werden, während die gespeicherte Anmeldung erhalten bleibt
+- Unsplash-Bilder lassen sich als dauerhafte Favoriten markieren
+- KI-Video-Fehler bleiben im Generator und wechseln nicht mehr ungewollt zu Unsplash
+- Text, QR-Codes und Vordergrundmedien können direkt auf der Folie per Maus verschoben und skaliert werden
+- Präzise Positions-, Größen-, Drehungs- und Deckkraftwerte für zusätzliche Folienelemente
+- Neue Vorlagen für kompakte, klassische, Jugend- und Abendgottesdienste
+- Überlauf der Inhaltswerkzeugleiste und Ausrichtung des Deckkraftreglers korrigiert
+
 ## 0.33.1 – 2026-09-09
 
 - Kritischen Startfehler aus 0.33.0 behoben: Nach dem Ladescreen erscheint die Bedienoberfläche wieder vollständig
