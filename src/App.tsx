@@ -28,6 +28,7 @@ import {
   type PresentationDocument,
   type ServiceItem,
   type Slide,
+  type SlideElement,
   type TransitionDirection,
   type TransitionEasing,
   type TransitionType,
@@ -3185,7 +3186,10 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
       startW: number;
       startH: number;
     } | null>(null),
-    [shapeMenu, setShapeMenu] = useState(false);
+    [shapeMenu, setShapeMenu] = useState(false),
+    elementContextId = useRef<string | null>(null),
+    elementClipboard = useRef<SlideElement[]>([]),
+    theme = usePreferences((value) => value.theme);
   useEffect(() => {
     const move = (event: PointerEvent) => {
       const active = drag.current,
@@ -3279,6 +3283,88 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
     state.addShape(kind, name);
     setShapeMenu(false);
   }
+  useEffect(() => {
+    const unsubscribe = (window.desktop as any)?.serviceContext?.onCommand?.(
+      (command: string) => {
+        if (!command.startsWith("element:")) return;
+        const id = elementContextId.current;
+        if (!id) return;
+        const selected = slide.elements.find((element) => element.id === id);
+        if (!selected && command !== "element:paste") return;
+        if (command === "element:cut" && selected) {
+          elementClipboard.current = [structuredClone(selected)];
+          state.removeElement(id);
+        } else if (command === "element:copy" && selected) {
+          elementClipboard.current = [structuredClone(selected)];
+        } else if (command === "element:paste") {
+          state.pasteElements(elementClipboard.current);
+        } else if (command === "element:duplicate" && selected) {
+          state.duplicateElements([id]);
+        } else if (command === "element:delete" && selected) {
+          state.removeElement(id);
+        } else if (command === "element:undo") state.undo();
+        else if (command === "element:redo") state.redo();
+        else if (command === "element:move-scale") state.selectElements([id]);
+        else if (command === "element:reset-mask" && selected) {
+          state.updateElement(id, {
+            properties: {
+              ...selected.properties,
+              mask: "none",
+              crop: "",
+              fit: "cover",
+              zoom: 1,
+            },
+          });
+        } else if (command === "element:forward") state.moveElementLayer(id, 1);
+        else if (command === "element:backward") state.moveElementLayer(id, -1);
+        else if (command === "element:front") state.moveElementToFront(id);
+        else if (command === "element:back") state.moveElementToBack(id);
+        else if (command === "element:text") state.addElement("text");
+        else if (command === "element:all-slides")
+          state.showElementOnAllSlides(id);
+      },
+    );
+    return typeof unsubscribe === "function" ? unsubscribe : undefined;
+  }, [slide.elements, state, slide.id]);
+  function openElementContext(event: React.MouseEvent, element: SlideElement) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!canEdit) return;
+    state.selectElements([element.id]);
+    elementContextId.current = element.id;
+    const isImage = element.type === "image" || element.type === "video";
+    const entries = [
+      { id: "element:cut", label: "Ausschneiden", accelerator: "CmdOrCtrl+X" },
+      { id: "element:copy", label: "Kopieren", accelerator: "CmdOrCtrl+C" },
+      {
+        id: "element:paste",
+        label: "Einfügen",
+        accelerator: "CmdOrCtrl+V",
+        enabled: elementClipboard.current.length > 0,
+      },
+      { id: "element:duplicate", label: "Duplizieren", accelerator: "CmdOrCtrl+D" },
+      { id: "element:delete", label: "Löschen" },
+      { type: "separator" as const },
+      { id: "element:undo", label: "Rückgängig", accelerator: "CmdOrCtrl+Z", enabled: state.history.length > 0 },
+      { id: "element:redo", label: "Wiederholen", accelerator: /Mac|iPhone|iPad/.test(navigator.platform) ? "Cmd+Shift+Z" : "Ctrl+Y", enabled: state.future.length > 0 },
+      { type: "separator" as const },
+      { id: "element:move-scale", label: "Verschieben und skalieren" },
+      ...(isImage ? [{ id: "element:reset-mask", label: "Maske zurücksetzen" }] : []),
+      { type: "separator" as const },
+      { id: "element:forward", label: "Eine Ebene nach vorn" },
+      { id: "element:backward", label: "Eine Ebene nach hinten" },
+      { id: "element:front", label: "Ganz nach vorn" },
+      { id: "element:back", label: "Ganz nach hinten" },
+      { type: "separator" as const },
+      { id: "element:text", label: "Textfeld hinzufügen" },
+      { id: "element:all-slides", label: "Auf allen Folien anzeigen", enabled: (state.items.find((item) => item.slides.some((entry) => entry.id === slide.id))?.slides.length ?? 0) > 1 },
+    ];
+    void (window.desktop as any)?.serviceContext?.open(
+      { x: event.clientX, y: event.clientY },
+      entries,
+      theme,
+    );
+  }
   return (
     <div className="editor-shell">
       <div className="canvas-tools">
@@ -3362,6 +3448,7 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
                     transform: `rotate(${element.rotation}deg)`,
                   }}
                   onPointerDown={(event) => begin(event, element.id, "move")}
+                  onContextMenu={(event) => openElementContext(event, element)}
                 >
                   {selected && !element.locked && (
                     <i
