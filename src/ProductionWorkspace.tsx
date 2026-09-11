@@ -251,12 +251,19 @@ function SongEditor({
   canEdit: boolean;
 }) {
   const state = usePresentation();
+  const [tab, setTab] = useState<"content" | "order" | "design" | "stage" | "stream">("content");
   const arrangement = item.slides.map((slide, index) =>
     slideLabel(slide, index),
   );
   const metadata = item.metadata;
   const changeMeta = (patch: Record<string, string | number | boolean>) =>
     state.updateItem(item.id, { metadata: { ...metadata, ...patch } });
+  const resetOverrides = () => {
+    const next = { ...metadata };
+    ["key", "verseOrder", "designOverride", "fontSize", "textEffect", "showChordsStage", "stageCurrentNext", "livestreamLowerThird", "livestreamLines", "arrangementSource"].forEach((key) => delete next[key]);
+    state.updateItem(item.id, { metadata: next });
+  };
+  const adapted = ["key", "verseOrder", "designOverride", "fontSize", "textEffect", "showChordsStage", "stageCurrentNext", "livestreamLowerThird", "livestreamLines"].some((key) => key in metadata);
   return (
     <div className="song-context">
       <header>
@@ -272,25 +279,31 @@ function SongEditor({
           <small>{String(metadata.originalTitle ?? "")}</small>
         </div>
         <label>
-          Team
+          Arrangement
           <select
             disabled={!canEdit}
-            value={String(metadata.team ?? "Lobpreis-Team")}
-            onChange={(event) => changeMeta({ team: event.target.value })}
+            value={String(metadata.arrangement ?? "Philippus Standard")}
+            onChange={(event) => changeMeta({ arrangement: event.target.value, arrangementSource: "presentation-override" })}
           >
-            <option>Lobpreis-Team</option>
-            <option>Technik-Team</option>
+            <option>Philippus Standard</option>
+            <option>Akustisch</option>
+            <option>Jugendgottesdienst</option>
+            <option>Kein Arrangement</option>
           </select>
         </label>
       </header>
+      <div className="song-status-row">
+        <span className={adapted ? "song-adapted" : ""}>{adapted ? "● Angepasst" : "● Arrangement aktiv"}</span>
+        {adapted && <button type="button" disabled={!canEdit} onClick={resetOverrides}>PRÄSENTATIONSÄNDERUNGEN ZURÜCKSETZEN</button>}
+      </div>
       <div className="arrangement-head">
-        <button>
-          <Icon name="expand_more" /> Hauptarrangement
+        <button type="button" disabled={!canEdit} onClick={() => changeMeta({ arrangementSource: "presentation-override" })}>
+          <Icon name="expand_more" /> ARRANGEMENT BEARBEITEN
         </button>
         <div className="arrangement-actions">
           <button
             title="Arrangement duplizieren"
-            onClick={() => state.duplicateSlide()}
+            onClick={() => changeMeta({ arrangement: `${String(metadata.arrangement ?? "Philippus Standard")} (Kopie)`, arrangementSource: "presentation-override" })}
             disabled={!canEdit}
           >
             <Icon name="content_copy" />
@@ -311,7 +324,7 @@ function SongEditor({
             onChange={(event) => changeMeta({ key: event.target.value })}
           >
             <option>–</option>
-            {["C", "D", "E", "F", "G", "A", "B"].map((key) => (
+            {["C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"].map((key) => (
               <option key={key}>{key}</option>
             ))}
           </select>
@@ -330,7 +343,52 @@ function SongEditor({
           </button>
         ))}
       </div>
-      <div className="lyrics-editor">
+      <nav className="song-tabs" aria-label="Songbereiche">
+        {([["content", "INHALT"], ["order", "ABLAUF"], ["design", "DESIGN"], ["stage", "STAGE"], ["stream", "LIVESTREAM"]] as const).map(([value, label]) => (
+          <button type="button" key={value} className={tab === value ? "active" : ""} onClick={() => setTab(value)}>{label}</button>
+        ))}
+      </nav>
+      {tab === "order" && (
+        <section className="song-override-panel">
+          <label>VERSE ORDER
+            <input disabled={!canEdit} value={String(metadata.verseOrder ?? "V1 C V2 C B C C")} placeholder="V1 C V2 C B C" onChange={(event) => changeMeta({ verseOrder: event.target.value })} />
+          </label>
+          <small>Beispiel: V1 C V2 C B C C · Der Chorus wird einmal gespeichert und kann mehrfach erscheinen.</small>
+        </section>
+      )}
+      {tab === "design" && (
+        <section className="song-override-panel">
+          <label>Design-Vorlage
+            <select disabled={!canEdit} value={String(metadata.designOverride ?? "Standard")} onChange={(event) => changeMeta({ designOverride: event.target.value })}>
+              <option>Standard</option><option>Modern</option><option>Jugend</option><option>Akustisch</option><option>Lower Third</option><option>Schlicht</option>
+            </select>
+          </label>
+          <label>Schriftgröße
+            <input type="number" min="24" max="160" disabled={!canEdit} value={Number(metadata.fontSize ?? 72)} onChange={(event) => changeMeta({ fontSize: Math.max(24, Math.min(160, Number(event.target.value) || 72)) })} />
+          </label>
+          <label>Texteffekt
+            <select disabled={!canEdit} value={String(metadata.textEffect ?? "Schatten")} onChange={(event) => changeMeta({ textEffect: event.target.value })}><option>Kein Effekt</option><option>Schatten</option><option>Kontur</option><option>Glow</option></select>
+          </label>
+          <small>Diese Designänderungen gelten nur für dieses Song-ServiceItem und verändern die Songbibliothek nicht.</small>
+        </section>
+      )}
+      {tab === "stage" && (
+        <section className="song-override-panel">
+          <label><input type="checkbox" disabled={!canEdit} checked={metadata.showChordsStage === true} onChange={(event) => changeMeta({ showChordsStage: event.target.checked })} /> Akkorde auf STAGE anzeigen</label>
+          <label><input type="checkbox" disabled={!canEdit} checked={metadata.stageCurrentNext !== false} onChange={(event) => changeMeta({ stageCurrentNext: event.target.checked })} /> Aktuelle und nächste Folie zeigen</label>
+          <small>MAIN bleibt beim Songtext; STAGE kann zusätzlich Akkorde und Current/Next anzeigen.</small>
+        </section>
+      )}
+      {tab === "stream" && (
+        <section className="song-override-panel">
+          <label><input type="checkbox" disabled={!canEdit} checked={metadata.livestreamLowerThird === true} onChange={(event) => changeMeta({ livestreamLowerThird: event.target.checked })} /> Livestream-Lower-Third aktivieren</label>
+          <label>Stream-Textzeilen
+            <input type="number" min="1" max="4" disabled={!canEdit} value={Number(metadata.livestreamLines ?? 2)} onChange={(event) => changeMeta({ livestreamLines: Math.max(1, Math.min(4, Number(event.target.value) || 2)) })} />
+          </label>
+          <small>Der Livestream erhält sein eigenes Layout und bleibt mit derselben Songposition synchron.</small>
+        </section>
+      )}
+      {tab === "content" && <div className="lyrics-editor">
         {item.slides.map((slide, index) => (
           <section
             key={slide.id}
@@ -366,7 +424,7 @@ function SongEditor({
             </button>
           </section>
         ))}
-      </div>
+      </div>}
       <div className="song-meta">
         <label>
           Autoren
