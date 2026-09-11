@@ -1,3 +1,21 @@
+# GottesdienstRegie 0.36.8
+
+Veröffentlicht am 11. September 2026.
+
+## Neu
+
+- **Song-Overrides:** Songs besitzen jetzt getrennte Bereiche für Inhalt, Ablauf, Design, STAGE und LIVESTREAM.
+- **Verse Order:** `V1 C V2 C B C C` kann pro Gottesdienst festgelegt werden.
+- **Arrangement und Tonart:** Philippus Standard, Akustisch, Jugendgottesdienst und Kein Arrangement sowie erweiterte Tonarten stehen direkt im Songeditor bereit.
+
+## Verbessert
+
+- Präsentationsänderungen werden am Song als „Angepasst“ markiert und können gesammelt zurückgesetzt werden.
+- Designvorlagen, Schriftgröße und Texteffekte lassen sich nur für das aktuelle Song-ServiceItem ändern.
+- STAGE kann Akkorde und Current/Next anzeigen; LIVESTREAM unterstützt ein eigenes Lower-Third-Layout.
+
+---
+
 # GottesdienstRegie 0.36.7
 
 Veröffentlicht am 11. September 2026 um 00:48 Uhr.

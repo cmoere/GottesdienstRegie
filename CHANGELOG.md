@@ -1,5 +1,12 @@
 # Versionshinweise / Release notes
 
+## 0.36.8 – 2026-09-11
+
+- Songeditor mit Tabs für Inhalt, Ablauf, Design, STAGE und LIVESTREAM
+- Präsentationsspezifische Song-Overrides für Arrangement, Verse Order, Tonart, Design, Texteffekte und Ausgabelayouts
+- STAGE-Akkorde, Current/Next und Livestream-Lower-Third direkt am Song konfigurierbar
+- Overrides gesammelt zurücksetzen, ohne die Songbibliothek oder gespeicherte Arrangements zu verändern
+
 ## 0.36.7 – 2026-09-11
 
 - Start-Synchronisierung kann übersprungen werden, während die gespeicherte Anmeldung erhalten bleibt

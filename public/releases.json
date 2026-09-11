@@ -5,10 +5,28 @@
     {
       "line": "0.36",
       "builds": [{
+        "version": "0.36.8",
+        "releaseDate": "2026-09-11",
+        "releaseTime": "01:15",
+        "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Song-Overrides","en":"Song overrides"},"text":{"de":"Songs besitzen getrennte Bereiche für Inhalt, Ablauf, Design, STAGE und LIVESTREAM. Änderungen gelten zunächst nur für das aktuelle Song-ServiceItem.","en":"Songs now have separate areas for content, order, design, STAGE and LIVESTREAM. Changes initially apply only to the current song service item."}},
+            {"label":{"de":"Verse Order","en":"Verse order"},"text":{"de":"Die Reihenfolge V1 C V2 C B C C kann direkt pro Gottesdienst festgelegt werden.","en":"The order V1 C V2 C B C C can be set directly for each service."}},
+            {"label":{"de":"Arrangement und Tonart","en":"Arrangement and key"},"text":{"de":"Mehrere Arrangements und zwölf Tonarten stehen direkt im Songeditor bereit.","en":"Multiple arrangements and twelve keys are available directly in the song editor."}}
+          ],
+          "improved": [
+            {"label":{"de":"Design-Overrides","en":"Design overrides"},"text":{"de":"Designvorlage, Schriftgröße und Texteffekt können pro Song angepasst und gesammelt zurückgesetzt werden.","en":"Design template, font size and text effects can be overridden per song and reset together."}},
+            {"label":{"de":"STAGE und LIVESTREAM","en":"STAGE and LIVESTREAM"},"text":{"de":"STAGE unterstützt Akkorde und Current/Next; der Livestream erhält ein eigenes Lower-Third-Layout.","en":"STAGE supports chords and Current/Next; livestream gets its own lower-third layout."}}
+          ],
+          "fixed": [],
+          "known": []
+        }
+      },{
         "version": "0.36.7",
         "releaseDate": "2026-09-11",
         "releaseTime": "00:48",
-        "current": true,
+        "current": false,
         "screenshot": {
           "src": "../help/release-0.36.7.png",
           "alt": {"de":"Unsplash-Foto mit Favoritenaktion in der Medienbibliothek","en":"Unsplash photo with favorite action in the media library"},
