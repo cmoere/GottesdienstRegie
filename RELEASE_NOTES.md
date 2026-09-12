@@ -1,3 +1,12 @@
+# GottesdienstRegie 0.36.10
+
+## Behoben
+
+- Windows-Startfehler „Titlebar overlay is not enabled“ behoben. Nach dem kompakten Ladefenster öffnet sich der Arbeitsbereich wieder in der eingestellten Größe.
+- Die Windows-Titelleiste wird bereits beim Erstellen des Fensters korrekt initialisiert.
+
+---
+
 # GottesdienstRegie 0.36.9
 
 ## Verbessert

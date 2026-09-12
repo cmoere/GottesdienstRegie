@@ -1,5 +1,10 @@
 # Versionshinweise / Release notes
 
+## 0.36.10
+
+- Windows-Startabsturz durch deaktiviertes Titlebar-Overlay behoben.
+- Fensterwechsel vom Ladefenster zum Arbeitsbereich mit einem Electron-Laufzeittest geprüft.
+
 ## 0.36.9
 
 - Kompaktes Startfenster ohne äußere Hintergrundfläche.

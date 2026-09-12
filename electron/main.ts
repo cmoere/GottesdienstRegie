@@ -67,7 +67,7 @@ function createControlWindow(preferences:AppPreferencesData) {
   const bounds=visible?stored!:{x:target.workArea.x+Math.round(target.workArea.width*.05),y:target.workArea.y+Math.round(target.workArea.height*.05),width:Math.max(960,Math.round(target.workArea.width*.9)),height:Math.max(620,Math.round(target.workArea.height*.9))};
   controlWindow = new BrowserWindow({
     width:410,height:700,show:false,minWidth: 320, minHeight: 480,
-    titleBarStyle:'hidden',titleBarOverlay:false,resizable:false,maximizable:false,
+    titleBarStyle:'hidden',titleBarOverlay:process.platform==='win32'?{color:'#282832',symbolColor:'#ffffff',height:28}:false,resizable:false,maximizable:false,
     backgroundColor: '#282832', icon: app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.join(app.getAppPath(), 'build/icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   });

@@ -5,9 +5,21 @@
     {
       "line": "0.36",
       "builds": [{
-        "version": "0.36.9",
+        "version": "0.36.10",
         "releaseDate": "2026-09-12",
         "current": true,
+        "sections": {
+          "new": [],
+          "improved": [],
+          "fixed": [
+            {"label":{"de":"Windows-Start repariert","en":"Windows startup fixed"},"text":{"de":"Der Fehler „Titlebar overlay is not enabled“ beim Wechsel vom Ladefenster zum Arbeitsbereich ist behoben.","en":"Fixed the titlebar overlay exception when switching from the loading window to the workspace."}}
+          ],
+          "known": []
+        }
+      },{
+        "version": "0.36.9",
+        "releaseDate": "2026-09-12",
+        "current": false,
         "sections": {
           "new": [],
           "improved": [
