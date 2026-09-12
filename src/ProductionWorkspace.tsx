@@ -6,6 +6,7 @@ import {
   type CSSProperties,
 } from "react";
 import QRCode from "qrcode";
+import { readSong, songPatch, shortSection, transposeChords, type SongStructure } from './songStructure';
 import { SlideRenderer } from "./SlideRenderer";
 import {
   defaultTransition,
@@ -251,23 +252,49 @@ function SongEditor({
   canEdit: boolean;
 }) {
   const state = usePresentation();
-  const [tab, setTab] = useState<"content" | "order" | "design" | "stage" | "stream">("content");
+  const [tab, setTab] = useState<"content" | "order" | "design" | "chords" | "stage" | "stream" | "metadata">("content");
+  const [query,setQuery]=useState('');
+  const [searching,setSearching]=useState(item.title==='Neuer Song');
+  const [savedSongs,setSavedSongs]=useState<ServiceItem[]>([]);
+  useEffect(()=>{let active=true;if(searching)void window.desktop?.presentation.list().then(async entries=>{
+    const songs:ServiceItem[]=[];
+    for(const entry of entries){const document=await window.desktop?.presentation.load(entry.id) as {items?:ServiceItem[]}|null;songs.push(...(document?.items||[]).filter(item=>item.type==='song'));}
+    if(active)setSavedSongs(songs);
+  }).catch(()=>{});return()=>{active=false}},[searching]);
+  const structure = useMemo(() => readSong(item), [item]);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const commitSong = (next: SongStructure) => {
+    if (!canEdit) return;
+    const patch = songPatch(item, next);
+    state.updateItem(item.id, patch);
+    if (!patch.slides?.some(slide => slide.id === state.selectedSlideId)) state.select(item.id, patch.slides?.[0]?.id);
+  };
+  const applyText = (properties: Record<string, string | number | boolean>) => {
+    commitSong({ ...structure, sections: structure.sections.map(section => ({ ...section, slides: section.slides.map(slide => ({ ...slide, elements: slide.elements.map((element, index) => index === 0 && element.type === 'text' ? { ...element, properties: { ...element.properties, ...properties } } : element) })) })) });
+  };
   const arrangement = item.slides.map((slide, index) =>
     slideLabel(slide, index),
   );
   const metadata = item.metadata;
   const changeMeta = (patch: Record<string, string | number | boolean>) =>
-    state.updateItem(item.id, { metadata: { ...metadata, ...patch } });
+    state.updateItem(item.id, { metadata: { ...metadata, ...patch, songAdjusted:true, songOriginal:metadata.songOriginal||JSON.stringify({slides:item.slides,metadata:item.metadata}) } });
   const resetOverrides = () => {
+    if (metadata.songOriginal) {
+      try { state.updateItem(item.id, JSON.parse(String(metadata.songOriginal))); } catch { return; }
+      const restored = usePresentation.getState().items.find(entry => entry.id === item.id);
+      state.select(item.id, restored?.slides[0]?.id);
+      return;
+    }
     const next = { ...metadata };
     ["key", "verseOrder", "designOverride", "fontSize", "textEffect", "showChordsStage", "stageCurrentNext", "livestreamLowerThird", "livestreamLines", "arrangementSource"].forEach((key) => delete next[key]);
     state.updateItem(item.id, { metadata: next });
   };
-  const adapted = ["key", "verseOrder", "designOverride", "fontSize", "textEffect", "showChordsStage", "stageCurrentNext", "livestreamLowerThird", "livestreamLines"].some((key) => key in metadata);
+  const adapted = metadata.songAdjusted === true;
   return (
     <div className="song-context">
       <header>
         <div>
+          <button type="button" onClick={()=>setSearching(value=>!value)}>SONG {searching?'BEARBEITEN':'SUCHEN / WECHSELN'}</button>
           <input
             aria-label="Songtitel"
             disabled={!canEdit}
@@ -282,35 +309,43 @@ function SongEditor({
           Arrangement
           <select
             disabled={!canEdit}
-            value={String(metadata.arrangement ?? "Philippus Standard")}
+            value={String(metadata.arrangement ?? "Kein Arrangement")}
             onChange={(event) => changeMeta({ arrangement: event.target.value, arrangementSource: "presentation-override" })}
           >
-            <option>Philippus Standard</option>
-            <option>Akustisch</option>
-            <option>Jugendgottesdienst</option>
+            {metadata.arrangement && <option>{String(metadata.arrangement)}</option>}
             <option>Kein Arrangement</option>
           </select>
         </label>
       </header>
+      {searching && <section className="song-search-panel"><input aria-label="Song suchen" placeholder="Bitte Songtitel eingeben" value={query} onChange={event=>setQuery(event.target.value)}/><strong>MEINE SONGS · AUS PRÄSENTATIONEN</strong><div>{[...state.items,...savedSongs].filter((entry,index,all)=>entry.type==='song'&&entry.id!==item.id&&entry.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())&&all.findIndex(other=>other.id===entry.id)===index).map(entry=><button disabled={!canEdit} key={entry.id} onClick={()=>{
+        const copy=structuredClone(entry);const metadata={...copy.metadata};delete metadata.songStructure;delete metadata.songOriginal;
+        state.updateItem(item.id,{title:copy.title,metadata,slides:copy.slides.map(slide=>({...slide,id:crypto.randomUUID(),itemId:item.id,elements:slide.elements.map(element=>({...element,id:crypto.randomUUID()}))}))});
+        state.select(item.id,usePresentation.getState().items.find(entry=>entry.id===item.id)?.slides[0]?.id);setSearching(false);
+      }}><b>{entry.title}</b><small>{String(entry.metadata.arrangement||'Präsentationsfassung')} · {entry.slides.map(slide=>shortSection(slide.title)).join(' · ')}</small></button>)}</div><button onClick={()=>setSearching(false)}>EIGENEN SONG BEARBEITEN</button></section>}
       <div className="song-status-row">
-        <span className={adapted ? "song-adapted" : ""}>{adapted ? "● Angepasst" : "● Arrangement aktiv"}</span>
+        <span className={adapted ? "song-adapted" : ""}>{adapted ? "● Für diese Präsentation angepasst" : "Präsentationsfassung"}</span>
         {adapted && <button type="button" disabled={!canEdit} onClick={resetOverrides}>PRÄSENTATIONSÄNDERUNGEN ZURÜCKSETZEN</button>}
       </div>
       <div className="arrangement-head">
-        <button type="button" disabled={!canEdit} onClick={() => changeMeta({ arrangementSource: "presentation-override" })}>
-          <Icon name="expand_more" /> ARRANGEMENT BEARBEITEN
+        <button type="button" onClick={() => setTab('order')}>
+          <Icon name="expand_more" /> ABLAUF BEARBEITEN
         </button>
         <div className="arrangement-actions">
           <button
-            title="Arrangement duplizieren"
-            onClick={() => changeMeta({ arrangement: `${String(metadata.arrangement ?? "Philippus Standard")} (Kopie)`, arrangementSource: "presentation-override" })}
+            title="Letzten Abschnitt wiederholen"
+            onClick={() => commitSong({...structure, order: [...structure.order, structure.order[structure.order.length - 1]]})}
             disabled={!canEdit}
           >
             <Icon name="content_copy" />
           </button>
           <button
             title="Abschnitt hinzufügen"
-            onClick={() => state.addSlide()}
+            onClick={() => {
+              const slide=structuredClone(item.slides[0]);
+              slide.body=''; slide.elements=slide.elements.map((element,index)=>index===0?{...element,properties:{...element.properties,text:''}}:element);
+              const section={id:crypto.randomUUID(),label:`Vers ${structure.sections.length+1}`,slides:[slide]};
+              commitSong({sections:[...structure.sections,section],order:[...structure.order,section.id]});
+            }}
             disabled={!canEdit}
           >
             <Icon name="add" />
@@ -321,7 +356,7 @@ function SongEditor({
           <select
             disabled={!canEdit}
             value={String(metadata.key ?? "–")}
-            onChange={(event) => changeMeta({ key: event.target.value })}
+            onChange={(event) => changeMeta({ key: event.target.value, chords: transposeChords(String(metadata.chords || ''), String(metadata.key || ''), event.target.value), songAdjusted:true })}
           >
             <option>–</option>
             {["C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"].map((key) => (
@@ -331,47 +366,54 @@ function SongEditor({
         </label>
       </div>
       <div className="arrangement-sequence" aria-label="Arrangement">
-        {arrangement.map((name, index) => (
+        {structure.order.map((id, index) => (
           <button
-            key={`${name}-${index}`}
+            key={`${id}-${index}`}
             className={
-              item.slides[index].id === state.selectedSlideId ? "active" : ""
+              item.slides[index]?.id === state.selectedSlideId ? "active" : ""
             }
-            onClick={() => state.select(item.id, item.slides[index].id)}
+            onClick={() => state.select(item.id, item.slides[structure.order.slice(0,index).reduce((sum,id)=>sum+(structure.sections.find(section=>section.id===id)?.slides.length??0),0)]?.id)}
           >
-            {name}
+            {shortSection(structure.sections.find(section=>section.id===id)?.label || '')}
           </button>
         ))}
       </div>
       <nav className="song-tabs" aria-label="Songbereiche">
-        {([["content", "INHALT"], ["order", "ABLAUF"], ["design", "DESIGN"], ["stage", "STAGE"], ["stream", "LIVESTREAM"]] as const).map(([value, label]) => (
+        {([["content", "INHALT"], ["order", "ABLAUF"], ["design", "DESIGN"], ["chords", "AKKORDE"], ["stage", "STAGE"], ["stream", "LIVESTREAM"], ["metadata", "METADATEN"]] as const).map(([value, label]) => (
           <button type="button" key={value} className={tab === value ? "active" : ""} onClick={() => setTab(value)}>{label}</button>
         ))}
       </nav>
       {tab === "order" && (
         <section className="song-override-panel">
-          <label>VERSE ORDER
-            <input disabled={!canEdit} value={String(metadata.verseOrder ?? "V1 C V2 C B C C")} placeholder="V1 C V2 C B C" onChange={(event) => changeMeta({ verseOrder: event.target.value })} />
-          </label>
+          <div className="song-order-chips">{structure.order.map((id,index)=><div key={`${id}-${index}`} draggable={canEdit} onDragStart={()=>setDragIndex(index)} onDragOver={event=>event.preventDefault()} onDrop={()=>{if(dragIndex===null)return;const order=[...structure.order];const [moved]=order.splice(dragIndex,1);order.splice(index,0,moved);commitSong({...structure,order});setDragIndex(null)}}>
+            <span>{shortSection(structure.sections.find(section=>section.id===id)?.label || '')}</span>
+            <button disabled={!canEdit||index===0} aria-label="Nach links verschieben" onClick={()=>{const order=[...structure.order];[order[index-1],order[index]]=[order[index],order[index-1]];commitSong({...structure,order})}}>←</button>
+            <button disabled={!canEdit||structure.order.length===1} aria-label="Aus Ablauf entfernen" onClick={()=>commitSong({...structure,order:structure.order.filter((_,i)=>i!==index)})}>×</button>
+          </div>)}</div>
+          <div className="song-order-chips">{structure.sections.map(section=><button disabled={!canEdit} key={section.id} onClick={()=>commitSong({...structure,order:[...structure.order,section.id]})}>+ {shortSection(section.label)}</button>)}</div>
+          <small>{item.slides.length} generierte Folien · Abschnitte ziehen oder mit den Pfeilen verschieben.</small>
           <small>Beispiel: V1 C V2 C B C C · Der Chorus wird einmal gespeichert und kann mehrfach erscheinen.</small>
         </section>
       )}
       {tab === "design" && (
         <section className="song-override-panel">
           <label>Design-Vorlage
-            <select disabled={!canEdit} value={String(metadata.designOverride ?? "Standard")} onChange={(event) => changeMeta({ designOverride: event.target.value })}>
-              <option>Standard</option><option>Modern</option><option>Jugend</option><option>Akustisch</option><option>Lower Third</option><option>Schlicht</option>
-            </select>
+            <button disabled={!canEdit} onClick={()=>applyText({fontSize:72,align:'center',fontWeight:600,textShadow:'0 2px 4px #000',textOutline:'',textGlow:''})}>Zentriert mit Schatten anwenden</button>
           </label>
           <label>Schriftgröße
-            <input type="number" min="24" max="160" disabled={!canEdit} value={Number(metadata.fontSize ?? 72)} onChange={(event) => changeMeta({ fontSize: Math.max(24, Math.min(160, Number(event.target.value) || 72)) })} />
+            <input type="number" min="24" max="160" disabled={!canEdit} value={Number(structure.sections[0]?.slides[0]?.elements[0]?.properties.fontSize ?? 72)} onChange={(event) => applyText({ fontSize: Math.max(24, Math.min(160, Number(event.target.value) || 72)) })} />
           </label>
           <label>Texteffekt
-            <select disabled={!canEdit} value={String(metadata.textEffect ?? "Schatten")} onChange={(event) => changeMeta({ textEffect: event.target.value })}><option>Kein Effekt</option><option>Schatten</option><option>Kontur</option><option>Glow</option></select>
+            <select disabled={!canEdit} defaultValue="" onChange={(event) => applyText({textShadow:event.target.value==='Schatten'?'0 2px 4px #000':'',textOutline:event.target.value==='Kontur'?'2px #000':'',textGlow:event.target.value==='Glow'?'0 0 12px #fff':''})}><option value="" disabled>Bitte Effekt wählen</option><option>Kein Effekt</option><option>Schatten</option><option>Kontur</option><option>Glow</option></select>
           </label>
+          <label>Schriftart<select disabled={!canEdit} value={String(structure.sections[0]?.slides[0]?.elements[0]?.properties.fontFamily || 'Cera Pro')} onChange={event=>applyText({fontFamily:event.target.value})}>{editorFonts.map(font=><option key={font}>{font}</option>)}</select></label>
+          <label>Textfarbe<input type="color" disabled={!canEdit} value={String(structure.sections[0]?.slides[0]?.elements[0]?.properties.color || '#ffffff')} onChange={event=>applyText({color:event.target.value})}/></label>
+          <label>Ausrichtung<select disabled={!canEdit} onChange={event=>applyText({align:event.target.value})}><option value="center">Zentriert</option><option value="left">Links</option><option value="right">Rechts</option></select></label>
+          <label>Hintergrundfarbe<input type="color" disabled={!canEdit} value={structure.sections[0]?.slides[0]?.background || '#000000'} onChange={event=>commitSong({...structure,sections:structure.sections.map(section=>({...section,slides:section.slides.map(slide=>({...slide,background:event.target.value,backgroundImage:undefined}))}))})}/></label>
           <small>Diese Designänderungen gelten nur für dieses Song-ServiceItem und verändern die Songbibliothek nicht.</small>
         </section>
       )}
+      {tab === 'chords' && <section className="song-override-panel"><label>Akkorde in eckigen Klammern<textarea disabled={!canEdit} rows={12} placeholder="[G] … [C] …" value={String(metadata.chords || '')} onChange={event=>changeMeta({chords:event.target.value,songAdjusted:true})}/></label><p>Beim Tonartwechsel werden Akkorde und Basstöne in eckigen Klammern transponiert. MAIN enthält weiterhin nur die Lyrics.</p></section>}
       {tab === "stage" && (
         <section className="song-override-panel">
           <label><input type="checkbox" disabled={!canEdit} checked={metadata.showChordsStage === true} onChange={(event) => changeMeta({ showChordsStage: event.target.checked })} /> Akkorde auf STAGE anzeigen</label>
@@ -389,19 +431,18 @@ function SongEditor({
         </section>
       )}
       {tab === "content" && <div className="lyrics-editor">
-        {item.slides.map((slide, index) => (
+        {structure.sections.flatMap(section => section.slides.map((slide, part) => ({section, slide, part}))).map(({section, slide, part}, index) => (
           <section
-            key={slide.id}
+            key={`${section.id}-${part}`}
             className={slide.id === state.selectedSlideId ? "active" : ""}
             onClick={() => state.select(item.id, slide.id)}
           >
             <input
               disabled={!canEdit}
-              value={slide.title}
+              value={section.label}
               aria-label={`Abschnitt ${index + 1}`}
               onChange={(event) => {
-                state.select(item.id, slide.id);
-                state.updateSlide({ title: event.target.value });
+                commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,label:event.target.value}:entry)});
               }}
             />
             <textarea
@@ -409,15 +450,15 @@ function SongEditor({
               value={slide.body}
               rows={Math.max(3, slide.body.split("\n").length + 1)}
               onChange={(event) => {
-                state.select(item.id, slide.id);
-                state.updateSlide({ body: event.target.value });
+                const body=event.target.value;
+                commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,body,elements:page.elements.map((element,j)=>j===0&&element.type==='text'?{...element,properties:{...element.properties,text:body}}:element)}:page)}:entry)});
               }}
             />
             <button
               disabled={!canEdit}
               onClick={() => {
-                state.select(item.id, slide.id);
-                state.addSlide();
+                const page=structuredClone(slide);page.id=crypto.randomUUID();page.body='';page.elements=page.elements.map((element,j)=>j===0?{...element,properties:{...element.properties,text:''}}:element);
+                commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:[...entry.slides.slice(0,part+1),page,...entry.slides.slice(part+1)]}:entry)});
               }}
             >
               <Icon name="horizontal_rule" /> FOLIENUMBRUCH
@@ -425,7 +466,7 @@ function SongEditor({
           </section>
         ))}
       </div>}
-      <div className="song-meta">
+      {tab === 'metadata' && <div className="song-meta">
         <label>
           Autoren
           <input
@@ -450,8 +491,8 @@ function SongEditor({
             onChange={(event) => changeMeta({ ccli: event.target.value })}
           />
         </label>
-      </div>
-      <div className="song-options">
+      </div>}
+      {tab === 'metadata' && <div className="song-options">
         <label>
           <input
             type="checkbox"
@@ -486,7 +527,7 @@ function SongEditor({
           Credits auf Titelfolie
         </label>
         <span>Übergang: Überblenden · 0,5 Sekunden</span>
-      </div>
+      </div>}
     </div>
   );
 }

@@ -2131,7 +2131,7 @@ function AddPopover({ close }: { close: () => void }) {
               option.type === "liveQuiz"
                 ? setQuizOpen(true)
                 : option.type === "song"
-                  ? addSong()
+                  ? (()=>{state.addItem('song',{title:'Neuer Song',section:'',sectionId,body:''});state.setMode('edit');close();})()
                   : option.type === "bible"
                     ? addBible()
                     : option.type === "videoInput"
@@ -9907,16 +9907,18 @@ function Output() {
       disposeQuick?.();
     };
   }, []);
+  const songOutput=(slide as (Slide & {songOutput?:{chords:string;showChords:boolean;currentNext:boolean;next:string;lowerThird:boolean}})|null)?.songOutput;
+  const renderedSlide=slide && songOutput?.lowerThird && role==='livestream'?{...slide,background:'transparent',backgroundImage:undefined,elements:slide.elements.filter(element=>element.type==='text').map(element=>({...element,x:140,y:800,width:1640,height:240,properties:{...element.properties,fontSize:52}}))}:slide;
   return (
     <div
       className={`output ${quick?.type === "noText" ? "quick-no-text" : ""}`}
     >
-      {slide && (
+      {slide && role==='stage' && songOutput ? <div style={{position:'absolute',inset:0,background:'#000',color:'#fff',padding:'4vw',whiteSpace:'pre-wrap',overflow:'hidden'}}><h2>{slide.title}</h2><div style={{fontSize:'3vw'}}>{slide.body}</div>{songOutput.showChords&&<pre style={{fontSize:'2vw',color:'#f3d67b'}}>{songOutput.chords}</pre>}{songOutput.currentNext&&<div style={{fontSize:'2vw',marginTop:'2vw',borderTop:'1px solid #777'}}>ALS NÄCHSTES<br/>{songOutput.next}</div>}</div> : renderedSlide && (
         <TransitionStage
-          slide={slide}
+          slide={renderedSlide}
           transition={
-            slide.transitionOverride ??
-            resolveTransition(slide, undefined, role)
+            renderedSlide.transitionOverride ??
+            resolveTransition(renderedSlide, undefined, role)
           }
           role={role}
         />

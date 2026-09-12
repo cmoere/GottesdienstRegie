@@ -1,0 +1,24 @@
+.song-context { display:flex; flex-direction:column; height:100%; min-height:0; overflow:hidden; }
+.song-context > header,.song-context > .song-status-row,.song-context > .arrangement-head,.song-context > .arrangement-sequence,.song-context > .song-tabs { flex:0 0 auto; }
+.song-context > header { padding:10px 12px 6px; }
+.song-context .arrangement-head { align-items:center; }
+.song-context .arrangement-sequence { max-height:70px; align-items:center; flex-wrap:wrap; gap:5px; padding:5px 12px; }
+.song-context .arrangement-sequence button { height:28px; min-width:34px; padding:4px 9px; font-size:11px; }
+.song-context .song-tabs { flex-wrap:wrap; gap:1px; padding:5px 10px; }
+.song-context .song-tabs button { font-size:10px; min-height:32px; padding:6px; }
+.song-context > .lyrics-editor,.song-context > .song-override-panel { flex:1 1 0; min-height:0; overflow:auto; }
+.song-context .lyrics-editor { margin:6px 12px 12px; }
+.song-context .lyrics-editor textarea { font-size:15px; line-height:1.55; min-height:130px; }
+.song-context .lyrics-editor input { font-size:12px; padding:6px 2px; }
+.song-context .song-override-panel { align-content:start; }
+.song-context .song-meta { overflow:auto; grid-template-columns:1fr; }
+.song-search-panel { flex:0 1 260px; min-height:100px; display:flex; flex-direction:column; gap:8px; padding:10px 12px; overflow:auto; }
+.song-search-panel > div { overflow:auto; }
+.song-search-panel > div > button { display:grid; gap:4px; text-align:left; width:100%; padding:8px; border-bottom:1px solid var(--border); }
+.song-context .song-override-panel textarea { width:100%; min-height:160px; font-size:14px; }
+.song-order-chips { display:flex; flex-wrap:wrap; gap:6px; }
+.song-order-chips > div { display:flex; align-items:center; gap:4px; border:1px solid var(--border); background:var(--panel2); padding:4px 6px; font-size:12px; }
+.song-order-chips button { min-height:28px; }
+.context-editor:has(>.song-context) { display:flex; flex-direction:column; }
+.context-editor:has(>.song-context) > .song-context { flex:1 1 0; }
+.context-editor:has(>.song-context) > :not(.song-context) { flex:0 0 auto; max-height:180px; overflow:auto; }
