@@ -5,9 +5,26 @@
     {
       "line": "0.36",
       "builds": [{
-        "version": "0.36.10",
+        "version": "0.36.11",
         "releaseDate": "2026-09-12",
         "current": true,
+        "sections": {
+          "new": [
+            {"label":{"de":"Songablauf","en":"Song order"},"text":{"de":"Kompakte Chips steuern die Folienreihenfolge. Wiederholte Abschnitte verwenden denselben Grundtext.","en":"Compact chips control slide order. Repeated sections share their source lyrics."}}
+          ],
+          "improved": [
+            {"label":{"de":"Song-Arbeitsbereich","en":"Song workspace"},"text":{"de":"Mehr Platz für Lyrics, sieben Haupttabs und Metadaten in einem eigenen Bereich.","en":"More room for lyrics, seven main tabs and a separate metadata area."}},
+            {"label":{"de":"Song-Suche und Gestaltung","en":"Song search and styling"},"text":{"de":"Songs aus gespeicherten Präsentationen lassen sich direkt suchen. Textgestaltung wirkt auf die Songfolien.","en":"Search songs from saved presentations directly. Text styling affects song slides."}}
+          ],
+          "fixed": [],
+          "known": [
+            {"label":{"de":"Noch offen","en":"Not yet included"},"text":{"de":"Eigenständige Cloud-Songbibliothek, Library-Arrangements und vollständige Design-Vererbung sind noch nicht enthalten.","en":"A standalone cloud song library, library arrangements and complete design inheritance are not yet included."}}
+          ]
+        }
+      },{
+        "version": "0.36.10",
+        "releaseDate": "2026-09-12",
+        "current": false,
         "sections": {
           "new": [],
           "improved": [],

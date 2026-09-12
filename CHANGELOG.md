@@ -1,5 +1,11 @@
 # Versionshinweise / Release notes
 
+## 0.36.11
+
+- Kompakter Songeditor mit größerem Lyrics-Bereich und separatem Metadaten-Tab.
+- Strukturierte Songabschnitte, wiederholbare Ablauf-Chips und echte Foliengenerierung.
+- Song-Suche in gespeicherten Präsentationen, wirksame Textgestaltung und Akkordtransposition.
+
 ## 0.36.10
 
 - Windows-Startabsturz durch deaktiviertes Titlebar-Overlay behoben.

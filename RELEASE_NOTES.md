@@ -1,3 +1,18 @@
+# GottesdienstRegie 0.36.11
+
+## Song-Editor
+
+- Kompakte Ablauf-Chips und ein größerer Lyrics-Bereich ersetzen die übergroße Arrangement-Fläche.
+- Inhalt, Ablauf, Design, Akkorde, STAGE, LIVESTREAM und Metadaten haben eigene Tabs.
+- Wiederholte Songabschnitte verwenden denselben Grundtext und erzeugen die tatsächliche Folienreihenfolge.
+- Die integrierte Suche findet Songs aus gespeicherten Präsentationen.
+- Schriftgröße, Textfarbe und Texteffekte wirken auf die Songfolien.
+- Akkorde in eckigen Klammern können beim Tonartwechsel transponiert werden.
+
+Die eigenständige Cloud-Songbibliothek, Library-Arrangements und vollständige Design-Vererbung sind noch nicht enthalten.
+
+---
+
 # GottesdienstRegie 0.36.10
 
 ## Behoben
