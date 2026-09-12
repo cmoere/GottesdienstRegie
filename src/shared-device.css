@@ -576,6 +576,10 @@
   border-color: var(--accent);
 }
 .production-boot .boot-panel {
+  width: 100vw;
+  height: 100vh;
+  min-height: 0;
+  box-shadow: none;
   grid-template-rows: auto 1fr auto auto auto !important;
 }
 .user-profile-dialog {

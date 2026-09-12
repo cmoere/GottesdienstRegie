@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.36.9
+
+## Verbessert
+
+- Der Startbildschirm erscheint als kompaktes Ladefenster ohne die große äußere Fläche. Anschließend öffnet sich der Arbeitsbereich in der eingestellten Fenstergröße.
+- Beim Beenden erscheint eine Speicheranzeige ohne Abbrechen- oder Überspringen-Schaltfläche. Die aktuelle Präsentation wird vor dem Schließen lokal gespeichert.
+- Die Größe des Ladefensters überschreibt nicht die gespeicherten Fenstereinstellungen.
+
+Hinweis: Die Anzeige beim Beenden bestätigt die lokale Speicherung, keine Cloud-Synchronisierung.
+
+---
+
 # GottesdienstRegie 0.36.8
 
 Veröffentlicht am 11. September 2026.

@@ -5,10 +5,25 @@
     {
       "line": "0.36",
       "builds": [{
+        "version": "0.36.9",
+        "releaseDate": "2026-09-12",
+        "current": true,
+        "sections": {
+          "new": [],
+          "improved": [
+            {"label":{"de":"Kompakter Start","en":"Compact startup"},"text":{"de":"Nur die mittlere Ladekarte erscheint als kleines Fenster. Anschließend öffnet sich der Arbeitsbereich in der eingestellten Größe.","en":"Only the central loading card appears in a small window, followed by the workspace at its configured size."}},
+            {"label":{"de":"Speichern beim Beenden","en":"Save on exit"},"text":{"de":"Eine nicht überspringbare Anzeige begleitet die lokale Speicherung der Präsentation vor dem Schließen.","en":"A non-skippable indicator accompanies local presentation saving before closing."}}
+          ],
+          "fixed": [],
+          "known": [
+            {"label":{"de":"Lokale Speicherung","en":"Local saving"},"text":{"de":"Die Speicheranzeige beim Beenden bestätigt keine Cloud-Synchronisierung.","en":"The exit saving indicator does not confirm cloud synchronization."}}
+          ]
+        }
+      },{
         "version": "0.36.8",
         "releaseDate": "2026-09-11",
         "releaseTime": "01:15",
-        "current": true,
+        "current": false,
         "sections": {
           "new": [
             {"label":{"de":"Song-Overrides","en":"Song overrides"},"text":{"de":"Songs besitzen getrennte Bereiche für Inhalt, Ablauf, Design, STAGE und LIVESTREAM. Änderungen gelten zunächst nur für das aktuelle Song-ServiceItem.","en":"Songs now have separate areas for content, order, design, STAGE and LIVESTREAM. Changes initially apply only to the current song service item."}},

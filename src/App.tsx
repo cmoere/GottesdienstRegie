@@ -9932,6 +9932,15 @@ export function App() {
   );
   const [device, setDevice] = useRegisteredDevice();
   const [startupProgress, setStartupProgress] = useState(0);
+  const [closing, setClosing] = useState(false);
+  useEffect(() => (window.desktop as any)?.lifecycle?.onClosing(() => {
+    setClosing(true);
+    const current=usePresentation.getState();
+    (window.desktop as any)?.lifecycle?.prepared(current.presentationId ? presentationDocument(current) : null);
+  }), []);
+  useEffect(() => {
+    if(session !== undefined && device !== undefined) (window.desktop as any)?.lifecycle?.ready();
+  }, [session, device]);
   const startupSkipped = useRef(false);
   const startupTimer = useRef<ReturnType<typeof setInterval> | undefined>(
     undefined,
@@ -10139,17 +10148,17 @@ export function App() {
   if (output) return <Output />;
   if (mediaBrowser) return <MediaBrowser />;
   if (historyWindow) return <ChangeHistoryWindow />;
-  if (session === undefined || device === undefined)
+  if (closing || session === undefined || device === undefined)
     return (
       <div className="boot production-boot">
         <div className="boot-panel">
-          <button
+          {!closing && <button
             className="boot-close"
             title="Schließen"
             onClick={() => window.close()}
           >
             <Icon name="close" />
-          </button>
+          </button>}
           <img src={logoWhite} alt="GottesdienstRegie" />
           <div
             className="boot-spinner"
@@ -10160,7 +10169,7 @@ export function App() {
             <i />
           </div>
           <p>
-            {startupProgress < 20
+            {closing ? "Änderungen werden gespeichert …" : startupProgress < 20
               ? "Konto wird geprüft …"
               : startupProgress < 42
                 ? "Cloud wird verbunden …"
@@ -10170,7 +10179,7 @@ export function App() {
                     ? "Arbeitsbereich wird vorbereitet …"
                     : "GottesdienstRegie wird gestartet …"}
           </p>
-          <button
+          {!closing && <button
             type="button"
             className="boot-skip"
             onClick={() => {
@@ -10183,7 +10192,7 @@ export function App() {
             }}
           >
             SYNCHRONISIERUNG ÜBERSPRINGEN
-          </button>
+          </button>}
           <strong>GottesdienstRegie</strong>
         </div>
       </div>

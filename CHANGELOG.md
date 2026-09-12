@@ -1,5 +1,11 @@
 # Versionshinweise / Release notes
 
+## 0.36.9
+
+- Kompaktes Startfenster ohne äußere Hintergrundfläche.
+- Nicht überspringbare Speicheranzeige beim Beenden mit lokaler Speicherung vor dem Schließen.
+- Ladefenster und gespeicherte Arbeitsbereichsgröße getrennt.
+
 ## 0.36.8 – 2026-09-11
 
 - Songeditor mit Tabs für Inhalt, Ablauf, Design, STAGE und LIVESTREAM

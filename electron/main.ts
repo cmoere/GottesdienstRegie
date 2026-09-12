@@ -20,6 +20,7 @@ let historyWindow: BrowserWindow | null = null;
 let appPreferences:AppPreferences;
 let controlCloseInProgress=false;
 let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
+let finishClose:()=>Promise<void>=async()=>{};
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}},{scheme:'gottesdienst-cloud',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 
@@ -65,28 +66,41 @@ function createControlWindow(preferences:AppPreferencesData) {
   const visible=stored&&displays.some(display=>stored.x<display.bounds.x+display.bounds.width&&stored.x+stored.width>display.bounds.x&&stored.y<display.bounds.y+display.bounds.height&&stored.y+stored.height>display.bounds.y);
   const bounds=visible?stored!:{x:target.workArea.x+Math.round(target.workArea.width*.05),y:target.workArea.y+Math.round(target.workArea.height*.05),width:Math.max(960,Math.round(target.workArea.width*.9)),height:Math.max(620,Math.round(target.workArea.height*.9))};
   controlWindow = new BrowserWindow({
-    ...bounds,show:false,minWidth: 960, minHeight: 620,
+    width:410,height:700,show:false,minWidth: 320, minHeight: 480,
+    titleBarStyle:'hidden',titleBarOverlay:false,resizable:false,maximizable:false,
     backgroundColor: '#282832', icon: app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.join(app.getAppPath(), 'build/icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   });
   controlWindow.setMenu(null);
   const configured=preferences.windowStartMode==='restore'?(preferences.lastWindowState??'fullscreen'):preferences.windowStartMode;
-  if(configured==='fullscreen')controlWindow.setFullScreen(true);else if(configured==='maximized')controlWindow.maximize();
+  controlWindow.center();
+  let workspaceReady=false;
+  const ready= (event:Electron.IpcMainEvent)=>{
+    if(event.sender!==controlWindow?.webContents||workspaceReady||controlCloseInProgress)return;
+    workspaceReady=true;
+    controlWindow.setMinimumSize(960,620);controlWindow.setResizable(true);controlWindow.setMaximizable(true);
+    controlWindow.setBounds(bounds);
+    if(process.platform==='win32')controlWindow.setTitleBarOverlay({color:'#282832',symbolColor:'#ffffff',height:28});
+    if(configured==='fullscreen')controlWindow.setFullScreen(true);else if(configured==='maximized')controlWindow.maximize();
+  };
+  ipcMain.on('lifecycle:ready',ready);
+  controlWindow.once('closed',()=>ipcMain.removeListener('lifecycle:ready',ready));
   controlWindow.once('ready-to-show',()=>controlWindow?.show());
   let saveTimer:NodeJS.Timeout|undefined;
   const saveWindowState=()=>{if(!controlWindow||controlWindow.isDestroyed())return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{if(!controlWindow||controlWindow.isDestroyed())return;const state=controlWindow.isFullScreen()?'fullscreen':controlWindow.isMaximized()?'maximized':'window',display=screen.getDisplayMatching(controlWindow.getBounds()),patch:Partial<AppPreferencesData>={lastWindowState:state,lastDisplayId:display.id};if(state==='window')patch.bounds=controlWindow.getBounds();void appPreferences.update(patch)},250)};
-  controlWindow.on('move',saveWindowState);controlWindow.on('resize',saveWindowState);controlWindow.on('maximize',saveWindowState);controlWindow.on('unmaximize',saveWindowState);controlWindow.on('enter-full-screen',saveWindowState);controlWindow.on('leave-full-screen',saveWindowState);
+  const rememberWorkspace=()=>{if(workspaceReady&&!controlCloseInProgress)saveWindowState();else clearTimeout(saveTimer)};
+  controlWindow.on('move',rememberWorkspace);controlWindow.on('resize',rememberWorkspace);controlWindow.on('maximize',rememberWorkspace);controlWindow.on('unmaximize',rememberWorkspace);controlWindow.on('enter-full-screen',rememberWorkspace);controlWindow.on('leave-full-screen',rememberWorkspace);
   controlWindow.webContents.on('before-input-event',(event,input)=>{if((input.control||input.meta)&&['+','=','-','0'].includes(input.key)){event.preventDefault();controlWindow?.webContents.setZoomFactor(1)}});
   controlWindow.on('close',event=>{
-    if(controlCloseInProgress)return;
+    if(controlCloseInProgress){event.preventDefault();return;}
     event.preventDefault();
     controlCloseInProgress=true;
     const closingWindow=controlWindow;
-    void stopPresentationOutputs().finally(()=>{
+    void finishClose().then(()=>{
       controlWindow=null;
       if(closingWindow&&!closingWindow.isDestroyed())closingWindow.destroy();
       app.quit();
-    });
+    }).catch(()=>{controlCloseInProgress=false;});
   });
   void load(controlWindow);
   controlWindow.webContents.once('did-finish-load',()=>{controlWindow?.webContents.setZoomFactor(1);void controlWindow?.webContents.setVisualZoomLevelLimits(1,1);if(appPreferences.get().automaticUpdates)setTimeout(()=>void checkForUpdates(),5000)});
@@ -302,9 +316,27 @@ app.whenReady().then(async() => {
   ipcMain.handle('outputs:send-role',(_event,role:OutputRole,payload:unknown)=>outputManager.sendTo(role,payload));
   ipcMain.handle('outputs:send-quick',(_event,roles:OutputRole[],payload:unknown)=>outputManager.sendQuick(roles,payload));
   ipcMain.handle('outputs:off-air',()=>{remoteServer.updateLive({onAir:false});return outputManager.stop()});
+  finishClose=async()=>{
+    const owner=controlWindow;if(!owner||owner.isDestroyed())return;
+    const document=await new Promise<unknown>((resolve,reject)=>{
+      const listener=(event:Electron.IpcMainEvent,value:unknown)=>{if(event.sender!==owner.webContents)return;clearTimeout(timer);ipcMain.removeListener('lifecycle:prepared',listener);resolve(value)};
+      const timer=setTimeout(()=>{ipcMain.removeListener('lifecycle:prepared',listener);reject(new Error('Der Arbeitsbereich antwortet nicht. Bitte erneut schließen.'))},10000);
+      ipcMain.on('lifecycle:prepared',listener);owner.webContents.send('lifecycle:closing');
+    });
+    owner.setFullScreen(false);owner.unmaximize();owner.setMinimumSize(320,480);owner.setResizable(false);owner.setMaximizable(false);owner.setContentSize(410,700);owner.center();
+    try{
+      await stopPresentationOutputs();
+      if(document)await presentationRepository.save(document);
+      await presentationRepository.setState({cleanShutdown:true});
+      await new Promise(resolve=>setTimeout(resolve,700));
+    }catch(error){
+      await dialog.showMessageBox(owner,{type:'error',title:'Speichern fehlgeschlagen',message:'Die Präsentation konnte nicht gespeichert werden. Bitte erneut versuchen.',detail:String(error)});
+      throw error;
+    }
+  };
   createControlWindow(initialPreferences);
   let cleanQuit=false;
-  app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();controlCloseInProgress=true;remoteServer.stop();void Promise.all([outputManager.stop(),presentationRepository.setState({cleanShutdown:true})]).finally(()=>{cleanQuit=true;app.quit()})});
+  app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();if(controlWindow&&!controlCloseInProgress){controlWindow.close();return;}if(controlWindow)return;remoteServer.stop();void outputManager.stop().finally(()=>{cleanQuit=true;app.quit()})});
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createControlWindow(appPreferences.get()); });
 });
 

@@ -1,6 +1,15 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("desktop", {
+  lifecycle: {
+    ready: () => ipcRenderer.send("lifecycle:ready"),
+    prepared: (document: unknown) => ipcRenderer.send("lifecycle:prepared", document),
+    onClosing: (callback: () => void) => {
+      const listener = () => callback();
+      ipcRenderer.on("lifecycle:closing", listener);
+      return () => ipcRenderer.removeListener("lifecycle:closing", listener);
+    },
+  },
   operator: {
     getPreferences: () => ipcRenderer.invoke("window-preferences:get"),
     setPreferences: (patch: unknown) =>
