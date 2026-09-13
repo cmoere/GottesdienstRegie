@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.36.15
+
+## Menüleiste bleibt vollständig sichtbar
+
+Beim Auswählen einer weit unten liegenden Folie konnte die gesamte App-Oberfläche nach oben scrollen. Die Menüleiste wurde dadurch am oberen Fensterrand abgeschnitten, während Profil, Synchronisierung und Fensterbuttons an ihrer festen Position blieben.
+
+Die äußere App-Hülle ist jetzt vom Scrollen ausgeschlossen. Folienübersicht und andere Inhaltsbereiche bleiben scrollbar. Auch bei niedrigen Fenstern erzwingt die Hülle keine übergroße Mindesthöhe mehr. Der Fix wurde in Electron bei 1920×1080, 1366×768 und 1280×600 mit Auswahl und Fokus auf entfernte Folien geprüft. Die bestehenden Layoutprüfungen für Einzelvorschau, Folienübersicht, Timeline und Bearbeiten bestehen ebenfalls.
+
+---
+
 # GottesdienstRegie 0.36.14
 
 ## Song- und Element-Editor: schneller vorbereiten, sicherer ausrichten

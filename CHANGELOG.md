@@ -1,5 +1,11 @@
 # Versionshinweise / Release notes
 
+## 0.36.15 – Menüleiste und Vorschau-Scrollen
+
+- Abgeschnittenes Menü bei Auswahl entfernter Folien behoben: Die äußere App-Hülle scrollt nicht mehr durch Fokus oder automatische Sichtbarkeitskorrekturen.
+- Überhohe App-Mindesthöhe entfernt; Profil, Sync und Fensterbuttons bleiben mit der Menüleiste ausgerichtet.
+- Electron-Regressionstest um Folienauswahl und Fokus bei drei Fenstergrößen ergänzt.
+
 ## 0.36.14 – Song- und Element-Editor
 
 - Lange Song-Lyrics lassen sich anhand der tatsächlichen Folienkapazität automatisch auf mehrere Folien aufteilen; Überläufe werden vor ON AIR gekennzeichnet.

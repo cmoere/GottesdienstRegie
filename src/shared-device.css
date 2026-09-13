@@ -3,8 +3,10 @@
 }
 .production-app {
   height: 100vh !important;
-  min-height: 620px;
-  overflow: hidden;
+  min-height: 0;
+  /* hidden still permits focus/scrollIntoView to scroll this ancestor.
+     Only the workspace panes may scroll; keep the window chrome in place. */
+  overflow: clip;
 }
 .production-app.mode-edit {
   grid-template-rows: 32px 42px 31px 34px minmax(280px, 1fr) auto 25px !important;
@@ -907,9 +909,6 @@
   }
   .remote-list > article > button {
     grid-column: auto;
-  }
-  .production-app {
-    min-height: 600px;
   }
 }
 

@@ -18,6 +18,7 @@ async function mount(){
  state.newDocument('Vorschau-Layouttest');
  state.addItem('content',{title:'Testinhalt',section:'',body:'Sichtbare Vorschau'});
  state.setMode('preview');
+ state.setPreviewLayout('single');
  (window as any).previewLayoutState=()=>usePresentation.getState();
  function Shell(){
   const state=usePresentation();

@@ -24,9 +24,27 @@
       "line": "0.36",
       "builds": [
         {
-          "version": "0.36.14",
+          "version": "0.36.15",
           "releaseDate": "2026-09-13",
           "current": true,
+          "overview": {
+            "label": {"de":"Menüleiste bleibt sichtbar","en":"Menu bar stays visible"},
+            "text": {"de":"Die Auswahl entfernter Folien konnte die App-Hülle nach oben scrollen und das Menü abschneiden. Die Hülle bleibt jetzt an ihrer Position, während die Inhaltsbereiche normal scrollen. Profil, Sync und Fensterbuttons bleiben mit dem Menü ausgerichtet.","en":"Selecting distant slides could scroll the app shell upward and clip the menu bar. The shell now stays in place while content panes scroll normally. Profile, sync and window controls remain aligned with the menu."}
+          },
+          "sections": {
+            "new": [],
+            "improved": [],
+            "fixed": [{
+              "label": {"de":"Abgeschnittenes Menü nach Folienauswahl","en":"Clipped menu after slide selection"},
+              "text": {"de":"Fokus und automatisches Scrollen in der Folienübersicht verschieben die äußere Oberfläche nicht mehr. Auch niedrige Fenster erzwingen keine übergroße App-Höhe. Geprüft in Electron bei 1920×1080, 1366×768 und 1280×600 sowie mit ausgeklappter Timeline und Moduswechsel.","en":"Focus and automatic scrolling in the slide overview no longer shift the outer interface. Short windows no longer force an oversized app height. Verified in Electron at 1920×1080, 1366×768 and 1280×600, plus expanded timeline and mode switching."}
+            }],
+            "known": []
+          }
+        },
+        {
+          "version": "0.36.14",
+          "releaseDate": "2026-09-13",
+          "current": false,
           "overview": {
             "label": {"de":"Song- und Element-Editor verbessert","en":"Song and element editor improved"},
             "text": {"de":"Lange Songtexte lassen sich passend zur Folienkapazität aufteilen und werden vor ON AIR bei Überlauf markiert. STAGE zeigt aktuelle Lyrics, optionale Akkordzeilen und den nächsten Inhalt getrennt von MAIN. Die Elementbearbeitung ergänzt Raster, magnetisches Einrasten, Tastatur-Nudging, Ausrichten, Verteilen und ein Ebenen-Panel. Mausgesten werden stabil lokal dargestellt und erst beim Loslassen gespeichert.","en":"Long song lyrics can be split to the slide capacity and are flagged before ON AIR when they overflow. STAGE shows current lyrics, optional chord rows and the next content separately from MAIN. Element editing adds a grid, magnetic snapping, keyboard nudging, alignment, distribution and a layers panel. Pointer gestures are rendered locally and saved only on release."}

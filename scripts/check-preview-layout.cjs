@@ -14,6 +14,22 @@ app.whenReady().then(async()=>{
    assert.ok(Math.abs(layout.timeline.bottom-layout.status.top)<2,label+': timeline must sit directly above status');
    assert.ok(layout.main.height>layout.height/2,label+': preview must receive the available working space');
   };
+  // Selecting a distant thumbnail must only scroll the preview, even when
+  // focus and scrollIntoView try to reveal content through hidden ancestors.
+  for(const size of [[1920,1080],[1366,768],[1280,600]]){
+   win.setContentSize(...size);
+   await evaluate(`(()=>{const s=window.previewLayoutState();s.setPreviewLayout('grid');s.setGridSize(440);for(let i=0;i<12;i++)s.addItem('content',{title:'Scrollziel '+i,body:'Weiter unten'});})()`);
+   await settled();
+   await evaluate(`(()=>{const s=window.previewLayoutState(),item=s.items.at(-1);s.selectPreview(item.id,item.slides[0].id)})()`);
+   await settled();
+   await evaluate(`[...document.querySelectorAll('.production-grid [data-preview-slide]')].at(-1)?.focus()`);
+   await settled();
+   const scrolling=await evaluate(`(()=>{const menu=document.querySelector('.menubar').getBoundingClientRect();return{menuTop:menu.top,appScroll:document.querySelector('.app').scrollTop,documentScroll:document.scrollingElement.scrollTop,gridScroll:document.querySelector('.production-grid').scrollTop}})()`);
+   console.log('selected distant thumbnail '+size.join('x'),JSON.stringify(scrolling));
+   assert.equal(scrolling.menuTop,0,'Menu must remain fully visible after preview selection');
+   assert.equal(scrolling.appScroll,0,'App shell must not scroll');
+   assert.equal(scrolling.documentScroll,0,'Document must not scroll');
+  }
   for(const size of [[1920,1080],[1366,768]]){
    win.setContentSize(...size);
    for(const mode of ['single','grid']){
