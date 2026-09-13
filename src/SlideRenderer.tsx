@@ -30,6 +30,12 @@ function TimedText({element,mode,style}:{element:SlideElement;mode:SlideRenderer
 function RenderElement({element,mode}:{element:SlideElement;mode:SlideRendererMode}){
   if(!element.visible)return null;
   const style=elementStyle(element),properties=element.properties,src=String(properties.src??properties.url??'');
+  if(element.type==='loop'){
+    const loopType=String(properties.loopType??'announcement');
+    if(loopType==='weather')return <iframe className="slide-renderer-element web loop-weather" style={{...style,pointerEvents:'none'}} src="https://weather.crbnm06.workers.dev" title="Wetterscreen" sandbox="allow-scripts allow-same-origin"/>;
+    if(loopType==='clock')return <ClockLoopElement style={style}/>;
+    return <div className="slide-renderer-element loop-surface" style={{...style,display:'flex',flexDirection:'column',justifyContent:'center',padding:'4%',background:String(properties.background??'#ffffff'),color:String(properties.color??'#000000')}}><strong>{String(properties.title??'Aktuelle Infos')}</strong><span>{String(properties.text??'')}</span></div>;
+  }
   if(element.type==='image'&&src)return <img className="slide-renderer-element media" style={style} src={src} alt="" loading={mode==='thumbnail'?'lazy':'eager'}/>;
   if(element.type==='video'&&src)return <RoutedMedia kind="video" element={element} mode={mode} style={style} src={src}/>;
   if(element.type==='audio'&&src)return mode==='thumbnail'?<div className="slide-renderer-element web-placeholder" style={style}>AUDIO</div>:<RoutedMedia kind="audio" element={element} mode={mode} style={style} src={src}/>;
@@ -41,6 +47,8 @@ function RenderElement({element,mode}:{element:SlideElement;mode:SlideRendererMo
   if(element.type==='text'&&Number(properties.timerDurationSeconds??0)>0)return <TimedText element={element} mode={mode} style={style}/>;
   return <div className={`slide-renderer-element text ${properties.animation==='fade-in'&&mode==='live'?'element-animation-fade-in':''}`} style={style}>{String(properties.text??'')}</div>;
 }
+
+function ClockLoopElement({style}:{style:CSSProperties}){const [now,setNow]=useState(()=>new Date());useEffect(()=>{const timer=window.setInterval(()=>setNow(new Date()),1000);return()=>window.clearInterval(timer)},[]);return <div className="slide-renderer-element loop-clock" style={{...style,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}><strong>{now.toLocaleTimeString('de-DE')}</strong><span>{now.toLocaleDateString('de-DE',{weekday:'long',day:'2-digit',month:'long'})}</span></div>}
 
 export function SlideRenderer({slide,mode='preview'}:{slide:Slide;mode?:SlideRendererMode}){
   const hasVisibleElements=slide.elements?.some(element=>element.visible);

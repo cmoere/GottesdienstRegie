@@ -38,6 +38,9 @@ import {
   type TransitionType,
 } from "./store";
 import { SlideRenderer } from "./SlideRenderer";
+import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopController, WEATHER_SCREEN_DURATION_MS, WEATHER_SCREEN_URL, type LoopItemType } from "./loopDomain";
+import { weatherScreenController } from "./weatherController";
+import { LoopPreview } from "./LoopPreview";
 import { liveEngine } from "./LiveEngine";
 import {
   authMessage,
@@ -1419,6 +1422,17 @@ function SortableItem({
     stageMessage: "speaker_notes",
     quickScreen: "bolt",
     liveQuiz: "quiz",
+    birthday: "cake",
+    event: "event",
+    weather: "cloud",
+    loopQuiz: "quiz",
+    loopCountdown: "hourglass_bottom",
+    clock: "schedule",
+    bibleVerse: "menu_book",
+    loopQr: "qr_code_2",
+    infoCard: "info",
+    today: "today",
+    nextEvents: "event_upcoming",
   };
   const commit = () => {
     const seconds = parseDuration(durationValue);
@@ -1745,6 +1759,8 @@ function AddPopover({ close }: { close: () => void }) {
     sectionId =
       state.items.find((item) => item.id === state.selectedItemId)?.sectionId ??
       "service",
+    activeSection = state.sections.find((section) => section.id === sectionId),
+    loopAvailable = isLoopSection(activeSection),
     [quizOpen, setQuizOpen] = useState(false);
   const options: {
     type: ItemType;
@@ -1818,6 +1834,20 @@ function AddPopover({ close }: { close: () => void }) {
       title: "Neue Schnellanzeige",
       icon: "bolt",
     },
+  ];
+  const loopOptions: { type: ItemType; label: string; title: string; icon: string }[] = [
+    { type: "announcement", label: "Meldungen", title: "Meldungen", icon: "campaign" },
+    { type: "birthday", label: "Geburtstage", title: "Geburtstage", icon: "cake" },
+    { type: "event", label: "Veranstaltungen", title: "Veranstaltungen", icon: "event" },
+    { type: "weather", label: "Wetter", title: "Wetter", icon: "cloud" },
+    { type: "loopQuiz", label: "Quiz", title: "Loop-Quiz", icon: "quiz" },
+    { type: "loopCountdown", label: "Countdown", title: "Loop-Countdown", icon: "hourglass_bottom" },
+    { type: "clock", label: "Uhrzeit", title: "Uhrzeit", icon: "schedule" },
+    { type: "bibleVerse", label: "Bibelvers", title: "Bibelvers", icon: "menu_book" },
+    { type: "loopQr", label: "QR-Code", title: "QR-Code", icon: "qr_code_2" },
+    { type: "infoCard", label: "Infokarte", title: "Infokarte", icon: "info" },
+    { type: "today", label: "Heute bei uns", title: "Heute bei uns", icon: "today" },
+    { type: "nextEvents", label: "Nächste Termine", title: "Nächste Termine", icon: "event_upcoming" },
   ];
   async function addImported(option: (typeof options)[number]) {
     void option;
@@ -1966,6 +1996,38 @@ function AddPopover({ close }: { close: () => void }) {
       return;
     }
     addOption(option);
+  }
+  function addLoopElement(option: (typeof loopOptions)[number]) {
+    if (!loopAvailable || !isLoopItemType(String(option.type))) return;
+    const type = option.type as LoopItemType;
+    let body = "";
+    const metadata: Record<string, string | number | boolean> = { source: type === "announcement" || type === "birthday" || type === "event" ? "firebase" : "local" };
+    if (type === "weather") {
+      metadata.weatherScreenUrl = WEATHER_SCREEN_URL;
+      metadata.weatherDurationMs = WEATHER_SCREEN_DURATION_MS;
+      body = "Wetterscreen · empfohlen: 20 Sekunden";
+    } else if (type === "loopQr") {
+      const url = prompt("URL für QR-Code", "https://");
+      if (!url) return;
+      metadata.url = url;
+      body = url;
+    } else if (type === "loopQuiz") {
+      body = "Frage\n\nA  Antwort 1\nB  Antwort 2\nC  Antwort 3";
+      metadata.questionDurationMs = 8_000;
+    } else if (type === "clock") {
+      metadata.format = "HH:mm:ss";
+      body = "Aktuelle Uhrzeit";
+    } else if (type === "bibleVerse") {
+      body = prompt("Bibelvers", "Johannes 3,16") ?? "";
+      if (!body) return;
+    }
+    state.addItem(type, { title: option.title, section: "", sectionId, body, metadata });
+    const current = usePresentation.getState();
+    current.addElement("loop");
+    const latest = usePresentation.getState();
+    const loopElement = latest.items.flatMap((entry) => entry.slides).find((slide) => slide.id === latest.selectedSlideId)?.elements.at(-1);
+    if (loopElement) latest.updateElement(loopElement.id, { x: 0, y: 0, width: 1920, height: 1080, properties: { ...loopElement.properties, loopType: type, title: option.title, text: body, durationMs: type === "weather" ? WEATHER_SCREEN_DURATION_MS : 15000, background: "#ffffff", color: "#000000" } });
+    close();
   }
   function addOption(option: (typeof options)[number]) {
     const metadata: Record<string, string | number | boolean> = {};
@@ -2132,7 +2194,9 @@ function AddPopover({ close }: { close: () => void }) {
           <button
             key={option.type}
             onClick={() =>
-              option.type === "liveQuiz"
+              loopAvailable && isLoopItemType(String(option.type))
+                ? addLoopElement(option as (typeof loopOptions)[number])
+                : option.type === "liveQuiz"
                 ? setQuizOpen(true)
                 : option.type === "song"
                   ? (()=>{state.addItem('song',{title:'Neuer Song',section:'',sectionId,body:''});state.setMode('edit');close();})()
@@ -2149,6 +2213,17 @@ function AddPopover({ close }: { close: () => void }) {
             <span>{option.label}</span>
           </button>
         ))}
+        {loopAvailable && (
+          <div className="add-popover-loop-group">
+            <strong>LOOP-ELEMENTE</strong>
+            {loopOptions.map((option) => (
+              <button key={`loop-${option.type}`} onClick={() => addLoopElement(option)}>
+                <Icon name={option.icon} />
+                <span>{option.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
       {quizOpen && (
         <QuizCreateDialog
@@ -2862,7 +2937,7 @@ function OrderOfService({
         {
           label: "Verknüpftes Element in",
           submenu: state.sections
-            .filter((section) => section.id !== item.sectionId)
+            .filter((section) => section.id !== item.sectionId && canPlaceItem(item, section))
             .map((section) => ({
               id: `link:${section.id}`,
               label: section.title,
@@ -2996,6 +3071,20 @@ function OrderOfService({
                     >
                       {section.title}
                     </button>
+                    {section.id === "pre" && (
+                      <button
+                        className={`section-loop-toggle ${section.autoLoop ? "active" : ""}`}
+                        type="button"
+                        disabled={!canEdit}
+                        title="VORPROGRAMM als automatischen Loop verwenden"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          state.updateSection(section.id, { autoLoop: !section.autoLoop, supportsLoopItems: !section.autoLoop });
+                        }}
+                      >
+                        LOOP
+                      </button>
+                    )}
                     <button
                       className={`audio-header-button ${audio?.tracks.length ? "configured" : ""} ${audio?.muted ? "muted" : ""} ${missing ? "missing" : ""}`}
                       title={
@@ -3823,10 +3912,10 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
               <label>
                 Standard-Folienzeit
                 <input
-                  disabled={!canEdit}
+                  disabled={!canEdit || item.itemCategory === "loop"}
                   type="number"
                   min="1"
-                  value={item.timing.slideDurationSeconds}
+                  value={item.itemCategory === "loop" ? Math.round(loopDurationMs(item) / 1000) : item.timing.slideDurationSeconds}
                   onChange={(e) =>
                     state.updateItem(item.id, {
                       plannedDuration:
@@ -3903,6 +3992,29 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                   }
                 />
               </label>
+            </div>
+          )}
+          {item?.itemCategory === "loop" && (
+            <div className="loop-item-fields">
+              <h4>LOOP-ELEMENT</h4>
+              <LoopPreview item={item} />
+              <p className="muted">Automatische Anzeige ausschließlich in einem unterstützten Loop-Bereich.</p>
+              {item.type === "weather" ? (
+                <>
+                  <label>Quelle<input readOnly value={WEATHER_SCREEN_URL} /></label>
+                  <label>Anzeigedauer (Sekunden)<input disabled={!canEdit} type="number" min="1" max="300" step="1" value={Math.round(loopDurationMs(item) / 1000)} onChange={(event) => { const seconds = Math.max(1, Math.min(300, Number(event.target.value) || 1)); state.updateItem(item.id, { plannedDuration: seconds * 1000, timing: { ...item.timing, slideDurationSeconds: seconds, totalDurationSeconds: seconds, autoAdvance: true }, metadata: { ...item.metadata, weatherDurationMs: seconds * 1000 }, autoAdvance: true }); }} /><span className="field-hint">Empfehlung: 20 Sekunden · änderbar</span></label>
+                  <p className="status-ready">● Wetterscreen wird vor der Anzeige vorgeladen und bei Fehler übersprungen.</p>
+                </>
+              ) : (
+                <label>
+                  Anzeigedauer
+                  <select disabled={!canEdit} value={String(Math.round(loopDurationMs(item) / 1000))} onChange={(event) => { const seconds = Number(event.target.value); state.updateItem(item.id, { plannedDuration: seconds * 1000, timing: { ...item.timing, slideDurationSeconds: seconds, totalDurationSeconds: seconds, autoAdvance: true }, autoAdvance: true }); }}>
+                    {[5, 10, 15, 20, 30, 45, 60].map((seconds) => <option key={seconds} value={seconds}>{seconds} Sekunden</option>)}
+                  </select>
+                </label>
+              )}
+              {item.type === "loopQr" && <label>QR-Code-URL<input disabled={!canEdit} value={String(item.metadata.url ?? "")} onChange={(event) => state.updateItem(item.id, { metadata: { ...item.metadata, url: event.target.value } })} /></label>}
+              {(item.type === "announcement" || item.type === "birthday" || item.type === "event") && <p className="muted">Quelle: Firebase · öffentliche Daten werden vor der Ausgabe validiert.</p>}
             </div>
           )}
           {item?.type === "web" && (
@@ -7831,6 +7943,7 @@ function AppShell({
 }) {
   const { t, locale } = useI18n();
   const state = usePresentation();
+  const loopController = useRef(new LoopController<ServiceItem>());
   const quickScreens = usePreferences((s) => s.quickScreens),
     storedShortcuts = usePreferences((s) => s.keyboardShortcuts),
     shortcuts = useMemo(
@@ -8416,6 +8529,50 @@ function AppShell({
       return;
     const item = state.items.find((entry) => entry.id === state.liveItemId),
       slide = item?.slides.find((entry) => entry.id === state.liveSlideId);
+    if (item?.itemCategory === "loop") {
+      const sectionItems = state.items
+        .filter((entry) => entry.sectionId === item.sectionId && entry.itemCategory === "loop" && entry.enabled && !entry.disabled)
+        .sort((a, b) => a.order - b.order);
+      loopController.current.setItems(sectionItems);
+      loopController.current.select(item.id);
+      let active = true;
+      if (item.type === "weather") {
+        void weatherScreenController.preload().then((ready) => {
+          if (!active || !ready) {
+            if (active) usePresentation.getState().nextLive();
+            return;
+          }
+          weatherScreenController.take(() => {
+            if (active && usePresentation.getState().onAir && usePresentation.getState().liveItemId === item.id) {
+              const nextId = loopController.current.advance(), nextItem = usePresentation.getState().items.find((entry) => entry.id === nextId);
+              if (nextItem?.slides[0]) usePresentation.getState().goLive(nextItem.id, nextItem.slides[0].id);
+              else usePresentation.getState().nextLive();
+            }
+          }, loopDurationMs(item));
+        });
+        return () => { active = false; weatherScreenController.cancel(); loopController.current.stop(); };
+      }
+      const timer = window.setTimeout(() => {
+        if (!active) return;
+        const nextId = loopController.current.advance(), nextItem = usePresentation.getState().items.find((entry) => entry.id === nextId);
+        if (nextItem?.slides[0]) usePresentation.getState().goLive(nextItem.id, nextItem.slides[0].id);
+        else usePresentation.getState().nextLive();
+      }, loopDurationMs(item));
+      return () => { active = false; window.clearTimeout(timer); loopController.current.stop(); };
+    }
+    if (item?.type === "weather") {
+      let active = true;
+      void weatherScreenController.preload().then((ready) => {
+        if (!active || !ready) {
+          if (active) usePresentation.getState().nextLive();
+          return;
+        }
+        weatherScreenController.take(() => {
+          if (active && usePresentation.getState().onAir && usePresentation.getState().liveItemId === item.id) usePresentation.getState().nextLive();
+        }, loopDurationMs(item));
+      });
+      return () => { active = false; weatherScreenController.cancel(); };
+    }
     if (
       !item?.timing.autoAdvance ||
       item.type === "video" ||

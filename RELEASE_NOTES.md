@@ -1,5 +1,19 @@
 # GottesdienstRegie 0.36.13
 
+## Spezielle PRE-/POST-LOOP-Elemente und Screenmeldung-Integration
+
+Diese Erweiterung ergänzt die Vorbereitung um dynamische, optionale Loop-Elemente. Sie laufen getrennt vom normalen Gottesdienstablauf und werden nur in dafür freigegebenen PRE-/POST-LOOP-Abschnitten beziehungsweise in einem ausdrücklich automatischen Vorprogramm berücksichtigt. Normale ServiceItems bleiben unverändert; der Live-Controller, MAIN, STAGE, Audio und Recording behalten Vorrang.
+
+- Neue Loop-Typen: Meldungen, Geburtstage, Veranstaltungen, Wetter, nicht-interaktives Quiz, Countdown, Uhrzeit, Bibelvers, QR-Code, Infokarte, Heute bei uns und Nächste Termine.
+- Zentrale Placement-Prüfung verhindert, dass Loop-Only-Elemente versehentlich im normalen Gottesdienst landen. Verschieben, Duplizieren, Import und automatische Wiedergabe verwenden dieselbe Regel.
+- Loop-Elemente rotieren über einen eigenen Controller mit sauberer Start-/Stopp- und Abbruchlogik; ein fehlendes oder leeres Datenobjekt wird übersprungen und blockiert niemals MAIN.
+- Screenmeldung basiert auf den mitgelieferten `screenmeldung.html`, `screenmeldung.css` und `screenmeldung.js`. Bestehende IDs, Klassen, internes Scrollen, QR-Position und Safe-Switch-Verhalten bleiben erhalten. Für den Loop werden Meldungen normalisiert, zeitlich gefiltert und nur bei passender Veröffentlichung/Audience angezeigt.
+- Wetter verwendet ausschließlich `https://weather.crbnm06.workers.dev`. 20 Sekunden sind die empfohlene Voreinstellung; die Anzeigedauer kann pro Element angepasst werden und wird vor der sichtbaren Ausgabe vorgeladen. Bei Offline-/Fehlerzustand wird der Eintrag übersprungen.
+- Die Editorvorschau zeigt Uhrzeit, Wetter und Meldungen lokal an. QR-URLs, Dauer und Loop-Metadaten werden im Inspector bearbeitbar dargestellt; die Wetterquelle bleibt systemseitig fest, die Dauer ist änderbar.
+- Preflight meldet fehlerhafte Loop-Platzierungen und ungültige Wettermetadaten als Warnungen. Optionale Loop-Daten dürfen den Start eines Gottesdienstes nicht blockieren.
+
+Die Erweiterung schreibt keine API-Schlüssel in die Anwendung und führt keine neue Live- oder Firebase-Engine ein. Screenmeldung-Daten bleiben im bestehenden Datenmodell; öffentliche Ansichten erhalten nur die fachlich notwendigen, bereinigten Felder.
+
 ## Vorschau-Layout korrigiert
 
 Diese Wartungsausgabe behebt die große Leerfläche unter Einzelvorschau und Folienübersicht sowie Statusangaben, die links über dem Gottesdienstablauf erschienen.

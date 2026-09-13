@@ -1,5 +1,13 @@
 # Versionshinweise / Release notes
 
+## 0.36.13 – Loop-Elemente und Screenmeldung
+
+- PRE-/POST-LOOP-Elemente mit zentraler Placement-Prüfung und eigenem Rotationscontroller ergänzt.
+- Dynamische Meldungen, Geburtstage, Veranstaltungen, Wetter, Quiz, Countdown, Uhrzeit, Bibelvers, QR-Code, Infokarte, Heute bei uns und Nächste Termine verfügbar.
+- Screenmeldung-Referenzdateien integriert; Public-/Zeit-/Placement-Filter, leere Meldungen überspringen und Safe-Switch-Vorschau ergänzt.
+- Wetterquelle auf `https://weather.crbnm06.workers.dev` festgelegt; 20 Sekunden sind voreingestellt und als Empfehlung markiert, die Anzeigedauer bleibt pro Element änderbar. Preload und Offline-Skip bleiben aktiv.
+- Loop-Diagnosen als nicht-blockierende Preflight-Warnungen ergänzt; MAIN/STAGE/Audio/Recording bleiben priorisiert.
+
 ## 0.36.13 – 2026-09-13
 
 - Vorschau-Shell auf die tatsächlich vorhandenen fünf Bereiche korrigiert.

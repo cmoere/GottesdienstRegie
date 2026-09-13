@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="Screen" content="Saalscreen-Meldungen" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  />
+  <meta name="color-scheme" content="light" />
+
+  <title>Saalscreen-Meldungen</title>
+
+  <!-- =========================================================
+       PERFORMANCE / PRECONNECTS
+       ========================================================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <!-- =========================================================
+       GOOGLE FONT: INTER
+       ========================================================= -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- =========================================================
+       LOGO PRELOAD
+       Verhindert sichtbares Nachladen / Pop-in
+       ========================================================= -->
+  <link
+    rel="preload"
+    as="image"
+    href="https://static.wixstatic.com/media/917d8a_c7e14abe41af478ea9f40e38f8afd66c~mv2.png/v1/crop/x_8,y_0,w_482,h_178/fill/w_240,h_89,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_auto/Logo%20500x500%20%20px%20(2).png"
+  />
+
+  <!-- =========================================================
+       HAUPT-CSS
+       ========================================================= -->
+  <link rel="stylesheet" href="screenmeldung.css" />
+
+  <!-- =========================================================
+       KLEINER FIX:
+       Links in Meldungen sind sichtbar, aber auf dem Screen nicht klickbar.
+       ========================================================= -->
+  <style>
+    #meldung-container a{
+      color: inherit !important;
+      text-decoration: none !important;
+      pointer-events: none !important;
+      cursor: default !important;
+    }
+  </style>
+
+  <!-- =========================================================
+       FIREBASE SDKs – COMPAT-MODUS
+
+       Wichtig:
+       Funktioniert weiterhin mit:
+       firebase.initializeApp(...)
+       firebase.database()
+
+       Damit bleibt dein bestehendes screenmeldung.js kompatibel.
+       ========================================================= -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+
+  <!-- =========================================================
+       APP-SCRIPT
+       Muss nach Firebase geladen werden.
+       ========================================================= -->
+  <script defer src="screenmeldung.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <!-- =======================================================
+         TOPBAR
+         ======================================================= -->
+    <header id="topbar">
+      <div id="title-container">
+        <span id="title">Aktuelle Infos</span>
+      </div>
+
+      <img
+        id="logo"
+        src="https://static.wixstatic.com/media/917d8a_c7e14abe41af478ea9f40e38f8afd66c~mv2.png/v1/crop/x_8,y_0,w_482,h_178/fill/w_240,h_89,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_auto/Logo%20500x500%20%20px%20(2).png"
+        alt="Philippus Gemeinde Logo"
+        decoding="async"
+        loading="eager"
+      />
+    </header>
+
+    <!-- =======================================================
+         MELDUNGEN
+         ======================================================= -->
+    <main id="main">
+      <div id="meldung-container" aria-live="polite"></div>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,205 @@
+/* screenmeldung.css */
+
+/* 1) Scrollbars ausblenden (global + interne Scrollboxen) */
+html, body {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE10+ */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari, Opera */
+}
+
+/* Interne Scroll-Container (Beschreibung/Titel-wrap) */
+.pgb-scrollbox {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.pgb-scrollbox::-webkit-scrollbar {
+  display: none;
+}
+
+/* 2) Globales Box-Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --padding-horiz: 20px;   /* seitlicher Innenabstand */
+  --logo-shift: 30px;      /* Logo weiter links */
+  --title-shift: 5px;      /* „Aktuelle Infos“ minimal nach links */
+}
+
+/* Grundlayout */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;                 /* Fullscreen-Kiosk */
+  font-family: 'Inter', Arial, sans-serif;
+  background-color: #fff;
+  color: #000;
+
+  /* sauberes Rendering für große Schriften */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Wrapper */
+.container {
+  width: 100vw;
+  margin: 0;
+  padding: 0 var(--padding-horiz);
+}
+
+/* Topbar */
+#topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  padding: 0 var(--padding-horiz);
+}
+
+/* „Aktuelle Infos“-Box: schmaler & nur unten rechts abgerundet */
+#title-container {
+  background-color: #699f3e;
+  padding: 10px 24px;
+  border-radius: 0 0 20px 0;
+  margin-left: calc(-1 * var(--title-shift));
+}
+
+#title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Logo minimal weiter nach links */
+#logo {
+  height: 80px;
+  object-fit: contain;
+  margin-right: calc(-1 * var(--logo-shift));
+}
+
+/* Main-Bereich */
+#main {
+  height: calc(100% - 100px);
+
+  /* nicht vertikal zentrieren -> oben starten, damit große Titel nicht „komisch“ sitzen */
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  overflow: hidden;
+  padding: 0 var(--padding-horiz);
+}
+
+/* Meldungs-Container */
+#meldung-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  text-align: left;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  padding: 0 var(--padding-horiz);
+
+  /* WICHTIG: KEIN transform hier! (sonst kann position:fixed vom QR "kaputt" gehen) */
+  will-change: opacity;
+}
+
+/* Flash-Animation (weiß → transparent) */
+@keyframes flash {
+  0%, 30%  { background-color: #fff; }
+  100%     { background-color: transparent; }
+}
+
+#meldung-container.flash {
+  animation: flash 0.5s ease-out forwards;
+}
+
+/* Meldungs-Layout (Flex, damit Beschreibung sauber Resthöhe bekommt) */
+.meldung {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* wichtig für flex + scrolling */
+}
+
+/* Titel-Container (JS setzt max-height dynamisch) */
+.meldung__titlewrap {
+  overflow: hidden; /* Standard: Titel NICHT scrollen */
+  min-height: 0;
+}
+
+/* Meldungstitel */
+.meldung__titel,
+.meldung h2 {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+
+  font-size: 5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+
+  /* sauberes Umbrechen */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* Trennlinie */
+.trennlinie {
+  width: 100%;
+  height: 2px;
+  background-color: #000;
+  margin: 0 0 15px;
+  flex: 0 0 auto;
+}
+
+/* Beschreibungstext */
+.beschreibung {
+  font-size: 3.5rem;
+  line-height: 1.5;
+  white-space: normal;
+
+  /* Scrollen über JS (overflow wird inline gesetzt), aber Flex muss es erlauben */
+  flex: 1 1 auto;
+  min-height: 0;
+
+  /* Standard nicht „hart“ begrenzen – Flex regelt die Resthöhe */
+  max-height: none;
+}
+
+/* Weniger Abstand zwischen Absätzen */
+.beschreibung p {
+  margin: 0 0 0.5rem;
+}
+
+/* QR-Code immer unten rechts im Viewport */
+#meldung-container img.qr-code {
+  position: fixed;   /* immer unten rechts im Fenster */
+  width: 140px;
+  height: 140px;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+/* Weißer Fallback */
+.weiss {
+  background-color: #fff !important;
+  color: transparent !important;
+}
+
+/* Schwarzbild (wenn keine Meldungen / Blackout) */
+.schwarz,
+body.schwarz {
+  background-color: #000 !important;
+  color: transparent !important;
+}
