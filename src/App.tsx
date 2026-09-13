@@ -10078,14 +10078,14 @@ function Output() {
       disposeQuick?.();
     };
   }, []);
-  const songOutput=(slide as (Slide & {songOutput?:{chords:string;showChords:boolean;currentNext:boolean;next:string;lowerThird:boolean}})|null)?.songOutput;
+  const songOutput=(slide as (Slide & {songOutput?:{chords:string;stageRows?:{chords:string;lyrics:string}[];showChords:boolean;currentNext:boolean;next:string;lowerThird:boolean}})|null)?.songOutput;
   const lyricScroll=(slide as (Slide & {lyricScroll?:LyricScrollPacket})|null)?.lyricScroll;
   const renderedSlide=slide && songOutput?.lowerThird && role==='livestream'?{...slide,background:'transparent',backgroundImage:undefined,elements:slide.elements.filter(element=>element.type==='text').map(element=>({...element,x:140,y:800,width:1640,height:240,properties:{...element.properties,fontSize:52}}))}:slide;
   return (
     <div
       className={`output ${quick?.type === "noText" ? "quick-no-text" : ""}`}
     >
-      {slide && role==='stage' && songOutput ? <div style={{position:'absolute',inset:0,background:'#000',color:'#fff',padding:'4vw',whiteSpace:'pre-wrap',overflow:'hidden'}}><h2>{slide.title}</h2><div style={{fontSize:'3vw'}}>{slide.body}</div>{songOutput.showChords&&<pre style={{fontSize:'2vw',color:'#f3d67b'}}>{songOutput.chords}</pre>}{songOutput.currentNext&&<div style={{fontSize:'2vw',marginTop:'2vw',borderTop:'1px solid #777'}}>ALS NÄCHSTES<br/>{songOutput.next}</div>}</div> : renderedSlide && (
+      {slide && role==='stage' && songOutput ? <div className="stage-song-shell"><header className="stage-song-header"><span>STAGE</span><strong>{slide.title}</strong></header><section className="stage-song-current"><small>JETZT</small>{songOutput.showChords && songOutput.stageRows?.length ? <div className="stage-song-rows">{songOutput.stageRows.map((row,index)=><div className="stage-song-row" key={`${index}-${row.lyrics}`}><span className="stage-song-chords">{row.chords}</span><span>{row.lyrics}</span></div>)}</div> : <div className="stage-song-lyrics">{slide.body}</div>}</section>{songOutput.currentNext && <section className="stage-song-next"><small>ALS NÄCHSTES</small><div>{songOutput.next || '—'}</div></section>}</div> : renderedSlide && (
         lyricScroll && role==='main' ? <LyricScrollRenderer packet={lyricScroll} live/> : <TransitionStage
           slide={renderedSlide}
           transition={

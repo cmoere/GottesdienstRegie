@@ -10,6 +10,9 @@
 .song-context .lyrics-editor { margin:6px 12px 12px; }
 .song-context .lyrics-editor textarea { font-size:15px; line-height:1.55; min-height:130px; }
 .song-context .lyrics-editor input { font-size:12px; padding:6px 2px; }
+.song-context .lyrics-editor > section.overflow { border:1px solid #c66a4b; box-shadow: inset 3px 0 #c66a4b; }
+.lyric-overflow-warning { width:auto; margin:5px 8px 0; padding:4px 7px; border:1px solid #c66a4b; color:#8c3d2a; background:#fff2ed; font-size:10px; text-align:left; }
+.arrangement-actions button[title*="auf Folien"] { color:#276f78; }
 .song-context .song-override-panel { align-content:start; }
 .song-context .song-meta { overflow:auto; grid-template-columns:1fr; }
 .song-search-panel { flex:0 1 260px; min-height:100px; display:flex; flex-direction:column; gap:8px; padding:10px 12px; overflow:auto; }

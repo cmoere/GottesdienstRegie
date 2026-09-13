@@ -3,11 +3,13 @@ import { usePresentation } from './store';
 import { lyricPacket } from './lyricScrolling';
 import { checkLyricLayouts } from './lyricPreflight';
 import { loopPreflight } from './loopDataService';
+import { stageChordRows } from './songStructure';
 
 function withSongOutputs(slide: Slide): Slide {
   const snapshot=structuredClone(slide),item=usePresentation.getState().items.find(item=>item.id===slide.itemId);
   if(item?.type!=='song')return snapshot;
-  return Object.assign(snapshot,{lyricScroll:lyricPacket(item,slide,usePresentation.getState().lyricScrolling),songOutput:{chords:String(item.metadata.chords||''),showChords:item.metadata.showChordsStage===true,currentNext:item.metadata.stageCurrentNext!==false,next:item.slides.filter(page=>page.enabled).slice(item.slides.filter(page=>page.enabled).findIndex(page=>page.id===slide.id)+1)[0]?.body||'',lowerThird:item.metadata.livestreamLowerThird===true}});
+  const chords=String(item.metadata.chords||'');
+  return Object.assign(snapshot,{lyricScroll:lyricPacket(item,slide,usePresentation.getState().lyricScrolling),songOutput:{chords,stageRows:stageChordRows(slide.body,chords),showChords:item.metadata.showChordsStage===true,currentNext:item.metadata.stageCurrentNext!==false,next:item.slides.filter(page=>page.enabled).slice(item.slides.filter(page=>page.enabled).findIndex(page=>page.id===slide.id)+1)[0]?.body||'',lowerThird:item.metadata.livestreamLowerThird===true}});
 }
 
 export class LiveEngine{

@@ -8,7 +8,8 @@ import {
 import QRCode from "qrcode";
 import { lyricPacket } from './lyricScrolling';
 import { LyricScrollRenderer } from './LyricScrollRenderer';
-import { readSong, songPatch, shortSection, transposeChords, type SongStructure } from './songStructure';
+import { autoSplitSongSection, readSong, songPatch, shortSection, transposeChords, type SongStructure } from './songStructure';
+import { estimateLyricLines } from './songLayout';
 import { SlideRenderer } from "./SlideRenderer";
 import {
   defaultTransition,
@@ -46,6 +47,7 @@ import { allEditorFonts as editorFonts, fontStack } from "./fonts";
 import { QuickOverlay } from "./QuickOverlay";
 import { usePreferences } from "./preferences";
 import { defaultAudioRouting, playRoutedTone } from "./audioRouting";
+import { snapPosition, snapRect } from './canvasGeometry';
 
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -65,6 +67,24 @@ function selected(state: ReturnType<typeof usePresentation.getState>) {
 
 function slideLabel(slide: Slide, index: number) {
   return slide.title?.trim() || `Folie ${index + 1}`;
+}
+
+function lyricCapacity(slide: Slide) {
+  const text = slide.elements.find(element => element.visible && element.type === 'text');
+  if (!text) return { maxLines: 0, charactersPerLine: 0 };
+  const properties = text.properties;
+  const fontSize = Math.max(1, Number(properties.fontSize ?? 72));
+  const lineHeight = Math.max(0.8, Number(properties.lineHeight ?? 1.15));
+  const padding = Math.max(0, Number(properties.padding ?? 0));
+  return {
+    maxLines: Math.max(1, Math.floor((text.height - padding * 2) / (fontSize * lineHeight))),
+    charactersPerLine: Math.max(8, Math.floor((text.width - padding * 2) / (fontSize * 0.55))),
+  };
+}
+
+function lyricSlideHasOverflow(slide: Slide) {
+  const capacity = lyricCapacity(slide);
+  return capacity.maxLines > 0 && estimateLyricLines(slide.body, { charactersPerLine: capacity.charactersPerLine }) > capacity.maxLines;
 }
 
 function previewSlide(slide: Slide) {
@@ -352,6 +372,22 @@ function SongEditor({
           >
             <Icon name="add" />
           </button>
+          <button
+            type="button"
+            title="Lange Lyrics automatisch auf Folien aufteilen"
+            disabled={!canEdit}
+            onClick={() => {
+              const selectedSection = structure.sections.find(section => section.slides.some(page => page.id === state.selectedSlideId));
+              const template = selectedSection?.slides[0];
+              if (!selectedSection || !template) return;
+              const capacity = lyricCapacity(template);
+              const nextSection = autoSplitSongSection(selectedSection, capacity.maxLines);
+              if (nextSection.slides.length === selectedSection.slides.length) return;
+              commitSong({ ...structure, sections: structure.sections.map(section => section.id === selectedSection.id ? nextSection : section) });
+            }}
+          >
+            <Icon name="splitscreen" />
+          </button>
         </div>
         <label>
           Tonart
@@ -437,9 +473,10 @@ function SongEditor({
         {structure.sections.flatMap(section => section.slides.map((slide, part) => ({section, slide, part}))).map(({section, slide, part}, index) => (
           <section
             key={`${section.id}-${part}`}
-            className={slide.id === state.selectedSlideId ? "active" : ""}
+            className={`${slide.id === state.selectedSlideId ? "active" : ""}${lyricSlideHasOverflow(slide) ? " overflow" : ""}`}
             onClick={() => state.select(item.id, slide.id)}
           >
+            {lyricSlideHasOverflow(slide) && <button type="button" className="lyric-overflow-warning" onClick={(event) => { event.stopPropagation(); state.select(item.id, slide.id); }}>⚠ Text überschreitet die Folienfläche</button>}
             <input
               disabled={!canEdit}
               value={section.label}
@@ -2428,6 +2465,7 @@ function PreviewStack({
   const [draft,setDraft]=useState<{id:string;patch:Partial<Slide['elements'][number]>}|null>(null);
   const pendingDraft=useRef<typeof draft>(null),drawFrame=useRef(0);
   const state = usePresentation(),
+    preferences = usePreferences(),
     frame = useRef<HTMLDivElement>(null),
     drag = useRef<{
       id: string;
@@ -2450,13 +2488,23 @@ function PreviewStack({
         if (!active || !rect || event.pointerId !== active.pointerId) return;
         const dx = ((event.clientX - active.pointerX) / rect.width) * 1920,
           dy = ((event.clientY - active.pointerY) / rect.height) * 1080;
-        const patch:Partial<Slide['elements'][number]>=active.mode === 'move'?{
+        const raw = active.mode === 'move' ? {
             x: Math.max(0, Math.min(1920 - active.width, active.x + dx)),
             y: Math.max(0, Math.min(1080 - active.height, active.y + dy)),
-          }:{
+            width: active.width,
+            height: active.height,
+          } : {
+            x: active.x,
+            y: active.y,
             width: Math.max(32, Math.min(1920 - active.x, active.width + dx)),
             height: Math.max(24, Math.min(1080 - active.y, active.height + dy)),
           };
+        const adjusted = active.mode === 'move'
+          ? snapPosition(raw, { grid: preferences.canvasGridSize, enabled: preferences.canvasSnapEnabled, guides: preferences.canvasSnapGuides, bounds: { width: 1920, height: 1080 } })
+          : snapRect(raw, { grid: preferences.canvasGridSize, enabled: preferences.canvasSnapEnabled, bounds: { width: 1920, height: 1080 } });
+        const patch:Partial<Slide['elements'][number]>=active.mode === 'move'
+          ? { x: adjusted.x, y: adjusted.y }
+          : { x: adjusted.x, y: adjusted.y, width: Math.max(32, adjusted.width), height: Math.max(24, adjusted.height) };
         pendingDraft.current={id:active.id,patch};
         if(!drawFrame.current)drawFrame.current=requestAnimationFrame(()=>{drawFrame.current=0;setDraft(pendingDraft.current)});
       },
@@ -2482,7 +2530,7 @@ function PreviewStack({
       removeEventListener("pointercancel", cancel);
       removeEventListener("blur", cancel);
     };
-  }, []);
+  }, [preferences.canvasGridSize, preferences.canvasSnapEnabled, preferences.canvasSnapGuides]);
   const begin = (
     event: React.PointerEvent,
     element: Slide["elements"][number],
@@ -2491,6 +2539,7 @@ function PreviewStack({
     if (!canEdit || element.locked || event.button!==0) return;
     event.preventDefault();
     event.stopPropagation();
+    (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
     state.selectElements([element.id]);
     drag.current = {
       id: element.id,
@@ -2517,8 +2566,14 @@ function PreviewStack({
       {scrollPacket&&<div><button onClick={()=>{setScrollPreview(!scrollPreview);setScrollStep(0)}}>↕ Lyric Scrolling · {scrollPreview?'VORSCHAU BEENDEN':'VORSCHAU'}</button>{scrollPreview&&<><button onClick={()=>setScrollStep(value=>Math.max(0,value-1))}>ZURÜCK</button><button onClick={()=>setScrollStep(value=>Math.min(item.slides.length-1,value+1))}>WEITER</button></>}</div>}
       <div
         ref={frame}
+        tabIndex={0}
         className={`production-slide ${guideClass} active ${slide.id === state.liveSlideId ? "live" : ""}`}
         onPointerDown={() => state.selectElements([])}
+        onKeyDown={(event) => {
+          if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key) || !state.selectedElementIds.length || !canEdit) return;
+          event.preventDefault();
+          state.nudgeSelectedElements(event.key, event.shiftKey ? 10 : 1);
+        }}
       >
         {scrollPreview&&demoPacket?<LyricScrollRenderer packet={demoPacket}/>:<TransitionStage
           slide={canvasSlide}
@@ -3113,7 +3168,7 @@ const palette = [
 ];
 
 function GuidesMenu({ close }: { close: () => void }) {
-  const state = usePresentation();
+  const state = usePresentation(), preferences = usePreferences();
   const row = (
     key: "smartGuides" | "marginGuides" | "ruleOfThirds",
     label: string,
@@ -3128,6 +3183,13 @@ function GuidesMenu({ close }: { close: () => void }) {
       {row("smartGuides", "Intelligente Hilfslinien")}
       {row("marginGuides", "Rand-Hilfslinien")}
       {row("ruleOfThirds", "Drittelraster")}
+      <label className="guide-setting">Rastergröße
+        <select value={preferences.canvasGridSize} onChange={event => preferences.setCanvasGridSize(Number(event.target.value))}>
+          {[8, 16, 24, 32, 64].map(value => <option key={value} value={value}>{value}px</option>)}
+        </select>
+      </label>
+      <button onClick={() => preferences.setCanvasSnapEnabled(!preferences.canvasSnapEnabled)}><Icon name={preferences.canvasSnapEnabled ? "check_box" : "check_box_outline_blank"} /> Am Raster einrasten</button>
+      <button onClick={() => preferences.setCanvasSnapGuides(!preferences.canvasSnapGuides)}><Icon name={preferences.canvasSnapGuides ? "check_box" : "check_box_outline_blank"} /> An Mitte und Rändern einrasten</button>
       <button className="menu-close" onClick={close}>
         <Icon name="close" /> Schließen
       </button>
@@ -3138,10 +3200,12 @@ function GuidesMenu({ close }: { close: () => void }) {
 function ArrangeMenu({ close }: { close: () => void }) {
   const state = usePresentation(),
     { slide } = selected(state),
+    [dragLayer, setDragLayer] = useState<string | null>(null),
     element =
       slide?.elements.find((entry) =>
         state.selectedElementIds.includes(entry.id),
       ) ?? slide?.elements[0];
+  const selectedElements = slide?.elements.filter(entry => state.selectedElementIds.includes(entry.id)) ?? [];
   const change = (patch: Parameters<typeof state.updateElement>[1]) =>
       element && state.updateElement(element.id, patch),
     align = (x?: number, y?: number) =>
@@ -3172,6 +3236,30 @@ function ArrangeMenu({ close }: { close: () => void }) {
           <Icon name="flip_to_back" />
           Ganz nach hinten
         </button>
+      </div>
+      <h4>MEHRFACHAUSWAHL</h4>
+      <div className="menu-grid">
+        <button disabled={selectedElements.length < 2} onClick={() => state.alignSelectedElements('left')}><Icon name="align_horizontal_left" /> Links ausrichten</button>
+        <button disabled={selectedElements.length < 2} onClick={() => state.alignSelectedElements('centerX')}><Icon name="align_horizontal_center" /> Horizontal zentrieren</button>
+        <button disabled={selectedElements.length < 2} onClick={() => state.alignSelectedElements('top')}><Icon name="align_vertical_top" /> Oben ausrichten</button>
+        <button disabled={selectedElements.length < 2} onClick={() => state.alignSelectedElements('centerY')}><Icon name="align_vertical_center" /> Vertikal zentrieren</button>
+        <button disabled={selectedElements.length < 3} onClick={() => state.distributeSelectedElements('horizontal')}><Icon name="space_bar" /> Horizontal verteilen</button>
+        <button disabled={selectedElements.length < 3} onClick={() => state.distributeSelectedElements('vertical')}><Icon name="height" /> Vertikal verteilen</button>
+      </div>
+      <h4>EBENEN-PANEL</h4>
+      <div className="layer-list">
+        {[...(slide?.elements ?? [])].sort((a, b) => b.zIndex - a.zIndex).map(entry => (
+          <div key={entry.id} className={state.selectedElementIds.includes(entry.id) ? 'active' : ''} draggable={!entry.locked} onDragStart={() => setDragLayer(entry.id)} onDragOver={event => event.preventDefault()} onDrop={() => {
+            if (!dragLayer || !slide || dragLayer === entry.id) return;
+            const ordered = [...slide.elements].sort((a, b) => a.zIndex - b.zIndex), from = ordered.findIndex(value => value.id === dragLayer), to = ordered.findIndex(value => value.id === entry.id), direction = to > from ? 1 : -1;
+            for (let index = from; index !== to; index += direction) state.moveElementLayer(dragLayer, direction);
+            setDragLayer(null);
+          }}>
+            <button className="layer-name" onClick={() => state.selectElements([entry.id])}><Icon name="drag_indicator" />{entry.name}</button>
+            <button title={entry.visible ? 'Ausblenden' : 'Einblenden'} onClick={() => state.toggleElementVisible(entry.id)}><Icon name={entry.visible ? 'visibility' : 'visibility_off'} /></button>
+            <button title={entry.locked ? 'Entsperren' : 'Sperren'} onClick={() => state.toggleElementLocked(entry.id)}><Icon name={entry.locked ? 'lock' : 'lock_open'} /></button>
+          </div>
+        ))}
       </div>
       <h4>AUSRICHTEN</h4>
       <div className="icon-grid">

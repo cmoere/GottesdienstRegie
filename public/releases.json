@@ -24,9 +24,39 @@
       "line": "0.36",
       "builds": [
         {
-          "version": "0.36.13",
+          "version": "0.36.14",
           "releaseDate": "2026-09-13",
           "current": true,
+          "overview": {
+            "label": {"de":"Song- und Element-Editor verbessert","en":"Song and element editor improved"},
+            "text": {"de":"Lange Songtexte lassen sich passend zur Folienkapazität aufteilen und werden vor ON AIR bei Überlauf markiert. STAGE zeigt aktuelle Lyrics, optionale Akkordzeilen und den nächsten Inhalt getrennt von MAIN. Die Elementbearbeitung ergänzt Raster, magnetisches Einrasten, Tastatur-Nudging, Ausrichten, Verteilen und ein Ebenen-Panel. Mausgesten werden stabil lokal dargestellt und erst beim Loslassen gespeichert.","en":"Long song lyrics can be split to the slide capacity and are flagged before ON AIR when they overflow. STAGE shows current lyrics, optional chord rows and the next content separately from MAIN. Element editing adds a grid, magnetic snapping, keyboard nudging, alignment, distribution and a layers panel. Pointer gestures are rendered locally and saved only on release."}
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {"de":"Song-Ablauf und STAGE","en":"Song order and STAGE"},
+                "text": {"de":"Verse-Chips bleiben per Drag-and-drop sortierbar. Lange Lyrics können automatisch in mehrere Folien geteilt werden. STAGE erhält eine kompakte Ansicht mit JETZT, Akkordzeilen und ALS NÄCHSTES; MAIN bleibt unverändert.","en":"Verse chips remain sortable by drag and drop. Long lyrics can be split automatically across slides. STAGE gets a compact NOW, chord-row and NEXT view while MAIN remains unchanged."}
+              }
+            ],
+            "improved": [
+              {
+                "label": {"de":"Canvas-Ausrichtung und Ebenen","en":"Canvas alignment and layers"},
+                "text": {"de":"Rastergröße und Snap-Verhalten sind unter Hilfslinien einstellbar. Mehrfach ausgewählte Elemente lassen sich links, mittig, oben und vertikal ausrichten sowie gleichmäßig verteilen. Das Ebenen-Panel bündelt Auswahl, Sichtbarkeit, Sperren und Reihenfolge.","en":"Grid size and snapping are configurable under Guides. Multiple elements can be aligned and evenly distributed. The layers panel combines selection, visibility, locking and order."}
+              }
+            ],
+            "fixed": [],
+            "known": [
+              {
+                "label": {"de":"Livebetrieb bleibt priorisiert","en":"Live operation remains prioritized"},
+                "text": {"de":"Die Hilfen sind Editorfunktionen. MAIN, STAGE, LIVESTREAM, Audio und Recording werden nicht blockiert; Zwischenstände einer Mausgeste erzeugen keinen eigenen History-Eintrag.","en":"These are editor features. MAIN, STAGE, LIVESTREAM, audio and recording are not blocked; pointer intermediates do not create separate history entries."}
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.36.13",
+          "releaseDate": "2026-09-13",
+          "current": false,
           "sections": {
             "new": [],
             "improved": [],

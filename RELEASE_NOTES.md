@@ -1,4 +1,16 @@
-# GottesdienstRegie 0.36.13
+# GottesdienstRegie 0.36.14
+
+## Song- und Element-Editor: schneller vorbereiten, sicherer ausrichten
+
+Der Song-Editor und die Folienbearbeitung erhalten einen zusammenhängenden Bedienfluss für die Vorbereitung. Lange Lyrics können direkt aus dem Song-Item auf mehrere Folien aufgeteilt werden; überlaufende Folien werden bereits im Editor sichtbar markiert, bevor sie in den Livebetrieb gelangen. Der STAGE-Ausgang zeigt aktuelle Zeilen, optionale Akkordzeilen und den nächsten Inhalt getrennt von MAIN. Songtitel, Ablauf und Vorschau bleiben dabei im bestehenden Editorfluss erhalten.
+
+Für Elemente stehen jetzt ein konfigurierbares Raster, magnetisches Einrasten an Raster, Folienmitte und Rändern, Tastatur-Nudging sowie ein Ebenen-Panel zur Verfügung. Mehrfach ausgewählte Elemente lassen sich links, mittig, oben oder vertikal ausrichten und gleichmäßig verteilen. Mausbewegungen werden lokal pro Frame dargestellt und erst beim Loslassen als eine Änderung gespeichert; dadurch entstehen keine Zwischenstände in der Änderungshistorie und der Livebetrieb bleibt unberührt.
+
+- Lange Lyrics automatisch auf Folien aufteilen; Überlaufwarnung mit direktem Sprung zur betroffenen Folie.
+- STAGE-Songansicht mit „Jetzt“, strukturierten Akkordzeilen und „Als Nächstes“; MAIN bleibt unverändert.
+- Rastergröße und Snap-Verhalten unter Hilfslinien einstellbar.
+- Ausrichten, Verteilen, Ebenen sortieren, Sichtbarkeit/Sperre und präzises Verschieben per Pfeiltasten (Shift = größere Schritte).
+- Bestehende Rollen, Berechtigungen, Cloud-Sync und Liveausgaben werden durch die optionalen Editorhilfen nicht verändert.
 
 ## Spezielle PRE-/POST-LOOP-Elemente und Screenmeldung-Integration
 

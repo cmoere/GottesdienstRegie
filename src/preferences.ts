@@ -31,6 +31,9 @@ interface PreferencesState {
   largeText:boolean;
   strongFocus:boolean;
   dyslexiaFriendly:boolean;
+  canvasGridSize:number;
+  canvasSnapEnabled:boolean;
+  canvasSnapGuides:boolean;
   audioOutputDevice:string;
   audioInputDevice:string;
   outputVolume:number;
@@ -64,6 +67,9 @@ interface PreferencesState {
   setLargeText:(value:boolean)=>void;
   setStrongFocus:(value:boolean)=>void;
   setDyslexiaFriendly:(value:boolean)=>void;
+  setCanvasGridSize:(value:number)=>void;
+  setCanvasSnapEnabled:(value:boolean)=>void;
+  setCanvasSnapGuides:(value:boolean)=>void;
   setAudioOutputDevice:(value:string)=>void;
   setAudioInputDevice:(value:string)=>void;
   setOutputVolume:(value:number)=>void;
@@ -107,6 +113,9 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   largeText:false,
   strongFocus:true,
   dyslexiaFriendly:false,
+  canvasGridSize:16,
+  canvasSnapEnabled:true,
+  canvasSnapGuides:true,
   audioOutputDevice:'default',
   audioInputDevice:'default',
   outputVolume:80,
@@ -140,6 +149,9 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setLargeText:largeText=>set({largeText}),
   setStrongFocus:strongFocus=>set({strongFocus}),
   setDyslexiaFriendly:dyslexiaFriendly=>set({dyslexiaFriendly}),
+  setCanvasGridSize:canvasGridSize=>set({canvasGridSize:Math.max(4,Math.min(128,Math.round(canvasGridSize)))}),
+  setCanvasSnapEnabled:canvasSnapEnabled=>set({canvasSnapEnabled}),
+  setCanvasSnapGuides:canvasSnapGuides=>set({canvasSnapGuides}),
   setAudioOutputDevice:audioOutputDevice=>set({audioOutputDevice}),
   setAudioInputDevice:audioInputDevice=>set({audioInputDevice}),
   setOutputVolume:outputVolume=>set({outputVolume}),

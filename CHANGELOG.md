@@ -1,5 +1,12 @@
 # Versionshinweise / Release notes
 
+## 0.36.14 – Song- und Element-Editor
+
+- Lange Song-Lyrics lassen sich anhand der tatsächlichen Folienkapazität automatisch auf mehrere Folien aufteilen; Überläufe werden vor ON AIR gekennzeichnet.
+- STAGE erhält eine kompakte Songansicht mit aktuellen Lyrics, optionalen Akkordzeilen und dem nächsten Inhalt, ohne MAIN zu verändern.
+- Canvas-Bearbeitung mit Raster, konfigurierbarem Snap, Hilfslinien-Snap, Tastatur-Nudging und stabiler Mausgeste mit einem Commit beim Loslassen.
+- Mehrfachauswahl unterstützt Ausrichten und gleichmäßiges Verteilen; das Ebenen-Panel bündelt Auswahl, Sichtbarkeit, Sperren und Drag-and-drop-Reihenfolge.
+
 ## 0.36.13 – Loop-Elemente und Screenmeldung
 
 - PRE-/POST-LOOP-Elemente mit zentraler Placement-Prüfung und eigenem Rotationscontroller ergänzt.

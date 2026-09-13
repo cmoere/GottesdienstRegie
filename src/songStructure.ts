@@ -1,7 +1,42 @@
 import type { ServiceItem, Slide } from './store';
+import { splitLyrics } from './songLayout';
 
 export interface SongSection { id: string; label: string; slides: Slide[] }
 export interface SongStructure { sections: SongSection[]; order: string[] }
+
+export interface StageChordRow { chords: string; lyrics: string }
+
+/**
+ * Keeps STAGE readable without changing MAIN: each lyric line gets one
+ * optional chord line above it. Chord text is intentionally treated as
+ * presentation metadata, never persisted into the lyric body.
+ */
+export function stageChordRows(body: string, chords: string): StageChordRow[] {
+  const lyrics = body.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+  const chordLines = chords.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+  return lyrics.map((line, index) => ({ chords: chordLines[index] || '', lyrics: line }));
+}
+
+export function autoSplitSongSection(section: SongSection, maxLines: number): SongSection {
+  const template = section.slides[0];
+  if (!template) return section;
+  const chunks = splitLyrics(section.slides.map(slide => slide.body).join('\n\n'), { maxLines });
+  if (chunks.length <= 1) return section;
+  return {
+    ...section,
+    slides: chunks.map((body, index) => {
+      const slide = structuredClone(template);
+      const id = `${section.id}:auto:${index + 1}`;
+      slide.id = id;
+      slide.title = section.label;
+      slide.body = body;
+      slide.elements = slide.elements.map((element, elementIndex) => elementIndex === 0 && element.type === 'text'
+        ? { ...element, id: `${id}:element:${elementIndex}`, properties: { ...element.properties, text: body } }
+        : { ...element, id: `${id}:element:${elementIndex}` });
+      return slide;
+    }),
+  };
+}
 export function readSong(item: ServiceItem): SongStructure {
   try {
     const value = JSON.parse(String(item.metadata.songStructure || ''));
