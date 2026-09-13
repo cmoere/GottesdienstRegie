@@ -1,3 +1,22 @@
+# GottesdienstRegie 0.36.13
+
+## Vorschau-Layout korrigiert
+
+Diese Wartungsausgabe behebt die große Leerfläche unter Einzelvorschau und Folienübersicht sowie Statusangaben, die links über dem Gottesdienstablauf erschienen.
+
+Ursache war eine später geladene Layoutregel: Sie reservierte sieben Zeilen, obwohl die Vorschau nur fünf Hauptbereiche besitzt. Dadurch erhielt der eigentliche Arbeitsbereich zu wenig Höhe und die Statuszeile landete im falschen Bereich.
+
+- Einzelvorschau und Folienübersicht verwenden wieder die verfügbare Fensterhöhe.
+- Die Timeline liegt direkt unter dem Arbeitsbereich; die Statuszeile bleibt am unteren Fensterrand.
+- Das Aufklappen der Timeline reduziert die Vorschauhöhe geordnet, ohne Überlagerungen zu erzeugen.
+- Der Wechsel zwischen Bearbeiten und Vorschau behält die jeweils passende Höhenaufteilung.
+
+Die Korrektur wurde mit der tatsächlichen Stylesheet-Reihenfolge und den produktiven Vorschau-/Timeline-Komponenten getestet: 1920×1080, 1366×768, beide Vorschauansichten, ausgeklappte Timeline und Rückkehr zum Bearbeiten. Der Produktionsbuild und die bestehenden Editor-, Website-, Vollbild- und Lyric-Regressionstests wurden ebenfalls geprüft.
+
+Präsentationsinhalte und Live-Steuerung werden nicht verändert. Die offenen Cloud-Songfunktionen aus 0.36.12 sind nicht Bestandteil dieses Layout-Hotfixes.
+
+---
+
 # GottesdienstRegie 0.36.12
 
 Diese Ausgabe ergänzt optionales Lyric Scrolling für Songs und behebt konkrete Probleme im Desktop-Arbeitsbereich. Vorhandene Präsentationen behalten ohne Aktivierung die normale Folienanzeige. Die Änderungen betreffen die Vorbereitung und Bedienung; sie ersetzen keine Prüfung der tatsächlichen Ausgabe am Regie-PC.

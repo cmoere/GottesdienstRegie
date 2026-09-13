@@ -24,9 +24,35 @@
       "line": "0.36",
       "builds": [
         {
-          "version": "0.36.12",
+          "version": "0.36.13",
           "releaseDate": "2026-09-13",
           "current": true,
+          "sections": {
+            "new": [],
+            "improved": [],
+            "fixed": [
+              {
+                "label": {"de":"Vorschau nutzt die volle Arbeitshöhe","en":"Preview uses the available workspace height"},
+                "text": {"de":"Einzelvorschau und Folienübersicht enden nicht mehr oberhalb einer großen ungenutzten Fläche. Eine fehlerhafte spätere CSS-Regel reservierte zusätzliche Zeilen für Werkzeuge, die im Vorschaumodus gar nicht vorhanden sind. Die Höhenaufteilung entspricht jetzt wieder den tatsächlich sichtbaren Bereichen.","en":"Single preview and slide overview no longer stop above a large unused area. A later CSS rule reserved extra rows for tools absent from preview mode. The height allocation now matches the visible sections."}
+              },
+              {
+                "label": {"de":"Timeline und Statuszeile wieder unten","en":"Timeline and status bar restored to the bottom"},
+                "text": {"de":"Die Timeline sitzt direkt unter dem Arbeitsbereich und die Statuszeile am unteren Fensterrand. Statusangaben überlagern den Ablauf nicht mehr. Die Anordnung bleibt auch beim Aufklappen der Timeline, bei kleineren Fenstern und nach dem Wechsel zwischen Bearbeiten und Vorschau erhalten.","en":"The timeline sits directly below the workspace and the status bar at the window bottom, without overlapping the service order. This remains stable when expanding the timeline, resizing the window or switching between edit and preview."}
+              }
+            ],
+            "known": [
+              {
+                "label": {"de":"Umfang dieser Korrektur","en":"Scope of this fix"},
+                "text": {"de":"Diese Wartungsausgabe korrigiert ausschließlich das Vorschau-Layout. Präsentationsinhalte, Live-Steuerung und die offenen Cloud-Songfunktionen aus 0.36.12 bleiben unverändert. Die Layouttests umfassen 1920×1080 und 1366×768 sowie beide Vorschauansichten und eine ausgeklappte Timeline.","en":"This maintenance release changes preview layout only. Presentation content, live control and pending cloud-song functionality from 0.36.12 remain unchanged. Layout tests cover 1920×1080, 1366×768, both preview views and an expanded timeline."}
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.36.12",
+          "overview": {"label":{"de":"Einordnung dieser Version","en":"About this release"},"text":{"de":"Optionales Lyric Scrolling ergänzt die Songausgabe auf MAIN. Die Ausgabe verbessert außerdem Ziehen und Skalieren, Vollbildbuttons, Website-Optionen und lokale Autosaves. Eine authentifizierte Cloud-Songbibliothek und vollständige Design-Vererbung sind weiterhin nicht enthalten.","en":"Optional lyric scrolling extends song output on MAIN. This release also improves dragging, fullscreen controls, website options and local autosaves. An authenticated cloud song library and full design inheritance are not yet included."}},
+          "releaseDate": "2026-09-13",
+          "current": false,
           "sections": {
             "new": [
               {

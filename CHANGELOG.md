@@ -1,5 +1,11 @@
 # Versionshinweise / Release notes
 
+## 0.36.13 – 2026-09-13
+
+- Vorschau-Shell auf die tatsächlich vorhandenen fünf Bereiche korrigiert.
+- Große ungenutzte Fläche unter Einzelvorschau/Folienübersicht und überlagernde Statuszeile behoben.
+- Regressionstest mit tatsächlicher CSS-Ladereihenfolge, zwei Fenstergrößen, beiden Vorschauansichten und Timeline-/Moduswechsel ergänzt.
+
 ## 0.36.12 – 2026-09-13
 
 - Optionales Lyric Scrolling für MAIN mit lokaler Editorvorschau, Präsentations-/Song-Einstellungen, Preflight, Undo/Redo und Dokumentpersistenz.
