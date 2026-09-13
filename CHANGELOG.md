@@ -1,5 +1,16 @@
 # Versionshinweise / Release notes
 
+## 0.36.12 – 2026-09-13
+
+- Optionales Lyric Scrolling für MAIN mit lokaler Editorvorschau, Präsentations-/Song-Einstellungen, Preflight, Undo/Redo und Dokumentpersistenz.
+- Mausgesten im Canvas: lokale rAF-Vorschau, ein Commit beim Loslassen, Abbruch ohne History-Eintrag.
+- Eigene F11-Fensterbuttons und reservierter Platz für Profil und Sync; lange Namen überdecken Sync nicht.
+- Native Rechtschreib-Kontextmenüs mit Vorschlägen, Lernen und Standard-Textaktionen.
+- Website-Einstellungen gruppiert, Formularfreigabe und Referrer-Wahl ergänzt, kein URL-Autofokus, Identitäten verknüpfter Websites erhalten.
+- Stille lokale Autosaves; Cloud-Erreichbarkeitsprüfung alle fünf Minuten, keine Behauptung vollständiger Cloud-Synchronisierung.
+- Alle 59 archivierten Versionen erhalten eine zusätzliche Einordnung in App und Web.
+- Noch offen: authentifizierte Cloud-Songbibliothek, verwaltete Library-Arrangements und vollständige Design-Vererbung. Lange Lyrics vor ON AIR aufteilen; die Schrift wird nicht automatisch verkleinert.
+
 ## 0.36.11
 
 - Kompakter Songeditor mit größerem Lyrics-Bereich und separatem Metadaten-Tab.

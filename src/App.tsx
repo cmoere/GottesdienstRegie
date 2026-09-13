@@ -1,3 +1,7 @@
+import { LyricScrollingSettings } from './LyricScrollingSettings';
+import { WindowControls } from './WindowControls';
+import { LyricScrollRenderer } from './LyricScrollRenderer';
+import type { LyricScrollPacket } from './lyricScrolling';
 import {
   useCallback,
   useEffect,
@@ -4187,6 +4191,7 @@ function VersionItem({
 type ReleaseText = Record<string, string>;
 type ReleaseEntry = { label: ReleaseText; text: ReleaseText };
 type ReleaseBuild = {
+  overview?: ReleaseEntry;
   version: string;
   releaseDate: string;
   current?: boolean;
@@ -4364,6 +4369,7 @@ function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
       fixed: language === "de" ? "Behoben" : "Fixed",
       security: language === "de" ? "Sicherheit" : "Security",
       knownIssues: language === "de" ? "Bekannte Probleme" : "Known issues",
+      known: language === "de" ? "Noch offen / Hinweise" : "Limitations / Notes",
     };
   if (!data) return <p>Versionsinformationen werden geladen …</p>;
   return (
@@ -4407,6 +4413,7 @@ function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
                   {build.current ? " · Aktuelle Version" : ""}
                 </small>
               </summary>
+              {build.overview&&<section><h4>{local(build.overview.label)}</h4><p>{local(build.overview.text)}</p></section>}
               {Object.entries(build.sections)
                 .filter(([, entries]) => entries.length)
                 .map(([key, entries]) => (
@@ -4971,6 +4978,7 @@ function PresentationTransitionSettings() {
   return (
     <section>
       <h3>Präsentation</h3>
+      <LyricScrollingSettings />
       <p>
         Lege den Standardübergang für MAIN fest. Einzelne Ablauf-Elemente und
         Folien können ihn im Editor überschreiben.
@@ -6383,6 +6391,7 @@ function HelpModal({ close }: { close: () => void }) {
     "Ablauf",
     "Folien",
     "Übergänge & Auto-Advance",
+    "Lyric Scrolling",
     "Bibel",
     "LiveQuiz",
     "SYSTEM",
@@ -6432,6 +6441,8 @@ function HelpModal({ close }: { close: () => void }) {
       "Beim Hinzufügen eines Videos wählst du lokale Datei, direkte URL, YouTube oder Vimeo. GottesdienstRegie lädt keine geschützten Onlinevideos herunter, sondern verwendet zulässige eingebettete Wiedergabe. Autoplay, Loop, Lautstärke und Verhalten nach Ende werden im Element gespeichert. Netzwerkquellen erscheinen im Preflight.",
     Webseiten:
       "Webseiten sind eigenständige Ablauf-Elemente mit URL, Zoom, Interaktion, Audio, automatischem Neuladen und Fallback. MAIN zeigt bei Fehlern keine Chromium-Standardseite. Prüfe Netzwerkseiten vor dem Gottesdienst und hinterlege für kritische Inhalte ein lokales Ersatzbild.",
+    "Lyric Scrolling":
+      "Lyric Scrolling zeigt aktuelle Liedzeilen deutlich und kommende Bereiche mit reduzierter Deckkraft. WEITER bewegt den nächsten Bereich nach oben an die aktive Position. Der tatsächliche Songablauf einschließlich Wiederholungen und Folienumbrüchen bleibt maßgeblich.\n\nAKTIVIEREN\nÖffne Einstellungen → Präsentation → Songs und aktiviere „Lyric Scrolling für Song-Items verwenden“. Bestehende Präsentationen starten ohne diese Einstellung weiterhin mit normalen Folien. Dauer, Anzahl kommender Bereiche und deren Deckkraft lassen sich dort einstellen und werden mit der Präsentation gespeichert.\n\nEINZELNEN SONG ANPASSEN\nWähle den Song und öffne DESIGN → Lyrics-Darstellung. „Präsentationsstandard“ übernimmt die Einstellung; „Normale Slides“ schaltet den Effekt für diesen Song aus. Diese Änderung unterstützt Rückgängig/Wiederholen.\n\nVORSCHAU\nKlicke über dem Editor-Canvas auf „Lyric Scrolling · VORSCHAU“. WEITER und ZURÜCK dort demonstrieren die Darstellung ausschließlich im Editor. VORSCHAU BEENDEN kehrt zur Bearbeitung zurück. MAIN bleibt unverändert.\n\nLIVE\nMAIN folgt den normalen Live-Befehlen. Sprünge aktualisieren die kommenden Texte sofort, schnelle Wechsel erzeugen keine Warteschlange. STAGE behält Current/Next und Akkorde; LIVESTREAM behält sein eigenes Layout. Schnellanzeigen haben Vorrang.\n\nGESTALTUNG\nDie Textbox begrenzt die Lyrics-Fläche. Vergrößere sie bei Bedarf im Editor. Aktive Lyrics haben Vorrang; lange Texte werden nicht automatisch verkleinert. Preflight warnt bei zu wenig Platz. Teile zu lange Abschnitte vor ON AIR auf, da überstehender Text abgeschnitten wird. Kommende Texte erscheinen nur im verbleibenden Platz. Prüfe die Lesbarkeit vor dem Gottesdienst auf dem tatsächlichen Ausgabegerät.",
     Songs:
       "Songs bestehen aus benannten Teilen wie Strophe, Refrain oder Bridge. Die Reihenfolge kann als Arrangement gespeichert werden; wiederholte Teile müssen dadurch nicht mehrfach gepflegt werden. Prüfe Textumbrüche in der Vorschau und verwende für MAIN eine ausreichend große, kontrastreiche Schrift. Urheber- und Lizenzangaben gehören in die dafür vorgesehenen Felder und können auf Titel- oder Abschlussfolien erscheinen.",
     Bibel:
@@ -8085,8 +8096,10 @@ function AppShell({
   useEffect(() => {
     const timer = window.setInterval(() => {
       const current = usePresentation.getState();
-      if (current.presentationId && current.saveState === "dirty")
-        void saveNow();
+      if(current.saveState==='dirty'&&current.presentationId&&!syncingRef.current&&window.desktop){
+        const document=presentationDocument(current);syncingRef.current=true;
+        void window.desktop.presentation.save(document).then(()=>{const latest=usePresentation.getState();if(latest.presentationId===document.presentationId&&latest.updatedAt===document.updatedAt)latest.markSaved()}).catch(()=>usePresentation.getState().markSaveError()).finally(()=>{syncingRef.current=false});
+      }
     }, 15_000);
     return () => {
       window.clearInterval(timer);
@@ -8102,7 +8115,7 @@ function AppShell({
         .then(setMediaStorage)
         .catch(() => setMediaStorage(null));
     refreshCloud();
-    const cloudTimer = window.setInterval(refreshCloud, 20000),
+    const cloudTimer = window.setInterval(refreshCloud, 300_000),
       disposeDisplays = window.desktop?.onDisplaysChanged(setDisplays),
       disposeOutputs = window.desktop?.onOutputStatus((status) =>
         setOutputState((current) => ({
@@ -9517,6 +9530,7 @@ function AppShell({
       onClick={() => setMenuOpen(null)}
     >
       <div className="menubar">
+        <WindowControls />
         <FileMenu
           open={menuOpen === "file"}
           label={t("file")}
@@ -9908,13 +9922,14 @@ function Output() {
     };
   }, []);
   const songOutput=(slide as (Slide & {songOutput?:{chords:string;showChords:boolean;currentNext:boolean;next:string;lowerThird:boolean}})|null)?.songOutput;
+  const lyricScroll=(slide as (Slide & {lyricScroll?:LyricScrollPacket})|null)?.lyricScroll;
   const renderedSlide=slide && songOutput?.lowerThird && role==='livestream'?{...slide,background:'transparent',backgroundImage:undefined,elements:slide.elements.filter(element=>element.type==='text').map(element=>({...element,x:140,y:800,width:1640,height:240,properties:{...element.properties,fontSize:52}}))}:slide;
   return (
     <div
       className={`output ${quick?.type === "noText" ? "quick-no-text" : ""}`}
     >
       {slide && role==='stage' && songOutput ? <div style={{position:'absolute',inset:0,background:'#000',color:'#fff',padding:'4vw',whiteSpace:'pre-wrap',overflow:'hidden'}}><h2>{slide.title}</h2><div style={{fontSize:'3vw'}}>{slide.body}</div>{songOutput.showChords&&<pre style={{fontSize:'2vw',color:'#f3d67b'}}>{songOutput.chords}</pre>}{songOutput.currentNext&&<div style={{fontSize:'2vw',marginTop:'2vw',borderTop:'1px solid #777'}}>ALS NÄCHSTES<br/>{songOutput.next}</div>}</div> : renderedSlide && (
-        <TransitionStage
+        lyricScroll && role==='main' ? <LyricScrollRenderer packet={lyricScroll} live/> : <TransitionStage
           slide={renderedSlide}
           transition={
             renderedSlide.transitionOverride ??

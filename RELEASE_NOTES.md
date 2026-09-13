@@ -1,3 +1,40 @@
+# GottesdienstRegie 0.36.12
+
+Diese Ausgabe ergänzt optionales Lyric Scrolling für Songs und behebt konkrete Probleme im Desktop-Arbeitsbereich. Vorhandene Präsentationen behalten ohne Aktivierung die normale Folienanzeige. Die Änderungen betreffen die Vorbereitung und Bedienung; sie ersetzen keine Prüfung der tatsächlichen Ausgabe am Regie-PC.
+
+## Neu: Lyric Scrolling für MAIN
+
+Unter **Einstellungen → Präsentation → Songs** lässt sich Lyric Scrolling einschalten. Aktuelle Liedzeilen erscheinen hervorgehoben; bis zu zwei kommende Textblöcke werden mit reduzierter Deckkraft angezeigt. Dauer und Deckkraft sind einstellbar. Im DESIGN-Tab kann ein einzelner Song den Präsentationsstandard übernehmen oder ausdrücklich normale Slides verwenden.
+
+WEITER und ZURÜCK folgen weiterhin dem tatsächlichen Songablauf einschließlich Wiederholungen. Direkte Sprünge wechseln zum gewählten Abschnitt, ohne eine Animationswarteschlange aufzubauen. Titel-, Leer- und deaktivierte Folien erscheinen nicht als kommende Lyrics. Die über dem Canvas angebotene Testvorschau bewegt nur die Editorvorschau, nicht den Live-Ausgang.
+
+Die Einstellungen werden im lokalen Präsentationsdokument gespeichert und unterstützen Undo/Redo. MAIN verwendet einen kopierten Live-Datenstand. STAGE und LIVESTREAM behalten ihre getrennten Darstellungen. Hintergrundübergänge übernehmen die bereits aufgelösten Folien-, Item- und Präsentationseinstellungen.
+
+## Präzisere Desktop-Bedienung
+
+- **Verschieben und Skalieren:** Mausbewegungen aktualisieren zunächst eine lokale Canvas-Vorschau. Erst das Loslassen speichert die Änderung als einen Undo-Schritt. Abgebrochene Gesten und ein inzwischen gewechselter Bearbeitungskontext werden nicht nachträglich gespeichert.
+- **Vollbild:** Im F11-Modus stehen eigene Schaltflächen zum Minimieren, Verlassen des Vollbilds und Schließen bereit. Profil und Sync erhalten Abstand zu den Fensterbuttons; lange Profilnamen werden gekürzt, statt den Sync-Button zu überdecken.
+- **Rechtschreibung:** Editierbare Textfelder erhalten das native Kontextmenü mit verfügbaren Korrekturvorschlägen, Lernen einer Schreibweise sowie Ausschneiden, Kopieren, Einfügen und Alles auswählen. Eine Websuche wird nur durch den ausdrücklich gewählten Befehl geöffnet. Vorschläge hängen von den geladenen Wörterbüchern ab.
+- **Ruhigeres Speichern:** Geänderte Dokumente werden weiterhin regelmäßig lokal gesichert, jetzt ohne das große manuelle Synchronisationsfenster. Die automatische Cloud-Erreichbarkeitsprüfung läuft im Abstand von fünf Minuten. Lokales Speichern und Cloud-Übertragung sind nicht dasselbe.
+
+## Website-Elemente
+
+Der Editor gliedert sich in Adresse und Darstellung, Wiedergabe und Bedienung sowie Verbindung und Sicherheit. Beim Öffnen springt der Eingabefokus nicht mehr automatisch in die URL. Neue Optionen steuern Formulare und die an fremde Websites übermittelte Referrer-Information. Änderungen an verknüpften Website-Vorkommen werden zusammen gespeichert, ohne deren eigene Folien- und Element-IDs zu überschreiben.
+
+## Ausführlichere Versionshinweise
+
+Alle 59 bisher archivierten Versionen erhalten eine zusätzliche Einordnung in der App und auf der Release-Notes-Seite. Die ursprünglichen Einzelpunkte bleiben erhalten. Historische Notizen beschreiben den damals dokumentierten Stand und sind keine erneute Abnahme jeder älteren Funktion. Im Archiv existiert 0.1.0, aber keine veröffentlichte Version 1.0; eine solche Version wird hier nicht nachträglich erfunden.
+
+## Grenzen und Prüfung vor dem Gottesdienst
+
+Sehr lange Lyrics werden nicht still in eine winzige Schrift umgerechnet. Preflight weist auf eine zu kleine Textfläche hin. Überstehender Text wird abgeschnitten; solche Abschnitte müssen vor ON AIR aufgeteilt oder die Textfläche vergrößert werden.
+
+Eine eigenständige authentifizierte Cloud-Songbibliothek, verwaltete Library-Arrangements und die vollständige Design-Vererbung sind **noch nicht enthalten**. Die vorhandene Anmeldung stellt dafür derzeit keinen geeigneten Cloud-Schreibzugang bereit. Auch die fünfminütige Statusprüfung bestätigt keine serverseitige Präsentationssynchronisierung.
+
+Geprüft wurden der Produktionsbuild, Songstruktur, Lyric-Datenregeln, schnelle Wechsel und Sprünge im Electron-Renderer, 4K-Layout, Erhalt der Schriftgröße, Undo/Redo, Dokument-Neuladen, atomare Ziehbewegungen, verknüpfte Website-IDs sowie die Abstände der Vollbildbuttons. Die isolierten Rendererchecks sind keine Framerate-Garantie für die konkrete GPU. Bitte MAIN, Quick Screens, Audio und Hintergrundvideo auf dem tatsächlichen Ausgabegerät vor dem nächsten Liveeinsatz prüfen.
+
+---
+
 # GottesdienstRegie 0.36.11
 
 ## Song-Editor

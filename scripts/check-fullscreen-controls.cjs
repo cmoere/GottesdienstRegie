@@ -1,0 +1,6 @@
+const {app,BrowserWindow}=require('electron'),assert=require('node:assert/strict');
+app.whenReady().then(async()=>{const win=new BrowserWindow({show:false,width:960,height:620,webPreferences:{offscreen:true}});try{
+ await win.loadURL('http://127.0.0.1:5178/scripts/editor-interaction-test.html?window-controls');
+ const result=await win.webContents.executeJavaScript(`new Promise((resolve,reject)=>{const timer=setInterval(()=>{const controls=document.querySelector('.fullscreen-controls');if(!controls)return;clearInterval(timer);const profile=document.querySelector('.top-profile-root').getBoundingClientRect(),sync=document.querySelector('.sync-control').getBoundingClientRect(),buttons=controls.getBoundingClientRect();document.querySelector('[aria-label="Programm schließen"]').click();resolve({overlap:sync.right>profile.left,buttonsOverlap:profile.right>buttons.left,action:window.lastWindowAction})},30);setTimeout(()=>reject(Error('Timeout')),5000)})`);
+ assert.equal(result.overlap,false,'Long profile names must not cover sync');assert.equal(result.buttonsOverlap,false);assert.equal(result.action,'close');console.log('PASS: fullscreen controls and profile/sync spacing at 960px');win.destroy();app.exit(0);
+}catch(error){console.error(error);win.destroy();app.exit(1)}});

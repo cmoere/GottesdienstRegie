@@ -1,0 +1,6 @@
+.lyric-scroll-output{position:absolute;inset:0;container-type:inline-size;overflow:hidden}
+.lyric-scroll-viewport{pointer-events:none}
+.quick-no-text .lyric-scroll-viewport{visibility:hidden}
+.lyric-settings{display:grid;gap:12px;padding:12px 0}
+.lyric-settings label{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.lyric-settings input[type=number]{width:90px}

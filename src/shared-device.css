@@ -26,13 +26,14 @@
 .top-profile-root {
   position: fixed;
   z-index: 1290;
-  right: 0;
+  right: 145px;
   top: 0;
   height: 32px;
 }
 .top-profile-button {
   height: 32px;
   min-width: 104px;
+  width: 104px;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -55,6 +56,8 @@
 .top-profile-button span {
   font-size: 11px;
 }
+.top-profile-button > span:not(.material-symbols-outlined){min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.top-profile-button > .material-symbols-outlined{flex:none}
 .top-profile-root > .menu-popup {
   top: 31px;
   right: 4px;
@@ -62,12 +65,12 @@
   width: 245px;
 }
 .production-app > .menubar > span {
-  min-width: 290px;
+  min-width: 0;
 }
 .production-app > .menubar > .sync-control {
   position: fixed !important;
   z-index: 1300;
-  right: 106px;
+  right: 251px;
   top: 0;
   width: 32px;
   height: 32px;
@@ -76,8 +79,12 @@
   border-right: 1px solid var(--border);
 }
 .top-cloud-health {
-  right: 141px !important;
+  right: 286px !important;
 }
+.fullscreen-controls{position:fixed;right:0;top:0;height:32px;display:flex;z-index:1400;background:var(--menubar)}
+.fullscreen-controls button{width:46px!important;min-width:46px;padding:0!important;height:32px!important;font-size:18px!important}
+.fullscreen-controls button:last-child:hover{background:#c42b1c;color:white}
+.production-app>.menubar{padding-right:290px}
 .menu-popup kbd {
   justify-self: end;
   padding: 0;

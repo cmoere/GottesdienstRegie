@@ -6,6 +6,8 @@ import {
   type CSSProperties,
 } from "react";
 import QRCode from "qrcode";
+import { lyricPacket } from './lyricScrolling';
+import { LyricScrollRenderer } from './LyricScrollRenderer';
 import { readSong, songPatch, shortSection, transposeChords, type SongStructure } from './songStructure';
 import { SlideRenderer } from "./SlideRenderer";
 import {
@@ -397,6 +399,7 @@ function SongEditor({
       )}
       {tab === "design" && (
         <section className="song-override-panel">
+          <label>Lyrics-Darstellung<select disabled={!canEdit} value={String(metadata.lyricScrollingMode||'inherit')} onChange={event=>changeMeta({lyricScrollingMode:event.target.value})}><option value="inherit">Präsentationsstandard</option><option value="enabled">Lyric Scrolling</option><option value="disabled">Normale Slides</option></select></label>
           <label>Design-Vorlage
             <button disabled={!canEdit} onClick={()=>applyText({fontSize:72,align:'center',fontWeight:600,textShadow:'0 2px 4px #000',textOutline:'',textGlow:''})}>Zentriert mit Schatten anwenden</button>
           </label>
@@ -667,11 +670,7 @@ function ContentEditor({
     const web = slide.elements.find((element) => element.type === "web"),
       url = String(web?.properties.src ?? item.metadata.url ?? ""),
       change = (patch: Record<string, string | number | boolean>) => {
-        state.updateItem(item.id, { metadata: { ...item.metadata, ...patch } });
-        if (web)
-          state.updateElement(web.id, {
-            properties: { ...web.properties, ...patch },
-          });
+        state.updateWebProperties(item.id,slide.id,web?.id,patch);
       },
       zoom = Number(web?.properties.zoom ?? item.metadata.zoom ?? 100);
     return (
@@ -685,10 +684,10 @@ function ContentEditor({
           <b>WEB-INHALT</b>
         </div>
         <div className="web-editor-fields">
+          <h4>ADRESSE & DARSTELLUNG</h4>
           <label>
             Webadresse
             <input
-              autoFocus
               disabled={!canEdit}
               type="url"
               placeholder="https://www.beispiel.de"
@@ -720,6 +719,7 @@ function ContentEditor({
               <Icon name="center_focus_strong" /> AUF 100 %
             </button>
           </div>
+          <h4>WIEDERGABE & BEDIENUNG</h4>
           <label>
             <input
               disabled={!canEdit}
@@ -762,6 +762,9 @@ function ContentEditor({
             />{" "}
             Pop-up-Fenster erlauben
           </label>
+          <h4>VERBINDUNG & SICHERHEIT</h4>
+          <label><input type="checkbox" disabled={!canEdit} checked={(web?.properties.allowForms??item.metadata.allowForms)!==false} onChange={event=>change({allowForms:event.target.checked})}/>Formulare erlauben</label>
+          <label>Referrer-Information<select disabled={!canEdit} value={String(web?.properties.referrerPolicy??item.metadata.referrerPolicy??'no-referrer')} onChange={event=>change({referrerPolicy:event.target.value})}><option value="no-referrer">Nicht übermitteln</option><option value="strict-origin-when-cross-origin">Nur Herkunft bei fremden Websites</option></select></label>
           <label>
             <input
               disabled={!canEdit}
@@ -2421,10 +2424,16 @@ function PreviewStack({
   previewToken: number;
   canEdit: boolean;
 }) {
+  const [scrollPreview,setScrollPreview]=useState(false),[scrollStep,setScrollStep]=useState(0);
+  const [draft,setDraft]=useState<{id:string;patch:Partial<Slide['elements'][number]>}|null>(null);
+  const pendingDraft=useRef<typeof draft>(null),drawFrame=useRef(0);
   const state = usePresentation(),
     frame = useRef<HTMLDivElement>(null),
     drag = useRef<{
       id: string;
+      slideId: string;
+      itemId: string;
+      pointerId: number;
       mode: "move" | "resize";
       pointerX: number;
       pointerY: number;
@@ -2438,28 +2447,40 @@ function PreviewStack({
     const move = (event: PointerEvent) => {
         const active = drag.current,
           rect = frame.current?.getBoundingClientRect();
-        if (!active || !rect) return;
+        if (!active || !rect || event.pointerId !== active.pointerId) return;
         const dx = ((event.clientX - active.pointerX) / rect.width) * 1920,
           dy = ((event.clientY - active.pointerY) / rect.height) * 1080;
-        if (active.mode === "move")
-          state.updateElement(active.id, {
+        const patch:Partial<Slide['elements'][number]>=active.mode === 'move'?{
             x: Math.max(0, Math.min(1920 - active.width, active.x + dx)),
             y: Math.max(0, Math.min(1080 - active.height, active.y + dy)),
-          });
-        else
-          state.updateElement(active.id, {
+          }:{
             width: Math.max(32, Math.min(1920 - active.x, active.width + dx)),
             height: Math.max(24, Math.min(1080 - active.y, active.height + dy)),
-          });
+          };
+        pendingDraft.current={id:active.id,patch};
+        if(!drawFrame.current)drawFrame.current=requestAnimationFrame(()=>{drawFrame.current=0;setDraft(pendingDraft.current)});
       },
-      end = () => {
+      cancel = () => {
+        cancelAnimationFrame(drawFrame.current);drawFrame.current=0;
+        pendingDraft.current=null;setDraft(null);
         drag.current = null;
+      },
+      end = (event:PointerEvent) => {
+        const active=drag.current,final=pendingDraft.current,current=usePresentation.getState();
+        if(!active||event.pointerId!==active.pointerId)return;
+        if(final&&current.selectedItemId===active.itemId&&current.selectedSlideId===active.slideId)current.updateElement(final.id,final.patch);
+        cancel();
       };
     addEventListener("pointermove", move);
     addEventListener("pointerup", end);
+    addEventListener("pointercancel", cancel);
+    addEventListener("blur", cancel);
     return () => {
+      cancelAnimationFrame(drawFrame.current);
       removeEventListener("pointermove", move);
       removeEventListener("pointerup", end);
+      removeEventListener("pointercancel", cancel);
+      removeEventListener("blur", cancel);
     };
   }, []);
   const begin = (
@@ -2467,12 +2488,15 @@ function PreviewStack({
     element: Slide["elements"][number],
     mode: "move" | "resize",
   ) => {
-    if (!canEdit || element.locked) return;
+    if (!canEdit || element.locked || event.button!==0) return;
     event.preventDefault();
     event.stopPropagation();
     state.selectElements([element.id]);
     drag.current = {
       id: element.id,
+      slideId: slide.id,
+      itemId: item.id,
+      pointerId: event.pointerId,
       mode,
       pointerX: event.clientX,
       pointerY: event.clientY,
@@ -2482,15 +2506,22 @@ function PreviewStack({
       height: element.height,
     };
   };
+  const scrollPacket=lyricPacket(item,{...slide,transitionOverride:resolveTransition(slide,item,'operator',state.transitionDefault)},state.lyricScrolling);
+  const canvasSlide=draft?{...slide,elements:slide.elements.map(element=>element.id===draft.id?{...element,...draft.patch}:element)}:slide;
+  useEffect(()=>{setScrollStep(0)},[slide.id,item.id]);
+  useEffect(()=>{setScrollPreview(false)},[item.id]);
+  const demoSlide=scrollPacket?.slides[Math.min(scrollPacket.slides.length-1,scrollPacket.slides.findIndex(page=>page.id===slide.id)+scrollStep)];
+  const demoPacket=demoSlide?lyricPacket(item,{...demoSlide,transitionOverride:resolveTransition(demoSlide,item,'operator',state.transitionDefault)},state.lyricScrolling):undefined;
   return (
     <div className="production-preview-scroll transition-preview-host">
+      {scrollPacket&&<div><button onClick={()=>{setScrollPreview(!scrollPreview);setScrollStep(0)}}>↕ Lyric Scrolling · {scrollPreview?'VORSCHAU BEENDEN':'VORSCHAU'}</button>{scrollPreview&&<><button onClick={()=>setScrollStep(value=>Math.max(0,value-1))}>ZURÜCK</button><button onClick={()=>setScrollStep(value=>Math.min(item.slides.length-1,value+1))}>WEITER</button></>}</div>}
       <div
         ref={frame}
         className={`production-slide ${guideClass} active ${slide.id === state.liveSlideId ? "live" : ""}`}
         onPointerDown={() => state.selectElements([])}
       >
-        <TransitionStage
-          slide={slide}
+        {scrollPreview&&demoPacket?<LyricScrollRenderer packet={demoPacket}/>:<TransitionStage
+          slide={canvasSlide}
           transition={resolveTransition(
             slide,
             item,
@@ -2499,8 +2530,8 @@ function PreviewStack({
           )}
           role="operator"
           previewToken={previewToken}
-        />
-        {slide.elements
+        />}
+        {(!(scrollPreview&&demoPacket)?canvasSlide.elements:[])
           .filter((element) => element.visible)
           .map((element) => {
             const active = state.selectedElementIds.includes(element.id);

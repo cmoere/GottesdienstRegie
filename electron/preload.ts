@@ -11,6 +11,9 @@ contextBridge.exposeInMainWorld("desktop", {
     },
   },
   operator: {
+    fullscreen:()=>ipcRenderer.invoke('window:fullscreen-state'),
+    control:(action:string)=>ipcRenderer.invoke('window:control',action),
+    onFullscreen:(callback:(value:boolean)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:boolean)=>callback(value);ipcRenderer.on('window:fullscreen-state',listener);return()=>ipcRenderer.removeListener('window:fullscreen-state',listener)},
     getPreferences: () => ipcRenderer.invoke("window-preferences:get"),
     setPreferences: (patch: unknown) =>
       ipcRenderer.invoke("window-preferences:set", patch),

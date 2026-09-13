@@ -23,6 +23,19 @@ let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
 let finishClose:()=>Promise<void>=async()=>{};
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}},{scheme:'gottesdienst-cloud',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
+app.on('web-contents-created',(_event,contents)=>{
+  contents.on('context-menu',(_event,params)=>{
+    if(!params.isEditable)return;
+    const items:MenuItemConstructorOptions[]=[];
+    if(params.misspelledWord){
+      for(const suggestion of params.dictionarySuggestions.slice(0,6))items.push({label:suggestion,click:()=>contents.replaceMisspelling(suggestion)});
+      if(!params.dictionarySuggestions.length)items.push({label:'Keine Korrekturvorschläge',enabled:false});
+      items.push({label:'Schreibweise lernen',click:()=>{contents.session.addWordToSpellCheckerDictionary(params.misspelledWord)}},{label:'Wort online suchen …',click:()=>{void shell.openExternal(`https://www.google.com/search?q=${encodeURIComponent(params.misspelledWord)}`)}},{type:'separator'});
+    }
+    items.push({role:'undo',label:'Rückgängig'},{role:'redo',label:'Wiederholen'},{type:'separator'},{role:'cut',label:'Ausschneiden'},{role:'copy',label:'Kopieren'},{role:'paste',label:'Einfügen'},{role:'selectAll',label:'Alles auswählen'});
+    const owner=BrowserWindow.fromWebContents(contents);if(owner)Menu.buildFromTemplate(items).popup({window:owner});
+  });
+});
 
 type UpdateStatus={state:'idle'|'checking'|'available'|'not-available'|'downloading'|'cancelled'|'downloaded'|'rollback-downloading'|'rollback-ready'|'error'|'development';version?:string;percent?:number;releaseNotes?:string;message?:string;transferred?:number;total?:number;bytesPerSecond?:number;etaSeconds?:number};
 let lastUpdateStatus:UpdateStatus={state:'idle'};
@@ -72,6 +85,9 @@ function createControlWindow(preferences:AppPreferencesData) {
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   });
   controlWindow.setMenu(null);
+  if(process.platform!=='darwin')controlWindow.webContents.session.setSpellCheckerLanguages(['de-DE','en-US'].filter(language=>controlWindow!.webContents.session.availableSpellCheckerLanguages.includes(language)));
+  const publishWindowState=()=>controlWindow?.webContents.send('window:fullscreen-state',controlWindow.isFullScreen());
+  controlWindow.on('enter-full-screen',publishWindowState);controlWindow.on('leave-full-screen',publishWindowState);
   const configured=preferences.windowStartMode==='restore'?(preferences.lastWindowState??'fullscreen'):preferences.windowStartMode;
   controlWindow.center();
   let workspaceReady=false;
@@ -202,6 +218,8 @@ app.whenReady().then(async() => {
   ipcMain.handle('window-preferences:get',()=>appPreferences.get());
   ipcMain.handle('window-preferences:set',async(_event,patch:Partial<AppPreferencesData>)=>{const allowed:Partial<AppPreferencesData>={};if(['fullscreen','maximized','window','restore'].includes(String(patch.windowStartMode)))allowed.windowStartMode=patch.windowStartMode;if(['primary','last'].includes(String(patch.operatorDisplayTarget)))allowed.operatorDisplayTarget=patch.operatorDisplayTarget;if(typeof patch.automaticUpdates==='boolean')allowed.automaticUpdates=patch.automaticUpdates;if(typeof patch.autoDownloadUpdates==='boolean'){allowed.autoDownloadUpdates=patch.autoDownloadUpdates;autoUpdater.autoDownload=patch.autoDownloadUpdates}if(typeof patch.betaUpdates==='boolean'){allowed.betaUpdates=patch.betaUpdates;autoUpdater.allowPrerelease=patch.betaUpdates}if(typeof patch.betaWarningAccepted==='boolean')allowed.betaWarningAccepted=patch.betaWarningAccepted;return appPreferences.update(allowed)});
   ipcMain.handle('window:toggle-fullscreen',()=>{if(!controlWindow)return false;controlWindow.setFullScreen(!controlWindow.isFullScreen());return controlWindow.isFullScreen()});
+  ipcMain.handle('window:fullscreen-state',()=>controlWindow?.isFullScreen()??false);
+  ipcMain.handle('window:control',(event,action:string)=>{if(event.sender!==controlWindow?.webContents)return false;if(action==='close')controlWindow.close();else if(action==='minimize')controlWindow.minimize();else if(action==='restore')controlWindow.setFullScreen(false);return true});
   ipcMain.handle('device:get',()=>{const registered=appPreferences.get().registeredDevice;return registered?{...registered,organizationId:'philippusgemeindebie',organizationName:'Philippus Gemeinde Bielefeld e. V.'}:null});
   ipcMain.handle('device:register',async(_event,input:{organizationName?:string;name:string;type:'shared'|'personal'})=>{const now=new Date().toISOString(),device={id:`church_${randomBytes(9).toString('hex')}`,organizationId:'philippusgemeindebie',organizationName:'Philippus Gemeinde Bielefeld e. V.',name:String(input.name??'').trim().slice(0,80),type:input.type==='personal'?'personal' as const:'shared' as const,platform:`${process.platform} ${process.getSystemVersion()}`,registeredAt:now,lastSeenAt:now,status:'online' as const};if(!device.name)throw new Error('Ein Gerätename ist erforderlich.');await appPreferences.update({registeredDevice:device});return device});
   ipcMain.handle('session:read', async () => {
