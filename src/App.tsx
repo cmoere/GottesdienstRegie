@@ -1753,14 +1753,23 @@ function addLiveQuiz(value: QuizCreateValue, sectionId = "service") {
   });
 }
 
-function AddPopover({ close }: { close: () => void }) {
+function AddPopover({
+  close,
+  targetSectionId,
+}: {
+  close: () => void;
+  targetSectionId?: string;
+}) {
   const { t } = useI18n();
   const state = usePresentation(),
     sectionId =
+      targetSectionId ??
       state.items.find((item) => item.id === state.selectedItemId)?.sectionId ??
       "service",
     activeSection = state.sections.find((section) => section.id === sectionId),
-    loopAvailable = isLoopSection(activeSection),
+    sectionCanHostLoop = isLoopSection(activeSection),
+    sectionIsLoopTarget = ["pre", "post", "preLoop", "postLoop"].includes(sectionId),
+    loopAvailable = sectionCanHostLoop || sectionIsLoopTarget,
     [quizOpen, setQuizOpen] = useState(false);
   const options: {
     type: ItemType;
@@ -1999,6 +2008,14 @@ function AddPopover({ close }: { close: () => void }) {
   }
   function addLoopElement(option: (typeof loopOptions)[number]) {
     if (!loopAvailable || !isLoopItemType(String(option.type))) return;
+    // Adding from a dedicated pre-/post-program button is an explicit request
+    // to enable loop content for that section, even when it was empty before.
+    if (!sectionCanHostLoop && sectionIsLoopTarget) {
+      usePresentation.getState().updateSection(sectionId, {
+        supportsLoopItems: true,
+        ...(sectionId === "pre" ? { autoLoop: true } : {}),
+      });
+    }
     const type = option.type as LoopItemType;
     let body = "";
     const metadata: Record<string, string | number | boolean> = { source: type === "announcement" || type === "birthday" || type === "event" ? "firebase" : "local" };
@@ -2181,16 +2198,35 @@ function AddPopover({ close }: { close: () => void }) {
     setQuizOpen(false);
     close();
   }
+  const loopGroup = loopAvailable ? (
+    <div className="add-popover-loop-group">
+      <strong>
+        {targetSectionId
+          ? `${activeSection?.title ?? "Bereich"} · LOOP-ELEMENTE`
+          : "LOOP-ELEMENTE"}
+      </strong>
+      {loopOptions.map((option) => (
+        <button key={`loop-${option.type}`} onClick={() => addLoopElement(option)}>
+          <Icon name={option.icon} />
+          <span>{option.label}</span>
+        </button>
+      ))}
+    </div>
+  ) : null;
+  const visibleOptions = targetSectionId
+    ? options.filter((option) => !isLoopItemType(String(option.type)))
+    : options;
   return (
     <>
       <div className="popover add-content-popover">
         <header>
-          <b>{t("addItem")}</b>
+          <b>{targetSectionId ? `${activeSection?.title ?? "Bereich"} hinzufügen` : t("addItem")}</b>
           <button onClick={close}>
             <Icon name="close" />
           </button>
         </header>
-        {options.map((option) => (
+        {targetSectionId && loopGroup}
+        {visibleOptions.map((option) => (
           <button
             key={option.type}
             onClick={() =>
@@ -2213,17 +2249,7 @@ function AddPopover({ close }: { close: () => void }) {
             <span>{option.label}</span>
           </button>
         ))}
-        {loopAvailable && (
-          <div className="add-popover-loop-group">
-            <strong>LOOP-ELEMENTE</strong>
-            {loopOptions.map((option) => (
-              <button key={`loop-${option.type}`} onClick={() => addLoopElement(option)}>
-                <Icon name={option.icon} />
-                <span>{option.label}</span>
-              </button>
-            ))}
-          </div>
-        )}
+        {!targetSectionId && loopGroup}
       </div>
       {quizOpen && (
         <QuizCreateDialog
@@ -2695,7 +2721,7 @@ function OrderOfService({
       () => ({ ...defaultKeyboardShortcuts, ...storedServiceShortcuts }),
       [storedServiceShortcuts],
     );
-  const [adding, setAdding] = useState(false),
+  const [adding, setAdding] = useState<string | null>(null),
     [timeEditor, setTimeEditor] = useState(false),
     [renameTarget, setRenameTarget] = useState<ServiceItem | null>(null),
     [audioPanel, setAudioPanel] = useState<{
@@ -3020,13 +3046,18 @@ function OrderOfService({
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
-            setAdding((value) => !value);
+            setAdding((value) => (value ? null : "service"));
           }}
           title={t(canEdit ? "addItem" : "noEditPermission")}
         >
           <Icon name="add" />
         </button>
-        {adding && canEdit && <AddPopover close={() => setAdding(false)} />}
+        {adding && canEdit && (
+          <AddPopover
+            targetSectionId={adding === "service" ? undefined : adding}
+            close={() => setAdding(null)}
+          />
+        )}
       </header>
       <div className="service-list">
         <DndContext collisionDetection={closestCenter} onDragEnd={end}>
@@ -3071,73 +3102,94 @@ function OrderOfService({
                     >
                       {section.title}
                     </button>
-                    {section.id === "pre" && (
-                      <button
-                        className={`section-loop-toggle ${section.autoLoop ? "active" : ""}`}
-                        type="button"
-                        disabled={!canEdit}
-                        title="VORPROGRAMM als automatischen Loop verwenden"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          state.updateSection(section.id, { autoLoop: !section.autoLoop, supportsLoopItems: !section.autoLoop });
-                        }}
-                      >
-                        LOOP
-                      </button>
-                    )}
-                    <button
-                      className={`audio-header-button ${audio?.tracks.length ? "configured" : ""} ${audio?.muted ? "muted" : ""} ${missing ? "missing" : ""}`}
-                      title={
-                        missing
-                          ? "Audio konnte nicht vorbereitet werden"
-                          : audio?.tracks.length
-                            ? `${audio.tracks.length} Titel · Background Audio`
-                            : "Background Audio hinzufügen"
-                      }
-                      onClick={(event) =>
-                        openAudio(
-                          event,
-                          "section",
-                          section.id,
-                          Boolean(audio?.tracks.length),
-                        )
-                      }
-                    >
-                      <Icon
-                        name={
-                          missing
-                            ? "warning"
-                            : audio?.muted
-                              ? "volume_off"
-                              : "volume_up"
-                        }
-                      />
-                    </button>
-                    {section.id === "service" ? (
-                      <div className="service-time-host">
+                    <div className="section-actions">
+                      {section.id === "pre" && (
                         <button
-                          className="service-time-control"
+                          className={`section-loop-toggle ${section.autoLoop ? "active" : ""}`}
                           type="button"
                           disabled={!canEdit}
-                          onClick={openTimes}
+                          title="VORPROGRAMM als automatischen Loop verwenden"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            state.updateSection(section.id, {
+                              autoLoop: !section.autoLoop,
+                              supportsLoopItems: !section.autoLoop,
+                            });
+                          }}
                         >
-                          <Icon name="schedule" />
-                          <span>{formatServiceTime(state.serviceTime)}</span>
+                          LOOP
                         </button>
-                        {timeEditor && (
-                          <ServiceTimePopover
-                            time={state.serviceTime}
-                            onCancel={() => setTimeEditor(false)}
-                            onSave={(serviceTime) => {
-                              state.updatePresentation({ serviceTime });
-                              setTimeEditor(false);
-                            }}
-                          />
-                        )}
-                      </div>
-                    ) : (
-                      <output>{formatDuration(duration)}</output>
-                    )}
+                      )}
+                      {(section.id === "pre" || section.id === "post") && (
+                        <button
+                          className="section-add-button"
+                          type="button"
+                          disabled={!canEdit}
+                          title={`${section.title} – Loop-Element hinzufügen`}
+                          aria-label={`${section.title} – Loop-Element hinzufügen`}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            setAdding((value) => (value === section.id ? null : section.id));
+                          }}
+                        >
+                          <Icon name="add" />
+                        </button>
+                      )}
+                      <button
+                        className={`audio-header-button ${audio?.tracks.length ? "configured" : ""} ${audio?.muted ? "muted" : ""} ${missing ? "missing" : ""}`}
+                        title={
+                          missing
+                            ? "Audio konnte nicht vorbereitet werden"
+                            : audio?.tracks.length
+                              ? `${audio.tracks.length} Titel · Background Audio`
+                              : "Background Audio hinzufügen"
+                        }
+                        onClick={(event) =>
+                          openAudio(
+                            event,
+                            "section",
+                            section.id,
+                            Boolean(audio?.tracks.length),
+                          )
+                        }
+                      >
+                        <Icon
+                          name={
+                            missing
+                              ? "warning"
+                              : audio?.muted
+                                ? "volume_off"
+                                : "volume_up"
+                          }
+                        />
+                      </button>
+                      {section.id === "service" ? (
+                        <div className="service-time-host">
+                          <button
+                            className="service-time-control"
+                            type="button"
+                            disabled={!canEdit}
+                            onClick={openTimes}
+                          >
+                            <Icon name="schedule" />
+                            <span>{formatServiceTime(state.serviceTime)}</span>
+                          </button>
+                          {timeEditor && (
+                            <ServiceTimePopover
+                              time={state.serviceTime}
+                              onCancel={() => setTimeEditor(false)}
+                              onSave={(serviceTime) => {
+                                state.updatePresentation({ serviceTime });
+                                setTimeEditor(false);
+                              }}
+                            />
+                          )}
+                        </div>
+                      ) : (
+                        <output>{formatDuration(duration)}</output>
+                      )}
+                    </div>
                   </div>
                   {!isCollapsed &&
                     sectionItems.map((item) => (

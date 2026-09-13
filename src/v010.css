@@ -90,3 +90,17 @@
 .top-cloud-health{position:fixed;z-index:310;right:154px;top:3px;height:27px;display:flex;align-items:center;gap:5px;padding:0 8px;color:var(--muted);background:var(--menubar);font-size:10px;font-weight:700;pointer-events:auto}.top-cloud-health .material-symbols-outlined{font-size:17px}.top-cloud-health.online{color:#54ad62}.top-cloud-health.offline{color:#9aa4a8}
 @media(max-width:900px){.file-flyout{position:fixed;left:355px;top:33px;max-width:calc(100vw - 370px)}.file-picker-list>button{grid-template-columns:96px minmax(0,1fr)}.file-picker-list time{display:none}}
 .production-boot{background:#17171d!important;background-image:none!important}.boot-photo{display:none!important}.production-app .service-section,.production-app .section-label{overflow:visible}.production-app .service-time-host{min-width:0;max-width:112px;overflow:visible}.production-app .service-time-control{max-width:112px;overflow:hidden}.production-app .service-time-control span{overflow:hidden;text-overflow:ellipsis}
+
+/* Keep section actions in one compact, non-overlapping group.  The pre/post
+   loop add button is intentionally next to the loop switch so empty sections
+   remain discoverable without selecting an existing item first. */
+.production-app .section-label{grid-template-columns:22px minmax(0,1fr) auto;gap:4px;align-items:center}
+.production-app .section-actions{display:flex;align-items:center;justify-content:flex-end;gap:2px;min-width:0;white-space:nowrap}
+.production-app .section-actions output{min-width:30px;text-align:right}
+.production-app .section-loop-toggle,.production-app .section-add-button,.production-app .audio-header-button{flex:none}
+.production-app .section-loop-toggle{margin:0 1px;padding:2px 5px}
+.production-app .section-add-button{display:grid;place-items:center;width:22px;height:22px;padding:0;border:0;background:transparent;color:#75b5bd}
+.production-app .section-add-button:hover{background:#4a4a55;color:#f3f3f5}
+.production-app .section-add-button:disabled{opacity:.45}
+.production-app .section-add-button .material-symbols-outlined{font-size:15px}
+.production-app .section-actions .audio-header-button{width:22px;height:22px}

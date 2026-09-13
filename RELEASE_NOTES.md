@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.36.16
+
+## Loop-Elemente direkt in Vor- und Nachprogramm einfügen
+
+Leere VORPROGRAMM- und NACHPROGRAMM-Abschnitte haben jetzt eigene Hinzufügen-Schaltflächen. Loop-Inhalte können dadurch direkt im gewünschten Bereich angelegt werden, ohne zuerst ein vorhandenes ServiceItem auswählen zu müssen. Beim Öffnen des Bereichsmenüs stehen die Loop-Elemente kompakt und sichtbar an erster Stelle: Meldungen, Geburtstage, Veranstaltungen, Wetter, Quiz, Countdown, Uhrzeit, Bibelvers, QR-Code, Infokarte sowie Terminanzeigen.
+
+Wird ein Loop-Element erstmals aus dem VORPROGRAMM hinzugefügt, wird der Bereich fachlich als Loop-Bereich freigeschaltet. Die zentrale Placement-Prüfung bleibt aktiv; normale ServiceItems und Liveausgaben werden nicht verändert. Die Loop-Erstellung bleibt optional und blockiert weder Synchronisierung noch MAIN, STAGE, Audio oder Recording.
+
+## Abschnitts-Header ohne Überlagerung
+
+Die Bereichsaktionen sind jetzt als zusammenhängende Gruppe aufgebaut. LOOP-Schalter, Hinzufügen, Background-Audio und Zeit-/Daueranzeige teilen sich nicht mehr zufällig Grid-Spalten. Dadurch bleibt das Lautsprechersymbol auch in der schmalen Seitenleiste vollständig sichtbar und die Bedienung bleibt bei kleinen Fensterbreiten stabil.
+
+---
+
 # GottesdienstRegie 0.36.15
 
 ## Menüleiste bleibt vollständig sichtbar

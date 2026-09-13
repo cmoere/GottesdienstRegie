@@ -24,9 +24,24 @@
       "line": "0.36",
       "builds": [
         {
-          "version": "0.36.15",
+          "version": "0.36.16",
           "releaseDate": "2026-09-13",
           "current": true,
+          "overview": {
+            "label": {"de":"Loop-Abschnitte direkt bearbeiten","en":"Edit loop sections directly"},
+            "text": {"de":"Leere Vor- und Nachprogramme haben eigene Hinzufügen-Schaltflächen. Loop-Elemente stehen im Bereichsmenü sofort oben; LOOP, Audio und Zeit bleiben im Abschnitts-Header sauber ausgerichtet.","en":"Empty pre- and post-program sections now have dedicated add buttons. Loop elements appear first in the section menu, while LOOP, audio and timing controls stay aligned in the header."}
+          },
+          "sections": {
+            "new": [{"label":{"de":"Loop-Elemente in leeren Abschnitten","en":"Loop elements in empty sections"},"text":{"de":"Meldungen, Wetter, Quiz, Countdown, Uhrzeit, QR-Code und weitere Loop-Typen lassen sich direkt im VORPROGRAMM oder NACHPROGRAMM anlegen, ohne zuvor ein ServiceItem auszuwählen.","en":"Announcements, weather, quiz, countdown, clock, QR code and other loop types can be created directly in PRE-PROGRAM or POST-PROGRAM without selecting an existing service item first."}}],
+            "improved": [{"label":{"de":"Stabiler Abschnitts-Header","en":"Stable section header"},"text":{"de":"LOOP-Schalter, Hinzufügen, Background-Audio und Zeit-/Daueranzeige werden als eine kompakte Aktionsgruppe angeordnet und überlappen nicht mehr.","en":"LOOP, add, background audio and timing controls are arranged as one compact action group and no longer overlap."}}],
+            "fixed": [{"label":{"de":"Loop-Menü in leeren Vorprogrammen","en":"Loop menu in empty pre-programs"},"text":{"de":"Das Hinzufügen-Menü war auf das aktuell ausgewählte Item angewiesen. Die Bereichsschaltfläche setzt das Ziel jetzt direkt und schaltet die Loop-Unterstützung beim ersten bewussten Hinzufügen frei.","en":"The add menu depended on the currently selected item. The section button now sets the target directly and enables loop support on the first intentional add."}}],
+            "known": []
+          }
+        },
+        {
+          "version": "0.36.15",
+          "releaseDate": "2026-09-13",
+          "current": false,
           "overview": {
             "label": {"de":"Menüleiste bleibt sichtbar","en":"Menu bar stays visible"},
             "text": {"de":"Die Auswahl entfernter Folien konnte die App-Hülle nach oben scrollen und das Menü abschneiden. Die Hülle bleibt jetzt an ihrer Position, während die Inhaltsbereiche normal scrollen. Profil, Sync und Fensterbuttons bleiben mit dem Menü ausgerichtet.","en":"Selecting distant slides could scroll the app shell upward and clip the menu bar. The shell now stays in place while content panes scroll normally. Profile, sync and window controls remain aligned with the menu."}

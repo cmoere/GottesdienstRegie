@@ -1,5 +1,13 @@
 # Versionshinweise / Release notes
 
+## 0.36.16 – Loop-Abschnitte direkt bearbeiten
+
+- Eigene Hinzufügen-Schaltflächen für leere VORPROGRAMM- und NACHPROGRAMM-Abschnitte ergänzt.
+- Loop-Elemente stehen im passenden Bereichsmenü sofort oben und benötigen kein zuvor ausgewähltes ServiceItem.
+- Das erste Hinzufügen aus dem VORPROGRAMM schaltet dessen Loop-Unterstützung kontrolliert frei; die zentrale Placement-Prüfung bleibt erhalten.
+- Abschnittsaktionen in einer gemeinsamen Gruppe angeordnet, damit LOOP, Hinzufügen, Audio und Zeit/Dauer nicht mehr überlappen.
+- Livebetrieb, Synchronisierung, MAIN, STAGE, Audio und Recording bleiben unverändert priorisiert.
+
 ## 0.36.15 – Menüleiste und Vorschau-Scrollen
 
 - Abgeschnittenes Menü bei Auswahl entfernter Folien behoben: Die äußere App-Hülle scrollt nicht mehr durch Fokus oder automatische Sichtbarkeitskorrekturen.
