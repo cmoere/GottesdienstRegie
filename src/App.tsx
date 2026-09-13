@@ -2703,7 +2703,7 @@ function PresentationEventHeader() {
   );
 }
 
-function OrderOfService({
+export function OrderOfService({
   canEdit,
   onTake,
 }: {
