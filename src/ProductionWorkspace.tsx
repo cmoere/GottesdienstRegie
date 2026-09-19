@@ -10,6 +10,7 @@ import { lyricPacket } from './lyricScrolling';
 import { LyricScrollRenderer } from './LyricScrollRenderer';
 import { autoSplitSongSection, readSong, songPatch, shortSection, transposeChords, type SongStructure } from './songStructure';
 import { estimateLyricLines } from './songLayout';
+import { getUserOverlayElements } from './loopCoreLayer';
 import { SlideRenderer } from "./SlideRenderer";
 import {
   defaultTransition,
@@ -594,7 +595,7 @@ function ContentEditor({
   const state = usePresentation();
   const primaryText = slide.elements.find((element) => element.type === "text"),
     fadeActive = primaryText?.properties.animation === "fade-in",
-    extras = slide.elements.filter((element) => element.id !== primaryText?.id);
+    extras = getUserOverlayElements(slide, item);
   const [qrOpen, setQrOpen] = useState(false),
     [qrDraft, setQrDraft] = useState("https://"),
     [qrPreview, setQrPreview] = useState(""),
