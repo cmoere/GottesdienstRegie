@@ -1,6 +1,6 @@
 {
   "name": "gottesdienstregie",
-  "version": "0.36.16",
+  "version": "0.39.0",
   "description": "Desktop-Regiesoftware für Gottesdienstpräsentationen der Philippusgemeinde.",
   "author": {
     "name": "Philippusgemeinde Ev. Freikirche",
@@ -124,6 +124,8 @@
       "artifactName": "GottesdienstRegie-${version}-${arch}.${ext}"
     },
     "nsis": {
+      "license": "build/terms.txt",
+      "include": "build/installer.nsh",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,

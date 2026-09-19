@@ -138,6 +138,9 @@ contextBridge.exposeInMainWorld("desktop", {
     sync: (id: string) => ipcRenderer.invoke("media:sync", id),
     cloudRemove: (id: string) => ipcRenderer.invoke("media:cloud-remove", id),
   },
+  songs: {
+    import: () => ipcRenderer.invoke("songs:import"),
+  },
   mediaWindow: {
     open: (
       context: "manage" | "select",

@@ -4,6 +4,7 @@ import type {LyricScrollPacket} from './lyricScrolling';
 import {usePreferences} from './preferences';
 import {TransitionStage,resolveTransition} from './transitions';
 import './lyric-scrolling.css';
+import {translationBlocks} from './songTranslation';
 
 /** Rendering only: the live controller supplies currentId; there is no navigation queue. */
 export function LyricScrollRenderer({packet,live=false}:{packet:LyricScrollPacket;live?:boolean}) {
@@ -11,10 +12,11 @@ export function LyricScrollRenderer({packet,live=false}:{packet:LyricScrollPacke
   const text=slide?.elements.find(element=>element.type==='text'&&element.visible);
   const container=useRef<HTMLDivElement>(null),stream=useRef<HTMLDivElement>(null);
   const [layout,setLayout]=useState({offset:0,height:0,ready:false});
+  const translationMode=usePreferences(state=>state.songTranslationMode);
   const reduce=usePreferences(state=>state.reduceMotion);
   const previous=useRef<{itemId:string;index:number}|undefined>(undefined);
   const [animate,setAnimate]=useState(false);
-  const signature=JSON.stringify(packet.slides.map(page=>[page.id,page.body]));
+  const signature=JSON.stringify(packet.slides.map(page=>[page.id,page.body,page.translation,page.songTranslationMode??translationMode]));
   useLayoutEffect(()=>{
     const old=previous.current;
     setAnimate(!!old&&old.itemId===packet.itemId&&Math.abs(old.index-index)===1&&!reduce&&!matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -39,14 +41,14 @@ export function LyricScrollRenderer({packet,live=false}:{packet:LyricScrollPacke
   if(!slide)return null;
   if(!text)return <SlideRenderer slide={slide} mode={live?'live':'preview'}/>;
   const style=elementStyle(text),duration=animate?packet.settings.durationMs:0;
-  const background={...slide,elements:slide.elements.map(element=>element.id===text.id?{...element,id:'lyrics-placeholder',properties:{...element.properties,text:''}}:element)};
+  const background={...slide,translation:undefined,elements:slide.elements.map(element=>element.id===text.id?{...element,id:'lyrics-placeholder',properties:{...element.properties,text:''}}:element)};
   background.id=`${packet.itemId}:background:${JSON.stringify([slide.background,slide.backgroundImage,slide.backgroundFit,slide.backgroundPositionX,slide.backgroundPositionY,slide.backgroundBlur,slide.backgroundRotation,background.elements])}`;
   return <div className="lyric-scroll-output">
     <TransitionStage slide={background} transition={resolveTransition(slide)} role={live?'main':'operator'}/>
     <div ref={container} className="lyric-scroll-viewport" style={{...style,position:'absolute',overflow:'hidden',display:'block',boxSizing:'border-box'}}>
       <div style={{height:layout.height||'100%',overflow:'hidden'}}>
         <div ref={stream} style={{transform:`translate3d(0,${-layout.offset}px,0)`,transition:`transform ${duration}ms ease-in-out`,visibility:layout.ready?'visible':'hidden',willChange:'transform'}}>
-          {packet.slides.map((page,position)=><div key={page.id} style={{whiteSpace:'pre-wrap',overflowWrap:'break-word',paddingBottom:page.body.trim()?`${Number(text.properties.lineHeight??1.15)}em`:0,opacity:position===index?1:position>index&&position<=index+packet.settings.upcomingBlocks?packet.settings.upcomingOpacity:0,transition:`opacity ${duration}ms ease-in-out`}}>{page.body}</div>)}
+          {packet.slides.map((page,position)=><div key={page.id} style={{whiteSpace:'pre-wrap',overflowWrap:'break-word',paddingBottom:page.body.trim()?`${Number(text.properties.lineHeight??1.15)}em`:0,opacity:position===index?1:position>index&&position<=index+packet.settings.upcomingBlocks?packet.settings.upcomingOpacity:0,transition:`opacity ${duration}ms ease-in-out`}}><div style={{display:'grid',gridTemplateColumns:translationBlocks(page.body,page.translation,page.songTranslationMode??translationMode).length===2?'1fr 1fr':'1fr',columnGap:'4%'}}>{translationBlocks(page.body,page.translation,page.songTranslationMode??translationMode).map((block,i)=><div key={i} style={{minWidth:0}}>{block}</div>)}</div></div>)}
         </div>
       </div>
     </div>

@@ -4,6 +4,8 @@ import { fontStack } from './fonts';
 import {applyAudioRoute,defaultAudioRouting,type AudioRoute} from './audioRouting';
 import {usePreferences} from './preferences';
 
+import {translatedSlide, translationBlocks} from './songTranslation';
+
 export type SlideRendererMode='editor'|'preview'|'thumbnail'|'live';
 
 export function elementStyle(element:SlideElement):CSSProperties{
@@ -51,12 +53,15 @@ function RenderElement({element,mode}:{element:SlideElement;mode:SlideRendererMo
 function ClockLoopElement({style}:{style:CSSProperties}){const [now,setNow]=useState(()=>new Date());useEffect(()=>{const timer=window.setInterval(()=>setNow(new Date()),1000);return()=>window.clearInterval(timer)},[]);return <div className="slide-renderer-element loop-clock" style={{...style,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}><strong>{now.toLocaleTimeString('de-DE')}</strong><span>{now.toLocaleDateString('de-DE',{weekday:'long',day:'2-digit',month:'long'})}</span></div>}
 
 export function SlideRenderer({slide,mode='preview'}:{slide:Slide;mode?:SlideRendererMode}){
+  const translationMode=usePreferences(state=>state.songTranslationMode);
+  const fallbackText=translationBlocks(slide.body,slide.translation,slide.songTranslationMode??translationMode).join('\n\n');
+  slide=translatedSlide(slide,translationMode);
   const hasVisibleElements=slide.elements?.some(element=>element.visible);
   const backgroundStyle:CSSProperties={backgroundColor:slide.background,backgroundImage:slide.backgroundImage?`url("${slide.backgroundImage}")`:undefined,backgroundSize:slide.backgroundFit??'cover',backgroundPosition:`${slide.backgroundPositionX??'center'} ${slide.backgroundPositionY??'center'}`};
   return <div className={`slide-renderer ${mode}`} style={{backgroundColor:slide.background}} data-slide-id={slide.id}>
     <div className="slide-background-layer" style={{...backgroundStyle,filter:slide.backgroundBlur?`blur(${slide.backgroundBlur}px)`:undefined,transform:`rotate(${slide.backgroundRotation??0}deg) scale(${slide.backgroundBlur?1.06:1})`}}/>
     {hasVisibleElements
       ?slide.elements.slice().sort((a,b)=>a.zIndex-b.zIndex).map(element=><RenderElement key={element.id} element={element} mode={mode}/>)
-      :<div className="slide-renderer-fallback"><strong>{slide.title}</strong><p>{slide.body}</p></div>}
+      :<div className="slide-renderer-fallback"><strong>{slide.title}</strong><p>{fallbackText}</p></div>}
   </div>;
 }

@@ -1,5 +1,9 @@
+import {helpV39,helpIllustrations} from './helpV39';
+import './version39.css';
+import {translationModes, type SongTranslationMode} from './songTranslation';
 import { LyricScrollingSettings } from './LyricScrollingSettings';
 import { WindowControls } from './WindowControls';
+import { startLiveSession, type LiveSessionMode } from './liveSession';
 import { LyricScrollRenderer } from './LyricScrollRenderer';
 import type { LyricScrollPacket } from './lyricScrolling';
 import {
@@ -104,6 +108,7 @@ import {
   AudioRoutingSettings,
   normalizedAudioRouting,
 } from "./AudioRoutingSettings";
+import { AudioEqualizerSettings } from "./AudioEqualizerSettings";
 import { playRoutedTone, routeAvailable } from "./audioRouting";
 import { installCeraPro, removeCeraPro, saveCeraPro } from "./customFonts";
 import { serviceItemCommands, slideSvgDataUrl } from "./serviceItemCommands";
@@ -628,6 +633,10 @@ function Login({
   const [twoFactorError, setTwoFactorError] = useState("");
   const [verifyBusy, setVerifyBusy] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
+  const [termsOpen, setTermsOpen] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(
+    () => localStorage.getItem("gottesdienstregie.terms-accepted") === "1",
+  );
   const [backgroundImage] = useState(() => randomLoginImage(theme));
 
   useEffect(() => {
@@ -647,6 +656,10 @@ function Login({
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!termsAccepted) {
+      setError("Bitte bestätige zuerst die Nutzungsbedingungen.");
+      return;
+    }
     setBusy(true);
     setError("");
     try {
@@ -829,6 +842,19 @@ function Login({
               <span>{error}</span>
             </div>
           )}
+          <label className="terms-consent">
+            <input
+              type="checkbox"
+              checked={termsAccepted}
+              onChange={(event) => {
+                const accepted = event.target.checked;
+                setTermsAccepted(accepted);
+                if (accepted) localStorage.setItem("gottesdienstregie.terms-accepted", "1");
+                else localStorage.removeItem("gottesdienstregie.terms-accepted");
+              }}
+            />
+            <span>Ich akzeptiere die <button type="button" onClick={() => setTermsOpen(true)}>Nutzungsbedingungen</button>.</span>
+          </label>
           <button className="primary" disabled={busy}>
             {t(busy ? "signingIn" : "signIn")}
           </button>
@@ -927,7 +953,29 @@ function Login({
           </form>
         </div>
       )}
+      {termsOpen && <TermsModal close={() => setTermsOpen(false)} />}
     </>
+  );
+}
+
+function TermsModal({ close }: { close: () => void }) {
+  return (
+    <div className="modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && close()}>
+      <section className="terms-dialog" role="dialog" aria-modal="true" aria-labelledby="terms-title">
+        <header><div><small>GOTTESDIENSTREGIE</small><h2 id="terms-title">Nutzungsbedingungen</h2></div><button type="button" onClick={close} aria-label="Schließen"><Icon name="close" /></button></header>
+        <div className="terms-body">
+          <p><b>Gültig für GottesdienstRegie der Philippus Gemeinde Bielefeld e. V.</b></p>
+          <h3>1. Zweck und Verantwortlichkeit</h3><p>GottesdienstRegie unterstützt die Vorbereitung und Durchführung von Präsentationen. Nutzerinnen und Nutzer prüfen Inhalte, Rechte, Termine und Ausgabegeräte vor dem Gottesdienst selbst.</p>
+          <h3>2. Livebetrieb</h3><p>ON AIR, MAIN, STAGE, LIVESTREAM, Audio und Recording haben Vorrang. Der Testbetrieb darf nur bewusst gestartet werden und ersetzt keine Probe oder Geräteprüfung.</p>
+          <h3>3. Inhalte und Rechte</h3><p>Es dürfen nur Texte, Bilder, Videos, Musik und Schriften verwendet werden, für die die Gemeinde die erforderlichen Rechte besitzt. Externe Quellen bleiben an deren Bedingungen gebunden.</p>
+          <h3>4. Daten und Cloud</h3><p>Präsentationen, Änderungsverläufe und Geräteeinstellungen können lokal und abhängig von der Konfiguration synchronisiert gespeichert werden. Zugangsdaten dürfen nicht weitergegeben werden; auf gemeinsam genutzten PCs ist abzumelden.</p>
+          <h3>5. Sorgfalt und Meldungen</h3><p>Fehler, Sicherheitsprobleme und unklare Livezustände sind sofort zu melden. Rechte dürfen nicht umgangen und fremde Konten nicht genutzt werden.</p>
+          <h3>6. Änderungen</h3><p>Die Gemeinde kann diese Bedingungen an organisatorische oder technische Änderungen anpassen. Die jeweils angezeigte Fassung gilt ab ihrer Bestätigung.</p>
+          <p className="terms-meta">Fassung 1.0 · Stand 14.09.2026 · Keine Rechtsberatung</p>
+        </div>
+        <footer><button type="button" className="primary" onClick={close}>SCHLIESSEN</button></footer>
+      </section>
+    </div>
   );
 }
 
@@ -4715,7 +4763,9 @@ type SettingsTab =
   | "display"
   | "audio"
   | "audioRouting"
+  | "audioEqualizer"
   | "videoInput"
+  | "songTranslations"
   | "presentation"
   | "quickScreens"
   | "fonts"
@@ -5292,16 +5342,19 @@ function useUpdateSearchDots(active: boolean) {
 function SettingsModal({
   close,
   canConfigure,
+  onOpenTerms,
   device = null,
 }: {
   close: () => void;
   canConfigure: boolean;
+  onOpenTerms?: () => void;
   device?: RegisteredDevice | null;
 }) {
   const [registeredDevice] = useRegisteredDevice();
   device = device ?? registeredDevice ?? null;
   const { t, locale } = useI18n();
   const [tab, setTab] = useState<SettingsTab>("general");
+  const [openSettingGroups, setOpenSettingGroups] = useState<Record<string, boolean>>({ AUDIO: false });
   const [displays, setDisplays] = useState<DesktopDisplay[]>([]);
   const [currentVersion, setCurrentVersion] = useState("…");
   const [versionMetadata, setVersionMetadata] =
@@ -5321,6 +5374,7 @@ function SettingsModal({
   const [micTesting, setMicTesting] = useState(false);
   const [operatorPrefs, setOperatorPrefs] =
     useState<DesktopOperatorPreferences>({
+      preventDisplaySleep: true,
       windowStartMode: "fullscreen",
       operatorDisplayTarget: "primary",
       automaticUpdates: true,
@@ -5551,6 +5605,8 @@ function SettingsModal({
   };
   const switchTab = (next: SettingsTab) => {
     setTab(next);
+    const group = settingGroups.find((entry) => entry.tabs.includes(next));
+    if (group) setOpenSettingGroups((current) => ({ ...current, [group.title]: true }));
     requestAnimationFrame(() => contentRef.current?.scrollTo({ top: 0 }));
   };
   const installedIsBeta = isPrerelease(currentVersion);
@@ -5601,11 +5657,12 @@ function SettingsModal({
       ],
     },
     { title: "AUSGABE", tabs: ["display", "remote", "videoInput"] },
-    { title: "AUDIO", tabs: ["audio", "audioRouting"] },
+    { title: "AUDIO", tabs: ["audio", "audioEqualizer", "audioRouting"] },
     {
       title: "PRÄSENTATION",
       tabs: [
         "presentation",
+        "songTranslations",
         "quickScreens",
         "fonts",
         "defaultMedia",
@@ -5615,12 +5672,14 @@ function SettingsModal({
     { title: "VERBINDUNGEN & STEUERUNG", tabs: ["lightingMidi", "midiInput"] },
   ];
   const tabName = (key: SettingsTab) =>
-    key === "midiInput"
+    key === "songTranslations" ? "Song" : key === "midiInput"
       ? "MIDI Input"
       : key === "shortcuts"
         ? "Tastenkürzel"
-        : key === "audioRouting"
-          ? "Audioausgänge"
+          : key === "audioRouting"
+            ? "Audioausgänge"
+            : key === "audioEqualizer"
+              ? "Equalizer"
           : key === "rewards"
             ? "Belohnungen"
             : key === "security"
@@ -5644,13 +5703,16 @@ function SettingsModal({
             <nav>
               {settingGroups.map((group) => (
                 <div className="settings-nav-group" key={group.title}>
-                  <b>{group.title}</b>
-                  {group.tabs.map((key) => (
-                    <button
-                      className={tab === key ? "active" : ""}
-                      key={key}
-                      onClick={() => switchTab(key)}
-                    >
+                  <button
+                    className="settings-nav-group-toggle"
+                    aria-expanded={openSettingGroups[group.title] !== false}
+                    onClick={() => setOpenSettingGroups((current) => ({ ...current, [group.title]: current[group.title] === false }))}
+                  >
+                    <b>{group.title}</b>
+                    <Icon name={openSettingGroups[group.title] === false ? "expand_more" : "expand_less"} />
+                  </button>
+                  {openSettingGroups[group.title] !== false && group.tabs.map((key) => (
+                    <button className={tab === key ? "active" : ""} key={key} onClick={() => switchTab(key)}>
                       {tabName(key)}
                     </button>
                   ))}
@@ -5999,6 +6061,16 @@ function SettingsModal({
                       </button>
                     )}
                   </div>
+                  {(updateStatus.state === "available" ||
+                    updateStatus.state === "cancelled") && (
+                    <p className="update-terms-notice">
+                      Mit der Aktualisierung stimmst du den{" "}
+                      <button type="button" onClick={onOpenTerms}>
+                        Nutzungsbedingungen
+                      </button>{" "}
+                      zu.
+                    </p>
+                  )}
                   <div className="rollback-box">
                     <h4>{L.previousVersion}</h4>
                     {previousVersion ? (
@@ -6242,7 +6314,9 @@ function SettingsModal({
                 </section>
               ) : tab === "audioRouting" ? (
                 <AudioRoutingSettings />
-              ) : tab === "presentation" ? (
+              ) : tab === "audioEqualizer" ? (
+                <AudioEqualizerSettings />
+              ) : tab === "songTranslations" ? null : tab === "presentation" ? (
                 <>
                   <PresentationTransitionSettings />
                   <TimelineSettings />
@@ -6264,9 +6338,18 @@ function SettingsModal({
                   <p>{t("sectionUnavailable")}</p>
                 </section>
               )}
+              {tab === "songTranslations" && <section className="settings-group">
+                <h3>SONG · ÜBERSETZUNGEN</h3>
+                <p>Füge im Song-Editor unter INHALT eine Übersetzung zu den jeweiligen Lyrics hinzu. Der Originaltext bleibt unverändert; diese Einstellung bestimmt die Darstellung auf diesem Gerät.</p>
+                <label>Übersetzungen anzeigen<select value={prefs.songTranslationMode} onChange={event=>prefs.setSongTranslationMode(event.target.value as SongTranslationMode)}>{translationModes.map(mode=><option key={mode.value} value={mode.value}>{mode.label}</option>)}</select></label>
+                <p>Standard ist die Übersetzung unter der Strophe in Klammern. Ohne Übersetzung erscheint immer der Originaltext, auch bei „Nur Übersetzung“. Bei zeilenweiser Darstellung sollten Original und Übersetzung gleich viele Zeilen haben. Prüfe vor ON AIR, ob beide Texte in die Folienfläche passen.</p>
+                <p>Eine Änderung wird für eine bereits live geschaltete Folie erst beim erneuten Senden wirksam. Die STAGE-Akkordansicht bleibt beim Originaltext.</p>
+              </section>}
               {tab === "general" && (
                 <section className="settings-group window-start-settings">
                   <h4>FENSTER &amp; START</h4>
+                  <label><input type="checkbox" checked={operatorPrefs.preventDisplaySleep!==false} onChange={event=>void setOperatorPreference({preventDisplaySleep:event.target.checked})}/> Bildschirmschoner und automatisches Ausschalten des Bildschirms verhindern</label>
+                  <p>Standardmäßig aktiv, solange GottesdienstRegie geöffnet ist. Beim Beenden wird der Schutz freigegeben. Manuelles Sperren, Zuklappen und verbindliche Sicherheitsrichtlinien werden nicht umgangen.</p>
                   <label>
                     Startmodus
                     <select
@@ -6518,6 +6601,9 @@ function HelpModal({ close }: { close: () => void }) {
   }, [close]);
   const topics = [
     "SCHNELLSTART",
+    "Songübersetzungen",
+    "Bildschirmschoner",
+    "Installation & Nutzungsbedingungen",
     "Erste Schritte",
     "Gemeinsame Gemeinde-PCs",
     "Anmelden & Abmelden",
@@ -6569,6 +6655,7 @@ function HelpModal({ close }: { close: () => void }) {
     "Remote",
     "Fehlerbehebung",
     "Support",
+    "Nutzungsbedingungen",
     "Versionsinformationen",
     "Über GottesdienstRegie",
   ];
@@ -6579,6 +6666,8 @@ function HelpModal({ close }: { close: () => void }) {
       "Die Menüleiste enthält Datei, Element hinzufügen, Medien, Songbibliothek, Präsentation, Ansicht, Werkzeuge, Einstellungen und Hilfe. Diese Menüs liegen immer über Arbeitsbereich, Canvas und Dialoginhalten. Darunter zeigt der Präsentationskopf den geöffneten Gottesdienst, den Modus BEARBEITEN oder VORSCHAU sowie ON AIR.\n\nLinks liegt der Ablauf mit VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM. In der Mitte befinden sich Kontexteditor und Folienfläche. Elemente auf der Folie lassen sich anklicken, ziehen und am Griff unten rechts skalieren. Eigenschaften und Ebenen steuern exakte Werte, Sichtbarkeit, Sperre und Reihenfolge.\n\nIm Modus BEARBEITEN erscheinen Format- und Canvaswerkzeuge. Im Modus VORSCHAU verschwinden diese Werkzeuge; stattdessen stehen Einzelansicht, Folienübersicht und die Schnellanzeigen wie LOGO, SCHWARZ, OHNE TEXT oder AMEN bereit.\n\nDie Statusleiste unten meldet Speichern, Cloud, MAIN, STAGE sowie aktuelle Element- und Folienposition. Wenn MAIN beim Bearbeiten unverändert bleibt, ist das beabsichtigt: Editor-, Vorschau- und Live-Zustand sind voneinander unabhängig.",
     Einstellungen:
       "Das Einstellungsfenster ist in Allgemein, Ausgabe, Präsentation sowie Verbindungen & Steuerung gegliedert. Die linke Navigation bleibt sichtbar, während nur der Inhalt rechts scrollt. Beim Wechsel zu einem anderen Bereich beginnt die Seite wieder oben.\n\nUnter Allgemein bestimmst du Sprache, Farbschema, Barrierefreiheit, Startmodus und Tastenkürzel. Unter Ausgabe werden reale Monitore, Audio und Videoeingänge eingerichtet. Präsentation enthält Schnellanzeigen, Schriftarten und Standardmedien. Änderungen werden lokal auf diesem Gerät gespeichert und – sofern sinnvoll – sofort angewendet.\n\nVor einem Gottesdienst sollten insbesondere Anzeige, Audio und Videoeingang kontrolliert werden. Änderungen am Bedienfenster beeinflussen eine bereits laufende MAIN- oder STAGE-Ausgabe nicht.",
+    Nutzungsbedingungen:
+      "GottesdienstRegie ist ein Arbeitsmittel der Philippus Gemeinde Bielefeld e. V. Nutzer prüfen Inhalte, Rechte, Veranstaltung, Medien und Ausgabegeräte selbst. ON AIR, MAIN, STAGE, LIVESTREAM, Audio und Recording haben Vorrang; der Testbetrieb wird ausdrücklich gekennzeichnet und erzeugt keine Belohnungen.\n\nEs dürfen nur rechtmäßig verwendete Texte, Bilder, Videos, Musik und Schriften eingesetzt werden. Zugangsdaten bleiben persönlich. Auf gemeinsam genutzten Gemeinde-PCs ist nach der Arbeit abzumelden. Präsentationen und Änderungshistorien können lokal und abhängig von der Konfiguration synchronisiert gespeichert werden.\n\nFehler und Sicherheitsprobleme sind sofort zu melden. Die vollständige Fassung kann jederzeit über Hilfe → Nutzungsbedingungen eingesehen werden.",
     Präsentationen:
       "Die lokale Bibliothek speichert jede Präsentation als eigenständiges Dokument. Unter Datei kannst du neue Präsentationen erstellen, vorhandene öffnen, duplizieren, umbenennen, importieren, exportieren, sichern, archivieren oder schließen. Änderungen werden verzögert und atomar gespeichert.\n\nNach einem unerwarteten Programmende bietet GottesdienstRegie die letzte Wiederherstellungskopie an. Exporte verwenden eine portable GottesdienstRegie-Datei; Backups landen im geschützten Anwendungsdatenordner.",
     Ablauf:
@@ -6684,6 +6773,7 @@ function HelpModal({ close }: { close: () => void }) {
     "KI-Motive":
       "KI-Motive erzeugen grafische Motive direkt in GottesdienstRegie, ohne dass du einen eigenen API-Schlüssel eintragen musst. Öffne Medien → Medienbibliothek → KI-MOTIVE, beschreibe das Motiv und wähle Format sowie Stil.\n\nPrüfe das Ergebnis vor ON AIR wie jedes andere Medium. Der globale Schalter unter Einstellungen → Künstliche Intelligenz kann die Funktion deaktivieren; die Umstellung wird nach einem sicheren Neustart vollständig wirksam.",
   });
+  Object.assign(articles,helpV39);
   for (const key of Object.keys(articles))
     articles[key] = articles[key]
       .replace(/Firebase[- ]?/gi, "")
@@ -6766,6 +6856,7 @@ function HelpModal({ close }: { close: () => void }) {
         </header>
         <div className="help-layout">
           <nav>
+            {filtered.length===0 && <p>Keine passenden Hilfethemen. Versuche einen kürzeren Suchbegriff, zum Beispiel „Song“ oder „Bildschirm“.</p>}
             {filtered.map((topic) => (
               <button
                 className={`${selected === topic ? "active " : ""}${topic === topic.toUpperCase() ? "help-section-title" : ""}`}
@@ -6778,6 +6869,7 @@ function HelpModal({ close }: { close: () => void }) {
           </nav>
           <article>
             <h2>{selected}</h2>
+            {helpIllustrations[selected] && <figure className="help-illustration"><img loading="lazy" src={helpIllustrations[selected].src} alt={helpIllustrations[selected].title}/><figcaption>Schematische Darstellung: {helpIllustrations[selected].title}</figcaption></figure>}
             {screenshot && (
               <figure className={`help-screenshot focus-${screenshot.focus}`}>
                 <div>
@@ -7996,6 +8088,11 @@ function AppShell({
   const { t, locale } = useI18n();
   const state = usePresentation();
   const loopController = useRef(new LoopController<ServiceItem>());
+  const airBusy = useRef(false);
+  const [airStarting, setAirStarting] = useState(false);
+  const [testMode, setTestMode] = useState(false);
+  // Deliberately local: a saved presentation or a restart never enables tests.
+  useEffect(() => { if (!state.onAir) setTestMode(false); }, [state.onAir]);
   const quickScreens = usePreferences((s) => s.quickScreens),
     storedShortcuts = usePreferences((s) => s.keyboardShortcuts),
     shortcuts = useMemo(
@@ -8004,6 +8101,7 @@ function AppShell({
     ),
     [previewQuick, setPreviewQuick] = useState<QuickScreenConfig | null>(null),
     [settingsOpen, setSettingsOpen] = useState(false),
+    [termsOpen, setTermsOpen] = useState(false),
     [helpOpen, setHelpOpen] = useState(false),
     [tourOpen, setTourOpen] = useState(
       () => localStorage.getItem("gottesdienstregie.interface-tour") !== "done",
@@ -8909,6 +9007,35 @@ function AppShell({
         quick,
       );
   };
+  const importSongs = async () => {
+    const imported = (await window.desktop?.songs?.import()) ?? [];
+    if (!imported.length) return;
+    const sectionId = state.items.find((item) => item.id === state.selectedItemId)?.sectionId ?? "service";
+    for (const song of imported) {
+      const sections = song.sections?.length
+        ? song.sections
+        : [{ title: "Abschnitt 1", body: song.lyrics }];
+      state.addItem("song", {
+        title: song.title,
+        section: "",
+        sectionId,
+        body: sections[0]?.body ?? song.lyrics,
+        metadata: {
+          author: song.author ?? "",
+          source: "Import aus der Songbibliothek",
+        },
+      });
+      for (const section of sections.slice(1)) {
+        usePresentation.getState().addSlide();
+        usePresentation.getState().updateSlide({
+          title: section.title,
+          body: section.body,
+        });
+      }
+    }
+    state.setMode("edit");
+    alert(`${imported.length} Song${imported.length === 1 ? "" : "s"} importiert.`);
+  };
   const menuItems: Record<string, MenuAction[]> = {
     file: [
       {
@@ -9262,6 +9389,11 @@ function AppShell({
         },
       },
       {
+        label: "Songs importieren …",
+        icon: "upload_file",
+        action: () => void importSongs(),
+      },
+      {
         label: "Neuen Song erstellen",
         icon: "add",
         action: () =>
@@ -9540,8 +9672,12 @@ function AppShell({
   async function air(
     preflightOnly = false,
     target?: { itemId: string; slideId: string },
+    requestedMode: LiveSessionMode = 'live',
   ) {
-    if (!can("presentationLive") || !window.desktop) return;
+    if (airBusy.current || !can("presentationLive") || !window.desktop) return;
+    airBusy.current = true;
+    setAirStarting(true);
+    try {
     if (state.onAir && !preflightOnly) {
       await backgroundAudioEngine.stop();
       await liveEngine.stop();
@@ -9550,18 +9686,7 @@ function AppShell({
       setOutputState({});
       return;
     }
-    if (!state.eventLink?.eventKey) {
-      void playRoutedTone(
-        normalizedAudioRouting(usePreferences.getState().audioRouting),
-        "notification",
-        392,
-        0.16,
-      ).catch(() => {});
-      alert(
-        "Bitte verknüpfe diese Präsentation zuerst mit einer Veranstaltung. Erst danach kann ON AIR gestartet werden.",
-      );
-      return;
-    }
+    const sessionMode = state.onAir && testMode ? 'test' : requestedMode;
     const itemId =
         target?.itemId ?? state.previewItemId ?? state.selectedItemId,
       slideId =
@@ -9569,6 +9694,13 @@ function AppShell({
       slide = state.items
         .find((item) => item.id === itemId)
         ?.slides.find((entry) => entry.id === slideId);
+    const startAssignments = { ...state.displayRoles };
+    const outcome = await startLiveSession({
+      mode: sessionMode, permitted: can('presentationLive'),
+      desktopAvailable: !!window.desktop, eventKey: state.eventLink?.eventKey,
+      assignments: startAssignments, preflightOnly,
+    }, {
+      preflight: async (assignments) => {
     const enabledSlides = state.items
       .filter((item) => item.enabled && !item.disabled)
       .flatMap((item) => item.slides.filter((entry) => entry.enabled));
@@ -9622,7 +9754,7 @@ function AppShell({
       warnings.push(
         "Systembenachrichtigungsausgang ist nicht verfügbar. Dies blockiert MAIN nicht; Fallback: Systemstandard.",
       );
-    const linkedEvent = state.eventLink?.eventKey
+    const linkedEvent = sessionMode !== 'test' && state.eventLink?.eventKey
       ? await getChurchEvent(state.eventLink.eventKey).catch(() => null)
       : null;
     if (isCancelled(linkedEvent))
@@ -9653,7 +9785,7 @@ function AppShell({
         );
       }
     }
-    const preflight = await liveEngine.preflight(state.displayRoles, {
+    const preflight = await liveEngine.preflight(assignments, {
       hasPresentation: !!state.presentationId && state.items.length > 0,
       activeSlideCount: enabledSlides.length,
       media: enabledSlides
@@ -9671,7 +9803,46 @@ function AppShell({
         .filter(Boolean),
     });
     preflight.warnings.push(...warnings);
-    if (preflight.ok)
+    if (!slide || !enabledSlides.some(entry => entry.id === slide.id)) {
+      preflight.ok = false;
+      preflight.errors.push('Bitte eine aktive Folie für den Start auswählen.');
+    }
+    return preflight;
+      },
+      displays: () => window.desktop!.displays(),
+      confirm: message => confirm(message),
+      isCurrent: () => {
+        const current = usePresentation.getState();
+        return can('presentationLive') && current.presentationId === state.presentationId
+          && current.items === state.items && current.sections === state.sections
+          && current.eventLink?.eventKey === state.eventLink?.eventKey
+          && JSON.stringify(current.displayRoles) === JSON.stringify(startAssignments)
+          && current.onAir === state.onAir;
+      },
+      start: async assignments => {
+        if (!slide) return false;
+        const item = state.items.find(entry => entry.id === itemId);
+        try {
+          const started = await liveEngine.start(assignments, {
+            ...slide, transitionOverride: resolveTransition(slide, item, 'main', state.transitionDefault),
+          });
+          if (!started) { await liveEngine.stop(); return false; }
+          setTestMode(sessionMode === 'test');
+          state.goLive(itemId, slideId);
+          state.setOnAir(true);
+          return true;
+        } catch (error) {
+          await liveEngine.stop().catch(() => false);
+          throw error;
+        }
+      },
+    });
+    const preflight = outcome.preflight;
+    if (outcome.error || (preflight && (!preflight.ok || preflightOnly))) {
+      alert(outcome.error ?? `${preflight!.ok ? 'Preflight erfolgreich.' : 'Preflight nicht bestanden.'}${preflight!.errors.length ? '\n\n'+preflight!.errors.join('\n') : ''}${preflight!.warnings.length ? '\n\nHinweise:\n'+preflight!.warnings.join('\n') : ''}`);
+    }
+    // Optional rewards cannot break a successful output start; tests earn none.
+    if (outcome.started && sessionMode === 'live' && preflight?.ok) try {
       awardReward({
         userId: user.uid,
         type: "preflightReady",
@@ -9681,37 +9852,7 @@ function AppShell({
         title: "BEREIT",
         description: "Preflight ohne kritische Fehler abgeschlossen.",
       });
-    if (!preflight.ok || preflightOnly) {
-      if (!preflight.ok || preflight.warnings.length)
-        void playRoutedTone(routing, "notification", 392, 0.16).catch(() => {});
-      alert(
-        `${preflight.ok ? "Preflight erfolgreich." : "Preflight nicht bestanden."}${preflight.errors.length ? `\n\n${preflight.errors.join("\n")}` : ""}${preflight.warnings.length ? `\n\nHinweise:\n${preflight.warnings.join("\n")}` : ""}`,
-      );
-      return;
-    }
-    if (preflight.warnings.length) {
-      void playRoutedTone(routing, "notification", 392, 0.16).catch(() => {});
-      if (
-        !confirm(
-          `Preflight mit ${preflight.warnings.length} Warnung${preflight.warnings.length === 1 ? "" : "en"}:\n\n${preflight.warnings.join("\n")}\n\nTrotzdem ON AIR gehen?`,
-        )
-      )
-        return;
-    }
-    if (!slide) return;
-    const item = state.items.find((entry) => entry.id === itemId);
-    await liveEngine.start(state.displayRoles, {
-      ...slide,
-      transitionOverride: resolveTransition(
-        slide,
-        item,
-        "main",
-        state.transitionDefault,
-      ),
-    });
-    state.goLive(itemId, slideId);
-    state.setOnAir(true);
-    awardReward({
+    if (outcome.started && outcome.allowRewards) awardReward({
       userId: user.uid,
       type: "firstOnAir",
       presentationId: state.presentationId,
@@ -9720,6 +9861,13 @@ function AppShell({
       title: "ON AIR",
       description: "Erste Präsentation erfolgreich live verwendet.",
     });
+    } catch (error) { console.warn('Optionale Belohnung konnte nicht gespeichert werden.', error); }
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Die Ausgabe konnte nicht umgeschaltet werden.');
+    } finally {
+      airBusy.current = false;
+      setAirStarting(false);
+    }
   }
   const menuOrder: { label?: string; key?: TranslationKey; id: string }[] = [
     { label: "Bearbeiten", id: "edit" },
@@ -9934,18 +10082,25 @@ function AppShell({
             {t("preview").toUpperCase()}
           </button>
         </div>
+        <div className="live-session-controls">
+        <button type="button" className={`test-session-button ${state.onAir && testMode ? 'active' : ''}`}
+          disabled={airStarting || !can('presentationLive') || !window.desktop || (state.onAir && !testMode)}
+          title="MAIN und STAGE ohne Veranstaltung testen. Echte Bild- und Tonausgabe nach Bestätigung."
+          onClick={() => void air(false, undefined, 'test')}>
+          {state.onAir && testMode ? 'TESTBETRIEB BEENDEN' : 'TESTBETRIEB STARTEN'}
+        </button>
         <button
           className={`onair ${state.onAir ? "live" : ""}`}
           disabled={
+            airStarting ||
             !can("presentationLive") ||
-            !state.mainDisplayId ||
             !window.desktop ||
-            (!state.onAir && !state.eventLink?.eventKey)
+            (!state.onAir && (!state.mainDisplayId || !state.eventLink?.eventKey))
           }
           title={
             !can("presentationLive")
               ? t("noLivePermission")
-              : !state.mainDisplayId
+              : !state.onAir && !state.mainDisplayId
                 ? t("assignMain")
                 : !state.onAir && !state.eventLink?.eventKey
                   ? "Bitte zuerst eine Veranstaltung verknüpfen"
@@ -9953,8 +10108,9 @@ function AppShell({
           }
           onClick={() => void air()}
         >
-          <span /> {state.onAir ? "OFF AIR" : "ON AIR"}
+          <span /> {state.onAir ? (testMode ? 'TEST STOPPEN' : "OFF AIR") : "ON AIR"}
         </button>
+        </div>
       </div>
       {state.mode === "edit" && (
         <>
@@ -10004,7 +10160,7 @@ function AppShell({
             : state.onAir
               ? outputState.main === "missing"
                 ? "FEHLT"
-                : "ON AIR"
+                : testMode ? 'TESTBETRIEB' : "ON AIR"
               : state.mainDisplayId
                 ? t("ready")
                 : "—"}
@@ -10057,8 +10213,10 @@ function AppShell({
         <SettingsModal
           canConfigure={canConfigure}
           close={() => setSettingsOpen(false)}
+          onOpenTerms={() => setTermsOpen(true)}
         />
       )}{" "}
+      {termsOpen && <TermsModal close={() => setTermsOpen(false)} />}{" "}
       {helpOpen && <HelpModal close={() => setHelpOpen(false)} />}{" "}
       {tourOpen && <InterfaceTour close={() => setTourOpen(false)} />}{" "}
       {reportOpen && (

@@ -1,0 +1,9 @@
+.unsplash-terms-notice{grid-column:1/-1;margin:8px 16px;padding:10px 12px;border:1px solid var(--border,#b9c8ce);font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.unsplash-terms-notice a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.song-translation-editor{margin:8px 0;padding:10px;border-left:3px solid #65a5af;background:color-mix(in srgb,#65a5af 8%,transparent)}
+.song-translation-editor label,.song-translation-editor small{display:block;line-height:1.5}
+.song-translation-editor textarea{min-height:100px;width:100%;box-sizing:border-box}
+.song-translation-editor button{margin-top:8px}
+.help-illustration{margin:16px 0;border:1px solid var(--border,#b9c8ce);border-radius:6px;overflow:hidden}
+.help-illustration img{display:block;width:100%;height:auto}
+.help-illustration figcaption{padding:12px;line-height:1.5;font-size:12px}

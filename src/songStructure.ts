@@ -19,7 +19,7 @@ export function stageChordRows(body: string, chords: string): StageChordRow[] {
 
 export function autoSplitSongSection(section: SongSection, maxLines: number): SongSection {
   const template = section.slides[0];
-  if (!template) return section;
+  if (!template || section.slides.some(slide=>slide.translation?.text.trim())) return section; // Preserve manually aligned bilingual pages.
   const chunks = splitLyrics(section.slides.map(slide => slide.body).join('\n\n'), { maxLines });
   if (chunks.length <= 1) return section;
   return {
@@ -45,7 +45,7 @@ export function readSong(item: ServiceItem): SongStructure {
   const sections: SongSection[] = [];
   const order: string[] = [];
   for (const slide of item.slides) {
-    const existing = sections.find(section => section.label === slide.title && section.slides[0].body === slide.body);
+    const existing = sections.find(section => section.label === slide.title && section.slides[0].body === slide.body && JSON.stringify(section.slides[0].translation)===JSON.stringify(slide.translation));
     if (existing) { order.push(existing.id); continue; }
     const section = { id: crypto.randomUUID(), label: slide.title || `Vers ${sections.length + 1}`, slides: [structuredClone(slide)] };
     sections.push(section); order.push(section.id);

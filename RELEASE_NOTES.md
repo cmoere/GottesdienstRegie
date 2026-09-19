@@ -1,3 +1,83 @@
+# GottesdienstRegie 0.39.0
+
+## Songübersetzungen mit sechs Anzeigearten
+
+Im Song-Editor steht unter INHALT bei jeder Lyrics-Folie der neue Button „Übersetzung hinzufügen“ bereit. Die Übersetzung besitzt ein eigenes Sprachfeld und einen eigenen Textbereich, sodass beispielsweise ein englischer Originaltext zusammen mit einer deutschen Übersetzung vorbereitet werden kann, ohne die Grundlyrics zu ersetzen. Wiederholte Abschnitte im Songablauf übernehmen dieselbe Übersetzung; Änderungen laufen über die vorhandene Präsentationsspeicherung und können mit Rückgängig und Wiederholen bearbeitet werden.
+
+Unter Einstellungen → Präsentation → Song stehen sechs Anzeigearten zur Verfügung: Aus, unter der Strophe in Klammern, unter der Strophe ohne Klammern, zeilenweise im Wechsel, nebeneinander in zwei Spalten und nur Übersetzung. Standardmäßig wird die Übersetzung in Klammern ergänzt. Falls für eine Folie keine Übersetzung eingetragen wurde, bleibt der Originaltext sichtbar. Die Eingabe erfolgt manuell; es wird kein Text an einen Übersetzungsdienst gesendet.
+
+Die gemeinsame Folienanzeige unterstützt die Übersetzungen in Vorschau, Thumbnails und MAIN. Beim Senden einer Live-Folie wird die Anzeigeart mitgespeichert, damit eine Änderung in den Einstellungen nicht plötzlich die gerade ausgespielte Folie verändert. Lyric Scrolling bewegt beide Sprachen zusammen. Die gesonderte STAGE-Akkordansicht bleibt bei den Originallyrics. Preflight prüft den zusätzlichen Platzbedarf und warnt vor zu großen Textmengen. Bereits übersetzte Abschnitte werden nicht automatisch neu aufgeteilt; verwende hier den manuellen Folienumbruch und prüfe die Zuordnung beider Sprachen.
+
+## Bildschirm während der Vorbereitung und Präsentation aktiv halten
+
+GottesdienstRegie fordert beim Betriebssystem standardmäßig an, Bildschirmschoner und automatisches Ausschalten des Displays während der geöffneten Anwendung zu verhindern. Der Schalter unter Einstellungen → Allgemein → Fenster & Start kann jederzeit deaktiviert werden und wird für diesen Rechner gespeichert. Wiederholtes Aktivieren erzeugt keine zusätzlichen dauerhaften Anforderungen; beim Abschalten oder normalen Beenden wird der Schutz freigegeben, ohne die persönlichen Energieeinstellungen zu überschreiben.
+
+Der Schutz ist keine Umgehung von Sicherheitsrichtlinien: Manuelles Sperren, das Zuklappen eines Notebooks sowie eigene Energiesparfunktionen von Monitoren oder Projektoren müssen weiterhin berücksichtigt werden. Prüfe die tatsächlich verwendete Geräteumgebung vor dem Gottesdienst.
+
+## Unsplash-Hinweis und verlinkte Bedingungen
+
+Der Unsplash-Bereich im Medienbrowser zeigt den gewünschten Hinweis zu den Nutzungs- und Datenschutzbedingungen jetzt dauerhaft an, auch während die Ergebnisse geladen werden. Die beiden Begriffe sind direkt mit den entsprechenden Unsplash-Seiten verknüpft. Zusätzlich steht der gewünschte Link zur Unsplash+-Lizenz bereit; dieser ist ausdrücklich separat gekennzeichnet und wird nicht als Lizenz sämtlicher Suchergebnisse ausgegeben. Die Desktop-Anwendung erlaubt für diese neuen Verweise nur die konkret hinterlegten HTTPS-Adressen.
+
+## Zustimmung im Windows-Installationsassistenten
+
+Der interaktive Windows-Installer enthält nun eine Seite mit den bereits vorhandenen Nutzungsbedingungen der Gemeinde. Das Zustimmungsfeld muss ausgewählt werden, bevor die Installation fortgesetzt werden kann. Die installierte Anwendung und der Update-Hinweis behalten den Zugang zum vollständigen Text. Stille beziehungsweise automatisierte Installationen haben keine interaktive Lizenzseite; die neue Checkbox gilt für den normalen Windows-Assistenten.
+
+## Ausführlichere, bebilderte Hilfe
+
+Die Hilfe enthält neue Artikel zu Songübersetzungen, Bildschirmschutz und Installation. Die Texte beschreiben die konkreten Menüwege, erklären die Auswirkungen der Einstellungen und nennen typische Fehlerquellen wie ungleiche Zeilenzahlen, zu kleine Textflächen oder abweichende Projektor-Energiesparregeln. Die Themen Erste Schritte und Unsplash wurden ebenfalls überarbeitet und um zusammenhängende Anleitungen ergänzt.
+
+Drei neue, als schematisch gekennzeichnete Abbildungen veranschaulichen den Übersetzungsablauf, den zeitlich begrenzten Bildschirmschutz und den Weg von der Vorbereitung über Preflight zur Live-Ausgabe. Bei einer erfolglosen Hilfesuche wird jetzt erklärt, wie sich die Suche mit kürzeren Begriffen eingrenzen lässt.
+
+## Hinweise vor der Nutzung
+
+Prüfe zweisprachige Songs vor ON AIR in der tatsächlichen Schrift und Ausgabegröße. Übersetzungen können deutlich mehr Platz benötigen als der Originaltext; sie werden nicht ungefragt verkleinert. Die Anzeigeeinstellung gilt für das jeweilige Gerät, während die eingegebenen Übersetzungen zum Song innerhalb der Präsentation gehören. Diese Version führt keinen automatischen Übersetzungsdienst und keine eigenständige neue Cloud-Songbibliothek ein.
+
+---
+
+# GottesdienstRegie 0.38.0
+
+## Songs importieren
+
+Über Songbibliothek → Songs importieren … lassen sich mehrere lokale Songdateien auf einmal auswählen. TXT-, Markdown-, SONG-, CSV- und JSON-Dateien werden offline eingelesen. Titel, Interpret und Abschnittsüberschriften werden soweit vorhanden übernommen; jeder importierte Song wird als eigenes ServiceItem mit seinen Abschnitten angelegt.
+
+## Equalizer als Audio-Unterpunkt
+
+Die Audioeinstellungen sind übersichtlicher gegliedert. Der neue Unterpunkt Equalizer bietet einen neutralen Standardmodus und eine eigene 10-Band-Kurve mit gespeicherten dB-Werten. Der Bereich ist bewusst separat erreichbar, damit die normalen Audioausgänge schnell und übersichtlich bleiben.
+
+## Upload-Fortschritt
+
+Beim Hochladen von Bildern, Videos, Audio und weiteren Medien zeigt der Dialog jetzt einen kleinen Fortschrittsbalken mit Prozentwert. Laufende Live-Ausgaben werden davon nicht angehalten.
+
+---
+
+# GottesdienstRegie 0.37.1
+
+## Zustimmung beim Update-Download
+
+Beim Herunterladen einer verfügbaren Aktualisierung zeigt die Update-Ansicht jetzt den Hinweis „Mit der Aktualisierung stimmst du den Nutzungsbedingungen zu.“ direkt beim Download an. Der Begriff „Nutzungsbedingungen“ ist als Link gestaltet und öffnet die vollständige Fassung ohne Umweg.
+
+Damit ist vor dem Start des Downloads klar erkennbar, welcher Zustimmung die Aktualisierung unterliegt. Der Hinweis ist rein informativ und verändert weder den Downloadablauf noch den Livebetrieb.
+
+---
+
+# GottesdienstRegie 0.37.0
+
+## Testbetrieb ohne Veranstaltung
+
+Für Proben und technische Checks gibt es neben ON AIR jetzt TESTBETRIEB STARTEN. Der Testbetrieb verlangt weiterhin die Live-Berechtigung, eine geöffnete Präsentation, aktive Folien, eine gültige MAIN-Zuordnung und den vollständigen Preflight. Eine Veranstaltung ist nur für den normalen ON-AIR-Start erforderlich.
+
+Vor dem Start zeigt GottesdienstRegie die tatsächlich verwendeten Bildschirme. Nach Bestätigung werden ausschließlich MAIN und STAGE geöffnet. LIVESTREAM, NOTES, LOBBY und Recording bleiben aus. Der Testbetrieb wird sichtbar gekennzeichnet, nicht in der Präsentation gespeichert und erzeugt keine XP- oder Belohnungsereignisse. Änderungen an Präsentation oder Zuordnung während der Prüfung verwerfen den Start sicher.
+
+## Nutzungsbedingungen
+
+Die Anmeldung enthält jetzt eine ausdrückliche Bestätigung der Nutzungsbedingungen. Sie erklären Zuständigkeit für Inhalte und Rechte, Vorrang des Livebetriebs, Umgang mit lokalen und synchronisierten Daten, persönliche Zugangsdaten sowie das Melden von Fehlern und Sicherheitsproblemen. Die vollständige Fassung kann jederzeit über Hilfe → Nutzungsbedingungen erneut geöffnet werden.
+
+## Versionslinie
+
+Der Funktionsstand wechselt mit diesem Paket auf die neue Hauptlinie 0.37.0. Die bisherige 0.36-Linie bleibt als Archiv erhalten.
+
+---
+
 # GottesdienstRegie 0.36.16
 
 ## Loop-Elemente direkt in Vor- und Nachprogramm einfügen

@@ -6,6 +6,8 @@ import { defaultAudioRouting, type AudioRoute, type AudioRouteConfig, type Audio
 export type Language='de'|'gsw'|'en'|'nl'|'da'|'no'|'sv'|'fi'|'fr'|'it'|'es'|'uk'|'ru'|'tr'|'ar'|'pl'|'pt-BR';
 export type ThemeMode='system'|'light'|'dark';
 export type VideoFit='contain'|'cover'|'fill';
+export type AudioEqualizerMode='standard'|'custom';
+export interface AudioEqualizerSettings{mode:AudioEqualizerMode;bands:number[]}
 export interface VideoInputSource{id:string;deviceId:string;name:string;enabled:boolean;width:number;height:number;frameRate:number;audioEnabled:boolean;audioDeviceId:string;volume:number;monitoring:'off'|'operator'|'live';fit:VideoFit;crop:{left:number;right:number;top:number;bottom:number};brightness:number;contrast:number;saturation:number;hue:number}
 export type QuickScreenType='logo'|'black'|'empty'|'noText'|'amen'|'countdown'|'bible'|'custom'|'quizJoin';
 export interface QuickScreenConfig{id:string;type:QuickScreenType;name:string;enabled:boolean;targets:string[];text?:string;background?:string;duration?:number;endText?:string;order:number;imageUrl?:string;joinUrl?:string;joinCode?:string}
@@ -20,6 +22,8 @@ const defaultQuickScreens:QuickScreenConfig[]=[
 ];
 
 interface PreferencesState {
+  songTranslationMode:import('./songTranslation').SongTranslationMode;
+  setSongTranslationMode:(mode:import('./songTranslation').SongTranslationMode)=>void;
   language:Language;
   theme:ThemeMode;
   blackWhite:boolean;
@@ -40,6 +44,7 @@ interface PreferencesState {
   inputGain:number;
   noiseSuppression:boolean;
   echoCancellation:boolean;
+  audioEqualizer:AudioEqualizerSettings;
   audioRouting:AudioRouting;
   timelineThumbnails:boolean;
   videoInputSources:VideoInputSource[];
@@ -76,6 +81,7 @@ interface PreferencesState {
   setInputGain:(value:number)=>void;
   setNoiseSuppression:(value:boolean)=>void;
   setEchoCancellation:(value:boolean)=>void;
+  setAudioEqualizer:(patch:Partial<AudioEqualizerSettings>)=>void;
   setAudioDefaultOutput:(deviceId:string)=>void;
   setAudioRoute:(route:AudioRoute,patch:Partial<AudioRouteConfig>)=>void;
   setTimelineThumbnails:(value:boolean)=>void;
@@ -102,6 +108,8 @@ function detectedLanguage():Language{
 }
 
 export const usePreferences=create<PreferencesState>()(persist(set=>({
+  songTranslationMode:'parentheses',
+  setSongTranslationMode:songTranslationMode=>set({songTranslationMode}),
   language:detectedLanguage(),
   theme:'dark',
   blackWhite:false,
@@ -122,6 +130,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   inputGain:100,
   noiseSuppression:true,
   echoCancellation:true,
+  audioEqualizer:{mode:'standard',bands:[0,0,0,0,0,0,0,0,0,0]},
   audioRouting:defaultAudioRouting,
   timelineThumbnails:true,
   videoInputSources:[],
@@ -158,6 +167,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setInputGain:inputGain=>set({inputGain}),
   setNoiseSuppression:noiseSuppression=>set({noiseSuppression}),
   setEchoCancellation:echoCancellation=>set({echoCancellation}),
+  setAudioEqualizer:patch=>set(state=>{const current=state.audioEqualizer??{mode:'standard' as AudioEqualizerMode,bands:[0,0,0,0,0,0,0,0,0,0]};return{audioEqualizer:{...current,...patch,bands:patch.bands??current.bands}}}),
   setAudioDefaultOutput:deviceId=>set(state=>({audioRouting:{...defaultAudioRouting,...state.audioRouting,defaultOutputDeviceId:deviceId}})),
   setAudioRoute:(route,patch)=>set(state=>({audioRouting:{...defaultAudioRouting,...state.audioRouting,[route]:{...defaultAudioRouting[route],...state.audioRouting?.[route],...patch}}})),
   setTimelineThumbnails:timelineThumbnails=>set({timelineThumbnails}),

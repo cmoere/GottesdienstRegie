@@ -266,7 +266,7 @@ function TransitionControls({
   );
 }
 
-function SongEditor({
+export function SongEditor({
   item,
   canEdit,
 }: {
@@ -284,6 +284,7 @@ function SongEditor({
     if(active)setSavedSongs(songs);
   }).catch(()=>{});return()=>{active=false}},[searching]);
   const structure = useMemo(() => readSong(item), [item]);
+  const generatedId=(sourceId:string)=>{const section=structure.sections.find(entry=>entry.slides.some(page=>page.id===sourceId));if(!section)return state.selectedSlideId;const part=section.slides.findIndex(page=>page.id===sourceId);return item.slides.find(page=>page.id===`${item.id}:song:${section.id}:0:${part}`)?.id??sourceId;};
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const commitSong = (next: SongStructure) => {
     if (!canEdit) return;
@@ -364,7 +365,7 @@ function SongEditor({
             title="Abschnitt hinzufügen"
             onClick={() => {
               const slide=structuredClone(item.slides[0]);
-              slide.body=''; slide.elements=slide.elements.map((element,index)=>index===0?{...element,properties:{...element.properties,text:''}}:element);
+              slide.body=''; delete slide.translation; slide.elements=slide.elements.map((element,index)=>index===0?{...element,properties:{...element.properties,text:''}}:element);
               const section={id:crypto.randomUUID(),label:`Vers ${structure.sections.length+1}`,slides:[slide]};
               commitSong({sections:[...structure.sections,section],order:[...structure.order,section.id]});
             }}
@@ -377,9 +378,10 @@ function SongEditor({
             title="Lange Lyrics automatisch auf Folien aufteilen"
             disabled={!canEdit}
             onClick={() => {
-              const selectedSection = structure.sections.find(section => section.slides.some(page => page.id === state.selectedSlideId));
+              const selectedSection = structure.sections.find(section => section.slides.some(page => generatedId(page.id) === state.selectedSlideId));
               const template = selectedSection?.slides[0];
               if (!selectedSection || !template) return;
+              if(selectedSection.slides.some(page=>page.translation?.text.trim())){window.alert("Dieser Abschnitt enthält Übersetzungen. Bitte die zweisprachigen Texte mit FOLIENUMBRUCH manuell aufteilen, damit die Zuordnung erhalten bleibt.");return;}
               const capacity = lyricCapacity(template);
               const nextSection = autoSplitSongSection(selectedSection, capacity.maxLines);
               if (nextSection.slides.length === selectedSection.slides.length) return;
@@ -473,8 +475,8 @@ function SongEditor({
         {structure.sections.flatMap(section => section.slides.map((slide, part) => ({section, slide, part}))).map(({section, slide, part}, index) => (
           <section
             key={`${section.id}-${part}`}
-            className={`${slide.id === state.selectedSlideId ? "active" : ""}${lyricSlideHasOverflow(slide) ? " overflow" : ""}`}
-            onClick={() => state.select(item.id, slide.id)}
+            className={`${generatedId(slide.id) === state.selectedSlideId ? "active" : ""}${lyricSlideHasOverflow(slide) ? " overflow" : ""}`}
+            onClick={() => state.select(item.id, generatedId(slide.id))}
           >
             {lyricSlideHasOverflow(slide) && <button type="button" className="lyric-overflow-warning" onClick={(event) => { event.stopPropagation(); state.select(item.id, slide.id); }}>⚠ Text überschreitet die Folienfläche</button>}
             <input
@@ -494,10 +496,18 @@ function SongEditor({
                 commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,body,elements:page.elements.map((element,j)=>j===0&&element.type==='text'?{...element,properties:{...element.properties,text:body}}:element)}:page)}:entry)});
               }}
             />
+            <div className="song-translation-editor" onClick={event=>event.stopPropagation()}>
+              {!slide.translation ? <button type="button" disabled={!canEdit} onClick={()=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{language:'Deutsch',text:''}}:page)}:entry)})}>ÜBERSETZUNG HINZUFÜGEN</button> : <>
+                <label>Sprache der Übersetzung<input disabled={!canEdit} aria-label="Sprache der Übersetzung" value={slide.translation.language} onChange={event=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{...slide.translation!,language:event.target.value}}:page)}:entry)})}/></label>
+                <textarea disabled={!canEdit} aria-label={`Übersetzung · ${section.label}`} placeholder="Hier die deutsche Übersetzung eingeben …" value={slide.translation.text} rows={Math.max(3,slide.translation.text.split('\n').length)} onChange={event=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{...slide.translation!,text:event.target.value}}:page)}:entry)})}/>
+                <small>Darstellung: Einstellungen → Präsentation → Song. Wiederholungen dieses Abschnitts verwenden dieselbe Übersetzung.</small>
+                <button type="button" disabled={!canEdit} onClick={()=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:undefined}:page)}:entry)})}>ÜBERSETZUNG ENTFERNEN</button>
+              </>}
+            </div>
             <button
               disabled={!canEdit}
               onClick={() => {
-                const page=structuredClone(slide);page.id=crypto.randomUUID();page.body='';page.elements=page.elements.map((element,j)=>j===0?{...element,properties:{...element.properties,text:''}}:element);
+                const page=structuredClone(slide);page.id=crypto.randomUUID();page.body='';delete page.translation;page.elements=page.elements.map((element,j)=>j===0?{...element,properties:{...element.properties,text:''}}:element);
                 commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:[...entry.slides.slice(0,part+1),page,...entry.slides.slice(part+1)]}:entry)});
               }}
             >

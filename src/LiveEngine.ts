@@ -3,13 +3,17 @@ import { usePresentation } from './store';
 import { lyricPacket } from './lyricScrolling';
 import { checkLyricLayouts } from './lyricPreflight';
 import { loopPreflight } from './loopDataService';
+import {usePreferences} from './preferences';
 import { stageChordRows } from './songStructure';
 
 function withSongOutputs(slide: Slide): Slide {
   const snapshot=structuredClone(slide),item=usePresentation.getState().items.find(item=>item.id===slide.itemId);
   if(item?.type!=='song')return snapshot;
   const chords=String(item.metadata.chords||'');
-  return Object.assign(snapshot,{lyricScroll:lyricPacket(item,slide,usePresentation.getState().lyricScrolling),songOutput:{chords,stageRows:stageChordRows(slide.body,chords),showChords:item.metadata.showChordsStage===true,currentNext:item.metadata.stageCurrentNext!==false,next:item.slides.filter(page=>page.enabled).slice(item.slides.filter(page=>page.enabled).findIndex(page=>page.id===slide.id)+1)[0]?.body||'',lowerThird:item.metadata.livestreamLowerThird===true}});
+  snapshot.songTranslationMode=usePreferences.getState().songTranslationMode;
+  const packet=lyricPacket(item,slide,usePresentation.getState().lyricScrolling);
+  if(packet)packet.slides=packet.slides.map(page=>({...page,songTranslationMode:snapshot.songTranslationMode}));
+  return Object.assign(snapshot,{lyricScroll:packet,songOutput:{chords,stageRows:stageChordRows(slide.body,chords),showChords:item.metadata.showChordsStage===true,currentNext:item.metadata.stageCurrentNext!==false,next:item.slides.filter(page=>page.enabled).slice(item.slides.filter(page=>page.enabled).findIndex(page=>page.id===slide.id)+1)[0]?.body||'',lowerThird:item.metadata.livestreamLowerThird===true}});
 }
 
 export class LiveEngine{

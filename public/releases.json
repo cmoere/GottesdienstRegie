@@ -21,12 +21,175 @@
   ],
   "versions": [
     {
+      "line": "0.39",
+      "builds": [
+        {
+          "version": "0.39.0",
+          "releaseDate": "2026-09-19",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Songübersetzungen, Bildschirmschutz und bebilderte Hilfe",
+              "en": "Song translations, display protection and illustrated help"
+            },
+            "text": {
+              "de": "Version 39 ergänzt manuell gepflegte Songübersetzungen mit sechs Anzeigearten, einen standardmäßig aktiven und abschaltbaren Bildschirmschutz sowie ausführlichere Hilfethemen mit drei neuen schematischen Abbildungen. Der Unsplash-Bereich erhält verlinkte Bedingungen; der interaktive Windows-Installer verlangt eine ausdrückliche Zustimmung zu den vorhandenen Nutzungsbedingungen.",
+              "en": "Version 39 adds manually entered song translations with six display modes, default-on display protection with an opt-out, and detailed help with three new diagrams. Unsplash terms are linked and the interactive Windows installer requires explicit agreement to the existing terms."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Übersetzungen direkt am Song",
+                  "en": "Translations alongside lyrics"
+                },
+                "text": {
+                  "de": "Unter INHALT lässt sich zu jeder Lyrics-Folie eine Übersetzung mit eigener Sprachangabe hinzufügen, bearbeiten oder entfernen. Die Originaltexte bleiben unverändert, wiederholte Songabschnitte übernehmen dieselbe Übersetzung und Änderungen werden mit der Präsentation gespeichert. Es wird kein automatischer Übersetzungsdienst aufgerufen.",
+                  "en": "Add, edit or remove a translation and language label for each lyrics page. Original lyrics remain unchanged, repeated sections share the translation, and edits are saved with the presentation without contacting a translation service."
+                }
+              },
+              {
+                "label": {
+                  "de": "Sechs Anzeigearten im Song-Untermenü",
+                  "en": "Six display modes in Song settings"
+                },
+                "text": {
+                  "de": "Einstellungen → Präsentation → Song bietet Aus, Klammern unter der Strophe, Übersetzung ohne Klammern, zeilenweisen Wechsel, zwei Spalten und nur Übersetzung. Standardmäßig erscheinen Klammern; ohne Übersetzung bleibt der Originaltext sichtbar. Die Live-Folie übernimmt die Einstellung erst beim Senden, während die separate STAGE-Akkordansicht beim Original bleibt.",
+                  "en": "Settings → Presentation → Song offers off, parentheses below, plain text below, alternating lines, two columns and translation only. Missing translations fall back to the original. Live slides capture the mode when sent; the separate STAGE chord view keeps the original."
+                }
+              },
+              {
+                "label": {
+                  "de": "Abschaltbarer Bildschirmschutz",
+                  "en": "Optional display protection"
+                },
+                "text": {
+                  "de": "Der standardmäßig aktive Schutz fordert das Betriebssystem auf, das Display bei geöffneter Anwendung eingeschaltet zu lassen. Unter Allgemein → Fenster & Start kann er deaktiviert werden. Die Auswahl bleibt gespeichert und beim Beenden wird der Schutz freigegeben, ohne Energieeinstellungen dauerhaft zu verändern.",
+                  "en": "Default-on protection asks the operating system to keep the display awake while the app is open. Disable it under General → Window & Startup. The choice is saved and protection is released on exit without rewriting power settings."
+                }
+              },
+              {
+                "label": {
+                  "de": "Zustimmung bei der Windows-Installation",
+                  "en": "Agreement during Windows installation"
+                },
+                "text": {
+                  "de": "Der interaktive Windows-Assistent zeigt die vorhandenen Nutzungsbedingungen und lässt die Installation erst nach Auswahl des Zustimmungsfeldes weiterlaufen. Die Bedingungen bleiben auch in der Anwendung und über den Update-Hinweis erreichbar.",
+                  "en": "The interactive Windows installer shows the existing terms and requires selecting the agreement checkbox before continuing. Terms remain accessible in the application and update notice."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Ausführliche Hilfe mit drei neuen Bildern",
+                  "en": "Detailed help with three new illustrations"
+                },
+                "text": {
+                  "de": "Neue Artikel erklären Songübersetzungen, Bildschirmschutz und die Installation Schritt für Schritt. Erste Schritte und Unsplash enthalten längere praktische Anleitungen; drei gekennzeichnete Diagramme verdeutlichen die Abläufe. Bei einer Suche ohne Treffer gibt es einen konkreten Hinweis zur Eingrenzung.",
+                  "en": "New articles explain translations, display protection and installation. Getting Started and Unsplash contain longer practical guidance. Three labelled diagrams illustrate workflows and empty searches offer useful guidance."
+                }
+              },
+              {
+                "label": {
+                  "de": "Verlinkter Unsplash-Hinweis",
+                  "en": "Linked Unsplash notice"
+                },
+                "text": {
+                  "de": "Im Unsplash-Bereich erscheint der gewünschte Nutzungshinweis auch beim Laden und bei Verbindungsproblemen. Nutzungs- und Datenschutzbedingungen öffnen ihre jeweiligen Webseiten; die Unsplash+-Lizenz ist zusätzlich separat verlinkt. Nur diese festgelegten HTTPS-Ziele sind neu für den externen Aufruf freigegeben.",
+                  "en": "The notice remains visible while loading or during connection errors. Terms and privacy links open the corresponding pages, with a separate Unsplash+ licence link. Only these exact HTTPS destinations are newly allowed."
+                }
+              }
+            ],
+            "fixed": [],
+            "known": [
+              {
+                "label": {
+                  "de": "Zweisprachige Folien vor ON AIR prüfen",
+                  "en": "Review bilingual slides before ON AIR"
+                },
+                "text": {
+                  "de": "Preflight berücksichtigt die zusätzliche Textmenge. Teile übersetzte Abschnitte bei Bedarf manuell auf, damit beide Sprachen zusammenbleiben. Die Anzeigeart gilt pro Gerät, die Übersetzung gehört zur Präsentation. Manuelles Sperren und verbindliche Sicherheitsrichtlinien werden vom Bildschirmschutz nicht umgangen; stille Installationen zeigen keine Checkbox.",
+                  "en": "Preflight checks the additional text. Split translated sections manually to preserve alignment. Display mode is device-specific; translation text belongs to the presentation. Display protection does not bypass manual locking or security policies; silent installers do not show a checkbox."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "line": "0.38",
+      "builds": [
+        {
+          "version": "0.38.0",
+          "releaseDate": "2026-09-14",
+          "current": false,
+          "overview": {
+            "label": {"de":"Song-Import, Equalizer und Upload-Fortschritt","en":"Song import, equalizer and upload progress"},
+            "text": {"de":"Songs lassen sich über die Songbibliothek importieren. Audio erhält einen eigenen Equalizer-Unterpunkt und Medien-Uploads zeigen einen kleinen Fortschrittsbalken.","en":"Songs can be imported from the song library. Audio now has a dedicated equalizer sub-section and media uploads show a compact progress bar."}
+          },
+          "sections": {
+            "new": [
+              {"label":{"de":"Songs importieren","en":"Import songs"},"text":{"de":"TXT-, Markdown-, SONG-, CSV- und JSON-Dateien können direkt über Songbibliothek → Songs importieren … eingelesen werden. Titel, Interpret und Abschnitte werden übernommen.","en":"TXT, Markdown, SONG, CSV and JSON files can be read directly through Song Library → Import songs … Titles, artists and sections are preserved."}},
+              {"label":{"de":"Equalizer-Unterpunkt","en":"Equalizer sub-section"},"text":{"de":"Audio enthält jetzt Standard und eigene 10-Band-Kurve mit gespeicherten dB-Werten, ohne die schnelle Auswahl der Audioausgänge zu überladen.","en":"Audio now includes a standard mode and a saved custom 10-band curve without cluttering quick output selection."}},
+              {"label":{"de":"Kompakter Upload-Fortschritt","en":"Compact upload progress"},"text":{"de":"Beim Upload von Bildern, Videos, Audio und weiteren Medien zeigt der Dialog Prozentfortschritt.","en":"Uploads of images, videos, audio and other media now show percentage progress in the dialog."}}
+            ],
+            "improved": [],
+            "fixed": [],
+            "known": []
+          }
+        }
+      ]
+    },
+    {
+      "line": "0.37",
+      "builds": [
+        {
+          "version": "0.37.1",
+          "releaseDate": "2026-09-14",
+          "current": false,
+          "overview": {
+            "label": {"de":"Update-Hinweis und Nutzungsbedingungen","en":"Update notice and terms of use"},
+            "text": {"de":"Beim Herunterladen einer Aktualisierung wird die Zustimmung zu den Nutzungsbedingungen klar angezeigt. Der Link öffnet die vollständige Fassung direkt.","en":"When downloading an update, consent to the terms of use is shown clearly. The link opens the full text directly."}
+          },
+          "sections": {
+            "new": [
+              {"label":{"de":"Klickbarer Hinweis beim Update","en":"Clickable update notice"},"text":{"de":"Vor dem Download steht jetzt: „Mit der Aktualisierung stimmst du den Nutzungsbedingungen zu.“ Das Wort Nutzungsbedingungen öffnet direkt die vollständige Fassung.","en":"Before downloading, the update view now says: ‘By updating, you agree to the terms of use.’ The terms link opens the full text directly."}}
+            ],
+            "improved": [],
+            "fixed": [],
+            "known": []
+          }
+        },
+        {
+          "version": "0.37.0",
+          "releaseDate": "2026-09-14",
+          "current": false,
+          "overview": {
+            "label": {"de":"Testbetrieb und Nutzungsbedingungen","en":"Test mode and terms of use"},
+            "text": {"de":"Der neue TESTBETRIEB prüft echte MAIN- und STAGE-Ausgaben ohne verknüpfte Veranstaltung. Die vollständigen Nutzungsbedingungen werden bei der Anmeldung bestätigt und bleiben unter Hilfe erreichbar.","en":"The new TEST MODE checks real MAIN and STAGE outputs without a linked event. Full terms of use are confirmed at sign-in and remain available from Help."}
+          },
+          "sections": {
+            "new": [
+              {"label":{"de":"TESTBETRIEB ohne Veranstaltung","en":"TEST MODE without an event"},"text":{"de":"Ein eigener Button startet eine ausdrücklich bestätigte Probeausgabe. Preflight, Berechtigungen, aktive Folien und MAIN-Zuordnung bleiben Pflicht. Es werden nur MAIN und STAGE geöffnet; LIVESTREAM, NOTES, LOBBY und Recording bleiben aus.","en":"A dedicated button starts an explicitly confirmed rehearsal output. Preflight, permissions, active slides and MAIN assignment remain required. Only MAIN and STAGE open; LIVESTREAM, NOTES, LOBBY and recording stay off."}},
+              {"label":{"de":"Nutzungsbedingungen","en":"Terms of use"},"text":{"de":"Die Anmeldung enthält eine bestätigbare Fassung zu Verantwortlichkeit, Livebetrieb, Medienrechten, Cloud-Daten und Fehlern. Die vollständige Fassung ist jederzeit über Hilfe → Nutzungsbedingungen verfügbar.","en":"Sign-in now includes confirmable terms covering responsibility, live operation, media rights, cloud data and errors. The full text remains available under Help → Terms of use."}}
+            ],
+            "improved": [{"label":{"de":"Eigene 0.37-Funktionslinie","en":"Dedicated 0.37 feature line"},"text":{"de":"Neue Funktionspakete werden nicht mehr als weitere Unterpunkte der 0.36-Linie veröffentlicht. Die bisherige 0.36-Linie bleibt als Archiv erhalten.","en":"New feature packages are no longer released as more 0.36 subversions. The previous 0.36 line remains available as an archive."}}],
+            "fixed": [{"label":{"de":"Sicherer Start ohne Veranstaltung","en":"Safe start without an event"},"text":{"de":"Der normale ON-AIR-Start bleibt an eine Veranstaltung gebunden. Nur der klar markierte Testbetrieb darf diese fachliche Voraussetzung ausnehmen und verwirft den Start bei Änderungen oder fehlender Ausgabe.","en":"Normal ON AIR remains tied to an event. Only the clearly marked test mode may omit that prerequisite and rejects the start after changes or missing output."}}],
+            "known": []
+          }
+        }
+      ]
+    },
+    {
       "line": "0.36",
       "builds": [
         {
           "version": "0.36.16",
           "releaseDate": "2026-09-13",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {"de":"Loop-Abschnitte direkt bearbeiten","en":"Edit loop sections directly"},
             "text": {"de":"Leere Vor- und Nachprogramme haben eigene Hinzufügen-Schaltflächen. Loop-Elemente stehen im Bereichsmenü sofort oben; LOOP, Audio und Zeit bleiben im Abschnitts-Header sauber ausgerichtet.","en":"Empty pre- and post-program sections now have dedicated add buttons. Loop elements appear first in the section menu, while LOOP, audio and timing controls stay aligned in the header."}

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, screen, safeStorage, Menu, shell, dialog, protocol, net, clipboard, nativeImage, nativeTheme, type MenuItemConstructorOptions } from 'electron';
+import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Menu, shell, dialog, protocol, net, clipboard, nativeImage, nativeTheme, type MenuItemConstructorOptions } from 'electron';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs/promises';
@@ -13,6 +13,10 @@ import { MediaRepository } from './MediaRepository';
 import { GitHubStorageProvider } from './storage/GitHubStorageProvider';
 import { AppPreferences, type AppPreferencesData } from './AppPreferences';
 import { RemoteServer } from './RemoteServer';
+
+import {DisplaySleepProtection} from './DisplaySleepProtection';
+const displaySleepProtection=new DisplaySleepProtection(powerSaveBlocker);
+app.on('will-quit',()=>displaySleepProtection.setEnabled(false));
 
 let controlWindow: BrowserWindow | null = null;
 let mediaWindow: BrowserWindow | null = null;
@@ -145,6 +149,7 @@ app.whenReady().then(async() => {
   Menu.setApplicationMenu(null);
   appPreferences=new AppPreferences(path.join(app.getPath('userData'),'app-preferences.json'));
   const initialPreferences=await appPreferences.load();
+  displaySleepProtection.setEnabled(initialPreferences.preventDisplaySleep!==false);
   autoUpdater.autoDownload=initialPreferences.autoDownloadUpdates;
   autoUpdater.allowPrerelease=initialPreferences.betaUpdates;
   const displayManager=new DisplayManager();
@@ -216,7 +221,7 @@ app.whenReady().then(async() => {
     return {user:session.user,permissions:session.permissions,expiresAt};
   }
   ipcMain.handle('window-preferences:get',()=>appPreferences.get());
-  ipcMain.handle('window-preferences:set',async(_event,patch:Partial<AppPreferencesData>)=>{const allowed:Partial<AppPreferencesData>={};if(['fullscreen','maximized','window','restore'].includes(String(patch.windowStartMode)))allowed.windowStartMode=patch.windowStartMode;if(['primary','last'].includes(String(patch.operatorDisplayTarget)))allowed.operatorDisplayTarget=patch.operatorDisplayTarget;if(typeof patch.automaticUpdates==='boolean')allowed.automaticUpdates=patch.automaticUpdates;if(typeof patch.autoDownloadUpdates==='boolean'){allowed.autoDownloadUpdates=patch.autoDownloadUpdates;autoUpdater.autoDownload=patch.autoDownloadUpdates}if(typeof patch.betaUpdates==='boolean'){allowed.betaUpdates=patch.betaUpdates;autoUpdater.allowPrerelease=patch.betaUpdates}if(typeof patch.betaWarningAccepted==='boolean')allowed.betaWarningAccepted=patch.betaWarningAccepted;return appPreferences.update(allowed)});
+  ipcMain.handle('window-preferences:set',async(_event,patch:Partial<AppPreferencesData>)=>{const allowed:Partial<AppPreferencesData>={};if(['fullscreen','maximized','window','restore'].includes(String(patch.windowStartMode)))allowed.windowStartMode=patch.windowStartMode;if(['primary','last'].includes(String(patch.operatorDisplayTarget)))allowed.operatorDisplayTarget=patch.operatorDisplayTarget;if(typeof patch.automaticUpdates==='boolean')allowed.automaticUpdates=patch.automaticUpdates;if(typeof patch.autoDownloadUpdates==='boolean'){allowed.autoDownloadUpdates=patch.autoDownloadUpdates;autoUpdater.autoDownload=patch.autoDownloadUpdates}if(typeof patch.betaUpdates==='boolean'){allowed.betaUpdates=patch.betaUpdates;autoUpdater.allowPrerelease=patch.betaUpdates}if(typeof patch.betaWarningAccepted==='boolean')allowed.betaWarningAccepted=patch.betaWarningAccepted;if(typeof patch.preventDisplaySleep==='boolean')allowed.preventDisplaySleep=patch.preventDisplaySleep;const saved=await appPreferences.update(allowed);displaySleepProtection.setEnabled(saved.preventDisplaySleep!==false);return saved});
   ipcMain.handle('window:toggle-fullscreen',()=>{if(!controlWindow)return false;controlWindow.setFullScreen(!controlWindow.isFullScreen());return controlWindow.isFullScreen()});
   ipcMain.handle('window:fullscreen-state',()=>controlWindow?.isFullScreen()??false);
   ipcMain.handle('window:control',(event,action:string)=>{if(event.sender!==controlWindow?.webContents)return false;if(action==='close')controlWindow.close();else if(action==='minimize')controlWindow.minimize();else if(action==='restore')controlWindow.setFullScreen(false);return true});
@@ -286,9 +291,37 @@ app.whenReady().then(async() => {
   ipcMain.handle('slide-export:copy',(_event,dataUrl:string)=>{const image=nativeImage.createFromDataURL(dataUrl);if(image.isEmpty())throw new Error('SLIDE_RENDER_FAILED');clipboard.writeImage(image);return true});
   ipcMain.handle('slide-export:save',async(event,dataUrl:string,suggestedName:string,format:'png'|'jpeg'='png')=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,extension=format==='jpeg'?'jpg':'png',picked=await dialog.showSaveDialog(owner,{title:'Folie als Bild speichern',defaultPath:`${suggestedName.replace(/[<>:"/\\|?*]/g,'-')}.${extension}`,filters:[{name:format==='jpeg'?'JPEG-Bild':'PNG-Bild',extensions:[extension]}]});if(picked.canceled||!picked.filePath)return null;const image=nativeImage.createFromDataURL(dataUrl);if(image.isEmpty())throw new Error('SLIDE_RENDER_FAILED');await fs.writeFile(picked.filePath,format==='jpeg'?image.toJPEG(94):image.toPNG());return picked.filePath});
   ipcMain.handle('presentation:import',async(_event,kind:'office'|'text'|'gottesdienstregie'|'all'='all')=>{const groups={office:{name:'PowerPoint, Keynote und OpenDocument',extensions:['pptx','key','odp']},text:{name:'Text und Markdown',extensions:['txt','md']},gottesdienstregie:{name:'GottesdienstRegie',extensions:['json','grpresentation','grbackup']}},selected=kind==='all'?{name:'Unterstützte Präsentationen',extensions:['pptx','key','odp','txt','md','json','grpresentation','grbackup']}:groups[kind];const picked=await dialog.showOpenDialog(controlWindow!,{title:'Präsentation importieren',properties:['openFile'],filters:[selected,{name:'Alle unterstützten Formate',extensions:['pptx','key','odp','txt','md','json','grpresentation','grbackup']}]});if(picked.canceled||!picked.filePaths[0])return null;try{return await presentationRepository.importDocument(picked.filePaths[0])}catch(error){void dialog.showMessageBox(controlWindow!,{type:'error',title:'Präsentation konnte nicht importiert werden',message:'Die ausgewählte Präsentation konnte nicht importiert werden.',detail:error instanceof Error&&error.message==='KEYNOTE_PREVIEW_NOT_FOUND'?'Diese Keynote-Datei enthält keine verwendbare Vorschau. Exportiere sie in Keynote als PowerPoint-Datei (.pptx) und versuche es erneut.':'Prüfe, ob die Datei vollständig ist und in einem unterstützten Format gespeichert wurde.'});return null}});
+  ipcMain.handle('songs:import',async(event)=>{
+    const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,picked=await dialog.showOpenDialog(owner,{title:'Songs importieren',properties:['openFile','multiSelections'],filters:[{name:'Songtexte',extensions:['txt','md','song','csv','json']},{name:'Alle Dateien',extensions:['*']}]});
+    if(picked.canceled)return [];
+    const imported:Array<{title:string;author:string;lyrics:string;sections:Array<{title:string;body:string}>;fileName:string}>=[];
+    for(const file of picked.filePaths){
+      try{
+        const extension=path.extname(file).toLowerCase(),fileName=path.basename(file),raw=(await fs.readFile(file,'utf8')).replace(/^\uFEFF/,'').trim();
+        if(!raw)continue;
+        let title=path.basename(file,extension),author='',lyrics=raw,sections:Array<{title:string;body:string}> = [];
+        if(extension==='.json'){
+          const parsed=JSON.parse(raw) as any,entry=Array.isArray(parsed)?parsed[0]:parsed;
+          title=String(entry?.title??entry?.name??title);author=String(entry?.author??entry?.artist??'');lyrics=String(entry?.lyrics??entry?.body??'');
+          if(Array.isArray(entry?.sections))sections=entry.sections.map((part:any,index:number)=>({title:String(part?.title??`Abschnitt ${index+1}`),body:String(part?.body??part?.lyrics??'')})).filter((part:any)=>part.body.trim());
+        }else{
+          const lines=raw.split(/\r?\n/),meta=lines.filter(line=>/^(title|titel|author|autor|artist|interpret)\s*:/i.test(line));
+          const titleLine=meta.find(line=>/^(title|titel)\s*:/i.test(line)),authorLine=meta.find(line=>/^(author|autor|artist|interpret)\s*:/i.test(line));
+          if(titleLine)title=titleLine.replace(/^[^:]+:\s*/,'').trim()||title;
+          if(authorLine)author=authorLine.replace(/^[^:]+:\s*/,'').trim();
+          lyrics=lines.filter(line=>!meta.includes(line)).join('\n').trim();
+          const blocks=lyrics.split(/\n\s*\n/).map(block=>block.trim()).filter(Boolean);
+          sections=blocks.map((body,index)=>{const heading=body.match(/^\[([^\]]+)\]\s*\n/);return heading?{title:heading[1],body:body.slice(heading[0].length).trim()}:{title:`Abschnitt ${index+1}`,body}});
+        }
+        if(!sections.length)sections=[{title:'Abschnitt 1',body:lyrics}];
+        imported.push({title,author,lyrics:sections[0]?.body??lyrics,sections,fileName});
+      }catch{ /* ungültige Einzeldateien werden übersprungen; gültige Importe bleiben erhalten */ }
+    }
+    return imported;
+  });
   ipcMain.handle('presentation:export',async(_event,id:string)=>{const doc=await presentationRepository.read(id);if(!doc)return null;const picked=await dialog.showSaveDialog(controlWindow!,{title:'Präsentation exportieren',defaultPath:`${String(doc.title||'Praesentation').replace(/[<>:"/\\|?*]/g,'-')}.grpresentation`,filters:[{name:'GottesdienstRegie Präsentation',extensions:['grpresentation']}]});if(picked.canceled||!picked.filePath)return null;return presentationRepository.exportDocument(id,picked.filePath)});
   ipcMain.handle('presentation:backup',(_event,id:string)=>presentationRepository.backup(id));
-  ipcMain.handle('external:open',async(_event,url:string)=>{const allowed=/^https:\/\/(github\.com\/cmoere\/GottesdienstRegie|cmoere\.github\.io\/GottesdienstRegie)/i.test(url)||new RegExp(`^http:\\/\\/(localhost|127\\.0\\.0\\.1|${remoteServer.get().address.replace(/\./g,'\\.')})(?::\\d+)?\\/`,'i').test(url);if(!allowed)throw new Error('EXTERNAL_URL_NOT_ALLOWED');await shell.openExternal(url);return true});
+  ipcMain.handle('external:open',async(_event,url:string)=>{const unsplashTerms=['https://unsplash.com/de/nutzungsbedingungen','https://unsplash.com/de/datenschutzregelungen','https://unsplash.com/de/plus/lizenz'].includes(url);const allowed=unsplashTerms||/^https:\/\/(github\.com\/cmoere\/GottesdienstRegie|cmoere\.github\.io\/GottesdienstRegie)/i.test(url)||new RegExp(`^http:\\/\\/(localhost|127\\.0\\.0\\.1|${remoteServer.get().address.replace(/\./g,'\\.')})(?::\\d+)?\\/`,'i').test(url);if(!allowed)throw new Error('EXTERNAL_URL_NOT_ALLOWED');await shell.openExternal(url);return true});
   ipcMain.handle('media:list',()=>mediaRepository.list());
   ipcMain.handle('media:import',async(event,kind?:'audio'|'video')=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,audio=kind==='audio',video=kind==='video',filter=audio?{name:'Unterstütztes Audio',extensions:['mp3','m4a','aac','wav','flac','ogg']}:video?{name:'Unterstützte Videos',extensions:['mp4','mov','webm','m4v']}:{name:'Medien',extensions:['png','jpg','jpeg','webp','gif','svg','mp4','mov','webm','m4v','mp3','wav','m4a','aac','ogg','flac','pdf']};const picked=await dialog.showOpenDialog(owner,{title:audio?'Audio zum Hochladen auswählen':video?'Video auswählen':'Medien zum Hochladen auswählen',properties:video?['openFile']:['openFile','multiSelections'],filters:[filter]});if(picked.canceled)return[];return mediaRepository.import(picked.filePaths)});
   ipcMain.handle('media:update',async(_event,id:string,patch:any)=>{try{return await mediaRepository.update(id,patch)}catch(error){if(!String(error).includes('MEDIA_NOT_FOUND'))throw error;const remote=(await onlineMedia.list()).find(item=>item.id===id);if(!remote)throw error;return mediaRepository.upsertRemote(remote,patch)}});

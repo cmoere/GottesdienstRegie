@@ -1,5 +1,62 @@
 # Versionshinweise / Release notes
 
+## 0.39.0 – Songübersetzungen, Bildschirmschutz und erweiterte Hilfe
+
+### Songübersetzungen mit sechs Anzeigearten
+
+Im Song-Editor steht unter INHALT bei jeder Lyrics-Folie der neue Button „Übersetzung hinzufügen“ bereit. Die Übersetzung besitzt ein eigenes Sprachfeld und einen eigenen Textbereich, sodass beispielsweise ein englischer Originaltext zusammen mit einer deutschen Übersetzung vorbereitet werden kann, ohne die Grundlyrics zu ersetzen. Wiederholte Abschnitte im Songablauf übernehmen dieselbe Übersetzung; Änderungen laufen über die vorhandene Präsentationsspeicherung und können mit Rückgängig und Wiederholen bearbeitet werden.
+
+Unter Einstellungen → Präsentation → Song stehen sechs Anzeigearten zur Verfügung: Aus, unter der Strophe in Klammern, unter der Strophe ohne Klammern, zeilenweise im Wechsel, nebeneinander in zwei Spalten und nur Übersetzung. Standardmäßig wird die Übersetzung in Klammern ergänzt. Falls für eine Folie keine Übersetzung eingetragen wurde, bleibt der Originaltext sichtbar. Die Eingabe erfolgt manuell; es wird kein Text an einen Übersetzungsdienst gesendet.
+
+Die gemeinsame Folienanzeige unterstützt die Übersetzungen in Vorschau, Thumbnails und MAIN. Beim Senden einer Live-Folie wird die Anzeigeart mitgespeichert, damit eine Änderung in den Einstellungen nicht plötzlich die gerade ausgespielte Folie verändert. Lyric Scrolling bewegt beide Sprachen zusammen. Die gesonderte STAGE-Akkordansicht bleibt bei den Originallyrics. Preflight prüft den zusätzlichen Platzbedarf und warnt vor zu großen Textmengen. Bereits übersetzte Abschnitte werden nicht automatisch neu aufgeteilt; verwende hier den manuellen Folienumbruch und prüfe die Zuordnung beider Sprachen.
+
+### Bildschirm während der Vorbereitung und Präsentation aktiv halten
+
+GottesdienstRegie fordert beim Betriebssystem standardmäßig an, Bildschirmschoner und automatisches Ausschalten des Displays während der geöffneten Anwendung zu verhindern. Der Schalter unter Einstellungen → Allgemein → Fenster & Start kann jederzeit deaktiviert werden und wird für diesen Rechner gespeichert. Wiederholtes Aktivieren erzeugt keine zusätzlichen dauerhaften Anforderungen; beim Abschalten oder normalen Beenden wird der Schutz freigegeben, ohne die persönlichen Energieeinstellungen zu überschreiben.
+
+Der Schutz ist keine Umgehung von Sicherheitsrichtlinien: Manuelles Sperren, das Zuklappen eines Notebooks sowie eigene Energiesparfunktionen von Monitoren oder Projektoren müssen weiterhin berücksichtigt werden. Prüfe die tatsächlich verwendete Geräteumgebung vor dem Gottesdienst.
+
+### Unsplash-Hinweis und verlinkte Bedingungen
+
+Der Unsplash-Bereich im Medienbrowser zeigt den gewünschten Hinweis zu den Nutzungs- und Datenschutzbedingungen jetzt dauerhaft an, auch während die Ergebnisse geladen werden. Die beiden Begriffe sind direkt mit den entsprechenden Unsplash-Seiten verknüpft. Zusätzlich steht der gewünschte Link zur Unsplash+-Lizenz bereit; dieser ist ausdrücklich separat gekennzeichnet und wird nicht als Lizenz sämtlicher Suchergebnisse ausgegeben. Die Desktop-Anwendung erlaubt für diese neuen Verweise nur die konkret hinterlegten HTTPS-Adressen.
+
+### Zustimmung im Windows-Installationsassistenten
+
+Der interaktive Windows-Installer enthält nun eine Seite mit den bereits vorhandenen Nutzungsbedingungen der Gemeinde. Das Zustimmungsfeld muss ausgewählt werden, bevor die Installation fortgesetzt werden kann. Die installierte Anwendung und der Update-Hinweis behalten den Zugang zum vollständigen Text. Stille beziehungsweise automatisierte Installationen haben keine interaktive Lizenzseite; die neue Checkbox gilt für den normalen Windows-Assistenten.
+
+### Ausführlichere, bebilderte Hilfe
+
+Die Hilfe enthält neue Artikel zu Songübersetzungen, Bildschirmschutz und Installation. Die Texte beschreiben die konkreten Menüwege, erklären die Auswirkungen der Einstellungen und nennen typische Fehlerquellen wie ungleiche Zeilenzahlen, zu kleine Textflächen oder abweichende Projektor-Energiesparregeln. Die Themen Erste Schritte und Unsplash wurden ebenfalls überarbeitet und um zusammenhängende Anleitungen ergänzt.
+
+Drei neue, als schematisch gekennzeichnete Abbildungen veranschaulichen den Übersetzungsablauf, den zeitlich begrenzten Bildschirmschutz und den Weg von der Vorbereitung über Preflight zur Live-Ausgabe. Bei einer erfolglosen Hilfesuche wird jetzt erklärt, wie sich die Suche mit kürzeren Begriffen eingrenzen lässt.
+
+### Hinweise vor der Nutzung
+
+Prüfe zweisprachige Songs vor ON AIR in der tatsächlichen Schrift und Ausgabegröße. Übersetzungen können deutlich mehr Platz benötigen als der Originaltext; sie werden nicht ungefragt verkleinert. Die Anzeigeeinstellung gilt für das jeweilige Gerät, während die eingegebenen Übersetzungen zum Song innerhalb der Präsentation gehören. Diese Version führt keinen automatischen Übersetzungsdienst und keine eigenständige neue Cloud-Songbibliothek ein.
+
+
+## 0.38.0 – Song-Import, Equalizer und Upload-Fortschritt
+
+- Songtexte können direkt über Songbibliothek → Songs importieren … aus TXT-, Markdown-, SONG-, CSV- und JSON-Dateien übernommen werden.
+- Audioeinstellungen enthalten jetzt einen eigenen Equalizer-Unterpunkt mit Standardmodus, eigener Kurve und Zurücksetzen.
+- Medien-Uploads zeigen einen kompakten Fortschrittsbalken mit Prozentanzeige; der laufende Upload kann nicht versehentlich abgebrochen werden.
+
+## 0.37.1 – Update-Hinweis zu Nutzungsbedingungen
+
+- Beim Herunterladen einer Aktualisierung wird jetzt deutlich angezeigt: „Mit der Aktualisierung stimmst du den Nutzungsbedingungen zu.“
+- „Nutzungsbedingungen“ ist direkt anklickbar und öffnet die vollständige Fassung.
+
+## 0.37.0 – Testbetrieb und Nutzungsbedingungen
+
+- Testbetrieb neben ON AIR ergänzt: MAIN und STAGE können ohne verknüpfte Veranstaltung geprüft werden.
+- Testbetrieb verwendet weiterhin Berechtigungen, Preflight und die reale Bildschirmzuordnung.
+- LIVESTREAM, LOBBY, NOTES und Recording werden im Testbetrieb nicht gestartet.
+- Vor dem Start werden die tatsächlich verwendeten Bildschirme angezeigt und ausdrücklich bestätigt.
+- Testbetrieb ist lokal und vorübergehend; er wird nicht gespeichert und vergibt keine Belohnungen.
+- Nutzungsbedingungen mit Abschnitten zu Verantwortlichkeit, Livebetrieb, Medienrechten, Cloud-Daten und Fehlermeldungen ergänzt.
+- Anmeldung verlangt eine ausdrückliche Bestätigung; die vollständige Fassung bleibt jederzeit unter Hilfe → Nutzungsbedingungen erreichbar.
+- Neue Funktionslinie 0.37 statt weiterer Unterversionen der 0.36-Linie.
+
 ## 0.36.16 – Loop-Abschnitte direkt bearbeiten
 
 - Eigene Hinzufügen-Schaltflächen für leere VORPROGRAMM- und NACHPROGRAMM-Abschnitte ergänzt.

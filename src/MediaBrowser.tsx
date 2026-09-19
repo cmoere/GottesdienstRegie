@@ -178,6 +178,7 @@ export function MediaBrowser() {
     [offline, setOffline] = useState(false),
     [cloudStatus, setCloudStatus] = useState<MediaStorageStatus | null>(null),
     [busy, setBusy] = useState(""),
+    [uploadProgress, setUploadProgress] = useState(0),
     [staged, setStaged] = useState<MediaAsset[]>([]),
     [uploadName, setUploadName] = useState(""),
     [uploadTags, setUploadTags] = useState("");
@@ -450,8 +451,13 @@ export function MediaBrowser() {
     setVisibleCount(30);
   }
   async function beginUpload() {
-    const picked: MediaAsset[] =
-      (await api?.import(isAudio ? "audio" : undefined)) ?? [];
+    setBusy("import");
+    let picked: MediaAsset[] = [];
+    try {
+      picked = (await api?.import(isAudio ? "audio" : undefined)) ?? [];
+    } finally {
+      setBusy("");
+    }
     if (!picked.length) return;
     setStaged(picked);
     setUploadName(picked[0].name);
@@ -479,6 +485,7 @@ export function MediaBrowser() {
   };
   async function upload() {
     setBusy("upload");
+    setUploadProgress(0);
     try {
       for (const [index, asset] of staged.entries()) {
         await api.update(asset.id, {
@@ -489,6 +496,7 @@ export function MediaBrowser() {
             .filter(Boolean),
         });
         await api.sync(asset.id);
+        setUploadProgress(Math.round(((index + 1) / staged.length) * 100));
       }
       setStaged([]);
       await refresh();
@@ -496,6 +504,7 @@ export function MediaBrowser() {
       alert(uploadError(error));
     } finally {
       setBusy("");
+      setUploadProgress(0);
     }
   }
   async function remove() {
@@ -954,6 +963,7 @@ export function MediaBrowser() {
           )}
         </aside>
         <section className="media-content">
+          {tab === "unsplash" && <p className="unsplash-terms-notice">Mit der Nutzung von Unsplash stimmst du automatisch den <a href="https://unsplash.com/de/nutzungsbedingungen" target="_blank" rel="noopener noreferrer" onClick={event=>{if(window.desktop){event.preventDefault();void window.desktop.openExternal(event.currentTarget.href)}}}>Nutzungsbedingungen</a> und <a href="https://unsplash.com/de/datenschutzregelungen" target="_blank" rel="noopener noreferrer" onClick={event=>{if(window.desktop){event.preventDefault();void window.desktop.openExternal(event.currentTarget.href)}}}>Datenschutzbedingungen</a> von Unsplash zu. <a href="https://unsplash.com/de/plus/lizenz" target="_blank" rel="noopener noreferrer" onClick={event=>{if(window.desktop){event.preventDefault();void window.desktop.openExternal(event.currentTarget.href)}}}>Unsplash+-Lizenz</a></p>}
           {tab === "unsplash" && !loading && (
             <div className="unsplash-category-brand">
               <span className="unsplash-mini-mark" aria-hidden="true">
@@ -1263,8 +1273,14 @@ export function MediaBrowser() {
                 onChange={(event) => setUploadTags(event.target.value)}
               />
             </label>
+            {busy === "upload" && (
+              <div className="media-upload-progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={uploadProgress}>
+                <i style={{ width: `${uploadProgress}%` }} />
+                <span>{uploadProgress}%</span>
+              </div>
+            )}
             <footer>
-              <button onClick={() => setStaged([])}>ABBRECHEN</button>
+              <button disabled={busy === "upload"} onClick={() => setStaged([])}>ABBRECHEN</button>
               <button
                 className="primary"
                 disabled={busy === "upload"}
