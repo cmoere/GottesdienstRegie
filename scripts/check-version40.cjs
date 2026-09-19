@@ -17,4 +17,13 @@ assert.deepEqual(getUserOverlayElements(slide,weatherItem).map(x=>x.id),['user-t
 assert.deepEqual(normalizeLoopOverlays({...slide,elements:undefined},weatherItem).elements,[]);
 assert.equal(getLoopCoreLayer(slide,{...weatherItem,type:'content'}),null);
 assert.equal(Object.isFrozen(getLoopCoreLayer(slide,weatherItem)),true);
+const {buildRenderedSlideSnapshot,cloneRenderedSlideSnapshot}=load('src/renderedSlideSnapshot.ts');
+const snapshotSource={...slide,elements:[text('visible',{text:'A'})]};
+const preview=buildRenderedSlideSnapshot(snapshotSource,{...weatherItem,slides:[snapshotSource]},'main',123);
+snapshotSource.elements[0].properties.text='B';
+const live=cloneRenderedSlideSnapshot(preview);
+assert.equal(live.slide.elements[0].properties.text,'A');
+assert.equal(live.createdAt,123);
+assert.equal(Object.isFrozen(live.slide.elements[0].properties),true);
+assert.notEqual(buildRenderedSlideSnapshot(snapshotSource,{...weatherItem,slides:[snapshotSource]},'main',124).hash,live.hash);
 console.log('PASS: version 0.40 domain contracts');

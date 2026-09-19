@@ -5,6 +5,7 @@ import { checkLyricLayouts } from './lyricPreflight';
 import { loopPreflight } from './loopDataService';
 import {usePreferences} from './preferences';
 import { stageChordRows } from './songStructure';
+import { buildRenderedSlideSnapshot, cloneRenderedSlideSnapshot } from './renderedSlideSnapshot';
 
 function withSongOutputs(slide: Slide): Slide {
   const snapshot=structuredClone(slide),item=usePresentation.getState().items.find(item=>item.id===slide.itemId);
@@ -18,8 +19,9 @@ function withSongOutputs(slide: Slide): Slide {
 
 export class LiveEngine{
   async preflight(assignments:Record<string,DisplayRole>,presentation:{hasPresentation:boolean;activeSlideCount:number;media:string[]}):Promise<DesktopPreflight>{const result=await (window.desktop?.preflight(assignments,presentation)??{ok:false,errors:['Die Desktop-Ausgabe ist nicht verfügbar.'],warnings:[]});const state=usePresentation.getState();const warnings=await checkLyricLayouts(state.items,state.lyricScrolling),loopWarnings=loopPreflight(state.items,state.sections).warnings;return {...result,warnings:[...result.warnings,...warnings,...loopWarnings]}}
-  async start(assignments:Record<string,DisplayRole>,slide:Slide){if(!window.desktop)throw new Error('Die Desktop-Ausgabe ist nicht verfügbar.');return window.desktop.goOnAir(assignments,withSongOutputs(slide))}
-  async show(slide:Slide){return window.desktop?.sendLiveSlide(withSongOutputs(slide))??false}
+  private snapshot(slide:Slide){const state=usePresentation.getState(),item=state.items.find(entry=>entry.id===slide.itemId);if(!item)return structuredClone(withSongOutputs(slide));return cloneRenderedSlideSnapshot(buildRenderedSlideSnapshot(withSongOutputs(slide),item,'main')).slide}
+  async start(assignments:Record<string,DisplayRole>,slide:Slide){if(!window.desktop)throw new Error('Die Desktop-Ausgabe ist nicht verfügbar.');return window.desktop.goOnAir(assignments,this.snapshot(slide))}
+  async show(slide:Slide){return window.desktop?.sendLiveSlide(this.snapshot(slide))??false}
   async stop(){return window.desktop?.goOffAir()??false}
 }
 
