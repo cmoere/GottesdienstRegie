@@ -8,6 +8,7 @@ export type ThemeMode='system'|'light'|'dark';
 export type VideoFit='contain'|'cover'|'fill';
 export type AudioEqualizerMode='standard'|'custom';
 export interface AudioEqualizerSettings{mode:AudioEqualizerMode;bands:number[]}
+export interface PublicInterestSettings{enabled:boolean;preLoop:boolean;postLoop:boolean;durationSeconds:number;interval:3|5|10;showQr:boolean;categories:string[]}
 export interface VideoInputSource{id:string;deviceId:string;name:string;enabled:boolean;width:number;height:number;frameRate:number;audioEnabled:boolean;audioDeviceId:string;volume:number;monitoring:'off'|'operator'|'live';fit:VideoFit;crop:{left:number;right:number;top:number;bottom:number};brightness:number;contrast:number;saturation:number;hue:number}
 export type QuickScreenType='logo'|'black'|'empty'|'noText'|'amen'|'countdown'|'bible'|'custom'|'quizJoin';
 export interface QuickScreenConfig{id:string;type:QuickScreenType;name:string;enabled:boolean;targets:string[];text?:string;background?:string;duration?:number;endText?:string;order:number;imageUrl?:string;joinUrl?:string;joinCode?:string}
@@ -57,6 +58,7 @@ interface PreferencesState {
   ceraProFileName:string;
   unsplashAccessKey:string;
   aiEnabled:boolean;
+  publicInterest:PublicInterestSettings;
   sharedDeviceAutoLogout:boolean;
   sharedDeviceTimeoutMinutes:number;
   logoutAfterOffAir:boolean;
@@ -96,6 +98,7 @@ interface PreferencesState {
   setCeraProFileName:(value:string)=>void;
   setUnsplashAccessKey:(value:string)=>void;
   setAiEnabled:(value:boolean)=>void;
+  setPublicInterest:(patch:Partial<PublicInterestSettings>)=>void;
   setSharedDeviceSecurity:(patch:Partial<Pick<PreferencesState,'sharedDeviceAutoLogout'|'sharedDeviceTimeoutMinutes'|'logoutAfterOffAir'|'logoutAfterOffAirMinutes'>>)=>void;
 }
 
@@ -143,6 +146,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   ceraProFileName:'',
   unsplashAccessKey:'',
   aiEnabled:true,
+  publicInterest:{enabled:false,preLoop:true,postLoop:true,durationSeconds:12,interval:5,showQr:true,categories:['blood','volunteering','inclusion','civil-protection','health']},
   sharedDeviceAutoLogout:true,
   sharedDeviceTimeoutMinutes:30,
   logoutAfterOffAir:false,
@@ -182,5 +186,6 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setCeraProFileName:ceraProFileName=>set({ceraProFileName}),
   setUnsplashAccessKey:unsplashAccessKey=>set({unsplashAccessKey}),
   setAiEnabled:aiEnabled=>set({aiEnabled}),
+  setPublicInterest:patch=>set(state=>({publicInterest:{...state.publicInterest,...patch,durationSeconds:Math.max(8,Math.min(30,patch.durationSeconds??state.publicInterest.durationSeconds))}})),
   setSharedDeviceSecurity:patch=>set(patch)
 }),{name:'gottesdienstregie.preferences'}));

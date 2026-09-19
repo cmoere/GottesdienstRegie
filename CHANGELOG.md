@@ -1,5 +1,17 @@
 # Versionshinweise / Release notes
 
+## 0.40.0 – Private Notizen, lokale Übersetzung und sichere Loop-Ausgabe
+
+Version 0.40.0 führt eine lokale automatische Englisch-Deutsch-Übersetzung direkt im Song-Editor ein. Das Sprachmodell läuft nach dem einmaligen Download auf dem Gerät und benötigt keinen API-Schlüssel; Akkorde in eckigen Klammern und bestehende Zeilenumbrüche werden geschützt. Übersetzungen bleiben vor dem Einsatz editierbar und alle sechs vorhandenen Anzeigearten bleiben verfügbar.
+
+Private Präsentations- und Foliennotizen werden getrennt vom synchronisierten Präsentationsdokument im Benutzerkontext dieses Geräts gespeichert. Sie erscheinen niemals auf MAIN, STAGE, LIVESTREAM oder in exportierten Folien. Hintergrundaudio kann zusätzlich nach HTTPS-Radiosendern suchen, diese vorhören und als Stream hinzufügen.
+
+Gemeinwohl-Hinweise sind unter Präsentation → Sonstiges → Extern standardmäßig deaktiviert. Die Konfiguration beschränkt sich auf Einsatzbereich, Dauer, Häufigkeit und QR-Code; Inhalte offizieller Stellen können nicht redaktionell verändert werden und enthalten kein Nutzertracking.
+
+Wetter, Uhr und weitere fachliche Loop-Kerninhalte sind nun von normalen Zusatzebenen getrennt und können nicht versehentlich gelöscht werden. Preview und MAIN verwenden unveränderliche Render-Snapshots, sodass spätere Editoränderungen erst nach dem nächsten bewussten Schalten live werden.
+
+Die Kopfzeile reserviert mehr Platz für native Windows-Schaltflächen und hält Profil sowie Sync erreichbar. Der KI-Motivbereich bleibt in schmalen Fenstern geordnet, numerische Einstellungsfelder besitzen eine verlässliche Mindestbreite und die Equalizerbänder zeigen Tiefen, untere Mitten, Mitten und Höhen mit vollständigen zugänglichen Beschriftungen.
+
 ## 0.39.0 – Songübersetzungen, Bildschirmschutz und erweiterte Hilfe
 
 ### Songübersetzungen mit sechs Anzeigearten

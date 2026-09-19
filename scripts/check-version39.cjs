@@ -34,7 +34,7 @@ protection.setEnabled(true);protection.setEnabled(true);assert.equal(starts,1);
 protection.setEnabled(false);protection.setEnabled(false);assert.equal(stops,1);assert.equal(active.size,0);
 protection.setEnabled(true);assert.equal(starts,2);protection.setEnabled(false);assert.equal(active.size,0);
 const manifest=JSON.parse(fs.readFileSync('public/releases.json','utf8')),builds=manifest.versions.flatMap(v=>v.builds);
-assert.deepEqual(builds.filter(v=>v.current).map(v=>v.version),['0.39.0']);
+assert.ok(builds.some(v=>v.version==='0.39.0'),'Version 0.39.0 remains in update history');
 assert.equal(JSON.parse(fs.readFileSync('package.json','utf8')).build.nsis.license,'build/terms.txt');
 assert.match(fs.readFileSync('build/installer.nsh','utf8'),/!define MUI_LICENSEPAGE_CHECKBOX/);
 console.log('PASS: six translation modes, fallback, immutable layouts, live override, repeated sections, roundtrip, safe splitting, sleep protection lifecycle, release and installer configuration');

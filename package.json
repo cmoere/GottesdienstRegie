@@ -1,6 +1,6 @@
 {
   "name": "gottesdienstregie",
-  "version": "0.39.0",
+  "version": "0.40.0",
   "description": "Desktop-Regiesoftware für Gottesdienstpräsentationen der Philippusgemeinde.",
   "author": {
     "name": "Philippusgemeinde Ev. Freikirche",
@@ -21,6 +21,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@fontsource/inter": "^5.2.6",
+    "@huggingface/transformers": "3.8.1",
     "bcryptjs": "^3.0.2",
     "electron-updater": "^6.6.2",
     "firebase": "^12.2.1",

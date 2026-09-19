@@ -21,12 +21,31 @@
   ],
   "versions": [
     {
+      "line": "0.40",
+      "builds": [{
+        "version": "0.40.0",
+        "releaseDate": "2026-09-20",
+        "current": true,
+        "overview": {"label":{"de":"Private Notizen, lokale Übersetzung und sichere Loop-Ausgabe","en":"Private notes, local translation and safe loop output"},"text":{"de":"Version 0.40.0 ergänzt lokale automatische Songübersetzung ohne API-Schlüssel, private Folien- und Präsentationsnotizen, Radiosender im Hintergrundaudio und standardmäßig deaktivierte Gemeinwohl-Hinweise. Geschützte Loop-Kerninhalte, unveränderliche Live-Snapshots und mehrere Layoutkorrekturen erhöhen die Sicherheit im Livebetrieb.","en":"Version 0.40.0 adds local automatic song translation without an API key, private slide and presentation notes, radio background audio and opt-in public-interest notices. Protected loop content, immutable live snapshots and layout fixes improve live reliability."}},
+        "sections": {
+          "new": [
+            {"label":{"de":"Lokale automatische Übersetzung","en":"Local automatic translation"},"text":{"de":"Englische und deutsche Songtexte können im Song-Editor mit einem lokal ausgeführten Sprachmodell übersetzt werden. Akkorde und Zeilenumbrüche bleiben geschützt; das Ergebnis bleibt vor dem Einsatz vollständig bearbeitbar.","en":"English and German lyrics can be translated with a locally executed model. Chords and line breaks are preserved and drafts remain editable."}},
+            {"label":{"de":"Private Notizen und Radiosender","en":"Private notes and radio stations"},"text":{"de":"Persönliche Notizen stehen pro Präsentation und Folie gerätelokal bereit und gelangen in keine Ausgabe. Die Hintergrundaudio-Auswahl kann HTTPS-Radiosender online suchen, vorhören und hinzufügen.","en":"Device-local personal notes are available per presentation and slide and never enter an output. Background audio can search, preview and add HTTPS radio stations."}},
+            {"label":{"de":"Gemeinwohl-Hinweise","en":"Public-interest notices"},"text":{"de":"Unter Präsentation → Sonstiges → Extern steht eine standardmäßig deaktivierte, trackingfreie Konfiguration für nicht editierbare Hinweise offizieller Stellen bereit.","en":"Presentation settings include an opt-in, tracking-free configuration for non-editable notices from official sources."}}
+          ],
+          "improved": [{"label":{"de":"Sichere Vorschau und Loop-Inhalte","en":"Safe preview and loop content"},"text":{"de":"MAIN erhält beim Schalten eine unveränderliche Kopie des gerenderten Folienstands. Wetter, Uhr und andere Loop-Kerninhalte sind geschützt und erscheinen nicht mehr als löschbare zusätzliche Ebene.","en":"MAIN receives an immutable copy of the rendered slide. Weather, clock and other loop core content is protected and excluded from removable additional layers."}}],
+          "fixed": [{"label":{"de":"Kopfzeile, KI-Motive, Zahlenfelder und Equalizer","en":"Header, AI motives, numeric fields and equalizer"},"text":{"de":"Fensterknöpfe und Profil überdecken sich nicht mehr. Der KI-Motivbereich bleibt responsiv, Zahlenfelder sind breit genug und jedes Equalizerband zeigt Frequenzbereich, Frequenz und Dezibelwert verständlich an.","en":"Window buttons and profile no longer overlap. AI motives remain responsive, numeric fields are wide enough and every equalizer band has clear labels."}}],
+          "known": [{"label":{"de":"Modelldownload und Radiosender benötigen Internet","en":"Model downloads and radio stations need internet"},"text":{"de":"Der erste Download eines Übersetzungsmodells und die Radiosuche benötigen eine Verbindung. Bereits laufende lokale Ausgabe und MAIN bleiben bei Fehlern unverändert.","en":"The first translation-model download and radio search require connectivity. Existing local playback and MAIN remain unchanged on failure."}}]
+        }
+      }]
+    },
+    {
       "line": "0.39",
       "builds": [
         {
           "version": "0.39.0",
           "releaseDate": "2026-09-19",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Songübersetzungen, Bildschirmschutz und bebilderte Hilfe",

@@ -1,6 +1,7 @@
 import { usePreferences, type AudioEqualizerMode } from "./preferences";
+import { equalizerBands } from './equalizerBands';
 
-const bands = ["31 Hz", "63 Hz", "125 Hz", "250 Hz", "500 Hz", "1 kHz", "2 kHz", "4 kHz", "8 kHz", "16 kHz"];
+const bands = equalizerBands.map(band=>band.frequency);
 
 export function AudioEqualizerSettings() {
   const { audioEqualizer, setAudioEqualizer } = usePreferences();
@@ -24,8 +25,9 @@ export function AudioEqualizerSettings() {
         </button>
       </div>
       <div className={`equalizer-bands ${mode === "standard" ? "disabled" : ""}`}>
-        {bands.map((label, index) => (
-          <label key={label}>
+        {equalizerBands.map((band, index) => (
+          <label key={band.frequency}>
+            <b>{band.group}</b>
             <input
               type="range"
               min={-12}
@@ -34,10 +36,10 @@ export function AudioEqualizerSettings() {
               value={values[index] ?? 0}
               disabled={mode === "standard"}
               onChange={(event) => setBand(index, Number(event.target.value))}
-              aria-label={label}
+              aria-label={band.accessibleName(values[index] ?? 0)}
             />
             <output>{values[index] ?? 0} dB</output>
-            <small>{label}</small>
+            <small>{band.frequency}</small>
           </label>
         ))}
       </div>

@@ -11,6 +11,8 @@ import { LyricScrollRenderer } from './LyricScrollRenderer';
 import { autoSplitSongSection, readSong, songPatch, shortSection, transposeChords, type SongStructure } from './songStructure';
 import { estimateLyricLines } from './songLayout';
 import { getUserOverlayElements } from './loopCoreLayer';
+import { PersonalNotesPanel } from './PersonalNotesPanel';
+import { localTranslate } from './translationDraft';
 import { SlideRenderer } from "./SlideRenderer";
 import {
   defaultTransition,
@@ -287,6 +289,7 @@ export function SongEditor({
   const structure = useMemo(() => readSong(item), [item]);
   const generatedId=(sourceId:string)=>{const section=structure.sections.find(entry=>entry.slides.some(page=>page.id===sourceId));if(!section)return state.selectedSlideId;const part=section.slides.findIndex(page=>page.id===sourceId);return item.slides.find(page=>page.id===`${item.id}:song:${section.id}:0:${part}`)?.id??sourceId;};
   const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [translationBusy,setTranslationBusy]=useState('');
   const commitSong = (next: SongStructure) => {
     if (!canEdit) return;
     const patch = songPatch(item, next);
@@ -499,6 +502,8 @@ export function SongEditor({
             />
             <div className="song-translation-editor" onClick={event=>event.stopPropagation()}>
               {!slide.translation ? <button type="button" disabled={!canEdit} onClick={()=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{language:'Deutsch',text:''}}:page)}:entry)})}>ÜBERSETZUNG HINZUFÜGEN</button> : <>
+                <button type="button" disabled={!canEdit||Boolean(translationBusy)} onClick={async()=>{try{setTranslationBusy('Lokale Übersetzung startet …');const text=await localTranslate(slide.body,'en','de',setTranslationBusy);commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{language:'Deutsch (maschinell)',text}}:page)}:entry)})}catch(error){window.alert(`Lokale Übersetzung nicht verfügbar: ${error instanceof Error?error.message:String(error)}`)}finally{setTranslationBusy('')}}}>{slide.translation.text?'NEU ÜBERSETZEN':'AUTOMATISCH ÜBERSETZEN'}</button>
+                {translationBusy&&<small role="status">{translationBusy}</small>}
                 <label>Sprache der Übersetzung<input disabled={!canEdit} aria-label="Sprache der Übersetzung" value={slide.translation.language} onChange={event=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{...slide.translation!,language:event.target.value}}:page)}:entry)})}/></label>
                 <textarea disabled={!canEdit} aria-label={`Übersetzung · ${section.label}`} placeholder="Hier die deutsche Übersetzung eingeben …" value={slide.translation.text} rows={Math.max(3,slide.translation.text.split('\n').length)} onChange={event=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{...slide.translation!,text:event.target.value}}:page)}:entry)})}/>
                 <small>Darstellung: Einstellungen → Präsentation → Song. Wiederholungen dieses Abschnitts verwenden dieselbe Übersetzung.</small>
@@ -964,6 +969,7 @@ function ContentEditor({
           value={slide.body}
           onChange={(event) => state.updateSlide({ body: event.target.value })}
         />
+        <PersonalNotesPanel noteKey={{userId:state.historyUserId||'local',presentationId:state.presentationId||'local',slideId:slide.id}} label="Meine Notiz zu dieser Folie" />
         {extras.length > 0 && (
           <section className="additional-elements">
             <header>
@@ -3129,6 +3135,7 @@ export function ProductionWorkspace({
   return (
     <section className="production-workspace">
       <div className="context-editor">
+        <PersonalNotesPanel noteKey={{userId:state.historyUserId||'local',presentationId:state.presentationId||'local'}} label="Meine Präsentationsnotiz" />
         {item.type === "song" ? (
           <SongEditor item={item} canEdit={canEdit} />
         ) : item.type === "liveQuiz" ? (

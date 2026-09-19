@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.40.0
+
+Version 0.40.0 erweitert den Song-Editor um eine lokale automatische Übersetzung zwischen Englisch und Deutsch. Beim ersten Einsatz wird das benötigte Modell geladen; danach läuft die Übersetzung auf dem Gerät ohne API-Schlüssel. Akkorde und Leerzeilen bleiben erhalten, der Entwurf kann vor dem Speichern korrigiert werden und ein Fehler verändert weder Originaltext noch MAIN.
+
+Persönliche Notizen können jetzt sowohl zur gesamten Präsentation als auch zu einer einzelnen Folie geführt werden. Sie sind gerätelokal, kontogetrennt und ausdrücklich nicht Teil der Cloud-Präsentation oder einer Ausgabe. Das Musikmenü unterstützt zusätzlich eine Online-Suche nach HTTPS-Radiosendern mit direkter Vorschau und Übernahme in das Hintergrundaudio.
+
+Die neue, standardmäßig ausgeschaltete Einstellung für Gemeinwohl-Hinweise bereitet trackingfreie Inhalte offizieller Stellen für Vor- und Nachprogramm vor. Nutzer steuern nur Einsatzbereich, Abstand, Dauer und QR-Code; die Inhalte selbst sind nicht editierbar.
+
+Für den Livebetrieb wurden Loop-Kerninhalte geschützt und vom Ebenenpanel getrennt. MAIN erhält beim Schalten einen unveränderlichen Snapshot, sodass Editoränderungen nicht versehentlich sofort live erscheinen. Zusätzlich wurden Überlagerungen in der Windows-Kopfzeile, die Beschriftung des Equalizers sowie responsive Abstände und Zahlenfelder korrigiert.
+
+---
+
 # GottesdienstRegie 0.39.0
 
 ## Songübersetzungen mit sechs Anzeigearten

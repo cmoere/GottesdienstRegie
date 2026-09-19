@@ -1,0 +1,3 @@
+export interface RadioStation{id:string;name:string;streamUrl:string;country:string;language:string;tags:string[];codec:string;bitrate:number}
+export function normalizeRadioStation(value:Record<string,unknown>):RadioStation|null{try{const streamUrl=String(value.url_resolved??value.url??''),url=new URL(streamUrl);if(url.protocol!=='https:'||Number(value.lastcheckok??1)!==1)return null;const id=String(value.stationuuid??'').trim(),name=String(value.name??'').trim();if(!id||!name)return null;return{id,name,streamUrl:url.toString(),country:String(value.country??''),language:String(value.language??''),tags:String(value.tags??'').split(',').map(x=>x.trim()).filter(Boolean),codec:String(value.codec??''),bitrate:Math.max(0,Number(value.bitrate??0)||0)}}catch{return null}}
+
