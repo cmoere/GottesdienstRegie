@@ -7,6 +7,7 @@ export class TranslationPackService{
   private listeners=new Set<(value:TranslationPackProgress)=>void>();private controllers=new Map<string,AbortController>();
   constructor(private root:string,private downloader:PackDownloader,private catalog:TranslationPackDescriptor[]=[]){ }
   onProgress(listener:(value:TranslationPackProgress)=>void){this.listeners.add(listener);return()=>this.listeners.delete(listener)}
+  activeDownloadCount(){return this.controllers.size}
   private emit(value:TranslationPackProgress){for(const listener of this.listeners)listener(value)}
   private async ready(item:TranslationPackDescriptor){try{const manifest=JSON.parse(await fs.readFile(path.join(this.root,item.key,item.revision,'manifest.json'),'utf8'));return manifest.key===item.key&&Array.isArray(manifest.files)&&manifest.files.length>0}catch{return false}}
   async list(){return Promise.all(this.catalog.map(async item=>({...item,status:await this.ready(item)?'ready':'not-downloaded'} as TranslationPackDescriptor)))}

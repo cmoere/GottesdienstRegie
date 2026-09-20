@@ -50,6 +50,7 @@ import { SlideRenderer } from "./SlideRenderer";
 import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopController, WEATHER_SCREEN_URL, type LoopItemType } from "./loopDomain";
 import { consumeInsertionGuard, createLoopItem } from "./loopItemFactory";
 import { EventLinkStatus } from "./EventLinkStatus";
+import { StorageSettings } from "./StorageSettings";
 import { canInsertItemType, menuItemTypesForSection } from "./itemPlacementPolicy";
 import { PersonalNotesPanel } from "./PersonalNotesPanel";
 import { prepareStandardTranslationPacks } from "./translationPackManager";
@@ -6326,6 +6327,7 @@ function SettingsModal({
                 <TranslationPackSettings />
               </section>}
               {tab === "general" && (
+                <>
                 <section className="settings-group window-start-settings">
                   <h4>FENSTER &amp; START</h4>
                   <label><input type="checkbox" checked={operatorPrefs.preventDisplaySleep!==false} onChange={event=>void setOperatorPreference({preventDisplaySleep:event.target.checked})}/> Bildschirmschoner und automatisches Ausschalten des Bildschirms verhindern</label>
@@ -6370,6 +6372,8 @@ function SettingsModal({
                     bleiben dabei unverändert.
                   </p>
                 </section>
+                <StorageSettings />
+                </>
               )}
               {tab === "updates" && (
                 <section className="update-product-details">

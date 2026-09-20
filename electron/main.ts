@@ -16,6 +16,7 @@ import { AppPreferences, type AppPreferencesData } from './AppPreferences';
 import { RemoteServer } from './RemoteServer';
 import {TranslationPackService,type TranslationPackDescriptor} from './TranslationPackService';
 import {platformAppearance} from './platformAppearance';
+import {StorageMaintenanceService,isStorageCategory,type StorageCategory} from './StorageMaintenanceService';
 
 import {DisplaySleepProtection} from './DisplaySleepProtection';
 const displaySleepProtection=new DisplaySleepProtection(powerSaveBlocker);
@@ -170,6 +171,14 @@ app.whenReady().then(async() => {
   const legacyPresentationFile=path.join(app.getPath('userData'),'presentations','default-presentation.json');
   const presentationRepository=new PresentationRepository(path.join(app.getPath('userData'),'library'));
   const mediaRepository=new MediaRepository(path.join(app.getPath('userData'),'media-library'));
+  const storageMaintenance=new StorageMaintenanceService({
+    'translation-packs':path.join(app.getPath('userData'),'translation-packs'),
+    'transformers-cache':path.join(app.getPath('userData'),'transformers-cache'),
+    'media-cache':path.join(app.getPath('userData'),'media-cache'),
+    thumbnails:path.join(app.getPath('userData'),'thumbnails'),
+    'temporary-downloads':path.join(app.getPath('userData'),'temporary-downloads'),
+    'web-cache':path.join(app.getPath('sessionData'),'Cache'),
+  });
   const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>controlWindow?.webContents.send('remote:command',payload));
   await remoteServer.start().catch(()=>null);
   const onlineMedia=new GitHubStorageProvider('cmoere','GottesdienstRegie','media-library');
@@ -337,6 +346,13 @@ app.whenReady().then(async() => {
   ipcMain.handle('translation-packs:download',(_event,key:string)=>translationPacks.download(key));
   ipcMain.handle('translation-packs:cancel',(_event,key:string)=>translationPacks.cancel(key));
   ipcMain.handle('translation-packs:remove',(_event,key:string)=>translationPacks.remove(key));
+  ipcMain.handle('storage:snapshot',()=>storageMaintenance.snapshot());
+  ipcMain.handle('storage:clear',(_event,categories:string[])=>{
+    if(outputManager.isActive())throw new Error('STORAGE_CLEAR_ON_AIR');
+    if(translationPacks.activeDownloadCount()>0)throw new Error('STORAGE_CLEAR_DOWNLOAD_ACTIVE');
+    if(!Array.isArray(categories)||categories.some(category=>!isStorageCategory(category)))throw new Error('UNKNOWN_STORAGE_CATEGORY');
+    return storageMaintenance.clear(categories as StorageCategory[]);
+  });
   ipcMain.handle('media:list',()=>mediaRepository.list());
   ipcMain.handle('media:import',async(event,kind?:'audio'|'video')=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,audio=kind==='audio',video=kind==='video',filter=audio?{name:'Unterstütztes Audio',extensions:['mp3','m4a','aac','wav','flac','ogg']}:video?{name:'Unterstützte Videos',extensions:['mp4','mov','webm','m4v']}:{name:'Medien',extensions:['png','jpg','jpeg','webp','gif','svg','mp4','mov','webm','m4v','mp3','wav','m4a','aac','ogg','flac','pdf']};const picked=await dialog.showOpenDialog(owner,{title:audio?'Audio zum Hochladen auswählen':video?'Video auswählen':'Medien zum Hochladen auswählen',properties:video?['openFile']:['openFile','multiSelections'],filters:[filter]});if(picked.canceled)return[];return mediaRepository.import(picked.filePaths)});
   ipcMain.handle('media:update',async(_event,id:string,patch:any)=>{try{return await mediaRepository.update(id,patch)}catch(error){if(!String(error).includes('MEDIA_NOT_FOUND'))throw error;const remote=(await onlineMedia.list()).find(item=>item.id===id);if(!remote)throw error;return mediaRepository.upsertRemote(remote,patch)}});

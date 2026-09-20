@@ -10,3 +10,4 @@
 .event-link-status.cancelled,.event-link-status.missing{border-color:#b66969}.event-link-status.cancelled small,.event-link-status.missing small{color:#a83f3f}
 .event-link-change{font-size:9px;font-weight:750;letter-spacing:.06em;color:var(--accent)}
 @media(max-width:360px){.event-link-status{grid-template-columns:20px minmax(0,1fr)}.event-link-change{grid-column:2}}
+.storage-settings{margin-top:16px}.storage-category{display:grid!important;grid-template-columns:20px minmax(0,1fr);align-items:start;gap:8px;padding:8px;border-bottom:1px solid var(--border)}.storage-category span{display:grid;gap:2px}.storage-category small{color:var(--muted)}.storage-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:12px}.storage-actions button{padding:8px 10px}.storage-actions .danger-button{background:#7f2e34;color:#fff}

@@ -149,6 +149,10 @@ contextBridge.exposeInMainWorld("desktop", {
     remove:(key:string)=>ipcRenderer.invoke('translation-packs:remove',key),
     onProgress:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('translation-packs:progress',listener);return()=>ipcRenderer.removeListener('translation-packs:progress',listener)},
   },
+  storage:{
+    snapshot:()=>ipcRenderer.invoke('storage:snapshot'),
+    clear:(categories:string[])=>ipcRenderer.invoke('storage:clear',categories),
+  },
   mediaWindow: {
     open: (
       context: "manage" | "select",
