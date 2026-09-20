@@ -23,9 +23,20 @@
     {
       "line": "0.43",
       "builds": [{
-        "version": "0.43.0",
+        "version": "0.43.1",
         "releaseDate": "2026-09-20",
         "current": true,
+        "overview": {"label":{"de":"Korrekte Flaggen und lesbare Sprachauswahl","en":"Correct flags and readable language picker"},"text":{"de":"Version 0.43.1 behebt eine CSS-Kollision zwischen dem großen Sprachschalter der Anmeldung und den kompakten SVG-Sprachsymbolen im Song-Übersetzer. Flaggen behalten nun zuverlässig ihre vorgesehene Größe, Text, Eigenbezeichnung und Downloadstatus liegen in getrennten Rasterspalten und überdecken sich nicht mehr.","en":"Version 0.43.1 fixes a CSS class collision between the large login language control and compact SVG symbols in the song translator. Flags now keep their intended size while labels, native names and download state remain in separate grid columns."}},
+        "sections": {
+          "new": [],
+          "improved": [{"label":{"de":"Eigener, kollisionsfreier SVG-Selektor","en":"Dedicated collision-free SVG selector"},"text":{"de":"Die Flaggenkomponente verwendet einen ausschließlich für Übersetzungssprachen bestimmten Klassennamen. Feste Maße von 24 × 16 Pixeln, neutrales Schattenverhalten und eine stabile erste Rasterspalte verhindern, dass globale Login-Regeln die Auswahlliste verändern.","en":"Translation flags now use a dedicated class with fixed 24 × 16 pixel dimensions, neutral shadow behavior and a stable grid column."}}],
+          "fixed": [{"label":{"de":"Überlappung in der Sprachsuche","en":"Language search overlap"},"text":{"de":"In der geöffneten Sprachsuche lagen Flagge, Sprachname und Eigenbezeichnung teilweise übereinander, weil eine später geladene globale Regel das SVG auf 46 × 38 Pixel vergrößerte. Die Klassennamen-Kollision ist entfernt und durch eine automatische Regressionsprüfung abgesichert.","en":"Flags, language labels and native names no longer overlap. A later global rule had enlarged the SVG to 46 × 38 pixels; the class collision is removed and covered by an automated regression check."}}],
+          "known": []
+        }
+      },{
+        "version": "0.43.0",
+        "releaseDate": "2026-09-20",
+        "current": false,
         "overview": {"label":{"de":"Sichere Speicherpflege, verlässliche Sprachpakete und klare Verknüpfungen","en":"Safe storage maintenance, reliable language packs and clear event links"},"text":{"de":"Version 0.43.0 erweitert die Nutzungsbedingungen zu einer gemeinsamen Langfassung für App, Installer und eine eigenständige Online-Seite. Loop-Elemente werden zuverlässig genau einmal eingefügt, Veranstaltungsverknüpfungen zeigen ihren Zustand verständlich, und die neue Speicherpflege räumt ausschließlich freigegebene Cache-Bereiche auf. Übersetzungsmodelle werden gestreamt, geprüft und nur nach einem bewussten Klick geladen; lokale SVG-Sprachsymbole ersetzen sämtliche Emoji-Flaggen.","en":"Version 0.43.0 introduces one long-form terms source for the app, installer and a dedicated online page. Loop items are inserted exactly once, event links expose their state clearly, and storage maintenance only clears approved cache areas. Translation models are streamed, validated and downloaded only after an explicit action; local SVG language symbols replace emoji flags."}},
         "sections": {
           "new": [

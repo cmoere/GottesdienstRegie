@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.43.1
+
+Version 0.43.1 behebt die überlappende Darstellung in der Sprachauswahl des Song-Übersetzers. Das kompakte SVG-Sprachsymbol hatte denselben globalen CSS-Klassennamen wie der große Sprachschalter auf dem Anmeldebildschirm. Da die Login-Regel später geladen wird, wurde die Flagge von den vorgesehenen 24 × 16 Pixeln auf 46 × 38 Pixel vergrößert, während die erste Rasterspalte weiterhin nur 28 Pixel breit war. Dadurch lagen Flagge, Sprachname und Eigenbezeichnung übereinander.
+
+Die Übersetzungsflaggen verwenden nun einen eigenen, ausschließlich für diese Komponente bestimmten Klassennamen. Größe, Schatten, Mauszeiger und Rasterbreite sind damit unabhängig von der Anmeldeseite. Sprachname, Eigenbezeichnung sowie Download- oder Bereitschaftsstatus bleiben wieder vollständig lesbar. Eine automatische Layoutprüfung verhindert, dass der kollidierende Klassenname später erneut eingesetzt wird.
+
+---
+
 # GottesdienstRegie 0.43.0
 
 Version 0.43.0 macht mehrere vorbereitete Funktionen belastbar für den täglichen Einsatz. Die Nutzungsbedingungen wurden zu einer deutlich ausführlicheren gemeinsamen Fassung erweitert. Anwendung, Windows-Installer und die eigenständige öffentliche Seite `https://cmoere.github.io/GottesdienstRegie/terms/` werden aus derselben strukturierten Quelle erzeugt. Die Online-Bedingungen liegen bewusst nicht auf derselben Seite wie die Versionshinweise. Themen wie Konten, Live-Verantwortung, Medienrechte, Cloud-Synchronisierung, lokale Speicherung, Übersetzungsmodelle, Updates, Verfügbarkeit, Haftung, Beendigung und Kontakt sind nun nachvollziehbar gegliedert.
