@@ -11,3 +11,5 @@
 .event-link-change{font-size:9px;font-weight:750;letter-spacing:.06em;color:var(--accent)}
 @media(max-width:360px){.event-link-status{grid-template-columns:20px minmax(0,1fr)}.event-link-change{grid-column:2}}
 .storage-settings{margin-top:16px}.storage-category{display:grid!important;grid-template-columns:20px minmax(0,1fr);align-items:start;gap:8px;padding:8px;border-bottom:1px solid var(--border)}.storage-category span{display:grid;gap:2px}.storage-category small{color:var(--muted)}.storage-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:12px}.storage-actions button{padding:8px 10px}.storage-actions .danger-button{background:#7f2e34;color:#fff}
+.language-flag{width:24px;height:16px;display:block;object-fit:cover;border:1px solid rgba(40,65,74,.25);border-radius:2px}.language-picker>button{display:flex;align-items:center;gap:6px}.language-picker-popover button{grid-template-columns:28px minmax(0,1fr) auto!important}
+.pack-language-pair{display:grid!important;grid-template-columns:24px auto 24px;align-items:center;gap:5px}.pack-language-pair small{grid-column:1/-1}
