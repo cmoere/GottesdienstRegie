@@ -49,6 +49,7 @@ import {
 import { SlideRenderer } from "./SlideRenderer";
 import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopController, WEATHER_SCREEN_URL, type LoopItemType } from "./loopDomain";
 import { consumeInsertionGuard, createLoopItem } from "./loopItemFactory";
+import { EventLinkStatus } from "./EventLinkStatus";
 import { canInsertItemType, menuItemTypesForSection } from "./itemPlacementPolicy";
 import { PersonalNotesPanel } from "./PersonalNotesPanel";
 import { prepareStandardTranslationPacks } from "./translationPackManager";
@@ -2452,6 +2453,8 @@ function formatServiceTime(value: string) {
 function PresentationEventHeader() {
   const state = usePresentation(),
     root = useRef<HTMLElement>(null),
+    eventTrigger = useRef<HTMLButtonElement>(null),
+    eventPickerWasOpen = useRef(false),
     [editing, setEditing] = useState(false),
     [draft, setDraft] = useState(state.title),
     [open, setOpen] = useState(false),
@@ -2498,6 +2501,8 @@ function PresentationEventHeader() {
       eventLink: {
         eventKey: pending.eventKey,
         titleSnapshot: pending.titel,
+        dateSnapshot: pending.start_datum,
+        timeSnapshot: pending.start_uhrzeit,
         linkedAt: new Date().toISOString(),
       },
       date: pending.start_datum,
@@ -2521,6 +2526,10 @@ function PresentationEventHeader() {
       removeEventListener("pointerdown", close);
       removeEventListener("keydown", escape);
     };
+  }, [open]);
+  useEffect(() => {
+    if (eventPickerWasOpen.current && !open) eventTrigger.current?.focus();
+    eventPickerWasOpen.current = open;
   }, [open]);
   const todayDate = new Date(),
     today = todayDate.toLocaleDateString("sv-SE"),
@@ -2550,10 +2559,7 @@ function PresentationEventHeader() {
         : event.start_datum === tomorrowKey
           ? "MORGEN"
           : "KOMMEND";
-  const delay = linked
-      ? minutesBetween(linked.start_uhrzeit, state.serviceTime)
-      : 0,
-    format = (event: ChurchEvent) =>
+  const format = (event: ChurchEvent) =>
       new Intl.DateTimeFormat("de-DE", {
         weekday: "short",
         day: "2-digit",
@@ -2593,26 +2599,7 @@ function PresentationEventHeader() {
       )}
       <PersonalNotesPanel noteKey={{userId:state.historyUserId||'local',presentationId:state.presentationId||'local'}} label="Präsentationsnotizen" presentation />
       <div className="event-link-row">
-        <button
-          className={`event-link-button ${isCancelled(linked) ? "cancelled" : ""}`}
-          title={
-            linked
-              ? `Planmäßig: ${linked.start_uhrzeit} Uhr\nAktuell: ${state.serviceTime} Uhr${isCancelled(linked) ? "\nDiese Veranstaltung fällt aus." : ""}`
-              : "Bitte eine Veranstaltung verknüpfen"
-          }
-          onClick={() => (open ? setOpen(false) : showPicker())}
-        >
-          <Icon name={isCancelled(linked) ? "warning" : "calendar_month"} />
-          <span>
-            {linked?.titel ?? "Veranstaltung verknüpfen"}
-            {linked && ` · ${state.serviceTime} Uhr`}
-            {delay !== 0 && ` · ${delay > 0 ? "+" : ""}${delay} Min.`}
-            {isCancelled(linked) && (
-              <b className="event-cancelled-label">Fällt aus!</b>
-            )}
-          </span>
-          <Icon name="arrow_drop_down" />
-        </button>
+        <EventLinkStatus buttonRef={eventTrigger} link={state.eventLink} event={linked} onClick={() => (open ? setOpen(false) : showPicker())} />
         <button
           className="event-help-button help-dot"
           title="Hilfe: Veranstaltungsverknüpfung"

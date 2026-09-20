@@ -29,7 +29,7 @@ export type ChangeAction='ERSTELLT'|'BEARBEITET'|'VERSCHOBEN'|'DUPLIZIERT'|'GELÃ
 export type HistorySyncStatus='LOCAL'|'PENDING'|'SYNCED'|'ERROR';
 export interface EditHistoryEntry{id:string;presentationId:string;revisionId:string;timestamp:string;actor:string;userId:string;userDisplayName:string;deviceId?:string;deviceNameSnapshot?:string;action:string;actionType:ChangeAction;category:ChangeCategory;entityType:string;entityId:string;entityTitle:string;before?:unknown;after?:unknown;source:'desktop'|'ai'|'import'|'remote'|'automation'|'system';transactionId:string;syncStatus:HistorySyncStatus}
 export interface RestorePoint{id:string;name:string;createdAt:string;createdBy:string;snapshot:Snapshot}
-export interface EventLink{eventKey:string;titleSnapshot?:string;linkedAt?:string}
+export interface EventLink{eventKey:string;titleSnapshot?:string;dateSnapshot?:string;timeSnapshot?:string;linkedAt?:string}
 export interface Snapshot{lyricScrolling?:LyricScrollingSettings;items:ServiceItem[];sections:ServiceSection[];selectedItemId:string;selectedSlideId:string;title:string;date:string;eventId:string;eventLink?:EventLink;serviceTime:string}
 export interface PresentationDocument{lyricScrolling?:LyricScrollingSettings;presentationId:string;title:string;date:string;createdAt:string;updatedAt:string;archived?:boolean;trashed?:boolean;eventId?:string;eventLink?:EventLink;templateId?:string;serviceTime?:string;serviceTimes?:string[];createdBy?:string;editHistory?:EditHistoryEntry[];restorePoints?:RestorePoint[];transitionDefault?:SlideTransition;sections:ServiceSection[];items:ServiceItem[];selectedItemId?:string;selectedSlideId?:string;previewItemId?:string;previewSlideId?:string}
 interface State{

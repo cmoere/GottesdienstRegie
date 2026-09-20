@@ -1,5 +1,5 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),ts=require('typescript'),Module=require('node:module');
-const cache=new Map();function load(relative){const file=path.resolve(relative);if(cache.has(file))return cache.get(file).exports;const mod=new Module(file,module);mod.paths=Module._nodeModulePaths(path.dirname(file));cache.set(file,mod);const original=mod.require.bind(mod);mod.require=id=>id.startsWith('.')?load(path.resolve(path.dirname(file),id.endsWith('.ts')?id:`${id}.ts`)):original(id);mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,file);return mod.exports}
+const cache=new Map();function load(relative){const file=path.resolve(relative);if(cache.has(file))return cache.get(file).exports;const mod=new Module(file,module);mod.paths=Module._nodeModulePaths(path.dirname(file));cache.set(file,mod);const original=mod.require.bind(mod);mod.require=id=>id.startsWith('.')?load(path.resolve(path.dirname(file),/\.(ts|tsx)$/.test(id)?id:`${id}.ts`)):original(id);mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);return mod.exports}
 const terms=load('src/termsContent.ts');
 assert.ok(terms.TERMS_VERSION);assert.ok(terms.TERMS_EFFECTIVE_DATE);assert.ok(terms.termsSections.length>=15);
 for(const topic of['Haftung','Medien','Cloud','Übersetzung','Kündigung'])assert.ok(terms.plainTerms().includes(topic),topic);
@@ -15,4 +15,11 @@ loop.resetInsertionGuards();
 assert.equal(loop.consumeInsertionGuard('pre:weather',1000),true);
 assert.equal(loop.consumeInsertionGuard('pre:weather',1200),false);
 assert.equal(loop.consumeInsertionGuard('pre:weather',1500),true);
+const eventStatus=load('src/EventLinkStatus.tsx');
+const now=new Date('2026-09-20T10:00:00+02:00');
+assert.equal(eventStatus.eventLinkViewModel(undefined,[],now).state,'unlinked');
+const snapshot={eventKey:'evt-1',titleSnapshot:'Gottesdienst',dateSnapshot:'2026-09-21',timeSnapshot:'10:30'};
+let eventVm=eventStatus.eventLinkViewModel(snapshot,[{eventKey:'evt-1',titel:'Geändert',start_datum:'2026-09-21',start_uhrzeit:'11:00',cancelled:true}],now);
+assert.equal(eventVm.state,'cancelled');assert.equal(eventVm.plannedTime,'10:30');assert.ok(eventVm.warning);
+eventVm=eventStatus.eventLinkViewModel(snapshot,[],now);assert.equal(eventVm.state,'missing');assert.equal(eventVm.plannedDate,'2026-09-21');
 console.log('Version 0.43 checks passed.');

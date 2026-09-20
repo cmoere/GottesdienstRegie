@@ -2,3 +2,11 @@
 .app:not(.output-app){font-size:calc(1rem * var(--operator-scale,1))}
 :root[data-liquid-glass="true"] .app:not(.output-app) :is(.topbar,.sidebar,.popover){background:color-mix(in srgb,var(--panel) 78%,transparent);backdrop-filter:blur(22px) saturate(1.3)}
 .app[data-reduced-transparency="true"] :is(.topbar,.sidebar,.popover){backdrop-filter:none;background:var(--panel)}
+.event-link-status{width:100%;min-width:0;display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:8px;padding:7px 8px;border:1px solid var(--border);border-radius:4px;background:var(--panel2);color:var(--text);text-align:left}
+.event-link-status:hover{border-color:var(--accent);background:var(--hover)}
+.event-link-status-copy{min-width:0;display:grid;gap:2px}
+.event-link-status-copy strong,.event-link-status-copy small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.event-link-status-copy strong{font-size:11px}.event-link-status-copy small{font-size:9px;color:var(--muted)}
+.event-link-status.cancelled,.event-link-status.missing{border-color:#b66969}.event-link-status.cancelled small,.event-link-status.missing small{color:#a83f3f}
+.event-link-change{font-size:9px;font-weight:750;letter-spacing:.06em;color:var(--accent)}
+@media(max-width:360px){.event-link-status{grid-template-columns:20px minmax(0,1fr)}.event-link-change{grid-column:2}}
