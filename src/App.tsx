@@ -47,7 +47,8 @@ import {
   type TransitionType,
 } from "./store";
 import { SlideRenderer } from "./SlideRenderer";
-import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopController, WEATHER_SCREEN_DURATION_MS, WEATHER_SCREEN_URL, type LoopItemType } from "./loopDomain";
+import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopController, WEATHER_SCREEN_URL, type LoopItemType } from "./loopDomain";
+import { consumeInsertionGuard, createLoopItem } from "./loopItemFactory";
 import { canInsertItemType, menuItemTypesForSection } from "./itemPlacementPolicy";
 import { PersonalNotesPanel } from "./PersonalNotesPanel";
 import { prepareStandardTranslationPacks } from "./translationPackManager";
@@ -2055,6 +2056,17 @@ function AddPopover({
   }
   function addLoopElement(option: (typeof loopOptions)[number]) {
     if (!loopAvailable || !isLoopItemType(String(option.type))) return;
+    const type = option.type as LoopItemType;
+    let body = "";
+    let url = "";
+    if (type === "loopQr") {
+      url = prompt("URL für QR-Code", "https://") ?? "";
+      if (!url) return;
+    } else if (type === "bibleVerse") {
+      body = prompt("Bibelvers", "Johannes 3,16") ?? "";
+      if (!body) return;
+    }
+    if (!consumeInsertionGuard(`${sectionId}:${type}`)) return;
     // Adding from a dedicated pre-/post-program button is an explicit request
     // to enable loop content for that section, even when it was empty before.
     if (!sectionCanHostLoop && sectionIsLoopTarget) {
@@ -2063,34 +2075,13 @@ function AddPopover({
         ...(sectionId === "pre" ? { autoLoop: true } : {}),
       });
     }
-    const type = option.type as LoopItemType;
-    let body = "";
-    const metadata: Record<string, string | number | boolean> = { source: type === "announcement" || type === "birthday" || type === "event" ? "firebase" : "local" };
-    if (type === "weather") {
-      metadata.weatherScreenUrl = WEATHER_SCREEN_URL;
-      metadata.weatherDurationMs = WEATHER_SCREEN_DURATION_MS;
-      body = "Wetterscreen · empfohlen: 20 Sekunden";
-    } else if (type === "loopQr") {
-      const url = prompt("URL für QR-Code", "https://");
-      if (!url) return;
-      metadata.url = url;
-      body = url;
-    } else if (type === "loopQuiz") {
-      body = "Frage\n\nA  Antwort 1\nB  Antwort 2\nC  Antwort 3";
-      metadata.questionDurationMs = 8_000;
-    } else if (type === "clock") {
-      metadata.format = "HH:mm:ss";
-      body = "Aktuelle Uhrzeit";
-    } else if (type === "bibleVerse") {
-      body = prompt("Bibelvers", "Johannes 3,16") ?? "";
-      if (!body) return;
-    }
-    state.addItem(type, { title: option.title, section: "", sectionId, body, metadata });
+    const draft = createLoopItem(type, sectionId, Date.now(), { body, url });
+    state.addItem(type, { title: draft.title, section: "", sectionId, body: draft.body, metadata: draft.metadata });
     const current = usePresentation.getState();
     current.addElement("loop");
     const latest = usePresentation.getState();
     const loopElement = latest.items.flatMap((entry) => entry.slides).find((slide) => slide.id === latest.selectedSlideId)?.elements.at(-1);
-    if (loopElement) latest.updateElement(loopElement.id, { x: 0, y: 0, width: 1920, height: 1080, properties: { ...loopElement.properties, loopType: type, title: option.title, text: body, durationMs: type === "weather" ? WEATHER_SCREEN_DURATION_MS : 15000, background: "#ffffff", color: "#000000" } });
+    if (loopElement) latest.updateElement(loopElement.id, { x: 0, y: 0, width: 1920, height: 1080, properties: { ...loopElement.properties, loopType: type, title: draft.title, text: draft.body, durationMs: draft.durationMs, background: "#ffffff", color: "#000000" } });
     close();
   }
   function addOption(option: (typeof options)[number]) {

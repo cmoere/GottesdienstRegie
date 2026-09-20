@@ -914,8 +914,13 @@
 }
 
 /* Dynamic loop elements */
-.add-popover-loop-group { border-top: 1px solid rgba(90, 120, 130, .24); margin-top: 6px; padding-top: 6px; }
-.add-popover-loop-group > strong { display: block; padding: 6px 12px 4px; font-size: 10px; letter-spacing: .08em; color: #55717d; }
+.add-content-popover { width:min(360px,calc(100vw - 24px)); }
+.add-popover-loop-group { border-top: 1px solid rgba(90, 120, 130, .24); margin-top: 6px; padding: 6px 8px 8px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:5px; }
+.add-popover-loop-group > strong { grid-column:1/-1; display: block; padding: 6px 4px 4px; font-size: 10px; letter-spacing: .08em; color: #55717d; }
+.add-popover-loop-group > button { min-width:0; min-height:36px; display:grid; grid-template-columns:22px minmax(0,1fr); align-items:center; gap:6px; padding:6px 8px; text-align:left; border:1px solid transparent; }
+.add-popover-loop-group > button:hover { border-color:rgba(71,139,151,.45); background:rgba(104,170,181,.12); }
+.add-popover-loop-group > button span:last-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+@media (max-width: 420px) { .add-popover-loop-group { grid-template-columns:1fr; } .add-popover-loop-group > strong { grid-column:1; } }
 .section-loop-toggle { margin-left: 6px; border: 1px solid #6ba6b0; background: transparent; color: #3c7782; border-radius: 10px; padding: 2px 6px; font-size: 9px; letter-spacing: .04em; }
 .section-loop-toggle.active { background: #d8f0f0; color: #125a65; }
 .loop-item-fields { border-top: 1px solid rgba(90, 120, 130, .2); margin-top: 12px; padding-top: 10px; }
