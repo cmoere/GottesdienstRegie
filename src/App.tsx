@@ -4,6 +4,7 @@ import './version41.css';
 import './version42.css';
 import {operatorScaleFactor} from './operatorAccessibility';
 import {TranslationPackSettings} from './TranslationPackSettings';
+import {TERMS_EFFECTIVE_DATE,TERMS_VERSION,termsSections} from './termsContent';
 import {translationModes, type SongTranslationMode} from './songTranslation';
 import { LyricScrollingSettings } from './LyricScrollingSettings';
 import { WindowControls } from './WindowControls';
@@ -970,17 +971,8 @@ function TermsModal({ close }: { close: () => void }) {
     <div className="modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && close()}>
       <section className="terms-dialog" role="dialog" aria-modal="true" aria-labelledby="terms-title">
         <header><div><small>GOTTESDIENSTREGIE</small><h2 id="terms-title">Nutzungsbedingungen</h2></div><button type="button" onClick={close} aria-label="Schließen"><Icon name="close" /></button></header>
-        <div className="terms-body">
-          <p><b>Gültig für GottesdienstRegie der Philippus Gemeinde Bielefeld e. V.</b></p>
-          <h3>1. Zweck und Verantwortlichkeit</h3><p>GottesdienstRegie unterstützt die Vorbereitung und Durchführung von Präsentationen. Nutzerinnen und Nutzer prüfen Inhalte, Rechte, Termine und Ausgabegeräte vor dem Gottesdienst selbst.</p>
-          <h3>2. Livebetrieb</h3><p>ON AIR, MAIN, STAGE, LIVESTREAM, Audio und Recording haben Vorrang. Der Testbetrieb darf nur bewusst gestartet werden und ersetzt keine Probe oder Geräteprüfung.</p>
-          <h3>3. Inhalte und Rechte</h3><p>Es dürfen nur Texte, Bilder, Videos, Musik und Schriften verwendet werden, für die die Gemeinde die erforderlichen Rechte besitzt. Externe Quellen bleiben an deren Bedingungen gebunden.</p>
-          <h3>4. Daten und Cloud</h3><p>Präsentationen, Änderungsverläufe und Geräteeinstellungen können lokal und abhängig von der Konfiguration synchronisiert gespeichert werden. Zugangsdaten dürfen nicht weitergegeben werden; auf gemeinsam genutzten PCs ist abzumelden.</p>
-          <h3>5. Sorgfalt und Meldungen</h3><p>Fehler, Sicherheitsprobleme und unklare Livezustände sind sofort zu melden. Rechte dürfen nicht umgangen und fremde Konten nicht genutzt werden.</p>
-          <h3>6. Änderungen</h3><p>Die Gemeinde kann diese Bedingungen an organisatorische oder technische Änderungen anpassen. Die jeweils angezeigte Fassung gilt ab ihrer Bestätigung.</p>
-          <p className="terms-meta">Fassung 1.0 · Stand 14.09.2026 · Keine Rechtsberatung</p>
-        </div>
-        <footer><button type="button" className="primary" onClick={close}>SCHLIESSEN</button></footer>
+        <div className="terms-body"><p><b>Version {TERMS_VERSION} · Gültig ab {TERMS_EFFECTIVE_DATE}</b></p>{termsSections.map(section=><section key={section.title}><h3>{section.title}</h3>{section.paragraphs.map(paragraph=><p key={paragraph}>{paragraph}</p>)}</section>)}</div>
+        <footer><button type="button" onClick={()=>void window.desktop?.openExternal('https://cmoere.github.io/GottesdienstRegie/terms/')}>ONLINE ÖFFNEN</button><button type="button" className="primary" onClick={close}>SCHLIESSEN</button></footer>
       </section>
     </div>
   );

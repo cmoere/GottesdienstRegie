@@ -1,23 +1,56 @@
-﻿GottesdienstRegie – Nutzungsbedingungen
-Philippus Gemeinde Bielefeld e. V.
-Fassung 1.0 · Stand 14.09.2026
+GottesdienstRegie – Nutzungsbedingungen
+Version 2.0 · Gültig ab 20. September 2026
 
-1. Zweck und Verantwortlichkeit
-GottesdienstRegie unterstützt die Vorbereitung und Durchführung von Präsentationen. Nutzerinnen und Nutzer prüfen Inhalte, Rechte, Termine und Ausgabegeräte vor dem Gottesdienst selbst.
+1. Geltungsbereich
+Diese Nutzungsbedingungen gelten für die Installation und Verwendung der Anwendung GottesdienstRegie einschließlich ihrer Desktop-, Cloud-, Medien-, Übersetzungs-, Fernsteuerungs- und Updatefunktionen. Mit Installation, Anmeldung oder Aktualisierung werden sie in ihrer jeweils angezeigten Fassung akzeptiert.
 
-2. Livebetrieb
-ON AIR, MAIN, STAGE, LIVESTREAM, Audio und Recording haben Vorrang. Der Testbetrieb darf nur bewusst gestartet werden und ersetzt keine Probe oder Geräteprüfung.
+2. Anbieter und Kontakt
+GottesdienstRegie wird als Arbeitsmittel der Philippus Gemeinde Bielefeld e. V. bereitgestellt. Fragen, Fehler- oder Sicherheitsmeldungen sind an die in der Anwendung angegebene Kontaktadresse zu richten.
 
-3. Inhalte und Rechte
-Es dürfen nur Texte, Bilder, Videos, Musik und Schriften verwendet werden, für die die Gemeinde die erforderlichen Rechte besitzt. Externe Quellen bleiben an deren Bedingungen gebunden.
+3. Nutzungsvoraussetzungen
+Die Anwendung darf nur von berechtigten Personen und im Rahmen der jeweiligen Gemeinde- oder Organisationsaufgabe genutzt werden. Minderjährige verwenden sie nur mit Zustimmung und Aufsicht einer verantwortlichen Person.
 
-4. Daten und Cloud
-Präsentationen, Änderungsverläufe und Geräteeinstellungen können lokal und abhängig von der Konfiguration synchronisiert gespeichert werden. Zugangsdaten dürfen nicht weitergegeben werden; auf gemeinsam genutzten PCs ist abzumelden.
+4. Konten und Zugangsdaten
+Zugangsdaten sind persönlich, geheim zu halten und vor Zugriff Dritter zu schützen. Auf gemeinsam genutzten Geräten ist die Sitzung nach Abschluss der Arbeit zu beenden. Verdächtige Zugriffe sind unverzüglich zu melden.
 
-5. Sorgfalt und Meldungen
-Fehler, Sicherheitsprobleme und unklare Livezustände sind sofort zu melden. Rechte dürfen nicht umgangen und fremde Konten nicht genutzt werden.
+5. Verantwortung im Livebetrieb
+Nutzer prüfen Veranstaltung, Ablauf, Inhalte, Ausgabegeräte, Audio, MAIN, STAGE, Livestream und Recording vor ON AIR selbst. Vorschau, Preflight und Testbetrieb unterstützen diese Prüfung, ersetzen aber keine verantwortliche Kontrolle.
 
-6. Änderungen
-Die Gemeinde kann diese Bedingungen an organisatorische oder technische Änderungen anpassen. Die jeweils angezeigte Fassung gilt ab ihrer Bestätigung.
+6. Inhalte und Medienrechte
+Es dürfen nur Texte, Bilder, Videos, Musik, Schriften, Bibeltexte und sonstige Medien verwendet werden, für die ausreichende Rechte oder Erlaubnisse bestehen. Die Verantwortung für Urheber-, Persönlichkeits-, Marken-, Lizenz- und Aufführungsrechte liegt bei der einstellenden Organisation.
 
-Keine Rechtsberatung.
+7. Unzulässige Nutzung
+Unzulässig sind rechtswidrige, diskriminierende, schädigende oder sicherheitsgefährdende Inhalte, die Umgehung technischer Schutzmaßnahmen sowie die Nutzung zur Störung fremder Systeme oder Veranstaltungen.
+
+8. Dienste Dritter
+Unsplash, GitHub, Firebase, Radio Browser, Übersetzungsmodelle und eingebettete Webinhalte unterliegen zusätzlich den Bedingungen ihrer jeweiligen Anbieter. Verfügbarkeit, Inhalte und Datenschutz dieser Dienste werden nicht von GottesdienstRegie kontrolliert.
+
+9. Cloud und Synchronisierung
+Präsentationen, Metadaten, Änderungshistorien und Medienreferenzen können abhängig von der Konfiguration lokal oder synchronisiert gespeichert werden. Nutzer prüfen vor kritischen Veranstaltungen, ob der erwartete Stand vollständig verfügbar ist.
+
+10. Lokale Speicherung und Cache
+Die Anwendung speichert Einstellungen, Modelle, Vorschaudaten und temporäre Dateien lokal. Das Leeren ausdrücklich ausgewiesener Cachebereiche ist endgültig; Präsentationen, gespeicherte Übersetzungen und Originalmedien dürfen davon nicht betroffen sein.
+
+11. Übersetzung und Sprachmodelle
+Automatische Übersetzungen können sachlich, sprachlich oder theologisch fehlerhaft sein. Jede Übersetzung ist vor ihrer Anzeige zu prüfen. Sprachmodelle benötigen Speicherplatz und gegebenenfalls eine Internetverbindung; gespeicherte Texte bleiben unabhängig vom Modell erhalten.
+
+12. Updates und Änderungen
+Updates dürfen Funktionen, Dateiformate, Sicherheitsanforderungen und diese Bedingungen ändern. Vor einer Aktualisierung sind laufende Ausgaben zu beenden und wichtige Präsentationen zu sichern. Wesentliche Änderungen werden mit Versionsdatum kenntlich gemacht.
+
+13. Verfügbarkeit und Datensicherung
+Eine ununterbrochene oder fehlerfreie Verfügbarkeit wird nicht zugesagt. Nutzer halten geeignete Backups und einen betrieblichen Ersatzplan für Ausfälle von Netzwerk, Cloud, Medien, Computern oder Ausgabegeräten bereit.
+
+14. Gewährleistung
+Die Anwendung wird im Rahmen der gesetzlichen Vorgaben bereitgestellt. Beschreibungen und Hilfetexte sind keine Garantie bestimmter Eigenschaften. Zwingende gesetzliche Rechte bleiben unberührt.
+
+15. Haftung
+Für Vorsatz und grobe Fahrlässigkeit sowie für Schäden aus Verletzung von Leben, Körper oder Gesundheit gilt die gesetzliche Haftung. Bei leicht fahrlässiger Verletzung wesentlicher Vertragspflichten ist die Haftung im gesetzlich zulässigen Umfang auf den vorhersehbaren typischen Schaden begrenzt. Zwingende Haftungsvorschriften bleiben unberührt.
+
+16. Verantwortung für Ansprüche Dritter
+Wer rechtswidrige oder nicht ausreichend lizenzierte Inhalte einsetzt, unterstützt die verantwortliche Organisation bei der Abwehr daraus entstehender Ansprüche und stellt die erforderlichen Informationen bereit, soweit dies gesetzlich zulässig ist.
+
+17. Beendigung und Kündigung
+Die Nutzung kann jederzeit durch Deinstallation und Abmeldung beendet werden. Zugänge können bei Sicherheitsrisiken, Rechtsverstößen oder Wegfall der Berechtigung gesperrt werden. Gesetzliche Aufbewahrungspflichten bleiben bestehen.
+
+18. Schlussbestimmungen
+Es gilt deutsches Recht, soweit zwingendes Recht nichts anderes bestimmt. Sollten einzelne Regelungen unwirksam sein, bleiben die übrigen Regelungen unberührt. Maßgeblich ist die bei Zustimmung bereitgestellte Fassung.
