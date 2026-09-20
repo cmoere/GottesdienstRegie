@@ -14,9 +14,10 @@ import { MediaRepository } from './MediaRepository';
 import { GitHubStorageProvider } from './storage/GitHubStorageProvider';
 import { AppPreferences, type AppPreferencesData } from './AppPreferences';
 import { RemoteServer } from './RemoteServer';
-import {TranslationPackService,type TranslationPackDescriptor} from './TranslationPackService';
+import {TranslationPackService} from './TranslationPackService';
 import {platformAppearance} from './platformAppearance';
 import {StorageMaintenanceService,isStorageCategory,type StorageCategory} from './StorageMaintenanceService';
+import {translationPackCatalog} from './translationPackCatalog';
 
 import {DisplaySleepProtection} from './DisplaySleepProtection';
 const displaySleepProtection=new DisplaySleepProtection(powerSaveBlocker);
@@ -152,10 +153,7 @@ function versionParts(value:string){return value.replace(/^v/,'').split('.').map
 function olderThan(candidate:string,current:string){const a=versionParts(candidate),b=versionParts(current);for(let i=0;i<Math.max(a.length,b.length);i++){if((a[i]??0)<(b[i]??0))return true;if((a[i]??0)>(b[i]??0))return false}return false}
 
 app.whenReady().then(async() => {
-  const packCodes=['de','en','fr','es','it','nl','pl','pt','uk','ru','tr','ar','da','sv','no'];
-  const packCatalog:TranslationPackDescriptor[]=[];
-  for(const code of packCodes)if(code!=='de')for(const[source,target]of[[code,'de'],['de',code]])packCatalog.push({key:`${source}-${target}`,source,target,model:`Xenova/opus-mt-${source}-${target}`,revision:'main',status:'not-downloaded'});
-  const translationPacks=new TranslationPackService(path.join(app.getPath('userData'),'translation-packs'),async(item,target,signal,progress)=>{const files=['config.json','tokenizer.json','onnx/model_quantized.onnx'];let done=0;for(const file of files){const response=await fetch(`https://huggingface.co/${item.model}/resolve/${item.revision}/${file}`,{signal});if(!response.ok)throw Error(`MODEL_DOWNLOAD_${response.status}`);const bytes=new Uint8Array(await response.arrayBuffer());const destination=path.join(target,file);await fs.mkdir(path.dirname(destination),{recursive:true});await fs.writeFile(destination,bytes);done++;progress({key:item.key,status:'downloading',downloadedBytes:done,totalBytes:files.length,percent:Math.round(done/files.length*100)})}} ,packCatalog);
+  const translationPacks=new TranslationPackService(path.join(app.getPath('userData'),'translation-packs'),async(item,target,signal,progress)=>{const files=item.requiredFiles??[];let downloadedBytes=0,knownTotal=0,totalKnown=true;for(const fileName of files){const response=await fetch(`https://huggingface.co/${item.model}/resolve/${item.revision}/${fileName}`,{signal});if(!response.ok||!response.body)throw Error(`MODEL_DOWNLOAD_${response.status}`);const length=Number(response.headers.get('content-length')??0);if(length>0)knownTotal+=length;else totalKnown=false;const destination=path.join(target,fileName);await fs.mkdir(path.dirname(destination),{recursive:true});const handle=await fs.open(destination,'w');try{const reader=response.body.getReader();for(;;){if(signal.aborted)throw Error('ABORT');const{done,value}=await reader.read();if(done)break;if(value?.byteLength){await handle.write(value);downloadedBytes+=value.byteLength;progress({key:item.key,status:'downloading',downloadedBytes,totalBytes:totalKnown?knownTotal:undefined,percent:totalKnown&&knownTotal?Math.min(99,Math.round(downloadedBytes/knownTotal*100)):0})}}}finally{await handle.close()}}},translationPackCatalog);
   translationPacks.onProgress(value=>controlWindow?.webContents.send('translation-packs:progress',value));
   Menu.setApplicationMenu(null);
   appPreferences=new AppPreferences(path.join(app.getPath('userData'),'app-preferences.json'));
