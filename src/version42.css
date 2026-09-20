@@ -1,0 +1,4 @@
+.shape-gallery-popover svg{width:30px;height:30px;fill:currentColor}
+.app:not(.output-app){font-size:calc(1rem * var(--operator-scale,1))}
+:root[data-liquid-glass="true"] .app:not(.output-app) :is(.topbar,.sidebar,.popover){background:color-mix(in srgb,var(--panel) 78%,transparent);backdrop-filter:blur(22px) saturate(1.3)}
+.app[data-reduced-transparency="true"] :is(.topbar,.sidebar,.popover){backdrop-filter:none;background:var(--panel)}

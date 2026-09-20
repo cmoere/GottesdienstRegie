@@ -33,6 +33,10 @@ export function allowedItemTypes(section: ServiceSection | null | undefined): It
     : [...standardItemTypes];
 }
 
+export function menuItemTypesForSection(section: ServiceSection): ItemType[] {
+  return sectionSupportsLoopItems(section) ? [...loopOnlyItemTypes] : [...standardItemTypes];
+}
+
 export function placementViolation(
   item: Pick<ServiceItem, 'type'> & Partial<Pick<ServiceItem, 'itemCategory' | 'placementPolicy'>>,
   section: ServiceSection | null | undefined,

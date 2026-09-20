@@ -156,6 +156,7 @@ export function MediaBrowser() {
         ? "serviceItem"
         : "section") as TargetType,
       targetId: q.get("targetId") ?? "",
+      mediaKind: q.get("mediaKind") ?? "",
     };
   }, []);
   const [context, setContext] = useState(initial.context),
@@ -167,7 +168,7 @@ export function MediaBrowser() {
     [selected, setSelected] = useState<CloudMediaAsset | null>(null),
     [audioSelection, setAudioSelection] = useState<CloudMediaAsset[]>([]),
     [query, setQuery] = useState(""),
-    [kind, setKind] = useState(initial.purpose === "audio" ? "audio" : "all"),
+    [kind, setKind] = useState<"all"|CloudMediaAsset["kind"]>(initial.purpose === "audio" ? "audio" : (["image","video","audio","pdf"].includes(initial.mediaKind)?initial.mediaKind as CloudMediaAsset["kind"]:"all")),
     [sort, setSort] = useState("newest"),
     [tab, setTab] = useState<"cloud" | "community" | "unsplash">("cloud"),
     [libraryFilter, setLibraryFilter] = useState<
@@ -860,7 +861,7 @@ export function MediaBrowser() {
         {!isAudio && (
           <select
             value={kind}
-            onChange={(event) => setKind(event.target.value)}
+            onChange={(event) => setKind(event.target.value as "all"|CloudMediaAsset["kind"])}
           >
             <option value="all">Alle Medien</option>
             <option value="image">Bilder</option>

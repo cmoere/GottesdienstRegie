@@ -2,6 +2,7 @@ import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Men
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs/promises';
+import os from 'node:os';
 import { createHash, createHmac, pbkdf2Sync, randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import { compare as bcryptCompare } from 'bcryptjs';
 import { autoUpdater, type UpdateInfo } from 'electron-updater';
@@ -13,6 +14,9 @@ import { MediaRepository } from './MediaRepository';
 import { GitHubStorageProvider } from './storage/GitHubStorageProvider';
 import { AppPreferences, type AppPreferencesData } from './AppPreferences';
 import { RemoteServer } from './RemoteServer';
+import {TranslationPackService} from './TranslationPackService';
+import {platformAppearance} from './platformAppearance';
+import type{TranslationPackDescriptor}from'../src/translationPackTypes';
 
 import {DisplaySleepProtection} from './DisplaySleepProtection';
 const displaySleepProtection=new DisplaySleepProtection(powerSaveBlocker);
@@ -21,6 +25,7 @@ app.on('will-quit',()=>displaySleepProtection.setEnabled(false));
 let controlWindow: BrowserWindow | null = null;
 let mediaWindow: BrowserWindow | null = null;
 let historyWindow: BrowserWindow | null = null;
+let mediaSelectionContext:{targetType?:'section'|'serviceItem';targetId?:string;mediaKind?:string}={};
 let appPreferences:AppPreferences;
 let controlCloseInProgress=false;
 let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
@@ -126,14 +131,15 @@ function createControlWindow(preferences:AppPreferencesData) {
   controlWindow.webContents.once('did-finish-load',()=>{controlWindow?.webContents.setZoomFactor(1);void controlWindow?.webContents.setVisualZoomLevelLimits(1,1);if(appPreferences.get().automaticUpdates)setTimeout(()=>void checkForUpdates(),5000)});
 }
 
-function openMediaWindow(context:'manage'|'select'='manage',purpose:'item'|'background'|'foreground'|'audio'='item',targetType?:'section'|'serviceItem',targetId?:string){
+function openMediaWindow(context:'manage'|'select'='manage',purpose:'item'|'background'|'foreground'|'audio'='item',targetType?:'section'|'serviceItem',targetId?:string,mediaKind?:string){
+  mediaSelectionContext={targetType,targetId,mediaKind};
   if(mediaWindow&&!mediaWindow.isDestroyed()){mediaWindow.setTitle(purpose==='audio'?'GottesdienstRegie - Audiobrowser':'GottesdienstRegie - Medienbibliothek');mediaWindow.focus();mediaWindow.webContents.send('media-window:context',{context,purpose,targetType,targetId});return true}
   const saved=appPreferences.get(),fallback={width:1400,height:850},bounds=saved.mediaBounds??fallback;
   mediaWindow=new BrowserWindow({...bounds,show:false,minWidth:900,minHeight:600,resizable:true,minimizable:true,maximizable:true,closable:true,skipTaskbar:false,alwaysOnTop:false,backgroundColor:'#f4f7f8',title:purpose==='audio'?'GottesdienstRegie - Audiobrowser':'GottesdienstRegie - Medienbibliothek',icon:app.isPackaged?path.join(process.resourcesPath,'icon.png'):path.join(app.getAppPath(),'build/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
   mediaWindow.setMenu(null);if(saved.mediaMaximized)mediaWindow.maximize();
   const save=()=>{if(!mediaWindow||mediaWindow.isDestroyed())return;const patch:Partial<AppPreferencesData>={mediaMaximized:mediaWindow.isMaximized()};if(!mediaWindow.isMaximized())patch.mediaBounds=mediaWindow.getBounds();void appPreferences.update(patch)};
   mediaWindow.on('move',save);mediaWindow.on('resize',save);mediaWindow.on('maximize',save);mediaWindow.on('unmaximize',save);mediaWindow.on('closed',()=>{mediaWindow=null});
-  mediaWindow.once('ready-to-show',()=>mediaWindow?.show());void load(mediaWindow,`#media?context=${context}&purpose=${purpose}&targetType=${targetType??''}&targetId=${encodeURIComponent(targetId??'')}`);return true
+  mediaWindow.once('ready-to-show',()=>mediaWindow?.show());void load(mediaWindow,`#media?context=${context}&purpose=${purpose}&targetType=${targetType??''}&targetId=${encodeURIComponent(targetId??'')}&mediaKind=${encodeURIComponent(mediaKind??'')}`);return true
 }
 
 function openHistoryWindow(){
@@ -146,6 +152,11 @@ function versionParts(value:string){return value.replace(/^v/,'').split('.').map
 function olderThan(candidate:string,current:string){const a=versionParts(candidate),b=versionParts(current);for(let i=0;i<Math.max(a.length,b.length);i++){if((a[i]??0)<(b[i]??0))return true;if((a[i]??0)>(b[i]??0))return false}return false}
 
 app.whenReady().then(async() => {
+  const packCodes=['de','en','fr','es','it','nl','pl','pt','uk','ru','tr','ar','da','sv','no'];
+  const packCatalog:TranslationPackDescriptor[]=[];
+  for(const code of packCodes)if(code!=='de')for(const[source,target]of[[code,'de'],['de',code]])packCatalog.push({key:`${source}-${target}`,source,target,model:`Xenova/opus-mt-${source}-${target}`,revision:'main',status:'not-downloaded'});
+  const translationPacks=new TranslationPackService(path.join(app.getPath('userData'),'translation-packs'),async(item,target,signal,progress)=>{const files=['config.json','tokenizer.json','onnx/model_quantized.onnx'];let done=0;for(const file of files){const response=await fetch(`https://huggingface.co/${item.model}/resolve/${item.revision}/${file}`,{signal});if(!response.ok)throw Error(`MODEL_DOWNLOAD_${response.status}`);const bytes=new Uint8Array(await response.arrayBuffer());const destination=path.join(target,file);await fs.mkdir(path.dirname(destination),{recursive:true});await fs.writeFile(destination,bytes);done++;progress({key:item.key,status:'downloading',downloadedBytes:done,totalBytes:files.length,percent:Math.round(done/files.length*100)})}} ,packCatalog);
+  translationPacks.onProgress(value=>controlWindow?.webContents.send('translation-packs:progress',value));
   Menu.setApplicationMenu(null);
   appPreferences=new AppPreferences(path.join(app.getPath('userData'),'app-preferences.json'));
   const initialPreferences=await appPreferences.load();
@@ -322,6 +333,11 @@ app.whenReady().then(async() => {
   ipcMain.handle('presentation:export',async(_event,id:string)=>{const doc=await presentationRepository.read(id);if(!doc)return null;const picked=await dialog.showSaveDialog(controlWindow!,{title:'Präsentation exportieren',defaultPath:`${String(doc.title||'Praesentation').replace(/[<>:"/\\|?*]/g,'-')}.grpresentation`,filters:[{name:'GottesdienstRegie Präsentation',extensions:['grpresentation']}]});if(picked.canceled||!picked.filePath)return null;return presentationRepository.exportDocument(id,picked.filePath)});
   ipcMain.handle('presentation:backup',(_event,id:string)=>presentationRepository.backup(id));
   ipcMain.handle('external:open',async(_event,url:string)=>{const unsplashTerms=['https://unsplash.com/de/nutzungsbedingungen','https://unsplash.com/de/datenschutzregelungen','https://unsplash.com/de/plus/lizenz'].includes(url);const allowed=unsplashTerms||/^https:\/\/(github\.com\/cmoere\/GottesdienstRegie|cmoere\.github\.io\/GottesdienstRegie)/i.test(url)||new RegExp(`^http:\\/\\/(localhost|127\\.0\\.0\\.1|${remoteServer.get().address.replace(/\./g,'\\.')})(?::\\d+)?\\/`,'i').test(url);if(!allowed)throw new Error('EXTERNAL_URL_NOT_ALLOWED');await shell.openExternal(url);return true});
+  ipcMain.handle('translation-packs:list',()=>translationPacks.list());
+  ipcMain.handle('platform:appearance',()=>platformAppearance(process.platform,os.release()));
+  ipcMain.handle('translation-packs:download',(_event,key:string)=>translationPacks.download(key));
+  ipcMain.handle('translation-packs:cancel',(_event,key:string)=>translationPacks.cancel(key));
+  ipcMain.handle('translation-packs:remove',(_event,key:string)=>translationPacks.remove(key));
   ipcMain.handle('media:list',()=>mediaRepository.list());
   ipcMain.handle('media:import',async(event,kind?:'audio'|'video')=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,audio=kind==='audio',video=kind==='video',filter=audio?{name:'Unterstütztes Audio',extensions:['mp3','m4a','aac','wav','flac','ogg']}:video?{name:'Unterstützte Videos',extensions:['mp4','mov','webm','m4v']}:{name:'Medien',extensions:['png','jpg','jpeg','webp','gif','svg','mp4','mov','webm','m4v','mp3','wav','m4a','aac','ogg','flac','pdf']};const picked=await dialog.showOpenDialog(owner,{title:audio?'Audio zum Hochladen auswählen':video?'Video auswählen':'Medien zum Hochladen auswählen',properties:video?['openFile']:['openFile','multiSelections'],filters:[filter]});if(picked.canceled)return[];return mediaRepository.import(picked.filePaths)});
   ipcMain.handle('media:update',async(_event,id:string,patch:any)=>{try{return await mediaRepository.update(id,patch)}catch(error){if(!String(error).includes('MEDIA_NOT_FOUND'))throw error;const remote=(await onlineMedia.list()).find(item=>item.id===id);if(!remote)throw error;return mediaRepository.upsertRemote(remote,patch)}});
@@ -334,9 +350,9 @@ app.whenReady().then(async() => {
   ipcMain.handle('media:set-remote-favorite',async(_event,asset:any,favorite:boolean)=>mediaRepository.upsertRemote({id:String(asset.id??asset.checksum),name:String(asset.name??'Unsplash-Foto'),path:String(asset.path??''),kind:asset.kind==='video'?'video':asset.kind==='audio'?'audio':asset.kind==='pdf'?'pdf':'image',size:Number(asset.size??0),checksum:String(asset.checksum??asset.id??''),downloadUrl:String(asset.downloadUrl??''),updatedAt:asset.updatedAt?String(asset.updatedAt):undefined},{favorite:Boolean(favorite),tags:Array.isArray(asset.tags)?asset.tags.map(String):[]}));
   ipcMain.handle('media:legacy-list',async()=>(await mediaRepository.list()).filter(asset=>asset.syncState!=='synced'));
   ipcMain.handle('media:cloud-remove',async(_event,id:string)=>{if(outputManager.isActive())throw new Error('MEDIA_IN_LIVE_USE');const local=(await mediaRepository.list()).find(asset=>asset.id===id);const remote=(await onlineMedia.list()).find(item=>item.path===local?.github?.path||item.id===id);if(!remote)throw new Error('MEDIA_NOT_FOUND');const references:any[]=[];for(const summary of await presentationRepository.list(true,true)){const doc=await presentationRepository.read(summary.id),raw=JSON.stringify(doc);if(raw.includes(id)||raw.includes(remote.path)||raw.includes(remote.downloadUrl))references.push(summary)}if(references.length)throw new Error(`MEDIA_IN_PRESENTATIONS:${references.map(entry=>entry.title).join('|')}`);await onlineMedia.remove(remote.path,remote.id);if(local)await mediaRepository.remove(local.id);return true});
-  ipcMain.handle('media-window:open',(_event,context:'manage'|'select',purpose:'item'|'background'|'foreground'|'audio',targetType?:'section'|'serviceItem',targetId?:string)=>openMediaWindow(context,purpose,targetType,targetId));
+  ipcMain.handle('media-window:open',(_event,context:'manage'|'select',purpose:'item'|'background'|'foreground'|'audio',targetType?:'section'|'serviceItem',targetId?:string,mediaKind?:string)=>openMediaWindow(context,purpose,targetType,targetId,mediaKind));
   ipcMain.handle('media-window:close',()=>{mediaWindow?.close();return true});
-  ipcMain.handle('media-window:select',(_event,asset:unknown,purpose:string)=>{if(controlWindow&&!controlWindow.isDestroyed()){controlWindow.webContents.send('media:selected',{asset,purpose});controlWindow.focus()}mediaWindow?.close();return true});
+  ipcMain.handle('media-window:select',(_event,asset:unknown,purpose:string)=>{if(controlWindow&&!controlWindow.isDestroyed()){controlWindow.webContents.send('media:selected',{asset,purpose,...mediaSelectionContext});controlWindow.focus()}mediaWindow?.close();return true});
   ipcMain.handle('media-window:select-audio',(_event,assets:unknown[],targetType:string,targetId:string)=>{if(controlWindow&&!controlWindow.isDestroyed()){controlWindow.webContents.send('media:selected',{assets,purpose:'audio',targetType,targetId});controlWindow.focus()}mediaWindow?.close();return true});
   ipcMain.handle('history-window:open',()=>openHistoryWindow());
   ipcMain.handle('history-window:close',()=>{historyWindow?.close();return true});

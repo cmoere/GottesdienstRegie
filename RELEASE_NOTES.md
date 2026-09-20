@@ -1154,3 +1154,10 @@ Veröffentlicht am 1. September 2026.
 
 - **GitHub-Zugang:** Zugangsdaten bleiben im Electron-Hauptprozess und werden weder an den Renderer noch in Präsentations- oder Mediendaten geschrieben.
 - **Große Videos:** Dateien oberhalb der sicheren GitHub-Grenze bleiben lokal und verursachen keinen unvollständigen Upload.
+# 0.42.0 – Zuverlässigere Medien, Formen und Bedienoberfläche
+
+Version 0.42.0 trennt die Spezialelemente des Vor- und Nachprogramms eindeutig von normalen Gottesdienst-Inhalten. Die 2D-Objektgalerie verwendet echte SVG-Vektoren, persönliche Notizen zeigen einen verständlichen und zeitlich begrenzten Speicherstatus, und die Einzelvorschau kommt ohne störenden Folienschatten aus.
+
+Neu sind außerdem die getestete Grundlage für fünf feste Anzeigegrößen, kollisionssichere Popovers, eine typisierte Videoauswahl und eine Plattform-Erkennung für Liquid-Glass-Materialien unter macOS 26. Alle Bedienhilfen bleiben auf das Operatorfenster beschränkt; MAIN, STAGE und Livestream behalten ihr festgelegtes Layout und ihre Farben.
+
+Sprachmodelle und Radiosuche benötigen für neue Downloads weiterhin eine Internetverbindung. Netzwerkfehler verändern weder bereits gespeicherte Übersetzungstexte noch eine laufende Ausgabe.

@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.42",
+      "builds": [{
+        "version": "0.42.0",
+        "releaseDate": "2026-09-20",
+        "current": true,
+        "overview": {"label":{"de":"Zuverlässigere Medien, Formen und Bedienoberfläche","en":"More reliable media, shapes and operator interface"},"text":{"de":"Version 0.42.0 trennt Vor- und Nachprogramm konsequent von normalen Gottesdienst-Elementen, ersetzt Platzhalter der 2D-Galerie durch echte Vektorgrafiken und verbessert Notizen, Videoauswahl, Popovers sowie die plattformgerechte Bedienoberfläche. Fünf klar definierte Anzeigegrößen, schattenlose Einzelvorschau und die Grundlage für macOS 26 Liquid Glass verbessern die tägliche Arbeit, ohne MAIN, STAGE oder Livestream zu verändern.","en":"Version 0.42.0 strictly separates loop-only content from normal service items, replaces shape placeholders with real vectors, and improves notes, video selection, popovers and platform-aware operator UI. Five defined display scales, a shadowless single preview and macOS 26 Liquid Glass capability leave outputs untouched."}},
+        "sections": {
+          "new": [{"label":{"de":"Vektorformen und fünf Anzeigegrößen","en":"Vector shapes and five display scales"},"text":{"de":"Die durchsuchbare 2D-Galerie verwendet nun eigenständige SVG-Pfade für alle Formen einschließlich Kirche, Bibel, Kreuz und Pfeilen. Die Bedienoberfläche kann in fünf festen Stufen skaliert werden; diese Einstellung bleibt strikt vom Ausgabebild getrennt.","en":"The searchable 2D gallery now uses SVG paths for all shapes. The operator UI can be scaled in five fixed levels without affecting output."}}],
+          "improved": [{"label":{"de":"Sprachpakete, Popovers und Plattformdarstellung","en":"Language packs, popovers and platform appearance"},"text":{"de":"Sprachauswahl und Objektgalerie erhalten kollisionssichere, scrollbar bleibende Popovers. Sprachpakete werden mit nachvollziehbarem Downloadstatus vorbereitet. Auf unterstützten macOS-26-Systemen kann die Bedienoberfläche transparente Materialien verwenden; reduzierte Transparenz schaltet den Effekt ab.","en":"Language and shape pickers use collision-safe scrollable popovers, language packs expose download state, and supported macOS 26 systems can use transparent materials with a reduced-transparency fallback."}}],
+          "fixed": [{"label":{"de":"Loop-Menüs, Video, Radio und Notizstatus","en":"Loop menus, video, radio and note status"},"text":{"de":"Vor- und Nachprogramm zeigen ausschließlich die dafür vorgesehenen Elemente; Song, Bibel und andere normale Inhalte erscheinen dort nicht mehr. Die Videoauswahl ist typisiert, Radiosender verwenden ausschließlich geprüfte HTTPS-Streams, und der Status Gespeichert bei persönlichen Notizen verschwindet nach fünf Sekunden wieder.","en":"Pre- and post-program menus now show only loop items. Video selection is typed, radio uses HTTPS streams, and personal-note saved status clears after five seconds."}}],
+          "known": [{"label":{"de":"Downloads und Online-Suche benötigen Internet","en":"Downloads and online search need internet"},"text":{"de":"Neue Übersetzungsmodelle und die Radiosuche benötigen eine Internetverbindung. Bereits gespeicherte Präsentationen sowie laufende Ausgaben bleiben bei Netzwerkfehlern unverändert.","en":"New translation models and radio search require internet access. Saved presentations and live outputs remain unchanged on network errors."}}]
+        }
+      }]
+    },
+    {
       "line": "0.41",
       "builds": [{
         "version": "0.41.0",
         "releaseDate": "2026-09-20",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Mehrsprachiger Song-Editor und sichere Loop-Bereiche","en":"Multilingual song editor and safe loop sections"},"text":{"de":"Version 0.41.0 führt eine zentrale Abschnittsregel für Loop-Elemente, durchsuchbare Übersetzungssprachen mit lokalen Sprachpaketen, Rich-Text-Präsentationsnotizen und eine deutlich größere 2D-Objektgalerie ein. Gleichzeitig wurden schmale Zahlenfelder, Kontraste und der Schwarz-Weiß-Modus für die Bedienoberfläche korrigiert.","en":"Version 0.41.0 adds a central placement policy for loop items, searchable translation languages with local packs, rich-text presentation notes and a larger 2D-object gallery. Narrow numeric fields, contrast and operator-only monochrome mode are also corrected."}},
         "sections": {
           "new": [

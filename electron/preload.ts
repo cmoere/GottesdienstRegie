@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("desktop", {
+  platform:{appearance:()=>ipcRenderer.invoke('platform:appearance')},
   lifecycle: {
     ready: () => ipcRenderer.send("lifecycle:ready"),
     prepared: (document: unknown) => ipcRenderer.send("lifecycle:prepared", document),
@@ -141,12 +142,20 @@ contextBridge.exposeInMainWorld("desktop", {
   songs: {
     import: () => ipcRenderer.invoke("songs:import"),
   },
+  translationPacks:{
+    list:()=>ipcRenderer.invoke('translation-packs:list'),
+    download:(key:string)=>ipcRenderer.invoke('translation-packs:download',key),
+    cancel:(key:string)=>ipcRenderer.invoke('translation-packs:cancel',key),
+    remove:(key:string)=>ipcRenderer.invoke('translation-packs:remove',key),
+    onProgress:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('translation-packs:progress',listener);return()=>ipcRenderer.removeListener('translation-packs:progress',listener)},
+  },
   mediaWindow: {
     open: (
       context: "manage" | "select",
       purpose: "item" | "background" | "foreground" | "audio",
       targetType?: "section" | "serviceItem",
       targetId?: string,
+      mediaKind?: string,
     ) =>
       ipcRenderer.invoke(
         "media-window:open",
@@ -154,6 +163,7 @@ contextBridge.exposeInMainWorld("desktop", {
         purpose,
         targetType,
         targetId,
+        mediaKind,
       ),
     close: () => ipcRenderer.invoke("media-window:close"),
     select: (asset: unknown, purpose: string) =>

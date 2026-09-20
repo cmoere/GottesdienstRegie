@@ -1,6 +1,9 @@
 import {helpV39,helpIllustrations} from './helpV39';
 import './version39.css';
 import './version41.css';
+import './version42.css';
+import {operatorScaleFactor} from './operatorAccessibility';
+import {TranslationPackSettings} from './TranslationPackSettings';
 import {translationModes, type SongTranslationMode} from './songTranslation';
 import { LyricScrollingSettings } from './LyricScrollingSettings';
 import { WindowControls } from './WindowControls';
@@ -44,7 +47,7 @@ import {
 } from "./store";
 import { SlideRenderer } from "./SlideRenderer";
 import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopController, WEATHER_SCREEN_DURATION_MS, WEATHER_SCREEN_URL, type LoopItemType } from "./loopDomain";
-import { canInsertItemType } from "./itemPlacementPolicy";
+import { canInsertItemType, menuItemTypesForSection } from "./itemPlacementPolicy";
 import { PersonalNotesPanel } from "./PersonalNotesPanel";
 import { prepareStandardTranslationPacks } from "./translationPackManager";
 import { weatherScreenController } from "./weatherController";
@@ -1912,7 +1915,7 @@ function AddPopover({
   ];
   async function addImported(option: (typeof options)[number]) {
     void option;
-    await (window.desktop as any)?.mediaWindow?.open("select", "item");
+    await (window.desktop as any)?.mediaWindow?.open("select", "item", "section", sectionId, option.type);
     close();
     return;
     /* Legacy-Direktimport entfernt: Dateien werden ausschließlich über den Cloud-Upload übernommen.
@@ -2265,7 +2268,8 @@ function AddPopover({
       ))}
     </div>
   ) : null;
-  const visibleOptions = options.filter((option) => canInsertItemType(option.type, activeSection));
+  const menuTypes = activeSection ? new Set(menuItemTypesForSection(activeSection)) : new Set();
+  const visibleOptions = options.filter((option) => menuTypes.has(option.type));
   return (
     <>
       <div className="popover add-content-popover">
@@ -2276,7 +2280,7 @@ function AddPopover({
           </button>
         </header>
         {targetSectionId && loopGroup}
-        {visibleOptions.map((option) => (
+        {!loopAvailable && visibleOptions.map((option) => (
           <button
             key={option.type}
             onClick={() =>
@@ -5817,6 +5821,7 @@ function SettingsModal({
                       <small>{t("reduceMotionHelp")}</small>
                     </span>
                   </label>
+                  <label className="setting-field"><span><b>Anzeigegröße</b><small>Fünf feste Stufen verändern ausschließlich die Bedienoberfläche.</small></span><input type="range" min="0" max="4" step="1" value={prefs.operatorScale} onChange={event=>prefs.setOperatorScale(Number(event.target.value) as 0|1|2|3|4)}/><output>{['Sehr klein','Klein','Standard','Groß','Sehr groß'][prefs.operatorScale]}</output></label>
                   <label className="setting-check">
                     <input
                       type="checkbox"
@@ -6348,6 +6353,7 @@ function SettingsModal({
                 <label>Übersetzungen anzeigen<select value={prefs.songTranslationMode} onChange={event=>prefs.setSongTranslationMode(event.target.value as SongTranslationMode)}>{translationModes.map(mode=><option key={mode.value} value={mode.value}>{mode.label}</option>)}</select></label>
                 <p>Standard ist die Übersetzung unter der Strophe in Klammern. Ohne Übersetzung erscheint immer der Originaltext, auch bei „Nur Übersetzung“. Bei zeilenweiser Darstellung sollten Original und Übersetzung gleich viele Zeilen haben. Prüfe vor ON AIR, ob beide Texte in die Folienfläche passen.</p>
                 <p>Eine Änderung wird für eine bereits live geschaltete Folie erst beim erneuten Senden wirksam. Die STAGE-Akkordansicht bleibt beim Originaltext.</p>
+                <TranslationPackSettings />
               </section>}
               {tab === "general" && (
                 <section className="settings-group window-start-settings">
@@ -8440,6 +8446,7 @@ function AppShell({
           purpose: "item" | "background" | "foreground" | "audio";
           targetType?: "section" | "serviceItem";
           targetId?: string;
+          mediaKind?: string;
         }) => {
           if (
             payload.purpose === "audio" &&
@@ -8479,6 +8486,7 @@ function AppShell({
           }
           const asset = payload.asset;
           if (!asset) return;
+          if (payload.mediaKind && payload.mediaKind !== 'slideshow' && asset.kind !== payload.mediaKind) { alert('Bitte wähle ein Medium des angeforderten Typs aus.'); return; }
           const url = asset.downloadUrl;
           if (payload.purpose === "background") {
             const current = usePresentation.getState();
@@ -8547,6 +8555,7 @@ function AppShell({
             {
               title: asset.name,
               section: "",
+              sectionId: payload.targetId,
               body: "",
               metadata: {
                 assetId: asset.id,
@@ -10343,10 +10352,12 @@ export function App() {
     largeText = usePreferences((state) => state.largeText),
     strongFocus = usePreferences((state) => state.strongFocus),
     dyslexiaFriendly = usePreferences((state) => state.dyslexiaFriendly);
+  const operatorScale=usePreferences(state=>state.operatorScale);
   const { t } = useI18n();
   const output = useMemo(() => location.hash.startsWith("#output"), []),
     mediaBrowser = useMemo(() => location.hash.startsWith("#media"), []),
     historyWindow = useMemo(() => location.hash.startsWith("#history"), []);
+  useEffect(()=>{if(output)return;void (window.desktop as any)?.platform?.appearance?.().then((value:{liquidGlass?:boolean})=>{document.documentElement.dataset.liquidGlass=String(Boolean(value?.liquidGlass))})},[output]);
   useEffect(() => {
     void installCeraPro().catch(() => false);
     if (!output) prepareStandardTranslationPacks();
@@ -10372,6 +10383,7 @@ export function App() {
     document.documentElement.dataset.largeText = String(largeText);
     document.documentElement.dataset.strongFocus = String(strongFocus);
     document.documentElement.dataset.dyslexia = String(dyslexiaFriendly);
+    document.documentElement.style.setProperty('--operator-scale',String(output?1:operatorScaleFactor(operatorScale)));
   }, [
     language,
     theme,
@@ -10382,6 +10394,7 @@ export function App() {
     largeText,
     strongFocus,
     dyslexiaFriendly,
+    operatorScale,
     output,
   ]);
   useEffect(() => {

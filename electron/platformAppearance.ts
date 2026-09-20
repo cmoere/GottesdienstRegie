@@ -1,0 +1,1 @@
+export function platformAppearance(platform:NodeJS.Platform,release:string){const major=Number.parseInt(release.split('.')[0]||'0',10),liquidGlass=platform==='darwin'&&major>=25;return {liquidGlass,...(liquidGlass?{vibrancy:'under-window' as const}:{})}}

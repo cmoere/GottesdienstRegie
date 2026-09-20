@@ -34,6 +34,7 @@ interface PreferencesState {
   reopenLastPresentation:boolean;
   highContrast:boolean;
   largeText:boolean;
+  operatorScale:0|1|2|3|4;
   strongFocus:boolean;
   dyslexiaFriendly:boolean;
   canvasGridSize:number;
@@ -72,6 +73,7 @@ interface PreferencesState {
   setReopenLastPresentation:(value:boolean)=>void;
   setHighContrast:(value:boolean)=>void;
   setLargeText:(value:boolean)=>void;
+  setOperatorScale:(value:0|1|2|3|4)=>void;
   setStrongFocus:(value:boolean)=>void;
   setDyslexiaFriendly:(value:boolean)=>void;
   setCanvasGridSize:(value:number)=>void;
@@ -122,6 +124,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   reopenLastPresentation:true,
   highContrast:false,
   largeText:false,
+  operatorScale:2,
   strongFocus:true,
   dyslexiaFriendly:false,
   canvasGridSize:16,
@@ -160,6 +163,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setReopenLastPresentation:reopenLastPresentation=>set({reopenLastPresentation}),
   setHighContrast:highContrast=>set({highContrast}),
   setLargeText:largeText=>set({largeText}),
+  setOperatorScale:operatorScale=>set({operatorScale}),
   setStrongFocus:strongFocus=>set({strongFocus}),
   setDyslexiaFriendly:dyslexiaFriendly=>set({dyslexiaFriendly}),
   setCanvasGridSize:canvasGridSize=>set({canvasGridSize:Math.max(4,Math.min(128,Math.round(canvasGridSize)))}),
