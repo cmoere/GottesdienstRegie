@@ -44,4 +44,16 @@ assert.equal(
   'LOOP_SECTION_REQUIRED',
 );
 assert.equal(placementViolation({ id: 'regular', type: 'content' }, sections.service), null);
+const { sanitizeRichNote } = load('src/personalNotes.ts');
+assert.equal(sanitizeRichNote('<b>Wichtig</b><script>alert(1)</script>'), '<b>Wichtig</b>');
+assert.equal(sanitizeRichNote('<div onclick="bad()"><u>Notiz</u></div>'), '<div><u>Notiz</u></div>');
+const { standardLanguageCodes, searchLanguages, translationModelKey } = load('src/languageCatalog.ts');
+assert.equal(standardLanguageCodes.length, 15);
+assert.equal(searchLanguages('deutsch')[0].code, 'de');
+assert.ok(searchLanguages('العربية').some(language => language.code === 'ar'));
+assert.equal(translationModelKey('en', 'de'), 'en-de');
+assert.equal(translationModelKey('de', 'en'), 'de-en');
+const { shapeCatalog, searchShapes } = load('src/shapeCatalog.ts');
+assert.ok(shapeCatalog.length >= 30);
+assert.ok(searchShapes('Kirche').some(shape => shape.kind === 'cross'));
 console.log('Version 0.41 placement policy checks passed.');

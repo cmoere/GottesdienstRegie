@@ -13,6 +13,8 @@ import { estimateLyricLines } from './songLayout';
 import { getUserOverlayElements } from './loopCoreLayer';
 import { PersonalNotesPanel } from './PersonalNotesPanel';
 import { localTranslate } from './translationDraft';
+import { LanguagePicker } from './LanguagePicker';
+import { ShapeGallery } from './ShapeGallery';
 import { SlideRenderer } from "./SlideRenderer";
 import {
   defaultTransition,
@@ -501,10 +503,10 @@ export function SongEditor({
               }}
             />
             <div className="song-translation-editor" onClick={event=>event.stopPropagation()}>
-              {!slide.translation ? <button type="button" disabled={!canEdit} onClick={()=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{language:'Deutsch',text:''}}:page)}:entry)})}>ÜBERSETZUNG HINZUFÜGEN</button> : <>
-                <button type="button" disabled={!canEdit||Boolean(translationBusy)} onClick={async()=>{try{setTranslationBusy('Lokale Übersetzung startet …');const text=await localTranslate(slide.body,'en','de',setTranslationBusy);commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{language:'Deutsch (maschinell)',text}}:page)}:entry)})}catch(error){window.alert(`Lokale Übersetzung nicht verfügbar: ${error instanceof Error?error.message:String(error)}`)}finally{setTranslationBusy('')}}}>{slide.translation.text?'NEU ÜBERSETZEN':'AUTOMATISCH ÜBERSETZEN'}</button>
+              {!slide.translation ? <button type="button" disabled={!canEdit} onClick={()=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{language:'de',text:''}}:page)}:entry)})}>ÜBERSETZUNG HINZUFÜGEN</button> : <>
+                <button type="button" disabled={!canEdit||Boolean(translationBusy)} onClick={async()=>{try{setTranslationBusy('Lokale Übersetzung startet …');const target=slide.translation?.language||'de',text=await localTranslate(slide.body,'en',target,setTranslationBusy);commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{language:target,text}}:page)}:entry)})}catch(error){window.alert(`Lokale Übersetzung nicht verfügbar: ${error instanceof Error?error.message:String(error)}`)}finally{setTranslationBusy('')}}}>{slide.translation.text?'NEU ÜBERSETZEN':'AUTOMATISCH ÜBERSETZEN'}</button>
                 {translationBusy&&<small role="status">{translationBusy}</small>}
-                <label>Sprache der Übersetzung<input disabled={!canEdit} aria-label="Sprache der Übersetzung" value={slide.translation.language} onChange={event=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{...slide.translation!,language:event.target.value}}:page)}:entry)})}/></label>
+                <label>Sprache der Übersetzung<LanguagePicker disabled={!canEdit} source="en" value={slide.translation.language||'de'} onChange={language=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{...slide.translation!,language}}:page)}:entry)})}/></label>
                 <textarea disabled={!canEdit} aria-label={`Übersetzung · ${section.label}`} placeholder="Hier die deutsche Übersetzung eingeben …" value={slide.translation.text} rows={Math.max(3,slide.translation.text.split('\n').length)} onChange={event=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{...slide.translation!,text:event.target.value}}:page)}:entry)})}/>
                 <small>Darstellung: Einstellungen → Präsentation → Song. Wiederholungen dieses Abschnitts verwenden dieselbe Übersetzung.</small>
                 <button type="button" disabled={!canEdit} onClick={()=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:undefined}:page)}:entry)})}>ÜBERSETZUNG ENTFERNEN</button>
@@ -898,45 +900,7 @@ function ContentEditor({
           <button disabled={!canEdit} onClick={() => openQr()}>
             <Icon name="qr_code_2" /> QR-CODE
           </button>
-          <select
-            aria-label="2D-Objekt hinzufügen"
-            disabled={!canEdit}
-            value=""
-            onChange={(event) => {
-              const [kind, name] = event.target.value.split("|");
-              if (kind) state.addShape(kind, name);
-            }}
-          >
-            <option value="">＋ 2D-OBJEKT</option>
-            {[
-              ["rectangle", "Rechteck"],
-              ["rounded", "Abgerundetes Rechteck"],
-              ["ellipse", "Kreis / Ellipse"],
-              ["triangle", "Dreieck"],
-              ["diamond", "Raute"],
-              ["pentagon", "Fünfeck"],
-              ["hexagon", "Sechseck"],
-              ["octagon", "Achteck"],
-              ["star", "Stern"],
-              ["burst", "Strahlenform"],
-              ["arrow", "Pfeil"],
-              ["chevron", "Chevron"],
-              ["speech", "Sprechblase"],
-              ["cross", "Kreuz"],
-              ["parallelogram", "Parallelogramm"],
-              ["trapezoid", "Trapez"],
-              ["heart", "Herz"],
-              ["lightning", "Blitz"],
-              ["shield", "Schild"],
-              ["cloud", "Wolke"],
-              ["home", "Haus"],
-              ["moon", "Halbmond"],
-            ].map(([kind, name]) => (
-              <option key={kind} value={`${kind}|${name}`}>
-                {name}
-              </option>
-            ))}
-          </select>
+          <ShapeGallery disabled={!canEdit} onSelect={(kind,name)=>state.addShape(kind,name)}/>
           <button
             className={fadeActive ? "active" : ""}
             disabled={!canEdit || !primaryText}
@@ -3135,7 +3099,6 @@ export function ProductionWorkspace({
   return (
     <section className="production-workspace">
       <div className="context-editor">
-        <PersonalNotesPanel noteKey={{userId:state.historyUserId||'local',presentationId:state.presentationId||'local'}} label="Meine Präsentationsnotiz" />
         {item.type === "song" ? (
           <SongEditor item={item} canEdit={canEdit} />
         ) : item.type === "liveQuiz" ? (

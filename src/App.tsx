@@ -1,5 +1,6 @@
 import {helpV39,helpIllustrations} from './helpV39';
 import './version39.css';
+import './version41.css';
 import {translationModes, type SongTranslationMode} from './songTranslation';
 import { LyricScrollingSettings } from './LyricScrollingSettings';
 import { WindowControls } from './WindowControls';
@@ -44,6 +45,8 @@ import {
 import { SlideRenderer } from "./SlideRenderer";
 import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopController, WEATHER_SCREEN_DURATION_MS, WEATHER_SCREEN_URL, type LoopItemType } from "./loopDomain";
 import { canInsertItemType } from "./itemPlacementPolicy";
+import { PersonalNotesPanel } from "./PersonalNotesPanel";
+import { prepareStandardTranslationPacks } from "./translationPackManager";
 import { weatherScreenController } from "./weatherController";
 import { LoopPreview } from "./LoopPreview";
 import { liveEngine } from "./LiveEngine";
@@ -2601,6 +2604,7 @@ function PresentationEventHeader() {
           {state.title}
         </button>
       )}
+      <PersonalNotesPanel noteKey={{userId:state.historyUserId||'local',presentationId:state.presentationId||'local'}} label="Präsentationsnotizen" presentation />
       <div className="event-link-row">
         <button
           className={`event-link-button ${isCancelled(linked) ? "cancelled" : ""}`}
@@ -10345,6 +10349,7 @@ export function App() {
     historyWindow = useMemo(() => location.hash.startsWith("#history"), []);
   useEffect(() => {
     void installCeraPro().catch(() => false);
+    if (!output) prepareStandardTranslationPacks();
   }, []);
   useEffect(() => {
     const syncPreferences = (event: StorageEvent) => {
@@ -10358,7 +10363,7 @@ export function App() {
     document.documentElement.lang = language === "gsw" ? "de-CH" : language;
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
     document.documentElement.dataset.theme = theme;
-    document.documentElement.dataset.bw = String(blackWhite);
+    document.documentElement.dataset.bw = String(!output && blackWhite);
     document.documentElement.dataset.reduceMotion = String(
       !output && reduceMotion,
     );
