@@ -14,9 +14,8 @@ import { MediaRepository } from './MediaRepository';
 import { GitHubStorageProvider } from './storage/GitHubStorageProvider';
 import { AppPreferences, type AppPreferencesData } from './AppPreferences';
 import { RemoteServer } from './RemoteServer';
-import {TranslationPackService} from './TranslationPackService';
+import {TranslationPackService,type TranslationPackDescriptor} from './TranslationPackService';
 import {platformAppearance} from './platformAppearance';
-import type{TranslationPackDescriptor}from'../src/translationPackTypes';
 
 import {DisplaySleepProtection} from './DisplaySleepProtection';
 const displaySleepProtection=new DisplaySleepProtection(powerSaveBlocker);

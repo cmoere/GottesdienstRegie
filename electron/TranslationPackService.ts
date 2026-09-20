@@ -1,4 +1,7 @@
-import fs from 'node:fs/promises';import path from 'node:path';import type{TranslationPackDescriptor,TranslationPackProgress}from'../src/translationPackTypes';
+import fs from 'node:fs/promises';import path from 'node:path';
+export type TranslationPackStatus='not-downloaded'|'queued'|'downloading'|'ready'|'error'|'update-available';
+export interface TranslationPackDescriptor{key:string;source:string;target:string;model:string;revision:string;status:TranslationPackStatus;size?:number;downloadedBytes?:number;error?:string}
+export interface TranslationPackProgress{key:string;status:TranslationPackStatus;downloadedBytes:number;totalBytes?:number;percent:number;error?:string}
 export type PackDownloader=(descriptor:TranslationPackDescriptor,target:string,signal:AbortSignal,progress:(value:TranslationPackProgress)=>void)=>Promise<void>;
 export class TranslationPackService{
   private listeners=new Set<(value:TranslationPackProgress)=>void>();private controllers=new Map<string,AbortController>();
