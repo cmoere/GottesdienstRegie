@@ -6775,7 +6775,7 @@ function HelpModal({ close }: { close: () => void }) {
     Websteuerung:
       "Unter Einstellungen → Anzeige → Websteuerung erstellst du eine zeitlich und funktional begrenzte Bedienadresse. Vergib nur die notwendigen Rechte. Jeder Befehl wird im Desktopprogramm erneut geprüft und benutzt dieselbe NEXT-/ZURÜCK-Logik wie die lokale Bedienung.\n\nWiderrufe eine nicht mehr benötigte Sitzung sofort. Bei Verbindungsabbruch bleibt die laufende Ausgabe unverändert; nach der Wiederverbindung wird zuerst der aktuelle Zustand geladen.",
     "KI-Motive":
-      "KI-Motive erzeugen grafische Motive direkt in GottesdienstRegie, ohne dass du einen eigenen API-Schlüssel eintragen musst. Öffne Medien → Medienbibliothek → KI-MOTIVE, beschreibe das Motiv und wähle Format sowie Stil.\n\nPrüfe das Ergebnis vor ON AIR wie jedes andere Medium. Der globale Schalter unter Einstellungen → Künstliche Intelligenz kann die Funktion deaktivieren; die Umstellung wird nach einem sicheren Neustart vollständig wirksam.",
+      "KI-Motive erzeugen grafische Motive direkt in GottesdienstRegie. Öffne Medien → Medienbibliothek → KI-MOTIVE, beschreibe das Motiv und wähle Format sowie Stil.\n\nPrüfe das Ergebnis vor ON AIR wie jedes andere Medium. Der globale Schalter unter Einstellungen → Künstliche Intelligenz kann die Funktion deaktivieren; die Umstellung wird nach einem sicheren Neustart vollständig wirksam.",
   });
   Object.assign(articles,helpV39);
   for (const key of Object.keys(articles))

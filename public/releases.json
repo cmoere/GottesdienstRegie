@@ -21,11 +21,29 @@
   ],
   "versions": [
     {
+      "line": "0.41",
+      "builds": [{
+        "version": "0.41.0",
+        "releaseDate": "2026-09-20",
+        "current": true,
+        "overview": {"label":{"de":"Mehrsprachiger Song-Editor und sichere Loop-Bereiche","en":"Multilingual song editor and safe loop sections"},"text":{"de":"Version 0.41.0 führt eine zentrale Abschnittsregel für Loop-Elemente, durchsuchbare Übersetzungssprachen mit lokalen Sprachpaketen, Rich-Text-Präsentationsnotizen und eine deutlich größere 2D-Objektgalerie ein. Gleichzeitig wurden schmale Zahlenfelder, Kontraste und der Schwarz-Weiß-Modus für die Bedienoberfläche korrigiert.","en":"Version 0.41.0 adds a central placement policy for loop items, searchable translation languages with local packs, rich-text presentation notes and a larger 2D-object gallery. Narrow numeric fields, contrast and operator-only monochrome mode are also corrected."}},
+        "sections": {
+          "new": [
+            {"label":{"de":"Sprachen mit Suche, Flaggen und Cloud-Paketen","en":"Languages with search, flags and cloud packs"},"text":{"de":"Der Song-Editor bietet eine durchsuchbare Sprachauswahl mit Namen, Eigenbezeichnung und Flagge. Fünfzehn häufige Sprachen werden im Hintergrund vorbereitet; weitere Sprachen bleiben sichtbar und können über das Wolkensymbol mit Fortschrittsanzeige lokal geladen werden. Gespeicherte Übersetzungstexte bleiben auf anderen Rechnern lesbar, auch wenn das Modell dort erst für eine erneute Übersetzung geladen werden muss.","en":"The song editor has a searchable language picker with names, native labels and flags. Fifteen common languages are prepared in the background; more remain visible and can be downloaded locally with progress feedback."}},
+            {"label":{"de":"Rich-Text-Notizen und erweiterte 2D-Objekte","en":"Rich-text notes and expanded 2D objects"},"text":{"de":"Direkt unter dem Präsentationstitel öffnet ein Notizknopf einen lokalen Editor für Fett, Kursiv, Unterstreichen, Listen, Ausrichtung sowie Rückgängig und Wiederholen. Die neue 2D-Galerie zeigt Symbole, Namen, Kategorien und eine Suche für mehr als dreißig Formen.","en":"A notes button below the presentation title opens a local rich-text editor. The 2D gallery now offers symbols, names, categories and search for more than thirty shapes."}}
+          ],
+          "improved": [{"label":{"de":"Loop-Elemente nur am richtigen Ort","en":"Loop items only in valid sections"},"text":{"de":"Eine gemeinsame Regel steuert Hinzufügen, Verschieben und Einfügen. Wetter, Meldungen, Geburtstage, Uhr, Quiz und weitere Loop-Inhalte erscheinen ausschließlich im Vor- oder Nachprogramm; ungültige Altbestände werden nicht stillschweigend gelöscht.","en":"One shared policy governs add, move and paste. Loop content is limited to pre- and post-program sections without silently deleting legacy data."}}],
+          "fixed": [{"label":{"de":"Bedienoberfläche, Zahlenfelder und Ausgabefarben","en":"Operator UI, numeric fields and output colors"},"text":{"de":"Zahlenfelder bleiben lesbar und bedienbar, Popovers besitzen stärkere Kontraste und passen sich an schmalere Fenster an. Der Schwarz-Weiß-Modus verändert nur noch die Bedienoberfläche; MAIN, STAGE, Livestream und weitere Ausgaben behalten ihre vorgesehenen Farben.","en":"Numeric fields remain readable, popovers have stronger contrast, and monochrome mode now affects only the operator interface while outputs retain their intended colors."}}],
+          "known": [{"label":{"de":"Erster Modelldownload benötigt Internet","en":"First model download needs internet"},"text":{"de":"Noch nicht vorhandene Sprachmodelle benötigen einmalig eine Internetverbindung und lokalen Speicherplatz. Bereits gespeicherte Texte und der Livebetrieb bleiben davon unabhängig.","en":"Missing language models require a one-time internet connection and local storage. Saved text and live output remain independent."}}]
+        }
+      }]
+    },
+    {
       "line": "0.40",
       "builds": [{
         "version": "0.40.0",
         "releaseDate": "2026-09-20",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Private Notizen, lokale Übersetzung und sichere Loop-Ausgabe","en":"Private notes, local translation and safe loop output"},"text":{"de":"Version 0.40.0 ergänzt lokale automatische Songübersetzung ohne API-Schlüssel, private Folien- und Präsentationsnotizen, Radiosender im Hintergrundaudio und standardmäßig deaktivierte Gemeinwohl-Hinweise. Geschützte Loop-Kerninhalte, unveränderliche Live-Snapshots und mehrere Layoutkorrekturen erhöhen die Sicherheit im Livebetrieb.","en":"Version 0.40.0 adds local automatic song translation without an API key, private slide and presentation notes, radio background audio and opt-in public-interest notices. Protected loop content, immutable live snapshots and layout fixes improve live reliability."}},
         "sections": {
           "new": [

@@ -39,8 +39,8 @@ jobs:
           cache: npm
       - name: Abhängigkeiten installieren
         run: npm ci
-      - name: Version-39-Funktionstests
-        run: node scripts/check-version39.cjs && node scripts/check-version40.cjs
+      - name: Versions-Funktionstests
+        run: node scripts/check-version39.cjs && node scripts/check-version40.cjs && node scripts/check-version41.cjs
       - name: Anwendung bauen
         run: npm run build
       - name: Windows-Installer erstellen

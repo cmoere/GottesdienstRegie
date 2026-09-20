@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.41.0
+
+Version 0.41.0 ordnet die neuen Pre- und Post-Loop-Inhalte mit einer zentralen Abschnittsregel. Meldungen, Geburtstage, Veranstaltungen, Wetter, Quiz, Loop-Countdown, Uhrzeit, Bibelvers, QR-Code, Infokarte und Terminanzeigen werden nur noch dort angeboten, wo sie fachlich erlaubt sind. Dieselbe Prüfung schützt Hinzufügen, Verschieben und Einfügen; vorhandene ältere Daten werden dabei nicht ungefragt gelöscht.
+
+Der Song-Editor erhält eine umfangreiche durchsuchbare Sprachauswahl. Spracheinträge zeigen Flagge, deutschen Namen und Eigenbezeichnung. Fünfzehn häufig verwendete Sprachen werden nach dem Programmstart mit niedriger Priorität vorbereitet. Weitere Sprachen bleiben vollständig sichtbar und kennzeichnen ein noch fehlendes lokales Modell mit einem Wolkensymbol. Beim Laden und Übersetzen erscheinen Spinner, Status und Prozentwert. Der übersetzte Text wird mit der Präsentation gespeichert, das große Modell selbst bleibt gerätelokal; auf einem zweiten Rechner ist der vorhandene Text deshalb lesbar und nur für eine erneute Übersetzung muss das passende Paket dort nachgeladen werden.
+
+Präsentationsnotizen sind jetzt direkt unter dem Präsentationstitel erreichbar. Das Popup unterstützt Fett, Kursiv, Unterstreichen, Listen, Ausrichtung, Rückgängig und Wiederholen sowie sicheres Einfügen als Klartext. Persönliche Foliennotizen bleiben kompakt am Editor. Beide Notizarten werden lokal und kontogetrennt gespeichert und gelangen nicht in MAIN, STAGE oder andere Ausgaben.
+
+Die bisherige einfache 2D-Auswahl wurde durch eine durchsuchbare Galerie mit Symbolen, Namen und Kategorien ersetzt. Mehr als dreißig Grundformen, Pfeile, Symbole und kirchliche Motive lassen sich dadurch schneller finden. Zahlenfelder, Popovers und schmale Einstellungsseiten besitzen stabilere Abstände und stärkere Kontraste.
+
+Der Schwarz-Weiß-Modus ist nun strikt auf die Bedienoberfläche beschränkt. MAIN, STAGE, Livestream, Lobby und weitere Ausgabefenster behalten immer die vorgesehenen Folienfarben. Die Hilfe beschreibt dieses Verhalten eindeutig und der veraltete Hinweis auf einen nicht benötigten API-Schlüssel wurde entfernt.
+
+---
+
 # GottesdienstRegie 0.40.0
 
 Version 0.40.0 erweitert den Song-Editor um eine lokale automatische Übersetzung zwischen Englisch und Deutsch. Beim ersten Einsatz wird das benötigte Modell geladen; danach läuft die Übersetzung auf dem Gerät ohne API-Schlüssel. Akkorde und Leerzeilen bleiben erhalten, der Entwurf kann vor dem Speichern korrigiert werden und ein Fehler verändert weder Originaltext noch MAIN.
