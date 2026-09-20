@@ -1,3 +1,21 @@
+# GottesdienstRegie 0.43.0
+
+Version 0.43.0 macht mehrere vorbereitete Funktionen belastbar für den täglichen Einsatz. Die Nutzungsbedingungen wurden zu einer deutlich ausführlicheren gemeinsamen Fassung erweitert. Anwendung, Windows-Installer und die eigenständige öffentliche Seite `https://cmoere.github.io/GottesdienstRegie/terms/` werden aus derselben strukturierten Quelle erzeugt. Die Online-Bedingungen liegen bewusst nicht auf derselben Seite wie die Versionshinweise. Themen wie Konten, Live-Verantwortung, Medienrechte, Cloud-Synchronisierung, lokale Speicherung, Übersetzungsmodelle, Updates, Verfügbarkeit, Haftung, Beendigung und Kontakt sind nun nachvollziehbar gegliedert.
+
+Unter Einstellungen → Allgemein steht eine neue Speicherübersicht bereit. Sie berechnet ausschließlich die Größe freigegebener, neu erzeugbarer Arbeitsdaten: lokale Übersetzungsmodelle, Modellcache, Mediencache, Vorschaubilder, unvollständige Downloads und Web-Cache. Kategorien können einzeln gewählt werden; vor dem unwiderruflichen Löschen nennt ein Bestätigungsdialog Auswahl und Größe. Präsentationen, Konten, Einstellungen, Originalmedien und bereits gespeicherte Songübersetzungen gehören ausdrücklich nicht zu diesen Bereichen. Während ON AIR oder eines laufenden Sprachdownloads wird die Bereinigung verweigert. Symbolische Verknüpfungen beziehungsweise Pfade außerhalb der genehmigten Ordner werden nicht verfolgt.
+
+Der Download lokaler Übersetzungsmodelle wurde technisch neu aufgebaut. Große Dateien werden blockweise auf die Festplatte gestreamt und nicht mehr vollständig im Arbeitsspeicher gesammelt. Bei bekannter Gesamtgröße erscheinen Bytes und Prozent; ohne Content-Length bleibt ein Aktivitätsstatus mit den bereits übertragenen Bytes sichtbar. Abbruch und Fehler entfernen den unvollständigen temporären Ordner, und „Bereit“ wird erst gesetzt, wenn alle vorgesehenen Dateien existieren und Inhalt besitzen. Beim Programmstart werden keine großen Modelle mehr ungefragt heruntergeladen. Nicht unterstützte Sprachrichtungen bleiben für manuell gespeicherte Texte auswählbar und sind klar als ohne lokales Modell gekennzeichnet.
+
+Die Sprachauswahl verwendet jetzt gebündelte SVG-Dateien statt Emoji-Flaggen. Häufige Sprachen besitzen ein lokales Flaggensymbol; bei Sprachen ohne eindeutige Länderzuordnung sowie bei einem Ladefehler erscheint ein neutrales Globus-SVG. Dadurch hängt die Darstellung weder von der Emoji-Unterstützung des Betriebssystems noch von einer externen Bildquelle ab.
+
+Die Veranstaltungsverknüpfung zeigt als vollständige Statuszeile, ob noch keine Veranstaltung gewählt wurde, eine Verbindung besteht, der Termin abgesagt wurde oder der Online-Datensatz aktuell nicht erreichbar ist. Titel, Datum und planmäßige Uhrzeit werden beim Speichern als Snapshot gesichert und nicht still durch spätere Änderungen ersetzt. Der Auswahlbereich behält Suche und die Gruppen HEUTE, MORGEN und KOMMEND, übernimmt eine Wahl erst über „Änderung speichern“ und gibt nach dem Schließen den Tastaturfokus an den Auslöser zurück.
+
+Das Hinzufügen spezieller Vor- und Nachprogramm-Elemente wurde gegen schnelle Doppelklicks abgesichert. Ein Klick erzeugt genau ein ServiceItem. Standardwerte für Wetter, Uhr, Quiz und weitere Typen stammen aus einer zentralen Factory; QR-Code und Bibelvers prüfen ihre Kerndaten vor der Anlage. Das Auswahlmenü ist ein responsives, scrollbar bleibendes Raster und bleibt auch in schmalen Fenstern lesbar. Die bestehende Abschnittsregel verhindert weiterhin, dass Loop-Inhalte in normale Gottesdienstbereiche gelangen.
+
+Die Hilfe erklärt Speicherbereinigung, lokale Sprachpakete, Loop-Elemente und die getrennte Online-Fassung der Bedingungen ausführlich. MAIN, STAGE, Livestream, Lobby und Recording werden durch diese Bedienoberflächenänderungen nicht gestaltet oder umgefärbt.
+
+---
+
 # GottesdienstRegie 0.41.0
 
 Version 0.41.0 ordnet die neuen Pre- und Post-Loop-Inhalte mit einer zentralen Abschnittsregel. Meldungen, Geburtstage, Veranstaltungen, Wetter, Quiz, Loop-Countdown, Uhrzeit, Bibelvers, QR-Code, Infokarte und Terminanzeigen werden nur noch dort angeboten, wo sie fachlich erlaubt sind. Dieselbe Prüfung schützt Hinzufügen, Verschieben und Einfügen; vorhandene ältere Daten werden dabei nicht ungefragt gelöscht.
