@@ -43,6 +43,7 @@ import {
 } from "./store";
 import { SlideRenderer } from "./SlideRenderer";
 import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopController, WEATHER_SCREEN_DURATION_MS, WEATHER_SCREEN_URL, type LoopItemType } from "./loopDomain";
+import { canInsertItemType } from "./itemPlacementPolicy";
 import { weatherScreenController } from "./weatherController";
 import { LoopPreview } from "./LoopPreview";
 import { liveEngine } from "./LiveEngine";
@@ -2253,7 +2254,7 @@ function AddPopover({
           ? `${activeSection?.title ?? "Bereich"} · LOOP-ELEMENTE`
           : "LOOP-ELEMENTE"}
       </strong>
-      {loopOptions.map((option) => (
+      {loopOptions.filter((option) => canInsertItemType(option.type, activeSection)).map((option) => (
         <button key={`loop-${option.type}`} onClick={() => addLoopElement(option)}>
           <Icon name={option.icon} />
           <span>{option.label}</span>
@@ -2261,9 +2262,7 @@ function AddPopover({
       ))}
     </div>
   ) : null;
-  const visibleOptions = targetSectionId
-    ? options.filter((option) => !isLoopItemType(String(option.type)))
-    : options;
+  const visibleOptions = options.filter((option) => canInsertItemType(option.type, activeSection));
   return (
     <>
       <div className="popover add-content-popover">
