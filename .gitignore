@@ -9,6 +9,7 @@ dist/
 dist-electron/
 release/
 work/
+.worktrees/
 *.tsbuildinfo
 *.log
 .env
