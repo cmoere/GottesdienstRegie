@@ -112,6 +112,10 @@ function detectedLanguage():Language{
   return 'de';
 }
 
+export function migratePreferencesForV44(persisted:unknown){
+  return {...(persisted&&typeof persisted==='object'?persisted:{}),operatorScale:3 as const};
+}
+
 export const usePreferences=create<PreferencesState>()(persist(set=>({
   songTranslationMode:'parentheses',
   setSongTranslationMode:songTranslationMode=>set({songTranslationMode}),
@@ -124,7 +128,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   reopenLastPresentation:true,
   highContrast:false,
   largeText:false,
-  operatorScale:2,
+  operatorScale:3,
   strongFocus:true,
   dyslexiaFriendly:false,
   canvasGridSize:16,
@@ -192,4 +196,4 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setAiEnabled:aiEnabled=>set({aiEnabled}),
   setPublicInterest:patch=>set(state=>({publicInterest:{...state.publicInterest,...patch,durationSeconds:Math.max(8,Math.min(30,patch.durationSeconds??state.publicInterest.durationSeconds))}})),
   setSharedDeviceSecurity:patch=>set(patch)
-}),{name:'gottesdienstregie.preferences'}));
+}),{name:'gottesdienstregie.preferences',version:44,migrate:persisted=>migratePreferencesForV44(persisted)}));

@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.44.0
+
+Version 0.44.0 macht die Bedienoberfläche standardmäßig etwas größer und besser lesbar. Die vorhandene fünfstufige Anzeigegröße beginnt nun auf der Stufe „Groß“ mit dem Faktor 1,1. Dadurch wachsen Navigation, Menüs, Schaltflächen, Symbole und allgemeine Beschriftungen behutsam um zehn Prozent, ohne die kompakte Desktop-Aufteilung grundlegend zu verändern.
+
+Eingabefelder, Textfelder, Auswahlfelder und andere Formularelemente behalten ihre bereits festgelegten Abmessungen. Damit bleibt in Editoren und Einstellungsseiten ausreichend Platz für Inhalte. Die Vergrößerung betrifft ausschließlich die Bedienoberfläche: Folienvorschau, MAIN, STAGE, Livestream, Lobby, Recording und weitere Ausgabefenster werden weder skaliert noch in ihrer Gestaltung verändert.
+
+Beim ersten Start nach dem Update erhalten auch bestehende Installationen einmalig die neue größere Ausgangsstufe. Danach kann die Anzeigegröße unter Einstellungen weiterhin frei zwischen Sehr klein, Klein, Standard, Groß und Sehr groß gewechselt werden. Automatische Prüfungen sichern die neue Ausgangsstufe, die unveränderte Ausgabeskalierung und die bestehende Skalenauswahl ab.
+
+---
+
 # GottesdienstRegie 0.43.1
 
 Version 0.43.1 behebt die überlappende Darstellung in der Sprachauswahl des Song-Übersetzers. Das kompakte SVG-Sprachsymbol hatte denselben globalen CSS-Klassennamen wie der große Sprachschalter auf dem Anmeldebildschirm. Da die Login-Regel später geladen wird, wurde die Flagge von den vorgesehenen 24 × 16 Pixeln auf 46 × 38 Pixel vergrößert, während die erste Rasterspalte weiterhin nur 28 Pixel breit war. Dadurch lagen Flagge, Sprachname und Eigenbezeichnung übereinander.

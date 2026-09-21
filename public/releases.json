@@ -21,11 +21,28 @@
   ],
   "versions": [
     {
+      "line": "0.44",
+      "builds": [{
+        "version": "0.44.0",
+        "releaseDate": "2026-09-21",
+        "current": true,
+        "overview": {"label":{"de":"Größere und besser lesbare Bedienoberfläche","en":"Larger and more readable operator interface"},"text":{"de":"Version 0.44.0 hebt die Standardgröße der Bedienoberfläche behutsam um zehn Prozent an. Navigation, Menüs, Schaltflächen, Symbole und allgemeine Beschriftungen sind dadurch leichter erfassbar, während Eingabefelder ihre bisherigen festen Abmessungen behalten und mehr Inhalt nicht unnötig verdrängt wird. Vorschau, MAIN, STAGE, Livestream, Recording und alle anderen Ausgabefenster bleiben unverändert.","en":"Version 0.44.0 gently raises the default operator interface scale by ten percent. Navigation, menus, buttons, icons and general labels are easier to read while fixed-size form controls retain their established dimensions. Preview and all output surfaces remain unchanged."}},
+        "sections": {
+          "new": [],
+          "improved": [
+            {"label":{"de":"Leicht vergrößerter Standard","en":"Slightly larger default"},"text":{"de":"Die bisherige fünfstufige Anzeigegröße startet nun auf der Stufe „Groß“ mit Faktor 1,1. Das gilt nach dem Update einmalig auch für bestehende Installationen; anschließend kann die Größe wie gewohnt zwischen Sehr klein, Klein, Standard, Groß und Sehr groß gewählt werden.","en":"The existing five-step display size now starts at Large with a 1.1 factor. Existing installations receive this baseline once and can continue to choose any of the five levels afterwards."},"bullets":{"de":["Bedientexte und Steuerelemente werden besser lesbar.","Feste Eingabefeldabmessungen werden nicht vergrößert.","Die persönliche Anzeigegröße bleibt weiterhin einstellbar."],"en":["Operator labels and controls are easier to read.","Fixed input field dimensions are not enlarged.","The personal display size remains configurable."]}}
+          ],
+          "fixed": [],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.43",
       "builds": [{
         "version": "0.43.1",
         "releaseDate": "2026-09-20",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Korrekte Flaggen und lesbare Sprachauswahl","en":"Correct flags and readable language picker"},"text":{"de":"Version 0.43.1 behebt eine CSS-Kollision zwischen dem großen Sprachschalter der Anmeldung und den kompakten SVG-Sprachsymbolen im Song-Übersetzer. Flaggen behalten nun zuverlässig ihre vorgesehene Größe, Text, Eigenbezeichnung und Downloadstatus liegen in getrennten Rasterspalten und überdecken sich nicht mehr.","en":"Version 0.43.1 fixes a CSS class collision between the large login language control and compact SVG symbols in the song translator. Flags now keep their intended size while labels, native names and download state remain in separate grid columns."}},
         "sections": {
           "new": [],

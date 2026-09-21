@@ -2,7 +2,7 @@ import {helpV39,helpIllustrations} from './helpV39';
 import './version39.css';
 import './version41.css';
 import './version42.css';
-import {operatorScaleFactor} from './operatorAccessibility';
+import {effectiveOperatorScale} from './operatorAccessibility';
 import {TranslationPackSettings} from './TranslationPackSettings';
 import {TERMS_EFFECTIVE_DATE,TERMS_VERSION,termsSections} from './termsContent';
 import {translationModes, type SongTranslationMode} from './songTranslation';
@@ -10357,7 +10357,7 @@ export function App() {
     document.documentElement.dataset.largeText = String(largeText);
     document.documentElement.dataset.strongFocus = String(strongFocus);
     document.documentElement.dataset.dyslexia = String(dyslexiaFriendly);
-    document.documentElement.style.setProperty('--operator-scale',String(output?1:operatorScaleFactor(operatorScale)));
+    document.documentElement.style.setProperty('--operator-scale',String(effectiveOperatorScale(operatorScale,output)));
   }, [
     language,
     theme,
