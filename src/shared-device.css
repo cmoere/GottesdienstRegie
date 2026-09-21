@@ -952,3 +952,7 @@
 .stage-song-chords { color:#f3d67b; font-size:.72em; min-height:1em; white-space:pre-wrap; }
 .stage-song-next { flex:none; border-top:1px solid rgba(180,220,225,.35); padding-top:clamp(10px,1.4vw,22px); color:#b6c9cc; font-size:clamp(16px,2vw,34px); line-height:1.25; }
 .stage-song-next div { margin-top:5px; white-space:pre-wrap; overflow:hidden; text-overflow:ellipsis; }
+.personal-note-status .material-symbols-outlined.is-spinning{animation:note-status-spin .8s linear infinite}
+.personal-note-status-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@keyframes note-status-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.personal-note-status .material-symbols-outlined.is-spinning{animation:none}}

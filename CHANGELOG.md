@@ -1,5 +1,13 @@
 # Versionshinweise / Release notes
 
+## 0.45.1 – Eindeutiger Speicherstatus für persönliche Notizen
+
+Der Hinweis unter persönlichen Präsentations- und Foliennotizen zeigt jetzt in jeder Phase das passende Symbol. Das Schloss kennzeichnet ausschließlich den privaten Ruhezustand. Während eine Änderung gespeichert wird, erscheint stattdessen ein rotierendes Synchronisationssymbol; die sichtbaren Punkte wechseln fortlaufend zwischen einem, zwei und drei Punkten. Nach erfolgreicher Speicherung bestätigt ein Haken den Vorgang für höchstens fünf Sekunden. Ein Fehler erhält ein eigenes Fehlerzeichen und bleibt sichtbar, bis eine neue Speicherung versucht wird.
+
+Schnelle aufeinanderfolgende Eingaben verwenden weiterhin nur den neuesten Notizstand. Veraltete Speicher- und Erfolgszeitgeber werden beim nächsten Bearbeiten, beim Wechsel der Notiz sowie beim Schließen des Editors vollständig beendet. Dadurch kann ein älterer Erfolg weder einen späteren Fehler verdecken noch den Status einer neueren Eingabe vorzeitig verändern.
+
+Für Screenreader wird der laufende Speichervorgang als stabiler Text ausgegeben, während die rein visuelle Punkteanimation nicht wiederholt vorgelesen wird. Bei aktivierter Betriebssystemeinstellung für reduzierte Bewegung dreht sich das Synchronisationssymbol nicht. Die Speicherung bleibt unverändert lokal, benutzer- und präsentationsbezogen; dieser Patch überträgt persönliche Notizen weder in die Cloud noch auf MAIN, STAGE, LIVESTREAM oder andere Ausgaben.
+
 ## 0.40.0 – Private Notizen, lokale Übersetzung und sichere Loop-Ausgabe
 
 Version 0.40.0 führt eine lokale automatische Englisch-Deutsch-Übersetzung direkt im Song-Editor ein. Das Sprachmodell läuft nach dem einmaligen Download auf dem Gerät und benötigt keinen API-Schlüssel; Akkorde in eckigen Klammern und bestehende Zeilenumbrüche werden geschützt. Übersetzungen bleiben vor dem Einsatz editierbar und alle sechs vorhandenen Anzeigearten bleiben verfügbar.

@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.45.1
+
+Version 0.45.1 präzisiert den Speicherstatus persönlicher Präsentations- und Foliennotizen. Das bisher dauerhaft sichtbare Schloss vermittelte auch während des Speicherns oder nach einem Fehler den Eindruck, dass lediglich der private Hinweis aktiv sei. Nun besitzt jeder Zustand eine eindeutige Darstellung: Im Ruhezustand bestätigt das Schloss weiterhin, dass die Notiz nur für den angemeldeten Benutzer auf diesem Gerät sichtbar ist. Sobald Text geändert wird, wechselt die Anzeige zu einem Synchronisationssymbol und einer laufenden Punktfolge aus „.“, „..“ und „...“.
+
+Nach erfolgreicher lokaler Speicherung erscheint ein Haken zusammen mit „Gespeichert“. Diese Bestätigung bleibt höchstens fünf Sekunden sichtbar und kehrt anschließend automatisch zum privaten Ruhezustand zurück. Schlägt das Speichern beispielsweise wegen eines nicht verfügbaren lokalen Speichers fehl, erscheint ein Fehlerzeichen mit „Speichern fehlgeschlagen“. Dieser Fehlerstatus wird nicht durch einen älteren Erfolgstimer überschrieben, sondern bleibt bis zum nächsten Speicherversuch nachvollziehbar.
+
+Die Zeitsteuerung wurde zugleich gegen schnelle Eingaben und das Schließen des Dialogs abgesichert. Jede neue Bearbeitung verwirft einen noch ausstehenden älteren Speichervorgang. Zeitgeber für Entprellung, Animation und Erfolgsanzeige werden beim Wechsel der Notiz sowie beim Entfernen der Komponente vollständig beendet. Damit entstehen keine verspäteten Schreibvorgänge und keine Statusänderungen, nachdem der Notizeneditor bereits geschlossen wurde.
+
+Auch die Barrierefreiheit wurde verbessert. Der Statusbereich meldet Änderungen über eine zurückhaltende Live-Region. Während die Punkte optisch weiterlaufen, hören Screenreader nur die stabile Meldung „Notiz wird gespeichert“ und nicht bei jeder Animationsstufe einen neuen Satz. Wer im Betriebssystem reduzierte Bewegung aktiviert hat, erhält denselben verlässlichen Status ohne rotierendes Symbol.
+
+Die Datenschutz- und Ausgaberegeln ändern sich nicht: Persönliche Notizen bleiben lokal, benutzer- und präsentationsbezogen gespeichert. Sie werden durch dieses Update nicht synchronisiert, nicht Teil der Präsentationsdatei und niemals auf MAIN, STAGE, LIVESTREAM, Lobby oder andere Ausgaben übertragen.
+
+Automatisierte Tests prüfen alle vier Zustände, die Punkteanimation, schnelle aufeinanderfolgende Eingaben, Fehler nach einem vorherigen Erfolg, die Fünf-Sekunden-Grenze, Screenreader-Ausgabe und die vollständige Timerbereinigung beim Schließen.
+
+---
+
 # GottesdienstRegie 0.45.0
 
 Version 0.45.0 vervollständigt die Sprachauswahl des Song-Übersetzers und behebt mehrere Fehler rund um persönliche Präsentationsnotizen. Der bislang kleine fest eingebaute Flaggenkatalog deckte nur die Standardsprachen ab. Weitere auswählbare Sprachen erhielten deshalb dasselbe neutrale Globus-Symbol. Der gesamte Sprachkatalog ist nun mit repräsentativen Länderzuordnungen verbunden und verwendet lokal gebündelte SVG-Flaggen. Die Anzeige ist unabhängig von Betriebssystem-Emojis und funktioniert ohne Internetzugriff.
