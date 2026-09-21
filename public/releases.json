@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.45",
+      "builds": [{
+        "version": "0.45.0",
+        "releaseDate": "2026-09-21",
+        "current": true,
+        "overview": {"label":{"de":"Vollständige Sprachflaggen und sicherer Notizen-Dialog","en":"Complete language flags and safer notes dialog"},"text":{"de":"Version 0.45.0 vervollständigt die visuelle Sprachauswahl und korrigiert mehrere Wechselwirkungen des Präsentationsnotizen-Dialogs. Jede im Übersetzer angebotene Sprache besitzt nun eine lokal gebündelte, SVG-basierte repräsentative Länderflagge. Der Notizen-Dialog liegt als echte oberste Modalebene über dem Editor, blendet dessen Formatierungsleiste aus und sperrt sämtliche Mausbewegungen im darunterliegenden Canvas. Zusätzlich wurden die Notizen-Symbole und die Hilfe-Schaltfläche der Veranstaltungsverknüpfung verbessert.","en":"Version 0.45.0 completes the visual language picker and fixes several presentation-notes dialog interactions. Every translation language now has a locally bundled SVG-based representative country flag. Notes use a true top-level modal layer, hide the underlying formatting toolbar and block all canvas interaction beneath the dialog."}},
+        "sections": {
+          "new": [{"label":{"de":"Flaggen für den gesamten Sprachkatalog","en":"Flags for the complete language catalog"},"text":{"de":"Nicht nur die Standardsprachen, sondern auch alle weiteren auswählbaren Übersetzungssprachen zeigen jetzt eine passende Flagge. Die Grafiken werden als lokale SVG-Ressourcen mit der Anwendung ausgeliefert und benötigen weder Emoji-Unterstützung noch eine Internetverbindung.","en":"Standard and additional translation languages now show a representative flag from locally bundled SVG resources without relying on emoji support or a network connection."}}],
+          "improved": [{"label":{"de":"Klarere Notizen-Werkzeuge","en":"Clearer notes tools"},"text":{"de":"Vor dem Datenschutzhinweis steht nun ein Schloss-Symbol. Rückgängig und Wiederholen erscheinen als eindeutige Symbole mit zugänglichen Beschriftungen und Tooltips.","en":"A lock marks the privacy notice, while undo and redo use clear icons with accessible labels and tooltips."}},{"label":{"de":"Hilfe zur Veranstaltungsverknüpfung ausgerichtet","en":"Aligned event-link help"},"text":{"de":"Die Hilfe-Schaltfläche sitzt in einer eigenen festen Rasterspalte rechts neben der Veranstaltung und ist unabhängig von Textlänge und Anzeigegröße vertikal zentriert.","en":"The event-link help control now occupies a dedicated right-hand grid column and remains vertically centered."}}],
+          "fixed": [{"label":{"de":"Editorleiste hinter Notizen","en":"Editor toolbar behind notes"},"text":{"de":"Beim Öffnen der Präsentationsnotizen bleibt die Textformatierungsleiste des Folieneditors nicht mehr sichtbar. Der Dialog wird direkt unterhalb des Dokumentkörpers gerendert und kann nicht von lokalen Stapelkontexten der Seitenleiste eingeschränkt werden.","en":"The slide formatting toolbar is no longer visible while presentation notes are open. The dialog renders at the document root and cannot be constrained by sidebar stacking contexts."}},{"label":{"de":"Keine Bearbeitung hinter einem Dialog","en":"No editing behind a dialog"},"text":{"de":"Die Anwendung unterhalb des Notizen-Dialogs erhält keine Mausereignisse mehr. Auch globale Canvas-Bewegungen prüfen den Modalzustand, brechen laufende Ziehvorgänge ab und verhindern so das versehentliche Verschieben oder Skalieren von Elementen.","en":"The application beneath the notes dialog no longer receives pointer events. Global canvas movement also checks modal state and cancels active drags."}}],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.44",
       "builds": [{
         "version": "0.44.0",
         "releaseDate": "2026-09-21",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Größere und besser lesbare Bedienoberfläche","en":"Larger and more readable operator interface"},"text":{"de":"Version 0.44.0 hebt die Standardgröße der Bedienoberfläche behutsam um zehn Prozent an. Navigation, Menüs, Schaltflächen, Symbole und allgemeine Beschriftungen sind dadurch leichter erfassbar, während Eingabefelder ihre bisherigen festen Abmessungen behalten und mehr Inhalt nicht unnötig verdrängt wird. Vorschau, MAIN, STAGE, Livestream, Recording und alle anderen Ausgabefenster bleiben unverändert.","en":"Version 0.44.0 gently raises the default operator interface scale by ten percent. Navigation, menus, buttons, icons and general labels are easier to read while fixed-size form controls retain their established dimensions. Preview and all output surfaces remain unchanged."}},
         "sections": {
           "new": [],

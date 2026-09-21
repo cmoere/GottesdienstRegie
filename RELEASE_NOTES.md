@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.45.0
+
+Version 0.45.0 vervollständigt die Sprachauswahl des Song-Übersetzers und behebt mehrere Fehler rund um persönliche Präsentationsnotizen. Der bislang kleine fest eingebaute Flaggenkatalog deckte nur die Standardsprachen ab. Weitere auswählbare Sprachen erhielten deshalb dasselbe neutrale Globus-Symbol. Der gesamte Sprachkatalog ist nun mit repräsentativen Länderzuordnungen verbunden und verwendet lokal gebündelte SVG-Flaggen. Die Anzeige ist unabhängig von Betriebssystem-Emojis und funktioniert ohne Internetzugriff.
+
+Der Präsentationsnotizen-Dialog wird nicht länger innerhalb der Seitenleiste aufgebaut, sondern als echte oberste Modalebene direkt am Dokumentkörper. Dadurch liegt er zuverlässig über allen Teilen des Editors. Die globale Textformatierungsleiste wird ausgeblendet, solange Notizen geöffnet sind. Gleichzeitig wird die darunterliegende Anwendung für Mausereignisse gesperrt. Eine zusätzliche Schutzprüfung in der Canvas-Bewegungslogik beendet laufende Ziehvorgänge, sobald ein modaler Dialog vorhanden ist. Elemente können daher nicht mehr versehentlich hinter dem Dialog verschoben oder skaliert werden.
+
+Im Notizeditor kennzeichnet ein Schloss-Symbol den Hinweis „Diese Notiz ist nur für dich sichtbar.“ Rückgängig und Wiederholen verwenden kompakte Undo- und Redo-Symbole statt langer Textschaltflächen; Tooltips und zugängliche Beschriftungen bleiben vorhanden. Die Hilfe-Schaltfläche der Veranstaltungsverknüpfung besitzt jetzt eine feste rechte Rasterspalte und sitzt unabhängig von Textlänge oder Anzeigegröße vertikal mittig.
+
+Automatische Regressionstests prüfen jede angebotene Übersetzungssprache, die Modal-Sperre, die Notizen-Symbole, das Ausblenden der Editorleiste sowie die Rasterposition der Veranstaltungshilfe.
+
+---
+
 # GottesdienstRegie 0.44.0
 
 Version 0.44.0 macht die Bedienoberfläche standardmäßig etwas größer und besser lesbar. Die vorhandene fünfstufige Anzeigegröße beginnt nun auf der Stufe „Groß“ mit dem Faktor 1,1. Dadurch wachsen Navigation, Menüs, Schaltflächen, Symbole und allgemeine Beschriftungen behutsam um zehn Prozent, ohne die kompakte Desktop-Aufteilung grundlegend zu verändern.

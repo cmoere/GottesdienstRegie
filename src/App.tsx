@@ -2,7 +2,9 @@ import {helpV39,helpIllustrations} from './helpV39';
 import './version39.css';
 import './version41.css';
 import './version42.css';
+import './version45.css';
 import {effectiveOperatorScale} from './operatorAccessibility';
+import {modalBlocksCanvas} from './modalInteraction';
 import {TranslationPackSettings} from './TranslationPackSettings';
 import {TERMS_EFFECTIVE_DATE,TERMS_VERSION,termsSections} from './termsContent';
 import {translationModes, type SongTranslationMode} from './songTranslation';
@@ -3363,6 +3365,7 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
     theme = usePreferences((value) => value.theme);
   useEffect(() => {
     const move = (event: PointerEvent) => {
+      if(modalBlocksCanvas()){drag.current=null;return}
       const active = drag.current,
         rect = frame.current?.getBoundingClientRect();
       if (!active || !rect) return;
@@ -3400,7 +3403,7 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
     id: string,
     kind: "move" | "resize",
   ) {
-    if (!canEdit) return;
+    if (!canEdit||modalBlocksCanvas()) return;
     event.preventDefault();
     event.stopPropagation();
     const element = slide.elements.find((entry) => entry.id === id);

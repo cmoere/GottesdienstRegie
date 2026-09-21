@@ -1,0 +1,4 @@
+body:has(.personal-notes-backdrop) #root{pointer-events:none}body:has(.personal-notes-backdrop) .production-app>.format-toolbar{display:none!important}
+.personal-notes-editor>small{display:flex;align-items:center;gap:5px;min-height:20px}.personal-notes-editor>small .material-symbols-outlined{font-size:15px}.personal-notes-toolbar button .material-symbols-outlined{font-size:18px}
+.event-link-row{grid-template-columns:minmax(0,1fr) 28px!important;align-items:center!important}.event-help-button{position:static!important;right:auto!important;bottom:auto!important;align-self:center;justify-self:center;margin:0!important}
+.translation-language-flag{background-size:cover!important;background-position:center!important}

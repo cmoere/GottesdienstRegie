@@ -6,6 +6,7 @@ import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import './cera-pro.css';
 import 'material-symbols/outlined.css';
+import 'flag-icons/css/flag-icons.min.css';
 import { App } from './App';
 import './styles.css';
 import './settings-v08.css';
