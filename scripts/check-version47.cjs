@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+const releases=JSON.parse(fs.readFileSync('public/releases.json','utf8'));
+const builds=releases.versions.flatMap(line=>line.builds);
+assert.equal(pkg.version,'0.47.0');
+assert.deepEqual(builds.filter(build=>build.current).map(build=>build.version),['0.47.0']);
+assert.match(fs.readFileSync('RELEASE_NOTES.md','utf8'),/220 Zeichen/);
+assert.doesNotMatch(fs.readFileSync('src/App.tsx','utf8'),/slice\(0,\s*220\)/);
+assert.match(fs.readFileSync('src/styles.css','utf8'),/\.update-state \.update-brief[^}]*overflow-wrap:\s*anywhere/s);
+console.log('Version 0.47 complete update description checks passed.');

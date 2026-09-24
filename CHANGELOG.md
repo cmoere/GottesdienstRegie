@@ -1,5 +1,12 @@
 # Versionshinweise / Release notes
 
+## 0.47.0 – Vollständige Update-Beschreibungen
+
+- Update-Beschreibungen werden nicht mehr starr nach 220 Zeichen abgeschnitten.
+- Die ersten beiden inhaltlichen Absätze bleiben vollständig sichtbar.
+- Markdown- und HTML-Versionshinweise werden zu lesbarem Klartext aufbereitet.
+- Lange Inhalte brechen innerhalb der Update-Karte um, ohne versteckten Überlauf oder Ellipse.
+
 ## 0.46.0 – Native Web-Editor-Vorschau
 
 - Gemeinsamer React-Anwendungskern startet nun als eigenständiger Browser-Build ohne Electron-Bridge.

@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.47",
+      "builds": [{
+        "version": "0.47.0",
+        "releaseDate": "2026-09-25",
+        "current": true,
+        "overview": {"label":{"de":"Vollständige und lesbare Update-Beschreibungen","en":"Complete and readable update descriptions"},"text":{"de":"Version 0.47.0 entfernt die starre 220-Zeichen-Grenze der Update-Karte. Lange Versionsbeschreibungen bleiben bis zum Ende der angezeigten Absätze erhalten und werden innerhalb der verfügbaren Breite sauber umgebrochen.","en":"Version 0.47.0 removes the update card's fixed 220-character limit. Long release descriptions remain intact through the displayed paragraphs and wrap cleanly within the available width."}},
+        "sections": {
+          "new": [],
+          "improved": [{"label":{"de":"Robuste Aufbereitung von Versionshinweisen","en":"Robust release-note formatting"},"text":{"de":"Klartext, Markdown und HTML werden einheitlich aufbereitet. Überschriften werden ausgelassen, während die ersten beiden inhaltlichen Absätze vollständig sichtbar bleiben.","en":"Plain text, Markdown and HTML notes are normalized consistently. Headings are omitted while the first two substantive paragraphs remain fully visible."}}],
+          "fixed": [{"label":{"de":"Kein abgeschnittener Text mehr","en":"No more truncated text"},"text":{"de":"Die bisherige feste Grenze von 220 Zeichen konnte Sätze mitten im Wort beenden. Sie wurde entfernt; normale und besonders lange Wörter brechen nun innerhalb der Update-Karte um, ohne verborgen zu werden.","en":"The previous 220-character limit could end sentences mid-word. It has been removed, and regular or unusually long words now wrap inside the update card without being hidden."}}],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.46",
       "builds": [{
         "version": "0.46.0",
         "releaseDate": "2026-09-25",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Native Web-Editor-Vorschau für PC, Tablet und Smartphone","en":"Native web editor preview for desktop, tablet and phone"},"text":{"de":"Version 0.46.0 veröffentlicht erstmals den gemeinsamen GottesdienstRegie-Editor als Browser-Vorschau. Präsentationen werden lokal und revisionsgeschützt im Browser gespeichert. Responsive Arbeitsbereiche ermöglichen die Vorbereitung auf PC, Tablet und Smartphone, während Liveausgaben weiterhin sicher der Desktop-App vorbehalten bleiben.","en":"Version 0.46.0 publishes the shared GottesdienstRegie editor as a browser preview. Presentations are stored locally with revision protection, responsive workspaces support desktop, tablet and phone, and live outputs remain safely limited to the desktop app."}},
         "sections": {
           "new": [{"label":{"de":"Web-Editor ohne Installation","en":"Web editor without installation"},"text":{"de":"Der Editor startet direkt im Browser, legt beim ersten Öffnen eine lokale Präsentation an und lädt sie beim nächsten Besuch wieder. Der Browser-Build benötigt keine Electron-Bridge.","en":"The editor starts directly in a browser, creates a local presentation on first use and restores it on later visits without requiring an Electron bridge."}},{"label":{"de":"Touch-Navigation","en":"Touch navigation"},"text":{"de":"Tablet und Smartphone erhalten eine Navigation für Ablauf, Song, Folie und Vorschau mit großen Touchzielen und sicheren Bildschirmrändern.","en":"Tablet and phone layouts provide large touch targets and navigation for service order, song, slide and preview."}}],

@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.47.0
+
+Version 0.47.0 behebt die abgeschnittenen Texte im Bereich Einstellungen → Updates. Die Kurzbeschreibung eines verfügbaren Updates wurde bislang unabhängig von Wort- und Satzgrenzen nach exakt 220 Zeichen beendet. Dadurch konnte der letzte sichtbare Satz mitten in einem Wort abbrechen, obwohl die vollständigen Versionshinweise bereits vorhanden waren.
+
+Die feste Zeichengrenze wurde entfernt. Die Update-Karte zeigt nun die ersten beiden inhaltlichen Absätze vollständig an und bereitet sowohl Markdown- als auch HTML-Versionshinweise als gut lesbaren Klartext auf. Überschriften und reine Veröffentlichungszeilen werden weiterhin ausgelassen, damit der Hinweis kompakt bleibt, ohne den eigentlichen Inhalt zu beschneiden.
+
+Auch die Darstellung der Update-Karte wurde abgesichert. Lange Sätze und ungewöhnlich lange Wörter brechen innerhalb der verfügbaren Breite um; es gibt keine feste Zeilenhöhe, keinen versteckten Überlauf und keine Ellipse. Damit bleibt der komplette angezeigte Text bei allen unterstützten Anzeigegrößen lesbar.
+
+Automatische Regressionstests prüfen lange Klartext- und HTML-Versionshinweise und stellen sicher, dass ein Absatz auch jenseits von 220 Zeichen vollständig erhalten bleibt.
+
+---
+
 # GottesdienstRegie 0.46.0
 
 Version 0.46.0 veröffentlicht erstmals eine native Browser-Vorschau des GottesdienstRegie-Editors für PC, Tablet und Smartphone. Die Weboberfläche wird aus demselben React-Anwendungskern wie die Desktop-App gebaut, startet aber ohne Electron-Bridge und ohne Installation direkt im Browser. Beim ersten Öffnen entsteht automatisch eine lokale Präsentation. Änderungen werden regelmäßig und beim manuellen Speichern im Browserprofil gesichert und beim nächsten Öffnen wieder geladen.
