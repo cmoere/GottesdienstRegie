@@ -8,7 +8,7 @@ const modal=load('src/modalInteraction.ts');
 assert.equal(modal.modalBlocksCanvas({querySelector:selector=>selector==='[aria-modal="true"]'?{}:null}),true);
 assert.equal(modal.modalBlocksCanvas({querySelector:()=>null}),false);
 const notes=fs.readFileSync('src/PersonalNotesPanel.tsx','utf8');
-assert.match(notes,/createPortal/);assert.match(notes,/>lock</);assert.match(notes,/>undo</);assert.match(notes,/>redo</);
+assert.match(notes,/createPortal/);assert.match(notes,/noteStatusPresentation/);assert.match(notes,/>undo</);assert.match(notes,/>redo</);
 assert.equal(notes.includes('>Rückgängig</button>'),false);assert.equal(notes.includes('>Wiederholen</button>'),false);
 const css=fs.readFileSync('src/version45.css','utf8');
 assert.match(css,/body:has\(\.personal-notes-backdrop\).*\.format-toolbar/);

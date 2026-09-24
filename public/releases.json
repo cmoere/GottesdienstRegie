@@ -23,9 +23,20 @@
     {
       "line": "0.45",
       "builds": [{
+        "version": "0.45.1",
+        "releaseDate": "2026-09-25",
+        "current": true,
+        "overview": {"label":{"de":"Eindeutiger Speicherstatus für persönliche Notizen","en":"Clear save status for personal notes"},"text":{"de":"Persönliche Präsentations- und Foliennotizen zeigen nun für Ruhe, Speichern, Erfolg und Fehler jeweils ein passendes Symbol. Die laufende Punktanzeige macht den Speichervorgang sichtbar; die Erfolgsbestätigung verschwindet nach höchstens fünf Sekunden wieder.","en":"Personal presentation and slide notes now show distinct idle, saving, success and error states. Animated dots expose active writes and the success confirmation disappears after no more than five seconds."}},
+        "sections": {
+          "new": [],
+          "improved": [{"label":{"de":"Verständlicher Speicherablauf","en":"Understandable save flow"},"text":{"de":"Im privaten Ruhezustand steht das Schloss. Während des Speicherns erscheint ein Synchronisationssymbol mit einem, zwei und drei Punkten. Ein Haken bestätigt die erfolgreiche Speicherung kurzzeitig; Fehler bleiben bis zum nächsten Versuch sichtbar.","en":"The lock marks private idle state, synchronization and dots show active saving, a check confirms success briefly, and errors remain visible until retry."}}],
+          "fixed": [{"label":{"de":"Robuste Zeitsteuerung und Screenreader-Ausgabe","en":"Robust timing and screen-reader output"},"text":{"de":"Neue Eingaben beenden veraltete Timer. Beim Schließen werden alle ausstehenden Vorgänge bereinigt. Screenreader erhalten während der visuellen Animation eine stabile Meldung und reduzierte Bewegung wird berücksichtigt.","en":"New edits cancel stale timers, closing clears pending work, screen readers receive a stable announcement and reduced-motion preferences are respected."}}],
+          "known": []
+        }
+      },{
         "version": "0.45.0",
         "releaseDate": "2026-09-21",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Vollständige Sprachflaggen und sicherer Notizen-Dialog","en":"Complete language flags and safer notes dialog"},"text":{"de":"Version 0.45.0 vervollständigt die visuelle Sprachauswahl und korrigiert mehrere Wechselwirkungen des Präsentationsnotizen-Dialogs. Jede im Übersetzer angebotene Sprache besitzt nun eine lokal gebündelte, SVG-basierte repräsentative Länderflagge. Der Notizen-Dialog liegt als echte oberste Modalebene über dem Editor, blendet dessen Formatierungsleiste aus und sperrt sämtliche Mausbewegungen im darunterliegenden Canvas. Zusätzlich wurden die Notizen-Symbole und die Hilfe-Schaltfläche der Veranstaltungsverknüpfung verbessert.","en":"Version 0.45.0 completes the visual language picker and fixes several presentation-notes dialog interactions. Every translation language now has a locally bundled SVG-based representative country flag. Notes use a true top-level modal layer, hide the underlying formatting toolbar and block all canvas interaction beneath the dialog."}},
         "sections": {
           "new": [{"label":{"de":"Flaggen für den gesamten Sprachkatalog","en":"Flags for the complete language catalog"},"text":{"de":"Nicht nur die Standardsprachen, sondern auch alle weiteren auswählbaren Übersetzungssprachen zeigen jetzt eine passende Flagge. Die Grafiken werden als lokale SVG-Ressourcen mit der Anwendung ausgeliefert und benötigen weder Emoji-Unterstützung noch eine Internetverbindung.","en":"Standard and additional translation languages now show a representative flag from locally bundled SVG resources without relying on emoji support or a network connection."}}],
