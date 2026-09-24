@@ -72,6 +72,8 @@ import {
   type TwoFactorChallenge,
 } from "./auth";
 import {usePlatform} from './platform/PlatformContext';
+import {MobileWorkspaceNav} from './responsive/MobileWorkspaceNav';
+import {CapabilityNotice} from './platform/CapabilityNotice';
 import { useI18n, type TranslationKey, type Translator } from "./i18n";
 import {
   usePreferences,
@@ -8074,7 +8076,7 @@ function AppShell({
   onLogout: () => void;
   device: RegisteredDevice | null;
 }) {
-  const {auth}=usePlatform();
+  const {auth,presentations,media,desktop,target}=usePlatform();
   const { t, locale } = useI18n();
   const state = usePresentation();
   const loopController = useRef(new LoopController<ServiceItem>());
@@ -8203,18 +8205,14 @@ function AppShell({
         step: 2,
         text: "Synchronisation … 2/4 · Präsentation speichern",
       });
-      await window.desktop?.presentation.save(
-        presentationDocument(usePresentation.getState()),
-      );
+      await presentations.save(presentationDocument(usePresentation.getState()));
       usePresentation.getState().markSaved();
       setSyncProgress({
         state: "syncing",
         step: 3,
         text: "Synchronisation … 3/4 · Cloud-Verbindung prüfen",
       });
-      const storage = await window.desktop?.media
-        .onlineStatus()
-        .catch(() => null);
+      const storage = await media.status().catch(() => null);
       if (storage) setMediaStorage(storage);
       setSyncProgress({
         state: "syncing",
@@ -8241,7 +8239,7 @@ function AppShell({
     } finally {
       syncingRef.current = false;
     }
-  }, []);
+  }, [presentations,media]);
   useEffect(() => {
     if (previousTourOpen.current && !tourOpen && !state.presentationId)
       setLibraryOpen(true);
@@ -8349,9 +8347,9 @@ function AppShell({
   useEffect(() => {
     const timer = window.setInterval(() => {
       const current = usePresentation.getState();
-      if(current.saveState==='dirty'&&current.presentationId&&!syncingRef.current&&window.desktop){
+      if(current.saveState==='dirty'&&current.presentationId&&!syncingRef.current){
         const document=presentationDocument(current);syncingRef.current=true;
-        void window.desktop.presentation.save(document).then(()=>{const latest=usePresentation.getState();if(latest.presentationId===document.presentationId&&latest.updatedAt===document.updatedAt)latest.markSaved()}).catch(()=>usePresentation.getState().markSaveError()).finally(()=>{syncingRef.current=false});
+        void presentations.save(document).then(()=>{const latest=usePresentation.getState();if(latest.presentationId===document.presentationId&&latest.updatedAt===document.updatedAt)latest.markSaved()}).catch(()=>usePresentation.getState().markSaveError()).finally(()=>{syncingRef.current=false});
       }
     }, 15_000);
     return () => {
@@ -8361,10 +8359,10 @@ function AppShell({
     };
   }, [saveNow]);
   useEffect(() => {
-    void window.desktop?.displays().then(setDisplays);
+    void desktop.displays().then(setDisplays).catch(()=>setDisplays([]));
     const refreshCloud = () =>
-      void window.desktop?.media
-        .onlineStatus()
+      void media
+        .status()
         .then(setMediaStorage)
         .catch(() => setMediaStorage(null));
     refreshCloud();
@@ -10111,6 +10109,7 @@ function AppShell({
           <FormatToolbar openBackgroundMedia={() => openMedia("background")} />
         </>
       )}
+      {target==='web'&&<CapabilityNotice capability="outputMain"/>}
       <div className="main">
         <OrderOfService
           canEdit={canEdit}
@@ -10239,6 +10238,7 @@ function AppShell({
           confirm={() => void leave()}
         />
       )}
+      <MobileWorkspaceNav />
     </div>
   );
 }
@@ -10304,7 +10304,7 @@ function Output() {
 }
 
 export function App() {
-  const {auth}=usePlatform();
+  const {auth,presentations,target}=usePlatform();
   const [session, setSession] = useState<AuthSession | null | undefined>(
     undefined,
   );
@@ -10462,9 +10462,10 @@ export function App() {
       const reopen = usePreferences.getState().reopenLastPresentation;
       const restoredPromise = restoreWith(auth).catch(() => null);
       startupAuth.current = restoredPromise;
+      const browserLoad=target==='web'?presentations.list().then(async entries=>entries[0]?(await presentations.load(entries[0].id))?.document??null:(await presentations.create({title:'Meine Web-Präsentation'})).document):Promise.resolve(null);
       const [restored, loaded, recoveryCopy] = await Promise.all([
         restoredPromise,
-        reopen
+        target==='web'?browserLoad:reopen
           ? window.desktop?.presentation.load().catch(() => null)
           : Promise.resolve(null),
         window.desktop?.presentation.recovery().catch(() => null),
@@ -10481,7 +10482,7 @@ export function App() {
         )
       )
         usePresentation.getState().loadDocument(recoveryCopy.document);
-      const remaining = Math.max(0, 10000 - (Date.now() - started));
+      const remaining = target==='web'?0:Math.max(0, 10000 - (Date.now() - started));
       await new Promise((resolve) => setTimeout(resolve, remaining));
       clearInterval(timer);
       startupTimer.current = undefined;
