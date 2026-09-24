@@ -7,6 +7,9 @@ firebase.json
 database.rules.json
 dist/
 dist-electron/
+dist-web/
+playwright-report/
+test-results/
 release/
 work/
 .worktrees/

@@ -11,8 +11,12 @@
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "concurrently -k \"vite\" \"wait-on http://localhost:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "dev:web": "vite --mode web --port 4173",
     "build": "tsc -b && vite build && tsc -p electron/tsconfig.json",
+    "build:web": "tsc -b && vite build --mode web --outDir dist-web",
     "start": "electron .",
+    "test:unit": "vitest run",
+    "test:web": "playwright test",
     "typecheck": "tsc -b --pretty false",
     "installer": "npm run build && electron-builder --win nsis --publish never"
   },
@@ -35,6 +39,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^24.3.0",
@@ -46,6 +51,7 @@
     "cross-env": "^10.0.0",
     "electron": "^37.4.0",
     "electron-builder": "^26.0.12",
+    "firebase-tools": "^14.27.0",
     "jsdom": "^26.1.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.3",
