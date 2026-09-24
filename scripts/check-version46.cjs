@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+const releases=JSON.parse(fs.readFileSync('public/releases.json','utf8'));
+const builds=releases.versions.flatMap(line=>line.builds);
+assert.equal(pkg.version,'0.46.0');
+assert.deepEqual(builds.filter(build=>build.current).map(build=>build.version),['0.46.0']);
+assert.match(fs.readFileSync('RELEASE_NOTES.md','utf8'),/native Browser-Vorschau/i);
+assert.match(fs.readFileSync('.github/workflows/pages.yml','utf8'),/GottesdienstRegie\/editor/);
+assert.match(fs.readFileSync('src/platform/web/LocalPresentationService.ts','utf8'),/RevisionConflictError/);
+console.log('Version 0.46 web editor preview checks passed.');

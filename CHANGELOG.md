@@ -1,5 +1,14 @@
 # Versionshinweise / Release notes
 
+## 0.46.0 – Native Web-Editor-Vorschau
+
+- Gemeinsamer React-Anwendungskern startet nun als eigenständiger Browser-Build ohne Electron-Bridge.
+- Lokale Browser-Präsentationen werden automatisch angelegt, revisionsgeschützt gespeichert und beim nächsten Öffnen wiederhergestellt.
+- Responsive PC-, Tablet- und Smartphone-Darstellung mit touchfähiger Arbeitsbereichsnavigation ergänzt.
+- Nicht verfügbare Desktop-Ausgaben werden verständlich erklärt, statt wirkungslose ON-AIR-Funktionen anzubieten.
+- GitHub Pages veröffentlicht den Web-Editor getrennt unter `/GottesdienstRegie/editor/`.
+- Präsentationen und persönliche Notizen bleiben in dieser Vorschau bewusst lokal im Browser; geräteübergreifende Cloud-Synchronisierung folgt in einer späteren Version.
+
 ## 0.45.1 – Eindeutiger Speicherstatus für persönliche Notizen
 
 Der Hinweis unter persönlichen Präsentations- und Foliennotizen zeigt jetzt in jeder Phase das passende Symbol. Das Schloss kennzeichnet ausschließlich den privaten Ruhezustand. Während eine Änderung gespeichert wird, erscheint stattdessen ein rotierendes Synchronisationssymbol; die sichtbaren Punkte wechseln fortlaufend zwischen einem, zwei und drei Punkten. Nach erfolgreicher Speicherung bestätigt ein Haken den Vorgang für höchstens fünf Sekunden. Ein Fehler erhält ein eigenes Fehlerzeichen und bleibt sichtbar, bis eine neue Speicherung versucht wird.

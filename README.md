@@ -1,5 +1,9 @@
 # GottesdienstRegie
 
+## Web-Editor-Vorschau
+
+Ab Version 0.46.0 steht unter [cmoere.github.io/GottesdienstRegie/editor/](https://cmoere.github.io/GottesdienstRegie/editor/) eine native Browser-Vorschau für PC, Tablet und Smartphone bereit. Präsentationen werden in dieser ersten Stufe ausschließlich lokal und revisionsgeschützt im jeweiligen Browserprofil gespeichert. MAIN, STAGE, Livestream, Gerätezugriff und Programmupdates bleiben der installierten Desktop-App vorbehalten. Löschen der Browserdaten entfernt auch die lokal gespeicherten Web-Präsentationen.
+
 GottesdienstRegie ist die Windows-Desktopsoftware der Philippusgemeinde für Gottesdienstabläufe, Folienvorschau und Präsentationsausgaben.
 
 ## Funktionen

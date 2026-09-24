@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.46.0
+
+Version 0.46.0 veröffentlicht erstmals eine native Browser-Vorschau des GottesdienstRegie-Editors für PC, Tablet und Smartphone. Die Weboberfläche wird aus demselben React-Anwendungskern wie die Desktop-App gebaut, startet aber ohne Electron-Bridge und ohne Installation direkt im Browser. Beim ersten Öffnen entsteht automatisch eine lokale Präsentation. Änderungen werden regelmäßig und beim manuellen Speichern im Browserprofil gesichert und beim nächsten Öffnen wieder geladen.
+
+Die lokale Speicherung verwendet fortlaufende Revisionen. Wird dieselbe ältere Grundfassung durch einen neueren Stand überholt, verwirft der Dienst die neuere Fassung nicht still, sondern meldet einen Revisionskonflikt. Die technische Revision bleibt außerhalb des fachlichen Präsentationsdokuments. Diese erste Webvorschau synchronisiert Präsentationen bewusst noch nicht zwischen verschiedenen Browsern oder Geräten; persönliche Notizen und Präsentationen bleiben in diesem Stand im jeweiligen Browserprofil.
+
+Tablet und Smartphone erhalten eine touchfähige Navigation für Ablauf, Song, Folie und Vorschau. Bedienelemente besitzen mindestens 44 Pixel große Ziele, berücksichtigen sichere Bildschirmränder und vermeiden horizontales Abschneiden. Auf kleinen Displays werden Ablauf und Arbeitsbereich untereinander angeordnet. Die Desktop-App behält ihre bisherige kompakte Oberfläche.
+
+Desktop-exklusive Funktionen werden im Browser nicht vorgetäuscht. MAIN-, STAGE- und Livestream-Ausgabe, lokale Geräte, Audio-Routing, Videoeingänge, lokale Übersetzungsmodelle und Programmupdates bleiben Aufgaben der installierten Desktop-App. Ein sichtbarer Hinweis erklärt dies direkt im Web-Editor. Der Browser kann Inhalte vorbereiten und lokal speichern, aber nicht ON AIR gehen.
+
+Der Web-Editor wird zusammen mit den Versionshinweisen unter `/GottesdienstRegie/editor/` veröffentlicht. Ein eigener Produktions-Web-Build und Browser-Smoke-Tests prüfen, dass der Editor ohne Electron-Bridge startet. Zusätzliche Tests decken PC-, Tablet- und Smartphone-Breiten, Touch-Navigation, Plattformfähigkeiten, lokale Revisionen sowie die weiterhin unveränderten Desktop-Builds ab.
+
+---
+
 # GottesdienstRegie 0.45.1
 
 Version 0.45.1 präzisiert den Speicherstatus persönlicher Präsentations- und Foliennotizen. Das bisher dauerhaft sichtbare Schloss vermittelte auch während des Speicherns oder nach einem Fehler den Eindruck, dass lediglich der private Hinweis aktiv sei. Nun besitzt jeder Zustand eine eindeutige Darstellung: Im Ruhezustand bestätigt das Schloss weiterhin, dass die Notiz nur für den angemeldeten Benutzer auf diesem Gerät sichtbar ist. Sobald Text geändert wird, wechselt die Anzeige zu einem Synchronisationssymbol und einer laufenden Punktfolge aus „.“, „..“ und „...“.

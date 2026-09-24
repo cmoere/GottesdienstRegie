@@ -29,6 +29,10 @@ jobs:
       - run: npm ci
       - name: Nutzungsbedingungen prüfen
         run: node scripts/generate-terms.cjs && node scripts/check-version43.cjs && git diff --exit-code -- build/terms.txt public/terms/index.html
+      - name: Web-Editor bauen
+        run: VITE_WEB_BASE=/GottesdienstRegie/editor/ npm run build:web
+      - name: Web-Editor in die Pages-Ausgabe übernehmen
+        run: mkdir -p public/editor && cp -R dist-web/. public/editor/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

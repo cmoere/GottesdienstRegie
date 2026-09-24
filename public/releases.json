@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.46",
+      "builds": [{
+        "version": "0.46.0",
+        "releaseDate": "2026-09-25",
+        "current": true,
+        "overview": {"label":{"de":"Native Web-Editor-Vorschau für PC, Tablet und Smartphone","en":"Native web editor preview for desktop, tablet and phone"},"text":{"de":"Version 0.46.0 veröffentlicht erstmals den gemeinsamen GottesdienstRegie-Editor als Browser-Vorschau. Präsentationen werden lokal und revisionsgeschützt im Browser gespeichert. Responsive Arbeitsbereiche ermöglichen die Vorbereitung auf PC, Tablet und Smartphone, während Liveausgaben weiterhin sicher der Desktop-App vorbehalten bleiben.","en":"Version 0.46.0 publishes the shared GottesdienstRegie editor as a browser preview. Presentations are stored locally with revision protection, responsive workspaces support desktop, tablet and phone, and live outputs remain safely limited to the desktop app."}},
+        "sections": {
+          "new": [{"label":{"de":"Web-Editor ohne Installation","en":"Web editor without installation"},"text":{"de":"Der Editor startet direkt im Browser, legt beim ersten Öffnen eine lokale Präsentation an und lädt sie beim nächsten Besuch wieder. Der Browser-Build benötigt keine Electron-Bridge.","en":"The editor starts directly in a browser, creates a local presentation on first use and restores it on later visits without requiring an Electron bridge."}},{"label":{"de":"Touch-Navigation","en":"Touch navigation"},"text":{"de":"Tablet und Smartphone erhalten eine Navigation für Ablauf, Song, Folie und Vorschau mit großen Touchzielen und sicheren Bildschirmrändern.","en":"Tablet and phone layouts provide large touch targets and navigation for service order, song, slide and preview."}}],
+          "improved": [{"label":{"de":"Klare Plattformgrenzen","en":"Clear platform boundaries"},"text":{"de":"Der Web-Editor erklärt sichtbar, dass MAIN, STAGE, Livestream und Gerätefunktionen die installierte Desktop-App benötigen. Die gemeinsame Plattformarchitektur verhindert undefinierte Electron-Aufrufe im Browser.","en":"The web editor visibly explains that MAIN, STAGE, livestream and device features require the installed desktop app, while the shared platform architecture avoids undefined Electron calls."}}],
+          "fixed": [{"label":{"de":"Revisionsgeschützte lokale Speicherung","en":"Revision-safe local storage"},"text":{"de":"Lokale Präsentationen erhalten fortlaufende Revisionen. Eine ältere Grundfassung kann einen neueren Stand nicht unbemerkt überschreiben.","en":"Local presentations receive monotonic revisions so an older base cannot silently overwrite newer work."}}],
+          "known": [{"label":{"de":"Noch keine geräteübergreifende Synchronisierung","en":"No cross-device synchronization yet"},"text":{"de":"Diese erste Vorschau speichert Präsentationen und persönliche Notizen ausschließlich im aktuellen Browserprofil. Cloud-Anmeldung, Team-Synchronisierung und Fernsteuerung folgen getrennt, damit Live- und Konfliktsicherheit unabhängig geprüft werden können.","en":"This first preview stores presentations and personal notes only in the current browser profile. Cloud sign-in, team sync and remote control will follow separately."}}]
+        }
+      }]
+    },
+    {
       "line": "0.45",
       "builds": [{
         "version": "0.45.1",
         "releaseDate": "2026-09-25",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Eindeutiger Speicherstatus für persönliche Notizen","en":"Clear save status for personal notes"},"text":{"de":"Persönliche Präsentations- und Foliennotizen zeigen nun für Ruhe, Speichern, Erfolg und Fehler jeweils ein passendes Symbol. Die laufende Punktanzeige macht den Speichervorgang sichtbar; die Erfolgsbestätigung verschwindet nach höchstens fünf Sekunden wieder.","en":"Personal presentation and slide notes now show distinct idle, saving, success and error states. Animated dots expose active writes and the success confirmation disappears after no more than five seconds."}},
         "sections": {
           "new": [],
