@@ -74,6 +74,7 @@ import {
 import {usePlatform} from './platform/PlatformContext';
 import {MobileWorkspaceNav} from './responsive/MobileWorkspaceNav';
 import {CapabilityNotice} from './platform/CapabilityNotice';
+import {conciseRemoteSummary} from './updateReleaseSummary';
 import { useI18n, type TranslationKey, type Translator } from "./i18n";
 import {
   usePreferences,
@@ -4523,23 +4524,6 @@ function conciseReleaseSummary(
           .join(", ")}`,
     )
     .join(" · ");
-}
-function conciseRemoteSummary(value: string) {
-  const lines = plainReleaseNotes(value)
-    .split(/\r?\n/)
-    .map((line) =>
-      line
-        .replace(/^\s*[-*•#>]+\s*/, "")
-        .replace(/[*_`]/g, "")
-        .trim(),
-    )
-    .filter(
-      (line) =>
-        line &&
-        !/^GottesdienstRegie\s+\d/i.test(line) &&
-        !/^Veröffentlicht|^Released/i.test(line),
-    );
-  return lines.slice(0, 2).join(" · ").slice(0, 220);
 }
 function isPrerelease(version: string) {
   return /-(?:beta|rc)\.\d+$/i.test(version);
