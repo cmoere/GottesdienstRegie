@@ -61,16 +61,17 @@ import { LoopPreview } from "./LoopPreview";
 import { liveEngine } from "./LiveEngine";
 import {
   authMessage,
-  cancelTwoFactor,
+  cancelTwoFactorWith,
   isTwoFactorChallenge,
-  login,
-  logout,
-  restore,
+  loginWith,
+  logoutWith,
+  restoreWith,
   twoFactorMessage,
-  verifyTwoFactor,
+  verifyTwoFactorWith,
   type AuthSession,
   type TwoFactorChallenge,
 } from "./auth";
+import {usePlatform} from './platform/PlatformContext';
 import { useI18n, type TranslationKey, type Translator } from "./i18n";
 import {
   usePreferences,
@@ -626,6 +627,7 @@ function Login({
   authenticated: (session: AuthSession) => void;
   device: RegisteredDevice;
 }) {
+  const {auth}=usePlatform();
   const { t } = useI18n();
   const language = usePreferences((state) => state.language),
     setLanguage = usePreferences((state) => state.setLanguage);
@@ -676,7 +678,7 @@ function Login({
     setBusy(true);
     setError("");
     try {
-      const result = await login(
+      const result = await loginWith(auth,
         email,
         password,
         device.type === "shared" ? false : remember,
@@ -719,7 +721,7 @@ function Login({
     setTwoFactorError("");
     try {
       authenticated(
-        await verifyTwoFactor(
+        await verifyTwoFactorWith(auth,
           twoFactor.challengeId,
           twoFactorCode,
           recoveryMode,
@@ -737,7 +739,7 @@ function Login({
   }
 
   async function cancelChallenge() {
-    if (twoFactor) await cancelTwoFactor(twoFactor.challengeId);
+    if (twoFactor) await cancelTwoFactorWith(auth,twoFactor.challengeId);
     setTwoFactor(null);
     setTwoFactorCode("");
     setRecoveryMode(false);
@@ -8072,6 +8074,7 @@ function AppShell({
   onLogout: () => void;
   device: RegisteredDevice | null;
 }) {
+  const {auth}=usePlatform();
   const { t, locale } = useI18n();
   const state = usePresentation();
   const loopController = useRef(new LoopController<ServiceItem>());
@@ -8890,7 +8893,7 @@ function AppShell({
       await window.desktop?.goOffAir();
       state.setOnAir(false);
     }
-    await logout();
+    await logoutWith(auth);
     onLogout();
   }
   useEffect(() => {
@@ -10301,6 +10304,7 @@ function Output() {
 }
 
 export function App() {
+  const {auth}=usePlatform();
   const [session, setSession] = useState<AuthSession | null | undefined>(
     undefined,
   );
@@ -10456,7 +10460,7 @@ export function App() {
     startupTimer.current = timer;
     void (async () => {
       const reopen = usePreferences.getState().reopenLastPresentation;
-      const restoredPromise = restore().catch(() => null);
+      const restoredPromise = restoreWith(auth).catch(() => null);
       startupAuth.current = restoredPromise;
       const [restored, loaded, recoveryCopy] = await Promise.all([
         restoredPromise,
@@ -10498,7 +10502,7 @@ export function App() {
     if (!signedIn) return;
     let active = true;
     const check = async () => {
-      const refreshed = await restore(true);
+      const refreshed = await restoreWith(auth,true);
       if (!active) return;
       if (!refreshed) {
         setSession(null);

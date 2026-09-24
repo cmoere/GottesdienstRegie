@@ -8,6 +8,9 @@ import './cera-pro.css';
 import 'material-symbols/outlined.css';
 import 'flag-icons/css/flag-icons.min.css';
 import { App } from './App';
+import {PlatformProvider} from './platform/PlatformContext';
+import {createElectronServices} from './platform/electron/createElectronServices';
+import {createWebServices} from './platform/web/createWebServices';
 import './styles.css';
 import './settings-v08.css';
 import './v09.css';
@@ -38,4 +41,9 @@ class AppErrorBoundary extends React.Component<React.PropsWithChildren,{error:st
   render(){return this.state.error?<main className="fatal-render-error"><div><span className="material-symbols-outlined">error</span><h1>GottesdienstRegie konnte die Oberfläche nicht laden</h1><p>{this.state.error}</p><button onClick={()=>location.reload()}>ERNEUT LADEN</button></div></main>:this.props.children}
 }
 
-createRoot(document.getElementById('root')!).render(<React.StrictMode><AppErrorBoundary><App /></AppErrorBoundary></React.StrictMode>);
+function requireDesktopBridge(){
+  if(!window.desktop)throw new Error('Die Desktop-Verbindung konnte nicht initialisiert werden. Bitte starte GottesdienstRegie neu.');
+  return window.desktop;
+}
+const services=__APP_TARGET__==='desktop'?createElectronServices(requireDesktopBridge()):createWebServices();
+createRoot(document.getElementById('root')!).render(<React.StrictMode><PlatformProvider services={services}><AppErrorBoundary><App /></AppErrorBoundary></PlatformProvider></React.StrictMode>);

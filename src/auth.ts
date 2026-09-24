@@ -4,18 +4,16 @@ export interface AuthSession { user:SafeUser; permissions:string[]; expiresAt:nu
 export interface TwoFactorChallenge { twoFactorRequired:true; challengeId:string; method:'email'|'sms'|'totp'|string; destination:string; expiresAt:number }
 export type LoginResult=AuthSession|TwoFactorChallenge;
 
-export async function login(email:string,password:string,remember:boolean):Promise<LoginResult>{
-  if(!window.desktop)throw new Error('DESKTOP_REQUIRED');
-  return window.desktop.auth.login(email.trim().toLowerCase(),password,remember);
-}
-export async function verifyTwoFactor(challengeId:string,code:string,recovery:boolean):Promise<AuthSession>{
-  if(!window.desktop)throw new Error('DESKTOP_REQUIRED');
-  return window.desktop.auth.verifyTwoFactor(challengeId,code,recovery);
-}
-export async function cancelTwoFactor(challengeId:string){await window.desktop?.auth.cancelTwoFactor(challengeId)}
+import type {AuthService} from './platform/PlatformServices';
+
+export const loginWith=(auth:AuthService,email:string,password:string,remember:boolean):Promise<LoginResult>=>
+  auth.login(email.trim().toLowerCase(),password,remember);
+export const verifyTwoFactorWith=(auth:AuthService,challengeId:string,code:string,recovery:boolean):Promise<AuthSession>=>
+  auth.verifyTwoFactor(challengeId,code,recovery);
+export const cancelTwoFactorWith=(auth:AuthService,challengeId:string)=>auth.cancelTwoFactor(challengeId);
 export function isTwoFactorChallenge(result:LoginResult):result is TwoFactorChallenge{return 'twoFactorRequired' in result&&result.twoFactorRequired===true}
-export async function restore(activeSession=false):Promise<AuthSession|null>{return (window.desktop?.auth.restore as ((active?:boolean)=>Promise<AuthSession|null>)|undefined)?.(activeSession)??null}
-export async function logout(){await window.desktop?.auth.logout()}
+export const restoreWith=(auth:AuthService,activeSession=false)=>auth.restore(activeSession);
+export const logoutWith=(auth:AuthService)=>auth.logout();
 
 function cleanedRemoteError(raw:string){
   return raw
