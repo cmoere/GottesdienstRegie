@@ -96,4 +96,16 @@ describe('PersonalNotesPanel save status',()=>{
     expect(status).toHaveTextContent('Notiz wird gespeichert');
     expect(status.querySelector('[aria-hidden="true"].personal-note-status-visual')).toHaveTextContent('Speichert .');
   });
+
+  it('opens presentation notes with a compact text button and extended formatting tools',()=>{
+    render(<PersonalNotesPanel noteKey={noteKey} label="Präsentationsnotizen" presentation/>);
+    const opener=screen.getByRole('button',{name:'Präsentationsnotizen'});
+    expect(opener.querySelector('.material-symbols-outlined')).toBeNull();
+    fireEvent.click(opener);
+    expect(screen.getByRole('toolbar',{name:'Notiz formatieren'})).toBeInTheDocument();
+    expect(screen.getByRole('button',{name:'Durchstreichen'})).toBeInTheDocument();
+    expect(screen.getByRole('button',{name:'Rechtsbündig'})).toBeInTheDocument();
+    expect(screen.getByRole('button',{name:'Einzug vergrößern'})).toBeInTheDocument();
+    expect(screen.getByRole('button',{name:'Formatierung entfernen'})).toBeInTheDocument();
+  });
 });

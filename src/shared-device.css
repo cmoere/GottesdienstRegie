@@ -914,7 +914,7 @@
 }
 
 /* Dynamic loop elements */
-.add-content-popover { width:min(360px,calc(100vw - 24px)); }
+.add-content-popover { position:fixed;left:8px;right:auto;top:clamp(150px,25vh,245px);width:min(245px,calc(100vw - 16px));max-height:calc(100vh - 260px);overflow:auto;z-index:1400; }
 .add-popover-loop-group { border-top: 1px solid rgba(90, 120, 130, .24); margin-top: 6px; padding: 6px 8px 8px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:5px; }
 .add-popover-loop-group > strong { grid-column:1/-1; display: block; padding: 6px 4px 4px; font-size: 10px; letter-spacing: .08em; color: #55717d; }
 .add-popover-loop-group > button { min-width:0; min-height:36px; display:grid; grid-template-columns:22px minmax(0,1fr); align-items:center; gap:6px; padding:6px 8px; text-align:left; border:1px solid transparent; }

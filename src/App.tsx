@@ -3138,23 +3138,6 @@ export function OrderOfService({
                       {section.title}
                     </button>
                     <div className="section-actions">
-                      {section.id === "pre" && (
-                        <button
-                          className={`section-loop-toggle ${section.autoLoop ? "active" : ""}`}
-                          type="button"
-                          disabled={!canEdit}
-                          title="VORPROGRAMM als automatischen Loop verwenden"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            state.updateSection(section.id, {
-                              autoLoop: !section.autoLoop,
-                              supportsLoopItems: !section.autoLoop,
-                            });
-                          }}
-                        >
-                          LOOP
-                        </button>
-                      )}
                       {(section.id === "pre" || section.id === "post") && (
                         <button
                           className="section-add-button"

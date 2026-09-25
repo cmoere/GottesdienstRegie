@@ -186,6 +186,7 @@ export function MediaBrowser() {
     [uploadName, setUploadName] = useState(""),
     [uploadTags, setUploadTags] = useState(""),
     [renameDraft,setRenameDraft]=useState(""),
+    [renaming,setRenaming]=useState(false),
     [zoomOpen,setZoomOpen]=useState(false),
     [zoom,setZoom]=useState(1);
   const [deleteTarget, setDeleteTarget] = useState<CloudMediaAsset | null>(
@@ -544,6 +545,7 @@ export function MediaBrowser() {
   function choose(item: CloudMediaAsset) {
     setSelected(item);
     setRenameDraft(item.name);
+    setRenaming(false);
     if (isAudio && context === "select")
       setAudioSelection((list) =>
         list.some((entry) => entry.id === item.id)
@@ -570,7 +572,7 @@ export function MediaBrowser() {
       );
     if (selected) void mediaWindow?.select(selected, purpose);
   }
-  async function renameSelected(){if(!selected)return;const valid=validateMediaName(renameDraft);if(!valid.ok)return;setBusy(selected.id);try{const updated=await api.update(selected.id,{name:valid.value});setItems(current=>current.map(item=>item.id===selected.id?{...item,name:updated.name}:item));setSelected(current=>current?{...current,name:updated.name}:current)}finally{setBusy("")}}
+  async function renameSelected(){if(!selected)return;const valid=validateMediaName(renameDraft);if(!valid.ok)return;setBusy(selected.id);try{const updated=await api.update(selected.id,{name:valid.value});setItems(current=>current.map(item=>item.id===selected.id?{...item,name:updated.name}:item));setSelected(current=>current?{...current,name:updated.name}:current);setRenaming(false)}finally{setBusy("")}}
   async function generateLocal() {
     const nonce = Date.now() + Math.floor(Math.random() * 100000),
       seed = [
@@ -1097,7 +1099,7 @@ export function MediaBrowser() {
               </h2>
               <p>
                 {tab === "community"
-                  ? "Freigegebene Medien werden hier getrennt von Unsplash und der Team-Cloud angezeigt."
+                  ? "Noch keine freigegebenen Medien vorhanden."
                   : "Lade bitte Dateien hoch. Erst nach erfolgreichem Cloud-Upload können sie verwendet werden."}
               </p>
               {tab === "cloud" && (
@@ -1136,8 +1138,7 @@ export function MediaBrowser() {
                   <Icon name="picture_as_pdf" />
                 )}
               </button>
-              <label className="media-rename">Name<input maxLength={300} value={renameDraft} onChange={event=>setRenameDraft(event.target.value)}/><small>{renameDraft.length}/300</small><button disabled={!validateMediaName(renameDraft).ok||busy===selected.id} onClick={()=>void renameSelected()}>SPEICHERN</button></label>
-              <p className="ai-generated"><Icon name="smart_toy"/> KI-generiert: <b>{isAiGenerated(selected)?'Ja':'Nein'}</b></p>
+              {renaming?<div className="media-rename"><label htmlFor="media-rename-input">Name</label><input id="media-rename-input" autoFocus maxLength={300} value={renameDraft} onChange={event=>setRenameDraft(event.target.value)}/><small>{renameDraft.length}/300</small><span><button onClick={()=>{setRenameDraft(selected.name);setRenaming(false)}}>ABBRECHEN</button><button disabled={!validateMediaName(renameDraft).ok||busy===selected.id} onClick={()=>void renameSelected()}>SPEICHERN</button></span></div>:<button className="media-name-display" onClick={()=>setRenaming(true)} title="Name bearbeiten"><strong>{selected.name}</strong><Icon name="edit"/></button>}
               <dl>
                 <dt>Typ</dt>
                 <dd>{typeName(selected.kind)}</dd>
@@ -1148,6 +1149,8 @@ export function MediaBrowser() {
                   {selected.extension ||
                     selected.path.split(".").at(-1)?.toUpperCase()}
                 </dd>
+                <dt className="ai-metadata"><Icon name="smart_toy"/> KI-generiert</dt>
+                <dd>{isAiGenerated(selected)?'Ja':'Nein'}</dd>
                 <dt>Quelle</dt>
                 <dd>{tab === "unsplash" ? "Unsplash" : "Team-Cloud"}</dd>
               </dl>
@@ -1414,6 +1417,15 @@ export function MediaBrowser() {
               </label>
             )}
           </div>
+          <aside className="generator-live-preview" aria-label="Motivvorschau">
+            <div className={`generator-preview-art style-${generatorStyle}`}>
+              <Icon name={generatorOutput==='video'?'movie':'image'}/>
+              <strong>LIVE-VORSCHAU</strong>
+              <span>{generatorScenes.find(([value])=>value===generatorScene)?.[1]}</span>
+              <small>{generatorStyles.find(([value])=>value===generatorStyle)?.[1]}</small>
+            </div>
+            <p>Dein Motiv wird im gewählten Format angelegt und danach direkt in der Medienbibliothek geöffnet.</p>
+          </aside>
           <footer>
             <AiGenerationStatus active={generating} error={generatorError} onRetry={()=>void generateLocal()} reducedMotion={prefs.reduceMotion}/>
             <button

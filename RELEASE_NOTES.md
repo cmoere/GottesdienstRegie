@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.50.0
+
+Version 0.50.0 ordnet die Medien- und Präsentationswerkzeuge sichtbar neu und beseitigt mehrere störende Bedienfehler. Die Seite „KI-Motive“ besitzt nun einen breiteren, zweigeteilten Arbeitsbereich: Beschreibung, Format, Szene und Stil bleiben links übersichtlich zusammengefasst, während rechts eine dauerhafte Motivvorschau die gewählte Bild- oder Videoart, Szene und Gestaltung unmittelbar sichtbar macht. Erstellungsstatus, wechselnde Animationen und „Erneut versuchen“ bleiben vollständig erhalten.
+
+In den Mediendetails steht „KI-generiert“ jetzt als normale Metadatenzeile direkt nach „Format“ und verwendet dort das Robotersymbol. Der Medienname wird zunächst ruhig als Überschrift angezeigt und wechselt erst nach einem bewussten Klick in den Bearbeitungsmodus. Dort gelten weiterhin die sichtbare Grenze von 300 Zeichen, Abbrechen und validiertes Speichern. Die Community-Leeransicht verwendet den neutralen Satz „Noch keine freigegebenen Medien vorhanden.“
+
+Präsentationsnotizen öffnen sich über eine kleinere Schaltfläche ohne zusätzliches Symbol. Der Editor unterstützt nun neben Fett, Kursiv und Unterstrichen auch Absatzformate, Zitate, Durchstreichen, linke, mittige und rechte Ausrichtung, Einzüge, Textfarbe und das Entfernen vorhandener Formatierung. Rückgängig und Wiederholen bleiben als kompakte Symbole verfügbar; persönliche Notizen bleiben lokal und erscheinen niemals in einer Ausgabe.
+
+Vorprogramm und Nachprogramm sind jetzt technisch verpflichtende Schleifen. Der missverständliche LOOP-Schalter wurde entfernt, und auch geladene ältere Präsentationen sowie interne Aktualisierungen können diese beiden Bereiche nicht versehentlich aus dem Schleifenbetrieb nehmen. Das Hinzufügen der dafür vorgesehenen Elemente bleibt erhalten. Der zugehörige Auswahlbereich wurde schmaler, vollständig sichtbar und unabhängig vom abgeschnittenen Seitenleisteninhalt positioniert.
+
+Die „Wir sagen Amen“-Schnellanzeige richtet ihre vollständige Animation nun in beiden Achsen an der Mitte der Ausgabe aus. „Bibeltext anzeigen“ behält den sicheren Ablauf bei: Zuerst werden Bibelstelle und Übersetzung gewählt, danach wird eine Vorschau geladen, und erst die ausdrückliche Anzeigeaktion überschreibt MAIN. Automatisierte Tests prüfen die festen Schleifenregeln sowie die kompakte Notizenöffnung, die erweiterten Formatierungswerkzeuge und die bestehenden Speicherzustände.
+
+---
+
 # GottesdienstRegie 0.49.0
 
 Version 0.49.0 korrigiert die Darstellung des Startbildschirms. Seit Version 0.48.0 erschien die Ladeansicht bereits in der vollständigen Größe des späteren Bedienfensters. Das war zwar eine Absicherung gegen ein dauerhaft kleines Hauptfenster, veränderte aber den bewusst kompakten Charakter des Programmstarts.

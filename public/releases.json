@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.50",
+      "builds": [{
+        "version": "0.50.0",
+        "releaseDate": "2026-09-25",
+        "current": true,
+        "overview": {"label":{"de":"Neue Medienansicht, erweiterte Notizen und feste Loops","en":"New media workspace, extended notes and permanent loops"},"text":{"de":"Version 0.50.0 gestaltet KI-Motive und Mediendetails neu, erweitert den Editor für Präsentationsnotizen und macht Vor- sowie Nachprogramm zu verlässlichen, nicht abschaltbaren Schleifen.","en":"Version 0.50.0 redesigns AI motifs and media details, extends presentation-note editing and makes pre- and post-program reliable permanent loops."}},
+        "sections": {
+          "new": [{"label":{"de":"Erweiterter Notizeneditor","en":"Extended notes editor"},"text":{"de":"Absatzformate, Zitate, Durchstreichen, drei Ausrichtungen, Einzüge, Textfarbe und Formatbereinigung ergänzen die vorhandenen Werkzeuge in einem sicheren modalen Dialog.","en":"Paragraph formats, quotes, strikethrough, three alignments, indentation, text color and format clearing extend the existing tools in a safe modal dialog."}}],
+          "improved": [{"label":{"de":"KI-Motive und Mediendetails neu geordnet","en":"Reorganized AI motifs and media details"},"text":{"de":"Der Generator verwendet eine sichtbare zweigeteilte Arbeitsfläche mit Vorschau. Mediennamen werden erst nach einem Klick bearbeitet; KI-Herkunft erscheint direkt nach dem Dateiformat.","en":"The generator now uses a visible two-column workspace with preview. Media names enter editing only after a click, while AI provenance appears directly after file format."}}],
+          "fixed": [{"label":{"de":"Verpflichtende Vor- und Nachprogramm-Schleifen","en":"Permanent pre- and post-program loops"},"text":{"de":"Der abschaltbare LOOP-Schalter wurde entfernt. Neue und geladene Präsentationen halten beide Bereiche technisch im Schleifenbetrieb; die Elementauswahl bleibt vollständig sichtbar und die Amen-Animation sitzt mittig.","en":"The loop toggle has been removed. New and loaded presentations keep both areas in loop mode, the item picker remains fully visible and the Amen animation is centered."}}],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.49",
       "builds": [{
         "version": "0.49.0",
         "releaseDate": "2026-09-25",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Kompakter Startbildschirm, großer Arbeitsbereich","en":"Compact startup screen, full workspace"},"text":{"de":"Version 0.49.0 stellt den schmalen, zentrierten Startbildschirm wieder her. Erst nach dem Laden wechselt GottesdienstRegie zuverlässig auf die vollständige Desktop-Größe.","en":"Version 0.49.0 restores the narrow centered startup screen and reliably switches to the full desktop workspace only after loading."}},
         "sections": {
           "new": [],

@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+const releases=JSON.parse(fs.readFileSync('public/releases.json','utf8'));
+const app=fs.readFileSync('src/App.tsx','utf8'),media=fs.readFileSync('src/MediaBrowser.tsx','utf8'),notes=fs.readFileSync('src/PersonalNotesPanel.tsx','utf8'),store=fs.readFileSync('src/store.ts','utf8');
+assert.equal(pkg.version,'0.50.0');
+assert.deepEqual(releases.versions.flatMap(x=>x.builds).filter(x=>x.current).map(x=>x.version),['0.50.0']);
+assert.doesNotMatch(app,/section-loop-toggle/);
+assert.match(store,/id==='pre'\|\|id==='post'/);
+assert.match(media,/generator-live-preview/);
+assert.match(media,/ai-metadata/);
+assert.match(notes,/aria-label="Durchstreichen"/);
+console.log('Version 0.50 media, notes and loop checks passed.');

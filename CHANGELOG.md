@@ -1,5 +1,13 @@
 # Versionshinweise / Release notes
 
+## 0.50.0 – Medien, Notizen und feste Programmschleifen
+
+- KI-Motive mit neuer zweigeteilter Arbeitsfläche und dauerhafter Motivvorschau.
+- Mediennamen werden erst nach einem Klick bearbeitet; die KI-Herkunft ist eine normale Metadatenzeile.
+- Präsentationsnotizen öffnen kompakter und bieten zusätzliche Absatz-, Ausrichtungs-, Einzugs-, Farb- und Bereinigungswerkzeuge.
+- Vor- und Nachprogramm sind verpflichtende Schleifen ohne abschaltbaren LOOP-Schalter.
+- Elementauswahl und Amen-Schnellanzeige wurden korrekt positioniert.
+
 ## 0.47.0 – Vollständige Update-Beschreibungen
 
 - Update-Beschreibungen werden nicht mehr starr nach 220 Zeichen abgeschnitten.
