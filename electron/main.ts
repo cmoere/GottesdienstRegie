@@ -18,6 +18,7 @@ import {TranslationPackService} from './TranslationPackService';
 import {platformAppearance} from './platformAppearance';
 import {StorageMaintenanceService,isStorageCategory,type StorageCategory} from './StorageMaintenanceService';
 import {translationPackCatalog} from './translationPackCatalog';
+import {resolveOperatorWindowStartup} from './windowStartup';
 
 import {DisplaySleepProtection} from './DisplaySleepProtection';
 const displaySleepProtection=new DisplaySleepProtection(powerSaveBlocker);
@@ -83,14 +84,10 @@ function load(win: BrowserWindow, route = '') {
 }
 
 function createControlWindow(preferences:AppPreferencesData) {
-  const displays=screen.getAllDisplays(),primary=screen.getPrimaryDisplay();
-  const remembered=preferences.operatorDisplayTarget==='last'?displays.find(display=>display.id===preferences.lastDisplayId):undefined;
-  const target=remembered??primary,stored=preferences.bounds;
-  const visible=stored&&displays.some(display=>stored.x<display.bounds.x+display.bounds.width&&stored.x+stored.width>display.bounds.x&&stored.y<display.bounds.y+display.bounds.height&&stored.y+stored.height>display.bounds.y);
-  const bounds=visible?stored!:{x:target.workArea.x+Math.round(target.workArea.width*.05),y:target.workArea.y+Math.round(target.workArea.height*.05),width:Math.max(960,Math.round(target.workArea.width*.9)),height:Math.max(620,Math.round(target.workArea.height*.9))};
+  const displays=screen.getAllDisplays(),primary=screen.getPrimaryDisplay(),startup=resolveOperatorWindowStartup(preferences,displays,primary.id);
   controlWindow = new BrowserWindow({
-    width:410,height:700,show:false,minWidth: 320, minHeight: 480,
-    titleBarStyle:'hidden',titleBarOverlay:process.platform==='win32'?{color:'#282832',symbolColor:'#ffffff',height:28}:false,resizable:false,maximizable:false,
+    ...startup.bounds,show:false,minWidth:startup.minimumSize.width,minHeight:startup.minimumSize.height,
+    titleBarStyle:'hidden',titleBarOverlay:process.platform==='win32'?{color:'#282832',symbolColor:'#ffffff',height:28}:false,resizable:startup.resizable,maximizable:startup.maximizable,
     backgroundColor: '#282832', icon: app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.join(app.getAppPath(), 'build/icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   });
@@ -98,20 +95,15 @@ function createControlWindow(preferences:AppPreferencesData) {
   if(process.platform!=='darwin')controlWindow.webContents.session.setSpellCheckerLanguages(['de-DE','en-US'].filter(language=>controlWindow!.webContents.session.availableSpellCheckerLanguages.includes(language)));
   const publishWindowState=()=>controlWindow?.webContents.send('window:fullscreen-state',controlWindow.isFullScreen());
   controlWindow.on('enter-full-screen',publishWindowState);controlWindow.on('leave-full-screen',publishWindowState);
-  const configured=preferences.windowStartMode==='restore'?(preferences.lastWindowState??'fullscreen'):preferences.windowStartMode;
-  controlWindow.center();
   let workspaceReady=false;
   const ready= (event:Electron.IpcMainEvent)=>{
     if(event.sender!==controlWindow?.webContents||workspaceReady||controlCloseInProgress)return;
     workspaceReady=true;
-    controlWindow.setMinimumSize(960,620);controlWindow.setResizable(true);controlWindow.setMaximizable(true);
-    controlWindow.setBounds(bounds);
     if(process.platform==='win32')controlWindow.setTitleBarOverlay({color:'#282832',symbolColor:'#ffffff',height:28});
-    if(configured==='fullscreen')controlWindow.setFullScreen(true);else if(configured==='maximized')controlWindow.maximize();
   };
   ipcMain.on('lifecycle:ready',ready);
   controlWindow.once('closed',()=>ipcMain.removeListener('lifecycle:ready',ready));
-  controlWindow.once('ready-to-show',()=>controlWindow?.show());
+  controlWindow.once('ready-to-show',()=>{if(!controlWindow)return;if(startup.startMode==='fullscreen')controlWindow.setFullScreen(true);else if(startup.startMode==='maximized')controlWindow.maximize();controlWindow.show()});
   let saveTimer:NodeJS.Timeout|undefined;
   const saveWindowState=()=>{if(!controlWindow||controlWindow.isDestroyed())return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{if(!controlWindow||controlWindow.isDestroyed())return;const state=controlWindow.isFullScreen()?'fullscreen':controlWindow.isMaximized()?'maximized':'window',display=screen.getDisplayMatching(controlWindow.getBounds()),patch:Partial<AppPreferencesData>={lastWindowState:state,lastDisplayId:display.id};if(state==='window')patch.bounds=controlWindow.getBounds();void appPreferences.update(patch)},250)};
   const rememberWorkspace=()=>{if(workspaceReady&&!controlCloseInProgress)saveWindowState();else clearTimeout(saveTimer)};
