@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.53.0
+
+Version 0.53.0 ordnet den Live-Start, die Bibel-Schnellanzeige, KI-Motive und mehrere Statusbereiche der Bedienoberfläche neu. ON AIR beginnt jetzt unabhängig von der zuletzt ausgewählten Editor- oder Vorschaufolie immer mit der ersten aktiven Folie des gesamten Ablaufs. Befindet sich diese Folie im Vorprogramm oder im Bereich Ankommen, startet die Ausgabe dort; deaktivierte Elemente und Folien werden übersprungen.
+
+Die sichtbare KI-Motiverstellung dauert mindestens acht Sekunden. Ist das Bild technisch früher vorbereitet, bleiben Spinner und wechselnde Arbeitsmeldungen bis zum Ablauf dieser Mindestzeit erhalten. Erst danach erscheint das Ergebnis zur Prüfung. Fehler werden nicht künstlich verzögert, sondern weiterhin sofort mit der vorhandenen Wiederholen-Aktion angezeigt.
+
+Die spontane Bibelanzeige wurde repariert. Die voreingestellte Stelle Johannes 3,16 konnte bisher nicht angezeigt werden, weil das lokale Startpaket nur einen abweichenden Bereichsschlüssel für Johannes 3,16–18 enthielt. Einzelvers und Bereich werden nun korrekt aufgelöst. Wird „AUF MAIN ANZEIGEN“ vor dem Live-Start verwendet, durchläuft GottesdienstRegie zuerst den normalen sicheren ON-AIR-Start und legt den bestätigten Bibeltext danach als unabhängige Schnellanzeige über MAIN.
+
+Die Regieoberfläche zeigt weniger entbehrliche Zusatzinformationen. Entfernt wurden der rote Punkt links im ON-AIR-Schalter, Mengenangaben wie „1 Folie“, „2 Songs“ oder Elementzahlen, die Markierung „MAIN · ON AIR“ unten links in der Vorschau, der Folientimer oben rechts und der doppelte Menüpunkt „Medienverwaltung“. Die vorhandene Medienbibliothek bleibt der zentrale Einstieg. Favoriten besitzen im aktiven Zustand einen ausgefüllten Stern.
+
+Dialoge, Popups, Menüs und vergleichbare schwebende Bedienflächen verwenden keine Schlagschatten mehr. Diese Änderung betrifft ausschließlich die Bedienoberfläche; bewusst gestaltete Texteffekte innerhalb einer Präsentationsfolie bleiben unverändert. Automatisierte Tests prüfen den ersten aktiven ON-AIR-Inhalt, die Acht-Sekunden-Regel, die voreingestellte Bibelstelle sowie die entfernten Bedienelemente.
+
+---
+
 # GottesdienstRegie 0.52.1
 
 Version 0.52.1 korrigiert die Veröffentlichung der öffentlichen Versionshinweise. Die vollständigen Einträge für 0.50.0, 0.51.0 und 0.52.0 waren bereits im gemeinsamen Versionskatalog und in der Anwendung vorhanden, wurden auf der Webseite aber nicht angezeigt. Ursache war, dass die GitHub-Pages-Bereitstellung ausschließlich auf Aktualisierungen des Branches `main` reagierte, während die neueren veröffentlichten Versionen als Tags aus dem Release-Branch erstellt wurden. Die Installationsdateien waren deshalb aktuell, die Webansicht blieb jedoch bei Version 0.49.0 stehen.

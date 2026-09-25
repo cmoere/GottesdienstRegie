@@ -3,6 +3,7 @@ import { usePreferences } from "./preferences";
 import { applyAudioRoute, defaultAudioRouting } from "./audioRouting";
 import {deleteMethodFor,isAiGenerated,sortRecentlyUsed,validateMediaName} from "./mediaLibraryModel";
 import {AiGenerationStatus} from './AiGenerationStatus';
+import {minimumGenerationDelay} from './release53Model';
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
     {name}
@@ -575,6 +576,8 @@ export function MediaBrowser() {
   }
   async function renameSelected(){if(!selected)return;const valid=validateMediaName(renameDraft);if(!valid.ok)return;setBusy(selected.id);try{const updated=await api.update(selected.id,{name:valid.value});setItems(current=>current.map(item=>item.id===selected.id?{...item,name:updated.name}:item));setSelected(current=>current?{...current,name:updated.name}:current);setRenaming(false)}finally{setBusy("")}}
   async function generateLocal() {
+    const generationStarted=performance.now();
+    let draft:CloudMediaAsset|null=null;
     const nonce = Date.now() + Math.floor(Math.random() * 100000),
       seed = [
         ...`${generatorPrompt}${generatorStyle}${generatorScene}${nonce}`,
@@ -713,7 +716,7 @@ export function MediaBrowser() {
             extension: "WEBM",
             visibility: "private",
           };
-        setGeneratedDraft(asset);
+        draft=asset;
       } else {
         let url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`,
           extension = "SVG",
@@ -761,8 +764,11 @@ export function MediaBrowser() {
           extension,
           visibility: "private",
         };
-        setGeneratedDraft(asset);
+        draft=asset;
       }
+      const remaining=minimumGenerationDelay(generationStarted,performance.now());
+      if(remaining)await new Promise(resolve=>setTimeout(resolve,remaining));
+      setGeneratedDraft(draft);
     } catch (error) {
       setGeneratorError(
         `Das ${generatorOutput === "video" ? "Video" : "Motiv"} konnte nicht erstellt werden. Bitte versuche es erneut. (${error instanceof Error ? error.message : String(error)})`,
@@ -1164,7 +1170,7 @@ export function MediaBrowser() {
                   className={selected.favorite ? "favorite active" : "favorite"}
                   onClick={() => void toggleFavorite(selected)}
                 >
-                  <Icon name={selected.favorite ? "star" : "star_outline"} />
+                  {selected.favorite?<span className="favorite-star-icon"><Icon name="star"/></span>:<Icon name="star_outline"/>}
                   {selected.favorite ? "FAVORIT ENTFERNEN" : "ALS FAVORIT"}
                 </button>
                 {context === "select" && !isAudio && (

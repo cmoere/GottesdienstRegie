@@ -115,6 +115,7 @@ import {
 import { QuickOverlay } from "./QuickOverlay";
 import { WEB_EDITOR_URL } from "./platformLinks";
 import {BibleTextDialog} from './BibleTextDialog';
+import {firstActiveTarget} from './release53Model';
 import { allEditorFonts as editorFonts, fontStack } from "./fonts";
 import {
   getChurchEvent,
@@ -1101,8 +1102,7 @@ function PresentationLibrary({
                     )}
                   </span>
                   <small>
-                    {entry.itemCount} Elemente · {entry.slideCount} Folien ·
-                    geändert {new Date(entry.updatedAt).toLocaleString(locale)}
+                    Geändert {new Date(entry.updatedAt).toLocaleString(locale)}
                   </small>
                 </button>
                 <div>
@@ -1520,8 +1520,6 @@ function SortableItem({
       });
     setEditingDuration(false);
   };
-  const quizQuestions =
-    item.type === "liveQuiz" ? Number(item.metadata.questionCount ?? 0) : 0;
   return (
     <div
       ref={setNodeRef}
@@ -1549,22 +1547,7 @@ function SortableItem({
           {item.title}
           {item.linkedContentId && <Icon name="link" />}
         </b>
-        <small>
-          {item.type === "liveQuiz" ? (
-            `${quizQuestions} ${quizQuestions === 1 ? "Frage" : "Fragen"}`
-          ) : (
-            <>
-              {item.slides.length}{" "}
-              {t(item.slides.length === 1 ? "slidesOne" : "slidesMany")}
-            </>
-          )}
-          {item.timing?.repeat && (
-            <>
-              {" "}
-              · <Icon name="repeat" />
-            </>
-          )}
-        </small>
+        {item.timing?.repeat&&<small><Icon name="repeat"/> Wiederholung</small>}
       </span>
       <button
         className={`item-audio-button ${item.backgroundAudio?.tracks.length ? "configured" : ""} ${item.audioStopCue ? "audio-stop-cue" : ""}`}
@@ -6645,7 +6628,7 @@ function HelpModal({ close }: { close: () => void }) {
     Vorschau:
       "Die Einzelansicht zeigt eine Folie groß. Die Folienübersicht gruppiert echte Thumbnails nach Ablaufabschnitt. Der Größenregler ändert nur die Thumbnailgröße. OFF AIR wählt ein Thumbnail ausschließlich als Vorschau; ON AIR schaltet ein angeklicktes aktives Thumbnail direkt live.",
     "ON AIR":
-      "ON AIR führt einen Preflight durch, öffnet MAIN rahmenlos auf dem zugeordneten Bildschirm und übernimmt die aktuelle Vorschau als Startfolie. Pfeil rechts beziehungsweise Bild ab schaltet zur nächsten aktiven Folie, Pfeil links beziehungsweise Bild auf zurück. Ein erneuter Klick beendet die Ausgabe sofort, ohne die Präsentation zu schließen.",
+      "ON AIR führt einen Preflight durch, öffnet MAIN rahmenlos auf dem zugeordneten Bildschirm und startet immer mit der ersten aktiven Folie des gesamten Ablaufs. Pfeil rechts beziehungsweise Bild ab schaltet zur nächsten aktiven Folie, Pfeil links beziehungsweise Bild auf zurück. Ein erneuter Klick beendet die Ausgabe sofort, ohne die Präsentation zu schließen.",
     Displays:
       "Unter Einstellungen → Anzeige siehst du tatsächlich angeschlossene Monitore als Anzeige 1, Anzeige 2 und so weiter. Weise MAIN, STAGE, NOTES, LIVESTREAM oder LOBBY nur passenden Ausgabebildschirmen zu. ANZEIGEN IDENTIFIZIEREN blendet Nummer, Verwendung, Gerätename und Auflösung auf jedem Monitor ein. Fehlt MAIN während ON AIR, wird niemals automatisch der Bedienbildschirm verwendet.",
     "Virtual Screens & Displays":
@@ -7738,8 +7721,7 @@ function UserProfileDialog({
                           {new Date(
                             entry.date || entry.updatedAt,
                           ).toLocaleDateString("de-DE")}{" "}
-                          · {entry.itemCount} Elemente · {entry.slideCount}{" "}
-                          Folien
+                          · Präsentation
                         </small>
                         <small>
                           {size
@@ -7889,8 +7871,7 @@ function PresentationInfoDialog({ close }: { close: () => void }) {
     [date, setDate] = useState(state.date),
     [createdBy, setCreatedBy] = useState(state.createdBy),
     [eventId, setEventId] = useState(state.eventId);
-  const slides = state.items.reduce((sum, item) => sum + item.slides.length, 0),
-    duration = state.items.reduce(
+  const duration = state.items.reduce(
       (sum, item) => sum + itemDurationSeconds(item),
       0,
     ),
@@ -7976,9 +7957,7 @@ function PresentationInfoDialog({ close }: { close: () => void }) {
             </div>
             <div>
               <small>INHALT</small>
-              <b>
-                {state.items.length} Elemente · {slides} Folien
-              </b>
+              <b>Präsentation</b>
             </div>
             <div>
               <small>GEPLANTE DAUER</small>
@@ -9121,11 +9100,6 @@ function AppShell({
         icon: "broken_image",
         action: () => void air(true),
       },
-      {
-        label: "Medienverwaltung",
-        icon: "settings",
-        action: () => openMedia("item", "manage"),
-      },
     ],
     edit: [
       {
@@ -9655,10 +9629,9 @@ function AppShell({
       return;
     }
     const sessionMode = state.onAir && testMode ? 'test' : requestedMode;
-    const itemId =
-        target?.itemId ?? state.previewItemId ?? state.selectedItemId,
-      slideId =
-        target?.slideId ?? state.previewSlideId ?? state.selectedSlideId,
+    const first=firstActiveTarget(state.items),
+      itemId = first?.itemId ?? "",
+      slideId = first?.slideId ?? "",
       slide = state.items
         .find((item) => item.id === itemId)
         ?.slides.find((entry) => entry.id === slideId);
@@ -10076,7 +10049,7 @@ function AppShell({
           }
           onClick={() => void air()}
         >
-          <span /> {state.onAir ? (testMode ? 'TEST STOPPEN' : "OFF AIR") : "ON AIR"}
+          {state.onAir ? (testMode ? 'TEST STOPPEN' : "OFF AIR") : "ON AIR"}
         </button>
         </div>
       </div>
@@ -10122,19 +10095,6 @@ function AppShell({
         </span>
         <span>{mediaStorage?.online ? "CLOUD ✓" : "CLOUD OFFLINE"}</span>
         <span>
-          {t("main")}{" "}
-          {state.mainDisplayId &&
-          !displays.some((display) => display.id === state.mainDisplayId)
-            ? "FEHLT"
-            : state.onAir
-              ? outputState.main === "missing"
-                ? "FEHLT"
-                : testMode ? 'TESTBETRIEB' : "ON AIR"
-              : state.mainDisplayId
-                ? t("ready")
-                : "—"}
-        </span>
-        <span>
           STAGE{" "}
           {Object.entries(state.displayRoles).some(
             ([, role]) => role === "stage",
@@ -10146,18 +10106,6 @@ function AppShell({
         </span>
         <i />
         <span>{roleLabel(t, access.role)}</span>
-        <span>
-          {t("item")}{" "}
-          {Math.max(
-            1,
-            state.items.findIndex((item) => item.id === state.selectedItemId) +
-              1,
-          )}
-          /{state.items.length}
-        </span>
-        <span>
-          {t("slide")} {slideIndex}/{slideCount}
-        </span>
         <Clock locale={locale} />
       </div>
       <RewardToastHost onAir={state.onAir} />
@@ -10215,7 +10163,7 @@ function AppShell({
           confirm={() => void leave()}
         />
       )}
-      {bibleTextOpen&&<BibleTextDialog close={()=>setBibleTextOpen(false)} onShow={value=>{const quick:QuickScreenConfig={id:`bible-${Date.now()}`,type:'bible',name:value.reference,enabled:true,targets:['main'],text:`${value.reference}\n\n${value.text}\n\n${value.translation}`,background:'#101820',order:0};void applyQuick(quick);setBibleTextOpen(false)}}/>}
+      {bibleTextOpen&&<BibleTextDialog close={()=>setBibleTextOpen(false)} onShow={value=>{const quick:QuickScreenConfig={id:`bible-${Date.now()}`,type:'bible',name:value.reference,enabled:true,targets:['main'],text:`${value.reference}\n\n${value.text}\n\n${value.translation}`,background:'#101820',order:0};void(async()=>{if(!usePresentation.getState().onAir)await air();if(!usePresentation.getState().onAir)return;setPreviewQuick(quick);await(window.desktop as any)?.sendQuick(['main'],quick);setBibleTextOpen(false)})()}}/>}
       <MobileWorkspaceNav />
     </div>
   );

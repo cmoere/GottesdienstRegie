@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const app=fs.readFileSync('src/App.tsx','utf8'),workspace=fs.readFileSync('src/ProductionWorkspace.tsx','utf8'),media=fs.readFileSync('src/MediaBrowser.tsx','utf8'),css=fs.readFileSync('src/version53.css','utf8'),pkg=require('../package.json'),releases=require('../public/releases.json');
+assert.equal(pkg.version,'0.53.0');
+assert.deepEqual(releases.versions.flatMap(x=>x.builds).filter(x=>x.current).map(x=>x.version),['0.53.0']);
+assert.doesNotMatch(app,/label: "Medienverwaltung"/);
+assert.doesNotMatch(app,/<span \/> \{state\.onAir/);
+assert.doesNotMatch(workspace,/preview-slide-timer|MAIN · ON AIR/);
+assert.doesNotMatch(app,/item\.slides\.length\}\{" "\}/);
+assert.match(media,/minimumGenerationDelay/);
+assert.match(media,/favorite-star-icon/);
+assert.match(css,/box-shadow:\s*none\s*!important/);
+console.log('Version 0.53 UI and live behavior checks passed.');

@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.53",
+      "builds": [{
+        "version": "0.53.0",
+        "releaseDate": "2026-09-25",
+        "current": true,
+        "overview": {"label":{"de":"Ruhiger Live-Start und aufgeräumte Regieoberfläche","en":"Calmer live start and cleaner control interface"},"text":{"de":"Version 0.53.0 startet ON AIR verlässlich mit der ersten aktiven Folie, stabilisiert die Bibel-Schnellanzeige, gibt der KI-Motiverstellung mindestens acht Sekunden sichtbare Arbeitszeit und reduziert entbehrliche Statusangaben sowie Schatten.","en":"Version 0.53.0 reliably starts ON AIR with the first active slide, stabilizes the Bible quick display, gives AI motif generation at least eight seconds of visible processing time and reduces unnecessary status details and shadows."}},
+        "sections": {
+          "new": [],
+          "improved": [{"label":{"de":"Mindestens acht Sekunden KI-Erstellung","en":"At least eight seconds of AI generation"},"text":{"de":"Ein erfolgreiches KI-Motiv erscheint frühestens acht Sekunden nach dem Start. Spinner und wechselnde Statusmeldungen bleiben bis dahin sichtbar; Fehler erscheinen weiterhin unverzüglich.","en":"A successful AI motif appears no earlier than eight seconds after starting. Spinner and changing status messages remain visible until then, while errors still appear immediately."}},{"label":{"de":"Ruhigere Bedienoberfläche","en":"Calmer operator interface"},"text":{"de":"Folien-, Song- und Elementmengen, der rote ON-AIR-Punkt, die MAIN-ON-AIR-Markierung, der obere Vorschautimer und der doppelte Menüpunkt Medienverwaltung wurden entfernt. Dialoge und Popups verwenden keine Schatten mehr; Favoriten zeigen einen ausgefüllten Stern.","en":"Slide, song and item counts, the red ON AIR dot, MAIN ON AIR marker, top preview timer and duplicate Media management menu item have been removed. Dialogs and popups no longer use shadows, and favorites show a filled star."}}],
+          "fixed": [{"label":{"de":"ON AIR beginnt am Ablaufanfang","en":"ON AIR begins at the start of the order"},"text":{"de":"Der Start ignoriert die aktuelle Editor- oder Vorschauauswahl und verwendet immer die erste aktive Folie des ersten aktiven Elements, auch im Vorprogramm oder Ankommen.","en":"Starting ignores the current editor or preview selection and always uses the first enabled slide of the first enabled item, including pre-program or arrival."}},{"label":{"de":"Bibeltext lässt sich wieder einblenden","en":"Bible text can be shown again"},"text":{"de":"Die voreingestellte Stelle Johannes 3,16 wird im lokalen Paket korrekt gefunden. Falls ON AIR noch nicht aktiv ist, startet der sichere Live-Ablauf zuerst und sendet den bestätigten Bibeltext danach als unabhängige MAIN-Schnellanzeige.","en":"The default reference John 3:16 is correctly resolved from the local bundle. If ON AIR is not active, the safe live sequence starts first and then sends the confirmed Bible text as an independent MAIN quick display."}}],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.52",
       "builds": [{
         "version": "0.52.1",
         "releaseDate": "2026-09-25",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Aktuelle Versionshinweise wieder vollständig im Web","en":"Current release notes fully available on the web again"},"text":{"de":"Version 0.52.1 behebt die Veröffentlichung der öffentlichen Versionshinweise. Die Einträge 0.50.0, 0.51.0 und 0.52.0 waren zwar in der Anwendung und im Release enthalten, die Webseite wurde nach 0.49.0 jedoch nicht mehr neu bereitgestellt.","en":"Version 0.52.1 fixes publishing of the public release notes. Entries 0.50.0, 0.51.0 and 0.52.0 existed in the app and releases, but the website had not been redeployed after 0.49.0."}},
         "sections": {
           "new": [],

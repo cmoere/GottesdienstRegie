@@ -2794,33 +2794,6 @@ function PreviewCenter({
             role="operator"
           />
           <QuickOverlay quick={activeQuick} />
-          {timedSeconds > 0 && (
-            <button
-              className={`preview-slide-timer ${(state.onAir ? livePaused : pausedSlideId === slide.id) ? "paused" : ""}`}
-              title="Timer anklicken, damit diese MAIN-Folie dauerhaft stehen bleibt"
-              onClick={() =>
-                state.onAir
-                  ? state.setLiveTimerPaused(livePaused ? undefined : slide.id)
-                  : setPausedSlideId(slide.id)
-              }
-            >
-              <Icon
-                name={
-                  (state.onAir ? livePaused : pausedSlideId === slide.id)
-                    ? "keep"
-                    : "timer"
-                }
-              />
-              {(state.onAir ? livePaused : pausedSlideId === slide.id)
-                ? "DAUERHAFT"
-                : `${Math.max(0, Math.ceil(remaining))} s`}
-            </button>
-          )}
-          <b
-            className={`main-live-state ${state.onAir ? "on-air" : "off-air"}`}
-          >
-            {state.onAir ? "MAIN · ON AIR" : "MAIN · VORSCHAU"}
-          </b>
         </div>
         <button
           className="preview-nav next"

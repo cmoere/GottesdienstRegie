@@ -1,5 +1,13 @@
 # Versionshinweise / Release notes
 
+## 0.53.0 – Live-Start, Bibelanzeige und ruhigere Oberfläche
+
+- ON AIR startet immer mit der ersten aktiven Folie des gesamten Ablaufs.
+- KI-Motive zeigen mindestens acht Sekunden lang den Erstellungszustand.
+- Die voreingestellte Bibelstelle Johannes 3,16 kann wieder auf MAIN eingeblendet werden.
+- Doppelte Statusangaben, Inhaltsmengen, Vorschautimer und der Menüpunkt Medienverwaltung wurden entfernt.
+- Popups und Dialoge verwenden keine Schatten; aktive Favoriten zeigen einen ausgefüllten Stern.
+
 ## 0.52.1 – Aktuelle Versionshinweise wieder im Web
 
 - Die Web-Veröffentlichung reagiert nun auch auf Versions-Tags und nicht mehr nur auf den Hauptbranch.
