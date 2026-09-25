@@ -23,9 +23,20 @@
     {
       "line": "0.52",
       "builds": [{
-        "version": "0.52.0",
+        "version": "0.52.1",
         "releaseDate": "2026-09-25",
         "current": true,
+        "overview": {"label":{"de":"Aktuelle Versionshinweise wieder vollständig im Web","en":"Current release notes fully available on the web again"},"text":{"de":"Version 0.52.1 behebt die Veröffentlichung der öffentlichen Versionshinweise. Die Einträge 0.50.0, 0.51.0 und 0.52.0 waren zwar in der Anwendung und im Release enthalten, die Webseite wurde nach 0.49.0 jedoch nicht mehr neu bereitgestellt.","en":"Version 0.52.1 fixes publishing of the public release notes. Entries 0.50.0, 0.51.0 and 0.52.0 existed in the app and releases, but the website had not been redeployed after 0.49.0."}},
+        "sections": {
+          "new": [],
+          "improved": [{"label":{"de":"Webseite folgt künftig jedem Release","en":"Website now follows every release"},"text":{"de":"Neben Aktualisierungen des Hauptbranches löst nun auch jeder Versions-Tag die Veröffentlichung der Release-Notes-Webseite aus. Damit gelangen neue Hinweise zusammen mit den Installationsdateien online.","en":"In addition to main-branch updates, every version tag now triggers deployment of the release-notes website, so new notes go online together with installers."}}],
+          "fixed": [{"label":{"de":"Versionen ab 0.50.0 nachgetragen","en":"Versions from 0.50.0 restored"},"text":{"de":"Die öffentliche Übersicht enthält wieder lückenlos 0.49.0, 0.50.0, 0.51.0, 0.52.0 und die aktuelle Version 0.52.1 einschließlich der ausführlichen deutschen und englischen Beschreibungen.","en":"The public overview once again includes 0.49.0, 0.50.0, 0.51.0, 0.52.0 and current version 0.52.1 with detailed German and English descriptions."}}],
+          "known": []
+        }
+      },{
+        "version": "0.52.0",
+        "releaseDate": "2026-09-25",
+        "current": false,
         "overview": {"label":{"de":"Variable KI-Motive und sichere Live-Navigation","en":"Variable AI motifs and safe live navigation"},"text":{"de":"Version 0.52.0 erzeugt sichtbar unterschiedliche Motivvarianten, repariert das Löschen lokaler Medien, begrenzt Notizen auf 5.000 Zeichen und erlaubt gezielte ON-AIR-Wechsel zwischen den Programmabschnitten.","en":"Version 0.52.0 creates visibly different motif variants, fixes local media deletion, limits notes to 5,000 characters and enables deliberate ON-AIR section changes."}},
         "sections": {
           "new": [{"label":{"de":"ON-AIR per Klick wechseln","en":"Switch ON AIR by click"},"text":{"de":"In der Vorschau schaltet ein Klick, im Bearbeitungsmodus ein Doppelklick das gewählte Element live. Abschnittstitel führen per Doppelklick zum ersten aktiven Inhalt.","en":"A click in preview or a double-click in edit mode takes the selected item live; double-clicking a section title opens its first active item."}}],

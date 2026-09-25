@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.52.1
+
+Version 0.52.1 korrigiert die Veröffentlichung der öffentlichen Versionshinweise. Die vollständigen Einträge für 0.50.0, 0.51.0 und 0.52.0 waren bereits im gemeinsamen Versionskatalog und in der Anwendung vorhanden, wurden auf der Webseite aber nicht angezeigt. Ursache war, dass die GitHub-Pages-Bereitstellung ausschließlich auf Aktualisierungen des Branches `main` reagierte, während die neueren veröffentlichten Versionen als Tags aus dem Release-Branch erstellt wurden. Die Installationsdateien waren deshalb aktuell, die Webansicht blieb jedoch bei Version 0.49.0 stehen.
+
+Die Pages-Pipeline reagiert nun zusätzlich auf jeden Versions-Tag. Neue Versionshinweise werden dadurch künftig gemeinsam mit dem jeweiligen Release angestoßen und gelangen nicht mehr unabhängig von den Downloads ins Hintertreffen. Die bisherige Veröffentlichung bei Änderungen am Hauptbranch bleibt als zusätzlicher Weg erhalten.
+
+Die öffentliche Webseite enthält nach dieser Aktualisierung wieder lückenlos Version 0.49.0, 0.50.0, 0.51.0, 0.52.0 und die aktuelle Version 0.52.1. Alle Einträge behalten ihre ausführlichen deutschen und englischen Beschreibungen, Kategorien und direkten Versionsanker. Eine automatische Prüfung stellt sicher, dass die betroffenen Versionen im Webkatalog enthalten sind, genau eine Version als aktuell markiert ist und Versions-Tags die Webbereitstellung auslösen.
+
+---
+
 # GottesdienstRegie 0.52.0
 
 Version 0.52.0 verbessert KI-Motive, Medienverwaltung, persönliche Notizen und die manuelle ON-AIR-Navigation. Die leere Ergebnisvorschau trägt nun nur noch die kleine Überschrift „Vorschau“; der bisherige erklärende Satz wurde entfernt. „Andere Beschreibung“ verwendet ein verständliches Aktualisieren-Symbol statt des Würfels.

@@ -1,5 +1,11 @@
 # Versionshinweise / Release notes
 
+## 0.52.1 – Aktuelle Versionshinweise wieder im Web
+
+- Die Web-Veröffentlichung reagiert nun auch auf Versions-Tags und nicht mehr nur auf den Hauptbranch.
+- Die ausführlichen Hinweise für 0.50.0, 0.51.0 und 0.52.0 werden wieder öffentlich angezeigt.
+- Ein Regressionstest prüft Katalogvollständigkeit, aktuelle Version und den Auslöser der Pages-Pipeline.
+
 ## 0.52.0 – Variable KI-Motive, Medienlöschung und ON-AIR-Navigation
 
 - Vorschauhinweis reduziert und Aktualisieren-Symbol für neue Beschreibungen eingeführt.
