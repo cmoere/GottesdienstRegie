@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const pkg=require('../package.json'),releases=require('../public/releases.json');
+const builds=releases.versions.flatMap(line=>line.builds),current=builds.filter(build=>build.current);
+assert.equal(pkg.version,'0.54.0');
+assert.deepEqual(current.map(build=>build.version),['0.54.0']);
+const release=current[0];
+assert.ok(release.overview.text.de.length>250);
+assert.ok(release.sections.new.length>=2);
+assert.ok(release.sections.improved.length>=3);
+assert.ok(release.sections.fixed.length>=2);
+const terms=fs.readFileSync('build/terms.txt','utf8');
+assert.match(terms,/\n- Diese Nutzungsbedingungen/);
+console.log('Version 0.54 release metadata and generated terms checks passed.');

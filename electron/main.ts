@@ -20,6 +20,9 @@ import {StorageMaintenanceService,isStorageCategory,type StorageCategory} from '
 import {translationPackCatalog} from './translationPackCatalog';
 import {resolveOperatorWindowStartup,resolveSplashWindowBounds} from './windowStartup';
 
+const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
+function applySpellCheckerLanguage(contents:Electron.WebContents,language:string){const requested=spellLocale[language]??language,available=contents.session.availableSpellCheckerLanguages,exact=available.find(item=>item.toLowerCase()===requested.toLowerCase()),base=available.find(item=>item.toLowerCase().split('-')[0]===requested.toLowerCase().split('-')[0]);contents.session.setSpellCheckerLanguages(exact?[exact]:base?[base]:[]);return exact??base??''}
+
 import {DisplaySleepProtection} from './DisplaySleepProtection';
 const displaySleepProtection=new DisplaySleepProtection(powerSaveBlocker);
 app.on('will-quit',()=>displaySleepProtection.setEnabled(false));
@@ -93,7 +96,7 @@ function createControlWindow(preferences:AppPreferencesData) {
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   });
   controlWindow.setMenu(null);
-  if(process.platform!=='darwin')controlWindow.webContents.session.setSpellCheckerLanguages(['de-DE','en-US'].filter(language=>controlWindow!.webContents.session.availableSpellCheckerLanguages.includes(language)));
+  if(process.platform!=='darwin')applySpellCheckerLanguage(controlWindow.webContents,'de');
   const publishWindowState=()=>controlWindow?.webContents.send('window:fullscreen-state',controlWindow.isFullScreen());
   controlWindow.on('enter-full-screen',publishWindowState);controlWindow.on('leave-full-screen',publishWindowState);
   let workspaceReady=false;
@@ -166,6 +169,7 @@ app.whenReady().then(async() => {
   const publishOutputStatus=(role:OutputRole,state:'ready'|'missing'|'closed')=>{if(controlWindow&&!controlWindow.isDestroyed())controlWindow.webContents.send('outputs:status',{role,state})};
   const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
   stopPresentationOutputs=()=>outputManager.stop();
+  ipcMain.handle('spelling:set-language',(event,language:string)=>applySpellCheckerLanguage(event.sender,String(language||'de')));
   const sessionFile = path.join(app.getPath('userData'), 'community-session.bin');
   const legacyPresentationFile=path.join(app.getPath('userData'),'presentations','default-presentation.json');
   const presentationRepository=new PresentationRepository(path.join(app.getPath('userData'),'library'));

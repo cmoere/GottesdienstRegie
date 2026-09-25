@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.54.0
+
+Version 0.54.0 überarbeitet die Rechtschreibprüfung, die Synchronisierung zwischen Bedienvorschau und MAIN, die KI-Motivvarianten und insbesondere die Bibel-Schnellanzeige. Die ausgewählte Anwendungssprache bestimmt nun auch das aktive Wörterbuch. Unbekannte oder falsch geschriebene Wörter werden in editierbaren Feldern rot unterstrichen. Das native Kontextmenü bietet höchstens sechs passende Schreibvorschläge, kann eine Schreibweise dauerhaft lernen oder das markierte Wort mit Google suchen. Rückgängig, Wiederholen, Ausschneiden, Kopieren, Einfügen und Alles auswählen bleiben im selben Menü verfügbar.
+
+Vorschau und MAIN reagieren nun auf denselben aktuellen Renderzustand. Zuvor wurde eine MAIN-Aktualisierung im Wesentlichen nur ausgelöst, wenn sich die Kennung der Live-Folie änderte. Wurde dagegen Text, Hintergrund, Übersetzung oder Gestaltung der bereits laufenden Folie verändert, zeigte die Bedienvorschau den neuen Zustand, während MAIN noch einen älteren Snapshot behalten konnte. Version 0.54.0 überträgt deshalb jede tatsächliche Inhaltsänderung erneut. Fortlaufende Ausgaberevisionen verhindern zugleich, dass verspätete ältere Zustände einen neueren Stand überschreiben.
+
+Die MAIN-Schnellaktion „Bibel einblenden“ wurde vollständig ersetzt. Ein Klick sendet nicht länger sofort eine möglicherweise leere Schnellanzeige, sondern öffnet zuerst einen eigenständigen Dialog. Dort werden Übersetzung, Bibelbuch, Kapitel sowie erster und letzter Vers gewählt. Eine echte Vorschau lädt den Text über die öffentliche GetBible-Schnittstelle ohne erforderlichen API-Schlüssel und speichert erfolgreiche Abfragen lokal zwischen. Luther 1545 ist voreingestellt; Elberfelder 1871, Elberfelder 1905, Schlachter 1951, King James Version und American Standard Version können ebenfalls gewählt werden. Erst „AUF MAIN ANZEIGEN“ legt den geprüften Text über die laufende Folie. Netzwerk- und Stellenfehler erzeugen niemals eine leere Ausgabe, sondern eine verständliche Meldung mit Wiederholen-Aktion.
+
+Temporäre Bibeltexte bleiben sichtbar, wenn sich darunter die normale Live-Folie weiterentwickelt. Die aktuelle MAIN-Folie wird parallel aktualisiert und erscheint wieder, sobald die Schnellanzeige bewusst beendet wird. Damit bleiben Ablaufsteuerung und temporäre Einblendung voneinander getrennt.
+
+Die KI-Motiverstellung verwendet jetzt einen robusten Variantenschlüssel. Wiederholte Generierungen derselben Beschreibung unterscheiden Farbgebung, Ausschnitt, Verschiebung, Zoom, leichte Drehung und gegebenenfalls Spiegelung deutlich sichtbarer. Die gewählte Szenenkategorie und der Gestaltungsstil bleiben dabei erhalten.
+
+Präsentationsnotizen lassen sich mit Escape schließen. Die Nutzungsbedingungen erscheinen in Anwendung, Installationsfassung und Onlineansicht als übersichtliche Aufzählungen mit Listenpunkten beziehungsweise Gedankenstrichen anstelle einer unruhigen Folge einzelner Textabsätze. Automatisierte Tests sichern Wörterbuchauswahl, Live-Revisionen, KI-Varianten, Bibeltextnormalisierung, leere Bibelantworten und die Escape-Bedienung ab.
+
+---
+
 # GottesdienstRegie 0.53.0
 
 Version 0.53.0 ordnet den Live-Start, die Bibel-Schnellanzeige, KI-Motive und mehrere Statusbereiche der Bedienoberfläche neu. ON AIR beginnt jetzt unabhängig von der zuletzt ausgewählten Editor- oder Vorschaufolie immer mit der ersten aktiven Folie des gesamten Ablaufs. Befindet sich diese Folie im Vorprogramm oder im Bereich Ankommen, startet die Ausgabe dort; deaktivierte Elemente und Folien werden übersprungen.

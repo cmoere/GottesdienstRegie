@@ -11,5 +11,6 @@ assert.ok(builds.some((build)=>build.version==='0.52.1'));
 for (const version of ['0.49.0', '0.50.0', '0.51.0', '0.52.0', '0.52.1']) {
   assert.ok(builds.some((build) => build.version === version), `missing web release note ${version}`);
 }
-assert.match(pagesWorkflow, /tags:\s*\n\s*- ['"]v\*['"]/);
+assert.match(pagesWorkflow, /branches:\s*\[main\]/);
+assert.doesNotMatch(pagesWorkflow, /tags:/);
 console.log('Version 0.52.1 web release-note publishing checks passed.');

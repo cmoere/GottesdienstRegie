@@ -4,6 +4,7 @@ import { applyAudioRoute, defaultAudioRouting } from "./audioRouting";
 import {deleteMethodFor,isAiGenerated,sortRecentlyUsed,validateMediaName} from "./mediaLibraryModel";
 import {AiGenerationStatus} from './AiGenerationStatus';
 import {minimumGenerationDelay} from './release53Model';
+import {nextGenerationSeed} from './release54Model';
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
     {name}
@@ -579,9 +580,7 @@ export function MediaBrowser() {
     const generationStarted=performance.now();
     let draft:CloudMediaAsset|null=null;
     const nonce = Date.now() + Math.floor(Math.random() * 100000),
-      seed = [
-        ...`${generatorPrompt}${generatorStyle}${generatorScene}${nonce}`,
-      ].reduce((sum, char) => sum + char.charCodeAt(0), 0),
+      seed = nextGenerationSeed(generatorPrompt,generatorScene,generatorStyle,nonce),
       hue = seed % 360,
       offset =
         generatorStyle === "bold"
@@ -729,8 +728,11 @@ export function MediaBrowser() {
           canvas.height = 1080;
           const context = canvas.getContext("2d")!;
           context.filter=`hue-rotate(${seed%31-15}deg) saturate(${.92+(seed%21)/100})`;
-          context.translate((seed%37)-18,(seed%29)-14);
-          context.scale(1.015+(seed%4)*.01,1.015+(seed%4)*.01);
+          const mirror=seed%2===0?-1:1,zoom=1.04+(seed%17)/100,shiftX=(seed%241)-120,shiftY=((seed>>>8)%161)-80;
+          context.translate(960+shiftX,540+shiftY);
+          context.scale(mirror*zoom,zoom);
+          context.rotate((((seed>>>16)%9)-4)*Math.PI/360);
+          context.translate(-960,-540);
           drawCover(context, photo, 1920, 1080);
           context.setTransform(1,0,0,1,0,0);
           context.filter='none';

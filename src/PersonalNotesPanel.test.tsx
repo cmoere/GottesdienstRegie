@@ -109,6 +109,14 @@ describe('PersonalNotesPanel save status',()=>{
     expect(screen.getByRole('button',{name:'Formatierung entfernen'})).toBeInTheDocument();
   });
 
+  it('closes presentation notes with Escape',()=>{
+    render(<PersonalNotesPanel noteKey={noteKey} label="Präsentationsnotizen" presentation/>);
+    fireEvent.click(screen.getByRole('button',{name:'Präsentationsnotizen'}));
+    expect(screen.getByRole('dialog',{name:'Präsentationsnotizen'})).toBeInTheDocument();
+    fireEvent.keyDown(window,{key:'Escape'});
+    expect(screen.queryByRole('dialog',{name:'Präsentationsnotizen'})).not.toBeInTheDocument();
+  });
+
   it('limits notes to 5000 characters and shows the counter at the bottom right',()=>{
     render(<PersonalNotesPanel noteKey={noteKey} label="Notizen"/>);
     enter('x'.repeat(5001));

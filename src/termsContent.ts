@@ -21,4 +21,4 @@ export const termsSections:TermsSection[]=[
 {title:'17. Beendigung und Kündigung',paragraphs:['Die Nutzung kann jederzeit durch Deinstallation und Abmeldung beendet werden. Zugänge können bei Sicherheitsrisiken, Rechtsverstößen oder Wegfall der Berechtigung gesperrt werden. Gesetzliche Aufbewahrungspflichten bleiben bestehen.']},
 {title:'18. Schlussbestimmungen',paragraphs:['Es gilt deutsches Recht, soweit zwingendes Recht nichts anderes bestimmt. Sollten einzelne Regelungen unwirksam sein, bleiben die übrigen Regelungen unberührt. Maßgeblich ist die bei Zustimmung bereitgestellte Fassung.']},
 ];
-export function plainTerms(){return `GottesdienstRegie – Nutzungsbedingungen\nVersion ${TERMS_VERSION} · Gültig ab ${TERMS_EFFECTIVE_DATE}\n\n${termsSections.map(section=>`${section.title}\n${section.paragraphs.join('\n\n')}`).join('\n\n')}`}
+export function plainTerms(){return `GottesdienstRegie – Nutzungsbedingungen\nVersion ${TERMS_VERSION} · Gültig ab ${TERMS_EFFECTIVE_DATE}\n\n${termsSections.map(section=>`${section.title}\n${section.paragraphs.map(paragraph=>`- ${paragraph}`).join('\n')}`).join('\n\n')}`}

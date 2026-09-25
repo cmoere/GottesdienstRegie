@@ -19,7 +19,7 @@ const defaultQuickScreens:QuickScreenConfig[]=[
   {id:'no-text',type:'noText',name:'Ohne Text',enabled:true,targets:['main'],order:3},
   {id:'amen',type:'amen',name:'Amen',enabled:true,targets:['main'],text:'Amen!',background:'#162d36',duration:6,order:4},
   {id:'countdown',type:'countdown',name:'Countdown',enabled:true,targets:['main'],duration:300,endText:'Wir beginnen gleich',background:'#000000',order:5},
-  {id:'bible',type:'bible',name:'Bibel einblenden',enabled:false,targets:['main'],order:6}
+  {id:'bible',type:'bible',name:'Bibel einblenden',enabled:true,targets:['main'],order:6}
 ];
 
 interface PreferencesState {

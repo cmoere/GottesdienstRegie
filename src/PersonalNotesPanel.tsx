@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { readPersonalNote, sanitizeRichNote, writePersonalNote, type PersonalNoteKey } from './personalNotes';
 import {noteStatusPresentation,PERSONAL_NOTE_SAVED_MS,type NoteStatus} from './noteStatus';
+import {usePreferences} from './preferences';
 type Props={noteKey:PersonalNoteKey;label:string;presentation?:boolean};
 export function PersonalNotesPanel({noteKey,label,presentation=false}:Props){
+  const language=usePreferences(state=>state.language);
   const identity=JSON.stringify(noteKey),editor=useRef<HTMLDivElement>(null),[value,setValue]=useState(()=>readPersonalNote(noteKey)),[count,setCount]=useState(0),[status,setStatus]=useState<NoteStatus>('idle'),[dotCount,setDotCount]=useState(1),[open,setOpen]=useState(false),timer=useRef<number|undefined>(undefined),statusTimer=useRef<number|undefined>(undefined),dotTimer=useRef<number|undefined>(undefined);
   const clearAllTimers=()=>{if(timer.current!==undefined){clearTimeout(timer.current);timer.current=undefined}if(statusTimer.current!==undefined){clearTimeout(statusTimer.current);statusTimer.current=undefined}if(dotTimer.current!==undefined){clearInterval(dotTimer.current);dotTimer.current=undefined}};
   useEffect(()=>{const next=readPersonalNote(noteKey);setValue(next);setStatus('idle');if(editor.current)editor.current.innerHTML=next;return clearAllTimers},[identity]);
   useEffect(()=>{if(open&&editor.current)editor.current.innerHTML=value},[open]);
+  useEffect(()=>{if(editor.current){editor.current.lang=language==='gsw'?'de-CH':language;editor.current.spellcheck=true}},[language,open]);
+  useEffect(()=>{if(!open)return;const close=(event:KeyboardEvent)=>{if(event.key==='Escape'){event.preventDefault();setOpen(false)}};addEventListener('keydown',close);return()=>removeEventListener('keydown',close)},[open]);
   useEffect(()=>{if(status!=='saving'){setDotCount(1);return}setDotCount(1);dotTimer.current=window.setInterval(()=>setDotCount(current=>current===3?1:current+1),400);return()=>{if(dotTimer.current!==undefined){clearInterval(dotTimer.current);dotTimer.current=undefined}}},[status]);
   const change=(next:string)=>{let clean=sanitizeRichNote(next);const probe=document.createElement('div');probe.innerHTML=clean;let plain=probe.textContent??'';if(plain.length>5000){plain=plain.slice(0,5000);clean=plain;if(editor.current)editor.current.textContent=plain}setCount(plain.length);setValue(clean);setStatus('saving');if(timer.current!==undefined)clearTimeout(timer.current);if(statusTimer.current!==undefined){clearTimeout(statusTimer.current);statusTimer.current=undefined}const captured={...noteKey};timer.current=window.setTimeout(()=>{timer.current=undefined;try{writePersonalNote(captured,clean);setStatus('saved');statusTimer.current=window.setTimeout(()=>{statusTimer.current=undefined;setStatus('idle')},PERSONAL_NOTE_SAVED_MS)}catch{setStatus('error')}},500)};
   const command=(name:string,value?:string)=>{editor.current?.focus();document.execCommand(name,false,value);change(editor.current?.innerHTML??'')};

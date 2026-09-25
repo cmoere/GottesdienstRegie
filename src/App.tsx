@@ -115,6 +115,7 @@ import {
 import { QuickOverlay } from "./QuickOverlay";
 import { WEB_EDITOR_URL } from "./platformLinks";
 import {BibleTextDialog} from './BibleTextDialog';
+import {shouldApplyOutputRevision} from './release54Model';
 import {firstActiveTarget} from './release53Model';
 import { allEditorFonts as editorFonts, fontStack } from "./fonts";
 import {
@@ -984,7 +985,7 @@ function TermsModal({ close }: { close: () => void }) {
     <div className="modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && close()}>
       <section className="terms-dialog" role="dialog" aria-modal="true" aria-labelledby="terms-title">
         <header><div><small>GOTTESDIENSTREGIE</small><h2 id="terms-title">Nutzungsbedingungen</h2></div><button type="button" onClick={close} aria-label="Schließen"><Icon name="close" /></button></header>
-        <div className="terms-body"><p><b>Version {TERMS_VERSION} · Gültig ab {TERMS_EFFECTIVE_DATE}</b></p>{termsSections.map(section=><section key={section.title}><h3>{section.title}</h3>{section.paragraphs.map(paragraph=><p key={paragraph}>{paragraph}</p>)}</section>)}</div>
+        <div className="terms-body"><p><b>Version {TERMS_VERSION} · Gültig ab {TERMS_EFFECTIVE_DATE}</b></p>{termsSections.map(section=><section key={section.title}><h3>{section.title}</h3><ul>{section.paragraphs.map(paragraph=><li key={paragraph}>{paragraph}</li>)}</ul></section>)}</div>
         <footer><button type="button" onClick={()=>void window.desktop?.openExternal('https://cmoere.github.io/GottesdienstRegie/terms/')}>ONLINE ÖFFNEN</button><button type="button" className="primary" onClick={close}>SCHLIESSEN</button></footer>
       </section>
     </div>
@@ -8040,6 +8041,7 @@ function AppShell({
   // Deliberately local: a saved presentation or a restart never enables tests.
   useEffect(() => { if (!state.onAir) setTestMode(false); }, [state.onAir]);
   const quickScreens = usePreferences((s) => s.quickScreens),
+    songTranslationMode=usePreferences((s)=>s.songTranslationMode),
     storedShortcuts = usePreferences((s) => s.keyboardShortcuts),
     shortcuts = useMemo(
       () => ({ ...defaultKeyboardShortcuts, ...storedShortcuts }),
@@ -8539,7 +8541,7 @@ function AppShell({
           state.transitionDefault,
         ),
       });
-  }, [state.liveSlideId, state.onAir]);
+  }, [state.liveSlideId,state.liveItemId,state.onAir,state.items,state.transitionDefault,state.lyricScrolling,songTranslationMode]);
   useEffect(() => {
     const previous = audioSessionRef.current,
       previewKey = `${state.previewItemId}:${state.previewSlideId}`,
@@ -8946,6 +8948,7 @@ function AppShell({
     else await liveEngine.show(slide);
   };
   const applyQuick = async (quick: QuickScreenConfig | null) => {
+    if(quick?.type==='bible'){setBibleTextOpen(true);return}
     setPreviewQuick(quick);
     if (state.onAir)
       await (window.desktop as any)?.sendQuick(
@@ -10186,6 +10189,7 @@ function Clock({ locale }: { locale: string }) {
   );
 }
 function Output() {
+  const outputRevisionRef=useRef(0);
   const [slide, setSlide] = useState<Slide | null>(null),
     [quick, setQuick] = useState<QuickScreenConfig | null>(null),
     role = useMemo(
@@ -10195,10 +10199,7 @@ function Output() {
       [],
     );
   useEffect(() => {
-    const disposeSlide = window.desktop?.onLiveSlide((payload) => {
-        setQuick(null);
-        setSlide(payload as Slide);
-      }),
+    const disposeSlide = window.desktop?.onLiveSlide((payload) => {const incoming=payload as Slide&{_outputRevision?:number},revision=incoming._outputRevision??outputRevisionRef.current+1;if(!shouldApplyOutputRevision(outputRevisionRef.current,revision))return;outputRevisionRef.current=revision;setSlide(incoming)}),
       disposeQuick = (window.desktop as any)?.onQuick?.(
         (payload: QuickScreenConfig | null) => setQuick(payload),
       );
@@ -10280,6 +10281,7 @@ export function App() {
   useEffect(() => {
     document.documentElement.lang = language === "gsw" ? "de-CH" : language;
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    void (window.desktop as any)?.spelling?.setLanguage?.(language);
     document.documentElement.dataset.theme = theme;
     document.documentElement.dataset.bw = String(!output && blackWhite);
     document.documentElement.dataset.reduceMotion = String(

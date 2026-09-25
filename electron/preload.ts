@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("desktop", {
+  spelling:{setLanguage:(language:string)=>ipcRenderer.invoke('spelling:set-language',language)},
   platform:{appearance:()=>ipcRenderer.invoke('platform:appearance')},
   lifecycle: {
     ready: () => ipcRenderer.send("lifecycle:ready"),

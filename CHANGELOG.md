@@ -1,5 +1,13 @@
 # Versionshinweise / Release notes
 
+## 0.54.0 – Sprachprüfung, Live-Synchronisierung und neue Bibelanzeige
+
+- Rechtschreibprüfung folgt der ausgewählten Anwendungssprache und bietet höchstens sechs Korrekturvorschläge, Lernen und Google-Suche.
+- Änderungen an der laufenden Folie werden sofort mit einer versionierten Ausgabe an MAIN übertragen; ältere Zustände werden verworfen.
+- Die MAIN-Schnellaktion „Bibel einblenden“ besitzt einen komplett neuen Auswahl-, Vorschau- und Bestätigungsablauf mit echten Bibeltexten.
+- Wiederholte KI-Motive variieren Ausschnitt, Position, Zoom, Drehung, Spiegelung und Farben deutlicher.
+- Präsentationsnotizen schließen mit Escape; Nutzungsbedingungen werden als übersichtliche Aufzählungen dargestellt.
+
 ## 0.53.0 – Live-Start, Bibelanzeige und ruhigere Oberfläche
 
 - ON AIR startet immer mit der ersten aktiven Folie des gesamten Ablaufs.
