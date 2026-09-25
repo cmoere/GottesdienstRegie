@@ -212,6 +212,7 @@ export function MediaBrowser() {
     ),
     [generatorDuration, setGeneratorDuration] = useState(30),
     [generating, setGenerating] = useState(false),
+    [generatedDraft,setGeneratedDraft]=useState<CloudMediaAsset|null>(null),
     [generatorError, setGeneratorError] = useState(""),
     [unsplashPage, setUnsplashPage] = useState(1),
     [unsplashHasMore, setUnsplashHasMore] = useState(true),
@@ -612,6 +613,7 @@ export function MediaBrowser() {
     };
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="hsl(${hue} ${light ? 28 : 55}% ${dark ? 11 : light ? 88 : 30}%)"/><stop offset="1" stop-color="hsl(${hue2} ${light ? 38 : 68}% ${dark ? 24 : light ? 72 : 54}%)"/></linearGradient><filter id="b"><feGaussianBlur stdDeviation="${generatorStyle === "minimal" ? 120 : 75}"/></filter></defs><rect width="1920" height="1080" fill="url(#g)"/>${geometry}<g opacity="${generatorStyle === "minimal" ? ".22" : ".52"}" filter="url(#b)"><circle cx="${240 + (seed % 620)}" cy="${160 + (seed % 260)}" r="${260 + (seed % 180)}" fill="hsl(${(hue + 130) % 360} 72% 64%)"/><circle cx="${1250 + (seed % 400)}" cy="${480 + (seed % 310)}" r="${340 + (seed % 170)}" fill="hsl(${(hue2 + 90) % 360} 72% 56%)"/></g>${scenes[generatorScene] ?? ""}<path d="M0 850 Q480 ${500 + (seed % 210)} 960 820 T1920 ${620 + (seed % 150)} V1080 H0Z" fill="${light ? "#fff" : "#000"}" opacity=".12"/><metadata>${safe}</metadata></svg>`;
     setGenerating(true);
+    setGeneratedDraft(null);
     setGeneratorError("");
     try {
       if (generatorOutput === "video") {
@@ -709,8 +711,7 @@ export function MediaBrowser() {
             extension: "WEBM",
             visibility: "private",
           };
-        setItems((current) => [asset, ...current]);
-        setSelected(asset);
+        setGeneratedDraft(asset);
       } else {
         let url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`,
           extension = "SVG",
@@ -753,13 +754,8 @@ export function MediaBrowser() {
           extension,
           visibility: "private",
         };
-        setItems((current) => [asset, ...current]);
-        setSelected(asset);
+        setGeneratedDraft(asset);
       }
-      setTab("cloud");
-      setQuery("");
-      setLibraryFilter("all");
-      setGeneratorOpen(false);
     } catch (error) {
       setGeneratorError(
         `Das ${generatorOutput === "video" ? "Video" : "Motiv"} konnte nicht erstellt werden. Bitte versuche es erneut. (${error instanceof Error ? error.message : String(error)})`,
@@ -768,6 +764,7 @@ export function MediaBrowser() {
       setGenerating(false);
     }
   }
+  async function saveGenerated(){if(!generatedDraft)return;setBusy('save-generated');try{const response=await fetch(generatedDraft.downloadUrl),data=new Uint8Array(await response.arrayBuffer()),saved=await api?.saveGenerated?.({name:generatedDraft.name,kind:generatedDraft.kind,extension:generatedDraft.extension||(generatedDraft.kind==='video'?'webm':'svg'),data,tags:generatedDraft.tags});if(!saved)throw new Error('MEDIA_SAVE_UNAVAILABLE');setTab('cloud');setQuery('');setLibraryFilter('all');setGeneratorOpen(false);setGeneratedDraft(null);await refresh('cloud');}catch(error){setGeneratorError(`Das Motiv konnte nicht in der Medienbibliothek gespeichert werden. (${error instanceof Error?error.message:String(error)})`)}finally{setBusy('')}}
   async function toggleFavorite(item: CloudMediaAsset) {
     const favorite = !item.favorite;
     setBusy(item.id);
@@ -1418,27 +1415,15 @@ export function MediaBrowser() {
             )}
           </div>
           <aside className="generator-live-preview" aria-label="Motivvorschau">
-            <div className={`generator-preview-art style-${generatorStyle}`}>
-              <Icon name={generatorOutput==='video'?'movie':'image'}/>
-              <strong>LIVE-VORSCHAU</strong>
-              <span>{generatorScenes.find(([value])=>value===generatorScene)?.[1]}</span>
-              <small>{generatorStyles.find(([value])=>value===generatorStyle)?.[1]}</small>
+            <div className={`generator-preview-art style-${generatorStyle}${generatedDraft?' has-result':''}`}>
+              {generatedDraft?.kind==='image'?<img src={generatedDraft.downloadUrl} alt="Erstelltes KI-Motiv"/>:generatedDraft?.kind==='video'?<video src={generatedDraft.downloadUrl} autoPlay muted loop playsInline/>:<><Icon name={generatorOutput==='video'?'movie':'image'}/><strong>VORSCHAU</strong><span>{generatorScenes.find(([value])=>value===generatorScene)?.[1]}</span><small>{generatorStyles.find(([value])=>value===generatorStyle)?.[1]}</small></>}
+              {generating&&<span className="generator-mini-spinner" role="status" aria-label="Motiv wird erstellt"/>}
             </div>
-            <p>Dein Motiv wird im gewählten Format angelegt und danach direkt in der Medienbibliothek geöffnet.</p>
+            <p>{generatedDraft?'Das Motiv ist fertig. Speichere es in der Medienbibliothek oder erstelle eine neue Variante.':'Erstelle zuerst eine Vorschau. Das Motiv wird erst nach deiner Bestätigung gespeichert.'}</p>
           </aside>
           <footer>
             <AiGenerationStatus active={generating} error={generatorError} onRetry={()=>void generateLocal()} reducedMotion={prefs.reduceMotion}/>
-            <button
-              className="primary"
-              disabled={!generatorPrompt.trim() || generating}
-              onClick={() => void generateLocal()}
-            >
-              {generating
-                ? `WIRD ERSTELLT · ${generatorDuration} S …`
-                : generatorOutput === "video"
-                  ? "VIDEO ERSTELLEN"
-                  : "MOTIV ERSTELLEN"}
-            </button>
+            {generatedDraft?<div className="generator-result-actions"><button disabled={generating||busy==='save-generated'} onClick={()=>void generateLocal()}>NEU GENERIEREN</button><button className="primary" disabled={busy==='save-generated'} onClick={()=>void saveGenerated()}>{busy==='save-generated'?'WIRD GESPEICHERT …':'IN MEDIENBIBLIOTHEK SPEICHERN'}</button></div>:<button className="primary" disabled={!generatorPrompt.trim()||generating} onClick={()=>void generateLocal()}>{generating?`WIRD ERSTELLT · ${generatorDuration} S …`:generatorOutput==='video'?'VIDEO ERSTELLEN':'MOTIV ERSTELLEN'}</button>}
           </footer>
         </section>
       )}

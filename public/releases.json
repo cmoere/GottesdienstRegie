@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.51",
+      "builds": [{
+        "version": "0.51.0",
+        "releaseDate": "2026-09-25",
+        "current": true,
+        "overview": {"label":{"de":"KI-Motive erst prüfen, dann speichern","en":"Review AI motifs before saving"},"text":{"de":"Version 0.51.0 korrigiert das Layout der KI-Motive-Seite, zeigt beim Erstellen einen kleinen Spinner und speichert ein Ergebnis erst nach deiner ausdrücklichen Bestätigung in der Medienbibliothek.","en":"Version 0.51.0 fixes the AI motif layout, shows a small generation spinner and saves a result to the media library only after explicit confirmation."}},
+        "sections": {
+          "new": [{"label":{"de":"Ergebnisentscheidung","en":"Result decision"},"text":{"de":"Nach der Erstellung bleibt das tatsächliche Bild oder Video als Vorschau stehen. „Neu generieren“ verwirft es zugunsten einer neuen Variante; „In Medienbibliothek speichern“ legt genau dieses Ergebnis dauerhaft ab.","en":"After generation, the actual image or video remains visible. Regenerate replaces it with another variant, while Save to media library persists exactly that result."}}],
+          "improved": [{"label":{"de":"Kompaktere KI-Motive-Seite","en":"More compact AI motif workspace"},"text":{"de":"Spaltenbreiten, Innenabstände, Formulargruppen und die 16:9-Vorschau sind sauber ausgerichtet. Ein kleiner Spinner informiert direkt im Vorschaubereich über die laufende Erstellung.","en":"Column widths, spacing, form groups and the 16:9 preview are aligned consistently, with a small spinner indicating generation directly in the preview."}}],
+          "fixed": [{"label":{"de":"Keine unbeabsichtigten Bibliothekseinträge","en":"No unintended library entries"},"text":{"de":"Generieren allein verändert die Medienbibliothek nicht mehr. Erst die Speicheraktion schreibt die Datei samt KI-Kennzeichnung dauerhaft in den lokalen Medienspeicher.","en":"Generation alone no longer changes the media library. Only the save action persists the file and its AI provenance in local media storage."}}],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.50",
       "builds": [{
         "version": "0.50.0",
         "releaseDate": "2026-09-25",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Neue Medienansicht, erweiterte Notizen und feste Loops","en":"New media workspace, extended notes and permanent loops"},"text":{"de":"Version 0.50.0 gestaltet KI-Motive und Mediendetails neu, erweitert den Editor für Präsentationsnotizen und macht Vor- sowie Nachprogramm zu verlässlichen, nicht abschaltbaren Schleifen.","en":"Version 0.50.0 redesigns AI motifs and media details, extends presentation-note editing and makes pre- and post-program reliable permanent loops."}},
         "sections": {
           "new": [{"label":{"de":"Erweiterter Notizeneditor","en":"Extended notes editor"},"text":{"de":"Absatzformate, Zitate, Durchstreichen, drei Ausrichtungen, Einzüge, Textfarbe und Formatbereinigung ergänzen die vorhandenen Werkzeuge in einem sicheren modalen Dialog.","en":"Paragraph formats, quotes, strikethrough, three alignments, indentation, text color and format clearing extend the existing tools in a safe modal dialog."}}],

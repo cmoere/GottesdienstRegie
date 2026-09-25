@@ -126,6 +126,7 @@ contextBridge.exposeInMainWorld("desktop", {
     markUsed: (id:string) => ipcRenderer.invoke("media:mark-used",id),
     import: (kind?: "audio" | "video") =>
       ipcRenderer.invoke("media:import", kind),
+    saveGenerated: (input: unknown) => ipcRenderer.invoke("media:save-generated", input),
     update: (id: string, patch: unknown) =>
       ipcRenderer.invoke("media:update", id, patch),
     setRemoteFavorite: (asset: unknown, favorite: boolean) =>

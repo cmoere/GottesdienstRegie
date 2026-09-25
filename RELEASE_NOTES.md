@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.51.0
+
+Version 0.51.0 vervollständigt den Arbeitsablauf für KI-Motive und korrigiert die noch sichtbaren Gestaltungsfehler der in Version 0.50 eingeführten zweigeteilten Ansicht. Eingabebereich und Vorschau besitzen nun ausgewogenere Breiten, einheitliche Innenabstände und sauber ausgerichtete Oberkanten. Beschreibung, Zeichenzähler, Zufallsvorschlag, Szenenkategorie und Gestaltungsstil bilden einen kompakten Block ohne unnötige Leerflächen. Die rechte Vorschau verwendet ein festes 16:9-Verhältnis und bleibt auch auf kleineren Fenstern vollständig erreichbar.
+
+Beim Erstellen erscheint jetzt ein kleiner, klar erkennbarer Lade-Spinner unmittelbar in der Motivvorschau. Er zeigt den laufenden Vorgang an, ohne die gesamte Seite zu verdecken oder die Eingaben zu verschieben. Die bereits vorhandenen wechselnden Statustexte und die Fehleraktion „Erneut versuchen“ bleiben erhalten. Bei reduzierter Bewegung wird die Darstellung weiterhin entsprechend der Systemeinstellung beruhigt.
+
+Ein fertig erzeugtes Bild oder Video wird nicht mehr automatisch in die Medienbibliothek übernommen. Stattdessen erscheint das tatsächliche Ergebnis zunächst groß in der Vorschau. Danach stehen zwei eindeutige Entscheidungen bereit: „Neu generieren“ erstellt mit den aktuellen Angaben eine neue Variante, während „In Medienbibliothek speichern“ genau das sichtbare Ergebnis dauerhaft ablegt. Damit landen verworfene Varianten nicht mehr unbeabsichtigt in der Bibliothek.
+
+Für die dauerhafte Speicherung besitzt die Desktop-App einen neuen, abgesicherten Medienpfad. Generierte Daten werden mit Prüfsumme, Dateityp, Dateigröße, KI-Kennzeichnung und zugehörigen Stichwörtern im lokalen Medienspeicher registriert. Bereits identische Dateien werden anhand ihrer Prüfsumme wiedererkannt. Lokal gespeicherte, noch nicht in die Team-Cloud hochgeladene Motive erscheinen ebenfalls in der Medienbibliothek und bleiben nach einem Neustart verfügbar.
+
+Automatisierte Tests prüfen, dass vor der ausdrücklichen Bestätigung kein Medieneintrag entsteht, dass das gespeicherte Ergebnis seine KI-Herkunft behält und dass seine tatsächlichen Dateidaten im Medienverzeichnis liegen. Zusätzliche Versionsprüfungen sichern Ergebnisaktionen, Vorschau und kleinen Lade-Spinner ab.
+
+---
+
 # GottesdienstRegie 0.50.0
 
 Version 0.50.0 ordnet die Medien- und Präsentationswerkzeuge sichtbar neu und beseitigt mehrere störende Bedienfehler. Die Seite „KI-Motive“ besitzt nun einen breiteren, zweigeteilten Arbeitsbereich: Beschreibung, Format, Szene und Stil bleiben links übersichtlich zusammengefasst, während rechts eine dauerhafte Motivvorschau die gewählte Bild- oder Videoart, Szene und Gestaltung unmittelbar sichtbar macht. Erstellungsstatus, wechselnde Animationen und „Erneut versuchen“ bleiben vollständig erhalten.

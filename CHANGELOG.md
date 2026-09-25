@@ -1,5 +1,13 @@
 # Versionshinweise / Release notes
 
+## 0.51.0 – Bestätigter KI-Motiv-Workflow
+
+- KI-Motive-Seite mit kompakten Abständen, ausgewogenen Spalten und echter 16:9-Ergebnisvorschau korrigiert.
+- Kleiner Lade-Spinner erscheint während der Erstellung direkt in der Vorschau.
+- Fertige Motive werden erst nach „In Medienbibliothek speichern“ dauerhaft abgelegt.
+- „Neu generieren“ erstellt eine weitere Variante, ohne das vorherige Ergebnis in die Bibliothek zu übernehmen.
+- Lokale KI-Motive bleiben nach dem Neustart erhalten und sind auch vor einem Cloud-Upload in der Medienbibliothek sichtbar.
+
 ## 0.50.0 – Medien, Notizen und feste Programmschleifen
 
 - KI-Motive mit neuer zweigeteilter Arbeitsfläche und dauerhafter Motivvorschau.
