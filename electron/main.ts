@@ -18,7 +18,7 @@ import {TranslationPackService} from './TranslationPackService';
 import {platformAppearance} from './platformAppearance';
 import {StorageMaintenanceService,isStorageCategory,type StorageCategory} from './StorageMaintenanceService';
 import {translationPackCatalog} from './translationPackCatalog';
-import {resolveOperatorWindowStartup} from './windowStartup';
+import {resolveOperatorWindowStartup,resolveSplashWindowBounds} from './windowStartup';
 
 import {DisplaySleepProtection} from './DisplaySleepProtection';
 const displaySleepProtection=new DisplaySleepProtection(powerSaveBlocker);
@@ -85,9 +85,10 @@ function load(win: BrowserWindow, route = '') {
 
 function createControlWindow(preferences:AppPreferencesData) {
   const displays=screen.getAllDisplays(),primary=screen.getPrimaryDisplay(),startup=resolveOperatorWindowStartup(preferences,displays,primary.id);
+  const startupDisplay=screen.getDisplayMatching(startup.bounds),splashBounds=resolveSplashWindowBounds(startupDisplay.workArea);
   controlWindow = new BrowserWindow({
-    ...startup.bounds,show:false,minWidth:startup.minimumSize.width,minHeight:startup.minimumSize.height,
-    titleBarStyle:'hidden',titleBarOverlay:process.platform==='win32'?{color:'#282832',symbolColor:'#ffffff',height:28}:false,resizable:startup.resizable,maximizable:startup.maximizable,
+    ...splashBounds,show:false,minWidth:360,minHeight:520,
+    titleBarStyle:'hidden',titleBarOverlay:process.platform==='win32'?{color:'#282832',symbolColor:'#ffffff',height:28}:false,resizable:false,maximizable:false,
     backgroundColor: '#282832', icon: app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.join(app.getAppPath(), 'build/icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   });
@@ -96,14 +97,22 @@ function createControlWindow(preferences:AppPreferencesData) {
   const publishWindowState=()=>controlWindow?.webContents.send('window:fullscreen-state',controlWindow.isFullScreen());
   controlWindow.on('enter-full-screen',publishWindowState);controlWindow.on('leave-full-screen',publishWindowState);
   let workspaceReady=false;
-  const ready= (event:Electron.IpcMainEvent)=>{
-    if(event.sender!==controlWindow?.webContents||workspaceReady||controlCloseInProgress)return;
+  let startupFallback:NodeJS.Timeout|undefined;
+  const revealWorkspace=()=>{
+    if(!controlWindow||controlWindow.isDestroyed()||workspaceReady||controlCloseInProgress)return;
     workspaceReady=true;
+    clearTimeout(startupFallback);
+    controlWindow.setResizable(startup.resizable);controlWindow.setMaximizable(startup.maximizable);controlWindow.setMinimumSize(startup.minimumSize.width,startup.minimumSize.height);controlWindow.setBounds(startup.bounds,false);
+    if(startup.startMode==='fullscreen')controlWindow.setFullScreen(true);else if(startup.startMode==='maximized')controlWindow.maximize();
     if(process.platform==='win32')controlWindow.setTitleBarOverlay({color:'#282832',symbolColor:'#ffffff',height:28});
   };
+  const ready= (event:Electron.IpcMainEvent)=>{
+    if(event.sender!==controlWindow?.webContents)return;
+    revealWorkspace();
+  };
   ipcMain.on('lifecycle:ready',ready);
-  controlWindow.once('closed',()=>ipcMain.removeListener('lifecycle:ready',ready));
-  controlWindow.once('ready-to-show',()=>{if(!controlWindow)return;if(startup.startMode==='fullscreen')controlWindow.setFullScreen(true);else if(startup.startMode==='maximized')controlWindow.maximize();controlWindow.show()});
+  controlWindow.once('closed',()=>{clearTimeout(startupFallback);ipcMain.removeListener('lifecycle:ready',ready)});
+  controlWindow.once('ready-to-show',()=>{controlWindow?.show();startupFallback=setTimeout(revealWorkspace,30000)});
   let saveTimer:NodeJS.Timeout|undefined;
   const saveWindowState=()=>{if(!controlWindow||controlWindow.isDestroyed())return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{if(!controlWindow||controlWindow.isDestroyed())return;const state=controlWindow.isFullScreen()?'fullscreen':controlWindow.isMaximized()?'maximized':'window',display=screen.getDisplayMatching(controlWindow.getBounds()),patch:Partial<AppPreferencesData>={lastWindowState:state,lastDisplayId:display.id};if(state==='window')patch.bounds=controlWindow.getBounds();void appPreferences.update(patch)},250)};
   const rememberWorkspace=()=>{if(workspaceReady&&!controlCloseInProgress)saveWindowState();else clearTimeout(saveTimer)};

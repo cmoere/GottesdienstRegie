@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.49",
+      "builds": [{
+        "version": "0.49.0",
+        "releaseDate": "2026-09-25",
+        "current": true,
+        "overview": {"label":{"de":"Kompakter Startbildschirm, großer Arbeitsbereich","en":"Compact startup screen, full workspace"},"text":{"de":"Version 0.49.0 stellt den schmalen, zentrierten Startbildschirm wieder her. Erst nach dem Laden wechselt GottesdienstRegie zuverlässig auf die vollständige Desktop-Größe.","en":"Version 0.49.0 restores the narrow centered startup screen and reliably switches to the full desktop workspace only after loading."}},
+        "sections": {
+          "new": [],
+          "improved": [{"label":{"de":"Sauberer Fensterübergang","en":"Clean window transition"},"text":{"de":"Das Startfenster ist auf dem vorgesehenen Monitor mittig platziert. Nach dem Bereitsignal werden Mindestgröße, Vergrößerbarkeit, Maximierung und gespeicherter Startmodus gemeinsam aktiviert.","en":"The startup window is centered on the intended display. Minimum size, resizing, maximization and the saved start mode are enabled together after readiness."}}],
+          "fixed": [{"label":{"de":"Startansicht nicht mehr bildschirmfüllend","en":"Startup view no longer fills the screen"},"text":{"de":"Die Ladeansicht verwendet wieder bis zu 410 × 700 Pixel statt der späteren Desktop-Abmessungen. Ein Sicherheitszeitgeber verhindert zugleich ein dauerhaft kleines Bedienfenster.","en":"The loading view once again uses up to 410 by 700 pixels instead of the later desktop bounds, while a safety timer prevents a permanently small workspace."}}],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.48",
       "builds": [{
         "version": "0.48.0",
         "releaseDate": "2026-09-25",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Zuverlässiger Start, neue Medien- und Bibelwerkzeuge","en":"Reliable startup, new media and Bible tools"},"text":{"de":"Version 0.48.0 startet immer in einer verwendbaren Desktop-Größe, verbindet Web- und Desktop-Ausgabe, modernisiert die Medienbibliothek und ergänzt eine sichere Bibeltext-Schnellanzeige für MAIN.","en":"Version 0.48.0 always starts at a usable desktop size, connects web and desktop editions, modernizes the media library and adds a safe Bible quick display for MAIN."}},
         "sections": {
           "new": [{"label":{"de":"Bibeltext anzeigen","en":"Show Bible text"},"text":{"de":"Bibelstellen können gesucht, in Luther 1912 oder einer installierbaren freien Übersetzung vorab geprüft und anschließend als unabhängige MAIN-Schnellanzeige eingeblendet werden.","en":"Bible references can be searched, previewed in Luther 1912 or an installable free translation, then shown as an independent MAIN quick overlay."}},{"label":{"de":"Verknüpfte Web- und Desktop-Version","en":"Connected web and desktop editions"},"text":{"de":"Die Desktop-App öffnet den Web-Editor; der Web-Editor verweist direkt auf den aktuellen Desktop-Download.","en":"The desktop app opens the web editor, while the web editor links directly to the latest desktop download."}}],

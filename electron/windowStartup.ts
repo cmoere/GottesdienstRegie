@@ -6,6 +6,11 @@ export type OperatorWindowStartup={bounds:Rectangle;startMode:Exclude<WindowStar
 
 const intersects=(a:Rectangle,b:Rectangle)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
 
+export function resolveSplashWindowBounds(workArea:Rectangle):Rectangle{
+  const width=Math.min(410,Math.max(360,workArea.width-40)),height=Math.min(700,Math.max(520,workArea.height-40));
+  return{x:workArea.x+Math.round((workArea.width-width)/2),y:workArea.y+Math.round((workArea.height-height)/2),width,height};
+}
+
 export function resolveOperatorWindowStartup(preferences:Partial<AppPreferencesData>,displays:DisplayGeometry[],primaryId:number):OperatorWindowStartup{
   const primary=displays.find(display=>display.id===primaryId)??displays[0];
   if(!primary)throw new Error('NO_DISPLAY');

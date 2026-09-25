@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.49.0
+
+Version 0.49.0 korrigiert die Darstellung des Startbildschirms. Seit Version 0.48.0 erschien die Ladeansicht bereits in der vollständigen Größe des späteren Bedienfensters. Das war zwar eine Absicherung gegen ein dauerhaft kleines Hauptfenster, veränderte aber den bewusst kompakten Charakter des Programmstarts.
+
+Der Startbildschirm erscheint nun wieder als schmales, mittig auf dem vorgesehenen Bildschirm platziertes Fenster mit bis zu 410 × 700 Pixeln. Darin bleiben Logo, Ladefortschritt, „Synchronisierung überspringen“ und die Schließen-Schaltfläche vollständig erreichbar. Die kompakte Startgröße wird nicht als normale Fensterposition gespeichert.
+
+Sobald Konto, Gerät und Arbeitsbereich bereit sind, wird das vorhandene Fenster kontrolliert auf die gespeicherte Desktop-Größe erweitert. Danach sind Vergrößern, Maximieren und der konfigurierte Startmodus wieder uneingeschränkt verfügbar. So bleibt der Start schmal, ohne den mit Version 0.48 behobenen Fehler eines dauerhaft kleinen Bedienfensters zurückzubringen.
+
+Falls das Bereitsignal wider Erwarten verloren geht, aktiviert ein 30-Sekunden-Sicherheitsweg automatisch den großen Arbeitsbereich. Automatisierte Tests prüfen sowohl die exakte Zentrierung des kompakten Startfensters als auch die weiterhin gültigen Mindestmaße und Wiederherstellungsregeln des Hauptfensters.
+
+---
+
 # GottesdienstRegie 0.48.0
 
 Version 0.48.0 behebt den Fehler, durch den GottesdienstRegie nach dem Hochfahren in einem schmalen, unvollständig aufgeklappten Fenster stehen bleiben konnte. Das Bedienfenster erhält nun bereits vor dem Laden der Oberfläche eine gültige Desktop-Größe, verwirft Positionen auf nicht mehr angeschlossenen Bildschirmen und bleibt jederzeit vergrößerbar und maximierbar. Die Wiederherstellung ist damit nicht mehr von einem verspäteten Renderer-Signal abhängig.

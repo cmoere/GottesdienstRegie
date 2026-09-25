@@ -7,6 +7,6 @@ export default defineConfig({
     environment:'jsdom',
     setupFiles:['src/test/setup.ts'],
     clearMocks:true,
-    exclude:['node_modules/**','dist/**','dist-web/**','release/**','work/**','tests/smoke/**']
+    exclude:['node_modules/**','dist/**','dist-web/**','dist-electron/**','release/**','work/**','tests/smoke/**']
   }
 });

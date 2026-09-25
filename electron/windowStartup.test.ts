@@ -1,9 +1,12 @@
 import {describe,expect,it} from 'vitest';
-import {resolveOperatorWindowStartup} from './windowStartup';
+import {resolveOperatorWindowStartup,resolveSplashWindowBounds} from './windowStartup';
 
 const displays=[{id:1,workArea:{x:0,y:0,width:1920,height:1040},bounds:{x:0,y:0,width:1920,height:1080}}];
 
 describe('resolveOperatorWindowStartup',()=>{
+  it('shows the startup screen as a narrow centered window before the workspace',()=>{
+    expect(resolveSplashWindowBounds(displays[0].workArea)).toEqual({x:755,y:170,width:410,height:700});
+  });
   it('starts with desktop bounds before a renderer ready signal',()=>{
     const result=resolveOperatorWindowStartup({windowStartMode:'window',operatorDisplayTarget:'primary'},displays,1);
     expect(result.bounds).toEqual({x:96,y:52,width:1728,height:936});

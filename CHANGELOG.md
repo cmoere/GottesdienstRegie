@@ -603,6 +603,12 @@ Prüfe zweisprachige Songs vor ON AIR in der tatsächlichen Schrift und Ausgabeg
 - Sikker nedlasting og omstart for installasjon, begge etter bekreftelse
 - Versjonsmerknader direkte i programmet
 - Oppdateringsvisning på tysk, engelsk, nederlandsk, dansk og norsk
+# 0.49.0 – 2026-09-25
+
+- Startbildschirm wieder kompakt und mittig mit bis zu 410 × 700 Pixeln.
+- Bedienfenster wird erst nach abgeschlossenem Start auf Desktop-Größe erweitert.
+- 30-Sekunden-Sicherheitsweg verhindert ein dauerhaft schmales Hauptfenster.
+
 # 0.48.0 – 2026-09-25
 
 - Bedienfenster startet zuverlässig in Desktop-Größe und bleibt maximierbar.
