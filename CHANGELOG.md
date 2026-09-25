@@ -1,5 +1,13 @@
 # Versionshinweise / Release notes
 
+## 0.52.0 – Variable KI-Motive, Medienlöschung und ON-AIR-Navigation
+
+- Vorschauhinweis reduziert und Aktualisieren-Symbol für neue Beschreibungen eingeführt.
+- Erneutes Generieren variiert Bildausschnitt, Skalierung und Farbgebung sichtbar.
+- Lokale und synchronisierte Medien verwenden den jeweils richtigen Löschpfad.
+- Persönliche Notizen sind auf 5.000 Zeichen begrenzt und zeigen `0/5000` rechts unten.
+- ON-AIR-Wechsel zwischen Vorprogramm, Ankommen und Gottesdienst per Klick oder Doppelklick ergänzt.
+
 ## 0.51.0 – Bestätigter KI-Motiv-Workflow
 
 - KI-Motive-Seite mit kompakten Abständen, ausgewogenen Spalten und echter 16:9-Ergebnisvorschau korrigiert.

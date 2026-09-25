@@ -1440,6 +1440,7 @@ function SortableItem({
   active,
   live,
   onSelect,
+  onTake,
   onContext,
   onAudio,
   canEdit,
@@ -1448,6 +1449,7 @@ function SortableItem({
   active: boolean;
   live: boolean;
   onSelect: (event: React.MouseEvent | React.KeyboardEvent) => void;
+  onTake: () => void;
   onContext: (event: React.MouseEvent) => void;
   onAudio: (event: React.MouseEvent<HTMLButtonElement>) => void;
   canEdit: boolean;
@@ -1529,6 +1531,7 @@ function SortableItem({
       aria-selected={active}
       className={`service-item ${active ? "active" : ""} ${live ? "live-item" : ""} ${!item.enabled ? "disabled-slide" : ""} ${isDragging ? "dragging" : ""}`}
       onClick={onSelect}
+      onDoubleClick={onTake}
       onKeyDown={(event) => {
         if (event.key === "Enter") onSelect(event);
       }}
@@ -2920,6 +2923,7 @@ export function OrderOfService({
     event: React.MouseEvent | React.KeyboardEvent,
     item: ServiceItem,
   ) {
+    if(state.onAir&&state.mode==='preview'&&'detail' in event&&event.detail===1){const first=item.slides.find(slide=>slide.enabled);if(first){state.goLive(item.id,first.id);return}}
     if ("ctrlKey" in event && (event.ctrlKey || event.metaKey)) {
       const next = state.selectedServiceItemIds.includes(item.id)
         ? state.selectedServiceItemIds.filter((id) => id !== item.id)
@@ -3134,6 +3138,7 @@ export function OrderOfService({
                       className="section-title"
                       type="button"
                       onClick={(event) => toggleSection(event, section.id)}
+                      onDoubleClick={(event)=>{event.preventDefault();event.stopPropagation();const first=sectionItems.find(item=>item.enabled&&!item.disabled)?.slides.find(slide=>slide.enabled);const owner=first&&sectionItems.find(item=>item.slides.some(slide=>slide.id===first.id));if(state.onAir&&owner&&first)state.goLive(owner.id,first.id)}}
                     >
                       {section.title}
                     </button>
@@ -3221,6 +3226,7 @@ export function OrderOfService({
                         live={live === item.id}
                         canEdit={canEdit}
                         onSelect={(event) => selectItem(event, item)}
+                        onTake={()=>{const first=item.slides.find(slide=>slide.enabled);if(state.onAir&&first)state.goLive(item.id,first.id)}}
                         onAudio={(event) =>
                           openAudio(
                             event,

@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.52.0
+
+Version 0.52.0 verbessert KI-Motive, Medienverwaltung, persönliche Notizen und die manuelle ON-AIR-Navigation. Die leere Ergebnisvorschau trägt nun nur noch die kleine Überschrift „Vorschau“; der bisherige erklärende Satz wurde entfernt. „Andere Beschreibung“ verwendet ein verständliches Aktualisieren-Symbol statt des Würfels.
+
+Neu generierte Motive unterscheiden sich jetzt auch bei derselben Beschreibung sichtbar. Neben dem wechselnden Erstellungswert werden Ausschnitt, minimale Skalierung, Farbton und Sättigung variiert. Dadurch liefert „Neu generieren“ tatsächlich eine neue Variante, während Szene und gewünschter Stil erhalten bleiben.
+
+Das Löschen von Medien wurde korrigiert. Lokale Medien werden nun direkt aus dem lokalen Medienbestand entfernt, während synchronisierte Team-Medien weiterhin den abgesicherten Cloud-Löschpfad einschließlich Verwendungs- und ON-AIR-Prüfung nutzen. Der vorherige Fehler entstand, weil auch lokale Dateien stets an den Cloud-Endpunkt geschickt wurden und dort zwangsläufig als nicht vorhanden galten.
+
+Persönliche Folien- und Präsentationsnotizen sind auf 5.000 Zeichen begrenzt. Ein Zähler rechts unten zeigt den aktuellen Stand als „0/5000“ an. Überlange Eingaben und eingefügte Texte werden unmittelbar an der Grenze beendet; auch die dauerhafte Speicherung wendet dieselbe Obergrenze an.
+
+Während ON AIR kann die Regie Vorprogramm, Ankommen und Gottesdienst jetzt gezielt wechseln. In der Vorschau schaltet ein normaler Klick auf ein Element dieses live; ein Doppelklick funktioniert zusätzlich aus dem Bearbeitungsmodus. Ein Doppelklick auf einen Abschnittstitel nimmt dessen erstes aktives Element live. Damit bleibt der automatische Loop erhalten, kann aber jederzeit bewusst verlassen werden.
+
+---
+
 # GottesdienstRegie 0.51.0
 
 Version 0.51.0 vervollständigt den Arbeitsablauf für KI-Motive und korrigiert die noch sichtbaren Gestaltungsfehler der in Version 0.50 eingeführten zweigeteilten Ansicht. Eingabebereich und Vorschau besitzen nun ausgewogenere Breiten, einheitliche Innenabstände und sauber ausgerichtete Oberkanten. Beschreibung, Zeichenzähler, Zufallsvorschlag, Szenenkategorie und Gestaltungsstil bilden einen kompakten Block ohne unnötige Leerflächen. Die rechte Vorschau verwendet ein festes 16:9-Verhältnis und bleibt auch auf kleineren Fenstern vollständig erreichbar.

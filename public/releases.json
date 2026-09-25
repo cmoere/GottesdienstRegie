@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.52",
+      "builds": [{
+        "version": "0.52.0",
+        "releaseDate": "2026-09-25",
+        "current": true,
+        "overview": {"label":{"de":"Variable KI-Motive und sichere Live-Navigation","en":"Variable AI motifs and safe live navigation"},"text":{"de":"Version 0.52.0 erzeugt sichtbar unterschiedliche Motivvarianten, repariert das Löschen lokaler Medien, begrenzt Notizen auf 5.000 Zeichen und erlaubt gezielte ON-AIR-Wechsel zwischen den Programmabschnitten.","en":"Version 0.52.0 creates visibly different motif variants, fixes local media deletion, limits notes to 5,000 characters and enables deliberate ON-AIR section changes."}},
+        "sections": {
+          "new": [{"label":{"de":"ON-AIR per Klick wechseln","en":"Switch ON AIR by click"},"text":{"de":"In der Vorschau schaltet ein Klick, im Bearbeitungsmodus ein Doppelklick das gewählte Element live. Abschnittstitel führen per Doppelklick zum ersten aktiven Inhalt.","en":"A click in preview or a double-click in edit mode takes the selected item live; double-clicking a section title opens its first active item."}}],
+          "improved": [{"label":{"de":"Neue Motivvarianten und kompaktere Vorschau","en":"New motif variants and compact preview"},"text":{"de":"Ausschnitt, Skalierung und Farbgebung variieren zwischen Aufträgen. Die leere Vorschau verwendet nur noch eine kleine Beschriftung und das Beschreibungswerkzeug ein Aktualisieren-Symbol.","en":"Crop, scale and color vary between requests. The empty preview uses only a small label and the description action now has a refresh icon."}},{"label":{"de":"Notizen bis 5.000 Zeichen","en":"Notes up to 5,000 characters"},"text":{"de":"Der Zähler rechts unten zeigt die aktuelle Länge; Eingabe und Speicherung halten dieselbe feste Grenze ein.","en":"A bottom-right counter shows the current length, while editing and storage enforce the same limit."}}],
+          "fixed": [{"label":{"de":"Medien lassen sich wieder löschen","en":"Media can be deleted again"},"text":{"de":"Lokale Dateien werden lokal entfernt; nur synchronisierte Medien verwenden den Cloud-Löschpfad und dessen Schutzprüfungen.","en":"Local files are removed locally, while only synchronized media use the cloud deletion path and its safety checks."}}],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.51",
       "builds": [{
         "version": "0.51.0",
         "releaseDate": "2026-09-25",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"KI-Motive erst prüfen, dann speichern","en":"Review AI motifs before saving"},"text":{"de":"Version 0.51.0 korrigiert das Layout der KI-Motive-Seite, zeigt beim Erstellen einen kleinen Spinner und speichert ein Ergebnis erst nach deiner ausdrücklichen Bestätigung in der Medienbibliothek.","en":"Version 0.51.0 fixes the AI motif layout, shows a small generation spinner and saves a result to the media library only after explicit confirmation."}},
         "sections": {
           "new": [{"label":{"de":"Ergebnisentscheidung","en":"Result decision"},"text":{"de":"Nach der Erstellung bleibt das tatsächliche Bild oder Video als Vorschau stehen. „Neu generieren“ verwirft es zugunsten einer neuen Variante; „In Medienbibliothek speichern“ legt genau dieses Ergebnis dauerhaft ab.","en":"After generation, the actual image or video remains visible. Regenerate replaces it with another variant, while Save to media library persists exactly that result."}}],

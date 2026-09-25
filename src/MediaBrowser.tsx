@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePreferences } from "./preferences";
 import { applyAudioRoute, defaultAudioRouting } from "./audioRouting";
-import {isAiGenerated,sortRecentlyUsed,validateMediaName} from "./mediaLibraryModel";
+import {deleteMethodFor,isAiGenerated,sortRecentlyUsed,validateMediaName} from "./mediaLibraryModel";
 import {AiGenerationStatus} from './AiGenerationStatus';
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -522,7 +522,7 @@ export function MediaBrowser() {
     const target = deleteTarget;
     setBusy(target.id);
     try {
-      await api.cloudRemove(target.id);
+      if(deleteMethodFor(target)==='local')await api.remove(target.id);else await api.cloudRemove(target.id);
       setSelected(null);
       setDeleteTarget(null);
       setAudioSelection((list) =>
@@ -650,7 +650,9 @@ export function MediaBrowser() {
               context.translate(640, 360);
               context.scale(zoom, zoom);
               context.translate(-640, -360);
+              context.filter=`hue-rotate(${seed%31-15}deg) saturate(${.92+(seed%21)/100})`;
               drawCover(context, photo, 1280, 720);
+              context.filter='none';
               context.restore();
               context.fillStyle = dark
                 ? "#07141b66"
@@ -723,7 +725,12 @@ export function MediaBrowser() {
           canvas.width = 1920;
           canvas.height = 1080;
           const context = canvas.getContext("2d")!;
+          context.filter=`hue-rotate(${seed%31-15}deg) saturate(${.92+(seed%21)/100})`;
+          context.translate((seed%37)-18,(seed%29)-14);
+          context.scale(1.015+(seed%4)*.01,1.015+(seed%4)*.01);
           drawCover(context, photo, 1920, 1080);
+          context.setTransform(1,0,0,1,0,0);
+          context.filter='none';
           context.fillStyle = dark
             ? "#07141b70"
             : light
@@ -1366,7 +1373,7 @@ export function MediaBrowser() {
                 )
               }
             >
-              <Icon name="casino" /> ANDERE BESCHREIBUNG
+              <Icon name="refresh" /> ANDERE BESCHREIBUNG
             </button>
           </div>
           <div className="generator-select-grid">
@@ -1415,11 +1422,11 @@ export function MediaBrowser() {
             )}
           </div>
           <aside className="generator-live-preview" aria-label="Motivvorschau">
-            <div className={`generator-preview-art style-${generatorStyle}${generatedDraft?' has-result':''}`}>
+            <small className="generator-preview-label">Vorschau</small><div className={`generator-preview-art style-${generatorStyle}${generatedDraft?' has-result':''}`}>
               {generatedDraft?.kind==='image'?<img src={generatedDraft.downloadUrl} alt="Erstelltes KI-Motiv"/>:generatedDraft?.kind==='video'?<video src={generatedDraft.downloadUrl} autoPlay muted loop playsInline/>:<><Icon name={generatorOutput==='video'?'movie':'image'}/><strong>VORSCHAU</strong><span>{generatorScenes.find(([value])=>value===generatorScene)?.[1]}</span><small>{generatorStyles.find(([value])=>value===generatorStyle)?.[1]}</small></>}
               {generating&&<span className="generator-mini-spinner" role="status" aria-label="Motiv wird erstellt"/>}
             </div>
-            <p>{generatedDraft?'Das Motiv ist fertig. Speichere es in der Medienbibliothek oder erstelle eine neue Variante.':'Erstelle zuerst eine Vorschau. Das Motiv wird erst nach deiner Bestätigung gespeichert.'}</p>
+            {generatedDraft&&<p>Das Motiv ist fertig. Speichere es in der Medienbibliothek oder erstelle eine neue Variante.</p>}
           </aside>
           <footer>
             <AiGenerationStatus active={generating} error={generatorError} onRetry={()=>void generateLocal()} reducedMotion={prefs.reduceMotion}/>

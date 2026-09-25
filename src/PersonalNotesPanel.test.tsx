@@ -108,4 +108,11 @@ describe('PersonalNotesPanel save status',()=>{
     expect(screen.getByRole('button',{name:'Einzug vergrößern'})).toBeInTheDocument();
     expect(screen.getByRole('button',{name:'Formatierung entfernen'})).toBeInTheDocument();
   });
+
+  it('limits notes to 5000 characters and shows the counter at the bottom right',()=>{
+    render(<PersonalNotesPanel noteKey={noteKey} label="Notizen"/>);
+    enter('x'.repeat(5001));
+    expect(editor()).toHaveTextContent('x'.repeat(5000));
+    expect(screen.getByText('5000/5000')).toBeInTheDocument();
+  });
 });

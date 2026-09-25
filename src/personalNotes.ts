@@ -8,4 +8,4 @@ export function sanitizeRichNote(value:string){
 }
 export function personalNoteStorageKey(key:PersonalNoteKey){return`gottesdienstregie.personal-note.${encodeURIComponent(key.userId)}.${encodeURIComponent(key.presentationId)}.${encodeURIComponent(key.slideId??'presentation')}`}
 export function readPersonalNote(key:PersonalNoteKey){try{return localStorage.getItem(personalNoteStorageKey(key))??''}catch{return''}}
-export function writePersonalNote(key:PersonalNoteKey,value:string){localStorage.setItem(personalNoteStorageKey(key),sanitizeRichNote(value).slice(0,50000))}
+export function writePersonalNote(key:PersonalNoteKey,value:string){localStorage.setItem(personalNoteStorageKey(key),sanitizeRichNote(value).slice(0,5000))}
