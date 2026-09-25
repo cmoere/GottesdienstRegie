@@ -1,0 +1,1 @@
+import {describe,expect,it} from 'vitest';import {parseBibleReference} from './reference';describe('Bible references',()=>{it('parses German references',()=>expect(parseBibleReference('Johannes 3,16-18')).toMatchObject({ok:true,book:'JHN',chapter:3,fromVerse:16,toVerse:18}));it('rejects reversed ranges',()=>expect(parseBibleReference('Joh 3,18-16').ok).toBe(false));});

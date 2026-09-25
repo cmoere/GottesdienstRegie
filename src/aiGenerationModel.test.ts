@@ -1,0 +1,2 @@
+import {describe,expect,it} from 'vitest';import {AI_LOADING_VARIANTS,nextLoadingVariant} from './aiGenerationModel';
+describe('AI loading',()=>{it('offers at least 15 unique phases',()=>{expect(AI_LOADING_VARIANTS.length).toBeGreaterThanOrEqual(15);expect(new Set(AI_LOADING_VARIANTS.map(x=>x.id)).size).toBe(AI_LOADING_VARIANTS.length)});it('cycles',()=>expect(nextLoadingVariant(14,15)).toBe(0));});

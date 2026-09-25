@@ -40,7 +40,7 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci
       - name: Versions-Funktionstests
-        run: node scripts/generate-terms.cjs && node scripts/check-version39.cjs && node scripts/check-version40.cjs && node scripts/check-version41.cjs && node scripts/check-version42.cjs && node scripts/check-version43.cjs && node scripts/check-version431.cjs && node scripts/check-version44.cjs && node scripts/check-version45.cjs && node scripts/check-version451.cjs && node scripts/check-version46.cjs && node scripts/check-version47.cjs
+        run: node scripts/generate-terms.cjs && node scripts/check-version39.cjs && node scripts/check-version40.cjs && node scripts/check-version41.cjs && node scripts/check-version42.cjs && node scripts/check-version43.cjs && node scripts/check-version431.cjs && node scripts/check-version44.cjs && node scripts/check-version45.cjs && node scripts/check-version451.cjs && node scripts/check-version46.cjs && node scripts/check-version47.cjs && node scripts/check-version48.cjs
       - name: Anwendung bauen
         run: npm run build
       - name: Windows-Installer erstellen

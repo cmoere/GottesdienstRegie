@@ -11,7 +11,7 @@ export function createWebServices():PlatformServices{
     target:'web',capabilities:webCapabilities,
     auth:{login:async()=>session,verifyTwoFactor:noData,cancelTwoFactor:async()=>{},restore:async()=>session,logout:async()=>{}},
     presentations:createLocalPresentationService(localStorage),
-    media:{list:noData,importFiles:noData,remove:noData,status:noData},
+    media:{list:noData,importFiles:noData,remove:noData,markUsed:noData,status:noData},
     desktop:{
       displays:async()=>{throw unsupported('outputMain')},identifyDisplays:async()=>{throw unsupported('outputMain')},
       preflight:async()=>{throw unsupported('outputMain')},goOnAir:async()=>{throw unsupported('outputMain')},

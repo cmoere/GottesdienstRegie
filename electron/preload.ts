@@ -123,6 +123,7 @@ contextBridge.exposeInMainWorld("desktop", {
   openExternal: (url: string) => ipcRenderer.invoke("external:open", url),
   media: {
     list: () => ipcRenderer.invoke("media:list"),
+    markUsed: (id:string) => ipcRenderer.invoke("media:mark-used",id),
     import: (kind?: "audio" | "video") =>
       ipcRenderer.invoke("media:import", kind),
     update: (id: string, patch: unknown) =>

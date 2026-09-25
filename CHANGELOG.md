@@ -603,3 +603,11 @@ Prüfe zweisprachige Songs vor ON AIR in der tatsächlichen Schrift und Ausgabeg
 - Sikker nedlasting og omstart for installasjon, begge etter bekreftelse
 - Versjonsmerknader direkte i programmet
 - Oppdateringsvisning på tysk, engelsk, nederlandsk, dansk og norsk
+# 0.48.0 – 2026-09-25
+
+- Bedienfenster startet zuverlässig in Desktop-Größe und bleibt maximierbar.
+- Direkte Verknüpfung zwischen Web-Editor und Desktop-Download.
+- Medienbibliothek mit echter Nutzungshistorie, Umbenennung, KI-Kennzeichnung und Bild-Zoom.
+- KI-Motive mit 15 Ladephasen und Wiederholen nach Fehlern.
+- Bibeltext-Suche mit Luther 1912 als Standard und getrenntem MAIN-Override.
+

@@ -19,6 +19,7 @@ export interface MediaService{
   list():Promise<MediaAsset[]>;
   importFiles(files?:ReadonlyArray<File>,onProgress?:(percent:number,fileName:string)=>void):Promise<MediaAsset[]>;
   remove(id:string):Promise<boolean>;
+  markUsed(id:string):Promise<MediaAsset>;
   status():Promise<MediaStorageStatus>;
 }
 export interface DesktopOnlyService{

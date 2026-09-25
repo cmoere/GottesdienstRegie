@@ -1,0 +1,4 @@
+import type {QuickScreenConfig} from '../preferences';
+export type QuickOverlayState={visibleQuick:QuickScreenConfig|null;normalSnapshot:unknown};
+export type QuickOverlayEvent={type:'SHOW_QUICK';quick:QuickScreenConfig;normalSnapshot:unknown}|{type:'UPDATE_NORMAL_SNAPSHOT';snapshot:unknown}|{type:'RESTORE'}|{type:'CLEAR'}|{type:'QUICK_TICK'};
+export function reduceQuickOverlay(state:QuickOverlayState,event:QuickOverlayEvent):QuickOverlayState{switch(event.type){case'SHOW_QUICK':return{visibleQuick:event.quick,normalSnapshot:event.normalSnapshot};case'UPDATE_NORMAL_SNAPSHOT':return{...state,normalSnapshot:event.snapshot};case'RESTORE':case'CLEAR':return{...state,visibleQuick:null};case'QUICK_TICK':return state.visibleQuick?.type==='countdown'?{...state,visibleQuick:{...state.visibleQuick,duration:Math.max(0,(state.visibleQuick.duration??0)-1)}}:state}}

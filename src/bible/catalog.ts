@@ -1,0 +1,6 @@
+export type BibleCatalogEntry={id:string;language:'de'|'en';name:string;shortName:string;availability:'bundled'|'downloadable'|'licensed'};
+const dePublic=[['luther1912','Luther 1912','LUT'],['luther1545','Luther 1545','L45'],['elberfelder1871','Elberfelder 1871','ELB'],['elberfelder1905','Elberfelder 1905','EL5'],['schlachter1951','Schlachter 1951','SCH'],['textbibel1899','Textbibel 1899','TB']];
+const deLicensed=Array.from({length:20},(_,index)=>[`de-catalog-${index+1}`,`Deutsche Übersetzung ${index+7}`,`DE${index+7}`]);
+const en=[['kjv','King James Version','KJV'],['asv','American Standard Version','ASV'],['web','World English Bible','WEB'],['bsb','Berean Standard Bible','BSB']];
+export const BIBLE_CATALOG:BibleCatalogEntry[]=[...dePublic.map((x,index)=>({id:x[0],name:x[1],shortName:x[2],language:'de' as const,availability:index===0?'bundled' as const:'downloadable' as const})),...deLicensed.map(x=>({id:x[0],name:x[1],shortName:x[2],language:'de' as const,availability:'licensed' as const})),...en.map(x=>({id:x[0],name:x[1],shortName:x[2],language:'en' as const,availability:'downloadable' as const}))];
+export const visibleBibleEntries=(installed:string[]=[])=>BIBLE_CATALOG.filter(entry=>entry.availability!=='licensed'||installed.includes(entry.id)).sort((a,b)=>a.id==='luther1912'?-1:b.id==='luther1912'?1:a.name.localeCompare(b.name));

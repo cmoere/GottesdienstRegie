@@ -8,5 +8,6 @@ describe('CapabilityNotice',()=>{
   it('erklärt eine Desktop-exklusive Fähigkeit',()=>{
     render(<PlatformProvider services={createWebServices()}><CapabilityNotice capability="outputMain"/></PlatformProvider>);
     expect(screen.getByRole('note')).toHaveTextContent('MAIN-Ausgabe benötigt die Desktop-App.');
+    expect(screen.getByRole('link',{name:'Desktop-App herunterladen'})).toHaveAttribute('href','https://github.com/cmoere/GottesdienstRegie/releases/latest');
   });
 });

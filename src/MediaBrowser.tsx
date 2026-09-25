@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePreferences } from "./preferences";
 import { applyAudioRoute, defaultAudioRouting } from "./audioRouting";
+import {isAiGenerated,sortRecentlyUsed,validateMediaName} from "./mediaLibraryModel";
+import {AiGenerationStatus} from './AiGenerationStatus';
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
     {name}
@@ -182,7 +184,10 @@ export function MediaBrowser() {
     [uploadProgress, setUploadProgress] = useState(0),
     [staged, setStaged] = useState<MediaAsset[]>([]),
     [uploadName, setUploadName] = useState(""),
-    [uploadTags, setUploadTags] = useState("");
+    [uploadTags, setUploadTags] = useState(""),
+    [renameDraft,setRenameDraft]=useState(""),
+    [zoomOpen,setZoomOpen]=useState(false),
+    [zoom,setZoom]=useState(1);
   const [deleteTarget, setDeleteTarget] = useState<CloudMediaAsset | null>(
       null,
     ),
@@ -349,7 +354,7 @@ export function MediaBrowser() {
   }, [context, selected, tab, deleteTarget]);
   const shown = useMemo(
     () =>
-      items
+      (libraryFilter === "recent" ? sortRecentlyUsed(items) : items)
         .filter(
           (item) =>
             (kind === "all" || item.kind === kind) &&
@@ -359,7 +364,6 @@ export function MediaBrowser() {
             (purpose !== "foreground" || item.kind === "image") &&
             (!isAudio || item.kind === "audio") &&
             (libraryFilter !== "favorites" || item.favorite) &&
-            (libraryFilter !== "recent" || Boolean(item.updatedAt)) &&
             (tab === "unsplash" ||
               `${item.name} ${(item.tags ?? []).join(" ")}`
                 .toLowerCase()
@@ -405,7 +409,7 @@ export function MediaBrowser() {
           (purpose !== "foreground" || item.kind === "image") &&
           (!isAudio || item.kind === "audio") &&
           (libraryFilter !== "favorites" || item.favorite) &&
-          (libraryFilter !== "recent" || Boolean(item.updatedAt)) &&
+            (libraryFilter !== "recent" || Boolean(item.lastUsedAt)) &&
           (tab === "unsplash" ||
             `${item.name} ${(item.tags ?? []).join(" ")}`
               .toLowerCase()
@@ -539,6 +543,7 @@ export function MediaBrowser() {
   }
   function choose(item: CloudMediaAsset) {
     setSelected(item);
+    setRenameDraft(item.name);
     if (isAudio && context === "select")
       setAudioSelection((list) =>
         list.some((entry) => entry.id === item.id)
@@ -554,7 +559,9 @@ export function MediaBrowser() {
       return next;
     });
   }
-  function useSelected() {
+  async function useSelected() {
+    const used=isAudio?audioSelection:selected?[selected]:[];
+    await Promise.all(used.map(item=>api?.markUsed?.(item.id))).catch(()=>{});
     if (isAudio)
       return void mediaWindow?.selectAudio(
         audioSelection,
@@ -563,6 +570,7 @@ export function MediaBrowser() {
       );
     if (selected) void mediaWindow?.select(selected, purpose);
   }
+  async function renameSelected(){if(!selected)return;const valid=validateMediaName(renameDraft);if(!valid.ok)return;setBusy(selected.id);try{const updated=await api.update(selected.id,{name:valid.value});setItems(current=>current.map(item=>item.id===selected.id?{...item,name:updated.name}:item));setSelected(current=>current?{...current,name:updated.name}:current)}finally{setBusy("")}}
   async function generateLocal() {
     const nonce = Date.now() + Math.floor(Math.random() * 100000),
       seed = [
@@ -695,6 +703,7 @@ export function MediaBrowser() {
                 (entry) => entry[0] === generatorScene,
               )?.[1] ?? generatorScene,
             ],
+            aiGenerated: true,
             extension: "WEBM",
             visibility: "private",
           };
@@ -738,6 +747,7 @@ export function MediaBrowser() {
             generatorStyles.find((entry) => entry[0] === generatorStyle)?.[1] ??
               generatorStyle,
           ],
+          aiGenerated: true,
           extension,
           visibility: "private",
         };
@@ -904,26 +914,6 @@ export function MediaBrowser() {
           />
           <Icon name="photo_size_select_large" />
         </label>
-        {selected && (
-          <>
-            <button
-              onClick={() => void toggleFavorite(selected)}
-              disabled={busy === selected.id}
-            >
-              <Icon name={selected.favorite ? "star" : "star_outline"} />{" "}
-              {selected.favorite ? "FAVORIT ENTFERNEN" : "ALS FAVORIT"}
-            </button>
-            {tab !== "unsplash" && (
-              <button
-                className="danger"
-                onClick={() => setDeleteTarget(selected)}
-                disabled={busy === selected.id}
-              >
-                <Icon name="delete" /> MEDIUM LÖSCHEN
-              </button>
-            )}
-          </>
-        )}
       </div>
       <div className="media-browser-body">
         <aside className="media-navigation">
@@ -1121,7 +1111,7 @@ export function MediaBrowser() {
         <aside className="media-details">
           {selected ? (
             <>
-              <div className="detail-preview">
+              <button className="detail-preview" onClick={()=>selected.kind==='image'&&setZoomOpen(true)} aria-label="Vorschau vergrößern">
                 {selected.kind === "image" ? (
                   <img src={selected.downloadUrl} alt="" />
                 ) : selected.kind === "video" ? (
@@ -1145,8 +1135,9 @@ export function MediaBrowser() {
                 ) : (
                   <Icon name="picture_as_pdf" />
                 )}
-              </div>
-              <h2>{selected.name}</h2>
+              </button>
+              <label className="media-rename">Name<input maxLength={300} value={renameDraft} onChange={event=>setRenameDraft(event.target.value)}/><small>{renameDraft.length}/300</small><button disabled={!validateMediaName(renameDraft).ok||busy===selected.id} onClick={()=>void renameSelected()}>SPEICHERN</button></label>
+              <p className="ai-generated"><Icon name="smart_toy"/> KI-generiert: <b>{isAiGenerated(selected)?'Ja':'Nein'}</b></p>
               <dl>
                 <dt>Typ</dt>
                 <dd>{typeName(selected.kind)}</dd>
@@ -1240,6 +1231,7 @@ export function MediaBrowser() {
           </button>
         </footer>
       )}
+      {zoomOpen&&selected?.kind==='image'&&<div className="media-zoom-backdrop" role="dialog" aria-modal="true" onMouseDown={event=>event.target===event.currentTarget&&setZoomOpen(false)}><section><header><b>{selected.name}</b><button onClick={()=>setZoomOpen(false)}><Icon name="close"/></button></header><div className="media-zoom-canvas"><img src={selected.downloadUrl} alt={selected.name} style={{transform:`scale(${zoom})`}}/></div><footer><button onClick={()=>setZoom(.25)}>ANPASSEN</button><button onClick={()=>setZoom(1)}>100 %</button><button onClick={()=>setZoom(value=>Math.max(.25,value-.25))}><Icon name="remove"/></button><span>{Math.round(zoom*100)} %</span><button onClick={()=>setZoom(value=>Math.min(4,value+.25))}><Icon name="add"/></button></footer></section></div>}
       {staged.length > 0 && (
         <div className="media-upload-backdrop">
           <section className="media-upload-dialog">
@@ -1423,11 +1415,7 @@ export function MediaBrowser() {
             )}
           </div>
           <footer>
-            {generatorError && (
-              <p className="generator-error" role="alert">
-                <Icon name="error" /> {generatorError}
-              </p>
-            )}
+            <AiGenerationStatus active={generating} error={generatorError} onRetry={()=>void generateLocal()} reducedMotion={prefs.reduceMotion}/>
             <button
               className="primary"
               disabled={!generatorPrompt.trim() || generating}

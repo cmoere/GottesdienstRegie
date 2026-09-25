@@ -113,6 +113,8 @@ import {
   TransitionStage,
 } from "./transitions";
 import { QuickOverlay } from "./QuickOverlay";
+import { WEB_EDITOR_URL } from "./platformLinks";
+import {BibleTextDialog} from './BibleTextDialog';
 import { allEditorFonts as editorFonts, fontStack } from "./fonts";
 import {
   getChurchEvent,
@@ -8077,6 +8079,7 @@ function AppShell({
     ),
     [previewQuick, setPreviewQuick] = useState<QuickScreenConfig | null>(null),
     [settingsOpen, setSettingsOpen] = useState(false),
+    [bibleTextOpen,setBibleTextOpen]=useState(false),
     [termsOpen, setTermsOpen] = useState(false),
     [helpOpen, setHelpOpen] = useState(false),
     [tourOpen, setTourOpen] = useState(
@@ -9251,14 +9254,9 @@ function AppShell({
           }),
       },
       {
-        label: "Bibel",
+        label: "Bibeltext anzeigen",
         icon: "menu_book",
-        action: () =>
-          state.addItem("bible", {
-            title: "Bibelstelle",
-            section: "",
-            body: "",
-          }),
+        action: () => setBibleTextOpen(true),
       },
       {
         label: "Bild",
@@ -9496,6 +9494,12 @@ function AppShell({
     ],
     help: [
       { label: t("helpTitle"), icon: "help", action: () => setHelpOpen(true) },
+      ...(window.desktop ? [{
+        label: "Webversion öffnen",
+        icon: "language",
+        external: true,
+        action: () => void window.desktop?.openExternal(WEB_EDITOR_URL),
+      }] : []),
       {
         label: "Benutzeroberfläche kennenlernen",
         icon: "explore",
@@ -10222,6 +10226,7 @@ function AppShell({
           confirm={() => void leave()}
         />
       )}
+      {bibleTextOpen&&<BibleTextDialog close={()=>setBibleTextOpen(false)} onShow={value=>{const quick:QuickScreenConfig={id:`bible-${Date.now()}`,type:'bible',name:value.reference,enabled:true,targets:['main'],text:`${value.reference}\n\n${value.text}\n\n${value.translation}`,background:'#101820',order:0};void applyQuick(quick);setBibleTextOpen(false)}}/>}
       <MobileWorkspaceNav />
     </div>
   );

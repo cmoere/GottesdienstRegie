@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.48",
+      "builds": [{
+        "version": "0.48.0",
+        "releaseDate": "2026-09-25",
+        "current": true,
+        "overview": {"label":{"de":"Zuverlässiger Start, neue Medien- und Bibelwerkzeuge","en":"Reliable startup, new media and Bible tools"},"text":{"de":"Version 0.48.0 startet immer in einer verwendbaren Desktop-Größe, verbindet Web- und Desktop-Ausgabe, modernisiert die Medienbibliothek und ergänzt eine sichere Bibeltext-Schnellanzeige für MAIN.","en":"Version 0.48.0 always starts at a usable desktop size, connects web and desktop editions, modernizes the media library and adds a safe Bible quick display for MAIN."}},
+        "sections": {
+          "new": [{"label":{"de":"Bibeltext anzeigen","en":"Show Bible text"},"text":{"de":"Bibelstellen können gesucht, in Luther 1912 oder einer installierbaren freien Übersetzung vorab geprüft und anschließend als unabhängige MAIN-Schnellanzeige eingeblendet werden.","en":"Bible references can be searched, previewed in Luther 1912 or an installable free translation, then shown as an independent MAIN quick overlay."}},{"label":{"de":"Verknüpfte Web- und Desktop-Version","en":"Connected web and desktop editions"},"text":{"de":"Die Desktop-App öffnet den Web-Editor; der Web-Editor verweist direkt auf den aktuellen Desktop-Download.","en":"The desktop app opens the web editor, while the web editor links directly to the latest desktop download."}}],
+          "improved": [{"label":{"de":"Medienbibliothek und KI-Motive","en":"Media library and AI motifs"},"text":{"de":"Großansicht, validierte Namen bis 300 Zeichen, KI-Herkunft, echte zuletzt verwendete Medien sowie 15 zugängliche Erstellungsphasen und eine Wiederholen-Aktion beschleunigen den Medienworkflow.","en":"Zoom, validated 300-character names, AI provenance, true recently used media, 15 accessible creation phases and retry improve the media workflow."}}],
+          "fixed": [{"label":{"de":"Fenster bleibt nicht mehr klein","en":"Window no longer remains compact"},"text":{"de":"Das Hauptfenster erhält vor dem Laden gültige Desktop-Abmessungen und ist unabhängig vom Renderer-Bereitsignal vergrößerbar.","en":"The main window receives valid desktop bounds before loading and remains resizable independently of renderer readiness."}},{"label":{"de":"MAIN-Schnellanzeige bleibt stabil","en":"MAIN quick overlay remains stable"},"text":{"de":"Folienwechsel und zugehörige Countdown-Timer ersetzen eine aktive Bibel- oder andere Schnellanzeige nicht mehr.","en":"Slide changes and related countdown timers no longer replace an active Bible or other quick overlay."}}],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.47",
       "builds": [{
         "version": "0.47.0",
         "releaseDate": "2026-09-25",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Vollständige und lesbare Update-Beschreibungen","en":"Complete and readable update descriptions"},"text":{"de":"Version 0.47.0 entfernt die starre 220-Zeichen-Grenze der Update-Karte. Lange Versionsbeschreibungen bleiben bis zum Ende der angezeigten Absätze erhalten und werden innerhalb der verfügbaren Breite sauber umgebrochen.","en":"Version 0.47.0 removes the update card's fixed 220-character limit. Long release descriptions remain intact through the displayed paragraphs and wrap cleanly within the available width."}},
         "sections": {
           "new": [],

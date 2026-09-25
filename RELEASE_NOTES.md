@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.48.0
+
+Version 0.48.0 behebt den Fehler, durch den GottesdienstRegie nach dem Hochfahren in einem schmalen, unvollständig aufgeklappten Fenster stehen bleiben konnte. Das Bedienfenster erhält nun bereits vor dem Laden der Oberfläche eine gültige Desktop-Größe, verwirft Positionen auf nicht mehr angeschlossenen Bildschirmen und bleibt jederzeit vergrößerbar und maximierbar. Die Wiederherstellung ist damit nicht mehr von einem verspäteten Renderer-Signal abhängig.
+
+Desktop-App und Web-Editor sind jetzt unmittelbar miteinander verbunden. Im Hilfemenü der installierten Anwendung öffnet ein fester Eintrag die Webversion; der Web-Editor verweist bei Desktop-Funktionen auf die aktuelle Downloadseite. Beide Ziele sind fest auf die offiziellen HTTPS-Adressen von GottesdienstRegie beschränkt.
+
+Die Medienbibliothek wurde für die tägliche Auswahl überarbeitet. Der Upload sitzt am rechten Rand der Befehlsleiste, doppelte Favoriten- und Löschaktionen wurden entfernt, ausgewählte Bilder lassen sich in einer großen Zoomansicht prüfen und Mediennamen direkt mit sichtbarer 300-Zeichen-Grenze bearbeiten. Zusätzlich zeigt die Detailansicht mit einem Robotersymbol eindeutig, ob ein Medium KI-generiert ist. „Zuletzt verwendet“ richtet sich nicht mehr nach irgendeiner Bearbeitung, sondern ausschließlich nach dem tatsächlichen Einsatz eines Mediums.
+
+Der Bereich KI-Motive besitzt nun einen eigenständigen Erstellungsstatus mit mindestens 15 wechselnden visuellen Phasen. Bei reduzierter Bewegung bleibt der Zustand ruhig und verständlich. Tritt ein Fehler auf, bleiben Beschreibung, Szene und Stil erhalten; eine kompakte Schaltfläche „Erneut versuchen“ startet denselben Auftrag erneut.
+
+Mit „Bibeltext anzeigen“ steht ein eigener Such- und Vorschauablauf für spontane MAIN-Einblendungen bereit. Luther 1912 ist voreingestellt. Der Katalog modelliert 26 deutsche und vier englische Übersetzungen; sichtbar sind aus rechtlichen Gründen nur bereits installierte oder ohne persönlichen API-Schlüssel direkt beziehbare Pakete. Lizenzpflichtige Texte werden nicht als scheinbar installierbare Auswahl angeboten. Die MAIN-Schnellanzeige bleibt als eigene Ebene bestehen, wenn Folien weitergeschaltet werden oder ein Folienwechsel-Countdown läuft.
+
+Automatisierte Tests prüfen die Fensterstart-Regeln, sicheren Plattformlinks, Mediennamen und Nutzungszeiten, 15 KI-Ladephasen, Bibelstellen-Parser, Katalogumfang und die Trennung der MAIN-Schnellanzeige vom normalen Folienstand.
+
+---
+
 # GottesdienstRegie 0.47.0
 
 Version 0.47.0 behebt die abgeschnittenen Texte im Bereich Einstellungen → Updates. Die Kurzbeschreibung eines verfügbaren Updates wurde bislang unabhängig von Wort- und Satzgrenzen nach exakt 220 Zeichen beendet. Dadurch konnte der letzte sichtbare Satz mitten in einem Wort abbrechen, obwohl die vollständigen Versionshinweise bereits vorhanden waren.

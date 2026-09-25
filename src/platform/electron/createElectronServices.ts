@@ -37,6 +37,7 @@ export function createElectronServices(bridge:NonNullable<Window['desktop']>):Pl
         return assets;
       },
       remove:id=>bridge.media.remove(id),
+      markUsed:id=>bridge.media.markUsed(id),
       status:()=>bridge.media.onlineStatus()
     },
     desktop:{
