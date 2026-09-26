@@ -6,7 +6,7 @@ import './version45.css';
 import {effectiveOperatorScale} from './operatorAccessibility';
 import {modalBlocksCanvas} from './modalInteraction';
 import {TranslationPackSettings} from './TranslationPackSettings';
-import {TERMS_EFFECTIVE_DATE,TERMS_VERSION,termsSections} from './termsContent';
+import {TERMS_EFFECTIVE_DATE,TERMS_VERSION,termsDocument} from './termsContent';
 import {translationModes, type SongTranslationMode} from './songTranslation';
 import { LyricScrollingSettings } from './LyricScrollingSettings';
 import { WindowControls } from './WindowControls';
@@ -90,6 +90,7 @@ import {
   ProductionTimeline,
   ProductionWorkspace,
 } from "./ProductionWorkspace";
+import {paginateBibleVerses} from './bibleOverlayModel';
 import { FileMenu } from "./FileMenu";
 import { MediaBrowser } from "./MediaBrowser";
 import {
@@ -981,12 +982,13 @@ function Login({
 }
 
 function TermsModal({ close }: { close: () => void }) {
+  const language=usePreferences(state=>state.language),terms=termsDocument(language);
   return (
     <div className="modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && close()}>
       <section className="terms-dialog" role="dialog" aria-modal="true" aria-labelledby="terms-title">
-        <header><div><small>GOTTESDIENSTREGIE</small><h2 id="terms-title">Nutzungsbedingungen</h2></div><button type="button" onClick={close} aria-label="Schließen"><Icon name="close" /></button></header>
-        <div className="terms-body"><p><b>Version {TERMS_VERSION} · Gültig ab {TERMS_EFFECTIVE_DATE}</b></p>{termsSections.map(section=><section key={section.title}><h3>{section.title}</h3><ul>{section.paragraphs.map(paragraph=><li key={paragraph}>{paragraph}</li>)}</ul></section>)}</div>
-        <footer><button type="button" onClick={()=>void window.desktop?.openExternal('https://cmoere.github.io/GottesdienstRegie/terms/')}>ONLINE ÖFFNEN</button><button type="button" className="primary" onClick={close}>SCHLIESSEN</button></footer>
+        <header><div><small>GOTTESDIENSTREGIE</small><h2 id="terms-title">{terms.title}</h2></div><button type="button" onClick={close} aria-label={terms.close}><Icon name="close" /></button></header>
+        <div className="terms-body" lang={terms.locale} dir={terms.locale==='ar'?'rtl':'ltr'}><p><b>Version {TERMS_VERSION} · {terms.effective} {TERMS_EFFECTIVE_DATE}</b></p><p>{terms.notice}</p>{terms.sections.map(section=><section key={section.title}><h3>{section.title}</h3><ul>{section.paragraphs.map(paragraph=><li key={paragraph}>{paragraph}</li>)}</ul></section>)}</div>
+        <footer><button type="button" onClick={()=>void window.desktop?.openExternal(`https://cmoere.github.io/GottesdienstRegie/terms/?lang=${terms.locale}`)}>{terms.open}</button><button type="button" className="primary" onClick={close}>{terms.close}</button></footer>
       </section>
     </div>
   );
@@ -3248,14 +3250,6 @@ export function OrderOfService({
             }}
           >
             <Icon name="radio" /> RADIOSENDER
-          </button>
-          <button
-            onClick={() => {
-              setAudioPanel({targetType:audioMenu.targetType,targetId:audioMenu.targetId});
-              setAudioMenu(null);
-            }}
-          >
-            <Icon name="tune" /> AUDIO EINSTELLUNGEN
           </button>
           {audioMenu.targetType === "serviceItem" && (
             <button
@@ -6552,6 +6546,7 @@ function HelpModal({ close }: { close: () => void }) {
     "Songübersetzungen",
     "Bildschirmschoner",
     "Installation & Nutzungsbedingungen",
+    "Minimum Viable Product (MVP)",
     "Erste Schritte",
     "Gemeinsame Gemeinde-PCs",
     "Anmelden & Abmelden",
@@ -6608,6 +6603,8 @@ function HelpModal({ close }: { close: () => void }) {
     "Über GottesdienstRegie",
   ];
   const articles: Record<string, string> = {
+    "Minimum Viable Product (MVP)":
+      "Die Software wurde als Minimum Viable Product (MVP) entwickelt.\n\nDas bedeutet, dass sie als erste minimal funktionsfähige Version veröffentlicht wurde, um Nutzerfeedback zu sammeln und die Weiterentwicklung direkt an den Anforderungen der Nutzer:innen auszurichten. Dadurch sollen Fehlentwicklungen vermieden werden.\n\nWir freuen uns darum über jede Rückmeldung, um die Software so zu programmieren, wie ihr sie braucht.",
     "Erste Schritte":
       "Willkommen bei GottesdienstRegie. Die Anwendung verbindet Ablaufplanung, Foliengestaltung, Medien, LiveQuiz und die echte Bildschirmausgabe.\n\n1. Präsentation vorbereiten\nÖffne über Datei eine vorhandene Präsentation oder erstelle eine neue. Klicke oben links auf den Titel, um ihn direkt umzubenennen. Verknüpfe darunter zwingend die passende Firebase-Veranstaltung. Dabei werden Datum und planmäßige Servicezeit übernommen; spätere Verzögerungen verändern die ursprüngliche Planzeit nicht.\n\n2. Ablauf aufbauen\nKlicke links neben ABLAUF auf Plus oder öffne Element hinzufügen. Ergänze Inhalte, Songs, Bibelstellen, Bilder, Videos, Webinhalte oder ein LiveQuiz. Elemente lassen sich ziehen, per Rechtsklick duplizieren und nur bei selbst erstellten Vorlagen wieder löschen.\n\n3. Folien gestalten\nWähle im Ablauf ein Element und danach unten eine Folie. Im Bearbeitungsmodus kannst du Text, Schrift, Größe, Ausrichtung, Farbe, Ebenen, Hintergrund und Übergang ändern. Die rechte Darstellung aktualisiert sich sofort. Cera Pro ist vollständig eingebettet und muss auf dem Rechner nicht installiert sein.\n\n4. Medien verwenden\nÖffne Medien → Medienbibliothek. Cloud-Medien werden zentral geladen; bei Unsplash gibst du einmal den Access Key dieses Geräts ein, suchst per Enter oder SUCHEN und wählst anschließend ein Bild aus. Uploads benötigen zusätzlich Schreibberechtigung für den GitHub-Medienspeicher.\n\n5. Anzeige einrichten\nÖffne Einstellungen → Anzeige und ordne MAIN einem angeschlossenen Ausgabebildschirm zu. Der primäre Bildschirm bleibt die Bedienoberfläche. Nutze ANZEIGEN IDENTIFIZIEREN, wenn du die Monitore nicht eindeutig zuordnen kannst.\n\n6. Vorschau prüfen\nSchalte oben auf VORSCHAU. In EINZELVORSCHAU navigierst du mit den großen Pfeilen oder den Pfeiltasten; die Folienübersicht zeigt den gesamten Ablauf. Vorschau und Live-Ausgabe bleiben getrennt.\n\n7. ON AIR starten\nKontrolliere, dass die Veranstaltung verknüpft, MAIN zugeordnet und die benötigten Medien erreichbar sind. Starte den Preflight. Erst danach gehst du ON AIR. Ein Klick auf OFF AIR oder das Schließen der Anwendung beendet alle Ausgabefenster und die Hintergrundmusik sicher.\n\n8. Sicher arbeiten\nÄnderungen werden alle 15 Sekunden automatisch gespeichert. Das Cloudsymbol oben rechts ist grün, sobald der Mediendienst erreichbar ist. Ein Klick auf das Synchronisationssymbol speichert sofort und zeigt die einzelnen Schritte. Nutze vor größeren Änderungen zusätzlich Datei → Backup erstellen.",
     Benutzeroberfläche:
@@ -6981,6 +6978,17 @@ const tourSteps = [
       "Links: Ablauf mit Vor-, Haupt- und Nachprogramm",
       "Mitte: Folien und große Arbeitsvorschau",
       "Oben: Bearbeiten, Vorschau, Preflight und ON AIR",
+    ],
+  },
+  {
+    title: "Minimum Viable Product (MVP)",
+    image: "./help/operator-workspace.png",
+    focus: "center",
+    text: "Die Software wurde als Minimum Viable Product (MVP) entwickelt. Sie wurde als erste minimal funktionsfähige Version veröffentlicht, um Nutzerfeedback zu sammeln und die Weiterentwicklung direkt an den Anforderungen der Nutzer:innen auszurichten.",
+    points: [
+      "Rückmeldungen helfen, Fehlentwicklungen zu vermeiden",
+      "Die Weiterentwicklung orientiert sich am tatsächlichen Bedarf",
+      "Wir freuen uns über jede Rückmeldung, damit die Software so wird, wie ihr sie braucht",
     ],
   },
   {
@@ -10173,7 +10181,7 @@ function AppShell({
           confirm={() => void leave()}
         />
       )}
-      {bibleTextOpen&&<BibleTextDialog close={()=>setBibleTextOpen(false)} onShow={value=>{const quick:QuickScreenConfig={id:`bible-${Date.now()}`,type:'bible',name:value.reference,enabled:true,targets:['main'],text:`${value.reference}\n\n${value.text}\n\n${value.translation}`,background:'#101820',order:0};void(async()=>{if(!usePresentation.getState().onAir)await air();if(!usePresentation.getState().onAir)return;setPreviewQuick(quick);await(window.desktop as any)?.sendQuick(['main'],quick);setBibleTextOpen(false)})()}}/>}
+      {bibleTextOpen&&<BibleTextDialog close={()=>setBibleTextOpen(false)} onShow={value=>{const quick:QuickScreenConfig={id:`bible-${Date.now()}`,type:'bible',name:value.reference,enabled:true,targets:['main'],text:value.text,pages:paginateBibleVerses(value.text.split('\n').filter(Boolean)),pageIndex:0,reference:value.reference,translation:value.translation,background:'#2d241b',order:0};void(async()=>{if(!usePresentation.getState().onAir)await air();if(!usePresentation.getState().onAir)return;setPreviewQuick(quick);await(window.desktop as any)?.sendQuick(['main'],quick);setBibleTextOpen(false)})()}}/>}
       <MobileWorkspaceNav />
     </div>
   );

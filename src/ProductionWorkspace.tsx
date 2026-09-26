@@ -55,6 +55,7 @@ import { defaultAudioRouting, playRoutedTone } from "./audioRouting";
 import { snapPosition, snapRect } from './canvasGeometry';
 import {canHideSlideContent} from './quickScreenAvailability';
 import {timerProgress} from './previewTimer';
+import {shouldHandlePreviewArrow} from './previewKeyboard';
 
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -2704,6 +2705,7 @@ function PreviewCenter({
       next = all[Math.max(0, Math.min(all.length - 1, index + delta))];
     if (next) state.selectPreview(next.item.id, next.slide.id);
   };
+  useEffect(()=>{if(state.previewLayout!=='single')return;const key=(event:KeyboardEvent)=>{if(!shouldHandlePreviewArrow(event.key,event.target))return;event.preventDefault();move(event.key==='ArrowRight'?1:-1)};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key)},[state.previewLayout,state.onAir,state.previewSlideId,state.liveSlideId,all.length]);
   useEffect(() => {
     setPausedSlideId("");
     setRemaining(timedSeconds);
@@ -2765,16 +2767,6 @@ function PreviewCenter({
         ref={root}
         tabIndex={0}
         aria-label="MAIN-Liveansicht. Mit linker und rechter Pfeiltaste live weiterschalten."
-        onKeyDown={(event) => {
-          if (event.key === "ArrowRight") {
-            event.preventDefault();
-            move(1);
-          }
-          if (event.key === "ArrowLeft") {
-            event.preventDefault();
-            move(-1);
-          }
-        }}
       >
         <button
           className="preview-nav previous"
@@ -2797,15 +2789,7 @@ function PreviewCenter({
           />
           <QuickOverlay quick={activeQuick} />
         </div>
-        {timedSeconds>0&&<div className="preview-timer-ring" aria-hidden="true"><svg viewBox="0 0 40 40"><circle className="track" cx="20" cy="20" r="16"/><circle className="progress" cx="20" cy="20" r="16" pathLength="1" style={{strokeDashoffset:1-timerProgress(remaining,timedSeconds)}}/></svg></div>}
-        <button
-          className="preview-nav next"
-          disabled={currentIndex < 0 || currentIndex >= all.length - 1}
-          title="Nächste MAIN-Folie"
-          onClick={() => move(1)}
-        >
-          <Icon name="chevron_right" />
-        </button>
+        <div className="preview-navigation-rail">{timedSeconds>0&&<div className="preview-timer-ring" aria-hidden="true"><svg viewBox="0 0 40 40"><circle className="track" cx="20" cy="20" r="16"/><circle className="progress" cx="20" cy="20" r="16" pathLength="1" style={{strokeDashoffset:1-timerProgress(remaining,timedSeconds)}}/></svg></div>}<button className="preview-nav next" disabled={currentIndex < 0 || currentIndex >= all.length - 1} title="Nächste MAIN-Folie" onClick={() => move(1)}><Icon name="chevron_right" /></button></div>
       </div>
     );
   return (
@@ -2996,9 +2980,9 @@ function PreviewRightSidebar({
             ))}
         </div>
         {activeQuick && (
-          <button className="restore-last" onClick={() => onQuick(null)}>
+          <>{activeQuick.type==='bible'&&(activeQuick.pages?.length??0)>1&&<div className="bible-page-controls"><button disabled={(activeQuick.pageIndex??0)<=0} onClick={()=>onQuick({...activeQuick,pageIndex:Math.max(0,(activeQuick.pageIndex??0)-1)})}><Icon name="chevron_left"/> Zurück</button><span>{(activeQuick.pageIndex??0)+1}/{activeQuick.pages!.length}</span><button disabled={(activeQuick.pageIndex??0)>=activeQuick.pages!.length-1} onClick={()=>onQuick({...activeQuick,pageIndex:Math.min(activeQuick.pages!.length-1,(activeQuick.pageIndex??0)+1)})}>Weiter <Icon name="chevron_right"/></button></div>}<button className="restore-last" onClick={() => onQuick(null)}>
             <Icon name="restore" /> MAIN-FOLIE WIEDERHERSTELLEN
-          </button>
+          </button></>
         )}
       </section>
     </aside>

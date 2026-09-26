@@ -11,7 +11,7 @@ export interface AudioEqualizerSettings{mode:AudioEqualizerMode;bands:number[]}
 export interface PublicInterestSettings{enabled:boolean;preLoop:boolean;postLoop:boolean;durationSeconds:number;interval:3|5|10;showQr:boolean;categories:string[]}
 export interface VideoInputSource{id:string;deviceId:string;name:string;enabled:boolean;width:number;height:number;frameRate:number;audioEnabled:boolean;audioDeviceId:string;volume:number;monitoring:'off'|'operator'|'live';fit:VideoFit;crop:{left:number;right:number;top:number;bottom:number};brightness:number;contrast:number;saturation:number;hue:number}
 export type QuickScreenType='logo'|'black'|'empty'|'noText'|'amen'|'countdown'|'bible'|'custom'|'quizJoin';
-export interface QuickScreenConfig{id:string;type:QuickScreenType;name:string;enabled:boolean;targets:string[];text?:string;background?:string;duration?:number;endText?:string;order:number;imageUrl?:string;joinUrl?:string;joinCode?:string}
+export interface QuickScreenConfig{id:string;type:QuickScreenType;name:string;enabled:boolean;targets:string[];text?:string;background?:string;duration?:number;endText?:string;order:number;imageUrl?:string;joinUrl?:string;joinCode?:string;pages?:string[][];pageIndex?:number;reference?:string;translation?:string}
 const defaultQuickScreens:QuickScreenConfig[]=[
   {id:'logo',type:'logo',name:'Logo',enabled:true,targets:['main'],background:'#000000',order:0},
   {id:'black',type:'black',name:'Schwarz',enabled:true,targets:['main'],order:1},

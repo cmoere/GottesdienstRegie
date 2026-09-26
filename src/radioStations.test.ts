@@ -1,5 +1,5 @@
 import {describe,expect,it,vi} from 'vitest';
-import {discoverRadioBrowserHosts,searchRadioStations} from './radioStations';
+import {discoverRadioBrowserHosts,normalizeRadioStation,searchRadioStations} from './radioStations';
 
 describe('radio station search',()=>{
   it('uses a fallback server when the first Radio Browser host fails',async()=>{
@@ -14,5 +14,9 @@ describe('radio station search',()=>{
   it('discovers current Radio Browser hosts instead of relying on stale names',async()=>{
     const fetcher=vi.fn(async()=>new Response(JSON.stringify([{name:'de1.api.radio-browser.info'},{name:'de1.api.radio-browser.info'},{name:'us1.api.radio-browser.info'}]),{status:200}));
     await expect(discoverRadioBrowserHosts(fetcher as typeof fetch)).resolves.toEqual(['https://de1.api.radio-browser.info','https://us1.api.radio-browser.info']);
+  });
+
+  it('keeps artwork and homepage metadata for the now-playing card',()=>{
+    expect(normalizeRadioStation({stationuuid:'1',name:'Radio',url_resolved:'https://example.test/live',lastcheckok:1,favicon:'https://example.test/logo.png',homepage:'https://example.test'})).toMatchObject({artworkUrl:'https://example.test/logo.png',homepage:'https://example.test'});
   });
 });

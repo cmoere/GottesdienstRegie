@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs');
 const pkg=require('../package.json'),releases=require('../public/releases.json');
 const app=fs.readFileSync('src/App.tsx','utf8'),workspace=fs.readFileSync('src/ProductionWorkspace.tsx','utf8'),audio=fs.readFileSync('src/audio-browser.css','utf8'),terms=fs.readFileSync('src/termsContent.ts','utf8');
-assert.equal(pkg.version,'0.56.0');
+assert.ok(Number(pkg.version.split('.')[1])>=56);
 assert.ok(releases.versions.flatMap(entry=>entry.builds).some(entry=>entry.version==='0.56.0'));
 assert.doesNotMatch(app,/className="section-add-button"/);
 assert.match(app,/RADIOSENDER/);

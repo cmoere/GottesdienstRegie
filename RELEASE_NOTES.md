@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.57.0
+
+Version 0.57.0 verbessert Einzelvorschau, Radiosender, Bibel-Schnellanzeige und die erreichbaren Nutzungsinformationen. Der verkleinerte grafische Zeitkreis liegt jetzt in einer eigenen rechten Navigationsschiene außerhalb der Folie. Linke und rechte Pfeiltaste wechseln Folien auch ohne vorherigen Fokus auf die Vorschau; Eingabefelder, Editoren und geöffnete Dialoge werden dabei bewusst nicht abgefangen.
+
+Radiosender öffnen am Lautsprechersymbol in einem eigenständigen Dialog, ohne zusätzliche Hinweise aus dem Audiobrowser und ohne den bisherigen Menüpunkt „Audio Einstellungen“. Die Suche heißt kompakt „Suchen“, Ergebnisse lassen sich schrittweise erweitern oder wieder reduzieren. Ein fester Bereich am unteren Rand zeigt den Ladezustand mit animierten Punkten, den laufenden Sender und – sofern der Stream beziehungsweise das System diese Metadaten bereitstellt – Live-Titel und Senderbild.
+
+Die spontane Bibelanzeige verwendet eine eigene animierte Buchgestaltung mit responsiver Typografie. Lange Stellen werden versweise auf mehrere Seiten verteilt, sodass Text nicht mehr aus der Ausgabe läuft. Die Seiten können im Bedienbereich manuell vor- und zurückgeschaltet werden. Der Bibelauswahldialog ist zugleich kompakter, höhenflexibel und hält Vorschau sowie Bestätigungsaktionen auch auf kleineren Bildschirmen erreichbar.
+
+Die Onlinefassung der Nutzungsbedingungen besitzt nun einen Sprachumschalter für alle siebzehn Anwendungssprachen und wählt beim ersten Aufruf passend zur Browsersprache. Die Anwendung öffnet die Onlinefassung direkt mit der aktuell gewählten Softwaresprache. Die rechtlich maßgebliche deutsche Originalfassung bleibt klar gekennzeichnet.
+
+Das Starterklärungstutorial enthält einen eigenen Schritt zum Minimum-Viable-Product-Ansatz. Derselbe ausführliche Hinweis ist dauerhaft unter Hilfe → Minimum Viable Product (MVP) erreichbar und erklärt, weshalb Rückmeldungen unmittelbar in die weitere Entwicklung einfließen.
+
+Automatisierte Regressionstests prüfen Bibel-Seitenaufteilung, fokusunabhängige Pfeiltastensteuerung, Sendermetadaten, Versionsinhalte und beide MVP-Hinweise.
+
+---
+
 # GottesdienstRegie 0.56.0
 
 Version 0.56.0 verbindet die MAIN-Bibelanzeige mit dem bereitgestellten öffentlichen Bibelstellen-Worker, ohne dessen Code zu verändern. Die Anwendung verwendet die Worker-Routen für Übersetzungen und Texte als bevorzugte Quelle und fällt bei einer Störung automatisch auf den bisherigen freien Bibeldienst zurück. Die gemeinsame Buchauswahl unterscheidet innerhalb derselben Box klar zwischen Altem und Neuem Testament; Suche, Kapitel, Versanfang, Versende und die vollständige Vorschau bleiben erhalten.
