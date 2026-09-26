@@ -6,8 +6,8 @@ import {RadioStationBrowser} from './RadioStationBrowser';
 const Icon=({name}:{name:string})=><span className="material-symbols-outlined" aria-hidden="true">{name}</span>;
 export const defaultBackgroundAudio=(tracks:BackgroundAudioTrack[]=[]):BackgroundAudioConfig=>({tracks,autoPlay:true,shuffle:false,repeat:true,continueUntil:'sectionEnd',volume:70,fadeInSeconds:1.5,fadeOutSeconds:2.5,crossfadeSeconds:2,muted:false,resumeSectionAfterItem:true,ducking:{enabled:true,level:25,attackMs:350,releaseMs:900},restartMode:'resume'});
 
-export function BackgroundAudioPanel({title,targetType,targetId,value,onChange,onClose}:{title:string;targetType:'section'|'serviceItem';targetId:string;value?:BackgroundAudioConfig;onChange:(value?:BackgroundAudioConfig)=>void;onClose:()=>void}){
- const config=value??defaultBackgroundAudio(),[dragIndex,setDragIndex]=useState(-1),[radioOpen,setRadioOpen]=useState(false),previewKey=useRef('');
+export function BackgroundAudioPanel({title,targetType,targetId,value,onChange,onClose,initialRadio=false}:{title:string;targetType:'section'|'serviceItem';targetId:string;value?:BackgroundAudioConfig;onChange:(value?:BackgroundAudioConfig)=>void;onClose:()=>void;initialRadio?:boolean}){
+ const config=value??defaultBackgroundAudio(),[dragIndex,setDragIndex]=useState(-1),[radioOpen,setRadioOpen]=useState(initialRadio),previewKey=useRef('');
  useEffect(()=>()=>{if(backgroundAudioEngine.snapshot().sourceKey===previewKey.current)void backgroundAudioEngine.stop(0)},[]);
  const update=(patch:Partial<BackgroundAudioConfig>)=>onChange({...config,...patch});
  const reorder=(to:number)=>{if(dragIndex<0||dragIndex===to)return;const tracks=[...config.tracks],[moved]=tracks.splice(dragIndex,1);tracks.splice(to,0,moved);update({tracks});setDragIndex(-1)};

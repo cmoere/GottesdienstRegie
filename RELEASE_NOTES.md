@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.56.0
+
+Version 0.56.0 verbindet die MAIN-Bibelanzeige mit dem bereitgestellten öffentlichen Bibelstellen-Worker, ohne dessen Code zu verändern. Die Anwendung verwendet die Worker-Routen für Übersetzungen und Texte als bevorzugte Quelle und fällt bei einer Störung automatisch auf den bisherigen freien Bibeldienst zurück. Die gemeinsame Buchauswahl unterscheidet innerhalb derselben Box klar zwischen Altem und Neuem Testament; Suche, Kapitel, Versanfang, Versende und die vollständige Vorschau bleiben erhalten.
+
+Der Audiobrowser reserviert nicht länger eine große leere Fläche oberhalb der Treffer. Seine Kopf-, Such-, Filter-, Ergebnis-, Detail- und Auswahlbereiche folgen wieder einer konsistenten Fensteraufteilung. Das Lautsprechermenü bietet nun ausdrücklich „Radiosender“ an und öffnet die vorhandene Onlinesuche als Popup, sodass erreichbare HTTPS-Streams gesucht, vorgehört und ohne Umweg in die Hintergrundplaylist übernommen werden können.
+
+Der zentrale Befehl „Element hinzufügen“ zielt verlässlich auf den Gottesdienst und zeigt dort alle normalen Elementarten. Die zusätzlichen Plus-Schaltflächen direkt neben Vor- und Nachprogramm wurden entfernt; die festen Schleifen und ihre zulässigen Inhalte bleiben unverändert. Die MAIN-Schnellanzeige „Ohne Text“ bleibt stets sichtbar, lässt sich auf Folien ohne ausblendbare Inhalte aber nicht auslösen und erklärt ihre momentane Nichtverfügbarkeit über einen kurzen Hinweis.
+
+Zeitgesteuerte Folien erhalten in der Einzelvorschau links neben dem rechten Navigationspfeil einen schlichten kreisförmigen Fortschritt. Er läuft proportional zur verbleibenden Zeit herunter, zeigt weder Text noch Symbol und wird niemals in MAIN eingeblendet. Zusätzlich wurden sämtliche achtzehn Abschnitte der Nutzungsbedingungen deutlich erweitert; App, Installer und Webfassung verwenden weiterhin dieselbe Fassung 2.1.
+
+---
+
 # GottesdienstRegie 0.55.0
 
 Version 0.55.0 erweitert die neue Bibel-Schnellanzeige zu einem durchsuchbaren Arbeitsablauf. Die Anwendung lädt den öffentlichen Übersetzungskatalog von GetBible und bietet dadurch wesentlich mehr frei verfügbare Ausgaben als die bisher fest eingetragene Startauswahl. Übersetzungen lassen sich nach Name, Sprache oder Kürzel filtern. Die voreingestellte Ausgabe bleibt Luther 1545, sodass der bekannte Ablauf ohne zusätzliche Auswahl erhalten bleibt.

@@ -1,5 +1,14 @@
 # Versionshinweise / Release notes
 
+## 0.56.0 – Bibel-Worker, Audio und sichere Livewerkzeuge
+
+- Unveränderten öffentlichen Bibelstellen-Worker als bevorzugte Quelle mit automatischem Rückfall eingebunden.
+- Buchsuche innerhalb einer gemeinsamen Box nach Altem und Neuem Testament gruppiert.
+- Leere Fläche im Audiobrowser entfernt und Radiosender direkt über das Lautsprechermenü erreichbar gemacht.
+- Gottesdienst-Elementauswahl vervollständigt und direkte Plus-Schaltflächen neben Vor- und Nachprogramm entfernt.
+- „Ohne Text“ bei fehlenden ausblendbaren Inhalten deaktiviert und mit einem erklärenden Hinweis versehen.
+- Kreisförmigen, textlosen Folientimer in der Einzelvorschau ergänzt und alle Nutzungsbedingungen erweitert.
+
 ## 0.55.0 – Bibelsuche, stabiler Testbetrieb und wiederhergestellte Werkzeuge
 
 - Bibelübersetzungen werden aus dem öffentlichen Katalog geladen und lassen sich nach Name, Sprache und Kürzel durchsuchen.

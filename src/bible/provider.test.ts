@@ -1,5 +1,5 @@
 import {describe,expect,it,vi} from 'vitest';
-import {chapterCountForBook,fetchBiblePassage,fetchBibleTranslations,searchBibleBooks} from './provider';
+import {BIBLE_BOOKS,chapterCountForBook,fetchBiblePassage,fetchBibleTranslations,fetchWorkerBiblePassage,searchBibleBooks} from './provider';
 
 describe('Bible passage provider',()=>{
   it('loads and normalizes a selected passage for the MAIN quick action',async()=>{
@@ -28,5 +28,18 @@ describe('Bible passage provider',()=>{
     const fetcher=vi.fn(async()=>new Response(JSON.stringify({kjv:{translation:'King James Version',abbreviation:'kjv',language:'English'},luther1545:{translation:'Luther 1545',abbreviation:'luther1545',language:'German'},web:{translation:'World English Bible',abbreviation:'web',language:'English'}}),{status:200}));
     const translations=await fetchBibleTranslations(fetcher as typeof fetch);
     expect(translations.map(entry=>entry.id)).toEqual(['luther1545','kjv','web']);
+  });
+
+  it('groups every selectable book by testament',()=>{
+    expect(BIBLE_BOOKS.find(book=>book.id==='Malachi')?.testament).toBe('old');
+    expect(BIBLE_BOOKS.find(book=>book.id==='Matthew')?.testament).toBe('new');
+  });
+
+  it('loads text through the supplied worker API without changing it',async()=>{
+    const fetcher=vi.fn(async()=>new Response('3:16 Also hat Gott die Welt geliebt.\n3:17 Denn Gott sandte seinen Sohn.',{status:200,headers:{'x-bibel-version-label':encodeURIComponent('Lutherbibel 1984 – modern (GLM)')}}));
+    const passage=await fetchWorkerBiblePassage({translation:'glm',book:'John',bookLabel:'Johannes',chapter:3,fromVerse:16,toVerse:17},fetcher as typeof fetch);
+    expect(fetcher).toHaveBeenCalledWith('https://bibelstelle.crbnm06.workers.dev/text?ref=Johannes+3%2C16-17&lang=de&v=glm',expect.objectContaining({headers:{accept:'text/plain'}}));
+    expect(passage.verses).toEqual([{number:16,text:'Also hat Gott die Welt geliebt.'},{number:17,text:'Denn Gott sandte seinen Sohn.'}]);
+    expect(passage.translation).toContain('Lutherbibel 1984');
   });
 });

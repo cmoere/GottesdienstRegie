@@ -2749,6 +2749,7 @@ export function OrderOfService({
     [audioPanel, setAudioPanel] = useState<{
       targetType: "section" | "serviceItem";
       targetId: string;
+      initialRadio?: boolean;
     } | null>(null),
     [audioMenu, setAudioMenu] = useState<{
       targetType: "section" | "serviceItem";
@@ -2797,11 +2798,7 @@ export function OrderOfService({
     event.preventDefault();
     event.stopPropagation();
     if (!canEdit) return;
-    if (configured) {
-      setAudioMenu(null);
-      setAudioPanel({ targetType, targetId });
-      return;
-    }
+    void configured;
     const rect = event.currentTarget.getBoundingClientRect();
     setAudioMenu({
       targetType,
@@ -3077,7 +3074,7 @@ export function OrderOfService({
         </button>
         {adding && canEdit && (
           <AddPopover
-            targetSectionId={adding === "service" ? undefined : adding}
+            targetSectionId={adding}
             close={() => setAdding(null)}
           />
         )}
@@ -3127,22 +3124,6 @@ export function OrderOfService({
                       {section.title}
                     </button>
                     <div className="section-actions">
-                      {(section.id === "pre" || section.id === "post") && (
-                        <button
-                          className="section-add-button"
-                          type="button"
-                          disabled={!canEdit}
-                          title={`${section.title} – Loop-Element hinzufügen`}
-                          aria-label={`${section.title} – Loop-Element hinzufügen`}
-                          onClick={(event) => {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            setAdding((value) => (value === section.id ? null : section.id));
-                          }}
-                        >
-                          <Icon name="add" />
-                        </button>
-                      )}
                       <button
                         className={`audio-header-button ${audio?.tracks.length ? "configured" : ""} ${audio?.muted ? "muted" : ""} ${missing ? "missing" : ""}`}
                         title={
@@ -3260,6 +3241,22 @@ export function OrderOfService({
           >
             <Icon name="upload_file" /> IMPORTIEREN …
           </button>
+          <button
+            onClick={() => {
+              setAudioPanel({targetType:audioMenu.targetType,targetId:audioMenu.targetId,initialRadio:true});
+              setAudioMenu(null);
+            }}
+          >
+            <Icon name="radio" /> RADIOSENDER
+          </button>
+          <button
+            onClick={() => {
+              setAudioPanel({targetType:audioMenu.targetType,targetId:audioMenu.targetId});
+              setAudioMenu(null);
+            }}
+          >
+            <Icon name="tune" /> AUDIO EINSTELLUNGEN
+          </button>
           {audioMenu.targetType === "serviceItem" && (
             <button
               className="separator"
@@ -3282,6 +3279,7 @@ export function OrderOfService({
           title={audioTarget.title}
           targetType={audioPanel.targetType}
           targetId={audioPanel.targetId}
+          initialRadio={audioPanel.initialRadio}
           value={audioConfig}
           onChange={(value) =>
             audioPanel.targetType === "section"

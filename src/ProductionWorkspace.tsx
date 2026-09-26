@@ -53,6 +53,8 @@ import { QuickOverlay } from "./QuickOverlay";
 import { usePreferences } from "./preferences";
 import { defaultAudioRouting, playRoutedTone } from "./audioRouting";
 import { snapPosition, snapRect } from './canvasGeometry';
+import {canHideSlideContent} from './quickScreenAvailability';
+import {timerProgress} from './previewTimer';
 
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -2795,6 +2797,7 @@ function PreviewCenter({
           />
           <QuickOverlay quick={activeQuick} />
         </div>
+        {timedSeconds>0&&<div className="preview-timer-ring" aria-hidden="true"><svg viewBox="0 0 40 40"><circle className="track" cx="20" cy="20" r="16"/><circle className="progress" cx="20" cy="20" r="16" pathLength="1" style={{strokeDashoffset:1-timerProgress(remaining,timedSeconds)}}/></svg></div>}
         <button
           className="preview-nav next"
           disabled={currentIndex < 0 || currentIndex >= all.length - 1}
@@ -2926,7 +2929,10 @@ function PreviewRightSidebar({
         "true",
     ),
     liveItem = state.items.find((item) => item.id === state.liveItemId),
-    live = liveItem?.slides.find((slide) => slide.id === state.liveSlideId);
+    live = liveItem?.slides.find((slide) => slide.id === state.liveSlideId),
+    previewItem=state.items.find(item=>item.id===state.previewItemId),
+    currentPreviewSlide=previewItem?.slides.find(slide=>slide.id===state.previewSlideId),
+    noTextAvailable=canHideSlideContent(live??currentPreviewSlide);
   const toggle = () =>
     setCollapsed((value) => {
       localStorage.setItem(
@@ -2978,9 +2984,10 @@ function PreviewRightSidebar({
                 key={quick.id}
                 aria-pressed={activeQuick?.id === quick.id}
                 className={activeQuick?.id === quick.id ? "active" : ""}
-                title={`${quick.name}${state.onAir ? " sofort auf MAIN anzeigen" : " für MAIN vorbereiten"}`}
+                disabled={quick.type==='noText'&&!noTextAvailable}
+                title={quick.type==='noText'&&!noTextAvailable?'Aktuell befinden sich keine ausblendbaren Inhalte auf der Folie.':`${quick.name}${state.onAir ? " sofort auf MAIN anzeigen" : " für MAIN vorbereiten"}`}
                 onClick={() =>
-                  onQuick(activeQuick?.id === quick.id ? null : quick)
+                  quick.type==='noText'&&!noTextAvailable?undefined:onQuick(activeQuick?.id === quick.id ? null : quick)
                 }
               >
                 <QuickScreenThumb quick={quick} />

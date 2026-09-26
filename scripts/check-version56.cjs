@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const pkg=require('../package.json'),releases=require('../public/releases.json');
+const app=fs.readFileSync('src/App.tsx','utf8'),workspace=fs.readFileSync('src/ProductionWorkspace.tsx','utf8'),audio=fs.readFileSync('src/audio-browser.css','utf8'),terms=fs.readFileSync('src/termsContent.ts','utf8');
+assert.equal(pkg.version,'0.56.0');
+assert.ok(releases.versions.flatMap(entry=>entry.builds).some(entry=>entry.version==='0.56.0'));
+assert.doesNotMatch(app,/className="section-add-button"/);
+assert.match(app,/RADIOSENDER/);
+assert.match(workspace,/preview-timer-ring/);
+assert.match(workspace,/Aktuell befinden sich keine ausblendbaren Inhalte/);
+assert.match(audio,/audio-browser>\.media-browser-body\{grid-row:auto/);
+assert.match(fs.readFileSync('src/bible/provider.ts','utf8'),/https:\/\/bibelstelle\.crbnm06\.workers\.dev/);
+assert.ok((terms.match(/paragraphs:/g)||[]).length>=18);
+assert.ok(terms.length>9000);
+console.log('Version 0.56 checks passed.');

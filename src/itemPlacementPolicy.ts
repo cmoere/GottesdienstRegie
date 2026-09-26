@@ -34,7 +34,7 @@ export function allowedItemTypes(section: ServiceSection | null | undefined): It
 }
 
 export function menuItemTypesForSection(section: ServiceSection | null | undefined): ItemType[] {
-  return sectionSupportsLoopItems(section) ? [...loopOnlyItemTypes] : [...standardItemTypes];
+  return section && sectionSupportsLoopItems(section) ? [...loopOnlyItemTypes] : [...standardItemTypes];
 }
 
 export function placementViolation(
