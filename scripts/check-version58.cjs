@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const pkg=require('../package.json'),releases=require('../public/releases.json');
+assert.equal(pkg.version,'0.58.0');
+assert.equal(releases.versions.flatMap(entry=>entry.builds).filter(entry=>entry.current).length,1);
+assert.ok(releases.versions.flatMap(entry=>entry.builds).some(entry=>entry.version==='0.58.0'&&entry.current));
+assert.match(fs.readFileSync('src/App.tsx','utf8'),/playAudioInPreview/);
+assert.match(fs.readFileSync('src/ProductionWorkspace.tsx','utf8'),/Folie dauerhaft anzeigen/);
+assert.match(fs.readFileSync('src/RadioStationBrowser.tsx','utf8'),/Suchtext löschen/);
+assert.match(fs.readFileSync('src/BibleTextDialog.tsx','utf8'),/translationGroups/);
+assert.match(fs.readFileSync('src/termsContent.ts','utf8'),/localizedSectionCopy/);
+console.log('Version 0.58 checks passed.');

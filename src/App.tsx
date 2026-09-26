@@ -131,6 +131,7 @@ import {
   normalizedAudioRouting,
 } from "./AudioRoutingSettings";
 import { AudioEqualizerSettings } from "./AudioEqualizerSettings";
+import {shouldSyncBackgroundAudio} from './audioPreviewPolicy';
 import { playRoutedTone, routeAvailable } from "./audioRouting";
 import { installCeraPro, removeCeraPro, saveCeraPro } from "./customFonts";
 import { serviceItemCommands, slideSvgDataUrl } from "./serviceItemCommands";
@@ -1568,6 +1569,7 @@ function SortableItem({
         }}
       >
         <Icon name={item.audioStopCue ? "volume_off" : "volume_up"} />
+        {!!item.backgroundAudio?.tracks.length&&<small className="audio-track-count">{item.backgroundAudio.tracks.length}</small>}
       </button>
       {editingDuration ? (
         <input
@@ -3153,6 +3155,7 @@ export function OrderOfService({
                                 : "volume_up"
                           }
                         />
+                        {!!audio?.tracks.length&&<small className="audio-track-count">{audio.tracks.length}</small>}
                       </button>
                       {section.id === "service" ? (
                         <div className="service-time-host">
@@ -5344,6 +5347,7 @@ function SettingsModal({
     inputGain,
     noiseSuppression,
     echoCancellation,
+    playAudioInPreview,
   } = prefs;
   const {
     setLanguage,
@@ -6155,6 +6159,10 @@ function SettingsModal({
                       <span>
                         <b>{L.echoCancellation}</b>
                       </span>
+                    </label>
+                    <label className="setting-check audio-preview-setting">
+                      <input type="checkbox" checked={playAudioInPreview} onChange={(event)=>prefs.setPlayAudioInPreview(event.target.checked)}/>
+                      <span><b>Radio und Audio in der Vorschau wiedergeben</b><small>Ist diese Option aus, startet verknüpftes Audio erst bei ON AIR. Manuelles Vorhören bleibt möglich.</small></span>
                     </label>
                     <div className="audio-test">
                       <button onClick={() => void testSpeakers()}>
@@ -8048,6 +8056,7 @@ function AppShell({
   useEffect(() => { if (!state.onAir) setTestMode(false); }, [state.onAir]);
   const quickScreens = usePreferences((s) => s.quickScreens),
     songTranslationMode=usePreferences((s)=>s.songTranslationMode),
+    playAudioInPreview=usePreferences((s)=>s.playAudioInPreview),
     storedShortcuts = usePreferences((s) => s.keyboardShortcuts),
     shortcuts = useMemo(
       () => ({ ...defaultKeyboardShortcuts, ...storedShortcuts }),
@@ -8576,7 +8585,7 @@ function AppShell({
       };
       return;
     }
-    if (state.mode === "edit") {
+    if (!shouldSyncBackgroundAudio({onAir:state.onAir,mode:state.mode,playInPreview:playAudioInPreview})) {
       void backgroundAudioEngine.stop();
       audioSessionRef.current = {
         onAir: false,
@@ -8627,6 +8636,7 @@ function AppShell({
     state.previewSlideId,
     state.items,
     state.sections,
+    playAudioInPreview,
   ]);
   useEffect(() => {
     if (!state.onAir || state.liveTimerPausedSlideId === state.liveSlideId)

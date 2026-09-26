@@ -1,5 +1,15 @@
 # Versionshinweise / Release notes
 
+## 0.58.0 – Vorschau-Audio, Bibelwerkzeuge und lokalisierte Bedingungen
+
+- Radio und verknüpftes Background Audio lassen sich in der Vorschau global deaktivieren; ON AIR und bewusstes Vorhören bleiben verfügbar.
+- Konfigurierte Lautsprecher zeigen ihren aktiven Zustand und die Anzahl hinterlegter Titel.
+- Bibelübersetzungen aus Worker und öffentlichem Katalog werden zusammengeführt, dedupliziert und nach Sprache gruppiert.
+- Der Bibeldialog besitzt feste Kopf- und Fußbereiche sowie getrennt scrollbare Inhalte für kleine Bildschirme.
+- Ein Klick auf den Zeitkreis hält die aktuelle Folie dauerhaft; ein weiterer Klick setzt die Zeitsteuerung fort.
+- Radiosuchtext lässt sich direkt über ein X entfernen.
+- Die Nutzungsbedingungen liefern für jede Anwendungssprache einen lokalisierten Dokumentinhalt.
+
 ## 0.56.0 – Bibel-Worker, Audio und sichere Livewerkzeuge
 
 - Unveränderten öffentlichen Bibelstellen-Worker als bevorzugte Quelle mit automatischem Rückfall eingebunden.

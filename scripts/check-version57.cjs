@@ -5,7 +5,7 @@ const radio=fs.readFileSync('src/RadioStationBrowser.tsx','utf8');
 const bible=fs.readFileSync('src/QuickOverlay.tsx','utf8');
 const terms=fs.readFileSync('src/termsContent.ts','utf8');
 const generator=fs.readFileSync('scripts/generate-terms.cjs','utf8');
-assert.equal(pkg.version,'0.57.0');
+assert.ok(Number(pkg.version.split('.')[1])>=57);
 assert.ok(releases.versions.flatMap(entry=>entry.builds).some(entry=>entry.version==='0.57.0'));
 assert.match(workspace,/preview-navigation-rail/);
 assert.match(workspace,/shouldHandlePreviewArrow/);

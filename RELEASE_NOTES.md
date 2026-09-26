@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.58.0
+
+Version 0.58.0 erweitert die Audiosteuerung, Bibelauswahl und Einzelvorschau. Unter Einstellungen → Audio entscheidet eine standardmäßig aktive Option, ob verknüpftes Radio und Background Audio bereits in der Vorschau automatisch wiedergegeben werden. Ist sie deaktiviert, beginnt die automatische Wiedergabe erst bei ON AIR; bewusstes Vorhören bleibt für die technische Kontrolle verfügbar. Konfigurierte Lautsprechersymbole erscheinen ausgefüllt und zeigen zusätzlich die Anzahl hinterlegter Titel.
+
+Der Bibeltextdialog behält Kopf- und Aktionsleiste auch auf niedrigen Bildschirmen vollständig im Fenster. Auswahl und Vorschau scrollen unabhängig voneinander, die Buchliste ist kompakter und öffentliche Übersetzungen des bereitgestellten Workers sowie des freien Katalogs werden zusammengeführt, doppelte Ausgaben entfernt und nach Sprache gruppiert.
+
+Der grafische Zeitkreis ist nun ein Bedienelement: Ein Klick hält die aktuelle Folie im Dauermodus und verhindert das automatische Weiterschalten, ein weiterer Klick setzt die Zeitsteuerung fort. Die Radiosuche zeigt bei eingegebenem Text rechts im Feld eine zugängliche X-Schaltfläche zum Leeren.
+
+Die Nutzungsbedingungen reagieren nicht mehr nur mit übersetzten Überschriften auf die Sprachwahl. Für jede der siebzehn Anwendungssprachen wird nun auch lokalisierter Abschnittsinhalt bereitgestellt; die ausführliche deutsche Originalfassung bleibt als rechtlich maßgebliche Fassung gekennzeichnet.
+
+Automatisierte Tests sichern Vorschau-Audioregel, Übersetzungszusammenführung, Dauermodus, Radiosuchfeld und vollständige Sprachabdeckung ab.
+
+---
+
 # GottesdienstRegie 0.57.0
 
 Version 0.57.0 verbessert Einzelvorschau, Radiosender, Bibel-Schnellanzeige und die erreichbaren Nutzungsinformationen. Der verkleinerte grafische Zeitkreis liegt jetzt in einer eigenen rechten Navigationsschiene außerhalb der Folie. Linke und rechte Pfeiltaste wechseln Folien auch ohne vorherigen Fokus auf die Vorschau; Eingabefelder, Editoren und geöffnete Dialoge werden dabei bewusst nicht abgefangen.

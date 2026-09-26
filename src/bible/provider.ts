@@ -102,7 +102,14 @@ export async function loadBiblePassage(request:BiblePassageRequest,fetcher:typeo
 }
 
 export async function loadBibleTranslations(fetcher:typeof fetch=fetch){
-  try{return await fetchWorkerBibleTranslations(fetcher)}catch{
-    try{return await fetchBibleTranslations(fetcher)}catch{return [...workerTranslations]}
-  }
+  const [worker,publicSource]=await Promise.all([
+    fetchWorkerBibleTranslations(fetcher).catch(()=>workerTranslations),
+    fetchBibleTranslations(fetcher).catch(()=>[] as BibleTranslation[]),
+  ]);
+  const unique=new Map<string,BibleTranslation>();
+  for(const entry of [...worker,...publicSource])if(!unique.has(entry.id))unique.set(entry.id,entry);
+  return [...unique.values()].sort((a,b)=>{
+    const aGerman=/german|deutsch/i.test(a.language)?0:1,bGerman=/german|deutsch/i.test(b.language)?0:1;
+    return aGerman-bGerman||a.name.localeCompare(b.name,'de');
+  });
 }

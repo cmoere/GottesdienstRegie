@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.58",
+      "builds": [{
+        "version": "0.58.0",
+        "releaseDate": "2026-09-26",
+        "current": true,
+        "overview": {"label":{"de":"Kontrolliertes Vorschau-Audio und bessere Bibelwerkzeuge","en":"Controlled preview audio and improved Bible tools"},"text":{"de":"Version 0.58.0 ergänzt eine globale Vorschau-Audioregel, einen sicheren Folien-Dauermodus, mehr gruppierte Bibelübersetzungen, einen responsiven Bibeldialog und vollständig lokalisierte Nutzungsansichten.","en":"Version 0.58.0 adds a global preview-audio policy, a safe continuous-slide mode, more grouped Bible translations, a responsive Bible dialog, and fully localized terms views."}},
+        "sections": {
+          "new": [{"label":{"de":"Audio nur bei ON AIR","en":"Audio only while ON AIR"},"text":{"de":"Eine standardmäßig aktive Einstellung erlaubt Radio und Background Audio in der Vorschau. Wird sie ausgeschaltet, startet automatische Wiedergabe erst bei ON AIR; manuelles Vorhören bleibt möglich.","en":"A default-on setting allows radio and background audio during preview. When disabled, automatic playback starts only while ON AIR; deliberate audition remains available."}},{"label":{"de":"Folien-Dauermodus","en":"Continuous slide mode"},"text":{"de":"Der Zeitkreis kann angeklickt werden, um automatisches Weiterschalten bis zu einem erneuten Klick auszusetzen.","en":"The timer ring can be clicked to suspend automatic advance until it is clicked again."}}],
+          "improved": [{"label":{"de":"Mehr Bibelübersetzungen nach Sprache","en":"More Bible translations by language"},"text":{"de":"Worker und öffentlicher Katalog werden zusammengeführt, doppelte Ausgaben entfernt und die Auswahl nach Sprache gruppiert.","en":"Worker and public catalog results are merged, duplicates removed, and the selector grouped by language."}},{"label":{"de":"Lokalisierte Bedingungen","en":"Localized terms"},"text":{"de":"Alle Anwendungssprachen erhalten lokalisierten Abschnittsinhalt in App und Webansicht.","en":"Every application language receives localized section content in both app and web views."}}],
+          "fixed": [{"label":{"de":"Bibeldialog bleibt im Fenster","en":"Bible dialog stays on screen"},"text":{"de":"Feste Kopf- und Fußbereiche sowie getrennt scrollbare Inhalte verhindern abgeschnittene Felder und Aktionen.","en":"Fixed header and footer rows plus independently scrollable content prevent clipped fields and actions."}},{"label":{"de":"Radiosuche schnell leeren","en":"Clear radio search quickly"},"text":{"de":"Ein X direkt im Suchfeld entfernt den eingegebenen Text.","en":"An X inside the search field clears entered text."}}],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.57",
       "builds": [{
         "version": "0.57.0",
         "releaseDate": "2026-09-26",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Responsive Bibelanzeige, Radio-Liveinformationen und sichere Vorschau","en":"Responsive Bible display, live radio information and safer preview"},"text":{"de":"Version 0.57.0 ordnet Zeitsteuerung und Tastaturnavigation in der Einzelvorschau neu, baut Radiosender als eigenständigen Dialog aus und zeigt lange Bibelstellen in einer bildschirmgerechten, animierten Buchansicht. Die Online-Nutzungsbedingungen erhalten außerdem einen Sprachumschalter für alle Anwendungssprachen.","en":"Version 0.57.0 refines timer and keyboard navigation in single preview, expands radio stations into a dedicated dialog, and presents long Bible passages in a responsive animated book view. The online terms also gain a language switcher for every application language."}},
         "sections": {
           "new": [{"label":{"de":"Mehrseitige Bibelanzeige","en":"Paged Bible display"},"text":{"de":"Bibeltexte erscheinen auf einem eigenständigen Buchhintergrund mit responsiver Typografie und dezenter Seitenanimation. Lange Stellen werden nur zwischen Versen getrennt und lassen sich im Bedienbereich manuell vor- und zurückschalten.","en":"Bible passages appear on a dedicated book background with responsive typography and a subtle page animation. Long passages split only between verses and can be advanced manually from the operator controls."}},{"label":{"de":"Radio-Wiedergabestatus","en":"Radio playback status"},"text":{"de":"Der eigenständige Radiosender-Dialog zeigt Laden, Wiedergabe und Fehler am unteren Rand. Verfügbare Senderbilder und vom System gemeldete Live-Titel werden dort ebenfalls dargestellt.","en":"The dedicated radio dialog shows loading, playback, and error states at the bottom. Available station artwork and live titles reported by the system are displayed there as well."}}],

@@ -46,6 +46,7 @@ interface PreferencesState {
   inputGain:number;
   noiseSuppression:boolean;
   echoCancellation:boolean;
+  playAudioInPreview:boolean;
   audioEqualizer:AudioEqualizerSettings;
   audioRouting:AudioRouting;
   timelineThumbnails:boolean;
@@ -85,6 +86,7 @@ interface PreferencesState {
   setInputGain:(value:number)=>void;
   setNoiseSuppression:(value:boolean)=>void;
   setEchoCancellation:(value:boolean)=>void;
+  setPlayAudioInPreview:(value:boolean)=>void;
   setAudioEqualizer:(patch:Partial<AudioEqualizerSettings>)=>void;
   setAudioDefaultOutput:(deviceId:string)=>void;
   setAudioRoute:(route:AudioRoute,patch:Partial<AudioRouteConfig>)=>void;
@@ -113,7 +115,7 @@ function detectedLanguage():Language{
 }
 
 export function migratePreferencesForV44(persisted:unknown){
-  return {...(persisted&&typeof persisted==='object'?persisted:{}),operatorScale:3 as const};
+  return {playAudioInPreview:true,...(persisted&&typeof persisted==='object'?persisted:{}),operatorScale:3 as const};
 }
 
 export const usePreferences=create<PreferencesState>()(persist(set=>({
@@ -140,6 +142,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   inputGain:100,
   noiseSuppression:true,
   echoCancellation:true,
+  playAudioInPreview:true,
   audioEqualizer:{mode:'standard',bands:[0,0,0,0,0,0,0,0,0,0]},
   audioRouting:defaultAudioRouting,
   timelineThumbnails:true,
@@ -179,6 +182,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setInputGain:inputGain=>set({inputGain}),
   setNoiseSuppression:noiseSuppression=>set({noiseSuppression}),
   setEchoCancellation:echoCancellation=>set({echoCancellation}),
+  setPlayAudioInPreview:playAudioInPreview=>set({playAudioInPreview}),
   setAudioEqualizer:patch=>set(state=>{const current=state.audioEqualizer??{mode:'standard' as AudioEqualizerMode,bands:[0,0,0,0,0,0,0,0,0,0]};return{audioEqualizer:{...current,...patch,bands:patch.bands??current.bands}}}),
   setAudioDefaultOutput:deviceId=>set(state=>({audioRouting:{...defaultAudioRouting,...state.audioRouting,defaultOutputDeviceId:deviceId}})),
   setAudioRoute:(route,patch)=>set(state=>({audioRouting:{...defaultAudioRouting,...state.audioRouting,[route]:{...defaultAudioRouting[route],...state.audioRouting?.[route],...patch}}})),
@@ -196,4 +200,4 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setAiEnabled:aiEnabled=>set({aiEnabled}),
   setPublicInterest:patch=>set(state=>({publicInterest:{...state.publicInterest,...patch,durationSeconds:Math.max(8,Math.min(30,patch.durationSeconds??state.publicInterest.durationSeconds))}})),
   setSharedDeviceSecurity:patch=>set(patch)
-}),{name:'gottesdienstregie.preferences',version:44,migrate:persisted=>migratePreferencesForV44(persisted)}));
+}),{name:'gottesdienstregie.preferences',version:58,migrate:persisted=>migratePreferencesForV44(persisted)}));

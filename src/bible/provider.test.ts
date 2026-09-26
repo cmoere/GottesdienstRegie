@@ -1,5 +1,5 @@
 import {describe,expect,it,vi} from 'vitest';
-import {BIBLE_BOOKS,chapterCountForBook,fetchBiblePassage,fetchBibleTranslations,fetchWorkerBiblePassage,searchBibleBooks} from './provider';
+import {BIBLE_BOOKS,chapterCountForBook,fetchBiblePassage,fetchBibleTranslations,fetchWorkerBiblePassage,loadBibleTranslations,searchBibleBooks} from './provider';
 
 describe('Bible passage provider',()=>{
   it('loads and normalizes a selected passage for the MAIN quick action',async()=>{
@@ -41,5 +41,13 @@ describe('Bible passage provider',()=>{
     expect(fetcher).toHaveBeenCalledWith('https://bibelstelle.crbnm06.workers.dev/text?ref=Johannes+3%2C16-17&lang=de&v=glm',expect.objectContaining({headers:{accept:'text/plain'}}));
     expect(passage.verses).toEqual([{number:16,text:'Also hat Gott die Welt geliebt.'},{number:17,text:'Denn Gott sandte seinen Sohn.'}]);
     expect(passage.translation).toContain('Lutherbibel 1984');
+  });
+
+  it('merges public translation providers and removes duplicate ids',async()=>{
+    const fetcher=vi.fn(async(input:string|URL|Request)=>String(input).includes('/versions')
+      ?new Response(JSON.stringify({versions:[{code:'kjv',label:'King James Version',language:'en'},{code:'glm',label:'Luther modern',language:'de'}]}),{status:200})
+      :new Response(JSON.stringify({kjv:{translation:'KJV duplicate',abbreviation:'kjv',language:'English'},web:{translation:'World English Bible',abbreviation:'web',language:'English'}}),{status:200}));
+    const translations=await loadBibleTranslations(fetcher as typeof fetch);
+    expect(translations.map(entry=>entry.id)).toEqual(['glm','kjv','web']);
   });
 });
