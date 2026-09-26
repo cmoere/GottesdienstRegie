@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const pkg=require('../package.json'),releases=require('../public/releases.json');
+assert.equal(pkg.version,'0.59.0');
+assert.equal(releases.versions.flatMap(entry=>entry.builds).filter(entry=>entry.current).length,1);
+assert.ok(releases.versions.flatMap(entry=>entry.builds).some(entry=>entry.version==='0.59.0'&&entry.current));
+assert.match(fs.readFileSync('src/App.tsx','utf8'),/deriveAudioTimeline/);
+assert.match(fs.readFileSync('src/App.tsx','utf8'),/BACKGROUND AUDIO STOPPEN/);
+assert.match(fs.readFileSync('src/MediaBrowser.tsx','utf8'),/generatorNegativePrompt/);
+assert.match(fs.readFileSync('src/MediaBrowser.tsx','utf8'),/generatorMotion/);
+assert.match(fs.readFileSync('src/version59.css','utf8'),/audio-timeline-active/);
+console.log('Version 0.59 checks passed.');

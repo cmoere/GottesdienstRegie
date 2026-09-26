@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.59",
+      "builds": [{
+        "version": "0.59.0",
+        "releaseDate": "2026-09-26",
+        "current": true,
+        "overview": {"label":{"de":"Sichtbarer Audioverlauf und erweiterte KI-Motive","en":"Visible audio timeline and expanded AI motifs"},"text":{"de":"Version 0.59.0 kennzeichnet laufendes Hintergrund-Audio über alle betroffenen Folien, ergänzt eindeutige Stop-Cues und erweitert die lokale Bild- und Videoerstellung um Format-, Qualitäts- und Bewegungsoptionen.","en":"Version 0.59.0 marks running background audio across every affected slide, adds clear stop cues, and expands local image and video creation with aspect, quality, and motion controls."}},
+        "sections": {
+          "new": [{"label":{"de":"Audioverlauf im Ablauf","en":"Audio timeline in the service plan"},"text":{"de":"Eine dezente blaue Kennzeichnung folgt dem geplanten Hintergrund-Audio vom Start über alle betroffenen Elemente und Folien bis zum konfigurierten Ende.","en":"A subtle blue marker follows scheduled background audio from its start across every affected item and slide to its configured end."}},{"label":{"de":"Erweiterte Medienerstellung","en":"Expanded media creation"},"text":{"de":"Seitenverhältnis, Qualitätsstufe, Negativbeschreibung und drei Video-Bewegungsarten stehen direkt im KI-Motiv-Arbeitsbereich bereit.","en":"Aspect ratio, quality, negative prompts, and three video motion modes are now available directly in the AI motif workspace."}}],
+          "improved": [{"label":{"de":"Eindeutige Audio-Stopps","en":"Unambiguous audio stops"},"text":{"de":"Stop-Cues erscheinen rot mit Lautsprecher und X. Neues Audio am selben Element löst einen alten Stop-Cue automatisch auf.","en":"Stop cues appear in red with a speaker and X. Assigning new audio to the same item automatically clears an old stop cue."}},{"label":{"de":"Mehr Varianten","en":"More variation"},"text":{"de":"Neue Seeds, Ausschnitte, Farbabstimmungen und Bewegungsprofile erzeugen klarer unterscheidbare Bild- und Videovarianten.","en":"New seeds, crops, color treatments, and motion profiles create more visibly distinct image and video variants."}}],
+          "fixed": [],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.58",
       "builds": [{
         "version": "0.58.0",
         "releaseDate": "2026-09-26",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Kontrolliertes Vorschau-Audio und bessere Bibelwerkzeuge","en":"Controlled preview audio and improved Bible tools"},"text":{"de":"Version 0.58.0 ergänzt eine globale Vorschau-Audioregel, einen sicheren Folien-Dauermodus, mehr gruppierte Bibelübersetzungen, einen responsiven Bibeldialog und vollständig lokalisierte Nutzungsansichten.","en":"Version 0.58.0 adds a global preview-audio policy, a safe continuous-slide mode, more grouped Bible translations, a responsive Bible dialog, and fully localized terms views."}},
         "sections": {
           "new": [{"label":{"de":"Audio nur bei ON AIR","en":"Audio only while ON AIR"},"text":{"de":"Eine standardmäßig aktive Einstellung erlaubt Radio und Background Audio in der Vorschau. Wird sie ausgeschaltet, startet automatische Wiedergabe erst bei ON AIR; manuelles Vorhören bleibt möglich.","en":"A default-on setting allows radio and background audio during preview. When disabled, automatic playback starts only while ON AIR; deliberate audition remains available."}},{"label":{"de":"Folien-Dauermodus","en":"Continuous slide mode"},"text":{"de":"Der Zeitkreis kann angeklickt werden, um automatisches Weiterschalten bis zu einem erneuten Klick auszusetzen.","en":"The timer ring can be clicked to suspend automatic advance until it is clicked again."}}],

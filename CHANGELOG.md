@@ -1,5 +1,14 @@
 # Versionshinweise / Release notes
 
+## 0.59.0 – Sichtbarer Audioverlauf und erweiterte KI-Motive
+
+- Folien mit laufendem Hintergrund-Audio werden im Ablauf und in der Folienübersicht dezent blau markiert.
+- Audio-Start, Weiterlauf und Stop-Cue werden aus der tatsächlichen Abschnittsreihenfolge berechnet.
+- „Hintergrund-Audio stoppen“ setzt einen deutlich roten Lautsprecher mit X; neues Audio am selben Element löst den Stop-Cue auf.
+- KI-Motive bieten Seitenverhältnis, Qualitätsstufe und eine Negativbeschreibung.
+- KI-Videos unterstützen Sanfter Zoom, Kamerafahrt und Parallax-Bewegung.
+- Neu generierte Varianten verwenden weiterhin wechselnde Seeds und müssen vor dem Speichern bestätigt werden.
+
 ## 0.58.0 – Vorschau-Audio, Bibelwerkzeuge und lokalisierte Bedingungen
 
 - Radio und verknüpftes Background Audio lassen sich in der Vorschau global deaktivieren; ON AIR und bewusstes Vorhören bleiben verfügbar.

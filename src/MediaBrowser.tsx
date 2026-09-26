@@ -5,6 +5,7 @@ import {deleteMethodFor,isAiGenerated,sortRecentlyUsed,validateMediaName} from "
 import {AiGenerationStatus} from './AiGenerationStatus';
 import {minimumGenerationDelay} from './release53Model';
 import {nextGenerationSeed} from './release54Model';
+import {generatorDimensions,videoMotionTransform,type GeneratorAspectRatio,type GeneratorMotion,type GeneratorQuality} from './generatorSettingsModel';
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
     {name}
@@ -213,6 +214,10 @@ export function MediaBrowser() {
       "image",
     ),
     [generatorDuration, setGeneratorDuration] = useState(30),
+    [generatorNegativePrompt,setGeneratorNegativePrompt]=useState("Schrift, Logos, Wasserzeichen, erkennbare Personen, unscharfe Details"),
+    [generatorAspectRatio,setGeneratorAspectRatio]=useState<GeneratorAspectRatio>("16:9"),
+    [generatorQuality,setGeneratorQuality]=useState<GeneratorQuality>("high"),
+    [generatorMotion,setGeneratorMotion]=useState<GeneratorMotion>("zoom"),
     [generating, setGenerating] = useState(false),
     [generatedDraft,setGeneratedDraft]=useState<CloudMediaAsset|null>(null),
     [generatorError, setGeneratorError] = useState(""),
@@ -580,7 +585,7 @@ export function MediaBrowser() {
     const generationStarted=performance.now();
     let draft:CloudMediaAsset|null=null;
     const nonce = Date.now() + Math.floor(Math.random() * 100000),
-      seed = nextGenerationSeed(generatorPrompt,generatorScene,generatorStyle,nonce),
+      seed = nextGenerationSeed(`${generatorPrompt}\u0000${generatorNegativePrompt}`,generatorScene,generatorStyle,nonce),
       hue = seed % 360,
       offset =
         generatorStyle === "bold"
@@ -595,6 +600,7 @@ export function MediaBrowser() {
       safe = generatorPrompt.replace(/[<>&"']/g, "").slice(0, 500),
       dark = ["dark", "ocean", "aurora"].includes(generatorStyle),
       light = ["light", "paper"].includes(generatorStyle),
+      dimensions=generatorDimensions(generatorAspectRatio,generatorOutput),
       geometry =
         generatorStyle === "geometric"
           ? `<g opacity=".26"><path d="M0 0L700 0L180 1080H0Z" fill="#fff"/><path d="M1920 0H1420L1740 1080H1920Z" fill="#000"/></g>`
@@ -613,15 +619,15 @@ export function MediaBrowser() {
       church:
         '<g fill="#111c27" opacity=".58"><path d="M1160 900V390L1460 180L1760 390V900Z"/><path d="M420 900V510H920V900Z"/></g><path d="M1390 900V610Q1460 500 1530 610V900Z" fill="#fff" opacity=".16"/>',
     };
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="hsl(${hue} ${light ? 28 : 55}% ${dark ? 11 : light ? 88 : 30}%)"/><stop offset="1" stop-color="hsl(${hue2} ${light ? 38 : 68}% ${dark ? 24 : light ? 72 : 54}%)"/></linearGradient><filter id="b"><feGaussianBlur stdDeviation="${generatorStyle === "minimal" ? 120 : 75}"/></filter></defs><rect width="1920" height="1080" fill="url(#g)"/>${geometry}<g opacity="${generatorStyle === "minimal" ? ".22" : ".52"}" filter="url(#b)"><circle cx="${240 + (seed % 620)}" cy="${160 + (seed % 260)}" r="${260 + (seed % 180)}" fill="hsl(${(hue + 130) % 360} 72% 64%)"/><circle cx="${1250 + (seed % 400)}" cy="${480 + (seed % 310)}" r="${340 + (seed % 170)}" fill="hsl(${(hue2 + 90) % 360} 72% 56%)"/></g>${scenes[generatorScene] ?? ""}<path d="M0 850 Q480 ${500 + (seed % 210)} 960 820 T1920 ${620 + (seed % 150)} V1080 H0Z" fill="${light ? "#fff" : "#000"}" opacity=".12"/><metadata>${safe}</metadata></svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${dimensions.width}" height="${dimensions.height}" viewBox="0 0 1920 1080"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="hsl(${hue} ${light ? 28 : 55}% ${dark ? 11 : light ? 88 : 30}%)"/><stop offset="1" stop-color="hsl(${hue2} ${light ? 38 : 68}% ${dark ? 24 : light ? 72 : 54}%)"/></linearGradient><filter id="b"><feGaussianBlur stdDeviation="${generatorStyle === "minimal" ? 120 : 75}"/></filter></defs><rect width="1920" height="1080" fill="url(#g)"/>${geometry}<g opacity="${generatorStyle === "minimal" ? ".22" : ".52"}" filter="url(#b)"><circle cx="${240 + (seed % 620)}" cy="${160 + (seed % 260)}" r="${260 + (seed % 180)}" fill="hsl(${(hue + 130) % 360} 72% 64%)"/><circle cx="${1250 + (seed % 400)}" cy="${480 + (seed % 310)}" r="${340 + (seed % 170)}" fill="hsl(${(hue2 + 90) % 360} 72% 56%)"/></g>${scenes[generatorScene] ?? ""}<path d="M0 850 Q480 ${500 + (seed % 210)} 960 820 T1920 ${620 + (seed % 150)} V1080 H0Z" fill="${light ? "#fff" : "#000"}" opacity=".12"/><metadata>${safe}; vermeiden: ${generatorNegativePrompt.replace(/[<>&"']/g,"").slice(0,300)}</metadata></svg>`;
     setGenerating(true);
     setGeneratedDraft(null);
     setGeneratorError("");
     try {
       if (generatorOutput === "video") {
         const canvas = document.createElement("canvas");
-        canvas.width = 1280;
-        canvas.height = 720;
+        canvas.width = dimensions.width;
+        canvas.height = dimensions.height;
         const context = canvas.getContext("2d")!,
           photoSource = generatorPhotoSources[generatorScene],
           photo = photoSource ? await loadGeneratorPhoto(photoSource) : null,
@@ -645,15 +651,15 @@ export function MediaBrowser() {
         await new Promise<void>((resolve) => {
           const draw = (now: number) => {
             const progress = (now - started) / (generatorDuration * 1000),
-              gradient = context.createLinearGradient(0, 0, 1280, 720);
+              gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
             if (photo) {
               context.save();
-              const zoom = 1.02 + Math.sin(progress * Math.PI) * 0.035;
-              context.translate(640, 360);
-              context.scale(zoom, zoom);
-              context.translate(-640, -360);
+              const motion=videoMotionTransform(generatorMotion,progress,seed);
+              context.translate(canvas.width/2+motion.x,canvas.height/2+motion.y);
+              context.scale(motion.scale, motion.scale);
+              context.translate(-canvas.width/2,-canvas.height/2);
               context.filter=`hue-rotate(${seed%31-15}deg) saturate(${.92+(seed%21)/100})`;
-              drawCover(context, photo, 1280, 720);
+              drawCover(context, photo, canvas.width, canvas.height);
               context.filter='none';
               context.restore();
               context.fillStyle = dark
@@ -661,7 +667,7 @@ export function MediaBrowser() {
                 : light
                   ? "#fff2d52b"
                   : "#0b263038";
-              context.fillRect(0, 0, 1280, 720);
+              context.fillRect(0, 0, canvas.width, canvas.height);
             } else {
               gradient.addColorStop(
                 0,
@@ -672,13 +678,13 @@ export function MediaBrowser() {
                 `hsl(${(hue2 + progress * 24) % 360} 70% ${dark ? 25 : 55}%)`,
               );
               context.fillStyle = gradient;
-              context.fillRect(0, 0, 1280, 720);
+              context.fillRect(0, 0, canvas.width, canvas.height);
               for (let index = 0; index < 7; index++) {
                 context.beginPath();
                 context.fillStyle = `hsla(${(hue + index * 42) % 360} 75% 65% / .16)`;
                 context.arc(
-                  180 + index * 190 + Math.sin(progress * 6.28 + index) * 55,
-                  220 + Math.cos(progress * 6.28 + index) * 90,
+                  canvas.width*.14 + index * canvas.width*.145 + Math.sin(progress * 6.28 + index) * canvas.width*.043,
+                  canvas.height*.31 + Math.cos(progress * 6.28 + index) * canvas.height*.125,
                   120 + index * 12,
                   0,
                   Math.PI * 2,
@@ -706,6 +712,8 @@ export function MediaBrowser() {
             tags: [
               "KI-generiert",
               `${generatorDuration} Sekunden`,
+              generatorAspectRatio,
+              generatorMotion,
               "Videohintergrund",
               generatorScenes.find(
                 (entry) => entry[0] === generatorScene,
@@ -724,16 +732,16 @@ export function MediaBrowser() {
         if (photoSource) {
           const photo = await loadGeneratorPhoto(photoSource),
             canvas = document.createElement("canvas");
-          canvas.width = 1920;
-          canvas.height = 1080;
+          canvas.width = dimensions.width;
+          canvas.height = dimensions.height;
           const context = canvas.getContext("2d")!;
           context.filter=`hue-rotate(${seed%31-15}deg) saturate(${.92+(seed%21)/100})`;
           const mirror=seed%2===0?-1:1,zoom=1.04+(seed%17)/100,shiftX=(seed%241)-120,shiftY=((seed>>>8)%161)-80;
-          context.translate(960+shiftX,540+shiftY);
+          context.translate(canvas.width/2+shiftX,canvas.height/2+shiftY);
           context.scale(mirror*zoom,zoom);
           context.rotate((((seed>>>16)%9)-4)*Math.PI/360);
-          context.translate(-960,-540);
-          drawCover(context, photo, 1920, 1080);
+          context.translate(-canvas.width/2,-canvas.height/2);
+          drawCover(context, photo, canvas.width, canvas.height);
           context.setTransform(1,0,0,1,0,0);
           context.filter='none';
           context.fillStyle = dark
@@ -741,8 +749,8 @@ export function MediaBrowser() {
             : light
               ? "#fff2d52b"
               : "#0b26302b";
-          context.fillRect(0, 0, 1920, 1080);
-          url = canvas.toDataURL("image/jpeg", 0.92);
+          context.fillRect(0, 0, canvas.width, canvas.height);
+          url = canvas.toDataURL("image/jpeg", generatorQuality==='high'?0.94:0.82);
           extension = "JPEG";
           size = Math.round(url.length * 0.75);
         }
@@ -761,6 +769,8 @@ export function MediaBrowser() {
               generatorScene,
             generatorStyles.find((entry) => entry[0] === generatorStyle)?.[1] ??
               generatorStyle,
+            generatorAspectRatio,
+            generatorQuality==='high'?'Hohe Qualität':'Standardqualität',
           ],
           aiGenerated: true,
           extension,
@@ -1429,7 +1439,13 @@ export function MediaBrowser() {
               </label>
             )}
           </div>
-          <aside className="generator-live-preview" aria-label="Motivvorschau">
+          <div className="generator-advanced-grid">
+            <label>Seitenverhältnis<select value={generatorAspectRatio} onChange={event=>setGeneratorAspectRatio(event.target.value as GeneratorAspectRatio)}><option>16:9</option><option>4:3</option><option>1:1</option><option>9:16</option></select></label>
+            <label>Qualität<select value={generatorQuality} onChange={event=>setGeneratorQuality(event.target.value as GeneratorQuality)}><option value="standard">Standard</option><option value="high">Hoch</option></select></label>
+            <label className="generator-motion">Nicht anzeigen<textarea rows={2} maxLength={300} value={generatorNegativePrompt} onChange={event=>setGeneratorNegativePrompt(event.target.value)} placeholder="Unerwünschte Inhalte, Stilmittel oder Objekte"/><small>{generatorNegativePrompt.length} / 300 Zeichen</small></label>
+            {generatorOutput==='video'&&<label>Bewegung<select value={generatorMotion} onChange={event=>setGeneratorMotion(event.target.value as GeneratorMotion)}><option value="zoom">Sanfter Zoom</option><option value="pan">Kamerafahrt</option><option value="parallax">Parallax</option></select></label>}
+          </div>
+          <aside className={`generator-live-preview ratio-${generatorAspectRatio.replace(':','-')}`} aria-label="Motivvorschau">
             <small className="generator-preview-label">Vorschau</small><div className={`generator-preview-art style-${generatorStyle}${generatedDraft?' has-result':''}`}>
               {generatedDraft?.kind==='image'?<img src={generatedDraft.downloadUrl} alt="Erstelltes KI-Motiv"/>:generatedDraft?.kind==='video'?<video src={generatedDraft.downloadUrl} autoPlay muted loop playsInline/>:<><Icon name={generatorOutput==='video'?'movie':'image'}/><strong>VORSCHAU</strong><span>{generatorScenes.find(([value])=>value===generatorScene)?.[1]}</span><small>{generatorStyles.find(([value])=>value===generatorStyle)?.[1]}</small></>}
               {generating&&<span className="generator-mini-spinner" role="status" aria-label="Motiv wird erstellt"/>}

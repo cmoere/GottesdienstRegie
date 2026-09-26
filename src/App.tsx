@@ -118,6 +118,7 @@ import { WEB_EDITOR_URL } from "./platformLinks";
 import {BibleTextDialog} from './BibleTextDialog';
 import {shouldApplyOutputRevision} from './release54Model';
 import {firstActiveTarget} from './release53Model';
+import {deriveAudioTimeline, type AudioTimelineEntry} from './audioTimelineModel';
 import { allEditorFonts as editorFonts, fontStack } from "./fonts";
 import {
   getChurchEvent,
@@ -1448,6 +1449,7 @@ function SortableItem({
   onContext,
   onAudio,
   canEdit,
+  audioTimeline,
 }: {
   item: ServiceItem;
   active: boolean;
@@ -1457,6 +1459,7 @@ function SortableItem({
   onContext: (event: React.MouseEvent) => void;
   onAudio: (event: React.MouseEvent<HTMLButtonElement>) => void;
   canEdit: boolean;
+  audioTimeline?: AudioTimelineEntry;
 }) {
   const { t } = useI18n();
   const state = usePresentation(),
@@ -1531,7 +1534,8 @@ function SortableItem({
       role="button"
       tabIndex={0}
       aria-selected={active}
-      className={`service-item ${active ? "active" : ""} ${live ? "live-item" : ""} ${!item.enabled ? "disabled-slide" : ""} ${isDragging ? "dragging" : ""}`}
+      className={`service-item ${active ? "active" : ""} ${live ? "live-item" : ""} ${!item.enabled ? "disabled-slide" : ""} ${isDragging ? "dragging" : ""} ${audioTimeline ? `audio-timeline-${audioTimeline.state}` : ""}`}
+      title={audioTimeline ? `${audioTimeline.state === "stops" ? "Background Audio endet" : "Background Audio läuft"} · Start: ${audioTimeline.sourceTitle}` : undefined}
       onClick={onSelect}
       onDoubleClick={onTake}
       onKeyDown={(event) => {
@@ -1568,7 +1572,8 @@ function SortableItem({
           onAudio(event);
         }}
       >
-        <Icon name={item.audioStopCue ? "volume_off" : "volume_up"} />
+        <Icon name={item.audioStopCue ? "speaker_notes_off" : "volume_up"} />
+        {item.audioStopCue && <i className="audio-stop-x">×</i>}
         {!!item.backgroundAudio?.tracks.length&&<small className="audio-track-count">{item.backgroundAudio.tracks.length}</small>}
       </button>
       {editingDuration ? (
@@ -2740,7 +2745,8 @@ export function OrderOfService({
     state = usePresentation(),
     items = state.items,
     selected = state.selectedItemId,
-    live = state.liveItemId;
+    live = state.liveItemId,
+    audioTimeline = useMemo(() => deriveAudioTimeline(state.sections, items), [state.sections, items]);
   const theme = usePreferences((value) => value.theme),
     storedServiceShortcuts = usePreferences((value) => value.keyboardShortcuts),
     serviceShortcuts = useMemo(
@@ -3195,6 +3201,7 @@ export function OrderOfService({
                         }
                         live={live === item.id}
                         canEdit={canEdit}
+                        audioTimeline={audioTimeline[item.id]}
                         onSelect={(event) => selectItem(event, item)}
                         onTake={()=>{const first=item.slides.find(slide=>slide.enabled);if(state.onAir&&first)state.goLive(item.id,first.id)}}
                         onAudio={(event) =>
@@ -3262,7 +3269,7 @@ export function OrderOfService({
                 setAudioMenu(null);
               }}
             >
-              <Icon name="volume_off" />{" "}
+              <Icon name="speaker_notes_off" />{" "}
               {items.find((item) => item.id === audioMenu.targetId)
                 ?.audioStopCue
                 ? "STOP-CUE ENTFERNEN"
@@ -3625,6 +3632,7 @@ function Workspace({
 }) {
   const { t } = useI18n();
   const state = usePresentation();
+  const audioTimeline = useMemo(() => deriveAudioTimeline(state.sections, state.items), [state.sections, state.items]);
   const itemId =
       state.mode === "preview" ? state.previewItemId : state.selectedItemId,
     slideId =
@@ -3717,7 +3725,8 @@ function Workspace({
                           return (
                             <div
                               key={current.id}
-                              className={`grid-slide ${preview ? "selected" : ""} ${live ? "live-slide" : ""} ${!canTakeLive ? "disabled-slide" : ""}`}
+                              className={`grid-slide ${preview ? "selected" : ""} ${live ? "live-slide" : ""} ${!canTakeLive ? "disabled-slide" : ""} ${audioTimeline[entry.id] ? `audio-timeline-${audioTimeline[entry.id].state}` : ""}`}
+                              title={audioTimeline[entry.id] ? `${audioTimeline[entry.id].state === "stops" ? "Background Audio endet" : "Background Audio läuft"} · Start: ${audioTimeline[entry.id].sourceTitle}` : undefined}
                             >
                               <button
                                 className="thumbnail-hit"

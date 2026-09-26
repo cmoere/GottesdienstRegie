@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.59.0
+
+Version 0.59.0 macht Hintergrund-Audio schon bei der Ablaufplanung sichtbar. Beginnt Audio im Vorprogramm, an einem Abschnitt oder an einem einzelnen Element, werden alle davon betroffenen Ablaufzeilen und Folien dezent blau gekennzeichnet. Die Markierung folgt der konfigurierten Laufzeit und endet am Abschnittsende, nach dem Element oder an einem ausdrücklichen Stop-Cue.
+
+Das Lautsprechermenü bietet dafür „Hintergrund-Audio stoppen“. Ein solcher Punkt wird mit einem roten Lautsprechersymbol und einem X dargestellt. Wird am gleichen Element später neues Audio eingerichtet, entfernt die Anwendung den widersprüchlichen Stop-Cue automatisch.
+
+Die lokale Bild- und Videoerstellung besitzt zusätzliche Gestaltungsoptionen. Neben Motiv, Szene und Stil lassen sich nun Seitenverhältnis, Qualitätsstufe und unerwünschte Inhalte festlegen. Videohintergründe unterstützen sanften Zoom, Kamerafahrt oder Parallax-Bewegung. Unterschiedliche Seeds, Bildausschnitte und Farbvarianten sorgen für sichtbar unterschiedliche Ergebnisse; Vorschau und Bestätigung vor dem Speichern bleiben erhalten.
+
+Automatisierte Tests prüfen den Audioverlauf über mehrere Elemente und Abschnittsgrenzen, die Stop-Cue-Auflösung sowie Seitenverhältnisse und Bewegungsprofile der Medienerstellung.
+
+---
+
 # GottesdienstRegie 0.58.0
 
 Version 0.58.0 erweitert die Audiosteuerung, Bibelauswahl und Einzelvorschau. Unter Einstellungen → Audio entscheidet eine standardmäßig aktive Option, ob verknüpftes Radio und Background Audio bereits in der Vorschau automatisch wiedergegeben werden. Ist sie deaktiviert, beginnt die automatische Wiedergabe erst bei ON AIR; bewusstes Vorhören bleibt für die technische Kontrolle verfügbar. Konfigurierte Lautsprechersymbole erscheinen ausgefüllt und zeigen zusätzlich die Anzahl hinterlegter Titel.
