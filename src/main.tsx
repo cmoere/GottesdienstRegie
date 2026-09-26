@@ -36,6 +36,7 @@ import './song-editor.css';
 import './web-editor.css';
 import './version53.css';
 import './version54.css';
+import './version55.css';
 
 class AppErrorBoundary extends React.Component<React.PropsWithChildren,{error:string|null}>{
   state:{error:string|null}={error:null};

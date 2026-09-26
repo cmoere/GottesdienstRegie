@@ -1,0 +1,2 @@
+.bible-reference-fields>label>small{display:block;margin-top:5px;color:var(--muted);font-size:10px}.bible-reference-fields>small{display:block;margin:-4px 0 10px;color:var(--muted);font-size:10px;line-height:1.4}.menu-root>.menu-popup{max-height:calc(100vh - 42px);overflow-y:auto;min-height:36px}.menu-root>.menu-popup:empty::after{content:"Elemente konnten nicht geladen werden.";display:block;padding:12px;color:var(--danger)}
+@media(max-width:1099px){.production-app .menubar:has(.menu-popup){overflow:visible}.production-app .menu-popup{top:43px}}

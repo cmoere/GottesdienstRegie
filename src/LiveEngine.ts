@@ -7,6 +7,7 @@ import {usePreferences} from './preferences';
 import { stageChordRows } from './songStructure';
 import { buildRenderedSlideSnapshot, cloneRenderedSlideSnapshot } from './renderedSlideSnapshot';
 import {outputRevision} from './release54Model';
+import {attachOutputRevision} from './release55Model';
 
 function withSongOutputs(slide: Slide): Slide {
   const snapshot=structuredClone(slide),item=usePresentation.getState().items.find(item=>item.id===slide.itemId);
@@ -22,7 +23,7 @@ export class LiveEngine{
   private revision=0;
   private lastHash=0;
   async preflight(assignments:Record<string,DisplayRole>,presentation:{hasPresentation:boolean;activeSlideCount:number;media:string[]}):Promise<DesktopPreflight>{const result=await (window.desktop?.preflight(assignments,presentation)??{ok:false,errors:['Die Desktop-Ausgabe ist nicht verfügbar.'],warnings:[]});const state=usePresentation.getState();const warnings=await checkLyricLayouts(state.items,state.lyricScrolling),loopWarnings=loopPreflight(state.items,state.sections).warnings;return {...result,warnings:[...result.warnings,...warnings,...loopWarnings]}}
-  private snapshot(slide:Slide){const state=usePresentation.getState(),item=state.items.find(entry=>entry.id===slide.itemId),rendered=item?cloneRenderedSlideSnapshot(buildRenderedSlideSnapshot(withSongOutputs(slide),item,'main')).slide:structuredClone(withSongOutputs(slide)),hash=outputRevision(rendered);if(hash!==this.lastHash){this.lastHash=hash;this.revision+=1}return Object.assign(rendered,{_outputRevision:this.revision})}
+  private snapshot(slide:Slide){const state=usePresentation.getState(),item=state.items.find(entry=>entry.id===slide.itemId),rendered=item?cloneRenderedSlideSnapshot(buildRenderedSlideSnapshot(withSongOutputs(slide),item,'main')).slide:structuredClone(withSongOutputs(slide)),hash=outputRevision(rendered);if(hash!==this.lastHash){this.lastHash=hash;this.revision+=1}return attachOutputRevision(rendered,this.revision)}
   async start(assignments:Record<string,DisplayRole>,slide:Slide){if(!window.desktop)throw new Error('Die Desktop-Ausgabe ist nicht verfügbar.');return window.desktop.goOnAir(assignments,this.snapshot(slide))}
   async show(slide:Slide){return window.desktop?.sendLiveSlide(this.snapshot(slide))??false}
   async stop(){return window.desktop?.goOffAir()??false}

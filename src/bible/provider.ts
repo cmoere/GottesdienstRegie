@@ -1,5 +1,6 @@
 export type BiblePassageRequest={translation:string;book:string;bookLabel:string;chapter:number;fromVerse:number;toVerse:number};
 export type BiblePassage={reference:string;translation:string;verses:{number:number;text:string}[]};
+export type BibleTranslation={id:string;name:string;language:string};
 
 export const BIBLE_TRANSLATIONS=[
   {id:'luther1545',name:'Luther 1545',language:'Deutsch'},
@@ -14,6 +15,30 @@ const bookRows=[
   ['Genesis','1. Mose'],['Exodus','2. Mose'],['Leviticus','3. Mose'],['Numbers','4. Mose'],['Deuteronomy','5. Mose'],['Joshua','Josua'],['Judges','Richter'],['Ruth','Rut'],['1 Samuel','1. Samuel'],['2 Samuel','2. Samuel'],['1 Kings','1. Könige'],['2 Kings','2. Könige'],['1 Chronicles','1. Chronik'],['2 Chronicles','2. Chronik'],['Ezra','Esra'],['Nehemiah','Nehemia'],['Esther','Ester'],['Job','Hiob'],['Psalms','Psalmen'],['Proverbs','Sprüche'],['Ecclesiastes','Prediger'],['Song of Solomon','Hohelied'],['Isaiah','Jesaja'],['Jeremiah','Jeremia'],['Lamentations','Klagelieder'],['Ezekiel','Hesekiel'],['Daniel','Daniel'],['Hosea','Hosea'],['Joel','Joel'],['Amos','Amos'],['Obadiah','Obadja'],['Jonah','Jona'],['Micah','Micha'],['Nahum','Nahum'],['Habakkuk','Habakuk'],['Zephaniah','Zefanja'],['Haggai','Haggai'],['Zechariah','Sacharja'],['Malachi','Maleachi'],['Matthew','Matthäus'],['Mark','Markus'],['Luke','Lukas'],['John','Johannes'],['Acts','Apostelgeschichte'],['Romans','Römer'],['1 Corinthians','1. Korinther'],['2 Corinthians','2. Korinther'],['Galatians','Galater'],['Ephesians','Epheser'],['Philippians','Philipper'],['Colossians','Kolosser'],['1 Thessalonians','1. Thessalonicher'],['2 Thessalonians','2. Thessalonicher'],['1 Timothy','1. Timotheus'],['2 Timothy','2. Timotheus'],['Titus','Titus'],['Philemon','Philemon'],['Hebrews','Hebräer'],['James','Jakobus'],['1 Peter','1. Petrus'],['2 Peter','2. Petrus'],['1 John','1. Johannes'],['2 John','2. Johannes'],['3 John','3. Johannes'],['Jude','Judas'],['Revelation','Offenbarung'],
 ] as const;
 export const BIBLE_BOOKS=bookRows.map(([id,name])=>({id,name}));
+const chapterCounts=[50,40,27,36,34,24,21,4,31,24,22,25,29,36,10,13,10,42,150,31,12,8,66,52,5,48,12,14,3,9,1,4,7,3,3,3,2,14,4,28,16,24,21,28,16,16,13,6,6,4,4,5,3,6,4,3,1,13,5,5,3,5,1,1,1,22] as const;
+const chapterCountByBook=new Map<string,number>(BIBLE_BOOKS.map((book,index)=>[book.id,chapterCounts[index]]));
+export function chapterCountForBook(book:string){return chapterCountByBook.get(book)??1}
+
+const bookAliases:Record<string,string[]>={
+  Psalms:['ps','psalm'],John:['joh','johannes','jn'],Matthew:['mt','matth'],Mark:['mk'],Luke:['lk'],
+  Revelation:['offb','offenbarung'],Romans:['röm','roemer'],Genesis:['gen','1 mose'],Exodus:['ex','2 mose'],
+};
+
+export function searchBibleBooks(query:string){
+  const needle=query.trim().toLocaleLowerCase('de');
+  if(!needle)return BIBLE_BOOKS;
+  return BIBLE_BOOKS.filter(book=>[book.name,book.id,...(bookAliases[book.id]??[])].some(value=>value.toLocaleLowerCase('de').includes(needle)));
+}
+
+export async function fetchBibleTranslations(fetcher:typeof fetch=fetch):Promise<BibleTranslation[]>{
+  const response=await fetcher('https://api.getbible.net/v2/translations.json',{headers:{accept:'application/json'}});
+  if(!response.ok)throw new Error(`BIBLE_TRANSLATIONS_${response.status}`);
+  const payload=await response.json() as Record<string,{translation?:string;abbreviation?:string;language?:string;lang?:string}>;
+  return Object.values(payload).map(entry=>({id:String(entry.abbreviation??'').trim(),name:String(entry.translation??entry.abbreviation??'').trim(),language:String(entry.language??entry.lang??'').trim()})).filter(entry=>entry.id&&entry.name).sort((a,b)=>{
+    const aGerman=/german|deutsch/i.test(a.language)?0:1,bGerman=/german|deutsch/i.test(b.language)?0:1;
+    return aGerman-bGerman||a.name.localeCompare(b.name,'de');
+  });
+}
 
 export async function fetchBiblePassage(request:BiblePassageRequest,fetcher:typeof fetch=fetch):Promise<BiblePassage>{
   const range=request.fromVerse===request.toVerse?String(request.fromVerse):`${request.fromVerse}-${request.toVerse}`;

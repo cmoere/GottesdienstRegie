@@ -1812,7 +1812,7 @@ function AddPopover({
       targetSectionId ??
       state.items.find((item) => item.id === state.selectedItemId)?.sectionId ??
       "service",
-    activeSection = state.sections.find((section) => section.id === sectionId),
+    activeSection = state.sections.find((section) => section.id === sectionId)??state.sections.find(section=>section.id==='service')??state.sections.find(section=>!isLoopSection(section)),
     sectionCanHostLoop = isLoopSection(activeSection),
     sectionIsLoopTarget = ["pre", "post", "preLoop", "postLoop"].includes(sectionId),
     loopAvailable = sectionCanHostLoop || sectionIsLoopTarget,
@@ -9466,6 +9466,15 @@ function AppShell({
         external: true,
         action: () => void window.desktop?.openExternal(WEB_EDITOR_URL),
       }] : []),
+      {
+        label: "Nutzungsbedingungen",
+        icon: "policy",
+        external: true,
+        action: () => {
+          const url="https://cmoere.github.io/GottesdienstRegie/terms/";
+          if(window.desktop)void window.desktop.openExternal(url);else window.open(url,"_blank","noopener,noreferrer");
+        },
+      },
       {
         label: "Benutzeroberfläche kennenlernen",
         icon: "explore",

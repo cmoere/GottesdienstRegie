@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.55.0
+
+Version 0.55.0 erweitert die neue Bibel-Schnellanzeige zu einem durchsuchbaren Arbeitsablauf. Die Anwendung lädt den öffentlichen Übersetzungskatalog von GetBible und bietet dadurch wesentlich mehr frei verfügbare Ausgaben als die bisher fest eingetragene Startauswahl. Übersetzungen lassen sich nach Name, Sprache oder Kürzel filtern. Die voreingestellte Ausgabe bleibt Luther 1545, sodass der bekannte Ablauf ohne zusätzliche Auswahl erhalten bleibt.
+
+Auch die Stellenwahl wurde genauer und schneller. Bibelbücher werden über deutsche Namen, englische Bezeichnungen und geläufige Kürzel gefunden. Für das gewählte Buch zeigt die Kapitelwahl nur den gültigen Bereich an; Kapitel- und Verseingaben bieten nummerische Vorschläge. Der angeforderte Bereich wird weiterhin erst beim Bibeldienst geprüft und vollständig in der Vorschau angezeigt. Erst eine erfolgreich geladene Vorschau kann auf MAIN eingeblendet werden.
+
+Der Absturz beim Start des Testbetriebs ist behoben. Gerenderte Ausgabesnapshots werden zum Schutz gegen unbeabsichtigte Änderungen unveränderlich gespeichert. Version 0.54.0 versuchte anschließend, die neue Ausgaberevision direkt an dieses eingefrorene Objekt anzuhängen, wodurch „Cannot add property _outputRevision, object is not extensible“ entstand. Version 0.55.0 erzeugt stattdessen eine getrennte, erweiterbare Ausgabekopie. Der unveränderliche Ursprungszustand bleibt geschützt, während Testbetrieb und ON AIR ihre Revision zuverlässig übertragen.
+
+Die Auswahl „Element hinzufügen“ bleibt wieder sichtbar. Wenn eine ältere oder unvollständige Präsentation vorübergehend keinen passenden aktiven Abschnitt liefert, verwendet das Menü einen sicheren Gottesdienst- beziehungsweise Standardbereich. Menüs erhalten außerdem eine eigene maximale Höhe und bleiben bei schmalen Desktop-, Tablet- und Webansichten außerhalb der horizontalen Menüleiste sichtbar. Vor- und Nachprogramm behalten weiterhin ausschließlich ihre vorgesehenen Loop-Elemente.
+
+Die Radiosendersuche verwendet nicht mehr nur einen einzelnen Server. Fällt der bevorzugte Radio-Browser-Knoten aus, werden weitere öffentliche Knoten nacheinander versucht. Die Suche startet zusätzlich mit Enter, sortiert brauchbare Ergebnisse nach Bekanntheit und meldet verständlich, wenn keine erreichbaren HTTPS-Streams gefunden wurden. Sender können weiterhin vorgehört und anschließend als Hintergrundaudio hinzugefügt werden.
+
+Im Menü Hilfe steht nun ein direkter Eintrag „Nutzungsbedingungen“. Er öffnet die eigenständige öffentliche Webfassung; dieselbe Seite ist auch aus der Webanwendung erreichbar. Installer, Anwendung und Onlineansicht verwenden weiterhin den gemeinsamen Inhalt. Automatisierte Regressionstests prüfen den unveränderlichen Live-Snapshot, Bibelbuchsuche, Kapitelgrenzen, Übersetzungskatalog, Radio-Ausweichserver und die Elementauswahl.
+
+---
+
 # GottesdienstRegie 0.54.0
 
 Version 0.54.0 überarbeitet die Rechtschreibprüfung, die Synchronisierung zwischen Bedienvorschau und MAIN, die KI-Motivvarianten und insbesondere die Bibel-Schnellanzeige. Die ausgewählte Anwendungssprache bestimmt nun auch das aktive Wörterbuch. Unbekannte oder falsch geschriebene Wörter werden in editierbaren Feldern rot unterstrichen. Das native Kontextmenü bietet höchstens sechs passende Schreibvorschläge, kann eine Schreibweise dauerhaft lernen oder das markierte Wort mit Google suchen. Rückgängig, Wiederholen, Ausschneiden, Kopieren, Einfügen und Alles auswählen bleiben im selben Menü verfügbar.

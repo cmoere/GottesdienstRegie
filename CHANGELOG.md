@@ -1,5 +1,14 @@
 # Versionshinweise / Release notes
 
+## 0.55.0 – Bibelsuche, stabiler Testbetrieb und wiederhergestellte Werkzeuge
+
+- Bibelübersetzungen werden aus dem öffentlichen Katalog geladen und lassen sich nach Name, Sprache und Kürzel durchsuchen.
+- Bibelbuch, Kapitel und Verse besitzen Such- beziehungsweise Vorschlagslisten und werden vor MAIN validiert.
+- Der Testbetrieb verarbeitet eingefrorene Renderzustände ohne Absturz.
+- Elementmenüs bleiben auch bei fehlender Abschnittsauswahl sichtbar und werden auf kleinen Ansichten nicht mehr abgeschnitten.
+- Die Radiosuche verwendet mehrere Ausweichserver, Suche per Enter und verständliche Fehlermeldungen.
+- Hilfe und Webversion verlinken direkt auf die eigenständigen Online-Nutzungsbedingungen.
+
 ## 0.54.0 – Sprachprüfung, Live-Synchronisierung und neue Bibelanzeige
 
 - Rechtschreibprüfung folgt der ausgewählten Anwendungssprache und bietet höchstens sechs Korrekturvorschläge, Lernen und Google-Suche.

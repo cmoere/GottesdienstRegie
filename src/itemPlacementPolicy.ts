@@ -33,7 +33,7 @@ export function allowedItemTypes(section: ServiceSection | null | undefined): It
     : [...standardItemTypes];
 }
 
-export function menuItemTypesForSection(section: ServiceSection): ItemType[] {
+export function menuItemTypesForSection(section: ServiceSection | null | undefined): ItemType[] {
   return sectionSupportsLoopItems(section) ? [...loopOnlyItemTypes] : [...standardItemTypes];
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "gottesdienstregie",
-  "version": "0.54.0",
+  "version": "0.55.0",
   "description": "Desktop-Regiesoftware für Gottesdienstpräsentationen der Philippusgemeinde.",
   "author": {
     "name": "Philippusgemeinde Ev. Freikirche",
@@ -19,7 +19,7 @@
     "test:web": "playwright test",
     "typecheck": "tsc -b --pretty false",
     "installer": "npm run build && electron-builder --win nsis --publish never",
-    "verify:release": "npm run test:unit && node scripts/check-version54.cjs"
+    "verify:release": "npm run test:unit && node scripts/check-version55.cjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
