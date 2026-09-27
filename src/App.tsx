@@ -123,6 +123,7 @@ import {assistantStore} from './ai/assistantStore';
 import {createAssistantController} from './ai/assistantController';
 import {buildAiContext} from './ai/contextBuilder';
 import {selectAiModelProfile} from './ai/modelProfiles';
+import {AiSettings} from './ai/AiSettings';
 import {deriveAudioTimeline, type AudioTimelineEntry} from './audioTimelineModel';
 import { allEditorFonts as editorFonts, fontStack } from "./fonts";
 import {
@@ -5887,37 +5888,7 @@ function SettingsModal({
                   </section>
                 </>
               ) : tab === "ai" ? (
-                <section>
-                  <h3>Künstliche Intelligenz</h3>
-                  <p>
-                    Steuert KI-Assistent, KI-Motive und weitere KI-gestützte
-                    Funktionen zentral. Bereits gespeicherte Medien bleiben
-                    erhalten.
-                  </p>
-                  <div className="settings-group">
-                    <label className="setting-check">
-                      <input
-                        type="checkbox"
-                        checked={prefs.aiEnabled}
-                        onChange={(e) => {
-                          prefs.setAiEnabled(e.target.checked);
-                          alert(
-                            usePresentation.getState().onAir
-                              ? "Die Änderung wird nach dem nächsten sicheren Neustart wirksam."
-                              : "Neustart erforderlich. Die Änderung wird beim nächsten Programmstart vollständig angewendet.",
-                          );
-                        }}
-                      />
-                      <span>
-                        <b>KI-Funktionen aktivieren</b>
-                        <small>
-                          Aktiviert KI-Assistent, KI-Motive und weitere
-                          KI-gestützte Funktionen in GottesdienstRegie.
-                        </small>
-                      </span>
-                    </label>
-                  </div>
-                </section>
+                <AiSettings supported={Boolean(window.desktop)||('gpu' in navigator)} manager={(window.desktop as any)?.aiModel} clearHistory={()=>assistantStore.setState({messages:[],pendingPlan:undefined})}/>
               ) : tab === "shortcuts" ? (
                 <KeyboardShortcutSettings />
               ) : tab === "rewards" ? (
