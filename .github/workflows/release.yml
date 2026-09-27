@@ -42,7 +42,7 @@ jobs:
       - name: Anwendung bauen
         run: npm run build
       - name: Windows-Installer erstellen
-        run: npx electron-builder --win nsis --publish never
+        run: npm run release:package-ci -- --win nsis --publish never
       - name: Release samt Update-Dateien veröffentlichen
         uses: softprops/action-gh-release@v2
         with:
@@ -65,7 +65,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - run: npx electron-builder --mac dmg zip --x64 --arm64 --publish never
+      - run: npm run release:package-ci -- --mac dmg zip --x64 --arm64 --publish never
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.prepare.outputs.tag }}
@@ -86,7 +86,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - run: npx electron-builder --linux AppImage deb --x64 --publish never
+      - run: npm run release:package-ci -- --linux AppImage deb --x64 --publish never
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.prepare.outputs.tag }}

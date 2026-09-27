@@ -1,0 +1,10 @@
+const {spawn}=require('node:child_process');
+const args=process.argv.slice(2);
+if(!args.length)throw new Error('electron-builder arguments required');
+const command=process.platform==='win32'?'npx.cmd':'npx';
+const child=spawn(command,['electron-builder',...args],{env:process.env,stdio:['inherit','pipe','pipe']});
+let output='';
+const forward=(stream,target)=>stream.on('data',chunk=>{const text=chunk.toString();output=(output+text).slice(-12000);target.write(chunk)});
+forward(child.stdout,process.stdout);forward(child.stderr,process.stderr);
+child.on('error',error=>{console.error(`::error title=Electron packaging failed::${String(error.message).replace(/%/g,'%25').replace(/\r/g,'%0D').replace(/\n/g,'%0A')}`);process.exit(1)});
+child.on('close',code=>{if(code){const detail=output.slice(-4000).replace(/%/g,'%25').replace(/\r/g,'%0D').replace(/\n/g,'%0A');console.error(`::error title=Electron packaging failed::${detail}`)}process.exit(code??1)});
