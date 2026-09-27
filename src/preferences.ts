@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { defaultKeyboardShortcuts, type KeyboardShortcuts, type ShortcutAction } from './shortcuts';
 import { defaultAudioRouting, type AudioRoute, type AudioRouteConfig, type AudioRouting } from './audioRouting';
+import type { AiExecutionMode, AiModelPreference } from './ai/modelProfiles';
 
 export type Language='de'|'gsw'|'en'|'nl'|'da'|'no'|'sv'|'fi'|'fr'|'it'|'es'|'uk'|'ru'|'tr'|'ar'|'pl'|'pt-BR';
 export type ThemeMode='system'|'light'|'dark';
@@ -22,7 +23,25 @@ const defaultQuickScreens:QuickScreenConfig[]=[
   {id:'bible',type:'bible',name:'Bibel einblenden',enabled:true,targets:['main'],order:6}
 ];
 
-interface PreferencesState {
+export interface AiAssistantPreferences {
+  modelPreference:AiModelPreference;
+  executionMode:AiExecutionMode;
+  allowMediaSuggestions:boolean;
+  allowTranslations:boolean;
+  includePresentationContext:boolean;
+  clearHistoryOnClose:boolean;
+}
+
+export const defaultAiAssistantPreferences:AiAssistantPreferences={
+  modelPreference:'auto',
+  executionMode:'confirm',
+  allowMediaSuggestions:true,
+  allowTranslations:true,
+  includePresentationContext:true,
+  clearHistoryOnClose:false
+};
+
+export interface PreferencesState {
   songTranslationMode:import('./songTranslation').SongTranslationMode;
   setSongTranslationMode:(mode:import('./songTranslation').SongTranslationMode)=>void;
   language:Language;
@@ -60,6 +79,7 @@ interface PreferencesState {
   ceraProFileName:string;
   unsplashAccessKey:string;
   aiEnabled:boolean;
+  aiAssistant:AiAssistantPreferences;
   publicInterest:PublicInterestSettings;
   sharedDeviceAutoLogout:boolean;
   sharedDeviceTimeoutMinutes:number;
@@ -102,6 +122,7 @@ interface PreferencesState {
   setCeraProFileName:(value:string)=>void;
   setUnsplashAccessKey:(value:string)=>void;
   setAiEnabled:(value:boolean)=>void;
+  setAiAssistant:(patch:Partial<AiAssistantPreferences>)=>void;
   setPublicInterest:(patch:Partial<PublicInterestSettings>)=>void;
   setSharedDeviceSecurity:(patch:Partial<Pick<PreferencesState,'sharedDeviceAutoLogout'|'sharedDeviceTimeoutMinutes'|'logoutAfterOffAir'|'logoutAfterOffAirMinutes'>>)=>void;
 }
@@ -116,6 +137,12 @@ function detectedLanguage():Language{
 
 export function migratePreferencesForV44(persisted:unknown){
   return {playAudioInPreview:true,...(persisted&&typeof persisted==='object'?persisted:{}),operatorScale:3 as const};
+}
+
+export function migratePreferencesForV60(persisted:unknown){
+  const previous=migratePreferencesForV44(persisted) as Record<string,unknown>;
+  const configured=previous.aiAssistant&&typeof previous.aiAssistant==='object'?previous.aiAssistant:{};
+  return {...previous,aiAssistant:{...defaultAiAssistantPreferences,...configured}} as Omit<PreferencesState,keyof PreferencesState&`set${string}`> & {aiAssistant:AiAssistantPreferences};
 }
 
 export const usePreferences=create<PreferencesState>()(persist(set=>({
@@ -156,6 +183,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   ceraProFileName:'',
   unsplashAccessKey:'',
   aiEnabled:true,
+  aiAssistant:{...defaultAiAssistantPreferences},
   publicInterest:{enabled:false,preLoop:true,postLoop:true,durationSeconds:12,interval:5,showQr:true,categories:['blood','volunteering','inclusion','civil-protection','health']},
   sharedDeviceAutoLogout:true,
   sharedDeviceTimeoutMinutes:30,
@@ -198,6 +226,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setCeraProFileName:ceraProFileName=>set({ceraProFileName}),
   setUnsplashAccessKey:unsplashAccessKey=>set({unsplashAccessKey}),
   setAiEnabled:aiEnabled=>set({aiEnabled}),
+  setAiAssistant:patch=>set(state=>({aiAssistant:{...state.aiAssistant,...patch}})),
   setPublicInterest:patch=>set(state=>({publicInterest:{...state.publicInterest,...patch,durationSeconds:Math.max(8,Math.min(30,patch.durationSeconds??state.publicInterest.durationSeconds))}})),
   setSharedDeviceSecurity:patch=>set(patch)
-}),{name:'gottesdienstregie.preferences',version:58,migrate:persisted=>migratePreferencesForV44(persisted)}));
+}),{name:'gottesdienstregie.preferences',version:60,migrate:persisted=>migratePreferencesForV60(persisted)}));
