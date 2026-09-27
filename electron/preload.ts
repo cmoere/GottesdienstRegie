@@ -159,6 +159,10 @@ contextBridge.exposeInMainWorld("desktop", {
     remove:()=>ipcRenderer.invoke('ai:remove-model'),
     onProgress:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('ai:model-progress',listener);return()=>ipcRenderer.removeListener('ai:model-progress',listener)},
   },
+  ai:{
+    generate:(request:unknown)=>ipcRenderer.invoke('ai:generate',request),
+    cancel:()=>ipcRenderer.invoke('ai:cancel-generation'),
+  },
   storage:{
     snapshot:()=>ipcRenderer.invoke('storage:snapshot'),
     clear:(categories:string[])=>ipcRenderer.invoke('storage:clear',categories),

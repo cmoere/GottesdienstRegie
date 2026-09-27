@@ -2,8 +2,10 @@ import type {PresentationDocument} from '../../store';
 import type {PlatformServices} from '../PlatformServices';
 import {desktopCapabilities} from '../capabilities';
 import type {PresentationSummary} from '../types';
+import {ElectronAiService} from './ElectronAiService';
 
 export function createElectronServices(bridge:NonNullable<Window['desktop']>):PlatformServices{
+  const aiBridge=(bridge as unknown as {ai:{generate:(request:unknown)=>Promise<unknown>;cancel:()=>Promise<boolean>}}).ai;
   return {
     target:'desktop',
     capabilities:desktopCapabilities,
@@ -40,6 +42,7 @@ export function createElectronServices(bridge:NonNullable<Window['desktop']>):Pl
       markUsed:id=>bridge.media.markUsed(id),
       status:()=>bridge.media.onlineStatus()
     },
+    ai:new ElectronAiService({generate:request=>aiBridge.generate(request),cancel:()=>aiBridge.cancel()}),
     desktop:{
       displays:()=>bridge.displays(),
       identifyDisplays:assignments=>bridge.identifyDisplays(assignments),

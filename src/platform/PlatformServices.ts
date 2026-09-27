@@ -1,6 +1,7 @@
 import type {AuthSession,LoginResult} from '../auth';
 import type {PresentationDocument} from '../store';
 import type {CapabilityState,MediaAsset,MediaStorageStatus,PlatformCapability,PlatformTarget,PresentationSummary,SaveResult} from './types';
+import type {AiInferenceService} from '../ai/AiInferenceService';
 
 export interface AuthService{
   login(email:string,password:string,remember:boolean):Promise<LoginResult>;
@@ -38,5 +39,6 @@ export interface PlatformServices{
   auth:AuthService;
   presentations:PresentationService;
   media:MediaService;
+  ai:AiInferenceService;
   desktop:DesktopOnlyService;
 }

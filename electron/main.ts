@@ -37,6 +37,8 @@ let controlCloseInProgress=false;
 let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
 let finishClose:()=>Promise<void>=async()=>{};
 let aiModelPreparation:AbortController|null=null;
+let aiGeneration:AbortController|null=null;
+let aiGenerator:{profile:string;run:(input:string,options:Record<string,unknown>)=>Promise<unknown>}|null=null;
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}},{scheme:'gottesdienst-cloud',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 app.on('web-contents-created',(_event,contents)=>{
@@ -356,6 +358,8 @@ app.whenReady().then(async() => {
   ipcMain.handle('ai:prepare-model',async(_event,profile:'eco'|'balanced'|'quality')=>{aiModelPreparation?.abort();aiModelPreparation=new AbortController();try{await aiModelManager.prepare(profile,aiModelPreparation.signal,progress=>controlWindow?.webContents.send('ai:model-progress',progress));return aiModelManager.status()}finally{aiModelPreparation=null}});
   ipcMain.handle('ai:cancel-model',()=>{aiModelPreparation?.abort();return true});
   ipcMain.handle('ai:remove-model',()=>aiModelManager.remove().then(()=>true));
+  ipcMain.handle('ai:generate',async(_event,request:{system:string;prompt:string;context:unknown;profile:'eco'|'balanced'|'quality'})=>{aiGeneration?.abort();aiGeneration=new AbortController();const active=aiGeneration;try{const status=await aiModelManager.status();if(status.state!=='ready'||status.profile!==request.profile||!status.directory)throw new Error('AI_MODEL_NOT_READY');if(!aiGenerator||aiGenerator.profile!==request.profile){const transformers=await import('@huggingface/transformers');transformers.env.allowRemoteModels=false;const generator=await transformers.pipeline('text-generation',status.directory,{dtype:request.profile==='quality'?'fp16':'q4',local_files_only:true}) as unknown as (input:string,options:Record<string,unknown>)=>Promise<unknown>;aiGenerator={profile:request.profile,run:generator}}if(active.signal.aborted)throw new Error('AI_GENERATION_CANCELLED');const input=`${request.system}\n\nKontext:\n${JSON.stringify(request.context)}\n\nAuftrag:\n${request.prompt}`;const result=await aiGenerator.run(input,{max_new_tokens:768,do_sample:false});if(active.signal.aborted)throw new Error('AI_GENERATION_CANCELLED');return result}finally{if(aiGeneration===active)aiGeneration=null}});
+  ipcMain.handle('ai:cancel-generation',()=>{aiGeneration?.abort();return true});
   ipcMain.handle('storage:snapshot',()=>storageMaintenance.snapshot());
   ipcMain.handle('storage:clear',(_event,categories:string[])=>{
     if(outputManager.isActive())throw new Error('STORAGE_CLEAR_ON_AIR');
