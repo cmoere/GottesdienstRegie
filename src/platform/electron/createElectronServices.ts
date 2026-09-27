@@ -6,6 +6,7 @@ import {ElectronAiService} from './ElectronAiService';
 
 export function createElectronServices(bridge:NonNullable<Window['desktop']>):PlatformServices{
   const aiBridge=(bridge as unknown as {ai:{generate:(request:unknown)=>Promise<unknown>;cancel:()=>Promise<boolean>}}).ai;
+  const aiModelBridge=(bridge as unknown as {aiModel?:{status:()=>Promise<{state:string;profile?:string}>;prepare:(profile:'eco'|'balanced'|'quality')=>Promise<unknown>}}).aiModel;
   return {
     target:'desktop',
     capabilities:desktopCapabilities,
@@ -42,7 +43,7 @@ export function createElectronServices(bridge:NonNullable<Window['desktop']>):Pl
       markUsed:id=>bridge.media.markUsed(id),
       status:()=>bridge.media.onlineStatus()
     },
-    ai:new ElectronAiService({generate:request=>aiBridge.generate(request),cancel:()=>aiBridge.cancel()}),
+    ai:new ElectronAiService({generate:request=>aiBridge.generate(request),cancel:()=>aiBridge.cancel()},aiModelBridge),
     desktop:{
       displays:()=>bridge.displays(),
       identifyDisplays:assignments=>bridge.identifyDisplays(assignments),

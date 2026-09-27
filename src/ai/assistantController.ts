@@ -18,6 +18,17 @@ interface Dependencies {
 const message = (role: AiChatMessage['role'], content: string): AiChatMessage => ({ id: crypto.randomUUID(), role, content, createdAt: Date.now() });
 const system = 'Du bist der lokale KI-Helfer von GottesdienstRegie. Antworte ausschließlich als gültiges JSON im freigegebenen Antwortschema. Führe keine externen Aktionen aus und erfinde keine Bibeltexte.';
 
+function unwrapGeneratedResponse(raw: unknown): unknown {
+  const candidate = Array.isArray(raw) && raw.length === 1 && raw[0] && typeof raw[0] === 'object' && 'generated_text' in raw[0]
+    ? (raw[0] as { generated_text: unknown }).generated_text : raw;
+  if (typeof candidate !== 'string') return candidate;
+  const fenced = candidate.match(/```(?:json)?\s*([\s\S]*?)```/i)?.[1];
+  const text = fenced ?? candidate;
+  const start = text.indexOf('{'); const end = text.lastIndexOf('}');
+  if (start < 0 || end < start) return candidate;
+  try { return JSON.parse(text.slice(start, end + 1)); } catch { return candidate; }
+}
+
 export function createAssistantController(dependencies: Dependencies) {
   let active: AbortController | undefined;
   const patch = (value: Partial<ReturnType<typeof dependencies.store.getState>>) => dependencies.store.setState(value);
@@ -35,7 +46,7 @@ export function createAssistantController(dependencies: Dependencies) {
     try {
       const raw = await dependencies.inference.generate({ system, prompt: trimmed, context: dependencies.getContext(), profile: dependencies.getProfile() }, { signal: controller.signal, onProgress: progress => patch({ progress }) });
       if (controller.signal.aborted) return;
-      const response = parseAiAssistantResponse(raw);
+      const response = parseAiAssistantResponse(unwrapGeneratedResponse(raw));
       patch({ messages: [...dependencies.store.getState().messages, message('assistant', response.message)], progress: 100 });
       if (response.plan) dependencies.getExecutionMode() === 'direct' ? apply(response.plan) : patch({ pendingPlan: response.plan });
     } catch (error) {

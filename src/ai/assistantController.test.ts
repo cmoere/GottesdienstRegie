@@ -22,6 +22,12 @@ describe('assistantController', () => {
     expect(store.getState().messages.map(message => message.content)).toEqual(['Frage', 'Lokale Antwort']);
   });
 
+  it('accepts generated-text envelopes from the local ONNX pipeline', async () => {
+    const { controller, store } = setup([{ generated_text: 'prefix\n```json\n{"message":"Erkannte Antwort"}\n```' }]);
+    await controller.send('Frage');
+    expect(store.getState().messages.at(-1)?.content).toBe('Erkannte Antwort');
+  });
+
   it('keeps a proposed plan pending in confirmation mode', async () => {
     const { controller, store, applyPlan } = setup(planned); await controller.send('Prüfen');
     expect(store.getState().pendingPlan?.id).toBe('p1'); expect(applyPlan).not.toHaveBeenCalled();
