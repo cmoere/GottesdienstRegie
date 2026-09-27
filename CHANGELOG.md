@@ -1,5 +1,14 @@
 # Versionshinweise / Release notes
 
+## 0.60.0 – Kostenloser lokaler KI-Helfer
+
+- Lokalen KI-Helfer ohne API-Schlüssel mit automatischer Modellwahl ergänzt.
+- Elf kontextbezogene Schnellaktionen und freie Fragen für Präsentationen hinzugefügt.
+- Striktes Aktionsschema, atomare Änderungen, Bestätigung und Rückgängig-Historie umgesetzt.
+- Persönliche Notizen, Geheimnisse und lokale Pfade aus dem Modellkontext ausgeschlossen.
+- Modellpakete mit Fortschritt, Abbruch, Integritätsprüfung, Aktualisierung und Entfernung ergänzt.
+- Desktop-Inferenz und verständliche Browser-Fallbacks integriert.
+
 ## 0.59.0 – Sichtbarer Audioverlauf und erweiterte KI-Motive
 
 - Folien mit laufendem Hintergrund-Audio werden im Ablauf und in der Folienübersicht dezent blau markiert.

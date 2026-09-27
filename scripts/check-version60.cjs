@@ -1,0 +1,14 @@
+const fs=require('node:fs');
+const assert=(value,message)=>{if(!value)throw new Error(message)};
+const pkg=require('../package.json');
+const releases=JSON.parse(fs.readFileSync('public/releases.json','utf8'));
+const notes=fs.readFileSync('RELEASE_NOTES.md','utf8');
+const workflow=fs.readFileSync('.github/workflows/release.yml','utf8');
+const app=fs.readFileSync('src/App.tsx','utf8');
+assert(pkg.version==='0.60.0','package version must be 0.60.0');
+assert(releases.versions[0]?.builds[0]?.version==='0.60.0'&&releases.versions[0].builds[0].current===true,'0.60.0 must lead public release catalog');
+assert(notes.includes('# GottesdienstRegie 0.60.0'),'release notes must describe 0.60.0');
+assert(workflow.includes('check-version60.cjs'),'release workflow must run V60 guard');
+assert(app.includes('<AiAssistantPanel'),'assistant must be integrated in the app');
+assert(fs.existsSync('src/ai/AiSettings.tsx')&&fs.existsSync('src/ai/modelManifest.ts'),'settings and pinned model manifest are required');
+console.log('Version 60 checks passed.');

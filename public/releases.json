@@ -21,11 +21,26 @@
   ],
   "versions": [
     {
+      "line": "0.60",
+      "builds": [{
+        "version": "0.60.0",
+        "releaseDate": "2026-09-28",
+        "current": true,
+        "overview": {"label":{"de":"Kostenloser lokaler KI-Helfer","en":"Free local AI assistant"},"text":{"de":"Version 0.60.0 ergänzt einen lokalen KI-Helfer ohne API-Schlüssel für Fragen, Entwürfe, Prüfungen und kontrollierte Präsentationsänderungen.","en":"Version 0.60.0 adds a local AI assistant without an API key for questions, drafts, reviews, and controlled presentation changes."}},
+        "sections": {
+          "new": [{"label":{"de":"Lokaler KI-Helfer","en":"Local AI assistant"},"text":{"de":"Elf Schnellaktionen und freie Aufträge helfen bei Ablauf, Texten, Ankündigungen, Bibel- und Songideen, Übersetzungen, Moderation, Gebeten und Stil.","en":"Eleven quick actions and free-form requests assist with planning, text, announcements, Bible and song ideas, translations, moderation, prayers, and style."}},{"label":{"de":"Modelleinstellungen","en":"Model settings"},"text":{"de":"Automatische Modellwahl, Bestätigungsmodus, Berechtigungen, Downloadfortschritt, Aktualisierung, Entfernung und Verlauf lassen sich verwalten.","en":"Automatic model selection, confirmation mode, permissions, download progress, updates, removal, and history can be managed."}}],
+          "improved": [{"label":{"de":"Kontrollierte Änderungen","en":"Controlled changes"},"text":{"de":"Vorschläge werden geprüft, als Vorschau gezeigt und atomar über die gemeinsame Rückgängig-Historie angewendet.","en":"Suggestions are validated, previewed, and applied atomically through the shared undo history."}},{"label":{"de":"Privat und offline","en":"Private and offline"},"text":{"de":"Persönliche Notizen, Geheimnisse und lokale Pfade bleiben außerhalb des Modellkontexts. Nach dem Download arbeitet der Helfer offline.","en":"Personal notes, secrets, and local paths stay out of model context. After download, the assistant works offline."}}],
+          "fixed": [],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.59",
       "builds": [{
         "version": "0.59.0",
         "releaseDate": "2026-09-26",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Sichtbarer Audioverlauf und erweiterte KI-Motive","en":"Visible audio timeline and expanded AI motifs"},"text":{"de":"Version 0.59.0 kennzeichnet laufendes Hintergrund-Audio über alle betroffenen Folien, ergänzt eindeutige Stop-Cues und erweitert die lokale Bild- und Videoerstellung um Format-, Qualitäts- und Bewegungsoptionen.","en":"Version 0.59.0 marks running background audio across every affected slide, adds clear stop cues, and expands local image and video creation with aspect, quality, and motion controls."}},
         "sections": {
           "new": [{"label":{"de":"Audioverlauf im Ablauf","en":"Audio timeline in the service plan"},"text":{"de":"Eine dezente blaue Kennzeichnung folgt dem geplanten Hintergrund-Audio vom Start über alle betroffenen Elemente und Folien bis zum konfigurierten Ende.","en":"A subtle blue marker follows scheduled background audio from its start across every affected item and slide to its configured end."}},{"label":{"de":"Erweiterte Medienerstellung","en":"Expanded media creation"},"text":{"de":"Seitenverhältnis, Qualitätsstufe, Negativbeschreibung und drei Video-Bewegungsarten stehen direkt im KI-Motiv-Arbeitsbereich bereit.","en":"Aspect ratio, quality, negative prompts, and three video motion modes are now available directly in the AI motif workspace."}}],

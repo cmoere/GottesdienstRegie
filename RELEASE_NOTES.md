@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.60.0
+
+Version 0.60.0 führt den kostenlosen lokalen KI-Helfer ohne API-Schlüssel ein. Fragen, Textentwürfe und strukturierte Änderungsvorschläge werden auf dem eigenen Gerät verarbeitet. Die Anwendung wählt im Hintergrund ein passendes Modellprofil; in den Einstellungen können Modell, Bestätigungsmodus und Berechtigungen angepasst werden.
+
+Der Helfer versteht Präsentationskontext, ohne persönliche Notizen, Zugangsdaten oder lokale Dateipfade an das Modell weiterzugeben. Änderungen werden vor dem Anwenden als Vorschau gezeigt oder – auf ausdrücklichen Wunsch – direkt ausgeführt. Jede angewendete Aktion ist atomar und lässt sich über die gemeinsame Präsentationshistorie rückgängig machen.
+
+Elf Schnellaktionen decken Ablaufplanung, Kürzen und Umschreiben, Ankündigungen, Bibel- und Songvorschläge, Präsentationsprüfung, Übersetzung, vorhandene Medien, Überschriften, Moderation, Gebete und Stilvereinheitlichung ab. Bibeltexte und Medien werden weiterhin nur über vertrauenswürdige Anwendungsdienste aufgelöst; das Modell darf keine unbekannten Aktionen oder Skripte ausführen.
+
+Die Desktop-App lädt das gewählte, fest versionierte Modell beim ersten Einsatz mit sichtbarem Fortschritt herunter und kann Download, Aktualisierung, Entfernung und lokalen Chatverlauf in den Einstellungen verwalten. Nach dem Download funktioniert der Helfer offline. Nicht unterstützte Browser empfehlen verständlich die Desktop-App.
+
+Automatisierte Prüfungen sichern Kontextfilter, Aktionsschema, atomare Anwendung, Modellpakete, lokale Inferenz, Abbruch, Wiederholen, Änderungsvorschau und Einstellungen ab.
+
+---
+
 # GottesdienstRegie 0.59.0
 
 Version 0.59.0 macht Hintergrund-Audio schon bei der Ablaufplanung sichtbar. Beginnt Audio im Vorprogramm, an einem Abschnitt oder an einem einzelnen Element, werden alle davon betroffenen Ablaufzeilen und Folien dezent blau gekennzeichnet. Die Markierung folgt der konfigurierten Laufzeit und endet am Abschnittsende, nach dem Element oder an einem ausdrücklichen Stop-Cue.
