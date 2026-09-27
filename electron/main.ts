@@ -19,6 +19,7 @@ import {platformAppearance} from './platformAppearance';
 import {StorageMaintenanceService,isStorageCategory,type StorageCategory} from './StorageMaintenanceService';
 import {translationPackCatalog} from './translationPackCatalog';
 import {resolveOperatorWindowStartup,resolveSplashWindowBounds} from './windowStartup';
+import {AiModelManager} from './AiModelManager';
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
 function applySpellCheckerLanguage(contents:Electron.WebContents,language:string){const requested=spellLocale[language]??language,available=contents.session.availableSpellCheckerLanguages,exact=available.find(item=>item.toLowerCase()===requested.toLowerCase()),base=available.find(item=>item.toLowerCase().split('-')[0]===requested.toLowerCase().split('-')[0]);contents.session.setSpellCheckerLanguages(exact?[exact]:base?[base]:[]);return exact??base??''}
@@ -35,6 +36,7 @@ let appPreferences:AppPreferences;
 let controlCloseInProgress=false;
 let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
 let finishClose:()=>Promise<void>=async()=>{};
+let aiModelPreparation:AbortController|null=null;
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}},{scheme:'gottesdienst-cloud',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 app.on('web-contents-created',(_event,contents)=>{
@@ -182,6 +184,7 @@ app.whenReady().then(async() => {
     'temporary-downloads':path.join(app.getPath('userData'),'temporary-downloads'),
     'web-cache':path.join(app.getPath('sessionData'),'Cache'),
   });
+  const aiModelManager=new AiModelManager(path.join(app.getPath('userData'),'ai-models'));
   const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>controlWindow?.webContents.send('remote:command',payload));
   await remoteServer.start().catch(()=>null);
   const onlineMedia=new GitHubStorageProvider('cmoere','GottesdienstRegie','media-library');
@@ -349,6 +352,10 @@ app.whenReady().then(async() => {
   ipcMain.handle('translation-packs:download',(_event,key:string)=>translationPacks.download(key));
   ipcMain.handle('translation-packs:cancel',(_event,key:string)=>translationPacks.cancel(key));
   ipcMain.handle('translation-packs:remove',(_event,key:string)=>translationPacks.remove(key));
+  ipcMain.handle('ai:model-status',()=>aiModelManager.status());
+  ipcMain.handle('ai:prepare-model',async(_event,profile:'eco'|'balanced'|'quality')=>{aiModelPreparation?.abort();aiModelPreparation=new AbortController();try{await aiModelManager.prepare(profile,aiModelPreparation.signal,progress=>controlWindow?.webContents.send('ai:model-progress',progress));return aiModelManager.status()}finally{aiModelPreparation=null}});
+  ipcMain.handle('ai:cancel-model',()=>{aiModelPreparation?.abort();return true});
+  ipcMain.handle('ai:remove-model',()=>aiModelManager.remove().then(()=>true));
   ipcMain.handle('storage:snapshot',()=>storageMaintenance.snapshot());
   ipcMain.handle('storage:clear',(_event,categories:string[])=>{
     if(outputManager.isActive())throw new Error('STORAGE_CLEAR_ON_AIR');
