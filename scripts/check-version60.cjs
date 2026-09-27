@@ -6,6 +6,7 @@ const notes=fs.readFileSync('RELEASE_NOTES.md','utf8');
 const workflow=fs.readFileSync('.github/workflows/release.yml','utf8');
 const app=fs.readFileSync('src/App.tsx','utf8');
 assert(pkg.version==='0.60.0','package version must be 0.60.0');
+assert(pkg.main==='dist-electron/electron/main.js','electron entry must match the clean TypeScript output');
 assert(releases.versions[0]?.builds[0]?.version==='0.60.0'&&releases.versions[0].builds[0].current===true,'0.60.0 must lead public release catalog');
 assert(notes.includes('# GottesdienstRegie 0.60.0'),'release notes must describe 0.60.0');
 assert(workflow.includes('check-version60.cjs'),'release workflow must run V60 guard');

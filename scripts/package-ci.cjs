@@ -1,8 +1,7 @@
 const {spawn}=require('node:child_process');
 const args=process.argv.slice(2);
 if(!args.length)throw new Error('electron-builder arguments required');
-const command=process.platform==='win32'?'npx.cmd':'npx';
-const child=spawn(command,['electron-builder',...args],{env:process.env,stdio:['inherit','pipe','pipe']});
+const child=spawn('npx',['electron-builder',...args],{env:process.env,stdio:['inherit','pipe','pipe'],shell:process.platform==='win32'});
 let output='';
 const forward=(stream,target)=>stream.on('data',chunk=>{const text=chunk.toString();output=(output+text).slice(-12000);target.write(chunk)});
 forward(child.stdout,process.stdout);forward(child.stderr,process.stderr);
