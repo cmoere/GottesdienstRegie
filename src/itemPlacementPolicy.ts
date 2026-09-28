@@ -13,6 +13,14 @@ export const standardItemTypes = [
 
 const loopTypes = new Set<ItemType>(loopOnlyItemTypes);
 
+export function resolveInsertionSectionId(requested:string|undefined,selected:string|undefined):string{
+  const value=requested??selected??'service';
+  if(value==='preLoop')return 'pre';
+  if(value==='postLoop')return 'post';
+  if(value==='arrival')return 'warmup';
+  return value;
+}
+
 export type PlacementViolation = {
   code: 'SECTION_MISSING' | 'LOOP_SECTION_REQUIRED';
   message: string;

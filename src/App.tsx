@@ -53,7 +53,7 @@ import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopContro
 import { consumeInsertionGuard, createLoopItem } from "./loopItemFactory";
 import { EventLinkStatus } from "./EventLinkStatus";
 import { StorageSettings } from "./StorageSettings";
-import { canInsertItemType, menuItemTypesForSection } from "./itemPlacementPolicy";
+import { canInsertItemType, menuItemTypesForSection, resolveInsertionSectionId } from "./itemPlacementPolicy";
 import { PersonalNotesPanel } from "./PersonalNotesPanel";
 import { prepareStandardTranslationPacks } from "./translationPackManager";
 import { weatherScreenController } from "./weatherController";
@@ -1823,11 +1823,8 @@ function AddPopover({
 }) {
   const { t } = useI18n();
   const state = usePresentation(),
-    sectionId =
-      targetSectionId ??
-      state.items.find((item) => item.id === state.selectedItemId)?.sectionId ??
-      "service",
-    activeSection = state.sections.find((section) => section.id === sectionId)??state.sections.find(section=>section.id==='service')??state.sections.find(section=>!isLoopSection(section)),
+    sectionId = resolveInsertionSectionId(targetSectionId,state.items.find((item) => item.id === state.selectedItemId)?.sectionId),
+    activeSection = state.sections.find((section) => section.id === sectionId),
     sectionCanHostLoop = isLoopSection(activeSection),
     sectionIsLoopTarget = ["pre", "post", "preLoop", "postLoop"].includes(sectionId),
     loopAvailable = sectionCanHostLoop || sectionIsLoopTarget,
