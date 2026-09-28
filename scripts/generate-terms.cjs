@@ -1,8 +1,9 @@
 const fs=require('node:fs'),path=require('node:path'),ts=require('typescript'),Module=require('node:module');
+const {encodeUtf16LeBom}=require('./terms-encoding.cjs');
 const file=path.resolve('src/termsContent.ts'),mod=new Module(file,module);
 mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,file);
 const t=mod.exports,escape=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-fs.writeFileSync('build/terms.txt',t.plainTerms());
+fs.writeFileSync('build/terms.txt',encodeUtf16LeBom(t.plainTerms()));
 fs.mkdirSync('public/terms',{recursive:true});
 const documents=Object.fromEntries(t.SUPPORTED_TERMS_LOCALES.map(locale=>[locale,t.termsDocument(locale)]));
 const options=t.SUPPORTED_TERMS_LOCALES.map(locale=>`<option value="${locale}">${escape(t.TERMS_LOCALE_LABELS[locale])}</option>`).join('');

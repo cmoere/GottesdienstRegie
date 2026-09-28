@@ -1,4 +1,5 @@
 const assert=require('node:assert/strict'),fs=require('node:fs');
+const {decodeUtf16LeBom}=require('./terms-encoding.cjs');
 const pkg=require('../package.json'),releases=require('../public/releases.json');
 const builds=releases.versions.flatMap(line=>line.builds);
 assert.ok(Number(pkg.version.split('.')[1])>=54);
@@ -8,6 +9,6 @@ assert.ok(release.overview.text.de.length>250);
 assert.ok(release.sections.new.length>=2);
 assert.ok(release.sections.improved.length>=3);
 assert.ok(release.sections.fixed.length>=2);
-const terms=fs.readFileSync('build/terms.txt','utf8');
+const terms=decodeUtf16LeBom(fs.readFileSync('build/terms.txt'));
 assert.match(terms,/\n- Diese Nutzungsbedingungen/);
 console.log('Version 0.54 release metadata and generated terms checks passed.');
