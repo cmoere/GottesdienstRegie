@@ -56,6 +56,9 @@ import { StorageSettings } from "./StorageSettings";
 import { resolveInsertionSectionId } from "./itemPlacementPolicy";
 import { getAddElementGroups } from './addElementCatalog';
 import {AssignedAudioPopover} from './AssignedAudioPopover';
+import {DEFAULT_OSB_SETTINGS,normalizeOsbSettings} from './osb/settingsModel';
+import type {OsbSettings} from './osb/types';
+import {BIBLE_TRANSLATIONS} from './bible/provider';
 import { PersonalNotesPanel } from "./PersonalNotesPanel";
 import { prepareStandardTranslationPacks } from "./translationPackManager";
 import { weatherScreenController } from "./weatherController";
@@ -8045,6 +8048,7 @@ function AppShell({
     [previewQuick, setPreviewQuick] = useState<QuickScreenConfig | null>(null),
     [settingsOpen, setSettingsOpen] = useState(false),
     [bibleTextOpen,setBibleTextOpen]=useState(false),
+    [osbSettings,setOsbSettings]=useState<OsbSettings>(DEFAULT_OSB_SETTINGS),
     [termsOpen, setTermsOpen] = useState(false),
     [helpOpen, setHelpOpen] = useState(false),
     [tourOpen, setTourOpen] = useState(
@@ -8070,6 +8074,7 @@ function AppShell({
       step: number;
       text: string;
     }>({ state: "idle", step: 0, text: "" });
+  useEffect(()=>{void (window.desktop as any)?.deviceSettings?.readOsb?.().then((value:unknown)=>setOsbSettings(normalizeOsbSettings(value,[...BIBLE_TRANSLATIONS])))},[]);
   const audioSessionRef = useRef<{
     onAir: boolean;
     mode: "edit" | "preview";
@@ -10171,7 +10176,7 @@ function AppShell({
           confirm={() => void leave()}
         />
       )}
-      {bibleTextOpen&&<BibleTextDialog close={()=>setBibleTextOpen(false)} onShow={value=>{const quick:QuickScreenConfig={id:`bible-${Date.now()}`,type:'bible',name:value.reference,enabled:true,targets:['main'],text:value.text,pages:paginateBibleVerses(value.text.split('\n').filter(Boolean)),pageIndex:0,reference:value.reference,translation:value.translation,background:'#2d241b',order:0};void(async()=>{if(!usePresentation.getState().onAir)await air();if(!usePresentation.getState().onAir)return;setPreviewQuick(quick);await(window.desktop as any)?.sendQuick(['main'],quick);setBibleTextOpen(false)})()}}/>}
+      {bibleTextOpen&&<BibleTextDialog initialTranslation={osbSettings.defaultBibleTranslationId} allowTranslationChange={osbSettings.allowTranslationChangeInQuickScreen} close={()=>setBibleTextOpen(false)} onShow={value=>{const quick:QuickScreenConfig={id:`bible-${Date.now()}`,type:'bible',name:value.reference,enabled:true,targets:['main'],text:value.text,pages:paginateBibleVerses(value.text.split('\n').filter(Boolean)),pageIndex:0,reference:value.reference,translation:value.translation,background:'#2d241b',order:0,osb:osbSettings};void(async()=>{if(!usePresentation.getState().onAir)return;setPreviewQuick(quick);await(window.desktop as any)?.sendQuick(['main'],quick);setBibleTextOpen(false)})()}}/>}
       <MobileWorkspaceNav />
     </div>
   );

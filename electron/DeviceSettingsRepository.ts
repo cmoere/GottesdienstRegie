@@ -1,0 +1,2 @@
+import fs from 'node:fs/promises';import path from 'node:path';import type {OsbSettings} from '../src/osb/types';
+export class DeviceSettingsRepository{constructor(private file:string){}async readOsb():Promise<unknown>{try{return JSON.parse(await fs.readFile(this.file,'utf8')).osb}catch{return null}}async writeOsb(osb:OsbSettings){await fs.mkdir(path.dirname(this.file),{recursive:true});const temp=`${this.file}.tmp`;await fs.writeFile(temp,JSON.stringify({osb},null,2),'utf8');await fs.rename(temp,this.file);return osb}}

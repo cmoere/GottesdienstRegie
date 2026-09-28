@@ -22,6 +22,7 @@ import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,re
 import {SpotifyAuthService} from './SpotifyAuthService';
 import {normalizeSpotifyTrackUrl,SpotifyOEmbedService} from './SpotifyOEmbedService';
 import {RadioMetadataService} from './RadioMetadataService';
+import {DeviceSettingsRepository} from './DeviceSettingsRepository';
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
 function applySpellCheckerLanguage(contents:Electron.WebContents,language:string){const requested=spellLocale[language]??language,available=contents.session.availableSpellCheckerLanguages,exact=available.find(item=>item.toLowerCase()===requested.toLowerCase()),base=available.find(item=>item.toLowerCase().split('-')[0]===requested.toLowerCase().split('-')[0]);contents.session.setSpellCheckerLanguages(exact?[exact]:base?[base]:[]);return exact??base??''}
@@ -177,6 +178,7 @@ app.whenReady().then(async() => {
   translationPacks.onProgress(value=>controlWindow?.webContents.send('translation-packs:progress',value));
   Menu.setApplicationMenu(null);
   appPreferences=new AppPreferences(path.join(app.getPath('userData'),'app-preferences.json'));
+  const deviceSettings=new DeviceSettingsRepository(path.join(app.getPath('userData'),'device-settings.json'));
   app.setAsDefaultProtocolClient('gottesdienstregie');
   const spotifyTokenFile=path.join(app.getPath('userData'),'spotify-refresh-token.bin');
   spotifyAuth=new SpotifyAuthService({clientId:String(process.env.SPOTIFY_CLIENT_ID??''),redirectUri:'gottesdienstregie://spotify-callback',openExternal:url=>shell.openExternal(url),request:fetch,readRefreshToken:async()=>{try{if(!safeStorage.isEncryptionAvailable())return null;return safeStorage.decryptString(await fs.readFile(spotifyTokenFile))}catch{return null}},writeRefreshToken:async token=>{if(!token){await fs.unlink(spotifyTokenFile).catch(()=>{});return}if(!safeStorage.isEncryptionAvailable())throw new Error('SPOTIFY_SECURE_STORAGE_UNAVAILABLE');await fs.writeFile(spotifyTokenFile,safeStorage.encryptString(token))}});
@@ -191,6 +193,8 @@ app.whenReady().then(async() => {
   ipcMain.handle('spelling:set-language',(event,language:string)=>applySpellCheckerLanguage(event.sender,String(language||'de')));
   ipcMain.handle('radio:metadata-start',(event,stationId:string,streamUrl:string)=>{radioMetadataStops.get(event.sender.id)?.();const sender=event.sender;radioMetadataStops.set(sender.id,radioMetadata.start(String(stationId),String(streamUrl),value=>{if(!sender.isDestroyed())sender.send('radio:metadata',value)}));return true});
   ipcMain.handle('radio:metadata-stop',(event)=>{radioMetadataStops.get(event.sender.id)?.();radioMetadataStops.delete(event.sender.id);return true});
+  ipcMain.handle('device-settings:osb-read',()=>deviceSettings.readOsb());
+  ipcMain.handle('device-settings:osb-write',(_event,value)=>deviceSettings.writeOsb(value));
   const sessionFile = path.join(app.getPath('userData'), 'community-session.bin');
   const legacyPresentationFile=path.join(app.getPath('userData'),'presentations','default-presentation.json');
   const presentationRepository=new PresentationRepository(path.join(app.getPath('userData'),'library'));

@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("desktop", {
+  deviceSettings:{readOsb:()=>ipcRenderer.invoke('device-settings:osb-read'),writeOsb:(value:unknown)=>ipcRenderer.invoke('device-settings:osb-write',value)},
   radio:{startMetadata:(stationId:string,streamUrl:string)=>ipcRenderer.invoke('radio:metadata-start',stationId,streamUrl),stopMetadata:()=>ipcRenderer.invoke('radio:metadata-stop'),onMetadata:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('radio:metadata',listener);return()=>ipcRenderer.removeListener('radio:metadata',listener)}},
   spotify:{status:()=>ipcRenderer.invoke('spotify:status'),connect:()=>ipcRenderer.invoke('spotify:connect'),disconnect:()=>ipcRenderer.invoke('spotify:disconnect'),search:(query:string,offset?:number)=>ipcRenderer.invoke('spotify:search',query,offset),resolve:(url:string)=>ipcRenderer.invoke('spotify:resolve',url),open:(url:string)=>ipcRenderer.invoke('spotify:open',url)},
   spelling:{setLanguage:(language:string)=>ipcRenderer.invoke('spelling:set-language',language)},

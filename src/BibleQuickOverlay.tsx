@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import type { QuickScreenConfig } from './preferences';
+import {OSB_COLORS,OSB_SPEED_FACTOR} from './osb/settingsModel';
 
 const verseParts = (line: string) => {
   const match = line.match(/^(\d+)\s+(.*)$/);
@@ -13,9 +14,10 @@ export function BibleQuickOverlay({ quick, reducedMotion, staticPreview }: { qui
   const density = characters > 800 || lines.length > 8 ? 'high' : characters > 440 || lines.length > 5 ? 'medium' : 'normal';
   const noAnimation = reducedMotion || staticPreview;
 
-  return <div className="bible-book">
+  const osb=quick.osb,style=osb?.style??'book',accent=OSB_COLORS[osb?.accentColor??'turquoise'],speed=OSB_SPEED_FACTOR[osb?.animationSpeed??'normal'];
+  return <div className={`bible-book osb-style-${style} reference-${osb?.referencePosition??'top-left'}`} style={{'--osb-accent':accent,'--osb-speed':speed} as CSSProperties}>
     <article className={`bible-page density-${density}${noAnimation ? ' no-animation' : ''}`} key={pageIndex} aria-label={`${quick.reference ?? quick.name}, ${quick.translation ?? ''}`}>
-      <header><span>{quick.reference ?? quick.name}</span><small>{quick.translation}</small></header>
+      {osb?.showReference!==false&&<header><span>{quick.reference ?? quick.name}</span>{osb?.showTranslationName!==false&&<small>{quick.translation}</small>}</header>}
       <main>{lines.map((line, index) => {
         const verse = verseParts(line);
         return <p key={`${index}-${line}`} style={{ '--verse-delay': `${0.22 + index * 0.13}s` } as CSSProperties}>
