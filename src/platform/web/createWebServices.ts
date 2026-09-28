@@ -14,6 +14,7 @@ export function createWebServices():PlatformServices{
     auth:{login:async()=>session,verifyTwoFactor:noData,cancelTwoFactor:async()=>{},restore:async()=>session,logout:async()=>{}},
     presentations:createLocalPresentationService(localStorage),
     media:{list:noData,importFiles:noData,remove:noData,markUsed:noData,status:noData},
+    spotify:{status:async()=>({state:'disconnected'}),connect:noData,disconnect:async()=>{},search:noData,openTrack:async reference=>{window.open(reference.externalUrl,'_blank','noopener,noreferrer');return true}},
     ai:new WebAiService(),
     desktop:{
       displays:async()=>{throw unsupported('outputMain')},identifyDisplays:async()=>{throw unsupported('outputMain')},

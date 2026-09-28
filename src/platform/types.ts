@@ -3,7 +3,7 @@ import type {PresentationDocument} from '../store';
 export type PlatformTarget='desktop'|'web';
 export type CapabilityAvailability='available'|'unavailable'|'disconnected';
 export interface CapabilityState{availability:CapabilityAvailability;reason?:string}
-export type PlatformCapability='auth'|'presentations'|'media'|'outputMain'|'outputStage'|'outputLivestream'|'updates'|'localTranslation'|'localAi'|'videoInput'|'audioRouting';
+export type PlatformCapability='auth'|'presentations'|'media'|'spotify'|'outputMain'|'outputStage'|'outputLivestream'|'updates'|'localTranslation'|'localAi'|'videoInput'|'audioRouting';
 
 export interface PresentationSummary{id:string;title:string;date:string;createdAt:string;updatedAt:string;archived:boolean;trashed:boolean;itemCount:number;slideCount:number}
 export interface MediaAsset{id:string;name:string;fileName:string;url:string;kind:'image'|'video'|'audio'|'pdf';extension:string;size:number;checksum:string;createdAt:string;updatedAt:string;lastUsedAt?:string;aiGenerated?:boolean;favorite:boolean;tags:string[];syncState:'local-only'|'uploading'|'synced'|'error';github?:{repository:string;path:string;sha:string;downloadUrl:string}}

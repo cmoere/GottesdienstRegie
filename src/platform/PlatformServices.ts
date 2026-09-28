@@ -2,6 +2,7 @@ import type {AuthSession,LoginResult} from '../auth';
 import type {PresentationDocument} from '../store';
 import type {CapabilityState,MediaAsset,MediaStorageStatus,PlatformCapability,PlatformTarget,PresentationSummary,SaveResult} from './types';
 import type {AiInferenceService} from '../ai/AiInferenceService';
+import type {SpotifyConnectionStatus,SpotifySearchPage,SpotifyTrackReference} from '../spotify/types';
 
 export interface AuthService{
   login(email:string,password:string,remember:boolean):Promise<LoginResult>;
@@ -23,6 +24,7 @@ export interface MediaService{
   markUsed(id:string):Promise<MediaAsset>;
   status():Promise<MediaStorageStatus>;
 }
+export interface SpotifyService{status():Promise<SpotifyConnectionStatus>;connect():Promise<SpotifyConnectionStatus>;disconnect():Promise<void>;search(query:string,offset?:number):Promise<SpotifySearchPage>;openTrack(reference:SpotifyTrackReference):Promise<boolean>}
 export interface DesktopOnlyService{
   displays():Promise<DesktopDisplay[]>;
   identifyDisplays(assignments:Record<string,string>):Promise<boolean>;
@@ -39,6 +41,7 @@ export interface PlatformServices{
   auth:AuthService;
   presentations:PresentationService;
   media:MediaService;
+  spotify:SpotifyService;
   ai:AiInferenceService;
   desktop:DesktopOnlyService;
 }

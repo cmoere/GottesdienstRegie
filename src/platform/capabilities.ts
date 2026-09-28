@@ -4,12 +4,12 @@ const available:CapabilityState={availability:'available'};
 const unavailable=(reason:string):CapabilityState=>({availability:'unavailable',reason});
 
 export const desktopCapabilities:Record<PlatformCapability,CapabilityState>={
-  auth:available,presentations:available,media:available,outputMain:available,outputStage:available,
+  auth:available,presentations:available,media:available,spotify:available,outputMain:available,outputStage:available,
   outputLivestream:available,updates:available,localTranslation:available,localAi:available,videoInput:available,audioRouting:available
 };
 
 export const webCapabilities:Record<PlatformCapability,CapabilityState>={
-  auth:available,presentations:available,media:available,
+  auth:available,presentations:available,media:available,spotify:unavailable('Spotify-Verknüpfung benötigt die Desktop-App.'),
   outputMain:unavailable('MAIN-Ausgabe benötigt die Desktop-App.'),
   outputStage:unavailable('STAGE-Ausgabe benötigt die Desktop-App.'),
   outputLivestream:unavailable('Livestream-Ausgabe benötigt die Desktop-App.'),
