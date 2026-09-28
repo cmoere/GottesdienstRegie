@@ -21,13 +21,14 @@ describe('normalizeSpotifyTrackUrl', () => {
 
 describe('SpotifyOEmbedService', () => {
   it('maps trusted metadata and discards embed HTML', async () => {
-    const request = vi.fn(async () => new Response(JSON.stringify({ provider_name: 'Spotify', type: 'rich', title: 'Test Track', thumbnail_url: 'https://i.scdn.co/image/cover', html: '<iframe src="untrusted"></iframe>' }), { status: 200, headers: { 'content-type': 'application/json' } }));
-    const service = new SpotifyOEmbedService(request);
+    let requestedUrl = '';
+    const request = vi.fn(async (input: string | URL | Request) => { requestedUrl = String(input); return new Response(JSON.stringify({ provider_name: 'Spotify', type: 'rich', title: 'Test Track', thumbnail_url: 'https://i.scdn.co/image/cover', html: '<iframe src="untrusted"></iframe>' }), { status: 200, headers: { 'content-type': 'application/json' } }); });
+    const service = new SpotifyOEmbedService(request as typeof fetch);
     const result = await service.resolve(`https://open.spotify.com/track/${trackId}?si=x`);
 
     expect(result).toEqual({ provider: 'spotify', id: trackId, title: 'Test Track', artists: [], imageUrl: 'https://i.scdn.co/image/cover', externalUrl: `https://open.spotify.com/track/${trackId}`, uri: `spotify:track:${trackId}` });
     expect(result).not.toHaveProperty('html');
-    expect(request.mock.calls[0]?.[0]).toContain('https://open.spotify.com/oembed?url=');
+    expect(requestedUrl).toContain('https://open.spotify.com/oembed?url=');
   });
 
   it.each([
