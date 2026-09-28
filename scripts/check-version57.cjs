@@ -2,7 +2,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
 const pkg=require('../package.json'),releases=require('../public/releases.json');
 const workspace=fs.readFileSync('src/ProductionWorkspace.tsx','utf8');
 const radio=fs.readFileSync('src/RadioStationBrowser.tsx','utf8');
-const bible=fs.readFileSync('src/QuickOverlay.tsx','utf8');
+const bible=fs.readFileSync('src/QuickOverlay.tsx','utf8')+fs.readFileSync('src/BibleQuickOverlay.tsx','utf8');
 const terms=fs.readFileSync('src/termsContent.ts','utf8');
 const generator=fs.readFileSync('scripts/generate-terms.cjs','utf8');
 assert.ok(Number(pkg.version.split('.')[1])>=57);

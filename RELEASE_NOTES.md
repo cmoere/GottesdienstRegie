@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.62.0
+
+Version 0.62.0 korrigiert die Darstellung der Nutzungsbedingungen im Windows-Installer. Umlaute, Gedankenstriche und weitere Sonderzeichen werden nun im vom Installer erwarteten Unicode-Format erzeugt und vor der Veröffentlichung automatisch geprüft.
+
+Der KI-Helfer zeigt keine technischen Werbehinweise und keine wiederholten internen Anweisungen mehr. Antworten lokaler Modelle werden auch dann sicher erkannt, wenn vor dem eigentlichen JSON ein Prompt, ein Codeblock oder andere Begleittexte ausgegeben werden. Ungültige Rohantworten gelangen nicht in den Chat; stattdessen bleibt die kurze Wiederholen-Aktion erhalten.
+
+Die MAIN-Vorschau zeigt die aktive Folie ohne zusätzliche rote LIVE-Plakette. Die Bibel-Schnellanzeige besitzt ein neues, projektortaugliches Buchdesign ohne Schlagschatten, passt die Schrift an längere Stellen an und verwendet Schreib-, Tinten- und Seitenwechselanimationen. Bei reduzierter Bewegung und in statischen Vorschaubildern erscheint der vollständige Text sofort.
+
+Spotify-Titel lassen sich nun über einen eingefügten Titellink hinzufügen. GottesdienstRegie lädt Name und Vorschaubild über Spotifys öffentliche Linkvorschau, speichert ausschließlich bereinigte Metadaten und öffnet den Titel erst nach einem ausdrücklichen Klick extern in Spotify. Eine Kontoverbindung oder automatische Wiedergabe wird dafür nicht vorgetäuscht.
+
+Automatisierte Prüfungen sichern Installer-Encoding, private KI-Anweisungen, MAIN-Darstellung, Bibel-Paginierung und -Animation, reduzierte Bewegung sowie Spotify-Linkvalidierung und Metadatenbereinigung ab.
+
+---
+
 # GottesdienstRegie 0.61.0
 
 Version 0.61.0 stabilisiert den nativen Programmstart und die Live-Steuerung. Die gepackte Anwendung findet ihre Weboberfläche nun unabhängig vom TypeScript-Ausgabeverzeichnis; bei einem Ladefehler erscheint statt eines schwarzen Fensters eine klare Wiederholen-Aktion. ON AIR und Testbetrieb verwenden dieselbe Auswahlregel und beginnen auf der ersten aktiven Folie – zuerst im Vorprogramm, danach Warm-up, Gottesdienst und Nachprogramm.
