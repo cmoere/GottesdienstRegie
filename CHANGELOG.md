@@ -1,5 +1,14 @@
 # Versionshinweise / Release notes
 
+## 0.61.0 – Stabiler Start, präzise Audiosteuerung und Spotify-Verknüpfungen
+
+- Schwarzen Bildschirm nach einem sauberen Paket-Build behoben und eine sichtbare Wiederholen-Ansicht ergänzt.
+- ON AIR und Testbetrieb starten immer auf der ersten aktiven Folie, bevorzugt im Vorprogramm.
+- Vor- und Nachprogramm behalten beim Hinzufügen zwingend ihr Loop-Ziel.
+- Laufendes Hintergrund-Audio wird nur noch am Lautsprechersymbol markiert; Stopppunkte sind auch an Abschnitten möglich.
+- Bedientöne lassen sich unabhängig von Präsentations- und Hintergrundaudio deaktivieren.
+- Spotify-Kontoanbindung, Titelsuche und sichere manuelle Spotify-Verknüpfungen ergänzt; keine automatische Wiedergabe oder Übertragung.
+
 ## 0.60.0 – Kostenloser lokaler KI-Helfer
 
 - Lokalen KI-Helfer ohne API-Schlüssel mit automatischer Modellwahl ergänzt.

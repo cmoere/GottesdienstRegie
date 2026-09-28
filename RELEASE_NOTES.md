@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.61.0
+
+Version 0.61.0 stabilisiert den nativen Programmstart und die Live-Steuerung. Die gepackte Anwendung findet ihre Weboberfläche nun unabhängig vom TypeScript-Ausgabeverzeichnis; bei einem Ladefehler erscheint statt eines schwarzen Fensters eine klare Wiederholen-Aktion. ON AIR und Testbetrieb verwenden dieselbe Auswahlregel und beginnen auf der ersten aktiven Folie – zuerst im Vorprogramm, danach Warm-up, Gottesdienst und Nachprogramm.
+
+Vor- und Nachprogramm bleiben zwingende Loops und behalten beim Hinzufügen ihr tatsächliches Ziel. Hintergrund-Audio färbt keine ganzen Ablaufzeilen mehr: Nur das Lautsprechersymbol zeigt Start, Laufzeit oder Stopp an. Stoppunkte können auch direkt an Abschnitten gesetzt werden, alle Bezeichnungen sind sprachabhängig, und reine Bedientöne lassen sich in den Audioeinstellungen abschalten, ohne Medien- oder Präsentationston zu beeinflussen.
+
+Spotify kann optional per sicherem PKCE-Verfahren verbunden werden. Titel lassen sich suchen, als bereinigte Metadaten-Verknüpfung speichern und nach einem ausdrücklichen Klick in Spotify öffnen. Zugangstoken werden verschlüsselt außerhalb der Präsentation gespeichert. GottesdienstRegie lädt keine Spotify-Audiodaten herunter, startet keine automatische Wiedergabe und synchronisiert oder überträgt keine Spotify-Musik.
+
+Automatisierte Tests sichern Paketpfade, Startfolien, Loop-Ziele, Abschnitts-Stopppunkte, Bedientöne, Spotify-Referenzen und OAuth-Sicherheitsregeln ab.
+
+---
+
 # GottesdienstRegie 0.60.0
 
 Version 0.60.0 führt den kostenlosen lokalen KI-Helfer ohne API-Schlüssel ein. Fragen, Textentwürfe und strukturierte Änderungsvorschläge werden auf dem eigenen Gerät verarbeitet. Die Anwendung wählt im Hintergrund ein passendes Modellprofil; in den Einstellungen können Modell, Bestätigungsmodus und Berechtigungen angepasst werden.

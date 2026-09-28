@@ -20,12 +20,13 @@
     "ar"
   ],
   "versions": [
+    {"line":"0.61","builds":[{"version":"0.61.0","releaseDate":"2026-09-28","current":true,"overview":{"label":{"de":"Stabiler Start, Audio und Spotify","en":"Stable startup, audio, and Spotify"},"text":{"de":"Stabiler nativer Start, einheitlicher Live-Beginn und sichere Spotify-Verknüpfungen.","en":"Stable native startup, consistent live starting behavior, and safe Spotify links."}},"sections":{"new":[{"label":{"de":"Spotify-Verknüpfungen","en":"Spotify links"},"text":{"de":"Spotify verbinden, Titel suchen, Verknüpfungen speichern und manuell öffnen – ohne automatische Wiedergabe.","en":"Connect Spotify, search tracks, save links, and open them manually—without autoplay."}}],"improved":[{"label":{"de":"Präzise Audiosteuerung","en":"Precise audio controls"},"text":{"de":"Audiozustände nur am Lautsprecher, Abschnitts-Stopppunkte und abschaltbare Bedientöne.","en":"Speaker-only audio states, section stop cues, and optional operator sounds."}}],"fixed":[{"label":{"de":"Zuverlässiger Programmstart","en":"Reliable startup"},"text":{"de":"Saubere Pakete laden die Oberfläche korrekt und bieten bei Fehlern Wiederholen an.","en":"Clean packages load the interface correctly and offer retry on failure."}}],"known":[]}}]},
     {
       "line": "0.60",
       "builds": [{
         "version": "0.60.0",
         "releaseDate": "2026-09-28",
-        "current": true,
+        "current": false,
         "overview": {"label":{"de":"Kostenloser lokaler KI-Helfer","en":"Free local AI assistant"},"text":{"de":"Version 0.60.0 ergänzt einen lokalen KI-Helfer ohne API-Schlüssel für Fragen, Entwürfe, Prüfungen und kontrollierte Präsentationsänderungen.","en":"Version 0.60.0 adds a local AI assistant without an API key for questions, drafts, reviews, and controlled presentation changes."}},
         "sections": {
           "new": [{"label":{"de":"Lokaler KI-Helfer","en":"Local AI assistant"},"text":{"de":"Elf Schnellaktionen und freie Aufträge helfen bei Ablauf, Texten, Ankündigungen, Bibel- und Songideen, Übersetzungen, Moderation, Gebeten und Stil.","en":"Eleven quick actions and free-form requests assist with planning, text, announcements, Bible and song ideas, translations, moderation, prayers, and style."}},{"label":{"de":"Modelleinstellungen","en":"Model settings"},"text":{"de":"Automatische Modellwahl, Bestätigungsmodus, Berechtigungen, Downloadfortschritt, Aktualisierung, Entfernung und Verlauf lassen sich verwalten.","en":"Automatic model selection, confirmation mode, permissions, download progress, updates, removal, and history can be managed."}}],
