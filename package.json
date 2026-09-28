@@ -20,6 +20,7 @@
     "typecheck": "tsc -b --pretty false",
     "installer": "npm run build && electron-builder --win nsis --publish never",
     "release:package-ci": "node scripts/package-ci.cjs",
+    "verify:package-entry": "node scripts/check-packaged-entry.cjs",
     "verify:release": "npm run test:unit && node scripts/check-version55.cjs && node scripts/check-version56.cjs && node scripts/check-version57.cjs && node scripts/check-version58.cjs && node scripts/check-version59.cjs && node scripts/check-version60.cjs && node scripts/check-version61.cjs"
   },
   "dependencies": {
