@@ -1,7 +1,6 @@
 import type {AuthSession,LoginResult} from '../auth';
 import type {PresentationDocument} from '../store';
 import type {CapabilityState,MediaAsset,MediaStorageStatus,PlatformCapability,PlatformTarget,PresentationSummary,SaveResult} from './types';
-import type {AiInferenceService} from '../ai/AiInferenceService';
 import type {SpotifyConnectionStatus,SpotifySearchPage,SpotifyTrackReference} from '../spotify/types';
 
 export interface AuthService{
@@ -42,6 +41,5 @@ export interface PlatformServices{
   presentations:PresentationService;
   media:MediaService;
   spotify:SpotifyService;
-  ai:AiInferenceService;
   desktop:DesktopOnlyService;
 }

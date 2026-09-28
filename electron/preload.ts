@@ -153,17 +153,6 @@ contextBridge.exposeInMainWorld("desktop", {
     remove:(key:string)=>ipcRenderer.invoke('translation-packs:remove',key),
     onProgress:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('translation-packs:progress',listener);return()=>ipcRenderer.removeListener('translation-packs:progress',listener)},
   },
-  aiModel:{
-    status:()=>ipcRenderer.invoke('ai:model-status'),
-    prepare:(profile:'eco'|'balanced'|'quality')=>ipcRenderer.invoke('ai:prepare-model',profile),
-    cancel:()=>ipcRenderer.invoke('ai:cancel-model'),
-    remove:()=>ipcRenderer.invoke('ai:remove-model'),
-    onProgress:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('ai:model-progress',listener);return()=>ipcRenderer.removeListener('ai:model-progress',listener)},
-  },
-  ai:{
-    generate:(request:unknown)=>ipcRenderer.invoke('ai:generate',request),
-    cancel:()=>ipcRenderer.invoke('ai:cancel-generation'),
-  },
   storage:{
     snapshot:()=>ipcRenderer.invoke('storage:snapshot'),
     clear:(categories:string[])=>ipcRenderer.invoke('storage:clear',categories),

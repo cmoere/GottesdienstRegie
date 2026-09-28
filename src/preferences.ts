@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { defaultKeyboardShortcuts, type KeyboardShortcuts, type ShortcutAction } from './shortcuts';
 import { defaultAudioRouting, type AudioRoute, type AudioRouteConfig, type AudioRouting } from './audioRouting';
-import type { AiExecutionMode, AiModelPreference } from './ai/modelProfiles';
 
 export type Language='de'|'gsw'|'en'|'nl'|'da'|'no'|'sv'|'fi'|'fr'|'it'|'es'|'uk'|'ru'|'tr'|'ar'|'pl'|'pt-BR';
 export type ThemeMode='system'|'light'|'dark';
@@ -22,24 +21,6 @@ const defaultQuickScreens:QuickScreenConfig[]=[
   {id:'countdown',type:'countdown',name:'Countdown',enabled:true,targets:['main'],duration:300,endText:'Wir beginnen gleich',background:'#000000',order:5},
   {id:'bible',type:'bible',name:'Bibel einblenden',enabled:true,targets:['main'],order:6}
 ];
-
-export interface AiAssistantPreferences {
-  modelPreference:AiModelPreference;
-  executionMode:AiExecutionMode;
-  allowMediaSuggestions:boolean;
-  allowTranslations:boolean;
-  includePresentationContext:boolean;
-  clearHistoryOnClose:boolean;
-}
-
-export const defaultAiAssistantPreferences:AiAssistantPreferences={
-  modelPreference:'auto',
-  executionMode:'confirm',
-  allowMediaSuggestions:true,
-  allowTranslations:true,
-  includePresentationContext:true,
-  clearHistoryOnClose:false
-};
 
 export interface PreferencesState {
   songTranslationMode:import('./songTranslation').SongTranslationMode;
@@ -80,7 +61,6 @@ export interface PreferencesState {
   ceraProFileName:string;
   unsplashAccessKey:string;
   aiEnabled:boolean;
-  aiAssistant:AiAssistantPreferences;
   publicInterest:PublicInterestSettings;
   sharedDeviceAutoLogout:boolean;
   sharedDeviceTimeoutMinutes:number;
@@ -124,7 +104,6 @@ export interface PreferencesState {
   setCeraProFileName:(value:string)=>void;
   setUnsplashAccessKey:(value:string)=>void;
   setAiEnabled:(value:boolean)=>void;
-  setAiAssistant:(patch:Partial<AiAssistantPreferences>)=>void;
   setPublicInterest:(patch:Partial<PublicInterestSettings>)=>void;
   setSharedDeviceSecurity:(patch:Partial<Pick<PreferencesState,'sharedDeviceAutoLogout'|'sharedDeviceTimeoutMinutes'|'logoutAfterOffAir'|'logoutAfterOffAirMinutes'>>)=>void;
 }
@@ -142,12 +121,16 @@ export function migratePreferencesForV44(persisted:unknown){
 }
 
 export function migratePreferencesForV60(persisted:unknown){
-  const previous=migratePreferencesForV44(persisted) as Record<string,unknown>;
-  const configured=previous.aiAssistant&&typeof previous.aiAssistant==='object'?previous.aiAssistant:{};
-  return {...previous,aiAssistant:{...defaultAiAssistantPreferences,...configured}} as Omit<PreferencesState,keyof PreferencesState&`set${string}`> & {aiAssistant:AiAssistantPreferences};
+  return migratePreferencesForV44(persisted);
 }
 
-export function migratePreferencesForV61(persisted:unknown){const previous=migratePreferencesForV60(persisted);return{...previous,operatorSoundsEnabled:typeof (previous as {operatorSoundsEnabled?:unknown}).operatorSoundsEnabled==='boolean'?(previous as {operatorSoundsEnabled:boolean}).operatorSoundsEnabled:true}}
+export function migratePreferencesForV61(persisted:unknown){const previous=migratePreferencesForV60(persisted),operatorSoundsEnabled=(previous as Record<string,unknown>).operatorSoundsEnabled;return{...previous,operatorSoundsEnabled:typeof operatorSoundsEnabled==='boolean'?operatorSoundsEnabled:true}}
+
+export function migratePreferencesForV63(persisted:unknown){
+  const previous=migratePreferencesForV61(persisted) as Record<string,unknown>;
+  const {aiAssistant: _removedAssistantPreferences, ...remaining}=previous;
+  return remaining;
+}
 
 export const usePreferences=create<PreferencesState>()(persist(set=>({
   songTranslationMode:'parentheses',
@@ -188,7 +171,6 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   ceraProFileName:'',
   unsplashAccessKey:'',
   aiEnabled:true,
-  aiAssistant:{...defaultAiAssistantPreferences},
   publicInterest:{enabled:false,preLoop:true,postLoop:true,durationSeconds:12,interval:5,showQr:true,categories:['blood','volunteering','inclusion','civil-protection','health']},
   sharedDeviceAutoLogout:true,
   sharedDeviceTimeoutMinutes:30,
@@ -232,7 +214,6 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setCeraProFileName:ceraProFileName=>set({ceraProFileName}),
   setUnsplashAccessKey:unsplashAccessKey=>set({unsplashAccessKey}),
   setAiEnabled:aiEnabled=>set({aiEnabled}),
-  setAiAssistant:patch=>set(state=>({aiAssistant:{...state.aiAssistant,...patch}})),
   setPublicInterest:patch=>set(state=>({publicInterest:{...state.publicInterest,...patch,durationSeconds:Math.max(8,Math.min(30,patch.durationSeconds??state.publicInterest.durationSeconds))}})),
   setSharedDeviceSecurity:patch=>set(patch)
-}),{name:'gottesdienstregie.preferences',version:61,migrate:persisted=>migratePreferencesForV61(persisted)}));
+}),{name:'gottesdienstregie.preferences',version:63,migrate:persisted=>migratePreferencesForV63(persisted)}));

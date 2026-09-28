@@ -118,12 +118,6 @@ import { WEB_EDITOR_URL } from "./platformLinks";
 import {BibleTextDialog} from './BibleTextDialog';
 import {shouldApplyOutputRevision} from './release54Model';
 import {firstActiveTarget} from './release53Model';
-import {AiAssistantPanel} from './ai/AiAssistantPanel';
-import {assistantStore} from './ai/assistantStore';
-import {createAssistantController} from './ai/assistantController';
-import {buildAiContext} from './ai/contextBuilder';
-import {selectAiModelProfile} from './ai/modelProfiles';
-import {AiSettings} from './ai/AiSettings';
 import {audioIconStateClass,deriveAudioTimeline, type AudioTimelineEntry} from './audioTimelineModel';
 import {backgroundAudioLabel} from './audioLabels';
 import { allEditorFonts as editorFonts, fontStack } from "./fonts";
@@ -4707,7 +4701,6 @@ function plainReleaseNotes(value: string) {
 
 type SettingsTab =
   | "general"
-  | "ai"
   | "security"
   | "accessibility"
   | "shortcuts"
@@ -5602,7 +5595,6 @@ function SettingsModal({
       title: "ALLGEMEIN",
       tabs: [
         "general",
-        "ai",
         "security",
         "accessibility",
         "shortcuts",
@@ -5638,9 +5630,7 @@ function SettingsModal({
             ? "Belohnungen"
             : key === "security"
               ? "Sicherheit"
-              : key === "ai"
-                ? "KI-Funktionen"
-                : key === "remote"
+              : key === "remote"
                   ? "Personal Monitore & Web-Steuerung"
                   : t(key as TranslationKey);
   return (
@@ -5886,8 +5876,6 @@ function SettingsModal({
                     </label>
                   </section>
                 </>
-              ) : tab === "ai" ? (
-                <AiSettings supported={Boolean(window.desktop)||('gpu' in navigator)} manager={(window.desktop as any)?.aiModel} clearHistory={()=>assistantStore.setState({messages:[],pendingPlan:undefined})}/>
               ) : tab === "shortcuts" ? (
                 <KeyboardShortcutSettings />
               ) : tab === "rewards" ? (
@@ -8029,7 +8017,7 @@ function AppShell({
   onLogout: () => void;
   device: RegisteredDevice | null;
 }) {
-  const {auth,presentations,media,desktop,target,ai}=usePlatform();
+  const {auth,presentations,media,desktop,target}=usePlatform();
   const { t, locale } = useI18n();
   const state = usePresentation();
   const loopController = useRef(new LoopController<ServiceItem>());
@@ -8049,7 +8037,6 @@ function AppShell({
     [previewQuick, setPreviewQuick] = useState<QuickScreenConfig | null>(null),
     [settingsOpen, setSettingsOpen] = useState(false),
     [bibleTextOpen,setBibleTextOpen]=useState(false),
-    [aiOpen,setAiOpen]=useState(false),
     [termsOpen, setTermsOpen] = useState(false),
     [helpOpen, setHelpOpen] = useState(false),
     [tourOpen, setTourOpen] = useState(
@@ -8084,14 +8071,6 @@ function AppShell({
   const previousTourOpen = useRef(tourOpen);
   const syncingRef = useRef(false),
     syncMessageTimer = useRef<number | undefined>(undefined);
-  const aiController=useMemo(()=>createAssistantController({
-    inference:ai,store:assistantStore,
-    getContext:()=>{const current=usePresentation.getState(),preferences=usePreferences.getState();return buildAiContext({document:presentationDocument(current),selectedItemId:current.selectedItemId,selectedSlideId:current.selectedSlideId,selectedElementIds:current.selectedElementIds,language:preferences.language,includePresentationContext:preferences.aiAssistant.includePresentationContext})},
-    getProfile:()=>{const preference=usePreferences.getState().aiAssistant.modelPreference;return selectAiModelProfile({memoryGb:Number((navigator as Navigator&{deviceMemory?:number}).deviceMemory??8),logicalCores:navigator.hardwareConcurrency??4,freeStorageGb:8,acceleration:'gpu' in navigator?'webgpu':'none'},preference)},
-    getExecutionMode:()=>usePreferences.getState().aiAssistant.executionMode,
-    getRevision:()=>{const revision=usePresentation.getState().editHistory.at(-1)?.revisionId??'rev-0';return Number(revision.replace(/\D/g,''))||0},
-    applyPlan:(plan,revision)=>usePresentation.getState().applyAiPlan(plan,revision),
-  }),[ai]);
   const openMedia = (
     purpose: "item" | "background" = "item",
     context: "manage" | "select" = "select",
@@ -9615,7 +9594,6 @@ function AppShell({
         setSettingsOpen(false);
         return;
       }
-      if(aiOpen){setAiOpen(false);return;}
       if (menuOpen) setMenuOpen(null);
     };
     addEventListener("keydown", escape);
@@ -9631,7 +9609,6 @@ function AppShell({
     libraryOpen,
     helpOpen,
     settingsOpen,
-    aiOpen,
     menuOpen,
   ]);
   async function air(
@@ -9889,7 +9866,6 @@ function AppShell({
           </div>
         ))}
         <button onClick={() => setSettingsOpen(true)}>{t("settings")}</button>
-        <button type="button" onClick={()=>setAiOpen(value=>!value)} aria-expanded={aiOpen} aria-controls="ai-assistant-panel">KI-Helfer</button>
         <div className="menu-root">
           <button
             onClick={(event) => {
@@ -10188,7 +10164,6 @@ function AppShell({
         />
       )}
       {bibleTextOpen&&<BibleTextDialog close={()=>setBibleTextOpen(false)} onShow={value=>{const quick:QuickScreenConfig={id:`bible-${Date.now()}`,type:'bible',name:value.reference,enabled:true,targets:['main'],text:value.text,pages:paginateBibleVerses(value.text.split('\n').filter(Boolean)),pageIndex:0,reference:value.reference,translation:value.translation,background:'#2d241b',order:0};void(async()=>{if(!usePresentation.getState().onAir)await air();if(!usePresentation.getState().onAir)return;setPreviewQuick(quick);await(window.desktop as any)?.sendQuick(['main'],quick);setBibleTextOpen(false)})()}}/>}
-      <AiAssistantPanel open={aiOpen} onClose={()=>setAiOpen(false)} store={assistantStore} controller={aiController}/>
       <MobileWorkspaceNav />
     </div>
   );

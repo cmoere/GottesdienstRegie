@@ -2,11 +2,8 @@ import type {PresentationDocument} from '../../store';
 import type {PlatformServices} from '../PlatformServices';
 import {desktopCapabilities} from '../capabilities';
 import type {PresentationSummary} from '../types';
-import {ElectronAiService} from './ElectronAiService';
 
 export function createElectronServices(bridge:NonNullable<Window['desktop']>):PlatformServices{
-  const aiBridge=(bridge as unknown as {ai:{generate:(request:unknown)=>Promise<unknown>;cancel:()=>Promise<boolean>}}).ai;
-  const aiModelBridge=(bridge as unknown as {aiModel?:{status:()=>Promise<{state:string;profile?:string}>;prepare:(profile:'eco'|'balanced'|'quality')=>Promise<unknown>}}).aiModel;
   const spotifyBridge=(bridge as unknown as {spotify:{status:()=>Promise<import('../../spotify/types').SpotifyConnectionStatus>;connect:()=>Promise<import('../../spotify/types').SpotifyConnectionStatus>;disconnect:()=>Promise<void>;search:(query:string,offset?:number)=>Promise<import('../../spotify/types').SpotifySearchPage>;open:(url:string)=>Promise<boolean>}}).spotify;
   return {
     target:'desktop',
@@ -45,7 +42,6 @@ export function createElectronServices(bridge:NonNullable<Window['desktop']>):Pl
       status:()=>bridge.media.onlineStatus()
     },
     spotify:{status:()=>spotifyBridge.status(),connect:()=>spotifyBridge.connect(),disconnect:()=>spotifyBridge.disconnect(),search:(query,offset)=>spotifyBridge.search(query,offset),openTrack:reference=>spotifyBridge.open(reference.externalUrl)},
-    ai:new ElectronAiService({generate:request=>aiBridge.generate(request),cancel:()=>aiBridge.cancel()},aiModelBridge),
     desktop:{
       displays:()=>bridge.displays(),
       identifyDisplays:assignments=>bridge.identifyDisplays(assignments),
