@@ -1,5 +1,6 @@
 import {describe,expect,it} from 'vitest';
-import {resolveOperatorWindowStartup,resolveSplashWindowBounds} from './windowStartup';
+import path from 'node:path';
+import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds} from './windowStartup';
 
 const displays=[{id:1,workArea:{x:0,y:0,width:1920,height:1040},bounds:{x:0,y:0,width:1920,height:1080}}];
 
@@ -18,5 +19,18 @@ describe('resolveOperatorWindowStartup',()=>{
     const result=resolveOperatorWindowStartup({windowStartMode:'restore',operatorDisplayTarget:'last',lastDisplayId:99,lastWindowState:'window',bounds:{x:9000,y:9000,width:410,height:700}},displays,1);
     expect(result.bounds).toEqual({x:96,y:52,width:1728,height:936});
     expect(result.startMode).toBe('window');
+  });
+});
+
+describe('packaged renderer startup',()=>{
+  it('resolves the renderer from the application root instead of the compiled electron folder',()=>{
+    expect(resolveRendererEntry(path.join('C:','app','dist-electron','electron'),path.join('C:','app'))).toBe(path.join('C:','app','dist','index.html'));
+  });
+
+  it('offers a visible retry action when loading the renderer fails',()=>{
+    const html=rendererFailureHtml('gottesdienstregie-retry://renderer');
+    expect(html).toContain('Arbeitsbereich konnte nicht geladen werden');
+    expect(html).toContain('Erneut versuchen');
+    expect(html).toContain('gottesdienstregie-retry://renderer');
   });
 });

@@ -18,7 +18,7 @@ import {TranslationPackService} from './TranslationPackService';
 import {platformAppearance} from './platformAppearance';
 import {StorageMaintenanceService,isStorageCategory,type StorageCategory} from './StorageMaintenanceService';
 import {translationPackCatalog} from './translationPackCatalog';
-import {resolveOperatorWindowStartup,resolveSplashWindowBounds} from './windowStartup';
+import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds} from './windowStartup';
 import {AiModelManager} from './AiModelManager';
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
@@ -85,9 +85,15 @@ async function checkForUpdates(){
   try{autoUpdater.allowPrerelease=appPreferences.get().betaUpdates;await autoUpdater.checkForUpdates();return lastUpdateStatus}catch(error){return publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)})}
 }
 
-function load(win: BrowserWindow, route = '') {
+const rendererRetryUrl='gottesdienstregie-retry://renderer';
+async function load(win: BrowserWindow, route = '') {
   if (rendererUrl) return win.loadURL(`${rendererUrl}${route}`);
-  return win.loadFile(path.join(__dirname, '../dist/index.html'), { hash: route.replace(/^#/, '') });
+  try{
+    return await win.loadFile(resolveRendererEntry(__dirname,app.getAppPath()),{hash:route.replace(/^#/,'')});
+  }catch(error){
+    console.error('Renderer konnte nicht geladen werden',error);
+    return win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(rendererFailureHtml(rendererRetryUrl))}`);
+  }
 }
 
 function createControlWindow(preferences:AppPreferencesData) {
@@ -100,6 +106,7 @@ function createControlWindow(preferences:AppPreferencesData) {
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   });
   controlWindow.setMenu(null);
+  controlWindow.webContents.on('will-navigate',(event,url)=>{if(url!==rendererRetryUrl)return;event.preventDefault();void load(controlWindow!)});
   if(process.platform!=='darwin')applySpellCheckerLanguage(controlWindow.webContents,'de');
   const publishWindowState=()=>controlWindow?.webContents.send('window:fullscreen-state',controlWindow.isFullScreen());
   controlWindow.on('enter-full-screen',publishWindowState);controlWindow.on('leave-full-screen',publishWindowState);
