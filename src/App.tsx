@@ -124,7 +124,7 @@ import {createAssistantController} from './ai/assistantController';
 import {buildAiContext} from './ai/contextBuilder';
 import {selectAiModelProfile} from './ai/modelProfiles';
 import {AiSettings} from './ai/AiSettings';
-import {deriveAudioTimeline, type AudioTimelineEntry} from './audioTimelineModel';
+import {audioIconStateClass,deriveAudioTimeline, type AudioTimelineEntry} from './audioTimelineModel';
 import { allEditorFonts as editorFonts, fontStack } from "./fonts";
 import {
   getChurchEvent,
@@ -1540,7 +1540,7 @@ function SortableItem({
       role="button"
       tabIndex={0}
       aria-selected={active}
-      className={`service-item ${active ? "active" : ""} ${live ? "live-item" : ""} ${!item.enabled ? "disabled-slide" : ""} ${isDragging ? "dragging" : ""} ${audioTimeline ? `audio-timeline-${audioTimeline.state}` : ""}`}
+      className={`service-item ${active ? "active" : ""} ${live ? "live-item" : ""} ${!item.enabled ? "disabled-slide" : ""} ${isDragging ? "dragging" : ""}`}
       title={audioTimeline ? `${audioTimeline.state === "stops" ? "Background Audio endet" : "Background Audio läuft"} · Start: ${audioTimeline.sourceTitle}` : undefined}
       onClick={onSelect}
       onDoubleClick={onTake}
@@ -1564,7 +1564,7 @@ function SortableItem({
         {item.timing?.repeat&&<small><Icon name="repeat"/> Wiederholung</small>}
       </span>
       <button
-        className={`item-audio-button ${item.backgroundAudio?.tracks.length ? "configured" : ""} ${item.audioStopCue ? "audio-stop-cue" : ""}`}
+        className={`item-audio-button ${item.backgroundAudio?.tracks.length ? "configured" : ""} ${item.audioStopCue ? "audio-stop-cue" : ""} ${audioIconStateClass(audioTimeline)}`}
         title={
           item.audioStopCue
             ? "Background Audio wird hier gestoppt"
@@ -3138,7 +3138,7 @@ export function OrderOfService({
                     </button>
                     <div className="section-actions">
                       <button
-                        className={`audio-header-button ${audio?.tracks.length ? "configured" : ""} ${audio?.muted ? "muted" : ""} ${missing ? "missing" : ""}`}
+                        className={`audio-header-button ${audio?.tracks.length ? "configured" : ""} ${audio?.muted ? "muted" : ""} ${missing ? "missing" : ""} ${section.audioStopCue?'audio-stop-cue':''}`}
                         title={
                           missing
                             ? "Audio konnte nicht vorbereitet werden"
@@ -3157,7 +3157,9 @@ export function OrderOfService({
                       >
                         <Icon
                           name={
-                            missing
+                            section.audioStopCue
+                              ? "speaker_notes_off"
+                              : missing
                               ? "warning"
                               : audio?.muted
                                 ? "volume_off"
@@ -3264,17 +3266,16 @@ export function OrderOfService({
           >
             <Icon name="radio" /> RADIOSENDER
           </button>
-          {audioMenu.targetType === "serviceItem" && (
+          {(audioMenu.targetType === "serviceItem" || audioMenu.targetType === "section") && (
             <button
               className="separator"
               onClick={() => {
-                state.toggleAudioStopCue(audioMenu.targetId);
+                if(audioMenu.targetType==='section')state.toggleSectionAudioStopCue(audioMenu.targetId);else state.toggleAudioStopCue(audioMenu.targetId);
                 setAudioMenu(null);
               }}
             >
               <Icon name="speaker_notes_off" />{" "}
-              {items.find((item) => item.id === audioMenu.targetId)
-                ?.audioStopCue
+              {(audioMenu.targetType==='section'?state.sections.find(section=>section.id===audioMenu.targetId)?.audioStopCue:items.find((item) => item.id === audioMenu.targetId)?.audioStopCue)
                 ? "STOP-CUE ENTFERNEN"
                 : "BACKGROUND AUDIO STOPPEN"}
             </button>
@@ -3728,7 +3729,7 @@ function Workspace({
                           return (
                             <div
                               key={current.id}
-                              className={`grid-slide ${preview ? "selected" : ""} ${live ? "live-slide" : ""} ${!canTakeLive ? "disabled-slide" : ""} ${audioTimeline[entry.id] ? `audio-timeline-${audioTimeline[entry.id].state}` : ""}`}
+                              className={`grid-slide ${preview ? "selected" : ""} ${live ? "live-slide" : ""} ${!canTakeLive ? "disabled-slide" : ""}`}
                               title={audioTimeline[entry.id] ? `${audioTimeline[entry.id].state === "stops" ? "Background Audio endet" : "Background Audio läuft"} · Start: ${audioTimeline[entry.id].sourceTitle}` : undefined}
                             >
                               <button

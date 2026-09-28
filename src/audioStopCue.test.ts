@@ -17,4 +17,13 @@ describe("audio stop cues", () => {
     expect(item?.audioStopCue).toBeUndefined();
     expect(item?.backgroundAudio?.tracks).toHaveLength(1);
   });
+
+  it('removes a section stop cue when new section audio is assigned',()=>{
+    const state=usePresentation.getState();
+    state.toggleSectionAudioStopCue('service');
+    state.updateSectionAudio('service',defaultBackgroundAudio([{assetId:'a',name:'Track',url:'track.mp3'}]));
+    const section=usePresentation.getState().sections.find(entry=>entry.id==='service');
+    expect(section?.audioStopCue).toBeUndefined();
+    expect(section?.backgroundAudio?.tracks).toHaveLength(1);
+  });
 });

@@ -7,6 +7,8 @@ export type AudioTimelineEntry = {
   sourceTitle: string;
 };
 
+export const audioIconStateClass=(entry:AudioTimelineEntry|undefined)=>entry?`audio-icon-${entry.state}`:'';
+
 type RunningAudio = {
   config: BackgroundAudioConfig;
   sourceItemId?: string;
@@ -26,6 +28,11 @@ export function deriveAudioTimeline(
     const sectionItems = items
       .filter((item) => item.sectionId === section.id && item.enabled && !item.disabled)
       .sort((a, b) => a.order - b.order);
+
+    if(section.audioStopCue&&running&&sectionItems[0]){
+      result[sectionItems[0].id]={state:'stops',sourceItemId:running.sourceItemId,sourceSectionId:running.sourceSectionId,sourceTitle:running.sourceTitle};
+      running=undefined;
+    }
 
     if (
       running &&

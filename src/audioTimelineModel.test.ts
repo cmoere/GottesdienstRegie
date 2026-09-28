@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { BackgroundAudioConfig, ServiceItem, ServiceSection } from "./store";
-import { deriveAudioTimeline } from "./audioTimelineModel";
+import { audioIconStateClass, deriveAudioTimeline } from "./audioTimelineModel";
 
 const audio = (continueUntil: BackgroundAudioConfig["continueUntil"] = "stopCue"): BackgroundAudioConfig => ({
   tracks: [{ assetId: "track-1", name: "Instrumental", url: "audio.mp3" }],
@@ -57,5 +57,19 @@ describe("deriveAudioTimeline", () => {
     ]);
     expect(result.short.state).toBe("starts");
     expect(result.next).toBeUndefined();
+  });
+
+  it("applies a section stop before its first item",()=>{
+    const result=deriveAudioTimeline(
+      [{...sections[0],backgroundAudio:audio('stopCue')},{...sections[1],audioStopCue:{fadeOutSeconds:2}}],
+      [item('pre-1','pre',0),item('service-1','service',0),item('service-2','service',1)],
+    );
+    expect(result['service-1']).toMatchObject({state:'stops',sourceSectionId:'pre'});
+    expect(result['service-2']).toBeUndefined();
+  });
+
+  it('maps timeline state only to an icon class',()=>{
+    expect(audioIconStateClass({state:'active',sourceTitle:'Musik'})).toBe('audio-icon-active');
+    expect(audioIconStateClass(undefined)).toBe('');
   });
 });
