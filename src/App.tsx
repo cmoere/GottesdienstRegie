@@ -55,6 +55,7 @@ import { EventLinkStatus } from "./EventLinkStatus";
 import { StorageSettings } from "./StorageSettings";
 import { resolveInsertionSectionId } from "./itemPlacementPolicy";
 import { getAddElementGroups } from './addElementCatalog';
+import {AssignedAudioPopover} from './AssignedAudioPopover';
 import { PersonalNotesPanel } from "./PersonalNotesPanel";
 import { prepareStandardTranslationPacks } from "./translationPackManager";
 import { weatherScreenController } from "./weatherController";
@@ -2768,6 +2769,7 @@ export function OrderOfService({
       targetId: string;
       x: number;
       y: number;
+      configured: boolean;
     } | null>(null),
     [collapsed, setCollapsed] = useState<Record<string, boolean>>(() => {
       try {
@@ -2817,6 +2819,7 @@ export function OrderOfService({
       targetId,
       x: Math.max(8, Math.min(rect.left, window.innerWidth - 250)),
       y: Math.min(rect.bottom + 3, window.innerHeight - 130),
+      configured,
     });
   }
   async function execute(command: string) {
@@ -3226,6 +3229,7 @@ export function OrderOfService({
         </DndContext>
       </div>
       {audioMenu && (
+        audioMenu.configured && (audioMenu.targetType==='section'?state.sections.find(s=>s.id===audioMenu.targetId)?.backgroundAudio:items.find(i=>i.id===audioMenu.targetId)?.backgroundAudio) ? <AssignedAudioPopover config={(audioMenu.targetType==='section'?state.sections.find(s=>s.id===audioMenu.targetId)?.backgroundAudio:items.find(i=>i.id===audioMenu.targetId)?.backgroundAudio)!} onClose={()=>setAudioMenu(null)} onChange={value=>{audioMenu.targetType==='section'?state.updateSectionAudio(audioMenu.targetId,value):state.updateItemAudio(audioMenu.targetId,value)}} onAdd={()=>{void (window.desktop as any)?.mediaWindow?.open('select','audio',audioMenu.targetType,audioMenu.targetId)}}/> :
         <div
           className="audio-context-menu"
           style={{ left: audioMenu.x, top: audioMenu.y }}

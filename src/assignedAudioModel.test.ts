@@ -1,0 +1,2 @@
+import {describe,expect,it} from 'vitest';import {removeAssignedTrack} from './assignedAudioModel';import {defaultBackgroundAudio} from './BackgroundAudioPanel';
+describe('assigned audio',()=>{it('removes by stable asset id',()=>{const c=defaultBackgroundAudio([{assetId:'a',name:'A',url:'a'},{assetId:'b',name:'B',url:'b'}]);expect(removeAssignedTrack(c,'a')?.tracks.map(t=>t.assetId)).toEqual(['b'])});it('clears the assignment after the last track',()=>{const c=defaultBackgroundAudio([{assetId:'a',name:'A',url:'a'}]);expect(removeAssignedTrack(c,'a')).toBeUndefined()})});
