@@ -66,6 +66,7 @@ export interface PreferencesState {
   noiseSuppression:boolean;
   echoCancellation:boolean;
   playAudioInPreview:boolean;
+  operatorSoundsEnabled:boolean;
   audioEqualizer:AudioEqualizerSettings;
   audioRouting:AudioRouting;
   timelineThumbnails:boolean;
@@ -107,6 +108,7 @@ export interface PreferencesState {
   setNoiseSuppression:(value:boolean)=>void;
   setEchoCancellation:(value:boolean)=>void;
   setPlayAudioInPreview:(value:boolean)=>void;
+  setOperatorSoundsEnabled:(value:boolean)=>void;
   setAudioEqualizer:(patch:Partial<AudioEqualizerSettings>)=>void;
   setAudioDefaultOutput:(deviceId:string)=>void;
   setAudioRoute:(route:AudioRoute,patch:Partial<AudioRouteConfig>)=>void;
@@ -145,6 +147,8 @@ export function migratePreferencesForV60(persisted:unknown){
   return {...previous,aiAssistant:{...defaultAiAssistantPreferences,...configured}} as Omit<PreferencesState,keyof PreferencesState&`set${string}`> & {aiAssistant:AiAssistantPreferences};
 }
 
+export function migratePreferencesForV61(persisted:unknown){const previous=migratePreferencesForV60(persisted);return{...previous,operatorSoundsEnabled:typeof (previous as {operatorSoundsEnabled?:unknown}).operatorSoundsEnabled==='boolean'?(previous as {operatorSoundsEnabled:boolean}).operatorSoundsEnabled:true}}
+
 export const usePreferences=create<PreferencesState>()(persist(set=>({
   songTranslationMode:'parentheses',
   setSongTranslationMode:songTranslationMode=>set({songTranslationMode}),
@@ -170,6 +174,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   noiseSuppression:true,
   echoCancellation:true,
   playAudioInPreview:true,
+  operatorSoundsEnabled:true,
   audioEqualizer:{mode:'standard',bands:[0,0,0,0,0,0,0,0,0,0]},
   audioRouting:defaultAudioRouting,
   timelineThumbnails:true,
@@ -211,6 +216,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setNoiseSuppression:noiseSuppression=>set({noiseSuppression}),
   setEchoCancellation:echoCancellation=>set({echoCancellation}),
   setPlayAudioInPreview:playAudioInPreview=>set({playAudioInPreview}),
+  setOperatorSoundsEnabled:operatorSoundsEnabled=>set({operatorSoundsEnabled}),
   setAudioEqualizer:patch=>set(state=>{const current=state.audioEqualizer??{mode:'standard' as AudioEqualizerMode,bands:[0,0,0,0,0,0,0,0,0,0]};return{audioEqualizer:{...current,...patch,bands:patch.bands??current.bands}}}),
   setAudioDefaultOutput:deviceId=>set(state=>({audioRouting:{...defaultAudioRouting,...state.audioRouting,defaultOutputDeviceId:deviceId}})),
   setAudioRoute:(route,patch)=>set(state=>({audioRouting:{...defaultAudioRouting,...state.audioRouting,[route]:{...defaultAudioRouting[route],...state.audioRouting?.[route],...patch}}})),
@@ -229,4 +235,4 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setAiAssistant:patch=>set(state=>({aiAssistant:{...state.aiAssistant,...patch}})),
   setPublicInterest:patch=>set(state=>({publicInterest:{...state.publicInterest,...patch,durationSeconds:Math.max(8,Math.min(30,patch.durationSeconds??state.publicInterest.durationSeconds))}})),
   setSharedDeviceSecurity:patch=>set(patch)
-}),{name:'gottesdienstregie.preferences',version:60,migrate:persisted=>migratePreferencesForV60(persisted)}));
+}),{name:'gottesdienstregie.preferences',version:61,migrate:persisted=>migratePreferencesForV61(persisted)}));

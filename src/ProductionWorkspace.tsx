@@ -51,7 +51,8 @@ import logoWhite from "./assets/logo-white.png";
 import { allEditorFonts as editorFonts, fontStack } from "./fonts";
 import { QuickOverlay } from "./QuickOverlay";
 import { usePreferences } from "./preferences";
-import { defaultAudioRouting, playRoutedTone } from "./audioRouting";
+import { defaultAudioRouting } from "./audioRouting";
+import {playOperatorTone} from './operatorSounds';
 import { snapPosition, snapRect } from './canvasGeometry';
 import {canHideSlideContent} from './quickScreenAvailability';
 import {nextTimerHold,timerProgress} from './previewTimer';
@@ -1948,7 +1949,7 @@ function QuizEditor({
             ...saved?.soundEffects,
           },
         };
-      void playRoutedTone(routing, "soundEffects", 659.25, 0.18).catch(
+      void playOperatorTone(usePreferences.getState().operatorSoundsEnabled,routing, "soundEffects",undefined,659.25, 0.18).catch(
         () => {},
       );
     } catch {
