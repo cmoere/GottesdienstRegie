@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("desktop", {
+  spotify:{status:()=>ipcRenderer.invoke('spotify:status'),connect:()=>ipcRenderer.invoke('spotify:connect'),disconnect:()=>ipcRenderer.invoke('spotify:disconnect'),search:(query:string,offset?:number)=>ipcRenderer.invoke('spotify:search',query,offset),open:(url:string)=>ipcRenderer.invoke('spotify:open',url)},
   spelling:{setLanguage:(language:string)=>ipcRenderer.invoke('spelling:set-language',language)},
   platform:{appearance:()=>ipcRenderer.invoke('platform:appearance')},
   lifecycle: {

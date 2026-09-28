@@ -20,6 +20,7 @@ import {StorageMaintenanceService,isStorageCategory,type StorageCategory} from '
 import {translationPackCatalog} from './translationPackCatalog';
 import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds} from './windowStartup';
 import {AiModelManager} from './AiModelManager';
+import {SpotifyAuthService} from './SpotifyAuthService';
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
 function applySpellCheckerLanguage(contents:Electron.WebContents,language:string){const requested=spellLocale[language]??language,available=contents.session.availableSpellCheckerLanguages,exact=available.find(item=>item.toLowerCase()===requested.toLowerCase()),base=available.find(item=>item.toLowerCase().split('-')[0]===requested.toLowerCase().split('-')[0]);contents.session.setSpellCheckerLanguages(exact?[exact]:base?[base]:[]);return exact??base??''}
@@ -39,6 +40,10 @@ let finishClose:()=>Promise<void>=async()=>{};
 let aiModelPreparation:AbortController|null=null;
 let aiGeneration:AbortController|null=null;
 let aiGenerator:{profile:string;run:(input:string,options:Record<string,unknown>)=>Promise<unknown>}|null=null;
+let spotifyAuth:SpotifyAuthService|null=null;
+const spotifyCallback=(url:string)=>{if(url.startsWith('gottesdienstregie://spotify-callback'))void spotifyAuth?.completeCallback(url).then(status=>controlWindow?.webContents.send('spotify:status',status)).catch(error=>controlWindow?.webContents.send('spotify:status',{state:'error',message:error instanceof Error?error.message:'SPOTIFY_CALLBACK_FAILED'}))};
+app.on('open-url',(event,url)=>{event.preventDefault();spotifyCallback(url)});
+app.on('second-instance',(_event,argv)=>{const url=argv.find(value=>value.startsWith('gottesdienstregie://spotify-callback'));if(url)spotifyCallback(url)});
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}},{scheme:'gottesdienst-cloud',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 app.on('web-contents-created',(_event,contents)=>{
@@ -172,6 +177,9 @@ app.whenReady().then(async() => {
   translationPacks.onProgress(value=>controlWindow?.webContents.send('translation-packs:progress',value));
   Menu.setApplicationMenu(null);
   appPreferences=new AppPreferences(path.join(app.getPath('userData'),'app-preferences.json'));
+  app.setAsDefaultProtocolClient('gottesdienstregie');
+  const spotifyTokenFile=path.join(app.getPath('userData'),'spotify-refresh-token.bin');
+  spotifyAuth=new SpotifyAuthService({clientId:String(process.env.SPOTIFY_CLIENT_ID??''),redirectUri:'gottesdienstregie://spotify-callback',openExternal:url=>shell.openExternal(url),request:fetch,readRefreshToken:async()=>{try{if(!safeStorage.isEncryptionAvailable())return null;return safeStorage.decryptString(await fs.readFile(spotifyTokenFile))}catch{return null}},writeRefreshToken:async token=>{if(!token){await fs.unlink(spotifyTokenFile).catch(()=>{});return}if(!safeStorage.isEncryptionAvailable())throw new Error('SPOTIFY_SECURE_STORAGE_UNAVAILABLE');await fs.writeFile(spotifyTokenFile,safeStorage.encryptString(token))}});
   const initialPreferences=await appPreferences.load();
   displaySleepProtection.setEnabled(initialPreferences.preventDisplaySleep!==false);
   autoUpdater.autoDownload=initialPreferences.autoDownloadUpdates;
@@ -355,6 +363,11 @@ app.whenReady().then(async() => {
   });
   ipcMain.handle('presentation:export',async(_event,id:string)=>{const doc=await presentationRepository.read(id);if(!doc)return null;const picked=await dialog.showSaveDialog(controlWindow!,{title:'Präsentation exportieren',defaultPath:`${String(doc.title||'Praesentation').replace(/[<>:"/\\|?*]/g,'-')}.grpresentation`,filters:[{name:'GottesdienstRegie Präsentation',extensions:['grpresentation']}]});if(picked.canceled||!picked.filePath)return null;return presentationRepository.exportDocument(id,picked.filePath)});
   ipcMain.handle('presentation:backup',(_event,id:string)=>presentationRepository.backup(id));
+  ipcMain.handle('spotify:status',()=>spotifyAuth!.status());
+  ipcMain.handle('spotify:connect',()=>spotifyAuth!.connect());
+  ipcMain.handle('spotify:disconnect',()=>spotifyAuth!.disconnect());
+  ipcMain.handle('spotify:open',async(_event,url:string)=>{if(!/^https:\/\/open\.spotify\.com\/track\/[A-Za-z0-9]+$/i.test(url))throw new Error('INVALID_SPOTIFY_URL');await shell.openExternal(url);return true});
+  ipcMain.handle('spotify:search',async(_event,query:string,offset=0)=>{const token=await spotifyAuth!.accessToken(),url=new URL('https://api.spotify.com/v1/search');url.search=new URLSearchParams({q:String(query??'').trim(),type:'track',limit:'20',offset:String(Math.max(0,Math.floor(offset)))}).toString();const response=await fetch(url,{headers:{authorization:`Bearer ${token}`},signal:AbortSignal.timeout(12000)});if(response.status===429)throw new Error(`SPOTIFY_RATE_LIMIT_${response.headers.get('retry-after')??'1'}`);if(!response.ok)throw new Error(`SPOTIFY_SEARCH_FAILED_${response.status}`);const data=await response.json() as any,tracks=data.tracks??{};return{items:(tracks.items??[]).map((track:any)=>({provider:'spotify',id:String(track.id),title:String(track.name),artists:(track.artists??[]).map((artist:any)=>String(artist.name)),album:String(track.album?.name??''),durationMs:Number(track.duration_ms??0),imageUrl:String(track.album?.images?.[0]?.url??''),externalUrl:String(track.external_urls?.spotify??`https://open.spotify.com/track/${track.id}`),uri:String(track.uri??`spotify:track:${track.id}`)})),nextOffset:tracks.next?Number(offset)+20:undefined,total:Number(tracks.total??0)}});
   ipcMain.handle('external:open',async(_event,url:string)=>{const unsplashTerms=['https://unsplash.com/de/nutzungsbedingungen','https://unsplash.com/de/datenschutzregelungen','https://unsplash.com/de/plus/lizenz'].includes(url);const allowed=unsplashTerms||/^https:\/\/(github\.com\/cmoere\/GottesdienstRegie|cmoere\.github\.io\/GottesdienstRegie)/i.test(url)||new RegExp(`^http:\\/\\/(localhost|127\\.0\\.0\\.1|${remoteServer.get().address.replace(/\./g,'\\.')})(?::\\d+)?\\/`,'i').test(url);if(!allowed)throw new Error('EXTERNAL_URL_NOT_ALLOWED');await shell.openExternal(url);return true});
   ipcMain.handle('translation-packs:list',()=>translationPacks.list());
   ipcMain.handle('platform:appearance',()=>platformAppearance(process.platform,os.release()));

@@ -5,6 +5,7 @@ import {deleteMethodFor,isAiGenerated,sortRecentlyUsed,validateMediaName} from "
 import {AiGenerationStatus} from './AiGenerationStatus';
 import {minimumGenerationDelay} from './release53Model';
 import {nextGenerationSeed} from './release54Model';
+import {SpotifyBrowser} from './spotify/SpotifyBrowser';
 import {generatorDimensions,videoMotionTransform,type GeneratorAspectRatio,type GeneratorMotion,type GeneratorQuality} from './generatorSettingsModel';
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -833,6 +834,7 @@ export function MediaBrowser() {
           <Icon name={cloudStatus?.online ? "cloud_done" : "cloud_off"} />
         </div>
       </header>
+      {isAudio&&<SpotifyBrowser/>}
       {!isAudio && (
         <nav className="media-tabs">
           <button
