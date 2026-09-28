@@ -21,6 +21,7 @@ import {translationPackCatalog} from './translationPackCatalog';
 import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds} from './windowStartup';
 import {AiModelManager} from './AiModelManager';
 import {SpotifyAuthService} from './SpotifyAuthService';
+import {normalizeSpotifyTrackUrl,SpotifyOEmbedService} from './SpotifyOEmbedService';
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
 function applySpellCheckerLanguage(contents:Electron.WebContents,language:string){const requested=spellLocale[language]??language,available=contents.session.availableSpellCheckerLanguages,exact=available.find(item=>item.toLowerCase()===requested.toLowerCase()),base=available.find(item=>item.toLowerCase().split('-')[0]===requested.toLowerCase().split('-')[0]);contents.session.setSpellCheckerLanguages(exact?[exact]:base?[base]:[]);return exact??base??''}
@@ -41,6 +42,7 @@ let aiModelPreparation:AbortController|null=null;
 let aiGeneration:AbortController|null=null;
 let aiGenerator:{profile:string;run:(input:string,options:Record<string,unknown>)=>Promise<unknown>}|null=null;
 let spotifyAuth:SpotifyAuthService|null=null;
+const spotifyOEmbed=new SpotifyOEmbedService();
 const spotifyCallback=(url:string)=>{if(url.startsWith('gottesdienstregie://spotify-callback'))void spotifyAuth?.completeCallback(url).then(status=>controlWindow?.webContents.send('spotify:status',status)).catch(error=>controlWindow?.webContents.send('spotify:status',{state:'error',message:error instanceof Error?error.message:'SPOTIFY_CALLBACK_FAILED'}))};
 app.on('open-url',(event,url)=>{event.preventDefault();spotifyCallback(url)});
 app.on('second-instance',(_event,argv)=>{const url=argv.find(value=>value.startsWith('gottesdienstregie://spotify-callback'));if(url)spotifyCallback(url)});
@@ -366,7 +368,8 @@ app.whenReady().then(async() => {
   ipcMain.handle('spotify:status',()=>spotifyAuth!.status());
   ipcMain.handle('spotify:connect',()=>spotifyAuth!.connect());
   ipcMain.handle('spotify:disconnect',()=>spotifyAuth!.disconnect());
-  ipcMain.handle('spotify:open',async(_event,url:string)=>{if(!/^https:\/\/open\.spotify\.com\/track\/[A-Za-z0-9]+$/i.test(url))throw new Error('INVALID_SPOTIFY_URL');await shell.openExternal(url);return true});
+  ipcMain.handle('spotify:resolve',(_event,url:string)=>spotifyOEmbed.resolve(url));
+  ipcMain.handle('spotify:open',async(_event,url:string)=>{const normalized=normalizeSpotifyTrackUrl(url);await shell.openExternal(normalized.url);return true});
   ipcMain.handle('spotify:search',async(_event,query:string,offset=0)=>{const token=await spotifyAuth!.accessToken(),url=new URL('https://api.spotify.com/v1/search');url.search=new URLSearchParams({q:String(query??'').trim(),type:'track',limit:'20',offset:String(Math.max(0,Math.floor(offset)))}).toString();const response=await fetch(url,{headers:{authorization:`Bearer ${token}`},signal:AbortSignal.timeout(12000)});if(response.status===429)throw new Error(`SPOTIFY_RATE_LIMIT_${response.headers.get('retry-after')??'1'}`);if(!response.ok)throw new Error(`SPOTIFY_SEARCH_FAILED_${response.status}`);const data=await response.json() as any,tracks=data.tracks??{};return{items:(tracks.items??[]).map((track:any)=>({provider:'spotify',id:String(track.id),title:String(track.name),artists:(track.artists??[]).map((artist:any)=>String(artist.name)),album:String(track.album?.name??''),durationMs:Number(track.duration_ms??0),imageUrl:String(track.album?.images?.[0]?.url??''),externalUrl:String(track.external_urls?.spotify??`https://open.spotify.com/track/${track.id}`),uri:String(track.uri??`spotify:track:${track.id}`)})),nextOffset:tracks.next?Number(offset)+20:undefined,total:Number(tracks.total??0)}});
   ipcMain.handle('external:open',async(_event,url:string)=>{const unsplashTerms=['https://unsplash.com/de/nutzungsbedingungen','https://unsplash.com/de/datenschutzregelungen','https://unsplash.com/de/plus/lizenz'].includes(url);const allowed=unsplashTerms||/^https:\/\/(github\.com\/cmoere\/GottesdienstRegie|cmoere\.github\.io\/GottesdienstRegie)/i.test(url)||new RegExp(`^http:\\/\\/(localhost|127\\.0\\.0\\.1|${remoteServer.get().address.replace(/\./g,'\\.')})(?::\\d+)?\\/`,'i').test(url);if(!allowed)throw new Error('EXTERNAL_URL_NOT_ALLOWED');await shell.openExternal(url);return true});
   ipcMain.handle('translation-packs:list',()=>translationPacks.list());
