@@ -26,6 +26,7 @@ const titles: Record<LoopItemType, string> = {
   infoCard: 'Infokarte',
   today: 'Heute bei uns',
   nextEvents: 'Nächste Termine',
+  nowPlaying: 'Läuft gerade',
 };
 
 export function createLoopItem(
@@ -52,6 +53,8 @@ export function createLoopItem(
   } else if (type === 'clock') {
     metadata.format = 'HH:mm:ss';
     body ||= 'Aktuelle Uhrzeit';
+  } else if (type === 'nowPlaying') {
+    body ||= 'Läuft gerade';
   }
   return { type, title: titles[type], sectionId, body, metadata, durationMs };
 }

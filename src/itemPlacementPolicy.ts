@@ -3,7 +3,7 @@ import type { ItemType, ServiceItem, ServiceSection } from './store';
 
 export const loopOnlyItemTypes = [
   'announcement', 'birthday', 'event', 'weather', 'loopQuiz', 'loopCountdown',
-  'clock', 'bibleVerse', 'loopQr', 'infoCard', 'today', 'nextEvents',
+  'clock', 'bibleVerse', 'loopQr', 'infoCard', 'today', 'nextEvents', 'nowPlaying',
 ] as const satisfies readonly ItemType[];
 
 export const standardItemTypes = [

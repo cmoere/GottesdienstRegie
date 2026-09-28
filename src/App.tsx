@@ -53,7 +53,8 @@ import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopContro
 import { consumeInsertionGuard, createLoopItem } from "./loopItemFactory";
 import { EventLinkStatus } from "./EventLinkStatus";
 import { StorageSettings } from "./StorageSettings";
-import { canInsertItemType, menuItemTypesForSection, resolveInsertionSectionId } from "./itemPlacementPolicy";
+import { resolveInsertionSectionId } from "./itemPlacementPolicy";
+import { getAddElementGroups } from './addElementCatalog';
 import { PersonalNotesPanel } from "./PersonalNotesPanel";
 import { prepareStandardTranslationPacks } from "./translationPackManager";
 import { weatherScreenController } from "./weatherController";
@@ -1823,7 +1824,9 @@ function AddPopover({
     sectionCanHostLoop = isLoopSection(activeSection),
     sectionIsLoopTarget = ["pre", "post", "preLoop", "postLoop"].includes(sectionId),
     loopAvailable = sectionCanHostLoop || sectionIsLoopTarget,
-    [quizOpen, setQuizOpen] = useState(false);
+    [quizOpen, setQuizOpen] = useState(false),
+    popoverRef = useRef<HTMLDivElement>(null);
+  useEffect(()=>{const onPointer=(event:PointerEvent)=>{if(!popoverRef.current?.contains(event.target as Node))close()};window.addEventListener('pointerdown',onPointer);return()=>window.removeEventListener('pointerdown',onPointer)},[close]);
   const options: {
     type: ItemType;
     label: string;
@@ -1910,6 +1913,7 @@ function AddPopover({
     { type: "infoCard", label: "Infokarte", title: "Infokarte", icon: "info" },
     { type: "today", label: "Heute bei uns", title: "Heute bei uns", icon: "today" },
     { type: "nextEvents", label: "Nächste Termine", title: "Nächste Termine", icon: "event_upcoming" },
+    { type: "nowPlaying", label: "Läuft gerade", title: "Läuft gerade", icon: "graphic_eq" },
   ];
   async function addImported(option: (typeof options)[number]) {
     void option;
@@ -2241,34 +2245,34 @@ function AddPopover({
     setQuizOpen(false);
     close();
   }
-  const loopGroup = loopAvailable ? (
+  const catalogGroups = getAddElementGroups(activeSection);
+  const loopGroup = (
     <div className="add-popover-loop-group">
       <strong>
         {targetSectionId
           ? `${activeSection?.title ?? "Bereich"} · LOOP-ELEMENTE`
           : "LOOP-ELEMENTE"}
       </strong>
-      {loopOptions.filter((option) => canInsertItemType(option.type, activeSection)).map((option) => (
-        <button key={`loop-${option.type}`} onClick={() => addLoopElement(option)}>
+      {loopOptions.map((option) => {const entry=catalogGroups[1].entries.find(item=>item.type===option.type);return (
+        <button key={`loop-${option.type}`} disabled={entry?.disabled} title={entry?.disabledReason} onClick={() => addLoopElement(option)}>
           <Icon name={option.icon} />
           <span>{option.label}</span>
         </button>
-      ))}
+      )})}
     </div>
-  ) : null;
-  const menuTypes = activeSection ? new Set(menuItemTypesForSection(activeSection)) : new Set();
-  const visibleOptions = options.filter((option) => menuTypes.has(option.type));
+  );
+  const visibleOptions = options;
   return (
     <>
-      <div className="popover add-content-popover">
+      <div className="popover add-content-popover" ref={popoverRef}>
         <header>
           <b>{targetSectionId ? `${activeSection?.title ?? "Bereich"} hinzufügen` : t("addItem")}</b>
           <button onClick={close}>
             <Icon name="close" />
           </button>
         </header>
-        {targetSectionId && loopGroup}
-        {!loopAvailable && visibleOptions.map((option) => (
+        <div className="add-popover-loop-group add-popover-standard-group"><strong>{catalogGroups[0].label}</strong>
+        {visibleOptions.map((option) => (
           <button
             key={option.type}
             onClick={() =>
@@ -2290,8 +2294,8 @@ function AddPopover({
             <Icon name={option.icon} />
             <span>{option.label}</span>
           </button>
-        ))}
-        {!targetSectionId && loopGroup}
+        ))}</div>
+        {loopGroup}
       </div>
       {quizOpen && (
         <QuizCreateDialog
