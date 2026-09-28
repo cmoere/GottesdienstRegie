@@ -28,6 +28,21 @@ describe('assistantController', () => {
     expect(store.getState().messages.at(-1)?.content).toBe('Erkannte Antwort');
   });
 
+  it('accepts valid JSON after an echoed internal prompt without exposing the echo', async () => {
+    const echoed = 'DU\nAntworte ausschließlich als JSON gemäß {message, plan}.\n{"message":"Sichtbare Antwort"}';
+    const { controller, store } = setup([{ generated_text: echoed }]);
+    await controller.send('Bitte helfen');
+    expect(store.getState().messages.map(item => item.content)).toEqual(['Bitte helfen', 'Sichtbare Antwort']);
+    expect(store.getState().messages.some(item => item.content.includes('Antworte ausschließlich'))).toBe(false);
+  });
+
+  it('never writes malformed raw model output to chat history', async () => {
+    const { controller, store } = setup('INTERNER SYSTEMPROMPT UND SCHEMA');
+    await controller.send('Bitte helfen');
+    expect(store.getState().messages.map(item => item.content)).toEqual(['Bitte helfen']);
+    expect(store.getState().error).toMatch(/sicher interpretiert/);
+  });
+
   it('keeps a proposed plan pending in confirmation mode', async () => {
     const { controller, store, applyPlan } = setup(planned); await controller.send('Prüfen');
     expect(store.getState().pendingPlan?.id).toBe('p1'); expect(applyPlan).not.toHaveBeenCalled();

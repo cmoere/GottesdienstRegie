@@ -1,9 +1,18 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createAssistantStore } from './assistantStore';
 import { AiAssistantPanel } from './AiAssistantPanel';
 
 describe('AiAssistantPanel', () => {
+  afterEach(cleanup);
+  it('uses neutral product copy without implementation claims', () => {
+    const store = createAssistantStore();
+    store.setState({ busy: true, progress: 10 });
+    render(<AiAssistantPanel open onClose={() => {}} store={store} controller={{ send: vi.fn(), cancel: vi.fn(), retry: vi.fn(), confirm: vi.fn(), reject: vi.fn(), clearHistory: vi.fn() }} />);
+    expect(screen.getByText('KI-Helfer arbeitet')).toBeInTheDocument();
+    expect(screen.queryByText(/LOKAL|OHNE API-SCHLÜSSEL|Lokale KI arbeitet/i)).not.toBeInTheDocument();
+  });
+
   it('submits prompts, runs quick actions, cancels, and returns focus when closed', async () => {
     const store = createAssistantStore(); const send = vi.fn(); const cancel = vi.fn(); const close = vi.fn();
     render(<AiAssistantPanel open onClose={close} store={store} controller={{ send, cancel, retry: vi.fn(), confirm: vi.fn(), reject: vi.fn(), clearHistory: vi.fn() }} />);

@@ -12,7 +12,7 @@ Automatisierte Tests sichern Paketpfade, Startfolien, Loop-Ziele, Abschnitts-Sto
 
 # GottesdienstRegie 0.60.0
 
-Version 0.60.0 führt den kostenlosen lokalen KI-Helfer ohne API-Schlüssel ein. Fragen, Textentwürfe und strukturierte Änderungsvorschläge werden auf dem eigenen Gerät verarbeitet. Die Anwendung wählt im Hintergrund ein passendes Modellprofil; in den Einstellungen können Modell, Bestätigungsmodus und Berechtigungen angepasst werden.
+Version 0.60.0 führt den integrierten KI-Helfer ein. Fragen, Textentwürfe und strukturierte Änderungsvorschläge werden anhand des gewählten Modellprofils verarbeitet; in den Einstellungen können Modell, Bestätigungsmodus und Berechtigungen angepasst werden.
 
 Der Helfer versteht Präsentationskontext, ohne persönliche Notizen, Zugangsdaten oder lokale Dateipfade an das Modell weiterzugeben. Änderungen werden vor dem Anwenden als Vorschau gezeigt oder – auf ausdrücklichen Wunsch – direkt ausgeführt. Jede angewendete Aktion ist atomar und lässt sich über die gemeinsame Präsentationshistorie rückgängig machen.
 
@@ -100,7 +100,7 @@ Version 0.54.0 überarbeitet die Rechtschreibprüfung, die Synchronisierung zwis
 
 Vorschau und MAIN reagieren nun auf denselben aktuellen Renderzustand. Zuvor wurde eine MAIN-Aktualisierung im Wesentlichen nur ausgelöst, wenn sich die Kennung der Live-Folie änderte. Wurde dagegen Text, Hintergrund, Übersetzung oder Gestaltung der bereits laufenden Folie verändert, zeigte die Bedienvorschau den neuen Zustand, während MAIN noch einen älteren Snapshot behalten konnte. Version 0.54.0 überträgt deshalb jede tatsächliche Inhaltsänderung erneut. Fortlaufende Ausgaberevisionen verhindern zugleich, dass verspätete ältere Zustände einen neueren Stand überschreiben.
 
-Die MAIN-Schnellaktion „Bibel einblenden“ wurde vollständig ersetzt. Ein Klick sendet nicht länger sofort eine möglicherweise leere Schnellanzeige, sondern öffnet zuerst einen eigenständigen Dialog. Dort werden Übersetzung, Bibelbuch, Kapitel sowie erster und letzter Vers gewählt. Eine echte Vorschau lädt den Text über die öffentliche GetBible-Schnittstelle ohne erforderlichen API-Schlüssel und speichert erfolgreiche Abfragen lokal zwischen. Luther 1545 ist voreingestellt; Elberfelder 1871, Elberfelder 1905, Schlachter 1951, King James Version und American Standard Version können ebenfalls gewählt werden. Erst „AUF MAIN ANZEIGEN“ legt den geprüften Text über die laufende Folie. Netzwerk- und Stellenfehler erzeugen niemals eine leere Ausgabe, sondern eine verständliche Meldung mit Wiederholen-Aktion.
+Die MAIN-Schnellaktion „Bibel einblenden“ wurde vollständig ersetzt. Ein Klick sendet nicht länger sofort eine möglicherweise leere Schnellanzeige, sondern öffnet zuerst einen eigenständigen Dialog. Dort werden Übersetzung, Bibelbuch, Kapitel sowie erster und letzter Vers gewählt. Eine echte Vorschau lädt den Text über die öffentliche GetBible-Schnittstelle und speichert erfolgreiche Abfragen zwischen. Luther 1545 ist voreingestellt; Elberfelder 1871, Elberfelder 1905, Schlachter 1951, King James Version und American Standard Version können ebenfalls gewählt werden. Erst „AUF MAIN ANZEIGEN“ legt den geprüften Text über die laufende Folie. Netzwerk- und Stellenfehler erzeugen niemals eine leere Ausgabe, sondern eine verständliche Meldung mit Wiederholen-Aktion.
 
 Temporäre Bibeltexte bleiben sichtbar, wenn sich darunter die normale Live-Folie weiterentwickelt. Die aktuelle MAIN-Folie wird parallel aktualisiert und erscheint wieder, sobald die Schnellanzeige bewusst beendet wird. Damit bleiben Ablaufsteuerung und temporäre Einblendung voneinander getrennt.
 
@@ -198,7 +198,7 @@ Die Medienbibliothek wurde für die tägliche Auswahl überarbeitet. Der Upload 
 
 Der Bereich KI-Motive besitzt nun einen eigenständigen Erstellungsstatus mit mindestens 15 wechselnden visuellen Phasen. Bei reduzierter Bewegung bleibt der Zustand ruhig und verständlich. Tritt ein Fehler auf, bleiben Beschreibung, Szene und Stil erhalten; eine kompakte Schaltfläche „Erneut versuchen“ startet denselben Auftrag erneut.
 
-Mit „Bibeltext anzeigen“ steht ein eigener Such- und Vorschauablauf für spontane MAIN-Einblendungen bereit. Luther 1912 ist voreingestellt. Der Katalog modelliert 26 deutsche und vier englische Übersetzungen; sichtbar sind aus rechtlichen Gründen nur bereits installierte oder ohne persönlichen API-Schlüssel direkt beziehbare Pakete. Lizenzpflichtige Texte werden nicht als scheinbar installierbare Auswahl angeboten. Die MAIN-Schnellanzeige bleibt als eigene Ebene bestehen, wenn Folien weitergeschaltet werden oder ein Folienwechsel-Countdown läuft.
+Mit „Bibeltext anzeigen“ steht ein eigener Such- und Vorschauablauf für spontane MAIN-Einblendungen bereit. Luther 1912 ist voreingestellt. Der Katalog modelliert 26 deutsche und vier englische Übersetzungen; sichtbar sind aus rechtlichen Gründen nur bereits installierte oder direkt beziehbare Pakete. Lizenzpflichtige Texte werden nicht als scheinbar installierbare Auswahl angeboten. Die MAIN-Schnellanzeige bleibt als eigene Ebene bestehen, wenn Folien weitergeschaltet werden oder ein Folienwechsel-Countdown läuft.
 
 Automatisierte Tests prüfen die Fensterstart-Regeln, sicheren Plattformlinks, Mediennamen und Nutzungszeiten, 15 KI-Ladephasen, Bibelstellen-Parser, Katalogumfang und die Trennung der MAIN-Schnellanzeige vom normalen Folienstand.
 
@@ -304,13 +304,13 @@ Präsentationsnotizen sind jetzt direkt unter dem Präsentationstitel erreichbar
 
 Die bisherige einfache 2D-Auswahl wurde durch eine durchsuchbare Galerie mit Symbolen, Namen und Kategorien ersetzt. Mehr als dreißig Grundformen, Pfeile, Symbole und kirchliche Motive lassen sich dadurch schneller finden. Zahlenfelder, Popovers und schmale Einstellungsseiten besitzen stabilere Abstände und stärkere Kontraste.
 
-Der Schwarz-Weiß-Modus ist nun strikt auf die Bedienoberfläche beschränkt. MAIN, STAGE, Livestream, Lobby und weitere Ausgabefenster behalten immer die vorgesehenen Folienfarben. Die Hilfe beschreibt dieses Verhalten eindeutig und der veraltete Hinweis auf einen nicht benötigten API-Schlüssel wurde entfernt.
+Der Schwarz-Weiß-Modus ist nun strikt auf die Bedienoberfläche beschränkt. MAIN, STAGE, Livestream, Lobby und weitere Ausgabefenster behalten immer die vorgesehenen Folienfarben. Die Hilfe beschreibt dieses Verhalten eindeutig und veraltete technische Hinweise wurden entfernt.
 
 ---
 
 # GottesdienstRegie 0.40.0
 
-Version 0.40.0 erweitert den Song-Editor um eine lokale automatische Übersetzung zwischen Englisch und Deutsch. Beim ersten Einsatz wird das benötigte Modell geladen; danach läuft die Übersetzung auf dem Gerät ohne API-Schlüssel. Akkorde und Leerzeilen bleiben erhalten, der Entwurf kann vor dem Speichern korrigiert werden und ein Fehler verändert weder Originaltext noch MAIN.
+Version 0.40.0 erweitert den Song-Editor um eine automatische Übersetzung zwischen Englisch und Deutsch. Beim ersten Einsatz wird das benötigte Modell geladen. Akkorde und Leerzeilen bleiben erhalten, der Entwurf kann vor dem Speichern korrigiert werden und ein Fehler verändert weder Originaltext noch MAIN.
 
 Persönliche Notizen können jetzt sowohl zur gesamten Präsentation als auch zu einer einzelnen Folie geführt werden. Sie sind gerätelokal, kontogetrennt und ausdrücklich nicht Teil der Cloud-Präsentation oder einer Ausgabe. Das Musikmenü unterstützt zusätzlich eine Online-Suche nach HTTPS-Radiosendern mit direkter Vorschau und Übernahme in das Hintergrundaudio.
 
@@ -450,7 +450,7 @@ Diese Erweiterung ergänzt die Vorbereitung um dynamische, optionale Loop-Elemen
 - Die Editorvorschau zeigt Uhrzeit, Wetter und Meldungen lokal an. QR-URLs, Dauer und Loop-Metadaten werden im Inspector bearbeitbar dargestellt; die Wetterquelle bleibt systemseitig fest, die Dauer ist änderbar.
 - Preflight meldet fehlerhafte Loop-Platzierungen und ungültige Wettermetadaten als Warnungen. Optionale Loop-Daten dürfen den Start eines Gottesdienstes nicht blockieren.
 
-Die Erweiterung schreibt keine API-Schlüssel in die Anwendung und führt keine neue Live- oder Firebase-Engine ein. Screenmeldung-Daten bleiben im bestehenden Datenmodell; öffentliche Ansichten erhalten nur die fachlich notwendigen, bereinigten Felder.
+Die Erweiterung führt keine neue Live- oder Firebase-Engine ein. Screenmeldung-Daten bleiben im bestehenden Datenmodell; öffentliche Ansichten erhalten nur die fachlich notwendigen, bereinigten Felder.
 
 ## Vorschau-Layout korrigiert
 
@@ -727,7 +727,7 @@ Veröffentlicht am 10. September 2026 um 03:35 Uhr.
 - **Gemeinsam genutzte Gemeinde-PCs:** Geräte werden einmalig registriert, während sich Benutzer auf gemeinsamen Rechnern bei jedem Start persönlich anmelden.
 - **Websteuerung im lokalen Netzwerk:** Zeitlich begrenzte, widerrufbare Sitzungen bedienen NEXT und ZURÜCK über dieselbe sichere Live-Logik wie der Operator-PC.
 - **Persönliche Monitore:** Feste, nur lesende URLs zeigen den bestätigten Live-Stand auf Smartphones, Tablets und weiteren Rechnern und verbinden sich automatisch neu.
-- **Zentrale KI-Steuerung:** KI-Funktionen lassen sich global ein- oder ausschalten; KI-Motive bleiben ohne eigenen API-Schlüssel verfügbar.
+- **Zentrale KI-Steuerung:** KI-Funktionen lassen sich global ein- oder ausschalten; KI-Motive bleiben direkt im Medienbrowser verfügbar.
 
 ## Verbessert
 
@@ -753,7 +753,7 @@ Veröffentlicht am 10. September 2026 um 02:25 Uhr.
 
 - **Dauerhafte Änderungshistorie:** Ein eigenes Systemfenster zeigt Revision, Benutzer, Bereich, Quelle, Synchronisierungsstatus sowie Vorher/Nachher und bietet sichere Wiederherstellungspunkte.
 - **Optionales Belohnungssystem:** XP, Level, Abzeichen, Anti-Farming und ein eigener Verlauf motivieren ohne Funktionen, Rollen oder Rechte zu sperren.
-- **Lokale KI-Motive:** Der Medienbrowser erzeugt ohne API-Schlüssel individuelle 16:9-Hintergründe direkt auf dem Gerät.
+- **KI-Motive:** Der Medienbrowser erzeugt individuelle 16:9-Hintergründe direkt in der Motiverstellung.
 - **Weitere 2D-Objekte:** Fünfeck, Sechseck, Achteck, Strahlenform, Chevron, Sprechblase und Kreuz ergänzen die Formbibliothek.
 
 ## Verbessert
