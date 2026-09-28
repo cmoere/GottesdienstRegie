@@ -2788,7 +2788,7 @@ function PreviewCenter({
             )}
             role="operator"
           />
-          <QuickOverlay quick={activeQuick} />
+          <QuickOverlay quick={activeQuick} staticPreview />
         </div>
         <div className="preview-navigation-rail">{timedSeconds>0&&<button className={`preview-timer-ring ${(pausedSlideId===slide.id||livePaused)?'held':''}`} aria-pressed={pausedSlideId===slide.id||livePaused} title={(pausedSlideId===slide.id||livePaused)?'Zeitsteuerung fortsetzen':'Folie dauerhaft anzeigen'} onClick={()=>{const wasHeld=pausedSlideId===slide.id||livePaused;if(wasHeld){setRemaining(timedSeconds);deadline.current=Date.now()+timedSeconds*1000}if(state.onAir)state.setLiveTimerPaused(livePaused?undefined:slide.id);else setPausedSlideId(value=>nextTimerHold(value,slide.id))}}><svg viewBox="0 0 40 40"><circle className="track" cx="20" cy="20" r="16"/><circle className="progress" cx="20" cy="20" r="16" pathLength="1" style={{strokeDashoffset:1-timerProgress(remaining,timedSeconds)}}/></svg></button>}<button className="preview-nav next" disabled={currentIndex < 0 || currentIndex >= all.length - 1} title="Nächste MAIN-Folie" onClick={() => move(1)}><Icon name="chevron_right" /></button></div>
       </div>

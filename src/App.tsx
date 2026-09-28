@@ -10101,7 +10101,7 @@ function AppShell({
             activeQuick={previewQuick}
             onQuick={(quick) => void applyQuick(quick)}
           />
-          {state.mode === "edit" && <QuickOverlay quick={previewQuick} />}
+          {state.mode === "edit" && <QuickOverlay quick={previewQuick} staticPreview />}
         </div>
       </div>
       <BackgroundAudioController />
