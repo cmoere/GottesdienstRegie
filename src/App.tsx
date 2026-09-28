@@ -125,6 +125,7 @@ import {buildAiContext} from './ai/contextBuilder';
 import {selectAiModelProfile} from './ai/modelProfiles';
 import {AiSettings} from './ai/AiSettings';
 import {audioIconStateClass,deriveAudioTimeline, type AudioTimelineEntry} from './audioTimelineModel';
+import {backgroundAudioLabel} from './audioLabels';
 import { allEditorFonts as editorFonts, fontStack } from "./fonts";
 import {
   getChurchEvent,
@@ -2744,7 +2745,7 @@ export function OrderOfService({
   canEdit: boolean;
   onTake: (itemId: string, slideId: string) => void;
 }) {
-  const { t } = useI18n(),
+  const { t, language } = useI18n(),
     state = usePresentation(),
     items = state.items,
     selected = state.selectedItemId,
@@ -3276,8 +3277,8 @@ export function OrderOfService({
             >
               <Icon name="speaker_notes_off" />{" "}
               {(audioMenu.targetType==='section'?state.sections.find(section=>section.id===audioMenu.targetId)?.audioStopCue:items.find((item) => item.id === audioMenu.targetId)?.audioStopCue)
-                ? "STOP-CUE ENTFERNEN"
-                : "BACKGROUND AUDIO STOPPEN"}
+                ? backgroundAudioLabel('removeStop',language)
+                : backgroundAudioLabel('stop',language)}
             </button>
           )}
         </div>
