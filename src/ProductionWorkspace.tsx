@@ -57,6 +57,7 @@ import { snapPosition, snapRect } from './canvasGeometry';
 import {canHideSlideContent} from './quickScreenAvailability';
 import {nextTimerHold,timerProgress} from './previewTimer';
 import {shouldHandlePreviewArrow} from './previewKeyboard';
+import { MainLivePreview } from './MainLivePreview';
 
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -2643,7 +2644,6 @@ function PreviewSlideCard({
           <Icon name="animation" />
         </i>
       )}
-      {live && <b className="preview-live-badge">LIVE</b>}
     </button>
   );
 }
@@ -2942,22 +2942,7 @@ function PreviewRightSidebar({
           <Icon name="chevron_right" />
         </button>
       </header>
-      <section className="live-slide-panel">
-        <h2>LIVE AUF MAIN</h2>
-        {live ? (
-          <>
-            <div>
-              <SlideRenderer slide={previewSlide(live)} mode="thumbnail" />
-              <b>LIVE</b>
-            </div>
-            <p>
-              {liveItem?.title} · {live.title || "Live-Folie"}
-            </p>
-          </>
-        ) : (
-          <p>MAIN ist derzeit OFF AIR.</p>
-        )}
-      </section>
+      {live ? <MainLivePreview title={`${liveItem?.title} · ${live.title || "Live-Folie"}`}><SlideRenderer slide={previewSlide(live)} mode="thumbnail" /></MainLivePreview> : <section className="live-slide-panel"><h2>LIVE AUF MAIN</h2><p>MAIN ist derzeit OFF AIR.</p></section>}
       <section className="quick-screens-panel">
         <h2>MAIN-SCHNELLANZEIGEN</h2>
         <div>
