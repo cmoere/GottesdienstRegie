@@ -21,6 +21,7 @@ import {translationPackCatalog} from './translationPackCatalog';
 import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds} from './windowStartup';
 import {SpotifyAuthService} from './SpotifyAuthService';
 import {normalizeSpotifyTrackUrl,SpotifyOEmbedService} from './SpotifyOEmbedService';
+import {RadioMetadataService} from './RadioMetadataService';
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
 function applySpellCheckerLanguage(contents:Electron.WebContents,language:string){const requested=spellLocale[language]??language,available=contents.session.availableSpellCheckerLanguages,exact=available.find(item=>item.toLowerCase()===requested.toLowerCase()),base=available.find(item=>item.toLowerCase().split('-')[0]===requested.toLowerCase().split('-')[0]);contents.session.setSpellCheckerLanguages(exact?[exact]:base?[base]:[]);return exact??base??''}
@@ -39,6 +40,7 @@ let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
 let finishClose:()=>Promise<void>=async()=>{};
 let spotifyAuth:SpotifyAuthService|null=null;
 const spotifyOEmbed=new SpotifyOEmbedService();
+const radioMetadata=new RadioMetadataService(),radioMetadataStops=new Map<number,()=>void>();
 const spotifyCallback=(url:string)=>{if(url.startsWith('gottesdienstregie://spotify-callback'))void spotifyAuth?.completeCallback(url).then(status=>controlWindow?.webContents.send('spotify:status',status)).catch(error=>controlWindow?.webContents.send('spotify:status',{state:'error',message:error instanceof Error?error.message:'SPOTIFY_CALLBACK_FAILED'}))};
 app.on('open-url',(event,url)=>{event.preventDefault();spotifyCallback(url)});
 app.on('second-instance',(_event,argv)=>{const url=argv.find(value=>value.startsWith('gottesdienstregie://spotify-callback'));if(url)spotifyCallback(url)});
@@ -187,6 +189,8 @@ app.whenReady().then(async() => {
   const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
   stopPresentationOutputs=()=>outputManager.stop();
   ipcMain.handle('spelling:set-language',(event,language:string)=>applySpellCheckerLanguage(event.sender,String(language||'de')));
+  ipcMain.handle('radio:metadata-start',(event,stationId:string,streamUrl:string)=>{radioMetadataStops.get(event.sender.id)?.();const sender=event.sender;radioMetadataStops.set(sender.id,radioMetadata.start(String(stationId),String(streamUrl),value=>{if(!sender.isDestroyed())sender.send('radio:metadata',value)}));return true});
+  ipcMain.handle('radio:metadata-stop',(event)=>{radioMetadataStops.get(event.sender.id)?.();radioMetadataStops.delete(event.sender.id);return true});
   const sessionFile = path.join(app.getPath('userData'), 'community-session.bin');
   const legacyPresentationFile=path.join(app.getPath('userData'),'presentations','default-presentation.json');
   const presentationRepository=new PresentationRepository(path.join(app.getPath('userData'),'library'));

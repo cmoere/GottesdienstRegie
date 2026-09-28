@@ -1,0 +1,2 @@
+export type RadioNowPlaying={stationId:string;title:string;artist:string;rawTitle:string;receivedAt:number};
+export function normalizeRadioTitle(stationId:string,raw:string):RadioNowPlaying{const clean=raw.replace(/[\x00-\x1f\x7f]/g,' ').replace(/\s+/g,' ').trim().slice(0,500);const split=clean.indexOf(' - ');return {stationId,artist:split>0?clean.slice(0,split).trim():'',title:split>0?clean.slice(split+3).trim():clean,rawTitle:clean,receivedAt:Date.now()}}
