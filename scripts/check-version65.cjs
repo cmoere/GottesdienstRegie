@@ -1,8 +1,8 @@
 const fs=require('fs'),assert=require('assert');
 const read=file=>fs.readFileSync(file,'utf8'),pkg=require('../package.json'),releases=require('../public/releases.json'),notes=read('RELEASE_NOTES.md'),app=read('src/App.tsx'),renderer=read('src/SlideRenderer.tsx'),model=read('src/nowPlayingModel.ts'),audio=read('src/BackgroundAudioEngine.ts'),workflow=read('.github/workflows/release.yml');
-assert(pkg.version==='0.65.0'&&pkg.releaseSeries==='0.65','package must identify V65');
-assert(releases.versions[0]?.builds[0]?.version==='0.65.0'&&releases.versions[0].builds[0].current===true,'V65 must lead the release catalog');
-assert(notes.startsWith('# GottesdienstRegie 0.65.0'),'notes must start with V65');
+assert(Number(pkg.version.split('.')[1])>=65,'package must include V65 or newer');
+assert(releases.versions.some(entry=>entry.builds?.some(build=>build.version==='0.65.0')),'V65 must remain in the release catalog');
+assert(notes.includes('# GottesdienstRegie 0.65.0'),'notes must include V65');
 assert(workflow.includes('check-version65.cjs'),'workflow must run V65 guard');
 assert(model.includes("'cover-left','cover-hero','minimal','vinyl','radio','gradient','typography','stage'"),'eight now-playing designs missing');
 assert(app.includes('Folie überspringen, wenn gerade nichts läuft'),'idle skip option missing');

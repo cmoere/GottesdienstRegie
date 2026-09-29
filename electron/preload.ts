@@ -244,6 +244,7 @@ contextBridge.exposeInMainWorld("desktop", {
   },
   updates: {
     currentVersion: () => ipcRenderer.invoke("updates:current-version"),
+    status: () => ipcRenderer.invoke("updates:status"),
     metadata: () => ipcRenderer.invoke("updates:metadata"),
     check: () => ipcRenderer.invoke("updates:check"),
     download: () => ipcRenderer.invoke("updates:download"),

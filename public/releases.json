@@ -21,11 +21,33 @@
   ],
   "versions": [
     {
+      "line": "0.66",
+      "builds": [{
+        "version": "0.66.0",
+        "releaseDate": "2026-09-29",
+        "current": true,
+        "overview": {
+          "label": { "de": "Updates laufen weiter, Radiotitel kommen an", "en": "Persistent updates and richer radio titles" },
+          "text": { "de": "Update-Suche und Downloads bleiben beim Schließen der Einstellungen aktiv; weitergeleitete Radiostreams liefern ihre Titelinformationen.", "en": "Update checks and downloads continue after closing settings, while redirected radio streams provide their title metadata." }
+        },
+        "sections": {
+          "new": [],
+          "improved": [
+            { "label": { "de": "Radiotitel über Weiterleitungen", "en": "Radio titles through redirects" }, "text": { "de": "Der Metadatenabruf folgt sicheren HTTPS-Weiterleitungen und zeigt Titel sowie Interpret, wenn der Sender sie übermittelt.", "en": "Metadata retrieval follows secure HTTPS redirects and shows title and artist when supplied by the station." } }
+          ],
+          "fixed": [
+            { "label": { "de": "Update-Fortschritt bleibt erhalten", "en": "Update progress is retained" }, "text": { "de": "Das Schließen der Einstellungen beendet weder Suche noch Download; beim erneuten Öffnen wird der aktuelle Fortschritt sofort angezeigt.", "en": "Closing settings no longer interrupts checking or downloading, and reopening immediately restores current progress." } }
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.65",
       "builds": [{
         "version": "0.65.0",
         "releaseDate": "2026-09-29",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "Läuft gerade – mit echten Musikdaten", "en": "Now playing with live music data" },
           "text": { "de": "Acht neue Designs zeigen Titel, Interpret, Album und Cover aus der aktiven Hintergrundwiedergabe.", "en": "Eight new designs show title, artist, album, and artwork from active background playback." }

@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.66.0
+
+Version 0.66.0 entkoppelt Update-Suche und Download vollständig vom geöffneten Einstellungsfenster. Wird das Fenster geschlossen, laufen beide Vorgänge im Electron-Hauptprozess weiter. Beim erneuten Öffnen wird der aktuelle Zustand samt Downloadfortschritt sofort wieder angezeigt. Ein Download endet nur noch durch den ausdrücklich betätigten Abbrechen-Button, einen Fehler oder seinen erfolgreichen Abschluss.
+
+Der Abruf von Radiometadaten folgt jetzt sicheren HTTPS-Weiterleitungen. Das ist bei vielen Sendern erforderlich, weil die gespeicherte Streamadresse zunächst auf den eigentlichen Audiostream verweist. Übermittelt der Sender ICY-Metadaten, zeigt „Läuft gerade“ dadurch Liedtitel und Interpret. Sendet ein Stream keine Titelinformationen, bleiben Sendername und „Online-Radio“ als ehrlicher Fallback sichtbar.
+
+Regressionstests sichern die Wiederaufnahme des Update-Status und Radiometadaten über Streamweiterleitungen ab.
+
+---
+
 # GottesdienstRegie 0.65.0
 
 Version 0.65.0 macht aus „Läuft gerade“ eine echte dynamische Musikfolie. Sie übernimmt Titel, Interpret, Album und – sofern verfügbar – das Cover aus der aktiven Hintergrundwiedergabe. Bei kompatiblen Radiosendern werden auch laufende ICY-Metadaten weitergereicht.

@@ -414,6 +414,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('remote:revoke-session',(_event,id:string)=>remoteServer.revokeSession(id));
   ipcMain.handle('remote:update-live',(_event,state:any)=>{remoteServer.updateLive(state);return true});
   ipcMain.handle('updates:current-version',()=>app.getVersion());
+  ipcMain.handle('updates:status',()=>lastUpdateStatus);
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});
   ipcMain.handle('updates:check',()=>checkForUpdates());
   ipcMain.handle('updates:download',async()=>{if(lastUpdateStatus.state!=='available'&&lastUpdateStatus.state!=='cancelled')return false;updateCancellationToken=new CancellationToken();smoothedDownloadSpeed=0;try{await autoUpdater.downloadUpdate(updateCancellationToken);updateCancellationToken=null;return true}catch(error){if(updateCancellationToken?.cancelled){updateCancellationToken=null;publishUpdateStatus({state:'cancelled',version:pendingUpdateVersion,message:'Der Update-Download wurde abgebrochen.'});return true}updateCancellationToken=null;publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)});return false}});

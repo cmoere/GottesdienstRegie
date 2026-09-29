@@ -98,6 +98,7 @@ import {
 import {paginateBibleVerses} from './bibleOverlayModel';
 import {quickScreenTypeForKey} from './quickScreenUi';
 import {NOW_PLAYING_DESIGNS,NOW_PLAYING_DESIGN_LABELS,shouldSkipNowPlaying} from './nowPlayingModel';
+import {subscribeToUpdateStatus} from './updateStatusSubscription';
 import { FileMenu } from "./FileMenu";
 import { MediaBrowser } from "./MediaBrowser";
 import {
@@ -5407,7 +5408,7 @@ function SettingsModal({
       ?.getPreferences()
       .then(setOperatorPrefs);
     const displayDispose = window.desktop?.onDisplaysChanged(setDisplays);
-    const dispose = window.desktop?.updates.onStatus((status) => {
+    const applyUpdateStatus=(status:DesktopUpdateStatus) => {
       if (
         Date.now() < minimumUpdateCheckUntil.current &&
         status.state !== "checking"
@@ -5416,7 +5417,10 @@ function SettingsModal({
         return;
       }
       setUpdateStatus(status);
-    });
+    };
+    const dispose = window.desktop?.updates
+      ? subscribeToUpdateStatus(window.desktop.updates,applyUpdateStatus)
+      : undefined;
     return () => {
       dispose?.();
       displayDispose?.();
