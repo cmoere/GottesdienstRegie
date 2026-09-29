@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.64.0
+
+Version 0.64.0 vereinheitlicht Schnellanzeigen, Bibeldarstellung und Ablaufbearbeitung. Jede MAIN-Schnellaktion zeigt nun unten links ihr direktes Tastenkürzel; die Tasten schalten die jeweilige Aktion auch tatsächlich. Der Bibelzugriff bleibt dabei auf F9.
+
+Loop-Elemente sind im Menü immer auswählbar. Wird das Menü aus einem normalen Gottesdienstbereich geöffnet, legt GottesdienstRegie das neue Loop-Element sicher im Vorprogramm an. Die bestehende Platzierungsregel verhindert weiterhin, dass Loop-Elemente nach „Ankommen“ oder „Gottesdienst“ gezogen werden. Die Bezeichnung lautet einheitlich „Element hinzufügen“.
+
+Die On-Screen Bible übernimmt Stil, Akzentfarbe, Referenzposition und Animationsgeschwindigkeit aus den zentralen OSB-Einstellungen. Einzelvorschau und MAIN verwenden denselben 16:9-Renderer. Lange Bibelstellen werden auf mehrere Seiten verteilt und lassen sich in der Regie vor- und zurückschalten; MAIN folgt exakt der gewählten Seite. Beim Wechsel in den Bearbeitungsmodus liegt keine Bibel-Schnellanzeige mehr über dem Editor. Außerdem wird die fehlerhafte Schreibweise „GOtt“ in gelieferten Bibeltexten als „Gott“ dargestellt.
+
+Automatisierte Tests sichern Tastenzuordnung, Textnormalisierung, Seitenwechsel, Loop-Katalog und Zielbereichsregeln ab.
+
+---
+
 # GottesdienstRegie 0.63.0
 
 Version 0.63.0 ordnet die Live-Werkzeuge neu. Der allgemeine KI-Helfer wurde vollständig entfernt, weil er im praktischen Einsatz nicht zuverlässig genug war. Die getrennten Medien- und Übersetzungsfunktionen bleiben erhalten.

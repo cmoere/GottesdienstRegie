@@ -58,6 +58,7 @@ import {canHideSlideContent} from './quickScreenAvailability';
 import {nextTimerHold,timerProgress} from './previewTimer';
 import {shouldHandlePreviewArrow} from './previewKeyboard';
 import { MainLivePreview } from './MainLivePreview';
+import {quickScreenShortcut} from './quickScreenUi';
 
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -2868,6 +2869,7 @@ function PreviewCenter({
 }
 
 function QuickScreenThumb({ quick }: { quick: QuickScreenConfig }) {
+  const shortcut=quickScreenShortcut(quick.type);
   return (
     <div
       className={`quick-screen-thumb quick-${quick.type}`}
@@ -2894,6 +2896,7 @@ function QuickScreenThumb({ quick }: { quick: QuickScreenConfig }) {
           )}
         </>
       )}
+      {shortcut&&<kbd className="quick-screen-shortcut">{shortcut}</kbd>}
     </div>
   );
 }

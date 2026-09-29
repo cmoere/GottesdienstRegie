@@ -96,6 +96,7 @@ import {
   ProductionWorkspace,
 } from "./ProductionWorkspace";
 import {paginateBibleVerses} from './bibleOverlayModel';
+import {quickScreenTypeForKey} from './quickScreenUi';
 import { FileMenu } from "./FileMenu";
 import { MediaBrowser } from "./MediaBrowser";
 import {
@@ -2069,8 +2070,10 @@ function AddPopover({
     addOption(option);
   }
   function addLoopElement(option: (typeof loopOptions)[number]) {
-    if (!loopAvailable || !isLoopItemType(String(option.type))) return;
+    if (!isLoopItemType(String(option.type))) return;
     const type = option.type as LoopItemType;
+    const loopSectionId=loopAvailable?sectionId:(state.sections.find(section=>section.id==='pre')?.id??state.sections.find(section=>section.id==='post')?.id);
+    if(!loopSectionId)return;
     let body = "";
     let url = "";
     if (type === "loopQr") {
@@ -2080,17 +2083,17 @@ function AddPopover({
       body = prompt("Bibelvers", "Johannes 3,16") ?? "";
       if (!body) return;
     }
-    if (!consumeInsertionGuard(`${sectionId}:${type}`)) return;
+    if (!consumeInsertionGuard(`${loopSectionId}:${type}`)) return;
     // Adding from a dedicated pre-/post-program button is an explicit request
     // to enable loop content for that section, even when it was empty before.
-    if (!sectionCanHostLoop && sectionIsLoopTarget) {
-      usePresentation.getState().updateSection(sectionId, {
+    if (!isLoopSection(state.sections.find(section=>section.id===loopSectionId))) {
+      usePresentation.getState().updateSection(loopSectionId, {
         supportsLoopItems: true,
-        ...(sectionId === "pre" ? { autoLoop: true } : {}),
+        ...(loopSectionId === "pre" ? { autoLoop: true } : {}),
       });
     }
-    const draft = createLoopItem(type, sectionId, Date.now(), { body, url });
-    state.addItem(type, { title: draft.title, section: "", sectionId, body: draft.body, metadata: draft.metadata });
+    const draft = createLoopItem(type, loopSectionId, Date.now(), { body, url });
+    state.addItem(type, { title: draft.title, section: "", sectionId:loopSectionId, body: draft.body, metadata: draft.metadata });
     const current = usePresentation.getState();
     current.addElement("loop");
     const latest = usePresentation.getState();
@@ -2271,7 +2274,7 @@ function AddPopover({
     <>
       <div className="popover add-content-popover" ref={popoverRef}>
         <header>
-          <b>{targetSectionId ? `${activeSection?.title ?? "Bereich"} hinzufügen` : t("addItem")}</b>
+          <b>Element hinzufügen</b>
           <button onClick={close}>
             <Icon name="close" />
           </button>
@@ -8781,6 +8784,12 @@ function AppShell({
         return;
       }
       if (isInput) return;
+      const quickType=quickScreenTypeForKey(event.key);
+      if(quickType){
+        const quick=quickScreens.find(entry=>entry.enabled&&entry.type===quickType);
+        if(quick){event.preventDefault();if(quick.type==='bible')setBibleTextOpen(true);else{const next=previewQuick?.id===quick.id?null:quick;setPreviewQuick(next);if(usePresentation.getState().onAir)void(window.desktop as any)?.sendQuick(quick.targets,next)}}
+        return;
+      }
       if (matchesShortcut(event, shortcuts.openHelp)) {
         event.preventDefault();
         setHelpOpen(true);
@@ -8842,6 +8851,8 @@ function AppShell({
     state.mainDisplayId,
     state.previewSlideId,
     state.selectedSlideId,
+    quickScreens,
+    previewQuick,
     saveNow,
   ]);
   async function leave() {
@@ -10091,7 +10102,6 @@ function AppShell({
             activeQuick={previewQuick}
             onQuick={(quick) => void applyQuick(quick)}
           />
-          {state.mode === "edit" && <QuickOverlay quick={previewQuick} staticPreview />}
         </div>
       </div>
       <BackgroundAudioController />

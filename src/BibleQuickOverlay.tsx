@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { QuickScreenConfig } from './preferences';
 import {OSB_COLORS,OSB_SPEED_FACTOR} from './osb/settingsModel';
+import {normalizeBibleDisplayText} from './quickScreenUi';
 
 const verseParts = (line: string) => {
   const match = line.match(/^(\d+)\s+(.*)$/);
@@ -9,7 +10,7 @@ const verseParts = (line: string) => {
 
 export function BibleQuickOverlay({ quick, reducedMotion, staticPreview }: { quick: QuickScreenConfig; reducedMotion: boolean; staticPreview: boolean }) {
   const pageIndex = Math.min(quick.pageIndex ?? 0, Math.max(0, (quick.pages?.length ?? 1) - 1));
-  const lines = quick.pages?.[pageIndex] ?? (quick.text ?? '').split('\n').filter(Boolean);
+  const lines = (quick.pages?.[pageIndex] ?? (quick.text ?? '').split('\n').filter(Boolean)).map(normalizeBibleDisplayText);
   const characters = lines.reduce((total, line) => total + line.length, 0);
   const density = characters > 800 || lines.length > 8 ? 'high' : characters > 440 || lines.length > 5 ? 'medium' : 'normal';
   const noAnimation = reducedMotion || staticPreview;

@@ -21,11 +21,37 @@
   ],
   "versions": [
     {
+      "line": "0.64",
+      "builds": [{
+        "version": "0.64.0",
+        "releaseDate": "2026-09-29",
+        "current": true,
+        "overview": {
+          "label": { "de": "Schnellaktionen und OSB präzise gesteuert", "en": "Precise quick-screen and OSB control" },
+          "text": { "de": "Sichtbare Tastenkürzel, sichere Loop-Ziele und eine einheitliche, mehrseitige Bibeldarstellung.", "en": "Visible keyboard shortcuts, safe loop targets, and a consistent multi-page Bible display." }
+        },
+        "sections": {
+          "new": [
+            { "label": { "de": "Tasten direkt sichtbar", "en": "Keys shown directly" }, "text": { "de": "MAIN-Schnellaktionen zeigen ihr Tastenkürzel klein unten links und lassen sich darüber auslösen.", "en": "MAIN quick actions show their keyboard shortcut in the lower-left corner and can be triggered with it." } },
+            { "label": { "de": "Mehrseitige Bibeltexte", "en": "Multi-page Bible passages" }, "text": { "de": "Lange Stellen werden lesbar aufgeteilt und in der Regie synchron vor- und zurückgeschaltet.", "en": "Long passages are split for readability and paged synchronously from the operator view." } }
+          ],
+          "improved": [
+            { "label": { "de": "OSB-Design durchgängig", "en": "Consistent OSB design" }, "text": { "de": "Bibeleinblendung, Einzelvorschau und MAIN übernehmen dieselben zentralen Stil-, Farb- und Positionswerte.", "en": "Bible overlay, single preview, and MAIN use the same central style, color, and placement values." } },
+            { "label": { "de": "Loop-Elemente immer erreichbar", "en": "Loop elements always available" }, "text": { "de": "Loop-Elemente bleiben im Hinzufügen-Menü auswählbar und werden sicher einem zulässigen Loop-Bereich zugeordnet.", "en": "Loop elements remain available in the add menu and are safely assigned to a valid loop section." } }
+          ],
+          "fixed": [
+            { "label": { "de": "Bibeltext im Editor", "en": "Bible text over editor" }, "text": { "de": "Beim Wechsel zu Bearbeiten verdeckt die Bibel-Schnellanzeige den Editor nicht mehr; „Gott“ wird korrekt geschrieben.", "en": "Switching to edit no longer leaves the Bible quick screen over the editor, and 'Gott' keeps the correct capitalization." } }
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.63",
       "builds": [{
         "version": "0.63.0",
         "releaseDate": "2026-09-29",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "OSB, Radio und Audio im Livebetrieb", "en": "OSB, radio, and audio for live production" },
           "text": { "de": "Zentrale On-Screen-Bible-Einstellungen, Live-Radiotitel und eine klarere Audio- und Ablaufsteuerung.", "en": "Central On-Screen Bible settings, live radio metadata, and clearer audio and rundown controls." }
