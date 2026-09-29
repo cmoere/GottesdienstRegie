@@ -8,6 +8,8 @@ import { stageChordRows } from './songStructure';
 import { buildRenderedSlideSnapshot, cloneRenderedSlideSnapshot } from './renderedSlideSnapshot';
 import {outputRevision} from './release54Model';
 import {attachOutputRevision} from './release55Model';
+import {communityPreflight} from './community/communityPreflight';
+import {getCommunityRuntimeSnapshot,startCommunityRuntime} from './community/communityRuntime';
 
 function withSongOutputs(slide: Slide): Slide {
   const snapshot=structuredClone(slide),item=usePresentation.getState().items.find(item=>item.id===slide.itemId);
@@ -22,7 +24,7 @@ function withSongOutputs(slide: Slide): Slide {
 export class LiveEngine{
   private revision=0;
   private lastHash=0;
-  async preflight(assignments:Record<string,DisplayRole>,presentation:{hasPresentation:boolean;activeSlideCount:number;media:string[]}):Promise<DesktopPreflight>{const result=await (window.desktop?.preflight(assignments,presentation)??{ok:false,errors:['Die Desktop-Ausgabe ist nicht verfügbar.'],warnings:[]});const state=usePresentation.getState();const warnings=await checkLyricLayouts(state.items,state.lyricScrolling),loopWarnings=loopPreflight(state.items,state.sections).warnings;return {...result,warnings:[...result.warnings,...warnings,...loopWarnings]}}
+  async preflight(assignments:Record<string,DisplayRole>,presentation:{hasPresentation:boolean;activeSlideCount:number;media:string[]}):Promise<DesktopPreflight>{const result=await (window.desktop?.preflight(assignments,presentation)??{ok:false,errors:['Die Desktop-Ausgabe ist nicht verfügbar.'],warnings:[]});const state=usePresentation.getState();startCommunityRuntime();const community=communityPreflight(getCommunityRuntimeSnapshot(),state.eventLink?.eventKey,state.items.filter(item=>item.itemCategory==='loop').map(item=>({id:item.title,type:item.type,target:item.sectionId})));const warnings=await checkLyricLayouts(state.items,state.lyricScrolling),loopWarnings=loopPreflight(state.items,state.sections).warnings;return {...result,warnings:[...result.warnings,...warnings,...loopWarnings,...community.warnings]}}
   private snapshot(slide:Slide){const state=usePresentation.getState(),item=state.items.find(entry=>entry.id===slide.itemId),rendered=item?cloneRenderedSlideSnapshot(buildRenderedSlideSnapshot(withSongOutputs(slide),item,'main')).slide:structuredClone(withSongOutputs(slide)),hash=outputRevision(rendered);if(hash!==this.lastHash){this.lastHash=hash;this.revision+=1}return attachOutputRevision(rendered,this.revision)}
   async start(assignments:Record<string,DisplayRole>,slide:Slide){if(!window.desktop)throw new Error('Die Desktop-Ausgabe ist nicht verfügbar.');return window.desktop.goOnAir(assignments,this.snapshot(slide))}
   async show(slide:Slide){return window.desktop?.sendLiveSlide(this.snapshot(slide))??false}
