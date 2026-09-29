@@ -8079,12 +8079,14 @@ function AppShell({
     [displays, setDisplays] = useState<DesktopDisplay[]>([]),
     [outputState, setOutputState] = useState<Record<string, string>>({}),
     [mediaStorage, setMediaStorage] = useState<MediaStorageStatus | null>(null),
+    [communityConnection,setCommunityConnection]=useState<{connected:boolean;mode:string;updatedAt:number}|null>(null),
     [syncProgress, setSyncProgress] = useState<{
       state: "idle" | "syncing" | "saved" | "error";
       step: number;
       text: string;
     }>({ state: "idle", step: 0, text: "" });
   useEffect(()=>{void (window.desktop as any)?.deviceSettings?.readOsb?.().then((value:unknown)=>setOsbSettings(normalizeOsbSettings(value,[...BIBLE_TRANSLATIONS])))},[]);
+  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge)return;const stop=bridge.onConnection((value:{connected:boolean;mode:string;updatedAt:number})=>setCommunityConnection(value));void bridge.start();return stop},[]);
   const audioSessionRef = useRef<{
     onAir: boolean;
     mode: "edit" | "preview";
@@ -10127,6 +10129,7 @@ function AppShell({
               : "GESPEICHERT ✓"}
         </span>
         <span>{mediaStorage?.online ? "CLOUD ✓" : "CLOUD OFFLINE"}</span>
+        {communityConnection&&!communityConnection.connected&&<span>{communityConnection.mode==='offline-cache'?`Offline · letzter Stand ${new Date(communityConnection.updatedAt).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})} Uhr`:'Gemeindedaten offline'}</span>}
         <span>
           STAGE{" "}
           {Object.entries(state.displayRoles).some(

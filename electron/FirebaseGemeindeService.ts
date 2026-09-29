@@ -1,7 +1,8 @@
 export type RawCommunityRecord=Record<string,unknown>;
 export type RawChurchEvent=RawCommunityRecord&{eventKey:string};
 export type RawAnnouncement=RawCommunityRecord&{messageId:string};
-export type CommunityConnectionState={connected:boolean;updatedAt:number};
+import type {CommunitySnapshotCache} from './CommunitySnapshotCache';
+export type CommunityConnectionState={connected:boolean;mode:'online'|'offline-cache'|'empty'|'error';updatedAt:number};
 
 export interface CommunityRealtimeAdapter{
   watchCollection(path:'veranstaltungen',listener:(rows:Record<string,unknown>)=>void):()=>void;
@@ -22,7 +23,7 @@ export class FirebaseGemeindeService{
   private stopAnnouncements?:()=>void;
   private stopConnection?:()=>void;
 
-  constructor(private readonly adapter:CommunityRealtimeAdapter){}
+  constructor(private readonly adapter:CommunityRealtimeAdapter,private readonly cache?:CommunitySnapshotCache){}
   updateEvent(eventKey:string,patch:Record<string,unknown>){if(!eventKey.trim()||!this.adapter.updateEvent)throw new Error('EVENT_UPDATE_UNAVAILABLE');return this.adapter.updateEvent(eventKey,patch)}
 
   subscribeEvents(listener:Listener<RawChurchEvent>):()=>void{
@@ -30,6 +31,7 @@ export class FirebaseGemeindeService{
     if(!this.stopEvents)this.stopEvents=this.adapter.watchCollection('veranstaltungen',rows=>{
       this.events=Object.entries(rows??{}).flatMap(([eventKey,value])=>value&&typeof value==='object'?[{eventKey,...value as RawCommunityRecord}]:[]);
       this.eventListeners.forEach(next=>next(this.events));
+      void this.persist();
     });
     if(this.events.length)listener(this.events);
     return()=>this.eventListeners.delete(listener);
@@ -49,8 +51,8 @@ export class FirebaseGemeindeService{
   subscribeConnection(listener:(state:CommunityConnectionState)=>void):()=>void{
     this.connectionListeners.add(listener);
     if(!this.stopConnection)this.stopConnection=this.adapter.watchConnection(connected=>{
-      const state={connected,updatedAt:Date.now()};
-      this.connectionListeners.forEach(next=>next(state));
+      if(connected){this.publishConnection({connected:true,mode:'online',updatedAt:Date.now()});void this.persist();return;}
+      void this.restoreCache();
     });
     return()=>this.connectionListeners.delete(listener);
   }
@@ -62,6 +64,21 @@ export class FirebaseGemeindeService{
     this.publishAnnouncements();
   }
   private publishAnnouncements(){const values=[...this.announcements.values()];this.announcementListeners.forEach(next=>next(values))}
+  private publishConnection(state:CommunityConnectionState){this.connectionListeners.forEach(next=>next(state))}
+  private async persist(){if(this.cache)await this.cache.write({events:this.events,announcements:[...this.announcements.values()]})}
+  private async restoreCache(){
+    if(!this.cache){this.publishConnection({connected:false,mode:'empty',updatedAt:Date.now()});return}
+    const snapshot=await this.cache.read(record=>this.isStillValid(record));
+    if(!this.events.length&&snapshot.events.length){this.events=snapshot.events;this.eventListeners.forEach(next=>next(this.events))}
+    if(!this.announcements.size&&snapshot.announcements.length){this.announcements=new Map(snapshot.announcements.map(item=>[item.messageId,item]));this.publishAnnouncements()}
+    this.publishConnection({connected:false,mode:snapshot.mode,updatedAt:snapshot.updatedAt??Date.now()});
+  }
+  private isStillValid(record:RawChurchEvent|RawAnnouncement){
+    if(record.trash===true)return false;
+    const raw=('messageId'in record?record.giltBis:record.Verspaetungsenddatum??record.ende_datum) as unknown;
+    if(!raw||String(raw).trim().toLowerCase()==='bis auf weiteres')return true;
+    const date=new Date(String(raw));return Number.isNaN(date.getTime())||date.getTime()>=Date.now();
+  }
 }
 
 export async function createCommunityRealtimeAdapter():Promise<CommunityRealtimeAdapter>{

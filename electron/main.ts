@@ -25,6 +25,7 @@ import {RadioMetadataService} from './RadioMetadataService';
 import {RadioArtworkService} from './RadioArtworkService';
 import {DeviceSettingsRepository} from './DeviceSettingsRepository';
 import {createCommunityRealtimeAdapter,FirebaseGemeindeService} from './FirebaseGemeindeService';
+import {CommunitySnapshotCache} from './CommunitySnapshotCache';
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
 function applySpellCheckerLanguage(contents:Electron.WebContents,language:string){const requested=spellLocale[language]??language,available=contents.session.availableSpellCheckerLanguages,exact=available.find(item=>item.toLowerCase()===requested.toLowerCase()),base=available.find(item=>item.toLowerCase().split('-')[0]===requested.toLowerCase().split('-')[0]);contents.session.setSpellCheckerLanguages(exact?[exact]:base?[base]:[]);return exact??base??''}
@@ -176,7 +177,7 @@ function versionParts(value:string){return value.replace(/^v/,'').split('.').map
 function olderThan(candidate:string,current:string){const a=versionParts(candidate),b=versionParts(current);for(let i=0;i<Math.max(a.length,b.length);i++){if((a[i]??0)<(b[i]??0))return true;if((a[i]??0)>(b[i]??0))return false}return false}
 
 app.whenReady().then(async() => {
-  const communityService=new FirebaseGemeindeService(await createCommunityRealtimeAdapter());
+  const communityService=new FirebaseGemeindeService(await createCommunityRealtimeAdapter(),new CommunitySnapshotCache(path.join(app.getPath('userData'),'community-snapshot.json')));
   const communityStops=new Map<number,Array<()=>void>>();
   ipcMain.handle('community:start',(event)=>{const sender=event.sender;communityStops.get(sender.id)?.forEach(stop=>stop());communityStops.set(sender.id,[communityService.subscribeEvents(value=>!sender.isDestroyed()&&sender.send('community:events',value)),communityService.subscribeAnnouncements(value=>!sender.isDestroyed()&&sender.send('community:announcements',value)),communityService.subscribeConnection(value=>!sender.isDestroyed()&&sender.send('community:connection',value))]);sender.once('destroyed',()=>{communityStops.get(sender.id)?.forEach(stop=>stop());communityStops.delete(sender.id)});return true});
   ipcMain.handle('community:update-event',(_event,eventKey:string,patch:Record<string,unknown>)=>communityService.updateEvent(String(eventKey),patch));
