@@ -97,7 +97,8 @@ import {
 } from "./ProductionWorkspace";
 import {paginateBibleVerses} from './bibleOverlayModel';
 import {quickScreenTypeForKey} from './quickScreenUi';
-import {NOW_PLAYING_DESIGNS,NOW_PLAYING_DESIGN_LABELS,shouldSkipNowPlaying} from './nowPlayingModel';
+import {shouldSkipNowPlaying} from './nowPlayingModel';
+import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
 import { FileMenu } from "./FileMenu";
 import { MediaBrowser } from "./MediaBrowser";
@@ -4095,7 +4096,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                 </label>
               )}
               {item.type === "loopQr" && <label>QR-Code-URL<input disabled={!canEdit} value={String(item.metadata.url ?? "")} onChange={(event) => state.updateItem(item.id, { metadata: { ...item.metadata, url: event.target.value } })} /></label>}
-              {item.type === "nowPlaying" && <><label>Design<select disabled={!canEdit} value={String(item.metadata.design??'cover-left')} onChange={event=>{const design=event.target.value;state.updateItem(item.id,{metadata:{...item.metadata,design}});const element=item.slides[0]?.elements.find(entry=>entry.type==='loop');if(element)state.updateElement(element.id,{properties:{...element.properties,design}})}}>{NOW_PLAYING_DESIGNS.map(design=><option key={design} value={design}>{NOW_PLAYING_DESIGN_LABELS[design]}</option>)}</select></label><label className="setting-check"><input type="checkbox" disabled={!canEdit} checked={item.metadata.skipWhenIdle!==false} onChange={event=>state.updateItem(item.id,{metadata:{...item.metadata,skipWhenIdle:event.target.checked}})}/><span>Folie überspringen, wenn gerade nichts läuft</span></label><label className="setting-check"><input type="checkbox" disabled={!canEdit} checked={item.metadata.showArtwork!==false} onChange={event=>{const showArtwork=event.target.checked;state.updateItem(item.id,{metadata:{...item.metadata,showArtwork}});const element=item.slides[0]?.elements.find(entry=>entry.type==='loop');if(element)state.updateElement(element.id,{properties:{...element.properties,showArtwork}})}}/><span>Cover anzeigen</span></label><label className="setting-check"><input type="checkbox" disabled={!canEdit} checked={item.metadata.showAlbum!==false} onChange={event=>{const showAlbum=event.target.checked;state.updateItem(item.id,{metadata:{...item.metadata,showAlbum}});const element=item.slides[0]?.elements.find(entry=>entry.type==='loop');if(element)state.updateElement(element.id,{properties:{...element.properties,showAlbum}})}}/><span>Album anzeigen</span></label></>}
+              {item.type === "nowPlaying" && <NowPlayingDesigner item={item} canEdit={canEdit}/>}
               {(item.type === "announcement" || item.type === "birthday" || item.type === "event") && <p className="muted">Quelle: Firebase · öffentliche Daten werden vor der Ausgabe validiert.</p>}
             </div>
           )}
