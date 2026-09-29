@@ -36,6 +36,8 @@ export interface LoopRuntimeItem {
   durationMs?: number;
 }
 
+export function dynamicLoopReady(recordCount:number):boolean{return Number.isFinite(recordCount)&&recordCount>0}
+
 export interface LoopControllerSnapshot {
   running: boolean;
   index: number;

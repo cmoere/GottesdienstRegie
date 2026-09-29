@@ -1,5 +1,6 @@
 import type { AnnouncementPlacement, PublicAnnouncement } from './loopData';
 import { AnnouncementService as DomainAnnouncementService, type RawAnnouncement } from './community/AnnouncementService';
+import {StableLoopSnapshot} from './community/StableLoopSnapshot';
 import type { ServiceItem, ServiceSection } from './store';
 import { isCancelled, listChurchEvents, type ChurchEvent } from './events';
 
@@ -16,11 +17,15 @@ export class CommunityAnnouncementProvider {
 }
 
 export class AnnouncementService {
+  private readonly snapshot=new StableLoopSnapshot<PublicAnnouncement>();
   constructor(private readonly provider = new CommunityAnnouncementProvider(), private readonly domain = new DomainAnnouncementService()) {}
 
   subscribe(placement: AnnouncementPlacement, listener: AnnouncementListener, onError?: (error: Error) => void): () => void {
-    return this.provider.subscribe((raw) => listener(this.domain.getForPlacement(Object.values(raw) as RawAnnouncement[], new Date(), placement).map((item) => ({ ...item, qrCodeUrl: item.qrReference })), raw), onError);
+    return this.provider.subscribe((raw) => {this.snapshot.prepare(this.domain.getForPlacement(Object.values(raw) as RawAnnouncement[], new Date(), placement).map((item) => ({ ...item, qrCodeUrl: item.qrReference })));listener([...this.snapshot.current()], raw)}, onError);
   }
+  beginDisplay(id:string){return this.snapshot.beginDisplay(id)}
+  completeDisplay(){this.snapshot.completeDisplay()}
+  get isEmpty(){return this.snapshot.isEmpty}
 }
 
 export interface PublicEvent { id: string; title: string; startsAt: string; location?: string; cancelled: boolean }
