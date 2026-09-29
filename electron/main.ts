@@ -24,6 +24,7 @@ import {normalizeSpotifyTrackUrl,SpotifyOEmbedService} from './SpotifyOEmbedServ
 import {RadioMetadataService} from './RadioMetadataService';
 import {RadioArtworkService} from './RadioArtworkService';
 import {DeviceSettingsRepository} from './DeviceSettingsRepository';
+import {createCommunityRealtimeAdapter,FirebaseGemeindeService} from './FirebaseGemeindeService';
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
 function applySpellCheckerLanguage(contents:Electron.WebContents,language:string){const requested=spellLocale[language]??language,available=contents.session.availableSpellCheckerLanguages,exact=available.find(item=>item.toLowerCase()===requested.toLowerCase()),base=available.find(item=>item.toLowerCase().split('-')[0]===requested.toLowerCase().split('-')[0]);contents.session.setSpellCheckerLanguages(exact?[exact]:base?[base]:[]);return exact??base??''}
@@ -175,6 +176,9 @@ function versionParts(value:string){return value.replace(/^v/,'').split('.').map
 function olderThan(candidate:string,current:string){const a=versionParts(candidate),b=versionParts(current);for(let i=0;i<Math.max(a.length,b.length);i++){if((a[i]??0)<(b[i]??0))return true;if((a[i]??0)>(b[i]??0))return false}return false}
 
 app.whenReady().then(async() => {
+  const communityService=new FirebaseGemeindeService(await createCommunityRealtimeAdapter());
+  const communityStops=new Map<number,Array<()=>void>>();
+  ipcMain.handle('community:start',(event)=>{const sender=event.sender;communityStops.get(sender.id)?.forEach(stop=>stop());communityStops.set(sender.id,[communityService.subscribeEvents(value=>!sender.isDestroyed()&&sender.send('community:events',value)),communityService.subscribeAnnouncements(value=>!sender.isDestroyed()&&sender.send('community:announcements',value)),communityService.subscribeConnection(value=>!sender.isDestroyed()&&sender.send('community:connection',value))]);sender.once('destroyed',()=>{communityStops.get(sender.id)?.forEach(stop=>stop());communityStops.delete(sender.id)});return true});
   const translationPacks=new TranslationPackService(path.join(app.getPath('userData'),'translation-packs'),async(item,target,signal,progress)=>{const files=item.requiredFiles??[];let downloadedBytes=0,knownTotal=0,totalKnown=true;for(const fileName of files){const response=await fetch(`https://huggingface.co/${item.model}/resolve/${item.revision}/${fileName}`,{signal});if(!response.ok||!response.body)throw Error(`MODEL_DOWNLOAD_${response.status}`);const length=Number(response.headers.get('content-length')??0);if(length>0)knownTotal+=length;else totalKnown=false;const destination=path.join(target,fileName);await fs.mkdir(path.dirname(destination),{recursive:true});const handle=await fs.open(destination,'w');try{const reader=response.body.getReader();for(;;){if(signal.aborted)throw Error('ABORT');const{done,value}=await reader.read();if(done)break;if(value?.byteLength){await handle.write(value);downloadedBytes+=value.byteLength;progress({key:item.key,status:'downloading',downloadedBytes,totalBytes:totalKnown?knownTotal:undefined,percent:totalKnown&&knownTotal?Math.min(99,Math.round(downloadedBytes/knownTotal*100)):0})}}}finally{await handle.close()}}},translationPackCatalog);
   translationPacks.onProgress(value=>controlWindow?.webContents.send('translation-packs:progress',value));
   Menu.setApplicationMenu(null);
