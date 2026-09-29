@@ -1,8 +1,8 @@
 const fs=require('fs'),assert=require('assert');
 const read=file=>fs.readFileSync(file,'utf8'),pkg=require('../package.json'),releases=require('../public/releases.json'),notes=read('RELEASE_NOTES.md'),main=read('electron/main.ts'),preload=read('electron/preload.ts'),radio=read('electron/RadioMetadataRequest.ts'),workflow=read('.github/workflows/release.yml');
-assert(pkg.version==='0.66.0'&&pkg.releaseSeries==='0.66','package must identify V66');
-assert(releases.versions[0]?.builds[0]?.version==='0.66.0'&&releases.versions[0].builds[0].current===true,'V66 must lead the release catalog');
-assert(notes.startsWith('# GottesdienstRegie 0.66.0'),'notes must start with V66');
+assert(Number(pkg.version.split('.')[1])>=66,'package must include V66 or newer');
+assert(releases.versions.some(entry=>entry.builds?.some(build=>build.version==='0.66.0')),'V66 must remain in the release catalog');
+assert(notes.includes('# GottesdienstRegie 0.66.0'),'notes must include V66');
 assert(workflow.includes('check-version66.cjs'),'workflow must run V66 guard');
 assert(main.includes("ipcMain.handle('updates:status',()=>lastUpdateStatus)"),'persistent update status IPC missing');
 assert(preload.includes('status: () => ipcRenderer.invoke("updates:status")'),'update status bridge missing');

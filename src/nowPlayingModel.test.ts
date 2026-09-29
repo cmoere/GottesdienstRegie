@@ -2,7 +2,7 @@ import {describe,expect,it} from 'vitest';
 import {NOW_PLAYING_DESIGNS,nowPlayingDisplay,shouldSkipNowPlaying} from './nowPlayingModel';
 
 describe('now-playing loop',()=>{
-  it('offers exactly eight stable designs',()=>expect(NOW_PLAYING_DESIGNS).toHaveLength(8));
+  it('offers exactly ten stable designs',()=>expect(NOW_PLAYING_DESIGNS).toHaveLength(10));
   it('uses live track metadata instead of the placeholder',()=>expect(nowPlayingDisplay({active:true,track:{name:'Good Grace',url:'x',assetId:'1',artist:'Hillsong',album:'People'}})).toMatchObject({title:'Good Grace',artist:'Hillsong',album:'People'}));
   it('skips an opted-in now-playing item while no audio is active',()=>{
     const item={type:'nowPlaying',metadata:{skipWhenIdle:true}} as any;

@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.67.0
+
+Version 0.67.0 ergänzt laufende Radiotitel automatisch um passende Titelbilder. Weil ICY-Radiometadaten selbst normalerweise kein Cover enthalten, sucht GottesdienstRegie exakte Kombinationen aus Titel und Interpret bei MusicBrainz und lädt das freigegebene Frontcover aus dem Cover Art Archive.
+
+Die Auflösung verwendet einen identifizierbaren User-Agent, hält das MusicBrainz-Limit von höchstens einer Anfrage pro Sekunde ein und speichert Ergebnisse zwischen. Nur exakte Titel- und Interpretenübereinstimmungen werden übernommen. Gibt es keinen sicheren Treffer, bleibt das Senderlogo oder das neutrale Plattensymbol sichtbar.
+
+Die „Läuft gerade“-Folie bietet nun zehn Designs. Zu den bisherigen acht Varianten kommen „Split Card“ und „Neon“. Coverwechsel werden weich eingeblendet und synchron an Vorschau sowie MAIN übertragen.
+
+Automatisierte Tests sichern die schlüssellose Coverauflösung, HTTPS-Bildadressen, den Cache und die zehn Designvarianten ab. Der reale Beispieltitel „Samba de Janeiro“ von Bellini wurde gegen MusicBrainz und das Cover Art Archive geprüft.
+
+---
+
 # GottesdienstRegie 0.66.0
 
 Version 0.66.0 entkoppelt Update-Suche und Download vollständig vom geöffneten Einstellungsfenster. Wird das Fenster geschlossen, laufen beide Vorgänge im Electron-Hauptprozess weiter. Beim erneuten Öffnen wird der aktuelle Zustand samt Downloadfortschritt sofort wieder angezeigt. Ein Download endet nur noch durch den ausdrücklich betätigten Abbrechen-Button, einen Fehler oder seinen erfolgreichen Abschluss.

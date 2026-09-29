@@ -1,0 +1,10 @@
+const fs=require('fs'),assert=require('assert');
+const read=file=>fs.readFileSync(file,'utf8'),pkg=require('../package.json'),releases=require('../public/releases.json'),notes=read('RELEASE_NOTES.md'),artwork=read('electron/RadioArtworkService.ts'),model=read('src/nowPlayingModel.ts'),workflow=read('.github/workflows/release.yml');
+assert(pkg.version==='0.67.0'&&pkg.releaseSeries==='0.67','package must identify V67');
+assert(releases.versions[0]?.builds[0]?.version==='0.67.0'&&releases.versions[0].builds[0].current===true,'V67 must lead the release catalog');
+assert(notes.startsWith('# GottesdienstRegie 0.67.0'),'notes must start with V67');
+assert(workflow.includes('check-version67.cjs'),'workflow must run V67 guard');
+assert(model.includes("'split-card','neon'")&&model.match(/NOW_PLAYING_DESIGNS=\[[^\]]+/)?.[0].split(',').length===10,'ten now-playing designs missing');
+assert(artwork.includes('musicbrainz.org/ws/2/release')&&artwork.includes('coverartarchive.org/release'),'keyless cover lookup missing');
+assert(!artwork.toLowerCase().includes('api-key')&&!artwork.toLowerCase().includes('authorization'),'cover lookup must not require an API key');
+console.log('V67 release guard passed.');

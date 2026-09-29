@@ -21,11 +21,34 @@
   ],
   "versions": [
     {
+      "line": "0.67",
+      "builds": [{
+        "version": "0.67.0",
+        "releaseDate": "2026-09-29",
+        "current": true,
+        "overview": {
+          "label": { "de": "Echte Radiocover und zehn Designs", "en": "Real radio artwork and ten designs" },
+          "text": { "de": "Laufende Radiotitel erhalten passende Frontcover aus öffentlich zugänglichen Musikkatalogen.", "en": "Current radio tracks receive matching front artwork from publicly accessible music catalogs." }
+        },
+        "sections": {
+          "new": [
+            { "label": { "de": "Automatische Coverauflösung", "en": "Automatic artwork resolution" }, "text": { "de": "Exakte Titel- und Interpretenpaare werden über MusicBrainz gesucht und mit dem passenden Frontcover aus dem Cover Art Archive ergänzt.", "en": "Exact title and artist pairs are resolved through MusicBrainz and enriched with matching Cover Art Archive artwork." } },
+            { "label": { "de": "Zehn Läuft-gerade-Designs", "en": "Ten now-playing designs" }, "text": { "de": "Split Card und Neon ergänzen die bisherigen acht Varianten.", "en": "Split Card and Neon join the existing eight variants." } }
+          ],
+          "improved": [
+            { "label": { "de": "Sicherer Cover-Fallback", "en": "Safe artwork fallback" }, "text": { "de": "Nur exakte Treffer werden verwendet; andernfalls bleiben Senderlogo oder Plattensymbol sichtbar. Treffer werden zwischengespeichert und Anfragen begrenzt.", "en": "Only exact matches are used; otherwise the station logo or record icon remains. Results are cached and requests are rate-limited." } }
+          ],
+          "fixed": [],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.66",
       "builds": [{
         "version": "0.66.0",
         "releaseDate": "2026-09-29",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "Updates laufen weiter, Radiotitel kommen an", "en": "Persistent updates and richer radio titles" },
           "text": { "de": "Update-Suche und Downloads bleiben beim Schließen der Einstellungen aktiv; weitergeleitete Radiostreams liefern ihre Titelinformationen.", "en": "Update checks and downloads continue after closing settings, while redirected radio streams provide their title metadata." }

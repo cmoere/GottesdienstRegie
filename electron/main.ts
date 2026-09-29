@@ -22,6 +22,7 @@ import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,re
 import {SpotifyAuthService} from './SpotifyAuthService';
 import {normalizeSpotifyTrackUrl,SpotifyOEmbedService} from './SpotifyOEmbedService';
 import {RadioMetadataService} from './RadioMetadataService';
+import {RadioArtworkService} from './RadioArtworkService';
 import {DeviceSettingsRepository} from './DeviceSettingsRepository';
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
@@ -41,7 +42,7 @@ let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
 let finishClose:()=>Promise<void>=async()=>{};
 let spotifyAuth:SpotifyAuthService|null=null;
 const spotifyOEmbed=new SpotifyOEmbedService();
-const radioMetadata=new RadioMetadataService(),radioMetadataStops=new Map<number,()=>void>();
+const radioMetadata=new RadioMetadataService(),radioArtwork=new RadioArtworkService(),radioMetadataStops=new Map<number,()=>void>();
 const spotifyCallback=(url:string)=>{if(url.startsWith('gottesdienstregie://spotify-callback'))void spotifyAuth?.completeCallback(url).then(status=>controlWindow?.webContents.send('spotify:status',status)).catch(error=>controlWindow?.webContents.send('spotify:status',{state:'error',message:error instanceof Error?error.message:'SPOTIFY_CALLBACK_FAILED'}))};
 app.on('open-url',(event,url)=>{event.preventDefault();spotifyCallback(url)});
 app.on('second-instance',(_event,argv)=>{const url=argv.find(value=>value.startsWith('gottesdienstregie://spotify-callback'));if(url)spotifyCallback(url)});
@@ -191,7 +192,7 @@ app.whenReady().then(async() => {
   const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
   stopPresentationOutputs=()=>outputManager.stop();
   ipcMain.handle('spelling:set-language',(event,language:string)=>applySpellCheckerLanguage(event.sender,String(language||'de')));
-  ipcMain.handle('radio:metadata-start',(event,stationId:string,streamUrl:string)=>{radioMetadataStops.get(event.sender.id)?.();const sender=event.sender;radioMetadataStops.set(sender.id,radioMetadata.start(String(stationId),String(streamUrl),value=>{if(!sender.isDestroyed())sender.send('radio:metadata',value)}));return true});
+  ipcMain.handle('radio:metadata-start',(event,stationId:string,streamUrl:string)=>{radioMetadataStops.get(event.sender.id)?.();const sender=event.sender;radioMetadataStops.set(sender.id,radioMetadata.start(String(stationId),String(streamUrl),value=>{if(sender.isDestroyed())return;sender.send('radio:metadata',value);if(value.title&&value.artist)void radioArtwork.resolve(value.title,value.artist).then(artwork=>{if(artwork&&!sender.isDestroyed())sender.send('radio:metadata',{...value,...artwork})}).catch(()=>{})}));return true});
   ipcMain.handle('radio:metadata-stop',(event)=>{radioMetadataStops.get(event.sender.id)?.();radioMetadataStops.delete(event.sender.id);return true});
   ipcMain.handle('device-settings:osb-read',()=>deviceSettings.readOsb());
   ipcMain.handle('device-settings:osb-write',(_event,value)=>deviceSettings.writeOsb(value));
