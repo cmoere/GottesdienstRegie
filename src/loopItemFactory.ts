@@ -3,6 +3,7 @@ import {
   WEATHER_SCREEN_URL,
   type LoopItemType,
 } from './loopDomain';
+import {normalizeNowPlayingSettings,nowPlayingSettingsPatch} from './nowPlayingModel';
 
 export interface LoopItemDraft {
   type: LoopItemType;
@@ -54,10 +55,7 @@ export function createLoopItem(
     metadata.format = 'HH:mm:ss';
     body ||= 'Aktuelle Uhrzeit';
   } else if (type === 'nowPlaying') {
-    metadata.design = 'cover-left';
-    metadata.skipWhenIdle = true;
-    metadata.showArtwork = true;
-    metadata.showAlbum = true;
+    Object.assign(metadata,nowPlayingSettingsPatch(normalizeNowPlayingSettings({})));
   }
   return { type, title: titles[type], sectionId, body, metadata, durationMs };
 }
