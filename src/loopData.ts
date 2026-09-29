@@ -34,6 +34,8 @@ export interface PublicAnnouncement {
   durationMs: number;
   icon?: string;
   qrCodeUrl?: string;
+  qrCode?: boolean;
+  qrReference?: string;
 }
 
 const allowedPlacements = new Set<AnnouncementPlacement>(['preLoop', 'postLoop', 'preProgram']);

@@ -1,23 +1,25 @@
-import { onValue, ref, type Unsubscribe } from 'firebase/database';
-import { communityDatabase } from './firebase';
-import { filterAnnouncements, type AnnouncementPlacement, type PublicAnnouncement } from './loopData';
+import type { AnnouncementPlacement, PublicAnnouncement } from './loopData';
+import { AnnouncementService as DomainAnnouncementService, type RawAnnouncement } from './community/AnnouncementService';
 import type { ServiceItem, ServiceSection } from './store';
 import { isCancelled, listChurchEvents, type ChurchEvent } from './events';
 
 export type AnnouncementRecord = Record<string, Record<string, unknown>>;
 export type AnnouncementListener = (items: PublicAnnouncement[], raw: AnnouncementRecord) => void;
 
-export class FirebaseAnnouncementProvider {
-  subscribe(listener: (raw: AnnouncementRecord) => void, onError?: (error: Error) => void): Unsubscribe {
-    return onValue(ref(communityDatabase, 'meldungen'), (snapshot) => listener((snapshot.val() ?? {}) as AnnouncementRecord), (error) => onError?.(error));
+export class CommunityAnnouncementProvider {
+  subscribe(listener: (raw: AnnouncementRecord) => void, onError?: (error: Error) => void): () => void {
+    const bridge = (window as unknown as {desktop?:{community?:{start:()=>Promise<unknown>;onAnnouncements:(callback:(items:RawAnnouncement[])=>void)=>()=>void}}}).desktop?.community;
+    if (!bridge) { onError?.(new Error('Gemeindedaten sind in dieser Umgebung nicht verfügbar.')); return () => {}; }
+    void bridge.start().catch(onError);
+    return bridge.onAnnouncements((items) => listener(Object.fromEntries(items.map((item) => [item.messageId, item]))));
   }
 }
 
 export class AnnouncementService {
-  constructor(private readonly provider = new FirebaseAnnouncementProvider()) {}
+  constructor(private readonly provider = new CommunityAnnouncementProvider(), private readonly domain = new DomainAnnouncementService()) {}
 
-  subscribe(placement: AnnouncementPlacement, listener: AnnouncementListener, onError?: (error: Error) => void): Unsubscribe {
-    return this.provider.subscribe((raw) => listener(filterAnnouncements(raw, new Date(), placement), raw), onError);
+  subscribe(placement: AnnouncementPlacement, listener: AnnouncementListener, onError?: (error: Error) => void): () => void {
+    return this.provider.subscribe((raw) => listener(this.domain.getForPlacement(Object.values(raw) as RawAnnouncement[], new Date(), placement).map((item) => ({ ...item, qrCodeUrl: item.qrReference })), raw), onError);
   }
 }
 

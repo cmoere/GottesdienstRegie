@@ -697,33 +697,6 @@ document.addEventListener("DOMContentLoaded", () => {
     showCurrent();
   };
 
-  // ---------- Firebase ----------
-  const firebaseConfig = {
-    apiKey: "AIzaSyB0fmfjqC8aPyOEZxLjk1TfQal_s5xZFAM",
-    authDomain: "philippusgemeindebie.firebaseapp.com",
-    databaseURL: "https://philippusgemeindebie-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "philippusgemeindebie",
-    storageBucket: "philippusgemeindebie.firebasestorage.app",
-    messagingSenderId: "429968461937",
-    appId: "1:429968461937:web:3c0f654404ec5d0e24cbd0",
-    measurementId: "G-0Y54ZJ9WJK"
-  };
-
-  try {
-    if (!firebase.apps?.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-  } catch (e) {
-    console.warn("Firebase init failed", e);
-  }
-
-  try {
-    firebase.database.INTERNAL.forceLongPolling();
-  } catch {}
-
-  const db = firebase.database();
-  const ref = db.ref("meldungen");
-
   const markDirty = () => {
     dirty = true;
 
@@ -733,76 +706,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Initial laden
-  ref.once("value").then((snap) => {
-    const data = snap.val() || {};
-
+  // Der Renderer erhält ausschließlich normalisierte, öffentliche Daten.
+  const receiveAnnouncements = (items) => {
     byId.clear();
-
-    Object.entries(data).forEach(([id, m]) => {
-      byId.set(id, {
-        ...(m || {}),
-        _id: id
-      });
-    });
-
-    rebuildList({ preserveCurrent: false });
-    showCurrent();
-
-    // Realtime: neue Meldung
-    ref.on("child_added", (snap2) => {
-      const id = snap2.key;
-      const m = snap2.val() || {};
-
-      byId.set(id, {
-        ...m,
-        _id: id
-      });
-
-      if (APPLY_UPDATES_ONLY_ON_SWITCH) {
-        markDirty();
-      } else {
-        rebuildList({ preserveCurrent: true });
-        showCurrent();
-      }
-    });
-
-    // Realtime: geänderte Meldung
-    ref.on("child_changed", (snap2) => {
-      const id = snap2.key;
-      const m = snap2.val() || {};
-
-      byId.set(id, {
-        ...m,
-        _id: id
-      });
-
-      if (APPLY_UPDATES_ONLY_ON_SWITCH) {
-        markDirty();
-      } else {
-        rebuildList({ preserveCurrent: true });
-        showCurrent();
-      }
-    });
-
-    // Realtime: entfernte Meldung
-    ref.on("child_removed", (snap2) => {
-      const id = snap2.key;
-
-      byId.delete(id);
-
-      if (APPLY_UPDATES_ONLY_ON_SWITCH) {
-        markDirty();
-      } else {
-        rebuildList({ preserveCurrent: true });
-        showCurrent();
-      }
-    });
-  }).catch((err) => {
-    console.warn("Meldungen konnten nicht geladen werden:", err);
-    list = [];
-    showEmptyInfo();
-  });
+    (Array.isArray(items) ? items : []).forEach((m) => byId.set(m.id, {...m,_id:m.id,titel:m.title,textMeldung:m.text,qrCode:m.qrCode,status:'öffentlich',messageScreen:true,giltAb:m.validFrom,giltBis:m.validUntil}));
+    if (APPLY_UPDATES_ONLY_ON_SWITCH && list.length) markDirty();
+    else { rebuildList({ preserveCurrent: true }); showCurrent(); }
+  };
+  window.gottesdienstRegieSetAnnouncements = receiveAnnouncements;
+  window.addEventListener('message',(event)=>{if(event.data?.type==='gottesdienstregie:announcements')receiveAnnouncements(event.data.items);});
+  showEmptyInfo();
 
   // Zeitbasierte Eligibility neu prüfen
   setInterval(() => {
@@ -821,7 +734,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Cleanup
   window.addEventListener("beforeunload", () => {
-    try { ref.off(); } catch {}
     stopAllScrolls();
     clearPlayTimer();
   });
