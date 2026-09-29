@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.63.0
+
+Version 0.63.0 ordnet die Live-Werkzeuge neu. Der allgemeine KI-Helfer wurde vollständig entfernt, weil er im praktischen Einsatz nicht zuverlässig genug war. Die getrennten Medien- und Übersetzungsfunktionen bleiben erhalten.
+
+Die On-Screen Bible wird jetzt zentral unter Einstellungen → Präsentation → MAIN Schnellanzeigen → OSB konfiguriert. Standard- und alternative Übersetzung, sechs Stile, sechs Akzentfarben, Bucheinleitung, Referenzdarstellung, Referenzposition und Geschwindigkeit werden geräteweit gespeichert. F9 bleibt der schnelle Live-Zugriff und übernimmt diese Vorgaben automatisch, ohne die normale Folienposition zu verändern. Die Vorschau in den Einstellungen bleibt ausschließlich lokal.
+
+Radiosender können nun – sofern der Stream ICY-Metadaten liefert – den aktuellen Liedtitel und Interpreten anzeigen. Fehlerhafte oder übergroße Metadaten werden verworfen, ohne die Audiowiedergabe zu unterbrechen. Bereits zugewiesenes Hintergrund-Audio öffnet am Lautsprechersymbol eine kompakte Liste, in der Titel entfernt, weitere Titel geladen und Shuffle umgeschaltet werden können.
+
+Das Menü „Element hinzufügen“ zeigt allgemeine Elemente und spezielle Vor-/Nachprogramm-Elemente in getrennten Bereichen und schließt sich beim Klick außerhalb. Nicht passende Loop-Elemente bleiben sichtbar, erklären aber ihren erforderlichen Zielbereich. Neu hinzugekommen ist die frei gestaltbare Loop-Folie „Läuft gerade“.
+
+Automatisierte Prüfungen sichern Einstellungsnormalisierung, sechs OSB-Stile und -Farben, Audioentfernung, Elementplatzierung, Radiometadaten sowie die vollständige Entfernung des allgemeinen KI-Helfers ab.
+
+---
+
 # GottesdienstRegie 0.62.0
 
 Version 0.62.0 korrigiert die Darstellung der Nutzungsbedingungen im Windows-Installer. Umlaute, Gedankenstriche und weitere Sonderzeichen werden nun im vom Installer erwarteten Unicode-Format erzeugt und vor der Veröffentlichung automatisch geprüft.

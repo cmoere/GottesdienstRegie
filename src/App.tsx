@@ -1507,6 +1507,7 @@ function SortableItem({
     infoCard: "info",
     today: "today",
     nextEvents: "event_upcoming",
+    nowPlaying: "graphic_eq",
   };
   const commit = () => {
     const seconds = parseDuration(durationValue);

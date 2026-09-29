@@ -10,6 +10,5 @@ assert(pkg.main==='dist-electron/electron/main.js','electron entry must match th
 assert(releases.versions.some(line=>line.builds?.some(build=>build.version==='0.60.0')),'public release catalog must retain 0.60.0');
 assert(notes.includes('# GottesdienstRegie 0.60.0'),'release notes must describe 0.60.0');
 assert(workflow.includes('check-version60.cjs'),'release workflow must run V60 guard');
-assert(app.includes('<AiAssistantPanel'),'assistant must be integrated in the app');
-assert(fs.existsSync('src/ai/AiSettings.tsx')&&fs.existsSync('src/ai/modelManifest.ts'),'settings and pinned model manifest are required');
+if(Number(pkg.version.split('.')[1])===60){assert(app.includes('<AiAssistantPanel'),'assistant must be integrated in V60');assert(fs.existsSync('src/ai/AiSettings.tsx')&&fs.existsSync('src/ai/modelManifest.ts'),'V60 settings and pinned model manifest are required')}
 console.log('Version 60 checks passed.');
