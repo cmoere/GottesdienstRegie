@@ -1,8 +1,8 @@
 const fs=require('fs'),assert=require('assert');
 const read=file=>fs.readFileSync(file,'utf8'),pkg=require('../package.json'),releases=require('../public/releases.json'),notes=read('RELEASE_NOTES.md'),app=read('src/App.tsx'),catalog=read('src/addElementCatalog.ts'),ui=read('src/quickScreenUi.ts'),workspace=read('src/ProductionWorkspace.tsx'),workflow=read('.github/workflows/release.yml');
-assert(pkg.version==='0.64.0'&&pkg.releaseSeries==='0.64','package must identify V64');
-assert(releases.versions[0]?.builds[0]?.version==='0.64.0'&&releases.versions[0].builds[0].current===true,'V64 must lead the release catalog');
-assert(notes.startsWith('# GottesdienstRegie 0.64.0'),'notes must start with V64');
+assert(Number(pkg.version.split('.')[1])>=64,'package must include V64 or newer');
+assert(releases.versions.some(entry=>entry.builds?.some(build=>build.version==='0.64.0')),'V64 must remain in the release catalog');
+assert(notes.includes('# GottesdienstRegie 0.64.0'),'notes must include V64');
 assert(workflow.includes('check-version64.cjs'),'workflow must run V64 guard');
 assert(ui.includes("bible:'F9'")&&workspace.includes('quick-screen-shortcut'),'quick-screen key badges missing');
 assert(catalog.includes('disabled:false'),'loop elements must remain addable');

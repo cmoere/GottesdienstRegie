@@ -5,6 +5,8 @@ import {applyAudioRoute,defaultAudioRouting,type AudioRoute} from './audioRoutin
 import {usePreferences} from './preferences';
 
 import {translatedSlide, translationBlocks} from './songTranslation';
+import {getNowPlayingState,nowPlayingDisplay,type NowPlayingDesign} from './nowPlayingModel';
+import type {BackgroundAudioState} from './BackgroundAudioEngine';
 
 export type SlideRendererMode='editor'|'preview'|'thumbnail'|'live';
 
@@ -36,6 +38,7 @@ function RenderElement({element,mode}:{element:SlideElement;mode:SlideRendererMo
     const loopType=String(properties.loopType??'announcement');
     if(loopType==='weather')return <iframe className="slide-renderer-element web loop-weather" style={{...style,pointerEvents:'none'}} src="https://weather.crbnm06.workers.dev" title="Wetterscreen" sandbox="allow-scripts allow-same-origin"/>;
     if(loopType==='clock')return <ClockLoopElement style={style}/>;
+    if(loopType==='nowPlaying')return <NowPlayingLoopElement style={style} properties={properties}/>;
     return <div className="slide-renderer-element loop-surface" style={{...style,display:'flex',flexDirection:'column',justifyContent:'center',padding:'4%',background:String(properties.background??'#ffffff'),color:String(properties.color??'#000000')}}><strong>{String(properties.title??'Aktuelle Infos')}</strong><span>{String(properties.text??'')}</span></div>;
   }
   if(element.type==='image'&&src)return <img className="slide-renderer-element media" style={style} src={src} alt="" loading={mode==='thumbnail'?'lazy':'eager'}/>;
@@ -51,6 +54,8 @@ function RenderElement({element,mode}:{element:SlideElement;mode:SlideRendererMo
 }
 
 function ClockLoopElement({style}:{style:CSSProperties}){const [now,setNow]=useState(()=>new Date());useEffect(()=>{const timer=window.setInterval(()=>setNow(new Date()),1000);return()=>window.clearInterval(timer)},[]);return <div className="slide-renderer-element loop-clock" style={{...style,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}><strong>{now.toLocaleTimeString('de-DE')}</strong><span>{now.toLocaleDateString('de-DE',{weekday:'long',day:'2-digit',month:'long'})}</span></div>}
+
+function NowPlayingLoopElement({style,properties}:{style:CSSProperties;properties:Record<string,string|number|boolean>}){const [state,setState]=useState<Partial<BackgroundAudioState>>(()=>getNowPlayingState());useEffect(()=>{const update=(event:Event)=>setState((event as CustomEvent<BackgroundAudioState>).detail);window.addEventListener('gottesdienstregie:background-audio',update);return()=>window.removeEventListener('gottesdienstregie:background-audio',update)},[]);const local=nowPlayingDisplay(state),live=local.active?local:{active:properties.nowPlayingActive===true,title:String(properties.nowPlayingTitle??''),artist:String(properties.nowPlayingArtist??''),album:String(properties.nowPlayingAlbum??''),artworkUrl:String(properties.nowPlayingArtwork??''),source:String(properties.nowPlayingSource??'')},design=String(properties.design??'cover-left') as NowPlayingDesign,showArtwork=properties.showArtwork!==false,showAlbum=properties.showAlbum!==false;return <div className={`slide-renderer-element now-playing-slide design-${design} ${live.active?'is-playing':'is-idle'}`} style={style}>{showArtwork&&<div className="now-playing-art">{live.artworkUrl?<img src={live.artworkUrl} alt=""/>:<span className="material-symbols-outlined">{design==='radio'?'radio':'album'}</span>}</div>}<div className="now-playing-copy"><small>{live.active?'LÄUFT GERADE':'BEREIT FÜR MUSIK'}</small><strong>{live.title||'Noch keine Wiedergabe'}</strong>{live.artist&&<span>{live.artist}</span>}{showAlbum&&live.album&&<em>{live.album}</em>}</div><i className="now-playing-bars"><b/><b/><b/><b/></i></div>}
 
 export function SlideRenderer({slide,mode='preview'}:{slide:Slide;mode?:SlideRendererMode}){
   const translationMode=usePreferences(state=>state.songTranslationMode);

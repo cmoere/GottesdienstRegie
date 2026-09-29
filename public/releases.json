@@ -21,11 +21,36 @@
   ],
   "versions": [
     {
+      "line": "0.65",
+      "builds": [{
+        "version": "0.65.0",
+        "releaseDate": "2026-09-29",
+        "current": true,
+        "overview": {
+          "label": { "de": "Läuft gerade – mit echten Musikdaten", "en": "Now playing with live music data" },
+          "text": { "de": "Acht neue Designs zeigen Titel, Interpret, Album und Cover aus der aktiven Hintergrundwiedergabe.", "en": "Eight new designs show title, artist, album, and artwork from active background playback." }
+        },
+        "sections": {
+          "new": [
+            { "label": { "de": "Acht Läuft-gerade-Designs", "en": "Eight now-playing designs" }, "text": { "de": "Cover links, Cover groß, Minimal, Vinyl, Radio, Verlauf, Typografie und Bühne stehen direkt im Elementeditor zur Auswahl.", "en": "Cover left, cover hero, minimal, vinyl, radio, gradient, typography, and stage are selectable in the element editor." } },
+            { "label": { "de": "Automatisch überspringen", "en": "Automatic skipping" }, "text": { "de": "Eine Checkbox überspringt die Folie automatisch, wenn gerade kein Audio läuft.", "en": "A checkbox automatically skips the slide when no audio is playing." } }
+          ],
+          "improved": [
+            { "label": { "de": "Live-Radiodaten", "en": "Live radio metadata" }, "text": { "de": "Unterstützte Radiosender reichen laufenden Titel und Interpreten direkt an die Läuft-gerade-Folie weiter.", "en": "Supported radio stations pass the current title and artist directly to the now-playing slide." } }
+          ],
+          "fixed": [
+            { "label": { "de": "Keine doppelte Platzhalterzeile", "en": "No duplicate placeholder" }, "text": { "de": "Die Folie zeigt echte Wiedergabedaten oder einen klaren Bereitschaftszustand statt zweimal „Läuft gerade“.", "en": "The slide shows live playback data or a clear idle state instead of duplicating the 'Now playing' placeholder." } }
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.64",
       "builds": [{
         "version": "0.64.0",
         "releaseDate": "2026-09-29",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "Schnellaktionen und OSB präzise gesteuert", "en": "Precise quick-screen and OSB control" },
           "text": { "de": "Sichtbare Tastenkürzel, sichere Loop-Ziele und eine einheitliche, mehrseitige Bibeldarstellung.", "en": "Visible keyboard shortcuts, safe loop targets, and a consistent multi-page Bible display." }

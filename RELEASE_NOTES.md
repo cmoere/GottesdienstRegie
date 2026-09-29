@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.65.0
+
+Version 0.65.0 macht aus „Läuft gerade“ eine echte dynamische Musikfolie. Sie übernimmt Titel, Interpret, Album und – sofern verfügbar – das Cover aus der aktiven Hintergrundwiedergabe. Bei kompatiblen Radiosendern werden auch laufende ICY-Metadaten weitergereicht.
+
+Für die Darstellung stehen acht Designs bereit: Cover links, Cover groß, Minimal, Vinyl, Radio, Verlauf, Typografie und Bühne. Cover- und Albumanzeige lassen sich einzeln steuern. Die bisher doppelte Platzhalterdarstellung wurde durch echte Wiedergabedaten und einen klaren Bereitschaftszustand ersetzt.
+
+Mit der neuen Option „Folie überspringen, wenn gerade nichts läuft“ kann das Element im Ablauf bleiben, ohne bei inaktiver Wiedergabe als leere Folie sichtbar zu werden. Die Option ist bei neu angelegten „Läuft gerade“-Elementen standardmäßig aktiviert.
+
+Automatisierte Prüfungen sichern die acht Designvarianten, die Live-Metadaten und das Überspringen bei inaktiver Wiedergabe ab.
+
+---
+
 # GottesdienstRegie 0.64.0
 
 Version 0.64.0 vereinheitlicht Schnellanzeigen, Bibeldarstellung und Ablaufbearbeitung. Jede MAIN-Schnellaktion zeigt nun unten links ihr direktes Tastenkürzel; die Tasten schalten die jeweilige Aktion auch tatsächlich. Der Bibelzugriff bleibt dabei auf F9.

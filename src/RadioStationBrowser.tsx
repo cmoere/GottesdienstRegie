@@ -132,6 +132,8 @@ export function RadioStationBrowser({
                   name: station.name,
                   url: station.streamUrl,
                   artist: "Online-Radio",
+                  album: station.name,
+                  imageUrl: station.artworkUrl,
                   format: station.codec || "Stream",
                   status: "ready",
                 })
