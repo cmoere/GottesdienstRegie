@@ -5,7 +5,7 @@ import { usePreferences } from './preferences';
 import { canPlaceItem, createLoopItemDefaults, isLoopItemType, isLoopSection, WEATHER_SCREEN_DURATION_MS, WEATHER_SCREEN_URL, type LoopItemType, type LoopSectionType } from './loopDomain';
 import { canInsertItem, canInsertItemType, resolveInsertionSectionId } from './itemPlacementPolicy';
 import { alignRects, distributeRects, nudgeRect, type AlignMode, type Rect } from './canvasGeometry';
-import {shouldSkipNowPlaying} from './nowPlayingModel';
+import {isLoopCandidateAvailable} from './nowPlayingModel';
 
 export type ItemType='content'|'image'|'video'|'videoInput'|'audio'|'song'|'bible'|'web'|'pdf'|'timer'|'countdown'|'announcement'|'slideshow'|'stageMessage'|'quickScreen'|'liveQuiz'|LoopItemType;
 export type ElementType='text'|'image'|'shape'|'line'|'video'|'audio'|'videoInput'|'web'|'qr'|'loop';
@@ -79,7 +79,7 @@ const describeChange=(state:State,patch:Partial<State>):ChangeMeta=>{
   return{action:'Präsentationseinstellungen geändert',actionType:'BEARBEITET',category:'EINSTELLUNGEN',entityType:'presentation',entityId:state.presentationId,entityTitle:state.title,before:undefined,after:patch};
 };
 const changed=(state:State,patch:Partial<State>,override?:Partial<ChangeMeta>)=>{const timestamp=iso(),meta={...describeChange(state,patch),...override} as ChangeMeta,previous=state.editHistory.at(-1),same=meta.coalesce&&previous?.entityId===meta.entityId&&previous.actionType===meta.actionType&&Date.parse(timestamp)-Date.parse(previous.timestamp)<1500,revision=Number(String(previous?.revisionId??'rev-0').replace(/\D/g,''))||0,entry:EditHistoryEntry={id:uuid(),presentationId:state.presentationId,revisionId:`rev-${same?revision:revision+1}`,timestamp,actor:state.historyDisplayName||state.createdBy||'Unbekannt',userId:state.historyUserId||'local',userDisplayName:state.historyDisplayName||state.createdBy||'Unbekannt',deviceId:state.historyDeviceId||undefined,deviceNameSnapshot:state.historyDeviceName||undefined,action:meta.action,actionType:meta.actionType,category:meta.category,entityType:meta.entityType,entityId:meta.entityId,entityTitle:meta.entityTitle,before:redactSensitiveValue(same?previous?.before:meta.before),after:redactSensitiveValue(meta.after),source:meta.source??'desktop',transactionId:same?previous!.transactionId:uuid(),syncStatus:'PENDING'},editHistory=same?[...state.editHistory.slice(0,-1),entry]:[...state.editHistory,entry].slice(-1000);return{...patch,history:[...state.history.slice(-49),snap(state)],future:[],editHistory,saveState:'dirty' as SaveState,updatedAt:timestamp}};
-const activeSlides=(state:State)=>state.items.filter(item=>item.enabled&&!item.disabled&&!shouldSkipNowPlaying(item)&&canPlaceItem(item,state.sections.find(section=>section.id===item.sectionId))).flatMap(item=>item.slides.filter(slide=>slide.enabled).map(slide=>({itemId:item.id,slideId:slide.id})));
+const activeSlides=(state:State)=>state.items.filter(item=>isLoopCandidateAvailable(item)&&canPlaceItem(item,state.sections.find(section=>section.id===item.sectionId))).flatMap(item=>item.slides.filter(slide=>slide.enabled).map(slide=>({itemId:item.id,slideId:slide.id})));
 const updateSelectedGeometry=(state:State,mutate:(elements:Rect[])=>Rect[])=>{
   const items=structuredClone(state.items),slide=items.flatMap(item=>item.slides).find(entry=>entry.id===state.selectedSlideId);
   if(!slide)return state;

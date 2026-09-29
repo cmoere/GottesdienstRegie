@@ -25,3 +25,4 @@ export function setNowPlayingState(state:Partial<BackgroundAudioState>){latest=s
 export function getNowPlayingState(){return latest}
 export function nowPlayingDisplay(state:Partial<BackgroundAudioState>=latest):NowPlayingDisplay{const track=state.track;return{active:Boolean(state.active&&track),title:track?.name??'',artist:track?.artist??'',album:track?.album??'',artworkUrl:String((track as any)?.imageUrl??''),source:track?.format??''}}
 export function shouldSkipNowPlaying(item:Pick<ServiceItem,'type'|'metadata'>,state:Partial<BackgroundAudioState>=latest){return item.type==='nowPlaying'&&normalizeNowPlayingSettings(item.metadata).skipWhenIdle&&!nowPlayingDisplay(state).active}
+export function isLoopCandidateAvailable(item:Pick<ServiceItem,'type'|'metadata'|'enabled'|'disabled'>|null|undefined,state:Partial<BackgroundAudioState>=latest){return Boolean(item&&item.enabled!==false&&item.disabled!==true&&!shouldSkipNowPlaying(item,state))}

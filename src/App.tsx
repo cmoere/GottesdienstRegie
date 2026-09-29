@@ -97,7 +97,7 @@ import {
 } from "./ProductionWorkspace";
 import {paginateBibleVerses} from './bibleOverlayModel';
 import {quickScreenTypeForKey} from './quickScreenUi';
-import {shouldSkipNowPlaying} from './nowPlayingModel';
+import {isLoopCandidateAvailable,shouldSkipNowPlaying} from './nowPlayingModel';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
 import { FileMenu } from "./FileMenu";
@@ -9666,7 +9666,7 @@ function AppShell({
       return;
     }
     const sessionMode = state.onAir && testMode ? 'test' : requestedMode;
-    const first=firstActiveTarget(state.items),
+    const first=firstActiveTarget(state.items.filter(item=>isLoopCandidateAvailable(item))),
       itemId = first?.itemId ?? "",
       slideId = first?.slideId ?? "",
       slide = state.items
@@ -9798,15 +9798,15 @@ function AppShell({
           && current.onAir === state.onAir;
       },
       start: async assignments => {
-        if (!slide) return false;
-        const item = state.items.find(entry => entry.id === itemId);
+        const current=usePresentation.getState(),selectedItem=current.items.find(entry=>entry.id===itemId),fallback=isLoopCandidateAvailable(selectedItem!)?{itemId,slideId}:firstActiveTarget(current.items.filter(item=>isLoopCandidateAvailable(item))),startItemId=fallback?.itemId??'',startSlideId=fallback?.slideId??'',item=current.items.find(entry=>entry.id===startItemId),startSlide=item?.slides.find(entry=>entry.id===startSlideId);
+        if (!startSlide) return false;
         try {
           const started = await liveEngine.start(assignments, {
-            ...slide, transitionOverride: resolveTransition(slide, item, 'main', state.transitionDefault),
+            ...startSlide, transitionOverride: resolveTransition(startSlide, item, 'main', current.transitionDefault),
           });
           if (!started) { await liveEngine.stop(); return false; }
           setTestMode(sessionMode === 'test');
-          state.goLive(itemId, slideId);
+          state.goLive(startItemId, startSlideId);
           state.setOnAir(true);
           return true;
         } catch (error) {
