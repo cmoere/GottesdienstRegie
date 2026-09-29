@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.68.0
+
+Version 0.68.0 räumt den Editor für automatisch gespeiste Loop-Elemente auf. „Läuft gerade“, Wetter, Uhrzeit, Meldungen, Geburtstage, Veranstaltungen, „Heute bei uns“ und „Nächste Termine“ zeigen nicht länger das allgemeine Folientextfeld, obwohl ihr Inhalt automatisch erzeugt wird.
+
+Stattdessen erscheint eine kompakte, passende Konfiguration. Bei „Läuft gerade“ sind die zehn Designs sowie die Schalter für Cover, Album und das Überspringen bei inaktiver Wiedergabe nun direkt im sichtbaren Editor erreichbar. Änderungen werden unmittelbar in die Folienvorschau übernommen.
+
+Manuell gepflegte Loop-Elemente wie Quiz, Countdown, Bibelvers, QR-Code und Infokarte behalten ihre benötigten Inhaltsfelder. Ein Regressionstest sichert diese Unterscheidung und verhindert die Rückkehr des irreführenden Platzhaltertexts.
+
+---
+
 # GottesdienstRegie 0.67.0
 
 Version 0.67.0 ergänzt laufende Radiotitel automatisch um passende Titelbilder. Weil ICY-Radiometadaten selbst normalerweise kein Cover enthalten, sucht GottesdienstRegie exakte Kombinationen aus Titel und Interpret bei MusicBrainz und lädt das freigegebene Frontcover aus dem Cover Art Archive.

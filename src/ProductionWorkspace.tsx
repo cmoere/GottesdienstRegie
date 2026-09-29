@@ -59,6 +59,8 @@ import {nextTimerHold,timerProgress} from './previewTimer';
 import {shouldHandlePreviewArrow} from './previewKeyboard';
 import { MainLivePreview } from './MainLivePreview';
 import {quickScreenShortcut} from './quickScreenUi';
+import {usesAutomaticLoopEditor} from './loopEditorModel';
+import {NOW_PLAYING_DESIGNS,NOW_PLAYING_DESIGN_LABELS} from './nowPlayingModel';
 
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -727,6 +729,30 @@ function ContentEditor({
     }
     setQrOpen(false);
   };
+  if(usesAutomaticLoopEditor(item.type)){
+    const durationSeconds=Math.max(1,Math.round((item.plannedDuration||item.timing.slideDurationSeconds*1000||15000)/1000));
+    const changeDuration=(seconds:number)=>state.updateItem(item.id,{plannedDuration:seconds*1000,autoAdvance:true,timing:{...item.timing,slideDurationSeconds:seconds,totalDurationSeconds:seconds,autoAdvance:true}});
+    const changeNowPlaying=(patch:Record<string,string|number|boolean>)=>{
+      state.updateItem(item.id,{metadata:{...item.metadata,...patch}});
+      const loopElement=item.slides[0]?.elements.find(element=>element.type==='loop');
+      if(loopElement)state.updateElement(loopElement.id,{properties:{...loopElement.properties,...patch}});
+    };
+    return <div className="content-context automatic-loop-content-editor">
+      <header><b>{item.title}</b><span>AUTOMATISCH</span></header>
+      <section className="automatic-loop-settings web-editor-fields">
+        <div className="automatic-loop-heading"><Icon name={item.type==='nowPlaying'?'graphic_eq':'autorenew'}/><div><b>Automatische Anzeige</b><small>Der Inhalt wird zur Laufzeit automatisch aktualisiert.</small></div></div>
+        {item.type==='nowPlaying'&&<>
+          <label>Design<select disabled={!canEdit} value={String(item.metadata.design??'cover-left')} onChange={event=>changeNowPlaying({design:event.target.value})}>{NOW_PLAYING_DESIGNS.map(design=><option key={design} value={design}>{NOW_PLAYING_DESIGN_LABELS[design]}</option>)}</select></label>
+          <label className="setting-check"><input type="checkbox" disabled={!canEdit} checked={item.metadata.showArtwork!==false} onChange={event=>changeNowPlaying({showArtwork:event.target.checked})}/><span>Cover anzeigen</span></label>
+          <label className="setting-check"><input type="checkbox" disabled={!canEdit} checked={item.metadata.showAlbum!==false} onChange={event=>changeNowPlaying({showAlbum:event.target.checked})}/><span>Album anzeigen</span></label>
+          <label className="setting-check"><input type="checkbox" disabled={!canEdit} checked={item.metadata.skipWhenIdle!==false} onChange={event=>changeNowPlaying({skipWhenIdle:event.target.checked})}/><span>Folie überspringen, wenn gerade nichts läuft</span></label>
+        </>}
+        <label>Anzeigedauer<select disabled={!canEdit} value={String(durationSeconds)} onChange={event=>changeDuration(Number(event.target.value))}>{[5,10,15,20,30,45,60].map(seconds=><option key={seconds} value={seconds}>{seconds} Sekunden</option>)}</select></label>
+        <p className="status-ready">● Wird vor der Ausgabe automatisch vorbereitet.</p>
+      </section>
+      <PersonalNotesPanel noteKey={{userId:state.historyUserId||'local',presentationId:state.presentationId||'local',slideId:slide.id}} label="Meine Notiz zu dieser Folie" />
+    </div>;
+  }
   if (item.type === "web") {
     const web = slide.elements.find((element) => element.type === "web"),
       url = String(web?.properties.src ?? item.metadata.url ?? ""),

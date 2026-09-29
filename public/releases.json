@@ -21,11 +21,33 @@
   ],
   "versions": [
     {
+      "line": "0.68",
+      "builds": [{
+        "version": "0.68.0",
+        "releaseDate": "2026-09-30",
+        "current": true,
+        "overview": {
+          "label": { "de": "Passende Editoren für automatische Loop-Elemente", "en": "Purpose-built editors for automatic loop elements" },
+          "text": { "de": "Automatische Loop-Inhalte zeigen jetzt ihre echten Einstellungen statt eines wirkungslosen Textfelds.", "en": "Automatic loop content now shows its real settings instead of an ineffective text field." }
+        },
+        "sections": {
+          "new": [],
+          "improved": [
+            { "label": { "de": "Läuft-gerade-Design direkt wählen", "en": "Choose the now-playing design directly" }, "text": { "de": "Alle zehn Designs sowie Cover-, Album- und Überspringen-Optionen sind direkt im sichtbaren Folieneditor verfügbar.", "en": "All ten designs plus artwork, album, and skip options are available directly in the visible slide editor." } }
+          ],
+          "fixed": [
+            { "label": { "de": "Unnötige Textfelder entfernt", "en": "Unnecessary text fields removed" }, "text": { "de": "Automatisch gespeiste Loop-Elemente zeigen kein irreführendes allgemeines Textfeld mehr; manuell gepflegte Elemente behalten ihre Eingaben.", "en": "Data-driven loop elements no longer show a misleading generic text field, while manually authored elements keep their inputs." } }
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.67",
       "builds": [{
         "version": "0.67.0",
         "releaseDate": "2026-09-29",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "Echte Radiocover und zehn Designs", "en": "Real radio artwork and ten designs" },
           "text": { "de": "Laufende Radiotitel erhalten passende Frontcover aus öffentlich zugänglichen Musikkatalogen.", "en": "Current radio tracks receive matching front artwork from publicly accessible music catalogs." }

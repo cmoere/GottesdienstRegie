@@ -54,7 +54,6 @@ export function createLoopItem(
     metadata.format = 'HH:mm:ss';
     body ||= 'Aktuelle Uhrzeit';
   } else if (type === 'nowPlaying') {
-    body ||= 'Wiedergabe wird automatisch erkannt';
     metadata.design = 'cover-left';
     metadata.skipWhenIdle = true;
     metadata.showArtwork = true;
