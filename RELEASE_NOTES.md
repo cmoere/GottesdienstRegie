@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.69.0
+
+Version 0.69.0 bindet Veranstaltungen und Meldungen zentral an die bestehende Firebase Realtime Database der Philippusgemeinde an. Stabile Child-Keys bleiben bei Umbenennungen erhalten, geplante und effektive Zeiten werden getrennt behandelt und PRE-/POST-Loop-Ziele strikt ausgewertet. MAIN erhält ausschließlich normalisierte öffentliche Daten. Realtime-Änderungen werden erst am sicheren Folienwechsel übernommen; bei Verbindungsproblemen steht der letzte weiterhin gültige Snapshot offline bereit.
+
+„Läuft gerade“ besitzt nun einen vollständigen visuellen Designer mit zehn Vorschaukarten statt eines Dropdowns. Hintergrund-, Akzent- und Textfarbe, Schreibweise, sichtbare Metadaten, Visualizer-Stil und -Position sowie die Anzeigedauer ab einer Sekunde lassen sich direkt einstellen. Vorschau und MAIN verwenden dasselbe Modell. Der Visualizer reagiert auf analysierbares Audio und nutzt bei blockierten Radiostreams einen bewegten Fallback; reduzierte Bewegung wird respektiert.
+
+Das Überspringen ohne aktive Wiedergabe wird bei der Loop-Auswahl und unmittelbar vor der Live-Ausgabe erneut geprüft. Umlaute erhalten in allen Designs genügend vertikalen Raum. Preflight meldet Firebase-Verbindung, verknüpfte Veranstaltung und optionale leere Loop-Inhalte, ohne ON AIR unnötig zu blockieren.
+
+---
+
 # GottesdienstRegie 0.68.0
 
 Version 0.68.0 räumt den Editor für automatisch gespeiste Loop-Elemente auf. „Läuft gerade“, Wetter, Uhrzeit, Meldungen, Geburtstage, Veranstaltungen, „Heute bei uns“ und „Nächste Termine“ zeigen nicht länger das allgemeine Folientextfeld, obwohl ihr Inhalt automatisch erzeugt wird.

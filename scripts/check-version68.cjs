@@ -1,10 +1,10 @@
 const fs=require('fs'),assert=require('assert');
-const read=file=>fs.readFileSync(file,'utf8'),pkg=require('../package.json'),releases=require('../public/releases.json'),notes=read('RELEASE_NOTES.md'),editor=read('src/ProductionWorkspace.tsx'),model=read('src/loopEditorModel.ts'),workflow=read('.github/workflows/release.yml');
-assert(pkg.version==='0.68.0'&&pkg.releaseSeries==='0.68','package must identify V68');
-assert(releases.versions[0]?.builds[0]?.version==='0.68.0'&&releases.versions[0].builds[0].current===true,'V68 must lead the release catalog');
-assert(notes.startsWith('# GottesdienstRegie 0.68.0'),'notes must start with V68');
+const read=file=>fs.readFileSync(file,'utf8'),pkg=require('../package.json'),releases=require('../public/releases.json'),notes=read('RELEASE_NOTES.md'),editor=read('src/ProductionWorkspace.tsx'),designer=read('src/NowPlayingDesigner.tsx'),model=read('src/loopEditorModel.ts'),workflow=read('.github/workflows/release.yml');
+assert(Number(pkg.version.split('.')[1])>=68,'package must include V68 or newer');
+assert(releases.versions.some(entry=>entry.builds?.some(build=>build.version==='0.68.0')),'V68 must remain in the release catalog');
+assert(notes.includes('# GottesdienstRegie 0.68.0'),'notes must include V68');
 assert(workflow.includes('check-version68.cjs'),'workflow must run V68 guard');
 assert(editor.includes('usesAutomaticLoopEditor(item.type)'),'automatic loop editor branch missing');
-assert(editor.includes('NOW_PLAYING_DESIGNS.map'),'now-playing design picker missing');
+assert(designer.includes('NOW_PLAYING_DESIGNS.map'),'now-playing design picker missing');
 assert(model.includes("'announcement'")&&model.includes("'nowPlaying'"),'automatic loop element coverage missing');
 console.log('V68 release guard passed.');

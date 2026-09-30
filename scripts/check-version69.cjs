@@ -1,0 +1,12 @@
+const fs=require('fs'),assert=require('assert');
+const read=file=>fs.readFileSync(file,'utf8'),pkg=require('../package.json'),releases=require('../public/releases.json'),notes=read('RELEASE_NOTES.md'),workflow=read('.github/workflows/release.yml'),firebase=read('electron/FirebaseGemeindeService.ts'),announcement=read('src/community/AnnouncementService.ts'),designer=read('src/NowPlayingDesigner.tsx'),audio=read('src/audio/AudioLevelProvider.ts'),app=read('src/App.tsx'),store=read('src/store.ts');
+assert(pkg.version==='0.69.0'&&pkg.releaseSeries==='0.69','package must identify V69');
+assert(releases.versions[0]?.builds[0]?.version==='0.69.0'&&releases.versions[0].builds[0].current===true,'V69 must lead the release catalog');
+assert(notes.startsWith('# GottesdienstRegie 0.69.0'),'notes must start with V69');
+assert(workflow.includes('check-version69.cjs'),'workflow must run V69 guard');
+assert(firebase.includes("watchCollection('veranstaltungen'")&&firebase.includes("watchChildren('meldungen'"),'central Firebase ownership missing');
+assert(announcement.includes('toPublic')&&!announcement.includes('internalComment'),'public announcement projection missing');
+assert(designer.includes('NOW_PLAYING_DESIGNS.map')&&designer.includes('now-playing-design-cards'),'ten design cards missing');
+assert(audio.includes("mode='fallback'")||audio.includes("this.mode='fallback'"),'audio fallback missing');
+assert(app.includes('isLoopCandidateAvailable')&&store.includes('isLoopCandidateAvailable'),'double now-playing skip guard missing');
+console.log('V69 release guard passed.');

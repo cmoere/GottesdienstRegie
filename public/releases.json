@@ -21,11 +21,36 @@
   ],
   "versions": [
     {
+      "line": "0.69",
+      "builds": [{
+        "version": "0.69.0",
+        "releaseDate": "2026-09-30",
+        "current": true,
+        "overview": {
+          "label": { "de": "Zentrale Gemeindedaten und visueller Musikdesigner", "en": "Central community data and visual music designer" },
+          "text": { "de": "Veranstaltungen und Meldungen laufen stabil über einen zentralen Firebase-Dienst; „Läuft gerade“ erhält zehn visuelle Designkarten und einen audio-reaktiven Visualizer.", "en": "Events and announcements now use one stable Firebase service, while Now Playing gains ten visual design cards and an audio-reactive visualizer." }
+        },
+        "sections": {
+          "new": [
+            { "label": { "de": "Zentrale Firebase-Quelle", "en": "Central Firebase source" }, "text": { "de": "Stabile Veranstaltungs- und Meldungs-IDs, effektive Zeiten, Offline-Snapshot und sichere Live-Wechsel verwenden eine gemeinsame Datenlogik.", "en": "Stable event and announcement IDs, effective times, offline snapshots, and safe live transitions share one data model." } },
+            { "label": { "de": "Visueller Läuft-gerade-Designer", "en": "Visual Now Playing designer" }, "text": { "de": "Zehn Designkarten sowie Farben, Schreibweise, Sichtbarkeit, Visualizer und Anzeigedauer werden direkt konfiguriert.", "en": "Ten design cards plus colors, casing, visibility, visualizer, and duration are configured directly." } }
+          ],
+          "improved": [
+            { "label": { "de": "Audio-reaktiver Visualizer", "en": "Audio-reactive visualizer" }, "text": { "de": "Lokales Audio steuert die Bewegung; Radiostreams erhalten bei blockierter Analyse einen aktiven Fallback.", "en": "Local audio drives motion, while radio streams receive an active fallback when analysis is blocked." } }
+          ],
+          "fixed": [
+            { "label": { "de": "Leere Musikfolie sicher übersprungen", "en": "Idle music slide skipped reliably" }, "text": { "de": "Die Wiedergabe wird bei Auswahl und direkt vor MAIN erneut geprüft; Umlaute werden nicht mehr abgeschnitten.", "en": "Playback is checked during selection and again before MAIN; umlauts are no longer clipped." } }
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.68",
       "builds": [{
         "version": "0.68.0",
         "releaseDate": "2026-09-30",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "Passende Editoren für automatische Loop-Elemente", "en": "Purpose-built editors for automatic loop elements" },
           "text": { "de": "Automatische Loop-Inhalte zeigen jetzt ihre echten Einstellungen statt eines wirkungslosen Textfelds.", "en": "Automatic loop content now shows its real settings instead of an ineffective text field." }
