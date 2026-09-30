@@ -10,12 +10,14 @@ export class DisplaySleepProtection {
         catch { this.id = undefined; this.unavailable = true; }
       }
     } else if (this.id !== undefined) {
-      if (this.blocker.isStarted(this.id)) this.blocker.stop(this.id);
-      this.id = undefined;
+      try { if (this.blocker.isStarted(this.id)) this.blocker.stop(this.id); }
+      catch { /* Electron may already have destroyed powerSaveBlocker during shutdown. */ }
+      finally { this.id = undefined; }
     }
   }
   getStatus(): 'active'|'disabled'|'unavailable' {
     if (this.unavailable) return 'unavailable';
-    return this.id !== undefined && this.blocker.isStarted(this.id) ? 'active' : 'disabled';
+    if(this.id===undefined)return 'disabled';
+    try{return this.blocker.isStarted(this.id)?'active':'disabled'}catch{return 'disabled'}
   }
 }

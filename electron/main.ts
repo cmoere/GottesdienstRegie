@@ -26,6 +26,7 @@ import {RadioArtworkService} from './RadioArtworkService';
 import {DeviceSettingsRepository} from './DeviceSettingsRepository';
 import {createCommunityRealtimeAdapter,FirebaseGemeindeService} from './FirebaseGemeindeService';
 import {CommunitySnapshotCache} from './CommunitySnapshotCache';
+import {sendToLiveWindow} from './windowSafety';
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
 function applySpellCheckerLanguage(contents:Electron.WebContents,language:string){const requested=spellLocale[language]??language,available=contents.session.availableSpellCheckerLanguages,exact=available.find(item=>item.toLowerCase()===requested.toLowerCase()),base=available.find(item=>item.toLowerCase().split('-')[0]===requested.toLowerCase().split('-')[0]);contents.session.setSpellCheckerLanguages(exact?[exact]:base?[base]:[]);return exact??base??''}
@@ -45,7 +46,7 @@ let finishClose:()=>Promise<void>=async()=>{};
 let spotifyAuth:SpotifyAuthService|null=null;
 const spotifyOEmbed=new SpotifyOEmbedService();
 const radioMetadata=new RadioMetadataService(),radioArtwork=new RadioArtworkService(),radioMetadataStops=new Map<number,()=>void>();
-const spotifyCallback=(url:string)=>{if(url.startsWith('gottesdienstregie://spotify-callback'))void spotifyAuth?.completeCallback(url).then(status=>controlWindow?.webContents.send('spotify:status',status)).catch(error=>controlWindow?.webContents.send('spotify:status',{state:'error',message:error instanceof Error?error.message:'SPOTIFY_CALLBACK_FAILED'}))};
+const spotifyCallback=(url:string)=>{if(url.startsWith('gottesdienstregie://spotify-callback'))void spotifyAuth?.completeCallback(url).then(status=>sendToLiveWindow(controlWindow,'spotify:status',status)).catch(error=>sendToLiveWindow(controlWindow,'spotify:status',{state:'error',message:error instanceof Error?error.message:'SPOTIFY_CALLBACK_FAILED'}))};
 app.on('open-url',(event,url)=>{event.preventDefault();spotifyCallback(url)});
 app.on('second-instance',(_event,argv)=>{const url=argv.find(value=>value.startsWith('gottesdienstregie://spotify-callback'));if(url)spotifyCallback(url)});
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}},{scheme:'gottesdienst-cloud',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
@@ -75,7 +76,7 @@ function releaseNotes(info:UpdateInfo){
 }
 function publishUpdateStatus(status:UpdateStatus){
   lastUpdateStatus=status;
-  if(controlWindow&&!controlWindow.isDestroyed())controlWindow.webContents.send('updates:status',status);
+  sendToLiveWindow(controlWindow,'updates:status',status);
   return status;
 }
 
@@ -117,7 +118,7 @@ function createControlWindow(preferences:AppPreferencesData) {
   controlWindow.setMenu(null);
   controlWindow.webContents.on('will-navigate',(event,url)=>{if(url!==rendererRetryUrl)return;event.preventDefault();void load(controlWindow!)});
   if(process.platform!=='darwin')applySpellCheckerLanguage(controlWindow.webContents,'de');
-  const publishWindowState=()=>controlWindow?.webContents.send('window:fullscreen-state',controlWindow.isFullScreen());
+  const publishWindowState=()=>{const owner=controlWindow;if(owner&&!owner.isDestroyed())sendToLiveWindow(owner,'window:fullscreen-state',owner.isFullScreen())};
   controlWindow.on('enter-full-screen',publishWindowState);controlWindow.on('leave-full-screen',publishWindowState);
   let workspaceReady=false;
   let startupFallback:NodeJS.Timeout|undefined;
@@ -134,7 +135,8 @@ function createControlWindow(preferences:AppPreferencesData) {
     revealWorkspace();
   };
   ipcMain.on('lifecycle:ready',ready);
-  controlWindow.once('closed',()=>{clearTimeout(startupFallback);ipcMain.removeListener('lifecycle:ready',ready)});
+  const createdWindow=controlWindow;
+  controlWindow.once('closed',()=>{clearTimeout(startupFallback);ipcMain.removeListener('lifecycle:ready',ready);if(controlWindow===createdWindow)controlWindow=null});
   controlWindow.once('ready-to-show',()=>{controlWindow?.show();startupFallback=setTimeout(revealWorkspace,30000)});
   let saveTimer:NodeJS.Timeout|undefined;
   const saveWindowState=()=>{if(!controlWindow||controlWindow.isDestroyed())return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{if(!controlWindow||controlWindow.isDestroyed())return;const state=controlWindow.isFullScreen()?'fullscreen':controlWindow.isMaximized()?'maximized':'window',display=screen.getDisplayMatching(controlWindow.getBounds()),patch:Partial<AppPreferencesData>={lastWindowState:state,lastDisplayId:display.id};if(state==='window')patch.bounds=controlWindow.getBounds();void appPreferences.update(patch)},250)};
@@ -182,7 +184,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('community:start',(event)=>{const sender=event.sender;communityStops.get(sender.id)?.forEach(stop=>stop());communityStops.set(sender.id,[communityService.subscribeEvents(value=>!sender.isDestroyed()&&sender.send('community:events',value)),communityService.subscribeAnnouncements(value=>!sender.isDestroyed()&&sender.send('community:announcements',value)),communityService.subscribeConnection(value=>!sender.isDestroyed()&&sender.send('community:connection',value))]);sender.once('destroyed',()=>{communityStops.get(sender.id)?.forEach(stop=>stop());communityStops.delete(sender.id)});return true});
   ipcMain.handle('community:update-event',(_event,eventKey:string,patch:Record<string,unknown>)=>communityService.updateEvent(String(eventKey),patch));
   const translationPacks=new TranslationPackService(path.join(app.getPath('userData'),'translation-packs'),async(item,target,signal,progress)=>{const files=item.requiredFiles??[];let downloadedBytes=0,knownTotal=0,totalKnown=true;for(const fileName of files){const response=await fetch(`https://huggingface.co/${item.model}/resolve/${item.revision}/${fileName}`,{signal});if(!response.ok||!response.body)throw Error(`MODEL_DOWNLOAD_${response.status}`);const length=Number(response.headers.get('content-length')??0);if(length>0)knownTotal+=length;else totalKnown=false;const destination=path.join(target,fileName);await fs.mkdir(path.dirname(destination),{recursive:true});const handle=await fs.open(destination,'w');try{const reader=response.body.getReader();for(;;){if(signal.aborted)throw Error('ABORT');const{done,value}=await reader.read();if(done)break;if(value?.byteLength){await handle.write(value);downloadedBytes+=value.byteLength;progress({key:item.key,status:'downloading',downloadedBytes,totalBytes:totalKnown?knownTotal:undefined,percent:totalKnown&&knownTotal?Math.min(99,Math.round(downloadedBytes/knownTotal*100)):0})}}}finally{await handle.close()}}},translationPackCatalog);
-  translationPacks.onProgress(value=>controlWindow?.webContents.send('translation-packs:progress',value));
+  translationPacks.onProgress(value=>sendToLiveWindow(controlWindow,'translation-packs:progress',value));
   Menu.setApplicationMenu(null);
   appPreferences=new AppPreferences(path.join(app.getPath('userData'),'app-preferences.json'));
   const deviceSettings=new DeviceSettingsRepository(path.join(app.getPath('userData'),'device-settings.json'));
@@ -194,7 +196,7 @@ app.whenReady().then(async() => {
   autoUpdater.autoDownload=initialPreferences.autoDownloadUpdates;
   autoUpdater.allowPrerelease=initialPreferences.betaUpdates;
   const displayManager=new DisplayManager();
-  const publishOutputStatus=(role:OutputRole,state:'ready'|'missing'|'closed')=>{if(controlWindow&&!controlWindow.isDestroyed())controlWindow.webContents.send('outputs:status',{role,state})};
+  const publishOutputStatus=(role:OutputRole,state:'ready'|'missing'|'closed')=>{sendToLiveWindow(controlWindow,'outputs:status',{role,state})};
   const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
   stopPresentationOutputs=()=>outputManager.stop();
   ipcMain.handle('spelling:set-language',(event,language:string)=>applySpellCheckerLanguage(event.sender,String(language||'de')));
@@ -214,7 +216,7 @@ app.whenReady().then(async() => {
     'temporary-downloads':path.join(app.getPath('userData'),'temporary-downloads'),
     'web-cache':path.join(app.getPath('sessionData'),'Cache'),
   });
-  const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>controlWindow?.webContents.send('remote:command',payload));
+  const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>sendToLiveWindow(controlWindow,'remote:command',payload));
   await remoteServer.start().catch(()=>null);
   const onlineMedia=new GitHubStorageProvider('cmoere','GottesdienstRegie','media-library');
   void presentationRepository.initialize();
@@ -410,8 +412,8 @@ app.whenReady().then(async() => {
   ipcMain.handle('media:cloud-remove',async(_event,id:string)=>{if(outputManager.isActive())throw new Error('MEDIA_IN_LIVE_USE');const local=(await mediaRepository.list()).find(asset=>asset.id===id);const remote=(await onlineMedia.list()).find(item=>item.path===local?.github?.path||item.id===id);if(!remote)throw new Error('MEDIA_NOT_FOUND');const references:any[]=[];for(const summary of await presentationRepository.list(true,true)){const doc=await presentationRepository.read(summary.id),raw=JSON.stringify(doc);if(raw.includes(id)||raw.includes(remote.path)||raw.includes(remote.downloadUrl))references.push(summary)}if(references.length)throw new Error(`MEDIA_IN_PRESENTATIONS:${references.map(entry=>entry.title).join('|')}`);await onlineMedia.remove(remote.path,remote.id);if(local)await mediaRepository.remove(local.id);return true});
   ipcMain.handle('media-window:open',(_event,context:'manage'|'select',purpose:'item'|'background'|'foreground'|'audio',targetType?:'section'|'serviceItem',targetId?:string,mediaKind?:string)=>openMediaWindow(context,purpose,targetType,targetId,mediaKind));
   ipcMain.handle('media-window:close',()=>{mediaWindow?.close();return true});
-  ipcMain.handle('media-window:select',(_event,asset:unknown,purpose:string)=>{if(controlWindow&&!controlWindow.isDestroyed()){controlWindow.webContents.send('media:selected',{asset,purpose,...mediaSelectionContext});controlWindow.focus()}mediaWindow?.close();return true});
-  ipcMain.handle('media-window:select-audio',(_event,assets:unknown[],targetType:string,targetId:string)=>{if(controlWindow&&!controlWindow.isDestroyed()){controlWindow.webContents.send('media:selected',{assets,purpose:'audio',targetType,targetId});controlWindow.focus()}mediaWindow?.close();return true});
+  ipcMain.handle('media-window:select',(_event,asset:unknown,purpose:string)=>{if(sendToLiveWindow(controlWindow,'media:selected',{asset,purpose,...mediaSelectionContext}))controlWindow?.focus();mediaWindow?.close();return true});
+  ipcMain.handle('media-window:select-audio',(_event,assets:unknown[],targetType:string,targetId:string)=>{if(sendToLiveWindow(controlWindow,'media:selected',{assets,purpose:'audio',targetType,targetId}))controlWindow?.focus();mediaWindow?.close();return true});
   ipcMain.handle('history-window:open',()=>openHistoryWindow());
   ipcMain.handle('history-window:close',()=>{historyWindow?.close();return true});
   ipcMain.handle('remote:get',()=>remoteServer.get());
@@ -432,13 +434,13 @@ app.whenReady().then(async() => {
   ipcMain.handle('updates:rollback',async()=>{try{const previous=await previousRelease();if(!previous)throw new Error('NO_PREVIOUS_VERSION');const response=await fetch(previous.url,{signal:AbortSignal.timeout(120000)});if(!response.ok||!response.body)throw new Error(`DOWNLOAD_${response.status}`);const total=Number(response.headers.get('content-length')??previous.size),target=path.join(app.getPath('temp'),`GottesdienstRegie-Setup-${previous.version}.exe`),file=await fs.open(target,'w');let received=0;try{const reader=response.body.getReader();for(;;){const{done,value}=await reader.read();if(done)break;await file.write(value);received+=value.byteLength;publishUpdateStatus({state:'rollback-downloading',version:previous.version,percent:total?Math.round(received/total*100):0})}}finally{await file.close()}publishUpdateStatus({state:'rollback-ready',version:previous.version,percent:100});const opened=await shell.openPath(target);if(opened)throw new Error(opened);setTimeout(()=>app.quit(),1200);return true}catch(error){publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)});return false}});
   const displayInfo=()=>displayManager.list();
   ipcMain.handle('displays:list',displayInfo);
-  const notifyDisplays=()=>controlWindow&&!controlWindow.isDestroyed()&&controlWindow.webContents.send('displays:changed',displayInfo());
+  const notifyDisplays=()=>sendToLiveWindow(controlWindow,'displays:changed',displayInfo());
   screen.on('display-added',notifyDisplays);screen.on('display-removed',(_event,display)=>{outputManager.handleRemoved(display.id);notifyDisplays()});screen.on('display-metrics-changed',notifyDisplays);
   ipcMain.handle('displays:identify',(_event,assignments:DisplayAssignments)=>outputManager.identify(assignments));
   ipcMain.handle('outputs:preflight',(_event,assignments:DisplayAssignments,presentation:{hasPresentation?:boolean;activeSlideCount?:number;media?:string[]})=>displayManager.preflight(assignments,presentation));
   ipcMain.handle('outputs:on-air',async(_event,assignments:DisplayAssignments,payload:unknown)=>{const preflight=displayManager.preflight(assignments,{hasPresentation:true,activeSlideCount:1});if(!preflight.ok)throw new Error(preflight.errors.join('\n'));remoteServer.updateLive({current:payload,onAir:true});return outputManager.start(assignments,payload)});
   ipcMain.handle('outputs:send-slide',(_event,payload:unknown)=>{outputManager.send(payload);remoteServer.updateLive({current:payload});return true});
-  ipcMain.on('outputs:media-ended',(_event,behavior:string)=>{if(controlWindow&&!controlWindow.isDestroyed())controlWindow.webContents.send('outputs:media-ended',behavior)});
+  ipcMain.on('outputs:media-ended',(_event,behavior:string)=>{sendToLiveWindow(controlWindow,'outputs:media-ended',behavior)});
   ipcMain.handle('outputs:send-role',(_event,role:OutputRole,payload:unknown)=>outputManager.sendTo(role,payload));
   ipcMain.handle('outputs:send-quick',(_event,roles:OutputRole[],payload:unknown)=>outputManager.sendQuick(roles,payload));
   ipcMain.handle('outputs:off-air',()=>{remoteServer.updateLive({onAir:false});return outputManager.stop()});

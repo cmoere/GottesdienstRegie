@@ -1,3 +1,9 @@
+# GottesdienstRegie 0.71.1
+
+Version 0.71.1 verhindert den gemeldeten JavaScript-Absturz im Electron-Hauptprozess beim Schließen oder Neustarten. Verzögerte Hintergrundereignisse senden nicht mehr an bereits zerstörte Fenster; die Bildschirm-Wachhaltung wird auch dann sicher beendet, wenn Electron das zugrunde liegende Objekt bereits freigegeben hat.
+
+---
+
 # GottesdienstRegie 0.71.0
 
 Version 0.71.0 zeigt in „Nächste Veranstaltungen“ mehrere kommende Termine gleichzeitig. Vier auswählbare Darstellungen – Karten, Zeitstrahl, Plakat und Minimal – sowie eine einstellbare Anzahl von zwei bis acht Veranstaltungen passen die Folie an den jeweiligen PRE-/POST-Loop an.

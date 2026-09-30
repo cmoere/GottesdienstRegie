@@ -11,16 +11,16 @@ const read = (file) => fs.readFileSync(file, "utf8"),
   designer = read("src/EventSlideDesigner.tsx"),
   nowPlaying = read("src/nowPlayingModel.ts");
 assert(
-  pkg.version === "0.71.0" && pkg.releaseSeries === "0.71",
+  pkg.version.startsWith("0.71.") && pkg.releaseSeries === "0.71",
   "package must identify V71",
 );
 assert(
-  releases.versions[0]?.builds[0]?.version === "0.71.0" &&
+  releases.versions[0]?.builds.some((build) => build.version === "0.71.0") &&
     releases.versions[0].builds[0].current === true,
   "V71 must lead the release catalog",
 );
 assert(
-  notes.startsWith("# GottesdienstRegie 0.71.0"),
+  notes.includes("# GottesdienstRegie 0.71.0"),
   "notes must start with V71",
 );
 assert(workflow.includes("check-version71.cjs"), "workflow must run V71 guard");

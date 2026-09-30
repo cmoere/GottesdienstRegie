@@ -23,9 +23,25 @@
     {
       "line": "0.71",
       "builds": [{
-        "version": "0.71.0",
+        "version": "0.71.1",
         "releaseDate": "2026-09-30",
         "current": true,
+        "overview": {
+          "label": { "de": "Stabiler Programmabschluss", "en": "Stable application shutdown" },
+          "text": { "de": "Ein Absturz des Electron-Hauptprozesses beim Schließen oder Neustarten wurde behoben.", "en": "A main-process crash while closing or restarting the Electron application has been fixed." }
+        },
+        "sections": {
+          "new": [],
+          "improved": [],
+          "fixed": [
+            { "label": { "de": "Kein zerstörtes Fenster mehr angesprochen", "en": "No access to destroyed windows" }, "text": { "de": "Verzögerte Update-, Übersetzungs-, Spotify-, Ausgabe- und Fernsteuerungsereignisse werden beim Beenden sicher verworfen. Auch die Bildschirm-Wachhaltung wird kontrolliert freigegeben.", "en": "Delayed update, translation, Spotify, output and remote-control events are now safely discarded during shutdown. Display sleep prevention is also released safely." } }
+          ],
+          "known": []
+        }
+      }, {
+        "version": "0.71.0",
+        "releaseDate": "2026-09-30",
+        "current": false,
         "overview": {
           "label": { "de": "Mehr Termine zuverlässig auf MAIN", "en": "More events reliably on MAIN" },
           "text": { "de": "Mehrere kommende Veranstaltungen erscheinen in vier Designs zuverlässig in Vorschau und MAIN; Musikcover können rund dargestellt werden.", "en": "Multiple upcoming events now appear reliably in preview and MAIN using four designs, and music artwork can be displayed as a circle." }
