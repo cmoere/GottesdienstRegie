@@ -187,6 +187,7 @@ export function NowPlayingDesigner({
         {(
           [
             ["showArtwork", "Cover anzeigen"],
+            ["roundArtwork", "Cover rund anzeigen"],
             ["showTitle", "Titel anzeigen"],
             ["showArtist", "Interpret anzeigen"],
             ["showAlbum", "Album anzeigen"],

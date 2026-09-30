@@ -1,13 +1,8 @@
 import {describe,expect,it} from 'vitest';
-import {eventSlideContent,getLatestPublicEvent,setLatestPublicEvent} from './dynamicEventSlide';
+import {eventSlideItems,getLatestPublicEvents,normalizeEventSlideSettings,setLatestPublicEvents} from './dynamicEventSlide';
 
 describe('dynamic event slide',()=>{
-  it('shows normalized public event data instead of an empty placeholder',()=>{
-    expect(eventSlideContent({eventTitle:'Gottesdienst',eventStart:'2026-10-04T10:30:00+02:00',eventLocation:'Kirchsaal'})).toEqual({title:'Gottesdienst',details:'04.10.2026 · 10:30 · Kirchsaal'});
-  });
-  it('falls back to a useful empty state',()=>expect(eventSlideContent({})).toEqual({title:'Keine kommenden Veranstaltungen',details:''}));
-  it('retains the latest event for renderers mounted after the realtime update',()=>{
-    setLatestPublicEvent({title:'Abendgottesdienst',effectiveStart:'2026-10-04T18:00:00+02:00'});
-    expect(getLatestPublicEvent()).toMatchObject({title:'Abendgottesdienst'});
-  });
+  it('shows several normalized public events instead of only the first one',()=>expect(eventSlideItems({eventItemsJson:JSON.stringify([{title:'Gottesdienst',effectiveStart:'2026-10-04T10:30:00+02:00',effectiveLocation:'Kirchsaal'},{title:'Gebetsabend',effectiveStart:'2026-10-06T19:30:00+02:00',effectiveLocation:'Gemeindesaal'}])})).toEqual([{title:'Gottesdienst',details:'04.10.2026 · 10:30 · Kirchsaal',coverUrl:''},{title:'Gebetsabend',details:'06.10.2026 · 19:30 · Gemeindesaal',coverUrl:''}]));
+  it('retains the latest event list for renderers mounted after the realtime update',()=>{setLatestPublicEvents([{title:'Abendgottesdienst',effectiveStart:'2026-10-04T18:00:00+02:00'}]);expect(getLatestPublicEvents()).toHaveLength(1)});
+  it('normalizes four supported designs and the event limit',()=>{expect(normalizeEventSlideSettings({eventDesign:'timeline',eventLimit:6})).toEqual({design:'timeline',limit:6});expect(normalizeEventSlideSettings({eventDesign:'unknown',eventLimit:99})).toEqual({design:'cards',limit:8})});
 });

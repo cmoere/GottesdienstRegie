@@ -1,13 +1,13 @@
 {
   "name": "gottesdienstregie",
-  "version": "0.70.0",
+  "version": "0.71.0",
   "description": "Desktop-Regiesoftware für Gottesdienstpräsentationen der Philippusgemeinde.",
   "author": {
     "name": "Philippusgemeinde Ev. Freikirche",
     "email": "cmoere@users.noreply.github.com"
   },
   "desktopName": "GottesdienstRegie",
-  "releaseSeries": "0.70",
+  "releaseSeries": "0.71",
   "private": true,
   "main": "dist-electron/electron/main.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "installer": "npm run build && electron-builder --win nsis --publish never",
     "release:package-ci": "node scripts/package-ci.cjs",
     "verify:package-entry": "node scripts/check-packaged-entry.cjs",
-    "verify:release": "npm run test:unit && node scripts/check-version55.cjs && node scripts/check-version56.cjs && node scripts/check-version57.cjs && node scripts/check-version58.cjs && node scripts/check-version59.cjs && node scripts/check-version60.cjs && node scripts/check-version61.cjs && node scripts/check-version62.cjs && node scripts/check-version63.cjs && node scripts/check-version64.cjs && node scripts/check-version65.cjs && node scripts/check-version66.cjs && node scripts/check-version67.cjs && node scripts/check-version68.cjs && node scripts/check-version69.cjs && node scripts/check-version70.cjs"
+    "verify:release": "npm run test:unit && node scripts/check-version55.cjs && node scripts/check-version56.cjs && node scripts/check-version57.cjs && node scripts/check-version58.cjs && node scripts/check-version59.cjs && node scripts/check-version60.cjs && node scripts/check-version61.cjs && node scripts/check-version62.cjs && node scripts/check-version63.cjs && node scripts/check-version64.cjs && node scripts/check-version65.cjs && node scripts/check-version66.cjs && node scripts/check-version67.cjs && node scripts/check-version68.cjs && node scripts/check-version69.cjs && node scripts/check-version70.cjs && node scripts/check-version71.cjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

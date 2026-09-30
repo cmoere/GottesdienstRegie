@@ -99,7 +99,8 @@ import {paginateBibleVerses} from './bibleOverlayModel';
 import {quickScreenTypeForKey} from './quickScreenUi';
 import {isLoopCandidateAvailable,shouldSkipNowPlaying} from './nowPlayingModel';
 import {EventService,type ChurchEvent as CommunityChurchEvent} from './community/EventService';
-import {setLatestPublicEvent} from './dynamicEventSlide';
+import {setLatestPublicEvents} from './dynamicEventSlide';
+import {EventSlideDesigner} from './EventSlideDesigner';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
 import { FileMenu } from "./FileMenu";
@@ -4099,6 +4100,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
               )}
               {item.type === "loopQr" && <label>QR-Code-URL<input disabled={!canEdit} value={String(item.metadata.url ?? "")} onChange={(event) => state.updateItem(item.id, { metadata: { ...item.metadata, url: event.target.value } })} /></label>}
               {item.type === "nowPlaying" && <NowPlayingDesigner item={item} canEdit={canEdit}/>}
+              {(item.type === "event" || item.type === "nextEvents") && <EventSlideDesigner item={item} canEdit={canEdit}/>}
               {(item.type === "announcement" || item.type === "birthday" || item.type === "event") && <p className="muted">Quelle: Firebase · öffentliche Daten werden vor der Ausgabe validiert.</p>}
             </div>
           )}
@@ -8090,7 +8092,7 @@ function AppShell({
     }>({ state: "idle", step: 0, text: "" });
   useEffect(()=>{void (window.desktop as any)?.deviceSettings?.readOsb?.().then((value:unknown)=>setOsbSettings(normalizeOsbSettings(value,[...BIBLE_TRANSLATIONS])))},[]);
   useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge)return;const stop=bridge.onConnection((value:{connected:boolean;mode:string;updatedAt:number})=>setCommunityConnection(value));void bridge.start();return stop},[]);
-  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;return bridge.onEvents((rows:CommunityChurchEvent[])=>{const service=new EventService(rows),event=service.getUpcomingEvents()[0],publicEvent=event?service.toPublicEvent(event):null;setLatestPublicEvent(publicEvent);window.dispatchEvent(new CustomEvent('gottesdienstregie:community-event',{detail:publicEvent}))})},[]);
+  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;return bridge.onEvents((rows:CommunityChurchEvent[])=>{const service=new EventService(rows),publicEvents=service.getUpcomingEvents().slice(0,8).map(event=>service.toPublicEvent(event));setLatestPublicEvents(publicEvents);window.dispatchEvent(new CustomEvent('gottesdienstregie:community-events',{detail:publicEvents}))})},[]);
   const audioSessionRef = useRef<{
     onAir: boolean;
     mode: "edit" | "preview";

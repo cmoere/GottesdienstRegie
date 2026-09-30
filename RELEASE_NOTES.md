@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.71.0
+
+Version 0.71.0 zeigt in „Nächste Veranstaltungen“ mehrere kommende Termine gleichzeitig. Vier auswählbare Darstellungen – Karten, Zeitstrahl, Plakat und Minimal – sowie eine einstellbare Anzahl von zwei bis acht Veranstaltungen passen die Folie an den jeweiligen PRE-/POST-Loop an.
+
+Die MAIN-Ausgabe erhält den normalisierten Veranstaltungssnapshot jetzt gemeinsam mit der Live-Folie. Dadurch stehen Titel, effektive Zeit, Ort und vorhandene Cover auch im separaten Ausgabefenster zuverlässig zur Verfügung; Firebase wird weiterhin ausschließlich über den zentralen EventService gelesen.
+
+Für „Läuft gerade“ kann das Cover zusätzlich rund dargestellt werden. Die Einstellung wird gemeinsam mit den vorhandenen Designs gespeichert und identisch in Vorschau und MAIN angewendet.
+
+---
+
 # GottesdienstRegie 0.70.0
 
 Version 0.70.0 erweitert „Läuft gerade“ um zehn auswählbare Animationen. Vinyl kann sich drehen, Cover können zoomen, schweben, pulsieren, aufklappen oder leuchten. Der vollständige visuelle Designer ist nun auch in der Produktionsansicht erreichbar. Cover werden mit jedem Titelwechsel neu eingesetzt, sodass zwischengespeicherte Darstellungen nicht beim vorherigen Lied stehen bleiben.
@@ -1554,6 +1564,7 @@ Veröffentlicht am 1. September 2026.
 
 - **GitHub-Zugang:** Zugangsdaten bleiben im Electron-Hauptprozess und werden weder an den Renderer noch in Präsentations- oder Mediendaten geschrieben.
 - **Große Videos:** Dateien oberhalb der sicheren GitHub-Grenze bleiben lokal und verursachen keinen unvollständigen Upload.
+
 # 0.42.0 – Zuverlässigere Medien, Formen und Bedienoberfläche
 
 Version 0.42.0 trennt die Spezialelemente des Vor- und Nachprogramms eindeutig von normalen Gottesdienst-Inhalten. Die 2D-Objektgalerie verwendet echte SVG-Vektoren, persönliche Notizen zeigen einen verständlichen und zeitlich begrenzten Speicherstatus, und die Einzelvorschau kommt ohne störenden Folienschatten aus.

@@ -24,4 +24,5 @@ describe('now-playing loop',()=>{
     expect(normalizeNowPlayingSettings({accentColor:'#123AbC'}).accentColor).toBe('#123abc');
   });
   it('creates a serializable settings patch',()=>expect(nowPlayingSettingsPatch(normalizeNowPlayingSettings({durationSeconds:4}))).toMatchObject({durationSeconds:4,design:'cover-left'}));
+  it('persists a round artwork shape when selected',()=>expect(nowPlayingSettingsPatch(normalizeNowPlayingSettings({roundArtwork:true}))).toMatchObject({roundArtwork:true}));
 });

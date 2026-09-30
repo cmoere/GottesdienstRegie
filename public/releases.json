@@ -21,11 +21,36 @@
   ],
   "versions": [
     {
+      "line": "0.71",
+      "builds": [{
+        "version": "0.71.0",
+        "releaseDate": "2026-09-30",
+        "current": true,
+        "overview": {
+          "label": { "de": "Mehr Termine zuverlässig auf MAIN", "en": "More events reliably on MAIN" },
+          "text": { "de": "Mehrere kommende Veranstaltungen erscheinen in vier Designs zuverlässig in Vorschau und MAIN; Musikcover können rund dargestellt werden.", "en": "Multiple upcoming events now appear reliably in preview and MAIN using four designs, and music artwork can be displayed as a circle." }
+        },
+        "sections": {
+          "new": [
+            { "label": { "de": "Vier Veranstaltungsdesigns", "en": "Four event designs" }, "text": { "de": "Karten, Zeitstrahl, Plakat und Minimal stehen mit kleinen Vorschauen zur Auswahl.", "en": "Cards, timeline, poster and minimal styles are available with visual previews." } },
+            { "label": { "de": "Runde Musikcover", "en": "Round music artwork" }, "text": { "de": "Cover auf „Läuft gerade“ können optional kreisförmig dargestellt werden.", "en": "Now Playing artwork can optionally be displayed as a circle." } }
+          ],
+          "improved": [
+            { "label": { "de": "Mehr kommende Veranstaltungen", "en": "More upcoming events" }, "text": { "de": "Pro Folie lassen sich zwei bis acht sortierte Termine anzeigen.", "en": "Each slide can show between two and eight sorted events." } }
+          ],
+          "fixed": [
+            { "label": { "de": "Veranstaltungen auf MAIN", "en": "Events on MAIN" }, "text": { "de": "Der aktuelle Veranstaltungssnapshot wird sicher mit der Live-Folie an das separate MAIN-Fenster übertragen.", "en": "The current event snapshot is safely sent to the separate MAIN window with the live slide." } }
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.70",
       "builds": [{
         "version": "0.70.0",
         "releaseDate": "2026-09-30",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "Dynamische Musik- und Veranstaltungsfolien", "en": "Dynamic music and event slides" },
           "text": { "de": "Läuft gerade erhält zehn Animationen, aktuelle Cover und den vollständigen Designer; Veranstaltungen und Audioquellen werden wieder zuverlässig angezeigt und abgespielt.", "en": "Now Playing gains ten animations, current artwork and the full designer, while events and audio sources display and play reliably again." }

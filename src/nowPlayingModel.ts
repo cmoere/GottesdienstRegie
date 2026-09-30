@@ -60,6 +60,7 @@ export interface NowPlayingPresentationSettings {
   design: NowPlayingDesign;
   animation: NowPlayingAnimation;
   showArtwork: boolean;
+  roundArtwork: boolean;
   showAlbum: boolean;
   showTitle: boolean;
   showArtist: boolean;
@@ -76,6 +77,7 @@ const defaults: NowPlayingPresentationSettings = {
   design: "cover-left",
   animation: "fade-rise",
   showArtwork: true,
+  roundArtwork: false,
   showAlbum: true,
   showTitle: true,
   showArtist: true,
@@ -131,6 +133,7 @@ export function normalizeNowPlayingSettings(
     design,
     animation,
     showArtwork: value.showArtwork !== false,
+    roundArtwork: value.roundArtwork === true,
     showAlbum: value.showAlbum !== false,
     showTitle: value.showTitle !== false,
     showArtist: value.showArtist !== false,

@@ -15,7 +15,12 @@ import {
   nowPlayingDisplay,
 } from "./nowPlayingModel";
 import type { BackgroundAudioState } from "./BackgroundAudioEngine";
-import { eventSlideContent, getLatestPublicEvent, type LatestPublicEvent } from "./dynamicEventSlide";
+import {
+  eventSlideItems,
+  getLatestPublicEvents,
+  normalizeEventSlideSettings,
+  type LatestPublicEvent,
+} from "./dynamicEventSlide";
 
 export type SlideRendererMode = "editor" | "preview" | "thumbnail" | "live";
 
@@ -532,11 +537,56 @@ function ClockLoopElement({ style }: { style: CSSProperties }) {
   );
 }
 
-function EventLoopElement({style,properties}:{style:CSSProperties;properties:Record<string,string|number|boolean>}){
-  const [event,setEvent]=useState<LatestPublicEvent|null>(()=>getLatestPublicEvent());
-  useEffect(()=>{const update=(message:Event)=>setEvent((message as CustomEvent<LatestPublicEvent|null>).detail);window.addEventListener('gottesdienstregie:community-event',update);return()=>window.removeEventListener('gottesdienstregie:community-event',update)},[]);
-  const content=eventSlideContent(event?{eventTitle:event.title,eventStart:event.effectiveStart,eventLocation:event.effectiveLocation}:properties);
-  return <div className="slide-renderer-element loop-surface event-loop-surface" style={{...style,display:'flex',flexDirection:'column',justifyContent:'center',padding:'6%',background:String(properties.background??'#13333d'),color:String(properties.color??'#ffffff')}}><small>NÄCHSTE VERANSTALTUNG</small><strong>{content.title}</strong>{content.details&&<span>{content.details}</span>}</div>;
+function EventLoopElement({
+  style,
+  properties,
+}: {
+  style: CSSProperties;
+  properties: Record<string, string | number | boolean>;
+}) {
+  const [events, setEvents] = useState<LatestPublicEvent[]>(() =>
+    getLatestPublicEvents(),
+  );
+  useEffect(() => {
+    const update = (message: Event) =>
+      setEvents((message as CustomEvent<LatestPublicEvent[]>).detail);
+    window.addEventListener("gottesdienstregie:community-events", update);
+    return () =>
+      window.removeEventListener("gottesdienstregie:community-events", update);
+  }, []);
+  const settings = normalizeEventSlideSettings(properties),
+    source = events.length
+      ? { ...properties, eventItemsJson: JSON.stringify(events) }
+      : properties,
+    items = eventSlideItems(source);
+  return (
+    <div
+      className={`slide-renderer-element loop-surface event-loop-surface event-design-${settings.design}`}
+      style={{
+        ...style,
+        background: String(properties.background ?? "#13333d"),
+        color: String(properties.color ?? "#ffffff"),
+      }}
+    >
+      <small>NÄCHSTE VERANSTALTUNGEN</small>
+      <div className="event-loop-list">
+        {items.map((event, index) => (
+          <article key={`${event.title}:${event.details}:${index}`}>
+            {settings.design === "poster" && event.coverUrl ? (
+              <img src={event.coverUrl} alt="" />
+            ) : (
+              <b>{String(index + 1).padStart(2, "0")}</b>
+            )}
+            <div>
+              <strong>{event.title}</strong>
+              {event.details && <span>{event.details}</span>}
+            </div>
+          </article>
+        ))}
+      </div>
+      {!items.length && <strong>Keine kommenden Veranstaltungen</strong>}
+    </div>
+  );
 }
 
 function NowPlayingLoopElement({
@@ -582,7 +632,7 @@ function NowPlayingLoopElement({
           : value;
   return (
     <div
-      className={`slide-renderer-element now-playing-slide design-${settings.design} animation-${settings.animation} visualizer-${settings.visualizerStyle} position-${settings.visualizerPosition} ${live.active ? "is-playing" : "is-idle"}`}
+      className={`slide-renderer-element now-playing-slide design-${settings.design} animation-${settings.animation} visualizer-${settings.visualizerStyle} position-${settings.visualizerPosition} ${settings.roundArtwork ? "round-artwork" : ""} ${live.active ? "is-playing" : "is-idle"}`}
       style={
         {
           ...style,
