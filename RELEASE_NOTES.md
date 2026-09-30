@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.70.0
+
+Version 0.70.0 erweitert „Läuft gerade“ um zehn auswählbare Animationen. Vinyl kann sich drehen, Cover können zoomen, schweben, pulsieren, aufklappen oder leuchten. Der vollständige visuelle Designer ist nun auch in der Produktionsansicht erreichbar. Cover werden mit jedem Titelwechsel neu eingesetzt, sodass zwischengespeicherte Darstellungen nicht beim vorherigen Lied stehen bleiben.
+
+Veranstaltungsfolien hören jetzt auf die zentral normalisierten Firebase-Ereignisse und zeigen Titel, effektive Zeit und effektiven Ort. Fehlen gültige Termine, erscheint ein klarer Leerzustand. Beim Start von ON AIR wechselt die Bedienoberfläche automatisch aus Bearbeiten in Vorschau; der rote LIVE-Rahmen und Markierungspunkt an Folien entfallen.
+
+Das Hintergrund-Audio-Feld bietet Medienbrowser, zuletzt verwendete Medien, Import und Radio. Eine optionale maximale Wiedergabedauer in Sekunden beendet Audio kontrolliert mit der gewählten Ausblendzeit. Radiovorschauen setzen und laden ihre Streamquelle nun vor dem Start, wodurch stille Wiedergabe durch einen veralteten Audiozustand verhindert wird.
+
+---
+
 # GottesdienstRegie 0.69.0
 
 Version 0.69.0 bindet Veranstaltungen und Meldungen zentral an die bestehende Firebase Realtime Database der Philippusgemeinde an. Stabile Child-Keys bleiben bei Umbenennungen erhalten, geplante und effektive Zeiten werden getrennt behandelt und PRE-/POST-Loop-Ziele strikt ausgewertet. MAIN erhält ausschließlich normalisierte öffentliche Daten. Realtime-Änderungen werden erst am sicheren Folienwechsel übernommen; bei Verbindungsproblemen steht der letzte weiterhin gültige Snapshot offline bereit.

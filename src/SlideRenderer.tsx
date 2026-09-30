@@ -1,72 +1,683 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import type { Slide, SlideElement } from './store';
-import { fontStack } from './fonts';
-import {applyAudioRoute,defaultAudioRouting,type AudioRoute} from './audioRouting';
-import {usePreferences} from './preferences';
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import type { Slide, SlideElement } from "./store";
+import { fontStack } from "./fonts";
+import {
+  applyAudioRoute,
+  defaultAudioRouting,
+  type AudioRoute,
+} from "./audioRouting";
+import { usePreferences } from "./preferences";
 
-import {translatedSlide, translationBlocks} from './songTranslation';
-import {getNowPlayingState,normalizeNowPlayingSettings,nowPlayingDisplay} from './nowPlayingModel';
-import type {BackgroundAudioState} from './BackgroundAudioEngine';
+import { translatedSlide, translationBlocks } from "./songTranslation";
+import {
+  getNowPlayingState,
+  normalizeNowPlayingSettings,
+  nowPlayingDisplay,
+} from "./nowPlayingModel";
+import type { BackgroundAudioState } from "./BackgroundAudioEngine";
+import { eventSlideContent, getLatestPublicEvent, type LatestPublicEvent } from "./dynamicEventSlide";
 
-export type SlideRendererMode='editor'|'preview'|'thumbnail'|'live';
+export type SlideRendererMode = "editor" | "preview" | "thumbnail" | "live";
 
-export function elementStyle(element:SlideElement):CSSProperties{
-  const value=element.properties;
-  const shadows=[String(value.textShadow??''),String(value.textGlow??'')].filter(Boolean).join(', ')||'none';
+export function elementStyle(element: SlideElement): CSSProperties {
+  const value = element.properties;
+  const shadows =
+    [String(value.textShadow ?? ""), String(value.textGlow ?? "")]
+      .filter(Boolean)
+      .join(", ") || "none";
   return {
-    left:`${element.x/19.2}%`,top:`${element.y/10.8}%`,width:`${element.width/19.2}%`,height:`${element.height/10.8}%`,
-    opacity:element.opacity,transform:`rotate(${element.rotation}deg) scaleX(${value.flipX===true?-1:1}) scaleY(${value.flipY===true?-1:1})`,zIndex:element.zIndex,
-    color:String(value.color??'#fff'),fontFamily:fontStack(String(value.fontFamily??'Cera Pro')),fontWeight:Number(value.fontWeight??400),fontStyle:String(value.fontStyle??'normal') as CSSProperties['fontStyle'],
-    fontSize:`${Number(value.fontSize??48)/19.2}cqw`,lineHeight:Number(value.lineHeight??1.15),letterSpacing:`${Number(value.letterSpacing??0)/19.2}cqw`,
-    textAlign:(value.align??'center') as CSSProperties['textAlign'],textShadow:shadows,WebkitTextStroke:String(value.textOutline??'')||undefined,padding:`${Number(value.padding??0)/19.2}cqw`,
-    alignItems:value.verticalAlign==='top'?'flex-start':value.verticalAlign==='bottom'?'flex-end':'center'
+    left: `${element.x / 19.2}%`,
+    top: `${element.y / 10.8}%`,
+    width: `${element.width / 19.2}%`,
+    height: `${element.height / 10.8}%`,
+    opacity: element.opacity,
+    transform: `rotate(${element.rotation}deg) scaleX(${value.flipX === true ? -1 : 1}) scaleY(${value.flipY === true ? -1 : 1})`,
+    zIndex: element.zIndex,
+    color: String(value.color ?? "#fff"),
+    fontFamily: fontStack(String(value.fontFamily ?? "Cera Pro")),
+    fontWeight: Number(value.fontWeight ?? 400),
+    fontStyle: String(
+      value.fontStyle ?? "normal",
+    ) as CSSProperties["fontStyle"],
+    fontSize: `${Number(value.fontSize ?? 48) / 19.2}cqw`,
+    lineHeight: Number(value.lineHeight ?? 1.15),
+    letterSpacing: `${Number(value.letterSpacing ?? 0) / 19.2}cqw`,
+    textAlign: (value.align ?? "center") as CSSProperties["textAlign"],
+    textShadow: shadows,
+    WebkitTextStroke: String(value.textOutline ?? "") || undefined,
+    padding: `${Number(value.padding ?? 0) / 19.2}cqw`,
+    alignItems:
+      value.verticalAlign === "top"
+        ? "flex-start"
+        : value.verticalAlign === "bottom"
+          ? "flex-end"
+          : "center",
   };
 }
 
-function routingWithDefaults(value:ReturnType<typeof usePreferences.getState>['audioRouting']){return{...defaultAudioRouting,...value,video:{...defaultAudioRouting.video,...value?.video},preview:{...defaultAudioRouting.preview,...value?.preview}}}
-
-function RoutedMedia({kind,element,mode,style,src}:{kind:'video'|'audio';element:SlideElement;mode:SlideRendererMode;style:CSSProperties;src:string}){const ref=useRef<HTMLMediaElement>(null),routingValue=usePreferences(state=>state.audioRouting),properties=element.properties,route:AudioRoute=mode==='live'?'video':'preview';useEffect(()=>{const media=ref.current;if(!media||mode==='thumbnail')return;const routing=routingWithDefaults(routingValue),config=routing[route];void applyAudioRoute(media,routing,route).then(()=>{media.volume=Math.max(0,Math.min(1,config.volume/100*Number(properties.volume??100)/100));media.muted=config.muted||properties.muted===true})},[routingValue,route,mode,properties.volume,properties.muted]);const common={className:'slide-renderer-element media',style,src,autoPlay:mode==='live'&&properties.autoplay!==false,loop:properties.loop===true,muted:properties.muted===true||mode==='thumbnail'||routingWithDefaults(routingValue)[route].muted,controls:mode==='editor'||mode==='preview',preload:mode==='thumbnail'?'none':'metadata',onEnded:()=>{if(mode==='live')(window.desktop as any)?.notifyMediaEnded(String(properties.endBehavior??'nextSlide'))}} as const;return kind==='video'?<video ref={ref as React.RefObject<HTMLVideoElement>} {...common} playsInline/>:<audio ref={ref as React.RefObject<HTMLAudioElement>} {...common} className="slide-renderer-element audio-player" preload="metadata"/>}
-
-function LiveVideoInput({element,mode,style}:{element:SlideElement;mode:SlideRendererMode;style:CSSProperties}){const ref=useRef<HTMLVideoElement>(null),[error,setError]=useState(false),properties=element.properties,routingValue=usePreferences(state=>state.audioRouting);useEffect(()=>{if(mode==='thumbnail'||!properties.deviceId)return;let active=true,stream:MediaStream|undefined;void navigator.mediaDevices.getUserMedia({video:{deviceId:{exact:String(properties.deviceId)},width:{ideal:Number(properties.width??1920)},height:{ideal:Number(properties.height??1080)},frameRate:{ideal:Number(properties.frameRate??30)}},audio:properties.audioEnabled===true}).then(value=>{if(!active){value.getTracks().forEach(track=>track.stop());return}stream=value;if(ref.current){ref.current.srcObject=value;const routing=routingWithDefaults(routingValue),route:AudioRoute=mode==='live'?'video':'preview';void applyAudioRoute(ref.current,routing,route);ref.current.volume=Math.max(0,Math.min(1,routing[route].volume/100*Number(properties.volume??100)/100));ref.current.muted=mode!=='live'||properties.audioEnabled!==true||routing[route].muted;void ref.current.play()}setError(false)}).catch(()=>setError(true));return()=>{active=false;stream?.getTracks().forEach(track=>track.stop())}},[mode,properties.deviceId,properties.width,properties.height,properties.frameRate,properties.audioEnabled,properties.volume,routingValue]);if(mode==='thumbnail')return <div className="slide-renderer-element web-placeholder" style={style}>LIVE</div>;return <div className="slide-renderer-element video-input-frame" style={{...style,overflow:'hidden',display:'grid',placeItems:'center',background:'#000'}}>{error?<strong>KEIN SIGNAL</strong>:<video ref={ref} autoPlay playsInline muted={mode!=='live'||properties.audioEnabled!==true} style={{width:'100%',height:'100%',objectFit:String(properties.fit??'contain') as CSSProperties['objectFit'],clipPath:`inset(${Number(properties.cropTop??0)}% ${Number(properties.cropRight??0)}% ${Number(properties.cropBottom??0)}% ${Number(properties.cropLeft??0)}%)`,filter:`brightness(${Number(properties.brightness??100)}%) contrast(${Number(properties.contrast??100)}%) saturate(${Number(properties.saturation??100)}%) hue-rotate(${Number(properties.hue??0)}deg)`}}/>}</div>}
-
-function TimedText({element,mode,style}:{element:SlideElement;mode:SlideRendererMode;style:CSSProperties}){const duration=Math.max(0,Number(element.properties.timerDurationSeconds??0)),[left,setLeft]=useState(duration);useEffect(()=>{setLeft(duration);if(mode!=='live'||duration<=0)return;const started=Date.now(),timer=setInterval(()=>setLeft(Math.max(0,duration-Math.floor((Date.now()-started)/1000))),250);return()=>clearInterval(timer)},[duration,mode,element.id]);const value=left===0&&element.properties.timerEndText?String(element.properties.timerEndText):`${Math.floor(left/60).toString().padStart(2,'0')}:${(left%60).toString().padStart(2,'0')}`;return <div className="slide-renderer-element text timer-text" style={style}>{value}</div>}
-
-function RenderElement({element,mode}:{element:SlideElement;mode:SlideRendererMode}){
-  if(!element.visible)return null;
-  const style=elementStyle(element),properties=element.properties,src=String(properties.src??properties.url??'');
-  if(element.type==='loop'){
-    const loopType=String(properties.loopType??'announcement');
-    if(loopType==='weather')return <iframe className="slide-renderer-element web loop-weather" style={{...style,pointerEvents:'none'}} src="https://weather.crbnm06.workers.dev" title="Wetterscreen" sandbox="allow-scripts allow-same-origin"/>;
-    if(loopType==='clock')return <ClockLoopElement style={style}/>;
-    if(loopType==='nowPlaying')return <NowPlayingLoopElement style={style} properties={properties}/>;
-    return <div className="slide-renderer-element loop-surface" style={{...style,display:'flex',flexDirection:'column',justifyContent:'center',padding:'4%',background:String(properties.background??'#ffffff'),color:String(properties.color??'#000000')}}><strong>{String(properties.title??'Aktuelle Infos')}</strong><span>{String(properties.text??'')}</span></div>;
-  }
-  if(element.type==='image'&&src)return <img className="slide-renderer-element media" style={style} src={src} alt="" loading={mode==='thumbnail'?'lazy':'eager'}/>;
-  if(element.type==='video'&&src)return <RoutedMedia kind="video" element={element} mode={mode} style={style} src={src}/>;
-  if(element.type==='audio'&&src)return mode==='thumbnail'?<div className="slide-renderer-element web-placeholder" style={style}>AUDIO</div>:<RoutedMedia kind="audio" element={element} mode={mode} style={style} src={src}/>;
-  if(element.type==='videoInput')return <LiveVideoInput element={element} mode={mode} style={style}/>;
-  if(element.type==='web'&&src){const proxy=String(properties.proxyUrl??''),resolved=properties.proxyEnabled&&proxy?(proxy.includes('{url}')?proxy.replace('{url}',encodeURIComponent(src)):`${proxy}${encodeURIComponent(src)}`):src,sandbox=['allow-scripts','allow-same-origin','allow-presentation',properties.allowForms!==false?'allow-forms':'',properties.allowPopups===true?'allow-popups':''].filter(Boolean).join(' ');return mode==='thumbnail'?<div className="slide-renderer-element web-placeholder" style={style}>WEB</div>:<iframe className="slide-renderer-element web" style={{...style,zoom:`${Number(properties.zoom??100)}%`,pointerEvents:properties.allowInteraction===true?'auto':'none'}} src={resolved} title="Web content" referrerPolicy={properties.referrerPolicy==='strict-origin-when-cross-origin'?'strict-origin-when-cross-origin':'no-referrer'} allow={`${properties.webAudio===true?'autoplay; ':''}fullscreen; picture-in-picture`} sandbox={sandbox}/>}
-  if(element.type==='shape'){const kind=String(properties.shapeKind??'rectangle'),paths:Record<string,string>={triangle:'polygon(50% 0,100% 100%,0 100%)',diamond:'polygon(50% 0,100% 50%,50% 100%,0 50%)',pentagon:'polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%)',hexagon:'polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)',octagon:'polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%)',star:'polygon(50% 0,61% 34%,98% 35%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,2% 35%,39% 34%)',burst:'polygon(50% 0,60% 25%,79% 7%,78% 34%,100% 30%,84% 50%,100% 70%,76% 66%,79% 93%,60% 75%,50% 100%,40% 75%,21% 93%,24% 66%,0 70%,16% 50%,0 30%,24% 34%,21% 7%,40% 25%)',arrow:'polygon(0 32%,62% 32%,62% 8%,100% 50%,62% 92%,62% 68%,0 68%)',chevron:'polygon(0 0,58% 0,100% 50%,58% 100%,0 100%,42% 50%)',speech:'polygon(0 0,100% 0,100% 78%,30% 78%,15% 100%,18% 78%,0 78%)',cross:'polygon(38% 0,62% 0,62% 38%,100% 38%,100% 62%,62% 62%,62% 100%,38% 100%,38% 62%,0 62%,0 38%,38% 38%)',parallelogram:'polygon(22% 0,100% 0,78% 100%,0 100%)',trapezoid:'polygon(20% 0,80% 0,100% 100%,0 100%)',heart:'polygon(50% 92%,8% 50%,4% 28%,12% 10%,30% 3%,50% 20%,70% 3%,88% 10%,96% 28%,92% 50%)',lightning:'polygon(55% 0,20% 54%,46% 54%,34% 100%,82% 39%,55% 39%)',shield:'polygon(50% 0,92% 15%,86% 66%,50% 100%,14% 66%,8% 15%)',cloud:'polygon(16% 78%,4% 65%,5% 45%,18% 34%,28% 35%,36% 14%,58% 7%,77% 21%,82% 38%,95% 47%,98% 67%,86% 82%,16% 82%)',home:'polygon(50% 0,100% 42%,88% 42%,88% 100%,60% 100%,60% 66%,40% 66%,40% 100%,12% 100%,12% 42%,0 42%)',moon:'polygon(78% 3%,56% 12%,39% 30%,34% 52%,41% 72%,58% 88%,80% 96%,61% 100%,37% 94%,17% 78%,5% 57%,7% 34%,22% 14%,45% 2%)'},clipPath=paths[kind];return <div className={`slide-renderer-element shape shape-${kind}`} style={{...style,background:String(properties.fill??properties.color??'#fff'),border:`${Math.max(0,Number(properties.strokeWidth??0))/19.2}cqw solid ${String(properties.stroke??'transparent')}`,borderRadius:kind==='ellipse'?'50%':kind==='rounded'?`${Number(properties.radius??42)/19.2}cqw`:0,clipPath,boxSizing:'border-box'}}/>}
-  if(element.type==='line')return <div className="slide-renderer-element line" style={{...style,background:String(properties.color??'#fff'),height:`${Math.max(1,Number(properties.strokeWidth??4))/19.2}cqw`}}/>;
-  if(element.type==='qr')return src?<img className="slide-renderer-element qr" style={{...style,objectFit:'contain',background:'#fff'}} src={src} alt="QR-Code"/>:<div className="slide-renderer-element qr" style={{...style,display:'grid',placeItems:'center',background:'#fff',color:'#102029'}}>{String(properties.text??properties.value??'QR-CODE')}</div>;
-  if(element.type==='text'&&Number(properties.timerDurationSeconds??0)>0)return <TimedText element={element} mode={mode} style={style}/>;
-  return <div className={`slide-renderer-element text ${properties.animation==='fade-in'&&mode==='live'?'element-animation-fade-in':''}`} style={style}>{String(properties.text??'')}</div>;
+function routingWithDefaults(
+  value: ReturnType<typeof usePreferences.getState>["audioRouting"],
+) {
+  return {
+    ...defaultAudioRouting,
+    ...value,
+    video: { ...defaultAudioRouting.video, ...value?.video },
+    preview: { ...defaultAudioRouting.preview, ...value?.preview },
+  };
 }
 
-function ClockLoopElement({style}:{style:CSSProperties}){const [now,setNow]=useState(()=>new Date());useEffect(()=>{const timer=window.setInterval(()=>setNow(new Date()),1000);return()=>window.clearInterval(timer)},[]);return <div className="slide-renderer-element loop-clock" style={{...style,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}><strong>{now.toLocaleTimeString('de-DE')}</strong><span>{now.toLocaleDateString('de-DE',{weekday:'long',day:'2-digit',month:'long'})}</span></div>}
+function RoutedMedia({
+  kind,
+  element,
+  mode,
+  style,
+  src,
+}: {
+  kind: "video" | "audio";
+  element: SlideElement;
+  mode: SlideRendererMode;
+  style: CSSProperties;
+  src: string;
+}) {
+  const ref = useRef<HTMLMediaElement>(null),
+    routingValue = usePreferences((state) => state.audioRouting),
+    properties = element.properties,
+    route: AudioRoute = mode === "live" ? "video" : "preview";
+  useEffect(() => {
+    const media = ref.current;
+    if (!media || mode === "thumbnail") return;
+    const routing = routingWithDefaults(routingValue),
+      config = routing[route];
+    void applyAudioRoute(media, routing, route).then(() => {
+      media.volume = Math.max(
+        0,
+        Math.min(
+          1,
+          ((config.volume / 100) * Number(properties.volume ?? 100)) / 100,
+        ),
+      );
+      media.muted = config.muted || properties.muted === true;
+    });
+  }, [routingValue, route, mode, properties.volume, properties.muted]);
+  const common = {
+    className: "slide-renderer-element media",
+    style,
+    src,
+    autoPlay: mode === "live" && properties.autoplay !== false,
+    loop: properties.loop === true,
+    muted:
+      properties.muted === true ||
+      mode === "thumbnail" ||
+      routingWithDefaults(routingValue)[route].muted,
+    controls: mode === "editor" || mode === "preview",
+    preload: mode === "thumbnail" ? "none" : "metadata",
+    onEnded: () => {
+      if (mode === "live")
+        (window.desktop as any)?.notifyMediaEnded(
+          String(properties.endBehavior ?? "nextSlide"),
+        );
+    },
+  } as const;
+  return kind === "video" ? (
+    <video
+      ref={ref as React.RefObject<HTMLVideoElement>}
+      {...common}
+      playsInline
+    />
+  ) : (
+    <audio
+      ref={ref as React.RefObject<HTMLAudioElement>}
+      {...common}
+      className="slide-renderer-element audio-player"
+      preload="metadata"
+    />
+  );
+}
 
-function NowPlayingLoopElement({style,properties}:{style:CSSProperties;properties:Record<string,string|number|boolean>}){const [state,setState]=useState<Partial<BackgroundAudioState>>(()=>getNowPlayingState()),[levels,setLevels]=useState([.35,.8,.55,.7]);useEffect(()=>{const update=(event:Event)=>setState((event as CustomEvent<BackgroundAudioState>).detail),level=(event:Event)=>setLevels((event as CustomEvent<{levels:number[]}>).detail.levels);window.addEventListener('gottesdienstregie:background-audio',update);window.addEventListener('gottesdienstregie:audio-level',level);return()=>{window.removeEventListener('gottesdienstregie:background-audio',update);window.removeEventListener('gottesdienstregie:audio-level',level)}},[]);const local=nowPlayingDisplay(state),live=local.active?local:{active:properties.nowPlayingActive===true,title:String(properties.nowPlayingTitle??''),artist:String(properties.nowPlayingArtist??''),album:String(properties.nowPlayingAlbum??''),artworkUrl:String(properties.nowPlayingArtwork??''),source:String(properties.nowPlayingSource??'')},settings=normalizeNowPlayingSettings(properties),caseText=(value:string)=>settings.textCase==='uppercase'?value.toLocaleUpperCase('de-DE'):settings.textCase==='lowercase'?value.toLocaleLowerCase('de-DE'):value;return <div className={`slide-renderer-element now-playing-slide design-${settings.design} visualizer-${settings.visualizerStyle} position-${settings.visualizerPosition} ${live.active?'is-playing':'is-idle'}`} style={{...style,background:settings.backgroundColor,color:settings.textColor,'--now-accent':settings.accentColor} as CSSProperties}>{settings.showArtwork&&<div className="now-playing-art">{live.artworkUrl?<img src={live.artworkUrl} alt=""/>:<span className="material-symbols-outlined">{settings.design==='radio'?'radio':'album'}</span>}</div>}<div className="now-playing-copy"><small>{live.active?'LÄUFT GERADE':'BEREIT FÜR MUSIK'}</small>{settings.showTitle&&<strong>{caseText(live.title||'Noch keine Wiedergabe')}</strong>}{settings.showArtist&&live.artist&&<span>{caseText(live.artist)}</span>}{settings.showAlbum&&live.album&&<em>{caseText(live.album)}</em>}</div><i className="now-playing-bars">{levels.slice(0,4).map((level,index)=><b key={index} style={{height:`${Math.max(12,level*100)}%`}}/>)}</i></div>}
+function LiveVideoInput({
+  element,
+  mode,
+  style,
+}: {
+  element: SlideElement;
+  mode: SlideRendererMode;
+  style: CSSProperties;
+}) {
+  const ref = useRef<HTMLVideoElement>(null),
+    [error, setError] = useState(false),
+    properties = element.properties,
+    routingValue = usePreferences((state) => state.audioRouting);
+  useEffect(() => {
+    if (mode === "thumbnail" || !properties.deviceId) return;
+    let active = true,
+      stream: MediaStream | undefined;
+    void navigator.mediaDevices
+      .getUserMedia({
+        video: {
+          deviceId: { exact: String(properties.deviceId) },
+          width: { ideal: Number(properties.width ?? 1920) },
+          height: { ideal: Number(properties.height ?? 1080) },
+          frameRate: { ideal: Number(properties.frameRate ?? 30) },
+        },
+        audio: properties.audioEnabled === true,
+      })
+      .then((value) => {
+        if (!active) {
+          value.getTracks().forEach((track) => track.stop());
+          return;
+        }
+        stream = value;
+        if (ref.current) {
+          ref.current.srcObject = value;
+          const routing = routingWithDefaults(routingValue),
+            route: AudioRoute = mode === "live" ? "video" : "preview";
+          void applyAudioRoute(ref.current, routing, route);
+          ref.current.volume = Math.max(
+            0,
+            Math.min(
+              1,
+              ((routing[route].volume / 100) *
+                Number(properties.volume ?? 100)) /
+                100,
+            ),
+          );
+          ref.current.muted =
+            mode !== "live" ||
+            properties.audioEnabled !== true ||
+            routing[route].muted;
+          void ref.current.play();
+        }
+        setError(false);
+      })
+      .catch(() => setError(true));
+    return () => {
+      active = false;
+      stream?.getTracks().forEach((track) => track.stop());
+    };
+  }, [
+    mode,
+    properties.deviceId,
+    properties.width,
+    properties.height,
+    properties.frameRate,
+    properties.audioEnabled,
+    properties.volume,
+    routingValue,
+  ]);
+  if (mode === "thumbnail")
+    return (
+      <div className="slide-renderer-element web-placeholder" style={style}>
+        LIVE
+      </div>
+    );
+  return (
+    <div
+      className="slide-renderer-element video-input-frame"
+      style={{
+        ...style,
+        overflow: "hidden",
+        display: "grid",
+        placeItems: "center",
+        background: "#000",
+      }}
+    >
+      {error ? (
+        <strong>KEIN SIGNAL</strong>
+      ) : (
+        <video
+          ref={ref}
+          autoPlay
+          playsInline
+          muted={mode !== "live" || properties.audioEnabled !== true}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: String(
+              properties.fit ?? "contain",
+            ) as CSSProperties["objectFit"],
+            clipPath: `inset(${Number(properties.cropTop ?? 0)}% ${Number(properties.cropRight ?? 0)}% ${Number(properties.cropBottom ?? 0)}% ${Number(properties.cropLeft ?? 0)}%)`,
+            filter: `brightness(${Number(properties.brightness ?? 100)}%) contrast(${Number(properties.contrast ?? 100)}%) saturate(${Number(properties.saturation ?? 100)}%) hue-rotate(${Number(properties.hue ?? 0)}deg)`,
+          }}
+        />
+      )}
+    </div>
+  );
+}
 
-export function SlideRenderer({slide,mode='preview'}:{slide:Slide;mode?:SlideRendererMode}){
-  const translationMode=usePreferences(state=>state.songTranslationMode);
-  const fallbackText=translationBlocks(slide.body,slide.translation,slide.songTranslationMode??translationMode).join('\n\n');
-  slide=translatedSlide(slide,translationMode);
-  const hasVisibleElements=slide.elements?.some(element=>element.visible);
-  const backgroundStyle:CSSProperties={backgroundColor:slide.background,backgroundImage:slide.backgroundImage?`url("${slide.backgroundImage}")`:undefined,backgroundSize:slide.backgroundFit??'cover',backgroundPosition:`${slide.backgroundPositionX??'center'} ${slide.backgroundPositionY??'center'}`};
-  return <div className={`slide-renderer ${mode}`} style={{backgroundColor:slide.background}} data-slide-id={slide.id}>
-    <div className="slide-background-layer" style={{...backgroundStyle,filter:slide.backgroundBlur?`blur(${slide.backgroundBlur}px)`:undefined,transform:`rotate(${slide.backgroundRotation??0}deg) scale(${slide.backgroundBlur?1.06:1})`}}/>
-    {hasVisibleElements
-      ?slide.elements.slice().sort((a,b)=>a.zIndex-b.zIndex).map(element=><RenderElement key={element.id} element={element} mode={mode}/>)
-      :<div className="slide-renderer-fallback"><strong>{slide.title}</strong><p>{fallbackText}</p></div>}
-  </div>;
+function TimedText({
+  element,
+  mode,
+  style,
+}: {
+  element: SlideElement;
+  mode: SlideRendererMode;
+  style: CSSProperties;
+}) {
+  const duration = Math.max(
+      0,
+      Number(element.properties.timerDurationSeconds ?? 0),
+    ),
+    [left, setLeft] = useState(duration);
+  useEffect(() => {
+    setLeft(duration);
+    if (mode !== "live" || duration <= 0) return;
+    const started = Date.now(),
+      timer = setInterval(
+        () =>
+          setLeft(
+            Math.max(0, duration - Math.floor((Date.now() - started) / 1000)),
+          ),
+        250,
+      );
+    return () => clearInterval(timer);
+  }, [duration, mode, element.id]);
+  const value =
+    left === 0 && element.properties.timerEndText
+      ? String(element.properties.timerEndText)
+      : `${Math.floor(left / 60)
+          .toString()
+          .padStart(2, "0")}:${(left % 60).toString().padStart(2, "0")}`;
+  return (
+    <div className="slide-renderer-element text timer-text" style={style}>
+      {value}
+    </div>
+  );
+}
+
+function RenderElement({
+  element,
+  mode,
+}: {
+  element: SlideElement;
+  mode: SlideRendererMode;
+}) {
+  if (!element.visible) return null;
+  const style = elementStyle(element),
+    properties = element.properties,
+    src = String(properties.src ?? properties.url ?? "");
+  if (element.type === "loop") {
+    const loopType = String(properties.loopType ?? "announcement");
+    if (loopType === "weather")
+      return (
+        <iframe
+          className="slide-renderer-element web loop-weather"
+          style={{ ...style, pointerEvents: "none" }}
+          src="https://weather.crbnm06.workers.dev"
+          title="Wetterscreen"
+          sandbox="allow-scripts allow-same-origin"
+        />
+      );
+    if (loopType === "clock") return <ClockLoopElement style={style} />;
+    if (loopType === "nowPlaying")
+      return <NowPlayingLoopElement style={style} properties={properties} />;
+    if (loopType === "event" || loopType === "nextEvents")
+      return <EventLoopElement style={style} properties={properties} />;
+    return (
+      <div
+        className="slide-renderer-element loop-surface"
+        style={{
+          ...style,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "4%",
+          background: String(properties.background ?? "#ffffff"),
+          color: String(properties.color ?? "#000000"),
+        }}
+      >
+        <strong>{String(properties.title ?? "Aktuelle Infos")}</strong>
+        <span>{String(properties.text ?? "")}</span>
+      </div>
+    );
+  }
+  if (element.type === "image" && src)
+    return (
+      <img
+        className="slide-renderer-element media"
+        style={style}
+        src={src}
+        alt=""
+        loading={mode === "thumbnail" ? "lazy" : "eager"}
+      />
+    );
+  if (element.type === "video" && src)
+    return (
+      <RoutedMedia
+        kind="video"
+        element={element}
+        mode={mode}
+        style={style}
+        src={src}
+      />
+    );
+  if (element.type === "audio" && src)
+    return mode === "thumbnail" ? (
+      <div className="slide-renderer-element web-placeholder" style={style}>
+        AUDIO
+      </div>
+    ) : (
+      <RoutedMedia
+        kind="audio"
+        element={element}
+        mode={mode}
+        style={style}
+        src={src}
+      />
+    );
+  if (element.type === "videoInput")
+    return <LiveVideoInput element={element} mode={mode} style={style} />;
+  if (element.type === "web" && src) {
+    const proxy = String(properties.proxyUrl ?? ""),
+      resolved =
+        properties.proxyEnabled && proxy
+          ? proxy.includes("{url}")
+            ? proxy.replace("{url}", encodeURIComponent(src))
+            : `${proxy}${encodeURIComponent(src)}`
+          : src,
+      sandbox = [
+        "allow-scripts",
+        "allow-same-origin",
+        "allow-presentation",
+        properties.allowForms !== false ? "allow-forms" : "",
+        properties.allowPopups === true ? "allow-popups" : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+    return mode === "thumbnail" ? (
+      <div className="slide-renderer-element web-placeholder" style={style}>
+        WEB
+      </div>
+    ) : (
+      <iframe
+        className="slide-renderer-element web"
+        style={{
+          ...style,
+          zoom: `${Number(properties.zoom ?? 100)}%`,
+          pointerEvents: properties.allowInteraction === true ? "auto" : "none",
+        }}
+        src={resolved}
+        title="Web content"
+        referrerPolicy={
+          properties.referrerPolicy === "strict-origin-when-cross-origin"
+            ? "strict-origin-when-cross-origin"
+            : "no-referrer"
+        }
+        allow={`${properties.webAudio === true ? "autoplay; " : ""}fullscreen; picture-in-picture`}
+        sandbox={sandbox}
+      />
+    );
+  }
+  if (element.type === "shape") {
+    const kind = String(properties.shapeKind ?? "rectangle"),
+      paths: Record<string, string> = {
+        triangle: "polygon(50% 0,100% 100%,0 100%)",
+        diamond: "polygon(50% 0,100% 50%,50% 100%,0 50%)",
+        pentagon: "polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%)",
+        hexagon: "polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)",
+        octagon:
+          "polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%)",
+        star: "polygon(50% 0,61% 34%,98% 35%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,2% 35%,39% 34%)",
+        burst:
+          "polygon(50% 0,60% 25%,79% 7%,78% 34%,100% 30%,84% 50%,100% 70%,76% 66%,79% 93%,60% 75%,50% 100%,40% 75%,21% 93%,24% 66%,0 70%,16% 50%,0 30%,24% 34%,21% 7%,40% 25%)",
+        arrow: "polygon(0 32%,62% 32%,62% 8%,100% 50%,62% 92%,62% 68%,0 68%)",
+        chevron: "polygon(0 0,58% 0,100% 50%,58% 100%,0 100%,42% 50%)",
+        speech: "polygon(0 0,100% 0,100% 78%,30% 78%,15% 100%,18% 78%,0 78%)",
+        cross:
+          "polygon(38% 0,62% 0,62% 38%,100% 38%,100% 62%,62% 62%,62% 100%,38% 100%,38% 62%,0 62%,0 38%,38% 38%)",
+        parallelogram: "polygon(22% 0,100% 0,78% 100%,0 100%)",
+        trapezoid: "polygon(20% 0,80% 0,100% 100%,0 100%)",
+        heart:
+          "polygon(50% 92%,8% 50%,4% 28%,12% 10%,30% 3%,50% 20%,70% 3%,88% 10%,96% 28%,92% 50%)",
+        lightning: "polygon(55% 0,20% 54%,46% 54%,34% 100%,82% 39%,55% 39%)",
+        shield: "polygon(50% 0,92% 15%,86% 66%,50% 100%,14% 66%,8% 15%)",
+        cloud:
+          "polygon(16% 78%,4% 65%,5% 45%,18% 34%,28% 35%,36% 14%,58% 7%,77% 21%,82% 38%,95% 47%,98% 67%,86% 82%,16% 82%)",
+        home: "polygon(50% 0,100% 42%,88% 42%,88% 100%,60% 100%,60% 66%,40% 66%,40% 100%,12% 100%,12% 42%,0 42%)",
+        moon: "polygon(78% 3%,56% 12%,39% 30%,34% 52%,41% 72%,58% 88%,80% 96%,61% 100%,37% 94%,17% 78%,5% 57%,7% 34%,22% 14%,45% 2%)",
+      },
+      clipPath = paths[kind];
+    return (
+      <div
+        className={`slide-renderer-element shape shape-${kind}`}
+        style={{
+          ...style,
+          background: String(properties.fill ?? properties.color ?? "#fff"),
+          border: `${Math.max(0, Number(properties.strokeWidth ?? 0)) / 19.2}cqw solid ${String(properties.stroke ?? "transparent")}`,
+          borderRadius:
+            kind === "ellipse"
+              ? "50%"
+              : kind === "rounded"
+                ? `${Number(properties.radius ?? 42) / 19.2}cqw`
+                : 0,
+          clipPath,
+          boxSizing: "border-box",
+        }}
+      />
+    );
+  }
+  if (element.type === "line")
+    return (
+      <div
+        className="slide-renderer-element line"
+        style={{
+          ...style,
+          background: String(properties.color ?? "#fff"),
+          height: `${Math.max(1, Number(properties.strokeWidth ?? 4)) / 19.2}cqw`,
+        }}
+      />
+    );
+  if (element.type === "qr")
+    return src ? (
+      <img
+        className="slide-renderer-element qr"
+        style={{ ...style, objectFit: "contain", background: "#fff" }}
+        src={src}
+        alt="QR-Code"
+      />
+    ) : (
+      <div
+        className="slide-renderer-element qr"
+        style={{
+          ...style,
+          display: "grid",
+          placeItems: "center",
+          background: "#fff",
+          color: "#102029",
+        }}
+      >
+        {String(properties.text ?? properties.value ?? "QR-CODE")}
+      </div>
+    );
+  if (
+    element.type === "text" &&
+    Number(properties.timerDurationSeconds ?? 0) > 0
+  )
+    return <TimedText element={element} mode={mode} style={style} />;
+  return (
+    <div
+      className={`slide-renderer-element text ${properties.animation === "fade-in" && mode === "live" ? "element-animation-fade-in" : ""}`}
+      style={style}
+    >
+      {String(properties.text ?? "")}
+    </div>
+  );
+}
+
+function ClockLoopElement({ style }: { style: CSSProperties }) {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+  return (
+    <div
+      className="slide-renderer-element loop-clock"
+      style={{
+        ...style,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <strong>{now.toLocaleTimeString("de-DE")}</strong>
+      <span>
+        {now.toLocaleDateString("de-DE", {
+          weekday: "long",
+          day: "2-digit",
+          month: "long",
+        })}
+      </span>
+    </div>
+  );
+}
+
+function EventLoopElement({style,properties}:{style:CSSProperties;properties:Record<string,string|number|boolean>}){
+  const [event,setEvent]=useState<LatestPublicEvent|null>(()=>getLatestPublicEvent());
+  useEffect(()=>{const update=(message:Event)=>setEvent((message as CustomEvent<LatestPublicEvent|null>).detail);window.addEventListener('gottesdienstregie:community-event',update);return()=>window.removeEventListener('gottesdienstregie:community-event',update)},[]);
+  const content=eventSlideContent(event?{eventTitle:event.title,eventStart:event.effectiveStart,eventLocation:event.effectiveLocation}:properties);
+  return <div className="slide-renderer-element loop-surface event-loop-surface" style={{...style,display:'flex',flexDirection:'column',justifyContent:'center',padding:'6%',background:String(properties.background??'#13333d'),color:String(properties.color??'#ffffff')}}><small>NÄCHSTE VERANSTALTUNG</small><strong>{content.title}</strong>{content.details&&<span>{content.details}</span>}</div>;
+}
+
+function NowPlayingLoopElement({
+  style,
+  properties,
+}: {
+  style: CSSProperties;
+  properties: Record<string, string | number | boolean>;
+}) {
+  const [state, setState] = useState<Partial<BackgroundAudioState>>(() =>
+      getNowPlayingState(),
+    ),
+    [levels, setLevels] = useState([0.35, 0.8, 0.55, 0.7]);
+  useEffect(() => {
+    const update = (event: Event) =>
+        setState((event as CustomEvent<BackgroundAudioState>).detail),
+      level = (event: Event) =>
+        setLevels((event as CustomEvent<{ levels: number[] }>).detail.levels);
+    window.addEventListener("gottesdienstregie:background-audio", update);
+    window.addEventListener("gottesdienstregie:audio-level", level);
+    return () => {
+      window.removeEventListener("gottesdienstregie:background-audio", update);
+      window.removeEventListener("gottesdienstregie:audio-level", level);
+    };
+  }, []);
+  const local = nowPlayingDisplay(state),
+    live = local.active
+      ? local
+      : {
+          active: properties.nowPlayingActive === true,
+          title: String(properties.nowPlayingTitle ?? ""),
+          artist: String(properties.nowPlayingArtist ?? ""),
+          album: String(properties.nowPlayingAlbum ?? ""),
+          artworkUrl: String(properties.nowPlayingArtwork ?? ""),
+          source: String(properties.nowPlayingSource ?? ""),
+        },
+    settings = normalizeNowPlayingSettings(properties),
+    caseText = (value: string) =>
+      settings.textCase === "uppercase"
+        ? value.toLocaleUpperCase("de-DE")
+        : settings.textCase === "lowercase"
+          ? value.toLocaleLowerCase("de-DE")
+          : value;
+  return (
+    <div
+      className={`slide-renderer-element now-playing-slide design-${settings.design} animation-${settings.animation} visualizer-${settings.visualizerStyle} position-${settings.visualizerPosition} ${live.active ? "is-playing" : "is-idle"}`}
+      style={
+        {
+          ...style,
+          background: settings.backgroundColor,
+          color: settings.textColor,
+          "--now-accent": settings.accentColor,
+        } as CSSProperties
+      }
+    >
+      {settings.showArtwork && (
+        <div className="now-playing-art">
+          {live.artworkUrl ? (
+            <img
+              key={`${live.title}:${live.artworkUrl}`}
+              src={live.artworkUrl}
+              alt=""
+            />
+          ) : (
+            <span className="material-symbols-outlined">
+              {settings.design === "radio" ? "radio" : "album"}
+            </span>
+          )}
+        </div>
+      )}
+      <div className="now-playing-copy">
+        <small>{live.active ? "LÄUFT GERADE" : "BEREIT FÜR MUSIK"}</small>
+        {settings.showTitle && (
+          <strong>{caseText(live.title || "Noch keine Wiedergabe")}</strong>
+        )}
+        {settings.showArtist && live.artist && (
+          <span>{caseText(live.artist)}</span>
+        )}
+        {settings.showAlbum && live.album && <em>{caseText(live.album)}</em>}
+      </div>
+      <i className="now-playing-bars">
+        {levels.slice(0, 4).map((level, index) => (
+          <b key={index} style={{ height: `${Math.max(12, level * 100)}%` }} />
+        ))}
+      </i>
+    </div>
+  );
+}
+
+export function SlideRenderer({
+  slide,
+  mode = "preview",
+}: {
+  slide: Slide;
+  mode?: SlideRendererMode;
+}) {
+  const translationMode = usePreferences((state) => state.songTranslationMode);
+  const fallbackText = translationBlocks(
+    slide.body,
+    slide.translation,
+    slide.songTranslationMode ?? translationMode,
+  ).join("\n\n");
+  slide = translatedSlide(slide, translationMode);
+  const hasVisibleElements = slide.elements?.some((element) => element.visible);
+  const backgroundStyle: CSSProperties = {
+    backgroundColor: slide.background,
+    backgroundImage: slide.backgroundImage
+      ? `url("${slide.backgroundImage}")`
+      : undefined,
+    backgroundSize: slide.backgroundFit ?? "cover",
+    backgroundPosition: `${slide.backgroundPositionX ?? "center"} ${slide.backgroundPositionY ?? "center"}`,
+  };
+  return (
+    <div
+      className={`slide-renderer ${mode}`}
+      style={{ backgroundColor: slide.background }}
+      data-slide-id={slide.id}
+    >
+      <div
+        className="slide-background-layer"
+        style={{
+          ...backgroundStyle,
+          filter: slide.backgroundBlur
+            ? `blur(${slide.backgroundBlur}px)`
+            : undefined,
+          transform: `rotate(${slide.backgroundRotation ?? 0}deg) scale(${slide.backgroundBlur ? 1.06 : 1})`,
+        }}
+      />
+      {hasVisibleElements ? (
+        slide.elements
+          .slice()
+          .sort((a, b) => a.zIndex - b.zIndex)
+          .map((element) => (
+            <RenderElement key={element.id} element={element} mode={mode} />
+          ))
+      ) : (
+        <div className="slide-renderer-fallback">
+          <strong>{slide.title}</strong>
+          <p>{fallbackText}</p>
+        </div>
+      )}
+    </div>
+  );
 }

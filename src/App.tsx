@@ -98,6 +98,8 @@ import {
 import {paginateBibleVerses} from './bibleOverlayModel';
 import {quickScreenTypeForKey} from './quickScreenUi';
 import {isLoopCandidateAvailable,shouldSkipNowPlaying} from './nowPlayingModel';
+import {EventService,type ChurchEvent as CommunityChurchEvent} from './community/EventService';
+import {setLatestPublicEvent} from './dynamicEventSlide';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
 import { FileMenu } from "./FileMenu";
@@ -3239,7 +3241,7 @@ export function OrderOfService({
         </DndContext>
       </div>
       {audioMenu && (
-        audioMenu.configured && (audioMenu.targetType==='section'?state.sections.find(s=>s.id===audioMenu.targetId)?.backgroundAudio:items.find(i=>i.id===audioMenu.targetId)?.backgroundAudio) ? <AssignedAudioPopover config={(audioMenu.targetType==='section'?state.sections.find(s=>s.id===audioMenu.targetId)?.backgroundAudio:items.find(i=>i.id===audioMenu.targetId)?.backgroundAudio)!} onClose={()=>setAudioMenu(null)} onChange={value=>{audioMenu.targetType==='section'?state.updateSectionAudio(audioMenu.targetId,value):state.updateItemAudio(audioMenu.targetId,value)}} onAdd={()=>{void (window.desktop as any)?.mediaWindow?.open('select','audio',audioMenu.targetType,audioMenu.targetId)}}/> :
+        audioMenu.configured && (audioMenu.targetType==='section'?state.sections.find(s=>s.id===audioMenu.targetId)?.backgroundAudio:items.find(i=>i.id===audioMenu.targetId)?.backgroundAudio) ? <AssignedAudioPopover config={(audioMenu.targetType==='section'?state.sections.find(s=>s.id===audioMenu.targetId)?.backgroundAudio:items.find(i=>i.id===audioMenu.targetId)?.backgroundAudio)!} onClose={()=>setAudioMenu(null)} onChange={value=>{audioMenu.targetType==='section'?state.updateSectionAudio(audioMenu.targetId,value):state.updateItemAudio(audioMenu.targetId,value)}} onAdd={()=>{setAudioPanel({targetType:audioMenu.targetType,targetId:audioMenu.targetId});setAudioMenu(null)}}/> :
         <div
           className="audio-context-menu"
           style={{ left: audioMenu.x, top: audioMenu.y }}
@@ -8088,6 +8090,7 @@ function AppShell({
     }>({ state: "idle", step: 0, text: "" });
   useEffect(()=>{void (window.desktop as any)?.deviceSettings?.readOsb?.().then((value:unknown)=>setOsbSettings(normalizeOsbSettings(value,[...BIBLE_TRANSLATIONS])))},[]);
   useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge)return;const stop=bridge.onConnection((value:{connected:boolean;mode:string;updatedAt:number})=>setCommunityConnection(value));void bridge.start();return stop},[]);
+  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;return bridge.onEvents((rows:CommunityChurchEvent[])=>{const service=new EventService(rows),event=service.getUpcomingEvents()[0],publicEvent=event?service.toPublicEvent(event):null;setLatestPublicEvent(publicEvent);window.dispatchEvent(new CustomEvent('gottesdienstregie:community-event',{detail:publicEvent}))})},[]);
   const audioSessionRef = useRef<{
     onAir: boolean;
     mode: "edit" | "preview";
@@ -9807,6 +9810,7 @@ function AppShell({
           if (!started) { await liveEngine.stop(); return false; }
           setTestMode(sessionMode === 'test');
           state.goLive(startItemId, startSlideId);
+          state.setMode('preview');
           state.setOnAir(true);
           return true;
         } catch (error) {

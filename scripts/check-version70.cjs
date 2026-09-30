@@ -1,0 +1,12 @@
+const fs=require('fs'),assert=require('assert');
+const read=file=>fs.readFileSync(file,'utf8'),pkg=require('../package.json'),releases=require('../public/releases.json'),notes=read('RELEASE_NOTES.md'),workflow=read('.github/workflows/release.yml'),model=read('src/nowPlayingModel.ts'),designer=read('src/NowPlayingDesigner.tsx'),renderer=read('src/SlideRenderer.tsx'),radio=read('src/RadioStationBrowser.tsx'),audioPanel=read('src/BackgroundAudioPanel.tsx'),app=read('src/App.tsx');
+assert(pkg.version==='0.70.0'&&pkg.releaseSeries==='0.70','package must identify V70');
+assert(releases.versions[0]?.builds[0]?.version==='0.70.0'&&releases.versions[0].builds[0].current===true,'V70 must lead the release catalog');
+assert(notes.startsWith('# GottesdienstRegie 0.70.0'),'notes must start with V70');
+assert(workflow.includes('check-version70.cjs'),'workflow must run V70 guard');
+assert(model.includes('NOW_PLAYING_ANIMATIONS')&&designer.includes('now-playing-animation-cards'),'ten now-playing animations missing');
+assert(renderer.includes('EventLoopElement')&&renderer.includes('community-event'),'dynamic event slide missing');
+assert(radio.includes('startRadioPreview'),'radio playback ordering fix missing');
+assert(audioPanel.includes('GERADE VERWENDET')&&audioPanel.includes('IMPORTIEREN'),'audio source actions missing');
+assert(app.includes("state.setMode('preview')")||app.includes('state.setMode("preview")'),'ON AIR preview switch missing');
+console.log('V70 release guard passed.');

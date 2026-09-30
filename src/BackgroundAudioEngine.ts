@@ -50,6 +50,7 @@ class BackgroundAudioEngine {
   private routeMuted = false;
   private ducked = false;
   private radioMetadataOff?: () => void;
+  private durationTimer?: number;
   constructor() {
     this.audio.preload = "auto";
     this.applyRouting(usePreferences.getState().audioRouting);
@@ -188,6 +189,12 @@ class BackgroundAudioEngine {
         .catch(() => sink.setSinkId?.("").catch(() => {}));
     try {
       await this.audio.play();
+      if (this.durationTimer) window.clearTimeout(this.durationTimer);
+      if ((this.config.maxPlaybackSeconds ?? 0) > 0)
+        this.durationTimer = window.setTimeout(
+          () => void this.stop(this.config?.fadeOutSeconds),
+          this.config.maxPlaybackSeconds! * 1000,
+        );
       if (fadeSeconds) await this.fade(this.targetVolume(), fadeSeconds);
     } catch {
       this.state.error = `„${track.name}“ konnte nicht gestartet werden.`;
@@ -339,6 +346,8 @@ class BackgroundAudioEngine {
     this.publish();
   }
   async stop(fadeSeconds = this.config?.fadeOutSeconds ?? 0) {
+    if (this.durationTimer) window.clearTimeout(this.durationTimer);
+    this.durationTimer = undefined;
     if (this.audio.src && fadeSeconds) await this.fade(0, fadeSeconds);
     this.stopRadioMetadata();
     audioLevelProvider.disconnect();

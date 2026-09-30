@@ -1,8 +1,8 @@
 const fs=require('fs'),assert=require('assert');
 const read=file=>fs.readFileSync(file,'utf8'),pkg=require('../package.json'),releases=require('../public/releases.json'),notes=read('RELEASE_NOTES.md'),workflow=read('.github/workflows/release.yml'),firebase=read('electron/FirebaseGemeindeService.ts'),announcement=read('src/community/AnnouncementService.ts'),designer=read('src/NowPlayingDesigner.tsx'),audio=read('src/audio/AudioLevelProvider.ts'),app=read('src/App.tsx'),store=read('src/store.ts');
-assert(pkg.version==='0.69.0'&&pkg.releaseSeries==='0.69','package must identify V69');
-assert(releases.versions[0]?.builds[0]?.version==='0.69.0'&&releases.versions[0].builds[0].current===true,'V69 must lead the release catalog');
-assert(notes.startsWith('# GottesdienstRegie 0.69.0'),'notes must start with V69');
+assert(Number(pkg.version.split('.')[1])>=69,'package must include V69 or newer');
+assert(releases.versions.some(entry=>entry.builds?.some(build=>build.version==='0.69.0')),'V69 must remain in the release catalog');
+assert(notes.includes('# GottesdienstRegie 0.69.0'),'notes must include V69');
 assert(workflow.includes('check-version69.cjs'),'workflow must run V69 guard');
 assert(firebase.includes("watchCollection('veranstaltungen'")&&firebase.includes("watchChildren('meldungen'"),'central Firebase ownership missing');
 assert(announcement.includes('toPublic')&&!announcement.includes('internalComment'),'public announcement projection missing');

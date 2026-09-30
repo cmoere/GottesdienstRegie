@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { searchRadioStations, type RadioStation } from "./radioStations";
 import type { BackgroundAudioTrack } from "./store";
+import { startRadioPreview } from "./radioPlayback";
 const PAGE_SIZE = 10;
 export function RadioStationBrowser({
   add,
@@ -58,10 +59,11 @@ export function RadioStationBrowser({
     setLiveTitle("");
     setLiveArtist("");
     setStatus("loading");
-    window.setTimeout(
-      () => audioRef.current?.play().catch(() => setStatus("error")),
-      0,
-    );
+    const media = audioRef.current;
+    if (media)
+      void startRadioPreview(media, station.streamUrl).catch(() =>
+        setStatus("error"),
+      );
   };
   return (
     <section className="radio-station-browser">
@@ -166,7 +168,6 @@ export function RadioStationBrowser({
       )}
       <audio
         ref={audioRef}
-        src={active?.streamUrl}
         preload="none"
         onLoadStart={() => setStatus("loading")}
         onWaiting={() => setStatus("loading")}
@@ -194,9 +195,11 @@ export function RadioStationBrowser({
               )}
             </small>
             <b>{liveTitle || active.name}</b>
-              {liveTitle && (
-                <span>{[liveArtist, active.name].filter(Boolean).join(" · ")}</span>
-              )}
+            {liveTitle && (
+              <span>
+                {[liveArtist, active.name].filter(Boolean).join(" · ")}
+              </span>
+            )}
           </div>
         </footer>
       )}

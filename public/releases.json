@@ -21,11 +21,39 @@
   ],
   "versions": [
     {
+      "line": "0.70",
+      "builds": [{
+        "version": "0.70.0",
+        "releaseDate": "2026-09-30",
+        "current": true,
+        "overview": {
+          "label": { "de": "Dynamische Musik- und Veranstaltungsfolien", "en": "Dynamic music and event slides" },
+          "text": { "de": "Läuft gerade erhält zehn Animationen, aktuelle Cover und den vollständigen Designer; Veranstaltungen und Audioquellen werden wieder zuverlässig angezeigt und abgespielt.", "en": "Now Playing gains ten animations, current artwork and the full designer, while events and audio sources display and play reliably again." }
+        },
+        "sections": {
+          "new": [
+            { "label": { "de": "Zehn Musik-Animationen", "en": "Ten music animations" }, "text": { "de": "Von drehendem Vinyl bis Cover-Zoom, Aufklappen und Leuchten stehen zehn passende Animationen mit reduzierter Bewegung bereit.", "en": "Ten suitable animations range from spinning vinyl to cover zoom, flip and glow, with reduced-motion support." } },
+            { "label": { "de": "Audiolaufzeit steuerbar", "en": "Controllable audio duration" }, "text": { "de": "Hintergrund-Audio kann optional nach einer frei gewählten Sekundenzahl ausblenden und stoppen.", "en": "Background audio can optionally fade out and stop after a freely selected number of seconds." } }
+          ],
+          "improved": [
+            { "label": { "de": "Vollständiger Läuft-gerade-Editor", "en": "Complete Now Playing editor" }, "text": { "de": "Design, Animation, Farben, Metadaten, Visualizer und Dauer sind jetzt auch in der Produktionsansicht direkt konfigurierbar.", "en": "Design, animation, colors, metadata, visualizer and duration are now directly configurable in the production view." } },
+            { "label": { "de": "Mehr Audioquellen", "en": "More audio sources" }, "text": { "de": "Medienbrowser, zuletzt verwendete Medien, Import und Radio sind gemeinsam im Hintergrund-Audio-Feld erreichbar.", "en": "Media browser, recently used media, import and radio are available together in the background-audio panel." } }
+          ],
+          "fixed": [
+            { "label": { "de": "Radio und Cover synchron", "en": "Radio and artwork synchronized" }, "text": { "de": "Radiostreams starten erst nach gesetzter Quelle; Cover werden bei jedem Titelwechsel neu eingesetzt.", "en": "Radio streams start only after their source is assigned, and artwork remounts on every title change." } },
+            { "label": { "de": "Veranstaltungen sichtbar", "en": "Events visible" }, "text": { "de": "Veranstaltungsfolien übernehmen normalisierte Firebase-Daten und zeigen einen klaren Leerzustand.", "en": "Event slides consume normalized Firebase data and show a clear empty state." } },
+            { "label": { "de": "Saubere MAIN-Vorschau", "en": "Clean MAIN preview" }, "text": { "de": "ON AIR wechselt aus Bearbeiten in Vorschau; der rote Folienrahmen und Punkt wurden entfernt.", "en": "Going on air leaves edit mode for preview, and the red slide frame and dot have been removed." } }
+          ],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.69",
       "builds": [{
         "version": "0.69.0",
         "releaseDate": "2026-09-30",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "Zentrale Gemeindedaten und visueller Musikdesigner", "en": "Central community data and visual music designer" },
           "text": { "de": "Veranstaltungen und Meldungen laufen stabil über einen zentralen Firebase-Dienst; „Läuft gerade“ erhält zehn visuelle Designkarten und einen audio-reaktiven Visualizer.", "en": "Events and announcements now use one stable Firebase service, while Now Playing gains ten visual design cards and an audio-reactive visualizer." }

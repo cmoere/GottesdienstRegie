@@ -6,15 +6,22 @@ import {
   type CSSProperties,
 } from "react";
 import QRCode from "qrcode";
-import { lyricPacket } from './lyricScrolling';
-import { LyricScrollRenderer } from './LyricScrollRenderer';
-import { autoSplitSongSection, readSong, songPatch, shortSection, transposeChords, type SongStructure } from './songStructure';
-import { estimateLyricLines } from './songLayout';
-import { getUserOverlayElements } from './loopCoreLayer';
-import { PersonalNotesPanel } from './PersonalNotesPanel';
-import { localTranslate } from './translationDraft';
-import { LanguagePicker } from './LanguagePicker';
-import { ShapeGallery } from './ShapeGallery';
+import { lyricPacket } from "./lyricScrolling";
+import { LyricScrollRenderer } from "./LyricScrollRenderer";
+import {
+  autoSplitSongSection,
+  readSong,
+  songPatch,
+  shortSection,
+  transposeChords,
+  type SongStructure,
+} from "./songStructure";
+import { estimateLyricLines } from "./songLayout";
+import { getUserOverlayElements } from "./loopCoreLayer";
+import { PersonalNotesPanel } from "./PersonalNotesPanel";
+import { localTranslate } from "./translationDraft";
+import { LanguagePicker } from "./LanguagePicker";
+import { ShapeGallery } from "./ShapeGallery";
 import { SlideRenderer } from "./SlideRenderer";
 import {
   defaultTransition,
@@ -52,15 +59,15 @@ import { allEditorFonts as editorFonts, fontStack } from "./fonts";
 import { QuickOverlay } from "./QuickOverlay";
 import { usePreferences } from "./preferences";
 import { defaultAudioRouting } from "./audioRouting";
-import {playOperatorTone} from './operatorSounds';
-import { snapPosition, snapRect } from './canvasGeometry';
-import {canHideSlideContent} from './quickScreenAvailability';
-import {nextTimerHold,timerProgress} from './previewTimer';
-import {shouldHandlePreviewArrow} from './previewKeyboard';
-import { MainLivePreview } from './MainLivePreview';
-import {quickScreenShortcut} from './quickScreenUi';
-import {usesAutomaticLoopEditor} from './loopEditorModel';
-import {NOW_PLAYING_DESIGNS,NOW_PLAYING_DESIGN_LABELS} from './nowPlayingModel';
+import { playOperatorTone } from "./operatorSounds";
+import { snapPosition, snapRect } from "./canvasGeometry";
+import { canHideSlideContent } from "./quickScreenAvailability";
+import { nextTimerHold, timerProgress } from "./previewTimer";
+import { shouldHandlePreviewArrow } from "./previewKeyboard";
+import { MainLivePreview } from "./MainLivePreview";
+import { quickScreenShortcut } from "./quickScreenUi";
+import { usesAutomaticLoopEditor } from "./loopEditorModel";
+import { NowPlayingDesigner } from "./NowPlayingDesigner";
 
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -83,21 +90,34 @@ function slideLabel(slide: Slide, index: number) {
 }
 
 function lyricCapacity(slide: Slide) {
-  const text = slide.elements.find(element => element.visible && element.type === 'text');
+  const text = slide.elements.find(
+    (element) => element.visible && element.type === "text",
+  );
   if (!text) return { maxLines: 0, charactersPerLine: 0 };
   const properties = text.properties;
   const fontSize = Math.max(1, Number(properties.fontSize ?? 72));
   const lineHeight = Math.max(0.8, Number(properties.lineHeight ?? 1.15));
   const padding = Math.max(0, Number(properties.padding ?? 0));
   return {
-    maxLines: Math.max(1, Math.floor((text.height - padding * 2) / (fontSize * lineHeight))),
-    charactersPerLine: Math.max(8, Math.floor((text.width - padding * 2) / (fontSize * 0.55))),
+    maxLines: Math.max(
+      1,
+      Math.floor((text.height - padding * 2) / (fontSize * lineHeight)),
+    ),
+    charactersPerLine: Math.max(
+      8,
+      Math.floor((text.width - padding * 2) / (fontSize * 0.55)),
+    ),
   };
 }
 
 function lyricSlideHasOverflow(slide: Slide) {
   const capacity = lyricCapacity(slide);
-  return capacity.maxLines > 0 && estimateLyricLines(slide.body, { charactersPerLine: capacity.charactersPerLine }) > capacity.maxLines;
+  return (
+    capacity.maxLines > 0 &&
+    estimateLyricLines(slide.body, {
+      charactersPerLine: capacity.charactersPerLine,
+    }) > capacity.maxLines
+  );
 }
 
 function previewSlide(slide: Slide) {
@@ -287,43 +307,116 @@ export function SongEditor({
   canEdit: boolean;
 }) {
   const state = usePresentation();
-  const [tab, setTab] = useState<"content" | "order" | "design" | "chords" | "stage" | "stream" | "metadata">("content");
-  const [query,setQuery]=useState('');
-  const [searching,setSearching]=useState(item.title==='Neuer Song');
-  const [savedSongs,setSavedSongs]=useState<ServiceItem[]>([]);
-  useEffect(()=>{let active=true;if(searching)void window.desktop?.presentation.list().then(async entries=>{
-    const songs:ServiceItem[]=[];
-    for(const entry of entries){const document=await window.desktop?.presentation.load(entry.id) as {items?:ServiceItem[]}|null;songs.push(...(document?.items||[]).filter(item=>item.type==='song'));}
-    if(active)setSavedSongs(songs);
-  }).catch(()=>{});return()=>{active=false}},[searching]);
+  const [tab, setTab] = useState<
+    "content" | "order" | "design" | "chords" | "stage" | "stream" | "metadata"
+  >("content");
+  const [query, setQuery] = useState("");
+  const [searching, setSearching] = useState(item.title === "Neuer Song");
+  const [savedSongs, setSavedSongs] = useState<ServiceItem[]>([]);
+  useEffect(() => {
+    let active = true;
+    if (searching)
+      void window.desktop?.presentation
+        .list()
+        .then(async (entries) => {
+          const songs: ServiceItem[] = [];
+          for (const entry of entries) {
+            const document = (await window.desktop?.presentation.load(
+              entry.id,
+            )) as { items?: ServiceItem[] } | null;
+            songs.push(
+              ...(document?.items || []).filter((item) => item.type === "song"),
+            );
+          }
+          if (active) setSavedSongs(songs);
+        })
+        .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [searching]);
   const structure = useMemo(() => readSong(item), [item]);
-  const generatedId=(sourceId:string)=>{const section=structure.sections.find(entry=>entry.slides.some(page=>page.id===sourceId));if(!section)return state.selectedSlideId;const part=section.slides.findIndex(page=>page.id===sourceId);return item.slides.find(page=>page.id===`${item.id}:song:${section.id}:0:${part}`)?.id??sourceId;};
+  const generatedId = (sourceId: string) => {
+    const section = structure.sections.find((entry) =>
+      entry.slides.some((page) => page.id === sourceId),
+    );
+    if (!section) return state.selectedSlideId;
+    const part = section.slides.findIndex((page) => page.id === sourceId);
+    return (
+      item.slides.find(
+        (page) => page.id === `${item.id}:song:${section.id}:0:${part}`,
+      )?.id ?? sourceId
+    );
+  };
   const [dragIndex, setDragIndex] = useState<number | null>(null);
-  const [translationBusy,setTranslationBusy]=useState('');
+  const [translationBusy, setTranslationBusy] = useState("");
   const commitSong = (next: SongStructure) => {
     if (!canEdit) return;
     const patch = songPatch(item, next);
     state.updateItem(item.id, patch);
-    if (!patch.slides?.some(slide => slide.id === state.selectedSlideId)) state.select(item.id, patch.slides?.[0]?.id);
+    if (!patch.slides?.some((slide) => slide.id === state.selectedSlideId))
+      state.select(item.id, patch.slides?.[0]?.id);
   };
   const applyText = (properties: Record<string, string | number | boolean>) => {
-    commitSong({ ...structure, sections: structure.sections.map(section => ({ ...section, slides: section.slides.map(slide => ({ ...slide, elements: slide.elements.map((element, index) => index === 0 && element.type === 'text' ? { ...element, properties: { ...element.properties, ...properties } } : element) })) })) });
+    commitSong({
+      ...structure,
+      sections: structure.sections.map((section) => ({
+        ...section,
+        slides: section.slides.map((slide) => ({
+          ...slide,
+          elements: slide.elements.map((element, index) =>
+            index === 0 && element.type === "text"
+              ? {
+                  ...element,
+                  properties: { ...element.properties, ...properties },
+                }
+              : element,
+          ),
+        })),
+      })),
+    });
   };
   const arrangement = item.slides.map((slide, index) =>
     slideLabel(slide, index),
   );
   const metadata = item.metadata;
   const changeMeta = (patch: Record<string, string | number | boolean>) =>
-    state.updateItem(item.id, { metadata: { ...metadata, ...patch, songAdjusted:true, songOriginal:metadata.songOriginal||JSON.stringify({slides:item.slides,metadata:item.metadata}) } });
+    state.updateItem(item.id, {
+      metadata: {
+        ...metadata,
+        ...patch,
+        songAdjusted: true,
+        songOriginal:
+          metadata.songOriginal ||
+          JSON.stringify({ slides: item.slides, metadata: item.metadata }),
+      },
+    });
   const resetOverrides = () => {
     if (metadata.songOriginal) {
-      try { state.updateItem(item.id, JSON.parse(String(metadata.songOriginal))); } catch { return; }
-      const restored = usePresentation.getState().items.find(entry => entry.id === item.id);
+      try {
+        state.updateItem(item.id, JSON.parse(String(metadata.songOriginal)));
+      } catch {
+        return;
+      }
+      const restored = usePresentation
+        .getState()
+        .items.find((entry) => entry.id === item.id);
       state.select(item.id, restored?.slides[0]?.id);
       return;
     }
     const next = { ...metadata };
-    ["key", "verseOrder", "designOverride", "fontSize", "textEffect", "showChordsStage", "stageCurrentNext", "livestreamLowerThird", "livestreamLines", "arrangementSource"].forEach((key) => delete next[key]);
+    [
+      "key",
+      "verseOrder",
+      "designOverride",
+      "fontSize",
+      "textEffect",
+      "showChordsStage",
+      "stageCurrentNext",
+      "livestreamLowerThird",
+      "livestreamLines",
+      "arrangementSource",
+    ].forEach((key) => delete next[key]);
     state.updateItem(item.id, { metadata: next });
   };
   const adapted = metadata.songAdjusted === true;
@@ -331,7 +424,9 @@ export function SongEditor({
     <div className="song-context">
       <header>
         <div>
-          <button type="button" onClick={()=>setSearching(value=>!value)}>SONG {searching?'BEARBEITEN':'SUCHEN / WECHSELN'}</button>
+          <button type="button" onClick={() => setSearching((value) => !value)}>
+            SONG {searching ? "BEARBEITEN" : "SUCHEN / WECHSELN"}
+          </button>
           <input
             aria-label="Songtitel"
             disabled={!canEdit}
@@ -347,30 +442,118 @@ export function SongEditor({
           <select
             disabled={!canEdit}
             value={String(metadata.arrangement ?? "Kein Arrangement")}
-            onChange={(event) => changeMeta({ arrangement: event.target.value, arrangementSource: "presentation-override" })}
+            onChange={(event) =>
+              changeMeta({
+                arrangement: event.target.value,
+                arrangementSource: "presentation-override",
+              })
+            }
           >
-            {metadata.arrangement && <option>{String(metadata.arrangement)}</option>}
+            {metadata.arrangement && (
+              <option>{String(metadata.arrangement)}</option>
+            )}
             <option>Kein Arrangement</option>
           </select>
         </label>
       </header>
-      {searching && <section className="song-search-panel"><input aria-label="Song suchen" placeholder="Bitte Songtitel eingeben" value={query} onChange={event=>setQuery(event.target.value)}/><strong>MEINE SONGS · AUS PRÄSENTATIONEN</strong><div>{[...state.items,...savedSongs].filter((entry,index,all)=>entry.type==='song'&&entry.id!==item.id&&entry.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())&&all.findIndex(other=>other.id===entry.id)===index).map(entry=><button disabled={!canEdit} key={entry.id} onClick={()=>{
-        const copy=structuredClone(entry);const metadata={...copy.metadata};delete metadata.songStructure;delete metadata.songOriginal;
-        state.updateItem(item.id,{title:copy.title,metadata,slides:copy.slides.map(slide=>({...slide,id:crypto.randomUUID(),itemId:item.id,elements:slide.elements.map(element=>({...element,id:crypto.randomUUID()}))}))});
-        state.select(item.id,usePresentation.getState().items.find(entry=>entry.id===item.id)?.slides[0]?.id);setSearching(false);
-      }}><b>{entry.title}</b><small>{String(entry.metadata.arrangement||'Präsentationsfassung')} · {entry.slides.map(slide=>shortSection(slide.title)).join(' · ')}</small></button>)}</div><button onClick={()=>setSearching(false)}>EIGENEN SONG BEARBEITEN</button></section>}
+      {searching && (
+        <section className="song-search-panel">
+          <input
+            aria-label="Song suchen"
+            placeholder="Bitte Songtitel eingeben"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+          <strong>MEINE SONGS · AUS PRÄSENTATIONEN</strong>
+          <div>
+            {[...state.items, ...savedSongs]
+              .filter(
+                (entry, index, all) =>
+                  entry.type === "song" &&
+                  entry.id !== item.id &&
+                  entry.title
+                    .toLocaleLowerCase()
+                    .includes(query.toLocaleLowerCase()) &&
+                  all.findIndex((other) => other.id === entry.id) === index,
+              )
+              .map((entry) => (
+                <button
+                  disabled={!canEdit}
+                  key={entry.id}
+                  onClick={() => {
+                    const copy = structuredClone(entry);
+                    const metadata = { ...copy.metadata };
+                    delete metadata.songStructure;
+                    delete metadata.songOriginal;
+                    state.updateItem(item.id, {
+                      title: copy.title,
+                      metadata,
+                      slides: copy.slides.map((slide) => ({
+                        ...slide,
+                        id: crypto.randomUUID(),
+                        itemId: item.id,
+                        elements: slide.elements.map((element) => ({
+                          ...element,
+                          id: crypto.randomUUID(),
+                        })),
+                      })),
+                    });
+                    state.select(
+                      item.id,
+                      usePresentation
+                        .getState()
+                        .items.find((entry) => entry.id === item.id)?.slides[0]
+                        ?.id,
+                    );
+                    setSearching(false);
+                  }}
+                >
+                  <b>{entry.title}</b>
+                  <small>
+                    {String(
+                      entry.metadata.arrangement || "Präsentationsfassung",
+                    )}{" "}
+                    ·{" "}
+                    {entry.slides
+                      .map((slide) => shortSection(slide.title))
+                      .join(" · ")}
+                  </small>
+                </button>
+              ))}
+          </div>
+          <button onClick={() => setSearching(false)}>
+            EIGENEN SONG BEARBEITEN
+          </button>
+        </section>
+      )}
       <div className="song-status-row">
-        <span className={adapted ? "song-adapted" : ""}>{adapted ? "● Für diese Präsentation angepasst" : "Präsentationsfassung"}</span>
-        {adapted && <button type="button" disabled={!canEdit} onClick={resetOverrides}>PRÄSENTATIONSÄNDERUNGEN ZURÜCKSETZEN</button>}
+        <span className={adapted ? "song-adapted" : ""}>
+          {adapted
+            ? "● Für diese Präsentation angepasst"
+            : "Präsentationsfassung"}
+        </span>
+        {adapted && (
+          <button type="button" disabled={!canEdit} onClick={resetOverrides}>
+            PRÄSENTATIONSÄNDERUNGEN ZURÜCKSETZEN
+          </button>
+        )}
       </div>
       <div className="arrangement-head">
-        <button type="button" onClick={() => setTab('order')}>
+        <button type="button" onClick={() => setTab("order")}>
           <Icon name="expand_more" /> ABLAUF BEARBEITEN
         </button>
         <div className="arrangement-actions">
           <button
             title="Letzten Abschnitt wiederholen"
-            onClick={() => commitSong({...structure, order: [...structure.order, structure.order[structure.order.length - 1]]})}
+            onClick={() =>
+              commitSong({
+                ...structure,
+                order: [
+                  ...structure.order,
+                  structure.order[structure.order.length - 1],
+                ],
+              })
+            }
             disabled={!canEdit}
           >
             <Icon name="content_copy" />
@@ -378,10 +561,26 @@ export function SongEditor({
           <button
             title="Abschnitt hinzufügen"
             onClick={() => {
-              const slide=structuredClone(item.slides[0]);
-              slide.body=''; delete slide.translation; slide.elements=slide.elements.map((element,index)=>index===0?{...element,properties:{...element.properties,text:''}}:element);
-              const section={id:crypto.randomUUID(),label:`Vers ${structure.sections.length+1}`,slides:[slide]};
-              commitSong({sections:[...structure.sections,section],order:[...structure.order,section.id]});
+              const slide = structuredClone(item.slides[0]);
+              slide.body = "";
+              delete slide.translation;
+              slide.elements = slide.elements.map((element, index) =>
+                index === 0
+                  ? {
+                      ...element,
+                      properties: { ...element.properties, text: "" },
+                    }
+                  : element,
+              );
+              const section = {
+                id: crypto.randomUUID(),
+                label: `Vers ${structure.sections.length + 1}`,
+                slides: [slide],
+              };
+              commitSong({
+                sections: [...structure.sections, section],
+                order: [...structure.order, section.id],
+              });
             }}
             disabled={!canEdit}
           >
@@ -392,14 +591,36 @@ export function SongEditor({
             title="Lange Lyrics automatisch auf Folien aufteilen"
             disabled={!canEdit}
             onClick={() => {
-              const selectedSection = structure.sections.find(section => section.slides.some(page => generatedId(page.id) === state.selectedSlideId));
+              const selectedSection = structure.sections.find((section) =>
+                section.slides.some(
+                  (page) => generatedId(page.id) === state.selectedSlideId,
+                ),
+              );
               const template = selectedSection?.slides[0];
               if (!selectedSection || !template) return;
-              if(selectedSection.slides.some(page=>page.translation?.text.trim())){window.alert("Dieser Abschnitt enthält Übersetzungen. Bitte die zweisprachigen Texte mit FOLIENUMBRUCH manuell aufteilen, damit die Zuordnung erhalten bleibt.");return;}
+              if (
+                selectedSection.slides.some((page) =>
+                  page.translation?.text.trim(),
+                )
+              ) {
+                window.alert(
+                  "Dieser Abschnitt enthält Übersetzungen. Bitte die zweisprachigen Texte mit FOLIENUMBRUCH manuell aufteilen, damit die Zuordnung erhalten bleibt.",
+                );
+                return;
+              }
               const capacity = lyricCapacity(template);
-              const nextSection = autoSplitSongSection(selectedSection, capacity.maxLines);
-              if (nextSection.slides.length === selectedSection.slides.length) return;
-              commitSong({ ...structure, sections: structure.sections.map(section => section.id === selectedSection.id ? nextSection : section) });
+              const nextSection = autoSplitSongSection(
+                selectedSection,
+                capacity.maxLines,
+              );
+              if (nextSection.slides.length === selectedSection.slides.length)
+                return;
+              commitSong({
+                ...structure,
+                sections: structure.sections.map((section) =>
+                  section.id === selectedSection.id ? nextSection : section,
+                ),
+              });
             }}
           >
             <Icon name="splitscreen" />
@@ -410,10 +631,33 @@ export function SongEditor({
           <select
             disabled={!canEdit}
             value={String(metadata.key ?? "–")}
-            onChange={(event) => changeMeta({ key: event.target.value, chords: transposeChords(String(metadata.chords || ''), String(metadata.key || ''), event.target.value), songAdjusted:true })}
+            onChange={(event) =>
+              changeMeta({
+                key: event.target.value,
+                chords: transposeChords(
+                  String(metadata.chords || ""),
+                  String(metadata.key || ""),
+                  event.target.value,
+                ),
+                songAdjusted: true,
+              })
+            }
           >
             <option>–</option>
-            {["C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"].map((key) => (
+            {[
+              "C",
+              "C#/Db",
+              "D",
+              "D#/Eb",
+              "E",
+              "F",
+              "F#/Gb",
+              "G",
+              "G#/Ab",
+              "A",
+              "A#/Bb",
+              "B",
+            ].map((key) => (
               <option key={key}>{key}</option>
             ))}
           </select>
@@ -426,174 +670,729 @@ export function SongEditor({
             className={
               item.slides[index]?.id === state.selectedSlideId ? "active" : ""
             }
-            onClick={() => state.select(item.id, item.slides[structure.order.slice(0,index).reduce((sum,id)=>sum+(structure.sections.find(section=>section.id===id)?.slides.length??0),0)]?.id)}
+            onClick={() =>
+              state.select(
+                item.id,
+                item.slides[
+                  structure.order
+                    .slice(0, index)
+                    .reduce(
+                      (sum, id) =>
+                        sum +
+                        (structure.sections.find((section) => section.id === id)
+                          ?.slides.length ?? 0),
+                      0,
+                    )
+                ]?.id,
+              )
+            }
           >
-            {shortSection(structure.sections.find(section=>section.id===id)?.label || '')}
+            {shortSection(
+              structure.sections.find((section) => section.id === id)?.label ||
+                "",
+            )}
           </button>
         ))}
       </div>
       <nav className="song-tabs" aria-label="Songbereiche">
-        {([["content", "INHALT"], ["order", "ABLAUF"], ["design", "DESIGN"], ["chords", "AKKORDE"], ["stage", "STAGE"], ["stream", "LIVESTREAM"], ["metadata", "METADATEN"]] as const).map(([value, label]) => (
-          <button type="button" key={value} className={tab === value ? "active" : ""} onClick={() => setTab(value)}>{label}</button>
+        {(
+          [
+            ["content", "INHALT"],
+            ["order", "ABLAUF"],
+            ["design", "DESIGN"],
+            ["chords", "AKKORDE"],
+            ["stage", "STAGE"],
+            ["stream", "LIVESTREAM"],
+            ["metadata", "METADATEN"],
+          ] as const
+        ).map(([value, label]) => (
+          <button
+            type="button"
+            key={value}
+            className={tab === value ? "active" : ""}
+            onClick={() => setTab(value)}
+          >
+            {label}
+          </button>
         ))}
       </nav>
       {tab === "order" && (
         <section className="song-override-panel">
-          <div className="song-order-chips">{structure.order.map((id,index)=><div key={`${id}-${index}`} draggable={canEdit} onDragStart={()=>setDragIndex(index)} onDragOver={event=>event.preventDefault()} onDrop={()=>{if(dragIndex===null)return;const order=[...structure.order];const [moved]=order.splice(dragIndex,1);order.splice(index,0,moved);commitSong({...structure,order});setDragIndex(null)}}>
-            <span>{shortSection(structure.sections.find(section=>section.id===id)?.label || '')}</span>
-            <button disabled={!canEdit||index===0} aria-label="Nach links verschieben" onClick={()=>{const order=[...structure.order];[order[index-1],order[index]]=[order[index],order[index-1]];commitSong({...structure,order})}}>←</button>
-            <button disabled={!canEdit||structure.order.length===1} aria-label="Aus Ablauf entfernen" onClick={()=>commitSong({...structure,order:structure.order.filter((_,i)=>i!==index)})}>×</button>
-          </div>)}</div>
-          <div className="song-order-chips">{structure.sections.map(section=><button disabled={!canEdit} key={section.id} onClick={()=>commitSong({...structure,order:[...structure.order,section.id]})}>+ {shortSection(section.label)}</button>)}</div>
-          <small>{item.slides.length} generierte Folien · Abschnitte ziehen oder mit den Pfeilen verschieben.</small>
-          <small>Beispiel: V1 C V2 C B C C · Der Chorus wird einmal gespeichert und kann mehrfach erscheinen.</small>
+          <div className="song-order-chips">
+            {structure.order.map((id, index) => (
+              <div
+                key={`${id}-${index}`}
+                draggable={canEdit}
+                onDragStart={() => setDragIndex(index)}
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={() => {
+                  if (dragIndex === null) return;
+                  const order = [...structure.order];
+                  const [moved] = order.splice(dragIndex, 1);
+                  order.splice(index, 0, moved);
+                  commitSong({ ...structure, order });
+                  setDragIndex(null);
+                }}
+              >
+                <span>
+                  {shortSection(
+                    structure.sections.find((section) => section.id === id)
+                      ?.label || "",
+                  )}
+                </span>
+                <button
+                  disabled={!canEdit || index === 0}
+                  aria-label="Nach links verschieben"
+                  onClick={() => {
+                    const order = [...structure.order];
+                    [order[index - 1], order[index]] = [
+                      order[index],
+                      order[index - 1],
+                    ];
+                    commitSong({ ...structure, order });
+                  }}
+                >
+                  ←
+                </button>
+                <button
+                  disabled={!canEdit || structure.order.length === 1}
+                  aria-label="Aus Ablauf entfernen"
+                  onClick={() =>
+                    commitSong({
+                      ...structure,
+                      order: structure.order.filter((_, i) => i !== index),
+                    })
+                  }
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className="song-order-chips">
+            {structure.sections.map((section) => (
+              <button
+                disabled={!canEdit}
+                key={section.id}
+                onClick={() =>
+                  commitSong({
+                    ...structure,
+                    order: [...structure.order, section.id],
+                  })
+                }
+              >
+                + {shortSection(section.label)}
+              </button>
+            ))}
+          </div>
+          <small>
+            {item.slides.length} generierte Folien · Abschnitte ziehen oder mit
+            den Pfeilen verschieben.
+          </small>
+          <small>
+            Beispiel: V1 C V2 C B C C · Der Chorus wird einmal gespeichert und
+            kann mehrfach erscheinen.
+          </small>
         </section>
       )}
       {tab === "design" && (
         <section className="song-override-panel">
-          <label>Lyrics-Darstellung<select disabled={!canEdit} value={String(metadata.lyricScrollingMode||'inherit')} onChange={event=>changeMeta({lyricScrollingMode:event.target.value})}><option value="inherit">Präsentationsstandard</option><option value="enabled">Lyric Scrolling</option><option value="disabled">Normale Slides</option></select></label>
-          <label>Design-Vorlage
-            <button disabled={!canEdit} onClick={()=>applyText({fontSize:72,align:'center',fontWeight:600,textShadow:'0 2px 4px #000',textOutline:'',textGlow:''})}>Zentriert mit Schatten anwenden</button>
+          <label>
+            Lyrics-Darstellung
+            <select
+              disabled={!canEdit}
+              value={String(metadata.lyricScrollingMode || "inherit")}
+              onChange={(event) =>
+                changeMeta({ lyricScrollingMode: event.target.value })
+              }
+            >
+              <option value="inherit">Präsentationsstandard</option>
+              <option value="enabled">Lyric Scrolling</option>
+              <option value="disabled">Normale Slides</option>
+            </select>
           </label>
-          <label>Schriftgröße
-            <input type="number" min="24" max="160" disabled={!canEdit} value={Number(structure.sections[0]?.slides[0]?.elements[0]?.properties.fontSize ?? 72)} onChange={(event) => applyText({ fontSize: Math.max(24, Math.min(160, Number(event.target.value) || 72)) })} />
+          <label>
+            Design-Vorlage
+            <button
+              disabled={!canEdit}
+              onClick={() =>
+                applyText({
+                  fontSize: 72,
+                  align: "center",
+                  fontWeight: 600,
+                  textShadow: "0 2px 4px #000",
+                  textOutline: "",
+                  textGlow: "",
+                })
+              }
+            >
+              Zentriert mit Schatten anwenden
+            </button>
           </label>
-          <label>Texteffekt
-            <select disabled={!canEdit} defaultValue="" onChange={(event) => applyText({textShadow:event.target.value==='Schatten'?'0 2px 4px #000':'',textOutline:event.target.value==='Kontur'?'2px #000':'',textGlow:event.target.value==='Glow'?'0 0 12px #fff':''})}><option value="" disabled>Bitte Effekt wählen</option><option>Kein Effekt</option><option>Schatten</option><option>Kontur</option><option>Glow</option></select>
+          <label>
+            Schriftgröße
+            <input
+              type="number"
+              min="24"
+              max="160"
+              disabled={!canEdit}
+              value={Number(
+                structure.sections[0]?.slides[0]?.elements[0]?.properties
+                  .fontSize ?? 72,
+              )}
+              onChange={(event) =>
+                applyText({
+                  fontSize: Math.max(
+                    24,
+                    Math.min(160, Number(event.target.value) || 72),
+                  ),
+                })
+              }
+            />
           </label>
-          <label>Schriftart<select disabled={!canEdit} value={String(structure.sections[0]?.slides[0]?.elements[0]?.properties.fontFamily || 'Cera Pro')} onChange={event=>applyText({fontFamily:event.target.value})}>{editorFonts.map(font=><option key={font}>{font}</option>)}</select></label>
-          <label>Textfarbe<input type="color" disabled={!canEdit} value={String(structure.sections[0]?.slides[0]?.elements[0]?.properties.color || '#ffffff')} onChange={event=>applyText({color:event.target.value})}/></label>
-          <label>Ausrichtung<select disabled={!canEdit} onChange={event=>applyText({align:event.target.value})}><option value="center">Zentriert</option><option value="left">Links</option><option value="right">Rechts</option></select></label>
-          <label>Hintergrundfarbe<input type="color" disabled={!canEdit} value={structure.sections[0]?.slides[0]?.background || '#000000'} onChange={event=>commitSong({...structure,sections:structure.sections.map(section=>({...section,slides:section.slides.map(slide=>({...slide,background:event.target.value,backgroundImage:undefined}))}))})}/></label>
-          <small>Diese Designänderungen gelten nur für dieses Song-ServiceItem und verändern die Songbibliothek nicht.</small>
+          <label>
+            Texteffekt
+            <select
+              disabled={!canEdit}
+              defaultValue=""
+              onChange={(event) =>
+                applyText({
+                  textShadow:
+                    event.target.value === "Schatten" ? "0 2px 4px #000" : "",
+                  textOutline:
+                    event.target.value === "Kontur" ? "2px #000" : "",
+                  textGlow:
+                    event.target.value === "Glow" ? "0 0 12px #fff" : "",
+                })
+              }
+            >
+              <option value="" disabled>
+                Bitte Effekt wählen
+              </option>
+              <option>Kein Effekt</option>
+              <option>Schatten</option>
+              <option>Kontur</option>
+              <option>Glow</option>
+            </select>
+          </label>
+          <label>
+            Schriftart
+            <select
+              disabled={!canEdit}
+              value={String(
+                structure.sections[0]?.slides[0]?.elements[0]?.properties
+                  .fontFamily || "Cera Pro",
+              )}
+              onChange={(event) =>
+                applyText({ fontFamily: event.target.value })
+              }
+            >
+              {editorFonts.map((font) => (
+                <option key={font}>{font}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Textfarbe
+            <input
+              type="color"
+              disabled={!canEdit}
+              value={String(
+                structure.sections[0]?.slides[0]?.elements[0]?.properties
+                  .color || "#ffffff",
+              )}
+              onChange={(event) => applyText({ color: event.target.value })}
+            />
+          </label>
+          <label>
+            Ausrichtung
+            <select
+              disabled={!canEdit}
+              onChange={(event) => applyText({ align: event.target.value })}
+            >
+              <option value="center">Zentriert</option>
+              <option value="left">Links</option>
+              <option value="right">Rechts</option>
+            </select>
+          </label>
+          <label>
+            Hintergrundfarbe
+            <input
+              type="color"
+              disabled={!canEdit}
+              value={structure.sections[0]?.slides[0]?.background || "#000000"}
+              onChange={(event) =>
+                commitSong({
+                  ...structure,
+                  sections: structure.sections.map((section) => ({
+                    ...section,
+                    slides: section.slides.map((slide) => ({
+                      ...slide,
+                      background: event.target.value,
+                      backgroundImage: undefined,
+                    })),
+                  })),
+                })
+              }
+            />
+          </label>
+          <small>
+            Diese Designänderungen gelten nur für dieses Song-ServiceItem und
+            verändern die Songbibliothek nicht.
+          </small>
         </section>
       )}
-      {tab === 'chords' && <section className="song-override-panel"><label>Akkorde in eckigen Klammern<textarea disabled={!canEdit} rows={12} placeholder="[G] … [C] …" value={String(metadata.chords || '')} onChange={event=>changeMeta({chords:event.target.value,songAdjusted:true})}/></label><p>Beim Tonartwechsel werden Akkorde und Basstöne in eckigen Klammern transponiert. MAIN enthält weiterhin nur die Lyrics.</p></section>}
+      {tab === "chords" && (
+        <section className="song-override-panel">
+          <label>
+            Akkorde in eckigen Klammern
+            <textarea
+              disabled={!canEdit}
+              rows={12}
+              placeholder="[G] … [C] …"
+              value={String(metadata.chords || "")}
+              onChange={(event) =>
+                changeMeta({ chords: event.target.value, songAdjusted: true })
+              }
+            />
+          </label>
+          <p>
+            Beim Tonartwechsel werden Akkorde und Basstöne in eckigen Klammern
+            transponiert. MAIN enthält weiterhin nur die Lyrics.
+          </p>
+        </section>
+      )}
       {tab === "stage" && (
         <section className="song-override-panel">
-          <label><input type="checkbox" disabled={!canEdit} checked={metadata.showChordsStage === true} onChange={(event) => changeMeta({ showChordsStage: event.target.checked })} /> Akkorde auf STAGE anzeigen</label>
-          <label><input type="checkbox" disabled={!canEdit} checked={metadata.stageCurrentNext !== false} onChange={(event) => changeMeta({ stageCurrentNext: event.target.checked })} /> Aktuelle und nächste Folie zeigen</label>
-          <small>MAIN bleibt beim Songtext; STAGE kann zusätzlich Akkorde und Current/Next anzeigen.</small>
+          <label>
+            <input
+              type="checkbox"
+              disabled={!canEdit}
+              checked={metadata.showChordsStage === true}
+              onChange={(event) =>
+                changeMeta({ showChordsStage: event.target.checked })
+              }
+            />{" "}
+            Akkorde auf STAGE anzeigen
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              disabled={!canEdit}
+              checked={metadata.stageCurrentNext !== false}
+              onChange={(event) =>
+                changeMeta({ stageCurrentNext: event.target.checked })
+              }
+            />{" "}
+            Aktuelle und nächste Folie zeigen
+          </label>
+          <small>
+            MAIN bleibt beim Songtext; STAGE kann zusätzlich Akkorde und
+            Current/Next anzeigen.
+          </small>
         </section>
       )}
       {tab === "stream" && (
         <section className="song-override-panel">
-          <label><input type="checkbox" disabled={!canEdit} checked={metadata.livestreamLowerThird === true} onChange={(event) => changeMeta({ livestreamLowerThird: event.target.checked })} /> Livestream-Lower-Third aktivieren</label>
-          <label>Stream-Textzeilen
-            <input type="number" min="1" max="4" disabled={!canEdit} value={Number(metadata.livestreamLines ?? 2)} onChange={(event) => changeMeta({ livestreamLines: Math.max(1, Math.min(4, Number(event.target.value) || 2)) })} />
+          <label>
+            <input
+              type="checkbox"
+              disabled={!canEdit}
+              checked={metadata.livestreamLowerThird === true}
+              onChange={(event) =>
+                changeMeta({ livestreamLowerThird: event.target.checked })
+              }
+            />{" "}
+            Livestream-Lower-Third aktivieren
           </label>
-          <small>Der Livestream erhält sein eigenes Layout und bleibt mit derselben Songposition synchron.</small>
+          <label>
+            Stream-Textzeilen
+            <input
+              type="number"
+              min="1"
+              max="4"
+              disabled={!canEdit}
+              value={Number(metadata.livestreamLines ?? 2)}
+              onChange={(event) =>
+                changeMeta({
+                  livestreamLines: Math.max(
+                    1,
+                    Math.min(4, Number(event.target.value) || 2),
+                  ),
+                })
+              }
+            />
+          </label>
+          <small>
+            Der Livestream erhält sein eigenes Layout und bleibt mit derselben
+            Songposition synchron.
+          </small>
         </section>
       )}
-      {tab === "content" && <div className="lyrics-editor">
-        {structure.sections.flatMap(section => section.slides.map((slide, part) => ({section, slide, part}))).map(({section, slide, part}, index) => (
-          <section
-            key={`${section.id}-${part}`}
-            className={`${generatedId(slide.id) === state.selectedSlideId ? "active" : ""}${lyricSlideHasOverflow(slide) ? " overflow" : ""}`}
-            onClick={() => state.select(item.id, generatedId(slide.id))}
-          >
-            {lyricSlideHasOverflow(slide) && <button type="button" className="lyric-overflow-warning" onClick={(event) => { event.stopPropagation(); state.select(item.id, slide.id); }}>⚠ Text überschreitet die Folienfläche</button>}
+      {tab === "content" && (
+        <div className="lyrics-editor">
+          {structure.sections
+            .flatMap((section) =>
+              section.slides.map((slide, part) => ({ section, slide, part })),
+            )
+            .map(({ section, slide, part }, index) => (
+              <section
+                key={`${section.id}-${part}`}
+                className={`${generatedId(slide.id) === state.selectedSlideId ? "active" : ""}${lyricSlideHasOverflow(slide) ? " overflow" : ""}`}
+                onClick={() => state.select(item.id, generatedId(slide.id))}
+              >
+                {lyricSlideHasOverflow(slide) && (
+                  <button
+                    type="button"
+                    className="lyric-overflow-warning"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      state.select(item.id, slide.id);
+                    }}
+                  >
+                    ⚠ Text überschreitet die Folienfläche
+                  </button>
+                )}
+                <input
+                  disabled={!canEdit}
+                  value={section.label}
+                  aria-label={`Abschnitt ${index + 1}`}
+                  onChange={(event) => {
+                    commitSong({
+                      ...structure,
+                      sections: structure.sections.map((entry) =>
+                        entry.id === section.id
+                          ? { ...entry, label: event.target.value }
+                          : entry,
+                      ),
+                    });
+                  }}
+                />
+                <textarea
+                  disabled={!canEdit}
+                  value={slide.body}
+                  rows={Math.max(3, slide.body.split("\n").length + 1)}
+                  onChange={(event) => {
+                    const body = event.target.value;
+                    commitSong({
+                      ...structure,
+                      sections: structure.sections.map((entry) =>
+                        entry.id === section.id
+                          ? {
+                              ...entry,
+                              slides: entry.slides.map((page, i) =>
+                                i === part
+                                  ? {
+                                      ...page,
+                                      body,
+                                      elements: page.elements.map(
+                                        (element, j) =>
+                                          j === 0 && element.type === "text"
+                                            ? {
+                                                ...element,
+                                                properties: {
+                                                  ...element.properties,
+                                                  text: body,
+                                                },
+                                              }
+                                            : element,
+                                      ),
+                                    }
+                                  : page,
+                              ),
+                            }
+                          : entry,
+                      ),
+                    });
+                  }}
+                />
+                <div
+                  className="song-translation-editor"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  {!slide.translation ? (
+                    <button
+                      type="button"
+                      disabled={!canEdit}
+                      onClick={() =>
+                        commitSong({
+                          ...structure,
+                          sections: structure.sections.map((entry) =>
+                            entry.id === section.id
+                              ? {
+                                  ...entry,
+                                  slides: entry.slides.map((page, i) =>
+                                    i === part
+                                      ? {
+                                          ...page,
+                                          translation: {
+                                            language: "de",
+                                            text: "",
+                                          },
+                                        }
+                                      : page,
+                                  ),
+                                }
+                              : entry,
+                          ),
+                        })
+                      }
+                    >
+                      ÜBERSETZUNG HINZUFÜGEN
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        disabled={!canEdit || Boolean(translationBusy)}
+                        onClick={async () => {
+                          try {
+                            setTranslationBusy("Lokale Übersetzung startet …");
+                            const target = slide.translation?.language || "de",
+                              text = await localTranslate(
+                                slide.body,
+                                "en",
+                                target,
+                                setTranslationBusy,
+                              );
+                            commitSong({
+                              ...structure,
+                              sections: structure.sections.map((entry) =>
+                                entry.id === section.id
+                                  ? {
+                                      ...entry,
+                                      slides: entry.slides.map((page, i) =>
+                                        i === part
+                                          ? {
+                                              ...page,
+                                              translation: {
+                                                language: target,
+                                                text,
+                                              },
+                                            }
+                                          : page,
+                                      ),
+                                    }
+                                  : entry,
+                              ),
+                            });
+                          } catch (error) {
+                            window.alert(
+                              `Lokale Übersetzung nicht verfügbar: ${error instanceof Error ? error.message : String(error)}`,
+                            );
+                          } finally {
+                            setTranslationBusy("");
+                          }
+                        }}
+                      >
+                        {slide.translation.text
+                          ? "NEU ÜBERSETZEN"
+                          : "AUTOMATISCH ÜBERSETZEN"}
+                      </button>
+                      {translationBusy && (
+                        <small role="status">{translationBusy}</small>
+                      )}
+                      <label>
+                        Sprache der Übersetzung
+                        <LanguagePicker
+                          disabled={!canEdit}
+                          source="en"
+                          value={slide.translation.language || "de"}
+                          onChange={(language) =>
+                            commitSong({
+                              ...structure,
+                              sections: structure.sections.map((entry) =>
+                                entry.id === section.id
+                                  ? {
+                                      ...entry,
+                                      slides: entry.slides.map((page, i) =>
+                                        i === part
+                                          ? {
+                                              ...page,
+                                              translation: {
+                                                ...slide.translation!,
+                                                language,
+                                              },
+                                            }
+                                          : page,
+                                      ),
+                                    }
+                                  : entry,
+                              ),
+                            })
+                          }
+                        />
+                      </label>
+                      <textarea
+                        disabled={!canEdit}
+                        aria-label={`Übersetzung · ${section.label}`}
+                        placeholder="Hier die deutsche Übersetzung eingeben …"
+                        value={slide.translation.text}
+                        rows={Math.max(
+                          3,
+                          slide.translation.text.split("\n").length,
+                        )}
+                        onChange={(event) =>
+                          commitSong({
+                            ...structure,
+                            sections: structure.sections.map((entry) =>
+                              entry.id === section.id
+                                ? {
+                                    ...entry,
+                                    slides: entry.slides.map((page, i) =>
+                                      i === part
+                                        ? {
+                                            ...page,
+                                            translation: {
+                                              ...slide.translation!,
+                                              text: event.target.value,
+                                            },
+                                          }
+                                        : page,
+                                    ),
+                                  }
+                                : entry,
+                            ),
+                          })
+                        }
+                      />
+                      <small>
+                        Darstellung: Einstellungen → Präsentation → Song.
+                        Wiederholungen dieses Abschnitts verwenden dieselbe
+                        Übersetzung.
+                      </small>
+                      <button
+                        type="button"
+                        disabled={!canEdit}
+                        onClick={() =>
+                          commitSong({
+                            ...structure,
+                            sections: structure.sections.map((entry) =>
+                              entry.id === section.id
+                                ? {
+                                    ...entry,
+                                    slides: entry.slides.map((page, i) =>
+                                      i === part
+                                        ? { ...page, translation: undefined }
+                                        : page,
+                                    ),
+                                  }
+                                : entry,
+                            ),
+                          })
+                        }
+                      >
+                        ÜBERSETZUNG ENTFERNEN
+                      </button>
+                    </>
+                  )}
+                </div>
+                <button
+                  disabled={!canEdit}
+                  onClick={() => {
+                    const page = structuredClone(slide);
+                    page.id = crypto.randomUUID();
+                    page.body = "";
+                    delete page.translation;
+                    page.elements = page.elements.map((element, j) =>
+                      j === 0
+                        ? {
+                            ...element,
+                            properties: { ...element.properties, text: "" },
+                          }
+                        : element,
+                    );
+                    commitSong({
+                      ...structure,
+                      sections: structure.sections.map((entry) =>
+                        entry.id === section.id
+                          ? {
+                              ...entry,
+                              slides: [
+                                ...entry.slides.slice(0, part + 1),
+                                page,
+                                ...entry.slides.slice(part + 1),
+                              ],
+                            }
+                          : entry,
+                      ),
+                    });
+                  }}
+                >
+                  <Icon name="horizontal_rule" /> FOLIENUMBRUCH
+                </button>
+              </section>
+            ))}
+        </div>
+      )}
+      {tab === "metadata" && (
+        <div className="song-meta">
+          <label>
+            Autoren
             <input
               disabled={!canEdit}
-              value={section.label}
-              aria-label={`Abschnitt ${index + 1}`}
-              onChange={(event) => {
-                commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,label:event.target.value}:entry)});
-              }}
+              value={String(metadata.author ?? "")}
+              onChange={(event) => changeMeta({ author: event.target.value })}
             />
-            <textarea
+          </label>
+          <label>
+            Publisher / Copyright
+            <input
               disabled={!canEdit}
-              value={slide.body}
-              rows={Math.max(3, slide.body.split("\n").length + 1)}
-              onChange={(event) => {
-                const body=event.target.value;
-                commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,body,elements:page.elements.map((element,j)=>j===0&&element.type==='text'?{...element,properties:{...element.properties,text:body}}:element)}:page)}:entry)});
-              }}
+              value={String(metadata.copyright ?? "")}
+              onChange={(event) =>
+                changeMeta({ copyright: event.target.value })
+              }
             />
-            <div className="song-translation-editor" onClick={event=>event.stopPropagation()}>
-              {!slide.translation ? <button type="button" disabled={!canEdit} onClick={()=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{language:'de',text:''}}:page)}:entry)})}>ÜBERSETZUNG HINZUFÜGEN</button> : <>
-                <button type="button" disabled={!canEdit||Boolean(translationBusy)} onClick={async()=>{try{setTranslationBusy('Lokale Übersetzung startet …');const target=slide.translation?.language||'de',text=await localTranslate(slide.body,'en',target,setTranslationBusy);commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{language:target,text}}:page)}:entry)})}catch(error){window.alert(`Lokale Übersetzung nicht verfügbar: ${error instanceof Error?error.message:String(error)}`)}finally{setTranslationBusy('')}}}>{slide.translation.text?'NEU ÜBERSETZEN':'AUTOMATISCH ÜBERSETZEN'}</button>
-                {translationBusy&&<small role="status">{translationBusy}</small>}
-                <label>Sprache der Übersetzung<LanguagePicker disabled={!canEdit} source="en" value={slide.translation.language||'de'} onChange={language=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{...slide.translation!,language}}:page)}:entry)})}/></label>
-                <textarea disabled={!canEdit} aria-label={`Übersetzung · ${section.label}`} placeholder="Hier die deutsche Übersetzung eingeben …" value={slide.translation.text} rows={Math.max(3,slide.translation.text.split('\n').length)} onChange={event=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:{...slide.translation!,text:event.target.value}}:page)}:entry)})}/>
-                <small>Darstellung: Einstellungen → Präsentation → Song. Wiederholungen dieses Abschnitts verwenden dieselbe Übersetzung.</small>
-                <button type="button" disabled={!canEdit} onClick={()=>commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:entry.slides.map((page,i)=>i===part?{...page,translation:undefined}:page)}:entry)})}>ÜBERSETZUNG ENTFERNEN</button>
-              </>}
-            </div>
-            <button
+          </label>
+          <label>
+            CCLI Song Number
+            <input
               disabled={!canEdit}
-              onClick={() => {
-                const page=structuredClone(slide);page.id=crypto.randomUUID();page.body='';delete page.translation;page.elements=page.elements.map((element,j)=>j===0?{...element,properties:{...element.properties,text:''}}:element);
-                commitSong({...structure,sections:structure.sections.map(entry=>entry.id===section.id?{...entry,slides:[...entry.slides.slice(0,part+1),page,...entry.slides.slice(part+1)]}:entry)});
-              }}
-            >
-              <Icon name="horizontal_rule" /> FOLIENUMBRUCH
-            </button>
-          </section>
-        ))}
-      </div>}
-      {tab === 'metadata' && <div className="song-meta">
-        <label>
-          Autoren
-          <input
-            disabled={!canEdit}
-            value={String(metadata.author ?? "")}
-            onChange={(event) => changeMeta({ author: event.target.value })}
-          />
-        </label>
-        <label>
-          Publisher / Copyright
-          <input
-            disabled={!canEdit}
-            value={String(metadata.copyright ?? "")}
-            onChange={(event) => changeMeta({ copyright: event.target.value })}
-          />
-        </label>
-        <label>
-          CCLI Song Number
-          <input
-            disabled={!canEdit}
-            value={String(metadata.ccli ?? "")}
-            onChange={(event) => changeMeta({ ccli: event.target.value })}
-          />
-        </label>
-      </div>}
-      {tab === 'metadata' && <div className="song-options">
-        <label>
-          <input
-            type="checkbox"
-            disabled={!canEdit}
-            checked={metadata.ccliLicensed !== false}
-            onChange={(event) =>
-              changeMeta({ ccliLicensed: event.target.checked })
-            }
-          />{" "}
-          Unter CCLI-Lizenz
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            disabled={!canEdit}
-            checked={metadata.showTitle === true}
-            onChange={(event) =>
-              changeMeta({ showTitle: event.target.checked })
-            }
-          />{" "}
-          Titel auf Titelfolie
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            disabled={!canEdit}
-            checked={metadata.showCredits !== false}
-            onChange={(event) =>
-              changeMeta({ showCredits: event.target.checked })
-            }
-          />{" "}
-          Credits auf Titelfolie
-        </label>
-        <span>Übergang: Überblenden · 0,5 Sekunden</span>
-      </div>}
+              value={String(metadata.ccli ?? "")}
+              onChange={(event) => changeMeta({ ccli: event.target.value })}
+            />
+          </label>
+        </div>
+      )}
+      {tab === "metadata" && (
+        <div className="song-options">
+          <label>
+            <input
+              type="checkbox"
+              disabled={!canEdit}
+              checked={metadata.ccliLicensed !== false}
+              onChange={(event) =>
+                changeMeta({ ccliLicensed: event.target.checked })
+              }
+            />{" "}
+            Unter CCLI-Lizenz
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              disabled={!canEdit}
+              checked={metadata.showTitle === true}
+              onChange={(event) =>
+                changeMeta({ showTitle: event.target.checked })
+              }
+            />{" "}
+            Titel auf Titelfolie
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              disabled={!canEdit}
+              checked={metadata.showCredits !== false}
+              onChange={(event) =>
+                changeMeta({ showCredits: event.target.checked })
+              }
+            />{" "}
+            Credits auf Titelfolie
+          </label>
+          <span>Übergang: Überblenden · 0,5 Sekunden</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -729,35 +1528,81 @@ function ContentEditor({
     }
     setQrOpen(false);
   };
-  if(usesAutomaticLoopEditor(item.type)){
-    const durationSeconds=Math.max(1,Math.round((item.plannedDuration||item.timing.slideDurationSeconds*1000||15000)/1000));
-    const changeDuration=(seconds:number)=>state.updateItem(item.id,{plannedDuration:seconds*1000,autoAdvance:true,timing:{...item.timing,slideDurationSeconds:seconds,totalDurationSeconds:seconds,autoAdvance:true}});
-    const changeNowPlaying=(patch:Record<string,string|number|boolean>)=>{
-      state.updateItem(item.id,{metadata:{...item.metadata,...patch}});
-      const loopElement=item.slides[0]?.elements.find(element=>element.type==='loop');
-      if(loopElement)state.updateElement(loopElement.id,{properties:{...loopElement.properties,...patch}});
-    };
-    return <div className="content-context automatic-loop-content-editor">
-      <header><b>{item.title}</b><span>AUTOMATISCH</span></header>
-      <section className="automatic-loop-settings web-editor-fields">
-        <div className="automatic-loop-heading"><Icon name={item.type==='nowPlaying'?'graphic_eq':'autorenew'}/><div><b>Automatische Anzeige</b><small>Der Inhalt wird zur Laufzeit automatisch aktualisiert.</small></div></div>
-        {item.type==='nowPlaying'&&<>
-          <label>Design<select disabled={!canEdit} value={String(item.metadata.design??'cover-left')} onChange={event=>changeNowPlaying({design:event.target.value})}>{NOW_PLAYING_DESIGNS.map(design=><option key={design} value={design}>{NOW_PLAYING_DESIGN_LABELS[design]}</option>)}</select></label>
-          <label className="setting-check"><input type="checkbox" disabled={!canEdit} checked={item.metadata.showArtwork!==false} onChange={event=>changeNowPlaying({showArtwork:event.target.checked})}/><span>Cover anzeigen</span></label>
-          <label className="setting-check"><input type="checkbox" disabled={!canEdit} checked={item.metadata.showAlbum!==false} onChange={event=>changeNowPlaying({showAlbum:event.target.checked})}/><span>Album anzeigen</span></label>
-          <label className="setting-check"><input type="checkbox" disabled={!canEdit} checked={item.metadata.skipWhenIdle!==false} onChange={event=>changeNowPlaying({skipWhenIdle:event.target.checked})}/><span>Folie überspringen, wenn gerade nichts läuft</span></label>
-        </>}
-        <label>Anzeigedauer<select disabled={!canEdit} value={String(durationSeconds)} onChange={event=>changeDuration(Number(event.target.value))}>{[5,10,15,20,30,45,60].map(seconds=><option key={seconds} value={seconds}>{seconds} Sekunden</option>)}</select></label>
-        <p className="status-ready">● Wird vor der Ausgabe automatisch vorbereitet.</p>
-      </section>
-      <PersonalNotesPanel noteKey={{userId:state.historyUserId||'local',presentationId:state.presentationId||'local',slideId:slide.id}} label="Meine Notiz zu dieser Folie" />
-    </div>;
+  if (usesAutomaticLoopEditor(item.type)) {
+    const durationSeconds = Math.max(
+      1,
+      Math.round(
+        (item.plannedDuration ||
+          item.timing.slideDurationSeconds * 1000 ||
+          15000) / 1000,
+      ),
+    );
+    const changeDuration = (seconds: number) =>
+      state.updateItem(item.id, {
+        plannedDuration: seconds * 1000,
+        autoAdvance: true,
+        timing: {
+          ...item.timing,
+          slideDurationSeconds: seconds,
+          totalDurationSeconds: seconds,
+          autoAdvance: true,
+        },
+      });
+    return (
+      <div className="content-context automatic-loop-content-editor">
+        <header>
+          <b>{item.title}</b>
+          <span>AUTOMATISCH</span>
+        </header>
+        <section className="automatic-loop-settings web-editor-fields">
+          <div className="automatic-loop-heading">
+            <Icon
+              name={item.type === "nowPlaying" ? "graphic_eq" : "autorenew"}
+            />
+            <div>
+              <b>Automatische Anzeige</b>
+              <small>
+                Der Inhalt wird zur Laufzeit automatisch aktualisiert.
+              </small>
+            </div>
+          </div>
+          {item.type === "nowPlaying" ? (
+            <NowPlayingDesigner item={item} canEdit={canEdit} />
+          ) : (
+            <label>
+              Anzeigedauer (Sekunden)
+              <input
+                type="number"
+                min="1"
+                step="1"
+                disabled={!canEdit}
+                value={durationSeconds}
+                onChange={(event) =>
+                  changeDuration(Math.max(1, Number(event.target.value) || 1))
+                }
+              />
+            </label>
+          )}
+          <p className="status-ready">
+            ● Wird vor der Ausgabe automatisch vorbereitet.
+          </p>
+        </section>
+        <PersonalNotesPanel
+          noteKey={{
+            userId: state.historyUserId || "local",
+            presentationId: state.presentationId || "local",
+            slideId: slide.id,
+          }}
+          label="Meine Notiz zu dieser Folie"
+        />
+      </div>
+    );
   }
   if (item.type === "web") {
     const web = slide.elements.find((element) => element.type === "web"),
       url = String(web?.properties.src ?? item.metadata.url ?? ""),
       change = (patch: Record<string, string | number | boolean>) => {
-        state.updateWebProperties(item.id,slide.id,web?.id,patch);
+        state.updateWebProperties(item.id, slide.id, web?.id, patch);
       },
       zoom = Number(web?.properties.zoom ?? item.metadata.zoom ?? 100);
     return (
@@ -850,8 +1695,37 @@ function ContentEditor({
             Pop-up-Fenster erlauben
           </label>
           <h4>VERBINDUNG & SICHERHEIT</h4>
-          <label><input type="checkbox" disabled={!canEdit} checked={(web?.properties.allowForms??item.metadata.allowForms)!==false} onChange={event=>change({allowForms:event.target.checked})}/>Formulare erlauben</label>
-          <label>Referrer-Information<select disabled={!canEdit} value={String(web?.properties.referrerPolicy??item.metadata.referrerPolicy??'no-referrer')} onChange={event=>change({referrerPolicy:event.target.value})}><option value="no-referrer">Nicht übermitteln</option><option value="strict-origin-when-cross-origin">Nur Herkunft bei fremden Websites</option></select></label>
+          <label>
+            <input
+              type="checkbox"
+              disabled={!canEdit}
+              checked={
+                (web?.properties.allowForms ?? item.metadata.allowForms) !==
+                false
+              }
+              onChange={(event) => change({ allowForms: event.target.checked })}
+            />
+            Formulare erlauben
+          </label>
+          <label>
+            Referrer-Information
+            <select
+              disabled={!canEdit}
+              value={String(
+                web?.properties.referrerPolicy ??
+                  item.metadata.referrerPolicy ??
+                  "no-referrer",
+              )}
+              onChange={(event) =>
+                change({ referrerPolicy: event.target.value })
+              }
+            >
+              <option value="no-referrer">Nicht übermitteln</option>
+              <option value="strict-origin-when-cross-origin">
+                Nur Herkunft bei fremden Websites
+              </option>
+            </select>
+          </label>
           <label>
             <input
               disabled={!canEdit}
@@ -932,7 +1806,10 @@ function ContentEditor({
           <button disabled={!canEdit} onClick={() => openQr()}>
             <Icon name="qr_code_2" /> QR-CODE
           </button>
-          <ShapeGallery disabled={!canEdit} onSelect={(kind,name)=>state.addShape(kind,name)}/>
+          <ShapeGallery
+            disabled={!canEdit}
+            onSelect={(kind, name) => state.addShape(kind, name)}
+          />
           <button
             className={fadeActive ? "active" : ""}
             disabled={!canEdit || !primaryText}
@@ -965,7 +1842,14 @@ function ContentEditor({
           value={slide.body}
           onChange={(event) => state.updateSlide({ body: event.target.value })}
         />
-        <PersonalNotesPanel noteKey={{userId:state.historyUserId||'local',presentationId:state.presentationId||'local',slideId:slide.id}} label="Meine Notiz zu dieser Folie" />
+        <PersonalNotesPanel
+          noteKey={{
+            userId: state.historyUserId || "local",
+            presentationId: state.presentationId || "local",
+            slideId: slide.id,
+          }}
+          label="Meine Notiz zu dieser Folie"
+        />
         {extras.length > 0 && (
           <section className="additional-elements">
             <header>
@@ -1977,9 +2861,14 @@ function QuizEditor({
             ...saved?.soundEffects,
           },
         };
-      void playOperatorTone(usePreferences.getState().operatorSoundsEnabled,routing, "soundEffects",undefined,659.25, 0.18).catch(
-        () => {},
-      );
+      void playOperatorTone(
+        usePreferences.getState().operatorSoundsEnabled,
+        routing,
+        "soundEffects",
+        undefined,
+        659.25,
+        0.18,
+      ).catch(() => {});
     } catch {
       setSessionError("Die Frage konnte nicht live geschaltet werden.");
     } finally {
@@ -2474,9 +3363,14 @@ function PreviewStack({
   previewToken: number;
   canEdit: boolean;
 }) {
-  const [scrollPreview,setScrollPreview]=useState(false),[scrollStep,setScrollStep]=useState(0);
-  const [draft,setDraft]=useState<{id:string;patch:Partial<Slide['elements'][number]>}|null>(null);
-  const pendingDraft=useRef<typeof draft>(null),drawFrame=useRef(0);
+  const [scrollPreview, setScrollPreview] = useState(false),
+    [scrollStep, setScrollStep] = useState(0);
+  const [draft, setDraft] = useState<{
+    id: string;
+    patch: Partial<Slide["elements"][number]>;
+  } | null>(null);
+  const pendingDraft = useRef<typeof draft>(null),
+    drawFrame = useRef(0);
   const state = usePresentation(),
     preferences = usePreferences(),
     frame = useRef<HTMLDivElement>(null),
@@ -2501,35 +3395,73 @@ function PreviewStack({
         if (!active || !rect || event.pointerId !== active.pointerId) return;
         const dx = ((event.clientX - active.pointerX) / rect.width) * 1920,
           dy = ((event.clientY - active.pointerY) / rect.height) * 1080;
-        const raw = active.mode === 'move' ? {
-            x: Math.max(0, Math.min(1920 - active.width, active.x + dx)),
-            y: Math.max(0, Math.min(1080 - active.height, active.y + dy)),
-            width: active.width,
-            height: active.height,
-          } : {
-            x: active.x,
-            y: active.y,
-            width: Math.max(32, Math.min(1920 - active.x, active.width + dx)),
-            height: Math.max(24, Math.min(1080 - active.y, active.height + dy)),
-          };
-        const adjusted = active.mode === 'move'
-          ? snapPosition(raw, { grid: preferences.canvasGridSize, enabled: preferences.canvasSnapEnabled, guides: preferences.canvasSnapGuides, bounds: { width: 1920, height: 1080 } })
-          : snapRect(raw, { grid: preferences.canvasGridSize, enabled: preferences.canvasSnapEnabled, bounds: { width: 1920, height: 1080 } });
-        const patch:Partial<Slide['elements'][number]>=active.mode === 'move'
-          ? { x: adjusted.x, y: adjusted.y }
-          : { x: adjusted.x, y: adjusted.y, width: Math.max(32, adjusted.width), height: Math.max(24, adjusted.height) };
-        pendingDraft.current={id:active.id,patch};
-        if(!drawFrame.current)drawFrame.current=requestAnimationFrame(()=>{drawFrame.current=0;setDraft(pendingDraft.current)});
+        const raw =
+          active.mode === "move"
+            ? {
+                x: Math.max(0, Math.min(1920 - active.width, active.x + dx)),
+                y: Math.max(0, Math.min(1080 - active.height, active.y + dy)),
+                width: active.width,
+                height: active.height,
+              }
+            : {
+                x: active.x,
+                y: active.y,
+                width: Math.max(
+                  32,
+                  Math.min(1920 - active.x, active.width + dx),
+                ),
+                height: Math.max(
+                  24,
+                  Math.min(1080 - active.y, active.height + dy),
+                ),
+              };
+        const adjusted =
+          active.mode === "move"
+            ? snapPosition(raw, {
+                grid: preferences.canvasGridSize,
+                enabled: preferences.canvasSnapEnabled,
+                guides: preferences.canvasSnapGuides,
+                bounds: { width: 1920, height: 1080 },
+              })
+            : snapRect(raw, {
+                grid: preferences.canvasGridSize,
+                enabled: preferences.canvasSnapEnabled,
+                bounds: { width: 1920, height: 1080 },
+              });
+        const patch: Partial<Slide["elements"][number]> =
+          active.mode === "move"
+            ? { x: adjusted.x, y: adjusted.y }
+            : {
+                x: adjusted.x,
+                y: adjusted.y,
+                width: Math.max(32, adjusted.width),
+                height: Math.max(24, adjusted.height),
+              };
+        pendingDraft.current = { id: active.id, patch };
+        if (!drawFrame.current)
+          drawFrame.current = requestAnimationFrame(() => {
+            drawFrame.current = 0;
+            setDraft(pendingDraft.current);
+          });
       },
       cancel = () => {
-        cancelAnimationFrame(drawFrame.current);drawFrame.current=0;
-        pendingDraft.current=null;setDraft(null);
+        cancelAnimationFrame(drawFrame.current);
+        drawFrame.current = 0;
+        pendingDraft.current = null;
+        setDraft(null);
         drag.current = null;
       },
-      end = (event:PointerEvent) => {
-        const active=drag.current,final=pendingDraft.current,current=usePresentation.getState();
-        if(!active||event.pointerId!==active.pointerId)return;
-        if(final&&current.selectedItemId===active.itemId&&current.selectedSlideId===active.slideId)current.updateElement(final.id,final.patch);
+      end = (event: PointerEvent) => {
+        const active = drag.current,
+          final = pendingDraft.current,
+          current = usePresentation.getState();
+        if (!active || event.pointerId !== active.pointerId) return;
+        if (
+          final &&
+          current.selectedItemId === active.itemId &&
+          current.selectedSlideId === active.slideId
+        )
+          current.updateElement(final.id, final.patch);
         cancel();
       };
     addEventListener("pointermove", move);
@@ -2543,13 +3475,17 @@ function PreviewStack({
       removeEventListener("pointercancel", cancel);
       removeEventListener("blur", cancel);
     };
-  }, [preferences.canvasGridSize, preferences.canvasSnapEnabled, preferences.canvasSnapGuides]);
+  }, [
+    preferences.canvasGridSize,
+    preferences.canvasSnapEnabled,
+    preferences.canvasSnapGuides,
+  ]);
   const begin = (
     event: React.PointerEvent,
     element: Slide["elements"][number],
     mode: "move" | "resize",
   ) => {
-    if (!canEdit || element.locked || event.button!==0) return;
+    if (!canEdit || element.locked || event.button !== 0) return;
     event.preventDefault();
     event.stopPropagation();
     (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
@@ -2568,38 +3504,123 @@ function PreviewStack({
       height: element.height,
     };
   };
-  const scrollPacket=lyricPacket(item,{...slide,transitionOverride:resolveTransition(slide,item,'operator',state.transitionDefault)},state.lyricScrolling);
-  const canvasSlide=draft?{...slide,elements:slide.elements.map(element=>element.id===draft.id?{...element,...draft.patch}:element)}:slide;
-  useEffect(()=>{setScrollStep(0)},[slide.id,item.id]);
-  useEffect(()=>{setScrollPreview(false)},[item.id]);
-  const demoSlide=scrollPacket?.slides[Math.min(scrollPacket.slides.length-1,scrollPacket.slides.findIndex(page=>page.id===slide.id)+scrollStep)];
-  const demoPacket=demoSlide?lyricPacket(item,{...demoSlide,transitionOverride:resolveTransition(demoSlide,item,'operator',state.transitionDefault)},state.lyricScrolling):undefined;
+  const scrollPacket = lyricPacket(
+    item,
+    {
+      ...slide,
+      transitionOverride: resolveTransition(
+        slide,
+        item,
+        "operator",
+        state.transitionDefault,
+      ),
+    },
+    state.lyricScrolling,
+  );
+  const canvasSlide = draft
+    ? {
+        ...slide,
+        elements: slide.elements.map((element) =>
+          element.id === draft.id ? { ...element, ...draft.patch } : element,
+        ),
+      }
+    : slide;
+  useEffect(() => {
+    setScrollStep(0);
+  }, [slide.id, item.id]);
+  useEffect(() => {
+    setScrollPreview(false);
+  }, [item.id]);
+  const demoSlide =
+    scrollPacket?.slides[
+      Math.min(
+        scrollPacket.slides.length - 1,
+        scrollPacket.slides.findIndex((page) => page.id === slide.id) +
+          scrollStep,
+      )
+    ];
+  const demoPacket = demoSlide
+    ? lyricPacket(
+        item,
+        {
+          ...demoSlide,
+          transitionOverride: resolveTransition(
+            demoSlide,
+            item,
+            "operator",
+            state.transitionDefault,
+          ),
+        },
+        state.lyricScrolling,
+      )
+    : undefined;
   return (
     <div className="production-preview-scroll transition-preview-host">
-      {scrollPacket&&<div><button onClick={()=>{setScrollPreview(!scrollPreview);setScrollStep(0)}}>↕ Lyric Scrolling · {scrollPreview?'VORSCHAU BEENDEN':'VORSCHAU'}</button>{scrollPreview&&<><button onClick={()=>setScrollStep(value=>Math.max(0,value-1))}>ZURÜCK</button><button onClick={()=>setScrollStep(value=>Math.min(item.slides.length-1,value+1))}>WEITER</button></>}</div>}
+      {scrollPacket && (
+        <div>
+          <button
+            onClick={() => {
+              setScrollPreview(!scrollPreview);
+              setScrollStep(0);
+            }}
+          >
+            ↕ Lyric Scrolling ·{" "}
+            {scrollPreview ? "VORSCHAU BEENDEN" : "VORSCHAU"}
+          </button>
+          {scrollPreview && (
+            <>
+              <button
+                onClick={() => setScrollStep((value) => Math.max(0, value - 1))}
+              >
+                ZURÜCK
+              </button>
+              <button
+                onClick={() =>
+                  setScrollStep((value) =>
+                    Math.min(item.slides.length - 1, value + 1),
+                  )
+                }
+              >
+                WEITER
+              </button>
+            </>
+          )}
+        </div>
+      )}
       <div
         ref={frame}
         tabIndex={0}
         className={`production-slide ${guideClass} active ${slide.id === state.liveSlideId ? "live" : ""}`}
         onPointerDown={() => state.selectElements([])}
         onKeyDown={(event) => {
-          if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key) || !state.selectedElementIds.length || !canEdit) return;
+          if (
+            !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(
+              event.key,
+            ) ||
+            !state.selectedElementIds.length ||
+            !canEdit
+          )
+            return;
           event.preventDefault();
           state.nudgeSelectedElements(event.key, event.shiftKey ? 10 : 1);
         }}
       >
-        {scrollPreview&&demoPacket?<LyricScrollRenderer packet={demoPacket}/>:<TransitionStage
-          slide={canvasSlide}
-          transition={resolveTransition(
-            slide,
-            item,
-            "operator",
-            state.transitionDefault,
-          )}
-          role="operator"
-          previewToken={previewToken}
-        />}
-        {(!(scrollPreview&&demoPacket)?canvasSlide.elements:[])
+        {scrollPreview && demoPacket ? (
+          <LyricScrollRenderer packet={demoPacket} />
+        ) : (
+          <TransitionStage
+            slide={canvasSlide}
+            transition={resolveTransition(
+              slide,
+              item,
+              "operator",
+              state.transitionDefault,
+            )}
+            role="operator"
+            previewToken={previewToken}
+          />
+        )}
+        {(!(scrollPreview && demoPacket) ? canvasSlide.elements : [])
           .filter((element) => element.visible)
           .map((element) => {
             const active = state.selectedElementIds.includes(element.id);
@@ -2733,7 +3754,22 @@ function PreviewCenter({
       next = all[Math.max(0, Math.min(all.length - 1, index + delta))];
     if (next) state.selectPreview(next.item.id, next.slide.id);
   };
-  useEffect(()=>{if(state.previewLayout!=='single')return;const key=(event:KeyboardEvent)=>{if(!shouldHandlePreviewArrow(event.key,event.target))return;event.preventDefault();move(event.key==='ArrowRight'?1:-1)};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key)},[state.previewLayout,state.onAir,state.previewSlideId,state.liveSlideId,all.length]);
+  useEffect(() => {
+    if (state.previewLayout !== "single") return;
+    const key = (event: KeyboardEvent) => {
+      if (!shouldHandlePreviewArrow(event.key, event.target)) return;
+      event.preventDefault();
+      move(event.key === "ArrowRight" ? 1 : -1);
+    };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [
+    state.previewLayout,
+    state.onAir,
+    state.previewSlideId,
+    state.liveSlideId,
+    all.length,
+  ]);
   useEffect(() => {
     setPausedSlideId("");
     setRemaining(timedSeconds);
@@ -2817,7 +3853,53 @@ function PreviewCenter({
           />
           <QuickOverlay quick={activeQuick} staticPreview />
         </div>
-        <div className="preview-navigation-rail">{timedSeconds>0&&<button className={`preview-timer-ring ${(pausedSlideId===slide.id||livePaused)?'held':''}`} aria-pressed={pausedSlideId===slide.id||livePaused} title={(pausedSlideId===slide.id||livePaused)?'Zeitsteuerung fortsetzen':'Folie dauerhaft anzeigen'} onClick={()=>{const wasHeld=pausedSlideId===slide.id||livePaused;if(wasHeld){setRemaining(timedSeconds);deadline.current=Date.now()+timedSeconds*1000}if(state.onAir)state.setLiveTimerPaused(livePaused?undefined:slide.id);else setPausedSlideId(value=>nextTimerHold(value,slide.id))}}><svg viewBox="0 0 40 40"><circle className="track" cx="20" cy="20" r="16"/><circle className="progress" cx="20" cy="20" r="16" pathLength="1" style={{strokeDashoffset:1-timerProgress(remaining,timedSeconds)}}/></svg></button>}<button className="preview-nav next" disabled={currentIndex < 0 || currentIndex >= all.length - 1} title="Nächste MAIN-Folie" onClick={() => move(1)}><Icon name="chevron_right" /></button></div>
+        <div className="preview-navigation-rail">
+          {timedSeconds > 0 && (
+            <button
+              className={`preview-timer-ring ${pausedSlideId === slide.id || livePaused ? "held" : ""}`}
+              aria-pressed={pausedSlideId === slide.id || livePaused}
+              title={
+                pausedSlideId === slide.id || livePaused
+                  ? "Zeitsteuerung fortsetzen"
+                  : "Folie dauerhaft anzeigen"
+              }
+              onClick={() => {
+                const wasHeld = pausedSlideId === slide.id || livePaused;
+                if (wasHeld) {
+                  setRemaining(timedSeconds);
+                  deadline.current = Date.now() + timedSeconds * 1000;
+                }
+                if (state.onAir)
+                  state.setLiveTimerPaused(livePaused ? undefined : slide.id);
+                else
+                  setPausedSlideId((value) => nextTimerHold(value, slide.id));
+              }}
+            >
+              <svg viewBox="0 0 40 40">
+                <circle className="track" cx="20" cy="20" r="16" />
+                <circle
+                  className="progress"
+                  cx="20"
+                  cy="20"
+                  r="16"
+                  pathLength="1"
+                  style={{
+                    strokeDashoffset:
+                      1 - timerProgress(remaining, timedSeconds),
+                  }}
+                />
+              </svg>
+            </button>
+          )}
+          <button
+            className="preview-nav next"
+            disabled={currentIndex < 0 || currentIndex >= all.length - 1}
+            title="Nächste MAIN-Folie"
+            onClick={() => move(1)}
+          >
+            <Icon name="chevron_right" />
+          </button>
+        </div>
       </div>
     );
   return (
@@ -2895,7 +3977,7 @@ function PreviewCenter({
 }
 
 function QuickScreenThumb({ quick }: { quick: QuickScreenConfig }) {
-  const shortcut=quickScreenShortcut(quick.type);
+  const shortcut = quickScreenShortcut(quick.type);
   return (
     <div
       className={`quick-screen-thumb quick-${quick.type}`}
@@ -2922,7 +4004,7 @@ function QuickScreenThumb({ quick }: { quick: QuickScreenConfig }) {
           )}
         </>
       )}
-      {shortcut&&<kbd className="quick-screen-shortcut">{shortcut}</kbd>}
+      {shortcut && <kbd className="quick-screen-shortcut">{shortcut}</kbd>}
     </div>
   );
 }
@@ -2944,9 +4026,11 @@ function PreviewRightSidebar({
     ),
     liveItem = state.items.find((item) => item.id === state.liveItemId),
     live = liveItem?.slides.find((slide) => slide.id === state.liveSlideId),
-    previewItem=state.items.find(item=>item.id===state.previewItemId),
-    currentPreviewSlide=previewItem?.slides.find(slide=>slide.id===state.previewSlideId),
-    noTextAvailable=canHideSlideContent(live??currentPreviewSlide);
+    previewItem = state.items.find((item) => item.id === state.previewItemId),
+    currentPreviewSlide = previewItem?.slides.find(
+      (slide) => slide.id === state.previewSlideId,
+    ),
+    noTextAvailable = canHideSlideContent(live ?? currentPreviewSlide);
   const toggle = () =>
     setCollapsed((value) => {
       localStorage.setItem(
@@ -2971,7 +4055,18 @@ function PreviewRightSidebar({
           <Icon name="chevron_right" />
         </button>
       </header>
-      {live ? <MainLivePreview title={`${liveItem?.title} · ${live.title || "Live-Folie"}`}><SlideRenderer slide={previewSlide(live)} mode="thumbnail" /></MainLivePreview> : <section className="live-slide-panel"><h2>LIVE AUF MAIN</h2><p>MAIN ist derzeit OFF AIR.</p></section>}
+      {live ? (
+        <MainLivePreview
+          title={`${liveItem?.title} · ${live.title || "Live-Folie"}`}
+        >
+          <SlideRenderer slide={previewSlide(live)} mode="thumbnail" />
+        </MainLivePreview>
+      ) : (
+        <section className="live-slide-panel">
+          <h2>LIVE AUF MAIN</h2>
+          <p>MAIN ist derzeit OFF AIR.</p>
+        </section>
+      )}
       <section className="quick-screens-panel">
         <h2>MAIN-SCHNELLANZEIGEN</h2>
         <div>
@@ -2983,10 +4078,16 @@ function PreviewRightSidebar({
                 key={quick.id}
                 aria-pressed={activeQuick?.id === quick.id}
                 className={activeQuick?.id === quick.id ? "active" : ""}
-                disabled={quick.type==='noText'&&!noTextAvailable}
-                title={quick.type==='noText'&&!noTextAvailable?'Aktuell befinden sich keine ausblendbaren Inhalte auf der Folie.':`${quick.name}${state.onAir ? " sofort auf MAIN anzeigen" : " für MAIN vorbereiten"}`}
+                disabled={quick.type === "noText" && !noTextAvailable}
+                title={
+                  quick.type === "noText" && !noTextAvailable
+                    ? "Aktuell befinden sich keine ausblendbaren Inhalte auf der Folie."
+                    : `${quick.name}${state.onAir ? " sofort auf MAIN anzeigen" : " für MAIN vorbereiten"}`
+                }
                 onClick={() =>
-                  quick.type==='noText'&&!noTextAvailable?undefined:onQuick(activeQuick?.id === quick.id ? null : quick)
+                  quick.type === "noText" && !noTextAvailable
+                    ? undefined
+                    : onQuick(activeQuick?.id === quick.id ? null : quick)
                 }
               >
                 <QuickScreenThumb quick={quick} />
@@ -2995,9 +4096,51 @@ function PreviewRightSidebar({
             ))}
         </div>
         {activeQuick && (
-          <>{activeQuick.type==='bible'&&(activeQuick.pages?.length??0)>1&&<div className="bible-page-controls"><button disabled={(activeQuick.pageIndex??0)<=0} onClick={()=>onQuick({...activeQuick,pageIndex:Math.max(0,(activeQuick.pageIndex??0)-1)})}><Icon name="chevron_left"/> Zurück</button><span>{(activeQuick.pageIndex??0)+1}/{activeQuick.pages!.length}</span><button disabled={(activeQuick.pageIndex??0)>=activeQuick.pages!.length-1} onClick={()=>onQuick({...activeQuick,pageIndex:Math.min(activeQuick.pages!.length-1,(activeQuick.pageIndex??0)+1)})}>Weiter <Icon name="chevron_right"/></button></div>}<button className="restore-last" onClick={() => onQuick(null)}>
-            <Icon name="restore" /> MAIN-FOLIE WIEDERHERSTELLEN
-          </button></>
+          <>
+            {activeQuick.type === "bible" &&
+              (activeQuick.pages?.length ?? 0) > 1 && (
+                <div className="bible-page-controls">
+                  <button
+                    disabled={(activeQuick.pageIndex ?? 0) <= 0}
+                    onClick={() =>
+                      onQuick({
+                        ...activeQuick,
+                        pageIndex: Math.max(
+                          0,
+                          (activeQuick.pageIndex ?? 0) - 1,
+                        ),
+                      })
+                    }
+                  >
+                    <Icon name="chevron_left" /> Zurück
+                  </button>
+                  <span>
+                    {(activeQuick.pageIndex ?? 0) + 1}/
+                    {activeQuick.pages!.length}
+                  </span>
+                  <button
+                    disabled={
+                      (activeQuick.pageIndex ?? 0) >=
+                      activeQuick.pages!.length - 1
+                    }
+                    onClick={() =>
+                      onQuick({
+                        ...activeQuick,
+                        pageIndex: Math.min(
+                          activeQuick.pages!.length - 1,
+                          (activeQuick.pageIndex ?? 0) + 1,
+                        ),
+                      })
+                    }
+                  >
+                    Weiter <Icon name="chevron_right" />
+                  </button>
+                </div>
+              )}
+            <button className="restore-last" onClick={() => onQuick(null)}>
+              <Icon name="restore" /> MAIN-FOLIE WIEDERHERSTELLEN
+            </button>
+          </>
         )}
       </section>
     </aside>
@@ -3128,7 +4271,8 @@ const palette = [
 ];
 
 function GuidesMenu({ close }: { close: () => void }) {
-  const state = usePresentation(), preferences = usePreferences();
+  const state = usePresentation(),
+    preferences = usePreferences();
   const row = (
     key: "smartGuides" | "marginGuides" | "ruleOfThirds",
     label: string,
@@ -3143,13 +4287,49 @@ function GuidesMenu({ close }: { close: () => void }) {
       {row("smartGuides", "Intelligente Hilfslinien")}
       {row("marginGuides", "Rand-Hilfslinien")}
       {row("ruleOfThirds", "Drittelraster")}
-      <label className="guide-setting">Rastergröße
-        <select value={preferences.canvasGridSize} onChange={event => preferences.setCanvasGridSize(Number(event.target.value))}>
-          {[8, 16, 24, 32, 64].map(value => <option key={value} value={value}>{value}px</option>)}
+      <label className="guide-setting">
+        Rastergröße
+        <select
+          value={preferences.canvasGridSize}
+          onChange={(event) =>
+            preferences.setCanvasGridSize(Number(event.target.value))
+          }
+        >
+          {[8, 16, 24, 32, 64].map((value) => (
+            <option key={value} value={value}>
+              {value}px
+            </option>
+          ))}
         </select>
       </label>
-      <button onClick={() => preferences.setCanvasSnapEnabled(!preferences.canvasSnapEnabled)}><Icon name={preferences.canvasSnapEnabled ? "check_box" : "check_box_outline_blank"} /> Am Raster einrasten</button>
-      <button onClick={() => preferences.setCanvasSnapGuides(!preferences.canvasSnapGuides)}><Icon name={preferences.canvasSnapGuides ? "check_box" : "check_box_outline_blank"} /> An Mitte und Rändern einrasten</button>
+      <button
+        onClick={() =>
+          preferences.setCanvasSnapEnabled(!preferences.canvasSnapEnabled)
+        }
+      >
+        <Icon
+          name={
+            preferences.canvasSnapEnabled
+              ? "check_box"
+              : "check_box_outline_blank"
+          }
+        />{" "}
+        Am Raster einrasten
+      </button>
+      <button
+        onClick={() =>
+          preferences.setCanvasSnapGuides(!preferences.canvasSnapGuides)
+        }
+      >
+        <Icon
+          name={
+            preferences.canvasSnapGuides
+              ? "check_box"
+              : "check_box_outline_blank"
+          }
+        />{" "}
+        An Mitte und Rändern einrasten
+      </button>
       <button className="menu-close" onClick={close}>
         <Icon name="close" /> Schließen
       </button>
@@ -3165,7 +4345,10 @@ function ArrangeMenu({ close }: { close: () => void }) {
       slide?.elements.find((entry) =>
         state.selectedElementIds.includes(entry.id),
       ) ?? slide?.elements[0];
-  const selectedElements = slide?.elements.filter(entry => state.selectedElementIds.includes(entry.id)) ?? [];
+  const selectedElements =
+    slide?.elements.filter((entry) =>
+      state.selectedElementIds.includes(entry.id),
+    ) ?? [];
   const change = (patch: Parameters<typeof state.updateElement>[1]) =>
       element && state.updateElement(element.id, patch),
     align = (x?: number, y?: number) =>
@@ -3199,27 +4382,90 @@ function ArrangeMenu({ close }: { close: () => void }) {
       </div>
       <h4>MEHRFACHAUSWAHL</h4>
       <div className="menu-grid">
-        <button disabled={selectedElements.length < 2} onClick={() => state.alignSelectedElements('left')}><Icon name="align_horizontal_left" /> Links ausrichten</button>
-        <button disabled={selectedElements.length < 2} onClick={() => state.alignSelectedElements('centerX')}><Icon name="align_horizontal_center" /> Horizontal zentrieren</button>
-        <button disabled={selectedElements.length < 2} onClick={() => state.alignSelectedElements('top')}><Icon name="align_vertical_top" /> Oben ausrichten</button>
-        <button disabled={selectedElements.length < 2} onClick={() => state.alignSelectedElements('centerY')}><Icon name="align_vertical_center" /> Vertikal zentrieren</button>
-        <button disabled={selectedElements.length < 3} onClick={() => state.distributeSelectedElements('horizontal')}><Icon name="space_bar" /> Horizontal verteilen</button>
-        <button disabled={selectedElements.length < 3} onClick={() => state.distributeSelectedElements('vertical')}><Icon name="height" /> Vertikal verteilen</button>
+        <button
+          disabled={selectedElements.length < 2}
+          onClick={() => state.alignSelectedElements("left")}
+        >
+          <Icon name="align_horizontal_left" /> Links ausrichten
+        </button>
+        <button
+          disabled={selectedElements.length < 2}
+          onClick={() => state.alignSelectedElements("centerX")}
+        >
+          <Icon name="align_horizontal_center" /> Horizontal zentrieren
+        </button>
+        <button
+          disabled={selectedElements.length < 2}
+          onClick={() => state.alignSelectedElements("top")}
+        >
+          <Icon name="align_vertical_top" /> Oben ausrichten
+        </button>
+        <button
+          disabled={selectedElements.length < 2}
+          onClick={() => state.alignSelectedElements("centerY")}
+        >
+          <Icon name="align_vertical_center" /> Vertikal zentrieren
+        </button>
+        <button
+          disabled={selectedElements.length < 3}
+          onClick={() => state.distributeSelectedElements("horizontal")}
+        >
+          <Icon name="space_bar" /> Horizontal verteilen
+        </button>
+        <button
+          disabled={selectedElements.length < 3}
+          onClick={() => state.distributeSelectedElements("vertical")}
+        >
+          <Icon name="height" /> Vertikal verteilen
+        </button>
       </div>
       <h4>EBENEN-PANEL</h4>
       <div className="layer-list">
-        {[...(slide?.elements ?? [])].sort((a, b) => b.zIndex - a.zIndex).map(entry => (
-          <div key={entry.id} className={state.selectedElementIds.includes(entry.id) ? 'active' : ''} draggable={!entry.locked} onDragStart={() => setDragLayer(entry.id)} onDragOver={event => event.preventDefault()} onDrop={() => {
-            if (!dragLayer || !slide || dragLayer === entry.id) return;
-            const ordered = [...slide.elements].sort((a, b) => a.zIndex - b.zIndex), from = ordered.findIndex(value => value.id === dragLayer), to = ordered.findIndex(value => value.id === entry.id), direction = to > from ? 1 : -1;
-            for (let index = from; index !== to; index += direction) state.moveElementLayer(dragLayer, direction);
-            setDragLayer(null);
-          }}>
-            <button className="layer-name" onClick={() => state.selectElements([entry.id])}><Icon name="drag_indicator" />{entry.name}</button>
-            <button title={entry.visible ? 'Ausblenden' : 'Einblenden'} onClick={() => state.toggleElementVisible(entry.id)}><Icon name={entry.visible ? 'visibility' : 'visibility_off'} /></button>
-            <button title={entry.locked ? 'Entsperren' : 'Sperren'} onClick={() => state.toggleElementLocked(entry.id)}><Icon name={entry.locked ? 'lock' : 'lock_open'} /></button>
-          </div>
-        ))}
+        {[...(slide?.elements ?? [])]
+          .sort((a, b) => b.zIndex - a.zIndex)
+          .map((entry) => (
+            <div
+              key={entry.id}
+              className={
+                state.selectedElementIds.includes(entry.id) ? "active" : ""
+              }
+              draggable={!entry.locked}
+              onDragStart={() => setDragLayer(entry.id)}
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={() => {
+                if (!dragLayer || !slide || dragLayer === entry.id) return;
+                const ordered = [...slide.elements].sort(
+                    (a, b) => a.zIndex - b.zIndex,
+                  ),
+                  from = ordered.findIndex((value) => value.id === dragLayer),
+                  to = ordered.findIndex((value) => value.id === entry.id),
+                  direction = to > from ? 1 : -1;
+                for (let index = from; index !== to; index += direction)
+                  state.moveElementLayer(dragLayer, direction);
+                setDragLayer(null);
+              }}
+            >
+              <button
+                className="layer-name"
+                onClick={() => state.selectElements([entry.id])}
+              >
+                <Icon name="drag_indicator" />
+                {entry.name}
+              </button>
+              <button
+                title={entry.visible ? "Ausblenden" : "Einblenden"}
+                onClick={() => state.toggleElementVisible(entry.id)}
+              >
+                <Icon name={entry.visible ? "visibility" : "visibility_off"} />
+              </button>
+              <button
+                title={entry.locked ? "Entsperren" : "Sperren"}
+                onClick={() => state.toggleElementLocked(entry.id)}
+              >
+                <Icon name={entry.locked ? "lock" : "lock_open"} />
+              </button>
+            </div>
+          ))}
       </div>
       <h4>AUSRICHTEN</h4>
       <div className="icon-grid">

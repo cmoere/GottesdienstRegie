@@ -4,7 +4,7 @@ assert(Number(pkg.version.split('.')[1])>=67,'package must include V67 or newer'
 assert(releases.versions.some(entry=>entry.builds?.some(build=>build.version==='0.67.0')),'V67 must remain in the release catalog');
 assert(notes.includes('# GottesdienstRegie 0.67.0'),'notes must include V67');
 assert(workflow.includes('check-version67.cjs'),'workflow must run V67 guard');
-assert(model.includes("'split-card','neon'")&&model.match(/NOW_PLAYING_DESIGNS=\[[^\]]+/)?.[0].split(',').length===10,'ten now-playing designs missing');
+assert(['cover-left','cover-hero','minimal','vinyl','radio','gradient','typography','stage','split-card','neon'].every(value=>model.includes(`'${value}'`)||model.includes(`"${value}"`)),'ten now-playing designs missing');
 assert(artwork.includes('musicbrainz.org/ws/2/release')&&artwork.includes('coverartarchive.org/release'),'keyless cover lookup missing');
 assert(!artwork.toLowerCase().includes('api-key')&&!artwork.toLowerCase().includes('authorization'),'cover lookup must not require an API key');
 console.log('V67 release guard passed.');

@@ -1,8 +1,13 @@
 import {describe,expect,it} from 'vitest';
-import {NOW_PLAYING_DESIGNS,normalizeNowPlayingSettings,nowPlayingDisplay,nowPlayingSettingsPatch,shouldSkipNowPlaying} from './nowPlayingModel';
+import {NOW_PLAYING_ANIMATIONS,NOW_PLAYING_DESIGNS,normalizeNowPlayingSettings,nowPlayingDisplay,nowPlayingSettingsPatch,shouldSkipNowPlaying} from './nowPlayingModel';
 
 describe('now-playing loop',()=>{
   it('offers exactly ten stable designs',()=>expect(NOW_PLAYING_DESIGNS).toHaveLength(10));
+  it('offers ten animations and persists a selected animation',()=>{
+    expect(NOW_PLAYING_ANIMATIONS).toHaveLength(10);
+    expect(normalizeNowPlayingSettings({animation:'vinyl-spin'}).animation).toBe('vinyl-spin');
+    expect(normalizeNowPlayingSettings({animation:'unknown'}).animation).toBe('fade-rise');
+  });
   it('uses live track metadata instead of the placeholder',()=>expect(nowPlayingDisplay({active:true,track:{name:'Good Grace',url:'x',assetId:'1',artist:'Hillsong',album:'People'}})).toMatchObject({title:'Good Grace',artist:'Hillsong',album:'People'}));
   it('skips an opted-in now-playing item while no audio is active',()=>{
     const item={type:'nowPlaying',metadata:{skipWhenIdle:true}} as any;

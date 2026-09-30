@@ -4,7 +4,7 @@ assert(Number(pkg.version.split('.')[1])>=65,'package must include V65 or newer'
 assert(releases.versions.some(entry=>entry.builds?.some(build=>build.version==='0.65.0')),'V65 must remain in the release catalog');
 assert(notes.includes('# GottesdienstRegie 0.65.0'),'notes must include V65');
 assert(workflow.includes('check-version65.cjs'),'workflow must run V65 guard');
-assert(model.includes("'cover-left','cover-hero','minimal','vinyl','radio','gradient','typography','stage'"),'eight now-playing designs missing');
+assert(['cover-left','cover-hero','minimal','vinyl','radio','gradient','typography','stage'].every(value=>model.includes(`'${value}'`)||model.includes(`"${value}"`)),'eight now-playing designs missing');
 assert(designer.includes('Folie überspringen, wenn gerade nichts läuft'),'idle skip option missing');
 assert(renderer.includes('now-playing-slide')&&renderer.includes('nowPlayingTitle'),'live metadata rendering missing');
 assert(audio.includes('startRadioMetadata(track')&&audio.includes('startRadioMetadata('),'radio live metadata forwarding missing');
