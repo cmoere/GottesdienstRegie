@@ -11,13 +11,12 @@ const read = (file) => fs.readFileSync(file, "utf8"),
   designer = read("src/EventSlideDesigner.tsx"),
   nowPlaying = read("src/nowPlayingModel.ts");
 assert(
-  pkg.version.startsWith("0.71.") && pkg.releaseSeries === "0.71",
+  Number(pkg.version.split('.')[1]) >= 71,
   "package must identify V71",
 );
 assert(
-  releases.versions[0]?.builds.some((build) => build.version === "0.71.0") &&
-    releases.versions[0].builds[0].current === true,
-  "V71 must lead the release catalog",
+  releases.versions.some((line) => line.builds?.some((build) => build.version === "0.71.0")),
+  "release catalog must retain V71",
 );
 assert(
   notes.includes("# GottesdienstRegie 0.71.0"),

@@ -21,11 +21,34 @@
   ],
   "versions": [
     {
+      "line": "0.72",
+      "builds": [{
+        "version": "0.72.0",
+        "releaseDate": "2026-10-01",
+        "current": true,
+        "overview": {
+          "label": { "de": "Updates nach Wunsch installieren", "en": "Install updates when you choose" },
+          "text": { "de": "Neue Versionen werden mit einem klaren Installationsdialog angekündigt und können sofort, später oder beim Beenden installiert werden.", "en": "New versions are announced with a clear installation prompt and can be installed now, later, or when quitting." }
+        },
+        "sections": {
+          "new": [
+            { "label": { "de": "Update-Dialog", "en": "Update prompt" }, "text": { "de": "Bei einer neuen Version stehen Jetzt installieren, Später, Beim Beenden installieren und Abbrechen zur Auswahl.", "en": "When a new version is available, choose Install now, Later, Install on quit, or Cancel." } },
+            { "label": { "de": "Installation beim Beenden", "en": "Install on quit" }, "text": { "de": "Das Verhalten kann zusätzlich dauerhaft unter Einstellungen → Updates festgelegt werden.", "en": "The behavior can also be configured permanently under Settings → Updates." } }
+          ],
+          "improved": [
+            { "label": { "de": "Kontrollierter Hintergrunddownload", "en": "Controlled background download" }, "text": { "de": "Automatische Downloads starten erst nach der Entscheidung im Hinweisfenster und installieren nicht ungefragt.", "en": "Automatic downloads start only after the prompt decision and never install without the selected behavior." } }
+          ],
+          "fixed": [],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.71",
       "builds": [{
         "version": "0.71.1",
         "releaseDate": "2026-09-30",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "Stabiler Programmabschluss", "en": "Stable application shutdown" },
           "text": { "de": "Ein Absturz des Electron-Hauptprozesses beim Schließen oder Neustarten wurde behoben.", "en": "A main-process crash while closing or restarting the Electron application has been fixed." }

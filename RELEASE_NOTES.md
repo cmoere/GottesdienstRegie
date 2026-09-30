@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.72.0
+
+Version 0.72.0 zeigt bei jeder gefundenen neuen Version ein eigenes Informationsfenster. Dort kann das Update sofort installiert, auf später verschoben, für die Installation beim Beenden vorgemerkt oder abgebrochen werden.
+
+Unter Einstellungen → Updates steht zusätzlich die dauerhafte Option „Heruntergeladene Updates beim Beenden installieren“ bereit. Ein automatischer Hintergrunddownload respektiert die Auswahl im Dialog und startet keine ungefragte Installation.
+
+---
+
 # GottesdienstRegie 0.71.1
 
 Version 0.71.1 verhindert den gemeldeten JavaScript-Absturz im Electron-Hauptprozess beim Schließen oder Neustarten. Verzögerte Hintergrundereignisse senden nicht mehr an bereits zerstörte Fenster; die Bildschirm-Wachhaltung wird auch dann sicher beendet, wenn Electron das zugrunde liegende Objekt bereits freigegeben hat.

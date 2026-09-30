@@ -27,6 +27,7 @@ import {DeviceSettingsRepository} from './DeviceSettingsRepository';
 import {createCommunityRealtimeAdapter,FirebaseGemeindeService} from './FirebaseGemeindeService';
 import {CommunitySnapshotCache} from './CommunitySnapshotCache';
 import {sendToLiveWindow} from './windowSafety';
+import {updatePromptAction} from './updatePromptModel';
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
 function applySpellCheckerLanguage(contents:Electron.WebContents,language:string){const requested=spellLocale[language]??language,available=contents.session.availableSpellCheckerLanguages,exact=available.find(item=>item.toLowerCase()===requested.toLowerCase()),base=available.find(item=>item.toLowerCase().split('-')[0]===requested.toLowerCase().split('-')[0]);contents.session.setSpellCheckerLanguages(exact?[exact]:base?[base]:[]);return exact??base??''}
@@ -69,6 +70,8 @@ type UpdateStatus={state:'idle'|'checking'|'available'|'not-available'|'download
 let lastUpdateStatus:UpdateStatus={state:'idle'};
 let updateCancellationToken:CancellationToken|null=null;
 let pendingUpdateVersion='';
+let installDownloadedUpdateNow=false;
+const promptedUpdateVersions=new Set<string>();
 function releaseNotes(info:UpdateInfo){
   if(typeof info.releaseNotes==='string')return info.releaseNotes;
   if(Array.isArray(info.releaseNotes))return info.releaseNotes.map(note=>typeof note==='string'?note:note.note).filter(Boolean).join('\n\n');
@@ -81,18 +84,38 @@ function publishUpdateStatus(status:UpdateStatus){
 }
 
 autoUpdater.autoDownload=false;
-autoUpdater.autoInstallOnAppQuit=true;
+autoUpdater.autoInstallOnAppQuit=false;
 autoUpdater.on('checking-for-update',()=>publishUpdateStatus({state:'checking'}));
-autoUpdater.on('update-available',info=>{pendingUpdateVersion=info.version;publishUpdateStatus({state:'available',version:info.version,releaseNotes:releaseNotes(info)})});
+autoUpdater.on('update-available',info=>{pendingUpdateVersion=info.version;publishUpdateStatus({state:'available',version:info.version,releaseNotes:releaseNotes(info)});void promptForAvailableUpdate(info)});
 autoUpdater.on('update-not-available',info=>{pendingUpdateVersion='';publishUpdateStatus({state:'not-available',version:info.version})});
 let smoothedDownloadSpeed=0;
 autoUpdater.on('download-progress',progress=>{const speed=Math.max(0,progress.bytesPerSecond||0);smoothedDownloadSpeed=smoothedDownloadSpeed?smoothedDownloadSpeed*.72+speed*.28:speed;const remaining=Math.max(0,progress.total-progress.transferred),etaSeconds=smoothedDownloadSpeed>0&&progress.percent>=3?Math.round(remaining/smoothedDownloadSpeed):undefined;publishUpdateStatus({state:'downloading',version:pendingUpdateVersion,percent:Math.round(progress.percent),transferred:progress.transferred,total:progress.total,bytesPerSecond:Math.round(smoothedDownloadSpeed),etaSeconds})});
-autoUpdater.on('update-downloaded',info=>{updateCancellationToken=null;publishUpdateStatus({state:'downloaded',version:info.version,releaseNotes:releaseNotes(info)})});
+autoUpdater.on('update-downloaded',info=>{updateCancellationToken=null;publishUpdateStatus({state:'downloaded',version:info.version,releaseNotes:releaseNotes(info)});if(installDownloadedUpdateNow)setImmediate(()=>autoUpdater.quitAndInstall(false,true))});
 autoUpdater.on('error',error=>{if(updateCancellationToken?.cancelled)return;publishUpdateStatus({state:'error',message:error.message})});
 
 async function checkForUpdates(){
   if(!app.isPackaged)return publishUpdateStatus({state:'development',version:app.getVersion()});
   try{autoUpdater.allowPrerelease=appPreferences.get().betaUpdates;await autoUpdater.checkForUpdates();return lastUpdateStatus}catch(error){return publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)})}
+}
+
+async function downloadAvailableUpdate(){
+  if(lastUpdateStatus.state!=='available'&&lastUpdateStatus.state!=='cancelled')return false;
+  updateCancellationToken=new CancellationToken();smoothedDownloadSpeed=0;
+  try{await autoUpdater.downloadUpdate(updateCancellationToken);updateCancellationToken=null;return true}
+  catch(error){if(updateCancellationToken?.cancelled){updateCancellationToken=null;publishUpdateStatus({state:'cancelled',version:pendingUpdateVersion,message:'Der Update-Download wurde abgebrochen.'});return true}updateCancellationToken=null;publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)});return false}
+}
+
+async function promptForAvailableUpdate(info:UpdateInfo){
+  if(!appPreferences||promptedUpdateVersions.has(info.version))return;
+  promptedUpdateVersions.add(info.version);
+  const owner=controlWindow&&!controlWindow.isDestroyed()?controlWindow:undefined;
+  const options:Electron.MessageBoxOptions={type:'info',title:'Neue Version verfügbar',message:`GottesdienstRegie ${info.version} ist verfügbar.`,detail:'Möchtest du die neue Version installieren?',buttons:['Jetzt installieren','Später','Beim Beenden installieren','Abbrechen'],defaultId:0,cancelId:3,noLink:true};
+  const result=await (owner?dialog.showMessageBox(owner,options):dialog.showMessageBox(options));
+  const action=updatePromptAction(result.response);
+  if(action==='install-now'){installDownloadedUpdateNow=true;autoUpdater.autoInstallOnAppQuit=false;if(lastUpdateStatus.state==='downloaded')setImmediate(()=>autoUpdater.quitAndInstall(false,true));else void downloadAvailableUpdate()}
+  else if(action==='install-on-exit'){installDownloadedUpdateNow=false;autoUpdater.autoInstallOnAppQuit=true;await appPreferences.update({installUpdatesOnQuit:true});void downloadAvailableUpdate()}
+  else if(action==='later'){installDownloadedUpdateNow=false;autoUpdater.autoInstallOnAppQuit=false;if(appPreferences.get().autoDownloadUpdates)void downloadAvailableUpdate()}
+  else if(updateCancellationToken){updateCancellationToken.cancel()}
 }
 
 const rendererRetryUrl='gottesdienstregie-retry://renderer';
@@ -193,7 +216,8 @@ app.whenReady().then(async() => {
   spotifyAuth=new SpotifyAuthService({clientId:String(process.env.SPOTIFY_CLIENT_ID??''),redirectUri:'gottesdienstregie://spotify-callback',openExternal:url=>shell.openExternal(url),request:fetch,readRefreshToken:async()=>{try{if(!safeStorage.isEncryptionAvailable())return null;return safeStorage.decryptString(await fs.readFile(spotifyTokenFile))}catch{return null}},writeRefreshToken:async token=>{if(!token){await fs.unlink(spotifyTokenFile).catch(()=>{});return}if(!safeStorage.isEncryptionAvailable())throw new Error('SPOTIFY_SECURE_STORAGE_UNAVAILABLE');await fs.writeFile(spotifyTokenFile,safeStorage.encryptString(token))}});
   const initialPreferences=await appPreferences.load();
   displaySleepProtection.setEnabled(initialPreferences.preventDisplaySleep!==false);
-  autoUpdater.autoDownload=initialPreferences.autoDownloadUpdates;
+  autoUpdater.autoDownload=false;
+  autoUpdater.autoInstallOnAppQuit=initialPreferences.installUpdatesOnQuit;
   autoUpdater.allowPrerelease=initialPreferences.betaUpdates;
   const displayManager=new DisplayManager();
   const publishOutputStatus=(role:OutputRole,state:'ready'|'missing'|'closed')=>{sendToLiveWindow(controlWindow,'outputs:status',{role,state})};
@@ -277,7 +301,7 @@ app.whenReady().then(async() => {
     return {user:session.user,permissions:session.permissions,expiresAt};
   }
   ipcMain.handle('window-preferences:get',()=>appPreferences.get());
-  ipcMain.handle('window-preferences:set',async(_event,patch:Partial<AppPreferencesData>)=>{const allowed:Partial<AppPreferencesData>={};if(['fullscreen','maximized','window','restore'].includes(String(patch.windowStartMode)))allowed.windowStartMode=patch.windowStartMode;if(['primary','last'].includes(String(patch.operatorDisplayTarget)))allowed.operatorDisplayTarget=patch.operatorDisplayTarget;if(typeof patch.automaticUpdates==='boolean')allowed.automaticUpdates=patch.automaticUpdates;if(typeof patch.autoDownloadUpdates==='boolean'){allowed.autoDownloadUpdates=patch.autoDownloadUpdates;autoUpdater.autoDownload=patch.autoDownloadUpdates}if(typeof patch.betaUpdates==='boolean'){allowed.betaUpdates=patch.betaUpdates;autoUpdater.allowPrerelease=patch.betaUpdates}if(typeof patch.betaWarningAccepted==='boolean')allowed.betaWarningAccepted=patch.betaWarningAccepted;if(typeof patch.preventDisplaySleep==='boolean')allowed.preventDisplaySleep=patch.preventDisplaySleep;const saved=await appPreferences.update(allowed);displaySleepProtection.setEnabled(saved.preventDisplaySleep!==false);return saved});
+  ipcMain.handle('window-preferences:set',async(_event,patch:Partial<AppPreferencesData>)=>{const allowed:Partial<AppPreferencesData>={};if(['fullscreen','maximized','window','restore'].includes(String(patch.windowStartMode)))allowed.windowStartMode=patch.windowStartMode;if(['primary','last'].includes(String(patch.operatorDisplayTarget)))allowed.operatorDisplayTarget=patch.operatorDisplayTarget;if(typeof patch.automaticUpdates==='boolean')allowed.automaticUpdates=patch.automaticUpdates;if(typeof patch.autoDownloadUpdates==='boolean')allowed.autoDownloadUpdates=patch.autoDownloadUpdates;if(typeof patch.installUpdatesOnQuit==='boolean'){allowed.installUpdatesOnQuit=patch.installUpdatesOnQuit;autoUpdater.autoInstallOnAppQuit=patch.installUpdatesOnQuit}if(typeof patch.betaUpdates==='boolean'){allowed.betaUpdates=patch.betaUpdates;autoUpdater.allowPrerelease=patch.betaUpdates}if(typeof patch.betaWarningAccepted==='boolean')allowed.betaWarningAccepted=patch.betaWarningAccepted;if(typeof patch.preventDisplaySleep==='boolean')allowed.preventDisplaySleep=patch.preventDisplaySleep;const saved=await appPreferences.update(allowed);displaySleepProtection.setEnabled(saved.preventDisplaySleep!==false);return saved});
   ipcMain.handle('window:toggle-fullscreen',()=>{if(!controlWindow)return false;controlWindow.setFullScreen(!controlWindow.isFullScreen());return controlWindow.isFullScreen()});
   ipcMain.handle('window:fullscreen-state',()=>controlWindow?.isFullScreen()??false);
   ipcMain.handle('window:control',(event,action:string)=>{if(event.sender!==controlWindow?.webContents)return false;if(action==='close')controlWindow.close();else if(action==='minimize')controlWindow.minimize();else if(action==='restore')controlWindow.setFullScreen(false);return true});
@@ -426,7 +450,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('updates:status',()=>lastUpdateStatus);
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});
   ipcMain.handle('updates:check',()=>checkForUpdates());
-  ipcMain.handle('updates:download',async()=>{if(lastUpdateStatus.state!=='available'&&lastUpdateStatus.state!=='cancelled')return false;updateCancellationToken=new CancellationToken();smoothedDownloadSpeed=0;try{await autoUpdater.downloadUpdate(updateCancellationToken);updateCancellationToken=null;return true}catch(error){if(updateCancellationToken?.cancelled){updateCancellationToken=null;publishUpdateStatus({state:'cancelled',version:pendingUpdateVersion,message:'Der Update-Download wurde abgebrochen.'});return true}updateCancellationToken=null;publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)});return false}});
+  ipcMain.handle('updates:download',()=>downloadAvailableUpdate());
   ipcMain.handle('updates:cancel-download',()=>{if(!updateCancellationToken||lastUpdateStatus.state!=='downloading')return false;updateCancellationToken.cancel();publishUpdateStatus({state:'cancelled',version:pendingUpdateVersion,message:'Der Update-Download wurde abgebrochen.'});return true});
   ipcMain.handle('updates:install',()=>{if(lastUpdateStatus.state!=='downloaded')return false;setImmediate(()=>autoUpdater.quitAndInstall(false,true));return true});
   async function previousRelease(){const response=await fetch('https://api.github.com/repos/cmoere/GottesdienstRegie/releases?per_page=20',{headers:{'user-agent':`GottesdienstRegie/${app.getVersion()}`},signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error(`GitHub ${response.status}`);const releases=await response.json() as any[];for(const release of releases){if(release.draft||release.prerelease||!olderThan(String(release.tag_name),app.getVersion()))continue;const asset=(release.assets??[]).find((entry:any)=>/GottesdienstRegie-Setup-.*\.exe$/i.test(String(entry.name)));if(asset)return{version:String(release.tag_name).replace(/^v/,''),publishedAt:String(release.published_at??''),size:Number(asset.size??0),url:String(asset.browser_download_url)}}return null}

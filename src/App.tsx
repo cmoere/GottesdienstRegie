@@ -5348,6 +5348,7 @@ function SettingsModal({
       operatorDisplayTarget: "primary",
       automaticUpdates: true,
       autoDownloadUpdates: true,
+      installUpdatesOnQuit: false,
       betaUpdates: false,
       betaWarningAccepted: false,
     });
@@ -6384,6 +6385,21 @@ function SettingsModal({
                       />
                       <span>
                         <b>Updates automatisch herunterladen</b>
+                      </span>
+                    </label>
+                    <label className="setting-check">
+                      <input
+                        type="checkbox"
+                        checked={operatorPrefs.installUpdatesOnQuit}
+                        onChange={(e) =>
+                          void setOperatorPreference({
+                            installUpdatesOnQuit: e.target.checked,
+                          })
+                        }
+                      />
+                      <span>
+                        <b>Heruntergeladene Updates beim Beenden installieren</b>
+                        <small>Die Anwendung installiert das fertige Update automatisch, sobald GottesdienstRegie beendet wird.</small>
                       </span>
                     </label>
                   </div>

@@ -9,6 +9,7 @@ export interface AppPreferencesData{
   preventDisplaySleep:boolean;
   automaticUpdates:boolean;
   autoDownloadUpdates:boolean;
+  installUpdatesOnQuit:boolean;
   betaUpdates:boolean;
   betaWarningAccepted:boolean;
   lastDisplayId?:number;
@@ -19,7 +20,7 @@ export interface AppPreferencesData{
   registeredDevice?:{id:string;organizationId:string;organizationName:string;name:string;type:'shared'|'personal';platform:string;registeredAt:string;lastSeenAt:string;status:'online'|'locked'};
 }
 
-const defaults:AppPreferencesData={preventDisplaySleep:true,windowStartMode:'fullscreen',operatorDisplayTarget:'primary',automaticUpdates:true,autoDownloadUpdates:true,betaUpdates:false,betaWarningAccepted:false};
+const defaults:AppPreferencesData={preventDisplaySleep:true,windowStartMode:'fullscreen',operatorDisplayTarget:'primary',automaticUpdates:true,autoDownloadUpdates:true,installUpdatesOnQuit:false,betaUpdates:false,betaWarningAccepted:false};
 
 export class AppPreferences{
   private value:AppPreferencesData={...defaults};

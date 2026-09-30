@@ -6,7 +6,7 @@ interface DesktopVersionMetadata{version:string;installedAt:string;modifiedAt:st
 interface DesktopPreviousVersion{version:string;publishedAt:string;size:number;url:string}
 interface DesktopOutputStatus{role:string;state:'ready'|'missing'|'closed'}
 interface DesktopPreflight{ok:boolean;errors:string[];warnings:string[];displays?:DesktopDisplay[]}
-interface DesktopOperatorPreferences{preventDisplaySleep:boolean;windowStartMode:'fullscreen'|'maximized'|'window'|'restore';operatorDisplayTarget:'primary'|'last';automaticUpdates:boolean;autoDownloadUpdates:boolean;betaUpdates:boolean;betaWarningAccepted:boolean}
+interface DesktopOperatorPreferences{preventDisplaySleep:boolean;windowStartMode:'fullscreen'|'maximized'|'window'|'restore';operatorDisplayTarget:'primary'|'last';automaticUpdates:boolean;autoDownloadUpdates:boolean;installUpdatesOnQuit:boolean;betaUpdates:boolean;betaWarningAccepted:boolean}
 type PresentationSummary=import('./platform/types').PresentationSummary;
 type MediaAsset=import('./platform/types').MediaAsset;
 type OnlineMediaAsset=import('./platform/types').OnlineMediaAsset;
