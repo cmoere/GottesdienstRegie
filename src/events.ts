@@ -1,14 +1,15 @@
 import {EventCommandService} from './community/EventCommandService';
 import {EventService,type ChurchEvent} from './community/EventService';
+import {RoomService,type RawRoom} from './community/RoomService';
 export type {ChurchEvent} from './community/EventService';
 
 const service=new EventService();
 let events:ChurchEvent[]=[],started:Promise<void>|null=null;
-const bridge=()=>((window.desktop as any)?.community as undefined|{start:()=>Promise<unknown>;onEvents:(callback:(value:unknown)=>void)=>()=>void;updateEvent:(eventKey:string,patch:Record<string,unknown>)=>Promise<unknown>});
+const bridge=()=>((window.desktop as any)?.community as undefined|{start:()=>Promise<unknown>;onEvents:(callback:(value:unknown)=>void)=>()=>void;onRooms?:(callback:(value:unknown)=>void)=>()=>void;updateEvent:(eventKey:string,patch:Record<string,unknown>)=>Promise<unknown>});
 
 function ensureStarted(){
   if(started)return started;
-  started=new Promise(resolve=>{const api=bridge();if(!api){resolve();return}let resolved=false;api.onEvents(value=>{events=Array.isArray(value)?value as ChurchEvent[]:[];service.setEvents(events);if(!resolved){resolved=true;resolve()}});void api.start().catch(()=>resolve());setTimeout(()=>{if(!resolved){resolved=true;resolve()}},2500)});
+  started=new Promise(resolve=>{const api=bridge();if(!api){resolve();return}let resolved=false;api.onEvents(value=>{events=Array.isArray(value)?value as ChurchEvent[]:[];service.setEvents(events);if(!resolved){resolved=true;resolve()}});api.onRooms?.(value=>service.setRooms(new RoomService(Array.isArray(value)?value as RawRoom[]:[])));void api.start().catch(()=>resolve());setTimeout(()=>{if(!resolved){resolved=true;resolve()}},2500)});
   return started;
 }
 

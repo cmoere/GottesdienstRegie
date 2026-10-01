@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.72.1
+
+Version 0.72.1 stellt die vier Designkarten für Veranstaltungsfolien im tatsächlich verwendeten Produktionseditor wieder her. Die Zahl der sichtbaren Termine und die Anzeigedauer bleiben dort direkt einstellbar. Jede Veranstaltung zeigt nun Start- und Endzeit.
+
+Firebase `rooms/` wird als zentrale Quelle für Raumdaten abonniert. Der neue RoomService löst stabile Raum-IDs sowie kompatible Namen und Kurzbezeichnungen auf. Interne, hybride, zusätzliche und Ersatzräume liefern normalisierte Daten; MAIN und Vorschau zeigen Raumname, Etage und Gebäude, niemals eine nicht aufgelöste interne ID.
+
+---
+
 # GottesdienstRegie 0.72.0
 
 Version 0.72.0 zeigt bei jeder gefundenen neuen Version ein eigenes Informationsfenster. Dort kann das Update sofort installiert, auf später verschoben, für die Installation beim Beenden vorgemerkt oder abgebrochen werden.

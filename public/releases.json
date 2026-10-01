@@ -23,9 +23,30 @@
     {
       "line": "0.72",
       "builds": [{
-        "version": "0.72.0",
+        "version": "0.72.1",
         "releaseDate": "2026-10-01",
         "current": true,
+        "overview": {
+          "label": { "de": "Veranstaltungsdesigns und Räume", "en": "Event designs and rooms" },
+          "text": { "de": "Die Designauswahl ist im produktiven Editor sichtbar, Termine zeigen ihre Endzeit und interne Raum-IDs werden zentral aufgelöst.", "en": "The design selector is visible in the production editor, events show their end time, and internal room IDs are centrally resolved." }
+        },
+        "sections": {
+          "new": [
+            { "label": { "de": "Zentraler RoomService", "en": "Central RoomService" }, "text": { "de": "Interne, hybride, zusätzliche und geänderte Räume werden anhand stabiler IDs aus Firebase rooms/ geladen.", "en": "Internal, hybrid, additional, and replacement rooms are loaded from Firebase rooms/ using stable IDs." } }
+          ],
+          "improved": [
+            { "label": { "de": "Start- und Endzeit", "en": "Start and end time" }, "text": { "de": "Veranstaltungsfolien zeigen jetzt neben dem Beginn auch die Endzeit.", "en": "Event slides now show the end time alongside the start time." } }
+          ],
+          "fixed": [
+            { "label": { "de": "Designauswahl sichtbar", "en": "Design selector visible" }, "text": { "de": "Die vier Veranstaltungsdesigns und die Anzahl der Termine lassen sich wieder direkt im produktiven Editor auswählen.", "en": "The four event designs and event count can again be selected directly in the production editor." } },
+            { "label": { "de": "Keine rohen Raum-IDs", "en": "No raw room IDs" }, "text": { "de": "MAIN, Vorschau und dynamische Veranstaltungsdaten verwenden Raumname, Etage und Gebäude statt interner Firebase-IDs.", "en": "MAIN, preview, and dynamic event data use room name, floor, and building instead of internal Firebase IDs." } }
+          ],
+          "known": []
+        }
+      }, {
+        "version": "0.72.0",
+        "releaseDate": "2026-10-01",
+        "current": false,
         "overview": {
           "label": { "de": "Updates nach Wunsch installieren", "en": "Install updates when you choose" },
           "text": { "de": "Neue Versionen werden mit einem klaren Installationsdialog angekündigt und können sofort, später oder beim Beenden installiert werden.", "en": "New versions are announced with a clear installation prompt and can be installed now, later, or when quitting." }

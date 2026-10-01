@@ -68,6 +68,7 @@ import { MainLivePreview } from "./MainLivePreview";
 import { quickScreenShortcut } from "./quickScreenUi";
 import { usesAutomaticLoopEditor } from "./loopEditorModel";
 import { NowPlayingDesigner } from "./NowPlayingDesigner";
+import { EventSlideDesigner } from "./EventSlideDesigner";
 
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -1568,6 +1569,14 @@ function ContentEditor({
           </div>
           {item.type === "nowPlaying" ? (
             <NowPlayingDesigner item={item} canEdit={canEdit} />
+          ) : (item.type === "event" || item.type === "nextEvents") ? (
+            <>
+              <EventSlideDesigner item={item} canEdit={canEdit} />
+              <label>
+                Anzeigedauer (Sekunden)
+                <input type="number" min="1" step="1" disabled={!canEdit} value={durationSeconds} onChange={(event)=>changeDuration(Math.max(1,Number(event.target.value)||1))}/>
+              </label>
+            </>
           ) : (
             <label>
               Anzeigedauer (Sekunden)

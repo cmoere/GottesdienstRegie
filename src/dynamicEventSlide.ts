@@ -2,6 +2,7 @@ export type LatestPublicEvent = {
   id?: string;
   title: string;
   effectiveStart: string;
+  effectiveEnd?: string;
   effectiveLocation?: string;
   coverUrl?: string;
 };
@@ -53,16 +54,14 @@ function formatted(event: LatestPublicEvent) {
   let date = "";
   if (event.effectiveStart) {
     const value = new Date(event.effectiveStart);
-    if (!Number.isNaN(value.getTime()))
-      date = new Intl.DateTimeFormat("de-DE", {
+    if (!Number.isNaN(value.getTime())) {
+      const day = new Intl.DateTimeFormat("de-DE", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-        .format(value)
-        .replace(",", " ·");
+      }).format(value),start=new Intl.DateTimeFormat('de-DE',{hour:'2-digit',minute:'2-digit'}).format(value),endValue=event.effectiveEnd?new Date(event.effectiveEnd):null,end=endValue&&!Number.isNaN(endValue.getTime())?new Intl.DateTimeFormat('de-DE',{hour:'2-digit',minute:'2-digit'}).format(endValue):'';
+      date = `${day} · ${start}${end?`–${end}`:''}`;
+    }
   }
   return {
     title: event.title.trim(),

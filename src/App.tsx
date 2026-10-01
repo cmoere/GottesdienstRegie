@@ -99,6 +99,7 @@ import {paginateBibleVerses} from './bibleOverlayModel';
 import {quickScreenTypeForKey} from './quickScreenUi';
 import {isLoopCandidateAvailable,shouldSkipNowPlaying} from './nowPlayingModel';
 import {EventService,type ChurchEvent as CommunityChurchEvent} from './community/EventService';
+import {RoomService,type RawRoom} from './community/RoomService';
 import {setLatestPublicEvents} from './dynamicEventSlide';
 import {EventSlideDesigner} from './EventSlideDesigner';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
@@ -8108,7 +8109,7 @@ function AppShell({
     }>({ state: "idle", step: 0, text: "" });
   useEffect(()=>{void (window.desktop as any)?.deviceSettings?.readOsb?.().then((value:unknown)=>setOsbSettings(normalizeOsbSettings(value,[...BIBLE_TRANSLATIONS])))},[]);
   useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge)return;const stop=bridge.onConnection((value:{connected:boolean;mode:string;updatedAt:number})=>setCommunityConnection(value));void bridge.start();return stop},[]);
-  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;return bridge.onEvents((rows:CommunityChurchEvent[])=>{const service=new EventService(rows),publicEvents=service.getUpcomingEvents().slice(0,8).map(event=>service.toPublicEvent(event));setLatestPublicEvents(publicEvents);window.dispatchEvent(new CustomEvent('gottesdienstregie:community-events',{detail:publicEvents}))})},[]);
+  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;let rows:CommunityChurchEvent[]=[],rooms:RawRoom[]=[];const publish=()=>{const service=new EventService(rows,new RoomService(rooms)),publicEvents=service.getUpcomingEvents().slice(0,8).map(event=>service.toPublicEvent(event));setLatestPublicEvents(publicEvents);window.dispatchEvent(new CustomEvent('gottesdienstregie:community-events',{detail:publicEvents}))};const stopEvents=bridge.onEvents((value:CommunityChurchEvent[])=>{rows=Array.isArray(value)?value:[];publish()}),stopRooms=bridge.onRooms?.((value:RawRoom[])=>{rooms=Array.isArray(value)?value:[];publish()});return()=>{stopEvents?.();stopRooms?.()}},[]);
   const audioSessionRef = useRef<{
     onAir: boolean;
     mode: "edit" | "preview";

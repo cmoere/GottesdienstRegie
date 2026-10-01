@@ -5,7 +5,7 @@ import type {CommunitySnapshotCache} from './CommunitySnapshotCache';
 export type CommunityConnectionState={connected:boolean;mode:'online'|'offline-cache'|'empty'|'error';updatedAt:number};
 
 export interface CommunityRealtimeAdapter{
-  watchCollection(path:'veranstaltungen',listener:(rows:Record<string,unknown>)=>void):()=>void;
+  watchCollection(path:'veranstaltungen'|'rooms',listener:(rows:Record<string,unknown>)=>void):()=>void;
   watchChildren(path:'meldungen',handlers:{added:(key:string,value:unknown)=>void;changed:(key:string,value:unknown)=>void;removed:(key:string)=>void}):()=>void;
   watchConnection(listener:(connected:boolean)=>void):()=>void;
   updateEvent?(eventKey:string,patch:Record<string,unknown>):Promise<void>;
@@ -16,11 +16,14 @@ type Listener<T>=(value:readonly T[])=>void;
 export class FirebaseGemeindeService{
   private events:RawChurchEvent[]=[];
   private announcements=new Map<string,RawAnnouncement>();
+  private rooms:Array<RawCommunityRecord&{roomId:string}>=[];
   private eventListeners=new Set<Listener<RawChurchEvent>>();
   private announcementListeners=new Set<Listener<RawAnnouncement>>();
+  private roomListeners=new Set<Listener<RawCommunityRecord&{roomId:string}>>();
   private connectionListeners=new Set<(state:CommunityConnectionState)=>void>();
   private stopEvents?:()=>void;
   private stopAnnouncements?:()=>void;
+  private stopRooms?:()=>void;
   private stopConnection?:()=>void;
 
   constructor(private readonly adapter:CommunityRealtimeAdapter,private readonly cache?:CommunitySnapshotCache){}
@@ -48,6 +51,13 @@ export class FirebaseGemeindeService{
     return()=>this.announcementListeners.delete(listener);
   }
 
+  subscribeRooms(listener:Listener<RawCommunityRecord&{roomId:string}>):()=>void{
+    this.roomListeners.add(listener);
+    if(!this.stopRooms)this.stopRooms=this.adapter.watchCollection('rooms',rows=>{this.rooms=Object.entries(rows??{}).flatMap(([roomId,value])=>value&&typeof value==='object'?[{roomId,...value as RawCommunityRecord}]:[]);this.roomListeners.forEach(next=>next(this.rooms))});
+    if(this.rooms.length)listener(this.rooms);
+    return()=>this.roomListeners.delete(listener);
+  }
+
   subscribeConnection(listener:(state:CommunityConnectionState)=>void):()=>void{
     this.connectionListeners.add(listener);
     if(!this.stopConnection)this.stopConnection=this.adapter.watchConnection(connected=>{
@@ -57,7 +67,7 @@ export class FirebaseGemeindeService{
     return()=>this.connectionListeners.delete(listener);
   }
 
-  dispose(){this.stopEvents?.();this.stopAnnouncements?.();this.stopConnection?.();this.stopEvents=this.stopAnnouncements=this.stopConnection=undefined;this.eventListeners.clear();this.announcementListeners.clear();this.connectionListeners.clear()}
+  dispose(){this.stopEvents?.();this.stopAnnouncements?.();this.stopRooms?.();this.stopConnection?.();this.stopEvents=this.stopAnnouncements=this.stopRooms=this.stopConnection=undefined;this.eventListeners.clear();this.announcementListeners.clear();this.roomListeners.clear();this.connectionListeners.clear()}
 
   private upsertAnnouncement(messageId:string,value:unknown){
     if(value&&typeof value==='object')this.announcements.set(messageId,{messageId,...value as RawCommunityRecord});
