@@ -18,7 +18,7 @@ import {TranslationPackService} from './TranslationPackService';
 import {platformAppearance} from './platformAppearance';
 import {StorageMaintenanceService,isStorageCategory,type StorageCategory} from './StorageMaintenanceService';
 import {translationPackCatalog} from './translationPackCatalog';
-import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds} from './windowStartup';
+import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds,UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS} from './windowStartup';
 import {SpotifyAuthService} from './SpotifyAuthService';
 import {normalizeSpotifyTrackUrl,SpotifyOEmbedService} from './SpotifyOEmbedService';
 import {RadioMetadataService} from './RadioMetadataService';
@@ -145,6 +145,7 @@ function createControlWindow(preferences:AppPreferencesData) {
   controlWindow.on('enter-full-screen',publishWindowState);controlWindow.on('leave-full-screen',publishWindowState);
   let workspaceReady=false;
   let startupFallback:NodeJS.Timeout|undefined;
+  let automaticUpdateTimer:NodeJS.Timeout|undefined;
   const revealWorkspace=()=>{
     if(!controlWindow||controlWindow.isDestroyed()||workspaceReady||controlCloseInProgress)return;
     workspaceReady=true;
@@ -152,6 +153,7 @@ function createControlWindow(preferences:AppPreferencesData) {
     controlWindow.setResizable(startup.resizable);controlWindow.setMaximizable(startup.maximizable);controlWindow.setMinimumSize(startup.minimumSize.width,startup.minimumSize.height);controlWindow.setBounds(startup.bounds,false);
     if(startup.startMode==='fullscreen')controlWindow.setFullScreen(true);else if(startup.startMode==='maximized')controlWindow.maximize();
     if(process.platform==='win32')controlWindow.setTitleBarOverlay({color:'#282832',symbolColor:'#ffffff',height:28});
+    if(appPreferences.get().automaticUpdates)automaticUpdateTimer=setTimeout(()=>void checkForUpdates(),UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS);
   };
   const ready= (event:Electron.IpcMainEvent)=>{
     if(event.sender!==controlWindow?.webContents)return;
@@ -159,7 +161,7 @@ function createControlWindow(preferences:AppPreferencesData) {
   };
   ipcMain.on('lifecycle:ready',ready);
   const createdWindow=controlWindow;
-  controlWindow.once('closed',()=>{clearTimeout(startupFallback);ipcMain.removeListener('lifecycle:ready',ready);if(controlWindow===createdWindow)controlWindow=null});
+  controlWindow.once('closed',()=>{clearTimeout(startupFallback);clearTimeout(automaticUpdateTimer);ipcMain.removeListener('lifecycle:ready',ready);if(controlWindow===createdWindow)controlWindow=null});
   controlWindow.once('ready-to-show',()=>{controlWindow?.show();startupFallback=setTimeout(revealWorkspace,30000)});
   let saveTimer:NodeJS.Timeout|undefined;
   const saveWindowState=()=>{if(!controlWindow||controlWindow.isDestroyed())return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{if(!controlWindow||controlWindow.isDestroyed())return;const state=controlWindow.isFullScreen()?'fullscreen':controlWindow.isMaximized()?'maximized':'window',display=screen.getDisplayMatching(controlWindow.getBounds()),patch:Partial<AppPreferencesData>={lastWindowState:state,lastDisplayId:display.id};if(state==='window')patch.bounds=controlWindow.getBounds();void appPreferences.update(patch)},250)};
@@ -178,7 +180,7 @@ function createControlWindow(preferences:AppPreferencesData) {
     }).catch(()=>{controlCloseInProgress=false;});
   });
   void load(controlWindow);
-  controlWindow.webContents.once('did-finish-load',()=>{controlWindow?.webContents.setZoomFactor(1);void controlWindow?.webContents.setVisualZoomLevelLimits(1,1);if(appPreferences.get().automaticUpdates)setTimeout(()=>void checkForUpdates(),5000)});
+  controlWindow.webContents.once('did-finish-load',()=>{controlWindow?.webContents.setZoomFactor(1);void controlWindow?.webContents.setVisualZoomLevelLimits(1,1)});
 }
 
 function openMediaWindow(context:'manage'|'select'='manage',purpose:'item'|'background'|'foreground'|'audio'='item',targetType?:'section'|'serviceItem',targetId?:string,mediaKind?:string){

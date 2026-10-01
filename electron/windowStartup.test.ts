@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import path from 'node:path';
-import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds} from './windowStartup';
+import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds,UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS} from './windowStartup';
 
 const displays=[{id:1,workArea:{x:0,y:0,width:1920,height:1040},bounds:{x:0,y:0,width:1920,height:1080}}];
 
@@ -15,6 +15,7 @@ describe('resolveOperatorWindowStartup',()=>{
     expect(result.resizable).toBe(true);
     expect(result.maximizable).toBe(true);
   });
+  it('waits two seconds after the workspace replaces the loading screen before checking updates',()=>expect(UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS).toBe(2000));
   it('discards stored bounds outside every attached display',()=>{
     const result=resolveOperatorWindowStartup({windowStartMode:'restore',operatorDisplayTarget:'last',lastDisplayId:99,lastWindowState:'window',bounds:{x:9000,y:9000,width:410,height:700}},displays,1);
     expect(result.bounds).toEqual({x:96,y:52,width:1728,height:936});

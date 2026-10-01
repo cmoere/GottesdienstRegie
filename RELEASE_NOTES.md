@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.73.0
+
+Version 0.73.0 startet die automatische Update-Suche erst zwei Sekunden nachdem der Ladescreen vollständig durch den Arbeitsbereich ersetzt wurde. Dadurch konkurriert die Netzwerkanfrage nicht mehr mit dem sichtbaren Programmstart.
+
+Der Hinweis für ein gültiges Konto ohne freigeschalteten GottesdienstRegie-Zugang nennt nun den nächsten Schritt: „Bitte wende dich an den Administrator.“
+
+---
+
 # GottesdienstRegie 0.72.1
 
 Version 0.72.1 stellt die vier Designkarten für Veranstaltungsfolien im tatsächlich verwendeten Produktionseditor wieder her. Die Zahl der sichtbaren Termine und die Anzeigedauer bleiben dort direkt einstellbar. Jede Veranstaltung zeigt nun Start- und Endzeit.

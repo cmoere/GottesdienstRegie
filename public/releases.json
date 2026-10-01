@@ -21,11 +21,32 @@
   ],
   "versions": [
     {
+      "line": "0.73",
+      "builds": [{
+        "version": "0.73.0",
+        "releaseDate": "2026-10-01",
+        "current": true,
+        "overview": {
+          "label": { "de": "Ruhiger Start und klarer Zugangshinweis", "en": "Calmer startup and clearer access guidance" },
+          "text": { "de": "Die Update-Suche beginnt erst zwei Sekunden nach dem Ladescreen; Konten ohne Freigabe erhalten einen klaren Ansprechpartner-Hinweis.", "en": "Update checks begin two seconds after the loading screen; accounts without access receive clear administrator guidance." }
+        },
+        "sections": {
+          "new": [],
+          "improved": [
+            { "label": { "de": "Update-Suche nach dem Start", "en": "Update check after startup" }, "text": { "de": "Die automatische Suche startet erst zwei Sekunden nachdem der Arbeitsbereich sichtbar geworden ist.", "en": "Automatic update checking starts two seconds after the workspace becomes visible." } },
+            { "label": { "de": "Zugangshinweis", "en": "Access guidance" }, "text": { "de": "Bei einem gültigen Konto ohne GottesdienstRegie-Freigabe wird jetzt auf den Administrator verwiesen.", "en": "Valid accounts without GottesdienstRegie access are now directed to the administrator." } }
+          ],
+          "fixed": [],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.72",
       "builds": [{
         "version": "0.72.1",
         "releaseDate": "2026-10-01",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "Veranstaltungsdesigns und Räume", "en": "Event designs and rooms" },
           "text": { "de": "Die Designauswahl ist im produktiven Editor sichtbar, Termine zeigen ihre Endzeit und interne Raum-IDs werden zentral aufgelöst.", "en": "The design selector is visible in the production editor, events show their end time, and internal room IDs are centrally resolved." }

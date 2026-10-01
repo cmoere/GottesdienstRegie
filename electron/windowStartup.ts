@@ -4,6 +4,7 @@ import type {AppPreferencesData,WindowStartMode} from './AppPreferences';
 export type Rectangle={x:number;y:number;width:number;height:number};
 export type DisplayGeometry={id:number;workArea:Rectangle;bounds:Rectangle};
 export type OperatorWindowStartup={bounds:Rectangle;startMode:Exclude<WindowStartMode,'restore'>;minimumSize:{width:number;height:number};resizable:true;maximizable:true};
+export const UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS=2000;
 
 const intersects=(a:Rectangle,b:Rectangle)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
 
