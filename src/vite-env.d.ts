@@ -5,6 +5,7 @@ interface DesktopUpdateStatus { state:'idle'|'checking'|'available'|'not-availab
 interface DesktopVersionMetadata{version:string;installedAt:string;modifiedAt:string;fileSize:number;executable:string}
 interface DesktopPreviousVersion{version:string;publishedAt:string;size:number;url:string}
 interface DesktopOutputStatus{role:string;state:'ready'|'missing'|'closed'}
+interface DesktopAppModeState{mode:'normal'|'test';onAir:boolean}
 interface DesktopPreflight{ok:boolean;errors:string[];warnings:string[];displays?:DesktopDisplay[]}
 interface DesktopOperatorPreferences{preventDisplaySleep:boolean;windowStartMode:'fullscreen'|'maximized'|'window'|'restore';operatorDisplayTarget:'primary'|'last';automaticUpdates:boolean;autoDownloadUpdates:boolean;installUpdatesOnQuit:boolean;betaUpdates:boolean;betaWarningAccepted:boolean}
 type PresentationSummary=import('./platform/types').PresentationSummary;

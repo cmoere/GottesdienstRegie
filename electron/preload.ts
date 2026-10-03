@@ -45,6 +45,7 @@ contextBridge.exposeInMainWorld("desktop", {
     ipcRenderer.invoke("outputs:send-role", role, payload),
   sendQuick: (roles: string[], payload: unknown) =>
     ipcRenderer.invoke("outputs:send-quick", roles, payload),
+  setOutputAppMode:(state:{mode:'normal'|'test';onAir:boolean})=>ipcRenderer.invoke('outputs:set-app-mode',state),
   onLiveSlide: (callback: (payload: unknown) => void) => {
     const listener = (_event: Electron.IpcRendererEvent, payload: unknown) =>
       callback(payload);
@@ -57,6 +58,7 @@ contextBridge.exposeInMainWorld("desktop", {
     ipcRenderer.on("outputs:quick", listener);
     return () => ipcRenderer.removeListener("outputs:quick", listener);
   },
+  onOutputAppMode:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:app-mode',listener);return()=>ipcRenderer.removeListener('outputs:app-mode',listener)},
   onOutputStatus: (callback: (payload: unknown) => void) => {
     const listener = (_event: Electron.IpcRendererEvent, payload: unknown) =>
       callback(payload);

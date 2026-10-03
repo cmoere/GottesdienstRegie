@@ -106,6 +106,7 @@ import {setPostProgramPrepared} from './community/communityRuntime';
 import {EventSlideDesigner} from './EventSlideDesigner';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
+import {NORMAL_APP_MODE,setAppOnAir,setAppTestMode,type AppModeState} from './appMode';
 import { FileMenu } from "./FileMenu";
 import { MediaBrowser } from "./MediaBrowser";
 import {
@@ -8070,9 +8071,10 @@ function AppShell({
   const postProgramNoticeController=useRef(new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(communityEventService.current)));
   const airBusy = useRef(false);
   const [airStarting, setAirStarting] = useState(false);
-  const [testMode, setTestMode] = useState(false);
-  // Deliberately local: a saved presentation or a restart never enables tests.
-  useEffect(() => { if (!state.onAir) setTestMode(false); }, [state.onAir]);
+  const [appMode,setAppMode]=useState<AppModeState>(NORMAL_APP_MODE);
+  // Runtime-only: presentations and restarts never persist test mode.
+  useEffect(()=>setAppMode(current=>current.onAir===state.onAir?current:setAppOnAir(current,state.onAir)),[state.onAir]);
+  useEffect(()=>{void (window.desktop as any)?.setOutputAppMode?.(appMode)},[appMode]);
   const quickScreens = usePreferences((s) => s.quickScreens),
     songTranslationMode=usePreferences((s)=>s.songTranslationMode),
     playAudioInPreview=usePreferences((s)=>s.playAudioInPreview),
@@ -9694,7 +9696,7 @@ function AppShell({
       setOutputState({});
       return;
     }
-    const sessionMode = state.onAir && testMode ? 'test' : requestedMode;
+    const sessionMode = appMode.mode==='test' ? 'test' : requestedMode;
     const first=firstActiveTarget(state.items.filter(item=>isLoopCandidateAvailable(item))),
       itemId = first?.itemId ?? "",
       slideId = first?.slideId ?? "",
@@ -9834,7 +9836,6 @@ function AppShell({
             ...startSlide, transitionOverride: resolveTransition(startSlide, item, 'main', current.transitionDefault),
           });
           if (!started) { await liveEngine.stop(); return false; }
-          setTestMode(sessionMode === 'test');
           state.goLive(startItemId, startSlideId);
           state.setMode('preview');
           state.setOnAir(true);
@@ -10091,11 +10092,11 @@ function AppShell({
           </button>
         </div>
         <div className="live-session-controls">
-        <button type="button" className={`test-session-button ${state.onAir && testMode ? 'active' : ''}`}
-          disabled={airStarting || !can('presentationLive') || !window.desktop || (state.onAir && !testMode)}
+        <button type="button" className={`test-session-button ${appMode.mode==='test' ? 'active' : ''}`}
+          disabled={airStarting || !can('presentationLive') || !window.desktop}
           title="MAIN und STAGE ohne Veranstaltung testen. Echte Bild- und Tonausgabe nach Bestätigung."
-          onClick={() => void air(false, undefined, 'test')}>
-          {state.onAir && testMode ? 'TESTBETRIEB BEENDEN' : 'TESTBETRIEB STARTEN'}
+          onClick={()=>setAppMode(current=>setAppTestMode(current,current.mode!=='test'))}>
+          {appMode.mode==='test' ? 'TESTBETRIEB BEENDEN' : 'TESTBETRIEB STARTEN'}
         </button>
         <button
           className={`onair ${state.onAir ? "live" : ""}`}
@@ -10103,20 +10104,20 @@ function AppShell({
             airStarting ||
             !can("presentationLive") ||
             !window.desktop ||
-            (!state.onAir && (!state.mainDisplayId || !state.eventLink?.eventKey))
+            (!state.onAir && (!state.mainDisplayId || (appMode.mode==='normal'&&!state.eventLink?.eventKey)))
           }
           title={
             !can("presentationLive")
               ? t("noLivePermission")
               : !state.onAir && !state.mainDisplayId
                 ? t("assignMain")
-                : !state.onAir && !state.eventLink?.eventKey
+                : !state.onAir && appMode.mode==='normal' && !state.eventLink?.eventKey
                   ? "Bitte zuerst eine Veranstaltung verknüpfen"
                   : ""
           }
           onClick={() => void air()}
         >
-          {state.onAir ? (testMode ? 'TEST STOPPEN' : "OFF AIR") : "ON AIR"}
+          {state.onAir ? (appMode.mode==='test' ? 'OFF AIR · TEST' : "OFF AIR") : (appMode.mode==='test'?'ON AIR · TEST':"ON AIR")}
         </button>
         </div>
       </div>
@@ -10256,6 +10257,7 @@ function Output() {
   const outputRevisionRef=useRef(0);
   const [slide, setSlide] = useState<Slide | null>(null),
     [quick, setQuick] = useState<QuickScreenConfig | null>(null),
+    [outputAppMode,setOutputAppMode]=useState<AppModeState>(NORMAL_APP_MODE),
     role = useMemo(
       () =>
         (new URLSearchParams(location.hash.split("?")[1] ?? "").get("role") ??
@@ -10266,10 +10268,11 @@ function Output() {
     const disposeSlide = window.desktop?.onLiveSlide((payload) => {const incoming=payload as Slide&{_outputRevision?:number},revision=incoming._outputRevision??outputRevisionRef.current+1;if(!shouldApplyOutputRevision(outputRevisionRef.current,revision))return;outputRevisionRef.current=revision;setSlide(incoming)}),
       disposeQuick = (window.desktop as any)?.onQuick?.(
         (payload: QuickScreenConfig | null) => setQuick(payload),
-      );
+      ),disposeAppMode=(window.desktop as any)?.onOutputAppMode?.((payload:AppModeState)=>setOutputAppMode(payload));
     return () => {
       disposeSlide?.();
       disposeQuick?.();
+      disposeAppMode?.();
     };
   }, []);
   const songOutput=(slide as (Slide & {songOutput?:{chords:string;stageRows?:{chords:string;lyrics:string}[];showChords:boolean;currentNext:boolean;next:string;lowerThird:boolean}})|null)?.songOutput;
@@ -10292,6 +10295,7 @@ function Output() {
       )}
       <QuickOverlay quick={quick} />
       {postProgramRoomNotice&&<section className="post-program-room-notice" aria-label="Nachprogramm-Raumhinweis">{postProgramRoomNotice.type==='next-event'?<><small>{postProgramRoomNotice.heading}</small><strong>{postProgramRoomNotice.title}</strong><span>{postProgramRoomNotice.time}</span><span>{postProgramRoomNotice.room}</span><em>Beginn in {postProgramRoomNotice.minutesUntil} Minuten</em></>:<strong>{postProgramRoomNotice.text}</strong>}</section>}
+      <span hidden data-output-mode={outputAppMode.mode} data-output-on-air={String(outputAppMode.onAir)}/>
     </div>
   );
 }
