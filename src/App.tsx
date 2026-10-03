@@ -107,6 +107,7 @@ import {EventSlideDesigner} from './EventSlideDesigner';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
 import {NORMAL_APP_MODE,setAppOnAir,setAppTestMode,type AppModeState} from './appMode';
+import {TestModeWatermark} from './TestModeWatermark';
 import { FileMenu } from "./FileMenu";
 import { MediaBrowser } from "./MediaBrowser";
 import {
@@ -10296,6 +10297,7 @@ function Output() {
       <QuickOverlay quick={quick} />
       {postProgramRoomNotice&&<section className="post-program-room-notice" aria-label="Nachprogramm-Raumhinweis">{postProgramRoomNotice.type==='next-event'?<><small>{postProgramRoomNotice.heading}</small><strong>{postProgramRoomNotice.title}</strong><span>{postProgramRoomNotice.time}</span><span>{postProgramRoomNotice.room}</span><em>Beginn in {postProgramRoomNotice.minutesUntil} Minuten</em></>:<strong>{postProgramRoomNotice.text}</strong>}</section>}
       <span hidden data-output-mode={outputAppMode.mode} data-output-on-air={String(outputAppMode.onAir)}/>
+      <TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/>
     </div>
   );
 }
