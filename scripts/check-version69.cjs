@@ -4,7 +4,7 @@ assert(Number(pkg.version.split('.')[1])>=69,'package must include V69 or newer'
 assert(releases.versions.some(entry=>entry.builds?.some(build=>build.version==='0.69.0')),'V69 must remain in the release catalog');
 assert(notes.includes('# GottesdienstRegie 0.69.0'),'notes must include V69');
 assert(workflow.includes('check-version69.cjs'),'workflow must run V69 guard');
-assert(firebase.includes("watchCollection('veranstaltungen'")&&firebase.includes("watchChildren('meldungen'"),'central Firebase ownership missing');
+assert(firebase.includes("watchChildren('veranstaltungen'")&&firebase.includes("watchChildren('meldungen'"),'central Firebase ownership missing');
 assert(announcement.includes('toPublic')&&!announcement.includes('internalComment'),'public announcement projection missing');
 assert(designer.includes('NOW_PLAYING_DESIGNS.map')&&designer.includes('now-playing-design-cards'),'ten design cards missing');
 assert(audio.includes("mode='fallback'")||audio.includes("this.mode='fallback'"),'audio fallback missing');

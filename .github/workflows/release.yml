@@ -53,6 +53,8 @@ jobs:
         run: node scripts/check-version721.cjs
       - name: V73-Freigabe prüfen
         run: node scripts/check-version73.cjs
+      - name: V74-Freigabe prüfen
+        run: node scripts/check-version74.cjs
       - name: Anwendung bauen
         run: npm run build
       - name: Windows-Installer erstellen

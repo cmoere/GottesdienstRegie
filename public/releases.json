@@ -21,11 +21,35 @@
   ],
   "versions": [
     {
+      "line": "0.74",
+      "builds": [{
+        "version": "0.74.0",
+        "releaseDate": "2026-10-03",
+        "current": true,
+        "overview": {
+          "label": { "de": "Zentrale Gemeindedaten und sicherer Testbetrieb", "en": "Central community data and safe test mode" },
+          "text": { "de": "Veranstaltungen, Meldungen und Räume werden zentral normalisiert; das Nachprogramm erkennt die nächste Raumbelegung und alle Testausgaben tragen ein Wasserzeichen.", "en": "Events, announcements, and rooms are normalized centrally; post-program detects the next room booking and every test output carries a watermark." }
+        },
+        "sections": {
+          "new": [
+            { "label": { "de": "Automatischer Raumhinweis", "en": "Automatic room notice" }, "text": { "de": "Das Nachprogramm zeigt die nächste Veranstaltung im effektiven Raum innerhalb von 61 Minuten oder bittet Besucher, den Raum zu verlassen.", "en": "Post-program shows the next event in the effective room within 61 minutes or asks visitors to leave the room." } },
+            { "label": { "de": "Test-Wasserzeichen", "en": "Test watermark" }, "text": { "de": "Alle tatsächlichen Ausgaben bleiben im Testbetrieb auch bei ON AIR eindeutig gekennzeichnet.", "en": "All actual outputs remain clearly marked in test mode, including while ON AIR." } }
+          ],
+          "improved": [
+            { "label": { "de": "Zentrale Firebase-Daten", "en": "Central Firebase data" }, "text": { "de": "Veranstaltungen, Meldungen und verschachtelte Räume werden über gemeinsame Services mit stabilen IDs und normalisierten Ausgabedaten verarbeitet.", "en": "Events, announcements, and nested rooms are processed through shared services with stable IDs and normalized output data." } },
+            { "label": { "de": "Offline und Preflight", "en": "Offline and preflight" }, "text": { "de": "Der letzte sinnvolle Datenstand bleibt verfügbar; technische Probleme erscheinen nur im Operator-Bereich.", "en": "The last useful data state remains available; technical issues appear only in the operator area." } }
+          ],
+          "fixed": [],
+          "known": []
+        }
+      }]
+    },
+    {
       "line": "0.73",
       "builds": [{
         "version": "0.73.0",
         "releaseDate": "2026-10-01",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "Ruhiger Start und klarer Zugangshinweis", "en": "Calmer startup and clearer access guidance" },
           "text": { "de": "Die Update-Suche beginnt erst zwei Sekunden nach dem Ladescreen; Konten ohne Freigabe erhalten einen klaren Ansprechpartner-Hinweis.", "en": "Update checks begin two seconds after the loading screen; accounts without access receive clear administrator guidance." }

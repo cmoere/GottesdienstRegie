@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.74.0
+
+Version 0.74.0 bindet Veranstaltungen, Meldungen und Räume zentral und in Echtzeit an die bestehende Firebase-Datenquelle an. Stabile Child-Keys bleiben erhalten, verschachtelte Raumdaten werden tolerant aufgelöst und MAIN erhält ausschließlich normalisierte öffentliche Inhalte. Bei Verbindungsproblemen kann der letzte noch sinnvolle Stand weiterverwendet werden; Preflight meldet fehlende oder nicht auflösbare Daten nur im Operator-Bereich.
+
+Beim Eintritt ins Nachprogramm prüft GottesdienstRegie nun automatisch den effektiven Raum der verknüpften Veranstaltung. Beginnt dort innerhalb der nächsten 61 Minuten eine weitere nicht abgesagte Veranstaltung, werden Titel, Startzeit und der lesbare Raum angezeigt. Andernfalls erscheint die Aufforderung, den Raum zu verlassen. Laufende Ausgaben bleiben bei Echtzeitänderungen bis zum nächsten sicheren Wechsel stabil.
+
+Testbetrieb und ON AIR sind jetzt unabhängige Zustände. Im Testbetrieb liegt auf jeder Ausgabe – einschließlich MAIN, Livestream, Stage, Quick Screens, Videos, Websites und Schwarzbild – ein dauerhaftes systemseitiges Wasserzeichen. Es bleibt auch bei ON AIR und während Übergängen sichtbar.
+
+---
+
 # GottesdienstRegie 0.73.0
 
 Version 0.73.0 startet die automatische Update-Suche erst zwei Sekunden nachdem der Ladescreen vollständig durch den Arbeitsbereich ersetzt wurde. Dadurch konkurriert die Netzwerkanfrage nicht mehr mit dem sichtbaren Programmstart.
