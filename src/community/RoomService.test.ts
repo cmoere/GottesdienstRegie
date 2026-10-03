@@ -8,4 +8,20 @@ describe('RoomService',()=>{
     expect(new RoomService(rooms).resolve(alias)).toMatchObject({roomId:'gemeindesaal',name:'Gemeindesaal',floor:'EG',building:'Gemeindezentrum',capacity:250,accessible:true});
   });
   it('never exposes an unresolved raw room id',()=>expect(new RoomService([]).display('interne_id')).toBe('Raum'));
+
+  it('flattens nested firebase room containers and preserves the canonical child key',()=>{
+    const service=new RoomService({rooms:{buildingA:{room_list:{'-dieJsO8X':{raumname:'Eltern-Kind-Raum',kurzname:'EKR',etage:'EG',gebaeude:'Gemeindezentrum',kapazitaet:20,barrierefrei:true}}}}});
+    expect(service.resolve('-dieJsO8X')).toMatchObject({roomId:'-dieJsO8X',name:'Eltern-Kind-Raum',shortName:'EKR',floor:'EG',building:'Gemeindezentrum',capacity:20,accessible:true});
+  });
+
+  it.each(['familien raum','FR','familienraum-eg','EG Familienraum','Familienraum Haus West','räume/familien'])('resolves extended alias %s',reference=>{
+    const service=new RoomService({räume:{familien:{id:'family-room',displayName:'Familienraum',shortName:'FR',floor:'EG',building:'Haus West',slug:'familien-raum',aliases:['familienraum-eg'],searchTerms:['familien raum']}}});
+    expect(service.resolve(reference)?.roomId).toBe('family-room');
+  });
+
+  it('normalizes umlauts and metadata aliases',()=>{
+    const service=new RoomService({roomList:{'-r':{meta:{name:'Säälchen',shortName:'SÄ'},stockwerk:'OG 1',haus:'Anbau',code:'SAE'}}});
+    expect(service.resolve('saalchen og 1')?.name).toBe('Säälchen');
+    expect(service.resolve('SAE')?.building).toBe('Anbau');
+  });
 });
