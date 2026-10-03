@@ -5,8 +5,7 @@ import type {CommunitySnapshotCache} from './CommunitySnapshotCache';
 export type CommunityConnectionState={connected:boolean;mode:'online'|'offline-cache'|'empty'|'error';updatedAt:number};
 
 export interface CommunityRealtimeAdapter{
-  watchCollection(path:'veranstaltungen'|'rooms',listener:(rows:Record<string,unknown>)=>void):()=>void;
-  watchChildren(path:'meldungen',handlers:{added:(key:string,value:unknown)=>void;changed:(key:string,value:unknown)=>void;removed:(key:string)=>void}):()=>void;
+  watchChildren(path:'veranstaltungen'|'meldungen'|'rooms',handlers:{added:(key:string,value:unknown)=>void;changed:(key:string,value:unknown)=>void;removed:(key:string)=>void}):()=>void;
   watchConnection(listener:(connected:boolean)=>void):()=>void;
   updateEvent?(eventKey:string,patch:Record<string,unknown>):Promise<void>;
 }
@@ -14,9 +13,9 @@ export interface CommunityRealtimeAdapter{
 type Listener<T>=(value:readonly T[])=>void;
 
 export class FirebaseGemeindeService{
-  private events:RawChurchEvent[]=[];
+  private events=new Map<string,RawChurchEvent>();
   private announcements=new Map<string,RawAnnouncement>();
-  private rooms:Array<RawCommunityRecord&{roomId:string}>=[];
+  private rooms=new Map<string,RawCommunityRecord&{roomId:string}>();
   private eventListeners=new Set<Listener<RawChurchEvent>>();
   private announcementListeners=new Set<Listener<RawAnnouncement>>();
   private roomListeners=new Set<Listener<RawCommunityRecord&{roomId:string}>>();
@@ -31,12 +30,12 @@ export class FirebaseGemeindeService{
 
   subscribeEvents(listener:Listener<RawChurchEvent>):()=>void{
     this.eventListeners.add(listener);
-    if(!this.stopEvents)this.stopEvents=this.adapter.watchCollection('veranstaltungen',rows=>{
-      this.events=Object.entries(rows??{}).flatMap(([eventKey,value])=>value&&typeof value==='object'?[{eventKey,...value as RawCommunityRecord}]:[]);
-      this.eventListeners.forEach(next=>next(this.events));
-      void this.persist();
+    if(!this.stopEvents)this.stopEvents=this.adapter.watchChildren('veranstaltungen',{
+      added:(eventKey,value)=>this.upsertEvent(eventKey,value),
+      changed:(eventKey,value)=>this.upsertEvent(eventKey,value),
+      removed:eventKey=>{this.events.delete(eventKey);this.publishEvents()},
     });
-    if(this.events.length)listener(this.events);
+    if(this.events.size)listener([...this.events.values()]);
     return()=>this.eventListeners.delete(listener);
   }
 
@@ -53,8 +52,12 @@ export class FirebaseGemeindeService{
 
   subscribeRooms(listener:Listener<RawCommunityRecord&{roomId:string}>):()=>void{
     this.roomListeners.add(listener);
-    if(!this.stopRooms)this.stopRooms=this.adapter.watchCollection('rooms',rows=>{this.rooms=Object.entries(rows??{}).flatMap(([roomId,value])=>value&&typeof value==='object'?[{roomId,...value as RawCommunityRecord}]:[]);this.roomListeners.forEach(next=>next(this.rooms))});
-    if(this.rooms.length)listener(this.rooms);
+    if(!this.stopRooms)this.stopRooms=this.adapter.watchChildren('rooms',{
+      added:(roomId,value)=>this.upsertRoom(roomId,value),
+      changed:(roomId,value)=>this.upsertRoom(roomId,value),
+      removed:roomId=>{this.rooms.delete(roomId);this.publishRooms()},
+    });
+    if(this.rooms.size)listener([...this.rooms.values()]);
     return()=>this.roomListeners.delete(listener);
   }
 
@@ -73,13 +76,18 @@ export class FirebaseGemeindeService{
     if(value&&typeof value==='object')this.announcements.set(messageId,{messageId,...value as RawCommunityRecord});
     this.publishAnnouncements();
   }
+  private upsertEvent(eventKey:string,value:unknown){if(value&&typeof value==='object')this.events.set(eventKey,{eventKey,...value as RawCommunityRecord});this.publishEvents()}
+  private publishEvents(){const values=[...this.events.values()];this.eventListeners.forEach(next=>next(values));void this.persist()}
+  private upsertRoom(roomId:string,value:unknown){if(value&&typeof value==='object')this.rooms.set(roomId,{roomId,...value as RawCommunityRecord});this.publishRooms()}
+  private publishRooms(){const values=[...this.rooms.values()];this.roomListeners.forEach(next=>next(values));void this.persist()}
   private publishAnnouncements(){const values=[...this.announcements.values()];this.announcementListeners.forEach(next=>next(values))}
   private publishConnection(state:CommunityConnectionState){this.connectionListeners.forEach(next=>next(state))}
-  private async persist(){if(this.cache)await this.cache.write({events:this.events,announcements:[...this.announcements.values()]})}
+  private async persist(){if(this.cache)await this.cache.write({events:[...this.events.values()],rooms:[...this.rooms.values()],announcements:[...this.announcements.values()]})}
   private async restoreCache(){
     if(!this.cache){this.publishConnection({connected:false,mode:'empty',updatedAt:Date.now()});return}
     const snapshot=await this.cache.read(record=>this.isStillValid(record));
-    if(!this.events.length&&snapshot.events.length){this.events=snapshot.events;this.eventListeners.forEach(next=>next(this.events))}
+    if(!this.events.size&&snapshot.events.length){this.events=new Map(snapshot.events.map(item=>[item.eventKey,item]));this.eventListeners.forEach(next=>next([...this.events.values()]))}
+    if(!this.rooms.size&&snapshot.rooms.length){this.rooms=new Map(snapshot.rooms.map(item=>[item.roomId,item]));this.roomListeners.forEach(next=>next([...this.rooms.values()]))}
     if(!this.announcements.size&&snapshot.announcements.length){this.announcements=new Map(snapshot.announcements.map(item=>[item.messageId,item]));this.publishAnnouncements()}
     this.publishConnection({connected:false,mode:snapshot.mode,updatedAt:snapshot.updatedAt??Date.now()});
   }
@@ -97,7 +105,6 @@ export async function createCommunityRealtimeAdapter():Promise<CommunityRealtime
   const app=getApps().find(entry=>entry.name===name)??initializeApp({apiKey:'AIzaSyB0fmfjqC8aPyOEZxLjk1TfQal_s5xZFAM',authDomain:'philippusgemeindebie.firebaseapp.com',databaseURL:'https://philippusgemeindebie-default-rtdb.europe-west1.firebasedatabase.app',projectId:'philippusgemeindebie',storageBucket:'philippusgemeindebie.firebasestorage.app',messagingSenderId:'429968461937',appId:'1:429968461937:web:3c0f654404ec5d0e24cbd0'},name);
   const database=getDatabase(getApp(name)??app);
   return{
-    watchCollection:(path,listener)=>onValue(ref(database,path),snapshot=>listener(snapshot.val()??{})),
     watchChildren:(path,handlers)=>{const target=ref(database,path),stops=[onChildAdded(target,snapshot=>handlers.added(snapshot.key!,snapshot.val())),onChildChanged(target,snapshot=>handlers.changed(snapshot.key!,snapshot.val())),onChildRemoved(target,snapshot=>handlers.removed(snapshot.key!))];return()=>stops.forEach(stop=>stop())},
     watchConnection:listener=>onValue(ref(database,'.info/connected'),snapshot=>listener(snapshot.val()===true)),
     updateEvent:async(eventKey,patch)=>{await update(ref(database,`veranstaltungen/${eventKey}`),patch)},
