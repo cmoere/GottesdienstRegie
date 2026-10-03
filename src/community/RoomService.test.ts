@@ -4,6 +4,14 @@ import {RoomService} from './RoomService';
 const rooms=[{roomId:'gemeindesaal',raumname:'Gemeindesaal',kurzname:'Saal',etage:'EG',gebaeude:'Gemeindezentrum',kapazitaet:250,barrierefrei:true}];
 
 describe('RoomService',()=>{
+  it('rejects ambiguous names while preserving direct IDs',()=>{
+    const rooms=new RoomService({a:{name:'Saal'},b:{name:'Saal'}});
+    expect(rooms.resolve('Saal')).toBeNull();expect(rooms.resolve('a')?.roomId).toBe('a');
+  });
+  it('flattens named containers rather than treating a building as a room',()=>{
+    const rooms=new RoomService({building:{name:'Zentrum',rooms:{'-room':{name:'Saal'}}}});
+    expect(rooms.resolve('-room')?.name).toBe('Saal');expect(rooms.resolve('building')).toBeNull();
+  });
   it.each(['gemeindesaal','Gemeindesaal','Saal','Gemeindesaal EG'])('resolves %s to the stable room record',alias=>{
     expect(new RoomService(rooms).resolve(alias)).toMatchObject({roomId:'gemeindesaal',name:'Gemeindesaal',floor:'EG',building:'Gemeindezentrum',capacity:250,accessible:true});
   });

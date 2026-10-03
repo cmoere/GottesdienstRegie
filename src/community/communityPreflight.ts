@@ -1,6 +1,6 @@
 import {RoomService} from './RoomService';
 
-export type CommunityPreflightEvent={id?:string;eventKey?:string;veranstaltungsort?:unknown;locationType?:unknown;raum?:unknown;ort?:unknown;ersatzortType?:unknown;ersatzort?:unknown};
+export type CommunityPreflightEvent={id?:string;eventKey?:string;veranstaltungsort?:unknown;locationType?:unknown;hybrid_vorort_typ?:unknown;raum?:unknown;ort?:unknown;ersatzortType?:unknown;ersatzort?:unknown};
 export type CommunityPreflightSnapshot={mode:'online'|'offline-cache'|'empty'|'error';updatedAt?:number;events:CommunityPreflightEvent[];rooms:unknown;announcements:Array<{id?:string;messageId?:string}>;loaded?:{events:boolean;rooms:boolean;announcements:boolean};postProgramPrepared?:boolean};
 export type CommunityLoopItem={id:string;type:string;target?:string};
 export interface CommunityPreflightResult{ready:boolean;warnings:string[];eventCount:number;roomCount:number;announcementCount:number;linkedEventResolved:boolean;currentRoomResolved:boolean;postProgramPrepared:boolean}
@@ -17,7 +17,7 @@ export function communityPreflight(snapshot:CommunityPreflightSnapshot,linkedEve
   if(linkedEventKey&&!linkedEventResolved)warnings.push('Die verknüpfte Veranstaltung wurde nicht gefunden.');
   let currentRoomResolved=true;
   if(linkedEvent){
-    const type=text(linkedEvent.veranstaltungsort??linkedEvent.locationType),roomType=type==='raum'||type==='hybrid',roomRef=roomType?text(linkedEvent.raum)||text(linkedEvent.ort):'';
+    const type=text(linkedEvent.veranstaltungsort??linkedEvent.locationType),roomType=type==='raum'||(type==='hybrid'&&text(linkedEvent.hybrid_vorort_typ)==='raum'),roomRef=roomType?text(linkedEvent.raum)||text(linkedEvent.ort):'';
     if(roomRef&&!rooms.resolve(roomRef)){currentRoomResolved=false;warnings.push(`Raum ${roomRef} konnte unter /rooms nicht aufgelöst werden.`)}
     const replacement=text(linkedEvent.ersatzort);if(text(linkedEvent.ersatzortType)==='raum'&&replacement&&!rooms.resolve(replacement)){currentRoomResolved=false;warnings.push(`Ersatzraum ${replacement} konnte unter /rooms nicht aufgelöst werden.`)}
   }

@@ -11,12 +11,13 @@ function dateTime(date:unknown,time:unknown):Date|null{
   const [year,month,dateOfMonth]=day.split('-').map(Number),[hour,minute]=clock.split(':').map(Number),result=new Date(year,month-1,dateOfMonth,hour,minute,0,0);
   return result.getFullYear()===year&&result.getMonth()===month-1&&result.getDate()===dateOfMonth&&result.getHours()===hour&&result.getMinutes()===minute?result:null;
 }
-function delayedDate(value:unknown):Date|null{
+function delayedDate(value:unknown,baseDate?:unknown,baseTime?:unknown):Date|null{
   if(typeof value==='string'){const result=new Date(value);return Number.isNaN(result.valueOf())?null:result}
-  if(value&&typeof value==='object'){const entry=value as Record<string,unknown>;return dateTime(entry.date,entry.time)}
+  if(value&&typeof value==='object'){const entry=value as Record<string,unknown>;return dateTime(text(entry.date)||baseDate,text(entry.time)||baseTime)}
   return null;
 }
 const iso=(value:Date|null)=>value?.toISOString()??'';
+const effectiveDate=(date:unknown,time:unknown,baseDate:unknown,baseTime:unknown)=>text(date)||text(time)?dateTime(text(date)||baseDate,text(time)||baseTime):null;
 const roomDetails=(location:EventLocation)=>location?.type==='room'?location:null;
 const locationLabel=(location:EventLocation)=>location?.type==='room'?[location.name,location.floor,location.building].filter(Boolean).join(' · '):location?.name??'';
 
@@ -30,11 +31,11 @@ export class EventService{
   remove(eventKey:string){this.eventsByKey.delete(eventKey)}
   getByKey(eventKey:string){return this.eventsByKey.get(eventKey)??null}
   getPlannedStart(event:ChurchEvent){return dateTime(event.start_datum,event.start_uhrzeit)}
-  getPlannedEnd(event:ChurchEvent){return dateTime(event.ende_datum??event.start_datum,event.ende_uhrzeit)}
-  getEffectiveStart(event:ChurchEvent){return dateTime(event.Verspaetungsanfangsdatum,event.Verspaetungsanfangsuhrzeit)??delayedDate(event.delay?.start)??this.getPlannedStart(event)}
-  getEffectiveEnd(event:ChurchEvent){return dateTime(event.Verspaetungsenddatum,event.Verspaetungsenduhrzeit)??delayedDate(event.delay?.end)??this.getPlannedEnd(event)}
+  getPlannedEnd(event:ChurchEvent){return text(event.ende_uhrzeit)?dateTime(event.ende_datum||event.start_datum,event.ende_uhrzeit):null}
+  getEffectiveStart(event:ChurchEvent){return effectiveDate(event.Verspaetungsanfangsdatum,event.Verspaetungsanfangsuhrzeit,event.start_datum,event.start_uhrzeit)??delayedDate(event.delay?.start,event.start_datum,event.start_uhrzeit)??this.getPlannedStart(event)}
+  getEffectiveEnd(event:ChurchEvent){return effectiveDate(event.Verspaetungsenddatum,event.Verspaetungsenduhrzeit,event.ende_datum||event.start_datum,event.ende_uhrzeit)??delayedDate(event.delay?.end,event.ende_datum||event.start_datum,event.ende_uhrzeit)??this.getPlannedEnd(event)}
   isCancelled(event:ChurchEvent){return bool(event.cancelled)||bool(event.cancel?.enabled)}
-  isTrashed(event:ChurchEvent){return bool(event.trash)||Boolean(event.trashAt)}
+  isTrashed(event:ChurchEvent){return bool(event.trash)||Boolean(event.trashAt)||bool(event.deleted)}
   private resolveLocation(typeValue:unknown,roomReference:unknown,externalReference:unknown):EventLocation{
     const type=text(typeValue);
     if(type==='raum'){const room=this.rooms.resolve(roomReference);return room??{type:'external',name:'Raum'}}
@@ -46,6 +47,7 @@ export class EventService{
     if(type==='hybrid')return hybridType==='raum'?this.resolveLocation('raum',event.raum||event.ort,''):this.resolveLocation('ort','',event.externenOrt||event.ort);
     if(type==='raum')return this.resolveLocation('raum',event.raum||event.ort,'');
     if(type==='online')return this.resolveLocation('online','','');
+    if(!type){const ref=text(event.raum)||text(event.ort),room=this.rooms.resolve(ref);if(room)return room;if(text(event.raum)||/^-[A-Za-z0-9_-]+$/.test(ref))return null}
     return this.resolveLocation('ort','',event.externenOrt||event.ort);
   }
   getEffectiveLocation(event:ChurchEvent):EventLocation{
@@ -54,7 +56,7 @@ export class EventService{
     return text(event.ersatzortType)==='raum'?this.resolveLocation('raum',replacement,''):this.resolveLocation('ort','',replacement);
   }
   isPublic(event:ChurchEvent){return !this.isTrashed(event)&&event.sichtbar!==false&&!this.isCancelled(event)&&Boolean(this.getEffectiveStart(event))}
-  getUpcomingEvents(events=this.getAllEvents(),now=new Date()){return events.filter(event=>{const end=this.getEffectiveEnd(event);return this.isPublic(event)&&Boolean(end&&end.valueOf()>=now.valueOf())}).sort((a,b)=>(this.getEffectiveStart(a)?.valueOf()??Infinity)-(this.getEffectiveStart(b)?.valueOf()??Infinity))}
+  getUpcomingEvents(events=this.getAllEvents(),now=new Date()){return events.filter(event=>{const end=this.getEffectiveEnd(event)??this.getEffectiveStart(event);return this.isPublic(event)&&Boolean(end&&end.valueOf()>=now.valueOf())}).sort((a,b)=>(this.getEffectiveStart(a)?.valueOf()??Infinity)-(this.getEffectiveStart(b)?.valueOf()??Infinity))}
   toPublicEvent(event:ChurchEvent):PublicEvent{
     const plannedStart=this.getPlannedStart(event),plannedEnd=this.getPlannedEnd(event),effectiveStart=this.getEffectiveStart(event),effectiveEnd=this.getEffectiveEnd(event),planned=this.getPlannedLocation(event),effective=this.getEffectiveLocation(event),plannedLocation=locationLabel(planned),effectiveLocation=locationLabel(effective),additionalIds=Array.isArray(event.zusatzraeume)?event.zusatzraeume:Array.isArray(event.zusatz_rooms)?event.zusatz_rooms:[],additionalLocations=additionalIds.flatMap((id:unknown)=>{const room=this.rooms.resolve(id);return room?[room]:[]});
     return{id:event.eventKey,title:text(event.titel),plannedStart:iso(plannedStart),plannedEnd:iso(plannedEnd),effectiveStart:iso(effectiveStart),effectiveEnd:iso(effectiveEnd),plannedLocation,effectiveLocation,plannedLocationDetails:roomDetails(planned),effectiveLocationDetails:roomDetails(effective),additionalLocations,delayed:iso(plannedStart)!==iso(effectiveStart),cancelled:this.isCancelled(event),locationChanged:plannedLocation!==effectiveLocation,infoText:text(event.infotext),coverUrl:text(event.coverUrl),registrationRequired:bool(event.anmeldung_erforderlich)||bool(event.registration?.required),preacher:text(event.prediger),sermonTitle:text(event.predigtTitel)};

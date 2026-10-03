@@ -13,6 +13,8 @@ type Candidate={raw:Record<string,unknown>;childKey:string;path:string};
 function flatten(source:unknown,path:string[]=[]):Candidate[]{
   if(Array.isArray(source))return source.flatMap((entry,index)=>flatten(entry,[...path,String(index)]));
   if(!object(source))return[];
+  const nestedContainers=Object.entries(source).filter(([key,entry])=>containers.has(key.toLocaleLowerCase('de'))&&(object(entry)||Array.isArray(entry)));
+  if(nestedContainers.length)return nestedContainers.flatMap(([key,entry])=>flatten(entry,[...path,key]));
   const hasName=Boolean(value(source,nameKeys)),hasExplicitId=Boolean(value(source,idKeys)),hasRoomDetails=Object.keys(source).some(key=>roomRecordKeys.has(key));
   if(hasName||(hasExplicitId&&hasRoomDetails))return[{raw:source,childKey:path.at(-1)??'',path:path.join('/')}];
   return Object.entries(source).flatMap(([key,entry])=>flatten(entry,[...path,key]));
@@ -33,7 +35,7 @@ export class RoomService{
       const lists=[raw.aliases,raw.suchbegriffe,raw.searchTerms].flatMap(entry=>Array.isArray(entry)?entry:[]).map(String);
       const pathAliases=[candidate.path,candidate.path.split('/').filter(part=>!containers.has(part.toLocaleLowerCase('de'))).join('/')];
       for(const entry of [roomId,candidate.childKey,...pathAliases,name,shortName,value(raw,['bezeichnung']),value(raw,['code']),value(raw,['slug']),value(raw,['meta.name']),value(raw,['meta.label']),value(raw,['meta.shortName']),...lists,`${name} ${floor}`,`${floor} ${name}`,`${shortName} ${floor}`,`${name} ${building}`]){
-        const key=alias(String(entry??''));if(key&&!this.aliasMap.has(key))this.aliasMap.set(key,roomId);
+        const key=alias(String(entry??''));if(key){if(!this.aliasMap.has(key))this.aliasMap.set(key,roomId);else if(this.aliasMap.get(key)!==roomId)this.aliasMap.set(key,'')}
       }
     }
   }

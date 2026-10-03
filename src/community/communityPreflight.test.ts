@@ -5,6 +5,10 @@ const event={id:'event',title:'Gottesdienst'};
 const announcement={id:'message',title:'Hinweis'};
 
 describe('communityPreflight',()=>{
+  it('does not resolve the external part of a hybrid event as a room',()=>{
+    const result=communityPreflight({mode:'online',events:[{id:'event',veranstaltungsort:'hybrid',hybrid_vorort_typ:'ort',ort:'Park'} as any],rooms:[],announcements:[],postProgramPrepared:true},'event',[]);
+    expect(result.currentRoomResolved).toBe(true);expect(result.warnings).toEqual([]);
+  });
   it('reports counts and resolves a linked event without blocking',()=>{
     const result=communityPreflight({mode:'online',events:[{...event,veranstaltungsort:'raum',raum:'saal'}],rooms:[{roomId:'saal',raumname:'Gemeindesaal'}],announcements:[announcement],loaded:{events:true,rooms:true,announcements:true},postProgramPrepared:true},'event',[{id:'messages',type:'announcement',target:'preLoop'}]);
     expect(result).toMatchObject({ready:true,eventCount:1,roomCount:1,announcementCount:1,linkedEventResolved:true,currentRoomResolved:true,postProgramPrepared:true});

@@ -6,6 +6,17 @@ const service=new EventService();
 const base={eventKey:'-Oabc',titel:'Gottesdienst',start_datum:'2026-10-04',start_uhrzeit:'10:30',ende_datum:'2026-10-04',ende_uhrzeit:'12:00',ort:'Saal',sichtbar:true};
 
 describe('EventService',()=>{
+  it('uses partial effective times without overwriting plan values',()=>{
+    const event={...base,Verspaetungsanfangsuhrzeit:'11:08',delay:{end:{time:'12:38'}}};
+    expect(service.getEffectiveStart(event)?.getHours()).toBe(11);expect(service.getEffectiveEnd(event)?.getMinutes()).toBe(38);
+    expect(event.start_uhrzeit).toBe('10:30');expect(event.ende_uhrzeit).toBe('12:00');
+  });
+  it('resolves untyped legacy IDs, suppresses unknown IDs and preserves explicit external places',()=>{
+    const svc=new EventService([],new RoomService({'-known':{raumname:'Gebetsraum'}}));
+    expect(svc.toPublicEvent({...base,ort:'-known'}).effectiveLocation).toBe('Gebetsraum');
+    expect(svc.toPublicEvent({...base,ort:'-ONH9VAK3XKiqMUPT5'}).effectiveLocation).not.toContain('-ONH');
+    expect(svc.getPlannedLocation({...base,veranstaltungsort:'ort',ort:'-known'})).toMatchObject({type:'external',name:'-known'});
+  });
   it('keeps planned values and resolves delay, cancellation and replacement location',()=>{
     const event={...base,Verspaetungsanfangsdatum:'2026-10-04',Verspaetungsanfangsuhrzeit:'11:00',Verspaetungsenddatum:'2026-10-04',Verspaetungsenduhrzeit:'12:30',cancel:{enabled:true},ersatzort:'Gemeindehaus'};
     expect(service.getPlannedStart(event)?.getHours()).toBe(10);
