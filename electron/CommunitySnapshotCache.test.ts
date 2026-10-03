@@ -8,6 +8,12 @@ const dirs:string[]=[];
 afterEach(async()=>{await Promise.all(dirs.splice(0).map(dir=>fs.rm(dir,{recursive:true,force:true})))});
 
 describe('CommunitySnapshotCache',()=>{
+  it('serializes concurrent child-event snapshots and retains the latest',async()=>{
+    const dir=await fs.mkdtemp(path.join(os.tmpdir(),'gr-community-'));dirs.push(dir);
+    const cache=new CommunitySnapshotCache(path.join(dir,'snapshot.json'));
+    await Promise.all(Array.from({length:15},(_,index)=>cache.write({events:[{eventKey:String(index)}],rooms:[],announcements:[]})));
+    expect((await cache.read(()=>true)).events).toEqual([{eventKey:'14'}]);
+  });
   it('persists and restores an atomic snapshot with age/status',async()=>{
     const dir=await fs.mkdtemp(path.join(os.tmpdir(),'gr-community-'));dirs.push(dir);
     const cache=new CommunitySnapshotCache(path.join(dir,'snapshot.json'),()=>1_000);

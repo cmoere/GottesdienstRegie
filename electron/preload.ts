@@ -46,6 +46,7 @@ contextBridge.exposeInMainWorld("desktop", {
   sendQuick: (roles: string[], payload: unknown) =>
     ipcRenderer.invoke("outputs:send-quick", roles, payload),
   setOutputAppMode:(state:{mode:'normal'|'test';onAir:boolean})=>ipcRenderer.invoke('outputs:set-app-mode',state),
+  getOutputAppMode:()=>ipcRenderer.invoke('outputs:get-app-mode'),
   onLiveSlide: (callback: (payload: unknown) => void) => {
     const listener = (_event: Electron.IpcRendererEvent, payload: unknown) =>
       callback(payload);

@@ -3,12 +3,17 @@ import {EventService,type ChurchEvent} from './EventService';
 import {RoomService} from './RoomService';
 import {PostProgramRoomNoticeController,PostProgramRoomNoticeService,withPostProgramRoomNotice} from './PostProgramRoomNoticeService';
 
-const now=new Date('2026-10-04T10:00:00.000Z');
+const now=new Date(2026,9,4,10,0,0);
 const roomService=new RoomService([{roomId:'saal',raumname:'Gemeindesaal',etage:'EG'},{roomId:'neben',raumname:'Nebenraum',etage:'OG'}]);
 const event=(eventKey:string,start:string,extra:Record<string,unknown>={}):ChurchEvent=>({eventKey,titel:eventKey,start_datum:'2026-10-04',start_uhrzeit:start,ende_datum:'2026-10-04',ende_uhrzeit:'13:00',veranstaltungsort:'raum',raum:'saal',...extra} as ChurchEvent);
 const service=(events:ChurchEvent[])=>new PostProgramRoomNoticeService(new EventService(events,roomService));
 
 describe('PostProgramRoomNoticeService',()=>{
+  it('compares Firebase wall-clock values with the local trusted app clock',()=>{
+    const localNow=new Date(2026,9,4,10,0,0);
+    expect(service([event('current','09:00'),event('next','10:30')]).compute({linkedEventKey:'current'},localNow)).toMatchObject({type:'next-event',eventId:'next',time:'10:30 Uhr',minutesUntil:30});
+  });
+
   it('selects the earliest event in the same effective room within the inclusive 61 minute window',()=>{
     const result=service([event('current','09:00'),event('later','11:01'),event('next','10:30')]).compute({linkedEventKey:'current'},now);
     expect(result).toMatchObject({type:'next-event',eventId:'next',title:'next',time:'10:30 Uhr',room:'Gemeindesaal · EG',minutesUntil:30});

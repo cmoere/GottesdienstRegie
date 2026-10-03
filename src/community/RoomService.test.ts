@@ -14,6 +14,12 @@ describe('RoomService',()=>{
     expect(service.resolve('-dieJsO8X')).toMatchObject({roomId:'-dieJsO8X',name:'Eltern-Kind-Raum',shortName:'EKR',floor:'EG',building:'Gemeindezentrum',capacity:20,accessible:true});
   });
 
+  it('does not mistake a child-watcher container id for a room id',()=>{
+    const service=new RoomService([{roomId:'buildingA',rooms:{'-dieJsO8X':{raumname:'Eltern-Kind-Raum',etage:'EG'}}}]);
+    expect(service.resolve('buildingA')).toBeNull();
+    expect(service.resolve('-dieJsO8X')).toMatchObject({roomId:'-dieJsO8X',name:'Eltern-Kind-Raum',floor:'EG'});
+  });
+
   it.each(['familien raum','FR','familienraum-eg','EG Familienraum','Familienraum Haus West','räume/familien'])('resolves extended alias %s',reference=>{
     const service=new RoomService({räume:{familien:{id:'family-room',displayName:'Familienraum',shortName:'FR',floor:'EG',building:'Haus West',slug:'familien-raum',aliases:['familienraum-eg'],searchTerms:['familien raum']}}});
     expect(service.resolve(reference)?.roomId).toBe('family-room');

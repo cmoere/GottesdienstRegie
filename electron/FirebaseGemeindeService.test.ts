@@ -9,10 +9,18 @@ function fakeAdapter(){
     watchConnection:(listener)=>{listener(true);return()=>{}},
   };
   const emit=(path:'veranstaltungen'|'meldungen'|'rooms',action:'added'|'changed'|'removed',key:string,value?:unknown)=>handlers.get(path)[action](key,value);
-  return {adapter,counts,emit};
+  return {adapter,counts,emit,sync:(path:string,keys:string[])=>handlers.get(path).synced(keys)};
 }
 
 describe('FirebaseGemeindeService',()=>{
+  it('reconciles removed records and preserves authoritative child ids',()=>{
+    const fake=fakeAdapter(),service=new FirebaseGemeindeService(fake.adapter),seen:any[]=[];
+    service.subscribeEvents(value=>seen.push(value));
+    fake.emit('veranstaltungen','added','real',{eventKey:'wrong',titel:'Termin'});
+    expect(seen.at(-1)[0].eventKey).toBe('real');
+    fake.sync('veranstaltungen',[]);
+    expect(seen.at(-1)).toEqual([]);
+  });
   it('shares one realtime subscription and preserves event child keys',()=>{
     const fake=fakeAdapter(),service=new FirebaseGemeindeService(fake.adapter),seen:any[]=[];
     service.subscribeEvents(value=>seen.push(value));

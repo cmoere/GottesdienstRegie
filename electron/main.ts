@@ -470,6 +470,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('outputs:send-role',(_event,role:OutputRole,payload:unknown)=>outputManager.sendTo(role,payload));
   ipcMain.handle('outputs:send-quick',(_event,roles:OutputRole[],payload:unknown)=>outputManager.sendQuick(roles,payload));
   ipcMain.handle('outputs:set-app-mode',(_event,state:{mode:'normal'|'test';onAir:boolean})=>outputManager.setAppMode(state));
+  ipcMain.handle('outputs:get-app-mode',()=>outputManager.getAppMode());
   ipcMain.handle('outputs:off-air',()=>{remoteServer.updateLive({onAir:false});return outputManager.stop()});
   finishClose=async()=>{
     const owner=controlWindow;if(!owner||owner.isDestroyed())return;

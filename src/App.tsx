@@ -8583,7 +8583,9 @@ function AppShell({
           "main",
           state.transitionDefault,
         ),
-      },output=item?.sectionId==='post'&&postProgramNoticeController.current.beginTransition()?withPostProgramRoomNotice(base,postProgramNoticeController.current.current()!):base;
+      };
+      if(item?.sectionId==='post')postProgramNoticeController.current.prepare({eventLink:state.eventLink},new Date());
+      const output=item?.sectionId==='post'&&postProgramNoticeController.current.beginTransition()?withPostProgramRoomNotice(base,postProgramNoticeController.current.current()!):base;
       if(item?.sectionId!=='post')postProgramNoticeController.current.leavePostProgram();
       void liveEngine.show(output);
     }
@@ -10269,11 +10271,14 @@ function Output() {
     const disposeSlide = window.desktop?.onLiveSlide((payload) => {const incoming=payload as Slide&{_outputRevision?:number},revision=incoming._outputRevision??outputRevisionRef.current+1;if(!shouldApplyOutputRevision(outputRevisionRef.current,revision))return;outputRevisionRef.current=revision;setSlide(incoming)}),
       disposeQuick = (window.desktop as any)?.onQuick?.(
         (payload: QuickScreenConfig | null) => setQuick(payload),
-      ),disposeAppMode=(window.desktop as any)?.onOutputAppMode?.((payload:AppModeState)=>setOutputAppMode(payload));
+      ),disposeAppMode=(window.desktop as any)?.onOutputAppMode?.((payload:AppModeState)=>{modeReceived=true;setOutputAppMode(payload)});
+    let modeReceived=false,disposed=false;
+    void (window.desktop as any)?.getOutputAppMode?.().then((payload:AppModeState)=>{if(!disposed&&!modeReceived)setOutputAppMode(payload)});
     return () => {
       disposeSlide?.();
       disposeQuick?.();
       disposeAppMode?.();
+      disposed=true;
     };
   }, []);
   const songOutput=(slide as (Slide & {songOutput?:{chords:string;stageRows?:{chords:string;lyrics:string}[];showChords:boolean;currentNext:boolean;next:string;lowerThird:boolean}})|null)?.songOutput;

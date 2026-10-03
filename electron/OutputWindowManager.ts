@@ -8,6 +8,7 @@ const outputRoles:OutputRole[]=['main','stage','notes','livestream','lobby'];
 export class OutputWindowManager{
   private outputs=new Map<OutputRole,ManagedOutput>();
   private appMode:AppModeState={mode:'normal',onAir:false};
+  getAppMode(){return {...this.appMode}}
   constructor(private readonly preload:string,private readonly load:(window:BrowserWindow,route:string)=>Promise<void>,private readonly status:(role:OutputRole,state:'ready'|'missing'|'closed')=>void){}
   async start(assignments:DisplayAssignments,payload:unknown){
     await this.stop();

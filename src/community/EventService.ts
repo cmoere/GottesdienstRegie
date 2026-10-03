@@ -8,7 +8,8 @@ const bool=(value:unknown)=>value===true||value===1||value==='true';
 function dateTime(date:unknown,time:unknown):Date|null{
   const day=text(date),clock=text(time)||'00:00';
   if(!/^\d{4}-\d{2}-\d{2}$/.test(day)||!/^([01]?\d|2[0-3]):[0-5]\d$/.test(clock))return null;
-  const result=new Date(`${day}T${clock.padStart(5,'0')}:00Z`);return Number.isNaN(result.valueOf())?null:result;
+  const [year,month,dateOfMonth]=day.split('-').map(Number),[hour,minute]=clock.split(':').map(Number),result=new Date(year,month-1,dateOfMonth,hour,minute,0,0);
+  return result.getFullYear()===year&&result.getMonth()===month-1&&result.getDate()===dateOfMonth&&result.getHours()===hour&&result.getMinutes()===minute?result:null;
 }
 function delayedDate(value:unknown):Date|null{
   if(typeof value==='string'){const result=new Date(value);return Number.isNaN(result.valueOf())?null:result}

@@ -8,8 +8,9 @@ const base={eventKey:'-Oabc',titel:'Gottesdienst',start_datum:'2026-10-04',start
 describe('EventService',()=>{
   it('keeps planned values and resolves delay, cancellation and replacement location',()=>{
     const event={...base,Verspaetungsanfangsdatum:'2026-10-04',Verspaetungsanfangsuhrzeit:'11:00',Verspaetungsenddatum:'2026-10-04',Verspaetungsenduhrzeit:'12:30',cancel:{enabled:true},ersatzort:'Gemeindehaus'};
-    expect(service.getPlannedStart(event)?.toISOString()).toContain('2026-10-04T10:30');
-    expect(service.getEffectiveStart(event)?.toISOString()).toContain('2026-10-04T11:00');
+    expect(service.getPlannedStart(event)?.getHours()).toBe(10);
+    expect(service.getPlannedStart(event)?.getMinutes()).toBe(30);
+    expect(service.getEffectiveStart(event)?.getHours()).toBe(11);
     expect(service.isCancelled(event)).toBe(true);
     expect(service.getEffectiveLocation(event)).toMatchObject({type:'external',name:'Gemeindehaus'});
     expect(event.start_uhrzeit).toBe('10:30');
@@ -48,8 +49,8 @@ describe('EventService',()=>{
 
   it('recognizes trash variants and falls back from invalid delay objects',()=>{
     expect(service.isTrashed({...base,trashAt:'2026-10-04'} as any)).toBe(true);
-    expect(service.getEffectiveStart({...base,delay:{start:{date:'invalid',time:'25:00'}}} as any)?.toISOString()).toContain('2026-10-04T10:30');
-    expect(service.getEffectiveStart({...base,delay:{start:{date:'2026-10-04',time:'10:45'}}} as any)?.toISOString()).toContain('2026-10-04T10:45');
+    expect(service.getEffectiveStart({...base,delay:{start:{date:'invalid',time:'25:00'}}} as any)?.getHours()).toBe(10);
+    expect(service.getEffectiveStart({...base,delay:{start:{date:'2026-10-04',time:'10:45'}}} as any)?.getMinutes()).toBe(45);
   });
 
   it('uses legacy ort only for room locations and never exposes an unresolved room id',()=>{

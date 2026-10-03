@@ -7,7 +7,7 @@ export type PostProgramRoomNotice=
 export type PresentationEventLink={linkedEventKey?:string;eventLink?:{eventKey?:string}};
 
 const roomLabel=(location:{name:string;floor?:string})=>[location.name,location.floor].filter(Boolean).join(' · ');
-const clock=(date:Date)=>new Intl.DateTimeFormat('de-DE',{hour:'2-digit',minute:'2-digit',timeZone:'UTC'}).format(date)+' Uhr';
+const clock=(date:Date)=>new Intl.DateTimeFormat('de-DE',{hour:'2-digit',minute:'2-digit'}).format(date)+' Uhr';
 
 export class PostProgramRoomNoticeService{
   constructor(private readonly events:EventService){}

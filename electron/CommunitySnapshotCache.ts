@@ -7,8 +7,15 @@ export type CommunityCachePayload={events:RawChurchEvent[];rooms:RawCachedRoom[]
 export type CommunityCacheSnapshot=CommunityCachePayload&{mode:'offline-cache'|'empty'|'error';updatedAt?:number;ageMs?:number};
 
 export class CommunitySnapshotCache{
+  private writes:Promise<void>=Promise.resolve();
   constructor(private readonly file:string,private readonly now:()=>number=Date.now){}
-  async write(payload:CommunityCachePayload):Promise<void>{
+  write(payload:CommunityCachePayload):Promise<void>{
+    const snapshot=structuredClone(payload);
+    const next=this.writes.catch(()=>{}).then(()=>this.writeSnapshot(snapshot));
+    this.writes=next;
+    return next;
+  }
+  private async writeSnapshot(payload:CommunityCachePayload):Promise<void>{
     const value={updatedAt:this.now(),...payload},temporary=`${this.file}.tmp`;
     await fs.mkdir(path.dirname(this.file),{recursive:true});
     await fs.writeFile(temporary,JSON.stringify(value),'utf8');

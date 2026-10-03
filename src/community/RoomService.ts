@@ -7,13 +7,14 @@ const value=(source:Record<string,unknown>,keys:string[])=>{for(const key of key
 const alias=(input:string)=>input.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('de').replace(/[^a-z0-9]+/g,' ').trim();
 const nameKeys=['raumname','raumName','name','label','bezeichnung','titel','displayName','raumkurzname','kurzname','shortName','meta.name','meta.label'];
 const idKeys=['id','roomId','raumId','key','__key'];
+const roomRecordKeys=new Set(['etage','floor','stockwerk','gebaeude','gebäude','building','haus','kapazitaet','capacity','barrierefrei','accessible','code','slug','aliases','suchbegriffe','searchTerms','meta']);
 
 type Candidate={raw:Record<string,unknown>;childKey:string;path:string};
 function flatten(source:unknown,path:string[]=[]):Candidate[]{
   if(Array.isArray(source))return source.flatMap((entry,index)=>flatten(entry,[...path,String(index)]));
   if(!object(source))return[];
-  const hasName=Boolean(value(source,nameKeys)),hasExplicitId=Boolean(value(source,idKeys));
-  if(hasName||(hasExplicitId&&Object.keys(source).some(key=>!idKeys.includes(key))))return[{raw:source,childKey:path.at(-1)??'',path:path.join('/')}];
+  const hasName=Boolean(value(source,nameKeys)),hasExplicitId=Boolean(value(source,idKeys)),hasRoomDetails=Object.keys(source).some(key=>roomRecordKeys.has(key));
+  if(hasName||(hasExplicitId&&hasRoomDetails))return[{raw:source,childKey:path.at(-1)??'',path:path.join('/')}];
   return Object.entries(source).flatMap(([key,entry])=>flatten(entry,[...path,key]));
 }
 
