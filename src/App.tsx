@@ -101,6 +101,7 @@ import {isLoopCandidateAvailable,shouldSkipNowPlaying} from './nowPlayingModel';
 import {EventService,type ChurchEvent as CommunityChurchEvent} from './community/EventService';
 import {RoomService,type RawRoom} from './community/RoomService';
 import {setLatestPublicEvents} from './dynamicEventSlide';
+import {PostProgramRoomNoticeController,PostProgramRoomNoticeService,withPostProgramRoomNotice,type PostProgramRoomNotice} from './community/PostProgramRoomNoticeService';
 import {EventSlideDesigner} from './EventSlideDesigner';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
@@ -8064,6 +8065,8 @@ function AppShell({
   const { t, locale } = useI18n();
   const state = usePresentation();
   const loopController = useRef(new LoopController<ServiceItem>());
+  const communityEventService=useRef(new EventService());
+  const postProgramNoticeController=useRef(new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(communityEventService.current)));
   const airBusy = useRef(false);
   const [airStarting, setAirStarting] = useState(false);
   const [testMode, setTestMode] = useState(false);
@@ -8109,7 +8112,7 @@ function AppShell({
     }>({ state: "idle", step: 0, text: "" });
   useEffect(()=>{void (window.desktop as any)?.deviceSettings?.readOsb?.().then((value:unknown)=>setOsbSettings(normalizeOsbSettings(value,[...BIBLE_TRANSLATIONS])))},[]);
   useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge)return;const stop=bridge.onConnection((value:{connected:boolean;mode:string;updatedAt:number})=>setCommunityConnection(value));void bridge.start();return stop},[]);
-  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;let rows:CommunityChurchEvent[]=[],rooms:RawRoom[]=[];const publish=()=>{const service=new EventService(rows,new RoomService(rooms)),publicEvents=service.getUpcomingEvents().slice(0,8).map(event=>service.toPublicEvent(event));setLatestPublicEvents(publicEvents);window.dispatchEvent(new CustomEvent('gottesdienstregie:community-events',{detail:publicEvents}))};const stopEvents=bridge.onEvents((value:CommunityChurchEvent[])=>{rows=Array.isArray(value)?value:[];publish()}),stopRooms=bridge.onRooms?.((value:RawRoom[])=>{rooms=Array.isArray(value)?value:[];publish()});return()=>{stopEvents?.();stopRooms?.()}},[]);
+  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;let rows:CommunityChurchEvent[]=[],rooms:RawRoom[]=[];const publish=()=>{const service=communityEventService.current;service.setEvents(rows);service.setRooms(new RoomService(rooms));const publicEvents=service.getUpcomingEvents().slice(0,8).map(event=>service.toPublicEvent(event));setLatestPublicEvents(publicEvents);postProgramNoticeController.current.prepare({eventLink:usePresentation.getState().eventLink},new Date());window.dispatchEvent(new CustomEvent('gottesdienstregie:community-events',{detail:publicEvents}))};const stopEvents=bridge.onEvents((value:CommunityChurchEvent[])=>{rows=Array.isArray(value)?value:[];publish()}),stopRooms=bridge.onRooms?.((value:RawRoom[])=>{rooms=Array.isArray(value)?value:[];publish()});return()=>{stopEvents?.();stopRooms?.()}},[]);
   const audioSessionRef = useRef<{
     onAir: boolean;
     mode: "edit" | "preview";
@@ -8567,8 +8570,8 @@ function AppShell({
     if (!state.onAir || !state.liveSlideId) return;
     const item = state.items.find((entry) => entry.id === state.liveItemId),
       liveSlide = item?.slides.find((slide) => slide.id === state.liveSlideId);
-    if (liveSlide)
-      void liveEngine.show({
+    if (liveSlide){
+      const base={
         ...liveSlide,
         transitionOverride: resolveTransition(
           liveSlide,
@@ -8576,7 +8579,10 @@ function AppShell({
           "main",
           state.transitionDefault,
         ),
-      });
+      },output=item?.sectionId==='post'&&postProgramNoticeController.current.beginTransition()?withPostProgramRoomNotice(base,postProgramNoticeController.current.current()!):base;
+      if(item?.sectionId!=='post')postProgramNoticeController.current.leavePostProgram();
+      void liveEngine.show(output);
+    }
   }, [state.liveSlideId,state.liveItemId,state.onAir,state.items,state.transitionDefault,state.lyricScrolling,songTranslationMode]);
   useEffect(()=>{const update=(event:Event)=>{const audio=(event as CustomEvent<BackgroundAudioState>).detail,item=usePresentation.getState().items.find(entry=>entry.id===usePresentation.getState().liveItemId);if(!usePresentation.getState().onAir||item?.type!=='nowPlaying')return;const track=audio.track,signature=`${audio.active}:${track?.assetId??''}:${track?.name??''}:${track?.artist??''}:${track?.album??''}:${track?.imageUrl??''}`;if(signature===nowPlayingSignatureRef.current)return;nowPlayingSignatureRef.current=signature;const slide=item.slides.find(entry=>entry.id===usePresentation.getState().liveSlideId)??item.slides[0];if(!slide)return;const patched={...slide,elements:slide.elements.map(element=>element.type==='loop'?{...element,properties:{...element.properties,nowPlayingActive:audio.active,nowPlayingTitle:track?.name??'',nowPlayingArtist:track?.artist??'',nowPlayingAlbum:track?.album??'',nowPlayingArtwork:track?.imageUrl??'',nowPlayingSource:track?.format??''}}:element)};void liveEngine.show({...patched,transitionOverride:resolveTransition(patched,item,'main',usePresentation.getState().transitionDefault)})};window.addEventListener('gottesdienstregie:background-audio',update);return()=>window.removeEventListener('gottesdienstregie:background-audio',update)},[]);
   useEffect(() => {
@@ -10267,6 +10273,7 @@ function Output() {
   }, []);
   const songOutput=(slide as (Slide & {songOutput?:{chords:string;stageRows?:{chords:string;lyrics:string}[];showChords:boolean;currentNext:boolean;next:string;lowerThird:boolean}})|null)?.songOutput;
   const lyricScroll=(slide as (Slide & {lyricScroll?:LyricScrollPacket})|null)?.lyricScroll;
+  const postProgramRoomNotice=(slide as (Slide&{postProgramRoomNotice?:PostProgramRoomNotice})|null)?.postProgramRoomNotice;
   const renderedSlide=slide && songOutput?.lowerThird && role==='livestream'?{...slide,background:'transparent',backgroundImage:undefined,elements:slide.elements.filter(element=>element.type==='text').map(element=>({...element,x:140,y:800,width:1640,height:240,properties:{...element.properties,fontSize:52}}))}:slide;
   return (
     <div
@@ -10283,6 +10290,7 @@ function Output() {
         />
       )}
       <QuickOverlay quick={quick} />
+      {postProgramRoomNotice&&<section className="post-program-room-notice" aria-label="Nachprogramm-Raumhinweis">{postProgramRoomNotice.type==='next-event'?<><small>{postProgramRoomNotice.heading}</small><strong>{postProgramRoomNotice.title}</strong><span>{postProgramRoomNotice.time}</span><span>{postProgramRoomNotice.room}</span><em>Beginn in {postProgramRoomNotice.minutesUntil} Minuten</em></>:<strong>{postProgramRoomNotice.text}</strong>}</section>}
     </div>
   );
 }
