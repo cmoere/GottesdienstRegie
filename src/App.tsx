@@ -10257,6 +10257,7 @@ function Clock({ locale }: { locale: string }) {
   );
 }
 function Output() {
+  const stateRevisionRef=useRef(-1);
   const outputRevisionRef=useRef(0);
   const [slide, setSlide] = useState<Slide | null>(null),
     [quick, setQuick] = useState<QuickScreenConfig | null>(null),
@@ -10268,6 +10269,18 @@ function Output() {
       [],
     );
   useEffect(() => {
+    const bridge=window.desktop as any;
+    if(bridge?.getOutputState&&bridge?.onOutputState){
+      let disposed=false;
+      const apply=(state:import('./outputState').OutputStateSnapshot|null)=>{
+        if(disposed||!state||!Number.isFinite(state.revision)||state.revision<=stateRevisionRef.current)return;
+        stateRevisionRef.current=state.revision;
+        setSlide(state.slide as Slide|null);setQuick(state.quick as QuickScreenConfig|null);setOutputAppMode(state.appMode);
+      };
+      const off=bridge.onOutputState(apply);
+      void bridge.getOutputState().then(apply).catch(()=>{});
+      return()=>{disposed=true;off?.()};
+    }
     const disposeSlide = window.desktop?.onLiveSlide((payload) => {const incoming=payload as Slide&{_outputRevision?:number},revision=incoming._outputRevision??outputRevisionRef.current+1;if(!shouldApplyOutputRevision(outputRevisionRef.current,revision))return;outputRevisionRef.current=revision;setSlide(incoming)}),
       disposeQuick = (window.desktop as any)?.onQuick?.(
         (payload: QuickScreenConfig | null) => setQuick(payload),

@@ -4,7 +4,7 @@ const sends:unknown[][]=[],windows:any[]=[];
 vi.mock('electron',()=>({
   screen:{getAllDisplays:()=>[{id:1,bounds:{x:0,y:0,width:1920,height:1080},label:'MAIN'}],getPrimaryDisplay:()=>({id:1})},
   BrowserWindow:class{
-    destroyed=false;webContents={send:(...args:unknown[])=>sends.push(args),insertCSS:vi.fn()};
+    destroyed=false;webContents={id:windows.length+1,send:(...args:unknown[])=>sends.push(args),insertCSS:vi.fn()};
     constructor(){windows.push(this)}setMenu(){}on(){}showInactive(){}setFullScreen(){}close(){this.destroyed=true}isDestroyed(){return this.destroyed}loadURL(){return Promise.resolve()}
   },
 }));
@@ -23,5 +23,19 @@ describe('OutputWindowManager app mode',()=>{
   it('ignores destroyed output windows',async()=>{
     const manager=new OutputWindowManager('preload',async()=>{},()=>{});await manager.start({'1':'main'} as any,{});windows[0].destroyed=true;
     expect(()=>manager.setAppMode({mode:'test',onAir:false})).not.toThrow();
+  });
+  it('restores latest state after late subscription and rejects unknown senders',async()=>{
+    const manager=new OutputWindowManager('preload',async()=>{},()=>{});
+    await manager.start({'1':'main'} as any,{id:'first'});
+    manager.send({id:'latest'});manager.sendQuick(['main'],{type:'black'});
+    const state=manager.getStateForSender(1);
+    expect(state?.slide).toEqual({id:'latest'});expect(state?.quick).toEqual({type:'black'});
+    expect(manager.getStateForSender(999)).toBeNull();
+    manager.sendQuick(['stage'],{type:'logo'});
+    expect(manager.getStateForSender(1)?.quick).toEqual({type:'black'});
+    manager.sendQuick(['main'],null);
+    expect(manager.getStateForSender(1)?.quick).toBeNull();
+    expect(manager.getStateForSender(1)!.revision).toBeGreaterThan(state!.revision);
+    windows[0].destroyed=true;expect(manager.getStateForSender(1)).toBeNull();
   });
 });
