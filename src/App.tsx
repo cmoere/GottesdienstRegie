@@ -102,6 +102,7 @@ import {EventService,type ChurchEvent as CommunityChurchEvent} from './community
 import {RoomService,type RawRoom} from './community/RoomService';
 import {setLatestPublicEvents} from './dynamicEventSlide';
 import {PostProgramRoomNoticeController,PostProgramRoomNoticeService,withPostProgramRoomNotice,type PostProgramRoomNotice} from './community/PostProgramRoomNoticeService';
+import {setPostProgramPrepared} from './community/communityRuntime';
 import {EventSlideDesigner} from './EventSlideDesigner';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
@@ -8112,7 +8113,7 @@ function AppShell({
     }>({ state: "idle", step: 0, text: "" });
   useEffect(()=>{void (window.desktop as any)?.deviceSettings?.readOsb?.().then((value:unknown)=>setOsbSettings(normalizeOsbSettings(value,[...BIBLE_TRANSLATIONS])))},[]);
   useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge)return;const stop=bridge.onConnection((value:{connected:boolean;mode:string;updatedAt:number})=>setCommunityConnection(value));void bridge.start();return stop},[]);
-  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;let rows:CommunityChurchEvent[]=[],rooms:RawRoom[]=[];const publish=()=>{const service=communityEventService.current;service.setEvents(rows);service.setRooms(new RoomService(rooms));const publicEvents=service.getUpcomingEvents().slice(0,8).map(event=>service.toPublicEvent(event));setLatestPublicEvents(publicEvents);postProgramNoticeController.current.prepare({eventLink:usePresentation.getState().eventLink},new Date());window.dispatchEvent(new CustomEvent('gottesdienstregie:community-events',{detail:publicEvents}))};const stopEvents=bridge.onEvents((value:CommunityChurchEvent[])=>{rows=Array.isArray(value)?value:[];publish()}),stopRooms=bridge.onRooms?.((value:RawRoom[])=>{rooms=Array.isArray(value)?value:[];publish()});return()=>{stopEvents?.();stopRooms?.()}},[]);
+  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;let rows:CommunityChurchEvent[]=[],rooms:RawRoom[]=[];const publish=()=>{const service=communityEventService.current;service.setEvents(rows);service.setRooms(new RoomService(rooms));const publicEvents=service.getUpcomingEvents().slice(0,8).map(event=>service.toPublicEvent(event));setLatestPublicEvents(publicEvents);postProgramNoticeController.current.prepare({eventLink:usePresentation.getState().eventLink},new Date());setPostProgramPrepared(true);window.dispatchEvent(new CustomEvent('gottesdienstregie:community-events',{detail:publicEvents}))};const stopEvents=bridge.onEvents((value:CommunityChurchEvent[])=>{rows=Array.isArray(value)?value:[];publish()}),stopRooms=bridge.onRooms?.((value:RawRoom[])=>{rooms=Array.isArray(value)?value:[];publish()});return()=>{stopEvents?.();stopRooms?.()}},[]);
   const audioSessionRef = useRef<{
     onAir: boolean;
     mode: "edit" | "preview";
