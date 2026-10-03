@@ -12,6 +12,8 @@ import {
 import { usePreferences } from "./preferences";
 import { setNowPlayingState } from "./nowPlayingModel";
 import { audioLevelProvider } from "./audio/AudioLevelProvider";
+import {BackgroundAudioRoute} from './audio/BackgroundAudioRoute';
+import {backgroundAudioStatus,type BackgroundAudioHealth} from './audio/backgroundAudioHealth';
 
 export interface BackgroundAudioState {
   active: boolean;
@@ -23,6 +25,7 @@ export interface BackgroundAudioState {
   volume: number;
   sourceKey: string;
   error?: string;
+  health?: BackgroundAudioHealth;
 }
 
 const emptyState: BackgroundAudioState = {
@@ -35,11 +38,17 @@ const emptyState: BackgroundAudioState = {
   sourceKey: "",
 };
 
-class BackgroundAudioEngine {
+export class BackgroundAudioEngine {
   getState() {
     return { ...this.state };
   }
   private audio = new Audio();
+  private route = new BackgroundAudioRoute(this.audio);
+  private waiting=false;
+  private lastTime=0;
+  private lastProgress=0;
+  private silentSince=0;
+  private fadeGeneration=0;
   private config?: BackgroundAudioConfig;
   private index = -1;
   private sourceKey = "";
@@ -55,6 +64,9 @@ class BackgroundAudioEngine {
     this.audio.preload = "auto";
     this.applyRouting(usePreferences.getState().audioRouting);
     usePreferences.subscribe((state) => this.applyRouting(state.audioRouting));
+    navigator.mediaDevices?.addEventListener('devicechange',()=>{void this.route.apply(this.outputDevice).then(()=>this.publish())});
+    this.audio.addEventListener('waiting',()=>{this.waiting=true;this.publish()});
+    this.audio.addEventListener('playing',()=>{this.waiting=false;void audioLevelProvider.connect(this.audio);this.publish()});
     this.audio.addEventListener("ended", () => void this.advance());
     this.audio.addEventListener("play", () => this.publish());
     this.audio.addEventListener("pause", () => this.publish());
@@ -69,6 +81,9 @@ class BackgroundAudioEngine {
     return this.state;
   }
   private publish() {
+    const now=Date.now();if(this.audio.currentTime>this.lastTime){this.lastProgress=now;this.waiting=false}this.lastTime=this.audio.currentTime;
+    const signal=audioLevelProvider.getSignalState();if(signal!=='silent')this.silentSince=0;else if(!this.silentSince)this.silentSince=now;
+    const health:BackgroundAudioHealth={status:backgroundAudioStatus({hasSource:Boolean(this.audio.src),paused:this.audio.paused,progressing:this.lastProgress>0&&now-this.lastProgress<3000,waiting:this.waiting,routeReady:this.route.ready,muted:this.audio.muted,volume:this.audio.volume,error:Boolean(this.state.error),signal,silentMs:this.silentSince?now-this.silentSince:0}),signal,route:'background',deviceId:this.route.deviceId,deviceName:this.route.name,volume:Math.round(this.audio.volume*100),muted:this.audio.muted,contextState:audioLevelProvider.getContextState(),fallback:false};
     this.state = {
       ...this.state,
       active: Boolean(this.audio.src) && !this.audio.ended,
@@ -86,6 +101,7 @@ class BackgroundAudioEngine {
           (this.ducked ? (this.config?.ducking.level ?? 25) / 100 : 1),
       ),
       sourceKey: this.sourceKey,
+      health,
     };
     setNowPlayingState(this.state);
     window.dispatchEvent(
@@ -102,34 +118,24 @@ class BackgroundAudioEngine {
       }),
     );
   }
+  getHealth(){return this.state.health}
   private applyRouting(value?: AudioRouting) {
     const routing = {
       ...defaultAudioRouting,
       ...value,
       background: { ...defaultAudioRouting.background, ...value?.background },
     };
-    this.outputDevice = routeDeviceId(routing, "background") || "default";
+    const nextDevice=routeDeviceId(routing, "background") || "default",changed=nextDevice!==this.outputDevice;
+    this.outputDevice = nextDevice;
     this.routeVolume = routing.background.volume / 100;
     this.routeMuted = routing.background.muted;
     this.audio.muted = Boolean(this.config?.muted) || this.routeMuted;
     this.audio.volume = this.targetVolume();
-    const target = this.audio as HTMLAudioElement & {
-      setSinkId?: (id: string) => Promise<void>;
-    };
-    if (target.setSinkId)
-      void target
-        .setSinkId(this.outputDevice === "default" ? "" : this.outputDevice)
-        .catch(() => target.setSinkId?.("").catch(() => {}));
+    if(changed||!this.route.ready)void this.route.apply(this.outputDevice);
   }
   async setOutputDevice(deviceId: string) {
     this.outputDevice = deviceId;
-    const target = this.audio as HTMLAudioElement & {
-      setSinkId?: (id: string) => Promise<void>;
-    };
-    if (target.setSinkId)
-      await target
-        .setSinkId(deviceId === "default" ? "" : deviceId)
-        .catch(() => target.setSinkId?.("").catch(() => {}));
+    await this.route.apply(deviceId);this.publish();
   }
   private targetVolume() {
     return Math.max(
@@ -143,6 +149,7 @@ class BackgroundAudioEngine {
     );
   }
   private fade(to: number, seconds: number) {
+    const generation=++this.fadeGeneration;
     const from = this.audio.volume,
       start = performance.now(),
       duration = Math.max(0, seconds) * 1000;
@@ -152,6 +159,7 @@ class BackgroundAudioEngine {
     }
     return new Promise<void>((resolve) => {
       const step = (now: number) => {
+        if(generation!==this.fadeGeneration){resolve();return}
         const progress = Math.min(1, (now - start) / duration);
         this.audio.volume = from + (to - from) * progress;
         if (progress < 1) requestAnimationFrame(step);
@@ -177,16 +185,11 @@ class BackgroundAudioEngine {
     if (crossfade && this.audio.src)
       await this.fade(0, Math.min(this.config.crossfadeSeconds / 2, 1));
     this.audio.src = track.url;
-    audioLevelProvider.connect(this.audio);
+    this.state.error=undefined;this.lastTime=0;this.lastProgress=0;this.silentSince=0;this.waiting=false;
+    audioLevelProvider.disconnect();
     this.audio.muted = this.config.muted || this.routeMuted;
     this.audio.volume = fadeSeconds ? 0 : this.targetVolume();
-    const sink = this.audio as HTMLAudioElement & {
-      setSinkId?: (id: string) => Promise<void>;
-    };
-    if (sink.setSinkId)
-      await sink
-        .setSinkId(this.outputDevice === "default" ? "" : this.outputDevice)
-        .catch(() => sink.setSinkId?.("").catch(() => {}));
+    await this.route.apply(this.outputDevice);
     try {
       await this.audio.play();
       if (this.durationTimer) window.clearTimeout(this.durationTimer);
@@ -342,10 +345,12 @@ class BackgroundAudioEngine {
     this.publish();
   }
   async resume() {
-    await this.audio.play().catch(() => {});
+    this.state.error=undefined;await this.route.apply(this.outputDevice);
+    await this.audio.play().catch(() => {this.state.error='Audio konnte nicht fortgesetzt werden.'});
     this.publish();
   }
   async stop(fadeSeconds = this.config?.fadeOutSeconds ?? 0) {
+    this.fadeGeneration++;
     if (this.durationTimer) window.clearTimeout(this.durationTimer);
     this.durationTimer = undefined;
     if (this.audio.src && fadeSeconds) await this.fade(0, fadeSeconds);

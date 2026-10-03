@@ -1,4 +1,5 @@
 import {helpV39,helpIllustrations} from './helpV39';
+import {AudioDiagnostics} from './AudioDiagnostics';
 import './version39.css';
 import './version41.css';
 import './version42.css';
@@ -7895,6 +7896,7 @@ function BackgroundAudioController() {
         }
       />
       {audio.error && <small>{audio.error}</small>}
+      <AudioDiagnostics health={audio.health}/>
     </div>
   );
 }
