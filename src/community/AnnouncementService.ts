@@ -9,7 +9,7 @@ export interface PublicAnnouncement {
 const truthy=(value:unknown)=>value===true||value===1||['true','1','ja','yes','on','öffentlich','oeffentlich','public'].includes(String(value??'').trim().toLowerCase());
 const clean=(value:unknown)=>String(value??'').replace(/<\s*(script|style|iframe|object|embed)[^>]*>[\s\S]*?<\/\s*\1\s*>/gi,'').replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi,'').replace(/javascript\s*:/gi,'').trim();
 const date=(value:unknown)=>{if(!value||String(value).trim().toLowerCase()==='bis auf weiteres')return undefined;const result=new Date(String(value));return Number.isNaN(result.getTime())?undefined:result;};
-const publicStatus=(value:unknown)=>['öffentlich','oeffentlich','public','published','aktiv','active'].includes(String(value??'').trim().toLowerCase());
+const publicStatus=(value:unknown)=>['öffentlich','oeffentlich','public','published','aktiv','active','freigegeben','released'].includes(String(value??'').trim().toLowerCase());
 const priorities=new Set(['urgent','important','normal']);
 const categories=new Set(['general','event','traffic','service','community','info','technical','internal']);
 
@@ -27,11 +27,11 @@ export class AnnouncementService {
     const from=date(truthy(raw.saalscreenUseShowFrom)&&raw.showFrom?raw.showFrom:raw.giltAb);
     const until=date(raw.giltBis);
     if((from&&until&&from>until)||(from&&now<from)||(until&&now>until))return false;
-    return Boolean(clean(raw.titel)||clean(raw.textMeldung??raw.beschreibung));
+    return Boolean(clean(raw.titel)||clean(raw.textMeldung)||clean(raw.beschreibung));
   }
 
   toPublic(raw:RawAnnouncement):PublicAnnouncement{
-    const title=clean(raw.titel),text=clean(raw.textMeldung??raw.beschreibung);
+    const title=clean(raw.titel),text=clean(raw.textMeldung)||clean(raw.beschreibung);
     const priority=String(raw.priority??'normal') as AnnouncementPriority;
     const category=String(raw.kategorie??raw.category??'general') as AnnouncementCategory;
     const explicit=Number(raw.displayDurationMs),calculated=Math.min(Math.max((title.length+text.replace(/<[^>]*>/g,'').length)*80+4_000,12_000),180_000);

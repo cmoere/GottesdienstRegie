@@ -35,4 +35,13 @@ describe('AnnouncementService',()=>{
   it('retains the message id as QR reference',()=>{
     expect(service.getForPlacement([{...base,qrCode:true}],now,'preLoop')[0]).toMatchObject({id:'-Omsg',qrCode:true,qrReference:'-Omsg'});
   });
+
+  it('accepts compatible public and truthy values and sanitizes the fallback text',()=>{
+    const result=service.getForPlacement([{...base,status:'freigegeben',messageScreen:'1',textMeldung:'',beschreibung:'Hallo <script>bad()</script>Welt',gottesdienstRegie:{enabled:'ja',loopTargets:{preLoop:1}}}],now,'preLoop');
+    expect(result).toEqual([expect.objectContaining({id:'-Omsg',text:'Hallo Welt'})]);
+  });
+
+  it('rejects an invalid date range and yields EMPTY data',()=>{
+    expect(service.getForPlacement([{...base,giltAb:'2026-10-05',giltBis:'2026-10-04'}],now,'preLoop')).toEqual([]);
+  });
 });
