@@ -65,6 +65,7 @@ import { canHideSlideContent } from "./quickScreenAvailability";
 import { nextTimerHold, timerProgress } from "./previewTimer";
 import { shouldHandlePreviewArrow } from "./previewKeyboard";
 import { MainLivePreview } from "./MainLivePreview";
+import {TestModeWatermark} from './TestModeWatermark';
 import { quickScreenShortcut } from "./quickScreenUi";
 import { usesAutomaticLoopEditor } from "./loopEditorModel";
 import { NowPlayingDesigner } from "./NowPlayingDesigner";
@@ -3861,6 +3862,7 @@ function PreviewCenter({
             role="operator"
           />
           <QuickOverlay quick={activeQuick} staticPreview />
+          <TestModeWatermark role="main"/>
         </div>
         <div className="preview-navigation-rail">
           {timedSeconds > 0 && (

@@ -15,6 +15,7 @@ import {
   nowPlayingDisplay,
 } from "./nowPlayingModel";
 import type { BackgroundAudioState } from "./BackgroundAudioEngine";
+import {EventTitle} from './EventTitle';
 import {
   eventSlideItems,
   getLatestPublicEvents,
@@ -316,7 +317,7 @@ function RenderElement({
     if (loopType === "nowPlaying")
       return <NowPlayingLoopElement style={style} properties={properties} />;
     if (loopType === "event" || loopType === "nextEvents")
-      return <EventLoopElement style={style} properties={properties} />;
+      return <EventLoopElement style={style} properties={properties} live={mode==='live'} />;
     return (
       <div
         className="slide-renderer-element loop-surface"
@@ -407,7 +408,7 @@ function RenderElement({
             ? "strict-origin-when-cross-origin"
             : "no-referrer"
         }
-        allow={`${properties.webAudio === true ? "autoplay; " : ""}fullscreen; picture-in-picture`}
+        allow={properties.webAudio === true ? "autoplay" : ""}
         sandbox={sandbox}
       />
     );
@@ -540,22 +541,25 @@ function ClockLoopElement({ style }: { style: CSSProperties }) {
 function EventLoopElement({
   style,
   properties,
+  live=false,
 }: {
   style: CSSProperties;
   properties: Record<string, string | number | boolean>;
+  live?:boolean;
 }) {
   const [events, setEvents] = useState<LatestPublicEvent[]>(() =>
     getLatestPublicEvents(),
   );
   useEffect(() => {
+    if(live)return;
     const update = (message: Event) =>
       setEvents((message as CustomEvent<LatestPublicEvent[]>).detail);
     window.addEventListener("gottesdienstregie:community-events", update);
     return () =>
       window.removeEventListener("gottesdienstregie:community-events", update);
-  }, []);
+  }, [live]);
   const settings = normalizeEventSlideSettings(properties),
-    source = events.length
+    source = !live&&events.length
       ? { ...properties, eventItemsJson: JSON.stringify(events) }
       : properties,
     items = eventSlideItems(source);
@@ -578,7 +582,7 @@ function EventLoopElement({
               <b>{String(index + 1).padStart(2, "0")}</b>
             )}
             <div>
-              <strong>{event.title}</strong>
+              <EventTitle title={event.title}/>
               {event.details && <span>{event.details}</span>}
             </div>
           </article>

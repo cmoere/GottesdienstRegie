@@ -11,12 +11,12 @@ const service=(events:ChurchEvent[])=>new PostProgramRoomNoticeService(new Event
 describe('PostProgramRoomNoticeService',()=>{
   it('compares Firebase wall-clock values with the local trusted app clock',()=>{
     const localNow=new Date(2026,9,4,10,0,0);
-    expect(service([event('current','09:00'),event('next','10:30')]).compute({linkedEventKey:'current'},localNow)).toMatchObject({type:'next-event',eventId:'next',time:'10:30 Uhr',minutesUntil:30});
+    expect(service([event('current','09:00'),event('next','10:30')]).compute({linkedEventKey:'current'},localNow)).toMatchObject({type:'next-events',events:[{id:'next',start:new Date(2026,9,4,10,30).toISOString()}]});
   });
 
   it('selects the earliest event in the same effective room within the inclusive 61 minute window',()=>{
     const result=service([event('current','09:00'),event('later','11:01'),event('next','10:30')]).compute({linkedEventKey:'current'},now);
-    expect(result).toMatchObject({type:'next-event',eventId:'next',title:'next',time:'10:30 Uhr',room:'Gemeindesaal · EG',minutesUntil:30});
+    expect(result).toMatchObject({type:'next-events',events:[{id:'next',title:'next',room:'Gemeindesaal · EG'},{id:'later'}]});
   });
 
   it('excludes now, after 61 minutes, current, cancelled and trashed candidates',()=>{
@@ -26,32 +26,32 @@ describe('PostProgramRoomNoticeService',()=>{
 
   it('uses effective replacement rooms for the current event and candidates',()=>{
     const current=event('current','09:00',{ersatzortType:'raum',ersatzort:'neben'}),movedIn=event('moved','10:45',{raum:'saal',ersatzortType:'raum',ersatzort:'neben'}),movedOut=event('out','10:20',{raum:'neben',ersatzortType:'raum',ersatzort:'saal'});
-    expect(service([current,movedOut,movedIn]).compute({linkedEventKey:'current'},now)).toMatchObject({type:'next-event',eventId:'moved',room:'Nebenraum · OG'});
+    expect(service([current,movedOut,movedIn]).compute({linkedEventKey:'current'},now)).toMatchObject({type:'next-events',events:[{id:'moved',room:'Nebenraum · OG'}]});
   });
 
   it('includes non-public room bookings and uses effective delayed start',()=>{
     const privateDelayed=event('internal','10:10',{sichtbar:false,Verspaetungsanfangsdatum:'2026-10-04',Verspaetungsanfangsuhrzeit:'10:40'});
-    expect(service([event('current','09:00'),privateDelayed]).compute({linkedEventKey:'current'},now)).toMatchObject({eventId:'internal',time:'10:40 Uhr',minutesUntil:40});
+    expect(service([event('current','09:00'),privateDelayed]).compute({linkedEventKey:'current'},now)).toMatchObject({events:[{id:'internal',start:new Date(2026,9,4,10,40).toISOString()}]});
   });
 
   it('falls back safely when the current room is unresolved without exposing its id',()=>{
     const result=service([event('current','09:00',{raum:'-secret'})]).compute({linkedEventKey:'current'},now);
     expect(JSON.stringify(result)).not.toContain('-secret');
-    expect(result).toEqual({type:'leave-room',text:'Wir bitten alle Besucher, den Raum zu verlassen.'});
+    expect(result).toBeNull();
   });
 
   it('keeps a visible notice stable until the next safe transition',()=>{
     const events=new EventService([event('current','09:00'),event('next','10:30')],roomService),domain=new PostProgramRoomNoticeService(events),controller=new PostProgramRoomNoticeController(domain);
     controller.prepare({linkedEventKey:'current'},now);
-    expect(controller.beginTransition()).toMatchObject({type:'next-event',eventId:'next'});
+    expect(controller.beginTransition()).toMatchObject({notice:{type:'next-events',events:[{id:'next'}]}});
     events.remove('next');
     controller.prepare({linkedEventKey:'current'},now);
-    expect(controller.current()).toMatchObject({type:'next-event',eventId:'next'});
-    expect(controller.beginTransition()).toEqual({type:'leave-room',text:'Wir bitten alle Besucher, den Raum zu verlassen.'});
+    expect(controller.current()).toMatchObject({notice:{type:'next-events',events:[{id:'next'}]}});
+    expect(controller.beginTransition()).toMatchObject({notice:{type:'leave-room',text:'Wir bitten alle Besucher, den Raum zu verlassen.'}});
   });
 
   it('adds a notice to an output snapshot without mutating the source slide',()=>{
-    const slide={id:'slide',body:'Normal'} as any,notice={type:'leave-room',text:'Wir bitten alle Besucher, den Raum zu verlassen.'} as const,result=withPostProgramRoomNotice(slide,notice);
+    const slide={id:'slide',body:'Normal'} as any,notice={sessionId:1,headerColor:'#608F9A',page:0,pageCount:1,notice:{type:'leave-room',text:'Wir bitten alle Besucher, den Raum zu verlassen.'}} as const,result=withPostProgramRoomNotice(slide,notice);
     expect(result).not.toBe(slide);
     expect(result.postProgramRoomNotice).toBe(notice);
     expect(slide).not.toHaveProperty('postProgramRoomNotice');

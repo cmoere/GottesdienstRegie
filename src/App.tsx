@@ -102,13 +102,15 @@ import {isLoopCandidateAvailable,shouldSkipNowPlaying} from './nowPlayingModel';
 import {EventService,type ChurchEvent as CommunityChurchEvent} from './community/EventService';
 import {RoomService,type RawRoom} from './community/RoomService';
 import {setLatestPublicEvents} from './dynamicEventSlide';
-import {PostProgramRoomNoticeController,PostProgramRoomNoticeService,withPostProgramRoomNotice,type PostProgramRoomNotice} from './community/PostProgramRoomNoticeService';
+import {PostProgramRoomNoticeController,PostProgramRoomNoticeService,withPostProgramRoomNotice,type PostProgramRoomNoticeSnapshot} from './community/PostProgramRoomNoticeService';
+import {PostProgramRoomNoticeView} from './PostProgramRoomNotice';
+import {AppClock} from './community/AppClock';
 import {setPostProgramPrepared} from './community/communityRuntime';
 import {EventSlideDesigner} from './EventSlideDesigner';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
 import {NORMAL_APP_MODE,setAppOnAir,setAppTestMode,type AppModeState} from './appMode';
-import {TestModeWatermark} from './TestModeWatermark';
+import {TestModeWatermark,TestModeContext} from './TestModeWatermark';
 import { FileMenu } from "./FileMenu";
 import { MediaBrowser } from "./MediaBrowser";
 import {
@@ -8072,6 +8074,10 @@ function AppShell({
   const loopController = useRef(new LoopController<ServiceItem>());
   const communityEventService=useRef(new EventService());
   const postProgramNoticeController=useRef(new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(communityEventService.current)));
+  useEffect(()=>{
+    const refresh=()=>{const current=usePresentation.getState(),item=current.items.find(entry=>entry.id===current.liveItemId);if(item?.sectionId==='post'){postProgramNoticeController.current.prepare({eventLink:current.eventLink},AppClock.now())}else postProgramNoticeController.current.leavePostProgram()};
+    refresh();const timer=setInterval(refresh,10000);return()=>clearInterval(timer);
+  },[state.liveItemId]);
   const airBusy = useRef(false);
   const [airStarting, setAirStarting] = useState(false);
   const [appMode,setAppMode]=useState<AppModeState>(NORMAL_APP_MODE);
@@ -8586,7 +8592,7 @@ function AppShell({
           state.transitionDefault,
         ),
       };
-      if(item?.sectionId==='post')postProgramNoticeController.current.prepare({eventLink:state.eventLink},new Date());
+      if(item?.sectionId==='post'){postProgramNoticeController.current.enterPostProgram();postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now())}
       const output=item?.sectionId==='post'&&postProgramNoticeController.current.beginTransition()?withPostProgramRoomNotice(base,postProgramNoticeController.current.current()!):base;
       if(item?.sectionId!=='post')postProgramNoticeController.current.leavePostProgram();
       void liveEngine.show(output);
@@ -10144,12 +10150,12 @@ function AppShell({
         <div
           className={`workspace-quick-host ${previewQuick?.type === "noText" ? "quick-no-text" : ""}`}
         >
-          <ProductionWorkspace
+          <TestModeContext.Provider value={appMode.mode==='test'}><ProductionWorkspace
             canEdit={canEdit}
             quickScreens={quickScreens}
             activeQuick={previewQuick}
             onQuick={(quick) => void applyQuick(quick)}
-          />
+          /></TestModeContext.Provider>
         </div>
       </div>
       <BackgroundAudioController />
@@ -10298,7 +10304,7 @@ function Output() {
   }, []);
   const songOutput=(slide as (Slide & {songOutput?:{chords:string;stageRows?:{chords:string;lyrics:string}[];showChords:boolean;currentNext:boolean;next:string;lowerThird:boolean}})|null)?.songOutput;
   const lyricScroll=(slide as (Slide & {lyricScroll?:LyricScrollPacket})|null)?.lyricScroll;
-  const postProgramRoomNotice=(slide as (Slide&{postProgramRoomNotice?:PostProgramRoomNotice})|null)?.postProgramRoomNotice;
+  const postProgramRoomNotice=(slide as (Slide&{postProgramRoomNotice?:PostProgramRoomNoticeSnapshot})|null)?.postProgramRoomNotice;
   const renderedSlide=slide && songOutput?.lowerThird && role==='livestream'?{...slide,background:'transparent',backgroundImage:undefined,elements:slide.elements.filter(element=>element.type==='text').map(element=>({...element,x:140,y:800,width:1640,height:240,properties:{...element.properties,fontSize:52}}))}:slide;
   return (
     <div
@@ -10315,7 +10321,7 @@ function Output() {
         />
       )}
       <QuickOverlay quick={quick} />
-      {postProgramRoomNotice&&<section className="post-program-room-notice" aria-label="Nachprogramm-Raumhinweis">{postProgramRoomNotice.type==='next-event'?<><small>{postProgramRoomNotice.heading}</small><strong>{postProgramRoomNotice.title}</strong><span>{postProgramRoomNotice.time}</span><span>{postProgramRoomNotice.room}</span><em>Beginn in {postProgramRoomNotice.minutesUntil} Minuten</em></>:<strong>{postProgramRoomNotice.text}</strong>}</section>}
+      {postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={postProgramRoomNotice}/>}
       <span hidden data-output-mode={outputAppMode.mode} data-output-on-air={String(outputAppMode.onAir)}/>
       <TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/>
     </div>
