@@ -15,6 +15,7 @@ function ensureStarted(){
 
 export function isCancelled(event:ChurchEvent|null|undefined){return event?service.isCancelled(event):false}
 export async function listChurchEvents(){await ensureStarted();return service.getUpcomingEvents(events,new Date(0))}
+export async function listPublicChurchEvents(){await ensureStarted();return service.getUpcomingEvents(events,new Date(0)).map(event=>service.toPublicEvent(event))}
 export async function getChurchEvent(eventKey:string){await ensureStarted();return service.getByKey(eventKey)}
 
 const localDateTime=(date:string,time:string)=>new Date(`${date}T${time||'00:00'}:00`);

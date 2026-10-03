@@ -2,7 +2,8 @@ import type { AnnouncementPlacement, PublicAnnouncement } from './loopData';
 import { AnnouncementService as DomainAnnouncementService, type RawAnnouncement } from './community/AnnouncementService';
 import {StableLoopSnapshot} from './community/StableLoopSnapshot';
 import type { ServiceItem, ServiceSection } from './store';
-import { isCancelled, listChurchEvents, type ChurchEvent } from './events';
+import { listPublicChurchEvents } from './events';
+import type {PublicEvent as NormalizedPublicEvent} from './community/EventService';
 
 export type AnnouncementRecord = Record<string, Record<string, unknown>>;
 export type AnnouncementListener = (items: PublicAnnouncement[], raw: AnnouncementRecord) => void;
@@ -30,9 +31,11 @@ export class AnnouncementService {
 
 export interface PublicEvent { id: string; title: string; startsAt: string; location?: string; cancelled: boolean }
 
+export function toLoopPublicEvent(event:Pick<NormalizedPublicEvent,'id'|'title'|'effectiveStart'|'effectiveLocation'|'cancelled'>):PublicEvent{return{id:event.id,title:event.title,startsAt:event.effectiveStart,location:event.effectiveLocation||undefined,cancelled:event.cancelled}}
+
 export async function loadPublicEvents(limit = 3): Promise<PublicEvent[]> {
-  const events = await listChurchEvents();
-  return events.filter((event) => !isCancelled(event)).slice(0, limit).map((event: ChurchEvent) => ({ id: event.eventKey, title: event.titel, startsAt: `${event.start_datum}T${event.start_uhrzeit || '00:00'}`, location: undefined, cancelled: false }));
+  const events = await listPublicChurchEvents();
+  return events.filter((event) => !event.cancelled).slice(0, limit).map(toLoopPublicEvent);
 }
 
 export interface PublicBirthday { id: string; displayName: string }
