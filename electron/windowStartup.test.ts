@@ -21,6 +21,11 @@ describe('resolveOperatorWindowStartup',()=>{
     expect(result.bounds).toEqual({x:96,y:52,width:1728,height:936});
     expect(result.startMode).toBe('window');
   });
+  it('does not restore splash-sized bounds as the operator workspace',()=>{
+    const result=resolveOperatorWindowStartup({windowStartMode:'window',bounds:{x:0,y:0,width:410,height:700}},displays,1);
+    expect(result.bounds.width).toBeGreaterThanOrEqual(960);
+    expect(result.bounds.height).toBeGreaterThanOrEqual(620);
+  });
 });
 
 describe('packaged renderer startup',()=>{

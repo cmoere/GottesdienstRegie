@@ -23,9 +23,21 @@
     {
       "line": "0.75",
       "builds": [{
-        "version": "0.75.0",
+        "version": "0.75.1",
         "releaseDate": "2026-10-04",
         "current": true,
+        "overview": {
+          "label": {"de":"Teststart und Nachprogramm korrigiert","en":"Test start and post-program fixes"},
+          "text": {"de":"Getrennte Starts für Test und Produktion, korrekte Folienreihenfolge und automatischer Nachprogramm-Einstieg.","en":"Separate test and production starts, correct slide order and automatic post-program entry."}
+        },
+        "sections": {"new":[],"improved":[],"fixed":[
+          {"label":{"de":"Live-Ablauf","en":"Live flow"},"text":{"de":"Die letzte Gottesdienstfolie wird in der richtigen Reihenfolge gezeigt; Weiterschalten erreicht auch ohne angelegte Nachprogramm-Folie den Raumhinweis einer verknüpften Veranstaltung.","en":"The final service slide follows the correct order; advancing can reach the linked event's room notice without an authored post-program slide."}},
+          {"label":{"de":"Test und ON AIR","en":"Test and ON AIR"},"text":{"de":"Testbetrieb starten öffnet die Testausgabe direkt nach Bestätigung. ON AIR bleibt der bestätigte Produktivstart mit Veranstaltung.","en":"Starting test mode opens test output after confirmation. ON AIR remains the confirmed production start with a linked event."}}
+        ],"known":[]}
+      },{
+        "version": "0.75.0",
+        "releaseDate": "2026-10-04",
+        "current": false,
         "overview": {
           "label": {"de":"Sichere Live-Ausgabe und Radio-Routing","en":"Reliable live output and radio routing"},
           "text": {"de":"MAIN-Zustand, Test-Wasserzeichen, Raumauflösung, Nachprogramm und vollständige Veranstaltungstitel verbessert.","en":"Improved MAIN state, test watermark, room resolution, post-program and complete event titles."}

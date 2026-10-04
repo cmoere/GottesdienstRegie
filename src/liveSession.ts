@@ -1,6 +1,8 @@
+import type {AppModeState} from './appMode';
 import type {DisplayRole} from './store';
 
 export type LiveSessionMode = 'live' | 'test';
+export function resolveSessionAction(state:AppModeState,requested:LiveSessionMode){if(!state.onAir)return 'start';if(state.mode==='test'&&requested==='live')return 'confirm-production';return 'stop'}
 interface PreflightResult {ok:boolean;errors:string[];warnings:string[]}
 interface StartInput {
  mode:LiveSessionMode;

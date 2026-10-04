@@ -11,7 +11,7 @@ import {TERMS_EFFECTIVE_DATE,TERMS_VERSION,termsDocument} from './termsContent';
 import {translationModes, type SongTranslationMode} from './songTranslation';
 import { LyricScrollingSettings } from './LyricScrollingSettings';
 import { WindowControls } from './WindowControls';
-import { startLiveSession, type LiveSessionMode } from './liveSession';
+import { startLiveSession, resolveSessionAction, type LiveSessionMode } from './liveSession';
 import { LyricScrollRenderer } from './LyricScrollRenderer';
 import type { LyricScrollPacket } from './lyricScrolling';
 import {
@@ -109,7 +109,7 @@ import {setPostProgramPrepared} from './community/communityRuntime';
 import {EventSlideDesigner} from './EventSlideDesigner';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
-import {NORMAL_APP_MODE,setAppOnAir,setAppTestMode,type AppModeState} from './appMode';
+import {NORMAL_APP_MODE,setAppOnAir,type AppModeState} from './appMode';
 import {TestModeWatermark,TestModeContext} from './TestModeWatermark';
 import { FileMenu } from "./FileMenu";
 import { MediaBrowser } from "./MediaBrowser";
@@ -8679,6 +8679,7 @@ function AppShell({
     state.items,
     state.sections,
     playAudioInPreview,
+    appMode.mode,
   ]);
   useEffect(() => {
     if (!state.onAir || state.liveTimerPausedSlideId === state.liveSlideId)
@@ -9440,7 +9441,7 @@ function AppShell({
         },
       },
       {
-        label: state.onAir ? "OFF AIR" : "ON AIR",
+        label: state.onAir&&appMode.mode==='normal' ? "OFF AIR" : "ON AIR",
         icon: "cast",
         separator: true,
         action: () => void air(),
@@ -9700,15 +9701,18 @@ function AppShell({
     airBusy.current = true;
     setAirStarting(true);
     try {
-    if (state.onAir && !preflightOnly) {
+    const sessionAction=resolveSessionAction({...appMode,onAir:state.onAir},requestedMode);
+    if(!preflightOnly&&sessionAction==='confirm-production'&&!confirm('Testbetrieb beenden und die verknüpfte Veranstaltung wirklich ON AIR starten?'))return;
+    if (sessionAction==='stop' && !preflightOnly) {
       await backgroundAudioEngine.stop();
       await liveEngine.stop();
       state.setOnAir(false);
       setPreviewQuick(null);
       setOutputState({});
+      setAppMode(NORMAL_APP_MODE);
       return;
     }
-    const sessionMode = appMode.mode==='test' ? 'test' : requestedMode;
+    const sessionMode = requestedMode;
     const first=firstActiveTarget(state.items.filter(item=>isLoopCandidateAvailable(item))),
       itemId = first?.itemId ?? "",
       slideId = first?.slideId ?? "",
@@ -9778,6 +9782,7 @@ function AppShell({
     const linkedEvent = sessionMode !== 'test' && state.eventLink?.eventKey
       ? await getChurchEvent(state.eventLink.eventKey).catch(() => null)
       : null;
+    if(!state.eventLink?.eventKey)warnings.push('Ohne verknüpfte Veranstaltung kann kein automatischer Raumhinweis im Nachprogramm ermittelt werden.');
     if (isCancelled(linkedEvent))
       warnings.push(
         "Die verknüpfte Veranstaltung fällt aus. Die Verbindung bleibt bestehen; bitte prüfe den Live-Start.",
@@ -9844,16 +9849,28 @@ function AppShell({
         const current=usePresentation.getState(),selectedItem=current.items.find(entry=>entry.id===itemId),fallback=isLoopCandidateAvailable(selectedItem!)?{itemId,slideId}:firstActiveTarget(current.items.filter(item=>isLoopCandidateAvailable(item))),startItemId=fallback?.itemId??'',startSlideId=fallback?.slideId??'',item=current.items.find(entry=>entry.id===startItemId),startSlide=item?.slides.find(entry=>entry.id===startSlideId);
         if (!startSlide) return false;
         try {
+          // Close the marked rehearsal output before switching its global mode.
+          if(appMode.mode==='test'&&current.onAir&&sessionMode==='live'){
+            await backgroundAudioEngine.stop();
+            await liveEngine.stop();
+          }
+          const nextMode:AppModeState={mode:sessionMode==='test'?'test':'normal',onAir:true};
+          await (window.desktop as any)?.setOutputAppMode?.(nextMode);
           const started = await liveEngine.start(assignments, {
             ...startSlide, transitionOverride: resolveTransition(startSlide, item, 'main', current.transitionDefault),
           });
-          if (!started) { await liveEngine.stop(); return false; }
+          if (!started) throw new Error('Die Ausgabe konnte nicht gestartet werden.');
+          setAppMode(nextMode);
           state.goLive(startItemId, startSlideId);
           state.setMode('preview');
           state.setOnAir(true);
           return true;
         } catch (error) {
           await liveEngine.stop().catch(() => false);
+          state.setOnAir(false);
+          const stoppedMode:AppModeState={...appMode,onAir:false};
+          setAppMode(stoppedMode);
+          await (window.desktop as any)?.setOutputAppMode?.(stoppedMode).catch(()=>{});
           throw error;
         }
       },
@@ -10105,31 +10122,31 @@ function AppShell({
         </div>
         <div className="live-session-controls">
         <button type="button" className={`test-session-button ${appMode.mode==='test' ? 'active' : ''}`}
-          disabled={airStarting || !can('presentationLive') || !window.desktop}
+          disabled={airStarting || !can('presentationLive') || !window.desktop || (state.onAir&&appMode.mode==='normal')}
           title="MAIN und STAGE ohne Veranstaltung testen. Echte Bild- und Tonausgabe nach Bestätigung."
-          onClick={()=>setAppMode(current=>setAppTestMode(current,current.mode!=='test'))}>
-          {appMode.mode==='test' ? 'TESTBETRIEB BEENDEN' : 'TESTBETRIEB STARTEN'}
+          onClick={()=>void air(false,undefined,'test')}>
+          {appMode.mode==='test'&&state.onAir ? 'TESTBETRIEB BEENDEN' : 'TESTBETRIEB STARTEN'}
         </button>
         <button
-          className={`onair ${state.onAir ? "live" : ""}`}
+          className={`onair ${state.onAir&&appMode.mode==='normal' ? "live" : ""}`}
           disabled={
             airStarting ||
             !can("presentationLive") ||
             !window.desktop ||
-            (!state.onAir && (!state.mainDisplayId || (appMode.mode==='normal'&&!state.eventLink?.eventKey)))
+            ((!state.onAir||appMode.mode==='test') && (!state.mainDisplayId || !state.eventLink?.eventKey))
           }
           title={
             !can("presentationLive")
               ? t("noLivePermission")
               : !state.onAir && !state.mainDisplayId
                 ? t("assignMain")
-                : !state.onAir && appMode.mode==='normal' && !state.eventLink?.eventKey
+                : (!state.onAir||appMode.mode==='test') && !state.eventLink?.eventKey
                   ? "Bitte zuerst eine Veranstaltung verknüpfen"
                   : ""
           }
           onClick={() => void air()}
         >
-          {state.onAir ? (appMode.mode==='test' ? 'OFF AIR · TEST' : "OFF AIR") : (appMode.mode==='test'?'ON AIR · TEST':"ON AIR")}
+          {state.onAir&&appMode.mode==='normal' ? 'OFF AIR' : 'ON AIR'}
         </button>
         </div>
       </div>

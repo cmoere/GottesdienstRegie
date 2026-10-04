@@ -25,7 +25,7 @@ export function resolveOperatorWindowStartup(preferences:Partial<AppPreferencesD
   const primary=displays.find(display=>display.id===primaryId)??displays[0];
   if(!primary)throw new Error('NO_DISPLAY');
   const requested=preferences.operatorDisplayTarget==='last'?displays.find(display=>display.id===preferences.lastDisplayId):undefined;
-  const target=requested??primary,stored=preferences.bounds,visible=Boolean(stored&&displays.some(display=>intersects(stored,display.bounds)));
+  const target=requested??primary,stored=preferences.bounds,visible=Boolean(stored&&stored.width>=960&&stored.height>=620&&displays.some(display=>intersects(stored,display.bounds)));
   const bounds=visible?stored!:{x:target.workArea.x+Math.round(target.workArea.width*.05),y:target.workArea.y+Math.round(target.workArea.height*.05),width:Math.max(960,Math.round(target.workArea.width*.9)),height:Math.max(620,Math.round(target.workArea.height*.9))};
   const configured=preferences.windowStartMode??'fullscreen';
   return{bounds,startMode:configured==='restore'?(preferences.lastWindowState??'fullscreen'):configured,minimumSize:{width:960,height:620},resizable:true,maximizable:true};

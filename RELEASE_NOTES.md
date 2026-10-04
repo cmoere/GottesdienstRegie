@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.75.1
+
+Testbetrieb starten öffnet nach Bestätigung direkt die Testausgaben. ON AIR startet den normalen Betrieb mit einer verknüpften Veranstaltung; der Wechsel aus einem laufenden Test wird ausdrücklich bestätigt.
+
+Live-Navigation und Start beachten die Reihenfolge von Abschnitten, Elementen und Folien. Nach der letzten Gottesdienstfolie wird beim Weiterschalten ein fehlender Nachprogramm-Einstieg automatisch ergänzt, wenn eine Veranstaltung verknüpft ist. Der Raumhinweis verwendet weiterhin die zentralen Veranstaltungs- und Raumdaten. Manuelle Folien bleiben manuell gesteuert.
+
+Gespeicherte Fensterabmessungen unterhalb der Desktop-Mindestgröße werden nicht als Arbeitsbereich wiederhergestellt.
+
+---
+
 # GottesdienstRegie 0.75.0
 
 MAIN erhält beim Öffnen den aktuellen versionierten Live-Zustand. Das Test-Wasserzeichen bleibt unabhängig von ON AIR auf den Ausgaben sichtbar.
