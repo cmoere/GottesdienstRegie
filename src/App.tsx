@@ -8075,7 +8075,7 @@ function AppShell({
   const communityEventService=useRef(new EventService());
   const postProgramNoticeController=useRef(new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(communityEventService.current)));
   useEffect(()=>{
-    const refresh=()=>{const current=usePresentation.getState(),item=current.items.find(entry=>entry.id===current.liveItemId);if(item?.sectionId==='post'){postProgramNoticeController.current.prepare({eventLink:current.eventLink},AppClock.now())}else postProgramNoticeController.current.leavePostProgram()};
+    const refresh=()=>{const current=usePresentation.getState(),item=current.items.find(entry=>entry.id===current.liveItemId);if(item?.sectionId==='post'){postProgramNoticeController.current.prepare({eventLink:current.eventLink},AppClock.now())}else if(current.onAir)postProgramNoticeController.current.leavePostProgram()};
     refresh();const timer=setInterval(refresh,10000);return()=>clearInterval(timer);
   },[state.liveItemId]);
   const airBusy = useRef(false);
@@ -8593,12 +8593,12 @@ function AppShell({
         ),
       };
       if(item?.sectionId==='post'){postProgramNoticeController.current.enterPostProgram();postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now())}
-      const output=item?.sectionId==='post'&&postProgramNoticeController.current.beginTransition()?withPostProgramRoomNotice(base,postProgramNoticeController.current.current()!):base;
+      const output=item?.sectionId==='post'?postProgramNoticeController.current.outputForTake(base,state.liveTransitionRevision):base;
       if(item?.sectionId!=='post')postProgramNoticeController.current.leavePostProgram();
       void liveEngine.show(output);
     }
-  }, [state.liveSlideId,state.liveItemId,state.onAir,state.items,state.transitionDefault,state.lyricScrolling,songTranslationMode]);
-  useEffect(()=>{const update=(event:Event)=>{const audio=(event as CustomEvent<BackgroundAudioState>).detail,item=usePresentation.getState().items.find(entry=>entry.id===usePresentation.getState().liveItemId);if(!usePresentation.getState().onAir||item?.type!=='nowPlaying')return;const track=audio.track,signature=`${audio.active}:${track?.assetId??''}:${track?.name??''}:${track?.artist??''}:${track?.album??''}:${track?.imageUrl??''}`;if(signature===nowPlayingSignatureRef.current)return;nowPlayingSignatureRef.current=signature;const slide=item.slides.find(entry=>entry.id===usePresentation.getState().liveSlideId)??item.slides[0];if(!slide)return;const patched={...slide,elements:slide.elements.map(element=>element.type==='loop'?{...element,properties:{...element.properties,nowPlayingActive:audio.active,nowPlayingTitle:track?.name??'',nowPlayingArtist:track?.artist??'',nowPlayingAlbum:track?.album??'',nowPlayingArtwork:track?.imageUrl??'',nowPlayingSource:track?.format??''}}:element)};void liveEngine.show({...patched,transitionOverride:resolveTransition(patched,item,'main',usePresentation.getState().transitionDefault)})};window.addEventListener('gottesdienstregie:background-audio',update);return()=>window.removeEventListener('gottesdienstregie:background-audio',update)},[]);
+  }, [state.liveTransitionRevision,state.liveSlideId,state.liveItemId,state.onAir,state.items,state.transitionDefault,state.lyricScrolling,songTranslationMode]);
+  useEffect(()=>{const update=(event:Event)=>{const audio=(event as CustomEvent<BackgroundAudioState>).detail,item=usePresentation.getState().items.find(entry=>entry.id===usePresentation.getState().liveItemId);if(!usePresentation.getState().onAir||item?.type!=='nowPlaying')return;const track=audio.track,signature=`${audio.active}:${track?.assetId??''}:${track?.name??''}:${track?.artist??''}:${track?.album??''}:${track?.imageUrl??''}`;if(signature===nowPlayingSignatureRef.current)return;nowPlayingSignatureRef.current=signature;const slide=item.slides.find(entry=>entry.id===usePresentation.getState().liveSlideId)??item.slides[0];if(!slide)return;const patched={...slide,elements:slide.elements.map(element=>element.type==='loop'?{...element,properties:{...element.properties,nowPlayingActive:audio.active,nowPlayingTitle:track?.name??'',nowPlayingArtist:track?.artist??'',nowPlayingAlbum:track?.album??'',nowPlayingArtwork:track?.imageUrl??'',nowPlayingSource:track?.format??''}}:element)};const output={...patched,transitionOverride:resolveTransition(patched,item,'main',usePresentation.getState().transitionDefault)};const notice=postProgramNoticeController.current.current();void liveEngine.show(item.sectionId==='post'&&notice?withPostProgramRoomNotice(output,notice):output)};window.addEventListener('gottesdienstregie:background-audio',update);return()=>window.removeEventListener('gottesdienstregie:background-audio',update)},[]);
   useEffect(() => {
     const previous = audioSessionRef.current,
       previewKey = `${state.previewItemId}:${state.previewSlideId}`,
@@ -8753,6 +8753,7 @@ function AppShell({
     state.liveItemId,
     state.liveSlideId,
     state.liveTimerPausedSlideId,
+    state.liveTransitionRevision,
     state.items,
   ]);
   useEffect(

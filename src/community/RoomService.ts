@@ -6,7 +6,7 @@ const object=(value:unknown):value is Record<string,unknown>=>Boolean(value)&&ty
 const value=(source:Record<string,unknown>,keys:string[])=>{for(const key of keys){const nested=key.split('.').reduce<unknown>((current,part)=>object(current)?current[part]:undefined,source);if(typeof nested==='string'&&nested.trim())return nested.trim()}return''};
 const alias=(input:string)=>input.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('de').replace(/[^a-z0-9]+/g,' ').trim();
 const nameKeys=['raumname','raumName','name','label','bezeichnung','titel','displayName','raumkurzname','kurzname','shortName','meta.name','meta.label'];
-const idKeys=['id','roomId','raumId','key','__key'];
+const idKeys=['roomId','id','raumId','key','__key'];
 const roomRecordKeys=new Set(['etage','floor','stockwerk','gebaeude','gebäude','building','haus','kapazitaet','capacity','barrierefrei','accessible','code','slug','aliases','suchbegriffe','searchTerms','meta']);
 
 type Candidate={raw:Record<string,unknown>;childKey:string;path:string};
@@ -34,7 +34,7 @@ export class RoomService{
       this.roomsById.set(roomId,room);
       const lists=[raw.aliases,raw.suchbegriffe,raw.searchTerms].flatMap(entry=>Array.isArray(entry)?entry:[]).map(String);
       const pathAliases=[candidate.path,candidate.path.split('/').filter(part=>!containers.has(part.toLocaleLowerCase('de'))).join('/')];
-      for(const entry of [roomId,candidate.childKey,...pathAliases,name,shortName,value(raw,['bezeichnung']),value(raw,['code']),value(raw,['slug']),value(raw,['meta.name']),value(raw,['meta.label']),value(raw,['meta.shortName']),...lists,`${name} ${floor}`,`${floor} ${name}`,`${shortName} ${floor}`,`${name} ${building}`]){
+      for(const entry of [roomId,...idKeys.map(key=>value(raw,[key])),candidate.childKey,...pathAliases,name,shortName,value(raw,['bezeichnung']),value(raw,['code']),value(raw,['slug']),value(raw,['meta.name']),value(raw,['meta.label']),value(raw,['meta.shortName']),...lists,`${name} ${floor}`,`${floor} ${name}`,`${shortName} ${floor}`,`${name} ${building}`]){
         const key=alias(String(entry??''));if(key){if(!this.aliasMap.has(key))this.aliasMap.set(key,roomId);else if(this.aliasMap.get(key)!==roomId)this.aliasMap.set(key,'')}
       }
     }

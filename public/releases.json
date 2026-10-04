@@ -21,11 +21,27 @@
   ],
   "versions": [
     {
+      "line": "0.75",
+      "builds": [{
+        "version": "0.75.0",
+        "releaseDate": "2026-10-04",
+        "current": true,
+        "overview": {
+          "label": {"de":"Sichere Live-Ausgabe und Radio-Routing","en":"Reliable live output and radio routing"},
+          "text": {"de":"MAIN-Zustand, Test-Wasserzeichen, Raumauflösung, Nachprogramm und vollständige Veranstaltungstitel verbessert.","en":"Improved MAIN state, test watermark, room resolution, post-program and complete event titles."}
+        },
+        "sections": {"new":[],"improved":[],"fixed":[
+          {"label":{"de":"MAIN und Radio","en":"MAIN and radio"},"text":{"de":"Initiale Ausgabe wird zuverlässig nachgeladen; Radio folgt der Background-Audio-Route mit Signaldiagnose.","en":"Initial output state is replayed; radio follows the Background Audio route with signal diagnostics."}},
+          {"label":{"de":"Veranstaltungen und Nachprogramm","en":"Events and post-program"},"text":{"de":"Stabile Raum-IDs, vollständige Titel, sichere Seitenwechsel und feste Sessionfarbe.","en":"Stable room IDs, complete titles, safe page transitions and a stable session color."}}
+        ],"known":[]}
+      }]
+    },
+    {
       "line": "0.74",
       "builds": [{
         "version": "0.74.0",
         "releaseDate": "2026-10-03",
-        "current": true,
+        "current": false,
         "overview": {
           "label": { "de": "Zentrale Gemeindedaten und sicherer Testbetrieb", "en": "Central community data and safe test mode" },
           "text": { "de": "Veranstaltungen, Meldungen und Räume werden zentral normalisiert; das Nachprogramm erkennt die nächste Raumbelegung und alle Testausgaben tragen ein Wasserzeichen.", "en": "Events, announcements, and rooms are normalized centrally; post-program detects the next room booking and every test output carries a watermark." }

@@ -1,3 +1,4 @@
+import {paginateReducedMotionEvents} from './eventPagination';
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Slide, SlideElement } from "./store";
 import { fontStack } from "./fonts";
@@ -558,13 +559,20 @@ function EventLoopElement({
     return () =>
       window.removeEventListener("gottesdienstregie:community-events", update);
   }, [live]);
+  const [reducedMotion,setReducedMotion]=useState(()=>window.matchMedia?.("(prefers-reduced-motion: reduce)").matches??false);
+  const [eventPage,setEventPage]=useState(0);
+  useEffect(()=>{const query=window.matchMedia?.("(prefers-reduced-motion: reduce)");const update=()=>setReducedMotion(query?.matches??false);query?.addEventListener("change",update);return()=>query?.removeEventListener("change",update)},[]);
+  useEffect(()=>{if(!reducedMotion)return;const timer=setInterval(()=>setEventPage(page=>page+1),8000);return()=>clearInterval(timer)},[reducedMotion]);
   const settings = normalizeEventSlideSettings(properties),
     source = !live&&events.length
       ? { ...properties, eventItemsJson: JSON.stringify(events) }
       : properties,
-    items = eventSlideItems(source);
+    allItems = eventSlideItems(source),
+    pages=reducedMotion?paginateReducedMotionEvents(allItems):[],
+    items=reducedMotion?(pages[eventPage%pages.length]??[]):allItems;
   return (
     <div
+      data-reduced-motion={reducedMotion}
       className={`slide-renderer-element loop-surface event-loop-surface event-design-${settings.design}`}
       style={{
         ...style,
@@ -579,7 +587,7 @@ function EventLoopElement({
             {settings.design === "poster" && event.coverUrl ? (
               <img src={event.coverUrl} alt="" />
             ) : (
-              <b>{String(index + 1).padStart(2, "0")}</b>
+              <b>{String("eventNumber" in event?event.eventNumber:index + 1).padStart(2, "0")}</b>
             )}
             <div>
               <EventTitle title={event.title}/>

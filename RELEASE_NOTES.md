@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.75.0
+
+MAIN erhält beim Öffnen den aktuellen versionierten Live-Zustand. Das Test-Wasserzeichen bleibt unabhängig von ON AIR auf den Ausgaben sichtbar.
+
+Das Nachprogramm zeigt alle passenden Raumbelegungen innerhalb von 61 Minuten im neuen Informationsdesign. Die Kopfbereichsfarbe bleibt je Session fest. Änderungen werden erst beim nächsten echten Wechsel übernommen. Raum-IDs werden zentral aufgelöst; lange Veranstaltungstitel bleiben vollständig und werden bei Bedarf auf Folgeseiten verteilt.
+
+Radio verwendet den konfigurierten Background-Audio-Ausgang. Die Pegelerfassung greift nicht mehr in den hörbaren Signalweg ein. Der Diagnosebereich zeigt Route, Ausgang, Signal, Lautstärke, Mute und AudioContext.
+
+---
+
 # GottesdienstRegie 0.74.0
 
 Version 0.74.0 bindet Veranstaltungen, Meldungen und Räume zentral und in Echtzeit an die bestehende Firebase-Datenquelle an. Stabile Child-Keys bleiben erhalten, verschachtelte Raumdaten werden tolerant aufgelöst und MAIN erhält ausschließlich normalisierte öffentliche Inhalte. Bei Verbindungsproblemen kann der letzte noch sinnvolle Stand weiterverwendet werden; Preflight meldet fehlende oder nicht auflösbare Daten nur im Operator-Bereich.

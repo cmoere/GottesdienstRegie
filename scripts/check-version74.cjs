@@ -1,8 +1,8 @@
 const fs=require('fs'),assert=require('assert');
 const pkg=require('../package.json'),releases=require('../public/releases.json'),read=file=>fs.readFileSync(file,'utf8');
-assert(pkg.version==='0.74.0'&&pkg.releaseSeries==='0.74','package must identify V74');
-assert(releases.versions[0]?.builds[0]?.version==='0.74.0'&&releases.versions[0].builds[0].current===true,'V74 must lead the catalog');
-assert(read('RELEASE_NOTES.md').startsWith('# GottesdienstRegie 0.74.0'),'notes must start with V74');
+assert(Number(pkg.version.split('.')[1])>=74,'package must include V74');
+assert(releases.versions.some(entry=>entry.builds?.some(build=>build.version==='0.74.0')),'catalog must retain V74');
+assert(read('RELEASE_NOTES.md').includes('# GottesdienstRegie 0.74.0'),'notes must retain V74');
 const firebase=read('electron/FirebaseGemeindeService.ts'),rooms=read('src/community/RoomService.ts'),post=read('src/community/PostProgramRoomNoticeService.ts'),mode=read('src/appMode.ts'),app=read('src/App.tsx');
 for(const path of ['veranstaltungen','meldungen','rooms'])assert(firebase.includes(`watchChildren('${path}'`),`central ${path} child watcher missing`);
 assert(rooms.includes('function flatten(')&&rooms.includes('roomsById'),'recursive stable room resolution missing');

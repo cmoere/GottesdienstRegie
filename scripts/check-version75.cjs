@@ -1,0 +1,11 @@
+const fs=require('fs'),assert=require('assert'),pkg=require('../package.json'),releases=require('../public/releases.json'),read=file=>fs.readFileSync(file,'utf8');
+assert(pkg.version==='0.75.0'&&pkg.releaseSeries==='0.75','package must identify V75');
+assert(releases.versions[0]?.builds[0]?.version==='0.75.0'&&releases.versions[0].builds[0].current,'V75 must lead the catalog');
+assert(read('RELEASE_NOTES.md').startsWith('# GottesdienstRegie 0.75.0'),'V75 release notes missing');
+assert(read('electron/OutputWindowManager.ts').includes('getStateForSender'),'output replay missing');
+assert(read('src/App.tsx').includes('liveTransitionRevision'),'explicit live take missing');
+assert(read('src/community/PostProgramRoomNoticeService.ts').includes('outputForTake'),'safe post transition missing');
+assert(read('src/eventPagination.ts').includes('paginatePostEvents'),'complete post pages missing');
+assert(!read('src/audio/AudioLevelProvider.ts').includes('createMediaElementSource('),'meter must not reroute audible media');
+assert(read('src/BackgroundAudioEngine.ts').includes('BackgroundAudioRoute'),'radio background route missing');
+console.log('V75 release guard passed.');
