@@ -27,3 +27,12 @@
 - Room notices require a resolvable linked event and effective internal room, also in test mode. Missing links now produce a preflight warning, not a fabricated visitor-facing notice.
 - Existing automatic timers for multi-slide loop items were not redesigned by this hotfix.
 - Physical display placement and audible output on the user's hardware still require an on-device check.
+
+## Publication
+
+- Source commit: `2c94f3ed1bf7bdd3e632680371f68641723a699b`.
+- Release workflow `37234941793`: Windows, macOS and Linux completed successfully.
+- Public release: https://github.com/cmoere/GottesdienstRegie/releases/tag/v0.75.1
+- Public Windows installer: 287769362 bytes; fully downloaded and matched against `latest.yml` SHA512:
+  `bweivmVVIQv82l/MqHhfYCdZdw2RF7BBSj1xgsZY4H9h2phZjsRNuRXWpx6vmuxjP6/GvNsnuLGluZ0tuTYwqQ==`.
+- GitHub `/releases/latest` with updater-style JSON accept header returns `v0.75.1`.
