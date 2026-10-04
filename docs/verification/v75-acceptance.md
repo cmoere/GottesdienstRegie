@@ -1,5 +1,14 @@
 # v75 verification — 2026-10-04
 
+## Published release
+
+- Public stable release: https://github.com/cmoere/GottesdienstRegie/releases/tag/v0.75.0
+- Release workflow 37180135136: Windows, macOS and Linux all successful at commit 2b7c121.
+- Windows installer and blockmap published; stable latest.yml reports 0.75.0.
+- Public installer downloaded in full (287770369 bytes). SHA512 matches the public stable feed:
+  `wTcYKHA+57dFABE06bm5fJ9T/KEnzYaWPxsRJGY9UZ7snia7KTsjXyQY6e5Wjd4HIgeMK98oBSOmCfYvYULYQg==`
+- Exact electron-updater provider endpoint also returns v0.75.0. Local NSIS packaging and packaged-entry verification passed.
+
 ## Scope and evidence
 
 - Independent branch review completed; its six important findings were verified against the code.
