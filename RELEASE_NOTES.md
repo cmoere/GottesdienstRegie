@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.75.2
+
+Der Weiter-Pfeil bleibt nach der letzten Gottesdienstfolie für den automatischen Nachprogramm-Einstieg verfügbar, wenn eine Veranstaltung verknüpft ist. Auch ein wiederholtes Nachprogramm kann über den Pfeil weitergeschaltet werden. Manuell gesteuerte Gottesdienstfolien bleiben manuell.
+
+Einzelvorschau und „LIVE AUF MAIN“ spiegeln jetzt den vorbereiteten Nachprogramm-Raumhinweis der Ausgabe. Passende Folgetermine innerhalb von 61 Minuten oder „Wir bitten alle Besucher, den Raum zu verlassen.“ erscheinen dadurch auch am Bedienplatz. Bearbeitbare Folien werden nicht verändert. Die Kopfbereichsfarbe bleibt pro Session fest; Änderungen werden beim nächsten sicheren Wechsel übernommen.
+
+Der Raumhinweis übernimmt in der kleinen MAIN-Vorschau keine abschneidende Beschriftungsformatierung mehr. Der Ablauf ist auch im Testbetrieb geprüft.
+
+---
+
 # GottesdienstRegie 0.75.1
 
 Testbetrieb starten öffnet nach Bestätigung direkt die Testausgaben. ON AIR startet den normalen Betrieb mit einer verknüpften Veranstaltung; der Wechsel aus einem laufenden Test wird ausdrücklich bestätigt.

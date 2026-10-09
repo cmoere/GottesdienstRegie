@@ -80,6 +80,19 @@ const describeChange=(state:State,patch:Partial<State>):ChangeMeta=>{
 };
 const changed=(state:State,patch:Partial<State>,override?:Partial<ChangeMeta>)=>{const timestamp=iso(),meta={...describeChange(state,patch),...override} as ChangeMeta,previous=state.editHistory.at(-1),same=meta.coalesce&&previous?.entityId===meta.entityId&&previous.actionType===meta.actionType&&Date.parse(timestamp)-Date.parse(previous.timestamp)<1500,revision=Number(String(previous?.revisionId??'rev-0').replace(/\D/g,''))||0,entry:EditHistoryEntry={id:uuid(),presentationId:state.presentationId,revisionId:`rev-${same?revision:revision+1}`,timestamp,actor:state.historyDisplayName||state.createdBy||'Unbekannt',userId:state.historyUserId||'local',userDisplayName:state.historyDisplayName||state.createdBy||'Unbekannt',deviceId:state.historyDeviceId||undefined,deviceNameSnapshot:state.historyDeviceName||undefined,action:meta.action,actionType:meta.actionType,category:meta.category,entityType:meta.entityType,entityId:meta.entityId,entityTitle:meta.entityTitle,before:redactSensitiveValue(same?previous?.before:meta.before),after:redactSensitiveValue(meta.after),source:meta.source??'desktop',transactionId:same?previous!.transactionId:uuid(),syncStatus:'PENDING'},editHistory=same?[...state.editHistory.slice(0,-1),entry]:[...state.editHistory,entry].slice(-1000);return{...patch,history:[...state.history.slice(-49),snap(state)],future:[],editHistory,saveState:'dirty' as SaveState,updatedAt:timestamp}};
 const activeSlides=(state:State)=>[...state.items].sort((a,b)=>(state.sections.find(section=>section.id===a.sectionId)?.order??99)-(state.sections.find(section=>section.id===b.sectionId)?.order??99)||a.order-b.order).filter(item=>isLoopCandidateAvailable(item)&&canPlaceItem(item,state.sections.find(section=>section.id===item.sectionId))).flatMap(item=>[...item.slides].sort((a,b)=>a.order-b.order).filter(slide=>slide.enabled).map(slide=>({itemId:item.id,slideId:slide.id})));
+function nextLiveTarget(state:State){
+  const all=activeSlides(state),index=all.findIndex(entry=>entry.slideId===state.liveSlideId),currentItem=state.items.find(item=>item.id===state.liveItemId);
+  let next=all[index<0?0:index+1];
+  if(currentItem&&(currentItem.sectionId==='pre'||currentItem.sectionId==='post')){
+    const sectionItems=state.items.filter(item=>item.sectionId===currentItem.sectionId&&isLoopCandidateAvailable(item));
+    const sectionSlides=all.filter(entry=>sectionItems.some(item=>item.id===entry.itemId));
+    if(sectionSlides.length&&sectionSlides.at(-1)?.slideId===state.liveSlideId&&sectionItems.some(item=>item.repeat||item.timing.repeat))next=sectionSlides[0];
+  }
+  return next;
+}
+export function canAdvanceLive(state:State){
+  return Boolean(nextLiveTarget(state)||(state.eventLink?.eventKey&&state.items.some(item=>item.id===state.liveItemId&&item.sectionId==='service')));
+}
 const updateSelectedGeometry=(state:State,mutate:(elements:Rect[])=>Rect[])=>{
   const items=structuredClone(state.items),slide=items.flatMap(item=>item.slides).find(entry=>entry.id===state.selectedSlideId);
   if(!slide)return state;
@@ -167,14 +180,8 @@ export const usePresentation=create<State>()(persist((set,get)=>({
   setDisplayRole:(id,role)=>set(state=>{const displayRoles={...state.displayRoles};if(role!=='unused')for(const key of Object.keys(displayRoles))if(displayRoles[key]===role)delete displayRoles[key];if(role==='unused')delete displayRoles[String(id)];else displayRoles[String(id)]=role;const mainEntry=Object.entries(displayRoles).find(([,value])=>value==='main');return{displayRoles,mainDisplayId:mainEntry?Number(mainEntry[0]):undefined}}),
   setOnAir:onAir=>set({onAir,...(!onAir?{liveItemId:'',liveSlideId:'',liveTimerPausedSlideId:undefined}:{})}),goLive:(liveItemId,liveSlideId)=>set(state=>({liveItemId,liveSlideId,liveTransitionRevision:(state.liveTransitionRevision??0)+1,liveTimerPausedSlideId:undefined})),setLiveTimerPaused:liveTimerPausedSlideId=>set({liveTimerPausedSlideId}),
   nextLive:()=>{
-    const state=get(),all=activeSlides(state),index=all.findIndex(entry=>entry.slideId===state.liveSlideId),currentItem=state.items.find(item=>item.id===state.liveItemId);
-    let next=all[index<0?0:index+1];
-    if(currentItem&&(currentItem.sectionId==='pre'||currentItem.sectionId==='post')){
-      const sectionItems=state.items.filter(item=>item.sectionId===currentItem.sectionId&&isLoopCandidateAvailable(item));
-      const sectionSlides=all.filter(entry=>sectionItems.some(item=>item.id===entry.itemId));
-      const sectionIndex=sectionSlides.findIndex(entry=>entry.slideId===state.liveSlideId);
-      if(sectionSlides.length&&sectionIndex===sectionSlides.length-1&&sectionItems.some(item=>item.repeat||item.timing.repeat))next=sectionSlides[0];
-    }
+    const state=get(),currentItem=state.items.find(item=>item.id===state.liveItemId);
+    let next=nextLiveTarget(state);
     if(!next&&currentItem?.sectionId==='service'&&state.eventLink?.eventKey){
       // The room notice is a global output overlay. Ensure it has a post-program
       // take even in older presentations without an explicitly authored post loop.

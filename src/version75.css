@@ -1,8 +1,10 @@
 .output>.post-program-room-notice{z-index:10}
+.main-preview-surface{position:relative;container-type:size}
+.main-preview-surface>.post-program-room-notice,.live-slide-panel>div>.post-program-room-notice{z-index:10}
 .post-program-room-notice{position:absolute;inset:0;display:block;padding:0;gap:0;text-align:left;background:#000;color:#fff;container-type:size;font-family:"Cera Pro","Segoe UI",sans-serif}
 .post-program-room-notice>header{height:17.5%;box-sizing:border-box;padding:1.2cqw 2cqw;color:#000;font-size:4.8cqw;line-height:1.15;font-weight:800;display:flex;align-items:flex-start}
 .post-program-body{padding:1.6cqw 1.25cqw}
-.post-program-body>p{margin:0;padding:0 .8cqw;font-size:2.8cqw;font-weight:800;line-height:1.3}
+.post-program-body>p{margin:0;padding:0 .8cqw;font-size:2.8cqw;font-weight:800;line-height:1.3;color:#fff;white-space:normal;overflow:visible;text-overflow:clip}
 .post-program-row{display:grid;grid-template-columns:25% 29% 31% 15%;border-bottom:2px solid #bbb;padding:.4cqw 0;align-items:start}
 .post-program-row>span,.post-program-row>strong{min-width:0;max-width:none;font-size:2.8cqw;line-height:1.2;font-weight:800;white-space:pre-line;overflow-wrap:anywhere}
 .post-program-row>span:last-child{text-align:right}

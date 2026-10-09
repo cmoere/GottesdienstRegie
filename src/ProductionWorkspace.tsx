@@ -25,6 +25,7 @@ import { ShapeGallery } from "./ShapeGallery";
 import { SlideRenderer } from "./SlideRenderer";
 import {
   defaultTransition,
+  canAdvanceLive,
   formatDuration,
   itemDurationSeconds,
   usePresentation,
@@ -70,6 +71,8 @@ import { quickScreenShortcut } from "./quickScreenUi";
 import { usesAutomaticLoopEditor } from "./loopEditorModel";
 import { NowPlayingDesigner } from "./NowPlayingDesigner";
 import { EventSlideDesigner } from "./EventSlideDesigner";
+import {useLiveOutputPreview} from './liveOutputPreview';
+import {PostProgramRoomNoticeView} from './PostProgramRoomNotice';
 
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -3711,6 +3714,7 @@ function PreviewCenter({
 }: {
   activeQuick: QuickScreenConfig | null;
 }) {
+  const output = useLiveOutputPreview(s=>s.slide);
   const state = usePresentation(),
     root = useRef<HTMLDivElement>(null),
     deadline = useRef(0),
@@ -3850,7 +3854,7 @@ function PreviewCenter({
         >
           <Icon name="chevron_left" />
         </button>
-        <div>
+        <div className="main-preview-surface">
           <TransitionStage
             slide={previewSlide(slide)}
             transition={resolveTransition(
@@ -3862,6 +3866,7 @@ function PreviewCenter({
             role="operator"
           />
           <QuickOverlay quick={activeQuick} staticPreview />
+          {state.onAir&&output?.id===slide.id&&output.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
           <TestModeWatermark role="main"/>
         </div>
         <div className="preview-navigation-rail">
@@ -3904,7 +3909,7 @@ function PreviewCenter({
           )}
           <button
             className="preview-nav next"
-            disabled={currentIndex < 0 || currentIndex >= all.length - 1}
+            disabled={state.onAir ? !canAdvanceLive(state) : currentIndex < 0 || currentIndex >= all.length - 1}
             title="Nächste MAIN-Folie"
             onClick={() => move(1)}
           >
@@ -4029,6 +4034,7 @@ function PreviewRightSidebar({
   activeQuick: QuickScreenConfig | null;
   onQuick: (quick: QuickScreenConfig | null) => void;
 }) {
+  const output = useLiveOutputPreview(s=>s.slide);
   const state = usePresentation(),
     [collapsed, setCollapsed] = useState(
       () =>
@@ -4071,6 +4077,7 @@ function PreviewRightSidebar({
           title={`${liveItem?.title} · ${live.title || "Live-Folie"}`}
         >
           <SlideRenderer slide={previewSlide(live)} mode="thumbnail" />
+          {state.onAir&&output?.id===live.id&&output.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
         </MainLivePreview>
       ) : (
         <section className="live-slide-panel">
