@@ -32,3 +32,14 @@
 - The harness connects the existing components with deterministic test data; actual monitor placement and the user's live Firebase records were not altered or validated.
 - Existing timer behavior for authored multi-slide loop items and sidebar quick-screen mirroring were not redesigned.
 - Initial local packaging hit a Windows file lock at `release/win-unpacked.tmp`; packaging is retried in a fresh output directory without deleting user data.
+
+## Package and publication
+
+- Fresh local Windows packaging completed successfully under `work/postpackage`. The native smoke also passed against its packaged MAIN renderer and preload.
+- Source commit: `660a1b4d13d9b2d7b550e76ca0b57016bb6aa645`.
+- Release workflow: `37999472148`.
+- Public Windows installer was fully downloaded: 287770310 bytes. Its SHA512 matches public `latest.yml`:
+  `Y0hixMzuxlJ2Fk9Y2xuNsRgHNW5Oqjnj2TLMPfHPLEQOKgGIxMA10mVLv2CpS80B1uOan6/PjwlYRgLn+RYYfg==`.
+- Public `latest.yml` identifies `0.75.2`, and GitHub `/releases/latest` with the updater's JSON accept header returns `v0.75.2`.
+- Release: https://github.com/cmoere/GottesdienstRegie/releases/tag/v0.75.2
+- Installer: https://github.com/cmoere/GottesdienstRegie/releases/download/v0.75.2/GottesdienstRegie-Setup-0.75.2.exe
