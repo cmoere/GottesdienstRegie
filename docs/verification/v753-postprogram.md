@@ -23,7 +23,17 @@
 1. `npm run build`
 2. Start `npx vite --host 127.0.0.1 --port 5173 --strictPort`
 3. `npx electron tests/smoke/native-full-app-postprogram.cjs`
-4. To exercise packaged MAIN/preload/service, append `--packaged=work/postpackage753/win-unpacked/resources/app.asar` after packaging there.
+4. To exercise packaged MAIN/preload/service, append `--packaged=work/postpackage753-local/win-unpacked/resources/app.asar` after packaging there.
+
+## Publication evidence — 2026-10-10
+
+- Source commit: `da61080ee36c7ef6228d1a1aca56aab77ff4a384`, pushed to main.
+- Release workflow: https://github.com/cmoere/GottesdienstRegie/actions/runs/38060173378 — Windows job succeeded.
+- Public release: https://github.com/cmoere/GottesdienstRegie/releases/tag/v0.75.3 (not draft, not prerelease).
+- Public latest/download/latest.yml reports version 0.75.3 and the matching Windows installer.
+- Downloaded installer size: 287769352 bytes. SHA512 matches the public update feed: `dWeKMKAIrJa7O25rKflHJ6dZSKkcR6gFF4u2zn0sQlJxUkB6TmUt9ZiDsPYGjVAmaeQfrtTC7rB9ddmJjH3t6w==`.
+- Two local archive-extraction attempts failed with Windows temporary-directory rename EPERM. Supported electronDist packaging using the installed unpacked Electron distribution succeeded without changing product configuration or disabling security controls.
+- The full-App native smoke passed again with packaged MAIN, preload and community service from the resulting app.asar. The operator test fixture still runs through Vite; this is not a real account/device end-to-end test.
 
 ## Limits
 
