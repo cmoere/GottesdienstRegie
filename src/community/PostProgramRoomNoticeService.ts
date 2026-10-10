@@ -8,6 +8,8 @@ export type PostProgramRoomNotice=
   |{type:'leave-room';text:typeof LEAVE_ROOM_TEXT};
 export type PostProgramRoomNoticeSnapshot={sessionId:number;headerColor:'#608F9A'|'#699F3E';notice:PostProgramRoomNotice;page:number;pageCount:number;pages?:PreparedPostRow[][]};
 export type PresentationEventLink={linkedEventKey?:string;eventLink?:{eventKey?:string}};
+export type PostProgramTestScenario='automatic'|'leave-room'|'next-events';
+export type PostProgramTestOptions={mode:'normal'|'test';scenario:PostProgramTestScenario};
 
 const roomLabel=(location:{name:string;floor?:string})=>[location.name,location.floor].filter(Boolean).join(' · ');
 const clock=(date:Date)=>new Intl.DateTimeFormat('de-DE',{hour:'2-digit',minute:'2-digit'}).format(date)+' Uhr';
@@ -38,7 +40,12 @@ export class PostProgramRoomNoticeController{
   private serial=0;private page=-1;private lastTake:number|undefined;
   constructor(private readonly service:PostProgramRoomNoticeService,private readonly random:()=>number=Math.random){}
   enterPostProgram(){if(!this.session){this.session={id:++this.serial,headerColor:this.random()<.5?'#608F9A':'#699F3E'};this.page=-1}}
-  prepare(presentation:PresentationEventLink,now:Date){this.pending=this.service.compute(presentation,now);return this.pending}
+  prepare(presentation:PresentationEventLink,now:Date,test?:PostProgramTestOptions){
+    if(test?.mode==='test'&&test.scenario==='leave-room')this.pending={type:'leave-room',text:LEAVE_ROOM_TEXT};
+    else if(test?.mode==='test'&&test.scenario==='next-events')this.pending={type:'next-events',events:[{id:'test-example',title:'Testveranstaltung (Beispieldaten)',start:new Date(now.getTime()+30*60_000).toISOString(),end:new Date(now.getTime()+90*60_000).toISOString(),room:'Testraum · EG'}]};
+    else this.pending=this.service.compute(presentation,now);
+    return this.pending;
+  }
   current(){return this.active}
   beginTransition(){this.enterPostProgram();if(!this.pending){this.active=null;return null}const pages=this.pending.type==='next-events'?paginatePostEvents(this.pending.events):undefined;const pageCount=pages?.length||1;this.page=(this.page+1)%pageCount;this.active={sessionId:this.session!.id,headerColor:this.session!.headerColor,notice:structuredClone(this.pending),page:this.page,pageCount,pages};return this.active}
   outputForTake<T extends object>(output:T,take:number):T&{postProgramRoomNotice?:PostProgramRoomNoticeSnapshot}{if(this.lastTake!==take){this.lastTake=take;this.beginTransition()}return this.active?withPostProgramRoomNotice(output,this.active):output}

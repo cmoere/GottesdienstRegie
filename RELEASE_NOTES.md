@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.75.3
+
+Beim Start des Testbetriebs lässt sich die Nachprogramm-Anzeige auswählen: Automatisch, Raum verlassen oder Testveranstaltung. Die letzten beiden Optionen funktionieren ohne verknüpfte Veranstaltung und ohne Gemeindedaten. Beispieldaten sind deutlich gekennzeichnet, gelten nur für den Testlauf und werden nicht in Firebase gespeichert. Echtes ON AIR verwendet weiterhin die verknüpfte Veranstaltung.
+
+Die Ausgabeprüfung wartet begrenzt auf die initialen Gemeindedaten. Bestehender Verbindungsstatus und bereits synchronisierte leere Listen werden neuen Abonnenten erneut zugestellt. Veranstaltungsverknüpfungen aus älteren Dialogen gelten sofort und bleiben beim Speichern konsistent.
+
+Der Raum-verlassen-Hinweis ist etwas größer und nicht mehr fett. Der letzte Weiter-Klick erreicht das Nachprogramm auch bei den beiden ausdrücklich gewählten Testszenarien ohne Veranstaltungsverknüpfung.
+
+---
+
 # GottesdienstRegie 0.75.2
 
 Der Weiter-Pfeil bleibt nach der letzten Gottesdienstfolie für den automatischen Nachprogramm-Einstieg verfügbar, wenn eine Veranstaltung verknüpft ist. Auch ein wiederholtes Nachprogramm kann über den Pfeil weitergeschaltet werden. Manuell gesteuerte Gottesdienstfolien bleiben manuell.

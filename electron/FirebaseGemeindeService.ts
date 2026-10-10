@@ -2,7 +2,7 @@ export type RawCommunityRecord=Record<string,unknown>;
 export type RawChurchEvent=RawCommunityRecord&{eventKey:string};
 export type RawAnnouncement=RawCommunityRecord&{messageId:string};
 import type {CommunitySnapshotCache} from './CommunitySnapshotCache';
-export type CommunityConnectionState={connected:boolean;mode:'online'|'offline-cache'|'empty'|'error';updatedAt:number};
+export type CommunityConnectionState={connected:boolean;mode:'online'|'offline-cache'|'empty'|'error';updatedAt:number;loaded?:{events:boolean;rooms:boolean;announcements:boolean}};
 
 export interface CommunityRealtimeAdapter{
   watchChildren(path:'veranstaltungen'|'meldungen'|'rooms',handlers:{added:(key:string,value:unknown)=>void;changed:(key:string,value:unknown)=>void;removed:(key:string)=>void;synced?:(keys:string[])=>void}):()=>void;
@@ -25,6 +25,7 @@ export class FirebaseGemeindeService{
   private stopRooms?:()=>void;
   private stopConnection?:()=>void;
   private synced=new Set<string>();
+  private connectionState?:CommunityConnectionState;
 
   constructor(private readonly adapter:CommunityRealtimeAdapter,private readonly cache?:CommunitySnapshotCache){}
   updateEvent(eventKey:string,patch:Record<string,unknown>){if(!eventKey.trim()||!this.adapter.updateEvent)throw new Error('EVENT_UPDATE_UNAVAILABLE');return this.adapter.updateEvent(eventKey,patch)}
@@ -35,9 +36,9 @@ export class FirebaseGemeindeService{
       added:(eventKey,value)=>this.upsertEvent(eventKey,value),
       changed:(eventKey,value)=>this.upsertEvent(eventKey,value),
       removed:eventKey=>{this.events.delete(eventKey);this.publishEvents()},
-      synced:keys=>{this.synced.add('events');for(const key of this.events.keys())if(!keys.includes(key))this.events.delete(key);this.publishEvents()},
+      synced:keys=>{this.synced.add('events');for(const key of this.events.keys())if(!keys.includes(key))this.events.delete(key);this.publishEvents();this.publishReadiness()},
     });
-    if(this.events.size)listener([...this.events.values()]);
+    if(this.events.size||this.synced.has('events'))listener([...this.events.values()]);
     return()=>this.eventListeners.delete(listener);
   }
 
@@ -47,9 +48,9 @@ export class FirebaseGemeindeService{
       added:(messageId,value)=>this.upsertAnnouncement(messageId,value),
       changed:(messageId,value)=>this.upsertAnnouncement(messageId,value),
       removed:messageId=>{this.announcements.delete(messageId);this.publishAnnouncements()},
-      synced:keys=>{this.synced.add('announcements');for(const key of this.announcements.keys())if(!keys.includes(key))this.announcements.delete(key);this.publishAnnouncements()},
+      synced:keys=>{this.synced.add('announcements');for(const key of this.announcements.keys())if(!keys.includes(key))this.announcements.delete(key);this.publishAnnouncements();this.publishReadiness()},
     });
-    if(this.announcements.size)listener([...this.announcements.values()]);
+    if(this.announcements.size||this.synced.has('announcements'))listener([...this.announcements.values()]);
     return()=>this.announcementListeners.delete(listener);
   }
 
@@ -59,14 +60,15 @@ export class FirebaseGemeindeService{
       added:(roomId,value)=>this.upsertRoom(roomId,value),
       changed:(roomId,value)=>this.upsertRoom(roomId,value),
       removed:roomId=>{this.rooms.delete(roomId);this.publishRooms()},
-      synced:keys=>{this.synced.add('rooms');for(const key of this.rooms.keys())if(!keys.includes(key))this.rooms.delete(key);this.publishRooms()},
+      synced:keys=>{this.synced.add('rooms');for(const key of this.rooms.keys())if(!keys.includes(key))this.rooms.delete(key);this.publishRooms();this.publishReadiness()},
     });
-    if(this.rooms.size)listener([...this.rooms.values()]);
+    if(this.rooms.size||this.synced.has('rooms'))listener([...this.rooms.values()]);
     return()=>this.roomListeners.delete(listener);
   }
 
   subscribeConnection(listener:(state:CommunityConnectionState)=>void):()=>void{
     this.connectionListeners.add(listener);
+    if(this.connectionState)listener(this.connectionState);
     if(!this.stopConnection)this.stopConnection=this.adapter.watchConnection(connected=>{
       if(connected){this.publishConnection({connected:true,mode:'online',updatedAt:Date.now()});void this.persist();return;}
       void this.restoreCache();
@@ -85,7 +87,8 @@ export class FirebaseGemeindeService{
   private upsertRoom(roomId:string,value:unknown){if(value&&typeof value==='object')this.rooms.set(roomId,{...value as RawCommunityRecord,roomId});this.publishRooms()}
   private publishRooms(){const values=[...this.rooms.values()];this.roomListeners.forEach(next=>next(values));void this.persist()}
   private publishAnnouncements(){const values=[...this.announcements.values()];this.announcementListeners.forEach(next=>next(values));void this.persist()}
-  private publishConnection(state:CommunityConnectionState){this.connectionListeners.forEach(next=>next(state))}
+  private publishConnection(state:CommunityConnectionState){this.connectionState={...state,loaded:{events:this.synced.has('events'),rooms:this.synced.has('rooms'),announcements:this.synced.has('announcements')}};this.connectionListeners.forEach(next=>next(this.connectionState!))}
+  private publishReadiness(){if(this.connectionState)this.publishConnection(this.connectionState)}
   private async persist(){try{if(this.cache)await this.cache.write({events:[...this.events.values()],rooms:[...this.rooms.values()],announcements:[...this.announcements.values()]})}catch{/* Cache failure must not interrupt live output. */}}
   private async restoreCache(){
     if(!this.cache){this.publishConnection({connected:false,mode:'empty',updatedAt:Date.now()});return}

@@ -102,7 +102,8 @@ import {isLoopCandidateAvailable,shouldSkipNowPlaying} from './nowPlayingModel';
 import {EventService,type ChurchEvent as CommunityChurchEvent} from './community/EventService';
 import {RoomService,type RawRoom} from './community/RoomService';
 import {setLatestPublicEvents} from './dynamicEventSlide';
-import {PostProgramRoomNoticeController,PostProgramRoomNoticeService,withPostProgramRoomNotice,type PostProgramRoomNoticeSnapshot} from './community/PostProgramRoomNoticeService';
+import {PostProgramRoomNoticeController,PostProgramRoomNoticeService,withPostProgramRoomNotice,type PostProgramRoomNoticeSnapshot,type PostProgramTestScenario} from './community/PostProgramRoomNoticeService';
+import {TestStartDialog} from './TestStartDialog';
 import {PostProgramRoomNoticeView} from './PostProgramRoomNotice';
 import {AppClock} from './community/AppClock';
 import {setPostProgramPrepared} from './community/communityRuntime';
@@ -7908,7 +7909,7 @@ function PresentationInfoDialog({ close }: { close: () => void }) {
     [title, setTitle] = useState(state.title),
     [date, setDate] = useState(state.date),
     [createdBy, setCreatedBy] = useState(state.createdBy),
-    [eventId, setEventId] = useState(state.eventId);
+    [eventId, setEventId] = useState(state.eventLink?.eventKey??state.eventId);
   const duration = state.items.reduce(
       (sum, item) => sum + itemDurationSeconds(item),
       0,
@@ -8075,11 +8076,12 @@ function AppShell({
   const communityEventService=useRef(new EventService());
   const postProgramNoticeController=useRef(new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(communityEventService.current)));
   useEffect(()=>{
-    const refresh=()=>{const current=usePresentation.getState(),item=current.items.find(entry=>entry.id===current.liveItemId);if(item?.sectionId==='post'){postProgramNoticeController.current.prepare({eventLink:current.eventLink},AppClock.now())}else if(current.onAir)postProgramNoticeController.current.leavePostProgram()};
+    const refresh=()=>{const current=usePresentation.getState(),item=current.items.find(entry=>entry.id===current.liveItemId);if(item?.sectionId==='post'){postProgramNoticeController.current.prepare({eventLink:current.eventLink},AppClock.now(),{mode:current.testPostProgramScenario?'test':'normal',scenario:current.testPostProgramScenario??'automatic'})}else if(current.onAir)postProgramNoticeController.current.leavePostProgram()};
     refresh();const timer=setInterval(refresh,10000);return()=>clearInterval(timer);
   },[state.liveItemId]);
   const airBusy = useRef(false);
   const [airStarting, setAirStarting] = useState(false);
+  const [testStartOpen,setTestStartOpen]=useState(false);
   const [appMode,setAppMode]=useState<AppModeState>(NORMAL_APP_MODE);
   // Runtime-only: presentations and restarts never persist test mode.
   useEffect(()=>setAppMode(current=>current.onAir===state.onAir?current:setAppOnAir(current,state.onAir)),[state.onAir]);
@@ -8124,7 +8126,7 @@ function AppShell({
     }>({ state: "idle", step: 0, text: "" });
   useEffect(()=>{void (window.desktop as any)?.deviceSettings?.readOsb?.().then((value:unknown)=>setOsbSettings(normalizeOsbSettings(value,[...BIBLE_TRANSLATIONS])))},[]);
   useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge)return;const stop=bridge.onConnection((value:{connected:boolean;mode:string;updatedAt:number})=>setCommunityConnection(value));void bridge.start();return stop},[]);
-  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;let rows:CommunityChurchEvent[]=[],rooms:RawRoom[]=[];const publish=()=>{const service=communityEventService.current;service.setEvents(rows);service.setRooms(new RoomService(rooms));const publicEvents=service.getUpcomingEvents().slice(0,8).map(event=>service.toPublicEvent(event));setLatestPublicEvents(publicEvents);postProgramNoticeController.current.prepare({eventLink:usePresentation.getState().eventLink},new Date());setPostProgramPrepared(true);window.dispatchEvent(new CustomEvent('gottesdienstregie:community-events',{detail:publicEvents}))};const stopEvents=bridge.onEvents((value:CommunityChurchEvent[])=>{rows=Array.isArray(value)?value:[];publish()}),stopRooms=bridge.onRooms?.((value:RawRoom[])=>{rooms=Array.isArray(value)?value:[];publish()});return()=>{stopEvents?.();stopRooms?.()}},[]);
+  useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;let rows:CommunityChurchEvent[]=[],rooms:RawRoom[]=[];const publish=()=>{const service=communityEventService.current;service.setEvents(rows);service.setRooms(new RoomService(rooms));const publicEvents=service.getUpcomingEvents().slice(0,8).map(event=>service.toPublicEvent(event));setLatestPublicEvents(publicEvents);postProgramNoticeController.current.prepare({eventLink:usePresentation.getState().eventLink},AppClock.now(),{mode:usePresentation.getState().testPostProgramScenario?'test':'normal',scenario:usePresentation.getState().testPostProgramScenario??'automatic'});setPostProgramPrepared(true);window.dispatchEvent(new CustomEvent('gottesdienstregie:community-events',{detail:publicEvents}))};const stopEvents=bridge.onEvents((value:CommunityChurchEvent[])=>{rows=Array.isArray(value)?value:[];publish()}),stopRooms=bridge.onRooms?.((value:RawRoom[])=>{rooms=Array.isArray(value)?value:[];publish()});return()=>{stopEvents?.();stopRooms?.()}},[]);
   const audioSessionRef = useRef<{
     onAir: boolean;
     mode: "edit" | "preview";
@@ -8592,7 +8594,7 @@ function AppShell({
           state.transitionDefault,
         ),
       };
-      if(item?.sectionId==='post'){postProgramNoticeController.current.enterPostProgram();postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now())}
+      if(item?.sectionId==='post'){postProgramNoticeController.current.enterPostProgram();postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'})}
       const output=item?.sectionId==='post'?postProgramNoticeController.current.outputForTake(base,state.liveTransitionRevision):base;
       if(item?.sectionId!=='post')postProgramNoticeController.current.leavePostProgram();
       void liveEngine.show(output);
@@ -9696,6 +9698,7 @@ function AppShell({
     preflightOnly = false,
     target?: { itemId: string; slideId: string },
     requestedMode: LiveSessionMode = 'live',
+    testScenario: PostProgramTestScenario = 'automatic',
   ) {
     if (airBusy.current || !can("presentationLive") || !window.desktop) return;
     airBusy.current = true;
@@ -9782,7 +9785,7 @@ function AppShell({
     const linkedEvent = sessionMode !== 'test' && state.eventLink?.eventKey
       ? await getChurchEvent(state.eventLink.eventKey).catch(() => null)
       : null;
-    if(!state.eventLink?.eventKey)warnings.push('Ohne verknüpfte Veranstaltung kann kein automatischer Raumhinweis im Nachprogramm ermittelt werden.');
+    if(!state.eventLink?.eventKey&&(sessionMode!=='test'||testScenario==='automatic'))warnings.push('Ohne verknüpfte Veranstaltung kann kein automatischer Raumhinweis im Nachprogramm ermittelt werden.');
     if (isCancelled(linkedEvent))
       warnings.push(
         "Die verknüpfte Veranstaltung fällt aus. Die Verbindung bleibt bestehen; bitte prüfe den Live-Start.",
@@ -9860,6 +9863,7 @@ function AppShell({
             ...startSlide, transitionOverride: resolveTransition(startSlide, item, 'main', current.transitionDefault),
           });
           if (!started) throw new Error('Die Ausgabe konnte nicht gestartet werden.');
+          state.setTestPostProgramScenario(sessionMode==='test'&&testScenario!=='automatic'?testScenario:undefined);
           setAppMode(nextMode);
           state.goLive(startItemId, startSlideId);
           state.setMode('preview');
@@ -10120,11 +10124,12 @@ function AppShell({
             {t("preview").toUpperCase()}
           </button>
         </div>
+        {testStartOpen&&<TestStartDialog onClose={()=>setTestStartOpen(false)} onStart={scenario=>{setTestStartOpen(false);void air(false,undefined,'test',scenario)}}/>}
         <div className="live-session-controls">
         <button type="button" className={`test-session-button ${appMode.mode==='test' ? 'active' : ''}`}
           disabled={airStarting || !can('presentationLive') || !window.desktop || (state.onAir&&appMode.mode==='normal')}
           title="MAIN und STAGE ohne Veranstaltung testen. Echte Bild- und Tonausgabe nach Bestätigung."
-          onClick={()=>void air(false,undefined,'test')}>
+          onClick={()=>state.onAir?void air(false,undefined,'test'):setTestStartOpen(true)}>
           {appMode.mode==='test'&&state.onAir ? 'TESTBETRIEB BEENDEN' : 'TESTBETRIEB STARTEN'}
         </button>
         <button

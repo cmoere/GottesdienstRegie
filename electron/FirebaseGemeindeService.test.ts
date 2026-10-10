@@ -13,6 +13,19 @@ function fakeAdapter(){
 }
 
 describe('FirebaseGemeindeService',()=>{
+  it('replays online status and synchronized empty collections to a late preflight subscriber',()=>{
+    const fake=fakeAdapter(),service=new FirebaseGemeindeService(fake.adapter);
+    service.subscribeConnection(()=>{});
+    service.subscribeEvents(()=>{});service.subscribeRooms(()=>{});service.subscribeAnnouncements(()=>{});
+    fake.sync('veranstaltungen',[]);fake.sync('rooms',[]);fake.sync('meldungen',[]);
+    const connections:any[]=[],events:any[]=[],rooms:any[]=[],messages:any[]=[];
+    service.subscribeConnection(value=>connections.push(value));
+    service.subscribeEvents(value=>events.push(value));
+    service.subscribeRooms(value=>rooms.push(value));
+    service.subscribeAnnouncements(value=>messages.push(value));
+    expect(connections.at(-1)).toMatchObject({mode:'online',connected:true});
+    expect(events).toEqual([[]]);expect(rooms).toEqual([[]]);expect(messages).toEqual([[]]);
+  });
   it('reconciles removed records and preserves authoritative child ids',()=>{
     const fake=fakeAdapter(),service=new FirebaseGemeindeService(fake.adapter),seen:any[]=[];
     service.subscribeEvents(value=>seen.push(value));

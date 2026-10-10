@@ -23,9 +23,24 @@
     {
       "line": "0.75",
       "builds": [{
-        "version": "0.75.2",
+        "version": "0.75.3",
         "releaseDate": "2026-10-10",
         "current": true,
+        "overview": {
+          "label": {"de":"Nachprogramm gezielt testen","en":"Choose post-program test scenarios"},
+          "text": {"de":"Automatisch, Raum verlassen oder Testveranstaltung beim Teststart wählen. Gemeindedaten und Veranstaltungsverknüpfungen zuverlässiger prüfen.","en":"Choose automatic, leave-room or sample-event output when starting a test. More reliable community data and event-link checks."}
+        },
+        "sections": {"new":[
+          {"label":{"de":"Testauswahl","en":"Test scenarios"},"text":{"de":"Raumhinweis und gekennzeichnete Testveranstaltung auch ohne Gemeindedaten testen; echte Termine bleiben unverändert.","en":"Rehearse room notices and a clearly labeled sample event without community data; real events remain unchanged."}}
+        ],"improved":[
+          {"label":{"de":"Raum-verlassen-Anzeige","en":"Leave-room notice"},"text":{"de":"Etwas größere Schrift ohne Fettdruck.","en":"Slightly larger text without bold weight."}}
+        ],"fixed":[
+          {"label":{"de":"Verknüpfung und Ladezustand","en":"Event links and loading state"},"text":{"de":"Ältere Veranstaltungsfelder werden sofort abgeglichen. Die Startprüfung wartet auf Daten; bestehender Verbindungsstatus wird nachgereicht.","en":"Legacy event fields synchronize immediately. Startup checks wait for data and receive the current connection state."}}
+        ],"known":[]}
+      },{
+        "version": "0.75.2",
+        "releaseDate": "2026-10-10",
+        "current": false,
         "overview": {
           "label": {"de":"Nachprogramm und MAIN-Vorschau korrigiert","en":"Post-program and MAIN preview fixes"},
           "text": {"de":"Der Weiter-Pfeil erreicht das automatische Nachprogramm; beide Live-Vorschauen spiegeln den tatsächlichen Raumhinweis.","en":"The Next button reaches the automatic post-program; both live previews mirror the actual room notice."}

@@ -13,7 +13,7 @@ export function communityPreflight(snapshot:CommunityPreflightSnapshot,linkedEve
   if(snapshot.loaded&&!snapshot.loaded.events)warnings.push('Veranstaltungen wurden noch nicht geladen.');
   if(snapshot.loaded&&!snapshot.loaded.rooms)warnings.push('Räume wurden noch nicht geladen.');
   if(snapshot.loaded&&!snapshot.loaded.announcements)warnings.push('Meldungen wurden noch nicht geladen.');
-  const linkedEvent=snapshot.events.find(event=>(event.id??event.eventKey)===linkedEventKey),linkedEventResolved=!linkedEventKey||Boolean(linkedEvent),rooms=new RoomService(snapshot.rooms),roomCount=rooms.roomsById.size;
+  const linkedEvent=snapshot.events.find(event=>(event.eventKey??event.id)===linkedEventKey),linkedEventResolved=!linkedEventKey||Boolean(linkedEvent),rooms=new RoomService(snapshot.rooms),roomCount=rooms.roomsById.size;
   if(linkedEventKey&&!linkedEventResolved)warnings.push('Die verknüpfte Veranstaltung wurde nicht gefunden.');
   let currentRoomResolved=true;
   if(linkedEvent){
