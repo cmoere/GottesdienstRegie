@@ -64,6 +64,8 @@ app.whenReady().then(async()=>{
   const prompts=await js('window.testConfirmations');
   assert(!prompts.join('\n').includes('Gemeindedaten sind derzeit nicht verfügbar'));
   assert(!prompts.join('\n').includes('Ohne verknüpfte Veranstaltung'));
+  const tableStyle=await main.webContents.executeJavaScript("(()=>{const h=document.querySelector('.post-program-columns>span'),c=document.querySelector('.post-program-cell>span');return {heading:parseFloat(getComputedStyle(h).fontSize),cell:parseFloat(getComputedStyle(c).fontSize),images:document.querySelectorAll('.post-program-room-notice img').length}})()");
+  assert(tableStyle.heading<tableStyle.cell*.6);assert.equal(tableStyle.images,0);
   await capture(main,'automatic-events');
   await js("document.querySelector('.test-session-button').click()");await until(operator,'!window.postProgramState().onAir');
   await js('window.seedPostProgram(false)');await start('leave-room');
@@ -84,7 +86,10 @@ app.whenReady().then(async()=>{
   await js("document.querySelector('.preview-nav.next').click()");
   await until(main,"document.body.innerText.includes('Gemeindeforum') && !document.body.innerText.includes('TESTBETRIEB')");
   assert(!(await main.webContents.executeJavaScript('document.body.innerText')).includes('Beispieldaten'));
+  await js('window.appendPostSlide()');
+  // Allow the system-page timer to advance to ordinary authored content.
+  await until(main,"document.body.innerText.includes('Danke für Ihren Besuch') && !document.querySelector('.post-program-room-notice')");
   console.log('PASS full App: link, late community/preflight, actual test dialog, final Next, automatic + both unlinked scenarios, MAIN, 400 weight, watermark, reset');
   app.exit(0);
- }catch(error){console.error(error);if(operator){console.error(await js('document.body.innerText'));await capture(operator,'failure')}app.exit(1)}
+ }catch(error){console.error(error);if(operator){console.error(await js("JSON.stringify({body:document.body.innerText,html:document.documentElement.innerHTML,seed:typeof window.seedPostProgram,resources:performance.getEntriesByType('resource').slice(-8).map(x=>x.name)})"));await capture(operator,'failure')}app.exit(1)}
 });

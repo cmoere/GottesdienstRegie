@@ -7,7 +7,7 @@ const event=(id:string,time:string,extra={})=>({eventKey:id,titel:id,start_datum
 function setup(){const events=new EventService([event('current','09:00'),event('second','11:01'),event('first','10:30',{sichtbar:false}),event('tooLate','11:02'),event('cancelled','10:10',{cancelled:true})],new RoomService({saal:{name:'Saal',floor:'EG'}}));return{events,service:new PostProgramRoomNoticeService(events)}}
 describe('v75 postprogram session',()=>{
  it('includes all chronological matches through exactly 61 minutes',()=>{
-  const {service}=setup();expect(service.compute({linkedEventKey:'current'},now)).toMatchObject({type:'next-events',events:[{id:'first',room:'Saal · EG'},{id:'second'}]});
+  const {service}=setup();expect(service.compute({linkedEventKey:'current'},now)).toMatchObject({type:'next-events',events:[{id:'first',room:'Saal'},{id:'second'}]});
  });
  it('does not invent a leave-room instruction for an unknown current room',()=>{
   const {service}=setup();expect(service.compute({linkedEventKey:'missing'},now)).toBeNull();

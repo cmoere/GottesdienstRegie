@@ -16,7 +16,7 @@ describe('PostProgramRoomNoticeService',()=>{
 
   it('selects the earliest event in the same effective room within the inclusive 61 minute window',()=>{
     const result=service([event('current','09:00'),event('later','11:01'),event('next','10:30')]).compute({linkedEventKey:'current'},now);
-    expect(result).toMatchObject({type:'next-events',events:[{id:'next',title:'next',room:'Gemeindesaal · EG'},{id:'later'}]});
+    expect(result).toMatchObject({type:'next-events',events:[{id:'next',title:'next',room:'Gemeindesaal'},{id:'later'}]});
   });
 
   it('excludes now, after 61 minutes, current, cancelled and trashed candidates',()=>{
@@ -26,7 +26,7 @@ describe('PostProgramRoomNoticeService',()=>{
 
   it('uses effective replacement rooms for the current event and candidates',()=>{
     const current=event('current','09:00',{ersatzortType:'raum',ersatzort:'neben'}),movedIn=event('moved','10:45',{raum:'saal',ersatzortType:'raum',ersatzort:'neben'}),movedOut=event('out','10:20',{raum:'neben',ersatzortType:'raum',ersatzort:'saal'});
-    expect(service([current,movedOut,movedIn]).compute({linkedEventKey:'current'},now)).toMatchObject({type:'next-events',events:[{id:'moved',room:'Nebenraum · OG'}]});
+    expect(service([current,movedOut,movedIn]).compute({linkedEventKey:'current'},now)).toMatchObject({type:'next-events',events:[{id:'moved',room:'Nebenraum'}]});
   });
 
   it('includes non-public room bookings and uses effective delayed start',()=>{

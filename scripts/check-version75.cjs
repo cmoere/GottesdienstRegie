@@ -1,5 +1,5 @@
 const fs=require('fs'),assert=require('assert'),pkg=require('../package.json'),releases=require('../public/releases.json'),read=file=>fs.readFileSync(file,'utf8');
-assert(/^0\.75\.\d+$/.test(pkg.version)&&pkg.releaseSeries==='0.75','package must identify V75');
+assert(/^0\.\d+\.\d+$/.test(pkg.version)&&Number(pkg.version.split('.')[1])>=75&&pkg.releaseSeries===pkg.version.split('.').slice(0,2).join('.'),'package must identify V75 or newer');
 assert(releases.versions[0]?.builds[0]?.version===pkg.version&&releases.versions[0].builds[0].current,'V75 must lead the catalog');
 assert(read('RELEASE_NOTES.md').startsWith('# GottesdienstRegie '+pkg.version),'V75 release notes missing');
 assert(read('electron/OutputWindowManager.ts').includes('getStateForSender'),'output replay missing');

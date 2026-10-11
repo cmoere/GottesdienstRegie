@@ -73,6 +73,7 @@ import { NowPlayingDesigner } from "./NowPlayingDesigner";
 import { EventSlideDesigner } from "./EventSlideDesigner";
 import {useLiveOutputPreview} from './liveOutputPreview';
 import {PostProgramRoomNoticeView} from './PostProgramRoomNotice';
+import {isPostProgramSystemItem} from './postProgramSystemSlide';
 
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -4236,6 +4237,7 @@ export function ProductionWorkspace({
         Wähle ein Element im Ablauf aus.
       </section>
     );
+  if(isPostProgramSystemItem(item))return <section className="production-workspace production-empty"><div className="system-slide-explanation"><h2>Nächste Veranstaltung / Raum verlassen</h2><p>Geschützte Systemfolie · wird automatisch aus der verknüpften Veranstaltung und dem Raum vorbereitet.</p><p>Diese Folie steht immer am Anfang des Nachprogramms. Sie kann nicht bearbeitet, entfernt oder dupliziert werden.</p><p>Zum Prüfen: Testbetrieb starten → Raum verlassen oder Testveranstaltung.</p></div></section>;
   return (
     <section className="production-workspace">
       <div className="context-editor">

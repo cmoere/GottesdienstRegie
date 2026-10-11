@@ -1,3 +1,13 @@
+# GottesdienstRegie 0.76.0
+
+Das Nachprogramm enthält immer eine geschützte erste Systemfolie für nächste Veranstaltungen oder den Raum-verlassen-Hinweis. Sie ist nicht bearbeitbar, entfernbar, verschiebbar oder über Plus hinzufügbar. Eigene Nachprogrammfolien bleiben danach sichtbar und werden nicht vom Raumhinweis überlagert.
+
+Die Veranstaltungstabelle verwendet ruhigere Schrift, kleine Spaltenüberschriften und vollständige Titel ohne Zeilenumbruch. Überlange Zellen scrollen langsam. Etagen und Veranstaltungsbilder werden nicht angezeigt. Ohne auflösbare Veranstaltungsdaten wird die leere Systemausgabe übersprungen; alternativ bleibt die letzte Gottesdienstfolie stehen.
+
+Der zuvor gemeldete graue Bildschirm beim Programmstart ist mit diesem Release nicht als behoben bestätigt.
+
+---
+
 # GottesdienstRegie 0.75.3
 
 Beim Start des Testbetriebs lässt sich die Nachprogramm-Anzeige auswählen: Automatisch, Raum verlassen oder Testveranstaltung. Die letzten beiden Optionen funktionieren ohne verknüpfte Veranstaltung und ohne Gemeindedaten. Beispieldaten sind deutlich gekennzeichnet, gelten nur für den Testlauf und werden nicht in Firebase gespeichert. Echtes ON AIR verwendet weiterhin die verknüpfte Veranstaltung.

@@ -8,7 +8,7 @@ it('prepares either explicit test scenario without inventing a real event link',
  const now=new Date('2026-10-10T10:00:00Z');
  controller.prepare({},now,{mode:'test',scenario:'next-events'});
  const first=controller.beginTransition();
- expect(first?.notice).toMatchObject({type:'next-events',events:[{title:'Testveranstaltung (Beispieldaten)',room:'Testraum · EG'}]});
+ expect(first?.notice).toMatchObject({type:'next-events',events:[{title:'Testveranstaltung (Beispieldaten)',room:'Testraum'}]});
  controller.prepare({},now,{mode:'test',scenario:'leave-room'});
  expect(controller.current()).toEqual(first);
  expect(controller.beginTransition()?.notice).toEqual({type:'leave-room',text:'Wir bitten alle Besucher, den Raum zu verlassen.'});

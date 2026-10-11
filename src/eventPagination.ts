@@ -25,19 +25,8 @@ export function wrapEventText(text:string,width:number,fontSize:number):string[]
 }
 export type PreparedPostRow=PostProgramEventRow&{lines:number};
 export function paginatePostEvents(events:PostProgramEventRow[]):PreparedPostRow[][]{
- const pages:PreparedPostRow[][]=[];let page:PreparedPostRow[]=[],used=0;
- for(const event of events){
-  const titles=wrapEventText(event.title,565,53.76),rooms=wrapEventText(event.room,275,53.76);
-  const count=Math.max(titles.length,rooms.length,2);
-  for(let offset=0;offset<count;offset+=8){
-   const title=titles.filter((_,i)=>i>=offset&&i<offset+8).join('\n');
-   const room=rooms.filter((_,i)=>i>=offset&&i<offset+8).join('\n');
-   const lines=Math.max(title.split('\n').length,room.split('\n').length,2)+1;
-   if(used+lines>10&&page.length){pages.push(page);page=[];used=0}
-   page.push({...event,title,room,lines});used+=lines;
-  }
- }
- if(page.length)pages.push(page);
+ const pages:PreparedPostRow[][]=[];
+ for(let index=0;index<events.length;index+=5)pages.push(events.slice(index,index+5).map(event=>({...event,lines:2})));
  return pages;
 }
 export function paginateReducedMotionEvents<T extends {title:string;details?:string}>(events:T[]):Array<Array<T&{eventNumber:number}>>{

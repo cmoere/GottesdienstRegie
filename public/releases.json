@@ -21,11 +21,24 @@
   ],
   "versions": [
     {
+      "line": "0.76",
+      "builds": [{
+        "version": "0.76.0",
+        "releaseDate": "2026-10-11",
+        "current": true,
+        "overview": {
+          "label": {"de":"Festes Nachprogramm","en":"Protected post-program slide"},
+          "text": {"de":"Automatischer Raumhinweis als geschützte erste Nachprogrammfolie. Klarere Veranstaltungstabelle ohne Bilder und Etagen.","en":"Automatic room notice as a protected first post-program slide. Clearer event table without images or floors."}
+        },
+        "sections": {"new":[],"improved":[],"fixed":[],"known":[]}
+      }]
+    },
+    {
       "line": "0.75",
       "builds": [{
         "version": "0.75.3",
         "releaseDate": "2026-10-10",
-        "current": true,
+        "current": false,
         "overview": {
           "label": {"de":"Nachprogramm gezielt testen","en":"Choose post-program test scenarios"},
           "text": {"de":"Automatisch, Raum verlassen oder Testveranstaltung beim Teststart wählen. Gemeindedaten und Veranstaltungsverknüpfungen zuverlässiger prüfen.","en":"Choose automatic, leave-room or sample-event output when starting a test. More reliable community data and event-link checks."}

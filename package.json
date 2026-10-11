@@ -1,13 +1,13 @@
 {
   "name": "gottesdienstregie",
-  "version": "0.75.3",
+  "version": "0.76.0",
   "description": "Desktop-Regiesoftware für Gottesdienstpräsentationen der Philippusgemeinde.",
   "author": {
     "name": "Philippusgemeinde Ev. Freikirche",
     "email": "cmoere@users.noreply.github.com"
   },
   "desktopName": "GottesdienstRegie",
-  "releaseSeries": "0.75",
+  "releaseSeries": "0.76",
   "private": true,
   "main": "dist-electron/electron/main.js",
   "scripts": {

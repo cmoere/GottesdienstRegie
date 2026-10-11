@@ -584,11 +584,7 @@ function EventLoopElement({
       <div className="event-loop-list">
         {items.map((event, index) => (
           <article key={`${event.title}:${event.details}:${index}`}>
-            {settings.design === "poster" && event.coverUrl ? (
-              <img src={event.coverUrl} alt="" />
-            ) : (
-              <b>{String("eventNumber" in event?event.eventNumber:index + 1).padStart(2, "0")}</b>
-            )}
+            <b>{String("eventNumber" in event?event.eventNumber:index + 1).padStart(2, "0")}</b>
             <div>
               <EventTitle title={event.title}/>
               {event.details && <span>{event.details}</span>}

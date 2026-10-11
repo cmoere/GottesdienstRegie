@@ -51,6 +51,8 @@ import {
 } from "./store";
 import { SlideRenderer } from "./SlideRenderer";
 import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopController, WEATHER_SCREEN_URL, type LoopItemType } from "./loopDomain";
+import {isPostProgramSystemItem} from './postProgramSystemSlide';
+import {postProgramCandidates,unavailablePostProgramTarget} from './postProgramNavigation';
 import { consumeInsertionGuard, createLoopItem } from "./loopItemFactory";
 import { EventLinkStatus } from "./EventLinkStatus";
 import { StorageSettings } from "./StorageSettings";
@@ -1494,7 +1496,7 @@ function SortableItem({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: item.id, disabled: !canEdit });
+  } = useSortable({ id: item.id, disabled: !canEdit || isPostProgramSystemItem(item) });
   const icon: Record<ItemType, string> = {
     song: "music_note",
     bible: "menu_book",
@@ -1564,10 +1566,10 @@ function SortableItem({
       onKeyDown={(event) => {
         if (event.key === "Enter") onSelect(event);
       }}
-      onContextMenu={onContext}
+      onContextMenu={event=>{if(isPostProgramSystemItem(item)){event.preventDefault();return}onContext(event)}}
     >
       <span className="drag" {...attributes} {...listeners}>
-        <Icon name="drag_indicator" />
+        <Icon name={isPostProgramSystemItem(item)?'lock':'drag_indicator'} />
       </span>
       <span className="service-thumb">
         {item.slides[0] && <LazyThumbnail slide={item.slides[0]} />}
@@ -8594,13 +8596,21 @@ function AppShell({
           state.transitionDefault,
         ),
       };
-      if(item?.sectionId==='post'){postProgramNoticeController.current.enterPostProgram();postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'})}
-      const output=item?.sectionId==='post'?postProgramNoticeController.current.outputForTake(base,state.liveTransitionRevision):base;
+      if(item?.sectionId==='post'){
+        postProgramNoticeController.current.enterPostProgram();
+        const notice=postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'});
+        if(isPostProgramSystemItem(item)&&!notice){
+          const target=unavailablePostProgramTarget(state.items);
+          if(target){state.goLive(target.itemId,target.slideId);if(state.items.find(entry=>entry.id===target.itemId)?.sectionId!=='post')state.setLiveTimerPaused(target.slideId)}
+          return;
+        }
+      }
+      const output=isPostProgramSystemItem(item)?postProgramNoticeController.current.outputForTake(base,state.liveTransitionRevision):base;
       if(item?.sectionId!=='post')postProgramNoticeController.current.leavePostProgram();
       void liveEngine.show(output);
     }
   }, [state.liveTransitionRevision,state.liveSlideId,state.liveItemId,state.onAir,state.items,state.transitionDefault,state.lyricScrolling,songTranslationMode]);
-  useEffect(()=>{const update=(event:Event)=>{const audio=(event as CustomEvent<BackgroundAudioState>).detail,item=usePresentation.getState().items.find(entry=>entry.id===usePresentation.getState().liveItemId);if(!usePresentation.getState().onAir||item?.type!=='nowPlaying')return;const track=audio.track,signature=`${audio.active}:${track?.assetId??''}:${track?.name??''}:${track?.artist??''}:${track?.album??''}:${track?.imageUrl??''}`;if(signature===nowPlayingSignatureRef.current)return;nowPlayingSignatureRef.current=signature;const slide=item.slides.find(entry=>entry.id===usePresentation.getState().liveSlideId)??item.slides[0];if(!slide)return;const patched={...slide,elements:slide.elements.map(element=>element.type==='loop'?{...element,properties:{...element.properties,nowPlayingActive:audio.active,nowPlayingTitle:track?.name??'',nowPlayingArtist:track?.artist??'',nowPlayingAlbum:track?.album??'',nowPlayingArtwork:track?.imageUrl??'',nowPlayingSource:track?.format??''}}:element)};const output={...patched,transitionOverride:resolveTransition(patched,item,'main',usePresentation.getState().transitionDefault)};const notice=postProgramNoticeController.current.current();void liveEngine.show(item.sectionId==='post'&&notice?withPostProgramRoomNotice(output,notice):output)};window.addEventListener('gottesdienstregie:background-audio',update);return()=>window.removeEventListener('gottesdienstregie:background-audio',update)},[]);
+  useEffect(()=>{const update=(event:Event)=>{const audio=(event as CustomEvent<BackgroundAudioState>).detail,item=usePresentation.getState().items.find(entry=>entry.id===usePresentation.getState().liveItemId);if(!usePresentation.getState().onAir||item?.type!=='nowPlaying')return;const track=audio.track,signature=`${audio.active}:${track?.assetId??''}:${track?.name??''}:${track?.artist??''}:${track?.album??''}:${track?.imageUrl??''}`;if(signature===nowPlayingSignatureRef.current)return;nowPlayingSignatureRef.current=signature;const slide=item.slides.find(entry=>entry.id===usePresentation.getState().liveSlideId)??item.slides[0];if(!slide)return;const patched={...slide,elements:slide.elements.map(element=>element.type==='loop'?{...element,properties:{...element.properties,nowPlayingActive:audio.active,nowPlayingTitle:track?.name??'',nowPlayingArtist:track?.artist??'',nowPlayingAlbum:track?.album??'',nowPlayingArtwork:track?.imageUrl??'',nowPlayingSource:track?.format??''}}:element)};const output={...patched,transitionOverride:resolveTransition(patched,item,'main',usePresentation.getState().transitionDefault)};const notice=postProgramNoticeController.current.current();void liveEngine.show(isPostProgramSystemItem(item)&&notice?withPostProgramRoomNotice(output,notice):output)};window.addEventListener('gottesdienstregie:background-audio',update);return()=>window.removeEventListener('gottesdienstregie:background-audio',update)},[]);
   useEffect(() => {
     const previous = audioSessionRef.current,
       previewKey = `${state.previewItemId}:${state.previewSlideId}`,
@@ -8690,7 +8700,7 @@ function AppShell({
       slide = item?.slides.find((entry) => entry.id === state.liveSlideId);
     if(item&&shouldSkipNowPlaying(item)){const timer=window.setTimeout(()=>usePresentation.getState().nextLive(),0);return()=>window.clearTimeout(timer)}
     if (item?.itemCategory === "loop") {
-      const sectionItems = state.items
+      const sectionItems = item.sectionId==='post'?postProgramCandidates(state.items,Boolean(postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'}))):state.items
         .filter((entry) => entry.sectionId === item.sectionId && entry.itemCategory === "loop" && entry.enabled && !entry.disabled&&!shouldSkipNowPlaying(entry))
         .sort((a, b) => a.order - b.order);
       loopController.current.setItems(sectionItems);
@@ -8705,7 +8715,8 @@ function AppShell({
           weatherScreenController.take(() => {
             if (active && usePresentation.getState().onAir && usePresentation.getState().liveItemId === item.id) {
               const nextId = loopController.current.advance(), nextItem = usePresentation.getState().items.find((entry) => entry.id === nextId);
-              if (nextItem?.slides[0]) usePresentation.getState().goLive(nextItem.id, nextItem.slides[0].id);
+              const nextSlide=nextItem?.slides.find(entry=>entry.enabled);
+              if (nextItem&&nextSlide) usePresentation.getState().goLive(nextItem.id, nextSlide.id);
               else usePresentation.getState().nextLive();
             }
           }, loopDurationMs(item));
@@ -8715,7 +8726,8 @@ function AppShell({
       const timer = window.setTimeout(() => {
         if (!active) return;
         const nextId = loopController.current.advance(), nextItem = usePresentation.getState().items.find((entry) => entry.id === nextId);
-        if (nextItem?.slides[0]) usePresentation.getState().goLive(nextItem.id, nextItem.slides[0].id);
+        const nextSlide=nextItem?.slides.find(entry=>entry.enabled);
+        if (nextItem&&nextSlide) usePresentation.getState().goLive(nextItem.id, nextSlide.id);
         else usePresentation.getState().nextLive();
       }, loopDurationMs(item));
       return () => { active = false; window.clearTimeout(timer); loopController.current.stop(); };
@@ -9849,7 +9861,15 @@ function AppShell({
           && current.onAir === state.onAir;
       },
       start: async assignments => {
-        const current=usePresentation.getState(),selectedItem=current.items.find(entry=>entry.id===itemId),fallback=isLoopCandidateAvailable(selectedItem!)?{itemId,slideId}:firstActiveTarget(current.items.filter(item=>isLoopCandidateAvailable(item))),startItemId=fallback?.itemId??'',startSlideId=fallback?.slideId??'',item=current.items.find(entry=>entry.id===startItemId),startSlide=item?.slides.find(entry=>entry.id===startSlideId);
+        const current=usePresentation.getState(),selectedItem=current.items.find(entry=>entry.id===itemId);
+        let fallback=isLoopCandidateAvailable(selectedItem!)?{itemId,slideId}:firstActiveTarget(current.items.filter(item=>isLoopCandidateAvailable(item)));
+        if(isPostProgramSystemItem(current.items.find(entry=>entry.id===fallback?.itemId))&&!postProgramNoticeController.current.prepare({eventLink:current.eventLink},AppClock.now(),{mode:sessionMode==='test'?'test':'normal',scenario:testScenario})){
+          fallback=unavailablePostProgramTarget(current.items)??null;
+        }
+        if(!fallback){
+          throw new Error('Für den automatischen Raumhinweis fehlen Veranstaltungsdaten. Bitte eine eigene Folie hinzufügen oder im Testbetrieb ein Testszenario wählen.');
+        }
+        const startItemId=fallback.itemId,startSlideId=fallback.slideId,item=current.items.find(entry=>entry.id===startItemId),startSlide=item?.slides.find(entry=>entry.id===startSlideId);
         if (!startSlide) return false;
         try {
           // Close the marked rehearsal output before switching its global mode.
@@ -10158,7 +10178,7 @@ function AppShell({
       {state.mode === "edit" && (
         <>
           <OutputTabs />
-          <FormatToolbar openBackgroundMedia={() => openMedia("background")} />
+          {!isPostProgramSystemItem(state.items.find(item=>item.id===state.selectedItemId))&&<FormatToolbar openBackgroundMedia={() => openMedia("background")} />}
         </>
       )}
       {target==='web'&&<CapabilityNotice capability="outputMain"/>}

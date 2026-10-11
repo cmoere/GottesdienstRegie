@@ -11,7 +11,7 @@ export type PresentationEventLink={linkedEventKey?:string;eventLink?:{eventKey?:
 export type PostProgramTestScenario='automatic'|'leave-room'|'next-events';
 export type PostProgramTestOptions={mode:'normal'|'test';scenario:PostProgramTestScenario};
 
-const roomLabel=(location:{name:string;floor?:string})=>[location.name,location.floor].filter(Boolean).join(' · ');
+const roomLabel=(location:{name:string;floor?:string})=>location.name;
 const clock=(date:Date)=>new Intl.DateTimeFormat('de-DE',{hour:'2-digit',minute:'2-digit'}).format(date)+' Uhr';
 
 export class PostProgramRoomNoticeService{
@@ -42,7 +42,7 @@ export class PostProgramRoomNoticeController{
   enterPostProgram(){if(!this.session){this.session={id:++this.serial,headerColor:this.random()<.5?'#608F9A':'#699F3E'};this.page=-1}}
   prepare(presentation:PresentationEventLink,now:Date,test?:PostProgramTestOptions){
     if(test?.mode==='test'&&test.scenario==='leave-room')this.pending={type:'leave-room',text:LEAVE_ROOM_TEXT};
-    else if(test?.mode==='test'&&test.scenario==='next-events')this.pending={type:'next-events',events:[{id:'test-example',title:'Testveranstaltung (Beispieldaten)',start:new Date(now.getTime()+30*60_000).toISOString(),end:new Date(now.getTime()+90*60_000).toISOString(),room:'Testraum · EG'}]};
+    else if(test?.mode==='test'&&test.scenario==='next-events')this.pending={type:'next-events',events:[{id:'test-example',title:'Testveranstaltung (Beispieldaten)',start:new Date(now.getTime()+30*60_000).toISOString(),end:new Date(now.getTime()+90*60_000).toISOString(),room:'Testraum'}]};
     else this.pending=this.service.compute(presentation,now);
     return this.pending;
   }
