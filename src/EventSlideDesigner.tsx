@@ -34,6 +34,7 @@ export function EventSlideDesigner({
   return (
     <section className="event-slide-designer">
       <h4>DESIGN</h4>
+      <p className="field-hint">Tabelle ist die empfohlene Übersicht. Gespeicherte Layouts bleiben auswählbar.</p>
       <div className="event-design-cards">
         {EVENT_SLIDE_DESIGNS.map((design) => (
           <button
@@ -57,7 +58,7 @@ export function EventSlideDesigner({
         <input
           type="number"
           min="2"
-          max="8"
+          max={settings.design==='table'?50:8}
           step="1"
           disabled={!canEdit}
           value={settings.limit}
@@ -65,7 +66,7 @@ export function EventSlideDesigner({
             change({
               eventLimit: Math.max(
                 2,
-                Math.min(8, Number(event.target.value) || 2),
+                Math.min(settings.design==='table'?50:8, Number(event.target.value) || 2),
               ),
             })
           }

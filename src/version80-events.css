@@ -1,0 +1,21 @@
+.event-loop-surface.event-design-table{background:#fff!important;color:#000!important;font-family:"Cera Pro","Segoe UI",sans-serif;align-items:stretch!important;text-align:left!important;padding:5.729167cqw!important;gap:0!important}
+.event-loop-surface.event-design-table>small{color:#608f9a;font-size:1.354167cqw;font-weight:500;letter-spacing:.08em;margin-bottom:1.666667cqw;text-align:left}
+.event-overview-table{width:100%;min-width:0;font-size:1.770833cqw;font-weight:500;line-height:1.3}
+.event-table-row{display:grid;grid-template-columns:16% 16% 42% 26%;box-sizing:border-box;align-items:center;min-width:0}
+.event-table-heading{border-bottom:1px solid #608f9a;color:#608f9a;font-size:1.354167cqw;font-weight:400}
+.event-table-heading .event-table-row{height:3.020833cqw}
+.event-table-row>[role=cell],.event-table-row>[role=columnheader]{box-sizing:border-box;min-width:0;padding:0 1.041667cqw 0 0}
+.event-table-row>[role=columnheader]:last-child,.event-table-room{text-align:right;padding-right:0!important}
+.event-table-viewport{height:36.458333cqw;overflow:hidden}
+.event-table-viewport [role=row]{height:7.083333cqw;border-bottom:1px solid #b6bec3}
+.event-table-viewport [role=row]:nth-child(even){background:rgb(182 190 195 / 10%)}
+.event-table-date,.event-table-time{font-size:1.458333cqw;font-weight:400;overflow-wrap:normal}
+.event-table-room{font-size:1.5625cqw;font-weight:400;overflow-wrap:anywhere}
+.event-table-title-viewport{width:100%;min-width:0;text-overflow:clip}
+.event-loop-surface.event-design-table .event-table-title{display:block;width:max-content;max-width:none;font-size:1.770833cqw;line-height:1.3;font-weight:500;white-space:nowrap!important;overflow-wrap:normal;text-overflow:clip;will-change:transform}
+.event-design-preview.event-design-table{display:flex;flex-direction:column;background:#fff;border-color:#b6bec3}
+.event-design-preview.event-design-table i{width:100%;height:18%;border-radius:0;background:#b6bec3}
+.event-design-preview.event-design-table i:first-child{background:#608f9a}
+.event-slide-designer .event-design-cards{grid-template-columns:repeat(5,minmax(0,1fr))}
+.event-slide-designer .event-design-cards button[aria-pressed=true]{border-color:#699f3e}
+@media(prefers-reduced-motion:reduce){.event-table-title-viewport{overflow-x:auto}.event-table-title{will-change:auto}}

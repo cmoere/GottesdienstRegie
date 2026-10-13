@@ -21,9 +21,109 @@
   ],
   "versions": [
     {
+      "line": "0.80",
+      "builds": [
+        {
+          "version": "0.80.0",
+          "releaseDate": "2026-10-13",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Bessere Meldungen, Veranstaltungslisten und Live-Bedienung",
+              "en": "Better announcements, event lists and live operation"
+            },
+            "text": {
+              "de": "Meldungen bieten acht Design-Kacheln mit Regie-Farben, einer lokalen QR-Freigabe, Kategorienfilter, Prioritätssortierung und einstellbarer Lesedauer. Die neue Veranstaltungsansicht zeigt eine helle Tabelle ohne Bilder und Etagen; vollständige Titel scrollen nur bei Platzmangel.\n\nDer Ablaufbereich lässt sich bis auf 15 Prozent der Fensterbreite ziehen. Explizite Einfügepositionen verbessern das Umordnen, während geschützte Systemfolien und Bereichsregeln erhalten bleiben. Vorschautitel stehen außerhalb der Folie. Live-Vorschauen sind stumm und lösen keine zweite Video-Ende-Navigation aus.",
+              "en": "Announcements offer eight design cards in the control palette, a local QR permission switch, category filtering, priority sorting and configurable reading time. The new event view uses a light table without pictures or floors; full titles scroll only when necessary.\n\nThe service sidebar can be resized up to 15 percent of the window. Explicit insertion targets improve reordering while preserving protected system slides and placement rules. Preview titles sit outside the slide. Live previews are silent and do not trigger duplicate video-end navigation."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Acht Meldungsdesigns und lokale Steuerung",
+                  "en": "Eight announcement designs and local controls"
+                },
+                "text": {
+                  "de": "Klar, Hell, Akzent, Seitenspalte, Grün, Silber, Rahmen und Fußbereich stehen als Vorschaukacheln bereit. Die QR-Option gilt für alle Meldungen des Elements; eine in Firebase nicht freigegebene QR-Anzeige wird dadurch nicht freigeschaltet. Kategorien und Prioritätssortierung filtern ausschließlich bereits freigegebene Meldungen. Lange Inhalte bleiben vollständig auf Folgeseiten erhalten.",
+                  "en": "Clear, Light, Accent, Sidebar, Green, Silver, Frame and Footer are available as preview cards. QR settings apply to the whole item and cannot enable a QR code withheld by Firebase. Categories and priority sorting operate only on eligible announcements. Long content remains complete across continuation pages."
+                }
+              },
+              {
+                "label": {
+                  "de": "Helle Veranstaltungstabelle",
+                  "en": "Light event table"
+                },
+                "text": {
+                  "de": "Die neue Standardansicht orientiert sich an der Veranstaltungsauskunft: Datum, Uhrzeit, Veranstaltung und Ort/Raum stehen in klaren Spalten mit dünnen Linien. Bis zu 50 Termine können vorbereitet werden. Titel werden nicht gekürzt oder verkleinert; nur überlange Titel bewegen sich horizontal. Große Listen scrollen vertikal und erhalten eine berechnete Mindestdauer.",
+                  "en": "The new default view follows the event information display: date, time, event and location/room in clear columns with thin separators. Up to 50 events can be prepared. Titles are not shortened or reduced; only overflowing titles move horizontally. Large lists scroll vertically and receive a calculated minimum duration."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Ablaufbreite und sichere Einfügeziele",
+                  "en": "Sidebar width and safer insertion targets"
+                },
+                "text": {
+                  "de": "Die Breite wird am rechten Rand gezogen und lokal als persönliche UI-Einstellung gespeichert. Die Grenze liegt bei 15 Prozent der Fensterbreite. Zeilen bieten Ziele vor und nach dem Eintrag; leere und eingeklappte Abschnitte erhalten ein eigenes Ziel. Loop-Bereichsregeln und die geschützte erste Nachprogrammfolie bleiben wirksam. Umordnungen sind rückgängig machbar.",
+                  "en": "Drag the sidebar edge to resize it; width is stored locally as a personal UI preference, capped at 15 percent of window width. Rows provide before/after targets, with dedicated targets for empty and collapsed sections. Loop placement rules and the protected first post-program slide remain enforced. Reordering supports undo."
+                }
+              },
+              {
+                "label": {
+                  "de": "Regie-Farben, Titel und Datumsformat",
+                  "en": "Control colors, titles and date format"
+                },
+                "text": {
+              "de": "Systemakzente verwenden #699f3e, #608f9a und #b6bec3; eigene Folien und Fehlerfarben bleiben erhalten. Die Einzelvorschau zeigt den Folientitel links oberhalb des Bildes. Sichtbare Veranstaltungs- und Übersichtsdatumsangaben verwenden den tatsächlichen Wochentag mit Datum, etwa Mi., 01.01.2020. Meldungen zeigen keinen laufenden Zeitbalken.",
+                  "en": "System accents use #699f3e, #608f9a and #b6bec3 while authored slides and error colors remain intact. Single preview shows its title above the picture on the left. Event and overview dates include the actual weekday and date, such as Mi., 01.01.2020. Announcements do not display a running progress bar."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Aktuelle Live-Daten während Übergängen",
+                  "en": "Current live data during transitions"
+                },
+                "text": {
+                  "de": "Geänderte Daten derselben Folie werden in der eintretenden Übergangsebene sofort übernommen und warten nicht auf das Ende einer langen Überblendung. Bedien- und Ausgabefenster deaktivieren die Browser-Hintergrunddrosselung, damit verdeckte Fenster nicht ihre Timer ausbremsen. Gemeinsame Snapshots und Anzeigezeitpunkte bleiben erhalten.",
+                  "en": "Updated data for the same slide is applied immediately to the entering transition layer instead of waiting for a long crossfade to finish. Operator and output windows disable browser background throttling so covered windows do not slow their timers. Shared snapshots and presentation deadlines are retained."
+                }
+              },
+              {
+                "label": {
+                  "de": "Keine doppelte Video-Audiowiedergabe aus Vorschauen",
+                  "en": "No duplicate video audio from previews"
+                },
+                "text": {
+                  "de": "Beide Live-Vorschauen verwenden einen stummen Spiegelmodus. Videos laufen visuell weiter, erzeugen aber keine zusätzliche Audioausgabe und melden ihr Ende nicht als weiteren MAIN-Navigationsbefehl. Die echte MAIN-Ausgabe behält Audio und Medien-Ende-Steuerung.",
+                  "en": "Both live previews use a silent mirror mode. Videos continue visually but do not produce another audio output or report their end as an additional MAIN navigation command. The real MAIN output retains audio and media-end control."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Prüfgrenzen",
+                  "en": "Verification limits"
+                },
+                "text": {
+                  "de": "Softwareseitig gemeinsame Anzeigezeitpunkte garantieren keine hardwareseitige Bildsynchronisation unterschiedlicher Monitore. Sehr lange Tabellen können entsprechend lange Mindestzeiten benötigen. Der früher gemeldete graue Programmstart ist weiterhin nicht als behoben bestätigt.",
+                  "en": "Shared software presentation deadlines do not guarantee hardware frame synchronization across different monitors. Very long tables may require correspondingly long minimum display times. The previously reported gray startup screen is still not confirmed as fixed."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.79",
       "builds": [{
-        "version": "0.79.0", "releaseDate": "2026-10-13", "current": true,
+        "version": "0.79.0", "releaseDate": "2026-10-13", "current": false,
         "overview": {
           "label": {"de":"Dauerhafte Ausgabeprofile und konsistentere Live-Bilder","en":"Persistent output profiles and more consistent live pictures"},
           "text": {"de":"Bildschirmzuordnungen werden unabhängig von Präsentationen als Geräteprofil gespeichert. Geänderte Monitor-IDs werden nur bei eindeutig passender Identität übernommen; fehlende oder mehrdeutige Ausgänge werden dem Operator gemeldet.\n\nMeldungen verwenden Cera Pro und bewahren Fettdruck, Kursivschrift, Unterstreichungen und Absätze über Folgeseiten hinweg. Laufende Musik wird bei jedem Take und zusätzlich sekündlich abgeglichen. Veranstaltungslisten nutzen native Browseranimationen statt React-Neuberechnung bei jedem Bild; MAIN und Live-Vorschauen arbeiten mit gemeinsam vorbereiteten Snapshots und Anzeigezeitpunkten.","en":"Display assignments are stored as a device profile independent of presentations. Changed monitor IDs are accepted only with an unambiguous matching identity; missing or ambiguous outputs are reported to the operator.\n\nAnnouncements use Cera Pro and preserve bold, italic, underline and paragraphs across continuation pages. Current playback is reconciled on every take and once per second. Event lists use native browser animations instead of per-frame React updates; MAIN and live previews share prepared snapshots and presentation deadlines."}

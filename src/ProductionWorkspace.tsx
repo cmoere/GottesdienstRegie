@@ -3856,8 +3856,10 @@ function PreviewCenter({
         >
           <Icon name="chevron_left" />
         </button>
+        <div className="main-preview-with-title">
+        <h2 className="single-preview-title">{(state.onAir&&output?output.title:slide.title)?.trim()||slideLabel(slide,item.slides.indexOf(slide))}</h2>
         <div className="main-preview-surface">
-          {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live/>:<TransitionStage
+          {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage
             slide={previewSlide(state.onAir&&output?output:slide)}
             transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(
               slide,
@@ -3866,10 +3868,12 @@ function PreviewCenter({
               state.transitionDefault,
             )}
             role={state.onAir?'main':'operator'}
+            renderMode={state.onAir?'mirror':undefined}
           />}
           <QuickOverlay quick={activeQuick} staticPreview />
           {state.onAir&&output?.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
           <TestModeWatermark role="main"/>
+        </div>
         </div>
         <div className="preview-navigation-rail">
           {timedSeconds > 0 && (
@@ -4078,7 +4082,7 @@ function PreviewRightSidebar({
         <MainLivePreview
           title={`${liveItem?.title} · ${live.title || "Live-Folie"}`}
         >
-          {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live/>:<TransitionStage slide={previewSlide(state.onAir&&output?output:live)} transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(live,liveItem,'main',state.transitionDefault)} role="main" />}
+          {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage slide={previewSlide(state.onAir&&output?output:live)} transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(live,liveItem,'main',state.transitionDefault)} role="main" renderMode="mirror" />}
           {state.onAir&&output?.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
         </MainLivePreview>
       ) : (

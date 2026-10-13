@@ -3,7 +3,8 @@ import {useLayoutEffect,useMemo,useRef,useState,type CSSProperties} from 'react'
 import type {PostProgramRoomNoticeSnapshot} from './community/PostProgramRoomNoticeService';
 import {preparePostEventPresentation,postEventTitle} from './community/PostProgramRoomNoticeService';
 import {EventScrollViewport,useEventPresentationClock} from './EventScrollViewport';
-const date=(value:string)=>new Date(value).toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'});
+import {formatEventDate} from './dynamicEventSlide';
+const date=(value:string)=>formatEventDate(value);
 const time=(value:string)=>new Date(value).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
 function ScrollCell({children,className=''}:{children:string;className?:string}){
  const outer=useRef<HTMLSpanElement>(null),inner=useRef<HTMLSpanElement>(null),[overflow,setOverflow]=useState(0);

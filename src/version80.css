@@ -1,0 +1,14 @@
+/* System accents; user-authored slide themes and safety red are not overwritten. */
+html,html[data-theme="light"],html[data-theme="dark"],html[data-theme="system"]{--accent:#608f9a;--success:#699f3e;--accent-gray:#b6bec3}
+.production-app .mode-switch button.active,.production-app .output-tabs button.active{color:#699f3e;border-bottom-color:#699f3e}
+.production-app .preview-nav,.production-app .section-label output,.production-app .service-time-control,.production-app .item-duration,.production-app .service-options .audio-state{color:#608f9a}
+.production-app .preview-mode-toolbar button.active{background:#608f9a;color:#000}
+.production-app .service-item.active{border-left-color:#608f9a;background:color-mix(in srgb,#608f9a 20%,var(--panel))}
+.production-app .main-quick-bible-preview,.production-app .audio-diagnostics{--accent:#608f9a}
+.event-loop-surface>small,.event-loop-surface .event-loop-list article>i{color:#608f9a}
+.event-loop-surface .event-loop-list article>i{background:#608f9a;color:#000}
+.event-loop-surface .event-loop-list article>div>span,.post-program-columns{color:#b6bec3}
+.event-loop-surface .event-loop-list{--event-color:#608f9a}
+.announcement-design-preview.announcement-design-accent{border-top-color:#608f9a}
+.announcement-design-preview.announcement-design-split{border-left-color:#608f9a}
+html[data-bw="true"]{--accent:#b6bec3;--success:#b6bec3}

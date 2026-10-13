@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { SlideRenderer } from './SlideRenderer';
+import { SlideRenderer,type SlideRendererMode } from './SlideRenderer';
 import { defaultTransition, type DisplayRole, type ServiceItem, type Slide, type SlideTransition } from './store';
 
 export const transitionLabels={cut:'Kein Übergang',fade:'Überblenden',crossfade:'Kreuzblende',dissolve:'Auflösen',slide:'Schieben',wipe:'Wischen',zoom:'Zoomen',blur:'Unschärfe',circle:'Kreis aufdecken',flip:'Drehen',push:'Schieben mit Verdrängen',iris:'Iris öffnen',curtain:'Vorhang öffnen',cube:'Würfel drehen',swing:'Einschwingen',flash:'Lichtblitz',scale:'Aufskalieren'} as const;
@@ -19,7 +19,7 @@ export function resolveTransition(slide:Slide,item?:ServiceItem,role:DisplayRole
 const opposite={left:'right',right:'left',up:'down',down:'up'} as const;
 const easing={standard:'cubic-bezier(.2,0,0,1)',linear:'linear','ease-in':'ease-in','ease-out':'ease-out','ease-in-out':'ease-in-out'} as const;
 
-export function TransitionStage({slide,transition,role='main',previewToken=0}:{slide:Slide;transition:SlideTransition;role?:DisplayRole;previewToken?:number}){
+export function TransitionStage({slide,transition,role='main',previewToken=0,renderMode}:{slide:Slide;transition:SlideTransition;role?:DisplayRole;previewToken?:number;renderMode?:SlideRendererMode}){
   const [shown,setShown]=useState(slide),[leaving,setLeaving]=useState<Slide|null>(null),[active,setActive]=useState(false),timer=useRef<number|undefined>(undefined),previous=useRef(slide);
   const effective=role==='stage'?{...transition,type:'cut' as const,durationMs:100}:transition;
   useEffect(()=>{
@@ -34,7 +34,7 @@ export function TransitionStage({slide,transition,role='main',previewToken=0}:{s
   const direction=backwards?opposite[effective.direction]:effective.direction;
   const style=useMemo(()=>({'--transition-duration':`${effective.durationMs}ms`,'--transition-easing':easing[effective.easing]}) as CSSProperties,[effective.durationMs,effective.easing]);
   return <div className={`transition-stage transition-${effective.type} direction-${direction} ${leaving?'transitioning':''} ${active?'active':''}`} style={style}>
-    {leaving&&<div className="transition-layer leaving"><SlideRenderer slide={leaving} mode={role==='operator'?'preview':'live'}/></div>}
-    <div className="transition-layer entering"><SlideRenderer slide={leaving?shown:slide} mode={role==='operator'?'preview':'live'}/></div>
+    {leaving&&<div className="transition-layer leaving"><SlideRenderer slide={leaving} mode={renderMode??(role==='operator'?'preview':'live')}/></div>}
+    <div className="transition-layer entering"><SlideRenderer slide={leaving&&shown.id!==slide.id?shown:slide} mode={renderMode??(role==='operator'?'preview':'live')}/></div>
   </div>;
 }

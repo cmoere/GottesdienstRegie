@@ -5,13 +5,18 @@ vi.mock('electron',()=>({
   screen:{getAllDisplays:()=>[{id:1,bounds:{x:0,y:0,width:1920,height:1080},label:'MAIN'},{id:2,bounds:{x:1920,y:0,width:1920,height:1080},label:'STAGE'}],getPrimaryDisplay:()=>({id:1})},
   BrowserWindow:class{
     destroyed=false;webContents={id:windows.length+1,send:(...args:unknown[])=>sends.push(args),insertCSS:vi.fn()};
-    shown=false;constructor(){windows.push(this)}setMenu(){}on(){}showInactive(){this.shown=true}setFullScreen(){}close(){this.destroyed=true}isDestroyed(){return this.destroyed}loadURL(){return Promise.resolve()}
+    shown=false;constructor(public options:any){windows.push(this)}setMenu(){}on(){}showInactive(){this.shown=true}setFullScreen(){}close(){this.destroyed=true}isDestroyed(){return this.destroyed}loadURL(){return Promise.resolve()}
   },
 }));
 import {OutputWindowManager} from './OutputWindowManager';
 
 describe('OutputWindowManager app mode',()=>{
   beforeEach(()=>{sends.length=0;windows.length=0});
+  it('keeps live renderer scheduling enabled even when an output is covered or inactive',async()=>{
+    const manager=new OutputWindowManager('preload',async()=>{},()=>{});
+    await manager.start({'1':'main'} as any,{id:'slide'});
+    expect(windows[0].options.webPreferences.backgroundThrottling).toBe(false);
+  });
   it('keeps all outputs hidden until every assigned window has loaded',async()=>{
     let finish!:()=>void;const pending=new Promise<void>(resolve=>{finish=resolve});
     const manager=new OutputWindowManager('preload',async(_window,route)=>{if(route.includes('stage'))await pending},()=>{});

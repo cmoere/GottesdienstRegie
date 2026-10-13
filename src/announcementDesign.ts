@@ -1,8 +1,8 @@
 import type {SlideElement} from './store';
 import {announcementRuns,announcementRunsText,type AnnouncementRun,type AnnouncementRichLines} from './announcementRichText';
-export const ANNOUNCEMENT_DESIGNS=['classic','light','accent','split'] as const;
+export const ANNOUNCEMENT_DESIGNS=['classic','light','accent','split','green','silver','frame','footer'] as const;
 export type AnnouncementDesign=(typeof ANNOUNCEMENT_DESIGNS)[number];
-export const ANNOUNCEMENT_DESIGN_LABELS:Record<AnnouncementDesign,string>={classic:'Klar',light:'Hell',accent:'Akzent',split:'Seitenspalte'};
+export const ANNOUNCEMENT_DESIGN_LABELS:Record<AnnouncementDesign,string>={classic:'Klar',light:'Hell',accent:'Akzent',split:'Seitenspalte',green:'Grün',silver:'Silber',frame:'Rahmen',footer:'Fußband'};
 export function announcementDesign(value:unknown):AnnouncementDesign{return ANNOUNCEMENT_DESIGNS.includes(value as AnnouncementDesign)?value as AnnouncementDesign:'classic'}
 type Box={x:number;y:number;width:number;height:number};
 export type PreparedAnnouncementPage={background:string;color:string;titleElement:Box;bodyElement:Box;qrElement?:Box;titleFontSize:number;bodyFontSize:number;titleHeight:number;bodyHeight:number;titleText:string;bodyText:string;bodyLines:string[];titleRichLines:AnnouncementRichLines;bodyRichLines:AnnouncementRichLines;decorations:Array<Box&{fill:string}>};
@@ -37,8 +37,8 @@ function lines(runs:AnnouncementRun[],maxWidth:number,size:number,weight:number)
 // Layout is prepared in the operator at 1920×1080 and shared with every output.
 // Source segments retain all characters; added visual line breaks never remove text.
 export function prepareAnnouncementPages(input:{title:string;body:string;qrCode:boolean;design:unknown}):PreparedAnnouncementPage[]{
- const design=announcementDesign(input.design),split=design==='split',light=design==='light';
- const background=light?'#f4f7f8':'#18232f',color=light?'#18232f':'#ffffff';
+ const design=announcementDesign(input.design),split=design==='split',light=design==='light'||design==='silver';
+ const background=design==='green'?'#699f3e':design==='silver'?'#b6bec3':light?'#f4f7f8':'#18232f',color=light?'#18232f':'#ffffff';
  const x=split?610:130,bodyWidth=(input.qrCode?1410:1790)-x;
  const titleWidth=split?490:1660;
  const titleRuns=announcementRuns(input.title),bodyRuns=announcementRuns(input.body);
@@ -55,8 +55,12 @@ export function prepareAnnouncementPages(input:{title:string;body:string;qrCode:
  const bodyLines=lines(fullBody,bodyWidth-24,bodyFontSize,400);
  const decorations:Array<Box&{fill:string}>=[];
  if(design==='accent')decorations.push({x:0,y:0,width:1920,height:26,fill:'#608f9a'});
+ if(design==='green')decorations.push({x:0,y:0,width:26,height:1080,fill:'#b6bec3'});
+ if(design==='silver')decorations.push({x:0,y:0,width:1920,height:26,fill:'#699f3e'});
+ if(design==='frame')decorations.push({x:45,y:45,width:1830,height:8,fill:'#b6bec3'},{x:45,y:1027,width:1830,height:8,fill:'#b6bec3'},{x:45,y:45,width:8,height:990,fill:'#699f3e'},{x:1867,y:45,width:8,height:990,fill:'#699f3e'});
+ if(design==='footer')decorations.push({x:0,y:1040,width:1920,height:40,fill:'#608f9a'});
  if(split)decorations.push({x:0,y:0,width:560,height:1080,fill:'#608f9a'});
- decorations.push(split?{x:585,y:110,width:3,height:160,fill:'#608f9a'}:{x:130,y:titleElement.y+titleElement.height+20,width:160,height:3,fill:light?'#c6d9de':'#608f9a'});
+ decorations.push(split?{x:585,y:110,width:3,height:160,fill:'#608f9a'}:{x:130,y:titleElement.y+titleElement.height+20,width:160,height:3,fill:light?'#699f3e':'#608f9a'});
  const pages:PreparedAnnouncementPage[]=[];
  for(let start=0;start<bodyLines.length;start+=maxLines){
   const part=bodyLines.slice(start,start+maxLines);

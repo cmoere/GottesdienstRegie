@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.80.0
+
+Meldungen bieten acht visuelle Design-Kacheln in den Regie-Farben #699f3e, #608f9a und #b6bec3. Im Bearbeiten-Bereich lassen sich QR-Codes für das ganze Element deaktivieren, Kategorien filtern, Prioritätssortierung wählen und die Lesedauer in Sekunden einstellen. Die Mindestlesedauer langer Folgeseiten bleibt wirksam. Cera Pro, sichere Textformatierung und vollständige Absätze bleiben erhalten; es gibt keinen laufenden Zeitbalken auf der Meldung.
+
+Die neue Standardansicht für nächste Veranstaltungen ist eine helle Tabelle mit kleinen Spaltenüberschriften Datum, Uhrzeit, Veranstaltung und Ort/Raum, dünnen Trennlinien und dezenten alternierenden Zeilen. Bilder und Etagen erscheinen dort nicht. Vollständige Titel behalten ihre Schriftgröße und bleiben einzeilig; nur überlange Titel scrollen langsam horizontal. Bis zu 50 Termine werden mit ruhiger vertikaler Bewegung und berechneter Mindest-Anzeigedauer dargestellt. Bereits ausdrücklich gespeicherte andere Designs bleiben ausgewählt.
+
+Der linke Ablaufbereich lässt sich am rechten Rand ziehen, maximal bis 15 Prozent der Fensterbreite. Die Breite wird lokal als persönliche Oberflächeneinstellung gespeichert. Explizite Ziele vor und nach Einträgen sowie für leere und eingeklappte Abschnitte verbessern das Umordnen. Bereichsregeln für Loop-Elemente und die geschützte erste Nachprogrammfolie bleiben erhalten. Umordnungen lassen sich rückgängig machen.
+
+Die Einzelvorschau zeigt den Folientitel links über dem Bild, nicht innerhalb der Ausgabe. Sichtbare Datumsangaben verwenden den tatsächlichen Wochentag und DD.MM.YYYY. Die Regie-Systemakzente verwenden die gewünschten drei Farben; individuelle Folienfarben und semantische Fehlermeldungen werden nicht überschrieben.
+
+Aktualisierte Daten derselben Live-Folie werden während einer laufenden Überblendung sofort in der eintretenden Ebene übernommen. Bedien- und Ausgabefenster deaktivieren Hintergrunddrosselung. Beide Live-Vorschauen verwenden einen stummen Medien-Spiegelmodus: Videos bleiben sichtbar, verursachen aber keine zweite Audioausgabe und kein zusätzliches Weiterschalten am Videoende. Die echte MAIN-Ausgabe behält diese Funktionen.
+
+Bekannt: Gemeinsame softwareseitige Anzeigezeitpunkte garantieren keine hardwareseitige Bildsynchronisation verschiedener Monitore. Sehr lange Tabellen benötigen entsprechend lange Mindestzeiten. Der früher gemeldete graue Programmstart ist weiterhin nicht als behoben bestätigt.
+
+---
+
 # GottesdienstRegie 0.79.0
 
 Ausgabebildschirme werden zusätzlich als technisches Geräteprofil gespeichert, unabhängig von einzelnen Präsentationen. Bei geänderten Bildschirm-IDs wird eine Zuordnung nur bei eindeutig passender Bildschirmidentität wiederhergestellt. Fehlende oder mehrdeutige Monitore werden im Bedienbereich gemeldet und nicht still einem anderen Ausgang zugeordnet. Bereits zurückgesetzte Zuordnungen müssen einmal neu ausgewählt werden. OSB-Geräteeinstellungen bleiben beim Speichern erhalten.

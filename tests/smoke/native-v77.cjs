@@ -43,6 +43,23 @@ app.whenReady().then(async()=>{try{
  operator.webContents.on('console-message',e=>{if(e.level==='error'||e.level===3)console.error('Renderer:',e.message)});
  await main.loadFile(path.join(runtime,'dist/index.html'),{hash:'output?role=main'});await operator.loadURL('http://127.0.0.1:5173/tests/smoke/native-v77.html?demo=1');
  await until(operator,"!!document.querySelector('.test-session-button:not(:disabled)')");await capture('operator-workspace');
+ if(process.argv.includes('--v80')){
+  await js('window.seedV80()');await sleep(250);
+  const edge=await js("(()=>{const r=document.querySelector('.service-sidebar-resize').getBoundingClientRect();return {x:Math.round(r.x+r.width/2),y:Math.round(r.y+50)}})()");
+  operator.webContents.sendInputEvent({type:'mouseDown',button:'left',...edge,clickCount:1});operator.webContents.sendInputEvent({type:'mouseMove',x:450,y:edge.y,buttons:1});operator.webContents.sendInputEvent({type:'mouseUp',button:'left',x:450,y:edge.y,clickCount:1});await sleep(250);
+  assert.equal(await js("Math.round(document.querySelector('.service-sidebar-shell').getBoundingClientRect().width)"),216,'Native pointer resize obeys15% of1440');
+  assert.equal(await js("localStorage.getItem('gottesdienstregie.ui.serviceSidebarWidth')"),'216');
+  const points=await js(`(()=>{const rows=[...document.querySelectorAll('.service-drop-row')];const get=title=>rows.find(row=>row.querySelector('.service-copy b')?.textContent.includes(title));const a=get('Termin A').getBoundingClientRect(),c=get('Termin C').querySelector('.drag').getBoundingClientRect();return {from:{x:Math.round(c.x+c.width/2),y:Math.round(c.y+c.height/2)},to:{x:Math.round(a.x+100),y:Math.round(a.y+5)}}})()`);
+  operator.webContents.sendInputEvent({type:'mouseDown',button:'left',...points.from,clickCount:1});operator.webContents.sendInputEvent({type:'mouseMove',x:points.from.x+8,y:points.from.y,buttons:1});await sleep(100);operator.webContents.sendInputEvent({type:'mouseMove',...points.to,buttons:1});await sleep(150);
+  assert(await js("!!document.querySelector('.service-drop-target.before.drop-over')"),'Pointer sees explicit before marker');
+  operator.webContents.sendInputEvent({type:'mouseUp',button:'left',...points.to,clickCount:1});await sleep(450);
+  assert.deepEqual(await js("window.v77State().items.filter(i=>i.sectionId==='service').sort((a,b)=>a.order-b.order).map(i=>i.id)"),['C','A','B'],'Native pointer drag moves C before A');
+  await js('window.v77State().undo()');assert.deepEqual(await js("window.v77State().items.filter(i=>i.sectionId==='service').sort((a,b)=>a.order-b.order).map(i=>i.id)"),['A','B','C']);
+  await js("window.v77State().setMode('preview')");await sleep(200);
+  assert(await js("(()=>{const title=document.querySelector('.single-preview-title'),frame=document.querySelector('.main-preview-surface');return title&&frame&&!frame.contains(title)&&title.getBoundingClientRect().bottom<=frame.getBoundingClientRect().top+1})()"),'Single preview title stays above output');
+  await capture('v80-workflow');await js('window.seedV77()');await sleep(100);
+  console.log('PASS native v80 workflow:15% pointer resize, persisted width, physical before-row drag, undo and external preview title.');
+ }
  await clickText('Einstellungen');await capture('settings-window');await js("document.body.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}))");
  await clickText('Medien');
  await js("(()=>{const b=[...document.querySelectorAll('button')].find(b=>b.textContent.includes('Medienbibliothek'));if(!b)throw Error('Medienbibliothek menu missing');b.click()})()");

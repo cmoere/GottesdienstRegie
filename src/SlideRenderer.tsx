@@ -1,8 +1,10 @@
 import {paginateReducedMotionEvents} from './eventPagination';
 import {EventScrollViewport,useEventPresentationClock} from './EventScrollViewport';
 import {prepareEventOverview} from './eventOverviewPresentation';
+import {EventOverviewTable} from './EventOverviewTable';
 import {prepareAnnouncementPages} from './announcementDesign';
 import {buildAnnouncementSlide} from './announcementLive';
+import {announcementSettings} from './announcementSettings';
 import {AnnouncementRichText} from './AnnouncementRichTextRenderer';
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Slide, SlideElement } from "./store";
@@ -29,7 +31,7 @@ import {
   type LatestPublicEvent,
 } from "./dynamicEventSlide";
 
-export type SlideRendererMode = "editor" | "preview" | "thumbnail" | "live";
+export type SlideRendererMode = "editor" | "preview" | "thumbnail" | "live" | "mirror";
 
 export function elementStyle(element: SlideElement): CSSProperties {
   const value = element.properties;
@@ -98,6 +100,7 @@ function RoutedMedia({
   useEffect(() => {
     const media = ref.current;
     if (!media || mode === "thumbnail") return;
+    if(mode==='mirror'){media.muted=true;media.volume=0;return}
     const routing = routingWithDefaults(routingValue),
       config = routing[route];
     void applyAudioRoute(media, routing, route).then(() => {
@@ -115,10 +118,11 @@ function RoutedMedia({
     className: "slide-renderer-element media",
     style,
     src,
-    autoPlay: mode === "live" && properties.autoplay !== false,
+    autoPlay: (mode === "live" || mode==='mirror') && properties.autoplay !== false,
     loop: properties.loop === true,
     muted:
       properties.muted === true ||
+      mode === "mirror" ||
       mode === "thumbnail" ||
       routingWithDefaults(routingValue)[route].muted,
     controls: mode === "editor" || mode === "preview",
@@ -171,7 +175,7 @@ function LiveVideoInput({
           height: { ideal: Number(properties.height ?? 1080) },
           frameRate: { ideal: Number(properties.frameRate ?? 30) },
         },
-        audio: properties.audioEnabled === true,
+        audio: mode!=='mirror'&&properties.audioEnabled === true,
       })
       .then((value) => {
         if (!active) {
@@ -272,7 +276,7 @@ function TimedText({
     [left, setLeft] = useState(duration);
   useEffect(() => {
     setLeft(duration);
-    if (mode !== "live" || duration <= 0) return;
+    if ((mode !== "live"&&mode!=='mirror') || duration <= 0) return;
     const started = Date.now(),
       timer = setInterval(
         () =>
@@ -320,11 +324,11 @@ function RenderElement({
         />
       );
     if (loopType === "clock") return <ClockLoopElement style={style} />;
-    if(loopType==='announcement')return mode==='live'?<div className="slide-renderer-element" style={style}/>:<AnnouncementLoopPreview style={style} properties={properties}/>;
+    if(loopType==='announcement')return mode==='live'||mode==='mirror'?<div className="slide-renderer-element" style={style}/>:<AnnouncementLoopPreview style={style} properties={properties}/>;
     if (loopType === "nowPlaying")
       return <NowPlayingLoopElement style={style} properties={properties} />;
     if (loopType === "event" || loopType === "nextEvents")
-      return <EventLoopElement style={style} properties={properties} live={mode==='live'} />;
+      return <EventLoopElement style={style} properties={properties} live={mode==='live'||mode==='mirror'} />;
     return (
       <div
         className="slide-renderer-element loop-surface"
@@ -508,7 +512,7 @@ function RenderElement({
     return <TimedText element={element} mode={mode} style={style} />;
   return (
     <div
-      className={`slide-renderer-element text ${properties.animation === "fade-in" && mode === "live" ? "element-animation-fade-in" : ""}`}
+      className={`slide-renderer-element text ${properties.animation === "fade-in" && (mode === "live"||mode==='mirror') ? "element-animation-fade-in" : ""}`}
       style={properties.preparedAnnouncementText===true?{...style,display:'block',whiteSpace:'pre',overflow:'hidden'}:style}
     >
       {properties.preparedAnnouncementText===true?<AnnouncementRichText value={properties.announcementRichLines} text={String(properties.text??'')}/>:String(properties.text ?? "")}
@@ -576,7 +580,7 @@ function EventLoopElement({
       ? { ...properties, eventItemsJson: JSON.stringify(events) }
       : properties,
     allItems = eventSlideItems(source),
-    pages=reducedMotion?paginateReducedMotionEvents(allItems):[],
+    pages=reducedMotion?(settings.design==='table'?Array.from({length:Math.ceil(allItems.length/5)},(_,index)=>allItems.slice(index*5,index*5+5)):paginateReducedMotionEvents(allItems)):[],
     items=reducedMotion?(pages[eventPage%pages.length]??[]):allItems;
   const prepared=prepareEventOverview(source);
   return (
@@ -585,12 +589,12 @@ function EventLoopElement({
       className={`slide-renderer-element loop-surface event-loop-surface event-design-${settings.design}`}
       style={{
         ...style,
-        background: String(properties.background ?? "#13333d"),
-        color: String(properties.color ?? "#ffffff"),
+        background: settings.design==='table'?'#ffffff':String(properties.background ?? "#13333d"),
+        color: settings.design==='table'?'#000000':String(properties.color ?? "#ffffff"),
       }}
     >
       <small>NÄCHSTE VERANSTALTUNGEN</small>
-      <EventScrollViewport plan={prepared.plan} elapsed={elapsed} reduced={reducedMotion}><div className="event-loop-list">
+      {settings.design==='table'?<EventOverviewTable items={items} plan={prepared.plan} elapsed={elapsed} reduced={reducedMotion}/>:<EventScrollViewport plan={prepared.plan} elapsed={elapsed} reduced={reducedMotion}><div className="event-loop-list">
         {items.map((event, index) => (
           <article key={`${event.title}:${event.details}:${index}`}>
             <b>{String("eventNumber" in event?event.eventNumber:index + 1).padStart(2, "0")}</b>
@@ -600,15 +604,16 @@ function EventLoopElement({
             </div>
           </article>
         ))}
-      </div></EventScrollViewport>
+      </div></EventScrollViewport>}
       {!items.length && <strong>Keine kommenden Veranstaltungen</strong>}
     </div>
   );
 }
 
 function AnnouncementLoopPreview({style,properties}:{style:CSSProperties;properties:Record<string,string|number|boolean>}){
- const page=prepareAnnouncementPages({title:'Beispielmeldung',body:'Aktuelle Meldungen werden für diese Anzeige vorbereitet. Lange Texte bleiben vollständig lesbar und werden automatisch auf mehrere Seiten verteilt.',qrCode:true,design:properties.announcementDesign})[0];
- const slide=buildAnnouncementSlide({id:'announcement-preview',itemId:'preview',order:0,enabled:true,title:'',body:'',background:page.background,transition:'none',transitionDuration:0,notes:'',elements:[]},{title:'Beispielmeldung',text:page.bodyText,durationMs:15000,qrCode:true,qrReference:'https://example.org'},page,0,1);
+ const qrCode=announcementSettings(properties).qrEnabled;
+ const page=prepareAnnouncementPages({title:'Beispielmeldung',body:'Aktuelle Meldungen werden für diese Anzeige vorbereitet. Lange Texte bleiben vollständig lesbar und werden automatisch auf mehrere Seiten verteilt.',qrCode,design:properties.announcementDesign})[0];
+ const slide=buildAnnouncementSlide({id:'announcement-preview',itemId:'preview',order:0,enabled:true,title:'',body:'',background:page.background,transition:'none',transitionDuration:0,notes:'',elements:[]},{title:'Beispielmeldung',text:page.bodyText,durationMs:15000,qrCode,qrReference:'https://example.org'},page,0,1);
  return <div className="slide-renderer-element announcement-loop-preview" style={style}><SlideRenderer slide={slide} mode="preview"/></div>;
 }
 

@@ -22,10 +22,14 @@ import {
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
-import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
+import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
+import {ResizableServiceSidebar} from './ResizableServiceSidebar';
+import {ServiceDropTarget,serviceDropCollision,type ServiceDropPosition} from './ServiceDropTarget';
+import './version80-workflow.css';
 import {
   SortableContext,
   verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -56,7 +60,7 @@ import {postProgramCandidates,unavailablePostProgramTarget} from './postProgramN
 import { consumeInsertionGuard, createLoopItem } from "./loopItemFactory";
 import { EventLinkStatus } from "./EventLinkStatus";
 import { StorageSettings } from "./StorageSettings";
-import { resolveInsertionSectionId } from "./itemPlacementPolicy";
+import { canInsertItem, resolveInsertionSectionId } from "./itemPlacementPolicy";
 import { getAddElementGroups } from './addElementCatalog';
 import {AssignedAudioPopover} from './AssignedAudioPopover';
 import {DEFAULT_OSB_SETTINGS,normalizeOsbSettings} from './osb/settingsModel';
@@ -114,6 +118,7 @@ import {setPostProgramPrepared} from './community/communityRuntime';
 import {EventSlideDesigner} from './EventSlideDesigner';
 import {AnnouncementSlideDesigner} from './AnnouncementSlideDesigner';
 import {eventOverviewMinimumDuration,hydrateNowPlayingData,nowPlayingSnapshotMatches} from './liveDynamicData';
+import {formatEventDate} from './dynamicEventSlide';
 import {useLiveOutputPreview} from './liveOutputPreview';
 import {useOutputDisplayProfile} from './useOutputDisplayProfile';
 import {useScheduledOutputSlide} from './outputPresentation';
@@ -1133,9 +1138,7 @@ function PresentationLibrary({
                 >
                   <b>{entry.title}</b>
                   <span>
-                    {new Date(entry.date || entry.updatedAt).toLocaleDateString(
-                      locale,
-                    )}
+                    {formatEventDate(entry.date || entry.updatedAt)}
                   </span>
                   <small>
                     Geändert {new Date(entry.updatedAt).toLocaleString(locale)}
@@ -1562,7 +1565,7 @@ function SortableItem({
   return (
     <div
       ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
+      style={{ transition }}
       role="button"
       tabIndex={0}
       aria-selected={active}
@@ -2600,12 +2603,7 @@ function PresentationEventHeader() {
           ? "MORGEN"
           : "KOMMEND";
   const format = (event: ChurchEvent) =>
-      new Intl.DateTimeFormat("de-DE", {
-        weekday: "short",
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      }).format(new Date(`${event.start_datum}T12:00:00`));
+      formatEventDate(`${event.start_datum}T12:00:00`);
   return (
     <section
       className="presentation-event-header"
@@ -2812,6 +2810,8 @@ export function OrderOfService({
       }
     });
   const contextIds = useRef<string[]>([]);
+  const dragSuppressedUntil=useRef(0),[draggingId,setDraggingId]=useState('');
+  const sensors=useSensors(useSensor(PointerSensor,{activationConstraint:{distance:6}}),useSensor(KeyboardSensor,{coordinateGetter:sortableKeyboardCoordinates}));
   useEffect(
     () =>
       localStorage.setItem(
@@ -2821,8 +2821,9 @@ export function OrderOfService({
     [collapsed],
   );
   function end(e: DragEndEvent) {
-    if (canEdit && e.over && e.active.id !== e.over.id)
-      state.reorder(String(e.active.id), String(e.over.id));
+    dragSuppressedUntil.current=Date.now()+350;setDraggingId('');
+    const drop=e.over?.data.current?.serviceDrop as ServiceDropPosition|undefined;
+    if(canEdit&&drop)state.reorder(String(e.active.id),drop.anchorId,drop.sectionId,drop.position);
   }
   function toggleSection(event: React.MouseEvent, sectionId: string) {
     event.preventDefault();
@@ -3098,6 +3099,8 @@ export function OrderOfService({
   return (
     <aside
       className="service"
+      onClickCapture={event=>{if(draggingId||Date.now()<dragSuppressedUntil.current){event.preventDefault();event.stopPropagation()}}}
+      onDoubleClickCapture={event=>{if(draggingId||Date.now()<dragSuppressedUntil.current){event.preventDefault();event.stopPropagation()}}}
       onClick={() => {
         setAudioMenu(null);
         setTimeEditor(false);
@@ -3126,7 +3129,7 @@ export function OrderOfService({
         )}
       </header>
       <div className="service-list">
-        <DndContext collisionDetection={closestCenter} onDragEnd={end}>
+        <DndContext sensors={sensors} collisionDetection={serviceDropCollision} onDragStart={event=>{setDraggingId(String(event.active.id));dragSuppressedUntil.current=Infinity}} onDragCancel={()=>{setDraggingId('');dragSuppressedUntil.current=Date.now()+350}} onDragEnd={end}>
           <SortableContext
             items={items.map((item) => item.id)}
             strategy={verticalListSortingStrategy}
@@ -3228,8 +3231,12 @@ export function OrderOfService({
                       )}
                     </div>
                   </div>
+                  {isCollapsed&&<ServiceDropTarget sectionId={section.id} disabled={!canEdit||!draggingId||!canInsertItem(items.find(item=>item.id===draggingId)!,section)}><span className="service-section-drop-label">{draggingId?'Hier am Abschnittsende einfügen':`${sectionItems.length} Elemente`}</span></ServiceDropTarget>}
                   {!isCollapsed &&
                     sectionItems.map((item) => (
+                      <div className="service-drop-row" key={item.id}>
+                      <ServiceDropTarget row sectionId={section.id} anchorId={item.id} position="before" disabled={!canEdit||!draggingId||draggingId===item.id||isPostProgramSystemItem(item)||!canInsertItem(items.find(entry=>entry.id===draggingId)!,section)}/>
+                      <ServiceDropTarget row sectionId={section.id} anchorId={item.id} position="after" disabled={!canEdit||!draggingId||draggingId===item.id||!canInsertItem(items.find(entry=>entry.id===draggingId)!,section)}/>
                       <SortableItem
                         key={item.id}
                         item={item}
@@ -3252,7 +3259,9 @@ export function OrderOfService({
                         }
                         onContext={(event) => openContext(event, item)}
                       />
+                      </div>
                     ))}
+                  {!isCollapsed&&<ServiceDropTarget sectionId={section.id} disabled={!canEdit||!draggingId||!canInsertItem(items.find(item=>item.id===draggingId)!,section)}>{sectionItems.length===0&&<span className="service-section-drop-label">{draggingId?'Hier einfügen':'Leerer Abschnitt'}</span>}</ServiceDropTarget>}
                 </section>
               );
             })}
@@ -4610,7 +4619,7 @@ function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
                   )}
                 </span>
                 <small>
-                  {new Date(build.releaseDate).toLocaleDateString(locale)}
+                  {formatEventDate(build.releaseDate)}
                   {build.current ? " · Aktuelle Version" : ""}
                 </small>
               </summary>
@@ -6036,9 +6045,7 @@ function SettingsModal({
                       <>
                         <p>
                           <b>{previousVersion.version}</b> ·{" "}
-                          {new Date(
-                            previousVersion.publishedAt,
-                          ).toLocaleDateString(locale)}{" "}
+                          {formatEventDate(previousVersion.publishedAt)}{" "}
                           ·{" "}
                           {new Intl.NumberFormat(locale, {
                             style: "unit",
@@ -6473,9 +6480,7 @@ function SettingsModal({
                         <dd>{previousVersion.version}</dd>
                         <dt>Veröffentlicht</dt>
                         <dd>
-                          {new Date(
-                            previousVersion.publishedAt,
-                          ).toLocaleDateString(locale)}
+                          {formatEventDate(previousVersion.publishedAt)}
                         </dd>
                         <dt>Build</dt>
                         <dd>{previousVersion.version}</dd>
@@ -7450,9 +7455,7 @@ function UserProfileDialog({
                       <span>
                         <b>{entry.title}</b>
                         <small>
-                          {new Date(
-                            entry.date || entry.updatedAt,
-                          ).toLocaleDateString("de-DE")}{" "}
+                          {formatEventDate(entry.date || entry.updatedAt)}{" "}
                           · Präsentation
                         </small>
                         <small>
@@ -9843,7 +9846,7 @@ function AppShell({
       <div className="toolbar">
         <div>
           <b>{state.title}</b>
-          <span> · {new Date().toLocaleDateString(locale)}</span>
+          <span> · {formatEventDate(state.date || new Date())}</span>
         </div>
         <div
           className={`mode-switch ${state.mode}`}
@@ -9913,6 +9916,7 @@ function AppShell({
       )}
       {target==='web'&&<CapabilityNotice capability="outputMain"/>}
       <div className="main">
+        <ResizableServiceSidebar>
         <OrderOfService
           canEdit={canEdit}
           onTake={(itemId, slideId) => {
@@ -9920,6 +9924,7 @@ function AppShell({
             else void air(false, { itemId, slideId });
           }}
         />
+        </ResizableServiceSidebar>
         <div
           className={`workspace-quick-host ${previewQuick?.type === "noText" ? "quick-no-text" : ""}`}
         >

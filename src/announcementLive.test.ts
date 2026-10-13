@@ -6,6 +6,41 @@ const now=new Date('2026-10-11T10:00:00');
 const raw={messageId:'a',titel:'Öffentliche Meldung',textMeldung:'Saaltext',status:'öffentlich',messageScreen:true,internalComment:'Geheim'};
 const item=createServiceItem('announcement',{sectionId:'pre',itemCategory:'loop'});
 describe('announcement live preparation',()=>{
+  it('suppresses locally disabled QR codes on every page and reclaims their body width',()=>{
+    const controller=new AnnouncementLiveController(),body='Diese Meldung braucht ausreichend Platz. '.repeat(150);
+    controller.setRecords([{...raw,textMeldung:body,qrCode:true}]);
+    const local={...item,metadata:{...item.metadata,announcementQrEnabled:false}};
+    const collected:string[]=[];
+    for(let revision=1;revision<30;revision++){
+      const output=controller.outputForTake(local,item.slides[0],revision,now)!;
+      expect(output.elements.some(element=>element.type==='qr')).toBe(false);
+      expect(output.elements.find(element=>element.name==='Meldungstext')!.width).toBe(1660);
+      collected.push(output.body);
+      if(!controller.hasContinuation(item.id))break;
+    }
+    expect(collected.join('')).toBe(body.trim());
+  });
+  it('applies category, sort and reading duration settings to eligible public messages',()=>{
+    const controller=new AnnouncementLiveController();
+    controller.setRecords([{...raw,titel:'Zebra',category:'event',priority:'urgent'},{...raw,messageId:'b',titel:'Alpha',category:'event'},{...raw,messageId:'c',titel:'Hidden',category:'technical'},{...raw,messageId:'d',titel:'Private',status:'internal',category:'event',priority:'urgent'}]);
+    const local={...item,metadata:{...item.metadata,announcementCategory:'event',announcementPrioritySort:false,announcementReadingSeconds:21}};
+    const first=controller.outputForTake(local,item.slides[0],1,now)!;
+    expect(first.title).toBe('Alpha');expect(first.timing?.durationSeconds).toBe(21);
+    expect(controller.outputForTake(local,item.slides[0],2,now)?.title).toBe('Zebra');
+    expect(controller.hasEligible({...item,metadata:{announcementCategory:'community'}},now)).toBe(false);
+  });
+  it('never enables a source-disabled QR code through the local default',()=>{
+    const controller=new AnnouncementLiveController();controller.setRecords([{...raw,qrCode:false}]);
+    const output=controller.outputForTake(item,item.slides[0],1,now)!;
+    expect(output.elements.some(element=>element.type==='qr')).toBe(false);
+  });
+  it('accepts a one second duration for a short notice but keeps long-page reading time safe',()=>{
+    const controller=new AnnouncementLiveController(),local={...item,metadata:{announcementReadingSeconds:1}};
+    controller.setRecords([raw]);
+    expect(controller.outputForTake(local,item.slides[0],1,now)!.timing?.durationSeconds).toBe(1);
+    controller.setRecords([{...raw,textMeldung:'Vollständig lesbare lange Meldung. '.repeat(100)}]);
+    expect(controller.outputForTake(local,item.slides[0],2,now)!.timing!.durationSeconds).toBeGreaterThanOrEqual(12);
+  });
   it('finishes every page of a long notice before moving to the next message',()=>{
     const controller=new AnnouncementLiveController(),body='Diese ausführliche öffentliche Meldung muss vollständig lesbar bleiben. '.repeat(65);
     controller.setRecords([{...raw,textMeldung:body,qrCode:true},{...raw,messageId:'b',titel:'Zweite Meldung'}]);

@@ -12,6 +12,11 @@ function seed(announcements=false){
 seed();
 (window as any).seedV77=seed;
 (window as any).v77State=()=>usePresentation.getState();
+(window as any).seedV80=()=>{
+ usePresentation.getState().newDocument('Ablaufprüfung');
+ const items=['A','B','C'].map((id,index)=>createServiceItem('content',{id,title:`Termin ${id}`,sectionId:'service',order:index}));
+ usePresentation.setState({items:[...items,...usePresentation.getState().items],selectedItemId:'A',selectedSlideId:items[0].slides[0].id,previewItemId:'A',previewSlideId:items[0].slides[0].id,displayRoles:{'123':'main'},mainDisplayId:123,previewLayout:'single',mode:'edit'});
+};
 window.confirm=()=>true;
 window.alert=message=>{throw Error(message)};
 await import('../../src/main');

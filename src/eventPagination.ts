@@ -3,10 +3,10 @@ import type {PostProgramEventRow} from './community/PostProgramRoomNoticeService
 // Fixed 1920px design coordinates; all outputs scale the same prepared pages.
 // Preserve every character, including separators, across continuation pages.
 let measurementContext:CanvasRenderingContext2D|null|undefined;
-export function eventTextWidth(text:string,fontSize:number){
+export function eventTextWidth(text:string,fontSize:number,fontWeight=400){
  if(typeof document!=='undefined'&&!navigator.userAgent.includes('jsdom')){
   const context=measurementContext??(measurementContext=document.createElement('canvas').getContext('2d'));
-  if(context){context.font=`400 ${fontSize}px "Cera Pro", "Segoe UI", sans-serif`;return context.measureText(text).width}
+  if(context){context.font=`${fontWeight} ${fontSize}px "Cera Pro", "Segoe UI", sans-serif`;return context.measureText(text).width}
  }
  return Array.from(text).length*fontSize;
 }

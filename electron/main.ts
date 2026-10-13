@@ -138,7 +138,7 @@ function createControlWindow(preferences:AppPreferencesData) {
     ...splashBounds,show:false,minWidth:360,minHeight:520,
     titleBarStyle:'hidden',titleBarOverlay:process.platform==='win32'?{color:'#282832',symbolColor:'#ffffff',height:28}:false,resizable:false,maximizable:false,
     backgroundColor: '#282832', icon: app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.join(app.getAppPath(), 'build/icon.png'),
-    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
+    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, backgroundThrottling:false }
   });
   controlWindow.setMenu(null);
   controlWindow.webContents.on('will-navigate',(event,url)=>{if(url!==rendererRetryUrl)return;event.preventDefault();void load(controlWindow!)});

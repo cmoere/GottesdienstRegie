@@ -7,7 +7,7 @@ import './lyric-scrolling.css';
 import {translationBlocks} from './songTranslation';
 
 /** Rendering only: the live controller supplies currentId; there is no navigation queue. */
-export function LyricScrollRenderer({packet,live=false}:{packet:LyricScrollPacket;live?:boolean}) {
+export function LyricScrollRenderer({packet,live=false,mirror=false}:{packet:LyricScrollPacket;live?:boolean;mirror?:boolean}) {
   const index=packet.slides.findIndex(slide=>slide.id===packet.currentId),slide=packet.slides[index];
   const text=slide?.elements.find(element=>element.type==='text'&&element.visible);
   const container=useRef<HTMLDivElement>(null),stream=useRef<HTMLDivElement>(null);
@@ -39,12 +39,12 @@ export function LyricScrollRenderer({packet,live=false}:{packet:LyricScrollPacke
     return()=>{alive=false;observer.disconnect()};
   },[signature,index,text?.width,text?.height,JSON.stringify(text?.properties)]);
   if(!slide)return null;
-  if(!text)return <SlideRenderer slide={slide} mode={live?'live':'preview'}/>;
+  if(!text)return <SlideRenderer slide={slide} mode={mirror?'mirror':live?'live':'preview'}/>;
   const style=elementStyle(text),duration=animate?packet.settings.durationMs:0;
   const background={...slide,translation:undefined,elements:slide.elements.map(element=>element.id===text.id?{...element,id:'lyrics-placeholder',properties:{...element.properties,text:''}}:element)};
   background.id=`${packet.itemId}:background:${JSON.stringify([slide.background,slide.backgroundImage,slide.backgroundFit,slide.backgroundPositionX,slide.backgroundPositionY,slide.backgroundBlur,slide.backgroundRotation,background.elements])}`;
   return <div className="lyric-scroll-output">
-    <TransitionStage slide={background} transition={resolveTransition(slide)} role={live?'main':'operator'}/>
+    <TransitionStage slide={background} transition={resolveTransition(slide)} role={live?'main':'operator'} renderMode={mirror?'mirror':undefined}/>
     <div ref={container} className="lyric-scroll-viewport" style={{...style,position:'absolute',overflow:'hidden',display:'block',boxSizing:'border-box'}}>
       <div style={{height:layout.height||'100%',overflow:'hidden'}}>
         <div ref={stream} style={{transform:`translate3d(0,${-layout.offset}px,0)`,transition:`transform ${duration}ms ease-in-out`,visibility:layout.ready?'visible':'hidden',willChange:'transform'}}>

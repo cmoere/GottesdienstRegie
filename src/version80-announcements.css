@@ -1,0 +1,12 @@
+.announcement-design-green{background:#699f3e;border-left:4px solid #b6bec3}
+.announcement-design-silver{background:#b6bec3;color:#18232f;border-top:5px solid #699f3e}
+.announcement-design-frame{outline:2px solid #b6bec3;outline-offset:-6px;border-left:4px solid #699f3e;border-right:4px solid #699f3e}
+.announcement-design-footer{border-bottom:7px solid #608f9a}
+.announcement-design-cards button:focus-visible{outline:2px solid #699f3e;outline-offset:2px}
+.announcement-loop-settings{display:grid;gap:8px;margin:16px 0 0;padding:12px;border:1px solid #b6bec3;min-width:0}
+.announcement-loop-settings legend{font-weight:600;padding:0 4px}
+.announcement-loop-settings label{display:grid;gap:5px;font-size:13px}
+.announcement-loop-settings .announcement-setting-check{display:flex;align-items:center;gap:8px}
+.announcement-loop-settings .announcement-setting-check input{width:auto;margin:0;accent-color:#699f3e}
+.announcement-loop-settings small{font-size:11px;line-height:1.4;opacity:.8}
+.announcement-loop-settings input[type=number],.announcement-loop-settings select{width:100%;box-sizing:border-box;min-height:32px;font:inherit}

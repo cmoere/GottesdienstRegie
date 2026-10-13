@@ -1,0 +1,20 @@
+.service-sidebar-shell{position:relative;min-width:0;min-height:0;height:100%;overflow:visible}
+.service-sidebar-shell>.service{height:100%;min-width:0;width:100%;max-width:none}
+.service-sidebar-resize{position:absolute;inset:0 -4px 0 auto;width:8px;z-index:20;cursor:col-resize;touch-action:none}
+.service-sidebar-resize:hover,.service-sidebar-resize:focus-visible{background:var(--accent);outline:2px solid var(--accent)}
+@media(min-width:1100px){.production-app .main:has(>.service-sidebar-shell){grid-template-columns:auto minmax(0,1fr)}.production-app .service-sidebar-shell{max-width:15vw}.production-app .output-tabs{padding-left:var(--service-sidebar-width,15vw)}.production-app .format-toolbar{padding-left:calc(var(--service-sidebar-width,15vw) + 8px)}}
+@media(max-width:1099px){.service-sidebar-shell{width:auto}.service-sidebar-resize{display:none}}
+@media(max-width:599px){.production-app .service-sidebar-shell{width:100%;max-height:42vh}.service-sidebar-shell>.service{max-height:42vh}}
+html[data-workspace-maximized] .service-sidebar-shell{display:none}
+.service-drop-row{position:relative}
+.service-drop-target{position:relative;min-height:12px}
+.service-drop-target.row-half{position:absolute;left:0;right:0;min-height:0;height:50%;pointer-events:none}
+.service-drop-target.row-half.before{top:0}.service-drop-target.row-half.after{bottom:0}
+.service-drop-target.drop-over:after{content:"";position:absolute;left:3px;right:3px;height:3px;background:var(--accent);box-shadow:0 0 0 1px var(--panel);z-index:10}
+.service-drop-target.before.drop-over:after{top:0}.service-drop-target.after.drop-over:after{bottom:0}
+.service-section-drop-label{display:block;padding:4px 8px;color:var(--muted);font-size:10px}
+.single-preview-title{text-align:left;align-self:stretch;color:var(--text-primary);font-size:13px;margin:0;padding:6px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main-preview-with-title{min-width:0;width:100%;display:grid;gap:4px}
+.production-single>.main-preview-with-title{aspect-ratio:auto}
+.main-preview-with-title>.main-preview-surface{position:relative;aspect-ratio:16/9;min-width:0;overflow:hidden}
+.service-item .drag{touch-action:none}

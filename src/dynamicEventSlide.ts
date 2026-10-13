@@ -7,6 +7,7 @@ export type LatestPublicEvent = {
   coverUrl?: string;
 };
 export const EVENT_SLIDE_DESIGNS = [
+  "table",
   "cards",
   "timeline",
   "poster",
@@ -14,6 +15,7 @@ export const EVENT_SLIDE_DESIGNS = [
 ] as const;
 export type EventSlideDesign = (typeof EVENT_SLIDE_DESIGNS)[number];
 export const EVENT_SLIDE_DESIGN_LABELS: Record<EventSlideDesign, string> = {
+  table: "Tabelle",
   cards: "Karten",
   timeline: "Zeitstrahl",
   poster: "Plakat",
@@ -42,30 +44,37 @@ export function normalizeEventSlideSettings(
     value.eventDesign as EventSlideDesign,
   )
     ? (value.eventDesign as EventSlideDesign)
-    : "cards";
+    : "table";
   const raw = Math.round(Number(value.eventLimit ?? 4));
   return {
     design,
-    limit: Math.max(2, Math.min(8, Number.isFinite(raw) ? raw : 4)),
+    limit: Math.max(2, Math.min(design==='table'?50:8, Number.isFinite(raw) ? raw : 4)),
   };
 }
 
+export function formatEventDate(value:string|number|Date){
+ const date=value instanceof Date?value:new Date(value);
+ if(Number.isNaN(date.getTime()))return '';
+ const weekday=new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',weekday:'short'}).format(date).replace(/\.$/,'');
+ const numeric=new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',day:'2-digit',month:'2-digit',year:'numeric'}).format(date);
+ return `${weekday}., ${numeric}`;
+}
 function formatted(event: LatestPublicEvent) {
-  let date = "";
-  if (event.effectiveStart) {
-    const value = new Date(event.effectiveStart);
-    if (!Number.isNaN(value.getTime())) {
-      const day = new Intl.DateTimeFormat("de-DE", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      }).format(value),start=new Intl.DateTimeFormat('de-DE',{hour:'2-digit',minute:'2-digit'}).format(value),endValue=event.effectiveEnd?new Date(event.effectiveEnd):null,end=endValue&&!Number.isNaN(endValue.getTime())?new Intl.DateTimeFormat('de-DE',{hour:'2-digit',minute:'2-digit'}).format(endValue):'';
-      date = `${day} · ${start}${end?`–${end}`:''}`;
-    }
-  }
+  const start = new Date(event.effectiveStart), end = new Date(event.effectiveEnd ?? "");
+  const validStart = !Number.isNaN(start.getTime()), validEnd = !Number.isNaN(end.getTime());
+  // The community screen uses the congregation's time zone, on every output device.
+  const dayFormatter = new Intl.DateTimeFormat("de-DE", {timeZone:"Europe/Berlin",day:"2-digit",month:"2-digit",year:"numeric"});
+  const timeFormatter = new Intl.DateTimeFormat("de-DE", {timeZone:"Europe/Berlin",hour:"2-digit",minute:"2-digit"});
+  const fullDay = formatEventDate;
+  const date = validStart ? `${fullDay(start)}${validEnd && dayFormatter.format(start)!==dayFormatter.format(end)?` – ${fullDay(end)}`:''}` : "";
+  const time = validStart ? `${timeFormatter.format(start)}${validEnd?`–${timeFormatter.format(end)}`:''}` : "";
+  const location = event.effectiveLocation?.trim() ?? "";
   return {
     title: event.title.trim(),
-    details: [date, event.effectiveLocation?.trim()]
+    date,
+    time,
+    location,
+    details: [date, time, location]
       .filter(Boolean)
       .join(" · "),
     coverUrl: event.coverUrl ?? "",
@@ -92,6 +101,7 @@ export function eventSlideItems(properties: Record<string, unknown>) {
           effectiveStart: String(
             properties.eventStart ?? properties.start ?? "",
           ),
+          effectiveEnd: String(properties.eventEnd ?? properties.end ?? ""),
           effectiveLocation: String(
             properties.eventLocation ?? properties.location ?? "",
           ),
