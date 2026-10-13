@@ -4,7 +4,7 @@ export type OutputRole='operator'|'main'|'stage'|'notes'|'livestream'|'lobby';
 export type DisplayAssignments=Record<string,string>;
 
 export class DisplayManager{
-  list(){const primary=screen.getPrimaryDisplay().id;return screen.getAllDisplays().map((display,index)=>({id:display.id,label:display.label||`Anzeige ${index+1}`,bounds:display.bounds,workArea:display.workArea,scaleFactor:display.scaleFactor,rotation:display.rotation,touchSupport:display.touchSupport,primary:display.id===primary}))}
+  list(){const primary=screen.getPrimaryDisplay().id;return screen.getAllDisplays().map((display,index)=>({id:display.id,identityLabel:display.label||'',label:display.label||`Anzeige ${index+1}`,bounds:display.bounds,workArea:display.workArea,scaleFactor:display.scaleFactor,rotation:display.rotation,touchSupport:display.touchSupport,primary:display.id===primary}))}
   displayForRole(assignments:DisplayAssignments,role:OutputRole):Display|undefined{const id=Number(Object.entries(assignments).find(([,value])=>value===role)?.[0]);return screen.getAllDisplays().find(display=>display.id===id)}
   preflight(assignments:DisplayAssignments,presentation:{hasPresentation?:boolean;activeSlideCount?:number;media?:string[]}){
     const errors:string[]=[],warnings:string[]=[],main=this.displayForRole(assignments,'main');

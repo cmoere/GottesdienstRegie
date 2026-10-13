@@ -1,4 +1,4 @@
-import {afterEach,describe,expect,it} from 'vitest';
+import {afterEach,describe,expect,it,vi} from 'vitest';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -8,6 +8,17 @@ const dirs:string[]=[];
 afterEach(async()=>{await Promise.all(dirs.splice(0).map(dir=>fs.rm(dir,{recursive:true,force:true})))});
 
 describe('CommunitySnapshotCache',()=>{
+  it('retries a temporary sharing lock without deleting the last snapshot',async()=>{
+    const dir=await fs.mkdtemp(path.join(os.tmpdir(),'gr-community-'));dirs.push(dir);
+    const cache=new CommunitySnapshotCache(path.join(dir,'snapshot.json'));
+    await cache.write({events:[{eventKey:'old'}],rooms:[],announcements:[]});
+    const rename=vi.spyOn(fs,'rename').mockRejectedValueOnce(Object.assign(new Error('sharing lock'),{code:'EPERM'}));
+    try{
+      await cache.write({events:[{eventKey:'new'}],rooms:[],announcements:[]});
+      expect(rename).toHaveBeenCalledTimes(2);
+      expect((await cache.read(()=>true)).events).toEqual([{eventKey:'new'}]);
+    }finally{rename.mockRestore()}
+  });
   it('serializes concurrent child-event snapshots and retains the latest',async()=>{
     const dir=await fs.mkdtemp(path.join(os.tmpdir(),'gr-community-'));dirs.push(dir);
     const cache=new CommunitySnapshotCache(path.join(dir,'snapshot.json'));

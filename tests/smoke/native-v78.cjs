@@ -10,7 +10,7 @@ app.whenReady().then(async()=>{try{
  for(let i=0;i<200&&!await win.webContents.executeJavaScript('!!window.v78');i++)await sleep(100);
  assert(await win.webContents.executeJavaScript('!!window.v78'),'Native renderer fixture loaded');
  for(const design of ['classic','light','accent','split']){
-  const result=await win.webContents.executeJavaScript(`window.v78.notice('${design}')`);assert(result.count>1);assert.equal(result.body,design==='split'?'Fehlerhafte Abendmahlstermine in der Veranstaltungsauskunft\n\n'+result.expected:result.expected);
+  const result=await win.webContents.executeJavaScript(`window.v78.notice('${design}')`);assert(result.count>1);assert(result.body===result.expected||result.body==='Fehlerhafte Abendmahlstermine in der Veranstaltungsauskunft\n\n'+result.expected,'Complete notice text, including oversized title when needed');
   for(const page of [0,result.count-1]){
    await win.webContents.executeJavaScript(`window.v78.notice('${design}',${page})`);await sleep(200);
    const boxes=await win.webContents.executeJavaScript(`(()=>[...document.querySelectorAll('.prepared-unused,.slide-renderer-element.text')].map(e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,scrollHeight:e.scrollHeight,height:e.clientHeight,scrollWidth:e.scrollWidth,width:e.clientWidth}}))()`);

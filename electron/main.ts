@@ -24,6 +24,8 @@ import {normalizeSpotifyTrackUrl,SpotifyOEmbedService} from './SpotifyOEmbedServ
 import {RadioMetadataService} from './RadioMetadataService';
 import {RadioArtworkService} from './RadioArtworkService';
 import {DeviceSettingsRepository} from './DeviceSettingsRepository';
+import {mergeOutputDisplayProfile,resolveOutputDisplayProfile} from './outputDisplayProfile';
+import type {OutputDisplayWriteOptions} from '../src/outputDisplayProfileTypes';
 import {createCommunityRealtimeAdapter,FirebaseGemeindeService} from './FirebaseGemeindeService';
 import {CommunitySnapshotCache} from './CommunitySnapshotCache';
 import {sendToLiveWindow} from './windowSafety';
@@ -460,6 +462,12 @@ app.whenReady().then(async() => {
   ipcMain.handle('updates:rollback',async()=>{try{const previous=await previousRelease();if(!previous)throw new Error('NO_PREVIOUS_VERSION');const response=await fetch(previous.url,{signal:AbortSignal.timeout(120000)});if(!response.ok||!response.body)throw new Error(`DOWNLOAD_${response.status}`);const total=Number(response.headers.get('content-length')??previous.size),target=path.join(app.getPath('temp'),`GottesdienstRegie-Setup-${previous.version}.exe`),file=await fs.open(target,'w');let received=0;try{const reader=response.body.getReader();for(;;){const{done,value}=await reader.read();if(done)break;await file.write(value);received+=value.byteLength;publishUpdateStatus({state:'rollback-downloading',version:previous.version,percent:total?Math.round(received/total*100):0})}}finally{await file.close()}publishUpdateStatus({state:'rollback-ready',version:previous.version,percent:100});const opened=await shell.openPath(target);if(opened)throw new Error(opened);setTimeout(()=>app.quit(),1200);return true}catch(error){publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)});return false}});
   const displayInfo=()=>displayManager.list();
   ipcMain.handle('displays:list',displayInfo);
+  ipcMain.handle('device-settings:output-displays-read',async()=>resolveOutputDisplayProfile(await deviceSettings.readOutputDisplays(),displayInfo()));
+  ipcMain.handle('device-settings:output-displays-write',async(_event,assignments:DisplayAssignments,options?:OutputDisplayWriteOptions)=>{
+    const displays=displayInfo();
+    const profile=await deviceSettings.writeOutputDisplays(mergeOutputDisplayProfile(await deviceSettings.readOutputDisplays(),assignments,displays,options));
+    return resolveOutputDisplayProfile(profile,displays);
+  });
   const notifyDisplays=()=>sendToLiveWindow(controlWindow,'displays:changed',displayInfo());
   screen.on('display-added',notifyDisplays);screen.on('display-removed',(_event,display)=>{outputManager.handleRemoved(display.id);notifyDisplays()});screen.on('display-metrics-changed',notifyDisplays);
   ipcMain.handle('displays:identify',(_event,assignments:DisplayAssignments)=>outputManager.identify(assignments));

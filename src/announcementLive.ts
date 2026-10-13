@@ -3,11 +3,10 @@ import {AnnouncementService,type RawAnnouncement} from './community/Announcement
 import type {AnnouncementPlacement} from './loopData';
 import QRCode from 'qrcode';
 import {prepareAnnouncementPages,announcementTextElement,type PreparedAnnouncementPage} from './announcementDesign';
+import {announcementRuns,announcementRunsText} from './announcementRichText';
 
 export function announcementPlainText(value:string):string{
-  const doc=new DOMParser().parseFromString(value.replace(/<br\s*\/?\s*>|<\/(?:p|div|li|h[1-6])>/gi,'\n'),'text/html');
-  doc.querySelectorAll('script,style,iframe,object,embed').forEach(node=>node.remove());
-  return (doc.body.textContent??'').trim();
+  return announcementRunsText(announcementRuns(value)).trim();
 }
 function qrImage(reference:string):string{
   const {modules}=QRCode.create(reference),size=modules.size;
@@ -21,8 +20,8 @@ export function isAnnouncementLoop(item:ServiceItem|undefined):item is ServiceIt
 export function buildAnnouncementSlide(slide:Slide,message:{title:string;text:string;durationMs:number;qrCode?:boolean;qrReference?:string},page:PreparedAnnouncementPage,index:number,count:number):Slide{
  const title=announcementPlainText(message.title),elements=page.decorations.map((decoration,n)=>({id:`${slide.id}-announcement-decoration-${n}`,type:'shape' as const,name:'Meldungsdesign',...decoration,rotation:0,opacity:1,locked:true,visible:true,zIndex:1,properties:{fill:decoration.fill,shapeKind:'rectangle'}}));
  const textElements=[
-  announcementTextElement(`${slide.id}-announcement-title`,'Meldungstitel',page.titleElement,page.titleText,page.titleFontSize,page.color,600),
-  announcementTextElement(`${slide.id}-announcement-body`,'Meldungstext',page.bodyElement,page.bodyLines.join('\n'),page.bodyFontSize,page.color,400),
+  announcementTextElement(`${slide.id}-announcement-title`,'Meldungstitel',page.titleElement,page.titleText,page.titleFontSize,page.color,600,page.titleRichLines),
+  announcementTextElement(`${slide.id}-announcement-body`,'Meldungstext',page.bodyElement,page.bodyLines.join('\n'),page.bodyFontSize,page.color,400,page.bodyRichLines),
  ];
  const readingMs=Math.max(12000,page.bodyText.length*80+4000);
  const durationMs=count>1?Math.max(message.durationMs/count,readingMs):message.durationMs;
@@ -49,7 +48,7 @@ export class AnnouncementLiveController {
     if(!rows.length){this.output=null;this.continuation.delete(item.id);return null}
     const pending=this.continuation.get(item.id),continuedIndex=pending?rows.findIndex(row=>row.id===pending.messageId):-1;
     const index=continuedIndex>=0?continuedIndex:(this.nextIndex.get(item.id)??0)%rows.length,message=rows[index];
-    const title=announcementPlainText(message.title),body=announcementPlainText(message.text),signature=JSON.stringify([title,body,message.qrCode,item.metadata.announcementDesign]);
+    const title=message.title.trim(),body=message.text.trim(),signature=JSON.stringify([title,body,message.qrCode,item.metadata.announcementDesign]);
     const pages=prepareAnnouncementPages({title,body,qrCode:message.qrCode,design:item.metadata.announcementDesign});
     const page=pending?.signature===signature?Math.min(pending.page,pages.length-1):0;
     if(page+1<pages.length)this.continuation.set(item.id,{messageId:message.id,signature,page:page+1});

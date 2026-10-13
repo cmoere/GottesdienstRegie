@@ -21,16 +21,52 @@
   ],
   "versions": [
     {
+      "line": "0.79",
+      "builds": [{
+        "version": "0.79.0", "releaseDate": "2026-10-13", "current": true,
+        "overview": {
+          "label": {"de":"Dauerhafte Ausgabeprofile und konsistentere Live-Bilder","en":"Persistent output profiles and more consistent live pictures"},
+          "text": {"de":"Bildschirmzuordnungen werden unabhängig von Präsentationen als Geräteprofil gespeichert. Geänderte Monitor-IDs werden nur bei eindeutig passender Identität übernommen; fehlende oder mehrdeutige Ausgänge werden dem Operator gemeldet.\n\nMeldungen verwenden Cera Pro und bewahren Fettdruck, Kursivschrift, Unterstreichungen und Absätze über Folgeseiten hinweg. Laufende Musik wird bei jedem Take und zusätzlich sekündlich abgeglichen. Veranstaltungslisten nutzen native Browseranimationen statt React-Neuberechnung bei jedem Bild; MAIN und Live-Vorschauen arbeiten mit gemeinsam vorbereiteten Snapshots und Anzeigezeitpunkten.","en":"Display assignments are stored as a device profile independent of presentations. Changed monitor IDs are accepted only with an unambiguous matching identity; missing or ambiguous outputs are reported to the operator.\n\nAnnouncements use Cera Pro and preserve bold, italic, underline and paragraphs across continuation pages. Current playback is reconciled on every take and once per second. Event lists use native browser animations instead of per-frame React updates; MAIN and live previews share prepared snapshots and presentation deadlines."}
+        },
+        "sections": {
+          "new": [{"label":{"de":"Technisches Ausgabeprofil","en":"Device output profile"},"text":{"de":"MAIN, Stage und weitere Ausgabezuordnungen werden dauerhaft zusammen mit den Geräteeinstellungen gespeichert. Bildschirmname und physische Auflösung unterstützen die Wiedererkennung bei geänderten IDs. Unklare Treffer starten keine falsche Ausgabe. Eine während ON AIR erkannte neue ID wird nach dem Stoppen übernommen, ohne laufende Zuordnungen still zu verändern.","en":"MAIN, Stage and other output assignments are persisted with device settings. Display name and physical resolution support recovery after an ID change. Ambiguous matches do not start an incorrect output. A new ID recognized while ON AIR is applied after stopping without silently changing active assignments."}}],
+          "improved": [
+            {"label":{"de":"Formatierte Meldungen in Cera Pro","en":"Formatted announcements in Cera Pro"},"text":{"de":"Titel und Beschreibung erhalten einen kleinen dünnen Trenner. Normaler Text bleibt normal; Fett, Kursiv und Unterstreichung werden als sichere Stilinformationen übernommen. Absätze einschließlich leerer Zeilen bleiben erhalten. QR-Codes und vollständige Folgeseiten bleiben verfügbar, ohne ungeprüftes HTML zu rendern.","en":"A small thin divider separates title and description. Regular text stays regular; bold, italic and underline are preserved as safe style data. Paragraphs including blank lines remain intact. QR codes and complete continuation pages remain available without rendering unchecked HTML."}},
+            {"label":{"de":"Ruhigere Vorschau und Ausgabe","en":"Smoother preview and output"},"text":{"de":"Veranstaltungslisten werden über native Browseranimationen bewegt; statische Listen lösen keine React-Neuberechnungen pro Bild aus. Folienwechsel nutzen einen gemeinsamen Anzeigezeitpunkt. Beide MAIN-Vorschauen zeigen den erfolgreich übertragenen Snapshot mit denselben Übergängen und dem passenden Renderer für scrollende Songs. Neue Ausgabefenster werden erst sichtbar, wenn alle geladen sind.","en":"Event lists move through native browser animations; static lists no longer trigger per-frame React updates. Slide changes use a shared presentation deadline. Both MAIN previews show the successfully delivered snapshot with matching transitions and the correct scrolling-song renderer. New output windows are shown only after all are loaded."}},
+            {"label":{"de":"Ausführlichere Versionsgeschichte","en":"More detailed release history"},"text":{"de":"29 bisher knappe ältere Builds wurden anhand der vorhandenen Änderungsprotokolle ausführlicher beschrieben. Die Darstellung unterstützt echte Absätze. Historische Angaben werden nicht nachträglich als neue Fehlerbehebungen ausgegeben.","en":"29 previously brief older builds were expanded using existing change logs. The display supports actual paragraphs. Historical changes are not presented as newly completed fixes."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Läuft gerade erneut zuverlässig vorbereiten","en":"Reliable now-playing preparation on re-entry"},"text":{"de":"Bei jedem Anzeigen wird der aktuelle Audiozustand übernommen, auch wenn derselbe Titel bereits zuvor lief. Ein sekündlicher Abgleich fängt verpasste Zustandsereignisse auf. Titel, Interpret und Cover bilden einen gemeinsamen Snapshot; unveränderte Daten verursachen keine unnötige Neuausgabe.","en":"Every take captures the current audio state, including when the same track played before. A one-second reconciliation catches missed state events. Title, artist and artwork form one snapshot; unchanged data does not cause unnecessary output updates."}},
+            {"label":{"de":"Temporäre Windows-Dateisperren","en":"Temporary Windows file locks"},"text":{"de":"Das atomare Ersetzen des Gemeindedaten-Caches und der Geräteeinstellungen wird bei vorübergehenden Zugriffssperren begrenzt erneut versucht. Der letzte gültige Stand wird dabei nicht gelöscht; dauerhafte Fehler bleiben erkennbar.","en":"Atomic replacement of the community cache and device settings is retried a bounded number of times for temporary sharing locks. The last valid snapshot is not deleted; persistent failures remain detectable."}}
+          ],
+          "known": [{"label":{"de":"Grenzen der Wiederherstellung","en":"Recovery limitations"},"text":{"de":"Bereits vor v79 verlorene Bildschirmzuordnungen können nicht rekonstruiert werden; bitte einmal neu auswählen. Ein gemeinsamer Software-Anzeigezeitpunkt ist keine hardwareseitige Bildsynchronisation. Der zuvor gemeldete graue Bildschirm beim Programmstart ist weiterhin nicht als behoben bestätigt.","en":"Display assignments lost before v79 cannot be reconstructed; please select them once again. A shared software presentation deadline is not hardware frame synchronization. The previously reported gray startup screen is still not confirmed as fixed."}}]
+        }
+      }]
+    },
+    {
       "line": "0.78",
       "builds": [{
         "version": "0.78.0",
         "releaseDate": "2026-10-13",
-        "current": true,
+        "current": false,
         "overview": {
           "label": {"de":"Lesbare Meldungen und vollständige Veranstaltungslisten","en":"Readable notices and complete event lists"},
-          "text": {"de":"Vier Meldungsdesigns, vollständige lange Meldungstexte mit Folgeseiten, ruhiges Scrollen bei Platzmangel und automatisch ausreichende Mindestdauer. Der Kopfbereich im Nachprogramm ist etwas niedriger.","en":"Four announcement designs, complete long notice text across continuation pages, calm overflow scrolling and an automatically sufficient minimum duration. The post-program header is slightly shorter."}
+          "text": {"de":"Meldungen bieten vier wählbare Designs: Klar, Hell, Akzent und Seitenspalte. Titel und Text erhalten getrennte Bereiche; lange Texte werden vollständig auf lesbare Folgeseiten verteilt, während der QR-Code daneben sichtbar bleibt. Der Loop zeigt alle Seiten einer Meldung vor dem nächsten Inhalt.\n\nVeranstaltungslisten mit Platzmangel scrollen ruhig vertikal. Die automatische Mindestdauer berücksichtigt Scrollweg, Anfangs- und Lesepausen und erhält längere manuell eingestellte Zeiten. Das gilt auch für die geschützte Nachprogramm-Raumanzeige; bei reduzierter Bewegung erscheinen statische Seiten. Ihr farbiger Kopfbereich beansprucht nun 15 statt 17,5 Prozent der Bildhöhe.","en":"Announcements offer four selectable designs: Clear, Light, Accent and Sidebar. Separate title and body areas keep long notices readable across complete continuation pages, with the QR code remaining beside the text. The loop shows every page of a notice before moving to the next item.\n\nEvent lists that exceed the available space scroll calmly vertically. The automatic minimum duration accounts for scrolling and reading pauses while preserving longer manually selected durations. This also applies to protected post-program room output; reduced motion uses static pages. Its colored header now occupies 15 rather than 17.5 percent of the image height."}
         },
-        "sections": {"new":[],"improved":[],"fixed":[],"known":[]}
+        "sections": {
+          "new": [
+            {"label":{"de":"Vier Meldungsdesigns","en":"Four announcement designs"},"text":{"de":"Im Bearbeiten-Bereich stehen Klar, Hell, Akzent und Seitenspalte als Design-Kacheln bereit. Getrennte Titel- und Textbereiche halten den Inhalt sicher innerhalb der Folie, während der QR-Code daneben sichtbar bleibt.","en":"The editing area provides Clear, Light, Accent and Sidebar design cards. Separate title and body areas keep content safely within the slide while its QR code stays visible beside it."}}
+          ],
+          "improved": [
+            {"label":{"de":"Vollständige Meldungen auf Folgeseiten","en":"Complete announcements across continuation pages"},"text":{"de":"Lange Meldungstexte werden vollständig auf lesbare Seiten verteilt. Der Loop zeigt zuerst alle Seiten einer Meldung und wechselt erst danach zum nächsten Inhalt. Erste und letzte Seiten sowie alle vier Designs wurden auch in nativen Electron-Ausgaben geprüft.","en":"Long announcement text is distributed in full across readable pages. The loop completes every page of a notice before moving to the next item. First and final pages and all four designs were also checked in native Electron outputs."}},
+            {"label":{"de":"Scrollweg bestimmt die Mindestdauer","en":"Scrolling determines minimum display time"},"text":{"de":"Überlange normale Veranstaltungslisten und die geschützte Nachprogramm-Raumanzeige scrollen ruhig vertikal. Die Mindestdauer berücksichtigt den gesamten Scrollweg und Pausen am Anfang sowie zum Lesen. Eine längere eingestellte Dauer bleibt bestehen. Reduzierte Bewegung verwendet statische vollständige Seiten.","en":"Oversized regular event lists and protected post-program room output scroll calmly vertically. Minimum duration accounts for the entire scroll distance, an initial pause and reading pauses. Longer configured durations are preserved. Reduced motion uses complete static pages."}},
+            {"label":{"de":"Kompakterer Nachprogramm-Kopf","en":"More compact post-program header"},"text":{"de":"Der farbige Kopfbereich wurde von 17,5 auf 15 Prozent der Bildhöhe reduziert. Die bereits gewählte Sitzungsfarbe bleibt erhalten.","en":"The colored header was reduced from 17.5 to 15 percent of the image height. The previously selected session color remains in place."}}
+          ],
+          "fixed": [],
+          "known": [
+            {"label":{"de":"Grauer Bildschirm beim Start","en":"Gray screen during startup"},"text":{"de":"Der zuvor gemeldete graue Bildschirm beim Programmstart ist mit dieser Version weiterhin nicht als behoben bestätigt.","en":"The previously reported gray screen during application startup is still not confirmed as fixed in this version."}}
+          ]
+        }
       }]
     },
     {
@@ -41,9 +77,24 @@
         "current": false,
         "overview": {
           "label": {"de":"Testbetrieb, Meldungen und Hilfe","en":"Rehearsals, announcements and help"},
-          "text": {"de":"Mehrere Testszenarien, 60 Sekunden Nachprogramm, zuverlässige Meldungsanzeige und überarbeitete mehrsprachige Hilfe.","en":"Multiple rehearsal scenarios, 60-second post-program notices, reliable announcement output and expanded multilingual help."}
+          "text": {"de":"Beim Vorbereiten des Testbetriebs wird die letzte Auswahl gemerkt und bei jedem neuen Test erneut abgefragt. Ein bis zwölf gekennzeichnete Testveranstaltungen können normal, verspätet, ausgefallen, mit Raumwechsel oder gemischt erscheinen. Die geschützte Nachprogrammfolie öffnet die Vorschau; Bearbeitungsversuche zeigen einen bestätigbaren Hinweis. Raum- und Veranstaltungshinweise laufen standardmäßig 60 Sekunden, auch bei älteren Präsentationen.\n\nFreigegebene Meldungen ohne zusätzliche Regie-Zuordnung erscheinen wieder. MAIN erhält bereits beim Start vorbereiteten öffentlichen Meldungstext; laufende Inhalte bleiben bis zum nächsten Wechsel stabil. Das Wasserzeichen bleibt innerhalb der Vorschau, beide Live-Vorschauen verwenden das passende Seitenverhältnis. Die Hilfe wurde ausführlicher und in allen 17 angebotenen Sprachen statisch übersetzt.","en":"Preparing a rehearsal remembers the last selection and asks again for each new test. Between one and twelve labeled sample events can appear on time, delayed, cancelled, with a room change or in a mixed scenario. The protected post-program slide opens preview; editing attempts show an acknowledgment notice. Room and event notices default to 60 seconds, including in older presentations.\n\nApproved announcements without an additional production assignment appear again. MAIN receives prepared public announcement text at startup and keeps active content stable until the next transition. The watermark stays inside preview, and both live previews use the correct aspect ratio. Help articles were expanded and statically translated into all 17 available languages."}
         },
-        "sections": {"new":[],"improved":[],"fixed":[],"known":[]}
+        "sections": {
+          "new": [
+            {"label":{"de":"Mehrere Testveranstaltungen","en":"Multiple rehearsal events"},"text":{"de":"Beim Vorbereiten eines Tests können ein bis zwölf ausdrücklich gekennzeichnete Testveranstaltungen normal, verspätet, ausgefallen, mit Raumwechsel oder gemischt angezeigt werden. Die letzte Auswahl wird gemerkt und bei jedem neuen Test erneut abgefragt. Echte Gemeindedaten bleiben unverändert.","en":"Preparing a rehearsal allows one to twelve explicitly labeled sample events to appear on time, delayed, cancelled, with a room change or in a mixed scenario. The last selection is remembered and requested again for every new test. Actual community data remains unchanged."}}
+          ],
+          "improved": [
+            {"label":{"de":"Geschützte Folie und 60 Sekunden Nachprogramm","en":"Protected slide and 60-second post-program"},"text":{"de":"Die geschützte Nachprogrammfolie öffnet die Vorschau. Bearbeitungsversuche führen zu einem bestätigbaren Hinweis. Raum-verlassen- und Veranstaltungsanzeige verwenden standardmäßig 60 Sekunden, auch wenn eine ältere Präsentation übernommen wird.","en":"The protected post-program slide opens preview. Editing attempts produce an acknowledgment notice. Leave-room and event output default to 60 seconds, including when an older presentation is loaded."}},
+            {"label":{"de":"Ausführliche Hilfe in 17 Sprachen","en":"Detailed help in 17 languages"},"text":{"de":"Die Hilfe enthält ausführlichere Artikel und statische Übersetzungen für alle angebotenen Sprachen. Die Übersetzungen sind maschinell unterstützt; Schweizerdeutsch verwendet Schweizer Standardschreibung. Aktuelle Hilfe-Aufnahmen wurden erneuert, historische Release-Bilder bleiben unverändert.","en":"Help includes expanded articles and static translations for all available languages. Translations are machine-assisted; Swiss German uses Swiss standard spelling. Current help screenshots were refreshed while historical release images remain unchanged."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Öffentliche Meldungen und sichere Wechsel","en":"Public announcements and safe transitions"},"text":{"de":"Freigegebene Meldungen ohne zusätzliche Regie-Zuordnung erscheinen wieder. MAIN erhält beim Start vorbereiteten öffentlichen Text. Laufende Meldungen bleiben bis zum nächsten Wechsel stabil; leere Meldungen und nicht verfügbare Raumhinweise lösen keine Wechsel-Endlosschleife aus.","en":"Approved announcements without an additional production assignment appear again. MAIN receives prepared public text on startup. Active notices remain stable until the next transition; empty announcements and unavailable room notices no longer cause endless transition loops."}},
+            {"label":{"de":"Wasserzeichen und MAIN-Vorschau","en":"Watermark and MAIN preview"},"text":{"de":"Das Test-Wasserzeichen bleibt innerhalb der Vorschau und liegt nicht über Hilfe oder Bedienfenstern. Beide Live-Vorschauen zeigen das vorbereitete MAIN-Bild im passenden Seitenverhältnis.","en":"The test watermark remains within preview and does not cover help or operator windows. Both live previews show the prepared MAIN image at the correct aspect ratio."}}
+          ],
+          "known": [
+            {"label":{"de":"Grauer Bildschirm beim Start","en":"Gray screen during startup"},"text":{"de":"Der zuvor gemeldete graue Bildschirm beim Programmstart ist mit dieser Version weiterhin nicht als behoben bestätigt.","en":"The previously reported gray screen during application startup is still not confirmed as fixed in this version."}}
+          ]
+        }
       }]
     },
     {
@@ -54,9 +105,22 @@
         "current": false,
         "overview": {
           "label": {"de":"Festes Nachprogramm","en":"Protected post-program slide"},
-          "text": {"de":"Automatischer Raumhinweis als geschützte erste Nachprogrammfolie. Klarere Veranstaltungstabelle ohne Bilder und Etagen.","en":"Automatic room notice as a protected first post-program slide. Clearer event table without images or floors."}
+          "text": {"de":"Das Nachprogramm beginnt immer mit einer geschützten Systemfolie für nächste Veranstaltungen oder die Bitte, den Raum zu verlassen. Diese Folie kann weder bearbeitet, entfernt, verschoben noch über Plus hinzugefügt werden. Eigene Nachprogrammfolien folgen danach und bleiben ohne Überlagerung durch den Raumhinweis sichtbar.\n\nDie Veranstaltungstabelle verwendet ruhigere Schrift und kleinere Spaltenüberschriften. Vollständige Titel bleiben einzeilig; überlange Zellen scrollen langsam. Etagen und Veranstaltungsbilder entfallen. Sind die benötigten Veranstaltungsdaten nicht auflösbar, wird eine leere Systemausgabe übersprungen oder die letzte Gottesdienstfolie bleibt stehen.","en":"Post-program always starts with a protected system slide showing upcoming events or asking visitors to leave the room. It cannot be edited, deleted, moved or added through the Plus control. Authored post-program slides follow it and remain visible without a room-notice overlay.\n\nThe event table uses calmer typography and smaller column headings. Complete titles remain on one line and oversized cells scroll slowly. Floors and event pictures are omitted. If the required event data cannot be resolved, empty system output is skipped or the final service slide remains visible."}
         },
-        "sections": {"new":[],"improved":[],"fixed":[],"known":[]}
+        "sections": {
+          "new": [
+            {"label":{"de":"Feste erste Nachprogrammfolie","en":"Fixed first post-program slide"},"text":{"de":"Das Nachprogramm enthält immer eine geschützte erste Systemfolie für nächste Veranstaltungen oder den Raum-verlassen-Hinweis. Sie ist nicht bearbeitbar, entfernbar oder verschiebbar und lässt sich nicht über Plus hinzufügen. Eigene Nachprogrammfolien bleiben danach sichtbar.","en":"Post-program always includes a protected first system slide for upcoming events or the leave-room notice. It cannot be edited, removed, moved or added through Plus. Authored post-program slides remain visible after it."}}
+          ],
+          "improved": [
+            {"label":{"de":"Ruhigere Veranstaltungstabelle","en":"Calmer event table"},"text":{"de":"Ruhigere Schrift und kleine Spaltenüberschriften verbessern die Übersicht. Vollständige Veranstaltungstitel bleiben ohne Zeilenumbruch sichtbar; überlange Zellen scrollen langsam. Etagen und Veranstaltungsbilder werden nicht angezeigt.","en":"Calmer typography and small column headings improve readability. Complete event titles remain visible without line wrapping; oversized cells scroll slowly. Floors and event pictures are not displayed."}}
+          ],
+          "fixed": [
+            {"label":{"de":"Eigene Folien und fehlende Daten","en":"Authored slides and missing data"},"text":{"de":"Der Raumhinweis überlagert eigene Nachprogrammfolien nicht mehr. Wenn Veranstaltungsdaten nicht aufgelöst werden können, wird die leere Systemausgabe übersprungen; alternativ bleibt die letzte Gottesdienstfolie stehen.","en":"Room notices no longer overlay authored post-program slides. If event data cannot be resolved, empty system output is skipped; alternatively, the final service slide remains visible."}}
+          ],
+          "known": [
+            {"label":{"de":"Grauer Bildschirm beim Start","en":"Gray screen during startup"},"text":{"de":"Der zuvor gemeldete graue Bildschirm beim Programmstart ist mit dieser Version nicht als behoben bestätigt.","en":"The previously reported gray screen during application startup is not confirmed as fixed in this version."}}
+          ]
+        }
       }]
     },
     {
@@ -67,7 +131,7 @@
         "current": false,
         "overview": {
           "label": {"de":"Nachprogramm gezielt testen","en":"Choose post-program test scenarios"},
-          "text": {"de":"Automatisch, Raum verlassen oder Testveranstaltung beim Teststart wählen. Gemeindedaten und Veranstaltungsverknüpfungen zuverlässiger prüfen.","en":"Choose automatic, leave-room or sample-event output when starting a test. More reliable community data and event-link checks."}
+          "text": {"de":"Der Teststart bietet Automatisch, Raum verlassen und Testveranstaltung als Nachprogramm-Szenarien an. Die beiden ausdrücklich gewählten Beispiele funktionieren ohne verknüpfte Veranstaltung und ohne Gemeindedaten. Sie sind gekennzeichnet, gelten nur für den Testlauf und werden nicht in Firebase gespeichert; echtes ON AIR nutzt weiterhin die verknüpfte Veranstaltung.\n\nDie Ausgabeprüfung wartet begrenzt auf initiale Gemeindedaten. Neue Abonnenten erhalten vorhandenen Verbindungsstatus und bereits synchronisierte leere Listen. Verknüpfungen aus älteren Veranstaltungsdialogen werden sofort berücksichtigt und konsistent gespeichert. Der letzte Weiter-Klick erreicht auch bei den beiden Testszenarien das Nachprogramm. Der Raum-verlassen-Hinweis verwendet etwas größere Schrift ohne Fettdruck.","en":"Test startup offers Automatic, Leave room and Sample event post-program scenarios. The two explicit sample scenarios work without a linked event or community data. Their labeled examples apply only to the rehearsal and are never saved to Firebase; actual ON AIR continues to use the linked event.\n\nOutput checks wait for initial community data for a limited time. New subscribers receive existing connection status and already synchronized empty lists. Links from older event dialogs take effect immediately and remain consistent when saved. The final Next click also reaches post-program in the two explicit test scenarios. The leave-room notice uses slightly larger, regular-weight text."}
         },
         "sections": {"new":[
           {"label":{"de":"Testauswahl","en":"Test scenarios"},"text":{"de":"Raumhinweis und gekennzeichnete Testveranstaltung auch ohne Gemeindedaten testen; echte Termine bleiben unverändert.","en":"Rehearse room notices and a clearly labeled sample event without community data; real events remain unchanged."}}
@@ -82,7 +146,7 @@
         "current": false,
         "overview": {
           "label": {"de":"Nachprogramm und MAIN-Vorschau korrigiert","en":"Post-program and MAIN preview fixes"},
-          "text": {"de":"Der Weiter-Pfeil erreicht das automatische Nachprogramm; beide Live-Vorschauen spiegeln den tatsächlichen Raumhinweis.","en":"The Next button reaches the automatic post-program; both live previews mirror the actual room notice."}
+          "text": {"de":"Der Weiter-Pfeil bleibt nach der letzten Gottesdienstfolie verfügbar, wenn eine Veranstaltung verknüpft ist und das automatische Nachprogramm erreicht werden kann. Auch wiederholtes Nachprogramm lässt sich weitersteuern; manuelle Gottesdienstfolien bleiben manuell bedienbar.\n\nEinzelvorschau und LIVE AUF MAIN zeigen jetzt den vorbereiteten Raumhinweis aus der tatsächlichen Ausgabe: passende Folgetermine innerhalb von 61 Minuten oder die Bitte, den Raum zu verlassen. Die bearbeitbare Folie wird dabei nicht verändert. Die Kopfbereichsfarbe bleibt während einer Session fest, Änderungen werden beim nächsten sicheren Wechsel übernommen. Der Raumhinweis wird in der kleinen MAIN-Vorschau nicht mehr durch Beschriftungsformatierung abgeschnitten.","en":"The Next arrow remains available after the final service slide when a linked event permits automatic entry into post-program. Repeated post-program playback can also be advanced; manually controlled service slides remain manual.\n\nSingle preview and LIVE ON MAIN now show the prepared room notice from actual output: matching events within 61 minutes or the request to leave the room. The editable slide stays intact. Header color remains fixed for the session, and changes are adopted at the next safe transition. Caption formatting no longer truncates the notice in the small MAIN preview."}
         },
         "sections": {"new":[],"improved":[],"fixed":[
           {"label":{"de":"Nachprogramm-Wechsel","en":"Post-program navigation"},"text":{"de":"Weiter bleibt für den automatischen Einstieg nach der letzten Gottesdienstfolie und für wiederholte Nachprogramm-Wechsel verfügbar.","en":"Next remains available for automatic entry after the final service slide and for repeated post-program transitions."}},
@@ -94,7 +158,7 @@
         "current": false,
         "overview": {
           "label": {"de":"Teststart und Nachprogramm korrigiert","en":"Test start and post-program fixes"},
-          "text": {"de":"Getrennte Starts für Test und Produktion, korrekte Folienreihenfolge und automatischer Nachprogramm-Einstieg.","en":"Separate test and production starts, correct slide order and automatic post-program entry."}
+          "text": {"de":"Testbetrieb starten öffnet die Testausgaben direkt nach Bestätigung. ON AIR beginnt den normalen Betrieb mit einer verknüpften Veranstaltung; der Wechsel aus einem laufenden Test erfordert eine ausdrückliche Bestätigung.\n\nStart und Live-Navigation beachten die Reihenfolge von Abschnitten, Elementen und Folien. Beim Weiterschalten nach der letzten Gottesdienstfolie wird ein fehlender Nachprogramm-Einstieg automatisch ergänzt, wenn eine Veranstaltung verknüpft ist. Der Raumhinweis nutzt weiterhin zentrale Veranstaltungs- und Raumdaten; manuelle Folien bleiben manuell gesteuert. Gespeicherte Fenstergrößen unterhalb der Desktop-Mindestgröße werden nicht als Arbeitsbereich wiederhergestellt.","en":"Start test mode opens rehearsal outputs immediately after confirmation. ON AIR starts production with a linked event, and switching from an active rehearsal requires explicit confirmation.\n\nStartup and live navigation respect the order of sections, items and slides. Advancing beyond the final service slide automatically adds a missing post-program entry when an event is linked. Room notices still use central event and room data, and manual slides remain manually controlled. Saved window dimensions below the desktop minimum are no longer restored as the workspace."}
         },
         "sections": {"new":[],"improved":[],"fixed":[
           {"label":{"de":"Live-Ablauf","en":"Live flow"},"text":{"de":"Die letzte Gottesdienstfolie wird in der richtigen Reihenfolge gezeigt; Weiterschalten erreicht auch ohne angelegte Nachprogramm-Folie den Raumhinweis einer verknüpften Veranstaltung.","en":"The final service slide follows the correct order; advancing can reach the linked event's room notice without an authored post-program slide."}},
@@ -106,7 +170,7 @@
         "current": false,
         "overview": {
           "label": {"de":"Sichere Live-Ausgabe und Radio-Routing","en":"Reliable live output and radio routing"},
-          "text": {"de":"MAIN-Zustand, Test-Wasserzeichen, Raumauflösung, Nachprogramm und vollständige Veranstaltungstitel verbessert.","en":"Improved MAIN state, test watermark, room resolution, post-program and complete event titles."}
+          "text": {"de":"Beim Öffnen erhält MAIN den aktuellen versionierten Live-Zustand. Das Test-Wasserzeichen bleibt unabhängig von ON AIR auf den Ausgaben sichtbar.\n\nDas Nachprogramm zeigt alle passenden Belegungen im effektiven Raum innerhalb von 61 Minuten. Die Kopfbereichsfarbe bleibt pro Session fest; neue Daten werden erst beim nächsten echten Wechsel übernommen. Raum-IDs werden zentral aufgelöst, vollständige lange Veranstaltungstitel bei Bedarf auf Folgeseiten verteilt.\n\nRadio nutzt den konfigurierten Background-Audio-Ausgang. Die Pegelerfassung greift nicht mehr in den hörbaren Signalweg ein. Die Diagnose zeigt Route, Ausgang, Signal, Lautstärke, Mute und AudioContext und unterstützt damit die Prüfung der tatsächlichen Wiedergabe.","en":"MAIN receives the current versioned live state when it opens. Test watermarks remain visible on outputs independently of ON AIR.\n\nPost-program shows all matching bookings in the effective room within 61 minutes. Header color stays fixed for the session, and new data is adopted at the next actual transition. Room IDs are centrally resolved, and complete long event titles are distributed across continuation pages when needed.\n\nRadio uses the configured Background Audio output. Level capture no longer interferes with the audible signal path. Diagnostics show route, output, signal, volume, mute and AudioContext to support checking actual playback."}
         },
         "sections": {"new":[],"improved":[],"fixed":[
           {"label":{"de":"MAIN und Radio","en":"MAIN and radio"},"text":{"de":"Initiale Ausgabe wird zuverlässig nachgeladen; Radio folgt der Background-Audio-Route mit Signaldiagnose.","en":"Initial output state is replayed; radio follows the Background Audio route with signal diagnostics."}},
@@ -122,7 +186,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Zentrale Gemeindedaten und sicherer Testbetrieb", "en": "Central community data and safe test mode" },
-          "text": { "de": "Veranstaltungen, Meldungen und Räume werden zentral normalisiert; das Nachprogramm erkennt die nächste Raumbelegung und alle Testausgaben tragen ein Wasserzeichen.", "en": "Events, announcements, and rooms are normalized centrally; post-program detects the next room booking and every test output carries a watermark." }
+          "text": { "de": "Veranstaltungen, Meldungen und Räume werden zentral in Echtzeit aus der bestehenden Firebase-Datenquelle verarbeitet. Stabile Child-Keys bleiben erhalten und verschachtelte Raumdaten werden tolerant aufgelöst. MAIN erhält normalisierte öffentliche Inhalte; bei Verbindungsproblemen kann der letzte sinnvolle Stand weiterverwendet werden. Preflight zeigt fehlende oder nicht auflösbare Daten nur im Operator-Bereich.\n\nBeim Nachprogramm-Einstieg wird der effektive Raum der verknüpften Veranstaltung geprüft. Eine weitere nicht abgesagte Veranstaltung innerhalb von 61 Minuten erscheint mit Titel, Startzeit und lesbarem Raum; andernfalls wird zum Verlassen des Raums aufgefordert. Testbetrieb und ON AIR sind unabhängige Zustände. MAIN, Livestream, Stage, Quick Screens, Videos, Websites und Schwarzbild tragen im Test ein dauerhaftes Wasserzeichen, auch während Übergängen.", "en": "Events, announcements and rooms are processed centrally in real time from the existing Firebase source. Stable child keys are retained and nested room data is resolved tolerantly. MAIN receives normalized public content; connection problems can use the last useful snapshot. Preflight reports missing or unresolved data only in the operator area.\n\nEntering post-program checks the linked event's effective room. Another non-cancelled event within 61 minutes appears with title, start time and readable room; otherwise visitors are asked to leave. Test mode and ON AIR are independent states. MAIN, livestream, stage, quick screens, videos, websites and black output retain a system watermark during rehearsals, including transitions." }
         },
         "sections": {
           "new": [
@@ -146,7 +210,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Ruhiger Start und klarer Zugangshinweis", "en": "Calmer startup and clearer access guidance" },
-          "text": { "de": "Die Update-Suche beginnt erst zwei Sekunden nach dem Ladescreen; Konten ohne Freigabe erhalten einen klaren Ansprechpartner-Hinweis.", "en": "Update checks begin two seconds after the loading screen; accounts without access receive clear administrator guidance." }
+          "text": { "de": "Die automatische Update-Suche startet erst zwei Sekunden nachdem der Ladescreen vollständig durch den Arbeitsbereich ersetzt wurde. Die Netzwerkanfrage beginnt dadurch nach dem sichtbaren Programmstart.\n\nBei einem gültigen Konto ohne freigeschalteten GottesdienstRegie-Zugang nennt der Hinweis nun einen konkreten nächsten Schritt: Bitte wende dich an den Administrator.", "en": "Automatic update checking starts two seconds after the workspace has fully replaced the loading screen. The network request therefore begins after visible application startup.\n\nFor a valid account without GottesdienstRegie access, the notice now gives a concrete next step: contact the administrator." }
         },
         "sections": {
           "new": [],
@@ -167,7 +231,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Veranstaltungsdesigns und Räume", "en": "Event designs and rooms" },
-          "text": { "de": "Die Designauswahl ist im produktiven Editor sichtbar, Termine zeigen ihre Endzeit und interne Raum-IDs werden zentral aufgelöst.", "en": "The design selector is visible in the production editor, events show their end time, and internal room IDs are centrally resolved." }
+          "text": { "de": "Die vier Designkarten für Veranstaltungsfolien sind wieder im tatsächlich verwendeten Produktionseditor erreichbar. Dort lassen sich die Anzahl sichtbarer Termine und ihre Anzeigedauer direkt einstellen. Veranstaltungen zeigen neben dem Beginn auch die Endzeit.\n\nFirebase rooms/ dient als zentrale abonnierte Raumquelle. Der RoomService löst stabile IDs sowie kompatible Namen und Kurzbezeichnungen auf und normalisiert interne, hybride, zusätzliche und Ersatzräume. MAIN und Vorschau verwenden Raumname, Etage und Gebäude; eine nicht aufgelöste interne ID erscheint nicht als öffentlicher Raumname.", "en": "The four event-slide design cards are available again in the actual production editor, alongside controls for visible event count and duration. Events now show both start and end times.\n\nFirebase rooms/ is subscribed to as the central room source. RoomService resolves stable IDs as well as compatible names and abbreviations, normalizing internal, hybrid, additional and replacement rooms. MAIN and preview use room name, floor and building; unresolved internal IDs are never displayed as public room names." }
         },
         "sections": {
           "new": [
@@ -188,7 +252,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Updates nach Wunsch installieren", "en": "Install updates when you choose" },
-          "text": { "de": "Neue Versionen werden mit einem klaren Installationsdialog angekündigt und können sofort, später oder beim Beenden installiert werden.", "en": "New versions are announced with a clear installation prompt and can be installed now, later, or when quitting." }
+          "text": { "de": "Für jede gefundene neue Version erscheint ein eigenes Informationsfenster mit den Optionen Jetzt installieren, Später, Beim Beenden installieren und Abbrechen. Die Entscheidung steuert, wann ein automatischer Hintergrunddownload beginnt und ob das Update beim Beenden übernommen werden soll.\n\nUnter Einstellungen → Updates kann die Option Heruntergeladene Updates beim Beenden installieren dauerhaft festgelegt werden. Download und Installation respektieren die Auswahl im Dialog; ein Hintergrunddownload löst keine ungefragte Installation aus.", "en": "Every newly discovered version opens a dedicated information prompt with Install now, Later, Install on quit and Cancel. This choice controls when an automatic background download starts and whether the update should be applied when quitting.\n\nSettings → Updates also offers a permanent Install downloaded updates on quit option. Download and installation respect the prompt decision; downloading in the background does not trigger an unrequested installation." }
         },
         "sections": {
           "new": [
@@ -211,7 +275,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Stabiler Programmabschluss", "en": "Stable application shutdown" },
-          "text": { "de": "Ein Absturz des Electron-Hauptprozesses beim Schließen oder Neustarten wurde behoben.", "en": "A main-process crash while closing or restarting the Electron application has been fixed." }
+          "text": { "de": "Der gemeldete JavaScript-Absturz im Electron-Hauptprozess beim Schließen oder Neustarten wird verhindert. Verzögerte Update-, Übersetzungs-, Spotify-, Ausgabe- und Fernsteuerungsereignisse werden beim Beenden verworfen, statt an bereits zerstörte Fenster zu senden.\n\nAuch die Bildschirm-Wachhaltung wird sicher freigegeben, wenn Electron das zugrunde liegende Objekt bereits beendet hat.", "en": "The reported JavaScript crash in Electron's main process during closing or restarting is prevented. Delayed update, translation, Spotify, output and remote-control events are discarded during shutdown rather than sent to destroyed windows.\n\nDisplay sleep prevention is also released safely when Electron has already disposed of the underlying object." }
         },
         "sections": {
           "new": [],
@@ -227,7 +291,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Mehr Termine zuverlässig auf MAIN", "en": "More events reliably on MAIN" },
-          "text": { "de": "Mehrere kommende Veranstaltungen erscheinen in vier Designs zuverlässig in Vorschau und MAIN; Musikcover können rund dargestellt werden.", "en": "Multiple upcoming events now appear reliably in preview and MAIN using four designs, and music artwork can be displayed as a circle." }
+          "text": { "de": "Nächste Veranstaltungen zeigt mehrere kommende Termine gemeinsam. Karten, Zeitstrahl, Plakat und Minimal bieten vier Darstellungen; die Anzahl von zwei bis acht Terminen lässt sich für den jeweiligen PRE-/POST-Loop einstellen.\n\nMAIN erhält den normalisierten Veranstaltungssnapshot gemeinsam mit der Live-Folie. Titel, effektive Zeit, Ort und vorhandene Cover stehen dadurch auch im separaten Ausgabefenster bereit; Firebase bleibt ausschließlich über den zentralen EventService angebunden. Bei Läuft gerade kann das Cover zusätzlich rund dargestellt werden. Die gespeicherte Einstellung wird identisch in Vorschau und MAIN angewendet.", "en": "Upcoming events displays several events together. Cards, Timeline, Poster and Minimal provide four layouts, with two to eight events configurable for each PRE/POST loop.\n\nMAIN receives the normalized event snapshot with the live slide. Titles, effective time, location and available artwork are therefore also present in the separate output window; Firebase continues to be read exclusively through central EventService. Now Playing additionally supports circular artwork. The saved setting is applied identically in preview and MAIN." }
         },
         "sections": {
           "new": [
@@ -252,7 +316,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Dynamische Musik- und Veranstaltungsfolien", "en": "Dynamic music and event slides" },
-          "text": { "de": "Läuft gerade erhält zehn Animationen, aktuelle Cover und den vollständigen Designer; Veranstaltungen und Audioquellen werden wieder zuverlässig angezeigt und abgespielt.", "en": "Now Playing gains ten animations, current artwork and the full designer, while events and audio sources display and play reliably again." }
+          "text": { "de": "Läuft gerade erhält zehn Animationen, darunter drehendes Vinyl sowie zoomen, schweben, pulsieren, aufklappen und leuchten. Der vollständige Designer ist auch in der Produktionsansicht erreichbar. Cover werden bei jedem Titelwechsel neu eingesetzt, damit die Anzeige nicht beim vorherigen Lied stehen bleibt.\n\nVeranstaltungsfolien übernehmen zentral normalisierte Firebase-Ereignisse mit Titel, effektiver Zeit und effektivem Ort; fehlen gültige Termine, erscheint ein klarer Leerzustand. ON AIR wechselt automatisch aus Bearbeiten in Vorschau. Das Hintergrund-Audio-Feld bietet Medienbrowser, zuletzt verwendete Medien, Import und Radio. Eine optionale maximale Wiedergabedauer beendet Audio mit der gewählten Ausblendzeit; Radiovorschauen laden ihre Quelle vor dem Start.", "en": "Now Playing gains ten animations, including rotating vinyl and artwork that zooms, floats, pulses, unfolds or glows. The full designer is also available in production view. Artwork is replaced on every track change so it does not remain stuck on the previous song.\n\nEvent slides consume centrally normalized Firebase events with title, effective time and effective location, or show an explicit empty state. ON AIR switches automatically from editing to preview. Background Audio offers the media browser, recent media, import and radio. An optional maximum playback duration stops audio with the selected fade-out; radio previews load their stream source before starting." }
         },
         "sections": {
           "new": [
@@ -280,7 +344,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Zentrale Gemeindedaten und visueller Musikdesigner", "en": "Central community data and visual music designer" },
-          "text": { "de": "Veranstaltungen und Meldungen laufen stabil über einen zentralen Firebase-Dienst; „Läuft gerade“ erhält zehn visuelle Designkarten und einen audio-reaktiven Visualizer.", "en": "Events and announcements now use one stable Firebase service, while Now Playing gains ten visual design cards and an audio-reactive visualizer." }
+          "text": { "de": "Veranstaltungen und Meldungen werden zentral aus Firebase Realtime Database verarbeitet. Stabile Child-Keys überstehen Umbenennungen, geplante und effektive Zeiten werden getrennt behandelt und PRE-/POST-Loop-Ziele strikt berücksichtigt. MAIN erhält normalisierte öffentliche Daten. Echtzeitänderungen werden am sicheren Folienwechsel übernommen; der letzte weiterhin gültige Snapshot bleibt bei Verbindungsproblemen offline verfügbar.\n\nLäuft gerade bietet einen vollständigen Designer mit zehn Vorschaukarten. Farben, Schreibweise, Metadaten, Visualizer-Stil und -Position sowie die Dauer ab einer Sekunde sind einstellbar. Der Visualizer reagiert auf analysierbares Audio und verwendet bei blockierten Radiostreams einen bewegten Fallback unter Beachtung reduzierter Bewegung. Preflight prüft Verbindung, Veranstaltungsverknüpfung und optionale leere Loop-Inhalte, ohne ON AIR unnötig zu blockieren.", "en": "Events and announcements are processed centrally from Firebase Realtime Database. Stable child keys survive renaming, planned and effective times remain distinct, and PRE/POST loop targets are enforced. MAIN receives normalized public data. Real-time changes are adopted at safe slide transitions; the last still-valid snapshot remains available offline during connection problems.\n\nNow Playing offers a complete designer with ten preview cards. Colors, capitalization, metadata, visualizer style and position, and durations from one second are configurable. The visualizer reacts to analyzable audio and uses a moving fallback for blocked radio streams while respecting reduced motion. Preflight checks connection, event linking and optional empty loop content without unnecessarily blocking ON AIR." }
         },
         "sections": {
           "new": [
@@ -305,7 +369,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Passende Editoren für automatische Loop-Elemente", "en": "Purpose-built editors for automatic loop elements" },
-          "text": { "de": "Automatische Loop-Inhalte zeigen jetzt ihre echten Einstellungen statt eines wirkungslosen Textfelds.", "en": "Automatic loop content now shows its real settings instead of an ineffective text field." }
+          "text": { "de": "Automatisch gespeiste Loop-Elemente zeigen kein allgemeines Folientextfeld mehr, dessen Platzhalter ihren tatsächlichen Inhalt nicht verändert. Das betrifft Läuft gerade, Wetter, Uhrzeit, Meldungen, Geburtstage, Veranstaltungen, Heute bei uns und Nächste Termine.\n\nAn dessen Stelle erscheint eine passende kompakte Konfiguration. Die zehn Läuft-gerade-Designs sowie Schalter für Cover, Album und Überspringen bei inaktiver Wiedergabe sind direkt im sichtbaren Editor erreichbar; Änderungen erscheinen sofort in der Vorschau. Manuell gepflegte Elemente wie Quiz, Countdown, Bibelvers, QR-Code und Infokarte behalten ihre Inhaltsfelder.", "en": "Automatically fed loop items no longer show a generic slide-text field whose placeholder does not control their actual content. This applies to Now Playing, weather, clock, announcements, birthdays, events, Today with us and Upcoming dates.\n\nA compact configuration suited to each item replaces it. The ten Now Playing designs and switches for artwork, album and skipping inactive playback are directly available in the visible editor, with changes immediately reflected in preview. Manually authored items such as quiz, countdown, Bible verse, QR code and information card retain their content fields." }
         },
         "sections": {
           "new": [],
@@ -327,7 +391,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Echte Radiocover und zehn Designs", "en": "Real radio artwork and ten designs" },
-          "text": { "de": "Laufende Radiotitel erhalten passende Frontcover aus öffentlich zugänglichen Musikkatalogen.", "en": "Current radio tracks receive matching front artwork from publicly accessible music catalogs." }
+          "text": { "de": "Laufende Radiotitel erhalten passende Cover, wenn MusicBrainz eine exakte Kombination aus Titel und Interpret findet und das Cover Art Archive ein Frontcover bereitstellt. Die Auflösung verwendet einen identifizierbaren User-Agent, höchstens eine MusicBrainz-Anfrage pro Sekunde und einen Ergebnis-Cache. Ohne sicheren Treffer bleiben Senderlogo oder neutrales Plattensymbol sichtbar.\n\nDie Läuft-gerade-Folie erweitert die bisherigen acht Designs um Split Card und Neon. Coverwechsel werden weich eingeblendet und synchron an Vorschau sowie MAIN übertragen.", "en": "Current radio tracks gain artwork when MusicBrainz finds an exact title and artist match and Cover Art Archive supplies a front cover. Lookup uses an identifiable User-Agent, at most one MusicBrainz request per second and a results cache. Without a reliable match, the station logo or neutral record symbol remains visible.\n\nThe Now Playing slide adds Split Card and Neon to the previous eight designs. Artwork changes fade in smoothly and are sent synchronously to preview and MAIN." }
         },
         "sections": {
           "new": [
@@ -350,7 +414,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Updates laufen weiter, Radiotitel kommen an", "en": "Persistent updates and richer radio titles" },
-          "text": { "de": "Update-Suche und Downloads bleiben beim Schließen der Einstellungen aktiv; weitergeleitete Radiostreams liefern ihre Titelinformationen.", "en": "Update checks and downloads continue after closing settings, while redirected radio streams provide their title metadata." }
+          "text": { "de": "Update-Suche und Download laufen unabhängig vom geöffneten Einstellungsfenster im Electron-Hauptprozess weiter. Nach dem erneuten Öffnen werden aktueller Zustand und Downloadfortschritt sofort angezeigt. Ein Download endet durch den ausdrücklichen Abbrechen-Button, einen Fehler oder den erfolgreichen Abschluss.\n\nRadiometadaten folgen jetzt sicheren HTTPS-Weiterleitungen zur eigentlichen Streamadresse. Liefert der Sender ICY-Metadaten, kann Läuft gerade Titel und Interpret anzeigen. Streams ohne Titelinformationen behalten Sendername und Online-Radio als Fallback.", "en": "Update checks and downloads continue in Electron's main process independently of the settings window. Reopening settings immediately restores the current state and download progress. Downloads end through the explicit Cancel button, an error or successful completion.\n\nRadio metadata requests now follow safe HTTPS redirects to the actual stream. If the station supplies ICY metadata, Now Playing can display title and artist. Streams without track information keep the station name and Online Radio fallback." }
         },
         "sections": {
           "new": [],
@@ -372,7 +436,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Läuft gerade – mit echten Musikdaten", "en": "Now playing with live music data" },
-          "text": { "de": "Acht neue Designs zeigen Titel, Interpret, Album und Cover aus der aktiven Hintergrundwiedergabe.", "en": "Eight new designs show title, artist, album, and artwork from active background playback." }
+          "text": { "de": "Läuft gerade übernimmt Titel, Interpret, Album und vorhandene Cover aus aktiver Hintergrundwiedergabe. Kompatible Radiosender liefern zusätzlich laufende ICY-Metadaten. Acht Designs stehen bereit: Cover links, Cover groß, Minimal, Vinyl, Radio, Verlauf, Typografie und Bühne. Cover- und Albumanzeige sind einzeln steuerbar.\n\nEchte Wiedergabedaten und ein Bereitschaftszustand ersetzen die doppelte Platzhalterdarstellung. Die Option Folie überspringen, wenn gerade nichts läuft hält das Element im Ablauf, ohne bei inaktiver Wiedergabe eine leere Folie auszugeben. Bei neuen Läuft-gerade-Elementen ist sie standardmäßig aktiviert.", "en": "Now Playing uses title, artist, album and available artwork from active background playback. Compatible radio stations additionally provide current ICY metadata. Eight designs are available: Cover Left, Large Cover, Minimal, Vinyl, Radio, Gradient, Typography and Stage. Artwork and album display can be controlled separately.\n\nActual playback data and a readiness state replace duplicate placeholders. Skip slide when nothing is playing keeps the item in the plan without producing an empty slide during inactive playback. This option is enabled by default for newly added Now Playing items." }
         },
         "sections": {
           "new": [
@@ -397,7 +461,7 @@
         "current": false,
         "overview": {
           "label": { "de": "Schnellaktionen und OSB präzise gesteuert", "en": "Precise quick-screen and OSB control" },
-          "text": { "de": "Sichtbare Tastenkürzel, sichere Loop-Ziele und eine einheitliche, mehrseitige Bibeldarstellung.", "en": "Visible keyboard shortcuts, safe loop targets, and a consistent multi-page Bible display." }
+          "text": { "de": "MAIN-Schnellaktionen zeigen ihr funktionierendes Tastenkürzel unten links; der Bibelzugriff bleibt auf F9. Loop-Elemente sind im Menü Element hinzufügen immer erreichbar. Aus einem normalen Gottesdienstbereich werden sie sicher im Vorprogramm angelegt; die Platzierungsregel für Ankommen und Gottesdienst bleibt wirksam.\n\nDie On-Screen Bible übernimmt Stil, Akzentfarbe, Referenzposition und Geschwindigkeit aus zentralen OSB-Einstellungen. Einzelvorschau und MAIN nutzen denselben 16:9-Renderer. Lange Stellen werden auf Seiten verteilt, die in der Regie vor- und zurückgeschaltet werden; MAIN folgt der gewählten Seite. Beim Bearbeiten verdeckt die Bibel-Schnellanzeige den Editor nicht mehr, und gelieferte Schreibweisen wie GOtt werden als Gott normalisiert.", "en": "MAIN quick actions show their working keyboard shortcut in the lower-left corner; Bible access remains F9. Loop items are always available in Add item. Invoked from a normal service section, they are safely created in pre-program, while placement restrictions for Arrival and Service remain active.\n\nOn-Screen Bible uses central OSB settings for style, accent color, reference position and speed. Single preview and MAIN share the same 16:9 renderer. Long passages are paginated and can be moved forward or back from the operator view; MAIN follows the chosen page. Editing no longer leaves the Bible quick screen over the editor, and supplied spellings such as GOtt are normalized to Gott." }
         },
         "sections": {
           "new": [
@@ -423,7 +487,7 @@
         "current": false,
         "overview": {
           "label": { "de": "OSB, Radio und Audio im Livebetrieb", "en": "OSB, radio, and audio for live production" },
-          "text": { "de": "Zentrale On-Screen-Bible-Einstellungen, Live-Radiotitel und eine klarere Audio- und Ablaufsteuerung.", "en": "Central On-Screen Bible settings, live radio metadata, and clearer audio and rundown controls." }
+          "text": { "de": "Der allgemeine KI-Helfer samt Einstellungen und Laufzeit wird entfernt; getrennte Medien- und Übersetzungsfunktionen bleiben verfügbar. Die On-Screen Bible erhält zentrale Einstellungen unter Präsentation → MAIN Schnellanzeigen → OSB: Standard- und alternative Übersetzung, sechs Stile und Farben, Bucheinleitung, Referenzdarstellung und -position sowie Geschwindigkeit. F9 nutzt die gespeicherten Gerätewerte, ohne die normale Folienposition zu verändern; die Einstellungsvorschau bleibt lokal.\n\nUnterstützte ICY-Radiostreams zeigen Titel und Interpret. Fehlerhafte oder übergroße Metadaten werden ohne Audiounterbrechung verworfen. Das Lautsprechersymbol öffnet eine kompakte Liste zum Entfernen, Nachladen und Umschalten von Shuffle. Element hinzufügen trennt allgemeine und Loop-Elemente; Läuft gerade kommt als gestaltbare Loop-Folie hinzu.", "en": "The general AI assistant, its settings and runtime are removed, while separate media and translation features remain available. On-Screen Bible gains central settings under Presentation → MAIN quick screens → OSB: default and alternative translations, six styles and colors, book introduction, reference display and position, and speed. F9 uses saved device settings without changing the regular slide position; settings preview remains local.\n\nSupported ICY radio streams display title and artist. Malformed or oversized metadata is discarded without interrupting audio. The speaker icon opens a compact list for removal, adding tracks and toggling shuffle. Add item separates general and loop items; Now Playing is added as a customizable loop slide." }
         },
         "sections": {
           "new": [
@@ -455,8 +519,8 @@
               "en": "Clean output and safe integrations"
             },
             "text": {
-              "de": "Korrekte Installer-Texte, ein robuster KI-Helfer, eine neue Bibelanzeige und Spotify-Linkimport.",
-              "en": "Correct installer text, a robust AI assistant, a redesigned Bible overlay, and Spotify link import."
+              "de": "Die Windows-Installer-Bedingungen werden im erwarteten Unicode-Format erzeugt, sodass Umlaute und Sonderzeichen lesbar bleiben. Der KI-Helfer erkennt lokale Modellantworten auch mit vorangestellten Prompts, Codeblöcken oder Begleittext. Interne Anweisungen und ungültige Rohantworten gelangen nicht in den Chat; bei ungültiger Antwort bleibt Wiederholen verfügbar.\n\nDie MAIN-Vorschau zeigt die Folie ohne zusätzliche rote LIVE-Plakette. Die Bibelanzeige verwendet ein responsives Buchdesign mit Schreib-, Tinten- und Seitenwechselanimationen; reduzierte Bewegung zeigt den vollständigen Text sofort. Spotify-Titellinks laden Name und Bild aus der öffentlichen Linkvorschau, speichern bereinigte Metadaten und öffnen den Titel ausschließlich nach ausdrücklichem Klick extern in Spotify.",
+              "en": "Windows installer terms are generated in the expected Unicode format so umlauts and special characters remain readable. The AI assistant recognizes local model responses even when preceded by prompts, code blocks or wrapper text. Internal instructions and invalid raw responses stay out of chat; invalid responses retain a Retry action.\n\nMAIN preview shows the slide without an extra red LIVE badge. Bible output uses a responsive book design with writing, ink and page-turn animations; reduced motion shows the complete text immediately. Spotify track links load name and artwork from the public link preview, store sanitized metadata and open the track externally in Spotify only after an explicit click."
             }
           },
           "sections": {
@@ -534,8 +598,8 @@
               "en": "Stable startup, audio, and Spotify"
             },
             "text": {
-              "de": "Stabiler nativer Start, einheitlicher Live-Beginn und sichere Spotify-Verknüpfungen.",
-              "en": "Stable native startup, consistent live starting behavior, and safe Spotify links."
+              "de": "Die gepackte Anwendung findet ihre Oberfläche unabhängig vom TypeScript-Ausgabeverzeichnis und bietet bei Ladefehlern Wiederholen an. ON AIR und Testbetrieb beginnen nach derselben Auswahlregel auf der ersten aktiven Folie: Vorprogramm, Warm-up, Gottesdienst und Nachprogramm. Vor- und Nachprogramm bleiben zwingende Loops und behalten beim Hinzufügen ihr Ziel.\n\nAudiozustände erscheinen nur am Lautsprechersymbol statt als gefärbte Ablaufzeilen. Stoppunkte können direkt an Abschnitten gesetzt und reine Bedientöne unabhängig von Medien abgeschaltet werden. Die optionale Spotify-Verbindung verwendet PKCE und verschlüsselt gespeicherte Token außerhalb der Präsentation. Titel werden als bereinigte Verknüpfungen gespeichert und manuell in Spotify geöffnet; Spotify-Audio wird weder heruntergeladen noch automatisch abgespielt oder übertragen.",
+              "en": "The packaged application locates its interface independently of the TypeScript output directory and offers Retry after loading errors. ON AIR and test mode follow the same selection rule for the first active slide: pre-program, warm-up, service and post-program. Pre- and post-program remain mandatory loops and preserve their destination when adding items.\n\nAudio states appear only on the speaker icon rather than tinted plan rows. Stop points can be assigned to sections and operator sounds disabled independently of media. Optional Spotify connection uses PKCE and stores encrypted tokens outside the presentation. Tracks are saved as sanitized links and opened manually in Spotify; Spotify audio is never downloaded, automatically played or transmitted."
             }
           },
           "sections": {
@@ -593,8 +657,8 @@
               "en": "Integrated AI assistant"
             },
             "text": {
-              "de": "Version 0.60.0 ergänzt einen KI-Helfer für Fragen, Entwürfe, Prüfungen und kontrollierte Präsentationsänderungen.",
-              "en": "Version 0.60.0 adds an AI assistant for questions, drafts, reviews, and controlled presentation changes."
+              "de": "Der integrierte KI-Helfer verarbeitet Fragen, Entwürfe und strukturierte Präsentationsänderungen nach dem gewählten Modellprofil. Elf Schnellaktionen unterstützen Planung, Texte, Ankündigungen, Bibel- und Songideen, Prüfung, Übersetzung, vorhandene Medien, Moderation, Gebete und Stil. Modell, Bestätigungsmodus und Berechtigungen lassen sich einstellen.\n\nPersönliche Notizen, Zugangsdaten und lokale Pfade bleiben außerhalb des Modellkontexts. Geprüfte Änderungen werden als Vorschau oder auf ausdrücklichen Wunsch direkt angewendet, atomar gespeichert und über die gemeinsame Historie rückgängig gemacht. Die Desktop-App lädt ein fest versioniertes Modell mit sichtbarem Fortschritt; danach arbeitet der Helfer offline. Download, Aktualisierung, Entfernung und Chatverlauf sind verwaltbar. Nicht unterstützte Browser verweisen auf die Desktop-App.",
+              "en": "The integrated AI assistant handles questions, drafts and structured presentation changes using the selected model profile. Eleven quick actions assist with planning, text, announcements, Bible and song ideas, review, translation, existing media, moderation, prayers and style. Model, confirmation mode and permissions are configurable.\n\nPersonal notes, credentials and local paths stay outside model context. Validated changes are previewed or applied directly on explicit request, stored atomically and reversible through shared history. The desktop app downloads a pinned model with visible progress and then works offline. Download, updates, removal and chat history can be managed. Unsupported browsers direct users to the desktop app."
             }
           },
           "sections": {
@@ -1489,8 +1553,8 @@
               "en": "Compact startup screen, full workspace"
             },
             "text": {
-              "de": "Version 0.49.0 stellt den schmalen, zentrierten Startbildschirm wieder her. Erst nach dem Laden wechselt GottesdienstRegie zuverlässig auf die vollständige Desktop-Größe.",
-              "en": "Version 0.49.0 restores the narrow centered startup screen and reliably switches to the full desktop workspace only after loading."
+              "de": "Der Startbildschirm erscheint wieder schmal und mittig auf dem vorgesehenen Monitor mit bis zu 410 × 700 Pixeln. Logo, Ladefortschritt, Synchronisierung überspringen und Schließen bleiben erreichbar. Die kompakte Größe wird nicht als normale Fensterposition gespeichert.\n\nSobald Konto, Gerät und Arbeitsbereich bereit sind, wird dasselbe Fenster auf die gespeicherte Desktop-Größe erweitert; Vergrößern, Maximieren und der Startmodus werden aktiviert. Falls das Bereitsignal ausbleibt, aktiviert ein 30-Sekunden-Sicherheitsweg den großen Arbeitsbereich.",
+              "en": "The startup screen is narrow again, centered on the intended monitor and sized up to 410 by 700 pixels. Logo, loading progress, Skip synchronization and Close remain accessible. Compact dimensions are not saved as the normal window position.\n\nOnce account, device and workspace are ready, the same window expands to the saved desktop size and enables resizing, maximization and the configured startup mode. If the readiness signal is missing, a 30-second safety fallback activates the full workspace."
             }
           },
           "sections": {
@@ -2448,8 +2512,8 @@
               "en": "Update notice and terms of use"
             },
             "text": {
-              "de": "Beim Herunterladen einer Aktualisierung wird die Zustimmung zu den Nutzungsbedingungen klar angezeigt. Der Link öffnet die vollständige Fassung direkt.",
-              "en": "When downloading an update, consent to the terms of use is shown clearly. The link opens the full text directly."
+              "de": "Die Update-Ansicht zeigt direkt beim Download den Hinweis: Mit der Aktualisierung stimmst du den Nutzungsbedingungen zu. Der verlinkte Begriff Nutzungsbedingungen öffnet die vollständige Fassung ohne Umweg.\n\nDer Hinweis macht die Zustimmung vor dem Download sichtbar. Er ist rein informativ und verändert weder den Downloadablauf noch den Livebetrieb.",
+              "en": "The update view shows a notice next to the download explaining that updating constitutes agreement to the terms of use. The linked terms label opens the complete text directly.\n\nThe notice makes the agreement visible before download. It is informational and changes neither the download workflow nor live operation."
             }
           },
           "sections": {
@@ -2946,7 +3010,7 @@
             },
             "text": {
               "de": "Dieser Wartungsstand betrifft den Wechsel vom kleinen Startfenster zum normalen Windows-Arbeitsbereich. Das Titlebar-Overlay wird bereits bei der Fenstererstellung aktiviert, damit spätere Anpassungen der Titelleiste nicht mehr die genannte JavaScript-Ausnahme auslösen.",
-              "en": "This archived release focuses on Windows startup fixed. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "This maintenance release fixes the Windows transition from the compact loading window to the normal workspace. The titlebar overlay is enabled when the window is created, preventing the later titlebar update from raising the reported JavaScript exception. The workspace then opens at the configured size."
             }
           }
         },
@@ -5877,8 +5941,8 @@
                   "en": "Service time popup fully visible"
                 },
                 "text": {
-                  "de": "Das Servicezeit-Popup bleibt jetzt vollständig innerhalb der Ablaufspalte und wird am linken Fensterrand nicht mehr abgeschnitten.",
-                  "en": "The service time popup now remains fully inside the order-of-service column and is no longer clipped at the left edge of the window."
+              "de": "Das Popup zum Festlegen der Startzeit bleibt vollständig innerhalb der Ablaufspalte. Überschrift, Zeitfeld und Schaltflächen werden links nicht mehr abgeschnitten. Bei schmalen App-Fenstern passt sich die Popupbreite an, ohne den Inhalt zu überdecken.",
+              "en": "The popup for setting the start time stays fully within the order-of-service column. Its heading, time field and buttons are no longer clipped on the left. In narrow application windows the popup width adapts without covering its content."
                 }
               }
             ],
@@ -5891,7 +5955,7 @@
             },
             "text": {
               "de": "Die Korrektur betrifft das Popup zur Servicezeit. Seine Inhalte sollen vollständig sichtbar bleiben, statt am Rand der Oberfläche abgeschnitten zu werden. Die zugrunde liegende Servicezeit erhält durch diesen reinen Darstellungsfix keine neue fachliche Bedeutung.",
-              "en": "This archived release focuses on Service time popup fully visible. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "This correction concerns the service-time popup used to set the start time. Its heading, input and buttons remain visible within the service-plan column, including in narrow windows where the popup width adapts. The change affects the popup layout, not the meaning of service time."
             }
           }
         },
@@ -6315,8 +6379,8 @@
                   "en": "Dedicated quiz address"
                 },
                 "text": {
-                  "de": "Teilnahmelinks und QR-Codes verwenden jetzt https://pgbielefeld.neocities.org/quiz.",
-                  "en": "Join links and QR codes now use https://pgbielefeld.neocities.org/quiz."
+              "de": "Teilnahmelinks und lokal erzeugte QR-Codes verwenden dauerhaft https://pgbielefeld.neocities.org/quiz. Die Einrichtungsanleitung nennt die Neocities-Domain, die für die anonyme Firebase-Anmeldung freigegeben werden muss.",
+              "en": "Join links and locally generated QR codes consistently use https://pgbielefeld.neocities.org/quiz. Setup instructions identify the Neocities domain that must be authorized for anonymous Firebase sign-in."
                 }
               }
             ],
@@ -6330,7 +6394,7 @@
             },
             "text": {
               "de": "Die Quizteilnahme erhält eine eigene Adresse. Damit wird der Zugang für Teilnehmer vom restlichen Bedienbereich getrennt und leichter kommunizierbar. Dieser kleine Stand ergänzt den zuvor eingeführten Quizablauf.",
-              "en": "This archived release focuses on Dedicated quiz address. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Quiz participation receives its own address at https://pgbielefeld.neocities.org/quiz, used by join links and locally generated QR codes. Setup instructions also name the domain required for anonymous Firebase sign-in. This small release extends the quiz workflow introduced previously."
             }
           }
         },

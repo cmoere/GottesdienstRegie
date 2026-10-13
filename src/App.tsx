@@ -113,7 +113,10 @@ import {AppClock} from './community/AppClock';
 import {setPostProgramPrepared} from './community/communityRuntime';
 import {EventSlideDesigner} from './EventSlideDesigner';
 import {AnnouncementSlideDesigner} from './AnnouncementSlideDesigner';
-import {eventOverviewMinimumDuration} from './liveDynamicData';
+import {eventOverviewMinimumDuration,hydrateNowPlayingData,nowPlayingSnapshotMatches} from './liveDynamicData';
+import {useLiveOutputPreview} from './liveOutputPreview';
+import {useOutputDisplayProfile} from './useOutputDisplayProfile';
+import {useScheduledOutputSlide} from './outputPresentation';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
 import {NORMAL_APP_MODE,setAppOnAir,type AppModeState} from './appMode';
@@ -7763,6 +7766,7 @@ function AppShell({
   const {auth,presentations,media,desktop,target}=usePlatform();
   const { t, locale } = useI18n();
   const state = usePresentation();
+  const outputProfileWarning=useOutputDisplayProfile();
   const loopController = useRef(new LoopController<ServiceItem>());
   const announcementController=useRef(new AnnouncementLiveController());
   const [protectedSlideOpen,setProtectedSlideOpen]=useState(false);
@@ -7829,7 +7833,6 @@ function AppShell({
     previewKey: string;
     previewSuppressed: boolean;
   }>({ onAir: false, mode: "edit", previewKey: "", previewSuppressed: false });
-  const nowPlayingSignatureRef=useRef('');
   const previousTourOpen = useRef(tourOpen);
   const syncingRef = useRef(false),
     syncMessageTimer = useRef<number | undefined>(undefined);
@@ -8318,7 +8321,19 @@ function AppShell({
       void liveEngine.show(output);
     }
   }, [state.liveTransitionRevision,state.liveSlideId,state.liveItemId,state.onAir,state.items,state.transitionDefault,state.lyricScrolling,songTranslationMode]);
-  useEffect(()=>{const update=(event:Event)=>{const audio=(event as CustomEvent<BackgroundAudioState>).detail,item=usePresentation.getState().items.find(entry=>entry.id===usePresentation.getState().liveItemId);if(!usePresentation.getState().onAir||item?.type!=='nowPlaying')return;const track=audio.track,signature=`${audio.active}:${track?.assetId??''}:${track?.name??''}:${track?.artist??''}:${track?.album??''}:${track?.imageUrl??''}`;if(signature===nowPlayingSignatureRef.current)return;nowPlayingSignatureRef.current=signature;const slide=item.slides.find(entry=>entry.id===usePresentation.getState().liveSlideId)??item.slides[0];if(!slide)return;const patched={...slide,elements:slide.elements.map(element=>element.type==='loop'?{...element,properties:{...element.properties,nowPlayingActive:audio.active,nowPlayingTitle:track?.name??'',nowPlayingArtist:track?.artist??'',nowPlayingAlbum:track?.album??'',nowPlayingArtwork:track?.imageUrl??'',nowPlayingSource:track?.format??''}}:element)};const output={...patched,transitionOverride:resolveTransition(patched,item,'main',usePresentation.getState().transitionDefault)};const notice=postProgramNoticeController.current.current();void liveEngine.show(isPostProgramSystemItem(item)&&notice?withPostProgramRoomNotice(output,notice):output)};window.addEventListener('gottesdienstregie:background-audio',update);return()=>window.removeEventListener('gottesdienstregie:background-audio',update)},[]);
+  useEffect(()=>{
+    const reconcile=()=>{
+      const current=usePresentation.getState(),item=current.items.find(entry=>entry.id===current.liveItemId);
+      if(!current.onAir||item?.type!=='nowPlaying')return;
+      const slide=item.slides.find(entry=>entry.id===current.liveSlideId);if(!slide)return;
+      const prepared=hydrateNowPlayingData(slide);
+      if(nowPlayingSnapshotMatches(useLiveOutputPreview.getState().slide,prepared))return;
+      void liveEngine.show({...prepared,transitionOverride:resolveTransition(prepared,item,'main',current.transitionDefault)});
+    };
+    window.addEventListener('gottesdienstregie:background-audio',reconcile);
+    const timer=setInterval(reconcile,1000);
+    return()=>{window.removeEventListener('gottesdienstregie:background-audio',reconcile);clearInterval(timer)};
+  },[]);
   useEffect(() => {
     const previous = audioSessionRef.current,
       previewKey = `${state.previewItemId}:${state.previewSlideId}`,
@@ -9922,6 +9937,7 @@ function AppShell({
         <span>
           {state.saveState === "error" ? t("authUnknown") : t("ready")}
         </span>
+        {outputProfileWarning&&<span title={outputProfileWarning}>⚠ {outputProfileWarning}</span>}
         <span>
           {state.saveState === "saving"
             ? "SPEICHERT …"
@@ -10026,7 +10042,7 @@ function Clock({ locale }: { locale: string }) {
 function Output() {
   const stateRevisionRef=useRef(-1);
   const outputRevisionRef=useRef(0);
-  const [slide, setSlide] = useState<Slide | null>(null),
+  const [slide, setSlide] = useScheduledOutputSlide(),
     [quick, setQuick] = useState<QuickScreenConfig | null>(null),
     [outputAppMode,setOutputAppMode]=useState<AppModeState>(NORMAL_APP_MODE),
     role = useMemo(

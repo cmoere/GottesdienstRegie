@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.79.0
+
+Ausgabebildschirme werden zusätzlich als technisches Geräteprofil gespeichert, unabhängig von einzelnen Präsentationen. Bei geänderten Bildschirm-IDs wird eine Zuordnung nur bei eindeutig passender Bildschirmidentität wiederhergestellt. Fehlende oder mehrdeutige Monitore werden im Bedienbereich gemeldet und nicht still einem anderen Ausgang zugeordnet. Bereits zurückgesetzte Zuordnungen müssen einmal neu ausgewählt werden. OSB-Geräteeinstellungen bleiben beim Speichern erhalten.
+
+Meldungen verwenden Cera Pro mit einer kleinen dünnen Trennlinie zwischen Titel und Beschreibung. Fettdruck, Kursivschrift, Unterstreichungen, Zeilenwechsel und leere Absätze bleiben beim Aufteilen auf Folgeseiten erhalten. Importiertes HTML wird auf sichere Text- und Stilinformationen reduziert; Skripte und eingebettete Inhalte werden nicht ausgeführt.
+
+Laufende Musik wird bei jedem neuen Anzeigen der Läuft-gerade-Folie aus dem Audiozustand vorbereitet. Ein zusätzlicher sekündlicher Abgleich korrigiert verpasste Metadatenänderungen, ohne unveränderte Inhalte ständig neu zu senden. Titel, Interpret und Cover werden dabei gemeinsam übernommen.
+
+Veranstaltungslisten scrollen nun über die Browser-Animationsengine statt die React-Oberfläche bei jedem Bild neu zu berechnen. MAIN und beide Live-Vorschauen erhalten denselben vorbereiteten Snapshot und einen gemeinsamen Anzeigezeitpunkt für Folienwechsel. Scrollende Songs verwenden auch in der Vorschau den passenden Songrenderer. Alle zugewiesenen Ausgabefenster bleiben beim Start verborgen, bis sie geladen sind. Das ist keine hardwareseitige Bildsynchronisation verschiedener Monitore.
+
+29 bisher knappe historische Änderungsbeschreibungen wurden anhand vorhandener Versionsprotokolle erweitert. Absätze werden auch in der Versionsübersicht dargestellt. Kurzzeitig gesperrte Windows-Dateien werden beim atomaren Speichern begrenzt erneut versucht, ohne den letzten gültigen Gemeindedatenstand zu löschen.
+
+Bekannt: Der früher gemeldete graue Bildschirm beim Programmstart ist weiterhin nicht als behoben bestätigt. Ein Geräteprofil kann bereits vor diesem Update verlorene Bildschirmzuordnungen nicht rekonstruieren.
+
+---
+
 # GottesdienstRegie 0.78.0
 
 Meldungen erhalten getrennte, sicher platzierte Titel- und Textbereiche. Lange Texte werden vollständig auf lesbare Folgeseiten verteilt; der QR-Code bleibt daneben sichtbar. Der Loop zeigt alle Seiten einer Meldung, bevor er weiterwechselt. Im Bearbeiten-Bereich stehen vier Design-Kacheln zur Auswahl: Klar, Hell, Akzent und Seitenspalte.

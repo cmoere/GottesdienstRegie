@@ -11,7 +11,15 @@ import '../../src/styles.css';import '../../src/version71.css';import '../../src
 const root=createRoot(document.getElementById('root')!);
 const body='Derzeit werden in der Veranstaltungsauskunft teilweise fehlerhafte Abendmahlstermine angezeigt. Bitte beachte die aktuellen Aushänge sowie den Monatsplan. Diese enthalten die gültigen Termine.\n\nWir arbeiten bereits mit Hochdruck an der Behebung des technischen Fehlers.\n\n'+('Weitere Informationen werden rechtzeitig bekannt gegeben. '.repeat(40));
 const base={id:'v78',itemId:'v78',order:0,enabled:true,title:'',body:'',background:'#18232f',transition:'none' as const,transitionDuration:0,notes:'',elements:[]};
+async function richNotice(){
+ await Promise.all([document.fonts.load('400 44px "Cera Pro"'),document.fonts.load('700 44px "Cera Pro"'),document.fonts.load('italic 400 44px "Cera Pro"')]);
+ const text='<p>Normal <strong>Fettdruck</strong> <u>Unterstrichen</u> <em>Kursiv</em></p><p></p><p>Neuer Absatz mit ÄÖÜ.</p>';
+ const page=prepareAnnouncementPages({title:'Meldung ÄÖÜ',body:text,qrCode:true,design:'classic'})[0];
+ root.render(<div style={{width:'100vw',height:'100vh'}}><SlideRenderer slide={buildAnnouncementSlide(base,{title:'Meldung ÄÖÜ',text,qrCode:true,qrReference:'https://example.org/public',durationMs:15000},page,0,1)} mode="live"/></div>);
+ return {body:page.bodyText};
+}
 async function notice(design:string,pageIndex=0){
+ await Promise.all([document.fonts.load('400 44px "Cera Pro"'),document.fonts.load('600 56px "Cera Pro"'),document.fonts.load('700 44px "Cera Pro"')]);
  await document.fonts.ready;
  const pages=prepareAnnouncementPages({title:'Fehlerhafte Abendmahlstermine in der Veranstaltungsauskunft',body,qrCode:true,design});
  const slide=buildAnnouncementSlide(base,{title:'Fehlerhafte Abendmahlstermine in der Veranstaltungsauskunft',text:body,qrCode:true,qrReference:'https://example.org/meldung',durationMs:15000},pages[pageIndex],pageIndex,pages.length);
@@ -30,5 +38,5 @@ function overview(atEnd=false,long=false){
  root.render(<div style={{width:'100vw',height:'100vh'}}><SlideRenderer slide={{...base,elements:[{id:'events',type:'loop',name:'Termine',x:0,y:0,width:1920,height:1080,rotation:0,opacity:1,locked:true,visible:true,zIndex:1,properties}]}} mode="live"/></div>);
  return prepared;
 }
-(window as any).v78={notice,events,overview};
+(window as any).v78={notice,events,overview,richNotice};
 await notice('classic');

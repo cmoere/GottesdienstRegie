@@ -1,2 +1,29 @@
-import fs from 'node:fs/promises';import path from 'node:path';import type {OsbSettings} from '../src/osb/types';
-export class DeviceSettingsRepository{constructor(private file:string){}async readOsb():Promise<unknown>{try{return JSON.parse(await fs.readFile(this.file,'utf8')).osb}catch{return null}}async writeOsb(osb:OsbSettings){await fs.mkdir(path.dirname(this.file),{recursive:true});const temp=`${this.file}.tmp`;await fs.writeFile(temp,JSON.stringify({osb},null,2),'utf8');await fs.rename(temp,this.file);return osb}}
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {atomicRename} from './atomicRename';
+import type {OsbSettings} from '../src/osb/types';
+import {normalizeOutputDisplayProfile,type OutputDisplayProfile} from './outputDisplayProfile';
+
+export class DeviceSettingsRepository {
+  private writes:Promise<void>=Promise.resolve();
+  constructor(private file:string){}
+  private async readSettings():Promise<Record<string,unknown>>{
+    try {const value:unknown=JSON.parse(await fs.readFile(this.file,'utf8'));if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('Ungültige Geräteeinstellungen.');return value as Record<string,unknown>}
+    catch(error){if((error as NodeJS.ErrnoException).code==='ENOENT')return {};throw error}
+  }
+  async readOsb():Promise<unknown>{await this.writes;try{return (await this.readSettings()).osb??null}catch{return null}}
+  async readOutputDisplays():Promise<OutputDisplayProfile|null>{await this.writes;try{return normalizeOutputDisplayProfile((await this.readSettings()).outputDisplays)}catch{return null}}
+  private update(patch:Record<string,unknown>):Promise<void>{
+    const operation=this.writes.then(async()=>{
+      const settings={...await this.readSettings(),...patch};
+      await fs.mkdir(path.dirname(this.file),{recursive:true});
+      const temp=`${this.file}.tmp`;
+      await fs.writeFile(temp,JSON.stringify(settings,null,2),'utf8');
+      await atomicRename(temp,this.file);
+    });
+    this.writes=operation.catch(()=>{});
+    return operation;
+  }
+  async writeOsb(osb:OsbSettings){await this.update({osb});return osb}
+  async writeOutputDisplays(profile:OutputDisplayProfile){const normalized=normalizeOutputDisplayProfile(profile);if(!normalized)throw new Error('Ungültiges Bildschirmprofil.');await this.update({outputDisplays:normalized});return normalized}
+}

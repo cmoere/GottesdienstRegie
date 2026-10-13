@@ -3,6 +3,7 @@ import {EventScrollViewport,useEventPresentationClock} from './EventScrollViewpo
 import {prepareEventOverview} from './eventOverviewPresentation';
 import {prepareAnnouncementPages} from './announcementDesign';
 import {buildAnnouncementSlide} from './announcementLive';
+import {AnnouncementRichText} from './AnnouncementRichTextRenderer';
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Slide, SlideElement } from "./store";
 import { fontStack } from "./fonts";
@@ -510,7 +511,7 @@ function RenderElement({
       className={`slide-renderer-element text ${properties.animation === "fade-in" && mode === "live" ? "element-animation-fade-in" : ""}`}
       style={properties.preparedAnnouncementText===true?{...style,display:'block',whiteSpace:'pre',overflow:'hidden'}:style}
     >
-      {String(properties.text ?? "")}
+      {properties.preparedAnnouncementText===true?<AnnouncementRichText value={properties.announcementRichLines} text={String(properties.text??'')}/>:String(properties.text ?? "")}
     </div>
   );
 }

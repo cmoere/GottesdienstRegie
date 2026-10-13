@@ -3857,18 +3857,18 @@ function PreviewCenter({
           <Icon name="chevron_left" />
         </button>
         <div className="main-preview-surface">
-          <TransitionStage
-            slide={previewSlide(state.onAir&&output?.id===slide.id?output:slide)}
-            transition={resolveTransition(
+          {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live/>:<TransitionStage
+            slide={previewSlide(state.onAir&&output?output:slide)}
+            transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(
               slide,
               item,
               "operator",
               state.transitionDefault,
             )}
-            role="operator"
-          />
+            role={state.onAir?'main':'operator'}
+          />}
           <QuickOverlay quick={activeQuick} staticPreview />
-          {state.onAir&&output?.id===slide.id&&output.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
+          {state.onAir&&output?.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
           <TestModeWatermark role="main"/>
         </div>
         <div className="preview-navigation-rail">
@@ -4078,8 +4078,8 @@ function PreviewRightSidebar({
         <MainLivePreview
           title={`${liveItem?.title} · ${live.title || "Live-Folie"}`}
         >
-          <SlideRenderer slide={previewSlide(state.onAir&&output?.id===live.id?output:live)} mode="thumbnail" />
-          {state.onAir&&output?.id===live.id&&output.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
+          {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live/>:<TransitionStage slide={previewSlide(state.onAir&&output?output:live)} transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(live,liveItem,'main',state.transitionDefault)} role="main" />}
+          {state.onAir&&output?.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
         </MainLivePreview>
       ) : (
         <section className="live-slide-panel">

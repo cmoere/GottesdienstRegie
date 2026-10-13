@@ -52,9 +52,16 @@ app.whenReady().then(async()=>{try{
  await start('next-events');await js("document.querySelector('.preview-nav.next').click()");await until(main,"document.body.innerText.includes('Testveranstaltung')");await capture('postprogram',main);
  await js("window.dispatchEvent(new CustomEvent('gottesdienstregie:open-help',{detail:'Testbetrieb'}))");await capture('test-help');
  await js("document.body.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}))");await js("document.querySelector('.test-session-button').click()");await until(operator,'!window.v77State().onAir');
- await js('window.seedV77(true)');await sleep(200);sent.length=0;await start('automatic');
+ await js('window.seedV77(true)');await sleep(200);sent.length=0;
+ const observe=selector=>`(()=>{window.v79Frames=[];new MutationObserver(()=>{const text=document.querySelector(${JSON.stringify(selector)})?.innerText??'';if(text.includes('Gemeinsam unterwegs')&&!window.v79Frames.length)window.v79Frames.push({at:Date.now(),text})}).observe(document.body,{subtree:true,childList:true,characterData:true})})()`;
+ await main.webContents.executeJavaScript(observe('.output'));await js(observe('.live-slide-panel'));await start('automatic');
  await until(main,"document.body.innerText.includes('Gemeinsam unterwegs')");
  assert(sent[0]?.slide?.body?.includes('Gemeindecafé'),'First announcement must contain prepared public text');
+ await until(operator,"window.v79Frames.length>0");
+ const mainFrame=(await main.webContents.executeJavaScript('window.v79Frames'))[0],previewFrame=(await js('window.v79Frames'))[0];
+ assert(mainFrame&&Math.abs(mainFrame.at-previewFrame.at)<80,'MAIN and preview must present the shared snapshot within 80 ms');
+ assert(mainFrame.at>=sent[0].slide._presentAtMs-5&&previewFrame.at>=sent[0].slide._presentAtMs-5,'Neither output commits before the shared deadline');
+ console.log('Native MAIN/preview presentation difference:',Math.abs(mainFrame.at-previewFrame.at),'ms');
  await capture('meldungen',main);await capture('meldungen-operator');
  const first=sent.find(x=>x.slide?.title==='Gemeinsam unterwegs');await until(main,"document.body.innerText.includes('Herzlich eingeladen')",9000);
  const next=sent.find(x=>x.slide?.title==='Herzlich eingeladen');assert(next.at-first.at>=3500&&next.at-first.at<6000,'Announcement rotation must honor 4000ms duration');

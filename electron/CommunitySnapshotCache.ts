@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {atomicRename} from './atomicRename';
 import type {RawAnnouncement,RawChurchEvent,RawCommunityRecord} from './FirebaseGemeindeService';
 
 export type RawCachedRoom=RawCommunityRecord&{roomId:string};
@@ -19,7 +20,7 @@ export class CommunitySnapshotCache{
     const value={updatedAt:this.now(),...payload},temporary=`${this.file}.tmp`;
     await fs.mkdir(path.dirname(this.file),{recursive:true});
     await fs.writeFile(temporary,JSON.stringify(value),'utf8');
-    await fs.rename(temporary,this.file);
+    await atomicRename(temporary,this.file);
   }
   async read(isValid:(record:RawChurchEvent|RawAnnouncement)=>boolean):Promise<CommunityCacheSnapshot>{
     try{

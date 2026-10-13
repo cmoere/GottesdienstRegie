@@ -26,6 +26,10 @@ contextBridge.exposeInMainWorld("desktop", {
     toggleFullscreen: () => ipcRenderer.invoke("window:toggle-fullscreen"),
   },
   displays: () => ipcRenderer.invoke("displays:list"),
+  outputDisplays: {
+    read: () => ipcRenderer.invoke('device-settings:output-displays-read'),
+    write: (assignments:Record<string,string>,options?:import('../src/outputDisplayProfileTypes').OutputDisplayWriteOptions) => ipcRenderer.invoke('device-settings:output-displays-write',assignments,options),
+  },
   onDisplaysChanged: (callback: (displays: unknown) => void) => {
     const listener = (_event: Electron.IpcRendererEvent, displays: unknown) =>
       callback(displays);
