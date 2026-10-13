@@ -43,6 +43,8 @@ import './version59.css';
 import './version70.css';
 import './version71.css';
 import './version75.css';
+import './version78-events.css';
+import './version78-announcements.css';
 
 class AppErrorBoundary extends React.Component<React.PropsWithChildren,{error:string|null}>{
   state:{error:string|null}={error:null};

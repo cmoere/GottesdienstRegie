@@ -112,6 +112,8 @@ import {PostProgramRoomNoticeView} from './PostProgramRoomNotice';
 import {AppClock} from './community/AppClock';
 import {setPostProgramPrepared} from './community/communityRuntime';
 import {EventSlideDesigner} from './EventSlideDesigner';
+import {AnnouncementSlideDesigner} from './AnnouncementSlideDesigner';
+import {eventOverviewMinimumDuration} from './liveDynamicData';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
 import {NORMAL_APP_MODE,setAppOnAir,type AppModeState} from './appMode';
@@ -4114,6 +4116,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
               {item.type === "loopQr" && <label>QR-Code-URL<input disabled={!canEdit} value={String(item.metadata.url ?? "")} onChange={(event) => state.updateItem(item.id, { metadata: { ...item.metadata, url: event.target.value } })} /></label>}
               {item.type === "nowPlaying" && <NowPlayingDesigner item={item} canEdit={canEdit}/>}
               {(item.type === "event" || item.type === "nextEvents") && <EventSlideDesigner item={item} canEdit={canEdit}/>}
+              {item.type==='announcement'&&<AnnouncementSlideDesigner item={item} canEdit={canEdit}/>}
               {(item.type === "announcement" || item.type === "birthday" || item.type === "event") && <p className="muted">Quelle: Firebase · öffentliche Daten werden vor der Ausgabe validiert.</p>}
             </div>
           )}
@@ -8430,13 +8433,16 @@ function AppShell({
       }
       const timer = window.setTimeout(() => {
         if (!active) return;
+        if(isAnnouncementLoop(item)&&slide&&announcementController.current.hasContinuation(item.id)){
+          usePresentation.getState().goLive(item.id,slide.id);return;
+        }
         const nextId = loopController.current.advance(), nextItem = usePresentation.getState().items.find((entry) => entry.id === nextId);
         const nextSlide=nextItem?.slides.find(entry=>entry.enabled);
         if (nextItem&&nextSlide) usePresentation.getState().goLive(nextItem.id, nextSlide.id);
         else usePresentation.getState().nextLive();
       }, isAnnouncementLoop(item)&&slide
         ? (announcementController.current.outputForTake(item,slide,state.liveTransitionRevision,AppClock.now())?.timing?.durationSeconds??loopDurationMs(item)/1000)*1000
-        : loopDurationMs(item));
+        : Math.max(loopDurationMs(item),eventOverviewMinimumDuration(slide),isPostProgramSystemItem(item)?postProgramNoticeController.current.current()?.minDurationMs??0:0));
       return () => { active = false; window.clearTimeout(timer); loopController.current.stop(); };
     }
     if (item?.type === "weather") {

@@ -1,4 +1,7 @@
 import type { ServiceItem } from "./store";
+import {useEffect,useState} from 'react';
+import {getLatestPublicEvents} from './dynamicEventSlide';
+import {prepareEventOverview} from './eventOverviewPresentation';
 import { usePresentation } from "./store";
 import {
   EVENT_SLIDE_DESIGNS,
@@ -15,6 +18,9 @@ export function EventSlideDesigner({
 }) {
   const state = usePresentation(),
     settings = normalizeEventSlideSettings(item.metadata);
+  const [events,setEvents]=useState(getLatestPublicEvents);
+  useEffect(()=>{const update=()=>setEvents(getLatestPublicEvents());window.addEventListener('gottesdienstregie:community-events',update);return()=>window.removeEventListener('gottesdienstregie:community-events',update)},[]);
+  const minimum=prepareEventOverview({...item.metadata,eventItemsJson:JSON.stringify(events)}).minDurationMs;
   const change = (patch: { eventDesign?: string; eventLimit?: number }) => {
     state.updateItem(item.id, { metadata: { ...item.metadata, ...patch } });
     const element = item.slides[0]?.elements.find(
@@ -65,6 +71,7 @@ export function EventSlideDesigner({
           }
         />
       </label>
+      <p className="field-hint">Bei Platzmangel scrollt die Liste automatisch. Mindestdauer aktuell: {Math.ceil(minimum/1000)} Sekunden. Eine längere eingestellte Dauer bleibt erhalten.</p>
     </section>
   );
 }

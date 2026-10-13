@@ -21,11 +21,24 @@
   ],
   "versions": [
     {
+      "line": "0.78",
+      "builds": [{
+        "version": "0.78.0",
+        "releaseDate": "2026-10-13",
+        "current": true,
+        "overview": {
+          "label": {"de":"Lesbare Meldungen und vollständige Veranstaltungslisten","en":"Readable notices and complete event lists"},
+          "text": {"de":"Vier Meldungsdesigns, vollständige lange Meldungstexte mit Folgeseiten, ruhiges Scrollen bei Platzmangel und automatisch ausreichende Mindestdauer. Der Kopfbereich im Nachprogramm ist etwas niedriger.","en":"Four announcement designs, complete long notice text across continuation pages, calm overflow scrolling and an automatically sufficient minimum duration. The post-program header is slightly shorter."}
+        },
+        "sections": {"new":[],"improved":[],"fixed":[],"known":[]}
+      }]
+    },
+    {
       "line": "0.77",
       "builds": [{
         "version": "0.77.0",
         "releaseDate": "2026-10-13",
-        "current": true,
+        "current": false,
         "overview": {
           "label": {"de":"Testbetrieb, Meldungen und Hilfe","en":"Rehearsals, announcements and help"},
           "text": {"de":"Mehrere Testszenarien, 60 Sekunden Nachprogramm, zuverlässige Meldungsanzeige und überarbeitete mehrsprachige Hilfe.","en":"Multiple rehearsal scenarios, 60-second post-program notices, reliable announcement output and expanded multilingual help."}

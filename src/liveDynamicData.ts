@@ -1,5 +1,6 @@
 import type { Slide } from "./store";
 import { getLatestPublicEvents } from "./dynamicEventSlide";
+import {prepareEventOverview} from './eventOverviewPresentation';
 
 export function hydrateDynamicEventData(slide: Slide): Slide {
   const events = getLatestPublicEvents();
@@ -17,8 +18,14 @@ export function hydrateDynamicEventData(slide: Slide): Slide {
         properties: {
           ...element.properties,
           eventItemsJson: JSON.stringify(events),
+          eventStartedAtMs:Date.now(),
         },
       };
     }),
   };
+}
+
+export function eventOverviewMinimumDuration(slide:Slide|undefined){
+ if(!slide)return 0;
+ return Math.max(0,...hydrateDynamicEventData(slide).elements.filter(element=>element.type==='loop'&&['event','nextEvents'].includes(String(element.properties.loopType))).map(element=>prepareEventOverview(element.properties).minDurationMs));
 }

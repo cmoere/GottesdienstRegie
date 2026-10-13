@@ -1,4 +1,8 @@
 import {paginateReducedMotionEvents} from './eventPagination';
+import {EventScrollViewport,useEventPresentationClock} from './EventScrollViewport';
+import {prepareEventOverview} from './eventOverviewPresentation';
+import {prepareAnnouncementPages} from './announcementDesign';
+import {buildAnnouncementSlide} from './announcementLive';
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Slide, SlideElement } from "./store";
 import { fontStack } from "./fonts";
@@ -315,6 +319,7 @@ function RenderElement({
         />
       );
     if (loopType === "clock") return <ClockLoopElement style={style} />;
+    if(loopType==='announcement')return mode==='live'?<div className="slide-renderer-element" style={style}/>:<AnnouncementLoopPreview style={style} properties={properties}/>;
     if (loopType === "nowPlaying")
       return <NowPlayingLoopElement style={style} properties={properties} />;
     if (loopType === "event" || loopType === "nextEvents")
@@ -503,7 +508,7 @@ function RenderElement({
   return (
     <div
       className={`slide-renderer-element text ${properties.animation === "fade-in" && mode === "live" ? "element-animation-fade-in" : ""}`}
-      style={style}
+      style={properties.preparedAnnouncementText===true?{...style,display:'block',whiteSpace:'pre',overflow:'hidden'}:style}
     >
       {String(properties.text ?? "")}
     </div>
@@ -548,6 +553,8 @@ function EventLoopElement({
   properties: Record<string, string | number | boolean>;
   live?:boolean;
 }) {
+  const [startedAt]=useState(()=>Date.now());
+  const {elapsed}=useEventPresentationClock(Number(properties.eventStartedAtMs)||startedAt);
   const [events, setEvents] = useState<LatestPublicEvent[]>(() =>
     getLatestPublicEvents(),
   );
@@ -570,6 +577,7 @@ function EventLoopElement({
     allItems = eventSlideItems(source),
     pages=reducedMotion?paginateReducedMotionEvents(allItems):[],
     items=reducedMotion?(pages[eventPage%pages.length]??[]):allItems;
+  const prepared=prepareEventOverview(source);
   return (
     <div
       data-reduced-motion={reducedMotion}
@@ -581,7 +589,7 @@ function EventLoopElement({
       }}
     >
       <small>NÄCHSTE VERANSTALTUNGEN</small>
-      <div className="event-loop-list">
+      <EventScrollViewport plan={prepared.plan} elapsed={elapsed} reduced={reducedMotion}><div className="event-loop-list">
         {items.map((event, index) => (
           <article key={`${event.title}:${event.details}:${index}`}>
             <b>{String("eventNumber" in event?event.eventNumber:index + 1).padStart(2, "0")}</b>
@@ -591,10 +599,16 @@ function EventLoopElement({
             </div>
           </article>
         ))}
-      </div>
+      </div></EventScrollViewport>
       {!items.length && <strong>Keine kommenden Veranstaltungen</strong>}
     </div>
   );
+}
+
+function AnnouncementLoopPreview({style,properties}:{style:CSSProperties;properties:Record<string,string|number|boolean>}){
+ const page=prepareAnnouncementPages({title:'Beispielmeldung',body:'Aktuelle Meldungen werden für diese Anzeige vorbereitet. Lange Texte bleiben vollständig lesbar und werden automatisch auf mehrere Seiten verteilt.',qrCode:true,design:properties.announcementDesign})[0];
+ const slide=buildAnnouncementSlide({id:'announcement-preview',itemId:'preview',order:0,enabled:true,title:'',body:'',background:page.background,transition:'none',transitionDuration:0,notes:'',elements:[]},{title:'Beispielmeldung',text:page.bodyText,durationMs:15000,qrCode:true,qrReference:'https://example.org'},page,0,1);
+ return <div className="slide-renderer-element announcement-loop-preview" style={style}><SlideRenderer slide={slide} mode="preview"/></div>;
 }
 
 function NowPlayingLoopElement({

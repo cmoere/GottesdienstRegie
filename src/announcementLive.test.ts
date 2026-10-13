@@ -6,6 +6,18 @@ const now=new Date('2026-10-11T10:00:00');
 const raw={messageId:'a',titel:'Öffentliche Meldung',textMeldung:'Saaltext',status:'öffentlich',messageScreen:true,internalComment:'Geheim'};
 const item=createServiceItem('announcement',{sectionId:'pre',itemCategory:'loop'});
 describe('announcement live preparation',()=>{
+  it('finishes every page of a long notice before moving to the next message',()=>{
+    const controller=new AnnouncementLiveController(),body='Diese ausführliche öffentliche Meldung muss vollständig lesbar bleiben. '.repeat(65);
+    controller.setRecords([{...raw,textMeldung:body,qrCode:true},{...raw,messageId:'b',titel:'Zweite Meldung'}]);
+    const pages:string[]=[];
+    for(let revision=1;revision<30;revision++){
+      const output=controller.outputForTake(item,item.slides[0],revision,now)!;
+      if(output.title==='Zweite Meldung')break;
+      pages.push(output.body);
+    }
+    expect(pages.length).toBeGreaterThan(1);
+    expect(pages.join('')).toBe(body.trim());
+  });
   it('uses PRE targets for PRE and POST targets for POST',()=>{
     expect(announcementPlacement('pre')).toBe('preLoop');
     expect(announcementPlacement('post')).toBe('postLoop');
@@ -35,7 +47,8 @@ describe('announcement live preparation',()=>{
     const controller=new AnnouncementLiveController();
     controller.setRecords([{...raw,textMeldung:'<p>Hallo &amp; willkommen</p><p>Zweite Zeile</p>',qrCode:true,displayDurationMs:24000}]);
     const output=controller.outputForTake(item,{...item.slides[0],background:'#ffffff'},1,now)!;
-    expect(output.elements[0].properties.text).toBe('Öffentliche Meldung\n\nHallo & willkommen\nZweite Zeile');
+    expect(output.elements.find(element=>element.name==='Meldungstitel')?.properties.text).toBe('Öffentliche Meldung');
+    expect(output.elements.find(element=>element.name==='Meldungstext')?.properties.text).toBe('Hallo & willkommen\nZweite Zeile');
     expect(output.background).toBe('#18232f');
     expect(output.timing?.durationSeconds).toBe(24);
     expect(output.elements.find(element=>element.type==='qr')?.properties.src).toMatch(/^data:image\/svg\+xml/);

@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.78.0
+
+Meldungen erhalten getrennte, sicher platzierte Titel- und Textbereiche. Lange Texte werden vollständig auf lesbare Folgeseiten verteilt; der QR-Code bleibt daneben sichtbar. Der Loop zeigt alle Seiten einer Meldung, bevor er weiterwechselt. Im Bearbeiten-Bereich stehen vier Design-Kacheln zur Auswahl: Klar, Hell, Akzent und Seitenspalte.
+
+Überlange Veranstaltungslisten scrollen ruhig vertikal. Die Mindest-Anzeigedauer berücksichtigt Scrollweg sowie Anfangs- und Lesepausen; eine längere eingestellte Dauer bleibt erhalten. Das gilt sowohl für die normale Veranstaltungsübersicht als auch für die geschützte Nachprogramm-Raumanzeige. Bei reduzierter Bewegung werden statische, vollständig lesbare Seiten verwendet.
+
+Der farbige Kopfbereich im Nachprogramm wurde von 17,5 auf 15 Prozent der Bildhöhe reduziert. Die einmal gewählte Sitzungsfarbe bleibt unverändert.
+
+Geprüft mit automatisierten Tests und nativen Electron-Ausgaben: vier Meldungsdesigns, erste und letzte Meldungsseite, 18 Nachprogramm-Veranstaltungen, normale Listen mit Platzmangel und reduzierte Bewegung. Der zuvor gemeldete graue Bildschirm beim Programmstart ist weiterhin nicht als behoben bestätigt.
+
+---
+
 # GottesdienstRegie 0.77.0
 
 Testbetrieb vorbereiten merkt sich die letzte Auswahl und fragt bei jedem neuen Test erneut. Ein bis zwölf ausdrücklich gekennzeichnete Testveranstaltungen lassen sich normal, verspätet, ausgefallen, mit Raumwechsel oder gemischt anzeigen. Echte Gemeindedaten bleiben unverändert.

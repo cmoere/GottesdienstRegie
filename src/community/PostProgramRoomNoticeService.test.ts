@@ -1,7 +1,7 @@
 import {describe,expect,it} from 'vitest';
 import {EventService,type ChurchEvent} from './EventService';
 import {RoomService} from './RoomService';
-import {PostProgramRoomNoticeController,PostProgramRoomNoticeService,withPostProgramRoomNotice} from './PostProgramRoomNoticeService';
+import {PostProgramRoomNoticeController,PostProgramRoomNoticeService,withPostProgramRoomNotice,preparePostEventPresentation} from './PostProgramRoomNoticeService';
 
 const now=new Date(2026,9,4,10,0,0);
 const roomService=new RoomService([{roomId:'saal',raumname:'Gemeindesaal',etage:'EG'},{roomId:'neben',raumname:'Nebenraum',etage:'OG'}]);
@@ -9,6 +9,23 @@ const event=(eventKey:string,start:string,extra:Record<string,unknown>={}):Churc
 const service=(events:ChurchEvent[])=>new PostProgramRoomNoticeService(new EventService(events,roomService));
 
 describe('PostProgramRoomNoticeService',()=>{
+  it('prepares one complete overflow traversal and keeps the visible plan stable until a take',()=>{
+    const events=new EventService([event('current','09:00'),...Array.from({length:20},(_,i)=>event(`event ${i}`,'10:30'))],roomService),controller=new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(events));
+    controller.prepare({linkedEventKey:'current'},now);
+    const snapshot=controller.beginTransition()!;
+    expect(snapshot.pages).toHaveLength(1);expect(snapshot.pages?.[0]).toHaveLength(20);
+    expect(snapshot.scrollPlan?.distance).toBeCloseTo(1265.424);
+    expect(snapshot.minDurationMs).toBeGreaterThan(60000);
+    events.remove('event 19');controller.prepare({linkedEventKey:'current'},now);
+    expect(controller.current()).toBe(snapshot);expect(controller.current()?.pages?.[0]).toHaveLength(20);
+  });
+  it('makes reduced-motion continuations preserve every character of long titles and rooms',()=>{
+    const title='Sehr lange Veranstaltung '.repeat(30),room='Gemeindesaal '.repeat(25);
+    const prepared=preparePostEventPresentation([{id:'long',title,room,start:now.toISOString()}]);
+    expect(prepared.reducedMotionPages.flat().map(row=>row.title.replace(/\n/g,'')).join('')).toBe(title);
+    expect(prepared.reducedMotionPages.flat().map(row=>row.room.replace(/\n/g,'')).join('')).toBe(room);
+    expect(prepared.minDurationMs).toBeGreaterThanOrEqual(prepared.reducedMotionPages.length*12000);
+  });
   it('compares Firebase wall-clock values with the local trusted app clock',()=>{
     const localNow=new Date(2026,9,4,10,0,0);
     expect(service([event('current','09:00'),event('next','10:30')]).compute({linkedEventKey:'current'},localNow)).toMatchObject({type:'next-events',events:[{id:'next',start:new Date(2026,9,4,10,30).toISOString()}]});

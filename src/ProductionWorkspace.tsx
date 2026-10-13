@@ -71,6 +71,7 @@ import { quickScreenShortcut } from "./quickScreenUi";
 import { usesAutomaticLoopEditor } from "./loopEditorModel";
 import { NowPlayingDesigner } from "./NowPlayingDesigner";
 import { EventSlideDesigner } from "./EventSlideDesigner";
+import { AnnouncementSlideDesigner } from './AnnouncementSlideDesigner';
 import {useLiveOutputPreview} from './liveOutputPreview';
 import {PostProgramRoomNoticeView} from './PostProgramRoomNotice';
 import {isPostProgramSystemItem} from './postProgramSystemSlide';
@@ -1583,7 +1584,7 @@ function ContentEditor({
               </label>
             </>
           ) : (
-            <label>
+            <>{item.type==='announcement'&&<AnnouncementSlideDesigner item={item} canEdit={canEdit}/>}<label>
               Anzeigedauer (Sekunden)
               <input
                 type="number"
@@ -1595,7 +1596,7 @@ function ContentEditor({
                   changeDuration(Math.max(1, Number(event.target.value) || 1))
                 }
               />
-            </label>
+            </label></>
           )}
           <p className="status-ready">
             ● Wird vor der Ausgabe automatisch vorbereitet.
