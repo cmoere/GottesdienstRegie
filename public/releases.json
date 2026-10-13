@@ -21,11 +21,24 @@
   ],
   "versions": [
     {
+      "line": "0.77",
+      "builds": [{
+        "version": "0.77.0",
+        "releaseDate": "2026-10-13",
+        "current": true,
+        "overview": {
+          "label": {"de":"Testbetrieb, Meldungen und Hilfe","en":"Rehearsals, announcements and help"},
+          "text": {"de":"Mehrere Testszenarien, 60 Sekunden Nachprogramm, zuverlässige Meldungsanzeige und überarbeitete mehrsprachige Hilfe.","en":"Multiple rehearsal scenarios, 60-second post-program notices, reliable announcement output and expanded multilingual help."}
+        },
+        "sections": {"new":[],"improved":[],"fixed":[],"known":[]}
+      }]
+    },
+    {
       "line": "0.76",
       "builds": [{
         "version": "0.76.0",
         "releaseDate": "2026-10-11",
-        "current": true,
+        "current": false,
         "overview": {
           "label": {"de":"Festes Nachprogramm","en":"Protected post-program slide"},
           "text": {"de":"Automatischer Raumhinweis als geschützte erste Nachprogrammfolie. Klarere Veranstaltungstabelle ohne Bilder und Etagen.","en":"Automatic room notice as a protected first post-program slide. Clearer event table without images or floors."}

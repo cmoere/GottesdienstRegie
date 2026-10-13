@@ -14,3 +14,7 @@ it('returns the final service slide rather than an empty system page when no roo
  expect(unavailablePostProgramTarget(ensurePostProgramSystemSlide([service]))?.itemId).toBe('last');
  expect(unavailablePostProgramTarget(ensurePostProgramSystemSlide([]))).toBeUndefined();
 });
+it('does not select an empty announcement as a room-notice fallback',()=>{
+ const message=createServiceItem('announcement',{id:'empty-message',sectionId:'post',itemCategory:'loop'});
+ expect(unavailablePostProgramTarget(ensurePostProgramSystemSlide([message]),()=>false)).toBeUndefined();
+});

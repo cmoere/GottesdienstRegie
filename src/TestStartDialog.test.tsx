@@ -1,7 +1,7 @@
 import {afterEach,expect,it,vi} from 'vitest';
 import {cleanup,fireEvent,render,screen} from '@testing-library/react';
 import {TestStartDialog} from './TestStartDialog';
-afterEach(cleanup);
+afterEach(()=>{cleanup();localStorage.clear()});
 it('selects a test notice explicitly before starting; cancel never starts output',()=>{
  const start=vi.fn(),cancel=vi.fn();
  render(<TestStartDialog onStart={start} onClose={cancel}/>);
@@ -11,4 +11,20 @@ it('selects a test notice explicitly before starting; cancel never starts output
  expect(start).toHaveBeenCalledWith('next-events');
  start.mockClear();fireEvent.click(screen.getByRole('button',{name:'Abbrechen'}));
  expect(cancel).toHaveBeenCalledOnce();expect(start).not.toHaveBeenCalled();
+});
+it('remembers explicit choices but allows changing them before every new test',()=>{
+ const start=vi.fn();
+ const first=render(<TestStartDialog onStart={start} onClose={()=>{}}/>);
+ fireEvent.click(screen.getByLabelText('Testveranstaltung'));
+ fireEvent.change(screen.getByLabelText('Anzahl Veranstaltungen'),{target:{value:'3'}});
+ fireEvent.change(screen.getByLabelText('Testsituation'),{target:{value:'mixed'}});
+ fireEvent.click(screen.getByRole('button',{name:'Weiter zur Ausgabeprüfung'}));
+ expect(start).toHaveBeenCalledWith('next-events:3:mixed');
+ first.unmount();
+ render(<TestStartDialog onStart={start} onClose={()=>{}}/>);
+ expect(screen.getByLabelText('Anzahl Veranstaltungen')).toHaveValue(3);
+ expect(screen.getByLabelText('Testsituation')).toHaveValue('mixed');
+ fireEvent.click(screen.getByLabelText('Raum verlassen'));
+ fireEvent.click(screen.getByRole('button',{name:'Weiter zur Ausgabeprüfung'}));
+ expect(start).toHaveBeenLastCalledWith('leave-room');
 });

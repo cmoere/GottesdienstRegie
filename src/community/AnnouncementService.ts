@@ -23,7 +23,8 @@ export class AnnouncementService {
   isEligible(raw:RawAnnouncement,now:Date,placement:AnnouncementPlacement):boolean{
     if(!raw.messageId||truthy(raw.trash)||!publicStatus(raw.status)||!truthy(raw.messageScreen))return false;
     const config=raw.gottesdienstRegie as {enabled?:unknown;loopTargets?:Record<string,unknown>}|undefined;
-    if(!config||!truthy(config.enabled)||!truthy(config.loopTargets?.[placement]))return false;
+    if(config?.enabled!==undefined&&!truthy(config.enabled))return false;
+    if(config?.loopTargets!==undefined&&!truthy(config.loopTargets?.[placement]))return false;
     const from=date(truthy(raw.saalscreenUseShowFrom)&&raw.showFrom?raw.showFrom:raw.giltAb);
     const until=date(raw.giltBis);
     if((from&&until&&from>until)||(from&&now<from)||(until&&now>until))return false;

@@ -1,5 +1,9 @@
 .output>.post-program-room-notice{z-index:10}
 .main-preview-surface{position:relative;container-type:size}
+/* Output overlays belong to their preview's paint stack, below operator dialogs. */
+.main-preview-surface,.live-slide-panel>div{isolation:isolate;overflow:hidden;container-type:size}
+.live-slide-panel>div{border:0;aspect-ratio:16/9}
+.main-preview-surface>.test-mode-watermark,.live-slide-panel>div>.test-mode-watermark{font-size:2.05cqh;right:1.4cqw;bottom:1.4cqw;border-width:.06cqw}
 .main-preview-surface>.post-program-room-notice,.live-slide-panel>div>.post-program-room-notice{z-index:10}
 .post-program-room-notice{position:absolute;inset:0;display:block;padding:0;gap:0;text-align:left;background:#000;color:#fff;container-type:size;font-family:"Cera Pro","Segoe UI",sans-serif}
 .post-program-room-notice>header{height:17.5%;box-sizing:border-box;padding:1.2cqw 2cqw;color:#000;font-size:4.1cqw;line-height:1.15;font-weight:500;display:flex;align-items:center;white-space:nowrap}
@@ -41,3 +45,14 @@
 .test-start-dialog p{font-size:13px;line-height:1.6}
 .test-start-dialog footer{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
 .test-start-dialog button{padding:10px 14px}
+.test-start-dialog .test-event-options{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px;padding:14px;background:#eaf0f2;border:1px solid #c7d6dc}
+.test-start-dialog .test-event-options label{display:grid;gap:8px;padding:0;font-size:13px;font-weight:600}
+.test-start-dialog .test-event-options input,.test-start-dialog .test-event-options select{box-sizing:border-box;min-width:0;width:100%;margin:0;padding:9px 10px;border:1px solid #819ca7;border-radius:3px;background:#fff;color:#182c35;font:inherit}
+.test-start-dialog .test-event-options :is(input,select):focus-visible{outline:2px solid #426d7a;outline-offset:2px}
+.protected-slide-notice{box-sizing:border-box;width:min(520px,90vw);max-height:90vh;overflow:auto;margin:auto;padding:26px;border:1px solid #608f9a;background:#f8fafb;color:#182c35;box-shadow:0 12px 48px #0005}
+.protected-slide-notice::backdrop{background:#0008}
+.protected-slide-notice h2{margin:0 0 18px;font-size:22px}
+.protected-slide-notice p{font-size:14px;line-height:1.6}
+.protected-slide-notice button{display:block;margin:22px 0 0 auto;padding:10px 24px;border:1px solid #426d7a;background:#608f9a;color:#fff;font:inherit;cursor:pointer}
+.protected-slide-notice button:focus-visible{outline:2px solid #426d7a;outline-offset:3px}
+@media(max-width:480px){.test-start-dialog .test-event-options{grid-template-columns:1fr}.test-start-dialog footer{flex-wrap:wrap}}

@@ -1,0 +1,58 @@
+import { helpEnglish } from './english';
+import { helpWest } from './localesWest';
+import translated from './translated.json';
+import legacyTranslated from './legacyTranslated.json';
+import {legacyGerman} from './legacyGerman';
+
+export type HelpArticle = { id: string; title: string; body: string; section?: boolean };
+export type HelpUI = { title: string; searchPlaceholder: string; noResults: string; screenshotLabel: string };
+export const helpLanguages = ['de','gsw','en','da','sv','no','fi','nl','fr','es','it','pl','pt-BR','uk','ru','tr','ar'] as const;
+export const stableGerman = Object.keys(helpEnglish);
+const uiRows: Record<string, [string,string,string,string]> = {
+  de: ['Hilfe','Hilfethemen durchsuchen …','Keine passenden Hilfethemen gefunden.','Beispielansicht'],
+  gsw: ['Hilfe','Hilfethemen durchsuchen …','Keine passenden Hilfethemen gefunden.','Beispielansicht'],
+  en: ['Help','Search help topics …','No matching help topics.','Example view'],
+  da: ['Hjælp','Søg i hjælpeemner …','Ingen matchende hjælpeemner.','Eksempelvisning'],
+  sv: ['Hjälp','Sök i hjälpavsnitt …','Inga matchande hjälpavsnitt.','Exempelvy'],
+  no: ['Hjelp','Søk i hjelpeemner …','Ingen samsvarende hjelpeemner.','Eksempelvisning'],
+  fi: ['Ohje','Hae ohjeaiheita …','Vastaavia ohjeaiheita ei löytynyt.','Esimerkkinäkymä'],
+  nl: ['Help','Zoek in helponderwerpen …','Geen overeenkomende helponderwerpen.','Voorbeeldweergave'],
+  fr: ['Aide','Rechercher dans l’aide …','Aucun sujet correspondant.','Exemple d’affichage'],
+  es: ['Ayuda','Buscar temas de ayuda …','No hay temas coincidentes.','Vista de ejemplo'],
+  it: ['Aiuto','Cerca negli argomenti …','Nessun argomento corrispondente.','Vista di esempio'],
+  pl: ['Pomoc','Szukaj tematów pomocy …','Brak pasujących tematów.','Przykładowy widok'],
+  'pt-BR': ['Ajuda','Pesquisar tópicos de ajuda …','Nenhum tópico correspondente.','Exemplo de visualização'],
+  uk: ['Довідка','Пошук тем довідки …','Відповідних тем не знайдено.','Приклад вигляду'],
+  ru: ['Справка','Поиск по справке …','Подходящие темы не найдены.','Пример отображения'],
+  tr: ['Yardım','Yardım konularında ara …','Eşleşen yardım konusu bulunamadı.','Örnek görünüm'],
+  ar: ['المساعدة','البحث في مواضيع المساعدة …','لم يتم العثور على مواضيع مطابقة.','عرض توضيحي'],
+};
+const sectionIds = new Set(['SCHNELLSTART','LIVE-BETRIEB','AUDIO','PRÄSENTATION','SYSTEM']);
+const packs: Record<string, Record<string, {title:string;body:string}>> = { ...translated, ...helpWest, en:helpEnglish };
+for(const [locale,pack] of Object.entries(packs)){
+  const legacy:Record<string,{body:string}>=locale==='de'
+    ? Object.fromEntries(Object.entries(legacyGerman).map(([id,body])=>[id,{body}]))
+    : (legacyTranslated as Record<string,Record<string,{body:string}>>)[locale]??{};
+  for(const [id,article] of Object.entries(pack)){
+    if(legacy[id]?.body)pack[id]={...article,body:legacy[id].body+'\n\n'+article.body};
+  }
+}
+// Swiss Standard German: avoids claiming an automatically generated dialect translation.
+packs.gsw = Object.fromEntries(Object.entries(packs.de).map(([id,a])=>[id,{title:a.title.replaceAll('ß','ss'),body:a.body.replaceAll('ß','ss')}]));
+const catalogs = new Map<string, {topics:HelpArticle[];ui:HelpUI}>();
+export function getHelpCatalog(language: string) {
+  const locale = language in packs ? language : 'en';
+  let catalog = catalogs.get(locale);
+  if (!catalog) {
+    const [title,searchPlaceholder,noResults,screenshotLabel] = uiRows[locale];
+    catalog = {
+      topics: stableGerman.map(id => ({id, ...packs[locale][id], section:sectionIds.has(id)})),
+      ui: {title,searchPlaceholder,noResults,screenshotLabel},
+    };
+    catalogs.set(locale,catalog);
+  }
+  return catalog;
+}
+export function getHelpArticle(id: string, language: string) {
+  return getHelpCatalog(language).topics.find(article=>article.id===id);
+}

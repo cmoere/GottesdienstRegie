@@ -3,6 +3,7 @@ import type { ServiceItem } from './store';
 import { WEATHER_SCREEN_URL } from './loopDomain';
 import { AnnouncementService } from './loopDataService';
 import type { PublicAnnouncement } from './loopData';
+import { announcementPlacement } from './announcementLive';
 
 export function LoopPreview({ item }: { item: ServiceItem }) {
   const [now, setNow] = useState(() => new Date());
@@ -14,7 +15,7 @@ export function LoopPreview({ item }: { item: ServiceItem }) {
   }, [item.type]);
   useEffect(() => {
     if (item.type !== 'announcement') return;
-    const placement = item.sectionId === 'post' ? 'postLoop' : item.sectionId === 'pre' ? 'preProgram' : 'preLoop';
+    const placement = announcementPlacement(item.sectionId);
     const service = new AnnouncementService();
     return service.subscribe(placement, (items) => setAnnouncements(items), () => setAnnouncements([]));
   }, [item.type, item.sectionId]);

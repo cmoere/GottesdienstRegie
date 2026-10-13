@@ -1,4 +1,4 @@
-import {helpV39,helpIllustrations} from './helpV39';
+import {getHelpCatalog} from './help';
 import {AudioDiagnostics} from './AudioDiagnostics';
 import './version39.css';
 import './version41.css';
@@ -106,6 +106,8 @@ import {RoomService,type RawRoom} from './community/RoomService';
 import {setLatestPublicEvents} from './dynamicEventSlide';
 import {PostProgramRoomNoticeController,PostProgramRoomNoticeService,withPostProgramRoomNotice,type PostProgramRoomNoticeSnapshot,type PostProgramTestScenario} from './community/PostProgramRoomNoticeService';
 import {TestStartDialog} from './TestStartDialog';
+import {ProtectedSlideNotice} from './ProtectedSlideNotice';
+import {AnnouncementLiveController,isAnnouncementLoop} from './announcementLive';
 import {PostProgramRoomNoticeView} from './PostProgramRoomNotice';
 import {AppClock} from './community/AppClock';
 import {setPostProgramPrepared} from './community/communityRuntime';
@@ -6560,350 +6562,34 @@ function roleLabel(t: Translator, role: string) {
 }
 
 function HelpModal({ close }: { close: () => void }) {
-  const { t, language } = useI18n(),
-    [query, setQuery] = useState(""),
-    [selected, setSelected] = useState(
-      () =>
-        localStorage.getItem("gottesdienstregie.help-topic") ||
-        "Erste Schritte",
-    );
-  useEffect(() => {
-    const key = (event: KeyboardEvent) => {
-      if (event.key === "Escape") close();
-    };
-    addEventListener("keydown", key);
-    return () => removeEventListener("keydown", key);
-  }, [close]);
-  const topics = [
-    "SCHNELLSTART",
-    "Songübersetzungen",
-    "Bildschirmschoner",
-    "Installation & Nutzungsbedingungen",
-    "Minimum Viable Product (MVP)",
-    "Erste Schritte",
-    "Gemeinsame Gemeinde-PCs",
-    "Anmelden & Abmelden",
-    "Veranstaltung verknüpfen",
-    "Inhalte hinzufügen",
-    "Medien",
-    "Cloud-Medien",
-    "Unsplash",
-    "KI-Motive",
-    "Songs",
-    "Virtual Screens & Displays",
-    "Persönliche Monitore",
-    "Websteuerung",
-    "Audioausgänge",
-    "Preflight",
-    "ON AIR",
-    "LIVE-BETRIEB",
-    "Vorschau",
-    "MAIN / STAGE / LIVESTREAM",
-    "Quick Screens",
-    "Current / Next",
-    "Recording",
-    "Servicezeit & Verspätung",
-    "Pre-Service & Post-Service",
-    "AUDIO",
-    "Videos",
-    "Background Audio",
-    "Vorhören",
-    "Systembenachrichtigungen",
-    "Audio Browser",
-    "Stop Background Audio",
-    "Routing-Probleme",
-    "PRÄSENTATION",
-    "Präsentationen",
-    "Ablauf",
-    "Folien",
-    "Übergänge & Auto-Advance",
-    "Lyric Scrolling",
-    "Bibel",
-    "LiveQuiz",
-    "SYSTEM",
-    "Sync / Offline / Preload",
-    "Updates",
-    "Tastenkürzel",
-    "Benutzeroberfläche",
-    "Einstellungen",
-    "Webseiten",
-    "Timer",
-    "Remote",
-    "Fehlerbehebung",
-    "Support",
-    "Nutzungsbedingungen",
-    "Versionsinformationen",
-    "Über GottesdienstRegie",
-  ];
-  const articles: Record<string, string> = {
-    "Minimum Viable Product (MVP)":
-      "Die Software wurde als Minimum Viable Product (MVP) entwickelt.\n\nDas bedeutet, dass sie als erste minimal funktionsfähige Version veröffentlicht wurde, um Nutzerfeedback zu sammeln und die Weiterentwicklung direkt an den Anforderungen der Nutzer:innen auszurichten. Dadurch sollen Fehlentwicklungen vermieden werden.\n\nWir freuen uns darum über jede Rückmeldung, um die Software so zu programmieren, wie ihr sie braucht.",
-    "Erste Schritte":
-      "Willkommen bei GottesdienstRegie. Die Anwendung verbindet Ablaufplanung, Foliengestaltung, Medien, LiveQuiz und die echte Bildschirmausgabe.\n\n1. Präsentation vorbereiten\nÖffne über Datei eine vorhandene Präsentation oder erstelle eine neue. Klicke oben links auf den Titel, um ihn direkt umzubenennen. Verknüpfe darunter zwingend die passende Firebase-Veranstaltung. Dabei werden Datum und planmäßige Servicezeit übernommen; spätere Verzögerungen verändern die ursprüngliche Planzeit nicht.\n\n2. Ablauf aufbauen\nKlicke links neben ABLAUF auf Plus oder öffne Element hinzufügen. Ergänze Inhalte, Songs, Bibelstellen, Bilder, Videos, Webinhalte oder ein LiveQuiz. Elemente lassen sich ziehen, per Rechtsklick duplizieren und nur bei selbst erstellten Vorlagen wieder löschen.\n\n3. Folien gestalten\nWähle im Ablauf ein Element und danach unten eine Folie. Im Bearbeitungsmodus kannst du Text, Schrift, Größe, Ausrichtung, Farbe, Ebenen, Hintergrund und Übergang ändern. Die rechte Darstellung aktualisiert sich sofort. Cera Pro ist vollständig eingebettet und muss auf dem Rechner nicht installiert sein.\n\n4. Medien verwenden\nÖffne Medien → Medienbibliothek. Cloud-Medien werden zentral geladen; bei Unsplash gibst du einmal den Access Key dieses Geräts ein, suchst per Enter oder SUCHEN und wählst anschließend ein Bild aus. Uploads benötigen zusätzlich Schreibberechtigung für den GitHub-Medienspeicher.\n\n5. Anzeige einrichten\nÖffne Einstellungen → Anzeige und ordne MAIN einem angeschlossenen Ausgabebildschirm zu. Der primäre Bildschirm bleibt die Bedienoberfläche. Nutze ANZEIGEN IDENTIFIZIEREN, wenn du die Monitore nicht eindeutig zuordnen kannst.\n\n6. Vorschau prüfen\nSchalte oben auf VORSCHAU. In EINZELVORSCHAU navigierst du mit den großen Pfeilen oder den Pfeiltasten; die Folienübersicht zeigt den gesamten Ablauf. Vorschau und Live-Ausgabe bleiben getrennt.\n\n7. ON AIR starten\nKontrolliere, dass die Veranstaltung verknüpft, MAIN zugeordnet und die benötigten Medien erreichbar sind. Starte den Preflight. Erst danach gehst du ON AIR. Ein Klick auf OFF AIR oder das Schließen der Anwendung beendet alle Ausgabefenster und die Hintergrundmusik sicher.\n\n8. Sicher arbeiten\nÄnderungen werden alle 15 Sekunden automatisch gespeichert. Das Cloudsymbol oben rechts ist grün, sobald der Mediendienst erreichbar ist. Ein Klick auf das Synchronisationssymbol speichert sofort und zeigt die einzelnen Schritte. Nutze vor größeren Änderungen zusätzlich Datei → Backup erstellen.",
-    Benutzeroberfläche:
-      "Die Menüleiste enthält Datei, Element hinzufügen, Medien, Songbibliothek, Präsentation, Ansicht, Werkzeuge, Einstellungen und Hilfe. Diese Menüs liegen immer über Arbeitsbereich, Canvas und Dialoginhalten. Darunter zeigt der Präsentationskopf den geöffneten Gottesdienst, den Modus BEARBEITEN oder VORSCHAU sowie ON AIR.\n\nLinks liegt der Ablauf mit VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM. In der Mitte befinden sich Kontexteditor und Folienfläche. Elemente auf der Folie lassen sich anklicken, ziehen und am Griff unten rechts skalieren. Eigenschaften und Ebenen steuern exakte Werte, Sichtbarkeit, Sperre und Reihenfolge.\n\nIm Modus BEARBEITEN erscheinen Format- und Canvaswerkzeuge. Im Modus VORSCHAU verschwinden diese Werkzeuge; stattdessen stehen Einzelansicht, Folienübersicht und die Schnellanzeigen wie LOGO, SCHWARZ, OHNE TEXT oder AMEN bereit.\n\nDie Statusleiste unten meldet Speichern, Cloud, MAIN, STAGE sowie aktuelle Element- und Folienposition. Wenn MAIN beim Bearbeiten unverändert bleibt, ist das beabsichtigt: Editor-, Vorschau- und Live-Zustand sind voneinander unabhängig.",
-    Einstellungen:
-      "Das Einstellungsfenster ist in Allgemein, Ausgabe, Präsentation sowie Verbindungen & Steuerung gegliedert. Die linke Navigation bleibt sichtbar, während nur der Inhalt rechts scrollt. Beim Wechsel zu einem anderen Bereich beginnt die Seite wieder oben.\n\nUnter Allgemein bestimmst du Sprache, Farbschema, Barrierefreiheit, Startmodus und Tastenkürzel. Unter Ausgabe werden reale Monitore, Audio und Videoeingänge eingerichtet. Präsentation enthält Schnellanzeigen, Schriftarten und Standardmedien. Änderungen werden lokal auf diesem Gerät gespeichert und – sofern sinnvoll – sofort angewendet.\n\nVor einem Gottesdienst sollten insbesondere Anzeige, Audio und Videoeingang kontrolliert werden. Änderungen am Bedienfenster beeinflussen eine bereits laufende MAIN- oder STAGE-Ausgabe nicht.",
-    Nutzungsbedingungen:
-      "GottesdienstRegie ist ein Arbeitsmittel der Philippus Gemeinde Bielefeld e. V. Nutzer prüfen Inhalte, Rechte, Veranstaltung, Medien und Ausgabegeräte selbst. ON AIR, MAIN, STAGE, LIVESTREAM, Audio und Recording haben Vorrang; der Testbetrieb wird ausdrücklich gekennzeichnet und erzeugt keine Belohnungen.\n\nEs dürfen nur rechtmäßig verwendete Texte, Bilder, Videos, Musik und Schriften eingesetzt werden. Zugangsdaten bleiben persönlich. Auf gemeinsam genutzten Gemeinde-PCs ist nach der Arbeit abzumelden. Präsentationen und Änderungshistorien können lokal und abhängig von der Konfiguration synchronisiert gespeichert werden.\n\nFehler und Sicherheitsprobleme sind sofort zu melden. Die vollständige Fassung kann jederzeit über Hilfe → Nutzungsbedingungen eingesehen werden.",
-    Präsentationen:
-      "Die lokale Bibliothek speichert jede Präsentation als eigenständiges Dokument. Unter Datei kannst du neue Präsentationen erstellen, vorhandene öffnen, duplizieren, umbenennen, importieren, exportieren, sichern, archivieren oder schließen. Änderungen werden verzögert und atomar gespeichert.\n\nNach einem unerwarteten Programmende bietet GottesdienstRegie die letzte Wiederherstellungskopie an. Exporte verwenden eine portable GottesdienstRegie-Datei; Backups landen im geschützten Anwendungsdatenordner.",
-    Ablauf:
-      "Der Ablauf besteht aus Abschnitten, ServiceItems und deren Folien. Ein normaler Klick wählt ein Element aus; Strg- beziehungsweise Cmd-Klick erweitert die Auswahl. Ein Rechtsklick auf ein nicht ausgewähltes Element wählt genau dieses Element. Bei einem bereits markierten Element bleibt eine Mehrfachauswahl bestehen.\n\nDas Kontextmenü arbeitet wie ein Desktop-Menü: Pfeil hoch und runter bewegen den Fokus, Enter führt den Befehl aus, Esc oder ein Klick außerhalb schließt es. Ausschneiden, Kopieren, Einfügen, Duplizieren, Löschen, Gruppieren, Ausblenden, Undo und Redo nutzen dieselbe Command- und Undo-Engine wie Tastatur und Werkzeugleiste. Eine Mehrfachaktion ist genau ein Undo-Schritt.\n\nAusblenden erhält das Element im Editor, überspringt es aber beim normalen Advance. Verknüpfte Elemente besitzen eigene Positionen und IDs, teilen jedoch ihre inhaltliche Zuordnung. Das Link-Symbol weist auf diese Beziehung hin. Export als Bild rendert nur die tatsächliche Folie, niemals Seitenleisten oder Bedienoberfläche.\n\nWährend ON AIR bleibt der aktive Live-Snapshot geschützt. Löschen, Verschieben oder Umbenennen im Editor verändert MAIN nicht rückwirkend. Erst der nächste bewusste Take verwendet den neuen Ablaufstand.",
-    "Pre-Service & Post-Service":
-      "VORPROGRAMM und NACHPROGRAMM sind vollständige Service-Abschnitte. Beide können beliebig viele Elemente mit beliebig vielen Folien enthalten. Auto Advance bestimmt den Wechsel statischer Folien, Loop beginnt nach dem letzten aktiven Inhalt wieder beim ersten. Videos können bis zum Ende spielen oder gemäß ihrer Ende-Aktion fortschalten.",
-    Folien:
-      "Wähle eine Folie im Filmstrip. Über die Werkzeugleiste kannst du Text, Bild, Form, Linie, Video oder QR-Code hinzufügen. Elemente lassen sich auf der Bühne ziehen und über den Griff skalieren. Eigenschaften ändern Position, Größe und Inhalt; Ebenen steuern Reihenfolge, Sichtbarkeit und Sperre. Rückgängig und Wiederholen funktionieren mit Strg+Z und Strg+Umschalt+Z.",
-    Vorschau:
-      "Die Einzelansicht zeigt eine Folie groß. Die Folienübersicht gruppiert echte Thumbnails nach Ablaufabschnitt. Der Größenregler ändert nur die Thumbnailgröße. OFF AIR wählt ein Thumbnail ausschließlich als Vorschau; ON AIR schaltet ein angeklicktes aktives Thumbnail direkt live.",
-    "ON AIR":
-      "ON AIR führt einen Preflight durch, öffnet MAIN rahmenlos auf dem zugeordneten Bildschirm und startet immer mit der ersten aktiven Folie des gesamten Ablaufs. Pfeil rechts beziehungsweise Bild ab schaltet zur nächsten aktiven Folie, Pfeil links beziehungsweise Bild auf zurück. Ein erneuter Klick beendet die Ausgabe sofort, ohne die Präsentation zu schließen.",
-    Displays:
-      "Unter Einstellungen → Anzeige siehst du tatsächlich angeschlossene Monitore als Anzeige 1, Anzeige 2 und so weiter. Weise MAIN, STAGE, NOTES, LIVESTREAM oder LOBBY nur passenden Ausgabebildschirmen zu. ANZEIGEN IDENTIFIZIEREN blendet Nummer, Verwendung, Gerätename und Auflösung auf jedem Monitor ein. Fehlt MAIN während ON AIR, wird niemals automatisch der Bedienbildschirm verwendet.",
-    "Virtual Screens & Displays":
-      "Virtual Screens bestimmen, welche Inhalte MAIN, STAGE und LIVESTREAM erhalten; Displays sind die tatsächlich angeschlossenen Monitore. Richte die Zuordnung unter Einstellungen → Anzeige ein. MAIN gehört zur Publikumsausgabe, STAGE zur Bühne und LIVESTREAM zum Stream. Ein getrennter Nebenmonitor beendet MAIN nicht und wird niemals automatisch durch den Bedienmonitor ersetzt.",
-    Medien:
-      "Die Medienbibliothek lädt Bilder, Videos und Audio aus dem Team-Cloudspeicher. Uploads werden erst nach bestätigter Übertragung verwendbar; die Quelldatei bleibt währenddessen erhalten. Unsplash-Bilder werden über die Suche eingebunden. Preflight meldet fehlende oder noch nicht geladene Dateien vor ON AIR.",
-    "Cloud-Medien":
-      "Cloud-Medien stehen allen berechtigten Arbeitsplätzen als gemeinsame Bibliothek zur Verfügung. Öffne Medien → Medienbibliothek und bleibe im Reiter CLOUD-MEDIEN. Die Suche filtert nach Dateiname und Schlagwort; Typ und Sortierung grenzen die Treffer weiter ein. Ein grüner Cloudstatus bedeutet, dass die Bibliothek tatsächlich erreicht wurde.\n\nWas geschieht bei einer Störung? GottesdienstRegie versucht zuerst die direkte Team-Cloud und danach automatisch einen sicheren öffentlichen Lesekanal. Dadurch bleiben vorhandene Bilder, Videos und Audiodateien auch bei einer vorübergehenden Begrenzung des Hauptdienstes abrufbar. Upload und Löschen benötigen weiterhin Schreibberechtigung und werden im Lesemodus nicht vorgetäuscht.\n\nWenn weiterhin „Cloud nicht erreichbar“ erscheint, kontrolliere bitte Internetzugang, Firewall und Systemzeit. Wähle ERNEUT VERSUCHEN. Bereits vorgeladene Live-Medien bleiben davon unberührt; MAIN wird nicht geleert. Öffne vor ON AIR den Preflight und kontrolliere den Abschnitt MEDIEN.",
-    Unsplash:
-      "Unsplash stellt durchsuchbare Fotos innerhalb der Medienbibliothek bereit. Öffne Medien → Medienbibliothek → UNSPLASH, gib einen konkreten Suchbegriff ein und drücke Enter oder SUCHEN. Der Zugangsschlüssel wird sicher lokal auf dem jeweiligen Gerät konfiguriert oder von der Systemadministration über UNSPLASH_ACCESS_KEY bereitgestellt und niemals in veröffentlichte Programmdateien geschrieben.\n\nWähle ein Ergebnis einmal an, um Quelle und Vorschau zu prüfen, und bestätige anschließend VERWENDEN. Die Urheberangabe bleibt am Medium erhalten. Suchergebnisse werden nicht automatisch in die Team-Cloud kopiert. Prüfe Bildausschnitt, Lesbarkeit und Nutzungshinweise, bevor du das Bild live einsetzt.\n\nFalls keine Treffer erscheinen, formuliere den Begriff allgemeiner oder prüfe die Internetverbindung. Bei einer Dienstbegrenzung zeigt GottesdienstRegie eine konkrete Fehlermeldung. Eine laufende MAIN-Ausgabe und Background Audio werden durch die Suche niemals verändert.",
-    Videos:
-      "Beim Hinzufügen eines Videos wählst du lokale Datei, direkte URL, YouTube oder Vimeo. GottesdienstRegie lädt keine geschützten Onlinevideos herunter, sondern verwendet zulässige eingebettete Wiedergabe. Autoplay, Loop, Lautstärke und Verhalten nach Ende werden im Element gespeichert. Netzwerkquellen erscheinen im Preflight.",
-    Webseiten:
-      "Webseiten sind eigenständige Ablauf-Elemente mit URL, Zoom, Interaktion, Audio, automatischem Neuladen und Fallback. MAIN zeigt bei Fehlern keine Chromium-Standardseite. Prüfe Netzwerkseiten vor dem Gottesdienst und hinterlege für kritische Inhalte ein lokales Ersatzbild.",
-    "Lyric Scrolling":
-      "Lyric Scrolling zeigt aktuelle Liedzeilen deutlich und kommende Bereiche mit reduzierter Deckkraft. WEITER bewegt den nächsten Bereich nach oben an die aktive Position. Der tatsächliche Songablauf einschließlich Wiederholungen und Folienumbrüchen bleibt maßgeblich.\n\nAKTIVIEREN\nÖffne Einstellungen → Präsentation → Songs und aktiviere „Lyric Scrolling für Song-Items verwenden“. Bestehende Präsentationen starten ohne diese Einstellung weiterhin mit normalen Folien. Dauer, Anzahl kommender Bereiche und deren Deckkraft lassen sich dort einstellen und werden mit der Präsentation gespeichert.\n\nEINZELNEN SONG ANPASSEN\nWähle den Song und öffne DESIGN → Lyrics-Darstellung. „Präsentationsstandard“ übernimmt die Einstellung; „Normale Slides“ schaltet den Effekt für diesen Song aus. Diese Änderung unterstützt Rückgängig/Wiederholen.\n\nVORSCHAU\nKlicke über dem Editor-Canvas auf „Lyric Scrolling · VORSCHAU“. WEITER und ZURÜCK dort demonstrieren die Darstellung ausschließlich im Editor. VORSCHAU BEENDEN kehrt zur Bearbeitung zurück. MAIN bleibt unverändert.\n\nLIVE\nMAIN folgt den normalen Live-Befehlen. Sprünge aktualisieren die kommenden Texte sofort, schnelle Wechsel erzeugen keine Warteschlange. STAGE behält Current/Next und Akkorde; LIVESTREAM behält sein eigenes Layout. Schnellanzeigen haben Vorrang.\n\nGESTALTUNG\nDie Textbox begrenzt die Lyrics-Fläche. Vergrößere sie bei Bedarf im Editor. Aktive Lyrics haben Vorrang; lange Texte werden nicht automatisch verkleinert. Preflight warnt bei zu wenig Platz. Teile zu lange Abschnitte vor ON AIR auf, da überstehender Text abgeschnitten wird. Kommende Texte erscheinen nur im verbleibenden Platz. Prüfe die Lesbarkeit vor dem Gottesdienst auf dem tatsächlichen Ausgabegerät.",
-    Songs:
-      "Songs bestehen aus benannten Teilen wie Strophe, Refrain oder Bridge. Die Reihenfolge kann als Arrangement gespeichert werden; wiederholte Teile müssen dadurch nicht mehrfach gepflegt werden. Prüfe Textumbrüche in der Vorschau und verwende für MAIN eine ausreichend große, kontrastreiche Schrift. Urheber- und Lizenzangaben gehören in die dafür vorgesehenen Felder und können auf Titel- oder Abschlussfolien erscheinen.",
-    Bibel:
-      "Ein Bibel-Element enthält Referenz, Übersetzung und die daraus erzeugten Versfolien. Lange Abschnitte sollten auf mehrere gut lesbare Folien verteilt werden. Prüfe vor ON AIR die gewünschte Übersetzung, Versnummern und Textgröße. Eine spontane Bibel-Schnellanzeige verändert den geplanten Ablauf nicht und kann mit LAST SHOWN wieder verlassen werden.",
-    LiveQuiz:
-      "Füge ein LiveQuiz über Element hinzufügen hinzu. Als erste Folie wird automatisch eine bearbeitbare Teilnahmefolie mit Quizname, Beschreibung, QR-Code, Webadresse und sechsstelliger Kennung erzeugt. Die letzte Systemfolie zeigt Antworten beziehungsweise Ergebnisse. Beide Folien verwenden den normalen Folieneditor: Wähle ein Element auf der Bühne, ziehe es an die gewünschte Stelle und ändere seine Größe am Griff unten rechts.\n\nWährend ON AIR startet das Quiz automatisch, sobald du das Quiz auswählst. Zuerst erscheint die Teilnahmefolie. AKTUELLE FRAGE STARTEN öffnet die gewählte Frage für Smartphones und schaltet gleichzeitig ihre Folie auf MAIN. Fragen können über den Griff in den Reitern neu angeordnet werden.\n\nBei Freitextfragen entscheidet die Option „Freitextantworten bis zur Freigabe zurückhalten“, ob Beiträge zunächst nur dem Bediener vorliegen. Prüfe freie Texte vor einer öffentlichen Anzeige. Die Vorschau zeigt einen Beispielcode; erst beim echten Start wird er durch den gültigen Code ersetzt.",
-    Stage:
-      "STAGE ist eine eigene logische Ausgabe für Mitwirkende und darf einem anderen physischen Bildschirm als MAIN zugeordnet werden. Sie kann aktuelle und nächste Inhalte, Notizen oder Zeitinformationen zeigen. Wird der STAGE-Monitor getrennt, bleibt MAIN aktiv; die Statusleiste meldet STAGE FEHLT. GottesdienstRegie verschiebt Ausgaben niemals automatisch auf den Bedienbildschirm.",
-    "Quick Screens":
-      "Schnellanzeigen blenden vorübergehend Logo, Schwarz, einen leeren Hintergrund, den aktuellen Hintergrund ohne Text, Amen oder einen Countdown ein. Sie verändern weder Ablauf noch ausgewählte Live-Folie. LAST SHOWN stellt exakt den zuvor sichtbaren Zustand wieder her. Reihenfolge, Aktivierung und Zielausgänge werden unter Einstellungen → Schnellanzeigen festgelegt.",
-    "Current / Next":
-      "Current zeigt den aktuell live ausgegebenen Inhalt, Next den nächsten aktiven Inhalt des Ablaufs. Die Anzeige dient vor allem STAGE und der Bedienkontrolle. Deaktivierte Folien und Elemente werden übersprungen. Das bloße Anwählen einer Vorschau ändert Current während ON AIR nicht.",
-    Recording:
-      "Recording steuert eine angeschlossene oder integrierte Aufzeichnung unabhängig von der Folienauswahl. Prüfe vor dem Gottesdienst Speicherziel, Eingang und freien Speicher. Ein Anzeigewechsel darf eine laufende Aufnahme nicht automatisch beenden; beende sie bewusst und kontrolliere danach die erzeugte Datei.",
-    Timer:
-      "Timer und Countdowns besitzen eine Dauer, einen Endtext und eine Aktion für 00:00. Lege vor ON AIR fest, ob der Timer stehen bleibt, ausgeblendet wird oder zur nächsten Folie wechselt. Ein Timer läuft unabhängig davon weiter, ob das Bedienfenster maximiert oder in den Fenstermodus geschaltet wird.",
-    SCHNELLSTART:
-      "Beginne mit einer neuen Präsentation, verknüpfe die passende Veranstaltung, baue den Ablauf auf und richte unter Einstellungen zuerst Displays und Audioausgänge ein. Prüfe Medien und Vorschau, führe Preflight aus und starte erst danach ON AIR. Die Unterseiten führen dich Schritt für Schritt durch jeden Punkt.",
-    "Inhalte hinzufügen":
-      "Öffne Element hinzufügen oder das Plus neben ABLAUF. Wähle Inhalt, Song, Bibel, Medium, Video, Webseite, Timer oder LiveQuiz. Das Element landet im aktiven Abschnitt und kann per Ziehen sortiert, per Rechtsklick dupliziert und im Editor gestaltet werden. Während ON AIR verändert das bloße Hinzufügen MAIN nicht.",
-    "Veranstaltung verknüpfen":
-      "Klicke unter dem Präsentationstitel auf „Veranstaltung verknüpfen“. Die Auswahl zeigt Termine chronologisch in den Gruppen HEUTE, MORGEN und KOMMEND. Jede Gruppenüberschrift erscheint nur einmal; feine Linien trennen die Bereiche. Nutze die Suche, wenn die Liste länger ist.\n\nWähle den gewünschten Termin zunächst aus und kontrolliere Titel, Datum und Uhrzeit. Erst „Änderung speichern“ übernimmt die Verknüpfung und die planmäßige Servicezeit. „Abbrechen“, Escape oder ein Klick neben das Fenster verwirft die noch nicht gespeicherte Auswahl.\n\nAusfallende Termine bleiben an ihrer zeitlich richtigen Stelle sichtbar. Der kleine rote Hinweis „Fällt aus!“ erklärt, warum der Eintrag nicht gewählt werden kann. Wird eine bereits verknüpfte Veranstaltung später abgesagt, bleibt die Verbindung bestehen und GottesdienstRegie zeigt eine deutliche Warnung. Eine andere Veranstaltung wird niemals automatisch gewählt.\n\nVor ON AIR muss eine Veranstaltung verknüpft sein. Das verhindert, dass versehentlich die falsche Präsentation live geschaltet wird.",
-    Audioausgänge:
-      "Unter Einstellungen → Audioausgänge werden echte Betriebssystemgeräte anhand ihrer stabilen Device-ID getrennt für Medien/Videos, Background Audio, Systembenachrichtigungen, Preview/Vorhören und Soundeffekte gewählt. Standardausgang verwenden folgt dem zentralen Fallback. TESTEN spielt einen neutralen Ton ausschließlich über die gewählte Route. Lautstärke und Mute gelten nur für diese Route. Fehlt ein Gerät, bleibt seine ID gespeichert und Systemstandard übernimmt sichtbar. Änderungen während ON AIR starten laufende Player nicht neu.",
-    Preflight:
-      "Preflight ist die technische Prüfung unmittelbar vor dem Livebetrieb. Sie kontrolliert Präsentation, aktive Folien, MAIN und weitere Ausgänge, Medien, Videos, Background Audio, Audio-Routing, Cloud, Veranstaltung, LiveQuiz, Webinhalte und Preload.\n\n✓ BEREIT bedeutet: Alles Wesentliche ist einsatzbereit. ⚠ WARNUNG bedeutet: Live ist möglich, aber ein Punkt sollte geprüft werden. ✕ FEHLER bedeutet: Ein kritisches Problem verhindert sicheren Livebetrieb.\n\nBei Audiofehlern öffne Einstellungen → Audioausgänge, kontrolliere die Device-ID beziehungsweise Kabelverbindung, nutze TESTEN und starte Preflight erneut. Fehlende Preview- oder Benachrichtigungsausgänge blockieren MAIN nicht; ein tatsächlich benötigter Video- oder Background-Ausgang wird deutlich gemeldet.",
-    "LIVE-BETRIEB":
-      "ON AIR ist der aktive Livebetrieb. Selected beziehungsweise Vorschau ist nicht automatisch Live. MAIN zeigt die Publikumsausgabe, STAGE die Confidence-Ansicht und LIVESTREAM den eigenen Streamoutput. Quick Screens überlagern sicher und vorübergehend. LIVE hat bei allen Änderungen Vorrang.",
-    "MAIN / STAGE / LIVESTREAM":
-      "MAIN ist die Saalausgabe, STAGE die unabhängige Bühnen-/Confidence-Ausgabe und LIVESTREAM ein eigener Streamoutput. Jeder Ausgang benötigt eine eindeutige Zuordnung. Ein fehlender Neben-Ausgang darf MAIN nicht ungefragt auf den Bedienbildschirm verschieben.",
-    "Servicezeit & Verspätung":
-      "Die Servicezeit wird beim Verknüpfen aus der planmäßigen Startzeit übernommen. Öffne die Zeit direkt im Abschnitt GOTTESDIENST. Der Dialog zeigt Planzeit, neue Servicezeit, Abweichung in Minuten und das daraus folgende voraussichtliche Ende.\n\nEine spätere Servicezeit verändert die ursprüngliche Planung nicht. GottesdienstRegie speichert die Verzögerung getrennt und verschiebt das voraussichtliche Ende um dieselbe Differenz. Setzt du die Servicezeit exakt auf die Planzeit zurück, wird eine nicht mehr benötigte Verzögerung entfernt. Ausfallende Termine bleiben sichtbar, sind aber nicht neu auswählbar.",
-    AUDIO:
-      "Getrennte Audiowege verhindern, dass das Publikum interne Geräusche hört: Videos und Background Audio können zur Saalanlage gehen, Vorhören zum Kopfhörer und Systembenachrichtigungen zum Technik-PC. Jede Wiedergabeinstanz behält ihre feste Route.",
-    "Background Audio":
-      "Background Audio läuft unabhängig von visuellen Folien und Loops. ENDE DER PLAYLIST spielt einmal vollständig. ENDE DER SECTION wiederholt bis zum Abschnittsende. GESTOPPT läuft über Abschnittsgrenzen, bis Stop Background Audio ausgeführt wird. Ein visueller Loop-Neustart startet die Playlist nicht neu. Ducking senkt die Musik kontrolliert, wenn Medienaudio Vorrang erhält.",
-    Vorhören:
-      "Preview/Vorhören ist ausschließlich für den Bediener. Audio aus Vorschau und Audio Browser verwendet die Preview-Route und verändert weder MAIN noch Background Audio noch deren Wiedergabeposition. Verwende für diesen Weg vorzugsweise Kopfhörer.",
-    Systembenachrichtigungen:
-      "Interne Warnungen, Fehler und Bedienhinweise verwenden einen getrennten Ausgang und standardmäßig eine niedrigere Lautstärke. Route sie auf den Technik-PC, damit sie nicht versehentlich über die Saalanlage hörbar werden.",
-    "Audio Browser":
-      "Der Audiobrowser verwaltet Cloud-Audio und Playlists. Die Wiedergabe im Detailbereich ist echtes Vorhören und nutzt ausschließlich die Preview-Route. Auswählen, Sortieren und Vorhören greifen nicht in eine laufende Live-Playlist ein.",
-    "Stop Background Audio":
-      "Ein Stop-Cue beendet Background Audio an der festgelegten Ablaufposition mit der konfigurierten Ausblendzeit. Es verändert weder Video-Audio noch Preview. Entferne oder verschiebe den Cue per Kontextmenü des Ablauf-Elements.",
-    "Routing-Probleme":
-      "„Audioausgang nicht verfügbar“ bedeutet, dass die gespeicherte Device-ID derzeit nicht vom Betriebssystem gemeldet wird. Prüfe Strom, USB/HDMI, Treiber und Betriebssystemauswahl. GottesdienstRegie fällt sicher auf Systemstandard zurück und erkennt dasselbe Gerät nach erneutem Anschließen automatisch. Nutze TESTEN, ohne laufende Quellen zu verändern.",
-    "Übergänge & Auto-Advance":
-      "Übergänge steuern den visuellen Wechsel, Auto-Advance den Zeitpunkt. Beide beeinflussen Background Audio nicht. In der Übergangsvorschau kannst du Effekt und Dauer prüfen. Zeitgesteuerte Folien lassen sich in der Einzelvorschau anhalten.",
-    SYSTEM:
-      "Systemthemen umfassen Preflight, Sync, Offlinebetrieb, Displays, Ausgänge, Updates, Preload und Diagnose. Prüfe Statusleiste und Preflight vor jedem Livebetrieb; ein Update erzwingt während ON AIR keinen Neustart.",
-    "Sync / Offline / Preload":
-      "SYNCED bedeutet echte Serverbestätigung, SYNCING laufende Übertragung, PENDING eine wartende Änderung, OFFLINE fehlende Verbindung und ERROR einen Fehler. Der grüne Haken erscheint erst nach Bestätigung. Preload lädt kritische Medien vor ON AIR. Bereits vorgeladene Inhalte sollen bei Internetverlust weiterlaufen; MAIN wird nicht absichtlich geleert.",
-    Updates:
-      "Updates werden gesucht und heruntergeladen, ohne ON AIR zu unterbrechen. Eine Installation oder ein Neustart erfolgt niemals erzwungen während des Livebetriebs. Prüfe Versionshinweise und erstelle vor großen Versionswechseln ein Backup.",
-    Remote:
-      "Die Fernsteuerung ist für Geräte im freigegebenen Netzwerk vorgesehen. Prüfe Verbindung, Berechtigung und den angezeigten Status, bevor du dich auf eine mobile Steuerung verlässt. Verwende keine öffentlich erreichbare Freigabe ohne Zugriffsschutz. Eine getrennte Fernsteuerung verändert MAIN erst, wenn sie eine ausdrückliche Live-Aktion sendet.",
-    Tastenkürzel:
-      "Unter Einstellungen → Tastenkürzel kann jede unterstützte Aktion neu belegt werden. Klicke auf das derzeitige Kürzel und drücke die gewünschte Kombination. Doppelte Belegungen werden abgewiesen; Escape bricht die Aufnahme ab. „Auf Standard zurücksetzen“ stellt alle ursprünglichen Kombinationen wieder her.\n\nSpeichern, Rückgängig und Wiederholen funktionieren auch im Editor. Nächste und vorherige Live-Folie reagieren nur während ON AIR. Der Moduswechsel betrifft ausschließlich Bearbeiten und Vorschau. Vollbild ändert nur das Bedienfenster. Für ON AIR sollte eine bewusste Kombination mit Strg oder Umschalt verwendet werden, damit die Live-Ausgabe nicht versehentlich gestartet wird.",
-    Fehlerbehebung:
-      "Wenn ON AIR nicht startet, öffne Preflight und prüfe Präsentation, aktive Folien, MAIN-Zuordnung und fehlende Medien. Wenn die Anmeldung fehlschlägt, prüfe Verbindung, Kontofreigabe und den aktuellen Zwei-Faktor-Code. Technische Codes werden aus Sicherheitsgründen nur in der Diagnose protokolliert.\n\nWenn ein Monitor fehlt, verbinde ihn erneut und öffne Einstellungen → Anzeige. GottesdienstRegie legt MAIN niemals ungefragt auf den Bedienmonitor.",
-    Support:
-      "Notiere bei einer Supportanfrage Zeitpunkt, installierte Version, Betriebssystem, betroffenen Bereich und die Schritte bis zum Fehler. Füge keine Passwörter, Codes, Hashes, Salts, Sitzungs- oder SSO-Token bei. Über Werkzeuge → Diagnose können später bereinigte technische Informationen exportiert werden.",
-    "Über GottesdienstRegie":
-      "GottesdienstRegie ist eine eigenständige mehrsprachige Desktop-Präsentationssoftware für Gottesdienste der Philippusgemeinde. Sie verbindet lokale Ausfallsicherheit, eine zentrale Folienwiedergabe und getrennte Editor-, Vorschau- und Live-Zustände.",
-  };
-  Object.assign(articles, {
-    "Gemeinsame Gemeinde-PCs":
-      "Beim ersten Start wird dieser Rechner einmalig als Gerät registriert. Ein gemeinsam genutzter Gemeinde-PC merkt sich Organisation, Gerätename und lokale Geräteausstattung, aber niemals dauerhaft die angemeldete Person. Deshalb erscheint bei jedem Programmstart die persönliche Anmeldung.\n\nBeim Abmelden werden Benutzer-Sitzung und persönliche Daten dieses Durchgangs entfernt. Präsentationen und gerätebezogene Konfigurationen wie Displays und Audioausgänge bleiben erhalten. Die Änderungshistorie zeichnet Benutzer und Gerätenamen getrennt auf.\n\nDie automatische Abmeldung wartet bei ON AIR, Recording, laufendem Background Audio und kritischen Vorgängen. Ein Gottesdienst wird dadurch niemals unterbrochen.",
-    "Anmelden & Abmelden":
-      "Melde dich auf einem gemeinsamen Gerät immer mit deinem persönlichen Konto an. Rollen und Rechte stammen ausschließlich aus deinem Benutzerkonto und nicht vom Level oder Gerätenamen. Auf gemeinsam genutzten Rechnern gibt es absichtlich kein dauerhaftes Angemeldetbleiben.\n\nVerlasse den Arbeitsplatz über Abmelden. Ist ON AIR oder eine kritische Wiedergabe aktiv, wird eine automatische Abmeldung bis zum sicheren Ende zurückgestellt.",
-    "Persönliche Monitore":
-      "Unter Einstellungen → Anzeige → Persönliche Monitore legst du feste, nur lesende Monitoradressen an. Öffne die angezeigte Adresse auf Smartphone, Tablet oder Notebook im selben Netzwerk. Die Seite verbindet sich automatisch neu und zeigt bei einer kurzen Unterbrechung den letzten bestätigten Stand.\n\nPersönliche Monitore steuern MAIN nicht. Für jedes Display lassen sich Name, Sprache und Inhalt getrennt konfigurieren. Die Adresse bleibt stabil, bis ein berechtigter Benutzer den Monitor entfernt.",
-    Websteuerung:
-      "Unter Einstellungen → Anzeige → Websteuerung erstellst du eine zeitlich und funktional begrenzte Bedienadresse. Vergib nur die notwendigen Rechte. Jeder Befehl wird im Desktopprogramm erneut geprüft und benutzt dieselbe NEXT-/ZURÜCK-Logik wie die lokale Bedienung.\n\nWiderrufe eine nicht mehr benötigte Sitzung sofort. Bei Verbindungsabbruch bleibt die laufende Ausgabe unverändert; nach der Wiederverbindung wird zuerst der aktuelle Zustand geladen.",
-    "KI-Motive":
-      "KI-Motive erzeugen grafische Motive direkt in GottesdienstRegie. Öffne Medien → Medienbibliothek → KI-MOTIVE, beschreibe das Motiv und wähle Format sowie Stil.\n\nPrüfe das Ergebnis vor ON AIR wie jedes andere Medium. Der globale Schalter unter Einstellungen → Künstliche Intelligenz kann die Funktion deaktivieren; die Umstellung wird nach einem sicheren Neustart vollständig wirksam.",
-  });
-  Object.assign(articles,helpV39);
-  for (const key of Object.keys(articles))
-    articles[key] = articles[key]
-      .replace(/Firebase[- ]?/gi, "")
-      .replace(/veranstaltungen\/<eventKey>/gi, "Veranstaltungsdienst");
-  const filtered = topics.filter((topic) =>
-    `${topic} ${articles[topic] ?? ""}`
-      .toLowerCase()
-      .includes(query.toLowerCase()),
-  );
-  const screenshot = [
-    "Benutzeroberfläche",
-    "Ablauf",
-    "Vorschau",
-    "ON AIR",
-    "Preflight",
-    "Veranstaltung verknüpfen",
-  ].includes(selected)
-    ? {
-        src: "./help/operator-workspace.png",
-        title:
-          selected === "Ablauf"
-            ? "Ablauf und ServiceItems"
-            : selected === "ON AIR"
-              ? "Live-Steuerung und ON AIR"
-              : selected === "Veranstaltung verknüpfen"
-                ? "Präsentationskopf und Veranstaltung"
-                : selected === "Preflight"
-                  ? "Ausgänge vor dem Livebetrieb prüfen"
-                  : "GottesdienstRegie-Arbeitsbereich",
-        caption: `Echte Aufnahme der Software mit Fokus auf ${selected}. Die Beschriftungen entsprechen dem tatsächlich sichtbaren Arbeitsbereich.`,
-        focus:
-          selected === "Ablauf" || selected === "Veranstaltung verknüpfen"
-            ? "left"
-            : selected === "ON AIR"
-              ? "top-right"
-              : "center",
-      }
-    : selected === "Einstellungen" || selected === "Audioausgänge"
-      ? {
-          src: "./help/settings-window.png",
-          title: "Das Einstellungsfenster",
-          caption:
-            "Echte Aufnahme der Einstellungen. Navigation und aktuell geöffneter Bereich werden gemeinsam gezeigt.",
-          focus: "center",
-        }
-      : [
-            "Medien",
-            "Cloud-Medien",
-            "Unsplash",
-            "Videos",
-            "Audio Browser",
-            "Background Audio",
-          ].includes(selected)
-        ? {
-            src: "./help/media-library.png",
-            title:
-              selected === "Unsplash"
-                ? "Unsplash-Suche in der Medienbibliothek"
-                : "Die Medienbibliothek",
-            caption: `Echte Aufnahme der Medienbibliothek mit Fokus auf ${selected}.`,
-            focus: selected === "Unsplash" ? "top" : "center",
-          }
-        : null;
-  return (
-    <div className="modal-backdrop">
-      <div className="help-dialog documentation">
-        <header>
-          <h2>HILFE</h2>
-          <label>
-            <Icon name="search" />
-            <input
-              placeholder="Hilfe durchsuchen"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </label>
-          <button onClick={close} title={t("close")}>
-            <X />
-          </button>
-        </header>
-        <div className="help-layout">
-          <nav>
-            {filtered.length===0 && <p>Keine passenden Hilfethemen. Versuche einen kürzeren Suchbegriff, zum Beispiel „Song“ oder „Bildschirm“.</p>}
-            {filtered.map((topic) => (
-              <button
-                className={`${selected === topic ? "active " : ""}${topic === topic.toUpperCase() ? "help-section-title" : ""}`}
-                key={topic}
-                onClick={() => setSelected(topic)}
-              >
-                {topic}
-              </button>
-            ))}
-          </nav>
-          <article>
-            <h2>{selected}</h2>
-            {helpIllustrations[selected] && <figure className="help-illustration"><img loading="lazy" src={helpIllustrations[selected].src} alt={helpIllustrations[selected].title}/><figcaption>Schematische Darstellung: {helpIllustrations[selected].title}</figcaption></figure>}
-            {screenshot && (
-              <figure className={`help-screenshot focus-${screenshot.focus}`}>
-                <div>
-                  <img src={screenshot.src} alt={screenshot.title} />
-                </div>
-                <figcaption>
-                  <b>{screenshot.title}</b>
-                  <span>{screenshot.caption}</span>
-                </figcaption>
-              </figure>
-            )}
-            {selected === "LiveQuiz" && (
-              <div className="help-quiz-flow">
-                <span>
-                  <Icon name="qr_code_2" /> Teilnahme
-                </span>
-                <i>→</i>
-                <span>
-                  <Icon name="quiz" /> Fragen
-                </span>
-                <i>→</i>
-                <span>
-                  <Icon name="fact_check" /> Antworten
-                </span>
-              </div>
-            )}
-            {selected === "Versionsinformationen" ? (
-              <ReleaseNotesView />
-            ) : (
-              <>
-                {(
-                  articles[selected] ??
-                  `${selected} ist als integrierter Arbeitsbereich verfügbar. Öffne den entsprechenden Bereich über Menü, Ablauf oder Einstellungen. Verwende Preflight vor ON AIR und prüfe bei Problemen zuerst Statusleiste, Berechtigungen und lokale Verfügbarkeit.`
-                )
-                  .split("\n\n")
-                  .map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))}
-                {selected === "Support" && (
-                  <button
-                    onClick={() =>
-                      void window.desktop?.openExternal(
-                        `https://cmoere.github.io/GottesdienstRegie/report/`,
-                      )
-                    }
-                  >
-                    FEHLERSEITE ÖFFNEN <Icon name="open_in_new" />
-                  </button>
-                )}
-              </>
-            )}
-          </article>
-        </div>
+  const { t, language } = useI18n();
+  const catalog = getHelpCatalog(language);
+  const [query,setQuery]=useState('');
+  const [selected,setSelected]=useState(()=>localStorage.getItem('gottesdienstregie.help-topic')||'Erste Schritte');
+  const article=catalog.topics.find(topic=>topic.id===selected)??catalog.topics[0];
+  const filtered=catalog.topics.filter(topic=>(topic.title+' '+topic.body).toLocaleLowerCase(language==='gsw'?'de-CH':language).includes(query.toLocaleLowerCase(language==='gsw'?'de-CH':language)));
+  useEffect(()=>{const key=(event:KeyboardEvent)=>{if(event.key==='Escape')close()};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key)},[close]);
+  useEffect(()=>{localStorage.setItem('gottesdienstregie.help-topic',selected)},[selected]);
+  const screenshot = ['Preflight','ON AIR'].includes(article.id) ? 'test-preparation.png'
+    : article.id==='Pre-Service & Post-Service' ? 'postprogram.png'
+    : ['Einstellungen','Audioausgänge','Routing-Probleme'].includes(article.id) ? 'settings-window.png'
+    : ['Medien','Cloud-Medien','Unsplash','Videos','Audio Browser','Background Audio'].includes(article.id) ? 'media-library.png'
+    : ['Erste Schritte','Benutzeroberfläche','Ablauf','Vorschau','Veranstaltung verknüpfen','Inhalte hinzufügen'].includes(article.id) ? 'operator-workspace.png' : null;
+  return <div className="modal-backdrop">
+    <div className="help-dialog documentation" role="dialog" aria-modal="true" aria-label={catalog.ui.title} lang={language} dir={language==='ar'?'rtl':'ltr'}>
+      <header><h2>{catalog.ui.title}</h2><label><Icon name="search"/><input aria-label={catalog.ui.searchPlaceholder} placeholder={catalog.ui.searchPlaceholder} value={query} onChange={event=>setQuery(event.target.value)}/></label><button onClick={close} title={t('close')}><X/></button></header>
+      <div className="help-layout">
+        <nav>{filtered.length===0&&<p>{catalog.ui.noResults}</p>}{filtered.map(topic=><button key={topic.id} className={`${selected===topic.id?'active ':''}${topic.section?'help-section-title':''}`} onClick={()=>setSelected(topic.id)}>{topic.title}</button>)}</nav>
+        <article key={article.id}>
+          <h2>{article.title}</h2>
+          {screenshot&&<figure className="help-screenshot focus-center"><div><img loading="lazy" src={'./help/'+screenshot} alt={article.title}/></div><figcaption><b>{catalog.ui.screenshotLabel} · v77</b></figcaption></figure>}
+          {article.body.split('\n\n').map((paragraph,index)=><p key={index}>{paragraph}</p>)}
+          {article.id==='Versionsinformationen'&&<ReleaseNotesView/>}
+          {article.id==='Support'&&<button onClick={()=>void window.desktop?.openExternal('https://cmoere.github.io/GottesdienstRegie/report/')}>{article.title} <Icon name="open_in_new"/></button>}
+        </article>
       </div>
     </div>
-  );
+  </div>;
 }
 
 function LogoutDialog({
@@ -8075,6 +7761,11 @@ function AppShell({
   const { t, locale } = useI18n();
   const state = usePresentation();
   const loopController = useRef(new LoopController<ServiceItem>());
+  const announcementController=useRef(new AnnouncementLiveController());
+  const [protectedSlideOpen,setProtectedSlideOpen]=useState(false);
+  useEffect(()=>{const show=()=>setProtectedSlideOpen(true);window.addEventListener('gottesdienstregie:protected-slide',show);return()=>window.removeEventListener('gottesdienstregie:protected-slide',show)},[]);
+  useEffect(()=>{const bridge=(window.desktop as unknown as {community?:{onAnnouncements:(listener:(rows:import('./community/AnnouncementService').RawAnnouncement[])=>void)=>()=>void}})?.community;return bridge?.onAnnouncements(rows=>announcementController.current.setRecords(rows))},[]);
+  const availableForOutput=(item:ServiceItem|undefined)=>isLoopCandidateAvailable(item)&&(!isAnnouncementLoop(item)||announcementController.current.hasEligible(item,AppClock.now()));
   const communityEventService=useRef(new EventService());
   const postProgramNoticeController=useRef(new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(communityEventService.current)));
   useEffect(()=>{
@@ -8587,7 +8278,7 @@ function AppShell({
     const item = state.items.find((entry) => entry.id === state.liveItemId),
       liveSlide = item?.slides.find((slide) => slide.id === state.liveSlideId);
     if (liveSlide){
-      const base={
+      let base={
         ...liveSlide,
         transitionOverride: resolveTransition(
           liveSlide,
@@ -8596,12 +8287,26 @@ function AppShell({
           state.transitionDefault,
         ),
       };
+      if(isAnnouncementLoop(item)){
+        const prepared=announcementController.current.outputForTake(item,base,state.liveTransitionRevision,AppClock.now());
+        if(!prepared){
+          const noticeReady=Boolean(postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'}));
+          const candidates=state.items.filter(entry=>entry.id!==item.id&&availableForOutput(entry)&&(!isPostProgramSystemItem(entry)||noticeReady)&&entry.slides.some(slide=>slide.enabled));
+          const next=candidates.find(entry=>entry.sectionId===item.sectionId&&entry.order>item.order)??candidates.find(entry=>entry.sectionId===item.sectionId)??candidates[0];
+          const slide=next?.slides.find(entry=>entry.enabled);
+          if(next&&slide)state.goLive(next.id,slide.id);
+          else state.setLiveTimerPaused(state.liveSlideId);
+          return;
+        }
+        base={...prepared,transitionOverride:base.transitionOverride};
+      }
       if(item?.sectionId==='post'){
         postProgramNoticeController.current.enterPostProgram();
         const notice=postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'});
         if(isPostProgramSystemItem(item)&&!notice){
-          const target=unavailablePostProgramTarget(state.items);
+          const target=unavailablePostProgramTarget(state.items,availableForOutput);
           if(target){state.goLive(target.itemId,target.slideId);if(state.items.find(entry=>entry.id===target.itemId)?.sectionId!=='post')state.setLiveTimerPaused(target.slideId)}
+          else state.setLiveTimerPaused(state.liveSlideId);
           return;
         }
       }
@@ -8700,8 +8405,8 @@ function AppShell({
       slide = item?.slides.find((entry) => entry.id === state.liveSlideId);
     if(item&&shouldSkipNowPlaying(item)){const timer=window.setTimeout(()=>usePresentation.getState().nextLive(),0);return()=>window.clearTimeout(timer)}
     if (item?.itemCategory === "loop") {
-      const sectionItems = item.sectionId==='post'?postProgramCandidates(state.items,Boolean(postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'}))):state.items
-        .filter((entry) => entry.sectionId === item.sectionId && entry.itemCategory === "loop" && entry.enabled && !entry.disabled&&!shouldSkipNowPlaying(entry))
+      const sectionItems = item.sectionId==='post'?postProgramCandidates(state.items.filter(availableForOutput),Boolean(postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'}))):state.items
+        .filter((entry) => entry.sectionId === item.sectionId && entry.itemCategory === "loop" && availableForOutput(entry)&&!shouldSkipNowPlaying(entry))
         .sort((a, b) => a.order - b.order);
       loopController.current.setItems(sectionItems);
       loopController.current.select(item.id);
@@ -8729,7 +8434,9 @@ function AppShell({
         const nextSlide=nextItem?.slides.find(entry=>entry.enabled);
         if (nextItem&&nextSlide) usePresentation.getState().goLive(nextItem.id, nextSlide.id);
         else usePresentation.getState().nextLive();
-      }, loopDurationMs(item));
+      }, isAnnouncementLoop(item)&&slide
+        ? (announcementController.current.outputForTake(item,slide,state.liveTransitionRevision,AppClock.now())?.timing?.durationSeconds??loopDurationMs(item)/1000)*1000
+        : loopDurationMs(item));
       return () => { active = false; window.clearTimeout(timer); loopController.current.stop(); };
     }
     if (item?.type === "weather") {
@@ -9728,7 +9435,7 @@ function AppShell({
       return;
     }
     const sessionMode = requestedMode;
-    const first=firstActiveTarget(state.items.filter(item=>isLoopCandidateAvailable(item))),
+    const first=firstActiveTarget(state.items.filter(availableForOutput)),
       itemId = first?.itemId ?? "",
       slideId = first?.slideId ?? "",
       slide = state.items
@@ -9862,9 +9569,9 @@ function AppShell({
       },
       start: async assignments => {
         const current=usePresentation.getState(),selectedItem=current.items.find(entry=>entry.id===itemId);
-        let fallback=isLoopCandidateAvailable(selectedItem!)?{itemId,slideId}:firstActiveTarget(current.items.filter(item=>isLoopCandidateAvailable(item)));
+        let fallback=availableForOutput(selectedItem)?{itemId,slideId}:firstActiveTarget(current.items.filter(availableForOutput));
         if(isPostProgramSystemItem(current.items.find(entry=>entry.id===fallback?.itemId))&&!postProgramNoticeController.current.prepare({eventLink:current.eventLink},AppClock.now(),{mode:sessionMode==='test'?'test':'normal',scenario:testScenario})){
-          fallback=unavailablePostProgramTarget(current.items)??null;
+          fallback=unavailablePostProgramTarget(current.items,availableForOutput)??null;
         }
         if(!fallback){
           throw new Error('Für den automatischen Raumhinweis fehlen Veranstaltungsdaten. Bitte eine eigene Folie hinzufügen oder im Testbetrieb ein Testszenario wählen.');
@@ -9879,8 +9586,10 @@ function AppShell({
           }
           const nextMode:AppModeState={mode:sessionMode==='test'?'test':'normal',onAir:true};
           await (window.desktop as any)?.setOutputAppMode?.(nextMode);
+          const preparedStart=isAnnouncementLoop(item)?announcementController.current.outputForTake(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now()):startSlide;
+          if(!preparedStart)throw new Error('Zurzeit sind keine freigegebenen Meldungen verfügbar.');
           const started = await liveEngine.start(assignments, {
-            ...startSlide, transitionOverride: resolveTransition(startSlide, item, 'main', current.transitionDefault),
+            ...preparedStart, transitionOverride: resolveTransition(startSlide, item, 'main', current.transitionDefault),
           });
           if (!started) throw new Error('Die Ausgabe konnte nicht gestartet werden.');
           state.setTestPostProgramScenario(sessionMode==='test'&&testScenario!=='automatic'?testScenario:undefined);
@@ -10257,6 +9966,7 @@ function AppShell({
       )}{" "}
       {termsOpen && <TermsModal close={() => setTermsOpen(false)} />}{" "}
       {helpOpen && <HelpModal close={() => setHelpOpen(false)} />}{" "}
+      {protectedSlideOpen&&<ProtectedSlideNotice onClose={()=>setProtectedSlideOpen(false)}/>}
       {tourOpen && <InterfaceTour close={() => setTourOpen(false)} />}{" "}
       {reportOpen && (
         <ReportIssueDialog

@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.77.0
+
+Testbetrieb vorbereiten merkt sich die letzte Auswahl und fragt bei jedem neuen Test erneut. Ein bis zwölf ausdrücklich gekennzeichnete Testveranstaltungen lassen sich normal, verspätet, ausgefallen, mit Raumwechsel oder gemischt anzeigen. Echte Gemeindedaten bleiben unverändert.
+
+Die geschützte Nachprogrammfolie öffnet die Vorschau; Bearbeitungsversuche zeigen einen bestätigbaren Hinweis. Raum-verlassen- und Veranstaltungsanzeige dauern standardmäßig 60 Sekunden, auch nach Übernahme älterer Präsentationen.
+
+Freigegebene Meldungen ohne zusätzliche Regie-Zuordnung werden wieder angezeigt. MAIN erhält bereits beim Start einen vorbereiteten öffentlichen Meldungstext; laufende Meldungen bleiben bis zum nächsten Wechsel stabil. Leere Meldungen und nicht verfügbare Raumhinweise verursachen keine Wechsel-Endlosschleife.
+
+Das Test-Wasserzeichen bleibt innerhalb der Vorschau und erscheint nicht über Hilfe oder anderen Bedienfenstern. Beide Live-Vorschauen zeigen das vorbereitete MAIN-Bild im passenden Seitenverhältnis.
+
+Die Hilfe enthält ausführlichere Artikel und statische Übersetzungen für alle 17 angebotenen Sprachen. Übersetzungen sind maschinell unterstützt; Schweizerdeutsch verwendet Schweizer Standardschreibung. Aktuelle Hilfe-Aufnahmen wurden erneuert; historische Release-Bilder bleiben unverändert.
+
+Der zuvor gemeldete graue Bildschirm beim Programmstart ist weiterhin nicht als behoben bestätigt.
+
+---
+
 # GottesdienstRegie 0.76.0
 
 Das Nachprogramm enthält immer eine geschützte erste Systemfolie für nächste Veranstaltungen oder den Raum-verlassen-Hinweis. Sie ist nicht bearbeitbar, entfernbar, verschiebbar oder über Plus hinzufügbar. Eigene Nachprogrammfolien bleiben danach sichtbar und werden nicht vom Raumhinweis überlagert.

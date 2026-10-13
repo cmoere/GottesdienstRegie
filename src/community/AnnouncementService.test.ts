@@ -20,11 +20,18 @@ describe('AnnouncementService',()=>{
     expect(service.getForPlacement([{...base,showFrom:future,saalscreenUseShowFrom:true}],now,'preLoop')).toHaveLength(0);
   });
 
-  it('keeps PRE and POST targets separate and requires explicit enablement',()=>{
+  it('keeps explicit PRE and POST targets separate while accepting ordinary screen messages',()=>{
     const post={...base,messageId:'post',gottesdienstRegie:{enabled:true,loopTargets:{postLoop:true}}};
     const unassigned={...base,messageId:'none',gottesdienstRegie:undefined};
-    expect(service.getForPlacement([base,post,unassigned],now,'preLoop').map(item=>item.id)).toEqual(['-Omsg']);
-    expect(service.getForPlacement([base,post,unassigned],now,'postLoop').map(item=>item.id)).toEqual(['post']);
+    expect(service.getForPlacement([base,post,unassigned],now,'preLoop').map(item=>item.id)).toEqual(['-Omsg','none']);
+    expect(service.getForPlacement([base,post,unassigned],now,'postLoop').map(item=>item.id)).toEqual(['post','none']);
+  });
+
+  it('honors opt-out and optional target restrictions independently',()=>{
+    expect(service.getForPlacement([{...base,gottesdienstRegie:{enabled:false}}],now,'preLoop')).toEqual([]);
+    expect(service.getForPlacement([{...base,gottesdienstRegie:{enabled:true}}],now,'postLoop')).toHaveLength(1);
+    expect(service.getForPlacement([{...base,gottesdienstRegie:{loopTargets:{postLoop:true}}}],now,'postLoop')).toHaveLength(1);
+    expect(service.getForPlacement([{...base,gottesdienstRegie:{loopTargets:{}}}],now,'postLoop')).toEqual([]);
   });
 
   it('rejects trash, non-public, disabled screen and expired messages',()=>{

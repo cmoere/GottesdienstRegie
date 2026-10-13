@@ -1,14 +1,15 @@
 import {paginatePostEvents,type PreparedPostRow} from '../eventPagination';
 import {EventService} from './EventService';
+import {createTestEvents,type TestEventScenario} from './postProgramTestData';
 
 export const LEAVE_ROOM_TEXT='Wir bitten alle Besucher, den Raum zu verlassen.';
-export type PostProgramEventRow={id:string;title:string;start:string;end?:string;room:string};
+export type PostProgramEventRow={id:string;title:string;start:string;end?:string;room:string;status?:'normal'|'delayed'|'cancelled'|'room-changed';plannedStart?:string};
 export type PostProgramRoomNotice=
   |{type:'next-events';events:PostProgramEventRow[]}
   |{type:'leave-room';text:typeof LEAVE_ROOM_TEXT};
 export type PostProgramRoomNoticeSnapshot={sessionId:number;headerColor:'#608F9A'|'#699F3E';notice:PostProgramRoomNotice;page:number;pageCount:number;pages?:PreparedPostRow[][]};
 export type PresentationEventLink={linkedEventKey?:string;eventLink?:{eventKey?:string}};
-export type PostProgramTestScenario='automatic'|'leave-room'|'next-events';
+export type PostProgramTestScenario=TestEventScenario;
 export type PostProgramTestOptions={mode:'normal'|'test';scenario:PostProgramTestScenario};
 
 const roomLabel=(location:{name:string;floor?:string})=>location.name;
@@ -42,7 +43,7 @@ export class PostProgramRoomNoticeController{
   enterPostProgram(){if(!this.session){this.session={id:++this.serial,headerColor:this.random()<.5?'#608F9A':'#699F3E'};this.page=-1}}
   prepare(presentation:PresentationEventLink,now:Date,test?:PostProgramTestOptions){
     if(test?.mode==='test'&&test.scenario==='leave-room')this.pending={type:'leave-room',text:LEAVE_ROOM_TEXT};
-    else if(test?.mode==='test'&&test.scenario==='next-events')this.pending={type:'next-events',events:[{id:'test-example',title:'Testveranstaltung (Beispieldaten)',start:new Date(now.getTime()+30*60_000).toISOString(),end:new Date(now.getTime()+90*60_000).toISOString(),room:'Testraum'}]};
+    else if(test?.mode==='test'&&test.scenario.startsWith('next-events'))this.pending={type:'next-events',events:createTestEvents(test.scenario,now)};
     else this.pending=this.service.compute(presentation,now);
     return this.pending;
   }

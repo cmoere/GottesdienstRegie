@@ -1,7 +1,32 @@
 import {beforeEach,expect,it} from 'vitest';
 import {usePresentation,presentationDocument} from './store';
+import {loopDurationMs} from './loopDomain';
+
+it('migrates a persisted v76 room notice to a full minute',async()=>{
+ const old=structuredClone(system());
+ old.plannedDuration=15000;old.timing.slideDurationSeconds=15;old.slides[0].timing={durationSeconds:15};
+ localStorage.setItem('gottesdienstregie2.presentation',JSON.stringify({version:14,state:{...presentationDocument(usePresentation.getState()),items:[old]}}));
+ await usePresentation.persist.rehydrate();
+ expect(loopDurationMs(system())).toBe(60000);
+ expect(system().slides[0].timing?.durationSeconds).toBe(60);
+});
 
 const system=()=>usePresentation.getState().items.find(item=>item.metadata.automaticRoomNotice===true)!;
+it('keeps a system slide selected via multi-selection in preview',()=>{
+ usePresentation.setState({mode:'edit'});
+ usePresentation.getState().selectServiceItems([system().id],system().id);
+ expect(usePresentation.getState().mode).toBe('preview');
+ expect(usePresentation.getState().previewItemId).toBe(system().id);
+});
+it('keeps the protected page in preview and explains edit attempts',()=>{
+ usePresentation.getState().select(system().id);
+ expect(usePresentation.getState().mode).toBe('preview');
+ let explained=false;const listener=()=>{explained=true};
+ window.addEventListener('gottesdienstregie:protected-slide',listener);
+ usePresentation.getState().setMode('edit');
+ window.removeEventListener('gottesdienstregie:protected-slide',listener);
+ expect(explained).toBe(true);expect(usePresentation.getState().mode).toBe('preview');
+});
 beforeEach(()=>usePresentation.getState().newDocument('Systemfolie'));
 it('adds exactly one protected first post item to new and legacy presentations',()=>{
  expect(system()).toBeDefined();

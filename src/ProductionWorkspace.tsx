@@ -3857,7 +3857,7 @@ function PreviewCenter({
         </button>
         <div className="main-preview-surface">
           <TransitionStage
-            slide={previewSlide(slide)}
+            slide={previewSlide(state.onAir&&output?.id===slide.id?output:slide)}
             transition={resolveTransition(
               slide,
               item,
@@ -4077,7 +4077,7 @@ function PreviewRightSidebar({
         <MainLivePreview
           title={`${liveItem?.title} · ${live.title || "Live-Folie"}`}
         >
-          <SlideRenderer slide={previewSlide(live)} mode="thumbnail" />
+          <SlideRenderer slide={previewSlide(state.onAir&&output?.id===live.id?output:live)} mode="thumbnail" />
           {state.onAir&&output?.id===live.id&&output.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
         </MainLivePreview>
       ) : (

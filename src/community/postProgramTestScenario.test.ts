@@ -2,6 +2,19 @@ import {expect,it} from 'vitest';
 import {PostProgramRoomNoticeService,PostProgramRoomNoticeController} from './PostProgramRoomNoticeService';
 import {EventService} from './EventService';
 import {canAdvanceLive,createServiceItem,presentationDocument,usePresentation} from '../store';
+it('generates several clearly marked test rows with delay cancellation and room change only in test mode',()=>{
+ const controller=new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(new EventService()));
+ const now=new Date('2026-10-10T10:00:00Z');
+ controller.prepare({},now,{mode:'test',scenario:'next-events:3:mixed'});
+ const notice=controller.beginTransition()?.notice;
+ expect(notice?.type).toBe('next-events');
+ if(notice?.type!=='next-events')throw Error('missing test rows');
+ expect(notice.events).toHaveLength(3);
+ expect(notice.events.map(e=>e.status)).toEqual(['delayed','cancelled','room-changed']);
+ expect(notice.events.every(e=>e.title.includes('Beispieldaten'))).toBe(true);
+ controller.prepare({},now,{mode:'normal',scenario:'next-events:3:mixed'});
+ expect(controller.beginTransition()).toBeNull();
+});
 
 it('prepares either explicit test scenario without inventing a real event link',()=>{
  const controller=new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(new EventService()));
