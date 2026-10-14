@@ -1,1742 +1,3913 @@
 # GottesdienstRegie 0.81.0
 
-Automatische Veranstaltungen, Meldungen und der Nachprogramm-Raumhinweis verwenden die verfügbare Folienbreite mit nur 32 Pixel Sicherheitsrand je Seite bei 1920 Pixel Ausgabe. QR-Codes behalten eine eigene Spalte; ohne QR erhält der Meldungstext die volle Breite. Eigene normale Folien werden nicht verändert. Mindestlesedauer, Titelbewegung und vertikales Scrollen berücksichtigen die tatsächlichen verbreiterten Spalten.
+Veröffentlicht: Mi., 14.10.2026
 
-Die Timeline-Markierungen waren in der nativen Prüfung um rund 130 Pixel neben ihre Linie verschoben. Sie sitzen nun auf der Linie und an der Mitte ihrer jeweiligen Zeile, auch nach vertikalem Scrollen. Lange Titel bleiben vollständig und behalten ihre Schriftgröße.
+Automatische Veranstaltungs- und Meldungsfolien sowie der Nachprogramm-Raumhinweis nutzen die verfügbare Breite mit einem kleinen Sicherheitsrand. Timeline-Markierungen folgen ihrer Zeile und bleiben beim Scrollen auf der Linie. Die Lesedauer langer Titel wird mit den tatsächlichen Spaltenbreiten abgestimmt.
 
-Zwei neue Einstellungen steuern den Windows-Anmeldestart: GottesdienstRegie öffnen oder ausschließlich im Hintergrund nach Updates suchen. Beide Optionen sind zunächst deaktiviert. Die Hintergrundsuche verwendet denselben Updater, startet keine Regie-, Splash- oder Ausgabefenster und kein Audio, lädt oder installiert nichts ungefragt und beendet sich nach der Prüfung bzw. einem begrenzten Timeout. Bei einer verfügbaren Version erscheint eine Windows-Benachrichtigung. Beide aktivierten Optionen erzeugen keinen zweiten Prozess.
+Neue Windows-Startoptionen erlauben das Öffnen bei der Anmeldung oder eine reine Update-Suche ohne Regiefenster. Dazu kommen stille Medienvorbereitung, Warnungen bei fehlenden Schriften, der Zeitpunkt der letzten Gemeindedaten-Aktualisierung und eine verbesserte Wiederherstellung ungespeicherter Änderungen nach Abstürzen.
 
-Die nächsten zwei aktivierten Folien werden still auf Medien vorbereitet. Bilder werden vorgeladen, Videos und lokale Audiodateien zunächst mit ihren Metadaten. Pro Fenster bleiben höchstens sechs Ressourcen und zwei gleichzeitige Ladeaufträge aktiv. Es gibt keinen play()-Aufruf, kein Vorabstarten von Radio oder Websites und keine Veränderung der Audio-Routen. Überholte oder hängende Aufträge werden freigegeben.
+## Neu
 
-Fehlende verwendete Schriften erscheinen im Bedienbereich und im Preflight. Die gespeicherte Schriftwahl wird nicht überschrieben; MAIN bleibt frei von technischen Hinweisen. Der Gemeindedatenstatus nennt den letzten tatsächlichen Datenstand online und den Cache-Zeitpunkt offline statt nur der letzten Verbindung.
+### Zwei getrennte Windows-Startoptionen
 
-Wiederherstellung arbeitet mit getrennten lokalen Zwischenständen nach kurzer Eingabepause, bei laufender Bearbeitung spätestens nach fünf Sekunden. Der normale Speicherstand bleibt separat. Nach einem Absturz wird die letzte gültige Fassung angeboten; bei beschädigter neuester Sicherung steht die vorige Generation zur Verfügung. Nur eine Bestätigung übernimmt die Wiederherstellung. ON AIR und Audio werden niemals automatisch fortgesetzt. Speichern, Zwischenstände und sauberes Beenden werden geordnet verarbeitet; das Überspringen des Ladescreens überspringt nicht die notwendige Startentscheidung.
+Unter Einstellungen lässt sich die installierte Windows-App bei der Anmeldung öffnen oder nur im Hintergrund nach Updates suchen. Beide Schalter sind zunächst aus. Die reine Hintergrundsuche startet weder Ladescreen noch Regie, Ausgaben, Audio oder Remote-Server und installiert nichts ungefragt. Nach der Suche oder einem begrenzten Timeout beendet sich der Prozess; verfügbare Updates werden per Windows-Benachrichtigung gemeldet.
 
-Bekannt: Medienvorbereitung garantiert keine verzögerungsfreie Wiedergabe jedes Netzwerkmediums. Windows-Benachrichtigungen hängen von den Systemeinstellungen ab; Anmeldestart ist nur in der installierten Windows-App verfügbar. Die allerletzten Änderungen vor dem nächsten Zwischenstand können bei einem harten Absturz verloren gehen. Der frühere graue Programmstart bleibt nicht als behoben bestätigt.
+### Stille Vorbereitung der nächsten Medien
+
+Die nächsten zwei aktivierten Folien werden auf Bild-, Video- und lokale Audiodateien geprüft. Pro Fenster werden höchstens sechs Ressourcen mit zwei gleichzeitigen Ladeaufträgen vorbereitet. Bilder sowie Video-/Audio-Metadaten werden vorab geladen; es wird niemals play() ausgelöst. Radio, Websites und Live-Streams werden nicht vorab gestartet. Überholte oder zu lange hängende Aufträge werden freigegeben.
+
+### Schriftprüfung und Gemeindedaten-Stand
+
+Verwendete Schriften sichtbarer Textobjekte werden geprüft. Fehlende Familien erscheinen im Bedienbereich und im Preflight; die gespeicherten Schriftwünsche bleiben unverändert und MAIN zeigt keine technische Warnung. Der Gemeindedatenstatus nennt online die letzte Datenaktualisierung und offline den Stand des gespeicherten Snapshots.
+
+## Verbessert
+
+### Mehr nutzbare Folienbreite
+
+Automatische Folien verwenden links und rechts 32 Pixel Sicherheitsrand bei 1920 Pixel Ausgabe. Meldungstext gewinnt Breite, wenn QR-Codes deaktiviert sind; mit QR-Code bleibt eine eigene Spalte erhalten. Gewöhnliche selbst gestaltete Folien werden nicht verändert. Scroll- und Mindestlesezeiten berücksichtigen die verbreiterten Titelbereiche.
+
+### Wiederherstellung mit getrennten Zwischenständen
+
+Ungespeicherte Änderungen erhalten nach einer kurzen Eingabepause einen separaten Wiederherstellungsstand; bei laufender Bearbeitung wird spätestens nach fünf Sekunden gesichert. Der regulär gespeicherte Präsentationsstand bleibt getrennt. Beim nächsten Start nach einem Absturz wird eine Wiederherstellung angeboten und nur nach Bestätigung geladen. Ein beschädigter letzter Zwischenstand kann auf den vorherigen gültigen Stand zurückfallen. Ausgaben und Audio werden niemals automatisch fortgesetzt.
+
+## Behoben
+
+### Timeline-Linie und Markierungen
+
+Eine in der nativen Prüfung reproduzierte Verschiebung der Markierungen neben die Timeline-Linie wurde korrigiert. Jede Markierung bleibt an ihrer eigenen Zeilenmitte, einschließlich der letzten sichtbaren Zeile nach dem Scrollen. Titelanimation und vertikale Bewegung verwenden abgestimmte Anzeigezeiten.
+
+### Geordneter Start und sichere Sicherungsreihenfolge
+
+Normales Speichern und Wiederherstellungsstände werden geordnet verarbeitet, damit eine alte Sicherung keine neuere ausdrücklich gespeicherte Fassung ersetzt. Das Überspringen des Ladescreens überspringt nicht die notwendige Dokument- und Wiederherstellungsentscheidung. Sauberes Beenden wartet auf ausstehende Sicherungen und erzeugt keinen falschen Absturzhinweis.
+
+## Bekannte Einschränkungen
+
+### Grenzen der Vorbereitung und Systemintegration
+
+Vorbereitung ist keine Garantie für verzögerungsfreie Wiedergabe jedes Netzwerkmediums; Videos und lokale Audiodateien werden zunächst mit Metadaten vorbereitet. Windows-Benachrichtigungen hängen von den Systemeinstellungen ab. Autostart ist in der installierten Windows-App verfügbar. Ein harter Absturz vor dem nächsten Zwischenstand kann die allerletzten Änderungen verlieren. Der frühere graue Programmstart bleibt weiterhin nicht als behoben bestätigt.
 
 ---
 
 # GottesdienstRegie 0.80.0
 
-Meldungen bieten acht visuelle Design-Kacheln in den Regie-Farben #699f3e, #608f9a und #b6bec3. Im Bearbeiten-Bereich lassen sich QR-Codes für das ganze Element deaktivieren, Kategorien filtern, Prioritätssortierung wählen und die Lesedauer in Sekunden einstellen. Die Mindestlesedauer langer Folgeseiten bleibt wirksam. Cera Pro, sichere Textformatierung und vollständige Absätze bleiben erhalten; es gibt keinen laufenden Zeitbalken auf der Meldung.
+Veröffentlicht: Di., 13.10.2026
 
-Die neue Standardansicht für nächste Veranstaltungen ist eine helle Tabelle mit kleinen Spaltenüberschriften Datum, Uhrzeit, Veranstaltung und Ort/Raum, dünnen Trennlinien und dezenten alternierenden Zeilen. Bilder und Etagen erscheinen dort nicht. Vollständige Titel behalten ihre Schriftgröße und bleiben einzeilig; nur überlange Titel scrollen langsam horizontal. Bis zu 50 Termine werden mit ruhiger vertikaler Bewegung und berechneter Mindest-Anzeigedauer dargestellt. Bereits ausdrücklich gespeicherte andere Designs bleiben ausgewählt.
+Meldungen bieten acht Design-Kacheln mit Regie-Farben, einer lokalen QR-Freigabe, Kategorienfilter, Prioritätssortierung und einstellbarer Lesedauer. Die neue Veranstaltungsansicht zeigt eine helle Tabelle ohne Bilder und Etagen; vollständige Titel scrollen nur bei Platzmangel.
 
-Der linke Ablaufbereich lässt sich am rechten Rand ziehen, maximal bis 15 Prozent der Fensterbreite. Die Breite wird lokal als persönliche Oberflächeneinstellung gespeichert. Explizite Ziele vor und nach Einträgen sowie für leere und eingeklappte Abschnitte verbessern das Umordnen. Bereichsregeln für Loop-Elemente und die geschützte erste Nachprogrammfolie bleiben erhalten. Umordnungen lassen sich rückgängig machen.
+Der Ablaufbereich lässt sich bis auf 15 Prozent der Fensterbreite ziehen. Explizite Einfügepositionen verbessern das Umordnen, während geschützte Systemfolien und Bereichsregeln erhalten bleiben. Vorschautitel stehen außerhalb der Folie. Live-Vorschauen sind stumm und lösen keine zweite Video-Ende-Navigation aus.
 
-Die Einzelvorschau zeigt den Folientitel links über dem Bild, nicht innerhalb der Ausgabe. Sichtbare Datumsangaben verwenden den tatsächlichen Wochentag und DD.MM.YYYY. Die Regie-Systemakzente verwenden die gewünschten drei Farben; individuelle Folienfarben und semantische Fehlermeldungen werden nicht überschrieben.
+## Neu
 
-Aktualisierte Daten derselben Live-Folie werden während einer laufenden Überblendung sofort in der eintretenden Ebene übernommen. Bedien- und Ausgabefenster deaktivieren Hintergrunddrosselung. Beide Live-Vorschauen verwenden einen stummen Medien-Spiegelmodus: Videos bleiben sichtbar, verursachen aber keine zweite Audioausgabe und kein zusätzliches Weiterschalten am Videoende. Die echte MAIN-Ausgabe behält diese Funktionen.
+### Acht Meldungsdesigns und lokale Steuerung
 
-Bekannt: Gemeinsame softwareseitige Anzeigezeitpunkte garantieren keine hardwareseitige Bildsynchronisation verschiedener Monitore. Sehr lange Tabellen benötigen entsprechend lange Mindestzeiten. Der früher gemeldete graue Programmstart ist weiterhin nicht als behoben bestätigt.
+Klar, Hell, Akzent, Seitenspalte, Grün, Silber, Rahmen und Fußbereich stehen als Vorschaukacheln bereit. Die QR-Option gilt für alle Meldungen des Elements; eine in Firebase nicht freigegebene QR-Anzeige wird dadurch nicht freigeschaltet. Kategorien und Prioritätssortierung filtern ausschließlich bereits freigegebene Meldungen. Lange Inhalte bleiben vollständig auf Folgeseiten erhalten.
+
+### Helle Veranstaltungstabelle
+
+Die neue Standardansicht orientiert sich an der Veranstaltungsauskunft: Datum, Uhrzeit, Veranstaltung und Ort/Raum stehen in klaren Spalten mit dünnen Linien. Bis zu 50 Termine können vorbereitet werden. Titel werden nicht gekürzt oder verkleinert; nur überlange Titel bewegen sich horizontal. Große Listen scrollen vertikal und erhalten eine berechnete Mindestdauer.
+
+## Verbessert
+
+### Ablaufbreite und sichere Einfügeziele
+
+Die Breite wird am rechten Rand gezogen und lokal als persönliche UI-Einstellung gespeichert. Die Grenze liegt bei 15 Prozent der Fensterbreite. Zeilen bieten Ziele vor und nach dem Eintrag; leere und eingeklappte Abschnitte erhalten ein eigenes Ziel. Loop-Bereichsregeln und die geschützte erste Nachprogrammfolie bleiben wirksam. Umordnungen sind rückgängig machbar.
+
+### Regie-Farben, Titel und Datumsformat
+
+Systemakzente verwenden #699f3e, #608f9a und #b6bec3; eigene Folien und Fehlerfarben bleiben erhalten. Die Einzelvorschau zeigt den Folientitel links oberhalb des Bildes. Sichtbare Veranstaltungs- und Übersichtsdatumsangaben verwenden den tatsächlichen Wochentag mit Datum, etwa Mi., 01.01.2020. Meldungen zeigen keinen laufenden Zeitbalken.
+
+## Behoben
+
+### Aktuelle Live-Daten während Übergängen
+
+Geänderte Daten derselben Folie werden in der eintretenden Übergangsebene sofort übernommen und warten nicht auf das Ende einer langen Überblendung. Bedien- und Ausgabefenster deaktivieren die Browser-Hintergrunddrosselung, damit verdeckte Fenster nicht ihre Timer ausbremsen. Gemeinsame Snapshots und Anzeigezeitpunkte bleiben erhalten.
+
+### Keine doppelte Video-Audiowiedergabe aus Vorschauen
+
+Beide Live-Vorschauen verwenden einen stummen Spiegelmodus. Videos laufen visuell weiter, erzeugen aber keine zusätzliche Audioausgabe und melden ihr Ende nicht als weiteren MAIN-Navigationsbefehl. Die echte MAIN-Ausgabe behält Audio und Medien-Ende-Steuerung.
+
+## Bekannte Einschränkungen
+
+### Prüfgrenzen
+
+Softwareseitig gemeinsame Anzeigezeitpunkte garantieren keine hardwareseitige Bildsynchronisation unterschiedlicher Monitore. Sehr lange Tabellen können entsprechend lange Mindestzeiten benötigen. Der früher gemeldete graue Programmstart ist weiterhin nicht als behoben bestätigt.
 
 ---
 
 # GottesdienstRegie 0.79.0
 
-Ausgabebildschirme werden zusätzlich als technisches Geräteprofil gespeichert, unabhängig von einzelnen Präsentationen. Bei geänderten Bildschirm-IDs wird eine Zuordnung nur bei eindeutig passender Bildschirmidentität wiederhergestellt. Fehlende oder mehrdeutige Monitore werden im Bedienbereich gemeldet und nicht still einem anderen Ausgang zugeordnet. Bereits zurückgesetzte Zuordnungen müssen einmal neu ausgewählt werden. OSB-Geräteeinstellungen bleiben beim Speichern erhalten.
+Veröffentlicht: Di., 13.10.2026
 
-Meldungen verwenden Cera Pro mit einer kleinen dünnen Trennlinie zwischen Titel und Beschreibung. Fettdruck, Kursivschrift, Unterstreichungen, Zeilenwechsel und leere Absätze bleiben beim Aufteilen auf Folgeseiten erhalten. Importiertes HTML wird auf sichere Text- und Stilinformationen reduziert; Skripte und eingebettete Inhalte werden nicht ausgeführt.
+Bildschirmzuordnungen werden unabhängig von Präsentationen als Geräteprofil gespeichert. Geänderte Monitor-IDs werden nur bei eindeutig passender Identität übernommen; fehlende oder mehrdeutige Ausgänge werden dem Operator gemeldet.
 
-Laufende Musik wird bei jedem neuen Anzeigen der Läuft-gerade-Folie aus dem Audiozustand vorbereitet. Ein zusätzlicher sekündlicher Abgleich korrigiert verpasste Metadatenänderungen, ohne unveränderte Inhalte ständig neu zu senden. Titel, Interpret und Cover werden dabei gemeinsam übernommen.
+Meldungen verwenden Cera Pro und bewahren Fettdruck, Kursivschrift, Unterstreichungen und Absätze über Folgeseiten hinweg. Laufende Musik wird bei jedem Take und zusätzlich sekündlich abgeglichen. Veranstaltungslisten nutzen native Browseranimationen statt React-Neuberechnung bei jedem Bild; MAIN und Live-Vorschauen arbeiten mit gemeinsam vorbereiteten Snapshots und Anzeigezeitpunkten.
 
-Veranstaltungslisten scrollen nun über die Browser-Animationsengine statt die React-Oberfläche bei jedem Bild neu zu berechnen. MAIN und beide Live-Vorschauen erhalten denselben vorbereiteten Snapshot und einen gemeinsamen Anzeigezeitpunkt für Folienwechsel. Scrollende Songs verwenden auch in der Vorschau den passenden Songrenderer. Alle zugewiesenen Ausgabefenster bleiben beim Start verborgen, bis sie geladen sind. Das ist keine hardwareseitige Bildsynchronisation verschiedener Monitore.
+## Neu
 
-29 bisher knappe historische Änderungsbeschreibungen wurden anhand vorhandener Versionsprotokolle erweitert. Absätze werden auch in der Versionsübersicht dargestellt. Kurzzeitig gesperrte Windows-Dateien werden beim atomaren Speichern begrenzt erneut versucht, ohne den letzten gültigen Gemeindedatenstand zu löschen.
+### Technisches Ausgabeprofil
 
-Bekannt: Der früher gemeldete graue Bildschirm beim Programmstart ist weiterhin nicht als behoben bestätigt. Ein Geräteprofil kann bereits vor diesem Update verlorene Bildschirmzuordnungen nicht rekonstruieren.
+MAIN, Stage und weitere Ausgabezuordnungen werden dauerhaft zusammen mit den Geräteeinstellungen gespeichert. Bildschirmname und physische Auflösung unterstützen die Wiedererkennung bei geänderten IDs. Unklare Treffer starten keine falsche Ausgabe. Eine während ON AIR erkannte neue ID wird nach dem Stoppen übernommen, ohne laufende Zuordnungen still zu verändern.
+
+## Verbessert
+
+### Formatierte Meldungen in Cera Pro
+
+Titel und Beschreibung erhalten einen kleinen dünnen Trenner. Normaler Text bleibt normal; Fett, Kursiv und Unterstreichung werden als sichere Stilinformationen übernommen. Absätze einschließlich leerer Zeilen bleiben erhalten. QR-Codes und vollständige Folgeseiten bleiben verfügbar, ohne ungeprüftes HTML zu rendern.
+
+### Ruhigere Vorschau und Ausgabe
+
+Veranstaltungslisten werden über native Browseranimationen bewegt; statische Listen lösen keine React-Neuberechnungen pro Bild aus. Folienwechsel nutzen einen gemeinsamen Anzeigezeitpunkt. Beide MAIN-Vorschauen zeigen den erfolgreich übertragenen Snapshot mit denselben Übergängen und dem passenden Renderer für scrollende Songs. Neue Ausgabefenster werden erst sichtbar, wenn alle geladen sind.
+
+### Ausführlichere Versionsgeschichte
+
+29 bisher knappe ältere Builds wurden anhand der vorhandenen Änderungsprotokolle ausführlicher beschrieben. Die Darstellung unterstützt echte Absätze. Historische Angaben werden nicht nachträglich als neue Fehlerbehebungen ausgegeben.
+
+## Behoben
+
+### Läuft gerade erneut zuverlässig vorbereiten
+
+Bei jedem Anzeigen wird der aktuelle Audiozustand übernommen, auch wenn derselbe Titel bereits zuvor lief. Ein sekündlicher Abgleich fängt verpasste Zustandsereignisse auf. Titel, Interpret und Cover bilden einen gemeinsamen Snapshot; unveränderte Daten verursachen keine unnötige Neuausgabe.
+
+### Temporäre Windows-Dateisperren
+
+Das atomare Ersetzen des Gemeindedaten-Caches und der Geräteeinstellungen wird bei vorübergehenden Zugriffssperren begrenzt erneut versucht. Der letzte gültige Stand wird dabei nicht gelöscht; dauerhafte Fehler bleiben erkennbar.
+
+## Bekannte Einschränkungen
+
+### Grenzen der Wiederherstellung
+
+Bereits vor v79 verlorene Bildschirmzuordnungen können nicht rekonstruiert werden; bitte einmal neu auswählen. Ein gemeinsamer Software-Anzeigezeitpunkt ist keine hardwareseitige Bildsynchronisation. Der zuvor gemeldete graue Bildschirm beim Programmstart ist weiterhin nicht als behoben bestätigt.
 
 ---
 
 # GottesdienstRegie 0.78.0
 
-Meldungen erhalten getrennte, sicher platzierte Titel- und Textbereiche. Lange Texte werden vollständig auf lesbare Folgeseiten verteilt; der QR-Code bleibt daneben sichtbar. Der Loop zeigt alle Seiten einer Meldung, bevor er weiterwechselt. Im Bearbeiten-Bereich stehen vier Design-Kacheln zur Auswahl: Klar, Hell, Akzent und Seitenspalte.
+Veröffentlicht: Di., 13.10.2026
 
-Überlange Veranstaltungslisten scrollen ruhig vertikal. Die Mindest-Anzeigedauer berücksichtigt Scrollweg sowie Anfangs- und Lesepausen; eine längere eingestellte Dauer bleibt erhalten. Das gilt sowohl für die normale Veranstaltungsübersicht als auch für die geschützte Nachprogramm-Raumanzeige. Bei reduzierter Bewegung werden statische, vollständig lesbare Seiten verwendet.
+Meldungen bieten vier wählbare Designs: Klar, Hell, Akzent und Seitenspalte. Titel und Text erhalten getrennte Bereiche; lange Texte werden vollständig auf lesbare Folgeseiten verteilt, während der QR-Code daneben sichtbar bleibt. Der Loop zeigt alle Seiten einer Meldung vor dem nächsten Inhalt.
 
-Der farbige Kopfbereich im Nachprogramm wurde von 17,5 auf 15 Prozent der Bildhöhe reduziert. Die einmal gewählte Sitzungsfarbe bleibt unverändert.
+Veranstaltungslisten mit Platzmangel scrollen ruhig vertikal. Die automatische Mindestdauer berücksichtigt Scrollweg, Anfangs- und Lesepausen und erhält längere manuell eingestellte Zeiten. Das gilt auch für die geschützte Nachprogramm-Raumanzeige; bei reduzierter Bewegung erscheinen statische Seiten. Ihr farbiger Kopfbereich beansprucht nun 15 statt 17,5 Prozent der Bildhöhe.
 
-Geprüft mit automatisierten Tests und nativen Electron-Ausgaben: vier Meldungsdesigns, erste und letzte Meldungsseite, 18 Nachprogramm-Veranstaltungen, normale Listen mit Platzmangel und reduzierte Bewegung. Der zuvor gemeldete graue Bildschirm beim Programmstart ist weiterhin nicht als behoben bestätigt.
+## Neu
+
+### Vier Meldungsdesigns
+
+Im Bearbeiten-Bereich stehen Klar, Hell, Akzent und Seitenspalte als Design-Kacheln bereit. Getrennte Titel- und Textbereiche halten den Inhalt sicher innerhalb der Folie, während der QR-Code daneben sichtbar bleibt.
+
+## Verbessert
+
+### Vollständige Meldungen auf Folgeseiten
+
+Lange Meldungstexte werden vollständig auf lesbare Seiten verteilt. Der Loop zeigt zuerst alle Seiten einer Meldung und wechselt erst danach zum nächsten Inhalt. Erste und letzte Seiten sowie alle vier Designs wurden auch in nativen Electron-Ausgaben geprüft.
+
+### Scrollweg bestimmt die Mindestdauer
+
+Überlange normale Veranstaltungslisten und die geschützte Nachprogramm-Raumanzeige scrollen ruhig vertikal. Die Mindestdauer berücksichtigt den gesamten Scrollweg und Pausen am Anfang sowie zum Lesen. Eine längere eingestellte Dauer bleibt bestehen. Reduzierte Bewegung verwendet statische vollständige Seiten.
+
+### Kompakterer Nachprogramm-Kopf
+
+Der farbige Kopfbereich wurde von 17,5 auf 15 Prozent der Bildhöhe reduziert. Die bereits gewählte Sitzungsfarbe bleibt erhalten.
+
+## Bekannte Einschränkungen
+
+### Grauer Bildschirm beim Start
+
+Der zuvor gemeldete graue Bildschirm beim Programmstart ist mit dieser Version weiterhin nicht als behoben bestätigt.
 
 ---
 
 # GottesdienstRegie 0.77.0
 
-Testbetrieb vorbereiten merkt sich die letzte Auswahl und fragt bei jedem neuen Test erneut. Ein bis zwölf ausdrücklich gekennzeichnete Testveranstaltungen lassen sich normal, verspätet, ausgefallen, mit Raumwechsel oder gemischt anzeigen. Echte Gemeindedaten bleiben unverändert.
+Veröffentlicht: Di., 13.10.2026
 
-Die geschützte Nachprogrammfolie öffnet die Vorschau; Bearbeitungsversuche zeigen einen bestätigbaren Hinweis. Raum-verlassen- und Veranstaltungsanzeige dauern standardmäßig 60 Sekunden, auch nach Übernahme älterer Präsentationen.
+Beim Vorbereiten des Testbetriebs wird die letzte Auswahl gemerkt und bei jedem neuen Test erneut abgefragt. Ein bis zwölf gekennzeichnete Testveranstaltungen können normal, verspätet, ausgefallen, mit Raumwechsel oder gemischt erscheinen. Die geschützte Nachprogrammfolie öffnet die Vorschau; Bearbeitungsversuche zeigen einen bestätigbaren Hinweis. Raum- und Veranstaltungshinweise laufen standardmäßig 60 Sekunden, auch bei älteren Präsentationen.
 
-Freigegebene Meldungen ohne zusätzliche Regie-Zuordnung werden wieder angezeigt. MAIN erhält bereits beim Start einen vorbereiteten öffentlichen Meldungstext; laufende Meldungen bleiben bis zum nächsten Wechsel stabil. Leere Meldungen und nicht verfügbare Raumhinweise verursachen keine Wechsel-Endlosschleife.
+Freigegebene Meldungen ohne zusätzliche Regie-Zuordnung erscheinen wieder. MAIN erhält bereits beim Start vorbereiteten öffentlichen Meldungstext; laufende Inhalte bleiben bis zum nächsten Wechsel stabil. Das Wasserzeichen bleibt innerhalb der Vorschau, beide Live-Vorschauen verwenden das passende Seitenverhältnis. Die Hilfe wurde ausführlicher und in allen 17 angebotenen Sprachen statisch übersetzt.
 
-Das Test-Wasserzeichen bleibt innerhalb der Vorschau und erscheint nicht über Hilfe oder anderen Bedienfenstern. Beide Live-Vorschauen zeigen das vorbereitete MAIN-Bild im passenden Seitenverhältnis.
+## Neu
 
-Die Hilfe enthält ausführlichere Artikel und statische Übersetzungen für alle 17 angebotenen Sprachen. Übersetzungen sind maschinell unterstützt; Schweizerdeutsch verwendet Schweizer Standardschreibung. Aktuelle Hilfe-Aufnahmen wurden erneuert; historische Release-Bilder bleiben unverändert.
+### Mehrere Testveranstaltungen
 
-Der zuvor gemeldete graue Bildschirm beim Programmstart ist weiterhin nicht als behoben bestätigt.
+Beim Vorbereiten eines Tests können ein bis zwölf ausdrücklich gekennzeichnete Testveranstaltungen normal, verspätet, ausgefallen, mit Raumwechsel oder gemischt angezeigt werden. Die letzte Auswahl wird gemerkt und bei jedem neuen Test erneut abgefragt. Echte Gemeindedaten bleiben unverändert.
+
+## Verbessert
+
+### Geschützte Folie und 60 Sekunden Nachprogramm
+
+Die geschützte Nachprogrammfolie öffnet die Vorschau. Bearbeitungsversuche führen zu einem bestätigbaren Hinweis. Raum-verlassen- und Veranstaltungsanzeige verwenden standardmäßig 60 Sekunden, auch wenn eine ältere Präsentation übernommen wird.
+
+### Ausführliche Hilfe in 17 Sprachen
+
+Die Hilfe enthält ausführlichere Artikel und statische Übersetzungen für alle angebotenen Sprachen. Die Übersetzungen sind maschinell unterstützt; Schweizerdeutsch verwendet Schweizer Standardschreibung. Aktuelle Hilfe-Aufnahmen wurden erneuert, historische Release-Bilder bleiben unverändert.
+
+## Behoben
+
+### Öffentliche Meldungen und sichere Wechsel
+
+Freigegebene Meldungen ohne zusätzliche Regie-Zuordnung erscheinen wieder. MAIN erhält beim Start vorbereiteten öffentlichen Text. Laufende Meldungen bleiben bis zum nächsten Wechsel stabil; leere Meldungen und nicht verfügbare Raumhinweise lösen keine Wechsel-Endlosschleife aus.
+
+### Wasserzeichen und MAIN-Vorschau
+
+Das Test-Wasserzeichen bleibt innerhalb der Vorschau und liegt nicht über Hilfe oder Bedienfenstern. Beide Live-Vorschauen zeigen das vorbereitete MAIN-Bild im passenden Seitenverhältnis.
+
+## Bekannte Einschränkungen
+
+### Grauer Bildschirm beim Start
+
+Der zuvor gemeldete graue Bildschirm beim Programmstart ist mit dieser Version weiterhin nicht als behoben bestätigt.
 
 ---
 
 # GottesdienstRegie 0.76.0
 
-Das Nachprogramm enthält immer eine geschützte erste Systemfolie für nächste Veranstaltungen oder den Raum-verlassen-Hinweis. Sie ist nicht bearbeitbar, entfernbar, verschiebbar oder über Plus hinzufügbar. Eigene Nachprogrammfolien bleiben danach sichtbar und werden nicht vom Raumhinweis überlagert.
+Veröffentlicht: So., 11.10.2026
 
-Die Veranstaltungstabelle verwendet ruhigere Schrift, kleine Spaltenüberschriften und vollständige Titel ohne Zeilenumbruch. Überlange Zellen scrollen langsam. Etagen und Veranstaltungsbilder werden nicht angezeigt. Ohne auflösbare Veranstaltungsdaten wird die leere Systemausgabe übersprungen; alternativ bleibt die letzte Gottesdienstfolie stehen.
+Das Nachprogramm beginnt immer mit einer geschützten Systemfolie für nächste Veranstaltungen oder die Bitte, den Raum zu verlassen. Diese Folie kann weder bearbeitet, entfernt, verschoben noch über Plus hinzugefügt werden. Eigene Nachprogrammfolien folgen danach und bleiben ohne Überlagerung durch den Raumhinweis sichtbar.
 
-Der zuvor gemeldete graue Bildschirm beim Programmstart ist mit diesem Release nicht als behoben bestätigt.
+Die Veranstaltungstabelle verwendet ruhigere Schrift und kleinere Spaltenüberschriften. Vollständige Titel bleiben einzeilig; überlange Zellen scrollen langsam. Etagen und Veranstaltungsbilder entfallen. Sind die benötigten Veranstaltungsdaten nicht auflösbar, wird eine leere Systemausgabe übersprungen oder die letzte Gottesdienstfolie bleibt stehen.
+
+## Neu
+
+### Feste erste Nachprogrammfolie
+
+Das Nachprogramm enthält immer eine geschützte erste Systemfolie für nächste Veranstaltungen oder den Raum-verlassen-Hinweis. Sie ist nicht bearbeitbar, entfernbar oder verschiebbar und lässt sich nicht über Plus hinzufügen. Eigene Nachprogrammfolien bleiben danach sichtbar.
+
+## Verbessert
+
+### Ruhigere Veranstaltungstabelle
+
+Ruhigere Schrift und kleine Spaltenüberschriften verbessern die Übersicht. Vollständige Veranstaltungstitel bleiben ohne Zeilenumbruch sichtbar; überlange Zellen scrollen langsam. Etagen und Veranstaltungsbilder werden nicht angezeigt.
+
+## Behoben
+
+### Eigene Folien und fehlende Daten
+
+Der Raumhinweis überlagert eigene Nachprogrammfolien nicht mehr. Wenn Veranstaltungsdaten nicht aufgelöst werden können, wird die leere Systemausgabe übersprungen; alternativ bleibt die letzte Gottesdienstfolie stehen.
+
+## Bekannte Einschränkungen
+
+### Grauer Bildschirm beim Start
+
+Der zuvor gemeldete graue Bildschirm beim Programmstart ist mit dieser Version nicht als behoben bestätigt.
 
 ---
 
 # GottesdienstRegie 0.75.3
 
-Beim Start des Testbetriebs lässt sich die Nachprogramm-Anzeige auswählen: Automatisch, Raum verlassen oder Testveranstaltung. Die letzten beiden Optionen funktionieren ohne verknüpfte Veranstaltung und ohne Gemeindedaten. Beispieldaten sind deutlich gekennzeichnet, gelten nur für den Testlauf und werden nicht in Firebase gespeichert. Echtes ON AIR verwendet weiterhin die verknüpfte Veranstaltung.
+Veröffentlicht: Sa., 10.10.2026
 
-Die Ausgabeprüfung wartet begrenzt auf die initialen Gemeindedaten. Bestehender Verbindungsstatus und bereits synchronisierte leere Listen werden neuen Abonnenten erneut zugestellt. Veranstaltungsverknüpfungen aus älteren Dialogen gelten sofort und bleiben beim Speichern konsistent.
+Der Teststart bietet Automatisch, Raum verlassen und Testveranstaltung als Nachprogramm-Szenarien an. Die beiden ausdrücklich gewählten Beispiele funktionieren ohne verknüpfte Veranstaltung und ohne Gemeindedaten. Sie sind gekennzeichnet, gelten nur für den Testlauf und werden nicht in Firebase gespeichert; echtes ON AIR nutzt weiterhin die verknüpfte Veranstaltung.
 
-Der Raum-verlassen-Hinweis ist etwas größer und nicht mehr fett. Der letzte Weiter-Klick erreicht das Nachprogramm auch bei den beiden ausdrücklich gewählten Testszenarien ohne Veranstaltungsverknüpfung.
+Die Ausgabeprüfung wartet begrenzt auf initiale Gemeindedaten. Neue Abonnenten erhalten vorhandenen Verbindungsstatus und bereits synchronisierte leere Listen. Verknüpfungen aus älteren Veranstaltungsdialogen werden sofort berücksichtigt und konsistent gespeichert. Der letzte Weiter-Klick erreicht auch bei den beiden Testszenarien das Nachprogramm. Der Raum-verlassen-Hinweis verwendet etwas größere Schrift ohne Fettdruck.
+
+## Neu
+
+### Testauswahl
+
+Raumhinweis und gekennzeichnete Testveranstaltung auch ohne Gemeindedaten testen; echte Termine bleiben unverändert.
+
+## Verbessert
+
+### Raum-verlassen-Anzeige
+
+Etwas größere Schrift ohne Fettdruck.
+
+## Behoben
+
+### Verknüpfung und Ladezustand
+
+Ältere Veranstaltungsfelder werden sofort abgeglichen. Die Startprüfung wartet auf Daten; bestehender Verbindungsstatus wird nachgereicht.
 
 ---
 
 # GottesdienstRegie 0.75.2
 
-Der Weiter-Pfeil bleibt nach der letzten Gottesdienstfolie für den automatischen Nachprogramm-Einstieg verfügbar, wenn eine Veranstaltung verknüpft ist. Auch ein wiederholtes Nachprogramm kann über den Pfeil weitergeschaltet werden. Manuell gesteuerte Gottesdienstfolien bleiben manuell.
+Veröffentlicht: Sa., 10.10.2026
 
-Einzelvorschau und „LIVE AUF MAIN“ spiegeln jetzt den vorbereiteten Nachprogramm-Raumhinweis der Ausgabe. Passende Folgetermine innerhalb von 61 Minuten oder „Wir bitten alle Besucher, den Raum zu verlassen.“ erscheinen dadurch auch am Bedienplatz. Bearbeitbare Folien werden nicht verändert. Die Kopfbereichsfarbe bleibt pro Session fest; Änderungen werden beim nächsten sicheren Wechsel übernommen.
+Der Weiter-Pfeil bleibt nach der letzten Gottesdienstfolie verfügbar, wenn eine Veranstaltung verknüpft ist und das automatische Nachprogramm erreicht werden kann. Auch wiederholtes Nachprogramm lässt sich weitersteuern; manuelle Gottesdienstfolien bleiben manuell bedienbar.
 
-Der Raumhinweis übernimmt in der kleinen MAIN-Vorschau keine abschneidende Beschriftungsformatierung mehr. Der Ablauf ist auch im Testbetrieb geprüft.
+Einzelvorschau und LIVE AUF MAIN zeigen jetzt den vorbereiteten Raumhinweis aus der tatsächlichen Ausgabe: passende Folgetermine innerhalb von 61 Minuten oder die Bitte, den Raum zu verlassen. Die bearbeitbare Folie wird dabei nicht verändert. Die Kopfbereichsfarbe bleibt während einer Session fest, Änderungen werden beim nächsten sicheren Wechsel übernommen. Der Raumhinweis wird in der kleinen MAIN-Vorschau nicht mehr durch Beschriftungsformatierung abgeschnitten.
+
+## Behoben
+
+### Nachprogramm-Wechsel
+
+Weiter bleibt für den automatischen Einstieg nach der letzten Gottesdienstfolie und für wiederholte Nachprogramm-Wechsel verfügbar.
+
+### Live-Vorschauen
+
+Einzelvorschau und LIVE AUF MAIN zeigen den vorbereiteten Raumhinweis, ohne die bearbeitbare Folie zu verändern oder den Text abzuschneiden.
 
 ---
 
 # GottesdienstRegie 0.75.1
 
-Testbetrieb starten öffnet nach Bestätigung direkt die Testausgaben. ON AIR startet den normalen Betrieb mit einer verknüpften Veranstaltung; der Wechsel aus einem laufenden Test wird ausdrücklich bestätigt.
+Veröffentlicht: So., 04.10.2026
 
-Live-Navigation und Start beachten die Reihenfolge von Abschnitten, Elementen und Folien. Nach der letzten Gottesdienstfolie wird beim Weiterschalten ein fehlender Nachprogramm-Einstieg automatisch ergänzt, wenn eine Veranstaltung verknüpft ist. Der Raumhinweis verwendet weiterhin die zentralen Veranstaltungs- und Raumdaten. Manuelle Folien bleiben manuell gesteuert.
+Testbetrieb starten öffnet die Testausgaben direkt nach Bestätigung. ON AIR beginnt den normalen Betrieb mit einer verknüpften Veranstaltung; der Wechsel aus einem laufenden Test erfordert eine ausdrückliche Bestätigung.
 
-Gespeicherte Fensterabmessungen unterhalb der Desktop-Mindestgröße werden nicht als Arbeitsbereich wiederhergestellt.
+Start und Live-Navigation beachten die Reihenfolge von Abschnitten, Elementen und Folien. Beim Weiterschalten nach der letzten Gottesdienstfolie wird ein fehlender Nachprogramm-Einstieg automatisch ergänzt, wenn eine Veranstaltung verknüpft ist. Der Raumhinweis nutzt weiterhin zentrale Veranstaltungs- und Raumdaten; manuelle Folien bleiben manuell gesteuert. Gespeicherte Fenstergrößen unterhalb der Desktop-Mindestgröße werden nicht als Arbeitsbereich wiederhergestellt.
+
+## Behoben
+
+### Live-Ablauf
+
+Die letzte Gottesdienstfolie wird in der richtigen Reihenfolge gezeigt; Weiterschalten erreicht auch ohne angelegte Nachprogramm-Folie den Raumhinweis einer verknüpften Veranstaltung.
+
+### Test und ON AIR
+
+Testbetrieb starten öffnet die Testausgabe direkt nach Bestätigung. ON AIR bleibt der bestätigte Produktivstart mit Veranstaltung.
 
 ---
 
 # GottesdienstRegie 0.75.0
 
-MAIN erhält beim Öffnen den aktuellen versionierten Live-Zustand. Das Test-Wasserzeichen bleibt unabhängig von ON AIR auf den Ausgaben sichtbar.
+Veröffentlicht: So., 04.10.2026
 
-Das Nachprogramm zeigt alle passenden Raumbelegungen innerhalb von 61 Minuten im neuen Informationsdesign. Die Kopfbereichsfarbe bleibt je Session fest. Änderungen werden erst beim nächsten echten Wechsel übernommen. Raum-IDs werden zentral aufgelöst; lange Veranstaltungstitel bleiben vollständig und werden bei Bedarf auf Folgeseiten verteilt.
+Beim Öffnen erhält MAIN den aktuellen versionierten Live-Zustand. Das Test-Wasserzeichen bleibt unabhängig von ON AIR auf den Ausgaben sichtbar.
 
-Radio verwendet den konfigurierten Background-Audio-Ausgang. Die Pegelerfassung greift nicht mehr in den hörbaren Signalweg ein. Der Diagnosebereich zeigt Route, Ausgang, Signal, Lautstärke, Mute und AudioContext.
+Das Nachprogramm zeigt alle passenden Belegungen im effektiven Raum innerhalb von 61 Minuten. Die Kopfbereichsfarbe bleibt pro Session fest; neue Daten werden erst beim nächsten echten Wechsel übernommen. Raum-IDs werden zentral aufgelöst, vollständige lange Veranstaltungstitel bei Bedarf auf Folgeseiten verteilt.
+
+Radio nutzt den konfigurierten Background-Audio-Ausgang. Die Pegelerfassung greift nicht mehr in den hörbaren Signalweg ein. Die Diagnose zeigt Route, Ausgang, Signal, Lautstärke, Mute und AudioContext und unterstützt damit die Prüfung der tatsächlichen Wiedergabe.
+
+## Behoben
+
+### MAIN und Radio
+
+Initiale Ausgabe wird zuverlässig nachgeladen; Radio folgt der Background-Audio-Route mit Signaldiagnose.
+
+### Veranstaltungen und Nachprogramm
+
+Stabile Raum-IDs, vollständige Titel, sichere Seitenwechsel und feste Sessionfarbe.
 
 ---
 
 # GottesdienstRegie 0.74.0
 
-Version 0.74.0 bindet Veranstaltungen, Meldungen und Räume zentral und in Echtzeit an die bestehende Firebase-Datenquelle an. Stabile Child-Keys bleiben erhalten, verschachtelte Raumdaten werden tolerant aufgelöst und MAIN erhält ausschließlich normalisierte öffentliche Inhalte. Bei Verbindungsproblemen kann der letzte noch sinnvolle Stand weiterverwendet werden; Preflight meldet fehlende oder nicht auflösbare Daten nur im Operator-Bereich.
+Veröffentlicht: Sa., 03.10.2026
 
-Beim Eintritt ins Nachprogramm prüft GottesdienstRegie nun automatisch den effektiven Raum der verknüpften Veranstaltung. Beginnt dort innerhalb der nächsten 61 Minuten eine weitere nicht abgesagte Veranstaltung, werden Titel, Startzeit und der lesbare Raum angezeigt. Andernfalls erscheint die Aufforderung, den Raum zu verlassen. Laufende Ausgaben bleiben bei Echtzeitänderungen bis zum nächsten sicheren Wechsel stabil.
+Veranstaltungen, Meldungen und Räume werden zentral in Echtzeit aus der bestehenden Firebase-Datenquelle verarbeitet. Stabile Child-Keys bleiben erhalten und verschachtelte Raumdaten werden tolerant aufgelöst. MAIN erhält normalisierte öffentliche Inhalte; bei Verbindungsproblemen kann der letzte sinnvolle Stand weiterverwendet werden. Preflight zeigt fehlende oder nicht auflösbare Daten nur im Operator-Bereich.
 
-Testbetrieb und ON AIR sind jetzt unabhängige Zustände. Im Testbetrieb liegt auf jeder Ausgabe – einschließlich MAIN, Livestream, Stage, Quick Screens, Videos, Websites und Schwarzbild – ein dauerhaftes systemseitiges Wasserzeichen. Es bleibt auch bei ON AIR und während Übergängen sichtbar.
+Beim Nachprogramm-Einstieg wird der effektive Raum der verknüpften Veranstaltung geprüft. Eine weitere nicht abgesagte Veranstaltung innerhalb von 61 Minuten erscheint mit Titel, Startzeit und lesbarem Raum; andernfalls wird zum Verlassen des Raums aufgefordert. Testbetrieb und ON AIR sind unabhängige Zustände. MAIN, Livestream, Stage, Quick Screens, Videos, Websites und Schwarzbild tragen im Test ein dauerhaftes Wasserzeichen, auch während Übergängen.
+
+## Neu
+
+### Automatischer Raumhinweis
+
+Das Nachprogramm zeigt die nächste Veranstaltung im effektiven Raum innerhalb von 61 Minuten oder bittet Besucher, den Raum zu verlassen.
+
+### Test-Wasserzeichen
+
+Alle tatsächlichen Ausgaben bleiben im Testbetrieb auch bei ON AIR eindeutig gekennzeichnet.
+
+## Verbessert
+
+### Zentrale Firebase-Daten
+
+Veranstaltungen, Meldungen und verschachtelte Räume werden über gemeinsame Services mit stabilen IDs und normalisierten Ausgabedaten verarbeitet.
+
+### Offline und Preflight
+
+Der letzte sinnvolle Datenstand bleibt verfügbar; technische Probleme erscheinen nur im Operator-Bereich.
 
 ---
 
 # GottesdienstRegie 0.73.0
 
-Version 0.73.0 startet die automatische Update-Suche erst zwei Sekunden nachdem der Ladescreen vollständig durch den Arbeitsbereich ersetzt wurde. Dadurch konkurriert die Netzwerkanfrage nicht mehr mit dem sichtbaren Programmstart.
+Veröffentlicht: Do., 01.10.2026
 
-Der Hinweis für ein gültiges Konto ohne freigeschalteten GottesdienstRegie-Zugang nennt nun den nächsten Schritt: „Bitte wende dich an den Administrator.“
+Die automatische Update-Suche startet erst zwei Sekunden nachdem der Ladescreen vollständig durch den Arbeitsbereich ersetzt wurde. Die Netzwerkanfrage beginnt dadurch nach dem sichtbaren Programmstart.
+
+Bei einem gültigen Konto ohne freigeschalteten GottesdienstRegie-Zugang nennt der Hinweis nun einen konkreten nächsten Schritt: Bitte wende dich an den Administrator.
+
+## Verbessert
+
+### Update-Suche nach dem Start
+
+Die automatische Suche startet erst zwei Sekunden nachdem der Arbeitsbereich sichtbar geworden ist.
+
+### Zugangshinweis
+
+Bei einem gültigen Konto ohne GottesdienstRegie-Freigabe wird jetzt auf den Administrator verwiesen.
 
 ---
 
 # GottesdienstRegie 0.72.1
 
-Version 0.72.1 stellt die vier Designkarten für Veranstaltungsfolien im tatsächlich verwendeten Produktionseditor wieder her. Die Zahl der sichtbaren Termine und die Anzeigedauer bleiben dort direkt einstellbar. Jede Veranstaltung zeigt nun Start- und Endzeit.
+Veröffentlicht: Do., 01.10.2026
 
-Firebase `rooms/` wird als zentrale Quelle für Raumdaten abonniert. Der neue RoomService löst stabile Raum-IDs sowie kompatible Namen und Kurzbezeichnungen auf. Interne, hybride, zusätzliche und Ersatzräume liefern normalisierte Daten; MAIN und Vorschau zeigen Raumname, Etage und Gebäude, niemals eine nicht aufgelöste interne ID.
+Die vier Designkarten für Veranstaltungsfolien sind wieder im tatsächlich verwendeten Produktionseditor erreichbar. Dort lassen sich die Anzahl sichtbarer Termine und ihre Anzeigedauer direkt einstellen. Veranstaltungen zeigen neben dem Beginn auch die Endzeit.
+
+Firebase rooms/ dient als zentrale abonnierte Raumquelle. Der RoomService löst stabile IDs sowie kompatible Namen und Kurzbezeichnungen auf und normalisiert interne, hybride, zusätzliche und Ersatzräume. MAIN und Vorschau verwenden Raumname, Etage und Gebäude; eine nicht aufgelöste interne ID erscheint nicht als öffentlicher Raumname.
+
+## Neu
+
+### Zentraler RoomService
+
+Interne, hybride, zusätzliche und geänderte Räume werden anhand stabiler IDs aus Firebase rooms/ geladen.
+
+## Verbessert
+
+### Start- und Endzeit
+
+Veranstaltungsfolien zeigen jetzt neben dem Beginn auch die Endzeit.
+
+## Behoben
+
+### Designauswahl sichtbar
+
+Die vier Veranstaltungsdesigns und die Anzahl der Termine lassen sich wieder direkt im produktiven Editor auswählen.
+
+### Keine rohen Raum-IDs
+
+MAIN, Vorschau und dynamische Veranstaltungsdaten verwenden Raumname, Etage und Gebäude statt interner Firebase-IDs.
 
 ---
 
 # GottesdienstRegie 0.72.0
 
-Version 0.72.0 zeigt bei jeder gefundenen neuen Version ein eigenes Informationsfenster. Dort kann das Update sofort installiert, auf später verschoben, für die Installation beim Beenden vorgemerkt oder abgebrochen werden.
+Veröffentlicht: Do., 01.10.2026
 
-Unter Einstellungen → Updates steht zusätzlich die dauerhafte Option „Heruntergeladene Updates beim Beenden installieren“ bereit. Ein automatischer Hintergrunddownload respektiert die Auswahl im Dialog und startet keine ungefragte Installation.
+Für jede gefundene neue Version erscheint ein eigenes Informationsfenster mit den Optionen Jetzt installieren, Später, Beim Beenden installieren und Abbrechen. Die Entscheidung steuert, wann ein automatischer Hintergrunddownload beginnt und ob das Update beim Beenden übernommen werden soll.
+
+Unter Einstellungen → Updates kann die Option Heruntergeladene Updates beim Beenden installieren dauerhaft festgelegt werden. Download und Installation respektieren die Auswahl im Dialog; ein Hintergrunddownload löst keine ungefragte Installation aus.
+
+## Neu
+
+### Update-Dialog
+
+Bei einer neuen Version stehen Jetzt installieren, Später, Beim Beenden installieren und Abbrechen zur Auswahl.
+
+### Installation beim Beenden
+
+Das Verhalten kann zusätzlich dauerhaft unter Einstellungen → Updates festgelegt werden.
+
+## Verbessert
+
+### Kontrollierter Hintergrunddownload
+
+Automatische Downloads starten erst nach der Entscheidung im Hinweisfenster und installieren nicht ungefragt.
 
 ---
 
 # GottesdienstRegie 0.71.1
 
-Version 0.71.1 verhindert den gemeldeten JavaScript-Absturz im Electron-Hauptprozess beim Schließen oder Neustarten. Verzögerte Hintergrundereignisse senden nicht mehr an bereits zerstörte Fenster; die Bildschirm-Wachhaltung wird auch dann sicher beendet, wenn Electron das zugrunde liegende Objekt bereits freigegeben hat.
+Veröffentlicht: Mi., 30.09.2026
+
+Der gemeldete JavaScript-Absturz im Electron-Hauptprozess beim Schließen oder Neustarten wird verhindert. Verzögerte Update-, Übersetzungs-, Spotify-, Ausgabe- und Fernsteuerungsereignisse werden beim Beenden verworfen, statt an bereits zerstörte Fenster zu senden.
+
+Auch die Bildschirm-Wachhaltung wird sicher freigegeben, wenn Electron das zugrunde liegende Objekt bereits beendet hat.
+
+## Behoben
+
+### Kein zerstörtes Fenster mehr angesprochen
+
+Verzögerte Update-, Übersetzungs-, Spotify-, Ausgabe- und Fernsteuerungsereignisse werden beim Beenden sicher verworfen. Auch die Bildschirm-Wachhaltung wird kontrolliert freigegeben.
 
 ---
 
 # GottesdienstRegie 0.71.0
 
-Version 0.71.0 zeigt in „Nächste Veranstaltungen“ mehrere kommende Termine gleichzeitig. Vier auswählbare Darstellungen – Karten, Zeitstrahl, Plakat und Minimal – sowie eine einstellbare Anzahl von zwei bis acht Veranstaltungen passen die Folie an den jeweiligen PRE-/POST-Loop an.
+Veröffentlicht: Mi., 30.09.2026
 
-Die MAIN-Ausgabe erhält den normalisierten Veranstaltungssnapshot jetzt gemeinsam mit der Live-Folie. Dadurch stehen Titel, effektive Zeit, Ort und vorhandene Cover auch im separaten Ausgabefenster zuverlässig zur Verfügung; Firebase wird weiterhin ausschließlich über den zentralen EventService gelesen.
+Nächste Veranstaltungen zeigt mehrere kommende Termine gemeinsam. Karten, Zeitstrahl, Plakat und Minimal bieten vier Darstellungen; die Anzahl von zwei bis acht Terminen lässt sich für den jeweiligen PRE-/POST-Loop einstellen.
 
-Für „Läuft gerade“ kann das Cover zusätzlich rund dargestellt werden. Die Einstellung wird gemeinsam mit den vorhandenen Designs gespeichert und identisch in Vorschau und MAIN angewendet.
+MAIN erhält den normalisierten Veranstaltungssnapshot gemeinsam mit der Live-Folie. Titel, effektive Zeit, Ort und vorhandene Cover stehen dadurch auch im separaten Ausgabefenster bereit; Firebase bleibt ausschließlich über den zentralen EventService angebunden. Bei Läuft gerade kann das Cover zusätzlich rund dargestellt werden. Die gespeicherte Einstellung wird identisch in Vorschau und MAIN angewendet.
+
+## Neu
+
+### Vier Veranstaltungsdesigns
+
+Karten, Zeitstrahl, Plakat und Minimal stehen mit kleinen Vorschauen zur Auswahl.
+
+### Runde Musikcover
+
+Cover auf „Läuft gerade“ können optional kreisförmig dargestellt werden.
+
+## Verbessert
+
+### Mehr kommende Veranstaltungen
+
+Pro Folie lassen sich zwei bis acht sortierte Termine anzeigen.
+
+## Behoben
+
+### Veranstaltungen auf MAIN
+
+Der aktuelle Veranstaltungssnapshot wird sicher mit der Live-Folie an das separate MAIN-Fenster übertragen.
 
 ---
 
 # GottesdienstRegie 0.70.0
 
-Version 0.70.0 erweitert „Läuft gerade“ um zehn auswählbare Animationen. Vinyl kann sich drehen, Cover können zoomen, schweben, pulsieren, aufklappen oder leuchten. Der vollständige visuelle Designer ist nun auch in der Produktionsansicht erreichbar. Cover werden mit jedem Titelwechsel neu eingesetzt, sodass zwischengespeicherte Darstellungen nicht beim vorherigen Lied stehen bleiben.
+Veröffentlicht: Mi., 30.09.2026
 
-Veranstaltungsfolien hören jetzt auf die zentral normalisierten Firebase-Ereignisse und zeigen Titel, effektive Zeit und effektiven Ort. Fehlen gültige Termine, erscheint ein klarer Leerzustand. Beim Start von ON AIR wechselt die Bedienoberfläche automatisch aus Bearbeiten in Vorschau; der rote LIVE-Rahmen und Markierungspunkt an Folien entfallen.
+Läuft gerade erhält zehn Animationen, darunter drehendes Vinyl sowie zoomen, schweben, pulsieren, aufklappen und leuchten. Der vollständige Designer ist auch in der Produktionsansicht erreichbar. Cover werden bei jedem Titelwechsel neu eingesetzt, damit die Anzeige nicht beim vorherigen Lied stehen bleibt.
 
-Das Hintergrund-Audio-Feld bietet Medienbrowser, zuletzt verwendete Medien, Import und Radio. Eine optionale maximale Wiedergabedauer in Sekunden beendet Audio kontrolliert mit der gewählten Ausblendzeit. Radiovorschauen setzen und laden ihre Streamquelle nun vor dem Start, wodurch stille Wiedergabe durch einen veralteten Audiozustand verhindert wird.
+Veranstaltungsfolien übernehmen zentral normalisierte Firebase-Ereignisse mit Titel, effektiver Zeit und effektivem Ort; fehlen gültige Termine, erscheint ein klarer Leerzustand. ON AIR wechselt automatisch aus Bearbeiten in Vorschau. Das Hintergrund-Audio-Feld bietet Medienbrowser, zuletzt verwendete Medien, Import und Radio. Eine optionale maximale Wiedergabedauer beendet Audio mit der gewählten Ausblendzeit; Radiovorschauen laden ihre Quelle vor dem Start.
+
+## Neu
+
+### Zehn Musik-Animationen
+
+Von drehendem Vinyl bis Cover-Zoom, Aufklappen und Leuchten stehen zehn passende Animationen mit reduzierter Bewegung bereit.
+
+### Audiolaufzeit steuerbar
+
+Hintergrund-Audio kann optional nach einer frei gewählten Sekundenzahl ausblenden und stoppen.
+
+## Verbessert
+
+### Vollständiger Läuft-gerade-Editor
+
+Design, Animation, Farben, Metadaten, Visualizer und Dauer sind jetzt auch in der Produktionsansicht direkt konfigurierbar.
+
+### Mehr Audioquellen
+
+Medienbrowser, zuletzt verwendete Medien, Import und Radio sind gemeinsam im Hintergrund-Audio-Feld erreichbar.
+
+## Behoben
+
+### Radio und Cover synchron
+
+Radiostreams starten erst nach gesetzter Quelle; Cover werden bei jedem Titelwechsel neu eingesetzt.
+
+### Veranstaltungen sichtbar
+
+Veranstaltungsfolien übernehmen normalisierte Firebase-Daten und zeigen einen klaren Leerzustand.
+
+### Saubere MAIN-Vorschau
+
+ON AIR wechselt aus Bearbeiten in Vorschau; der rote Folienrahmen und Punkt wurden entfernt.
 
 ---
 
 # GottesdienstRegie 0.69.0
 
-Version 0.69.0 bindet Veranstaltungen und Meldungen zentral an die bestehende Firebase Realtime Database der Philippusgemeinde an. Stabile Child-Keys bleiben bei Umbenennungen erhalten, geplante und effektive Zeiten werden getrennt behandelt und PRE-/POST-Loop-Ziele strikt ausgewertet. MAIN erhält ausschließlich normalisierte öffentliche Daten. Realtime-Änderungen werden erst am sicheren Folienwechsel übernommen; bei Verbindungsproblemen steht der letzte weiterhin gültige Snapshot offline bereit.
+Veröffentlicht: Mi., 30.09.2026
 
-„Läuft gerade“ besitzt nun einen vollständigen visuellen Designer mit zehn Vorschaukarten statt eines Dropdowns. Hintergrund-, Akzent- und Textfarbe, Schreibweise, sichtbare Metadaten, Visualizer-Stil und -Position sowie die Anzeigedauer ab einer Sekunde lassen sich direkt einstellen. Vorschau und MAIN verwenden dasselbe Modell. Der Visualizer reagiert auf analysierbares Audio und nutzt bei blockierten Radiostreams einen bewegten Fallback; reduzierte Bewegung wird respektiert.
+Veranstaltungen und Meldungen werden zentral aus Firebase Realtime Database verarbeitet. Stabile Child-Keys überstehen Umbenennungen, geplante und effektive Zeiten werden getrennt behandelt und PRE-/POST-Loop-Ziele strikt berücksichtigt. MAIN erhält normalisierte öffentliche Daten. Echtzeitänderungen werden am sicheren Folienwechsel übernommen; der letzte weiterhin gültige Snapshot bleibt bei Verbindungsproblemen offline verfügbar.
 
-Das Überspringen ohne aktive Wiedergabe wird bei der Loop-Auswahl und unmittelbar vor der Live-Ausgabe erneut geprüft. Umlaute erhalten in allen Designs genügend vertikalen Raum. Preflight meldet Firebase-Verbindung, verknüpfte Veranstaltung und optionale leere Loop-Inhalte, ohne ON AIR unnötig zu blockieren.
+Läuft gerade bietet einen vollständigen Designer mit zehn Vorschaukarten. Farben, Schreibweise, Metadaten, Visualizer-Stil und -Position sowie die Dauer ab einer Sekunde sind einstellbar. Der Visualizer reagiert auf analysierbares Audio und verwendet bei blockierten Radiostreams einen bewegten Fallback unter Beachtung reduzierter Bewegung. Preflight prüft Verbindung, Veranstaltungsverknüpfung und optionale leere Loop-Inhalte, ohne ON AIR unnötig zu blockieren.
+
+## Neu
+
+### Zentrale Firebase-Quelle
+
+Stabile Veranstaltungs- und Meldungs-IDs, effektive Zeiten, Offline-Snapshot und sichere Live-Wechsel verwenden eine gemeinsame Datenlogik.
+
+### Visueller Läuft-gerade-Designer
+
+Zehn Designkarten sowie Farben, Schreibweise, Sichtbarkeit, Visualizer und Anzeigedauer werden direkt konfiguriert.
+
+## Verbessert
+
+### Audio-reaktiver Visualizer
+
+Lokales Audio steuert die Bewegung; Radiostreams erhalten bei blockierter Analyse einen aktiven Fallback.
+
+## Behoben
+
+### Leere Musikfolie sicher übersprungen
+
+Die Wiedergabe wird bei Auswahl und direkt vor MAIN erneut geprüft; Umlaute werden nicht mehr abgeschnitten.
 
 ---
 
 # GottesdienstRegie 0.68.0
 
-Version 0.68.0 räumt den Editor für automatisch gespeiste Loop-Elemente auf. „Läuft gerade“, Wetter, Uhrzeit, Meldungen, Geburtstage, Veranstaltungen, „Heute bei uns“ und „Nächste Termine“ zeigen nicht länger das allgemeine Folientextfeld, obwohl ihr Inhalt automatisch erzeugt wird.
+Veröffentlicht: Mi., 30.09.2026
 
-Stattdessen erscheint eine kompakte, passende Konfiguration. Bei „Läuft gerade“ sind die zehn Designs sowie die Schalter für Cover, Album und das Überspringen bei inaktiver Wiedergabe nun direkt im sichtbaren Editor erreichbar. Änderungen werden unmittelbar in die Folienvorschau übernommen.
+Automatisch gespeiste Loop-Elemente zeigen kein allgemeines Folientextfeld mehr, dessen Platzhalter ihren tatsächlichen Inhalt nicht verändert. Das betrifft Läuft gerade, Wetter, Uhrzeit, Meldungen, Geburtstage, Veranstaltungen, Heute bei uns und Nächste Termine.
 
-Manuell gepflegte Loop-Elemente wie Quiz, Countdown, Bibelvers, QR-Code und Infokarte behalten ihre benötigten Inhaltsfelder. Ein Regressionstest sichert diese Unterscheidung und verhindert die Rückkehr des irreführenden Platzhaltertexts.
+An dessen Stelle erscheint eine passende kompakte Konfiguration. Die zehn Läuft-gerade-Designs sowie Schalter für Cover, Album und Überspringen bei inaktiver Wiedergabe sind direkt im sichtbaren Editor erreichbar; Änderungen erscheinen sofort in der Vorschau. Manuell gepflegte Elemente wie Quiz, Countdown, Bibelvers, QR-Code und Infokarte behalten ihre Inhaltsfelder.
+
+## Verbessert
+
+### Läuft-gerade-Design direkt wählen
+
+Alle zehn Designs sowie Cover-, Album- und Überspringen-Optionen sind direkt im sichtbaren Folieneditor verfügbar.
+
+## Behoben
+
+### Unnötige Textfelder entfernt
+
+Automatisch gespeiste Loop-Elemente zeigen kein irreführendes allgemeines Textfeld mehr; manuell gepflegte Elemente behalten ihre Eingaben.
 
 ---
 
 # GottesdienstRegie 0.67.0
 
-Version 0.67.0 ergänzt laufende Radiotitel automatisch um passende Titelbilder. Weil ICY-Radiometadaten selbst normalerweise kein Cover enthalten, sucht GottesdienstRegie exakte Kombinationen aus Titel und Interpret bei MusicBrainz und lädt das freigegebene Frontcover aus dem Cover Art Archive.
+Veröffentlicht: Di., 29.09.2026
 
-Die Auflösung verwendet einen identifizierbaren User-Agent, hält das MusicBrainz-Limit von höchstens einer Anfrage pro Sekunde ein und speichert Ergebnisse zwischen. Nur exakte Titel- und Interpretenübereinstimmungen werden übernommen. Gibt es keinen sicheren Treffer, bleibt das Senderlogo oder das neutrale Plattensymbol sichtbar.
+Laufende Radiotitel erhalten passende Cover, wenn MusicBrainz eine exakte Kombination aus Titel und Interpret findet und das Cover Art Archive ein Frontcover bereitstellt. Die Auflösung verwendet einen identifizierbaren User-Agent, höchstens eine MusicBrainz-Anfrage pro Sekunde und einen Ergebnis-Cache. Ohne sicheren Treffer bleiben Senderlogo oder neutrales Plattensymbol sichtbar.
 
-Die „Läuft gerade“-Folie bietet nun zehn Designs. Zu den bisherigen acht Varianten kommen „Split Card“ und „Neon“. Coverwechsel werden weich eingeblendet und synchron an Vorschau sowie MAIN übertragen.
+Die Läuft-gerade-Folie erweitert die bisherigen acht Designs um Split Card und Neon. Coverwechsel werden weich eingeblendet und synchron an Vorschau sowie MAIN übertragen.
 
-Automatisierte Tests sichern die schlüssellose Coverauflösung, HTTPS-Bildadressen, den Cache und die zehn Designvarianten ab. Der reale Beispieltitel „Samba de Janeiro“ von Bellini wurde gegen MusicBrainz und das Cover Art Archive geprüft.
+## Neu
+
+### Automatische Coverauflösung
+
+Exakte Titel- und Interpretenpaare werden über MusicBrainz gesucht und mit dem passenden Frontcover aus dem Cover Art Archive ergänzt.
+
+### Zehn Läuft-gerade-Designs
+
+Split Card und Neon ergänzen die bisherigen acht Varianten.
+
+## Verbessert
+
+### Sicherer Cover-Fallback
+
+Nur exakte Treffer werden verwendet; andernfalls bleiben Senderlogo oder Plattensymbol sichtbar. Treffer werden zwischengespeichert und Anfragen begrenzt.
 
 ---
 
 # GottesdienstRegie 0.66.0
 
-Version 0.66.0 entkoppelt Update-Suche und Download vollständig vom geöffneten Einstellungsfenster. Wird das Fenster geschlossen, laufen beide Vorgänge im Electron-Hauptprozess weiter. Beim erneuten Öffnen wird der aktuelle Zustand samt Downloadfortschritt sofort wieder angezeigt. Ein Download endet nur noch durch den ausdrücklich betätigten Abbrechen-Button, einen Fehler oder seinen erfolgreichen Abschluss.
+Veröffentlicht: Di., 29.09.2026
 
-Der Abruf von Radiometadaten folgt jetzt sicheren HTTPS-Weiterleitungen. Das ist bei vielen Sendern erforderlich, weil die gespeicherte Streamadresse zunächst auf den eigentlichen Audiostream verweist. Übermittelt der Sender ICY-Metadaten, zeigt „Läuft gerade“ dadurch Liedtitel und Interpret. Sendet ein Stream keine Titelinformationen, bleiben Sendername und „Online-Radio“ als ehrlicher Fallback sichtbar.
+Update-Suche und Download laufen unabhängig vom geöffneten Einstellungsfenster im Electron-Hauptprozess weiter. Nach dem erneuten Öffnen werden aktueller Zustand und Downloadfortschritt sofort angezeigt. Ein Download endet durch den ausdrücklichen Abbrechen-Button, einen Fehler oder den erfolgreichen Abschluss.
 
-Regressionstests sichern die Wiederaufnahme des Update-Status und Radiometadaten über Streamweiterleitungen ab.
+Radiometadaten folgen jetzt sicheren HTTPS-Weiterleitungen zur eigentlichen Streamadresse. Liefert der Sender ICY-Metadaten, kann Läuft gerade Titel und Interpret anzeigen. Streams ohne Titelinformationen behalten Sendername und Online-Radio als Fallback.
+
+## Verbessert
+
+### Radiotitel über Weiterleitungen
+
+Der Metadatenabruf folgt sicheren HTTPS-Weiterleitungen und zeigt Titel sowie Interpret, wenn der Sender sie übermittelt.
+
+## Behoben
+
+### Update-Fortschritt bleibt erhalten
+
+Das Schließen der Einstellungen beendet weder Suche noch Download; beim erneuten Öffnen wird der aktuelle Fortschritt sofort angezeigt.
 
 ---
 
 # GottesdienstRegie 0.65.0
 
-Version 0.65.0 macht aus „Läuft gerade“ eine echte dynamische Musikfolie. Sie übernimmt Titel, Interpret, Album und – sofern verfügbar – das Cover aus der aktiven Hintergrundwiedergabe. Bei kompatiblen Radiosendern werden auch laufende ICY-Metadaten weitergereicht.
+Veröffentlicht: Di., 29.09.2026
 
-Für die Darstellung stehen acht Designs bereit: Cover links, Cover groß, Minimal, Vinyl, Radio, Verlauf, Typografie und Bühne. Cover- und Albumanzeige lassen sich einzeln steuern. Die bisher doppelte Platzhalterdarstellung wurde durch echte Wiedergabedaten und einen klaren Bereitschaftszustand ersetzt.
+Läuft gerade übernimmt Titel, Interpret, Album und vorhandene Cover aus aktiver Hintergrundwiedergabe. Kompatible Radiosender liefern zusätzlich laufende ICY-Metadaten. Acht Designs stehen bereit: Cover links, Cover groß, Minimal, Vinyl, Radio, Verlauf, Typografie und Bühne. Cover- und Albumanzeige sind einzeln steuerbar.
 
-Mit der neuen Option „Folie überspringen, wenn gerade nichts läuft“ kann das Element im Ablauf bleiben, ohne bei inaktiver Wiedergabe als leere Folie sichtbar zu werden. Die Option ist bei neu angelegten „Läuft gerade“-Elementen standardmäßig aktiviert.
+Echte Wiedergabedaten und ein Bereitschaftszustand ersetzen die doppelte Platzhalterdarstellung. Die Option Folie überspringen, wenn gerade nichts läuft hält das Element im Ablauf, ohne bei inaktiver Wiedergabe eine leere Folie auszugeben. Bei neuen Läuft-gerade-Elementen ist sie standardmäßig aktiviert.
 
-Automatisierte Prüfungen sichern die acht Designvarianten, die Live-Metadaten und das Überspringen bei inaktiver Wiedergabe ab.
+## Neu
+
+### Acht Läuft-gerade-Designs
+
+Cover links, Cover groß, Minimal, Vinyl, Radio, Verlauf, Typografie und Bühne stehen direkt im Elementeditor zur Auswahl.
+
+### Automatisch überspringen
+
+Eine Checkbox überspringt die Folie automatisch, wenn gerade kein Audio läuft.
+
+## Verbessert
+
+### Live-Radiodaten
+
+Unterstützte Radiosender reichen laufenden Titel und Interpreten direkt an die Läuft-gerade-Folie weiter.
+
+## Behoben
+
+### Keine doppelte Platzhalterzeile
+
+Die Folie zeigt echte Wiedergabedaten oder einen klaren Bereitschaftszustand statt zweimal „Läuft gerade“.
 
 ---
 
 # GottesdienstRegie 0.64.0
 
-Version 0.64.0 vereinheitlicht Schnellanzeigen, Bibeldarstellung und Ablaufbearbeitung. Jede MAIN-Schnellaktion zeigt nun unten links ihr direktes Tastenkürzel; die Tasten schalten die jeweilige Aktion auch tatsächlich. Der Bibelzugriff bleibt dabei auf F9.
+Veröffentlicht: Di., 29.09.2026
 
-Loop-Elemente sind im Menü immer auswählbar. Wird das Menü aus einem normalen Gottesdienstbereich geöffnet, legt GottesdienstRegie das neue Loop-Element sicher im Vorprogramm an. Die bestehende Platzierungsregel verhindert weiterhin, dass Loop-Elemente nach „Ankommen“ oder „Gottesdienst“ gezogen werden. Die Bezeichnung lautet einheitlich „Element hinzufügen“.
+MAIN-Schnellaktionen zeigen ihr funktionierendes Tastenkürzel unten links; der Bibelzugriff bleibt auf F9. Loop-Elemente sind im Menü Element hinzufügen immer erreichbar. Aus einem normalen Gottesdienstbereich werden sie sicher im Vorprogramm angelegt; die Platzierungsregel für Ankommen und Gottesdienst bleibt wirksam.
 
-Die On-Screen Bible übernimmt Stil, Akzentfarbe, Referenzposition und Animationsgeschwindigkeit aus den zentralen OSB-Einstellungen. Einzelvorschau und MAIN verwenden denselben 16:9-Renderer. Lange Bibelstellen werden auf mehrere Seiten verteilt und lassen sich in der Regie vor- und zurückschalten; MAIN folgt exakt der gewählten Seite. Beim Wechsel in den Bearbeitungsmodus liegt keine Bibel-Schnellanzeige mehr über dem Editor. Außerdem wird die fehlerhafte Schreibweise „GOtt“ in gelieferten Bibeltexten als „Gott“ dargestellt.
+Die On-Screen Bible übernimmt Stil, Akzentfarbe, Referenzposition und Geschwindigkeit aus zentralen OSB-Einstellungen. Einzelvorschau und MAIN nutzen denselben 16:9-Renderer. Lange Stellen werden auf Seiten verteilt, die in der Regie vor- und zurückgeschaltet werden; MAIN folgt der gewählten Seite. Beim Bearbeiten verdeckt die Bibel-Schnellanzeige den Editor nicht mehr, und gelieferte Schreibweisen wie GOtt werden als Gott normalisiert.
 
-Automatisierte Tests sichern Tastenzuordnung, Textnormalisierung, Seitenwechsel, Loop-Katalog und Zielbereichsregeln ab.
+## Neu
+
+### Tasten direkt sichtbar
+
+MAIN-Schnellaktionen zeigen ihr Tastenkürzel klein unten links und lassen sich darüber auslösen.
+
+### Mehrseitige Bibeltexte
+
+Lange Stellen werden lesbar aufgeteilt und in der Regie synchron vor- und zurückgeschaltet.
+
+## Verbessert
+
+### OSB-Design durchgängig
+
+Bibeleinblendung, Einzelvorschau und MAIN übernehmen dieselben zentralen Stil-, Farb- und Positionswerte.
+
+### Loop-Elemente immer erreichbar
+
+Loop-Elemente bleiben im Hinzufügen-Menü auswählbar und werden sicher einem zulässigen Loop-Bereich zugeordnet.
+
+## Behoben
+
+### Bibeltext im Editor
+
+Beim Wechsel zu Bearbeiten verdeckt die Bibel-Schnellanzeige den Editor nicht mehr; „Gott“ wird korrekt geschrieben.
 
 ---
 
 # GottesdienstRegie 0.63.0
 
-Version 0.63.0 ordnet die Live-Werkzeuge neu. Der allgemeine KI-Helfer wurde vollständig entfernt, weil er im praktischen Einsatz nicht zuverlässig genug war. Die getrennten Medien- und Übersetzungsfunktionen bleiben erhalten.
+Veröffentlicht: Di., 29.09.2026
 
-Die On-Screen Bible wird jetzt zentral unter Einstellungen → Präsentation → MAIN Schnellanzeigen → OSB konfiguriert. Standard- und alternative Übersetzung, sechs Stile, sechs Akzentfarben, Bucheinleitung, Referenzdarstellung, Referenzposition und Geschwindigkeit werden geräteweit gespeichert. F9 bleibt der schnelle Live-Zugriff und übernimmt diese Vorgaben automatisch, ohne die normale Folienposition zu verändern. Die Vorschau in den Einstellungen bleibt ausschließlich lokal.
+Der allgemeine KI-Helfer samt Einstellungen und Laufzeit wird entfernt; getrennte Medien- und Übersetzungsfunktionen bleiben verfügbar. Die On-Screen Bible erhält zentrale Einstellungen unter Präsentation → MAIN Schnellanzeigen → OSB: Standard- und alternative Übersetzung, sechs Stile und Farben, Bucheinleitung, Referenzdarstellung und -position sowie Geschwindigkeit. F9 nutzt die gespeicherten Gerätewerte, ohne die normale Folienposition zu verändern; die Einstellungsvorschau bleibt lokal.
 
-Radiosender können nun – sofern der Stream ICY-Metadaten liefert – den aktuellen Liedtitel und Interpreten anzeigen. Fehlerhafte oder übergroße Metadaten werden verworfen, ohne die Audiowiedergabe zu unterbrechen. Bereits zugewiesenes Hintergrund-Audio öffnet am Lautsprechersymbol eine kompakte Liste, in der Titel entfernt, weitere Titel geladen und Shuffle umgeschaltet werden können.
+Unterstützte ICY-Radiostreams zeigen Titel und Interpret. Fehlerhafte oder übergroße Metadaten werden ohne Audiounterbrechung verworfen. Das Lautsprechersymbol öffnet eine kompakte Liste zum Entfernen, Nachladen und Umschalten von Shuffle. Element hinzufügen trennt allgemeine und Loop-Elemente; Läuft gerade kommt als gestaltbare Loop-Folie hinzu.
 
-Das Menü „Element hinzufügen“ zeigt allgemeine Elemente und spezielle Vor-/Nachprogramm-Elemente in getrennten Bereichen und schließt sich beim Klick außerhalb. Nicht passende Loop-Elemente bleiben sichtbar, erklären aber ihren erforderlichen Zielbereich. Neu hinzugekommen ist die frei gestaltbare Loop-Folie „Läuft gerade“.
+## Neu
 
-Automatisierte Prüfungen sichern Einstellungsnormalisierung, sechs OSB-Stile und -Farben, Audioentfernung, Elementplatzierung, Radiometadaten sowie die vollständige Entfernung des allgemeinen KI-Helfers ab.
+### Zentrale OSB-Einstellungen
+
+Sechs Stile, sechs Farben, Referenzposition und Animation werden geräteweit festgelegt und von F9 automatisch verwendet.
+
+### Live-Radiotitel
+
+Unterstützte Radiosender zeigen Titel und Interpret direkt im Audiofenster.
+
+### Läuft-gerade-Folie
+
+Vor- und Nachprogramm erhalten eine frei gestaltbare „Läuft gerade“-Loop-Folie.
+
+## Verbessert
+
+### Audio direkt verwalten
+
+Das Lautsprechersymbol öffnet eine kompakte Titelliste mit Shuffle, Entfernen und Nachladen.
+
+### Elemente klar gruppiert
+
+Das Hinzufügen-Menü trennt allgemeine Elemente von Vor- und Nachprogramm und schließt sich außerhalb automatisch.
+
+## Behoben
+
+### KI-Helfer entfernt
+
+Der fehleranfällige allgemeine KI-Helfer samt Einstellungen und Laufzeit wurde entfernt; Medien- und Übersetzungsfunktionen bleiben erhalten.
 
 ---
 
 # GottesdienstRegie 0.62.0
 
-Version 0.62.0 korrigiert die Darstellung der Nutzungsbedingungen im Windows-Installer. Umlaute, Gedankenstriche und weitere Sonderzeichen werden nun im vom Installer erwarteten Unicode-Format erzeugt und vor der Veröffentlichung automatisch geprüft.
+Veröffentlicht: Mo., 28.09.2026
 
-Der KI-Helfer zeigt keine technischen Werbehinweise und keine wiederholten internen Anweisungen mehr. Antworten lokaler Modelle werden auch dann sicher erkannt, wenn vor dem eigentlichen JSON ein Prompt, ein Codeblock oder andere Begleittexte ausgegeben werden. Ungültige Rohantworten gelangen nicht in den Chat; stattdessen bleibt die kurze Wiederholen-Aktion erhalten.
+Die Windows-Installer-Bedingungen werden im erwarteten Unicode-Format erzeugt, sodass Umlaute und Sonderzeichen lesbar bleiben. Der KI-Helfer erkennt lokale Modellantworten auch mit vorangestellten Prompts, Codeblöcken oder Begleittext. Interne Anweisungen und ungültige Rohantworten gelangen nicht in den Chat; bei ungültiger Antwort bleibt Wiederholen verfügbar.
 
-Die MAIN-Vorschau zeigt die aktive Folie ohne zusätzliche rote LIVE-Plakette. Die Bibel-Schnellanzeige besitzt ein neues, projektortaugliches Buchdesign ohne Schlagschatten, passt die Schrift an längere Stellen an und verwendet Schreib-, Tinten- und Seitenwechselanimationen. Bei reduzierter Bewegung und in statischen Vorschaubildern erscheint der vollständige Text sofort.
+Die MAIN-Vorschau zeigt die Folie ohne zusätzliche rote LIVE-Plakette. Die Bibelanzeige verwendet ein responsives Buchdesign mit Schreib-, Tinten- und Seitenwechselanimationen; reduzierte Bewegung zeigt den vollständigen Text sofort. Spotify-Titellinks laden Name und Bild aus der öffentlichen Linkvorschau, speichern bereinigte Metadaten und öffnen den Titel ausschließlich nach ausdrücklichem Klick extern in Spotify.
 
-Spotify-Titel lassen sich nun über einen eingefügten Titellink hinzufügen. GottesdienstRegie lädt Name und Vorschaubild über Spotifys öffentliche Linkvorschau, speichert ausschließlich bereinigte Metadaten und öffnet den Titel erst nach einem ausdrücklichen Klick extern in Spotify. Eine Kontoverbindung oder automatische Wiedergabe wird dafür nicht vorgetäuscht.
+## Neu
 
-Automatisierte Prüfungen sichern Installer-Encoding, private KI-Anweisungen, MAIN-Darstellung, Bibel-Paginierung und -Animation, reduzierte Bewegung sowie Spotify-Linkvalidierung und Metadatenbereinigung ab.
+### Spotify-Titellinks
+
+Spotify-Titellinks laden eine sichere Vorschau, lassen sich lokal speichern und werden nur nach ausdrücklichem Klick extern geöffnet.
+
+### Neue Bibelanzeige
+
+Bibelstellen erscheinen in einem responsiven Buchdesign mit Schreib-, Tinten- und Seitenwechselanimationen sowie vollständiger Unterstützung für reduzierte Bewegung.
+
+## Verbessert
+
+### Robuster KI-Helfer
+
+Prompt-Wiederholungen und Begleittext lokaler Modelle bleiben verborgen; nur sicher geprüfte Antworten erscheinen im Chat.
+
+### Saubere MAIN-Vorschau
+
+Die aktive MAIN-Folie wird ohne zusätzliche rote LIVE-Plakette dargestellt.
+
+## Behoben
+
+### Lesbare Installer-Bedingungen
+
+Unicode-Encoding verhindert fehlerhafte Umlaute und Sonderzeichen in den Windows-Nutzungsbedingungen.
 
 ---
 
 # GottesdienstRegie 0.61.0
 
-Version 0.61.0 stabilisiert den nativen Programmstart und die Live-Steuerung. Die gepackte Anwendung findet ihre Weboberfläche nun unabhängig vom TypeScript-Ausgabeverzeichnis; bei einem Ladefehler erscheint statt eines schwarzen Fensters eine klare Wiederholen-Aktion. ON AIR und Testbetrieb verwenden dieselbe Auswahlregel und beginnen auf der ersten aktiven Folie – zuerst im Vorprogramm, danach Warm-up, Gottesdienst und Nachprogramm.
+Veröffentlicht: Mo., 28.09.2026
 
-Vor- und Nachprogramm bleiben zwingende Loops und behalten beim Hinzufügen ihr tatsächliches Ziel. Hintergrund-Audio färbt keine ganzen Ablaufzeilen mehr: Nur das Lautsprechersymbol zeigt Start, Laufzeit oder Stopp an. Stoppunkte können auch direkt an Abschnitten gesetzt werden, alle Bezeichnungen sind sprachabhängig, und reine Bedientöne lassen sich in den Audioeinstellungen abschalten, ohne Medien- oder Präsentationston zu beeinflussen.
+Die gepackte Anwendung findet ihre Oberfläche unabhängig vom TypeScript-Ausgabeverzeichnis und bietet bei Ladefehlern Wiederholen an. ON AIR und Testbetrieb beginnen nach derselben Auswahlregel auf der ersten aktiven Folie: Vorprogramm, Warm-up, Gottesdienst und Nachprogramm. Vor- und Nachprogramm bleiben zwingende Loops und behalten beim Hinzufügen ihr Ziel.
 
-Spotify kann optional per sicherem PKCE-Verfahren verbunden werden. Titel lassen sich suchen, als bereinigte Metadaten-Verknüpfung speichern und nach einem ausdrücklichen Klick in Spotify öffnen. Zugangstoken werden verschlüsselt außerhalb der Präsentation gespeichert. GottesdienstRegie lädt keine Spotify-Audiodaten herunter, startet keine automatische Wiedergabe und synchronisiert oder überträgt keine Spotify-Musik.
+Audiozustände erscheinen nur am Lautsprechersymbol statt als gefärbte Ablaufzeilen. Stoppunkte können direkt an Abschnitten gesetzt und reine Bedientöne unabhängig von Medien abgeschaltet werden. Die optionale Spotify-Verbindung verwendet PKCE und verschlüsselt gespeicherte Token außerhalb der Präsentation. Titel werden als bereinigte Verknüpfungen gespeichert und manuell in Spotify geöffnet; Spotify-Audio wird weder heruntergeladen noch automatisch abgespielt oder übertragen.
 
-Automatisierte Tests sichern Paketpfade, Startfolien, Loop-Ziele, Abschnitts-Stopppunkte, Bedientöne, Spotify-Referenzen und OAuth-Sicherheitsregeln ab.
+## Neu
+
+### Spotify-Verknüpfungen
+
+Spotify verbinden, Titel suchen, Verknüpfungen speichern und manuell öffnen – ohne automatische Wiedergabe.
+
+## Verbessert
+
+### Präzise Audiosteuerung
+
+Audiozustände nur am Lautsprecher, Abschnitts-Stopppunkte und abschaltbare Bedientöne.
+
+## Behoben
+
+### Zuverlässiger Programmstart
+
+Saubere Pakete laden die Oberfläche korrekt und bieten bei Fehlern Wiederholen an.
 
 ---
 
 # GottesdienstRegie 0.60.0
 
-Version 0.60.0 führt den integrierten KI-Helfer ein. Fragen, Textentwürfe und strukturierte Änderungsvorschläge werden anhand des gewählten Modellprofils verarbeitet; in den Einstellungen können Modell, Bestätigungsmodus und Berechtigungen angepasst werden.
+Veröffentlicht: Mo., 28.09.2026
 
-Der Helfer versteht Präsentationskontext, ohne persönliche Notizen, Zugangsdaten oder lokale Dateipfade an das Modell weiterzugeben. Änderungen werden vor dem Anwenden als Vorschau gezeigt oder – auf ausdrücklichen Wunsch – direkt ausgeführt. Jede angewendete Aktion ist atomar und lässt sich über die gemeinsame Präsentationshistorie rückgängig machen.
+Der integrierte KI-Helfer verarbeitet Fragen, Entwürfe und strukturierte Präsentationsänderungen nach dem gewählten Modellprofil. Elf Schnellaktionen unterstützen Planung, Texte, Ankündigungen, Bibel- und Songideen, Prüfung, Übersetzung, vorhandene Medien, Moderation, Gebete und Stil. Modell, Bestätigungsmodus und Berechtigungen lassen sich einstellen.
 
-Elf Schnellaktionen decken Ablaufplanung, Kürzen und Umschreiben, Ankündigungen, Bibel- und Songvorschläge, Präsentationsprüfung, Übersetzung, vorhandene Medien, Überschriften, Moderation, Gebete und Stilvereinheitlichung ab. Bibeltexte und Medien werden weiterhin nur über vertrauenswürdige Anwendungsdienste aufgelöst; das Modell darf keine unbekannten Aktionen oder Skripte ausführen.
+Persönliche Notizen, Zugangsdaten und lokale Pfade bleiben außerhalb des Modellkontexts. Geprüfte Änderungen werden als Vorschau oder auf ausdrücklichen Wunsch direkt angewendet, atomar gespeichert und über die gemeinsame Historie rückgängig gemacht. Die Desktop-App lädt ein fest versioniertes Modell mit sichtbarem Fortschritt; danach arbeitet der Helfer offline. Download, Aktualisierung, Entfernung und Chatverlauf sind verwaltbar. Nicht unterstützte Browser verweisen auf die Desktop-App.
 
-Die Desktop-App lädt das gewählte, fest versionierte Modell beim ersten Einsatz mit sichtbarem Fortschritt herunter und kann Download, Aktualisierung, Entfernung und lokalen Chatverlauf in den Einstellungen verwalten. Nach dem Download funktioniert der Helfer offline. Nicht unterstützte Browser empfehlen verständlich die Desktop-App.
+## Neu
 
-Automatisierte Prüfungen sichern Kontextfilter, Aktionsschema, atomare Anwendung, Modellpakete, lokale Inferenz, Abbruch, Wiederholen, Änderungsvorschau und Einstellungen ab.
+### Lokaler KI-Helfer
+
+Elf Schnellaktionen und freie Aufträge helfen bei Ablauf, Texten, Ankündigungen, Bibel- und Songideen, Übersetzungen, Moderation, Gebeten und Stil.
+
+### Modelleinstellungen
+
+Automatische Modellwahl, Bestätigungsmodus, Berechtigungen, Downloadfortschritt, Aktualisierung, Entfernung und Verlauf lassen sich verwalten.
+
+## Verbessert
+
+### Kontrollierte Änderungen
+
+Vorschläge werden geprüft, als Vorschau gezeigt und atomar über die gemeinsame Rückgängig-Historie angewendet.
+
+### Privat und offline
+
+Persönliche Notizen, Geheimnisse und lokale Pfade bleiben außerhalb des Modellkontexts. Nach dem Download arbeitet der Helfer offline.
 
 ---
 
 # GottesdienstRegie 0.59.0
 
-Version 0.59.0 macht Hintergrund-Audio schon bei der Ablaufplanung sichtbar. Beginnt Audio im Vorprogramm, an einem Abschnitt oder an einem einzelnen Element, werden alle davon betroffenen Ablaufzeilen und Folien dezent blau gekennzeichnet. Die Markierung folgt der konfigurierten Laufzeit und endet am Abschnittsende, nach dem Element oder an einem ausdrücklichen Stop-Cue.
+Veröffentlicht: Sa., 26.09.2026
 
-Das Lautsprechermenü bietet dafür „Hintergrund-Audio stoppen“. Ein solcher Punkt wird mit einem roten Lautsprechersymbol und einem X dargestellt. Wird am gleichen Element später neues Audio eingerichtet, entfernt die Anwendung den widersprüchlichen Stop-Cue automatisch.
+Version 0.59.0 kennzeichnet laufendes Hintergrund-Audio über alle betroffenen Folien, ergänzt eindeutige Stop-Cues und erweitert die lokale Bild- und Videoerstellung um Format-, Qualitäts- und Bewegungsoptionen.
 
-Die lokale Bild- und Videoerstellung besitzt zusätzliche Gestaltungsoptionen. Neben Motiv, Szene und Stil lassen sich nun Seitenverhältnis, Qualitätsstufe und unerwünschte Inhalte festlegen. Videohintergründe unterstützen sanften Zoom, Kamerafahrt oder Parallax-Bewegung. Unterschiedliche Seeds, Bildausschnitte und Farbvarianten sorgen für sichtbar unterschiedliche Ergebnisse; Vorschau und Bestätigung vor dem Speichern bleiben erhalten.
+## Neu
 
-Automatisierte Tests prüfen den Audioverlauf über mehrere Elemente und Abschnittsgrenzen, die Stop-Cue-Auflösung sowie Seitenverhältnisse und Bewegungsprofile der Medienerstellung.
+### Audioverlauf im Ablauf
+
+Eine dezente blaue Kennzeichnung folgt dem geplanten Hintergrund-Audio vom Start über alle betroffenen Elemente und Folien bis zum konfigurierten Ende.
+
+### Erweiterte Medienerstellung
+
+Seitenverhältnis, Qualitätsstufe, Negativbeschreibung und drei Video-Bewegungsarten stehen direkt im KI-Motiv-Arbeitsbereich bereit.
+
+## Verbessert
+
+### Eindeutige Audio-Stopps
+
+Stop-Cues erscheinen rot mit Lautsprecher und X. Neues Audio am selben Element löst einen alten Stop-Cue automatisch auf.
+
+### Mehr Varianten
+
+Neue Seeds, Ausschnitte, Farbabstimmungen und Bewegungsprofile erzeugen klarer unterscheidbare Bild- und Videovarianten.
 
 ---
 
 # GottesdienstRegie 0.58.0
 
-Version 0.58.0 erweitert die Audiosteuerung, Bibelauswahl und Einzelvorschau. Unter Einstellungen → Audio entscheidet eine standardmäßig aktive Option, ob verknüpftes Radio und Background Audio bereits in der Vorschau automatisch wiedergegeben werden. Ist sie deaktiviert, beginnt die automatische Wiedergabe erst bei ON AIR; bewusstes Vorhören bleibt für die technische Kontrolle verfügbar. Konfigurierte Lautsprechersymbole erscheinen ausgefüllt und zeigen zusätzlich die Anzahl hinterlegter Titel.
+Veröffentlicht: Sa., 26.09.2026
 
-Der Bibeltextdialog behält Kopf- und Aktionsleiste auch auf niedrigen Bildschirmen vollständig im Fenster. Auswahl und Vorschau scrollen unabhängig voneinander, die Buchliste ist kompakter und öffentliche Übersetzungen des bereitgestellten Workers sowie des freien Katalogs werden zusammengeführt, doppelte Ausgaben entfernt und nach Sprache gruppiert.
+Version 0.58.0 ergänzt eine globale Vorschau-Audioregel, einen sicheren Folien-Dauermodus, mehr gruppierte Bibelübersetzungen, einen responsiven Bibeldialog und vollständig lokalisierte Nutzungsansichten.
 
-Der grafische Zeitkreis ist nun ein Bedienelement: Ein Klick hält die aktuelle Folie im Dauermodus und verhindert das automatische Weiterschalten, ein weiterer Klick setzt die Zeitsteuerung fort. Die Radiosuche zeigt bei eingegebenem Text rechts im Feld eine zugängliche X-Schaltfläche zum Leeren.
+## Neu
 
-Die Nutzungsbedingungen reagieren nicht mehr nur mit übersetzten Überschriften auf die Sprachwahl. Für jede der siebzehn Anwendungssprachen wird nun auch lokalisierter Abschnittsinhalt bereitgestellt; die ausführliche deutsche Originalfassung bleibt als rechtlich maßgebliche Fassung gekennzeichnet.
+### Audio nur bei ON AIR
 
-Automatisierte Tests sichern Vorschau-Audioregel, Übersetzungszusammenführung, Dauermodus, Radiosuchfeld und vollständige Sprachabdeckung ab.
+Eine standardmäßig aktive Einstellung erlaubt Radio und Background Audio in der Vorschau. Wird sie ausgeschaltet, startet automatische Wiedergabe erst bei ON AIR; manuelles Vorhören bleibt möglich.
+
+### Folien-Dauermodus
+
+Der Zeitkreis kann angeklickt werden, um automatisches Weiterschalten bis zu einem erneuten Klick auszusetzen.
+
+## Verbessert
+
+### Mehr Bibelübersetzungen nach Sprache
+
+Worker und öffentlicher Katalog werden zusammengeführt, doppelte Ausgaben entfernt und die Auswahl nach Sprache gruppiert.
+
+### Lokalisierte Bedingungen
+
+Alle Anwendungssprachen erhalten lokalisierten Abschnittsinhalt in App und Webansicht.
+
+## Behoben
+
+### Bibeldialog bleibt im Fenster
+
+Feste Kopf- und Fußbereiche sowie getrennt scrollbare Inhalte verhindern abgeschnittene Felder und Aktionen.
+
+### Radiosuche schnell leeren
+
+Ein X direkt im Suchfeld entfernt den eingegebenen Text.
 
 ---
 
 # GottesdienstRegie 0.57.0
 
-Version 0.57.0 verbessert Einzelvorschau, Radiosender, Bibel-Schnellanzeige und die erreichbaren Nutzungsinformationen. Der verkleinerte grafische Zeitkreis liegt jetzt in einer eigenen rechten Navigationsschiene außerhalb der Folie. Linke und rechte Pfeiltaste wechseln Folien auch ohne vorherigen Fokus auf die Vorschau; Eingabefelder, Editoren und geöffnete Dialoge werden dabei bewusst nicht abgefangen.
+Veröffentlicht: Sa., 26.09.2026
 
-Radiosender öffnen am Lautsprechersymbol in einem eigenständigen Dialog, ohne zusätzliche Hinweise aus dem Audiobrowser und ohne den bisherigen Menüpunkt „Audio Einstellungen“. Die Suche heißt kompakt „Suchen“, Ergebnisse lassen sich schrittweise erweitern oder wieder reduzieren. Ein fester Bereich am unteren Rand zeigt den Ladezustand mit animierten Punkten, den laufenden Sender und – sofern der Stream beziehungsweise das System diese Metadaten bereitstellt – Live-Titel und Senderbild.
+Version 0.57.0 ordnet Zeitsteuerung und Tastaturnavigation in der Einzelvorschau neu, baut Radiosender als eigenständigen Dialog aus und zeigt lange Bibelstellen in einer bildschirmgerechten, animierten Buchansicht. Die Online-Nutzungsbedingungen erhalten außerdem einen Sprachumschalter für alle Anwendungssprachen.
 
-Die spontane Bibelanzeige verwendet eine eigene animierte Buchgestaltung mit responsiver Typografie. Lange Stellen werden versweise auf mehrere Seiten verteilt, sodass Text nicht mehr aus der Ausgabe läuft. Die Seiten können im Bedienbereich manuell vor- und zurückgeschaltet werden. Der Bibelauswahldialog ist zugleich kompakter, höhenflexibel und hält Vorschau sowie Bestätigungsaktionen auch auf kleineren Bildschirmen erreichbar.
+## Neu
 
-Die Onlinefassung der Nutzungsbedingungen besitzt nun einen Sprachumschalter für alle siebzehn Anwendungssprachen und wählt beim ersten Aufruf passend zur Browsersprache. Die Anwendung öffnet die Onlinefassung direkt mit der aktuell gewählten Softwaresprache. Die rechtlich maßgebliche deutsche Originalfassung bleibt klar gekennzeichnet.
+### Mehrseitige Bibelanzeige
 
-Das Starterklärungstutorial enthält einen eigenen Schritt zum Minimum-Viable-Product-Ansatz. Derselbe ausführliche Hinweis ist dauerhaft unter Hilfe → Minimum Viable Product (MVP) erreichbar und erklärt, weshalb Rückmeldungen unmittelbar in die weitere Entwicklung einfließen.
+Bibeltexte erscheinen auf einem eigenständigen Buchhintergrund mit responsiver Typografie und dezenter Seitenanimation. Lange Stellen werden nur zwischen Versen getrennt und lassen sich im Bedienbereich manuell vor- und zurückschalten.
 
-Automatisierte Regressionstests prüfen Bibel-Seitenaufteilung, fokusunabhängige Pfeiltastensteuerung, Sendermetadaten, Versionsinhalte und beide MVP-Hinweise.
+### Radio-Wiedergabestatus
+
+Der eigenständige Radiosender-Dialog zeigt Laden, Wiedergabe und Fehler am unteren Rand. Verfügbare Senderbilder und vom System gemeldete Live-Titel werden dort ebenfalls dargestellt.
+
+## Verbessert
+
+### Vorschau ohne Fokus navigieren
+
+Linke und rechte Pfeiltaste wechseln Folien nun auch ohne vorherigen Klick in die Vorschau. Eingabefelder, Editoren und geöffnete Dialoge bleiben davon ausgenommen.
+
+### Sprachumschalter für Nutzungsbedingungen
+
+Die App öffnet die Nutzungsbedingungen passend zur gewählten Softwaresprache. Die Webfassung bietet alle siebzehn Anwendungssprachen in einer eigenen Auswahl und berücksichtigt automatisch die Browsersprache.
+
+## Behoben
+
+### Zeitkreis außerhalb der Folie
+
+Der verkleinerte Zeitkreis besitzt jetzt eine eigene rechte Navigationsschiene und kann den sichtbaren Folienbereich nicht mehr überdecken.
+
+### Kompakter Bibeldialog und klares Lautsprechermenü
+
+Der Bibeldialog passt sich kleineren Bildschirmhöhen an und hält Vorschau sowie Aktionen erreichbar. Radiosender öffnen am Lautsprecher ohne Audiobrowser-Hinweise; der zusätzliche Audio-Einstellungen-Eintrag wurde entfernt.
 
 ---
 
 # GottesdienstRegie 0.56.0
 
-Version 0.56.0 verbindet die MAIN-Bibelanzeige mit dem bereitgestellten öffentlichen Bibelstellen-Worker, ohne dessen Code zu verändern. Die Anwendung verwendet die Worker-Routen für Übersetzungen und Texte als bevorzugte Quelle und fällt bei einer Störung automatisch auf den bisherigen freien Bibeldienst zurück. Die gemeinsame Buchauswahl unterscheidet innerhalb derselben Box klar zwischen Altem und Neuem Testament; Suche, Kapitel, Versanfang, Versende und die vollständige Vorschau bleiben erhalten.
+Veröffentlicht: Sa., 26.09.2026
 
-Der Audiobrowser reserviert nicht länger eine große leere Fläche oberhalb der Treffer. Seine Kopf-, Such-, Filter-, Ergebnis-, Detail- und Auswahlbereiche folgen wieder einer konsistenten Fensteraufteilung. Das Lautsprechermenü bietet nun ausdrücklich „Radiosender“ an und öffnet die vorhandene Onlinesuche als Popup, sodass erreichbare HTTPS-Streams gesucht, vorgehört und ohne Umweg in die Hintergrundplaylist übernommen werden können.
+Version 0.56.0 bindet den bereitgestellten Bibelstellen-Worker unverändert als bevorzugte Quelle ein, ordnet Bücher im gemeinsamen Suchfeld nach Altem und Neuem Testament und behält einen automatischen Rückfall bei. Außerdem wurden der Audiobrowser repariert, Radiosender direkt am Lautsprecher erreichbar gemacht, die Elementauswahl für den Gottesdienst korrigiert, die Schnellanzeige Ohne Text abgesichert und ein grafischer Zeitkreis in der Einzelvorschau ergänzt.
 
-Der zentrale Befehl „Element hinzufügen“ zielt verlässlich auf den Gottesdienst und zeigt dort alle normalen Elementarten. Die zusätzlichen Plus-Schaltflächen direkt neben Vor- und Nachprogramm wurden entfernt; die festen Schleifen und ihre zulässigen Inhalte bleiben unverändert. Die MAIN-Schnellanzeige „Ohne Text“ bleibt stets sichtbar, lässt sich auf Folien ohne ausblendbare Inhalte aber nicht auslösen und erklärt ihre momentane Nichtverfügbarkeit über einen kurzen Hinweis.
+## Neu
 
-Zeitgesteuerte Folien erhalten in der Einzelvorschau links neben dem rechten Navigationspfeil einen schlichten kreisförmigen Fortschritt. Er läuft proportional zur verbleibenden Zeit herunter, zeigt weder Text noch Symbol und wird niemals in MAIN eingeblendet. Zusätzlich wurden sämtliche achtzehn Abschnitte der Nutzungsbedingungen deutlich erweitert; App, Installer und Webfassung verwenden weiterhin dieselbe Fassung 2.1.
+### Bibelbücher nach Testament
+
+Die Buchsuche bleibt in einer gemeinsamen Box und trennt ihre Treffer dort klar in Altes und Neues Testament. Übersetzungen und Bibeltexte werden über den öffentlichen Worker geladen; fällt er aus, versucht die Anwendung weiterhin die bisherige freie Quelle.
+
+### Grafischer Folien-Zeitkreis
+
+Zeitgesteuerte Folien zeigen in der Einzelvorschau links neben dem rechten Navigationspfeil einen schlichten Kreis, dessen Umfang mit der verbleibenden Zeit abnimmt. Der Kreis enthält bewusst weder Text noch Symbol und beeinflusst die Ausgabe nicht.
+
+## Verbessert
+
+### Radiosender am Lautsprecher
+
+Das Lautsprechermenü bietet neben Audiobrowser, Import und Einstellungen nun direkt Radiosender an. Die Auswahl öffnet die vorhandene Onlinesuche als Popup, in dem Streams gesucht, vorgehört und zur Playlist hinzugefügt werden können.
+
+### Ausführlichere Nutzungsbedingungen
+
+Alle achtzehn Regelungsbereiche wurden erweitert und erläutern Zuständigkeiten, Liveprüfung, Medienrechte, Drittanbieter, Synchronisierung, Sicherungen, Updates und Haftung genauer. App, Installer und eigenständige Webfassung werden weiterhin aus derselben Textquelle erzeugt.
+
+## Behoben
+
+### Audiobrowser ohne leere obere Fläche
+
+Eine widersprüchliche Grid-Zuordnung reservierte im Auswahlfenster eine große leere Fläche und schob Treffer sowie Details nach unten. Der Audiobrowser verwendet jetzt durchgehend seine vorgesehenen Zeilen und bleibt bei leeren Filtern vollständig bedienbar.
+
+### Sichere Element- und Schnellanzeigenauswahl
+
+Der zentrale Plus-Button zielt eindeutig auf den Gottesdienst und zeigt dort sämtliche normalen Elemente; die zusätzlichen Plus-Schaltflächen neben Vor- und Nachprogramm wurden entfernt. Ohne Text bleibt sichtbar, ist ohne ausblendbare Folieninhalte jedoch gesperrt und erklärt den Grund beim Darüberfahren.
 
 ---
 
 # GottesdienstRegie 0.55.0
 
-Version 0.55.0 erweitert die neue Bibel-Schnellanzeige zu einem durchsuchbaren Arbeitsablauf. Die Anwendung lädt den öffentlichen Übersetzungskatalog von GetBible und bietet dadurch wesentlich mehr frei verfügbare Ausgaben als die bisher fest eingetragene Startauswahl. Übersetzungen lassen sich nach Name, Sprache oder Kürzel filtern. Die voreingestellte Ausgabe bleibt Luther 1545, sodass der bekannte Ablauf ohne zusätzliche Auswahl erhalten bleibt.
+Veröffentlicht: Sa., 26.09.2026
 
-Auch die Stellenwahl wurde genauer und schneller. Bibelbücher werden über deutsche Namen, englische Bezeichnungen und geläufige Kürzel gefunden. Für das gewählte Buch zeigt die Kapitelwahl nur den gültigen Bereich an; Kapitel- und Verseingaben bieten nummerische Vorschläge. Der angeforderte Bereich wird weiterhin erst beim Bibeldienst geprüft und vollständig in der Vorschau angezeigt. Erst eine erfolgreich geladene Vorschau kann auf MAIN eingeblendet werden.
+Version 0.55.0 erweitert die MAIN-Bibelanzeige um einen dynamischen Katalog mit wesentlich mehr frei verfügbaren Übersetzungen, Suchvorschläge für Ausgaben und Bücher sowie gültige Kapitel- und Versbereiche. Gleichzeitig behebt das Update den Absturz beim Start des Testbetriebs, stellt verdeckte Elementmenüs wieder her, macht die Radiosuche durch mehrere Ausweichserver belastbarer und verlinkt die eigenständige Onlinefassung der Nutzungsbedingungen direkt im Hilfemenü.
 
-Der Absturz beim Start des Testbetriebs ist behoben. Gerenderte Ausgabesnapshots werden zum Schutz gegen unbeabsichtigte Änderungen unveränderlich gespeichert. Version 0.54.0 versuchte anschließend, die neue Ausgaberevision direkt an dieses eingefrorene Objekt anzuhängen, wodurch „Cannot add property _outputRevision, object is not extensible“ entstand. Version 0.55.0 erzeugt stattdessen eine getrennte, erweiterbare Ausgabekopie. Der unveränderliche Ursprungszustand bleibt geschützt, während Testbetrieb und ON AIR ihre Revision zuverlässig übertragen.
+## Neu
 
-Die Auswahl „Element hinzufügen“ bleibt wieder sichtbar. Wenn eine ältere oder unvollständige Präsentation vorübergehend keinen passenden aktiven Abschnitt liefert, verwendet das Menü einen sicheren Gottesdienst- beziehungsweise Standardbereich. Menüs erhalten außerdem eine eigene maximale Höhe und bleiben bei schmalen Desktop-, Tablet- und Webansichten außerhalb der horizontalen Menüleiste sichtbar. Vor- und Nachprogramm behalten weiterhin ausschließlich ihre vorgesehenen Loop-Elemente.
+### Durchsuchbarer Bibel-Katalog
 
-Die Radiosendersuche verwendet nicht mehr nur einen einzelnen Server. Fällt der bevorzugte Radio-Browser-Knoten aus, werden weitere öffentliche Knoten nacheinander versucht. Die Suche startet zusätzlich mit Enter, sortiert brauchbare Ergebnisse nach Bekanntheit und meldet verständlich, wenn keine erreichbaren HTTPS-Streams gefunden wurden. Sender können weiterhin vorgehört und anschließend als Hintergrundaudio hinzugefügt werden.
+Übersetzungen werden aus dem öffentlichen GetBible-Katalog geladen und können nach Name, Sprache oder Kürzel gefiltert werden. Luther 1545 bleibt voreingestellt; bei einem Netzfehler bleibt die integrierte Grundauswahl verfügbar.
 
-Im Menü Hilfe steht nun ein direkter Eintrag „Nutzungsbedingungen“. Er öffnet die eigenständige öffentliche Webfassung; dieselbe Seite ist auch aus der Webanwendung erreichbar. Installer, Anwendung und Onlineansicht verwenden weiterhin den gemeinsamen Inhalt. Automatisierte Regressionstests prüfen den unveränderlichen Live-Snapshot, Bibelbuchsuche, Kapitelgrenzen, Übersetzungskatalog, Radio-Ausweichserver und die Elementauswahl.
+### Vorschläge für Stelle und Bereich
+
+Bücher werden über deutsche und englische Namen sowie übliche Kürzel gefunden. Kapitel folgen den Grenzen des ausgewählten Buchs; Kapitel und Verse bieten nummerische Vorschläge und werden vor MAIN anhand der geladenen Vorschau geprüft.
+
+## Verbessert
+
+### Radiosuche mit Ausweichservern
+
+Mehrere öffentliche Radio-Browser-Knoten werden nacheinander verwendet. Suche per Enter, verständliche Leer- und Fehlermeldungen sowie die vorhandene Vorschau erleichtern das Hinzufügen eines erreichbaren HTTPS-Streams.
+
+### Nutzungsbedingungen direkt erreichbar
+
+Das Hilfemenü in Desktop- und Webversion öffnet die getrennte öffentliche Seite der Nutzungsbedingungen direkt.
+
+## Behoben
+
+### Testbetrieb startet ohne Revisionsfehler
+
+Die Ausgaberevision wird einer sicheren Kopie hinzugefügt, statt einen eingefrorenen Renderzustand zu verändern. Dadurch tritt der Fehler „object is not extensible“ nicht mehr auf.
+
+### Elemente wieder sichtbar
+
+Die Elementauswahl verwendet bei fehlender Abschnittszuordnung einen sicheren Standardbereich und bleibt auch in schmalen Ansichten vollständig sichtbar.
+
+### Radio bleibt bei Serverausfall nutzbar
+
+Ein nicht erreichbarer erster Suchserver blockiert die Funktion nicht mehr; die Suche wechselt automatisch zum nächsten Knoten.
 
 ---
 
 # GottesdienstRegie 0.54.0
 
-Version 0.54.0 überarbeitet die Rechtschreibprüfung, die Synchronisierung zwischen Bedienvorschau und MAIN, die KI-Motivvarianten und insbesondere die Bibel-Schnellanzeige. Die ausgewählte Anwendungssprache bestimmt nun auch das aktive Wörterbuch. Unbekannte oder falsch geschriebene Wörter werden in editierbaren Feldern rot unterstrichen. Das native Kontextmenü bietet höchstens sechs passende Schreibvorschläge, kann eine Schreibweise dauerhaft lernen oder das markierte Wort mit Google suchen. Rückgängig, Wiederholen, Ausschneiden, Kopieren, Einfügen und Alles auswählen bleiben im selben Menü verfügbar.
+Veröffentlicht: Fr., 25.09.2026
 
-Vorschau und MAIN reagieren nun auf denselben aktuellen Renderzustand. Zuvor wurde eine MAIN-Aktualisierung im Wesentlichen nur ausgelöst, wenn sich die Kennung der Live-Folie änderte. Wurde dagegen Text, Hintergrund, Übersetzung oder Gestaltung der bereits laufenden Folie verändert, zeigte die Bedienvorschau den neuen Zustand, während MAIN noch einen älteren Snapshot behalten konnte. Version 0.54.0 überträgt deshalb jede tatsächliche Inhaltsänderung erneut. Fortlaufende Ausgaberevisionen verhindern zugleich, dass verspätete ältere Zustände einen neueren Stand überschreiben.
+Version 0.54.0 führt eine sprachabhängige Rechtschreibprüfung mit Korrekturmenü ein, hält Vorschau und MAIN über versionierte Renderzustände deckungsgleich, erzeugt deutlichere KI-Motivvarianten und ersetzt die bisher kaum nutzbare Bibelanzeige durch einen vollständigen Auswahl-, Vorschau- und Liveablauf.
 
-Die MAIN-Schnellaktion „Bibel einblenden“ wurde vollständig ersetzt. Ein Klick sendet nicht länger sofort eine möglicherweise leere Schnellanzeige, sondern öffnet zuerst einen eigenständigen Dialog. Dort werden Übersetzung, Bibelbuch, Kapitel sowie erster und letzter Vers gewählt. Eine echte Vorschau lädt den Text über die öffentliche GetBible-Schnittstelle und speichert erfolgreiche Abfragen zwischen. Luther 1545 ist voreingestellt; Elberfelder 1871, Elberfelder 1905, Schlachter 1951, King James Version und American Standard Version können ebenfalls gewählt werden. Erst „AUF MAIN ANZEIGEN“ legt den geprüften Text über die laufende Folie. Netzwerk- und Stellenfehler erzeugen niemals eine leere Ausgabe, sondern eine verständliche Meldung mit Wiederholen-Aktion.
+## Neu
 
-Temporäre Bibeltexte bleiben sichtbar, wenn sich darunter die normale Live-Folie weiterentwickelt. Die aktuelle MAIN-Folie wird parallel aktualisiert und erscheint wieder, sobald die Schnellanzeige bewusst beendet wird. Damit bleiben Ablaufsteuerung und temporäre Einblendung voneinander getrennt.
+### Neue Bibel-Schnellaktion für MAIN
 
-Die KI-Motiverstellung verwendet jetzt einen robusten Variantenschlüssel. Wiederholte Generierungen derselben Beschreibung unterscheiden Farbgebung, Ausschnitt, Verschiebung, Zoom, leichte Drehung und gegebenenfalls Spiegelung deutlich sichtbarer. Die gewählte Szenenkategorie und der Gestaltungsstil bleiben dabei erhalten.
+Ein Klick auf „Bibel einblenden“ öffnet nun zuerst einen eigenen Dialog. Buch, Kapitel, Versbereich und Übersetzung werden getrennt gewählt; der echte Text wird geladen, zwischengespeichert, vollständig geprüft und erst nach Bestätigung als temporäre MAIN-Ebene angezeigt. Luther 1545 ist voreingestellt, weitere freie deutsche und englische Ausgaben stehen direkt bereit.
 
-Präsentationsnotizen lassen sich mit Escape schließen. Die Nutzungsbedingungen erscheinen in Anwendung, Installationsfassung und Onlineansicht als übersichtliche Aufzählungen mit Listenpunkten beziehungsweise Gedankenstrichen anstelle einer unruhigen Folge einzelner Textabsätze. Automatisierte Tests sichern Wörterbuchauswahl, Live-Revisionen, KI-Varianten, Bibeltextnormalisierung, leere Bibelantworten und die Escape-Bedienung ab.
+### Rechtschreibprüfung folgt der gewählten Sprache
+
+Die Desktop-Rechtschreibprüfung wechselt gemeinsam mit der Anwendungssprache. Unbekannte Wörter werden rot markiert; das Kontextmenü zeigt höchstens sechs Vorschläge sowie Schreibweise lernen, Google-Suche, Rückgängig, Wiederholen, Ausschneiden, Kopieren, Einfügen und Alles auswählen.
+
+## Verbessert
+
+### Vorschau und MAIN verwenden denselben aktuellen Zustand
+
+Änderungen an einer bereits live geschalteten Folie lösen jetzt ebenfalls eine neue MAIN-Ausgabe aus. Jede Ausgabe trägt eine fortlaufende Revision; verspätete ältere Zustände werden ignoriert. Temporäre Bibelanzeigen bleiben während normaler Folienaktualisierungen sichtbar und lassen sich gezielt zur aktuellen MAIN-Folie zurücksetzen.
+
+### Deutlichere KI-Motivvarianten
+
+Wiederholte Generierungen derselben Beschreibung verwenden einen stabilen Variantengenerator statt einer anfälligen Zeichensumme. Farbwerte, Ausschnitt, Verschiebung, Zoom, leichte Drehung und Spiegelung unterscheiden sich dadurch sichtbar, ohne Szene oder Stil zu verlassen.
+
+### Nutzungsbedingungen als Aufzählung
+
+Regelungen erscheinen in Anwendung, Installertext und Webansicht als ruhige Aufzählungen mit Gedankenstrichen beziehungsweise Listenpunkten statt als Folge einzelner Absätze.
+
+## Behoben
+
+### Präsentationsnotizen mit Escape schließen
+
+Der modale Editor für Präsentationsnotizen reagiert jetzt zuverlässig auf Escape und gibt die darunterliegende Oberfläche erst nach dem Schließen wieder frei.
+
+### Keine leere Bibelanzeige mehr
+
+Die bisherige Schnellaktion konnte eine inhaltslose Bibelkonfiguration direkt an MAIN senden, weil nur wenige lokale Beispielstellen existierten. Der neue Ablauf verlangt erfolgreich geladene Vorschauinhalte und zeigt bei Netzwerk- oder Stellenfehlern eine verständliche Wiederholen-Aktion.
 
 ---
 
 # GottesdienstRegie 0.53.0
 
-Version 0.53.0 ordnet den Live-Start, die Bibel-Schnellanzeige, KI-Motive und mehrere Statusbereiche der Bedienoberfläche neu. ON AIR beginnt jetzt unabhängig von der zuletzt ausgewählten Editor- oder Vorschaufolie immer mit der ersten aktiven Folie des gesamten Ablaufs. Befindet sich diese Folie im Vorprogramm oder im Bereich Ankommen, startet die Ausgabe dort; deaktivierte Elemente und Folien werden übersprungen.
+Veröffentlicht: Fr., 25.09.2026
 
-Die sichtbare KI-Motiverstellung dauert mindestens acht Sekunden. Ist das Bild technisch früher vorbereitet, bleiben Spinner und wechselnde Arbeitsmeldungen bis zum Ablauf dieser Mindestzeit erhalten. Erst danach erscheint das Ergebnis zur Prüfung. Fehler werden nicht künstlich verzögert, sondern weiterhin sofort mit der vorhandenen Wiederholen-Aktion angezeigt.
+Version 0.53.0 startet ON AIR verlässlich mit der ersten aktiven Folie, stabilisiert die Bibel-Schnellanzeige, gibt der KI-Motiverstellung mindestens acht Sekunden sichtbare Arbeitszeit und reduziert entbehrliche Statusangaben sowie Schatten.
 
-Die spontane Bibelanzeige wurde repariert. Die voreingestellte Stelle Johannes 3,16 konnte bisher nicht angezeigt werden, weil das lokale Startpaket nur einen abweichenden Bereichsschlüssel für Johannes 3,16–18 enthielt. Einzelvers und Bereich werden nun korrekt aufgelöst. Wird „AUF MAIN ANZEIGEN“ vor dem Live-Start verwendet, durchläuft GottesdienstRegie zuerst den normalen sicheren ON-AIR-Start und legt den bestätigten Bibeltext danach als unabhängige Schnellanzeige über MAIN.
+## Verbessert
 
-Die Regieoberfläche zeigt weniger entbehrliche Zusatzinformationen. Entfernt wurden der rote Punkt links im ON-AIR-Schalter, Mengenangaben wie „1 Folie“, „2 Songs“ oder Elementzahlen, die Markierung „MAIN · ON AIR“ unten links in der Vorschau, der Folientimer oben rechts und der doppelte Menüpunkt „Medienverwaltung“. Die vorhandene Medienbibliothek bleibt der zentrale Einstieg. Favoriten besitzen im aktiven Zustand einen ausgefüllten Stern.
+### Mindestens acht Sekunden KI-Erstellung
 
-Dialoge, Popups, Menüs und vergleichbare schwebende Bedienflächen verwenden keine Schlagschatten mehr. Diese Änderung betrifft ausschließlich die Bedienoberfläche; bewusst gestaltete Texteffekte innerhalb einer Präsentationsfolie bleiben unverändert. Automatisierte Tests prüfen den ersten aktiven ON-AIR-Inhalt, die Acht-Sekunden-Regel, die voreingestellte Bibelstelle sowie die entfernten Bedienelemente.
+Ein erfolgreiches KI-Motiv erscheint frühestens acht Sekunden nach dem Start. Spinner und wechselnde Statusmeldungen bleiben bis dahin sichtbar; Fehler erscheinen weiterhin unverzüglich.
+
+### Ruhigere Bedienoberfläche
+
+Folien-, Song- und Elementmengen, der rote ON-AIR-Punkt, die MAIN-ON-AIR-Markierung, der obere Vorschautimer und der doppelte Menüpunkt Medienverwaltung wurden entfernt. Dialoge und Popups verwenden keine Schatten mehr; Favoriten zeigen einen ausgefüllten Stern.
+
+## Behoben
+
+### ON AIR beginnt am Ablaufanfang
+
+Der Start ignoriert die aktuelle Editor- oder Vorschauauswahl und verwendet immer die erste aktive Folie des ersten aktiven Elements, auch im Vorprogramm oder Ankommen.
+
+### Bibeltext lässt sich wieder einblenden
+
+Die voreingestellte Stelle Johannes 3,16 wird im lokalen Paket korrekt gefunden. Falls ON AIR noch nicht aktiv ist, startet der sichere Live-Ablauf zuerst und sendet den bestätigten Bibeltext danach als unabhängige MAIN-Schnellanzeige.
 
 ---
 
 # GottesdienstRegie 0.52.1
 
-Version 0.52.1 korrigiert die Veröffentlichung der öffentlichen Versionshinweise. Die vollständigen Einträge für 0.50.0, 0.51.0 und 0.52.0 waren bereits im gemeinsamen Versionskatalog und in der Anwendung vorhanden, wurden auf der Webseite aber nicht angezeigt. Ursache war, dass die GitHub-Pages-Bereitstellung ausschließlich auf Aktualisierungen des Branches `main` reagierte, während die neueren veröffentlichten Versionen als Tags aus dem Release-Branch erstellt wurden. Die Installationsdateien waren deshalb aktuell, die Webansicht blieb jedoch bei Version 0.49.0 stehen.
+Veröffentlicht: Fr., 25.09.2026
 
-Die Pages-Pipeline reagiert nun zusätzlich auf jeden Versions-Tag. Neue Versionshinweise werden dadurch künftig gemeinsam mit dem jeweiligen Release angestoßen und gelangen nicht mehr unabhängig von den Downloads ins Hintertreffen. Die bisherige Veröffentlichung bei Änderungen am Hauptbranch bleibt als zusätzlicher Weg erhalten.
+Version 0.52.1 behebt die Veröffentlichung der öffentlichen Versionshinweise. Die Einträge 0.50.0, 0.51.0 und 0.52.0 waren zwar in der Anwendung und im Release enthalten, die Webseite wurde nach 0.49.0 jedoch nicht mehr neu bereitgestellt.
 
-Die öffentliche Webseite enthält nach dieser Aktualisierung wieder lückenlos Version 0.49.0, 0.50.0, 0.51.0, 0.52.0 und die aktuelle Version 0.52.1. Alle Einträge behalten ihre ausführlichen deutschen und englischen Beschreibungen, Kategorien und direkten Versionsanker. Eine automatische Prüfung stellt sicher, dass die betroffenen Versionen im Webkatalog enthalten sind, genau eine Version als aktuell markiert ist und Versions-Tags die Webbereitstellung auslösen.
+## Verbessert
+
+### Webseite folgt künftig jedem Release
+
+Neben Aktualisierungen des Hauptbranches löst nun auch jeder Versions-Tag die Veröffentlichung der Release-Notes-Webseite aus. Damit gelangen neue Hinweise zusammen mit den Installationsdateien online.
+
+## Behoben
+
+### Versionen ab 0.50.0 nachgetragen
+
+Die öffentliche Übersicht enthält wieder lückenlos 0.49.0, 0.50.0, 0.51.0, 0.52.0 und die aktuelle Version 0.52.1 einschließlich der ausführlichen deutschen und englischen Beschreibungen.
 
 ---
 
 # GottesdienstRegie 0.52.0
 
-Version 0.52.0 verbessert KI-Motive, Medienverwaltung, persönliche Notizen und die manuelle ON-AIR-Navigation. Die leere Ergebnisvorschau trägt nun nur noch die kleine Überschrift „Vorschau“; der bisherige erklärende Satz wurde entfernt. „Andere Beschreibung“ verwendet ein verständliches Aktualisieren-Symbol statt des Würfels.
+Veröffentlicht: Fr., 25.09.2026
 
-Neu generierte Motive unterscheiden sich jetzt auch bei derselben Beschreibung sichtbar. Neben dem wechselnden Erstellungswert werden Ausschnitt, minimale Skalierung, Farbton und Sättigung variiert. Dadurch liefert „Neu generieren“ tatsächlich eine neue Variante, während Szene und gewünschter Stil erhalten bleiben.
+Version 0.52.0 erzeugt sichtbar unterschiedliche Motivvarianten, repariert das Löschen lokaler Medien, begrenzt Notizen auf 5.000 Zeichen und erlaubt gezielte ON-AIR-Wechsel zwischen den Programmabschnitten.
 
-Das Löschen von Medien wurde korrigiert. Lokale Medien werden nun direkt aus dem lokalen Medienbestand entfernt, während synchronisierte Team-Medien weiterhin den abgesicherten Cloud-Löschpfad einschließlich Verwendungs- und ON-AIR-Prüfung nutzen. Der vorherige Fehler entstand, weil auch lokale Dateien stets an den Cloud-Endpunkt geschickt wurden und dort zwangsläufig als nicht vorhanden galten.
+## Neu
 
-Persönliche Folien- und Präsentationsnotizen sind auf 5.000 Zeichen begrenzt. Ein Zähler rechts unten zeigt den aktuellen Stand als „0/5000“ an. Überlange Eingaben und eingefügte Texte werden unmittelbar an der Grenze beendet; auch die dauerhafte Speicherung wendet dieselbe Obergrenze an.
+### ON-AIR per Klick wechseln
 
-Während ON AIR kann die Regie Vorprogramm, Ankommen und Gottesdienst jetzt gezielt wechseln. In der Vorschau schaltet ein normaler Klick auf ein Element dieses live; ein Doppelklick funktioniert zusätzlich aus dem Bearbeitungsmodus. Ein Doppelklick auf einen Abschnittstitel nimmt dessen erstes aktives Element live. Damit bleibt der automatische Loop erhalten, kann aber jederzeit bewusst verlassen werden.
+In der Vorschau schaltet ein Klick, im Bearbeitungsmodus ein Doppelklick das gewählte Element live. Abschnittstitel führen per Doppelklick zum ersten aktiven Inhalt.
+
+## Verbessert
+
+### Neue Motivvarianten und kompaktere Vorschau
+
+Ausschnitt, Skalierung und Farbgebung variieren zwischen Aufträgen. Die leere Vorschau verwendet nur noch eine kleine Beschriftung und das Beschreibungswerkzeug ein Aktualisieren-Symbol.
+
+### Notizen bis 5.000 Zeichen
+
+Der Zähler rechts unten zeigt die aktuelle Länge; Eingabe und Speicherung halten dieselbe feste Grenze ein.
+
+## Behoben
+
+### Medien lassen sich wieder löschen
+
+Lokale Dateien werden lokal entfernt; nur synchronisierte Medien verwenden den Cloud-Löschpfad und dessen Schutzprüfungen.
 
 ---
 
 # GottesdienstRegie 0.51.0
 
-Version 0.51.0 vervollständigt den Arbeitsablauf für KI-Motive und korrigiert die noch sichtbaren Gestaltungsfehler der in Version 0.50 eingeführten zweigeteilten Ansicht. Eingabebereich und Vorschau besitzen nun ausgewogenere Breiten, einheitliche Innenabstände und sauber ausgerichtete Oberkanten. Beschreibung, Zeichenzähler, Zufallsvorschlag, Szenenkategorie und Gestaltungsstil bilden einen kompakten Block ohne unnötige Leerflächen. Die rechte Vorschau verwendet ein festes 16:9-Verhältnis und bleibt auch auf kleineren Fenstern vollständig erreichbar.
+Veröffentlicht: Fr., 25.09.2026
 
-Beim Erstellen erscheint jetzt ein kleiner, klar erkennbarer Lade-Spinner unmittelbar in der Motivvorschau. Er zeigt den laufenden Vorgang an, ohne die gesamte Seite zu verdecken oder die Eingaben zu verschieben. Die bereits vorhandenen wechselnden Statustexte und die Fehleraktion „Erneut versuchen“ bleiben erhalten. Bei reduzierter Bewegung wird die Darstellung weiterhin entsprechend der Systemeinstellung beruhigt.
+Version 0.51.0 korrigiert das Layout der KI-Motive-Seite, zeigt beim Erstellen einen kleinen Spinner und speichert ein Ergebnis erst nach deiner ausdrücklichen Bestätigung in der Medienbibliothek.
 
-Ein fertig erzeugtes Bild oder Video wird nicht mehr automatisch in die Medienbibliothek übernommen. Stattdessen erscheint das tatsächliche Ergebnis zunächst groß in der Vorschau. Danach stehen zwei eindeutige Entscheidungen bereit: „Neu generieren“ erstellt mit den aktuellen Angaben eine neue Variante, während „In Medienbibliothek speichern“ genau das sichtbare Ergebnis dauerhaft ablegt. Damit landen verworfene Varianten nicht mehr unbeabsichtigt in der Bibliothek.
+## Neu
 
-Für die dauerhafte Speicherung besitzt die Desktop-App einen neuen, abgesicherten Medienpfad. Generierte Daten werden mit Prüfsumme, Dateityp, Dateigröße, KI-Kennzeichnung und zugehörigen Stichwörtern im lokalen Medienspeicher registriert. Bereits identische Dateien werden anhand ihrer Prüfsumme wiedererkannt. Lokal gespeicherte, noch nicht in die Team-Cloud hochgeladene Motive erscheinen ebenfalls in der Medienbibliothek und bleiben nach einem Neustart verfügbar.
+### Ergebnisentscheidung
 
-Automatisierte Tests prüfen, dass vor der ausdrücklichen Bestätigung kein Medieneintrag entsteht, dass das gespeicherte Ergebnis seine KI-Herkunft behält und dass seine tatsächlichen Dateidaten im Medienverzeichnis liegen. Zusätzliche Versionsprüfungen sichern Ergebnisaktionen, Vorschau und kleinen Lade-Spinner ab.
+Nach der Erstellung bleibt das tatsächliche Bild oder Video als Vorschau stehen. „Neu generieren“ verwirft es zugunsten einer neuen Variante; „In Medienbibliothek speichern“ legt genau dieses Ergebnis dauerhaft ab.
+
+## Verbessert
+
+### Kompaktere KI-Motive-Seite
+
+Spaltenbreiten, Innenabstände, Formulargruppen und die 16:9-Vorschau sind sauber ausgerichtet. Ein kleiner Spinner informiert direkt im Vorschaubereich über die laufende Erstellung.
+
+## Behoben
+
+### Keine unbeabsichtigten Bibliothekseinträge
+
+Generieren allein verändert die Medienbibliothek nicht mehr. Erst die Speicheraktion schreibt die Datei samt KI-Kennzeichnung dauerhaft in den lokalen Medienspeicher.
 
 ---
 
 # GottesdienstRegie 0.50.0
 
-Version 0.50.0 ordnet die Medien- und Präsentationswerkzeuge sichtbar neu und beseitigt mehrere störende Bedienfehler. Die Seite „KI-Motive“ besitzt nun einen breiteren, zweigeteilten Arbeitsbereich: Beschreibung, Format, Szene und Stil bleiben links übersichtlich zusammengefasst, während rechts eine dauerhafte Motivvorschau die gewählte Bild- oder Videoart, Szene und Gestaltung unmittelbar sichtbar macht. Erstellungsstatus, wechselnde Animationen und „Erneut versuchen“ bleiben vollständig erhalten.
+Veröffentlicht: Fr., 25.09.2026
 
-In den Mediendetails steht „KI-generiert“ jetzt als normale Metadatenzeile direkt nach „Format“ und verwendet dort das Robotersymbol. Der Medienname wird zunächst ruhig als Überschrift angezeigt und wechselt erst nach einem bewussten Klick in den Bearbeitungsmodus. Dort gelten weiterhin die sichtbare Grenze von 300 Zeichen, Abbrechen und validiertes Speichern. Die Community-Leeransicht verwendet den neutralen Satz „Noch keine freigegebenen Medien vorhanden.“
+Version 0.50.0 gestaltet KI-Motive und Mediendetails neu, erweitert den Editor für Präsentationsnotizen und macht Vor- sowie Nachprogramm zu verlässlichen, nicht abschaltbaren Schleifen.
 
-Präsentationsnotizen öffnen sich über eine kleinere Schaltfläche ohne zusätzliches Symbol. Der Editor unterstützt nun neben Fett, Kursiv und Unterstrichen auch Absatzformate, Zitate, Durchstreichen, linke, mittige und rechte Ausrichtung, Einzüge, Textfarbe und das Entfernen vorhandener Formatierung. Rückgängig und Wiederholen bleiben als kompakte Symbole verfügbar; persönliche Notizen bleiben lokal und erscheinen niemals in einer Ausgabe.
+## Neu
 
-Vorprogramm und Nachprogramm sind jetzt technisch verpflichtende Schleifen. Der missverständliche LOOP-Schalter wurde entfernt, und auch geladene ältere Präsentationen sowie interne Aktualisierungen können diese beiden Bereiche nicht versehentlich aus dem Schleifenbetrieb nehmen. Das Hinzufügen der dafür vorgesehenen Elemente bleibt erhalten. Der zugehörige Auswahlbereich wurde schmaler, vollständig sichtbar und unabhängig vom abgeschnittenen Seitenleisteninhalt positioniert.
+### Erweiterter Notizeneditor
 
-Die „Wir sagen Amen“-Schnellanzeige richtet ihre vollständige Animation nun in beiden Achsen an der Mitte der Ausgabe aus. „Bibeltext anzeigen“ behält den sicheren Ablauf bei: Zuerst werden Bibelstelle und Übersetzung gewählt, danach wird eine Vorschau geladen, und erst die ausdrückliche Anzeigeaktion überschreibt MAIN. Automatisierte Tests prüfen die festen Schleifenregeln sowie die kompakte Notizenöffnung, die erweiterten Formatierungswerkzeuge und die bestehenden Speicherzustände.
+Absatzformate, Zitate, Durchstreichen, drei Ausrichtungen, Einzüge, Textfarbe und Formatbereinigung ergänzen die vorhandenen Werkzeuge in einem sicheren modalen Dialog.
+
+## Verbessert
+
+### KI-Motive und Mediendetails neu geordnet
+
+Der Generator verwendet eine sichtbare zweigeteilte Arbeitsfläche mit Vorschau. Mediennamen werden erst nach einem Klick bearbeitet; KI-Herkunft erscheint direkt nach dem Dateiformat.
+
+## Behoben
+
+### Verpflichtende Vor- und Nachprogramm-Schleifen
+
+Der abschaltbare LOOP-Schalter wurde entfernt. Neue und geladene Präsentationen halten beide Bereiche technisch im Schleifenbetrieb; die Elementauswahl bleibt vollständig sichtbar und die Amen-Animation sitzt mittig.
 
 ---
 
 # GottesdienstRegie 0.49.0
 
-Version 0.49.0 korrigiert die Darstellung des Startbildschirms. Seit Version 0.48.0 erschien die Ladeansicht bereits in der vollständigen Größe des späteren Bedienfensters. Das war zwar eine Absicherung gegen ein dauerhaft kleines Hauptfenster, veränderte aber den bewusst kompakten Charakter des Programmstarts.
+Veröffentlicht: Fr., 25.09.2026
 
-Der Startbildschirm erscheint nun wieder als schmales, mittig auf dem vorgesehenen Bildschirm platziertes Fenster mit bis zu 410 × 700 Pixeln. Darin bleiben Logo, Ladefortschritt, „Synchronisierung überspringen“ und die Schließen-Schaltfläche vollständig erreichbar. Die kompakte Startgröße wird nicht als normale Fensterposition gespeichert.
+Der Startbildschirm erscheint wieder schmal und mittig auf dem vorgesehenen Monitor mit bis zu 410 × 700 Pixeln. Logo, Ladefortschritt, Synchronisierung überspringen und Schließen bleiben erreichbar. Die kompakte Größe wird nicht als normale Fensterposition gespeichert.
 
-Sobald Konto, Gerät und Arbeitsbereich bereit sind, wird das vorhandene Fenster kontrolliert auf die gespeicherte Desktop-Größe erweitert. Danach sind Vergrößern, Maximieren und der konfigurierte Startmodus wieder uneingeschränkt verfügbar. So bleibt der Start schmal, ohne den mit Version 0.48 behobenen Fehler eines dauerhaft kleinen Bedienfensters zurückzubringen.
+Sobald Konto, Gerät und Arbeitsbereich bereit sind, wird dasselbe Fenster auf die gespeicherte Desktop-Größe erweitert; Vergrößern, Maximieren und der Startmodus werden aktiviert. Falls das Bereitsignal ausbleibt, aktiviert ein 30-Sekunden-Sicherheitsweg den großen Arbeitsbereich.
 
-Falls das Bereitsignal wider Erwarten verloren geht, aktiviert ein 30-Sekunden-Sicherheitsweg automatisch den großen Arbeitsbereich. Automatisierte Tests prüfen sowohl die exakte Zentrierung des kompakten Startfensters als auch die weiterhin gültigen Mindestmaße und Wiederherstellungsregeln des Hauptfensters.
+## Verbessert
+
+### Sauberer Fensterübergang
+
+Das Startfenster ist auf dem vorgesehenen Monitor mittig platziert. Nach dem Bereitsignal werden Mindestgröße, Vergrößerbarkeit, Maximierung und gespeicherter Startmodus gemeinsam aktiviert.
+
+## Behoben
+
+### Startansicht nicht mehr bildschirmfüllend
+
+Die Ladeansicht verwendet wieder bis zu 410 × 700 Pixel statt der späteren Desktop-Abmessungen. Ein Sicherheitszeitgeber verhindert zugleich ein dauerhaft kleines Bedienfenster.
 
 ---
 
 # GottesdienstRegie 0.48.0
 
-Version 0.48.0 behebt den Fehler, durch den GottesdienstRegie nach dem Hochfahren in einem schmalen, unvollständig aufgeklappten Fenster stehen bleiben konnte. Das Bedienfenster erhält nun bereits vor dem Laden der Oberfläche eine gültige Desktop-Größe, verwirft Positionen auf nicht mehr angeschlossenen Bildschirmen und bleibt jederzeit vergrößerbar und maximierbar. Die Wiederherstellung ist damit nicht mehr von einem verspäteten Renderer-Signal abhängig.
+Veröffentlicht: Fr., 25.09.2026
 
-Desktop-App und Web-Editor sind jetzt unmittelbar miteinander verbunden. Im Hilfemenü der installierten Anwendung öffnet ein fester Eintrag die Webversion; der Web-Editor verweist bei Desktop-Funktionen auf die aktuelle Downloadseite. Beide Ziele sind fest auf die offiziellen HTTPS-Adressen von GottesdienstRegie beschränkt.
+Version 0.48.0 startet immer in einer verwendbaren Desktop-Größe, verbindet Web- und Desktop-Ausgabe, modernisiert die Medienbibliothek und ergänzt eine sichere Bibeltext-Schnellanzeige für MAIN.
 
-Die Medienbibliothek wurde für die tägliche Auswahl überarbeitet. Der Upload sitzt am rechten Rand der Befehlsleiste, doppelte Favoriten- und Löschaktionen wurden entfernt, ausgewählte Bilder lassen sich in einer großen Zoomansicht prüfen und Mediennamen direkt mit sichtbarer 300-Zeichen-Grenze bearbeiten. Zusätzlich zeigt die Detailansicht mit einem Robotersymbol eindeutig, ob ein Medium KI-generiert ist. „Zuletzt verwendet“ richtet sich nicht mehr nach irgendeiner Bearbeitung, sondern ausschließlich nach dem tatsächlichen Einsatz eines Mediums.
+## Neu
 
-Der Bereich KI-Motive besitzt nun einen eigenständigen Erstellungsstatus mit mindestens 15 wechselnden visuellen Phasen. Bei reduzierter Bewegung bleibt der Zustand ruhig und verständlich. Tritt ein Fehler auf, bleiben Beschreibung, Szene und Stil erhalten; eine kompakte Schaltfläche „Erneut versuchen“ startet denselben Auftrag erneut.
+### Bibeltext anzeigen
 
-Mit „Bibeltext anzeigen“ steht ein eigener Such- und Vorschauablauf für spontane MAIN-Einblendungen bereit. Luther 1912 ist voreingestellt. Der Katalog modelliert 26 deutsche und vier englische Übersetzungen; sichtbar sind aus rechtlichen Gründen nur bereits installierte oder direkt beziehbare Pakete. Lizenzpflichtige Texte werden nicht als scheinbar installierbare Auswahl angeboten. Die MAIN-Schnellanzeige bleibt als eigene Ebene bestehen, wenn Folien weitergeschaltet werden oder ein Folienwechsel-Countdown läuft.
+Bibelstellen können gesucht, in Luther 1912 oder einer installierbaren freien Übersetzung vorab geprüft und anschließend als unabhängige MAIN-Schnellanzeige eingeblendet werden.
 
-Automatisierte Tests prüfen die Fensterstart-Regeln, sicheren Plattformlinks, Mediennamen und Nutzungszeiten, 15 KI-Ladephasen, Bibelstellen-Parser, Katalogumfang und die Trennung der MAIN-Schnellanzeige vom normalen Folienstand.
+### Verknüpfte Web- und Desktop-Version
+
+Die Desktop-App öffnet den Web-Editor; der Web-Editor verweist direkt auf den aktuellen Desktop-Download.
+
+## Verbessert
+
+### Medienbibliothek und KI-Motive
+
+Großansicht, validierte Namen bis 300 Zeichen, KI-Herkunft, echte zuletzt verwendete Medien sowie 15 zugängliche Erstellungsphasen und eine Wiederholen-Aktion beschleunigen den Medienworkflow.
+
+## Behoben
+
+### Fenster bleibt nicht mehr klein
+
+Das Hauptfenster erhält vor dem Laden gültige Desktop-Abmessungen und ist unabhängig vom Renderer-Bereitsignal vergrößerbar.
+
+### MAIN-Schnellanzeige bleibt stabil
+
+Folienwechsel und zugehörige Countdown-Timer ersetzen eine aktive Bibel- oder andere Schnellanzeige nicht mehr.
 
 ---
 
 # GottesdienstRegie 0.47.0
 
-Version 0.47.0 behebt die abgeschnittenen Texte im Bereich Einstellungen → Updates. Die Kurzbeschreibung eines verfügbaren Updates wurde bislang unabhängig von Wort- und Satzgrenzen nach exakt 220 Zeichen beendet. Dadurch konnte der letzte sichtbare Satz mitten in einem Wort abbrechen, obwohl die vollständigen Versionshinweise bereits vorhanden waren.
+Veröffentlicht: Fr., 25.09.2026
 
-Die feste Zeichengrenze wurde entfernt. Die Update-Karte zeigt nun die ersten beiden inhaltlichen Absätze vollständig an und bereitet sowohl Markdown- als auch HTML-Versionshinweise als gut lesbaren Klartext auf. Überschriften und reine Veröffentlichungszeilen werden weiterhin ausgelassen, damit der Hinweis kompakt bleibt, ohne den eigentlichen Inhalt zu beschneiden.
+Version 0.47.0 entfernt die starre 220-Zeichen-Grenze der Update-Karte. Lange Versionsbeschreibungen bleiben bis zum Ende der angezeigten Absätze erhalten und werden innerhalb der verfügbaren Breite sauber umgebrochen.
 
-Auch die Darstellung der Update-Karte wurde abgesichert. Lange Sätze und ungewöhnlich lange Wörter brechen innerhalb der verfügbaren Breite um; es gibt keine feste Zeilenhöhe, keinen versteckten Überlauf und keine Ellipse. Damit bleibt der komplette angezeigte Text bei allen unterstützten Anzeigegrößen lesbar.
+## Verbessert
 
-Automatische Regressionstests prüfen lange Klartext- und HTML-Versionshinweise und stellen sicher, dass ein Absatz auch jenseits von 220 Zeichen vollständig erhalten bleibt.
+### Robuste Aufbereitung von Versionshinweisen
+
+Klartext, Markdown und HTML werden einheitlich aufbereitet. Überschriften werden ausgelassen, während die ersten beiden inhaltlichen Absätze vollständig sichtbar bleiben.
+
+## Behoben
+
+### Kein abgeschnittener Text mehr
+
+Die bisherige feste Grenze von 220 Zeichen konnte Sätze mitten im Wort beenden. Sie wurde entfernt; normale und besonders lange Wörter brechen nun innerhalb der Update-Karte um, ohne verborgen zu werden.
 
 ---
 
 # GottesdienstRegie 0.46.0
 
-Version 0.46.0 veröffentlicht erstmals eine native Browser-Vorschau des GottesdienstRegie-Editors für PC, Tablet und Smartphone. Die Weboberfläche wird aus demselben React-Anwendungskern wie die Desktop-App gebaut, startet aber ohne Electron-Bridge und ohne Installation direkt im Browser. Beim ersten Öffnen entsteht automatisch eine lokale Präsentation. Änderungen werden regelmäßig und beim manuellen Speichern im Browserprofil gesichert und beim nächsten Öffnen wieder geladen.
+Veröffentlicht: Fr., 25.09.2026
 
-Die lokale Speicherung verwendet fortlaufende Revisionen. Wird dieselbe ältere Grundfassung durch einen neueren Stand überholt, verwirft der Dienst die neuere Fassung nicht still, sondern meldet einen Revisionskonflikt. Die technische Revision bleibt außerhalb des fachlichen Präsentationsdokuments. Diese erste Webvorschau synchronisiert Präsentationen bewusst noch nicht zwischen verschiedenen Browsern oder Geräten; persönliche Notizen und Präsentationen bleiben in diesem Stand im jeweiligen Browserprofil.
+Version 0.46.0 veröffentlicht erstmals den gemeinsamen GottesdienstRegie-Editor als Browser-Vorschau. Präsentationen werden lokal und revisionsgeschützt im Browser gespeichert. Responsive Arbeitsbereiche ermöglichen die Vorbereitung auf PC, Tablet und Smartphone, während Liveausgaben weiterhin sicher der Desktop-App vorbehalten bleiben.
 
-Tablet und Smartphone erhalten eine touchfähige Navigation für Ablauf, Song, Folie und Vorschau. Bedienelemente besitzen mindestens 44 Pixel große Ziele, berücksichtigen sichere Bildschirmränder und vermeiden horizontales Abschneiden. Auf kleinen Displays werden Ablauf und Arbeitsbereich untereinander angeordnet. Die Desktop-App behält ihre bisherige kompakte Oberfläche.
+## Neu
 
-Desktop-exklusive Funktionen werden im Browser nicht vorgetäuscht. MAIN-, STAGE- und Livestream-Ausgabe, lokale Geräte, Audio-Routing, Videoeingänge, lokale Übersetzungsmodelle und Programmupdates bleiben Aufgaben der installierten Desktop-App. Ein sichtbarer Hinweis erklärt dies direkt im Web-Editor. Der Browser kann Inhalte vorbereiten und lokal speichern, aber nicht ON AIR gehen.
+### Web-Editor ohne Installation
 
-Der Web-Editor wird zusammen mit den Versionshinweisen unter `/GottesdienstRegie/editor/` veröffentlicht. Ein eigener Produktions-Web-Build und Browser-Smoke-Tests prüfen, dass der Editor ohne Electron-Bridge startet. Zusätzliche Tests decken PC-, Tablet- und Smartphone-Breiten, Touch-Navigation, Plattformfähigkeiten, lokale Revisionen sowie die weiterhin unveränderten Desktop-Builds ab.
+Der Editor startet direkt im Browser, legt beim ersten Öffnen eine lokale Präsentation an und lädt sie beim nächsten Besuch wieder. Der Browser-Build benötigt keine Electron-Bridge.
+
+### Touch-Navigation
+
+Tablet und Smartphone erhalten eine Navigation für Ablauf, Song, Folie und Vorschau mit großen Touchzielen und sicheren Bildschirmrändern.
+
+## Verbessert
+
+### Klare Plattformgrenzen
+
+Der Web-Editor erklärt sichtbar, dass MAIN, STAGE, Livestream und Gerätefunktionen die installierte Desktop-App benötigen. Die gemeinsame Plattformarchitektur verhindert undefinierte Electron-Aufrufe im Browser.
+
+## Behoben
+
+### Revisionsgeschützte lokale Speicherung
+
+Lokale Präsentationen erhalten fortlaufende Revisionen. Eine ältere Grundfassung kann einen neueren Stand nicht unbemerkt überschreiben.
+
+## Bekannte Einschränkungen
+
+### Noch keine geräteübergreifende Synchronisierung
+
+Diese erste Vorschau speichert Präsentationen und persönliche Notizen ausschließlich im aktuellen Browserprofil. Cloud-Anmeldung, Team-Synchronisierung und Fernsteuerung folgen getrennt, damit Live- und Konfliktsicherheit unabhängig geprüft werden können.
 
 ---
 
 # GottesdienstRegie 0.45.1
 
-Version 0.45.1 präzisiert den Speicherstatus persönlicher Präsentations- und Foliennotizen. Das bisher dauerhaft sichtbare Schloss vermittelte auch während des Speicherns oder nach einem Fehler den Eindruck, dass lediglich der private Hinweis aktiv sei. Nun besitzt jeder Zustand eine eindeutige Darstellung: Im Ruhezustand bestätigt das Schloss weiterhin, dass die Notiz nur für den angemeldeten Benutzer auf diesem Gerät sichtbar ist. Sobald Text geändert wird, wechselt die Anzeige zu einem Synchronisationssymbol und einer laufenden Punktfolge aus „.“, „..“ und „...“.
+Veröffentlicht: Fr., 25.09.2026
 
-Nach erfolgreicher lokaler Speicherung erscheint ein Haken zusammen mit „Gespeichert“. Diese Bestätigung bleibt höchstens fünf Sekunden sichtbar und kehrt anschließend automatisch zum privaten Ruhezustand zurück. Schlägt das Speichern beispielsweise wegen eines nicht verfügbaren lokalen Speichers fehl, erscheint ein Fehlerzeichen mit „Speichern fehlgeschlagen“. Dieser Fehlerstatus wird nicht durch einen älteren Erfolgstimer überschrieben, sondern bleibt bis zum nächsten Speicherversuch nachvollziehbar.
+Persönliche Präsentations- und Foliennotizen zeigen nun für Ruhe, Speichern, Erfolg und Fehler jeweils ein passendes Symbol. Die laufende Punktanzeige macht den Speichervorgang sichtbar; die Erfolgsbestätigung verschwindet nach höchstens fünf Sekunden wieder.
 
-Die Zeitsteuerung wurde zugleich gegen schnelle Eingaben und das Schließen des Dialogs abgesichert. Jede neue Bearbeitung verwirft einen noch ausstehenden älteren Speichervorgang. Zeitgeber für Entprellung, Animation und Erfolgsanzeige werden beim Wechsel der Notiz sowie beim Entfernen der Komponente vollständig beendet. Damit entstehen keine verspäteten Schreibvorgänge und keine Statusänderungen, nachdem der Notizeneditor bereits geschlossen wurde.
+## Verbessert
 
-Auch die Barrierefreiheit wurde verbessert. Der Statusbereich meldet Änderungen über eine zurückhaltende Live-Region. Während die Punkte optisch weiterlaufen, hören Screenreader nur die stabile Meldung „Notiz wird gespeichert“ und nicht bei jeder Animationsstufe einen neuen Satz. Wer im Betriebssystem reduzierte Bewegung aktiviert hat, erhält denselben verlässlichen Status ohne rotierendes Symbol.
+### Verständlicher Speicherablauf
 
-Die Datenschutz- und Ausgaberegeln ändern sich nicht: Persönliche Notizen bleiben lokal, benutzer- und präsentationsbezogen gespeichert. Sie werden durch dieses Update nicht synchronisiert, nicht Teil der Präsentationsdatei und niemals auf MAIN, STAGE, LIVESTREAM, Lobby oder andere Ausgaben übertragen.
+Im privaten Ruhezustand steht das Schloss. Während des Speicherns erscheint ein Synchronisationssymbol mit einem, zwei und drei Punkten. Ein Haken bestätigt die erfolgreiche Speicherung kurzzeitig; Fehler bleiben bis zum nächsten Versuch sichtbar.
 
-Automatisierte Tests prüfen alle vier Zustände, die Punkteanimation, schnelle aufeinanderfolgende Eingaben, Fehler nach einem vorherigen Erfolg, die Fünf-Sekunden-Grenze, Screenreader-Ausgabe und die vollständige Timerbereinigung beim Schließen.
+## Behoben
+
+### Robuste Zeitsteuerung und Screenreader-Ausgabe
+
+Neue Eingaben beenden veraltete Timer. Beim Schließen werden alle ausstehenden Vorgänge bereinigt. Screenreader erhalten während der visuellen Animation eine stabile Meldung und reduzierte Bewegung wird berücksichtigt.
 
 ---
 
 # GottesdienstRegie 0.45.0
 
-Version 0.45.0 vervollständigt die Sprachauswahl des Song-Übersetzers und behebt mehrere Fehler rund um persönliche Präsentationsnotizen. Der bislang kleine fest eingebaute Flaggenkatalog deckte nur die Standardsprachen ab. Weitere auswählbare Sprachen erhielten deshalb dasselbe neutrale Globus-Symbol. Der gesamte Sprachkatalog ist nun mit repräsentativen Länderzuordnungen verbunden und verwendet lokal gebündelte SVG-Flaggen. Die Anzeige ist unabhängig von Betriebssystem-Emojis und funktioniert ohne Internetzugriff.
+Veröffentlicht: Mo., 21.09.2026
 
-Der Präsentationsnotizen-Dialog wird nicht länger innerhalb der Seitenleiste aufgebaut, sondern als echte oberste Modalebene direkt am Dokumentkörper. Dadurch liegt er zuverlässig über allen Teilen des Editors. Die globale Textformatierungsleiste wird ausgeblendet, solange Notizen geöffnet sind. Gleichzeitig wird die darunterliegende Anwendung für Mausereignisse gesperrt. Eine zusätzliche Schutzprüfung in der Canvas-Bewegungslogik beendet laufende Ziehvorgänge, sobald ein modaler Dialog vorhanden ist. Elemente können daher nicht mehr versehentlich hinter dem Dialog verschoben oder skaliert werden.
+Version 0.45.0 vervollständigt die visuelle Sprachauswahl und korrigiert mehrere Wechselwirkungen des Präsentationsnotizen-Dialogs. Jede im Übersetzer angebotene Sprache besitzt nun eine lokal gebündelte, SVG-basierte repräsentative Länderflagge. Der Notizen-Dialog liegt als echte oberste Modalebene über dem Editor, blendet dessen Formatierungsleiste aus und sperrt sämtliche Mausbewegungen im darunterliegenden Canvas. Zusätzlich wurden die Notizen-Symbole und die Hilfe-Schaltfläche der Veranstaltungsverknüpfung verbessert.
 
-Im Notizeditor kennzeichnet ein Schloss-Symbol den Hinweis „Diese Notiz ist nur für dich sichtbar.“ Rückgängig und Wiederholen verwenden kompakte Undo- und Redo-Symbole statt langer Textschaltflächen; Tooltips und zugängliche Beschriftungen bleiben vorhanden. Die Hilfe-Schaltfläche der Veranstaltungsverknüpfung besitzt jetzt eine feste rechte Rasterspalte und sitzt unabhängig von Textlänge oder Anzeigegröße vertikal mittig.
+## Neu
 
-Automatische Regressionstests prüfen jede angebotene Übersetzungssprache, die Modal-Sperre, die Notizen-Symbole, das Ausblenden der Editorleiste sowie die Rasterposition der Veranstaltungshilfe.
+### Flaggen für den gesamten Sprachkatalog
+
+Nicht nur die Standardsprachen, sondern auch alle weiteren auswählbaren Übersetzungssprachen zeigen jetzt eine passende Flagge. Die Grafiken werden als lokale SVG-Ressourcen mit der Anwendung ausgeliefert und benötigen weder Emoji-Unterstützung noch eine Internetverbindung.
+
+## Verbessert
+
+### Klarere Notizen-Werkzeuge
+
+Vor dem Datenschutzhinweis steht nun ein Schloss-Symbol. Rückgängig und Wiederholen erscheinen als eindeutige Symbole mit zugänglichen Beschriftungen und Tooltips.
+
+### Hilfe zur Veranstaltungsverknüpfung ausgerichtet
+
+Die Hilfe-Schaltfläche sitzt in einer eigenen festen Rasterspalte rechts neben der Veranstaltung und ist unabhängig von Textlänge und Anzeigegröße vertikal zentriert.
+
+## Behoben
+
+### Editorleiste hinter Notizen
+
+Beim Öffnen der Präsentationsnotizen bleibt die Textformatierungsleiste des Folieneditors nicht mehr sichtbar. Der Dialog wird direkt unterhalb des Dokumentkörpers gerendert und kann nicht von lokalen Stapelkontexten der Seitenleiste eingeschränkt werden.
+
+### Keine Bearbeitung hinter einem Dialog
+
+Die Anwendung unterhalb des Notizen-Dialogs erhält keine Mausereignisse mehr. Auch globale Canvas-Bewegungen prüfen den Modalzustand, brechen laufende Ziehvorgänge ab und verhindern so das versehentliche Verschieben oder Skalieren von Elementen.
 
 ---
 
 # GottesdienstRegie 0.44.0
 
-Version 0.44.0 macht die Bedienoberfläche standardmäßig etwas größer und besser lesbar. Die vorhandene fünfstufige Anzeigegröße beginnt nun auf der Stufe „Groß“ mit dem Faktor 1,1. Dadurch wachsen Navigation, Menüs, Schaltflächen, Symbole und allgemeine Beschriftungen behutsam um zehn Prozent, ohne die kompakte Desktop-Aufteilung grundlegend zu verändern.
+Veröffentlicht: Mo., 21.09.2026
 
-Eingabefelder, Textfelder, Auswahlfelder und andere Formularelemente behalten ihre bereits festgelegten Abmessungen. Damit bleibt in Editoren und Einstellungsseiten ausreichend Platz für Inhalte. Die Vergrößerung betrifft ausschließlich die Bedienoberfläche: Folienvorschau, MAIN, STAGE, Livestream, Lobby, Recording und weitere Ausgabefenster werden weder skaliert noch in ihrer Gestaltung verändert.
+Version 0.44.0 hebt die Standardgröße der Bedienoberfläche behutsam um zehn Prozent an. Navigation, Menüs, Schaltflächen, Symbole und allgemeine Beschriftungen sind dadurch leichter erfassbar, während Eingabefelder ihre bisherigen festen Abmessungen behalten und mehr Inhalt nicht unnötig verdrängt wird. Vorschau, MAIN, STAGE, Livestream, Recording und alle anderen Ausgabefenster bleiben unverändert.
 
-Beim ersten Start nach dem Update erhalten auch bestehende Installationen einmalig die neue größere Ausgangsstufe. Danach kann die Anzeigegröße unter Einstellungen weiterhin frei zwischen Sehr klein, Klein, Standard, Groß und Sehr groß gewechselt werden. Automatische Prüfungen sichern die neue Ausgangsstufe, die unveränderte Ausgabeskalierung und die bestehende Skalenauswahl ab.
+## Verbessert
+
+### Leicht vergrößerter Standard
+
+Die bisherige fünfstufige Anzeigegröße startet nun auf der Stufe „Groß“ mit Faktor 1,1. Das gilt nach dem Update einmalig auch für bestehende Installationen; anschließend kann die Größe wie gewohnt zwischen Sehr klein, Klein, Standard, Groß und Sehr groß gewählt werden.
 
 ---
 
 # GottesdienstRegie 0.43.1
 
-Version 0.43.1 behebt die überlappende Darstellung in der Sprachauswahl des Song-Übersetzers. Das kompakte SVG-Sprachsymbol hatte denselben globalen CSS-Klassennamen wie der große Sprachschalter auf dem Anmeldebildschirm. Da die Login-Regel später geladen wird, wurde die Flagge von den vorgesehenen 24 × 16 Pixeln auf 46 × 38 Pixel vergrößert, während die erste Rasterspalte weiterhin nur 28 Pixel breit war. Dadurch lagen Flagge, Sprachname und Eigenbezeichnung übereinander.
+Veröffentlicht: So., 20.09.2026
 
-Die Übersetzungsflaggen verwenden nun einen eigenen, ausschließlich für diese Komponente bestimmten Klassennamen. Größe, Schatten, Mauszeiger und Rasterbreite sind damit unabhängig von der Anmeldeseite. Sprachname, Eigenbezeichnung sowie Download- oder Bereitschaftsstatus bleiben wieder vollständig lesbar. Eine automatische Layoutprüfung verhindert, dass der kollidierende Klassenname später erneut eingesetzt wird.
+Version 0.43.1 behebt eine CSS-Kollision zwischen dem großen Sprachschalter der Anmeldung und den kompakten SVG-Sprachsymbolen im Song-Übersetzer. Flaggen behalten nun zuverlässig ihre vorgesehene Größe, Text, Eigenbezeichnung und Downloadstatus liegen in getrennten Rasterspalten und überdecken sich nicht mehr.
+
+## Verbessert
+
+### Eigener, kollisionsfreier SVG-Selektor
+
+Die Flaggenkomponente verwendet einen ausschließlich für Übersetzungssprachen bestimmten Klassennamen. Feste Maße von 24 × 16 Pixeln, neutrales Schattenverhalten und eine stabile erste Rasterspalte verhindern, dass globale Login-Regeln die Auswahlliste verändern.
+
+## Behoben
+
+### Überlappung in der Sprachsuche
+
+In der geöffneten Sprachsuche lagen Flagge, Sprachname und Eigenbezeichnung teilweise übereinander, weil eine später geladene globale Regel das SVG auf 46 × 38 Pixel vergrößerte. Die Klassennamen-Kollision ist entfernt und durch eine automatische Regressionsprüfung abgesichert.
 
 ---
 
 # GottesdienstRegie 0.43.0
 
-Version 0.43.0 macht mehrere vorbereitete Funktionen belastbar für den täglichen Einsatz. Die Nutzungsbedingungen wurden zu einer deutlich ausführlicheren gemeinsamen Fassung erweitert. Anwendung, Windows-Installer und die eigenständige öffentliche Seite `https://cmoere.github.io/GottesdienstRegie/terms/` werden aus derselben strukturierten Quelle erzeugt. Die Online-Bedingungen liegen bewusst nicht auf derselben Seite wie die Versionshinweise. Themen wie Konten, Live-Verantwortung, Medienrechte, Cloud-Synchronisierung, lokale Speicherung, Übersetzungsmodelle, Updates, Verfügbarkeit, Haftung, Beendigung und Kontakt sind nun nachvollziehbar gegliedert.
+Veröffentlicht: So., 20.09.2026
 
-Unter Einstellungen → Allgemein steht eine neue Speicherübersicht bereit. Sie berechnet ausschließlich die Größe freigegebener, neu erzeugbarer Arbeitsdaten: lokale Übersetzungsmodelle, Modellcache, Mediencache, Vorschaubilder, unvollständige Downloads und Web-Cache. Kategorien können einzeln gewählt werden; vor dem unwiderruflichen Löschen nennt ein Bestätigungsdialog Auswahl und Größe. Präsentationen, Konten, Einstellungen, Originalmedien und bereits gespeicherte Songübersetzungen gehören ausdrücklich nicht zu diesen Bereichen. Während ON AIR oder eines laufenden Sprachdownloads wird die Bereinigung verweigert. Symbolische Verknüpfungen beziehungsweise Pfade außerhalb der genehmigten Ordner werden nicht verfolgt.
+Version 0.43.0 erweitert die Nutzungsbedingungen zu einer gemeinsamen Langfassung für App, Installer und eine eigenständige Online-Seite. Loop-Elemente werden zuverlässig genau einmal eingefügt, Veranstaltungsverknüpfungen zeigen ihren Zustand verständlich, und die neue Speicherpflege räumt ausschließlich freigegebene Cache-Bereiche auf. Übersetzungsmodelle werden gestreamt, geprüft und nur nach einem bewussten Klick geladen; lokale SVG-Sprachsymbole ersetzen sämtliche Emoji-Flaggen.
 
-Der Download lokaler Übersetzungsmodelle wurde technisch neu aufgebaut. Große Dateien werden blockweise auf die Festplatte gestreamt und nicht mehr vollständig im Arbeitsspeicher gesammelt. Bei bekannter Gesamtgröße erscheinen Bytes und Prozent; ohne Content-Length bleibt ein Aktivitätsstatus mit den bereits übertragenen Bytes sichtbar. Abbruch und Fehler entfernen den unvollständigen temporären Ordner, und „Bereit“ wird erst gesetzt, wenn alle vorgesehenen Dateien existieren und Inhalt besitzen. Beim Programmstart werden keine großen Modelle mehr ungefragt heruntergeladen. Nicht unterstützte Sprachrichtungen bleiben für manuell gespeicherte Texte auswählbar und sind klar als ohne lokales Modell gekennzeichnet.
+## Neu
 
-Die Sprachauswahl verwendet jetzt gebündelte SVG-Dateien statt Emoji-Flaggen. Häufige Sprachen besitzen ein lokales Flaggensymbol; bei Sprachen ohne eindeutige Länderzuordnung sowie bei einem Ladefehler erscheint ein neutrales Globus-SVG. Dadurch hängt die Darstellung weder von der Emoji-Unterstützung des Betriebssystems noch von einer externen Bildquelle ab.
+### Getrennte Online-Nutzungsbedingungen
 
-Die Veranstaltungsverknüpfung zeigt als vollständige Statuszeile, ob noch keine Veranstaltung gewählt wurde, eine Verbindung besteht, der Termin abgesagt wurde oder der Online-Datensatz aktuell nicht erreichbar ist. Titel, Datum und planmäßige Uhrzeit werden beim Speichern als Snapshot gesichert und nicht still durch spätere Änderungen ersetzt. Der Auswahlbereich behält Suche und die Gruppen HEUTE, MORGEN und KOMMEND, übernimmt eine Wahl erst über „Änderung speichern“ und gibt nach dem Schließen den Tastaturfokus an den Auslöser zurück.
+Die deutlich ausführlichere Fassung deckt Konten, Live-Verantwortung, Rechte an Medien, Cloud-Synchronisierung, lokale Daten, Übersetzungsmodelle, Updates, Verfügbarkeit, Haftung, Beendigung und Kontakt ab. App, Windows-Installer und die neue Seite /terms/ werden aus derselben Quelle erzeugt; die Versionshinweise bleiben eine getrennte Seite.
 
-Das Hinzufügen spezieller Vor- und Nachprogramm-Elemente wurde gegen schnelle Doppelklicks abgesichert. Ein Klick erzeugt genau ein ServiceItem. Standardwerte für Wetter, Uhr, Quiz und weitere Typen stammen aus einer zentralen Factory; QR-Code und Bibelvers prüfen ihre Kerndaten vor der Anlage. Das Auswahlmenü ist ein responsives, scrollbar bleibendes Raster und bleibt auch in schmalen Fenstern lesbar. Die bestehende Abschnittsregel verhindert weiterhin, dass Loop-Inhalte in normale Gottesdienstbereiche gelangen.
+### Speicherübersicht mit sicherer Bereinigung
 
-Die Hilfe erklärt Speicherbereinigung, lokale Sprachpakete, Loop-Elemente und die getrennte Online-Fassung der Bedingungen ausführlich. MAIN, STAGE, Livestream, Lobby und Recording werden durch diese Bedienoberflächenänderungen nicht gestaltet oder umgefärbt.
+Einstellungen → Allgemein zeigt die aktuelle Größe von Sprachmodellen, Modellcache, Mediencache, Vorschaubildern, temporären Downloads und Web-Cache. Kategorien werden einzeln gewählt und vor dem unwiderruflichen Leeren nochmals mit Größe bestätigt. Präsentationen, Konten, Einstellungen, Originalmedien und gespeicherte Übersetzungstexte bleiben unberührt; ON AIR und laufende Downloads sperren die Aktion.
+
+### Lokale SVG-Sprachsymbole
+
+Häufig verwendete Sprachen erhalten gebündelte SVG-Flaggen. Mehrdeutige Sprachzuordnungen verwenden einen neutralen Globus. Fehlerhafte Dateien fallen ebenfalls auf den Globus zurück; externe Bildabrufe und Emoji-Flaggen werden nicht verwendet.
+
+## Verbessert
+
+### Gestreamte und prüfbare Übersetzungsmodelle
+
+Große Modelldateien werden blockweise auf die Festplatte geschrieben statt vollständig im Arbeitsspeicher gesammelt. Fortschritt zeigt Bytes und, sofern bekannt, Prozentwerte. Abbrechen entfernt temporäre Daten, ein Paket gilt erst nach Prüfung aller Pflichtdateien als bereit, und beim Programmstart findet kein automatischer Modelldownload mehr statt.
+
+### Veranstaltung klar verknüpfen
+
+Die Statuszeile unterscheidet unverknüpft, verknüpft, abgesagt und nicht erreichbar. Titel, Datum und planmäßige Uhrzeit werden beim Verknüpfen als Snapshot gespeichert. Suche, HEUTE/MORGEN/KOMMEND, bewusste Auswahl und explizites Speichern bleiben erhalten; nach dem Schließen kehrt der Tastaturfokus zum Auslöser zurück.
+
+## Behoben
+
+### Loop-Elemente ohne Doppelanlage und gequetschtes Menü
+
+Ein Einfüge-Schutz verhindert doppelte ServiceItems durch schnelle Mehrfachklicks. Standardwerte liegen nun in einer gemeinsamen Factory, QR-Code und Bibelvers werden vor der Anlage geprüft, und das responsive Raster bleibt bei schmalen Fenstern scrollbar und lesbar. Loop-Inhalte bleiben auf Vor- und Nachprogramm beschränkt.
+
+## Bekannte Einschränkungen
+
+### Modelle und Online-Fassung benötigen Internet
+
+Neue lokale Übersetzungsmodelle und die Online-Fassung der Bedingungen benötigen eine Verbindung. Die installierte Textfassung, gespeicherte Übersetzungen, Präsentationen und Live-Ausgaben bleiben offline nutzbar. Sprachrichtungen ohne verfügbares lokales Modell bleiben auswählbar, können aber nicht automatisch neu übersetzt werden.
+
+---
+
+# GottesdienstRegie 0.42.0
+
+Veröffentlicht: So., 20.09.2026
+
+Version 0.42.0 trennt Vor- und Nachprogramm konsequent von normalen Gottesdienst-Elementen, ersetzt Platzhalter der 2D-Galerie durch echte Vektorgrafiken und verbessert Notizen, Videoauswahl, Popovers sowie die plattformgerechte Bedienoberfläche. Fünf klar definierte Anzeigegrößen, schattenlose Einzelvorschau und die Grundlage für macOS 26 Liquid Glass verbessern die tägliche Arbeit, ohne MAIN, STAGE oder Livestream zu verändern.
+
+## Neu
+
+### Vektorformen und fünf Anzeigegrößen
+
+Die durchsuchbare 2D-Galerie verwendet nun eigenständige SVG-Pfade für alle Formen einschließlich Kirche, Bibel, Kreuz und Pfeilen. Die Bedienoberfläche kann in fünf festen Stufen skaliert werden; diese Einstellung bleibt strikt vom Ausgabebild getrennt.
+
+## Verbessert
+
+### Sprachpakete, Popovers und Plattformdarstellung
+
+Sprachauswahl und Objektgalerie erhalten kollisionssichere, scrollbar bleibende Popovers. Sprachpakete werden mit nachvollziehbarem Downloadstatus vorbereitet. Auf unterstützten macOS-26-Systemen kann die Bedienoberfläche transparente Materialien verwenden; reduzierte Transparenz schaltet den Effekt ab.
+
+## Behoben
+
+### Loop-Menüs, Video, Radio und Notizstatus
+
+Vor- und Nachprogramm zeigen ausschließlich die dafür vorgesehenen Elemente; Song, Bibel und andere normale Inhalte erscheinen dort nicht mehr. Die Videoauswahl ist typisiert, Radiosender verwenden ausschließlich geprüfte HTTPS-Streams, und der Status Gespeichert bei persönlichen Notizen verschwindet nach fünf Sekunden wieder.
+
+## Bekannte Einschränkungen
+
+### Downloads und Online-Suche benötigen Internet
+
+Neue Übersetzungsmodelle und die Radiosuche benötigen eine Internetverbindung. Bereits gespeicherte Präsentationen sowie laufende Ausgaben bleiben bei Netzwerkfehlern unverändert.
 
 ---
 
 # GottesdienstRegie 0.41.0
 
-Version 0.41.0 ordnet die neuen Pre- und Post-Loop-Inhalte mit einer zentralen Abschnittsregel. Meldungen, Geburtstage, Veranstaltungen, Wetter, Quiz, Loop-Countdown, Uhrzeit, Bibelvers, QR-Code, Infokarte und Terminanzeigen werden nur noch dort angeboten, wo sie fachlich erlaubt sind. Dieselbe Prüfung schützt Hinzufügen, Verschieben und Einfügen; vorhandene ältere Daten werden dabei nicht ungefragt gelöscht.
+Veröffentlicht: So., 20.09.2026
 
-Der Song-Editor erhält eine umfangreiche durchsuchbare Sprachauswahl. Spracheinträge zeigen Flagge, deutschen Namen und Eigenbezeichnung. Fünfzehn häufig verwendete Sprachen werden nach dem Programmstart mit niedriger Priorität vorbereitet. Weitere Sprachen bleiben vollständig sichtbar und kennzeichnen ein noch fehlendes lokales Modell mit einem Wolkensymbol. Beim Laden und Übersetzen erscheinen Spinner, Status und Prozentwert. Der übersetzte Text wird mit der Präsentation gespeichert, das große Modell selbst bleibt gerätelokal; auf einem zweiten Rechner ist der vorhandene Text deshalb lesbar und nur für eine erneute Übersetzung muss das passende Paket dort nachgeladen werden.
+Version 0.41.0 führt eine zentrale Abschnittsregel für Loop-Elemente, durchsuchbare Übersetzungssprachen mit lokalen Sprachpaketen, Rich-Text-Präsentationsnotizen und eine deutlich größere 2D-Objektgalerie ein. Gleichzeitig wurden schmale Zahlenfelder, Kontraste und der Schwarz-Weiß-Modus für die Bedienoberfläche korrigiert.
 
-Präsentationsnotizen sind jetzt direkt unter dem Präsentationstitel erreichbar. Das Popup unterstützt Fett, Kursiv, Unterstreichen, Listen, Ausrichtung, Rückgängig und Wiederholen sowie sicheres Einfügen als Klartext. Persönliche Foliennotizen bleiben kompakt am Editor. Beide Notizarten werden lokal und kontogetrennt gespeichert und gelangen nicht in MAIN, STAGE oder andere Ausgaben.
+## Neu
 
-Die bisherige einfache 2D-Auswahl wurde durch eine durchsuchbare Galerie mit Symbolen, Namen und Kategorien ersetzt. Mehr als dreißig Grundformen, Pfeile, Symbole und kirchliche Motive lassen sich dadurch schneller finden. Zahlenfelder, Popovers und schmale Einstellungsseiten besitzen stabilere Abstände und stärkere Kontraste.
+### Sprachen mit Suche, Flaggen und Cloud-Paketen
 
-Der Schwarz-Weiß-Modus ist nun strikt auf die Bedienoberfläche beschränkt. MAIN, STAGE, Livestream, Lobby und weitere Ausgabefenster behalten immer die vorgesehenen Folienfarben. Die Hilfe beschreibt dieses Verhalten eindeutig und veraltete technische Hinweise wurden entfernt.
+Der Song-Editor bietet eine durchsuchbare Sprachauswahl mit Namen, Eigenbezeichnung und Flagge. Fünfzehn häufige Sprachen werden im Hintergrund vorbereitet; weitere Sprachen bleiben sichtbar und können über das Wolkensymbol mit Fortschrittsanzeige lokal geladen werden. Gespeicherte Übersetzungstexte bleiben auf anderen Rechnern lesbar, auch wenn das Modell dort erst für eine erneute Übersetzung geladen werden muss.
+
+### Rich-Text-Notizen und erweiterte 2D-Objekte
+
+Direkt unter dem Präsentationstitel öffnet ein Notizknopf einen lokalen Editor für Fett, Kursiv, Unterstreichen, Listen, Ausrichtung sowie Rückgängig und Wiederholen. Die neue 2D-Galerie zeigt Symbole, Namen, Kategorien und eine Suche für mehr als dreißig Formen.
+
+## Verbessert
+
+### Loop-Elemente nur am richtigen Ort
+
+Eine gemeinsame Regel steuert Hinzufügen, Verschieben und Einfügen. Wetter, Meldungen, Geburtstage, Uhr, Quiz und weitere Loop-Inhalte erscheinen ausschließlich im Vor- oder Nachprogramm; ungültige Altbestände werden nicht stillschweigend gelöscht.
+
+## Behoben
+
+### Bedienoberfläche, Zahlenfelder und Ausgabefarben
+
+Zahlenfelder bleiben lesbar und bedienbar, Popovers besitzen stärkere Kontraste und passen sich an schmalere Fenster an. Der Schwarz-Weiß-Modus verändert nur noch die Bedienoberfläche; MAIN, STAGE, Livestream und weitere Ausgaben behalten ihre vorgesehenen Farben.
+
+## Bekannte Einschränkungen
+
+### Erster Modelldownload benötigt Internet
+
+Noch nicht vorhandene Sprachmodelle benötigen einmalig eine Internetverbindung und lokalen Speicherplatz. Bereits gespeicherte Texte und der Livebetrieb bleiben davon unabhängig.
 
 ---
 
 # GottesdienstRegie 0.40.0
 
-Version 0.40.0 erweitert den Song-Editor um eine automatische Übersetzung zwischen Englisch und Deutsch. Beim ersten Einsatz wird das benötigte Modell geladen. Akkorde und Leerzeilen bleiben erhalten, der Entwurf kann vor dem Speichern korrigiert werden und ein Fehler verändert weder Originaltext noch MAIN.
+Veröffentlicht: So., 20.09.2026
 
-Persönliche Notizen können jetzt sowohl zur gesamten Präsentation als auch zu einer einzelnen Folie geführt werden. Sie sind gerätelokal, kontogetrennt und ausdrücklich nicht Teil der Cloud-Präsentation oder einer Ausgabe. Das Musikmenü unterstützt zusätzlich eine Online-Suche nach HTTPS-Radiosendern mit direkter Vorschau und Übernahme in das Hintergrundaudio.
+Version 0.40.0 ergänzt automatische Songübersetzung, private Folien- und Präsentationsnotizen, Radiosender im Hintergrundaudio und standardmäßig deaktivierte Gemeinwohl-Hinweise. Geschützte Loop-Kerninhalte, unveränderliche Live-Snapshots und mehrere Layoutkorrekturen erhöhen die Sicherheit im Livebetrieb.
 
-Die neue, standardmäßig ausgeschaltete Einstellung für Gemeinwohl-Hinweise bereitet trackingfreie Inhalte offizieller Stellen für Vor- und Nachprogramm vor. Nutzer steuern nur Einsatzbereich, Abstand, Dauer und QR-Code; die Inhalte selbst sind nicht editierbar.
+## Neu
 
-Für den Livebetrieb wurden Loop-Kerninhalte geschützt und vom Ebenenpanel getrennt. MAIN erhält beim Schalten einen unveränderlichen Snapshot, sodass Editoränderungen nicht versehentlich sofort live erscheinen. Zusätzlich wurden Überlagerungen in der Windows-Kopfzeile, die Beschriftung des Equalizers sowie responsive Abstände und Zahlenfelder korrigiert.
+### Lokale automatische Übersetzung
+
+Englische und deutsche Songtexte können im Song-Editor mit einem lokal ausgeführten Sprachmodell übersetzt werden. Akkorde und Zeilenumbrüche bleiben geschützt; das Ergebnis bleibt vor dem Einsatz vollständig bearbeitbar.
+
+### Private Notizen und Radiosender
+
+Persönliche Notizen stehen pro Präsentation und Folie gerätelokal bereit und gelangen in keine Ausgabe. Die Hintergrundaudio-Auswahl kann HTTPS-Radiosender online suchen, vorhören und hinzufügen.
+
+### Gemeinwohl-Hinweise
+
+Unter Präsentation → Sonstiges → Extern steht eine standardmäßig deaktivierte, trackingfreie Konfiguration für nicht editierbare Hinweise offizieller Stellen bereit.
+
+## Verbessert
+
+### Sichere Vorschau und Loop-Inhalte
+
+MAIN erhält beim Schalten eine unveränderliche Kopie des gerenderten Folienstands. Wetter, Uhr und andere Loop-Kerninhalte sind geschützt und erscheinen nicht mehr als löschbare zusätzliche Ebene.
+
+## Behoben
+
+### Kopfzeile, KI-Motive, Zahlenfelder und Equalizer
+
+Fensterknöpfe und Profil überdecken sich nicht mehr. Der KI-Motivbereich bleibt responsiv, Zahlenfelder sind breit genug und jedes Equalizerband zeigt Frequenzbereich, Frequenz und Dezibelwert verständlich an.
+
+## Bekannte Einschränkungen
+
+### Modelldownload und Radiosender benötigen Internet
+
+Der erste Download eines Übersetzungsmodells und die Radiosuche benötigen eine Verbindung. Bereits laufende lokale Ausgabe und MAIN bleiben bei Fehlern unverändert.
 
 ---
 
 # GottesdienstRegie 0.39.0
 
-## Songübersetzungen mit sechs Anzeigearten
+Veröffentlicht: Sa., 19.09.2026
 
-Im Song-Editor steht unter INHALT bei jeder Lyrics-Folie der neue Button „Übersetzung hinzufügen“ bereit. Die Übersetzung besitzt ein eigenes Sprachfeld und einen eigenen Textbereich, sodass beispielsweise ein englischer Originaltext zusammen mit einer deutschen Übersetzung vorbereitet werden kann, ohne die Grundlyrics zu ersetzen. Wiederholte Abschnitte im Songablauf übernehmen dieselbe Übersetzung; Änderungen laufen über die vorhandene Präsentationsspeicherung und können mit Rückgängig und Wiederholen bearbeitet werden.
+Version 39 ergänzt manuell gepflegte Songübersetzungen mit sechs Anzeigearten, einen standardmäßig aktiven und abschaltbaren Bildschirmschutz sowie ausführlichere Hilfethemen mit drei neuen schematischen Abbildungen. Der Unsplash-Bereich erhält verlinkte Bedingungen; der interaktive Windows-Installer verlangt eine ausdrückliche Zustimmung zu den vorhandenen Nutzungsbedingungen.
 
-Unter Einstellungen → Präsentation → Song stehen sechs Anzeigearten zur Verfügung: Aus, unter der Strophe in Klammern, unter der Strophe ohne Klammern, zeilenweise im Wechsel, nebeneinander in zwei Spalten und nur Übersetzung. Standardmäßig wird die Übersetzung in Klammern ergänzt. Falls für eine Folie keine Übersetzung eingetragen wurde, bleibt der Originaltext sichtbar. Die Eingabe erfolgt manuell; es wird kein Text an einen Übersetzungsdienst gesendet.
+## Neu
 
-Die gemeinsame Folienanzeige unterstützt die Übersetzungen in Vorschau, Thumbnails und MAIN. Beim Senden einer Live-Folie wird die Anzeigeart mitgespeichert, damit eine Änderung in den Einstellungen nicht plötzlich die gerade ausgespielte Folie verändert. Lyric Scrolling bewegt beide Sprachen zusammen. Die gesonderte STAGE-Akkordansicht bleibt bei den Originallyrics. Preflight prüft den zusätzlichen Platzbedarf und warnt vor zu großen Textmengen. Bereits übersetzte Abschnitte werden nicht automatisch neu aufgeteilt; verwende hier den manuellen Folienumbruch und prüfe die Zuordnung beider Sprachen.
+### Übersetzungen direkt am Song
 
-## Bildschirm während der Vorbereitung und Präsentation aktiv halten
+Unter INHALT lässt sich zu jeder Lyrics-Folie eine Übersetzung mit eigener Sprachangabe hinzufügen, bearbeiten oder entfernen. Die Originaltexte bleiben unverändert, wiederholte Songabschnitte übernehmen dieselbe Übersetzung und Änderungen werden mit der Präsentation gespeichert. Es wird kein automatischer Übersetzungsdienst aufgerufen.
 
-GottesdienstRegie fordert beim Betriebssystem standardmäßig an, Bildschirmschoner und automatisches Ausschalten des Displays während der geöffneten Anwendung zu verhindern. Der Schalter unter Einstellungen → Allgemein → Fenster & Start kann jederzeit deaktiviert werden und wird für diesen Rechner gespeichert. Wiederholtes Aktivieren erzeugt keine zusätzlichen dauerhaften Anforderungen; beim Abschalten oder normalen Beenden wird der Schutz freigegeben, ohne die persönlichen Energieeinstellungen zu überschreiben.
+### Sechs Anzeigearten im Song-Untermenü
 
-Der Schutz ist keine Umgehung von Sicherheitsrichtlinien: Manuelles Sperren, das Zuklappen eines Notebooks sowie eigene Energiesparfunktionen von Monitoren oder Projektoren müssen weiterhin berücksichtigt werden. Prüfe die tatsächlich verwendete Geräteumgebung vor dem Gottesdienst.
+Einstellungen → Präsentation → Song bietet Aus, Klammern unter der Strophe, Übersetzung ohne Klammern, zeilenweisen Wechsel, zwei Spalten und nur Übersetzung. Standardmäßig erscheinen Klammern; ohne Übersetzung bleibt der Originaltext sichtbar. Die Live-Folie übernimmt die Einstellung erst beim Senden, während die separate STAGE-Akkordansicht beim Original bleibt.
 
-## Unsplash-Hinweis und verlinkte Bedingungen
+### Abschaltbarer Bildschirmschutz
 
-Der Unsplash-Bereich im Medienbrowser zeigt den gewünschten Hinweis zu den Nutzungs- und Datenschutzbedingungen jetzt dauerhaft an, auch während die Ergebnisse geladen werden. Die beiden Begriffe sind direkt mit den entsprechenden Unsplash-Seiten verknüpft. Zusätzlich steht der gewünschte Link zur Unsplash+-Lizenz bereit; dieser ist ausdrücklich separat gekennzeichnet und wird nicht als Lizenz sämtlicher Suchergebnisse ausgegeben. Die Desktop-Anwendung erlaubt für diese neuen Verweise nur die konkret hinterlegten HTTPS-Adressen.
+Der standardmäßig aktive Schutz fordert das Betriebssystem auf, das Display bei geöffneter Anwendung eingeschaltet zu lassen. Unter Allgemein → Fenster & Start kann er deaktiviert werden. Die Auswahl bleibt gespeichert und beim Beenden wird der Schutz freigegeben, ohne Energieeinstellungen dauerhaft zu verändern.
 
-## Zustimmung im Windows-Installationsassistenten
+### Zustimmung bei der Windows-Installation
 
-Der interaktive Windows-Installer enthält nun eine Seite mit den bereits vorhandenen Nutzungsbedingungen der Gemeinde. Das Zustimmungsfeld muss ausgewählt werden, bevor die Installation fortgesetzt werden kann. Die installierte Anwendung und der Update-Hinweis behalten den Zugang zum vollständigen Text. Stille beziehungsweise automatisierte Installationen haben keine interaktive Lizenzseite; die neue Checkbox gilt für den normalen Windows-Assistenten.
+Der interaktive Windows-Assistent zeigt die vorhandenen Nutzungsbedingungen und lässt die Installation erst nach Auswahl des Zustimmungsfeldes weiterlaufen. Die Bedingungen bleiben auch in der Anwendung und über den Update-Hinweis erreichbar.
 
-## Ausführlichere, bebilderte Hilfe
+## Verbessert
 
-Die Hilfe enthält neue Artikel zu Songübersetzungen, Bildschirmschutz und Installation. Die Texte beschreiben die konkreten Menüwege, erklären die Auswirkungen der Einstellungen und nennen typische Fehlerquellen wie ungleiche Zeilenzahlen, zu kleine Textflächen oder abweichende Projektor-Energiesparregeln. Die Themen Erste Schritte und Unsplash wurden ebenfalls überarbeitet und um zusammenhängende Anleitungen ergänzt.
+### Ausführliche Hilfe mit drei neuen Bildern
 
-Drei neue, als schematisch gekennzeichnete Abbildungen veranschaulichen den Übersetzungsablauf, den zeitlich begrenzten Bildschirmschutz und den Weg von der Vorbereitung über Preflight zur Live-Ausgabe. Bei einer erfolglosen Hilfesuche wird jetzt erklärt, wie sich die Suche mit kürzeren Begriffen eingrenzen lässt.
+Neue Artikel erklären Songübersetzungen, Bildschirmschutz und die Installation Schritt für Schritt. Erste Schritte und Unsplash enthalten längere praktische Anleitungen; drei gekennzeichnete Diagramme verdeutlichen die Abläufe. Bei einer Suche ohne Treffer gibt es einen konkreten Hinweis zur Eingrenzung.
 
-## Hinweise vor der Nutzung
+### Verlinkter Unsplash-Hinweis
 
-Prüfe zweisprachige Songs vor ON AIR in der tatsächlichen Schrift und Ausgabegröße. Übersetzungen können deutlich mehr Platz benötigen als der Originaltext; sie werden nicht ungefragt verkleinert. Die Anzeigeeinstellung gilt für das jeweilige Gerät, während die eingegebenen Übersetzungen zum Song innerhalb der Präsentation gehören. Diese Version führt keinen automatischen Übersetzungsdienst und keine eigenständige neue Cloud-Songbibliothek ein.
+Im Unsplash-Bereich erscheint der gewünschte Nutzungshinweis auch beim Laden und bei Verbindungsproblemen. Nutzungs- und Datenschutzbedingungen öffnen ihre jeweiligen Webseiten; die Unsplash+-Lizenz ist zusätzlich separat verlinkt. Nur diese festgelegten HTTPS-Ziele sind neu für den externen Aufruf freigegeben.
+
+## Bekannte Einschränkungen
+
+### Zweisprachige Folien vor ON AIR prüfen
+
+Preflight berücksichtigt die zusätzliche Textmenge. Teile übersetzte Abschnitte bei Bedarf manuell auf, damit beide Sprachen zusammenbleiben. Die Anzeigeart gilt pro Gerät, die Übersetzung gehört zur Präsentation. Manuelles Sperren und verbindliche Sicherheitsrichtlinien werden vom Bildschirmschutz nicht umgangen; stille Installationen zeigen keine Checkbox.
 
 ---
 
 # GottesdienstRegie 0.38.0
 
-## Songs importieren
+Veröffentlicht: Mo., 14.09.2026
 
-Über Songbibliothek → Songs importieren … lassen sich mehrere lokale Songdateien auf einmal auswählen. TXT-, Markdown-, SONG-, CSV- und JSON-Dateien werden offline eingelesen. Titel, Interpret und Abschnittsüberschriften werden soweit vorhanden übernommen; jeder importierte Song wird als eigenes ServiceItem mit seinen Abschnitten angelegt.
+Songs lassen sich über die Songbibliothek importieren. Audio erhält einen eigenen Equalizer-Unterpunkt und Medien-Uploads zeigen einen kleinen Fortschrittsbalken.
 
-## Equalizer als Audio-Unterpunkt
+## Neu
 
-Die Audioeinstellungen sind übersichtlicher gegliedert. Der neue Unterpunkt Equalizer bietet einen neutralen Standardmodus und eine eigene 10-Band-Kurve mit gespeicherten dB-Werten. Der Bereich ist bewusst separat erreichbar, damit die normalen Audioausgänge schnell und übersichtlich bleiben.
+### Songs importieren
 
-## Upload-Fortschritt
+TXT-, Markdown-, SONG-, CSV- und JSON-Dateien können direkt über Songbibliothek → Songs importieren … eingelesen werden. Titel, Interpret und Abschnitte werden übernommen.
 
-Beim Hochladen von Bildern, Videos, Audio und weiteren Medien zeigt der Dialog jetzt einen kleinen Fortschrittsbalken mit Prozentwert. Laufende Live-Ausgaben werden davon nicht angehalten.
+### Equalizer-Unterpunkt
+
+Audio enthält jetzt Standard und eigene 10-Band-Kurve mit gespeicherten dB-Werten, ohne die schnelle Auswahl der Audioausgänge zu überladen.
+
+### Kompakter Upload-Fortschritt
+
+Beim Upload von Bildern, Videos, Audio und weiteren Medien zeigt der Dialog Prozentfortschritt.
 
 ---
 
 # GottesdienstRegie 0.37.1
 
-## Zustimmung beim Update-Download
+Veröffentlicht: Mo., 14.09.2026
 
-Beim Herunterladen einer verfügbaren Aktualisierung zeigt die Update-Ansicht jetzt den Hinweis „Mit der Aktualisierung stimmst du den Nutzungsbedingungen zu.“ direkt beim Download an. Der Begriff „Nutzungsbedingungen“ ist als Link gestaltet und öffnet die vollständige Fassung ohne Umweg.
+Die Update-Ansicht zeigt direkt beim Download den Hinweis: Mit der Aktualisierung stimmst du den Nutzungsbedingungen zu. Der verlinkte Begriff Nutzungsbedingungen öffnet die vollständige Fassung ohne Umweg.
 
-Damit ist vor dem Start des Downloads klar erkennbar, welcher Zustimmung die Aktualisierung unterliegt. Der Hinweis ist rein informativ und verändert weder den Downloadablauf noch den Livebetrieb.
+Der Hinweis macht die Zustimmung vor dem Download sichtbar. Er ist rein informativ und verändert weder den Downloadablauf noch den Livebetrieb.
+
+## Neu
+
+### Klickbarer Hinweis beim Update
+
+Vor dem Download steht jetzt: „Mit der Aktualisierung stimmst du den Nutzungsbedingungen zu.“ Das Wort Nutzungsbedingungen öffnet direkt die vollständige Fassung.
 
 ---
 
 # GottesdienstRegie 0.37.0
 
-## Testbetrieb ohne Veranstaltung
+Veröffentlicht: Mo., 14.09.2026
 
-Für Proben und technische Checks gibt es neben ON AIR jetzt TESTBETRIEB STARTEN. Der Testbetrieb verlangt weiterhin die Live-Berechtigung, eine geöffnete Präsentation, aktive Folien, eine gültige MAIN-Zuordnung und den vollständigen Preflight. Eine Veranstaltung ist nur für den normalen ON-AIR-Start erforderlich.
+Der neue TESTBETRIEB prüft echte MAIN- und STAGE-Ausgaben ohne verknüpfte Veranstaltung. Die vollständigen Nutzungsbedingungen werden bei der Anmeldung bestätigt und bleiben unter Hilfe erreichbar.
 
-Vor dem Start zeigt GottesdienstRegie die tatsächlich verwendeten Bildschirme. Nach Bestätigung werden ausschließlich MAIN und STAGE geöffnet. LIVESTREAM, NOTES, LOBBY und Recording bleiben aus. Der Testbetrieb wird sichtbar gekennzeichnet, nicht in der Präsentation gespeichert und erzeugt keine XP- oder Belohnungsereignisse. Änderungen an Präsentation oder Zuordnung während der Prüfung verwerfen den Start sicher.
+## Neu
 
-## Nutzungsbedingungen
+### TESTBETRIEB ohne Veranstaltung
 
-Die Anmeldung enthält jetzt eine ausdrückliche Bestätigung der Nutzungsbedingungen. Sie erklären Zuständigkeit für Inhalte und Rechte, Vorrang des Livebetriebs, Umgang mit lokalen und synchronisierten Daten, persönliche Zugangsdaten sowie das Melden von Fehlern und Sicherheitsproblemen. Die vollständige Fassung kann jederzeit über Hilfe → Nutzungsbedingungen erneut geöffnet werden.
+Ein eigener Button startet eine ausdrücklich bestätigte Probeausgabe. Preflight, Berechtigungen, aktive Folien und MAIN-Zuordnung bleiben Pflicht. Es werden nur MAIN und STAGE geöffnet; LIVESTREAM, NOTES, LOBBY und Recording bleiben aus.
 
-## Versionslinie
+### Nutzungsbedingungen
 
-Der Funktionsstand wechselt mit diesem Paket auf die neue Hauptlinie 0.37.0. Die bisherige 0.36-Linie bleibt als Archiv erhalten.
+Die Anmeldung enthält eine bestätigbare Fassung zu Verantwortlichkeit, Livebetrieb, Medienrechten, Cloud-Daten und Fehlern. Die vollständige Fassung ist jederzeit über Hilfe → Nutzungsbedingungen verfügbar.
+
+## Verbessert
+
+### Eigene 0.37-Funktionslinie
+
+Neue Funktionspakete werden nicht mehr als weitere Unterpunkte der 0.36-Linie veröffentlicht. Die bisherige 0.36-Linie bleibt als Archiv erhalten.
+
+## Behoben
+
+### Sicherer Start ohne Veranstaltung
+
+Der normale ON-AIR-Start bleibt an eine Veranstaltung gebunden. Nur der klar markierte Testbetrieb darf diese fachliche Voraussetzung ausnehmen und verwirft den Start bei Änderungen oder fehlender Ausgabe.
 
 ---
 
 # GottesdienstRegie 0.36.16
 
-## Loop-Elemente direkt in Vor- und Nachprogramm einfügen
+Veröffentlicht: So., 13.09.2026
 
-Leere VORPROGRAMM- und NACHPROGRAMM-Abschnitte haben jetzt eigene Hinzufügen-Schaltflächen. Loop-Inhalte können dadurch direkt im gewünschten Bereich angelegt werden, ohne zuerst ein vorhandenes ServiceItem auswählen zu müssen. Beim Öffnen des Bereichsmenüs stehen die Loop-Elemente kompakt und sichtbar an erster Stelle: Meldungen, Geburtstage, Veranstaltungen, Wetter, Quiz, Countdown, Uhrzeit, Bibelvers, QR-Code, Infokarte sowie Terminanzeigen.
+Leere Vor- und Nachprogramme haben eigene Hinzufügen-Schaltflächen. Loop-Elemente stehen im Bereichsmenü sofort oben; LOOP, Audio und Zeit bleiben im Abschnitts-Header sauber ausgerichtet.
 
-Wird ein Loop-Element erstmals aus dem VORPROGRAMM hinzugefügt, wird der Bereich fachlich als Loop-Bereich freigeschaltet. Die zentrale Placement-Prüfung bleibt aktiv; normale ServiceItems und Liveausgaben werden nicht verändert. Die Loop-Erstellung bleibt optional und blockiert weder Synchronisierung noch MAIN, STAGE, Audio oder Recording.
+## Neu
 
-## Abschnitts-Header ohne Überlagerung
+### Loop-Elemente in leeren Abschnitten
 
-Die Bereichsaktionen sind jetzt als zusammenhängende Gruppe aufgebaut. LOOP-Schalter, Hinzufügen, Background-Audio und Zeit-/Daueranzeige teilen sich nicht mehr zufällig Grid-Spalten. Dadurch bleibt das Lautsprechersymbol auch in der schmalen Seitenleiste vollständig sichtbar und die Bedienung bleibt bei kleinen Fensterbreiten stabil.
+Meldungen, Wetter, Quiz, Countdown, Uhrzeit, QR-Code und weitere Loop-Typen lassen sich direkt im VORPROGRAMM oder NACHPROGRAMM anlegen, ohne zuvor ein ServiceItem auszuwählen.
+
+## Verbessert
+
+### Stabiler Abschnitts-Header
+
+LOOP-Schalter, Hinzufügen, Background-Audio und Zeit-/Daueranzeige werden als eine kompakte Aktionsgruppe angeordnet und überlappen nicht mehr.
+
+## Behoben
+
+### Loop-Menü in leeren Vorprogrammen
+
+Das Hinzufügen-Menü war auf das aktuell ausgewählte Item angewiesen. Die Bereichsschaltfläche setzt das Ziel jetzt direkt und schaltet die Loop-Unterstützung beim ersten bewussten Hinzufügen frei.
 
 ---
 
 # GottesdienstRegie 0.36.15
 
-## Menüleiste bleibt vollständig sichtbar
+Veröffentlicht: So., 13.09.2026
 
-Beim Auswählen einer weit unten liegenden Folie konnte die gesamte App-Oberfläche nach oben scrollen. Die Menüleiste wurde dadurch am oberen Fensterrand abgeschnitten, während Profil, Synchronisierung und Fensterbuttons an ihrer festen Position blieben.
+Die Auswahl entfernter Folien konnte die App-Hülle nach oben scrollen und das Menü abschneiden. Die Hülle bleibt jetzt an ihrer Position, während die Inhaltsbereiche normal scrollen. Profil, Sync und Fensterbuttons bleiben mit dem Menü ausgerichtet.
 
-Die äußere App-Hülle ist jetzt vom Scrollen ausgeschlossen. Folienübersicht und andere Inhaltsbereiche bleiben scrollbar. Auch bei niedrigen Fenstern erzwingt die Hülle keine übergroße Mindesthöhe mehr. Der Fix wurde in Electron bei 1920×1080, 1366×768 und 1280×600 mit Auswahl und Fokus auf entfernte Folien geprüft. Die bestehenden Layoutprüfungen für Einzelvorschau, Folienübersicht, Timeline und Bearbeiten bestehen ebenfalls.
+## Behoben
+
+### Abgeschnittenes Menü nach Folienauswahl
+
+Fokus und automatisches Scrollen in der Folienübersicht verschieben die äußere Oberfläche nicht mehr. Auch niedrige Fenster erzwingen keine übergroße App-Höhe. Geprüft in Electron bei 1920×1080, 1366×768 und 1280×600 sowie mit ausgeklappter Timeline und Moduswechsel.
 
 ---
 
 # GottesdienstRegie 0.36.14
 
-## Song- und Element-Editor: schneller vorbereiten, sicherer ausrichten
+Veröffentlicht: So., 13.09.2026
 
-Der Song-Editor und die Folienbearbeitung erhalten einen zusammenhängenden Bedienfluss für die Vorbereitung. Lange Lyrics können direkt aus dem Song-Item auf mehrere Folien aufgeteilt werden; überlaufende Folien werden bereits im Editor sichtbar markiert, bevor sie in den Livebetrieb gelangen. Der STAGE-Ausgang zeigt aktuelle Zeilen, optionale Akkordzeilen und den nächsten Inhalt getrennt von MAIN. Songtitel, Ablauf und Vorschau bleiben dabei im bestehenden Editorfluss erhalten.
+Lange Songtexte lassen sich passend zur Folienkapazität aufteilen und werden vor ON AIR bei Überlauf markiert. STAGE zeigt aktuelle Lyrics, optionale Akkordzeilen und den nächsten Inhalt getrennt von MAIN. Die Elementbearbeitung ergänzt Raster, magnetisches Einrasten, Tastatur-Nudging, Ausrichten, Verteilen und ein Ebenen-Panel. Mausgesten werden stabil lokal dargestellt und erst beim Loslassen gespeichert.
 
-Für Elemente stehen jetzt ein konfigurierbares Raster, magnetisches Einrasten an Raster, Folienmitte und Rändern, Tastatur-Nudging sowie ein Ebenen-Panel zur Verfügung. Mehrfach ausgewählte Elemente lassen sich links, mittig, oben oder vertikal ausrichten und gleichmäßig verteilen. Mausbewegungen werden lokal pro Frame dargestellt und erst beim Loslassen als eine Änderung gespeichert; dadurch entstehen keine Zwischenstände in der Änderungshistorie und der Livebetrieb bleibt unberührt.
+## Neu
 
-- Lange Lyrics automatisch auf Folien aufteilen; Überlaufwarnung mit direktem Sprung zur betroffenen Folie.
-- STAGE-Songansicht mit „Jetzt“, strukturierten Akkordzeilen und „Als Nächstes“; MAIN bleibt unverändert.
-- Rastergröße und Snap-Verhalten unter Hilfslinien einstellbar.
-- Ausrichten, Verteilen, Ebenen sortieren, Sichtbarkeit/Sperre und präzises Verschieben per Pfeiltasten (Shift = größere Schritte).
-- Bestehende Rollen, Berechtigungen, Cloud-Sync und Liveausgaben werden durch die optionalen Editorhilfen nicht verändert.
+### Song-Ablauf und STAGE
 
-## Spezielle PRE-/POST-LOOP-Elemente und Screenmeldung-Integration
+Verse-Chips bleiben per Drag-and-drop sortierbar. Lange Lyrics können automatisch in mehrere Folien geteilt werden. STAGE erhält eine kompakte Ansicht mit JETZT, Akkordzeilen und ALS NÄCHSTES; MAIN bleibt unverändert.
 
-Diese Erweiterung ergänzt die Vorbereitung um dynamische, optionale Loop-Elemente. Sie laufen getrennt vom normalen Gottesdienstablauf und werden nur in dafür freigegebenen PRE-/POST-LOOP-Abschnitten beziehungsweise in einem ausdrücklich automatischen Vorprogramm berücksichtigt. Normale ServiceItems bleiben unverändert; der Live-Controller, MAIN, STAGE, Audio und Recording behalten Vorrang.
+## Verbessert
 
-- Neue Loop-Typen: Meldungen, Geburtstage, Veranstaltungen, Wetter, nicht-interaktives Quiz, Countdown, Uhrzeit, Bibelvers, QR-Code, Infokarte, Heute bei uns und Nächste Termine.
-- Zentrale Placement-Prüfung verhindert, dass Loop-Only-Elemente versehentlich im normalen Gottesdienst landen. Verschieben, Duplizieren, Import und automatische Wiedergabe verwenden dieselbe Regel.
-- Loop-Elemente rotieren über einen eigenen Controller mit sauberer Start-/Stopp- und Abbruchlogik; ein fehlendes oder leeres Datenobjekt wird übersprungen und blockiert niemals MAIN.
-- Screenmeldung basiert auf den mitgelieferten `screenmeldung.html`, `screenmeldung.css` und `screenmeldung.js`. Bestehende IDs, Klassen, internes Scrollen, QR-Position und Safe-Switch-Verhalten bleiben erhalten. Für den Loop werden Meldungen normalisiert, zeitlich gefiltert und nur bei passender Veröffentlichung/Audience angezeigt.
-- Wetter verwendet ausschließlich `https://weather.crbnm06.workers.dev`. 20 Sekunden sind die empfohlene Voreinstellung; die Anzeigedauer kann pro Element angepasst werden und wird vor der sichtbaren Ausgabe vorgeladen. Bei Offline-/Fehlerzustand wird der Eintrag übersprungen.
-- Die Editorvorschau zeigt Uhrzeit, Wetter und Meldungen lokal an. QR-URLs, Dauer und Loop-Metadaten werden im Inspector bearbeitbar dargestellt; die Wetterquelle bleibt systemseitig fest, die Dauer ist änderbar.
-- Preflight meldet fehlerhafte Loop-Platzierungen und ungültige Wettermetadaten als Warnungen. Optionale Loop-Daten dürfen den Start eines Gottesdienstes nicht blockieren.
+### Canvas-Ausrichtung und Ebenen
 
-Die Erweiterung führt keine neue Live- oder Firebase-Engine ein. Screenmeldung-Daten bleiben im bestehenden Datenmodell; öffentliche Ansichten erhalten nur die fachlich notwendigen, bereinigten Felder.
+Rastergröße und Snap-Verhalten sind unter Hilfslinien einstellbar. Mehrfach ausgewählte Elemente lassen sich links, mittig, oben und vertikal ausrichten sowie gleichmäßig verteilen. Das Ebenen-Panel bündelt Auswahl, Sichtbarkeit, Sperren und Reihenfolge.
 
-## Vorschau-Layout korrigiert
+## Bekannte Einschränkungen
 
-Diese Wartungsausgabe behebt die große Leerfläche unter Einzelvorschau und Folienübersicht sowie Statusangaben, die links über dem Gottesdienstablauf erschienen.
+### Livebetrieb bleibt priorisiert
 
-Ursache war eine später geladene Layoutregel: Sie reservierte sieben Zeilen, obwohl die Vorschau nur fünf Hauptbereiche besitzt. Dadurch erhielt der eigentliche Arbeitsbereich zu wenig Höhe und die Statuszeile landete im falschen Bereich.
+Die Hilfen sind Editorfunktionen. MAIN, STAGE, LIVESTREAM, Audio und Recording werden nicht blockiert; Zwischenstände einer Mausgeste erzeugen keinen eigenen History-Eintrag.
 
-- Einzelvorschau und Folienübersicht verwenden wieder die verfügbare Fensterhöhe.
-- Die Timeline liegt direkt unter dem Arbeitsbereich; die Statuszeile bleibt am unteren Fensterrand.
-- Das Aufklappen der Timeline reduziert die Vorschauhöhe geordnet, ohne Überlagerungen zu erzeugen.
-- Der Wechsel zwischen Bearbeiten und Vorschau behält die jeweils passende Höhenaufteilung.
+---
 
-Die Korrektur wurde mit der tatsächlichen Stylesheet-Reihenfolge und den produktiven Vorschau-/Timeline-Komponenten getestet: 1920×1080, 1366×768, beide Vorschauansichten, ausgeklappte Timeline und Rückkehr zum Bearbeiten. Der Produktionsbuild und die bestehenden Editor-, Website-, Vollbild- und Lyric-Regressionstests wurden ebenfalls geprüft.
+# GottesdienstRegie 0.36.13
 
-Präsentationsinhalte und Live-Steuerung werden nicht verändert. Die offenen Cloud-Songfunktionen aus 0.36.12 sind nicht Bestandteil dieses Layout-Hotfixes.
+Veröffentlicht: So., 13.09.2026
+
+## Behoben
+
+### Vorschau nutzt die volle Arbeitshöhe
+
+Einzelvorschau und Folienübersicht enden nicht mehr oberhalb einer großen ungenutzten Fläche. Eine fehlerhafte spätere CSS-Regel reservierte zusätzliche Zeilen für Werkzeuge, die im Vorschaumodus gar nicht vorhanden sind. Die Höhenaufteilung entspricht jetzt wieder den tatsächlich sichtbaren Bereichen.
+
+### Timeline und Statuszeile wieder unten
+
+Die Timeline sitzt direkt unter dem Arbeitsbereich und die Statuszeile am unteren Fensterrand. Statusangaben überlagern den Ablauf nicht mehr. Die Anordnung bleibt auch beim Aufklappen der Timeline, bei kleineren Fenstern und nach dem Wechsel zwischen Bearbeiten und Vorschau erhalten.
+
+## Bekannte Einschränkungen
+
+### Umfang dieser Korrektur
+
+Diese Wartungsausgabe korrigiert ausschließlich das Vorschau-Layout. Präsentationsinhalte, Live-Steuerung und die offenen Cloud-Songfunktionen aus 0.36.12 bleiben unverändert. Die Layouttests umfassen 1920×1080 und 1366×768 sowie beide Vorschauansichten und eine ausgeklappte Timeline.
 
 ---
 
 # GottesdienstRegie 0.36.12
 
-Diese Ausgabe ergänzt optionales Lyric Scrolling für Songs und behebt konkrete Probleme im Desktop-Arbeitsbereich. Vorhandene Präsentationen behalten ohne Aktivierung die normale Folienanzeige. Die Änderungen betreffen die Vorbereitung und Bedienung; sie ersetzen keine Prüfung der tatsächlichen Ausgabe am Regie-PC.
+Veröffentlicht: So., 13.09.2026
 
-## Neu: Lyric Scrolling für MAIN
+Optionales Lyric Scrolling ergänzt die Songausgabe auf MAIN. Die Ausgabe verbessert außerdem Ziehen und Skalieren, Vollbildbuttons, Website-Optionen und lokale Autosaves. Eine authentifizierte Cloud-Songbibliothek und vollständige Design-Vererbung sind weiterhin nicht enthalten.
 
-Unter **Einstellungen → Präsentation → Songs** lässt sich Lyric Scrolling einschalten. Aktuelle Liedzeilen erscheinen hervorgehoben; bis zu zwei kommende Textblöcke werden mit reduzierter Deckkraft angezeigt. Dauer und Deckkraft sind einstellbar. Im DESIGN-Tab kann ein einzelner Song den Präsentationsstandard übernehmen oder ausdrücklich normale Slides verwenden.
+## Neu
 
-WEITER und ZURÜCK folgen weiterhin dem tatsächlichen Songablauf einschließlich Wiederholungen. Direkte Sprünge wechseln zum gewählten Abschnitt, ohne eine Animationswarteschlange aufzubauen. Titel-, Leer- und deaktivierte Folien erscheinen nicht als kommende Lyrics. Die über dem Canvas angebotene Testvorschau bewegt nur die Editorvorschau, nicht den Live-Ausgang.
+### Lyric Scrolling für Songs
 
-Die Einstellungen werden im lokalen Präsentationsdokument gespeichert und unterstützen Undo/Redo. MAIN verwendet einen kopierten Live-Datenstand. STAGE und LIVESTREAM behalten ihre getrennten Darstellungen. Hintergrundübergänge übernehmen die bereits aufgelösten Folien-, Item- und Präsentationseinstellungen.
+Unter Einstellungen → Präsentation → Songs einschalten. MAIN zeigt aktuelle Lyrics und bis zu zwei abgedunkelte kommende Blöcke. Dauer und Deckkraft sind einstellbar; jeder Song kann im DESIGN-Tab den Standard übernehmen oder normale Slides verwenden. Titel-, Leer- und deaktivierte Folien erscheinen nicht als kommende Lyrics.
 
-## Präzisere Desktop-Bedienung
+### Getrennte Vorschau und gespeicherte Einstellungen
 
-- **Verschieben und Skalieren:** Mausbewegungen aktualisieren zunächst eine lokale Canvas-Vorschau. Erst das Loslassen speichert die Änderung als einen Undo-Schritt. Abgebrochene Gesten und ein inzwischen gewechselter Bearbeitungskontext werden nicht nachträglich gespeichert.
-- **Vollbild:** Im F11-Modus stehen eigene Schaltflächen zum Minimieren, Verlassen des Vollbilds und Schließen bereit. Profil und Sync erhalten Abstand zu den Fensterbuttons; lange Profilnamen werden gekürzt, statt den Sync-Button zu überdecken.
-- **Rechtschreibung:** Editierbare Textfelder erhalten das native Kontextmenü mit verfügbaren Korrekturvorschlägen, Lernen einer Schreibweise sowie Ausschneiden, Kopieren, Einfügen und Alles auswählen. Eine Websuche wird nur durch den ausdrücklich gewählten Befehl geöffnet. Vorschläge hängen von den geladenen Wörterbüchern ab.
-- **Ruhigeres Speichern:** Geänderte Dokumente werden weiterhin regelmäßig lokal gesichert, jetzt ohne das große manuelle Synchronisationsfenster. Die automatische Cloud-Erreichbarkeitsprüfung läuft im Abstand von fünf Minuten. Lokales Speichern und Cloud-Übertragung sind nicht dasselbe.
+Die Testvorschau über dem Canvas ändert nur den Editor. Die eigentliche Ausgabe folgt WEITER, ZURÜCK und direkten Sprüngen ohne Animationswarteschlange. Einstellungen bleiben im lokalen Dokument erhalten und unterstützen Undo/Redo. STAGE und LIVESTREAM behalten eigene Layouts.
 
-## Website-Elemente
+## Verbessert
 
-Der Editor gliedert sich in Adresse und Darstellung, Wiedergabe und Bedienung sowie Verbindung und Sicherheit. Beim Öffnen springt der Eingabefokus nicht mehr automatisch in die URL. Neue Optionen steuern Formulare und die an fremde Websites übermittelte Referrer-Information. Änderungen an verknüpften Website-Vorkommen werden zusammen gespeichert, ohne deren eigene Folien- und Element-IDs zu überschreiben.
+### Website-Einstellungen in Bereichen
 
-## Ausführlichere Versionshinweise
+Adresse und Darstellung, Wiedergabe und Bedienung sowie Verbindung und Sicherheit sind gruppiert. Formularfreigabe und Referrer-Verhalten sind pro Website einstellbar. Beim Öffnen erhält das URL-Feld nicht mehr automatisch den Fokus.
 
-Alle 59 bisher archivierten Versionen erhalten eine zusätzliche Einordnung in der App und auf der Release-Notes-Seite. Die ursprünglichen Einzelpunkte bleiben erhalten. Historische Notizen beschreiben den damals dokumentierten Stand und sind keine erneute Abnahme jeder älteren Funktion. Im Archiv existiert 0.1.0, aber keine veröffentlichte Version 1.0; eine solche Version wird hier nicht nachträglich erfunden.
+### Ruhigeres lokales Speichern
 
-## Grenzen und Prüfung vor dem Gottesdienst
+Lokale Autosaves laufen ohne das große Synchronisationsfenster. Die Cloud-Erreichbarkeit wird automatisch alle fünf Minuten geprüft. Eine lokale Sicherung oder Erreichbarkeitsprüfung ist ausdrücklich keine bestätigte Cloud-Synchronisierung der Präsentation.
 
-Sehr lange Lyrics werden nicht still in eine winzige Schrift umgerechnet. Preflight weist auf eine zu kleine Textfläche hin. Überstehender Text wird abgeschnitten; solche Abschnitte müssen vor ON AIR aufgeteilt oder die Textfläche vergrößert werden.
+### Rechtschreib-Kontextmenü
 
-Eine eigenständige authentifizierte Cloud-Songbibliothek, verwaltete Library-Arrangements und die vollständige Design-Vererbung sind **noch nicht enthalten**. Die vorhandene Anmeldung stellt dafür derzeit keinen geeigneten Cloud-Schreibzugang bereit. Auch die fünfminütige Statusprüfung bestätigt keine serverseitige Präsentationssynchronisierung.
+In editierbaren Feldern stehen verfügbare Korrekturvorschläge, Schreibweise lernen und die üblichen Textaktionen bereit. Die optionale Onlinesuche öffnet erst nach bewusstem Anklicken eine externe Suchseite; verfügbare Vorschläge hängen von den geladenen Wörterbüchern ab.
 
-Geprüft wurden der Produktionsbuild, Songstruktur, Lyric-Datenregeln, schnelle Wechsel und Sprünge im Electron-Renderer, 4K-Layout, Erhalt der Schriftgröße, Undo/Redo, Dokument-Neuladen, atomare Ziehbewegungen, verknüpfte Website-IDs sowie die Abstände der Vollbildbuttons. Die isolierten Rendererchecks sind keine Framerate-Garantie für die konkrete GPU. Bitte MAIN, Quick Screens, Audio und Hintergrundvideo auf dem tatsächlichen Ausgabegerät vor dem nächsten Liveeinsatz prüfen.
+### Ausführlicheres Versionsarchiv
+
+Alle 59 bisherigen Versionen erhalten eine zusätzliche Einordnung in App und Webseite. Die ursprünglichen Einzelpunkte bleiben erhalten. Historische Notizen sind keine erneute Verifikation aller damaligen Funktionen. Das Archiv beginnt bei 0.1.0; eine veröffentlichte 1.0 existiert dort nicht.
+
+## Behoben
+
+### Ruhigeres Ziehen und Skalieren
+
+Die Arbeitsfläche zeichnet während der Mausbewegung eine lokale Vorschau. Erst Loslassen erzeugt einen Undo-Schritt. Abgebrochene Bewegungen werden nicht gespeichert; ein Wechsel der ausgewählten Folie verhindert einen nachträglichen Commit im falschen Kontext.
+
+### F11, Profil und Sync
+
+Eigene Vollbildbuttons erlauben Minimieren, Vollbild verlassen und Schließen. Profil und Synchronisierung halten Abstand zu den Fensterbuttons. Lange Namen werden gekürzt, statt den Sync-Button zu überdecken.
+
+### Verknüpfte Websites und Songübergänge
+
+Website-Änderungen bewahren die eigenen IDs jedes verknüpften Vorkommens und bilden eine gemeinsame Transaktion. Lyric Scrolling übernimmt den bereits aufgelösten Hintergrundübergang statt ihn durch einen anderen Standard zu ersetzen.
+
+## Bekannte Einschränkungen
+
+### Cloud-Songbibliothek noch offen
+
+Eigenständige authentifizierte Cloud-Songbibliothek, verwaltete Library-Arrangements und vollständige Design-Vererbung sind nicht Bestandteil dieser Ausgabe. Dafür fehlt weiterhin die geeignete Anbindung der bestehenden Anmeldung; es werden keine offenen Cloud-Schreibrechte eingeführt.
+
+### Lange Lyrics vor ON AIR prüfen
+
+Die Schrift wird nicht unbemerkt verkleinert. Preflight warnt bei einer zu kleinen Textfläche; überstehender Text wird abgeschnitten. Solche Abschnitte vor ON AIR aufteilen oder die Textfläche vergrößern. Rendererchecks bis 4K ersetzen keinen Test von MAIN, Quick Screens, Audio und Video auf dem tatsächlichen Regie-PC.
 
 ---
 
 # GottesdienstRegie 0.36.11
 
-## Song-Editor
+Veröffentlicht: Sa., 12.09.2026
 
-- Kompakte Ablauf-Chips und ein größerer Lyrics-Bereich ersetzen die übergroße Arrangement-Fläche.
-- Inhalt, Ablauf, Design, Akkorde, STAGE, LIVESTREAM und Metadaten haben eigene Tabs.
-- Wiederholte Songabschnitte verwenden denselben Grundtext und erzeugen die tatsächliche Folienreihenfolge.
-- Die integrierte Suche findet Songs aus gespeicherten Präsentationen.
-- Schriftgröße, Textfarbe und Texteffekte wirken auf die Songfolien.
-- Akkorde in eckigen Klammern können beim Tonartwechsel transponiert werden.
+Diese Ausgabe ordnet die Songarbeit um: Grundtext, tatsächliche Abfolge und Metadaten werden voneinander getrennt. Wiederholungen im Ablauf sollen den Grundtext nicht vervielfachen. Die Suche greift auf gespeicherte Präsentationen zurück und ist noch keine eigenständige Cloud-Songbibliothek.
 
-Die eigenständige Cloud-Songbibliothek, Library-Arrangements und vollständige Design-Vererbung sind noch nicht enthalten.
+## Neu
+
+### Songablauf
+
+Kompakte Chips steuern die Folienreihenfolge. Wiederholte Abschnitte verwenden denselben Grundtext.
+
+## Verbessert
+
+### Song-Arbeitsbereich
+
+Mehr Platz für Lyrics, sieben Haupttabs und Metadaten in einem eigenen Bereich.
+
+### Song-Suche und Gestaltung
+
+Songs aus gespeicherten Präsentationen lassen sich direkt suchen. Textgestaltung wirkt auf die Songfolien.
+
+## Bekannte Einschränkungen
+
+### Noch offen
+
+Eigenständige Cloud-Songbibliothek, Library-Arrangements und vollständige Design-Vererbung sind noch nicht enthalten.
 
 ---
 
 # GottesdienstRegie 0.36.10
 
+Veröffentlicht: Sa., 12.09.2026
+
+Dieser Wartungsstand betrifft den Wechsel vom kleinen Startfenster zum normalen Windows-Arbeitsbereich. Das Titlebar-Overlay wird bereits bei der Fenstererstellung aktiviert, damit spätere Anpassungen der Titelleiste nicht mehr die genannte JavaScript-Ausnahme auslösen.
+
 ## Behoben
 
-- Windows-Startfehler „Titlebar overlay is not enabled“ behoben. Nach dem kompakten Ladefenster öffnet sich der Arbeitsbereich wieder in der eingestellten Größe.
-- Die Windows-Titelleiste wird bereits beim Erstellen des Fensters korrekt initialisiert.
+### Windows-Start repariert
+
+Der Fehler „Titlebar overlay is not enabled“ beim Wechsel vom Ladefenster zum Arbeitsbereich ist behoben.
 
 ---
 
 # GottesdienstRegie 0.36.9
 
+Veröffentlicht: Sa., 12.09.2026
+
+Starten und Beenden erhalten jeweils eine kompakte, auf den Speichervorgang konzentrierte Anzeige. Die gespeicherte Arbeitsbereichsgröße bleibt vom Ladefenster getrennt. Beim Beenden wird lokal gespeichert; die Anzeige ist ausdrücklich kein Nachweis einer erfolgreichen Cloud-Übertragung.
+
 ## Verbessert
 
-- Der Startbildschirm erscheint als kompaktes Ladefenster ohne die große äußere Fläche. Anschließend öffnet sich der Arbeitsbereich in der eingestellten Fenstergröße.
-- Beim Beenden erscheint eine Speicheranzeige ohne Abbrechen- oder Überspringen-Schaltfläche. Die aktuelle Präsentation wird vor dem Schließen lokal gespeichert.
-- Die Größe des Ladefensters überschreibt nicht die gespeicherten Fenstereinstellungen.
+### Kompakter Start
 
-Hinweis: Die Anzeige beim Beenden bestätigt die lokale Speicherung, keine Cloud-Synchronisierung.
+Nur die mittlere Ladekarte erscheint als kleines Fenster. Anschließend öffnet sich der Arbeitsbereich in der eingestellten Größe.
+
+### Speichern beim Beenden
+
+Eine nicht überspringbare Anzeige begleitet die lokale Speicherung der Präsentation vor dem Schließen.
+
+## Bekannte Einschränkungen
+
+### Lokale Speicherung
+
+Die Speicheranzeige beim Beenden bestätigt keine Cloud-Synchronisierung.
 
 ---
 
 # GottesdienstRegie 0.36.8
 
-Veröffentlicht am 11. September 2026.
+Veröffentlicht: Fr., 11.09.2026
+
+Der Songeditor führt präsentationsbezogene Einstellungen für Ablauf, Tonart und Ausgaben zusammen. Die dokumentierte Arrangement-Auswahl ist von einer verwalteten Library zu unterscheiden: Eigenständige Cloud-Arrangements und eine vollständige mehrstufige Design-Vererbung wurden damit noch nicht geliefert.
 
 ## Neu
 
-- **Song-Overrides:** Songs besitzen jetzt getrennte Bereiche für Inhalt, Ablauf, Design, STAGE und LIVESTREAM.
-- **Verse Order:** `V1 C V2 C B C C` kann pro Gottesdienst festgelegt werden.
-- **Arrangement und Tonart:** Philippus Standard, Akustisch, Jugendgottesdienst und Kein Arrangement sowie erweiterte Tonarten stehen direkt im Songeditor bereit.
+### Song-Overrides
+
+Songs besitzen getrennte Bereiche für Inhalt, Ablauf, Design, STAGE und LIVESTREAM. Änderungen gelten zunächst nur für das aktuelle Song-ServiceItem.
+
+### Verse Order
+
+Die Reihenfolge V1 C V2 C B C C kann direkt pro Gottesdienst festgelegt werden.
+
+### Arrangement und Tonart
+
+Mehrere Arrangements und zwölf Tonarten stehen direkt im Songeditor bereit.
 
 ## Verbessert
 
-- Präsentationsänderungen werden am Song als „Angepasst“ markiert und können gesammelt zurückgesetzt werden.
-- Designvorlagen, Schriftgröße und Texteffekte lassen sich nur für das aktuelle Song-ServiceItem ändern.
-- STAGE kann Akkorde und Current/Next anzeigen; LIVESTREAM unterstützt ein eigenes Lower-Third-Layout.
+### Design-Overrides
+
+Designvorlage, Schriftgröße und Texteffekt können pro Song angepasst und gesammelt zurückgesetzt werden.
+
+### STAGE und LIVESTREAM
+
+STAGE unterstützt Akkorde und Current/Next; der Livestream erhält ein eigenes Lower-Third-Layout.
 
 ---
 
 # GottesdienstRegie 0.36.7
 
-Veröffentlicht am 11. September 2026 um 00:48 Uhr.
+Veröffentlicht: Fr., 11.09.2026
+
+Der Schwerpunkt liegt auf direkter Arbeit an der Folie und schnellerem Wiederfinden von Medien. Zusätzliche Elemente können über Maus und Zahlenwerte gestaltet werden; Unsplash-Favoriten ergänzen die Medienauswahl. Der Start kann ohne Verlust der gespeicherten Anmeldung übersprungen werden.
 
 ## Neu
 
-- **Direkte Folienbearbeitung:** Text, QR-Codes, Vordergrundmedien und weitere Folienelemente lassen sich auf der 16:9-Arbeitsfläche mit der Maus verschieben und am sichtbaren Griff skalieren.
-- **Neue Präsentationsvorlagen:** Gottesdienst kompakt, Sonntagsgottesdienst klassisch, Jugendgottesdienst und Abendveranstaltung stehen beim Erstellen einer Präsentation bereit.
-- **Unsplash-Favoriten:** Bilder aus der Unsplash-Suche können als Favorit gespeichert und später wiedererkannt werden.
+### Direkte Folienbearbeitung
+
+Text, QR-Codes und Vordergrundmedien lassen sich auf der 16:9-Arbeitsfläche mit der Maus verschieben und skalieren.
+
+### Neue Ablaufvorlagen
+
+Vier vorbereitete Vorlagen decken kompakte, klassische, Jugend- und Abendgottesdienste ab.
+
+### Unsplash-Favoriten
+
+Bilder aus der Unsplash-Suche können dauerhaft als Favorit gespeichert werden.
 
 ## Verbessert
 
-- Die Start-Synchronisierung kann übersprungen werden, ohne die gespeicherte Anmeldung zu verwerfen.
-- Ausgewählte Bild-, Video- und QR-Elemente besitzen zusätzliche präzise Werte für Position, Größe, Drehung und Deckkraft.
-- Die Werkzeugleiste im Inhaltseditor bricht auf schmaleren Flächen sauber um.
+### Start überspringen
+
+Die Start-Synchronisierung kann übersprungen werden, ohne die gespeicherte Anmeldung zu verlieren.
+
+### Präzise Elementwerte
+
+Position, Größe, Drehung und Deckkraft ausgewählter Folienelemente sind direkt einstellbar.
 
 ## Behoben
 
-- Ein Fehler bei der lokalen KI-Videoerzeugung öffnet nicht mehr unvermittelt den Unsplash-Bereich.
-- Nach erfolgreicher Medienerzeugung wird gezielt die Cloud-Medienansicht geöffnet.
-- Beschriftung und Regler für die Deckkraft sind wieder korrekt ausgerichtet.
+### Stabiler KI-Videobereich
+
+Fehler bei der Videoerzeugung bleiben im Generator und führen nicht mehr zu Unsplash.
+
+### Saubere Werkzeugleisten
+
+Die Inhaltswerkzeuge und der Deckkraftregler überlappen oder verrutschen nicht mehr.
 
 ---
 
 # GottesdienstRegie 0.36.6
 
-Veröffentlicht am 11. September 2026 um 00:12 Uhr.
+Veröffentlicht: Fr., 11.09.2026
+
+Die Suchanfrage des Unsplash-Bereichs wird an den zugehörigen Anbieter weitergegeben. Beim Nachladen sollen vorhandene Ergebnisse erhalten bleiben und weitere Treffer angehängt werden. Dieser Stand adressiert damit zwei unterschiedliche Probleme: falsche Leerergebnisse und den kompletten Neuaufbau der Trefferliste.
 
 ## Verbessert
 
-- **Unsplash-Suche:** Suchbegriffe werden direkt an Unsplash übergeben; die gelieferten Bilder bleiben vollständig sichtbar und werden nicht noch einmal lokal nach ihrem Beschreibungstext gefiltert.
-- **Stabiles Nachladen:** „Mehr laden“ ergänzt die nächste Ergebnisseite, ohne das vorhandene Medienraster auszublenden, neu aufzubauen oder umzusortieren.
-- Beim seitenweisen Nachladen bleibt die aktuelle Auswahl erhalten und der Button zeigt den laufenden Vorgang deutlich an.
+### Echte Unsplash-Suche
+
+Der eingegebene Suchbegriff wird direkt von Unsplash verarbeitet; die zurückgegebenen Treffer werden vollständig angezeigt.
+
+### Inkrementelles Nachladen
+
+Weitere Ergebnisse werden an das bestehende Raster angehängt, ohne vorhandene Karten auszublenden oder neu zu sortieren.
 
 ## Behoben
 
-- Suchanfragen wie „natur“ melden nicht mehr fälschlich „Keine passenden Medien gefunden“, obwohl Unsplash Treffer geliefert hat.
-- Bereits geladene Bilder verschwinden beim Abrufen der nächsten Seite nicht mehr kurzzeitig.
+### Keine falschen Leerergebnisse
+
+Unsplash-Treffer verschwinden nicht mehr durch einen nachgelagerten lokalen Textfilter.
 
 ---
 
 # GottesdienstRegie 0.36.5
 
-Veröffentlicht am 10. September 2026 um 23:06 Uhr.
+Veröffentlicht: Do., 10.09.2026
+
+Präsentationsauswahl, QR-Code-Bearbeitung und Medienrückmeldungen werden ausgebaut. Eigene Präsentationen lassen sich über eine gesonderte Übersicht wiederfinden; QR-Codes erhalten eine Eingabe mit Vorschau. Die Medienauswahl für Vordergrundelemente und Zusatztexte wird direkter in die Bearbeitung eingebunden.
 
 ## Neu
 
-- **Meine Präsentationen:** Das persönliche Profil enthält eine durchsuchbare und filterbare Präsentationsübersicht mit Titelbild, Datum, Umfang, Dateigröße und Änderungszeit. Ein Klick öffnet die Präsentation direkt.
-- **QR-Code-Editor:** URL oder Text werden in einem eigenen Dialog eingegeben, live als QR-Code angezeigt und können später erneut bearbeitet werden.
-- **Medien in Fehlerberichten:** Bis zu vier Screenshots, Bilder oder kurze Videos lassen sich einem Fehlerbericht beifügen.
+### Meine Präsentationen
+
+Das Profil zeigt eine durchsuchbare Präsentationsübersicht mit Titelbild, Datum, Umfang, Größe und direktem Öffnen.
+
+### QR-Code-Editor
+
+Ein eigener Dialog erzeugt aus URL oder Text eine Live-Vorschau und einen echten QR-Code für die Folie.
+
+### Medienanhänge
+
+Fehlerberichte unterstützen bis zu vier Screenshots, Bilder oder kurze Videos.
 
 ## Verbessert
 
-- KI-Motive werden als vollständiger Bereich der Medienbibliothek angezeigt und nicht mehr in einem Popup.
-- Vordergrundbilder besitzen ein kompaktes Dropdown für die Medienbibliothek und den direkten Bildimport.
-- Zusatztexte können sofort eingegeben und anschließend direkt in ihrer Ebenenbox bearbeitet werden.
-- Unsplash lädt weitere Ergebnisse seitenweise und bietet „Mehr laden“ sowie „Weniger anzeigen“.
-- Die Servicezeit steht rechts im Abschnittskopf, ist größer und kennzeichnet Vormittag oder Nachmittag.
+### KI-Motive ohne Popup
+
+Die Gestaltung erfolgt als ruhiger, vollständiger Arbeitsbereich innerhalb der Medienbibliothek.
+
+### Unsplash-Seiten
+
+Mehr und weniger Ergebnisse lassen sich über sichtbare Ladebuttons steuern.
+
+### Vordergrund und Zusatztext
+
+Vordergrundbilder bieten Medienauswahl oder Import; Zusatztexte bleiben in ihrer Ebenenbox direkt bearbeitbar.
 
 ## Behoben
 
-- Die leere Box „Zusätzliche Ebenen“ wird nicht mehr angezeigt; vorhandene Ebenenfunktionen bleiben vollständig erhalten.
-- QR-Codes speichern nun ein tatsächlich gerendertes QR-Bild statt eines bloßen Textplatzhalters.
-- Die unerwünschten Erklärungssätze im Profil, KI-Videobereich und Fehlerdialog wurden entfernt.
+### Echte QR-Codes
+
+QR-Elemente zeigen nun das generierte QR-Bild und nicht mehr nur einen Textplatzhalter.
+
+### Servicezeit ausgerichtet
+
+Die Servicezeit bleibt rechts im Abschnittskopf und zeigt VORM. oder NACHM.
 
 ---
 
 # GottesdienstRegie 0.36.4
 
-Veröffentlicht am 10. September 2026 um 21:00 Uhr.
+Veröffentlicht: Do., 10.09.2026
+
+Zusätzliche Folieninhalte und das persönliche Profil werden klarer voneinander abgegrenzt. Profilangaben bleiben im Profil, Belohnungen in ihrem eigenen Bereich. Für erzeugte Hintergrundvideos wird eine Länge von 30 bis 60 Sekunden angeboten; fotografische Motive sind von abstrakten Formen zu unterscheiden.
 
 ## Neu
 
-- **Zusätzliche Ebenen:** Texte, Vordergrundbilder, QR-Codes und 2D-Objekte erhalten im Bearbeiten-Bereich eine eigene übersichtliche Ebenenbox zum Auswählen, Bearbeiten, Ein- und Ausblenden sowie Entfernen.
-- **Erweiterte Motivwelt:** Mehr Szenenkategorien, deutlich mehr Gestaltungsstile und ausführlichere wechselnde Motivbeschreibungen erweitern die lokale Hintergrunderzeugung.
-- **Persönliches Profil:** „Mein Profil“ zeigt Profilbild, Name, Benutzername, E-Mail-Adresse, Rolle und Organisation getrennt vom Belohnungsbereich.
+### Zusätzliche Ebenen
+
+Text, Vordergrundbild, QR-Code und 2D-Objekt besitzen eine eigene Auswahl mit Bearbeiten, Sichtbarkeit und Entfernen.
+
+### Mehr Motive und Stile
+
+Erweiterte Szenenkategorien und Gestaltungsstile werden durch lange wechselnde Motivbeschreibungen ergänzt.
+
+### Getrennte Profilansicht
+
+Profilbild, Kontodaten, Rolle und Organisation erscheinen unter Mein Profil; XP und Abzeichen bleiben im eigenen Fortschrittsbereich.
 
 ## Verbessert
 
-- KI-Videohintergründe sind zwischen 30 und 60 Sekunden einstellbar und lassen sich anschließend als echte Videohintergründe einsetzen.
-- Natur-, Wald-, Stadt- und Wetterszenen verwenden fotografische Ausgangsmotive mit ruhiger Kamerabewegung statt abstrakter Formen.
-- Der Synchronisationsstatus sitzt mit minimalem Abstand unmittelbar links vom Profil.
-- Fehler-, Änderungs- und Featureformulare erklären in jedem Eingabefeld kurz, welche Angaben benötigt werden.
+### 30–60 Sekunden Video
+
+Die Länge lokaler Videohintergründe ist in Fünf-Sekunden-Schritten von 30 bis 60 Sekunden einstellbar.
+
+### Fotografische Natur
+
+Natur- und Stadtkategorien verwenden echte Bildmotive mit ruhiger Kamerabewegung statt abstrakter Ersatzformen.
+
+### Kompakter Syncstatus
+
+Der Synchronisationsstatus befindet sich unmittelbar links neben dem Profil.
 
 ## Behoben
 
-- Unsplash funktioniert ohne manuelle Eingabe eines Access Keys in den Einstellungen.
-- Erzeugte Videos werden in der Hintergrundauswahl nicht mehr ignoriert.
-- Zusätzliche Folienelemente lassen sich nun gezielt einzeln entfernen, ohne andere ausgewählte Ebenen unbeabsichtigt zu löschen.
+### Unsplash-Zugang
+
+Die Bildsuche benötigt keine manuelle Access-Key-Eingabe mehr.
+
+### Video als Hintergrund
+
+Erzeugte Videos werden von der Hintergrundauswahl übernommen und als vollflächige Videohintergründe angelegt.
 
 ---
 
 # GottesdienstRegie 0.36.3
 
-Veröffentlicht am 10. September 2026 um 19:26 Uhr.
+Veröffentlicht: Do., 10.09.2026
+
+Rückmeldungen zur Anwendung können über die Hilfe begonnen werden. Der Hintergrundbereich ergänzt Natur- und Stadtmotive sowie Videoausgabe, während der Website-Editor eine überarbeitete Feldanordnung erhält. Die Bezeichnung KI beschreibt dabei nicht automatisch eine externe generative Video-KI.
 
 ## Neu
 
-- **Feedback direkt aus der Hilfe:** Fehler, konkrete Änderungswünsche und neue Featurewünsche lassen sich getrennt erfassen und über die eigene GottesdienstRegie-Meldeseite einreichen.
-- **KI-Videohintergründe:** Neben Bildern entstehen nun sechs Sekunden lange animierte WebM-Hintergründe mit ruhiger Bewegung und echter Vorschau.
-- **Szenenkategorien:** Natur, Wald, Berge, Stadt, Meer, Himmel, Kirchenraum und abstrakte Motive stehen gezielt zur Auswahl.
+### Feedback aus der Hilfe
+
+Fehler, Änderungen und Featurewünsche werden in einem klaren eigenen Formular erfasst.
+
+### KI-Videohintergründe
+
+Animierte sechssekündige WebM-Hintergründe lassen sich erzeugen, ansehen und als Hintergrund auswählen.
+
+### Natur und Städte
+
+Acht Szenenkategorien umfassen Natur, Wald, Berge, Stadt, Meer, Himmel, Kirchenraum und abstrakte Motive.
 
 ## Verbessert
 
-- Bild- und Videohintergründe sind gemeinsam in der Hintergrundauswahl verfügbar.
-- Die Videoerzeugung wählt automatisch einen unterstützten VP9-, VP8- oder WebM-Modus.
+### Kompatible Videoerzeugung
+
+GottesdienstRegie wählt automatisch einen unterstützten WebM-Codec und zeigt erzeugte Videos direkt in der Medienvorschau.
 
 ## Behoben
 
-- Checkboxen und Beschriftungen im Webeditor werden nicht mehr über die gesamte Seitenbreite auseinandergezogen.
+### Webeditor-Layout
+
+Checkboxen und ihre Texte bleiben kompakt zusammen und werden nicht mehr über die gesamte Breite verteilt.
 
 ---
 
 # GottesdienstRegie 0.36.2
 
-Veröffentlicht am 10. September 2026 um 12:15 Uhr.
+Veröffentlicht: Do., 10.09.2026
+
+Webseiten erhalten eigene elementbezogene Optionen, statt alle Einstellungen global zu teilen. Parallel werden das Hinzufügen von Video und 2D-Inhalten sowie Medienaktionen überarbeitet. Die Versionsnotizen betreffen sowohl die Auswahl neuer Inhalte als auch deren anschließende Bearbeitung.
 
 ## Neu
 
-- **Weboptionen je Element:** Zoom, 100-%-Reset, Interaktion, Audio, Pop-ups, automatisches Aktualisieren und ein optionaler Proxy werden direkt am jeweiligen Webelement eingestellt.
-- **Mehr 2D-Objekte:** Parallelogramm, Trapez, Herz, Blitz, Schild, Wolke, Haus und Halbmond ergänzen die Formen und lassen sich nun direkt im Bearbeiten-Bereich einfügen.
+### Weboptionen je Element
+
+Zoom-Reset, Interaktion, Audio, Pop-ups, Aktualisierung und Proxy werden separat pro Webelement gespeichert.
+
+### Weitere 2D-Objekte
+
+Acht neue Formen lassen sich direkt im sichtbaren Bearbeiten-Bereich hinzufügen und gestalten.
 
 ## Verbessert
 
-- KI-Motive bieten zwölf Stile, ausführliche wechselnde Motivbeschreibungen und bei jeder Erzeugung eine neue visuelle Variante.
-- Die Schriftliste wurde erneut erweitert; Websteuerung und Uhr verwenden Cera Pro als bevorzugte Schrift und zeigen Sekunden an.
-- Der Sync-Schalter sitzt unmittelbar rechts neben dem Profil.
+### KI-Motive
+
+Zwölf Stile und ausführliche wechselnde Motivbeschreibungen erzeugen bei jedem Öffnen und Generieren neue Varianten.
+
+### Schriften und Webuhr
+
+Die Schriftliste wurde erweitert; Webansichten bevorzugen Cera Pro und zeigen die Uhrzeit einschließlich Sekunden.
 
 ## Behoben
 
-- Favoriten funktionieren nun auch für reine Cloud-Medien ohne vorherigen lokalen Indexeintrag.
-- Cloud-Medien lassen sich über ihre stabile Cloud-Referenz löschen; lokale Metadaten werden anschließend sauber entfernt.
-- „Element hinzufügen → Video“ öffnet einen passenden Videodialog und erzeugt ein vollständig abspielbares Videoelement.
+### Cloud-Favoriten und Löschen
+
+Favoriten und Löschen funktionieren nun auch bei Medien, die ausschließlich in der Cloud liegen.
+
+### Video und 2D wirklich hinzufügen
+
+Video verwendet einen passenden Dateidialog; 2D-Objekte sind im Bearbeiten-Bereich direkt erreichbar.
 
 ---
 
 # GottesdienstRegie 0.36.1
 
-Veröffentlicht am 10. September 2026 um 11:21 Uhr.
+Veröffentlicht: Do., 10.09.2026
+
+Profil- und Bearbeitungsaktionen werden im Hauptfenster deutlicher erreichbar. Ein Schwerpunkt ist die Zuordnung der Befehle aus „Element hinzufügen“ zu den tatsächlichen Elementtypen. Organisationsangabe und Darstellung der verfügbaren Schriftstile werden ebenfalls angepasst.
 
 ## Neu
 
-- **Profil oben rechts:** Das neue Profilmenü öffnet Profil, XP, Level und Abzeichen und bietet direkten Zugriff auf Einstellungen und Abmelden.
-- **Vollständiges Bearbeiten-Menü:** Undo, Redo, Ausschneiden, Kopieren, Einfügen, Duplizieren sowie Folienbefehle verwenden die bestehenden zentralen Editoraktionen.
+### Profilmenü
+
+Profil, Belohnungen, Einstellungen und Abmelden sind oben rechts in einem klaren persönlichen Menü gebündelt.
+
+### Bearbeiten-Menü
+
+Zentrale Editor-, Zwischenablage- und Folienbefehle sind jetzt über ein vollständiges Bearbeiten-Menü erreichbar.
 
 ## Verbessert
 
-- Mehr als 200 Schriftfamilien, neun Schriftgewichte sowie zusätzliche Textvorlagen stehen im Folieneditor bereit.
-- „Element hinzufügen“ zeigt alle 16 unterstützten ServiceItem-Typen übersichtlich und direkt erreichbar an.
-- Der rechte Kopfbereich besitzt klare Profil-, Cloud- und Bedienaktionen ohne überlappende Symbole.
+### Schriften und Stile
+
+Mehr als 200 Schriftfamilien, neun Gewichte und zusätzliche Textvorlagen erweitern die Gestaltung.
+
+### Alle Elementtypen
+
+Alle 16 unterstützten ServiceItem-Typen sind über Element hinzufügen und das Plus-Menü erreichbar.
 
 ## Behoben
 
-- Der Organisationsname ist unveränderlich auf „Philippus Gemeinde Bielefeld e. V.“ festgelegt – auch für bereits registrierte Geräte.
-- Slideshow und bisher unvollständig erreichbare Elemente lassen sich über das Plus-Menü tatsächlich anlegen.
+### Feste Organisation
+
+Der Organisationsname kann nicht mehr verändert oder durch einen alten Gerätewert überschrieben werden.
+
+### Elemente wirklich hinzufügen
+
+Slideshow und weitere zuvor unvollständige Pfade erzeugen nun das gewählte Element zuverlässig.
 
 ---
 
 # GottesdienstRegie 0.36.0
 
-Veröffentlicht am 10. September 2026 um 03:35 Uhr.
+Veröffentlicht: Do., 10.09.2026
+
+Diese Ausgabe bündelt Funktionen für gemeinsam genutzte Gemeindegeräte mit Verbesserungen am Arbeitsbereich. Persönliche Bedienung und gerätebezogene Angaben werden unterschieden. Die dokumentierten Historie- und Monitorfunktionen sind im Kontext der vorhandenen Anmeldung und Berechtigungen zu verstehen.
 
 ## Neu
 
-- **Gemeinsam genutzte Gemeinde-PCs:** Geräte werden einmalig registriert, während sich Benutzer auf gemeinsamen Rechnern bei jedem Start persönlich anmelden.
-- **Websteuerung im lokalen Netzwerk:** Zeitlich begrenzte, widerrufbare Sitzungen bedienen NEXT und ZURÜCK über dieselbe sichere Live-Logik wie der Operator-PC.
-- **Persönliche Monitore:** Feste, nur lesende URLs zeigen den bestätigten Live-Stand auf Smartphones, Tablets und weiteren Rechnern und verbinden sich automatisch neu.
-- **Zentrale KI-Steuerung:** KI-Funktionen lassen sich global ein- oder ausschalten; KI-Motive bleiben direkt im Medienbrowser verfügbar.
+### Gemeinsam genutzte Geräte
+
+Einmalige Geräteregistrierung und persönliche Anmeldung trennen Rechner, Benutzer und lokale Geräteeinstellungen sauber voneinander.
+
+### Websteuerung und persönliche Monitore
+
+Widerrufbare Steuersitzungen und feste Nur-Lese-Monitorseiten stehen im lokalen Netzwerk bereit und verwenden den bestätigten Live-Stand.
 
 ## Verbessert
 
-- Die Änderungshistorie protokolliert Benutzer und verwendeten Gerätenamen getrennt und macht beides durchsuchbar.
-- 2D-Objekte besitzen zusätzliche Formen sowie direkte Felder für Position, Größe, Drehung, Sichtbarkeit und Deckkraft.
-- Text erhält getrennte Schalter für Schatten, Kontur, Leuchten und Deckkraft.
-- Webseiten werden ohne Eingabe-Popup sofort angelegt; URL und Zoom werden anschließend im normalen Editor bearbeitet.
-- Der Hilfebereich erklärt gemeinsam genutzte Geräte, persönliche Anmeldung, Websteuerung, persönliche Monitore und KI-Motive.
+### 2D- und Textgestaltung
+
+Mehr Formen, direkte Transformationsfelder sowie Schatten, Kontur, Leuchten und Deckkraft erweitern den Folieneditor.
+
+### Gerätebezogene Historie
+
+Historieneinträge enthalten nun Benutzer und Gerätenamen getrennt und bleiben danach durchsuchbar.
 
 ## Behoben
 
-- Die schwebende Änderungsanzeige überlagert die Formatleiste nicht mehr.
-- Die Hauptoberfläche kann nach dem Ladescreen nicht mehr zu einem schmalen Streifen kollabieren.
-- Gespeicherte Geräteinformationen bleiben beim erneuten Laden älterer Historien erhalten.
+### Stabile Hauptoberfläche
+
+Die Oberfläche kollabiert nach dem Ladescreen nicht mehr, und die Änderungsanzeige verdeckt keine Werkzeugleiste mehr.
 
 ---
 
 # GottesdienstRegie 0.35.0
 
-Veröffentlicht am 10. September 2026 um 02:25 Uhr.
+Veröffentlicht: Do., 10.09.2026
+
+Änderungshistorie und optionale Belohnungen werden als getrennte Bereiche eingeführt. Hinzu kommen lokale Hintergrundmotive, zusätzliche Formen und Schriftgestaltung. Eine lokale Historie oder Punkteanzeige bestätigt dabei weder eine serverseitige Revision noch die Umsetzung aller später gewünschten Cloud-Funktionen.
 
 ## Neu
 
-- **Dauerhafte Änderungshistorie:** Ein eigenes Systemfenster zeigt Revision, Benutzer, Bereich, Quelle, Synchronisierungsstatus sowie Vorher/Nachher und bietet sichere Wiederherstellungspunkte.
-- **Optionales Belohnungssystem:** XP, Level, Abzeichen, Anti-Farming und ein eigener Verlauf motivieren ohne Funktionen, Rollen oder Rechte zu sperren.
-- **KI-Motive:** Der Medienbrowser erzeugt individuelle 16:9-Hintergründe direkt in der Motiverstellung.
-- **Weitere 2D-Objekte:** Fünfeck, Sechseck, Achteck, Strahlenform, Chevron, Sprechblase und Kreuz ergänzen die Formbibliothek.
+### Dauerhafte Änderungshistorie
+
+Ein eigenes Systemfenster zeigt Revision, Benutzer, Bereich, Quelle, Synchronisierungsstatus und Vorher/Nachher. Sichere Wiederherstellungen erzeugen eine neue Revision.
+
+### Belohnungen und Abzeichen
+
+Das optionale XP-System bietet Level, Abzeichen, Fortschritt und Anti-Farming, ohne Funktionen oder Berechtigungen zu beeinflussen.
+
+### Lokale KI-Motive
+
+Individuelle 16:9-Hintergründe werden direkt im Medienbrowser erzeugt.
+
+### Erweiterte 2D-Formen
+
+Fünfeck, Sechseck, Achteck, Strahlenform, Chevron, Sprechblase und Kreuz ergänzen die bisherigen Objekte.
 
 ## Verbessert
 
-- Historieneinträge werden logisch zusammengefasst, sensible Werte redigiert und nach echter Speicherung als synchronisiert markiert.
-- Gelöschte ServiceItems, Servicezeiten und geeignete Präsentationsstände lassen sich als neue Revision wiederherstellen; neuere Historie bleibt erhalten.
-- Mehr als 170 Schriftfamilien sowie Gewichte von Dünn bis Schwarz und normaler/kursiver Standardstil stehen bereit.
-- Der Ersteller einer Präsentation wird automatisch aus dem angemeldeten Konto übernommen.
-- Belohnungsbenachrichtigungen erscheinen nie auf MAIN, STAGE oder LIVESTREAM und werden während ON AIR zurückgehalten.
+### Schriftgestaltung
+
+Mehr als 170 Schriftfamilien, zusätzliche Gewichte und ein normaler oder kursiver Standardstil stehen zur Auswahl.
+
+### Automatischer Ersteller
+
+Neue Präsentationen übernehmen den Ersteller automatisch aus dem angemeldeten Konto.
 
 ## Behoben
 
-- 2D-Objekte werden nun atomar erstellt und sofort ausgewählt; der bisherige wirkungslose zweistufige Einfügevorgang entfällt.
-- Die redundante Erklärungszeile zum Drei-Jahres-Zeitraum wurde aus der Veranstaltungsauswahl entfernt.
+### 2D-Objekte einfügen
+
+Formen werden atomar eingefügt und sofort ausgewählt; alle neuen Formen sind direkt bearbeitbar.
 
 ---
 
 # GottesdienstRegie 0.34.1
 
-Veröffentlicht am 9. September 2026 um 23:14 Uhr.
+Veröffentlicht: Mi., 09.09.2026
+
+Dieser Wartungsstand konzentriert sich auf die Skalierung der Bedienoberfläche. Besonders die obere Leiste soll nach Größenänderungen nicht mehr zusammengedrückt erscheinen. Es handelt sich um eine Korrektur der Arbeitsfläche, nicht um eine neue Präsentations- oder Ausgabelogik.
 
 ## Verbessert
 
-- Das Bedienfenster setzt die Oberflächenskalierung bei jedem Start zuverlässig auf 100 Prozent.
-- Browser-Zoomtasten verändern die Produktionsoberfläche nicht mehr unbeabsichtigt.
+### Stabile Oberflächenskalierung
+
+Das Bedienfenster startet jetzt immer mit 100 Prozent Zoom. Browser-Zoomtasten können die Produktionsoberfläche nicht mehr unbeabsichtigt verkleinern oder vergrößern.
 
 ## Behoben
 
-- Menü-, Präsentations- und Formatleiste werden nicht mehr auf halbe Höhe zusammengedrückt.
-- Die obere Bedienoberfläche überlagert sich nicht mehr direkt unter der Windows-Titelleiste.
+### Zusammengedrückte obere Leiste
+
+Menü-, Präsentations- und Formatleiste behalten wieder ihre vorgesehenen Höhen und überlagern sich nicht mehr direkt unter der Windows-Titelleiste.
 
 ---
 
 # GottesdienstRegie 0.34.0
 
-Veröffentlicht am 9. September 2026 um 22:39 Uhr.
+Veröffentlicht: Mi., 09.09.2026
+
+Medienverwaltung, Formen und Veranstaltungsauswahl werden gemeinsam erweitert. Der dokumentierte Löschablauf umfasst eine bewusst auszulösende Aktion; die Veranstaltungsauswahl berücksichtigt einen längeren Planungshorizont. Gestaltungsmöglichkeiten und Medienbrowser sind die wesentlichen Arbeitsbereiche dieser Ausgabe.
 
 ## Neu
 
-- **Bearbeitbare 2D-Objekte:** Rechtecke, abgerundete Rechtecke, Ellipsen, Dreiecke, Rauten, Sterne und Pfeile lassen sich frei gestalten und anordnen.
-- **Medien sicher löschen:** Team-Medien können über einen eindeutigen Bestätigungsdialog entfernt werden. Verwendete und live aktive Dateien bleiben geschützt.
-- **LiveQuiz-Belohnungen:** Preise für die ersten drei Plätze und eine automatisch berechnete Rangliste ergänzen den Quizbetrieb.
-- **Schnelle Änderungsanzeige:** Die letzte Bearbeitung und die vollständige Änderungshistorie sind direkt am Arbeitsbereich erreichbar.
+### Bearbeitbare 2D-Objekte
+
+Rechteck, abgerundetes Rechteck, Ellipse, Dreieck, Raute, Stern und Pfeil können eingefügt, verschoben, skaliert, gedreht und mit Füllung, Kontur sowie Deckkraft gestaltet werden.
+
+### Medien sicher löschen
+
+Team-Medien können über einen klaren Bestätigungsdialog dauerhaft gelöscht werden. In Präsentationen oder im Livebetrieb verwendete Dateien bleiben geschützt.
+
+### LiveQuiz-Belohnungen
+
+Für Quizze können Belohnungen für die ersten drei Plätze hinterlegt werden. Eine Rangliste berechnet die Punkte aus den richtigen Antworten.
+
+### Schnelle Änderungsanzeige
+
+Eine kompakte Anzeige informiert über die letzte Änderung und öffnet direkt die vollständige Bearbeitungshistorie.
 
 ## Verbessert
 
-- Der Medienbrowser zeigt Ergebnisanzahl, veränderbare Kachelgrößen, Favoriten sowie „Mehr laden“ und „Weniger anzeigen“.
-- `Strg+F`, `Entf` und `Esc` unterstützen die schnelle Tastaturbedienung im Medienbrowser.
-- Die Veranstaltungsauswahl zeigt chronologisch sortiert nur heutige und kommende Termine der nächsten drei Jahre.
-- Textstile, Textfarbe, Textschatten und die Live-Animation „Fade in Text“ funktionieren direkt im Editor.
+### Professioneller Medienbrowser
+
+Ergebnisanzahl, veränderbare Kachelgröße, Favoriten, Mehr-/Weniger-Laden sowie Tastaturbefehle für Suche, Löschen und Schließen beschleunigen die Medienverwaltung.
+
+### Veranstaltungen bis drei Jahre
+
+Die Verknüpfung zeigt heutige und kommende Veranstaltungen für maximal drei Jahre, chronologisch sortiert und verständlich gruppiert. Eine klare Leermeldung erklärt fehlende Treffer.
+
+### Textgestaltung
+
+Titel-, Untertitel- und Normalstil wirken jetzt direkt. Textfarbe, Textschatten und die Live-Einblendung „Fade in Text“ sind funktionsfähig.
 
 ## Behoben
 
-- „Arrangement duplizieren“ führt nun eine echte Editoraktion mit Undo-Unterstützung aus.
-- Jede Medien-Löschaktion verwendet denselben sicheren App-Dialog.
+### Arrangement duplizieren
+
+Der bisher wirkungslose Button dupliziert nun die aktuelle Folie über die vorhandene Editor- und Undo-Logik.
+
+### Sicherer Löschablauf
+
+Alle sichtbaren Löschaktionen öffnen denselben App-Dialog; ein versehentliches sofortiges Löschen über die Detailansicht ist ausgeschlossen.
+
+---
+
+# GottesdienstRegie 0.33.1
+
+Veröffentlicht: Mi., 09.09.2026
+
+Die Ausgabe ergänzt eine sichtbare Fehlerabsicherung für die Oberfläche nach dem Start. Statt einer nicht bedienbaren Ansicht soll ein Fehler nachvollziehbar werden. Dieser Stand ist vor allem für die Wiederaufnahme der Arbeit und die Diagnose eines fehlerhaften Starts relevant.
+
+## Verbessert
+
+### Sichtbare Fehlerabsicherung
+
+Falls zukünftig ein unerwarteter Darstellungsfehler auftritt, zeigt GottesdienstRegie eine verständliche Meldung und einen Button zum erneuten Laden statt einer leeren Fläche.
+
+## Behoben
+
+### Bedienoberfläche nach dem Start
+
+Ein instabil erzeugtes Tastenkürzel-Objekt verursachte eine endlose React-Aktualisierung. Der Zustand wird jetzt stabil gecacht und die vollständige Oberfläche erscheint wieder nach dem Ladescreen.
+
+---
+
+# GottesdienstRegie 0.33.0
+
+Veröffentlicht: Mi., 09.09.2026
+
+Einführung und Hilfe werden durch Bilder ergänzt, während die Medienbibliothek komfortabler bedienbar wird. Nachladen, Filter ohne Treffer und das Umbenennen von Elementen stehen im Mittelpunkt. Die Übergangsvorschau unterstützt zusätzlich die Kontrolle vor der Live-Ausgabe.
+
+## Neu
+
+### Bebilderte Einführung
+
+Ein neuer mehrstufiger Rundgang erklärt Arbeitsbereich, Ablauf, Medien, Einstellungen, Vorschau und Livebetrieb mit echten Softwareaufnahmen; er lässt sich jederzeit im Hilfe-Menü erneut starten.
+
+### Medien komfortabel nachladen
+
+Große Ergebnislisten lassen sich mit „Mehr laden“ schrittweise erweitern und mit „Weniger anzeigen“ wieder kompakt darstellen.
+
+## Verbessert
+
+### Medienbibliothek
+
+Cloud, Community und Unsplash sind jetzt getrennte, korrekt wechselnde Bereiche; Bibliotheksfilter funktionieren und Unsplash ist eindeutig gekennzeichnet.
+
+### Tastenkürzel
+
+Zusätzliche Befehle öffnen Hilfe, Einstellungen, Präsentations- und Medienbibliothek, Folienübersicht und Preflight. Vor dem Zurücksetzen erscheint eine Bestätigung.
+
+### Versionsbilder
+
+Neue Versionen erhalten ab jetzt ein eigenes Bild direkt in den Web-Versionshinweisen.
+
+## Behoben
+
+### Element umbenennen
+
+Das Umbenennen verwendet nun einen eigenen zuverlässigen App-Dialog mit Enter, Escape, Undo, Autosave und Sync statt eines blockierten Browserdialogs.
+
+### Übergangsvorschau
+
+Die Vorschau des Standardübergangs funktioniert auch ohne ausgewählte Folie mit einer eingebauten Testfolie und verändert MAIN nicht.
+
+### Filter ohne Treffer
+
+Bei null Treffern erscheint eine passende Erklärung mit direktem Button zum Zurücksetzen statt der irreführenden Meldung „Noch keine Medien“.
+
+---
+
+# GottesdienstRegie 0.32.0
+
+Veröffentlicht: Mi., 09.09.2026
+
+Fehler- und Hilfeseiten werden besser in die Bedienung eingebunden. Die Medienanbindung an Cloud und Unsplash erhält zusätzliche Erläuterungen und Korrekturen. Anbieterzugang und Erreichbarkeit bleiben dabei von der lokalen Bearbeitung einer Präsentation zu unterscheiden.
+
+## Neu
+
+### Eigene Fehlerseite
+
+Fehlerberichte werden auf einer eigenen GottesdienstRegie-Seite geprüft, kopiert, gespeichert oder über die Systemfreigabe versendet – ohne direkte Weiterleitung auf eine GitHub-Eingabeseite.
+
+### Cloud- und Unsplash-Hilfe
+
+Neue Unterthemen erklären Suche, Lesemodus, Berechtigungen, Preload und konkrete Schritte bei Verbindungsproblemen.
+
+## Verbessert
+
+### Kontextmenü und Shortcuts
+
+Das ServiceItem-Menü folgt dem App-Farbschema, benennt die Live-Aktion eindeutig und verwendet Umschalt+F5 für ON AIR sowie Strg+R zum Umbenennen.
+
+### Breiteres Hilfezentrum
+
+Navigation und Artikel nutzen mehr Platz, vermeiden horizontales Abschneiden und zeigen fokussierte Ausschnitte echter Softwareaufnahmen.
+
+## Behoben
+
+### Medien-Cloud erreichbar
+
+Die falsche, nicht vorhandene Repository-Adresse wurde durch einen abgegrenzten Medienbereich des erreichbaren Projekts ersetzt; API-Fehler erhalten einen sicheren Lese-Fallback.
+
+### Unsplash ohne Schlüsselabfrage
+
+Der eingerichtete App-Zugang wird automatisch genutzt und die Suche zeigt verständlichere Netzwerk- und Dienstfehler.
+
+---
+
+# GottesdienstRegie 0.31.0
+
+Veröffentlicht: Di., 08.09.2026
+
+Das ServiceItem-Kontextmenü bündelt Aktionen für ausgewählte, mehrfach markierte und verknüpfte Elemente. Weitere Änderungen betreffen den Präsentationskopf, die Veranstaltungsauswahl und Quick Screens. Die Bedienung soll vorbereitet werden können, ohne die aktive Live-Ausgabe unbeabsichtigt zu verändern.
+
+## Neu
+
+### Professionelles ServiceItem-Kontextmenü
+
+Das native Desktop-Menü unterstützt Ausschneiden, Kopieren, Einfügen, Duplizieren, Löschen, Verknüpfen, Gruppieren, Ausblenden, Undo/Redo, Umbenennen, Folienexport und ON AIR mit passenden Zuständen.
+
+### Mehrfachauswahl und verknüpfte Elemente
+
+Strg-/Cmd-Klick wählt mehrere Ablauf-Elemente; Gruppen bewegen sich gemeinsam und verknüpfte Instanzen behalten eigene IDs bei gemeinsamer Inhaltszuordnung.
+
+### Folie als Bild
+
+Gerenderte Folien lassen sich ohne Bedienoberfläche in die Systemzwischenablage kopieren oder über einen echten Speichern-Dialog als PNG exportieren.
+
+## Verbessert
+
+### Veranstaltungsauswahl
+
+Termine sind einmalig nach HEUTE, MORGEN und KOMMEND gruppiert; Auswahl und Übernahme sind getrennt, Änderungen werden bewusst gespeichert und der Dialog schließt per Escape oder Außenklick.
+
+### Hilfe und Präsentationskopf
+
+Hilfeartikel erklären Bedienabläufe ohne interne Speichertechnik, verwenden mehr echte Softwareaufnahmen und der kompakte Veranstaltungskopf besitzt eine kollisionsfreie Hilfe-Schaltfläche.
+
+### Live-Sicherheit
+
+Editoraktionen bleiben von MAIN getrennt; ON AIR aus dem Kontextmenü verwendet die vorhandene Preflight- und Take-Logik.
+
+## Behoben
+
+### Servicezeit nicht mehr abgeschnitten
+
+Der enge Abschnittskopf zeigt die Uhrzeit ohne abgeschnittenen Vormittags-/Nachmittagszusatz.
+
+### Schwarz und Amen
+
+Die Schwarz-Schnellanzeige enthält keinen Text mehr; Amen liegt transparent über dem sichtbaren Folienhintergrund.
+
+### Ruhiger Programmstart
+
+Beim Start erscheint nur noch der Ladebereich auf neutralem Hintergrund und kein vollflächiges Fotomotiv.
 
 ---
 
 # GottesdienstRegie 0.30.0
 
-Veröffentlicht am 8. September 2026.
+Veröffentlicht: Di., 08.09.2026
+
+Der Schwerpunkt liegt auf Audio-Routing und der Prüfung von Ausgabewegen vor dem Gottesdienst. Geräte-Fallbacks und getrennte Routen ergänzen die Bedienung; Timeline-Bilder und Hilfe erleichtern die Orientierung. Ein angeschlossenes Gerät sollte dennoch vor Ort mit dem tatsächlichen Audiosignal geprüft werden.
 
 ## Neu
 
-- **Professionelles Audio-Routing:** Videos, Background Audio, Systembenachrichtigungen, Vorhören und LiveQuiz-Soundeffekte besitzen getrennte, gerätebezogene Ausgänge.
-- **Ausgangskontrolle:** Jede Route bietet eigene Lautstärke, Stummschaltung, echten Gerätenamen und einen isolierten Testton.
-- **Vollständiges Hilfezentrum:** Schnellstart, Livebetrieb, Audio, Präsentation und System enthalten ausführliche Bedien-, Preflight- und Problemlösungshilfen.
-- **Timeline-Vorschaubilder:** Die aufgeklappte Timeline kann echte kleine Folienvorschaubilder anzeigen; die Funktion lässt sich in den Präsentationseinstellungen ein- oder ausschalten.
+### Professionelles Audio-Routing
+
+Videos, Background Audio, Systembenachrichtigungen, Vorhören und LiveQuiz-Soundeffekte besitzen getrennte, gerätebezogene Ausgänge mit Lautstärke, Mute und Testton.
+
+### Vollständiges Hilfezentrum
+
+Schnellstart, Livebetrieb, Audio, Präsentation und System enthalten ausführliche Bedien-, Preflight-, Fehler- und Problemlösungshilfen sowie kontextbezogene Hilfe-Schaltflächen.
+
+### Timeline-Vorschaubilder
+
+Die aufgeklappte Timeline kann kleine echte Folienvorschaubilder anzeigen; die Darstellung lässt sich in den Präsentationseinstellungen deaktivieren.
 
 ## Verbessert
 
-- Audiogeräte werden dynamisch vom Betriebssystem erkannt und anhand ihrer stabilen Device-ID lokal gespeichert.
-- Fehlende Ausgänge bleiben gespeichert, werden sichtbar als nicht verfügbar markiert und verwenden vorübergehend den Systemstandard.
-- Änderungen an Audioausgängen während ON AIR starten laufende Videos oder Playlists nicht neu.
-- Preflight prüft benötigte Video- und Background-Audio-Ausgänge sowie die nicht blockierenden Preview- und Benachrichtigungswege.
-- Abgesagte Firebase-Veranstaltungen bleiben chronologisch sichtbar, tragen den roten Hinweis „Fällt aus!“ und sind für neue Verknüpfungen gesperrt.
-- Wird eine bereits verknüpfte Veranstaltung später abgesagt, bleibt die Verbindung erhalten und der Präsentationskopf zeigt eine Warnung.
-- Kontextbezogene Hilfe ist direkt an Preflight, Audioausgängen, Servicezeit und Veranstaltungsverknüpfung erreichbar.
+### Sicheres Geräte-Fallback
+
+Getrennte Audiogeräte werden anhand stabiler IDs wiedererkannt; getrennte oder fehlende Geräte werden sichtbar gemeldet und sicher durch Systemstandard ersetzt.
+
+### Ausfallende Veranstaltungen
+
+Ausfallende Firebase-Veranstaltungen bleiben chronologisch sichtbar, tragen „Fällt aus!“ und sind für neue Verknüpfungen per Maus und Tastatur gesperrt; bestehende Verbindungen bleiben mit Warnung erhalten.
+
+### Preflight prüft Audiowege
+
+Preflight kontrolliert benötigte Video- und Background-Ausgänge sowie nicht blockierende Preview- und Benachrichtigungsausgänge und zeigt den Fallback verständlich an.
 
 ## Behoben
 
-- Die alte globale Audioauswahl überschreibt die neue Background-Audio-Route nicht mehr.
-- Eine erreichbare Medien-Cloud wird bei einer leeren oder vorübergehend nicht lesbaren Medienliste nicht mehr fälschlich als offline angezeigt.
-- Präsentationstitel sind beim Erstellen, Laden, Umbenennen und Speichern zuverlässig auf maximal 500 Zeichen begrenzt.
+### Cloudstatus stabilisiert
+
+Eine erreichbare Medien-Cloud bleibt als verbunden sichtbar, selbst wenn eine leere oder vorübergehend nicht lesbare Medienliste zurückkommt; der Status wird regelmäßig neu geprüft.
+
+### Audio-Routen überschreiben sich nicht
+
+Die frühere globale Audioauswahl überschreibt die neue Background-Audio-Route nicht mehr; laufende Wiedergabe wird bei Änderungen nicht neu gestartet.
+
+### Präsentationstitel begrenzt
+
+Titel sind beim Erstellen, Laden, Umbenennen und Speichern konsistent auf maximal 500 Zeichen begrenzt.
+
+---
+
+# GottesdienstRegie 0.29.0
+
+Veröffentlicht: Di., 08.09.2026
+
+Schriften, Medienauswahl und Statusanzeigen werden zusammen überarbeitet. Cera Pro wird mit der Anwendung ausgeliefert und ist damit nicht nur ein ausgewählter Name in der Schriftliste. Weitere Korrekturen betreffen sichtbare Servicezeiten, Übergangsvorschau und den Leerzustand der Medienbibliothek.
+
+## Neu
+
+### Cera Pro vollständig mitgeliefert
+
+Alle zwölf bereitgestellten Schnitte von Thin bis Black, jeweils normal und kursiv, sind direkt in der Anwendung enthalten und benötigen keine Systeminstallation.
+
+### Mehr moderne Schriften
+
+Über 40 zusätzliche moderne Sans-, Serif-, Display- und Monospace-Familien erweitern die Schriftartenauswahl.
+
+### Cloudstatus im Kopf
+
+Ein grünes Cloudsymbol oben rechts zeigt sofort, wenn der Medien-Cloudspeicher erreichbar ist.
+
+## Verbessert
+
+### Medienbibliothek und Unsplash
+
+Öffentliche Cloud-Repositories lassen sich jetzt lesen, authentifizierte Uploads bleiben geschützt und Unsplash-Suchen laufen zuverlässig über den Desktop-Prozess.
+
+### Sicherer ON-AIR-Start
+
+ON AIR kann erst gestartet werden, wenn die Präsentation dauerhaft mit einer Firebase-Veranstaltung verknüpft ist.
+
+### Ausführlichere Hilfe
+
+Erste Schritte führt jetzt detailliert durch Präsentation, Veranstaltung, Ablauf, Medien, Displays, Vorschau, ON AIR und sichere Speicherung.
+
+## Behoben
+
+### Servicezeit bleibt sichtbar
+
+Das Servicezeit-Popup wird nicht mehr links abgeschnitten und passt sich vollständig in die Ablaufspalte ein.
+
+### Übergangsvorschau reagiert
+
+VORSCHAU ANSEHEN zeigt nun einen klar erkennbaren Übergang statt dieselbe Folie unmerklich gegen sich selbst zu wechseln.
+
+### Sauberer Medien-Leerzustand
+
+Der doppelte und abgeschnittene Hinweis wurde entfernt; es erscheint nur noch „Wähle bitte ein Medium aus.“.
+
+### Eigenständiges Medienfenster
+
+Der überflüssige zweite Schließen-Button entfällt und Fenstertitel folgen dem Schema „GottesdienstRegie - Medienbibliothek“.
+
+---
+
+# GottesdienstRegie 0.28.0
+
+Veröffentlicht: Di., 08.09.2026
+
+Veranstaltungsdaten, Medienquellen und der Präsentationskopf werden enger miteinander verbunden. Eine verknüpfte Veranstaltung liefert weiterhin ihre ursprüngliche Planzeit; die Darstellung und Bearbeitung der Servicezeit ist davon zu unterscheiden. Die Schriftbereitstellung und Beschriftungen werden ebenfalls vereinheitlicht.
+
+## Neu
+
+### Firebase-Veranstaltungen
+
+Präsentationen werden über den dauerhaften eventKey mit veranstaltungen/<eventKey> verknüpft; Auswahl, Suche und kompakter Kopf sind integriert.
+
+### Cera Pro eingebettet
+
+Eine lizenzierte Cera-Pro-Datei kann in den Schriftarten-Einstellungen eingebettet und ohne Systeminstallation verwendet werden.
+
+### Unsplash und Cloud-Medien
+
+Die Medienbibliothek arbeitet als Cloud-Bibliothek und kann Unsplash nach lokaler Eingabe eines Access Keys durchsuchen.
+
+## Verbessert
+
+### Präsentationskopf
+
+Titel lassen sich inline bearbeiten; verknüpfte Veranstaltung, aktuelle Servicezeit und Verspätung erscheinen kompakt über dem Ablauf.
+
+### Logo und Webauftritt
+
+Die Logo-Schnellanzeige nutzt das Philippus-Gemeindelogo, kann angepasst werden und die App sowie Versionshinweise besitzen ein Favicon.
+
+### Eindeutige Beschriftungen
+
+MAIN LIVE heißt jetzt EINZELVORSCHAU und Hinweise verwenden eine freundlichere Bitte-Formulierung.
+
+## Behoben
+
+### Planzeit bleibt erhalten
+
+Servicezeitänderungen überschreiben nicht mehr die planmäßigen start_/ende_-Felder, sondern aktualisieren ausschließlich die vorhandenen Verspaetungs*-Felder bei gleicher Dauer.
 
 ---
 
 # GottesdienstRegie 0.27.0
 
-Veröffentlicht am 7. September 2026.
+Veröffentlicht: Mo., 07.09.2026
+
+Diese Ausgabe konzentriert sich auf die MAIN-Ansicht und einen einheitlicheren typografischen Auftritt. Cera Pro wird als Standard gewählt, und die Amen-Schnellanzeige erhält eine Animation. Übergänge und Statusabläufe werden im Zusammenhang mit der Bedienung des Hauptausgangs angepasst.
 
 ## Neu
 
-- **Cera Pro als Standard:** Neue Texte und Folien verwenden Cera Pro. Ist die proprietäre Schrift auf einem Gerät nicht installiert, greift eine passende Kette aus Aptos, Inter und Segoe UI.
-- **Schriftarten-Einstellungen:** Standardschrift, Schriftgröße und Gewicht lassen sich zentral einstellen, direkt ansehen und auf alle Texte der aktuellen Folie anwenden.
-- **MAIN-Liveansicht:** Die Einzelansicht bildet die tatsächliche MAIN-Ausgabe ab. Im ON-AIR-Betrieb schalten große Pfeile sowie Links/Rechts direkt live weiter.
-- **Animiertes Amen:** Die Amen-Schnellanzeige nutzt Ringe, Lichtstrahlen und eine dynamische Typo-Animation, bleibt sechs Sekunden sichtbar und stellt danach automatisch die MAIN-Folie wieder her.
+### Cera Pro als Standard
+
+Neue Folien und Texte starten mit Cera Pro; zentrale Schriftarten-Einstellungen steuern Familie, Größe und Gewicht.
+
+### MAIN-Liveansicht
+
+Die Einzelansicht zeigt MAIN und schaltet ON AIR mit großen Pfeilen oder den Links-/Rechts-Tasten direkt live weiter.
+
+### Animiertes Amen
+
+Die neu gestaltete Amen-Schnellanzeige erscheint sechs Sekunden mit dynamischer Typografie und stellt danach die MAIN-Folie wieder her.
 
 ## Verbessert
 
-- Die Vorschau konzentriert sich auf MAIN; weitere Ausgangsreiter und die bisherige „Ausgewählt“-Karte wurden entfernt.
-- Unter Einstellungen → Präsentation zeigt STANDARDÜBERGANG eine kleine Folienvorschau mit eigenem Abspielknopf.
-- Die Übergangsdauer hat ein deutlich breiteres, gut lesbares Eingabefeld.
-- Untermenüs für „Zuletzt öffnen“, „Zuletzt duplizieren“ und den Präsentationsimport öffnen auf Höhe ihres jeweiligen Menüeintrags.
-- Alle geänderten Inhalte werden spätestens alle 15 Sekunden gespeichert. Das Wolkensymbol neben Abmelden löst den Vorgang manuell aus und zeigt vier Fortschrittsstufen.
+### Übergang und Synchronisation
+
+Der Standardübergang besitzt eine kleine Vorschau; Autosave läuft alle 15 Sekunden und das Wolkensymbol zeigt vier Sync-Schritte.
+
+### Konsequent auf MAIN
+
+Weitere Ausgangsreiter und die Karte „Ausgewählt“ entfallen, während Datei-Untermenüs sauber am jeweiligen Eintrag ausgerichtet sind.
 
 ## Behoben
 
-- Nach dem Erstellen eines Elements schließt sich das Menü „Element hinzufügen“ automatisch.
-- Tastaturbefehle in der MAIN-Einzelansicht lösen keinen doppelten Folienwechsel mehr aus.
+### Saubere Bedienabläufe
+
+Element hinzufügen schließt nach dem Anlegen automatisch, die Dauerneingabe ist nicht mehr eingeengt und Pfeiltasten wechseln nicht doppelt.
 
 ---
 
 # GottesdienstRegie 0.26.0
 
-Veröffentlicht am 7. September 2026.
+Veröffentlicht: Mo., 07.09.2026
+
+Mehr Übergänge und Schriftoptionen erweitern die Gestaltung. Die Vorschau wird stärker auf das Ergebnis ausgerichtet und soll Änderungen direkt sichtbar machen. Die dokumentierte Entfernung einer Bereitschaftsanzeige ist eine Oberflächenänderung und hebt Prüfungen vor ON AIR nicht grundsätzlich auf.
 
 ## Neu
 
-- **Noch mehr Übergänge:** Iris öffnen, Vorhang öffnen, Würfel drehen, Einschwingen, Lichtblitz und Aufskalieren ergänzen die vorhandenen Animationen.
-- **Große Schriftauswahl:** Der Editor bietet jetzt mehr als 120 verbreitete Systemschriften, darunter zusätzliche serifenlose, Serif-, Schreib-, Display- und Monospace-Schriften.
+### Mehr Übergänge
+
+Iris, Vorhang, Würfel, Einschwingen, Lichtblitz und Aufskalieren erweitern die Animationsauswahl.
+
+### Mehr als 120 Schriften
+
+Zusätzliche Systemschriften für Fließtext, Überschriften, Handschrift und Monospace stehen im Editor bereit.
 
 ## Verbessert
 
-- Der Vorschaumodus konzentriert sich vollständig auf die Präsentationssteuerung. Ausgangsauswahl und Textformatierungswerkzeuge aus dem Bearbeitungsmodus werden dort nicht mehr angezeigt.
-- Die Einzelansicht übernimmt einen hellen oder dunklen Arbeitsflächenhintergrund passend zur gewählten Darstellung – einschließlich der Systemeinstellung.
-- Änderungen an Titel, Inhalt und Gestaltung der ausgewählten Folie erscheinen während der Bearbeitung sofort in der rechten Vorschau.
+### Konzentrierte Vorschau
+
+Ausgangsauswahl und Bearbeitungswerkzeuge bleiben im Vorschaumodus verborgen; die Einzelansicht folgt der hellen oder dunklen Darstellung.
+
+### Sofortige Bearbeitungsvorschau
+
+Änderungen an der ausgewählten Folie werden ohne Verzögerung rechts angezeigt.
 
 ## Behoben
 
-- Bereitschaftssymbol und Text „BEREIT“ wurden aus der Vorschau entfernt und belegen dort keinen unnötigen Platz mehr.
+### Bereitschaftsanzeige entfernt
+
+Symbol und Text „BEREIT“ belegen in der Vorschau keinen Platz mehr.
 
 ---
 
 # GottesdienstRegie 0.25.0
 
-Veröffentlicht am 7. September 2026.
+Veröffentlicht: Mo., 07.09.2026
+
+Eigene Ablaufvorlagen und zusätzliche Präsentationsinformationen unterstützen die Vorbereitung wiederkehrender Gottesdienste. Vorschau, Übergänge und Schriftoptionen werden erweitert. Ein eigener Fehlerpunkt betrifft Schwarzbilder nach einem Übergang und damit die Kontinuität der Folienanzeige.
 
 ## Neu
 
-- **Erweiterte Übergänge:** Zusätzlich zu den bisherigen Effekten stehen Zoomen, Unschärfe, Kreis-Aufdecken, Drehen und Schieben mit Verdrängen bereit.
-- **Gesteuerte Einzelansicht:** Große Pfeile und die Tastaturtasten Links/Rechts navigieren durch alle aktiven Folien. Zeitgesteuerte Folien zeigen einen Countdown, der per Klick für eine dauerhafte Anzeige gestoppt werden kann.
-- **Eigene Ablaufvorlagen:** Der aktuelle Ablauf kann als Vorlage gespeichert und beim Erstellen einer Präsentation wiederverwendet werden. Nur eigene Vorlagen lassen sich löschen.
-- **Präsentationsinformationen:** Ein neues Fenster bündelt Ersteller, Erstellungs- und Änderungszeit, Inhaltsumfang, Dauer, Kennungen und bis zu 60 Einträge Bearbeitungshistorie.
+### Gesteuerte Einzelansicht
+
+Große Pfeile, Links-/Rechts-Tastatursteuerung und ein anklickbarer Folientimer ermöglichen eine konzentrierte, sichere Vorschau.
+
+### Eigene Ablaufvorlagen
+
+Abläufe lassen sich als eigene Vorlage speichern, für neue Präsentationen auswählen und bei Bedarf wieder löschen.
+
+### Präsentationsinformationen
+
+Metadaten, Umfang, Dauer und bis zu 60 Bearbeitungen sind in einem übersichtlichen Informationsfenster zusammengefasst.
 
 ## Verbessert
 
-- Die Einzelansicht konzentriert sich vollständig auf die Folie; der Thumbnailgrößen-Regler wird nur noch in der Folienübersicht angezeigt.
-- Mehr als 65 verbreitete Systemschriftarten stehen im Editor zur Auswahl.
-- Die Folienübersicht reagiert ebenfalls auf die Pfeiltasten und verwendet weiterhin acht klar definierte Thumbnailgrößen.
+### Mehr Übergänge und Schriften
+
+Fünf zusätzliche Übergangseffekte und mehr als 65 Systemschriften erweitern die Gestaltungsmöglichkeiten.
 
 ## Behoben
 
-- Nach einem Übergang wird die neue Folie nicht mehr schwarz. Der abgeschlossene Animationszustand bleibt ausdrücklich vollständig sichtbar.
+### Kein Schwarzbild nach Übergängen
+
+Die neue Folie bleibt nach dem Ende einer Animation vollständig sichtbar.
 
 ---
 
 # GottesdienstRegie 0.24.0
 
-Veröffentlicht am 7. September 2026.
+Veröffentlicht: Mo., 07.09.2026
+
+Die Vorschau erhält einen eigenständiger aufgebauten Arbeitsplatz mit anpassbarer Folienübersicht. Editor-Auswahl und live gezeigte Folie werden getrennt gehalten. Virtual Screens und Schnellanzeigen ergänzen diesen Ablauf, ohne Editor-Platzhalter in die Ergebnisvorschau zu übernehmen.
 
 ## Neu
 
-- **Professioneller Vorschau-Arbeitsplatz:** Ablauf, vollständige gruppierte Folienübersicht und eine rechte Leiste für Auswahl, Live-Folie und Schnellanzeigen sind gleichzeitig sichtbar.
-- **Echte Virtual-Screen-Ansichten:** MAIN, LIVESTREAM, STAGE, NOTIZEN und SIGNALE wechseln ohne Neuladen und behalten den gewählten Arbeitsbereich bei.
-- **Live-Kontrolle rechts:** Die ausgewählte Folie bleibt navigierbar, während die tatsächlich live gezeigte Folie separat als AKTUELL gekennzeichnet wird.
+### Professioneller Vorschau-Arbeitsplatz
+
+Ablauf, vollständige gruppierte Folienübersicht und rechte Live-/Schnellanzeigenleiste sind jetzt gleichzeitig in einem dichten Drei-Bereich-Layout sichtbar.
+
+### Getrennte Auswahl und Live-Folie
+
+Eine Folie kann vorbereitet und navigiert werden, während die tatsächlich aktuelle ON-AIR-Folie separat und eindeutig markiert bleibt.
 
 ## Verbessert
 
-- Das responsive Raster verteilt je nach Fensterbreite und einer von acht Thumbnailstufen automatisch mehr oder weniger Folien pro Reihe.
-- Sections und Ablauf-Elemente zeigen kompakte Gruppen, Folienanzahl, echte Dauern, Wiederholung und vorhandene Übergangsmarkierungen.
-- Leere Sections belegen nur noch eine schmale Zeile. Die rechte Seitenleiste kann eingeklappt werden und gibt der Folienübersicht dann den Platz frei.
-- Auswahl per Ablauf, Thumbnail und Pfeiltaste verwendet denselben Zustand. Beim Wechsel zwischen Bearbeiten und Vorschau bleibt die aktuelle Auswahl erhalten.
-- Nicht sichtbare Gruppen werden browserseitig verzögert gerendert, damit auch große Präsentationen flüssiger scrollen.
+### Responsive Folienübersicht
+
+Acht gespeicherte Thumbnailstufen, kompakte leere Sections, echte Dauern und verzögertes Rendern nutzen kleine wie große Bildschirme effizienter.
+
+### Virtual Screens und Schnellanzeigen
+
+MAIN, LIVESTREAM, STAGE, NOTIZEN und SIGNALE sind verbunden; konfigurierte Schnellanzeigen erscheinen als echte bedienbare Vorschaukacheln.
 
 ## Behoben
 
-- Das Auswählen einer Folie im Vorschaumodus verändert die Live-Ausgabe nicht mehr. Auswahl und ON-AIR-Zustand können sichtbar voneinander abweichen.
-- Reine Editor-Hinweise wie „Inhalt bearbeiten“ erscheinen nicht länger als echter Inhalt in den Preview-Thumbnails.
-- Die bisher große ungenutzte Fläche im Vorschau-Modus wird durch das responsive Raster und die Live-Seitenleiste sinnvoll genutzt.
+### Keine Editor-Platzhalter in Preview
+
+Reine Bearbeitungshinweise werden nicht mehr als Präsentationsinhalt gerendert, und eine Preview-Auswahl verändert MAIN nicht.
 
 ---
 
 # GottesdienstRegie 0.23.0
 
-Veröffentlicht am 7. September 2026.
+Veröffentlicht: Mo., 07.09.2026
+
+Folienübergänge bekommen eine gemeinsame Auflösung von Standard- und individuellen Einstellungen. Eine Vorschau im Editor hilft beim Prüfen des Effekts vor der Ausgabe. Bestehende Präsentationen sollen ihre nutzbare Übergangskonfiguration beim Wechsel auf diese Version behalten.
 
 ## Neu
 
-- **Übergangseffekte:** Folien unterstützen jetzt Schnitt, Überblenden, Kreuzblende, Auflösen, Schieben und Wischen. Schieben und Wischen lassen sich nach links, rechts, oben oder unten ausrichten.
-- **Hierarchische Standards:** Ein Präsentationsstandard kann pro Ablauf-Element und anschließend pro einzelner Folie überschrieben werden. „Auf Standard zurücksetzen“ entfernt nur die Folienüberschreibung.
-- **Editor-Vorschau:** Der neue Vorschau-Button spielt den gewählten Übergang ausschließlich im Editor ab und verändert weder MAIN noch die aktuelle Live-Folie.
+### Professionelle Folienübergänge
+
+Schnitt, Überblenden, Kreuzblende, Auflösen, Schieben und Wischen stehen für MAIN, LIVESTREAM und LOBBY bereit. Richtung, Dauer und Bewegung lassen sich präzise einstellen.
+
+### Übergangs-Vorschau im Editor
+
+Ein eigener Vorschau-Button spielt den Effekt im Editor ab, ohne MAIN oder die aktive Live-Folie zu verändern.
 
 ## Verbessert
 
-- Dauer, Bewegungskurve und die Umkehrung der Richtung beim Zurückschalten sind direkt am Übergang einstellbar.
-- MAIN, LIVESTREAM und LOBBY verwenden die gestalteten Übergänge. STAGE schaltet bewusst ohne Animation, damit Hinweise jederzeit sofort lesbar bleiben.
-- Die Ausgabe verwendet GPU-freundliche Deckkraft-, Transformations- und Maskenanimationen. Bei schnellem Weiterschalten wird der laufende Übergang sauber ersetzt und nicht aufgestaut.
+### Klare Standard-Hierarchie
+
+Präsentationsstandard, Ablauf-Element und einzelne Folie greifen nachvollziehbar ineinander. Überschreibungen können jederzeit auf den übergeordneten Standard zurückgesetzt werden.
+
+### Sichere Live-Wiedergabe
+
+Schnelles Weiterschalten ersetzt einen laufenden Effekt sofort. STAGE bleibt beim direkten Schnitt und Background Audio läuft unabhängig weiter.
 
 ## Behoben
 
-- Alte Präsentationen mit den bisherigen Feldern `transition` und `transitionDuration` werden beim Öffnen automatisch in das neue Modell übernommen.
-- Hintergrund-Audio wird von visuellen Folienübergängen nicht neu gestartet oder verändert.
-- Schnellanzeigen bleiben von der Übergangsauswahl getrennt und Schwarz erscheint weiterhin unmittelbar.
+### Kompatibilität bestehender Präsentationen
+
+Bisherige Übergangsfelder werden beim Laden automatisch in das neue Modell übertragen.
 
 ---
 
 # GottesdienstRegie 0.22.0
 
-Veröffentlicht am 7. September 2026.
+Veröffentlicht: Mo., 07.09.2026
+
+Der Fokus liegt auf klaren Grenzen für Audiowiedergabe: Bearbeiten, Vorschau und ON AIR sollen nicht unbeabsichtigt denselben Wiedergabestatus teilen. Die Lautsprechersteuerung wird eindeutiger, und OFF AIR soll laufende Musik zuverlässig stoppen.
 
 ## Neu
 
-- **Vorschau-Audio:** Background Audio kann jetzt im Vorschaumodus anhand des dort ausgewählten Elements beziehungsweise Abschnitts kontrolliert werden. Im Bearbeitungsmodus bleibt es stumm.
-- **Kompaktes Lautsprechermenü:** Ein inaktives Lautsprecher-Icon öffnet direkt an der Ablaufzeile die Aktionen „Audio durchsuchen“, „Importieren“ und – bei Ablauf-Elementen – „Background Audio stoppen“.
-- **Autoplay:** Jede Playlist kann vorbereitet werden, ohne automatisch zu starten. Für normale PRE-/POST-Loop-Playlists ist Autoplay weiterhin standardmäßig aktiviert.
+### Audio nur in Vorschau und ON AIR
+
+Background Audio wird nur im Vorschaumodus oder während einer aktiven Ausgabe wiedergegeben. Der Bearbeitungsmodus bleibt stumm.
 
 ## Verbessert
 
-- Background Audio verwendet im Ablauf, Playlist-Panel und Live-Controller ausschließlich Lautsprecher- und Wiedergabesymbole. Das Musiknoten-Symbol bleibt echten Songs vorbehalten.
-- Das kompakte Playlist-Panel bietet Track-Hörprobe, Dauer, Drag-and-drop-Sortierung, Lautstärke, Fade In, Fade Out, Crossfade, Ducking sowie verständliche Regeln für Playlist-, Element-, Abschnitts- und OFF-AIR-Ende.
-- Abschnittsmusik läuft unabhängig von visuellen PRE-/POST-Loops weiter. Item-Audio besitzt Vorrang und kann Abschnittsmusik entsprechend der gespeicherten Zielregel ersetzen oder fortführen.
+### Eindeutige Lautsprechersteuerung
+
+Abschnitte, Ablauf-Elemente, Playlist und Live-Controller verwenden jetzt Lautsprecher- und Wiedergabesymbole. Musiknoten kennzeichnen ausschließlich echte Songs.
 
 ## Behoben
 
-- **OFF AIR:** Das Beenden der Ausgabe stoppt laufende Background-Musik zuverlässig und verhindert einen unmittelbaren Neustart durch den weiterhin sichtbaren Vorschaumodus.
-- Beim Wechsel in den Bearbeitungsmodus wird eine laufende Vorschau-Wiedergabe beendet.
-- Die Regel „Ende der Section“ berücksichtigt nun auch bei Item-Audio den tatsächlichen Abschnittswechsel.
+### OFF AIR stoppt Musik zuverlässig
+
+Beim Beenden von ON AIR stoppt die aktive Audio-Session und startet nicht durch eine weiterhin geöffnete Vorschau erneut. Item-Audio mit der Regel „Ende der Section“ endet außerdem am tatsächlichen Abschnittswechsel.
 
 ---
 
 # GottesdienstRegie 0.21.0
 
-Veröffentlicht am 7. September 2026.
+Veröffentlicht: Mo., 07.09.2026
+
+Fehlerberichte werden strukturiert erfasst, damit Beschreibung und Diagnose besser zusammenpassen. Eine eigene Release-Notes-Seite macht den Versionsverlauf zugänglich. Zusätzlich werden gezielter Import sowie die Positionierung von Menüs und Hilfebereichen überarbeitet.
 
 ## Neu
 
-- **Fehler melden:** Der Hilfe-Bereich besitzt einen strukturierten, in allen vorhandenen Oberflächensprachen vorbereiteten Fehlerdialog. Kurztitel, beobachtetes Verhalten, Reproduktionsschritte und erwartetes Verhalten werden als vollständiger GitHub-Bericht vorbereitet.
-- **Bereinigte Diagnose:** Versionsnummer, Plattform und Sprache können optional ergänzt werden. Passwörter, Zwei-Faktor-Codes und vertrauliche Inhalte werden ausdrücklich ausgeschlossen.
+### Strukturierte Fehlerberichte
+
+Der Hilfe-Bereich erstellt jetzt einen vollständigen Bericht mit Beschreibung, Reproduktionsschritten, erwartetem Verhalten und optionalen bereinigten Diagnosedaten.
 
 ## Verbessert
 
-- Die öffentliche Release-Notes-Seite orientiert sich jetzt an einer professionellen Entwicklerdokumentation: feste Dokumentationsnavigation, Versionsleiste, Suche, Direktlinks, aktuelle Version, Downloadzugang und responsive Darstellung.
-- Alle Bedientexte der Release-Notes-Webseite sind für Deutsch, Schweizerdeutsch, Englisch, Dänisch, Schwedisch, Norwegisch, Finnisch, Niederländisch, Französisch, Spanisch, Italienisch, Polnisch, Portugiesisch (Brasilien), Ukrainisch, Russisch, Türkisch und Arabisch vorbereitet.
-- PowerPoint/Keynote/OpenDocument, Text/Markdown und GottesdienstRegie-Dateien öffnen nun jeweils einen passenden Dateifilter.
+### Neue Release-Notes-Webseite
+
+Die öffentliche Dokumentation verwendet jetzt eine klare, an professionelle Entwicklerdokumentation angelehnte Navigation mit Versionsleiste, Suche, Direktlinks, Sprachwahl, Hell-/Dunkelmodus und responsiver Darstellung.
+
+### Gezielter Präsentationsimport
+
+PowerPoint, Keynote und OpenDocument, Text und Markdown sowie GottesdienstRegie-Dateien besitzen getrennte Importaktionen und passende Dateifilter.
 
 ## Behoben
 
-- Das Import-Untermenü erscheint nun auf Höhe von „Präsentation importieren“ statt am oberen Rand des Datei-Menüs.
-- Das Hilfe-Dropdown ist breiter, besitzt klare Material-Symbole und zerlegt kurze Bezeichnungen nicht mehr in unleserliche Einzelzeilen.
+### Menüposition und Hilfe-Layout
+
+Das Import-Untermenü öffnet auf Höhe der gewählten Zeile. Das Hilfe-Menü ist breiter, zeigt eindeutige Symbole und bricht kurze Bezeichnungen nicht mehr unschön um.
 
 ---
 
 # GottesdienstRegie 0.20.0
 
-Veröffentlicht am 7. September 2026.
+Veröffentlicht: Mo., 07.09.2026
+
+Hintergrundaudio kann an Abschnitte und einzelne Ablauf-Elemente gebunden werden. Ein eigener Browser und ein Live-Audiocontroller ergänzen die Auswahl und Wiedergabe. Preflight berücksichtigt Audio, und Folienloops sollen laufende Musik nicht unnötig neu starten.
 
 ## Neu
 
-- **Abschnittsmusik:** VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM erhalten eigene Background-Audio-Playlists. Folienwechsel und visuelle Schleifen bleiben von der Audio-Wiedergabe getrennt.
-- **Element-Audio und Stop-Cues:** Einzelne Ablauf-Elemente können Abschnittsmusik ersetzen oder die Wiedergabe gezielt beenden. Änderungen sind in Rückgängig/Wiederholen enthalten.
-- **Audio Browser:** Ein separates Desktopfenster zeigt die echten Audiodateien des Team-Cloudspeichers. Mehrere Titel können gewählt, angehört und vor dem Einfügen sortiert werden.
-- **Live-Controller:** Der Operator kann den aktuellen Titel pausieren, fortsetzen, überspringen, stoppen, stummschalten und dessen Lautstärke verändern.
+### Background Audio für Abschnitte
+
+VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM können eigene Cloud-Playlists besitzen. Visuelle Schleifen laufen unabhängig und starten die Musik nicht erneut.
+
+### Audio für Ablauf-Elemente
+
+Ein Ablauf-Element kann die Abschnittsmusik vorübergehend ersetzen. Audio-Stop-Cues beenden die Wiedergabe gezielt und sind über Rückgängig wiederherstellbar.
+
+### Eigener Audio Browser
+
+Das neue Systemfenster zeigt ausschließlich echte Audiodateien aus dem Team-Cloudspeicher, unterstützt Mehrfachauswahl, Hörprobe und eine sortierbare Auswahlleiste.
+
+### Live-Audiocontroller
+
+Während der Wiedergabe stehen Titelanzeige, Zeit, Pause, Fortsetzen, nächster Titel, Stop, Stummschaltung und Lautstärke direkt in der Operator-Oberfläche bereit.
 
 ## Verbessert
 
-- Playlists bieten Zufallswiedergabe, Wiederholung, Ein- und Ausblendzeiten, Titelübergänge sowie unterschiedliche Regeln für das Wiedergabeende.
-- Videos mit hörbarem Ton können die Hintergrundmusik automatisch absenken und anschließend wieder anheben.
-- Der Preflight prüft Background-Audio-Abhängigkeiten und nennt fehlende oder noch nicht vorbereitete Titel verständlich.
-- Der konfigurierte Audioausgang aus den Einstellungen wird auch für Background Audio verwendet.
+### Professionelle Wiedergaberegeln
+
+Playlists unterstützen Wiederholung, Zufallswiedergabe, Ein- und Ausblenden, Übergänge, Fortsetzungsregeln und automatische Absenkung bei Videos mit Ton.
+
+### Audio-Preflight
+
+Vor ON AIR werden nicht vorbereitete oder fehlende Background-Audio-Dateien verständlich gemeldet. Dauerhafte lokale Dateipfade werden nicht als Cloudquelle ausgegeben.
 
 ## Behoben
 
-- Ein Neustart der Folienfolge in VORPROGRAMM oder NACHPROGRAMM beginnt einen bereits laufenden Audiotitel nicht erneut.
+### Musik bleibt bei Folienloops stabil
+
+Der Neustart eines PRE- oder POST-Folienloops setzt den laufenden Audiotitel nicht mehr auf den Anfang zurück.
 
 ---
 
 # GottesdienstRegie 0.19.0
 
-Veröffentlicht am 7. September 2026.
+Veröffentlicht: Mo., 07.09.2026
+
+Tastenkürzel werden anpassbar und erhalten eine abgesicherte Bearbeitung. Die Hilfe ergänzt echte Bildschirmabbildungen zur Orientierung im Programm. Ein konfigurierbarer Vollbildmodus erweitert die Arbeitsplatzdarstellung, unabhängig von der Gestaltung der ausgegebenen Folien.
 
 ## Neu
 
-- **Tastenkürzel anpassen:** Unter Einstellungen → Tastenkürzel lassen sich Speichern, Rückgängig, Wiederholen, nächste und vorherige Live-Folie, Bearbeiten/Vorschau, Vollbild sowie ON AIR/OFF AIR neu belegen.
-- **Echte Softwareaufnahmen:** Die Hilfe enthält echte Screenshots des Arbeitsbereichs, des Einstellungsfensters und der Medienbibliothek mit erklärenden Bildunterschriften.
+### Anpassbare Tastenkürzel
+
+Unter Einstellungen → Tastenkürzel können Speichern, Rückgängig, Wiederholen, Live-Navigation, Moduswechsel, Vollbild und ON AIR neu belegt werden. Änderungen werden lokal gespeichert und sofort angewendet.
+
+### Echte Screenshots in der Hilfe
+
+Die integrierte Hilfe zeigt jetzt echte Aufnahmen von Arbeitsbereich, Einstellungsfenster und Medienbibliothek mit passenden Beschreibungen.
 
 ## Verbessert
 
-- Neue und erweiterte Hilfekapitel erklären Einstellungen, Songs, Bibel, STAGE, Schnellanzeigen, Timer, Fernsteuerung und Tastaturbedienung.
-- Geänderte Kürzel werden auf dem Gerät gespeichert und sofort angewendet.
-- Doppelte Belegungen werden verhindert; Escape bricht eine Aufnahme ab und die Standardbelegung kann vollständig wiederhergestellt werden.
+### Ausführlichere Hilfe
+
+Zusätzliche Hilfekapitel erklären Einstellungen, Songs, Bibel, STAGE, Schnellanzeigen, Timer, Fernsteuerung und Tastenkürzel ausführlich und praxisnah.
+
+### Sichere Kürzelbearbeitung
+
+Doppelte Tastenkombinationen werden erkannt und abgewiesen. Eine laufende Eingabe kann mit Escape abgebrochen und die gesamte Belegung auf Standard zurückgesetzt werden.
 
 ## Behoben
 
-- F11 wird nicht mehr unabhängig von den Einstellungen im Electron-Hauptprozess abgefangen. Die Vollbildfunktion folgt jetzt zuverlässig der gewählten Belegung.
+### Konfigurierbares Vollbild
+
+F11 ist nicht mehr fest im Desktop-Prozess verdrahtet. Das Bedienfenster reagiert nun ausschließlich auf das in den Einstellungen festgelegte Vollbild-Kürzel.
 
 ---
 
 # GottesdienstRegie 0.18.0
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
+
+Präsentationen können umbenannt und aus zusätzlichen Formaten importiert werden. PowerPoint, OpenDocument, Keynote sowie Text und Markdown besitzen unterschiedliche Importwege; deren Ergebnis sollte vor ON AIR geprüft werden. Daneben werden Modusumschalter und Versionshinweise überarbeitet.
 
 ## Neu
 
-- **Präsentationen umbenennen:** Im Datei-Menü kann die aktuell geöffnete Präsentation umbenannt werden. Der Name bleibt gespeichert und wird in der Bibliothek sowie beim erneuten Öffnen verwendet.
-- **PowerPoint und OpenDocument:** `.pptx`- und `.odp`-Dateien werden folienweise importiert. Erkannte Textinhalte entstehen als bearbeitbare Folien in GottesdienstRegie.
-- **Keynote:** `.key`-Dateien werden über eine enthaltene Vorschaugrafik übernommen. Für vollständig editierbare Inhalte weist die App auf den Export als `.pptx` hin.
-- **Text und Markdown:** Absätze aus `.txt` und `.md` werden automatisch als einzelne Folien angelegt.
+### Präsentationen umbenennen
+
+Die aktuell geöffnete Präsentation kann jetzt im Datei-Menü umbenannt werden. Der neue Name wird dauerhaft gespeichert und erscheint auch in der Präsentationsbibliothek.
+
+### PowerPoint- und OpenDocument-Import
+
+PPTX- und ODP-Dateien werden folienweise eingelesen. Erkannte Texte werden als bearbeitbare GottesdienstRegie-Folien angelegt.
+
+### Keynote-Import
+
+Keynote-Dateien können über ihre eingebettete Vorschau importiert werden. Für vollständig bearbeitbare Inhalte empfiehlt die Anwendung den vorherigen Export als PowerPoint-Datei.
+
+### Text und Markdown importieren
+
+Absätze aus TXT- und Markdown-Dateien können automatisch in einzelne Präsentationsfolien umgewandelt werden.
 
 ## Verbessert
 
-- Der Bearbeiten-/Vorschau-Umschalter ist abgerundet und steht direkt links neben ON AIR.
-- Die öffentliche Release-Notes-Seite besitzt ein neues responsives Design, eine Suchfunktion, Sprachwahl und eine gemeinsame Auf-/Zuklappfunktion.
+### Abgerundeter Modus-Umschalter
+
+Der Umschalter zwischen Bearbeiten und Vorschau ist jetzt abgerundet und befindet sich unmittelbar links neben ON AIR.
+
+### Neue Release-Notes-Webseite
+
+Die öffentliche Versionsübersicht besitzt ein modernes responsives Design, Suche, Sprachwahl sowie Schaltflächen zum gemeinsamen Auf- und Zuklappen aller Versionen.
 
 ---
 
 # GottesdienstRegie 0.17.2
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
+
+Dieser kleine Aktualisierungsstand ergänzt eine Kurzbeschreibung zu einem angebotenen Update. Benutzer erhalten damit bereits im Updateablauf eine Einordnung der neuen Version. Ausführliche Änderungen bleiben im vollständigen Versionsverlauf nachlesbar.
 
 ## Neu
 
-- **Update-Kurzinfo:** Sobald eine neue Version gefunden wurde, steht direkt unter der Verfügbarkeitsmeldung eine kurze Zusammenfassung der wichtigsten Änderungen.
+### Kurzinfo zum verfügbaren Update
 
-## Verbessert
-
-- Die Kurzinfo nennt kompakt Kategorien wie „Neu“, „Verbessert“ und „Fehlerbehebungen“.
-- Pro Kategorie erscheinen höchstens zwei kurze Punkte; ausführliche Beschreibungen bleiben in den Versionshinweisen.
-- Die Kategorien werden passend zur gewählten Sprache angezeigt. Bei noch nicht lokal bekannten zukünftigen Versionen dient die GitHub-Zusammenfassung als Fallback.
+Bei einem gefundenen Update zeigt die Statusbox jetzt eine kurze Übersicht der wichtigsten Neuerungen, Verbesserungen und Fehlerbehebungen. Die vollständigen Details bleiben in den Versionshinweisen.
 
 ---
 
 # GottesdienstRegie 0.17.1
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
+
+Die Korrektur betrifft das Popup zur Servicezeit. Seine Inhalte sollen vollständig sichtbar bleiben, statt am Rand der Oberfläche abgeschnitten zu werden. Die zugrunde liegende Servicezeit erhält durch diesen reinen Darstellungsfix keine neue fachliche Bedeutung.
 
 ## Behoben
 
-- **Servicezeit:** Das Popup zum Festlegen der Startzeit bleibt vollständig innerhalb der Ablaufspalte. Überschrift, Zeitfeld und Schaltflächen werden am linken Fensterrand nicht mehr abgeschnitten.
-- **Kleine Fenster:** Die Popupbreite passt sich bei schmalen App-Fenstern an, ohne den Inhalt zu überdecken.
+### Servicezeit-Popup vollständig sichtbar
+
+Das Popup zum Festlegen der Startzeit bleibt vollständig innerhalb der Ablaufspalte. Überschrift, Zeitfeld und Schaltflächen werden links nicht mehr abgeschnitten. Bei schmalen App-Fenstern passt sich die Popupbreite an, ohne den Inhalt zu überdecken.
 
 ---
 
 # GottesdienstRegie 0.17.0
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
+
+LiveQuiz erhält weitere Folien- und Vorschauoptionen, darunter eine Antwortfolie und QR-Vorschau. Fragenreihenfolge, Moderation und sichtbare Menüs werden überarbeitet. Schriftwahl, Thumbnail-Größen und Oberflächenanimationen ergänzen die Bedienung außerhalb des Quiz.
 
 ## Neu
 
-- **Live-Antwortfolie:** Jedes Quiz besitzt eine echte Abschlussfolie. Sie zeigt Stimmen je Auswahlmöglichkeit oder – sofern freigegeben – eingehende Freitextantworten und kann wie jede andere Folie gestaltet werden.
-- **QR-Code vor dem Start:** Die Teilnahmefolie ist schon beim Erstellen vollständig sichtbar. Ein Vorschaucode wird beim automatischen Quizstart durch den gültigen Teilnahmecode ersetzt.
-- **Mehr Schriftarten:** Der Texteditor enthält zahlreiche zusätzliche Präsentations- und Systemschriftarten samt Vorschau.
+### Antwortfolie für LiveQuiz
+
+Jedes Quiz besitzt jetzt eine echte, frei gestaltbare Antwortfolie. Während einer Sitzung zeigt sie die Auswertung der aktiven Auswahlfrage oder freigegebene Freitextantworten.
+
+### QR-Code-Vorschau
+
+Die Teilnahmefolie zeigt bereits vor dem Start einen Vorschau-QR-Code. Beim automatischen Start wird dieser ohne Designverlust durch den echten Link und Code ersetzt.
+
+### Erweiterte Schriftarten
+
+Der Texteditor bietet eine deutlich größere Auswahl verbreiteter Präsentations- und Systemschriftarten mit direkter Vorschau.
 
 ## Verbessert
 
-- Quizfragen können per Drag-and-drop neu angeordnet werden; Fragenfolien und Auswertung bleiben synchron.
-- Die Folienübersicht bietet acht feste Thumbnail-Stufen von 160 bis 440 Pixeln.
-- Schnellanzeigen wie Logo, Schwarz, Ohne Text und Amen sind auf den Vorschau-Modus begrenzt.
-- Die Hilfe erklärt die Benutzeroberfläche und den gesamten LiveQuiz-Ablauf ausführlicher mit schematischen Darstellungen.
-- Dezente Einblend-, Hover- und Live-Animationen respektieren die Systemeinstellung für reduzierte Bewegung.
-- Die animierte Updatesuche bleibt mindestens drei Sekunden sichtbar.
+### Acht Thumbnail-Stufen
+
+Die Folienübersicht besitzt jetzt acht feste Größenstufen und erlaubt deutlich größere Vorschaubilder, ohne die eigentliche Folie zu skalieren.
+
+### Fragen neu anordnen
+
+Quizfragen können direkt an ihren Reitern gezogen und neu angeordnet werden. Die zugehörigen Folien und Antwortauswertung folgen derselben Reihenfolge.
+
+### Ruhigere Vorschau
+
+Logo, Schwarz, Ohne Text, Amen und weitere Schnellanzeigen erscheinen ausschließlich im Vorschau-Modus. Die Bearbeitungsansicht bleibt auf die Inhaltserstellung konzentriert.
+
+### Hilfe zur Oberfläche und zum Quiz
+
+Die integrierte Hilfe erklärt Menüs, Bearbeitung, Vorschau sowie den Ablauf von Teilnahme über Fragen bis zur Auswertung mit zusätzlichen schematischen Darstellungen.
+
+### Sanfte Oberflächenanimationen
+
+Ansichten, Live-Status und Folien-Thumbnails verwenden dezente Animationen unter Beachtung der Systemeinstellung für reduzierte Bewegung.
+
+### Mindestens drei Sekunden Updatesuche
+
+Die animierte Updatesuche bleibt mindestens drei Sekunden sichtbar, damit der Prüfstatus klar wahrgenommen werden kann.
 
 ## Behoben
 
-- Die Quizbeschreibung erscheint zuverlässig auf der Teilnahmefolie.
-- Hauptmenüs liegen stets über Canvas, Editor, Popovern und weiteren Arbeitsbereichen.
-- Zurückgehaltene Freitextantworten werden nicht auf MAIN ausgegeben; sichtbar bleibt nur ihre Anzahl.
+### Quizbeschreibung sichtbar
+
+Die im Editor eingegebene Quizbeschreibung wird jetzt zuverlässig auf der Teilnahmefolie dargestellt und live aktualisiert.
+
+### Menüs im Vordergrund
+
+Die Dropdown-Menüs der Hauptnavigation werden nicht mehr durch Editor, Canvas, Popover oder andere Arbeitsbereiche verdeckt.
+
+### Freitext-Moderation angewendet
+
+Zurückgehaltene Freitextantworten werden auf MAIN nicht offengelegt. Der Bediener sieht stattdessen die Anzahl der geschützten Antworten.
 
 ---
 
 # GottesdienstRegie 0.16.0
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
+
+Die Quiz-Teilnahmefolie wird bearbeitbar und der Quizstart enger mit dem Ablauf verbunden. Freitext kann zunächst zurückgehalten werden, bevor er auf der Ausgabe erscheint. QR-Darstellung, Vorschauwerkzeuge und Versionsverlauf werden ebenfalls erweitert.
 
 ## Neu
 
-- **Quiz-Teilnahmefolie:** Jedes Quiz beginnt mit einer echten Folie für QR-Code, Link und Teilnahmecode. Hintergrund, Texte, Farben und Positionen bleiben vollständig bearbeitbar.
-- **Automatischer Start:** Beim Wechsel zu einem Quiz während ON AIR startet die Live-Sitzung und zeigt zuerst die Teilnahmefolie.
-- **Freitext-Moderation:** Eine Checkbox pro Freitextfrage legt fest, ob Antworten bis zur Freigabe zurückgehalten werden.
+### Bearbeitbare Quiz-Teilnahmefolie
 
-## Verbessert und behoben
+Jedes Quiz besitzt jetzt als erste Folie eine echte Teilnahmefolie mit Link, Teilnahmecode und QR-Code. Texte, Farben, Hintergrund und Positionen lassen sich mit denselben Werkzeugen wie bei anderen Folien gestalten.
 
-- QR-Codes werden durch die zentrale SlideRenderer-Engine in Editor, Vorschau und MAIN identisch dargestellt.
-- Im Vorschau-Modus bleiben Format- und Bearbeitungswerkzeuge ausgeblendet.
-- Login-Fotos erhalten keine falschen Ortsangaben mehr durch eine zufällige Dateireihenfolge.
-- Version 0.13.0 und 0.13.1 erscheinen wieder vollständig im Versionsverlauf.
+### Automatischer LiveQuiz-Start
 
-# GottesdienstRegie 0.15.4
+Wird während ON AIR zu einem Quiz gewechselt, startet die Sitzung automatisch und die Teilnahmefolie wird zuerst live geschaltet.
 
-Veröffentlicht am 6. September 2026.
+### Freitext zurückhalten
 
-## Neu
-
-- **Animierte Updatesuche:** Während der Prüfung wechselt die Anzeige fortlaufend zwischen „Suche nach Updates“, „Suche nach Updates .“, „Suche nach Updates ..“ und „Suche nach Updates ...“.
-- **Download abbrechen:** Rechts im grünen Download-Fortschrittsbalken befindet sich jetzt eine gut erreichbare X-Schaltfläche.
+Für jede Freitextfrage kann festgelegt werden, ob eingehende Antworten bis zur Freigabe ausschließlich beim Bediener bleiben.
 
 ## Verbessert
 
-- **Echter Abbruch:** Das X beendet die laufende Netzwerkübertragung über einen CancellationToken. Anschließend kann der Update-Download erneut gestartet werden.
-- **Verständlicher Status:** Nach dem Abbruch zeigt die Anwendung eine klare Meldung, ohne einen technischen Fehlercode auszugeben.
+### QR-Code im gemeinsamen Renderer
+
+Der echte QR-Code wird in Editor, Vorschau und MAIN durch dieselbe Folien-Engine dargestellt; das gewählte Foliendesign bleibt dabei erhalten.
+
+### Versionsverlauf
+
+Version 0.13 mit den Builds 0.13.0 und 0.13.1 ist wieder vollständig in den Versionshinweisen enthalten.
+
+## Behoben
+
+### Fotomotiv-Beschreibung
+
+Login-Fotomotive werden nicht mehr anhand ihrer zufälligen Listenposition mit einem möglicherweise falschen Aufnahmeort beschriftet.
+
+### Werkzeuge in der Vorschau
+
+Die Bearbeitungs- und Formatwerkzeuge werden im Vorschau-Modus vollständig ausgeblendet.
+
+---
+
+# GottesdienstRegie 0.15.4
+
+Veröffentlicht: So., 06.09.2026
+
+Die Updatesuche erhält eine animierte Rückmeldung und der Download eine Abbruchaktion. Der dokumentierte Abbruch betrifft auch die Netzwerkübertragung, nicht nur das Ausblenden des Dialogs. Dadurch werden sichtbarer Fortschritt und tatsächlicher Downloadzustand besser aufeinander abgestimmt.
+
+## Neu
+
+### Animierte Updatesuche
+
+Die Punkte hinter der Updatesuche werden während der Prüfung fortlaufend animiert.
+
+### Download abbrechen
+
+Ein X rechts im Fortschrittsbalken beendet den laufenden Update-Download.
+
+## Verbessert
+
+### Echter Netzwerkabbruch
+
+Der Download wird technisch über einen CancellationToken gestoppt und kann anschließend erneut gestartet werden.
 
 ---
 
 # GottesdienstRegie 0.15.3
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
+
+Quizteilnahme und Teilnahmelink werden im Live-Arbeitsablauf leichter zugänglich. MAIN kann die Teilnahmeinformation zeigen, und mehrere Ausgänge werden berücksichtigt. LAST SHOWN ergänzt die Orientierung an zuvor gezeigten Inhalten.
 
 ## Neu
 
-- **Quizteilnahme auf MAIN:** Der Bediener kann eine fertige Teilnahmeansicht mit Quizname, QR-Code, Webadresse und sechsstelligen Code direkt auf MAIN anzeigen.
-- **Weitere Ausgänge:** Auf Wunsch erscheint dieselbe Teilnahmeansicht gleichzeitig auf MAIN, STAGE, LIVESTREAM und LOBBY.
-- **Link kopieren:** Der vollständige Teilnahmelink lässt sich direkt aus der laufenden Quizsitzung in die Zwischenablage kopieren.
+### Quizteilnahme auf MAIN
+
+Quizname, QR-Code, Webadresse und sechsstelliger Teilnahmecode können direkt auf MAIN angezeigt werden.
+
+### Mehrere Ausgänge
+
+Die Teilnahmeansicht kann optional gleichzeitig an MAIN, STAGE, LIVESTREAM und LOBBY gesendet werden.
+
+### Teilnahmelink kopieren
+
+Der vollständige Teilnahmelink lässt sich direkt aus der Quizsteuerung kopieren.
 
 ## Verbessert
 
-- **Live-Zustand bleibt erhalten:** Die Teilnahmeansicht arbeitet als temporäre Schnellanzeige. LAST SHOWN entfernt sie und stellt die zuvor laufende Livefolie unverändert wieder her.
-- **Sichere Bedienung:** Die Ausgabeschaltflächen sind erst aktiv, wenn ON AIR läuft und der QR-Code vollständig erzeugt wurde.
+### LAST SHOWN
+
+Die Teilnahmeansicht verändert die Livefolie nicht; LAST SHOWN stellt den vorherigen Zustand exakt wieder her.
 
 ---
 
 # GottesdienstRegie 0.15.2
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
 
-## Behoben
-
-- **Alt+F4 während ON AIR:** Wird die Bedienoberfläche mit Alt+F4 oder dem Windows-X geschlossen, beendet der Main Process zuerst MAIN, STAGE, NOTES, LIVESTREAM und LOBBY.
-- **Verwaiste Ausgabefenster:** Präsentationsfenster bleiben nicht mehr sichtbar, nachdem das Bedienfenster geschlossen wurde.
+Das Beenden der Anwendung wird über einen zentralen Ablauf geführt. Besonders Alt+F4 während ON AIR soll dieselben Schutzschritte durchlaufen wie andere Schließaktionen. Ziel dieses Stands ist ein kontrollierter Shutdown, nicht eine zusätzliche Präsentationsfunktion.
 
 ## Verbessert
 
-- **Zentraler Shutdown:** Auch eine Programmbeendigung durch Update oder Betriebssystem verwendet denselben Output-Shutdown und markiert die Präsentationsbibliothek anschließend als sauber beendet.
+### Zentraler Shutdown
+
+Normales Schließen, Alt+F4 und Programmbeendigungen verwenden jetzt denselben sicheren Output-Shutdown.
+
+## Behoben
+
+### ON AIR bei Alt+F4
+
+MAIN, STAGE und weitere Ausgabefenster werden geschlossen, bevor die Bedienoberfläche beendet wird.
 
 ---
 
 # GottesdienstRegie 0.15.1
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
+
+Die Quizteilnahme erhält eine eigene Adresse. Damit wird der Zugang für Teilnehmer vom restlichen Bedienbereich getrennt und leichter kommunizierbar. Dieser kleine Stand ergänzt den zuvor eingeführten Quizablauf.
 
 ## Verbessert
 
-- **Eigene Quizadresse:** Teilnahmelinks und lokal erzeugte QR-Codes verwenden jetzt dauerhaft `https://pgbielefeld.neocities.org/quiz`.
-- **Firebase-Domain:** Die Einrichtungsanleitung nennt die Neocities-Domain, die für die anonyme Firebase-Anmeldung freigegeben werden muss.
+### Eigene Quizadresse
+
+Teilnahmelinks und lokal erzeugte QR-Codes verwenden dauerhaft https://pgbielefeld.neocities.org/quiz. Die Einrichtungsanleitung nennt die Neocities-Domain, die für die anonyme Firebase-Anmeldung freigegeben werden muss.
 
 ---
 
 # GottesdienstRegie 0.15.0
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
+
+LiveQuiz wird um Teilnahmecode, QR-Code und mobile Teilnahme erweitert. Die Live-Steuerung berücksichtigt tatsächliche Teilnehmer- und Antwortzahlen. Die Behandlung von Antworten ist von der vorbereiteten Quizfolie zu unterscheiden und benötigt den jeweiligen aktiven Quizlauf.
 
 ## Neu
 
-- **Teilnahmecode:** Beim bewussten Start eines LiveQuiz erzeugt GottesdienstRegie eine echte, zufällige sechsstellige Sitzungskennung.
-- **QR-Code:** Die Desktop-App erstellt den QR-Code lokal. Es werden keine Quizdaten an einen externen QR-Bilddienst gesendet.
-- **Mobile Join-Seite:** Eine responsive Teilnahmeoberfläche aus HTML, CSS und JavaScript steht auf der öffentlichen GottesdienstRegie-Seite bereit.
-- **Echtzeitteilnahme:** Besucher können anonym oder mit Anzeigenamen beitreten und auf die jeweils vom Bediener geöffnete Frage antworten.
-- **Live-Steuerung:** Fragen werden gezielt gestartet, Antworten geschlossen und die gesamte Sitzung kontrolliert beendet.
+### Teilnahmecode und QR-Code
+
+Ein bewusster LiveQuiz-Start erzeugt einen echten sechsstelligen Teilnahmecode und einen lokal gerenderten QR-Code.
+
+### Mobile Teilnahme
+
+Eine responsive HTML-, CSS- und JavaScript-Seite ermöglicht die anonyme oder namentliche Teilnahme per Smartphone.
+
+### Live-Steuerung
+
+Der Bediener kann Fragen einzeln öffnen, Antworten schließen und die Sitzung kontrolliert beenden.
 
 ## Verbessert
 
-- **Live-Status:** Der Editor zeigt die tatsächliche Teilnehmerzahl und die Zahl der Antworten auf die aktuell geöffnete Frage.
-- **Sitzungsschutz:** Die Quizdefinition wird während einer laufenden Sitzung gesperrt, damit Desktop und Teilnehmer dieselben Inhalte verwenden.
-- **Ablauf:** Ein beendeter Teilnahmecode wird sofort aus der Codezuordnung entfernt und kann nicht erneut betreten werden.
+### Echte Zähler
 
-## Sicherheit
-
-- **Getrennte Datenbereiche:** Quizsitzungen, Codezuordnungen und Antworten besitzen getrennte Firebase-Regeln. Teilnehmer schreiben ausschließlich ihre eigene Antwort zur aktiven Frage.
-- **Keine Lösungen im Browser:** Korrekte Antwortkennungen bleiben in der Desktop-Präsentation und werden nicht an die mobile Teilnahme-Seite ausgeliefert.
-- **Keine geheimen Schlüssel:** Die Join-Seite enthält nur die vorgesehene öffentliche Firebase-Webkonfiguration, keine Administrator- oder Secret-Schlüssel.
+Teilnehmer und Antworten auf die aktive Frage werden aus Firebase in Echtzeit gezählt.
 
 ---
 
 # GottesdienstRegie 0.14.0
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
+
+LiveQuiz wird als Element des Gottesdienstablaufs eingeführt. Quizeditor, Fragetypen und gemeinsamer Renderer bilden die vorbereitende Grundlage; Speicherung und Historie werden angebunden. Der angezeigte Live-Status soll zwischen vorbereiteten Inhalten und einem tatsächlich laufenden Quiz unterscheiden.
 
 ## Neu
 
-- **LiveQuiz im Ablauf:** LiveQuiz ist jetzt über das Hauptmenü „Element hinzufügen“ und über das Plus im Order of Service erreichbar. Beide Wege erzeugen einen eigenen LiveQuiz-ServiceItem-Typ mit passendem Material Symbol.
-- **Sicherer Erstellungsdialog:** Vor dem Anlegen werden Titel, Quiz oder Umfrage sowie anonyme oder namentliche Teilnahme ausgewählt. Abbrechen erzeugt weder ein Ablauf-Element noch eine Quizdefinition.
-- **Spezialisierter Quizeditor:** Fragen, Antwortoptionen, korrekte Antworten, Zeitlimit, Punkte und nachträgliche Antwortänderung lassen sich unmittelbar bearbeiten.
-- **Fragetypen:** Der Editor unterstützt Single Choice, Multiple Choice, Richtig/Falsch, Ja/Nein, Freitext, Skala und reine Umfragen.
-- **Mehrere Fragen:** Ein LiveQuiz bleibt genau ein Ablauf-Element und kann darin beliebig viele interne Fragen verwalten. Die Fragenleiste ermöglicht das gezielte Auswählen, Hinzufügen und Löschen.
+### LiveQuiz im Ablauf
+
+LiveQuiz kann über Element hinzufügen und das Plus im Ablauf als eigener ServiceItem-Typ erstellt werden.
+
+### Quizeditor
+
+Der spezialisierte Editor verwaltet mehrere Fragen, Antwortoptionen, richtige Lösungen, Zeitlimits, Punkte und die Teilnahmeart.
+
+### Fragetypen
+
+Single Choice, Multiple Choice, Richtig/Falsch, Ja/Nein, Freitext, Skala und Umfrage stehen im Editor bereit.
 
 ## Verbessert
 
-- **Gemeinsame Darstellung:** Jede Quizfrage erzeugt eine echte Folie und verwendet denselben SlideRenderer wie Editor, Vorschau, Folienübersicht und MAIN.
-- **Ablaufanzeige:** Statt einer generischen Folienzahl zeigt das LiveQuiz-Element seine tatsächliche Fragenanzahl.
-- **Speicherung:** Quizdefinition, Teilnahmeart, Fragen, Antworten und Einstellungen werden gemeinsam mit der Präsentation gespeichert und durch Autosave erfasst.
-- **Undo/Redo:** Erstellen und redaktionelle Änderungen laufen durch den zentralen History-Mechanismus. Eine neue Änderung verwirft den nicht mehr passenden Redo-Zweig.
+### Gemeinsamer Renderer
 
-## Sicherheit
+Quizfragen werden als echte Folien in Editor, Vorschau, Raster und MAIN identisch dargestellt.
 
-- **Keine erfundene Teilnahme:** Ohne eingerichteten Audience-Dienst werden weder fingierte Besucher noch scheinbare Live-Ergebnisse oder Teilnahmecodes angezeigt. Freitextantworten dürfen später nur nach Moderation auf MAIN erscheinen.
+### Speicherung und Historie
+
+Quizdefinitionen bleiben in der Präsentation erhalten und sind in Autosave sowie Undo/Redo eingebunden.
 
 ---
 
 # GottesdienstRegie 0.13.1
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
 
-## Behoben
-
-- **Cloud-Migration:** Statt der bisherigen allgemeinen Abbruchmeldung wird jetzt verständlich angezeigt, ob das Medien-Repository nicht privat ist, die GitHub-Berechtigung fehlt, die Verbindung unterbrochen wurde oder eine Datei nicht akzeptiert werden konnte.
-- **Private Team-Medien:** Auflisten, Vorschau, Upload und Löschen verwenden einen authentifizierten Zugriff. Private Medien-URLs werden nicht als ungeschützte öffentliche Roh-Links an den Renderer weitergegeben.
-- **Fortsetzen nach Fehlern:** Bereits erfolgreich migrierte Medien bleiben synchronisiert; nur die noch offenen Quelldateien werden bei einem weiteren Versuch erneut verarbeitet.
-- **Präsentationsmenü:** Präsentationsinformationen, Servicezeit und ON AIR befinden sich wieder in genau einem zusammenhängenden Dropdown. ON AIR erscheint nicht mehr in einem abgesetzten zweiten Kasten.
+Dieser Wartungsstand behandelt die Übernahme von Cloud-Mediendaten sowie unterbrochene Übertragungen. Medienfenster und Präsentationsmenü erhalten begleitende Korrekturen. Eine abgebrochene Übertragung ist nicht mit einer vollständig verfügbaren Mediendatei gleichzusetzen.
 
 ## Verbessert
 
-- **Medienfenster:** Das native Arbeitsfenster heißt nun eindeutig „GottesdienstRegie – Medienbibliothek“ und bleibt normal minimierbar, maximierbar sowie über den Windows-Fensterwechsel erreichbar.
-- **Rückgängig/Wiederholen:** Beide Befehle bleiben an ihrer festen Position sichtbar. Ohne passenden History-Eintrag sind sie technisch und visuell deaktiviert und werden für Hilfstechnologien als nicht verfügbar bezeichnet.
-- **Upload-Stabilität:** Vorübergehende Netzwerk- und Serverfehler werden begrenzt wiederholt, ohne eine Endlosschleife zu erzeugen.
+### Cloud-Migration
+
+Lokale Medien lassen sich kontrolliert in die private GitHub-Medienbibliothek übertragen, während die Quelldateien erhalten bleiben.
+
+### Medienfenster
+
+Status, Upload und Verwaltung der Medienbibliothek reagieren auch bei unterbrochenen Übertragungen verständlich.
+
+## Behoben
+
+### Unterbrochene Übertragung
+
+Bereits übertragene Medien bleiben erhalten und übrige Dateien können später erneut hochgeladen werden.
+
+### Präsentationsmenü
+
+Die Befehle im Präsentationsmenü öffnen wieder zuverlässig die vorgesehenen Ansichten.
 
 ---
 
 # GottesdienstRegie 0.13.0
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
 
-## Cloud-Medienbibliothek
+Eine private Medienbibliothek mit eigenem Fenster ergänzt die lokale Präsentationsarbeit. Medienraster und Speicherstatus erleichtern Auswahl und Verwaltung. Die Cloudanzeige wird überarbeitet, damit sie den Zustand der Medienanbindung verständlicher vermittelt.
 
-Die Medienbibliothek ist jetzt ein eigener Desktop-Arbeitsbereich mit drei klar getrennten Quellen, einer professionellen Rasteransicht und einem Detailbereich. Die bisherige Anzeige lokaler Bestände sowie der dauerhafte technische GitHub-Status entfallen.
+## Neu
 
-Lokale Dateien werden ausschließlich zum Hochladen ausgewählt. Erst nach erfolgreicher Übertragung steht das Cloud-Medium zur Verwendung in Präsentationen bereit. Vorhandene Altmedien können über einen sicheren Migrationshinweis übertragen werden.
+### Private Cloud-Medienbibliothek
 
-## Sicheres Verwalten
+Bilder, Videos und Audiodateien können zusätzlich zur lokalen Bibliothek sicher in einer privaten GitHub-Ablage verwaltet werden.
 
-Der Verwaltungsmodus zeigt keine irreführenden „Verwenden“-Schaltflächen. Im Auswahlmodus kann ein Medium gezielt als Inhalt oder Hintergrund übernommen werden. Medien, die gerade live oder in gespeicherten Präsentationen verwendet werden, sind vor versehentlichem Löschen geschützt.
+### Eigenständiges Medienfenster
 
-## Darstellung
+Die Medienbibliothek steht als eigenes Desktop-Fenster mit Suche, Filtern und Medienaktionen bereit.
 
-Suche, Filter und Sortierung bleiben kompakt. Das Raster reagiert auf die Fenstergröße, der Detailbereich bleibt erreichbar und echte Leer-, Lade- und Offline-Zustände ersetzen Platzhalter oder erfundene Inhalte.
+## Verbessert
+
+### Medienraster
+
+Vorschaubilder, Metadaten und Aktionen sind in einem übersichtlichen Raster zusammengeführt.
+
+### Speicherstatus
+
+Die Oberfläche unterscheidet lokale Dateien und Cloud-Medien eindeutig und zeigt den tatsächlichen Übertragungszustand.
+
+## Behoben
+
+### Irreführende Cloud-Anzeige
+
+Medien werden nicht mehr als online verfügbar dargestellt, bevor ihre Übertragung erfolgreich abgeschlossen wurde.
 
 ---
 
 # GottesdienstRegie 0.12.0
 
-Veröffentlicht am 6. September 2026.
+Veröffentlicht: So., 06.09.2026
+
+Das Datei-Menü bündelt Präsentationsdialoge und unterschiedliche Duplizieraktionen. Kopien sollen eindeutig voneinander unterscheidbar bleiben. Tastaturbedienung, Menüfokus und Live-Sicherheit werden bei diesen Aktionen ebenfalls berücksichtigt.
 
 ## Neu
 
-- **Professionelles Datei-Menü:** Neu, Öffnen, zuletzt verwendete Präsentationen, Duplizieren, Import, Sicherung, Wiederherstellung, Drucken, Teilen und Beenden sind in einer klar gegliederten Menühierarchie verfügbar.
-- **Neue Präsentation:** Titel, Datum, Servicezeit, Team und Vorlage werden in einem kompakten Dialog erfasst; die vier Standardbereiche werden automatisch angelegt.
-- **Präsentationsauswahl:** Die Öffnen- und Duplizieren-Dialoge bieten Suche, Sortierung, echte Folienminiaturen, Metadaten und Doppelklick.
-- **Duplizieroptionen:** Servicezeit, Medienreferenzen und Zielzeiten können gezielt übernommen werden.
+### Datei-Menü
+
+Ein mehrstufiges Datei-Menü bündelt Neu, Öffnen, zuletzt verwendete Präsentationen, Duplizieren, Import, Sicherung, Wiederherstellung, Drucken, Teilen und Beenden.
+
+### Präsentationsdialoge
+
+Neue Präsentationen erfassen Titel, Datum, Servicezeit, Team und Vorlage; Öffnen und Duplizieren bieten Suche, Sortierung, Metadaten und echte Folienminiaturen.
+
+### Duplizieroptionen
+
+Beim Duplizieren können Servicezeit, Medienreferenzen und Zielzeiten gezielt übernommen werden.
 
 ## Verbessert
 
-- **Tastaturbedienung:** Pfeiltasten navigieren im Datei-Menü; Escape schließt zuerst das Untermenü, danach das Hauptmenü und schließlich geöffnete Datei-Dialoge.
-- **Eindeutige Kopien:** Duplizierte Präsentationen erhalten neue IDs für Präsentation, Bereiche, Ablauf-Elemente, Folien und Canvas-Elemente.
-- **Live-Sicherheit:** Beim Beenden während ON AIR erscheint eine klare Warnung; nach Bestätigung werden Ausgaben kontrolliert beendet und der Stand gespeichert.
+### Eindeutige Kopien
+
+Kopien erhalten neue IDs für Präsentation, Bereiche, Ablauf-Elemente, Folien und Canvas-Elemente.
+
+### Tastaturbedienung
+
+Pfeiltasten navigieren im Datei-Menü; Escape schließt Untermenü, Hauptmenü und Dialoge in der richtigen Reihenfolge.
+
+### Live-Sicherheit
+
+Beim Beenden während ON AIR warnt die Anwendung und beendet aktive Ausgaben erst nach ausdrücklicher Bestätigung.
 
 ## Behoben
 
-- **Zuletzt duplizieren:** Die im Untermenü gewählte Präsentation wird im Duplizieren-Dialog korrekt vorausgewählt.
-- **Menüfokus:** Nach dem Schließen eines Dialogs kehrt der Tastaturfokus zum Datei-Menü zurück.
+### Zuletzt duplizieren
+
+Der ausgewählte Eintrag wird nun im Duplizieren-Dialog korrekt vorausgewählt.
+
+### Menüfokus
+
+Nach dem Schließen eines Datei-Dialogs kehrt der Tastaturfokus zuverlässig zum Datei-Menü zurück.
 
 ---
 
 # GottesdienstRegie 0.11.1
 
-Veröffentlicht am 2. September 2026.
+Veröffentlicht: Mi., 02.09.2026
+
+Diese Wartungsausgabe behandelt hellen und dunklen Darstellungsmodus sowie die zugehörigen Einstellungen. Im Mittelpunkt steht die Lesbarkeit der Bedienoberfläche. Die gewählte Oberflächenfarbe ist von Farben und Hintergründen der eigentlichen Folien zu unterscheiden.
 
 ## Behoben
 
-- **Heller Modus:** Die vollständige Produktionsoberfläche übernimmt nun das helle Farbschema. Menü-, Ablauf-, Editor-, Timeline- und Werkzeugbereiche bleiben dadurch kontrastreich lesbar.
-- **Einstellungen:** Titel, Bereichsüberschriften und Schließen-Schaltfläche erben keine helle Produktionsschrift mehr und sind auf dem weißen Dialoghintergrund wieder deutlich sichtbar.
-- **Dunkler Modus:** Die bisherigen dunklen Produktionsfarben bleiben unverändert erhalten.
+### Heller Modus
+
+Menü, Ablauf, Editor, Timeline und Werkzeugbereiche übernehmen nun vollständig das helle Farbschema und bleiben kontrastreich lesbar.
+
+### Einstellungen
+
+Titel, Bereichsüberschriften und die Schließen-Schaltfläche erben keine helle Produktionsschrift mehr und sind auf dem weißen Dialoghintergrund wieder deutlich sichtbar.
+
+### Dunkler Modus
+
+Die Korrektur ist auf das helle Farbschema begrenzt; die bewährten dunklen Produktionsfarben bleiben unverändert.
 
 ---
 
 # GottesdienstRegie 0.11.0
 
-Veröffentlicht am 2. September 2026.
+Veröffentlicht: Mi., 02.09.2026
+
+Hintergrundauswahl, Bildanpassung, Hilfslinien und Ebenenanordnung werden in die Bearbeitung integriert. Der gemeinsame Renderer verbindet Editor und Ausgabe. Weitere Verbesserungen betreffen Medienauswahl, Folienübersicht, kleinere Fenster und Textformatierung.
 
 ## Neu
 
-- **Hintergrund-Menü:** Medien durchsuchen, Bilder direkt importieren, zuletzt verwendete Motive auswählen und Füllfarben sofort anwenden.
-- **Bildanpassung:** Hintergrundbilder weichzeichnen, drehen, an Höhe oder Breite anpassen, ausfüllen, einpassen und positionieren.
-- **Hilfslinien:** Canvas Smart Guides, Randhilfen und Drittelregel lassen sich unabhängig ein- und ausschalten und bleiben auf den Editor beschränkt.
-- **Anordnen:** Elemente nach vorn oder hinten legen, an sechs Positionen ausrichten, drehen, spiegeln sowie sperren und entsperren.
+### Hintergrund-Menü
+
+Ein kompaktes Produktionsmenü ermöglicht Medienauswahl, direkten Bildimport, zuletzt verwendete Bilder und eine sofort anwendbare Farbpalette.
+
+### Bildanpassung
+
+Hintergrundbilder lassen sich weichzeichnen, drehen, an Höhe oder Breite anpassen, ausfüllen, einpassen und exakt ausrichten.
+
+### Hilfslinien
+
+Canvas Smart Guides, Randhilfen und die Drittelregel können unabhängig aktiviert werden und erscheinen ausschließlich im Editor.
+
+### Anordnen
+
+Elemente können nach vorn oder hinten gelegt, an allen sechs Kanten und Mittellinien ausgerichtet, gedreht, gespiegelt und gesperrt werden.
 
 ## Verbessert
 
-- **Zentraler Renderer:** Hintergrundbilder, Bildposition, Unschärfe, Rotation, Spiegelung und Kursivschrift erscheinen in Editor, Vorschau, Thumbnails und MAIN identisch.
-- **Medienbibliothek:** Aus dem Hintergrund-Menü ausgewählte Bilder ändern ausschließlich die aktuelle Folie und erzeugen kein neues Ablauf-Element.
-- **Folienübersicht:** Der gespeicherte Thumbnail-Regler verändert nun sichtbar die Rastergröße, ohne Folieninhalt oder Canvas-Auflösung anzupassen.
+### Zentraler Renderer
+
+Hintergrundfarbe, Bild, Position, Unschärfe, Rotation sowie gespiegelte und kursive Elemente werden in Editor, Vorschau, Miniaturen und Live-Ausgabe identisch gerendert.
+
+### Medienauswahl
+
+Wird die Medienbibliothek über das Hintergrund-Menü geöffnet, setzt die Auswahl den Folienhintergrund und erzeugt kein zusätzliches Ablauf-Element.
+
+### Folienübersicht
+
+Der gespeicherte Regler für die Miniaturgröße verändert nun sichtbar die Rastergröße, ohne Inhalte oder Canvas-Auflösung zu beeinflussen.
 
 ## Behoben
 
-- **Kleine Fenster:** Alle sechs Ausrichtungen sowie Drehen, Spiegeln und Sperren bleiben auch in einer kompakten Bedienoberfläche sichtbar.
-- **Textformatierung:** Kursiv wird vom gemeinsamen Renderer tatsächlich dargestellt.
+### Kleine Fenster
+
+Eine ältere Responsive-Regel blendet Ausrichtungs- und Drehbefehle in kompakten Fenstergrößen nicht mehr versehentlich aus.
+
+### Textformatierung
+
+Die Kursiv-Schaltfläche wirkt jetzt sichtbar im gemeinsamen Folienrenderer.
 
 ---
 
 # GottesdienstRegie 0.10.0
 
-Veröffentlicht am 2. September 2026.
+Veröffentlicht: Mi., 02.09.2026
+
+Der Produktionsarbeitsbereich führt Songeditor, Ablauf und Timeline deutlicher zusammen. Startbildschirm, Updatebedienung und Tastaturwege werden überarbeitet. Servicezeiten lassen sich in diesem Arbeitsablauf festlegen und bleiben Teil der Präsentationsvorbereitung.
 
 ## Neu
 
-- **Produktionsarbeitsbereich:** Ablauf, spezialisierter Kontexteditor und große Ausgabenvorschau bilden eine dichte professionelle Arbeitsfläche. Output-Tabs und Formatierungsleiste bleiben sichtbar.
-- **Songeditor:** Arrangement, Tonart, Lyrics-Abschnitte, Metadaten, CCLI-Optionen und mehrere echte Folienvorschauen sind gleichzeitig bearbeitbar.
-- **Timeline:** Die Timeline zeigt aktive Elemente samt Dauer und Liveposition. Sie lässt sich aufklappen und in der Höhe anpassen.
-- **Startbildschirm:** Das konfigurierte Loginmotiv füllt den Hintergrund; eine eigene dunkle Startkarte zeigt echte Ladephasen mit ruhigem Spinner.
+### Produktionsarbeitsbereich
+
+Ablauf, spezialisierter Kontexteditor und große Ausgabenvorschau bilden jetzt eine dichte professionelle Arbeitsfläche mit dauerhaft sichtbaren Output-Tabs und Formatierungsleiste.
+
+### Songeditor
+
+Songs zeigen Arrangement, Tonart, direkt bearbeitbare Abschnitte, Metadaten, CCLI-Optionen und mehrere echte Folienvorschauen gleichzeitig.
+
+### Timeline
+
+Eine aufklappbare und in der Höhe anpassbare Timeline visualisiert alle aktiven Elemente mit Dauer und Liveposition.
+
+### Startbildschirm
+
+Der Startvorgang verwendet das konfigurierte Loginmotiv als Vollbildhintergrund und zeigt in einer eigenen dunklen Karte ausschließlich echte Ladephasen mit ruhigem Spinner.
 
 ## Verbessert
 
-- **Ablauf:** Echte Miniaturansichten, kompakte Dauern, Wiederholung, Auswahl und Livezustand benötigen deutlich weniger Platz.
-- **Updates:** Die voraussichtliche Restdauer basiert auf übertragenen Bytes und einer geglätteten realen Downloadgeschwindigkeit.
-- **Tastatur:** Escape schließt im Haupteditor stets das oberste Menü oder Dialogfenster und bricht Sicherheitsdialoge ab.
+### Ablauf
 
-## Geändert
+Abschnitte, echte Miniaturansichten, Dauern, Wiederholung, Auswahl und Livezustand sind kompakter und bei 1920 × 1080 gleichzeitig mit Editor und Vorschau sichtbar.
 
-- **Servicezeit:** Jede Präsentation besitzt exakt eine Servicezeit. Sie erscheint als `10:30 (VORM.)` beziehungsweise `15:30 (NACHM.)`.
+### Updates
+
+Beim Herunterladen wird die Restzeit aus übertragenen Bytes und einer geglätteten realen Downloadgeschwindigkeit berechnet.
+
+### Tastaturbedienung
+
+Escape schließt im Haupteditor das jeweils oberste Menü oder Dialogfenster; Sicherheitsdialoge werden dabei immer abgebrochen.
 
 ## Behoben
 
-- **Zeit festlegen:** Der Zeitdialog verändert den Aufklappzustand des Gottesdienstbereichs nicht; Escape verwirft die Änderung.
+### Zeit festlegen
+
+Der kompakte Zeitdialog verändert den Aufklappzustand des Gottesdienstbereichs nicht und verwirft Änderungen mit Escape.
 
 ---
 
 # GottesdienstRegie 0.9.2
 
-Veröffentlicht am 2. September 2026.
+Veröffentlicht: Mi., 02.09.2026
+
+Der professionelle Arbeitsbereich wird als Standard stärker hervorgehoben. Kompakte Ablaufzeiten und überarbeitete Dialogebenen unterstützen die Desktop-Bedienung. Einstellungen und Zeitbearbeitung erhalten Korrekturen, damit wichtige Aktionen nicht hinter anderen Flächen verschwinden.
 
 ## Verbessert
 
-- **Professioneller Standardmodus:** Bei einer neuen Installation startet die Produktionsoberfläche standardmäßig im dunklen Design. Bereits gespeicherte Benutzereinstellungen bleiben unverändert.
-- **Kompakte Ablaufzeiten:** Zeitangaben unter einer Minute erscheinen jetzt als `7s`, `10s` oder `45s`; längere Zeiten bleiben im Format `1:00` oder `3:06`.
-- **Tastaturbedienung:** Das Einstellungsfenster lässt sich zuverlässig mit Escape schließen. Ein geöffneter Beta-Hinweis wird dabei zuerst geschlossen.
+### Professioneller Standardmodus
+
+Bei neuen Installationen verwendet die Produktionsoberfläche standardmäßig das dunkle Design; bereits gespeicherte persönliche Einstellungen bleiben unverändert.
+
+### Kompakte Ablaufzeiten
+
+Dauern unter einer Minute werden als 7s, 10s oder 45s angezeigt; ab einer Minute verwendet GottesdienstRegie weiterhin das Format 1:00 oder 3:06.
+
+### Tastaturbedienung
+
+Das Einstellungsfenster kann jetzt mit Escape geschlossen werden; ein geöffneter Beta-Hinweis wird dabei zuerst geschlossen.
 
 ## Behoben
 
-- **Einstellungsfenster:** Auswahlrahmen und Größenanfasser von Text-, Bild- oder Videoelementen können nicht mehr vor dem Einstellungsfenster erscheinen.
-- **Dialogebenen:** Einstellungen, Hilfe, Medienbibliothek, Präsentationsbibliothek und Bestätigungsdialoge verwenden jetzt eine gemeinsame, geschützte oberste Anwendungsebene.
-- **Zeitbearbeitung:** Kurze Zeitwerte mit `s` können nach der kompakten Darstellung weiterhin direkt bearbeitet und korrekt gespeichert werden.
+### Einstellungsfenster
+
+Der Auswahlrahmen eines Textfelds oder anderen Canvas-Elements kann nicht mehr vor dem Einstellungsfenster dargestellt werden.
+
+### Dialogebenen
+
+Einstellungen, Hilfe, Medien- und Präsentationsbibliothek sowie Bestätigungsdialoge verwenden eine gemeinsame geschützte oberste Ebene.
+
+### Zeitbearbeitung
+
+Kurze Zeitwerte mit Sekundenkürzel lassen sich weiterhin direkt bearbeiten und werden korrekt gespeichert.
 
 ---
 
 # GottesdienstRegie 0.9.1
 
-Veröffentlicht am 1. September 2026.
+Veröffentlicht: Di., 01.09.2026
+
+Ein Beta-Kanal ergänzt die stabile Updateversorgung. Hinweise zum gewählten Kanal und zur Rückkehr auf eine stabile Ausgabe werden sichtbar gemacht. Mehrere Servicezeiten sowie Kopf- und Einklappaktionen erhalten begleitende Verbesserungen.
 
 ## Neu
 
-- **Beta-Updates:** Unter Einstellungen → Updates lassen sich Vorabversionen optional aktivieren. Standardmäßig werden weiterhin nur stabile Versionen berücksichtigt.
-- **Mehrere Servicezeiten:** Startzeiten können hinzugefügt, einzeln bearbeitet, entfernt und mit der Präsentation gespeichert werden.
+### Beta-Update-Kanal
+
+Unter Einstellungen → Updates können Vorabversionen jetzt gezielt aktiviert werden. Ohne Aktivierung berücksichtigt GottesdienstRegie weiterhin ausschließlich stabile Veröffentlichungen.
+
+### Mehrere Servicezeiten
+
+Für den Gottesdienst lassen sich mehrere Startzeiten hinzufügen, einzeln bearbeiten, entfernen und dauerhaft mit der Präsentation speichern.
 
 ## Verbessert
 
-- **Einmaliger Warnhinweis:** Beim ersten Aktivieren des Beta-Kanals erklärt ein kompakter Dialog verständlich die möglichen Einschränkungen.
-- **Versionsdarstellung:** Beta- und RC-Versionen werden verständlich benannt, mit einem dezenten BETA-Badge gekennzeichnet und unterstützen „Bekannte Probleme“.
-- **Rückkehr zur stabilen Version:** Ist eine Beta installiert, wird die stabile Version mit Kompatibilitätsprüfung und Backup-Möglichkeit angeboten.
+### Beta-Hinweis
+
+Beim ersten Aktivieren erklärt ein einmaliger, verständlicher Dialog die möglichen Einschränkungen von Beta-Versionen. Der aktuelle Kanal und Beta-Versionen werden klar, aber nicht alarmierend gekennzeichnet.
+
+### Versionshinweise
+
+Vorabversionen werden als „Version … Beta“ beziehungsweise RC dargestellt und können zusätzlich die Kategorie „Bekannte Probleme“ enthalten.
+
+### Rückkehr zu Stabil
+
+Bei installierter Beta-Version wird die Rückkehr zur stabilen Ausgabe eindeutig angeboten; Präsentationskompatibilität und Backup-Möglichkeit bleiben Teil der Sicherheitsprüfung.
 
 ## Behoben
 
-- **Zeit festlegen:** Ein Klick auf die Servicezeit öffnet nur noch den Zeitdialog und klappt GOTTESDIENST nicht mehr ein oder aus.
-- **Getrennte Header-Aktionen:** Pfeil, Titel, Zeit, Plus und weitere interaktive Controls lösen keine unbeabsichtigten Mehrfachaktionen durch Event Bubbling mehr aus.
-- **Unabhängiger Zustand:** Servicezeiten und Collapse-Zustand werden getrennt gespeichert; Zeitänderungen lassen den Abschnitt exakt im bisherigen Zustand.
+### Zeit festlegen
+
+Ein Klick auf „ZEIT FESTLEGEN“ oder eine vorhandene Startzeit öffnet jetzt ausschließlich die Zeitbearbeitung und klappt den Bereich GOTTESDIENST nicht mehr unbeabsichtigt ein oder aus.
+
+### Header-Aktionen
+
+Pfeil, Abschnittstitel, Zeitfeld und Hinzufügen-Schaltfläche besitzen getrennte Klickbereiche und lösen durch Event Bubbling keine zweite Aktion mehr aus.
+
+### Collapse-Zustand
+
+Der Ein-/Ausklappzustand der Ablaufbereiche wird unabhängig von den Servicezeiten lokal gespeichert und bleibt bei Zeitänderungen exakt erhalten.
 
 ---
 
 # GottesdienstRegie 0.9.0
 
-Veröffentlicht am 1. September 2026.
+Veröffentlicht: Di., 01.09.2026
+
+Diese umfangreichere Ausgabe verbindet Ablaufzeiten, WARM-UP und zeitgesteuerte Wechsel mit erweiterten Medienquellen. Audioelemente und Live-Timer ergänzen den Ablauf. Korrekturen betreffen unter anderem lokale Videos, Medienende und Schleifenwechsel.
 
 ## Neu
 
-- **Ablaufzeiten:** Elemente und einzelne Folien besitzen echte Wiedergabezeiten. Abschnittssummen werden automatisch berechnet und direkt im Ablauf oder Eigenschaftenbereich bearbeitet.
-- **WARM-UP:** VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM sind getrennte Bereiche. Alte ANKOMMEN-Inhalte werden automatisch übernommen.
-- **Zeitgesteuerter Übergang:** Wenn ON AIR bereits aktiv ist, startet WARM-UP anhand seiner berechneten Dauer und wechselt zur hinterlegten Servicezeit in den Gottesdienst.
-- **GitHub-Medienbibliothek:** Lokale Medien lassen sich prüfsummenbasiert mit dem öffentlichen Repository `cmoere/GottesdienstRegie-Media` synchronisieren.
-- **StorageProvider:** Lokaler Cache und GitHub-Speicher sind sauber getrennt; weitere Speicherziele können später ergänzt werden.
-- **Audio:** Importierte Audiodateien werden als echte Player-Elemente in Vorschau und Live-Ausgabe wiedergegeben.
-- **Timer und Countdown:** Zeiten laufen in der tatsächlichen MAIN-Ausgabe sekundengenau und können einen Endtext anzeigen.
+### Ablaufzeiten
+
+Elemente und einzelne Folien besitzen jetzt echte Wiedergabezeiten; Abschnittssummen werden automatisch berechnet und Zeiten lassen sich direkt im Ablauf oder im Eigenschaftenbereich bearbeiten.
+
+### WARM-UP
+
+Der Ablauf verwendet jetzt die vier klar getrennten Bereiche VORPROGRAMM, WARM-UP, GOTTESDIENST und NACHPROGRAMM; ältere ANKOMMEN-Inhalte werden automatisch übernommen.
+
+### Zeitgesteuerter Übergang
+
+Wenn ON AIR bereits aktiv ist, wechselt das Vorprogramm passend zur berechneten WARM-UP-Dauer und der hinterlegten Servicezeit in WARM-UP und anschließend in den Gottesdienst.
+
+### GitHub-Medienbibliothek
+
+Lokale Medien können prüfsummenbasiert in das öffentliche Repository GottesdienstRegie-Media synchronisiert werden; der Online- und Uploadstatus ist direkt in der Medienbibliothek sichtbar.
+
+### Medien-Provider
+
+Eine erweiterbare StorageProvider-Schnittstelle trennt lokalen Cache und GitHub-Speicher und bereitet weitere kostenlose oder selbst gehostete Speicherziele vor.
+
+### Echte Audioelemente
+
+Importierte Audiodateien werden als echte Player-Elemente gerendert, starten im Live-Ausgang automatisch und können nach dem Ende zur nächsten Folie wechseln.
+
+### Live-Timer
+
+Timer und Countdowns zählen in der tatsächlichen MAIN-Ausgabe sekundengenau und zeigen nach Ablauf den konfigurierten Endtext.
 
 ## Verbessert
 
-- **Bearbeiten/Vorschau:** Der kompakte Schiebeschalter entspricht dem Referenzdesign und markiert den aktiven Modus gelb.
-- **Startbildschirm:** Der echte mindestens zehnsekündige Startvorgang verwendet einen Spinner ohne Balken und Prozentanzeige.
-- **Ablaufdarstellung:** Echte Miniaturansichten, Typ-Symbole, Schleifenstatus, einklappbare Bereiche und direkt bearbeitbare Dauern verbessern lange Abläufe.
-- **Elemente hinzufügen:** Bild, Video, Audio, PDF, Slideshow, Timer, Countdown, Ankündigung, Stage-Nachricht und Schnellanzeige erzeugen typgerechte Inhalte statt leerer Platzhalter.
-- **Medienende:** Das Ende von Video und Audio kann sicher die nächste aktive Folie aufrufen.
+### Bearbeiten/Vorschau
+
+Die Umschaltung entspricht jetzt dem kompakten Referenzdesign mit zwei Beschriftungen, zentralem Schiebeschalter und gelber Markierung des aktiven Modus.
+
+### Startbildschirm
+
+Der echte mindestens zehnsekündige Startvorgang verwendet jetzt einen ruhigen Spinner ohne Fortschrittsbalken und ohne Prozentanzeige.
+
+### Ablaufdarstellung
+
+Kompakte echte Folienvorschaubilder, Typ-Symbole, Schleifenstatus, einklappbare Bereiche und bearbeitbare Dauern verbessern die Übersicht bei langen Gottesdiensten.
+
+### Elemente hinzufügen
+
+Bild, Video, Audio, PDF, Slideshow, Timer, Countdown, Ankündigung, Stage-Nachricht und Schnellanzeige erzeugen jetzt typgerechte Daten und Wiedergabeelemente statt leerer Platzhalter.
+
+### Medienende
+
+Das Ende eines Videos oder einer Audiodatei wird sicher vom Output-Fenster an die Bedienoberfläche gemeldet und führt bei entsprechender Einstellung zur nächsten aktiven Folie.
 
 ## Behoben
 
-- **Lokale Videos:** Die Auswahl „Datei“ öffnet tatsächlich den Medien-Dateidialog und erzeugt ein vollflächiges Videoelement.
-- **Schleifen:** Vor- und Nachprogramm springen nach der letzten aktiven Folie verlässlich an den Bereichsanfang zurück.
-- **Migration:** Vorhandene Präsentationen werden um Timing-Daten ergänzt, ohne ihre Folien zu verlieren.
+### Lokale Videodatei
 
-## Sicherheit
+Die Auswahl „Datei“ öffnet jetzt tatsächlich den Medien-Dateidialog und erzeugt ein vollflächiges Videoelement.
 
-- **GitHub-Zugang:** Zugangsdaten bleiben im Electron-Hauptprozess und werden weder an den Renderer noch in Präsentations- oder Mediendaten geschrieben.
-- **Große Videos:** Dateien oberhalb der sicheren GitHub-Grenze bleiben lokal und verursachen keinen unvollständigen Upload.
+### Schleifenwechsel
 
-# 0.42.0 – Zuverlässigere Medien, Formen und Bedienoberfläche
+Vor- und Nachprogramm springen nach ihrer letzten aktiven Folie zuverlässig an den Anfang des jeweiligen Bereichs zurück, ohne deaktivierte Inhalte einzubeziehen.
 
-Version 0.42.0 trennt die Spezialelemente des Vor- und Nachprogramms eindeutig von normalen Gottesdienst-Inhalten. Die 2D-Objektgalerie verwendet echte SVG-Vektoren, persönliche Notizen zeigen einen verständlichen und zeitlich begrenzten Speicherstatus, und die Einzelvorschau kommt ohne störenden Folienschatten aus.
+### Zugangsdaten
 
-Neu sind außerdem die getestete Grundlage für fünf feste Anzeigegrößen, kollisionssichere Popovers, eine typisierte Videoauswahl und eine Plattform-Erkennung für Liquid-Glass-Materialien unter macOS 26. Alle Bedienhilfen bleiben auf das Operatorfenster beschränkt; MAIN, STAGE und Livestream behalten ihr festgelegtes Layout und ihre Farben.
+GitHub-Zugangsdaten bleiben vollständig im Electron-Hauptprozess und werden weder an den Renderer noch an Präsentations- oder Mediendaten weitergegeben.
 
-Sprachmodelle und Radiosuche benötigen für neue Downloads weiterhin eine Internetverbindung. Netzwerkfehler verändern weder bereits gespeicherte Übersetzungstexte noch eine laufende Ausgabe.
+---
+
+# GottesdienstRegie 0.8.0
+
+Veröffentlicht: Di., 01.09.2026
+
+Fensterstart, Videoeingänge und Live-Kamera erweitern den Einsatz der Anwendung am Regieplatz. Schnellanzeigen und LAST SHOWN helfen bei spontanen Inhalten. Die Versionshinweise dokumentieren außerdem Korrekturen für Videoaudio, Gerätausfälle, Einstellungen und Update-Sicherheit.
+
+## Neu
+
+### Fensterstart
+
+Die Bedienoberfläche startet standardmäßig im Vollbildmodus und kann alternativ maximiert, als Fenster oder im zuletzt verwendeten Zustand geöffnet werden.
+
+### Videoeingänge
+
+Echte Kameras, Webcams und Capture Cards werden über die Betriebssystem-Mediengeräte erkannt, ausgewählt und mit einer Live-Vorschau dargestellt.
+
+### Live-Kamera
+
+Ein konfigurierter Videoeingang kann als normales Ablauf-Element eingefügt werden und verwendet in Vorschau und MAIN dieselbe Wiedergabekomponente.
+
+### Schnellanzeigen
+
+Logo, Schwarz, Leer, Ohne Text, Amen, Countdown und eigene Schnellanzeigen lassen sich aktivieren, sortieren, konfigurieren und gezielt Ausgängen zuweisen.
+
+### LAST SHOWN
+
+Schnellanzeigen werden als temporärer Live-Zustand über die aktive Folie gelegt; LAST SHOWN entfernt ihn, ohne die Live-Folien-ID oder den Ablauf zu verändern.
+
+## Verbessert
+
+### Einstellungen
+
+Header, Navigation und Inhalt besitzen jetzt getrennte Höhen- und Scrollbereiche, damit lange Seiten vollständig innerhalb des Fensters bleiben.
+
+### Updates
+
+Aktuelle und vorherige Version zeigen Produkt, Datum, Build, Downloadgröße, Architektur, Kanal und Wiederherstellungsstatus in verständlicher Form.
+
+### Downgrade-Sicherheit
+
+Vor der Installation einer älteren Version werden neuere Inhaltsarten erkannt und bei möglichen Einschränkungen wird zuerst ein Präsentationsbackup angeboten.
+
+### Videoformat
+
+Auflösung, Bildrate, Seitenanpassung, Helligkeit, Kontrast, Sättigung, Farbton und Beschnitt wirken unmittelbar auf das echte Eingangssignal.
+
+### Videoaudio
+
+Capture-Audio kann mit Quelle, Lautstärke und sicherem Monitoring konfiguriert werden; ein Rückkopplungshinweis erscheint beim Operator-Monitoring.
+
+## Behoben
+
+### Settings-Scrollbereich
+
+Lange Versionshinweise laufen nicht mehr in einen dunklen Bereich unterhalb des Einstellungsfensters und die Schließen-Schaltfläche bleibt sichtbar.
+
+### Startflackern
+
+Das Bedienfenster bleibt bis ready-to-show verborgen und wird erst nach dem Setzen von Displayposition und Fensterzustand angezeigt.
+
+### Geräteverlust
+
+Wird eine Videoquelle entfernt, wechselt die Vorschau zu einer verständlichen Nicht-verfügbar-Meldung statt eines unerklärten schwarzen Bildes.
+
+---
+
+# GottesdienstRegie 0.7.0
+
+Veröffentlicht: Di., 01.09.2026
+
+Präsentationsverwaltung, Pre- und Post-Service sowie Inhaltsbearbeitung werden gemeinsam weiterentwickelt. Sprache, Hilfe und Anzeige ergänzen die Bedienung. Anmeldung, Live-Ausgabe und Diagnose gehören ebenfalls zum dokumentierten Umfang dieses frühen Entwicklungsstands.
+
+## Neu
+
+### Präsentationen
+
+Eine neue lokale Präsentationsbibliothek verwaltet jetzt mehrere Gottesdienste dauerhaft und unterstützt Erstellen, Öffnen, Duplizieren, Umbenennen, Archivieren, Importieren, Exportieren und Backups.
+
+### Pre- und Post-Service
+
+Vor- und Nachprogramm verwenden jetzt dieselbe Abschnitts-, Element- und Folienstruktur wie der Hauptgottesdienst und können beliebig viele Inhalte enthalten.
+
+### Inhalte
+
+Das Hinzufügen-Menü umfasst jetzt Inhalte, Bilder, Videos, Audio, Songs, Bibelstellen, Webseiten, PDF, Timer, Countdowns, Ankündigungen, Slideshows, Stage-Nachrichten und Schnellanzeigen.
+
+### Sprache
+
+Português (Brasil), Svenska, Suomi, Français und Italiano wurden ergänzt; alle Sprachen werden in der Auswahl immer mit ihrem Eigennamen und einer Flagge dargestellt.
+
+## Verbessert
+
+### Hilfe
+
+Die integrierte Hilfe wurde zu einer durchsuchbaren Dokumentation mit ausführlichen Artikeln, verwandten Themen und Fehlerbehebung erweitert.
+
+### Anzeige
+
+Physische Anzeigen werden jetzt mit verständlichen Nummern beschrieben und lassen sich über „Anzeigen identifizieren“ zuverlässig ihren Ausgaberollen zuordnen.
+
+## Behoben
+
+### Anmeldung
+
+Technische Fehlerkennungen und interne Antwortdetails werden nicht mehr in verständlichen Anmeldefehlern angezeigt.
+
+### Live-Ausgabe
+
+Editor-, Vorschau- und Live-Auswahl bleiben vollständig getrennt, sodass das Bearbeiten anderer Inhalte die laufende MAIN-Ausgabe nicht verändert.
+
+---
+
+# GottesdienstRegie 0.6.0
+
+Veröffentlicht: Mo., 31.08.2026
+
+Diese Ausgabe verbessert den Weg vom Start und Login zur Folienauswahl. Ablauf, Folienübersicht und mehrere Ausgänge werden zusammen betrachtet. Der Schwerpunkt liegt damit auf Orientierung und Ausgabeorganisation während der Vorbereitung.
+
+## Neu
+
+### Start
+
+Ein echter Startvorgang prüft Konto, Anzeigen, Präsentation, Updates und Verbindung vor dem Öffnen der Bedienoberfläche.
+
+### Folienübersicht
+
+Vollständige Gottesdienste können nach Abschnitten gruppiert als performantes Raster echter Folienvorschaubilder angezeigt werden.
+
+### Mehrere Ausgänge
+
+Physische Monitore können erstmals getrennten virtuellen Rollen wie MAIN, STAGE, NOTES und LIVESTREAM zugeordnet werden.
+
+## Verbessert
+
+### Login
+
+Dreißig lokale Motive aus deutschen Städten und Landschaften wechseln passend zum Farbschema.
+
+### Ablauf
+
+Ablauf-Elemente und Folien zeigen Auswahl, Live-Status und deaktivierte Zustände klarer und kompakter.
+
+## Behoben
+
+### Folienauswahl
+
+Die Vorschauauswahl bleibt nach dem Verschieben eines Ablauf-Elements erhalten und verändert die Live-Ausgabe nicht.
+
+---
+
+# GottesdienstRegie 0.5.0
+
+Veröffentlicht: Mo., 31.08.2026
+
+Live-Ausgabe und Präsentationsverwaltung werden mit mehreren Folien und einem weiterentwickelten Editor verbunden. Die Speicherung gehört zu den dokumentierten Verbesserungen. Diese frühe Ausgabe bildet einen Zwischenschritt zur späteren Trennung von Editor, Vorschau und Livebetrieb.
+
+## Neu
+
+### Live-Ausgabe
+
+MAIN- und STAGE-Fenster verwenden erstmals dieselbe zentrale Folienwiedergabe wie Editor und Vorschau.
+
+### Präsentationen
+
+Präsentationen können lokal erstellt, geöffnet und automatisch gespeichert werden.
+
+### Mehrere Folien
+
+Jedes Ablauf-Element unterstützt mehrere einzeln aktivierbare, sortierbare und duplizierbare Folien.
+
+## Verbessert
+
+### Editor
+
+Eigenschaften für Texte, Hintergründe, Positionen und Ebenen wurden erweitert.
+
+## Behoben
+
+### Speicherung
+
+Änderungen werden vor einem schnellen Schließen zuverlässiger in die lokale Wiederherstellungskopie geschrieben.
+
+---
+
+# GottesdienstRegie 0.4.0
+
+Veröffentlicht: So., 30.08.2026
+
+Der frühe Arbeitsbereich wird in Ablauf, Vorschau und allgemeiner Benutzeroberfläche ausgebaut. Im Mittelpunkt steht das Zusammenführen der vorbereiteten Inhalte mit ihrer sichtbaren Reihenfolge. Spätere professionelle Song- und Cloudfunktionen gehören nicht zu diesem ursprünglichen Umfang.
+
+## Neu
+
+### Ablauf
+
+Der Gottesdienst kann in Vorprogramm, Ankommen, Gottesdienst und Nachprogramm gegliedert werden.
+
+### Vorschau
+
+Eine getrennte Vorschau wurde eingeführt, damit Inhalte vor dem Live-Schalten kontrolliert werden können.
+
+## Verbessert
+
+### Benutzeroberfläche
+
+Ablauf, Arbeitsbereich, Eigenschaften und Filmstrip bilden eine kompakte, übersichtliche Bedienoberfläche mit mehr Platz für die Folie.
+
+---
+
+# GottesdienstRegie 0.3.1
+
+Veröffentlicht: So., 30.08.2026
+
+Benutzerkonto, Anmeldung und Berechtigungen stehen im Mittelpunkt dieses Wartungsstands. Die Updatefunktion wird im selben Zusammenhang weiterentwickelt. Kontozugang und fachliche Rollen sind getrennt von später eingeführten kosmetischen Profil- oder Belohnungsfunktionen zu betrachten.
+
+## Neu
+
+### Benutzerkonto
+
+Die Desktop-Anwendung wurde mit dem vorhandenen Gemeindekonto und dessen sicherer Zwei-Faktor-Anmeldung verbunden.
+
+### Berechtigungen
+
+Der Zugriff auf GottesdienstRegie kann für einzelne Benutzer unabhängig von der allgemeinen Rolle freigegeben werden.
+
+## Verbessert
+
+### Updates
+
+Updatefortschritt, Dateigröße, Installationszeit und die Rückkehr zur vorherigen Version sind direkt in den Einstellungen verfügbar.
+
+### Anmeldung
+
+Die vorhandene Web-Anmeldung wurde für die sichere Verwendung in der installierten Desktop-Anwendung optimiert.
+
+---
+
+# GottesdienstRegie 0.2.0
+
+Veröffentlicht: Sa., 29.08.2026
+
+Editor und Ablauf werden nach dem ersten Grundstand weiter ausgebaut. Die Aktualisierung der Anwendung ist ein weiterer dokumentierter Schwerpunkt. Dieser Versionsstand beschreibt eine frühe Basis und nicht den vollständigen Funktionsumfang der heutigen Anwendung.
+
+## Neu
+
+### Editor
+
+Ein erster Folieneditor mit Titel, Text, Hintergrund und elementaren Layoutoptionen wurde eingeführt.
+
+### Ablauf
+
+Einzelne Präsentationselemente können innerhalb eines Gottesdienstablaufs ausgewählt und sortiert werden.
+
+### Aktualisierung
+
+GottesdienstRegie kann neue öffentliche GitHub-Versionen suchen, herunterladen und installieren.
+
+---
+
+# GottesdienstRegie 0.1.0
+
+Veröffentlicht: Sa., 29.08.2026
+
+Der erste hier archivierte Stand umfasst Grundsystem, Benutzeroberfläche und Gemeindekonto. Er bildet den Ausgangspunkt der weiteren Entwicklung. Die Versionsnummer lautet 0.1.0; eine veröffentlichte Version 1.0 ist in diesem Archiv bislang nicht enthalten.
+
+## Neu
+
+### Grundsystem
+
+Die erste funktionsfähige installierbare Desktop-Version von GottesdienstRegie wurde erstellt.
+
+### Benutzeroberfläche
+
+Menüleiste, Ablauf, Arbeitsbereich, Eigenschaften und Statusleiste wurden als grundlegende Bedienstruktur eingeführt.
+
+### Gemeindekonto
+
+Die Anwendung verbindet die PGB-Anmeldung mit einer lokalen Gottesdienst-Präsentationsoberfläche.
+
+---
+
+<!-- Einheitlich aus public/releases.json aufbereitet. -->
+
+[Ursprüngliche archivierte Detailnotizen vor v82](public/releases-archive-before-v82.md)

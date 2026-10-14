@@ -1,4 +1,4 @@
-import {describe,expect,it} from 'vitest';
+import {describe,expect,it,vi} from 'vitest';
 import {AnnouncementService} from './AnnouncementService';
 
 const now=new Date('2026-10-04T10:00:00');
@@ -74,5 +74,13 @@ describe('independent announcement banner channel',()=>{
   it('orders priority first with stable id ties',()=>{
     const records=[{...banner,messageId:'z'},{...banner,messageId:'a'},{...banner,messageId:'urgent',priority:'urgent'}];
     expect(service.getBanners(records,now).map(i=>i.id)).toEqual(['urgent','a','z']);
+  });
+  it('does not repeatedly parse unchanged HTML while checking validity every tick',()=>{
+    const parse=vi.spyOn(DOMParser.prototype,'parseFromString'),record={...banner,textBanner:'<b>Ein Hinweis</b>'};
+    try{
+      for(let tick=0;tick<5;tick++)expect(service.getBanners([record],now)[0].text).toBe('Ein Hinweis');
+      expect(parse).toHaveBeenCalledTimes(1);
+      record.textBanner='<b>Ein neuer Hinweis</b>';expect(service.getBanners([record],now)[0].text).toBe('Ein neuer Hinweis');expect(parse).toHaveBeenCalledTimes(2);
+    }finally{parse.mockRestore()}
   });
 });

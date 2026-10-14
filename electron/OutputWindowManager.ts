@@ -25,7 +25,7 @@ export class OutputWindowManager{
   }
   send(payload:unknown){for(const role of outputRoles)this.update(role,{slide:payload})}
   sendTo(role:OutputRole,payload:unknown){if(!outputRoles.includes(role))return false;this.update(role,{slide:payload});return Boolean(this.outputs.get(role)&&!this.outputs.get(role)!.window.isDestroyed())}
-  sendQuick(roles:OutputRole[],payload:unknown){for(const role of roles)if(outputRoles.includes(role))this.update(role,{quick:payload});return true}
+  sendQuick(roles:OutputRole[],payload:unknown){const value=payload as {type?:string;startedAtMs?:number}|null;const quick=value?.type==='countdown'&&!Number.isFinite(value.startedAtMs)?{...value,startedAtMs:Date.now()}:payload;for(const role of roles)if(outputRoles.includes(role))this.update(role,{quick});return true}
   setAppMode(state:AppModeState){this.appMode={...state};for(const role of outputRoles)this.update(role,{appMode:this.appMode});for(const {window} of this.outputs.values())if(!window.isDestroyed())window.webContents.send('outputs:app-mode',this.appMode);return true}
   async stop(){for(const {window} of this.outputs.values())if(!window.isDestroyed())window.close();this.outputs.clear();return true}
   isActive(){return [...this.outputs.values()].some(entry=>!entry.window.isDestroyed())}

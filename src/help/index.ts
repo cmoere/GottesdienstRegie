@@ -3,8 +3,10 @@ import { helpWest } from './localesWest';
 import translated from './translated.json';
 import legacyTranslated from './legacyTranslated.json';
 import {legacyGerman} from './legacyGerman';
+import {helpEnhancementsEnglish} from './enhancementsEnglish';
+import {helpEnhancementsGerman} from './enhancementsGerman';
 
-export type HelpArticle = { id: string; title: string; body: string; section?: boolean };
+export type HelpArticle = { id: string; title: string; body: string; section?: boolean;related?:string[] };
 export type HelpUI = { title: string; searchPlaceholder: string; noResults: string; screenshotLabel: string };
 export const helpLanguages = ['de','gsw','en','da','sv','no','fi','nl','fr','es','it','pl','pt-BR','uk','ru','tr','ar'] as const;
 export const stableGerman = Object.keys(helpEnglish);
@@ -28,20 +30,26 @@ const uiRows: Record<string, [string,string,string,string]> = {
   ar: ['المساعدة','البحث في مواضيع المساعدة …','لم يتم العثور على مواضيع مطابقة.','عرض توضيحي'],
 };
 const sectionIds = new Set(['SCHNELLSTART','LIVE-BETRIEB','AUDIO','PRÄSENTATION','SYSTEM']);
-const packs: Record<string, Record<string, {title:string;body:string}>> = { ...translated, ...helpWest, en:helpEnglish };
+const packs: Record<string, Record<string, {title:string;body:string;related?:string[]}>> = { ...translated, ...helpWest, en:helpEnglish };
+const enhancements:Record<string,typeof helpEnhancementsEnglish>={en:helpEnhancementsEnglish,de:helpEnhancementsGerman};
+// These old instructions predate independent test operation, protected post-program
+// content and the current countdown/update workflow. Current articles replace them.
+const retiredLegacy=new Set(['ON AIR','Pre-Service & Post-Service','Vorschau','MAIN / STAGE / LIVESTREAM','Timer','Updates','Loop-Elemente','Audio Browser','Einstellungen']);
 for(const [locale,pack] of Object.entries(packs)){
   const legacy:Record<string,{body:string}>=locale==='de'
     ? Object.fromEntries(Object.entries(legacyGerman).map(([id,body])=>[id,{body}]))
     : (legacyTranslated as Record<string,Record<string,{body:string}>>)[locale]??{};
   for(const [id,article] of Object.entries(pack)){
-    if(legacy[id]?.body)pack[id]={...article,body:legacy[id].body+'\n\n'+article.body};
+    const paragraphs=[...(retiredLegacy.has(id)?[]:(legacy[id]?.body??'').split('\n\n')),...article.body.split('\n\n')].filter(Boolean);
+    const extra=enhancements[locale]?.[id];
+    pack[id]={...article,body:[...new Set(paragraphs)].join('\n\n')+(extra?'\n\n'+extra.body:''),related:extra?.related};
   }
 }
 // Swiss Standard German: avoids claiming an automatically generated dialect translation.
-packs.gsw = Object.fromEntries(Object.entries(packs.de).map(([id,a])=>[id,{title:a.title.replaceAll('ß','ss'),body:a.body.replaceAll('ß','ss')}]));
+packs.gsw = Object.fromEntries(Object.entries(packs.de).map(([id,a])=>[id,{...a,title:a.title.replaceAll('ß','ss'),body:a.body.replaceAll('ß','ss')}]));
 const catalogs = new Map<string, {topics:HelpArticle[];ui:HelpUI}>();
 export function getHelpCatalog(language: string) {
-  const locale = language in packs ? language : 'en';
+  const locale = Object.hasOwn(packs,language) ? language : 'en';
   let catalog = catalogs.get(locale);
   if (!catalog) {
     const [title,searchPlaceholder,noResults,screenshotLabel] = uiRows[locale];

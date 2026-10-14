@@ -34,5 +34,6 @@ describe('offline help catalog',()=>{
     expect(getHelpCatalog('gsw').topics.some(a=>a.body.includes('ß'))).toBe(false);
     expect(getHelpArticle('missing','de')).toBeUndefined();
     expect(getHelpCatalog('unknown')).toBe(getHelpCatalog('en'));
+    expect(getHelpCatalog('constructor')).toBe(getHelpCatalog('en'));
   });
 });

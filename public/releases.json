@@ -3188,7 +3188,7 @@
             },
             "text": {
               "de": "Diese Ausgabe ordnet die Songarbeit um: Grundtext, tatsächliche Abfolge und Metadaten werden voneinander getrennt. Wiederholungen im Ablauf sollen den Grundtext nicht vervielfachen. Die Suche greift auf gespeicherte Präsentationen zurück und ist noch keine eigenständige Cloud-Songbibliothek.",
-              "en": "This archived release focuses on Song order, Song workspace, Song search and styling. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Compact chips control slide order. Repeated sections share their source lyrics. More room for lyrics, seven main tabs and a separate metadata area. Search songs from saved presentations directly. Text styling affects song slides."
             }
           }
         },
@@ -3273,7 +3273,7 @@
             },
             "text": {
               "de": "Starten und Beenden erhalten jeweils eine kompakte, auf den Speichervorgang konzentrierte Anzeige. Die gespeicherte Arbeitsbereichsgröße bleibt vom Ladefenster getrennt. Beim Beenden wird lokal gespeichert; die Anzeige ist ausdrücklich kein Nachweis einer erfolgreichen Cloud-Übertragung.",
-              "en": "This archived release focuses on Compact startup, Save on exit, Local saving. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Only the central loading card appears in a small window, followed by the workspace at its configured size. A non-skippable indicator accompanies local presentation saving before closing."
             }
           }
         },
@@ -3347,7 +3347,7 @@
             },
             "text": {
               "de": "Der Songeditor führt präsentationsbezogene Einstellungen für Ablauf, Tonart und Ausgaben zusammen. Die dokumentierte Arrangement-Auswahl ist von einer verwalteten Library zu unterscheiden: Eigenständige Cloud-Arrangements und eine vollständige mehrstufige Design-Vererbung wurden damit noch nicht geliefert.",
-              "en": "This archived release focuses on Song overrides, Verse order, Arrangement and key. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Songs now have separate areas for content, order, design, STAGE and LIVESTREAM. Changes initially apply only to the current song service item. The order V1 C V2 C B C C can be set directly for each service. Multiple arrangements and twelve keys are available directly in the song editor."
             }
           }
         },
@@ -3453,7 +3453,7 @@
             },
             "text": {
               "de": "Der Schwerpunkt liegt auf direkter Arbeit an der Folie und schnellerem Wiederfinden von Medien. Zusätzliche Elemente können über Maus und Zahlenwerte gestaltet werden; Unsplash-Favoriten ergänzen die Medienauswahl. Der Start kann ohne Verlust der gespeicherten Anmeldung übersprungen werden.",
-              "en": "This archived release focuses on Direct slide editing, New service templates, Unsplash favorites. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Text, QR codes and foreground media can be moved and resized with the mouse on the 16:9 canvas. Four prepared templates cover compact, classic, youth and evening services. Images from Unsplash search can be saved persistently as favorites."
             }
           }
         },
@@ -3518,7 +3518,7 @@
             },
             "text": {
               "de": "Die Suchanfrage des Unsplash-Bereichs wird an den zugehörigen Anbieter weitergegeben. Beim Nachladen sollen vorhandene Ergebnisse erhalten bleiben und weitere Treffer angehängt werden. Dieser Stand adressiert damit zwei unterschiedliche Probleme: falsche Leerergebnisse und den kompletten Neuaufbau der Trefferliste.",
-              "en": "This archived release focuses on Real Unsplash search, Incremental loading, No false empty results. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The entered search term is processed directly by Unsplash and all returned results remain visible. Additional results are appended to the existing grid without hiding or reordering existing cards. Unsplash results no longer disappear because of a secondary local text filter."
             }
           }
         },
@@ -3634,7 +3634,7 @@
             },
             "text": {
               "de": "Präsentationsauswahl, QR-Code-Bearbeitung und Medienrückmeldungen werden ausgebaut. Eigene Präsentationen lassen sich über eine gesonderte Übersicht wiederfinden; QR-Codes erhalten eine Eingabe mit Vorschau. Die Medienauswahl für Vordergrundelemente und Zusatztexte wird direkter in die Bearbeitung eingebunden.",
-              "en": "This archived release focuses on My presentations, QR code editor, Media attachments. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The profile shows a searchable presentation overview with cover image, date, scope, size and direct opening. A dedicated dialog creates a live preview and real slide QR code from a URL or text. Bug reports support up to four screenshots, images or short videos."
             }
           }
         },
@@ -3750,7 +3750,7 @@
             },
             "text": {
               "de": "Zusätzliche Folieninhalte und das persönliche Profil werden klarer voneinander abgegrenzt. Profilangaben bleiben im Profil, Belohnungen in ihrem eigenen Bereich. Für erzeugte Hintergrundvideos wird eine Länge von 30 bis 60 Sekunden angeboten; fotografische Motive sind von abstrakten Formen zu unterscheiden.",
-              "en": "This archived release focuses on Additional layers, More scenes and styles, Separate profile view. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Text, foreground images, QR codes and 2D objects have a dedicated list with edit, visibility and removal controls. Expanded scene categories and visual styles are complemented by long rotating scene descriptions. Profile image, account details, role and organization appear under My Profile; XP and badges remain in their own progress area."
             }
           }
         },
@@ -3836,7 +3836,7 @@
             },
             "text": {
               "de": "Rückmeldungen zur Anwendung können über die Hilfe begonnen werden. Der Hintergrundbereich ergänzt Natur- und Stadtmotive sowie Videoausgabe, während der Website-Editor eine überarbeitete Feldanordnung erhält. Die Bezeichnung KI beschreibt dabei nicht automatisch eine externe generative Video-KI.",
-              "en": "This archived release focuses on Feedback from Help, AI video backgrounds, Nature and cities. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Bugs, changes, and feature requests are captured in a clear dedicated form. Animated six-second WebM backgrounds can be created, previewed, and selected as backgrounds. Eight scene categories cover nature, forest, mountains, city, ocean, sky, church interiors, and abstract artwork."
             }
           }
         },
@@ -3932,7 +3932,7 @@
             },
             "text": {
               "de": "Webseiten erhalten eigene elementbezogene Optionen, statt alle Einstellungen global zu teilen. Parallel werden das Hinzufügen von Video und 2D-Inhalten sowie Medienaktionen überarbeitet. Die Versionsnotizen betreffen sowohl die Auswahl neuer Inhalte als auch deren anschließende Bearbeitung.",
-              "en": "This archived release focuses on Per-item web options, More 2D objects, AI artwork. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Zoom reset, interaction, audio, pop-ups, refresh and proxy are stored separately for each web item. Eight new shapes can be added and styled directly in the visible editing workspace. Twelve styles and detailed rotating artwork descriptions create new variants each time."
             }
           }
         },
@@ -4028,7 +4028,7 @@
             },
             "text": {
               "de": "Profil- und Bearbeitungsaktionen werden im Hauptfenster deutlicher erreichbar. Ein Schwerpunkt ist die Zuordnung der Befehle aus „Element hinzufügen“ zu den tatsächlichen Elementtypen. Organisationsangabe und Darstellung der verfügbaren Schriftstile werden ebenfalls angepasst.",
-              "en": "This archived release focuses on Profile menu, Edit menu, Fonts and styles. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Profile, rewards, settings and sign-out are grouped in a clear personal menu at the top right. Central editor, clipboard and slide commands are now available from a complete Edit menu. More than 200 font families, nine weights and additional text presets expand typography options."
             }
           }
         },
@@ -4114,7 +4114,7 @@
             },
             "text": {
               "de": "Diese Ausgabe bündelt Funktionen für gemeinsam genutzte Gemeindegeräte mit Verbesserungen am Arbeitsbereich. Persönliche Bedienung und gerätebezogene Angaben werden unterschieden. Die dokumentierten Historie- und Monitorfunktionen sind im Kontext der vorhandenen Anmeldung und Berechtigungen zu verstehen.",
-              "en": "This archived release focuses on Shared devices, Web control and personal monitors, 2D and text styling. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "One-time device registration and personal sign-in cleanly separate computers, users and local device settings. Revocable control sessions and fixed read-only monitor pages are available on the local network and use the confirmed live state. More shapes, direct transform fields plus shadow, outline, glow and opacity extend the slide editor."
             }
           }
         }
@@ -4225,7 +4225,7 @@
             },
             "text": {
               "de": "Änderungshistorie und optionale Belohnungen werden als getrennte Bereiche eingeführt. Hinzu kommen lokale Hintergrundmotive, zusätzliche Formen und Schriftgestaltung. Eine lokale Historie oder Punkteanzeige bestätigt dabei weder eine serverseitige Revision noch die Umsetzung aller später gewünschten Cloud-Funktionen.",
-              "en": "This archived release focuses on Persistent change history, Rewards and badges, Local AI artwork. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "A dedicated system window shows revision, user, category, source, sync state and before/after values. Safe restores create a new revision. The optional XP system provides levels, badges, progress and anti-farming without affecting features or permissions. Custom 16:9 backgrounds are generated directly in the media browser without an API key or external prompt transmission."
             }
           }
         }
@@ -4285,7 +4285,7 @@
             },
             "text": {
               "de": "Dieser Wartungsstand konzentriert sich auf die Skalierung der Bedienoberfläche. Besonders die obere Leiste soll nach Größenänderungen nicht mehr zusammengedrückt erscheinen. Es handelt sich um eine Korrektur der Arbeitsfläche, nicht um eine neue Präsentations- oder Ausgabelogik.",
-              "en": "This archived release focuses on Stable interface scaling, Compressed application header. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The operator window now always starts at 100 percent zoom. Browser zoom shortcuts can no longer resize the production interface accidentally. Menu, presentation and formatting bars retain their intended heights and no longer overlap directly below the Windows title bar."
             }
           }
         },
@@ -4411,7 +4411,7 @@
             },
             "text": {
               "de": "Medienverwaltung, Formen und Veranstaltungsauswahl werden gemeinsam erweitert. Der dokumentierte Löschablauf umfasst eine bewusst auszulösende Aktion; die Veranstaltungsauswahl berücksichtigt einen längeren Planungshorizont. Gestaltungsmöglichkeiten und Medienbrowser sind die wesentlichen Arbeitsbereiche dieser Ausgabe.",
-              "en": "This archived release focuses on Editable 2D objects, Safely delete media, LiveQuiz rewards. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Rectangles, rounded rectangles, ellipses, triangles, diamonds, stars and arrows can be inserted, moved, resized, rotated and styled with fill, stroke and opacity. Team media can be permanently deleted through a clear confirmation dialog. Files referenced by presentations or live output remain protected. Rewards can be configured for the top three quiz positions. A leaderboard calculates points from correct answers."
             }
           }
         }
@@ -4471,7 +4471,7 @@
             },
             "text": {
               "de": "Die Ausgabe ergänzt eine sichtbare Fehlerabsicherung für die Oberfläche nach dem Start. Statt einer nicht bedienbaren Ansicht soll ein Fehler nachvollziehbar werden. Dieser Stand ist vor allem für die Wiederaufnahme der Arbeit und die Diagnose eines fehlerhaften Starts relevant.",
-              "en": "This archived release focuses on Visible error recovery, Interface after startup. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "If an unexpected rendering error occurs in the future, GottesdienstRegie now shows a clear message and reload action instead of a blank surface. An unstable keyboard-shortcut object caused an endless React update. The state is now cached correctly and the full interface appears again after the loading screen."
             }
           }
         },
@@ -4587,7 +4587,7 @@
             },
             "text": {
               "de": "Einführung und Hilfe werden durch Bilder ergänzt, während die Medienbibliothek komfortabler bedienbar wird. Nachladen, Filter ohne Treffer und das Umbenennen von Elementen stehen im Mittelpunkt. Die Übergangsvorschau unterstützt zusätzlich die Kontrolle vor der Live-Ausgabe.",
-              "en": "This archived release focuses on Illustrated introduction, Load more media, Media library. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "A new multi-step tour explains the workspace, service order, media, settings, preview and live operation using real software captures and can be replayed from Help at any time. Large result sets can be progressively expanded with Load more and compacted again with Show less. Cloud, Community and Unsplash are now distinct, correctly switching areas; library filters work and Unsplash is clearly identified."
             }
           }
         }
@@ -4677,7 +4677,7 @@
             },
             "text": {
               "de": "Fehler- und Hilfeseiten werden besser in die Bedienung eingebunden. Die Medienanbindung an Cloud und Unsplash erhält zusätzliche Erläuterungen und Korrekturen. Anbieterzugang und Erreichbarkeit bleiben dabei von der lokalen Bearbeitung einer Präsentation zu unterscheiden.",
-              "en": "This archived release focuses on Dedicated issue report page, Cloud and Unsplash help, Context menu and shortcuts. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Issue reports are reviewed, copied, saved or shared from a dedicated GottesdienstRegie page without redirecting directly to a GitHub form. New subtopics explain search, read-only mode, permissions, preload and concrete troubleshooting steps. The service-item menu follows the app color scheme, clearly names its live action and uses Shift+F5 for On Air and Ctrl+R for rename."
             }
           }
         }
@@ -4797,7 +4797,7 @@
             },
             "text": {
               "de": "Das ServiceItem-Kontextmenü bündelt Aktionen für ausgewählte, mehrfach markierte und verknüpfte Elemente. Weitere Änderungen betreffen den Präsentationskopf, die Veranstaltungsauswahl und Quick Screens. Die Bedienung soll vorbereitet werden können, ohne die aktive Live-Ausgabe unbeabsichtigt zu verändern.",
-              "en": "This archived release focuses on Professional service-item context menu, Multi-selection and linked items, Slide as image. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The native desktop menu supports cut, copy, paste, duplicate, delete, linking, grouping, hiding, undo/redo, rename, slide export and On Air with contextual states. Ctrl/Cmd-click selects multiple service items; groups move together and linked instances keep independent IDs with shared content association. Rendered slides can be copied without editor chrome to the system clipboard or exported as PNG through a native save dialog."
             }
           }
         }
@@ -4917,7 +4917,7 @@
             },
             "text": {
               "de": "Der Schwerpunkt liegt auf Audio-Routing und der Prüfung von Ausgabewegen vor dem Gottesdienst. Geräte-Fallbacks und getrennte Routen ergänzen die Bedienung; Timeline-Bilder und Hilfe erleichtern die Orientierung. Ein angeschlossenes Gerät sollte dennoch vor Ort mit dem tatsächlichen Audiosignal geprüft werden.",
-              "en": "This archived release focuses on Professional audio routing, Complete help center, Timeline thumbnails. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Videos, background audio, system notifications, preview listening and LiveQuiz sound effects now have separate device-specific outputs with volume, mute and test tone. Quick start, live operation, audio, presentation and system now include detailed usage, preflight, error and troubleshooting guidance plus contextual help buttons. The expanded timeline can show small real slide thumbnails, which can be disabled in presentation settings."
             }
           }
         }
@@ -5047,7 +5047,7 @@
             },
             "text": {
               "de": "Schriften, Medienauswahl und Statusanzeigen werden zusammen überarbeitet. Cera Pro wird mit der Anwendung ausgeliefert und ist damit nicht nur ein ausgewählter Name in der Schriftliste. Weitere Korrekturen betreffen sichtbare Servicezeiten, Übergangsvorschau und den Leerzustand der Medienbibliothek.",
-              "en": "This archived release focuses on Complete bundled Cera Pro, More modern fonts, Cloud status in the header. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "All twelve supplied faces from Thin through Black, in regular and italic styles, are bundled directly and require no system installation. More than 40 additional modern sans, serif, display and monospace families expand the font selector. A green cloud icon in the top-right immediately indicates that cloud media storage is reachable."
             }
           }
         }
@@ -5147,7 +5147,7 @@
             },
             "text": {
               "de": "Veranstaltungsdaten, Medienquellen und der Präsentationskopf werden enger miteinander verbunden. Eine verknüpfte Veranstaltung liefert weiterhin ihre ursprüngliche Planzeit; die Darstellung und Bearbeitung der Servicezeit ist davon zu unterscheiden. Die Schriftbereitstellung und Beschriftungen werden ebenfalls vereinheitlicht.",
-              "en": "This archived release focuses on Firebase events, Embedded Cera Pro, Unsplash and cloud media. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Presentations link to veranstaltungen/<eventKey> through the durable eventKey, with integrated search, selection and compact header. A licensed Cera Pro file can be embedded in font settings and used without a system installation. The media library now operates as a cloud library and can search Unsplash after a local access key is supplied."
             }
           }
         }
@@ -5236,7 +5236,7 @@
             },
             "text": {
               "de": "Diese Ausgabe konzentriert sich auf die MAIN-Ansicht und einen einheitlicheren typografischen Auftritt. Cera Pro wird als Standard gewählt, und die Amen-Schnellanzeige erhält eine Animation. Übergänge und Statusabläufe werden im Zusammenhang mit der Bedienung des Hauptausgangs angepasst.",
-              "en": "This archived release focuses on Cera Pro by default, MAIN live view, Animated Amen. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "New slides and text start with Cera Pro; central font settings control family, size and weight. Single view mirrors MAIN and advances live while ON AIR using large arrows or the left/right keys. The redesigned Amen quick screen uses dynamic typography for six seconds and then restores the MAIN slide."
             }
           }
         }
@@ -5315,7 +5315,7 @@
             },
             "text": {
               "de": "Mehr Übergänge und Schriftoptionen erweitern die Gestaltung. Die Vorschau wird stärker auf das Ergebnis ausgerichtet und soll Änderungen direkt sichtbar machen. Die dokumentierte Entfernung einer Bereitschaftsanzeige ist eine Oberflächenänderung und hebt Prüfungen vor ON AIR nicht grundsätzlich auf.",
-              "en": "This archived release focuses on More transitions, More than 120 fonts, Focused preview. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Iris, curtain, cube, swing, flash and scale expand the transition selection. Additional system fonts for body text, headings, handwriting and monospace are available in the editor. Output selection and editing tools stay hidden in Preview, while single-slide view follows the light or dark appearance."
             }
           }
         }
@@ -5394,7 +5394,7 @@
             },
             "text": {
               "de": "Eigene Ablaufvorlagen und zusätzliche Präsentationsinformationen unterstützen die Vorbereitung wiederkehrender Gottesdienste. Vorschau, Übergänge und Schriftoptionen werden erweitert. Ein eigener Fehlerpunkt betrifft Schwarzbilder nach einem Übergang und damit die Kontinuität der Folienanzeige.",
-              "en": "This archived release focuses on Controlled single-slide view, Custom service templates, Presentation information. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Large arrows, left/right keyboard navigation and a clickable slide timer provide a focused and reliable preview. Service plans can be saved as custom templates, selected for new presentations and removed when no longer needed. Metadata, scope, duration and up to 60 edits are collected in a clear information dialog."
             }
           }
         }
@@ -5473,7 +5473,7 @@
             },
             "text": {
               "de": "Die Vorschau erhält einen eigenständiger aufgebauten Arbeitsplatz mit anpassbarer Folienübersicht. Editor-Auswahl und live gezeigte Folie werden getrennt gehalten. Virtual Screens und Schnellanzeigen ergänzen diesen Ablauf, ohne Editor-Platzhalter in die Ergebnisvorschau zu übernehmen.",
-              "en": "This archived release focuses on Professional preview workspace, Separate selection and live slide, Responsive slide overview. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The order of service, complete grouped slide overview and right-hand live/quick-screen rail are now visible together in a dense three-pane layout. A slide can be selected and navigated while the actual ON-AIR slide remains separately and clearly marked. Eight persisted thumbnail steps, compact empty sections, real durations and deferred rendering make better use of both small and large displays."
             }
           }
         }
@@ -5552,7 +5552,7 @@
             },
             "text": {
               "de": "Folienübergänge bekommen eine gemeinsame Auflösung von Standard- und individuellen Einstellungen. Eine Vorschau im Editor hilft beim Prüfen des Effekts vor der Ausgabe. Bestehende Präsentationen sollen ihre nutzbare Übergangskonfiguration beim Wechsel auf diese Version behalten.",
-              "en": "This archived release focuses on Professional slide transitions, Transition preview in the editor, Clear default hierarchy. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Cut, fade, crossfade, dissolve, slide and wipe are available for MAIN, LIVESTREAM and LOBBY, with precise direction, duration and easing controls. A dedicated Preview button plays the effect in the editor without changing MAIN or the active live slide. Presentation, service-item and individual-slide defaults now form a predictable hierarchy, and overrides can be reset at any time."
             }
           }
         }
@@ -5701,7 +5701,7 @@
             },
             "text": {
               "de": "Der Fokus liegt auf klaren Grenzen für Audiowiedergabe: Bearbeiten, Vorschau und ON AIR sollen nicht unbeabsichtigt denselben Wiedergabestatus teilen. Die Lautsprechersteuerung wird eindeutiger, und OFF AIR soll laufende Musik zuverlässig stoppen.",
-              "en": "This archived release focuses on Audio only in Preview and ON AIR, Clear speaker controls, OFF AIR reliably stops music. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Background audio now plays only in Preview or during an active output. Edit mode remains silent. Sections, service items, playlists and the live controller now use speaker and playback symbols. Music notes identify real songs only. Leaving ON AIR stops the active audio session and an open Preview no longer restarts it. Item audio set to end with its section now also stops at the actual section transition."
             }
           }
         }
@@ -5830,7 +5830,7 @@
             },
             "text": {
               "de": "Fehlerberichte werden strukturiert erfasst, damit Beschreibung und Diagnose besser zusammenpassen. Eine eigene Release-Notes-Seite macht den Versionsverlauf zugänglich. Zusätzlich werden gezielter Import sowie die Positionierung von Menüs und Hilfebereichen überarbeitet.",
-              "en": "This archived release focuses on Structured bug reports, New release notes website, Targeted presentation import. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Help can now create a complete report with a description, reproduction steps, expected behaviour and optional sanitised diagnostics. The public documentation now uses clear professional documentation navigation with a version sidebar, search, deep links, language selection, light and dark modes and responsive layout. PowerPoint, Keynote and OpenDocument, Text and Markdown, and GottesdienstRegie files now have separate import actions and matching file filters."
             }
           }
         }
@@ -5929,7 +5929,7 @@
             },
             "text": {
               "de": "Hintergrundaudio kann an Abschnitte und einzelne Ablauf-Elemente gebunden werden. Ein eigener Browser und ein Live-Audiocontroller ergänzen die Auswahl und Wiedergabe. Preflight berücksichtigt Audio, und Folienloops sollen laufende Musik nicht unnötig neu starten.",
-              "en": "This archived release focuses on Section background audio, Item background audio, Dedicated Audio Browser. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "PRE-SERVICE, WARM-UP, SERVICE and POST-SERVICE can each use cloud playlists. Visual loops run independently and do not restart the music. An order-of-service item can temporarily override section music. Audio stop cues end playback deliberately and support Undo. The new system window shows real audio files from team cloud storage only, with multi-selection, preview and a sortable selection tray."
             }
           }
         }
@@ -6008,7 +6008,7 @@
             },
             "text": {
               "de": "Tastenkürzel werden anpassbar und erhalten eine abgesicherte Bearbeitung. Die Hilfe ergänzt echte Bildschirmabbildungen zur Orientierung im Programm. Ein konfigurierbarer Vollbildmodus erweitert die Arbeitsplatzdarstellung, unabhängig von der Gestaltung der ausgegebenen Folien.",
-              "en": "This archived release focuses on Custom keyboard shortcuts, Real screenshots in Help, Expanded help. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Settings → Keyboard shortcuts now allows Save, Undo, Redo, live navigation, mode switching, fullscreen and ON AIR to be reassigned. Changes are saved locally and applied immediately. The integrated help now shows real captures of the workspace, settings window and media library with matching explanations. Additional help chapters provide detailed, practical guidance for settings, songs, Bible, STAGE, quick screens, timers, remote control and keyboard shortcuts."
             }
           }
         }
@@ -6096,7 +6096,7 @@
             },
             "text": {
               "de": "Präsentationen können umbenannt und aus zusätzlichen Formaten importiert werden. PowerPoint, OpenDocument, Keynote sowie Text und Markdown besitzen unterschiedliche Importwege; deren Ergebnis sollte vor ON AIR geprüft werden. Daneben werden Modusumschalter und Versionshinweise überarbeitet.",
-              "en": "This archived release focuses on Rename presentations, PowerPoint and OpenDocument import, Keynote import. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The currently open presentation can now be renamed from the File menu. Its new name is saved permanently and also appears in the presentation library. PPTX and ODP files are imported slide by slide. Recognised text is created as editable GottesdienstRegie slides. Keynote files can be imported using their embedded preview. For fully editable content, the app recommends exporting to PowerPoint first."
             }
           }
         }
@@ -6133,7 +6133,7 @@
             },
             "text": {
               "de": "Dieser kleine Aktualisierungsstand ergänzt eine Kurzbeschreibung zu einem angebotenen Update. Benutzer erhalten damit bereits im Updateablauf eine Einordnung der neuen Version. Ausführliche Änderungen bleiben im vollständigen Versionsverlauf nachlesbar.",
-              "en": "This archived release focuses on Update summary. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "When an update is found, the status box now shows a concise overview of its most important new features, improvements and fixes. Full details remain in the release notes."
             }
           }
         },
@@ -6309,7 +6309,7 @@
             },
             "text": {
               "de": "LiveQuiz erhält weitere Folien- und Vorschauoptionen, darunter eine Antwortfolie und QR-Vorschau. Fragenreihenfolge, Moderation und sichtbare Menüs werden überarbeitet. Schriftwahl, Thumbnail-Größen und Oberflächenanimationen ergänzen die Bedienung außerhalb des Quiz.",
-              "en": "This archived release focuses on LiveQuiz answer slide, QR code preview, Expanded font selection. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Every quiz now includes a real, freely editable answer slide. During a session it shows results for the active choice question or released free-text answers. The participation slide now shows a preview QR code before the session starts. Automatic start replaces it with the real link and code without changing the design. The text editor now offers a much larger selection of common presentation and system fonts with direct previews."
             }
           }
         }
@@ -6408,7 +6408,7 @@
             },
             "text": {
               "de": "Die Quiz-Teilnahmefolie wird bearbeitbar und der Quizstart enger mit dem Ablauf verbunden. Freitext kann zunächst zurückgehalten werden, bevor er auf der Ausgabe erscheint. QR-Darstellung, Vorschauwerkzeuge und Versionsverlauf werden ebenfalls erweitert.",
-              "en": "This archived release focuses on Editable quiz participation slide, Automatic LiveQuiz start, Hold free-text answers. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Every quiz now begins with a real participation slide containing the link, join code and QR code. Text, colours, background and positions can be designed with the same tools as other slides. When an operator enters a quiz while ON AIR, the session starts automatically and its participation slide is taken live first. Each free-text question can define whether incoming answers remain visible only to the operator until approved."
             }
           }
         }
@@ -6466,7 +6466,7 @@
             },
             "text": {
               "de": "Die Updatesuche erhält eine animierte Rückmeldung und der Download eine Abbruchaktion. Der dokumentierte Abbruch betrifft auch die Netzwerkübertragung, nicht nur das Ausblenden des Dialogs. Dadurch werden sichtbarer Fortschritt und tatsächlicher Downloadzustand besser aufeinander abgestimmt.",
-              "en": "This archived release focuses on Animated update check, Cancel download, Real network cancellation. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The dots following the update-check message are now animated continuously while checking. An X on the right side of the progress bar stops the active update download. The download is technically stopped through a cancellation token and can be started again afterwards."
             }
           }
         },
@@ -6529,7 +6529,7 @@
             },
             "text": {
               "de": "Quizteilnahme und Teilnahmelink werden im Live-Arbeitsablauf leichter zugänglich. MAIN kann die Teilnahmeinformation zeigen, und mehrere Ausgänge werden berücksichtigt. LAST SHOWN ergänzt die Orientierung an zuvor gezeigten Inhalten.",
-              "en": "This archived release focuses on Quiz participation on MAIN, Multiple outputs, Copy join link. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The quiz name, QR code, web address and six-digit join code can now be shown directly on MAIN. The participation screen can optionally be sent to MAIN, STAGE, LIVESTREAM and LOBBY at the same time. The complete join link can be copied directly from the quiz controls."
             }
           }
         },
@@ -6572,7 +6572,7 @@
             },
             "text": {
               "de": "Das Beenden der Anwendung wird über einen zentralen Ablauf geführt. Besonders Alt+F4 während ON AIR soll dieselben Schutzschritte durchlaufen wie andere Schließaktionen. Ziel dieses Stands ist ein kontrollierter Shutdown, nicht eine zusätzliche Präsentationsfunktion.",
-              "en": "This archived release focuses on Central shutdown, ON AIR on Alt+F4. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Normal closing, Alt+F4 and application shutdowns now use the same safe output shutdown. MAIN, STAGE and other output windows are closed before the operator interface exits."
             }
           }
         },
@@ -6678,7 +6678,7 @@
             },
             "text": {
               "de": "LiveQuiz wird um Teilnahmecode, QR-Code und mobile Teilnahme erweitert. Die Live-Steuerung berücksichtigt tatsächliche Teilnehmer- und Antwortzahlen. Die Behandlung von Antworten ist von der vorbereiteten Quizfolie zu unterscheiden und benötigt den jeweiligen aktiven Quizlauf.",
-              "en": "This archived release focuses on Join code and QR code, Mobile participation, Live controls. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Starting a LiveQuiz deliberately creates a real six-digit join code and a locally rendered QR code. A responsive HTML, CSS and JavaScript page enables anonymous or named participation from a phone. The operator can open questions individually, close answers and end the session in a controlled way."
             }
           }
         }
@@ -6767,7 +6767,7 @@
             },
             "text": {
               "de": "LiveQuiz wird als Element des Gottesdienstablaufs eingeführt. Quizeditor, Fragetypen und gemeinsamer Renderer bilden die vorbereitende Grundlage; Speicherung und Historie werden angebunden. Der angezeigte Live-Status soll zwischen vorbereiteten Inhalten und einem tatsächlich laufenden Quiz unterscheiden.",
-              "en": "This archived release focuses on LiveQuiz in the service order, Quiz editor, Question types. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "LiveQuiz can now be created as a dedicated service item from Add Item and the plus control in the service order. The specialized editor manages multiple questions, answer options, correct answers, time limits, points and participation mode. Single choice, multiple choice, true/false, yes/no, free text, scale and poll are available in the editor."
             }
           }
         }
@@ -6835,7 +6835,7 @@
             },
             "text": {
               "de": "Dieser Wartungsstand behandelt die Übernahme von Cloud-Mediendaten sowie unterbrochene Übertragungen. Medienfenster und Präsentationsmenü erhalten begleitende Korrekturen. Eine abgebrochene Übertragung ist nicht mit einer vollständig verfügbaren Mediendatei gleichzusetzen.",
-              "en": "This archived release focuses on Cloud migration, Media window, Interrupted transfer. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Local media can be transferred safely to the private GitHub media library while source files remain intact. Status, upload and media-library management now respond clearly when transfers are interrupted. Previously transferred media remains available and remaining files can be uploaded again later."
             }
           }
         },
@@ -6909,7 +6909,7 @@
             },
             "text": {
               "de": "Eine private Medienbibliothek mit eigenem Fenster ergänzt die lokale Präsentationsarbeit. Medienraster und Speicherstatus erleichtern Auswahl und Verwaltung. Die Cloudanzeige wird überarbeitet, damit sie den Zustand der Medienanbindung verständlicher vermittelt.",
-              "en": "This archived release focuses on Private cloud media library, Dedicated media window, Media grid. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Images, videos and audio files can now be managed securely in a private GitHub-backed library alongside local media. The media library is available as a dedicated desktop window with search, filters and media actions. Previews, metadata and actions are combined in a clearer media grid."
             }
           }
         }
@@ -7018,7 +7018,7 @@
             },
             "text": {
               "de": "Das Datei-Menü bündelt Präsentationsdialoge und unterschiedliche Duplizieraktionen. Kopien sollen eindeutig voneinander unterscheidbar bleiben. Tastaturbedienung, Menüfokus und Live-Sicherheit werden bei diesen Aktionen ebenfalls berücksichtigt.",
-              "en": "This archived release focuses on File menu, Presentation dialogs, Duplicate options. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "A multi-level File menu now combines New, Open, recent presentations, Duplicate, Import, Backup, Restore, Print, Share and Exit. New presentations capture title, date, service time, team and template; Open and Duplicate provide search, sorting, metadata and real slide thumbnails. Duplicating can selectively preserve service time, media references and target start times."
             }
           }
         }
@@ -7075,7 +7075,7 @@
             },
             "text": {
               "de": "Diese Wartungsausgabe behandelt hellen und dunklen Darstellungsmodus sowie die zugehörigen Einstellungen. Im Mittelpunkt steht die Lesbarkeit der Bedienoberfläche. Die gewählte Oberflächenfarbe ist von Farben und Hintergründen der eigentlichen Folien zu unterscheiden.",
-              "en": "This archived release focuses on Light theme, Settings, Dark theme. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Menus, service order, editor, timeline and tool areas now fully follow the light theme and remain clearly readable. Titles, section headings and the close control no longer inherit the light production text color and are clearly visible on the white dialog background. The correction is limited to the light theme, leaving the established dark production colors unchanged."
             }
           }
         },
@@ -7189,7 +7189,7 @@
             },
             "text": {
               "de": "Hintergrundauswahl, Bildanpassung, Hilfslinien und Ebenenanordnung werden in die Bearbeitung integriert. Der gemeinsame Renderer verbindet Editor und Ausgabe. Weitere Verbesserungen betreffen Medienauswahl, Folienübersicht, kleinere Fenster und Textformatierung.",
-              "en": "This archived release focuses on Background menu, Image fitting, Guides. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "A compact production menu now provides media browsing, direct image import, recently used images and an immediately applicable color palette. Background images can now be blurred, rotated, fitted to height or width, filled, contained and positioned precisely. Canvas smart guides, margin guides and the rule of thirds can be enabled independently and appear only in the editor."
             }
           }
         }
@@ -7310,7 +7310,7 @@
             },
             "text": {
               "de": "Der Produktionsarbeitsbereich führt Songeditor, Ablauf und Timeline deutlicher zusammen. Startbildschirm, Updatebedienung und Tastaturwege werden überarbeitet. Servicezeiten lassen sich in diesem Arbeitsablauf festlegen und bleiben Teil der Präsentationsvorbereitung.",
-              "en": "This archived release focuses on Production workspace, Song editor, Timeline. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The order of service, specialized context editor and large output preview now form a dense professional workspace with persistent output tabs and formatting controls. Songs now show arrangement, key, directly editable sections, metadata, CCLI options and multiple real slide previews at the same time. An expandable, height-adjustable timeline visualizes every active item with duration and live position."
             }
           }
         }
@@ -7398,7 +7398,7 @@
             },
             "text": {
               "de": "Der professionelle Arbeitsbereich wird als Standard stärker hervorgehoben. Kompakte Ablaufzeiten und überarbeitete Dialogebenen unterstützen die Desktop-Bedienung. Einstellungen und Zeitbearbeitung erhalten Korrekturen, damit wichtige Aktionen nicht hinter anderen Flächen verschwinden.",
-              "en": "This archived release focuses on Professional default mode, Compact service timing, Keyboard operation. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "New installations now use the dark production interface by default while existing personal preferences remain unchanged. Durations below one minute are shown as 7s, 10s or 45s, while durations of one minute or more continue to use formats such as 1:00 or 3:06. Settings can now be closed with Escape, with an open beta notice being dismissed first."
             }
           }
         },
@@ -7503,7 +7503,7 @@
             },
             "text": {
               "de": "Ein Beta-Kanal ergänzt die stabile Updateversorgung. Hinweise zum gewählten Kanal und zur Rückkehr auf eine stabile Ausgabe werden sichtbar gemacht. Mehrere Servicezeiten sowie Kopf- und Einklappaktionen erhalten begleitende Verbesserungen.",
-              "en": "This archived release focuses on Beta update channel, Multiple service times, Beta notice. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Prerelease updates can now be enabled explicitly under Settings → Updates. Without opt-in, GottesdienstRegie continues to consider stable releases only. Multiple service start times can now be added, edited individually, removed and stored permanently with the presentation. A one-time plain-language dialog explains the possible limitations of beta versions when first enabled. The current channel and beta releases are marked clearly without alarm styling."
             }
           }
         },
@@ -7677,7 +7677,7 @@
             },
             "text": {
               "de": "Diese umfangreichere Ausgabe verbindet Ablaufzeiten, WARM-UP und zeitgesteuerte Wechsel mit erweiterten Medienquellen. Audioelemente und Live-Timer ergänzen den Ablauf. Korrekturen betreffen unter anderem lokale Videos, Medienende und Schleifenwechsel.",
-              "en": "This archived release focuses on Service timing, WARM-UP, Scheduled handoff. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "Items and individual slides now have real playback timing; section totals are calculated automatically and timing can be edited in the service order or inspector. The service order now uses the four distinct sections PRE-SERVICE, WARM-UP, SERVICE and POST-SERVICE; older arrival content is migrated automatically. When ON AIR is already active, pre-service hands off to WARM-UP based on its calculated duration and then enters the service at the configured service time."
             }
           }
         }
@@ -7846,7 +7846,7 @@
             },
             "text": {
               "de": "Fensterstart, Videoeingänge und Live-Kamera erweitern den Einsatz der Anwendung am Regieplatz. Schnellanzeigen und LAST SHOWN helfen bei spontanen Inhalten. Die Versionshinweise dokumentieren außerdem Korrekturen für Videoaudio, Gerätausfälle, Einstellungen und Update-Sicherheit.",
-              "en": "This archived release focuses on Window startup, Video inputs, Live camera. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The control interface now starts in full-screen mode by default and can alternatively open maximized, windowed or in its last state. Real cameras, webcams and capture cards are detected through operating-system media devices, can be selected and are shown in a live preview. A configured video input can be added as a regular service item and uses the same renderer in preview and MAIN."
             }
           }
         }
@@ -7994,7 +7994,7 @@
             },
             "text": {
               "de": "Präsentationsverwaltung, Pre- und Post-Service sowie Inhaltsbearbeitung werden gemeinsam weiterentwickelt. Sprache, Hilfe und Anzeige ergänzen die Bedienung. Anmeldung, Live-Ausgabe und Diagnose gehören ebenfalls zum dokumentierten Umfang dieses frühen Entwicklungsstands.",
-              "en": "This archived release focuses on Presentations, Pre- and post-service, Content. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "A new local presentation library now stores multiple services permanently and supports creating, opening, duplicating, renaming, archiving, importing, exporting and backups. Pre-service and post-service now use the same section, item and slide structure as the main service and can contain any number of items. The add menu now includes content, images, video, audio, songs, Bible passages, websites, PDF, timers, countdowns, announcements, slideshows, stage messages and Quick Screens."
             }
           }
         }
@@ -8082,7 +8082,7 @@
             },
             "text": {
               "de": "Diese Ausgabe verbessert den Weg vom Start und Login zur Folienauswahl. Ablauf, Folienübersicht und mehrere Ausgänge werden zusammen betrachtet. Der Schwerpunkt liegt damit auf Orientierung und Ausgabeorganisation während der Vorbereitung.",
-              "en": "This archived release focuses on Startup, Slide overview, Multiple outputs. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "A real startup sequence checks the account, displays, presentation, updates and connection before opening the control interface. Complete services can be shown as a performant grid of real slide thumbnails grouped by section. Physical displays can now be assigned to separate virtual roles such as MAIN, STAGE, NOTES and LIVESTREAM."
             }
           }
         }
@@ -8160,7 +8160,7 @@
             },
             "text": {
               "de": "Live-Ausgabe und Präsentationsverwaltung werden mit mehreren Folien und einem weiterentwickelten Editor verbunden. Die Speicherung gehört zu den dokumentierten Verbesserungen. Diese frühe Ausgabe bildet einen Zwischenschritt zur späteren Trennung von Editor, Vorschau und Livebetrieb.",
-              "en": "This archived release focuses on Live output, Presentations, Multiple slides. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "MAIN and STAGE windows now use the same central slide renderer as the editor and preview. Presentations can be created, opened and saved automatically on the local device. Each service item supports multiple slides that can be enabled, ordered and duplicated independently."
             }
           }
         }
@@ -8202,8 +8202,8 @@
                   "en": "User interface"
                 },
                 "text": {
-                  "de": "Ablauf, Arbeitsbereich, Eigenschaften und Filmstrip bilden eine kompakte professionelle Bedienoberfläche mit mehr Platz für die Folie.",
-                  "en": "Order of service, workspace, properties and filmstrip form a compact professional interface with more room for the slide."
+                  "de": "Ablauf, Arbeitsbereich, Eigenschaften und Filmstrip bilden eine kompakte, übersichtliche Bedienoberfläche mit mehr Platz für die Folie.",
+                  "en": "Order of service, workspace, properties and filmstrip form a compact, clearly arranged interface with more room for the slide."
                 }
               }
             ],
@@ -8217,7 +8217,7 @@
             },
             "text": {
               "de": "Der frühe Arbeitsbereich wird in Ablauf, Vorschau und allgemeiner Benutzeroberfläche ausgebaut. Im Mittelpunkt steht das Zusammenführen der vorbereiteten Inhalte mit ihrer sichtbaren Reihenfolge. Spätere professionelle Song- und Cloudfunktionen gehören nicht zu diesem ursprünglichen Umfang.",
-              "en": "This archived release focuses on Order of service, Preview, User interface. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The service can be divided into pre-service, arrival, service and post-service sections. A separate preview was introduced so content can be checked before taking it live. Order of service, workspace, properties and filmstrip form a compact, clearly arranged interface with more room for the slide."
             }
           }
         }
@@ -8284,7 +8284,7 @@
             },
             "text": {
               "de": "Benutzerkonto, Anmeldung und Berechtigungen stehen im Mittelpunkt dieses Wartungsstands. Die Updatefunktion wird im selben Zusammenhang weiterentwickelt. Kontozugang und fachliche Rollen sind getrennt von später eingeführten kosmetischen Profil- oder Belohnungsfunktionen zu betrachten.",
-              "en": "This archived release focuses on Account, Permissions, Updates. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The desktop application was connected to the existing church account and its secure two-factor sign-in. Access to GottesdienstRegie can be granted per user independently from the general account role. Update progress, file size, installation time and rollback to the previous version are available directly in Settings."
             }
           }
         }
@@ -8340,7 +8340,7 @@
             },
             "text": {
               "de": "Editor und Ablauf werden nach dem ersten Grundstand weiter ausgebaut. Die Aktualisierung der Anwendung ist ein weiterer dokumentierter Schwerpunkt. Dieser Versionsstand beschreibt eine frühe Basis und nicht den vollständigen Funktionsumfang der heutigen Anwendung.",
-              "en": "This archived release focuses on Editor, Order of service, Updates. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "An initial slide editor with title, text, background and basic layout options was introduced. Individual presentation items can be selected and ordered within a service. GottesdienstRegie can check for, download and install new public GitHub releases."
             }
           }
         }
@@ -8396,7 +8396,7 @@
             },
             "text": {
               "de": "Der erste hier archivierte Stand umfasst Grundsystem, Benutzeroberfläche und Gemeindekonto. Er bildet den Ausgangspunkt der weiteren Entwicklung. Die Versionsnummer lautet 0.1.0; eine veröffentlichte Version 1.0 ist in diesem Archiv bislang nicht enthalten.",
-              "en": "This archived release focuses on Core system, User interface, Church account. The entries below describe changes recorded for this version, not a new verification of all historical features."
+              "en": "The first functional installable desktop version of GottesdienstRegie was created. Menu bar, order of service, workspace, properties and status bar were introduced as the core control structure. The application connects PGB sign-in with a local worship presentation interface."
             }
           }
         }

@@ -815,7 +815,7 @@ export function MediaBrowser() {
       setBusy("");
     }
   }
-  if(countdownsOpen&&!isAudio)return <main className="cloud-media-browser"><header className="media-window-header"><h1>Countdown-Bibliothek</h1><button onClick={()=>setCountdownsOpen(false)}>Zurück zu Medien</button></header><CountdownPresetBrowser purpose={purpose} onSelect={id=>{void(window.desktop as any)?.mediaWindow?.selectCountdown(id)}}/></main>;
+  if(countdownsOpen&&!isAudio)return <main className="cloud-media-browser countdown-mode"><header className="media-window-header"><h1>Countdown-Bibliothek</h1><button onClick={()=>setCountdownsOpen(false)}>Zurück zu Medien</button></header><CountdownPresetBrowser purpose={purpose} onSelect={id=>{void(window.desktop as any)?.mediaWindow?.selectCountdown(id)}}/></main>;
   return (
     <main
       className={`cloud-media-browser ${isAudio ? "audio-browser" : ""} ${generatorOpen ? "generator-active" : ""}`}

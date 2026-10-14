@@ -16,6 +16,14 @@ const priorities=new Set(['urgent','important','normal']);
 const categories=new Set(['general','event','traffic','service','community','info','technical','internal']);
 
 export class AnnouncementService {
+  private readonly bannerTextCache=new WeakMap<RawAnnouncement,{values:unknown[];text:string|undefined}>();
+  private bannerText(raw:RawAnnouncement):string|undefined{
+    const values=[raw.textBanner,raw.textLaufbanner,raw.textMeldung,raw.beschreibung,raw.titel],cached=this.bannerTextCache.get(raw);
+    if(cached&&values.every((value,index)=>value===cached.values[index]))return cached.text;
+    let text:string|undefined;
+    for(const value of values){if(typeof value!=='string')continue;const candidate=announcementRunsText(announcementRuns(value)).replace(/\s+/g,' ').trim();if(candidate){text=candidate;break}}
+    this.bannerTextCache.set(raw,{values,text});return text;
+  }
   private isPublicAndCurrent(raw:RawAnnouncement,now:Date):boolean{
     if(!raw.messageId||truthy(raw.trash)||!publicStatus(raw.status))return false;
     const config=raw.gottesdienstRegie as {enabled?:unknown}|undefined;
@@ -26,7 +34,7 @@ export class AnnouncementService {
   getBanners(records:RawAnnouncement[],now:Date):PublicBannerAnnouncement[]{
     const rank={urgent:0,important:1,normal:2};
     return records.filter(raw=>truthy(raw.showMeldungBanner)&&this.isPublicAndCurrent(raw,now)).flatMap(raw=>{
-      const text=[raw.textBanner,raw.textLaufbanner,raw.textMeldung,raw.beschreibung,raw.titel].map(value=>typeof value==='string'?announcementRunsText(announcementRuns(value)).replace(/\s+/g,' ').trim():'').find(Boolean);
+      const text=this.bannerText(raw);
       if(!text)return [];
       const priority=String(raw.priority??'normal') as AnnouncementPriority;
       return [{id:raw.messageId,text,priority:priorities.has(priority)?priority:'normal' as AnnouncementPriority,validFrom:date(truthy(raw.saalscreenUseShowFrom)&&raw.showFrom?raw.showFrom:raw.giltAb)?.toISOString(),validUntil:date(raw.giltBis)?.toISOString()}];

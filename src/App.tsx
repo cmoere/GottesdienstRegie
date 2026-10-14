@@ -137,6 +137,8 @@ import {changedOutputLayers,type OutputStateSnapshot,type BannerOutputState} fro
 import {OutputComposition} from './OutputComposition';
 import {AnnouncementBannerController} from './AnnouncementBannerController';
 import {AnnouncementBannerSettings} from './AnnouncementBannerSettings';
+import {HelpArticleView} from './help/HelpArticleView';
+import {helpScreenshot} from './help/helpAssets';
 import {TestModeWatermark,TestModeContext} from './TestModeWatermark';
 import { FileMenu } from "./FileMenu";
 import { MediaBrowser } from "./MediaBrowser";
@@ -6599,20 +6601,14 @@ function HelpModal({ close }: { close: () => void }) {
   const filtered=catalog.topics.filter(topic=>(topic.title+' '+topic.body).toLocaleLowerCase(language==='gsw'?'de-CH':language).includes(query.toLocaleLowerCase(language==='gsw'?'de-CH':language)));
   useEffect(()=>{const key=(event:KeyboardEvent)=>{if(event.key==='Escape')close()};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key)},[close]);
   useEffect(()=>{localStorage.setItem('gottesdienstregie.help-topic',selected)},[selected]);
-  const screenshot = ['Preflight','ON AIR'].includes(article.id) ? 'test-preparation.png'
-    : article.id==='Pre-Service & Post-Service' ? 'postprogram.png'
-    : ['Einstellungen','Audioausgänge','Routing-Probleme'].includes(article.id) ? 'settings-window.png'
-    : ['Medien','Cloud-Medien','Unsplash','Videos','Audio Browser','Background Audio'].includes(article.id) ? 'media-library.png'
-    : ['Erste Schritte','Benutzeroberfläche','Ablauf','Vorschau','Veranstaltung verknüpfen','Inhalte hinzufügen'].includes(article.id) ? 'operator-workspace.png' : null;
+  const screenshot = helpScreenshot(article.id);
   return <div className="modal-backdrop">
     <div className="help-dialog documentation" role="dialog" aria-modal="true" aria-label={catalog.ui.title} lang={language} dir={language==='ar'?'rtl':'ltr'}>
       <header><h2>{catalog.ui.title}</h2><label><Icon name="search"/><input aria-label={catalog.ui.searchPlaceholder} placeholder={catalog.ui.searchPlaceholder} value={query} onChange={event=>setQuery(event.target.value)}/></label><button onClick={close} title={t('close')}><X/></button></header>
       <div className="help-layout">
         <nav>{filtered.length===0&&<p>{catalog.ui.noResults}</p>}{filtered.map(topic=><button key={topic.id} className={`${selected===topic.id?'active ':''}${topic.section?'help-section-title':''}`} onClick={()=>setSelected(topic.id)}>{topic.title}</button>)}</nav>
         <article key={article.id}>
-          <h2>{article.title}</h2>
-          {screenshot&&<figure className="help-screenshot focus-center"><div><img loading="lazy" src={'./help/'+screenshot} alt={article.title}/></div><figcaption><b>{catalog.ui.screenshotLabel} · v77</b></figcaption></figure>}
-          {article.body.split('\n\n').map((paragraph,index)=><p key={index}>{paragraph}</p>)}
+          <HelpArticleView article={article} locale={language} onOpenTopic={setSelected} screenshot={screenshot?{src:'./help/'+screenshot,caption:`${catalog.ui.screenshotLabel} · ${article.title}`,alt:article.title}:undefined}/>
           {article.id==='Versionsinformationen'&&<ReleaseNotesView/>}
           {article.id==='Support'&&<button onClick={()=>void window.desktop?.openExternal('https://cmoere.github.io/GottesdienstRegie/report/')}>{article.title} <Icon name="open_in_new"/></button>}
         </article>

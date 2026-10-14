@@ -51,4 +51,11 @@ describe('OutputWindowManager app mode',()=>{
     expect(manager.getStateForSender(1)!.revision).toBeGreaterThan(state!.revision);
     windows[0].destroyed=true;expect(manager.getStateForSender(1)).toBeNull();
   });
+  it('anchors externally triggered quick countdowns once for every assigned output',async()=>{
+    const manager=new OutputWindowManager('preload',async()=>{},()=>{});await manager.start({'1':'main','2':'stage'} as any,{});
+    manager.sendQuick(['main','stage'],{type:'countdown',duration:60});
+    const main=manager.getStateForSender(1)!.quick as any,stage=manager.getStateForSender(2)!.quick as any;
+    expect(Number.isFinite(main.startedAtMs)).toBe(true);expect(stage.startedAtMs).toBe(main.startedAtMs);
+    manager.sendQuick(['main'],{type:'countdown',duration:60,startedAtMs:1234});expect((manager.getStateForSender(1)!.quick as any).startedAtMs).toBe(1234);
+  });
 });
