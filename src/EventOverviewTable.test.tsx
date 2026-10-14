@@ -44,7 +44,7 @@ describe('event overview table',()=>{
   width=900;act(()=>resize());
   expect(animate).toHaveBeenCalledWith(expect.arrayContaining([expect.objectContaining({transform:'translateX(-600px)'})]),expect.objectContaining({easing:'linear',fill:'forwards'}));
   // A scaled preview must preserve the same reading speed as the 1920px output.
-  expect(animate.mock.calls[0][1].duration).toBeCloseTo(49657.143,2);
+  expect(animate.mock.calls[0][1].duration).toBeCloseTo(53401.143,2);
   expect(screen.getAllByText(title).at(-1)).toHaveStyle({whiteSpace:'nowrap'});
   vi.unstubAllGlobals();
  });

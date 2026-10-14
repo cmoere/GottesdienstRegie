@@ -2,6 +2,20 @@ import {describe,it,expect} from 'vitest';
 import {prepareAnnouncementPages,announcementDesign,ANNOUNCEMENT_DESIGNS} from './announcementDesign';
 
 describe('readable announcement layouts',()=>{
+ it('uses the available slide width and reserves only the QR column when enabled',()=>{
+  for(const design of ANNOUNCEMENT_DESIGNS.filter(value=>value!=='split')){
+   const plain=prepareAnnouncementPages({title:'Information',body:'Ein Text',qrCode:false,design})[0];
+   expect(plain.titleElement.x).toBe(32);
+   expect(plain.titleElement.x+plain.titleElement.width).toBe(1888);
+   expect(plain.bodyElement.x).toBe(32);
+   expect(plain.bodyElement.x+plain.bodyElement.width).toBe(1888);
+   const qr=prepareAnnouncementPages({title:'Information',body:'Ein Text',qrCode:true,design})[0];
+   expect(qr.bodyElement.x+qr.bodyElement.width).toBe(1576);
+   expect(qr.qrElement!.x).toBe(1608);
+   expect(qr.qrElement!.x+qr.qrElement!.width).toBe(1888);
+   expect(qr.bodyFontSize).toBe(plain.bodyFontSize);
+  }
+ });
  it('provides eight distinct selectable layouts with safe pagination and approved palette accents',()=>{
   expect(ANNOUNCEMENT_DESIGNS).toHaveLength(8);
   const pages=ANNOUNCEMENT_DESIGNS.map(design=>prepareAnnouncementPages({title:'<u>Titel</u>',body:'<p><strong>Text</strong></p><p>Absatz</p>',qrCode:true,design})[0]);

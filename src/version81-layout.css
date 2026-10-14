@@ -1,0 +1,13 @@
+/* Generated event surfaces use the slide's available width with a 32px safe edge. */
+.event-loop-surface,
+.event-loop-surface.event-design-table{padding-left:1.666667cqw!important;padding-right:1.666667cqw!important}
+.post-program-room-notice>header{padding-left:1.666667cqw;padding-right:1.666667cqw}
+.post-program-body{padding-left:1.666667cqw;padding-right:1.666667cqw}
+.post-program-body>p{padding-left:0;padding-right:0}
+/* Leave half a marker inside the viewport. Each marker belongs to its row;
+   the rail and rows live in the same transformed scroll content. */
+.event-design-timeline .event-loop-list{margin-left:.5cqw;border-left-color:var(--event-color,#608f9a)}
+.event-design-timeline .event-loop-list article>b{left:-2.675cqw;top:50%;transform:translateY(-50%)}
+.event-title-container[data-scrolling=true]>.event-title-text{animation:none}
+.community-data-status,.font-availability-warning{max-width:34vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.font-availability-warning{color:var(--warning,#806900)}

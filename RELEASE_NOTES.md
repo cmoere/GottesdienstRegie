@@ -1,3 +1,21 @@
+# GottesdienstRegie 0.81.0
+
+Automatische Veranstaltungen, Meldungen und der Nachprogramm-Raumhinweis verwenden die verfügbare Folienbreite mit nur 32 Pixel Sicherheitsrand je Seite bei 1920 Pixel Ausgabe. QR-Codes behalten eine eigene Spalte; ohne QR erhält der Meldungstext die volle Breite. Eigene normale Folien werden nicht verändert. Mindestlesedauer, Titelbewegung und vertikales Scrollen berücksichtigen die tatsächlichen verbreiterten Spalten.
+
+Die Timeline-Markierungen waren in der nativen Prüfung um rund 130 Pixel neben ihre Linie verschoben. Sie sitzen nun auf der Linie und an der Mitte ihrer jeweiligen Zeile, auch nach vertikalem Scrollen. Lange Titel bleiben vollständig und behalten ihre Schriftgröße.
+
+Zwei neue Einstellungen steuern den Windows-Anmeldestart: GottesdienstRegie öffnen oder ausschließlich im Hintergrund nach Updates suchen. Beide Optionen sind zunächst deaktiviert. Die Hintergrundsuche verwendet denselben Updater, startet keine Regie-, Splash- oder Ausgabefenster und kein Audio, lädt oder installiert nichts ungefragt und beendet sich nach der Prüfung bzw. einem begrenzten Timeout. Bei einer verfügbaren Version erscheint eine Windows-Benachrichtigung. Beide aktivierten Optionen erzeugen keinen zweiten Prozess.
+
+Die nächsten zwei aktivierten Folien werden still auf Medien vorbereitet. Bilder werden vorgeladen, Videos und lokale Audiodateien zunächst mit ihren Metadaten. Pro Fenster bleiben höchstens sechs Ressourcen und zwei gleichzeitige Ladeaufträge aktiv. Es gibt keinen play()-Aufruf, kein Vorabstarten von Radio oder Websites und keine Veränderung der Audio-Routen. Überholte oder hängende Aufträge werden freigegeben.
+
+Fehlende verwendete Schriften erscheinen im Bedienbereich und im Preflight. Die gespeicherte Schriftwahl wird nicht überschrieben; MAIN bleibt frei von technischen Hinweisen. Der Gemeindedatenstatus nennt den letzten tatsächlichen Datenstand online und den Cache-Zeitpunkt offline statt nur der letzten Verbindung.
+
+Wiederherstellung arbeitet mit getrennten lokalen Zwischenständen nach kurzer Eingabepause, bei laufender Bearbeitung spätestens nach fünf Sekunden. Der normale Speicherstand bleibt separat. Nach einem Absturz wird die letzte gültige Fassung angeboten; bei beschädigter neuester Sicherung steht die vorige Generation zur Verfügung. Nur eine Bestätigung übernimmt die Wiederherstellung. ON AIR und Audio werden niemals automatisch fortgesetzt. Speichern, Zwischenstände und sauberes Beenden werden geordnet verarbeitet; das Überspringen des Ladescreens überspringt nicht die notwendige Startentscheidung.
+
+Bekannt: Medienvorbereitung garantiert keine verzögerungsfreie Wiedergabe jedes Netzwerkmediums. Windows-Benachrichtigungen hängen von den Systemeinstellungen ab; Anmeldestart ist nur in der installierten Windows-App verfügbar. Die allerletzten Änderungen vor dem nächsten Zwischenstand können bei einem harten Absturz verloren gehen. Der frühere graue Programmstart bleibt nicht als behoben bestätigt.
+
+---
+
 # GottesdienstRegie 0.80.0
 
 Meldungen bieten acht visuelle Design-Kacheln in den Regie-Farben #699f3e, #608f9a und #b6bec3. Im Bearbeiten-Bereich lassen sich QR-Codes für das ganze Element deaktivieren, Kategorien filtern, Prioritätssortierung wählen und die Lesedauer in Sekunden einstellen. Die Mindestlesedauer langer Folgeseiten bleibt wirksam. Cera Pro, sichere Textformatierung und vollständige Absätze bleiben erhalten; es gibt keinen laufenden Zeitbalken auf der Meldung.

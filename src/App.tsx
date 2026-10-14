@@ -1,4 +1,11 @@
 import {getHelpCatalog} from './help';
+import {sanitizeRecoveryDocument} from './presentationRecovery';
+import {initializePresentationStartup} from './presentationStartup';
+import {upcomingMedia,useMediaWarmup,type WarmupAsset} from './mediaWarmup';
+import {findMissingFonts} from './fonts';
+import {FontAvailabilityWarning} from './FontAvailabilityWarning';
+import {CommunityDataStatus} from './CommunityDataStatus';
+import {startRecoveryCheckpoints} from './recoveryCheckpoints';
 import {AudioDiagnostics} from './AudioDiagnostics';
 import './version39.css';
 import './version41.css';
@@ -5375,6 +5382,8 @@ function SettingsModal({
       windowStartMode: "fullscreen",
       operatorDisplayTarget: "primary",
       automaticUpdates: true,
+      openAtLogin: false,
+      checkUpdatesAtLogin: false,
       autoDownloadUpdates: true,
       installUpdatesOnQuit: false,
       betaUpdates: false,
@@ -6321,6 +6330,9 @@ function SettingsModal({
                 <>
                 <section className="settings-group window-start-settings">
                   <h4>FENSTER &amp; START</h4>
+                  <label><input type="checkbox" checked={operatorPrefs.openAtLogin===true} disabled={!operatorPrefs.loginStartupSupported} onChange={event=>void setOperatorPreference({openAtLogin:event.target.checked})}/> GottesdienstRegie bei der Windows-Anmeldung öffnen</label>
+                  <label><input type="checkbox" checked={operatorPrefs.checkUpdatesAtLogin===true} disabled={!operatorPrefs.loginStartupSupported} onChange={event=>void setOperatorPreference({checkUpdatesAtLogin:event.target.checked})}/> Bei der Windows-Anmeldung im Hintergrund nach Updates suchen</label>
+                  <p>Beide Optionen sind standardmäßig aus und gelten für die installierte Windows-App. Die Hintergrundprüfung öffnet keine Bedienoberfläche und keine Ausgänge, startet kein Audio und beendet sich nach der Prüfung. Ein verfügbares Update wird über Windows gemeldet; die Installation wählst du selbst. Sind beide Optionen aktiv, öffnet sich die App einmal normal. Die automatische Updatesuche beim normalen Programmstart bleibt separat unter „Updates“ einstellbar.</p>
                   <label><input type="checkbox" checked={operatorPrefs.preventDisplaySleep!==false} onChange={event=>void setOperatorPreference({preventDisplaySleep:event.target.checked})}/> Bildschirmschoner und automatisches Ausschalten des Bildschirms verhindern</label>
                   <p>Standardmäßig aktiv, solange GottesdienstRegie geöffnet ist. Beim Beenden wird der Schutz freigegeben. Manuelles Sperren, Zuklappen und verbindliche Sicherheitsrichtlinien werden nicht umgangen.</p>
                   <label>
@@ -7828,6 +7840,12 @@ function AppShell({
       text: string;
     }>({ state: "idle", step: 0, text: "" });
   useEffect(()=>{void (window.desktop as any)?.deviceSettings?.readOsb?.().then((value:unknown)=>setOsbSettings(normalizeOsbSettings(value,[...BIBLE_TRANSLATIONS])))},[]);
+  useMediaWarmup(useMemo(()=>upcomingMedia(state.items,state.onAir?state.liveSlideId:state.previewSlideId||state.selectedSlideId,state.sections.map(section=>section.id)),[state.items,state.onAir,state.liveSlideId,state.previewSlideId,state.selectedSlideId,state.sections]));
+  const [checkpointError,setCheckpointError]=useState(false);
+  useEffect(()=>{
+    const save=window.desktop?.presentation.saveRecovery;if(!save)return;
+    return startRecoveryCheckpoints(usePresentation.subscribe,usePresentation.getState,snapshot=>save(presentationDocument(snapshot)).then(()=>setCheckpointError(false)),()=>setCheckpointError(true));
+  },[]);
   useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge)return;const stop=bridge.onConnection((value:{connected:boolean;mode:string;updatedAt:number})=>setCommunityConnection(value));void bridge.start();return stop},[]);
   useEffect(()=>{const bridge=(window.desktop as any)?.community;if(!bridge?.onEvents)return;let rows:CommunityChurchEvent[]=[],rooms:RawRoom[]=[];const publish=()=>{const service=communityEventService.current;service.setEvents(rows);service.setRooms(new RoomService(rooms));const publicEvents=service.getUpcomingEvents().slice(0,8).map(event=>service.toPublicEvent(event));setLatestPublicEvents(publicEvents);postProgramNoticeController.current.prepare({eventLink:usePresentation.getState().eventLink},AppClock.now(),{mode:usePresentation.getState().testPostProgramScenario?'test':'normal',scenario:usePresentation.getState().testPostProgramScenario??'automatic'});setPostProgramPrepared(true);window.dispatchEvent(new CustomEvent('gottesdienstregie:community-events',{detail:publicEvents}))};const stopEvents=bridge.onEvents((value:CommunityChurchEvent[])=>{rows=Array.isArray(value)?value:[];publish()}),stopRooms=bridge.onRooms?.((value:RawRoom[])=>{rooms=Array.isArray(value)?value:[];publish()});return()=>{stopEvents?.();stopRooms?.()}},[]);
   const audioSessionRef = useRef<{
@@ -9487,6 +9505,9 @@ function AppShell({
         ),
         ...state.items.flatMap((item) => item.backgroundAudio?.tracks ?? []),
       ];
+    const fonts=await findMissingFonts(state.items);
+    if(fonts.missing.length)warnings.push('Fehlende Schriftarten: '+fonts.missing.join(', ')+'. Die Ausgabe verwendet Ersatzschriften.');
+    if(fonts.unchecked.length)warnings.push('Schriftprüfung nicht vollständig verfügbar: '+fonts.unchecked.join(', '));
     const routing = normalizedAudioRouting(
       usePreferences.getState().audioRouting,
     );
@@ -9951,7 +9972,9 @@ function AppShell({
               : "GESPEICHERT ✓"}
         </span>
         <span>{mediaStorage?.online ? "CLOUD ✓" : "CLOUD OFFLINE"}</span>
-        {communityConnection&&!communityConnection.connected&&<span>{communityConnection.mode==='offline-cache'?`Offline · letzter Stand ${new Date(communityConnection.updatedAt).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})} Uhr`:'Gemeindedaten offline'}</span>}
+        <CommunityDataStatus connection={communityConnection}/>
+        <FontAvailabilityWarning items={state.items}/>
+        {checkpointError&&<span title="Die normale Speicherfunktion bleibt verfügbar.">Wiederherstellung konnte nicht gesichert werden</span>}
         <span>
           STAGE{" "}
           {Object.entries(state.displayRoles).some(
@@ -10056,6 +10079,7 @@ function Output() {
           "main") as DisplayRole,
       [],
     );
+  useMediaWarmup((slide as (Slide&{_mediaWarmup?:WarmupAsset[]})|null)?._mediaWarmup??[]);
   useEffect(() => {
     const bridge=window.desktop as any;
     if(bridge?.getOutputState&&bridge?.onOutputState){
@@ -10128,7 +10152,7 @@ export function App() {
   const startupTimer = useRef<ReturnType<typeof setInterval> | undefined>(
     undefined,
   );
-  const startupAuth = useRef<Promise<AuthSession | null> | null>(null);
+  const startupReady = useRef<Promise<AuthSession | null> | null>(null);
   const language = usePreferences((state) => state.language),
     theme = usePreferences((state) => state.theme),
     blackWhite = usePreferences((state) => state.blackWhite),
@@ -10267,28 +10291,32 @@ export function App() {
     void (async () => {
       const reopen = usePreferences.getState().reopenLastPresentation;
       const restoredPromise = restoreWith(auth).catch(() => null);
-      startupAuth.current = restoredPromise;
       const browserLoad=target==='web'?presentations.list().then(async entries=>entries[0]?(await presentations.load(entries[0].id))?.document??null:(await presentations.create({title:'Meine Web-Präsentation'})).document):Promise.resolve(null);
-      const [restored, loaded, recoveryCopy] = await Promise.all([
-        restoredPromise,
+      const ready=initializePresentationStartup(
+        Promise.all([restoredPromise,window.desktop?.displays().catch(() => []),window.desktop?.updates.currentVersion().catch(() => ""),window.desktop?.auth.connection().catch(() => false)]).then(([restored])=>restored),
         target==='web'?browserLoad:reopen
-          ? window.desktop?.presentation.load().catch(() => null)
+          ? window.desktop?.presentation.load().catch(() => null)??Promise.resolve(null)
           : Promise.resolve(null),
-        window.desktop?.presentation.recovery().catch(() => null),
-        window.desktop?.displays().catch(() => []),
-        window.desktop?.updates.currentVersion().catch(() => ""),
-        window.desktop?.auth.connection().catch(() => false),
-      ]);
+        window.desktop?.presentation.beginSession().catch(() => null)??Promise.resolve(null),
+        (loaded,recoveryCopy)=>{
+      if (!active) return;
       if (loaded) usePresentation.getState().loadDocument(loaded);
+      const recoveryDocument=sanitizeRecoveryDocument(recoveryCopy?.document);
       if (
-        restored &&
-        recoveryCopy &&
+        recoveryCopy && recoveryDocument &&
         confirm(
           `GottesdienstRegie wurde zuvor nicht ordnungsgemäß beendet.\n\nWiederherstellung für „${recoveryCopy.summary.title}“ öffnen?`,
         )
-      )
-        usePresentation.getState().loadDocument(recoveryCopy.document);
-      const remaining = target==='web'?0:Math.max(0, 10000 - (Date.now() - started));
+      ) {
+        usePresentation.getState().loadDocument(recoveryDocument);
+        usePresentation.setState({saveState:'dirty'});
+      }
+        },
+      );
+      startupReady.current=ready;
+      const restored=await ready;
+      if(!active)return;
+      const remaining = target==='web'||startupSkipped.current?0:Math.max(0, 10000 - (Date.now() - started));
       await new Promise((resolve) => setTimeout(resolve, remaining));
       clearInterval(timer);
       startupTimer.current = undefined;
@@ -10296,12 +10324,12 @@ export function App() {
         setStartupProgress(100);
         setSession(restored);
       }
-      startupAuth.current = null;
+      if(startupReady.current===ready)startupReady.current = null;
     })();
     return () => {
       active = false;
       clearInterval(timer);
-      startupAuth.current = null;
+      startupReady.current = null;
     };
   }, [output, historyWindow]);
   const signedIn = !!session;
@@ -10376,9 +10404,10 @@ export function App() {
               startupSkipped.current = true;
               if (startupTimer.current) clearInterval(startupTimer.current);
               setStartupProgress(100);
-              const auth = startupAuth.current;
-              if (auth) void auth.then((restored) => setSession(restored));
-              else setSession(null);
+              const ready = startupReady.current;
+              if (ready) void ready.then((restored) => {
+                if(startupReady.current===ready)setSession(restored);
+              });
             }}
           >
             SYNCHRONISIERUNG ÜBERSPRINGEN

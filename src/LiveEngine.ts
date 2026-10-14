@@ -15,6 +15,7 @@ import {audioPreflight} from './audio/audioPreflight';
 import {backgroundAudioEngine} from './BackgroundAudioEngine';
 import {useLiveOutputPreview} from './liveOutputPreview';
 import {outputPresentationDelay} from './outputPresentation';
+import {upcomingMedia} from './mediaWarmup';
 
 function withSongOutputs(slide: Slide): Slide {
   const snapshot=structuredClone(slide),item=usePresentation.getState().items.find(item=>item.id===slide.itemId);
@@ -46,7 +47,7 @@ export class LiveEngine{
     });
   }
   async preflight(assignments:Record<string,DisplayRole>,presentation:{hasPresentation:boolean;activeSlideCount:number;media:string[]}):Promise<DesktopPreflight>{const result=await (window.desktop?.preflight(assignments,presentation)??{ok:false,errors:['Die Desktop-Ausgabe ist nicht verfügbar.'],warnings:[]});const snapshot=await waitForCommunityRuntime();const state=usePresentation.getState();const community=communityPreflight(snapshot,state.eventLink?.eventKey,state.items.filter(item=>item.itemCategory==='loop').map(item=>({id:item.title,type:item.type,target:item.sectionId})));const warnings=await checkLyricLayouts(state.items,state.lyricScrolling),loopWarnings=loopPreflight(state.items,state.sections).warnings;return {...result,warnings:[...result.warnings,...warnings,...loopWarnings,...community.warnings,...audioPreflight(backgroundAudioEngine.getHealth()).warnings]}}
-  private snapshot(slide:Slide){const state=usePresentation.getState(),item=state.items.find(entry=>entry.id===slide.itemId),dynamic=hydrateDynamicEventData(hydrateNowPlayingData(withSongOutputs(slide))),rendered=item?cloneRenderedSlideSnapshot(buildRenderedSlideSnapshot(dynamic,item,'main')).slide:structuredClone(dynamic),hash=outputRevision(rendered);if(hash!==this.lastHash){this.lastHash=hash;this.revision+=1}return {...attachOutputRevision(rendered,this.revision),_presentAtMs:Date.now()+100}}
+  private snapshot(slide:Slide){const state=usePresentation.getState(),item=state.items.find(entry=>entry.id===slide.itemId),dynamic=hydrateDynamicEventData(hydrateNowPlayingData(withSongOutputs(slide))),rendered=item?cloneRenderedSlideSnapshot(buildRenderedSlideSnapshot(dynamic,item,'main')).slide:structuredClone(dynamic),hash=outputRevision(rendered);if(hash!==this.lastHash){this.lastHash=hash;this.revision+=1}return {...attachOutputRevision(rendered,this.revision),_mediaWarmup:upcomingMedia(state.items,slide.id,state.sections.map(section=>section.id)),_presentAtMs:Date.now()+100}}
   async start(assignments:Record<string,DisplayRole>,slide:Slide){if(!window.desktop)throw new Error('Die Desktop-Ausgabe ist nicht verfügbar.');const delivery=++this.delivery,snapshot=this.snapshot(slide),ok=await window.desktop.goOnAir(assignments,snapshot);if(ok)await this.commit(snapshot,delivery);return ok}
   async show(slide:Slide){const delivery=++this.delivery,snapshot=this.snapshot(slide),ok=await(window.desktop?.sendLiveSlide(snapshot)??false);if(ok)await this.commit(snapshot,delivery);return ok}
   async stop(){++this.delivery;++this.committedDelivery;this.cancelCommit();useLiveOutputPreview.setState({slide:null});return window.desktop?.goOffAir()??false}

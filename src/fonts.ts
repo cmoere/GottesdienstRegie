@@ -3,3 +3,24 @@ export const editorFonts=['Cera Pro','Inter','Aptos','Aptos Display','Agency FB'
 export const allEditorFonts=[...editorFonts,'Roboto','Open Sans','Montserrat','Poppins','Lato','Source Sans 3','Source Serif 4','Nunito Sans','Raleway','Oswald','Merriweather','Merriweather Sans','Playfair Display','Noto Sans','Noto Serif','Ubuntu','Fira Sans','Work Sans','DM Sans','Manrope','Rubik','Mulish','Karla','Libre Franklin','Libre Baskerville','Libre Caslon Text','PT Sans','PT Serif','IBM Plex Sans','IBM Plex Serif','IBM Plex Mono','Josefin Sans','Quicksand','Cabin','Bebas Neue','Barlow','Archivo','Arvo','Crimson Text','Cormorant Garamond','Exo 2','Titillium Web','Space Grotesk','Lexend','Atkinson Hyperlegible','League Spartan','Outfit','Sora','Urbanist','Plus Jakarta Sans','Assistant','Hind','Vollkorn','Lora','Cinzel','Anton','Comfortaa','Caveat','Dancing Script','Abril Fatface','Spectral','Zilla Slab','Alegreya','Alegreya Sans','Cardo','Domine','EB Garamond','Figtree','Inconsolata','JetBrains Mono','Afacad','Albert Sans','Alumni Sans','Amatic SC','Bitter','Bodoni Moda','Bricolage Grotesque','Chivo','Commissioner','Didact Gothic','Encode Sans','Epilogue','Fraunces','Geologica','Inter Tight','Jost','Kanit','Literata','Martel','Newsreader','Noto Sans Display','Noto Serif Display','Overpass','Prompt','Public Sans','Red Hat Display','Roboto Condensed','Roboto Slab','Sen','Signika','Source Code Pro','Teko','Unbounded','Varela Round','Yanone Kaffeesatz','Anek Latin','Asap','Asap Condensed','Be Vietnam Pro','BioRhyme','Black Han Sans','Bree Serif','Catamaran','Crete Round','Dosis','Familiar Pro','Fira Sans Condensed','Gelasio','Gloock','Heebo','Instrument Sans','K2D','Lalezar','Libre Bodoni','M PLUS 1p','Maven Pro','Nobile','Pathway Extreme','Questrial','Rokkitt','Schibsted Grotesk','Spline Sans','Syne','Trirong','Viga','Wix Madefor Display','Young Serif'] as const;
 
 export const fontStack=(font:string)=>font==='Cera Pro'?'"Cera Pro", "Aptos", "Inter", "Segoe UI", sans-serif':`"${font.replace(/"/g,'')}"`;
+
+export function usedPresentationFonts(items:import('./store').ServiceItem[]):string[]{
+ const families=items.filter(item=>item.enabled&&!item.disabled).flatMap(item=>item.slides.filter(slide=>slide.enabled).flatMap(slide=>slide.elements.filter(element=>element.visible&&element.type==='text').map(element=>String(element.properties.fontFamily||'Cera Pro').split(',')[0].trim().replace(/^["']|["']$/g,''))));
+ return [...new Set(families)].filter(name=>name&&!/^(serif|sans-serif|monospace|system-ui|inherit)$/i.test(name)).sort().slice(0,100);
+}
+export async function probeFontFamily(name:string):Promise<boolean|null>{
+ if(!document.fonts)return null;
+ const safe=name.replace(/["\\]/g,''),sample='ÄÖÜWimQ0123456789';
+ let timer:ReturnType<typeof setTimeout>|undefined;
+ try{
+  const loaded=await Promise.race([document.fonts.load(`400 72px "${safe}"`),new Promise<null>(resolve=>{timer=setTimeout(()=>resolve(null),2000)})]);
+  if(loaded===null)return null;
+  if(loaded.some(face=>face.status==='loaded'))return true;
+  const context=document.createElement('canvas').getContext('2d');if(!context)return null;
+  return ['monospace','serif','sans-serif'].some(fallback=>{context.font=`72px ${fallback}`;const base=context.measureText(sample).width;context.font=`72px "${safe}", ${fallback}`;return Math.abs(context.measureText(sample).width-base)>.01});
+ }catch{return false}finally{clearTimeout(timer)}
+}
+export async function findMissingFonts(items:import('./store').ServiceItem[],probe:(name:string)=>Promise<boolean|null>=probeFontFamily){
+ const rows=await Promise.all(usedPresentationFonts(items).map(async name=>({name,available:await probe(name)})));
+ return {missing:rows.filter(row=>row.available===false).map(row=>row.name),unchecked:rows.filter(row=>row.available===null).map(row=>row.name)};
+}

@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {validateLoginPreferences} from './loginStartup';
 
 export type WindowStartMode='fullscreen'|'maximized'|'window'|'restore';
 export type OperatorDisplayTarget='primary'|'last';
@@ -8,6 +9,8 @@ export interface AppPreferencesData{
   operatorDisplayTarget:OperatorDisplayTarget;
   preventDisplaySleep:boolean;
   automaticUpdates:boolean;
+  openAtLogin:boolean;
+  checkUpdatesAtLogin:boolean;
   autoDownloadUpdates:boolean;
   installUpdatesOnQuit:boolean;
   betaUpdates:boolean;
@@ -20,12 +23,12 @@ export interface AppPreferencesData{
   registeredDevice?:{id:string;organizationId:string;organizationName:string;name:string;type:'shared'|'personal';platform:string;registeredAt:string;lastSeenAt:string;status:'online'|'locked'};
 }
 
-const defaults:AppPreferencesData={preventDisplaySleep:true,windowStartMode:'fullscreen',operatorDisplayTarget:'primary',automaticUpdates:true,autoDownloadUpdates:true,installUpdatesOnQuit:false,betaUpdates:false,betaWarningAccepted:false};
+const defaults:AppPreferencesData={preventDisplaySleep:true,windowStartMode:'fullscreen',operatorDisplayTarget:'primary',automaticUpdates:true,openAtLogin:false,checkUpdatesAtLogin:false,autoDownloadUpdates:true,installUpdatesOnQuit:false,betaUpdates:false,betaWarningAccepted:false};
 
 export class AppPreferences{
   private value:AppPreferencesData={...defaults};
   constructor(private readonly file:string){}
-  async load(){try{this.value={...defaults,...JSON.parse(await fs.readFile(this.file,'utf8'))}}catch{}return this.get()}
+  async load(){try{const parsed=JSON.parse(await fs.readFile(this.file,'utf8'));this.value={...defaults,...parsed,openAtLogin:false,checkUpdatesAtLogin:false,...validateLoginPreferences(parsed)}}catch{}return this.get()}
   get(){return structuredClone(this.value)}
   async update(patch:Partial<AppPreferencesData>){this.value={...this.value,...patch};await fs.mkdir(path.dirname(this.file),{recursive:true});const temporary=`${this.file}.tmp`;await fs.writeFile(temporary,JSON.stringify(this.value,null,2),'utf8');try{await fs.rename(temporary,this.file)}catch{await fs.unlink(this.file).catch(()=>{});await fs.rename(temporary,this.file)}return this.get()}
 }

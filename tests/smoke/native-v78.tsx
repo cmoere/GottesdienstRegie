@@ -8,9 +8,12 @@ import {buildAnnouncementSlide} from '../../src/announcementLive';
 import {prepareEventOverview} from '../../src/eventOverviewPresentation';
 import {TransitionStage} from '../../src/transitions';
 import {defaultTransition} from '../../src/store';
+import {probeFontFamily} from '../../src/fonts';
+import {MediaWarmupPool} from '../../src/mediaWarmup';
 import '@fontsource/inter/400.css';import '@fontsource/inter/600.css';import '../../src/cera-pro.css';
 import '../../src/styles.css';import '../../src/version71.css';import '../../src/version75.css';import '../../src/version78-events.css';
 import '../../src/version80-events.css';
+import '../../src/version81-layout.css';
 const root=createRoot(document.getElementById('root')!);
 const body='Derzeit werden in der Veranstaltungsauskunft teilweise fehlerhafte Abendmahlstermine angezeigt. Bitte beachte die aktuellen Aushänge sowie den Monatsplan. Diese enthalten die gültigen Termine.\n\nWir arbeiten bereits mit Hochdruck an der Behebung des technischen Fehlers.\n\n'+('Weitere Informationen werden rechtzeitig bekannt gegeben. '.repeat(40));
 const base={id:'v78',itemId:'v78',order:0,enabled:true,title:'',body:'',background:'#18232f',transition:'none' as const,transitionDuration:0,notes:'',elements:[]};
@@ -35,8 +38,8 @@ function events(atEnd=false){
  root.render(<div style={{width:'100vw',height:'100vh',position:'relative',containerType:'inline-size'}}><PostProgramRoomNoticeView snapshot={{sessionId:1,headerColor:'#608F9A',notice:{type:'next-events',events:rows},page:0,pageCount:1,pages:[rows.map(row=>({...row,lines:2}))],...prepared,startedAtMs:Date.now()-(atEnd?prepared.minDurationMs:0)}}/></div>);
  return prepared;
 }
-function overview(atEnd=false,long=false){
- const properties={loopType:'nextEvents',eventDesign:'timeline',eventLimit:8,eventItemsJson:JSON.stringify(Array.from({length:8},(_,i)=>({title:long?'Überlange Gemeindeveranstaltung mit vollständigem Titel '.repeat(12):`Veranstaltung ${i+1}`,effectiveStart:'2026-10-13T12:00:00Z'}))),eventStartedAtMs:Date.now()};
+function overview(atEnd=false,long=false,design='timeline'){
+ const properties={loopType:'nextEvents',eventDesign:design,eventLimit:8,eventItemsJson:JSON.stringify(Array.from({length:8},(_,i)=>({title:long?'Überlange Gemeindeveranstaltung mit vollständigem Titel '.repeat(12):`Veranstaltung ${i+1}`,effectiveStart:'2026-10-13T12:00:00Z'}))),eventStartedAtMs:Date.now()};
  const prepared=prepareEventOverview(properties);if(atEnd)properties.eventStartedAtMs-=prepared.minDurationMs;
  root.render(<div style={{width:'100vw',height:'100vh'}}><SlideRenderer slide={{...base,elements:[{id:'events',type:'loop',name:'Termine',x:0,y:0,width:1920,height:1080,rotation:0,opacity:1,locked:true,visible:true,zIndex:1,properties}]}} mode="live"/></div>);
  return prepared;
@@ -50,5 +53,16 @@ async function table(atEnd=false){
  return {...prepared,title};
 }
 function transition(id:string,body:string){root.render(<div style={{width:'100vw',height:'100vh'}}><TransitionStage slide={{...base,id,body}} transition={{...defaultTransition,type:'crossfade',durationMs:2000}} role="main"/></div>)}
-(window as any).v78={notice,events,overview,richNotice,table,transition};
+async function safetyChecks(){
+ const fonts={bundled:await probeFontFamily('Cera Pro'),missing:await probeFontFamily('GottesdienstRegie Fictional Missing Font 8181')};
+ const buffer=new ArrayBuffer(8044),view=new DataView(buffer),bytes=new Uint8Array(buffer);const text=(at:number,value:string)=>{for(let i=0;i<value.length;i++)bytes[at+i]=value.charCodeAt(i)};
+ text(0,'RIFF');view.setUint32(4,8036,true);text(8,'WAVE');text(12,'fmt ');view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,1,true);view.setUint32(24,8000,true);view.setUint32(28,8000,true);view.setUint16(32,1,true);view.setUint16(34,8,true);text(36,'data');view.setUint32(40,8000,true);bytes.fill(128,44);
+ const url=URL.createObjectURL(new Blob([buffer],{type:'audio/wav'})),pool=new MediaWarmupPool(),original=document.createElement.bind(document);let audio:HTMLAudioElement|undefined;
+ document.createElement=((tag:string,...args:any[])=>{const node=original(tag,...args);if(tag==='audio')audio=node as HTMLAudioElement;return node}) as typeof document.createElement;
+ try{pool.prepare([{kind:'audio',src:url}])}finally{document.createElement=original as typeof document.createElement}
+ for(let i=0;i<50&&audio!.readyState<1;i++)await new Promise(resolve=>setTimeout(resolve,20));
+ const media={ready:audio!.readyState,paused:audio!.paused,time:audio!.currentTime,muted:audio!.muted,volume:audio!.volume,autoplay:audio!.autoplay};
+ pool.clear();URL.revokeObjectURL(url);return {fonts,media,released:!audio!.hasAttribute('src')};
+}
+(window as any).v78={notice,events,overview,richNotice,table,transition,safetyChecks};
 await notice('classic');

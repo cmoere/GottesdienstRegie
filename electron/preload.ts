@@ -132,6 +132,8 @@ contextBridge.exposeInMainWorld("desktop", {
     export: (id: string) => ipcRenderer.invoke("presentation:export", id),
     backup: (id: string) => ipcRenderer.invoke("presentation:backup", id),
     recovery: () => ipcRenderer.invoke("presentation:recovery"),
+    saveRecovery: (document:unknown) => ipcRenderer.invoke("presentation:recovery-save",document),
+    beginSession: () => ipcRenderer.invoke("presentation:session-start"),
     markClean: () => ipcRenderer.invoke("presentation:mark-clean"),
   },
   openExternal: (url: string) => ipcRenderer.invoke("external:open", url),

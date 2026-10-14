@@ -21,12 +21,122 @@
   ],
   "versions": [
     {
+      "line": "0.81",
+      "builds": [
+        {
+          "version": "0.81.0",
+          "releaseDate": "2026-10-14",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Breitere automatische Folien und sicherer Programmstart",
+              "en": "Wider automatic slides and safer startup"
+            },
+            "text": {
+              "de": "Automatische Veranstaltungs- und Meldungsfolien sowie der Nachprogramm-Raumhinweis nutzen die verfügbare Breite mit einem kleinen Sicherheitsrand. Timeline-Markierungen folgen ihrer Zeile und bleiben beim Scrollen auf der Linie. Die Lesedauer langer Titel wird mit den tatsächlichen Spaltenbreiten abgestimmt.\n\nNeue Windows-Startoptionen erlauben das Öffnen bei der Anmeldung oder eine reine Update-Suche ohne Regiefenster. Dazu kommen stille Medienvorbereitung, Warnungen bei fehlenden Schriften, der Zeitpunkt der letzten Gemeindedaten-Aktualisierung und eine verbesserte Wiederherstellung ungespeicherter Änderungen nach Abstürzen.",
+              "en": "Automatic event and announcement slides and the post-program room notice use the available width with a small safe edge. Timeline markers follow their row and remain aligned while scrolling. Reading time for long titles is coordinated with actual column widths.\n\nNew Windows startup options open the app at sign-in or check updates without an operator window. Silent media preparation, missing-font warnings, community-data timestamps and improved recovery of unsaved changes are also included."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Zwei getrennte Windows-Startoptionen",
+                  "en": "Two separate Windows startup options"
+                },
+                "text": {
+                  "de": "Unter Einstellungen lässt sich die installierte Windows-App bei der Anmeldung öffnen oder nur im Hintergrund nach Updates suchen. Beide Schalter sind zunächst aus. Die reine Hintergrundsuche startet weder Ladescreen noch Regie, Ausgaben, Audio oder Remote-Server und installiert nichts ungefragt. Nach der Suche oder einem begrenzten Timeout beendet sich der Prozess; verfügbare Updates werden per Windows-Benachrichtigung gemeldet.",
+                  "en": "Settings can open the installed Windows app at sign-in or check for updates only in the background. Both switches default to off. Background-only checking starts no splash, operator, outputs, audio or remote server and never installs unsolicited updates. The process exits after checking or a bounded timeout; available updates are reported by a Windows notification."
+                }
+              },
+              {
+                "label": {
+                  "de": "Stille Vorbereitung der nächsten Medien",
+                  "en": "Silent preparation of upcoming media"
+                },
+                "text": {
+                  "de": "Die nächsten zwei aktivierten Folien werden auf Bild-, Video- und lokale Audiodateien geprüft. Pro Fenster werden höchstens sechs Ressourcen mit zwei gleichzeitigen Ladeaufträgen vorbereitet. Bilder sowie Video-/Audio-Metadaten werden vorab geladen; es wird niemals play() ausgelöst. Radio, Websites und Live-Streams werden nicht vorab gestartet. Überholte oder zu lange hängende Aufträge werden freigegeben.",
+                  "en": "The next two enabled slides are inspected for images, video and local audio. Each window prepares up to six resources with two concurrent requests. Images and video/audio metadata are preloaded; play() is never invoked. Radio, websites and live streams are not started ahead of time. Obsolete or stalled requests are released."
+                }
+              },
+              {
+                "label": {
+                  "de": "Schriftprüfung und Gemeindedaten-Stand",
+                  "en": "Font checks and community data freshness"
+                },
+                "text": {
+                  "de": "Verwendete Schriften sichtbarer Textobjekte werden geprüft. Fehlende Familien erscheinen im Bedienbereich und im Preflight; die gespeicherten Schriftwünsche bleiben unverändert und MAIN zeigt keine technische Warnung. Der Gemeindedatenstatus nennt online die letzte Datenaktualisierung und offline den Stand des gespeicherten Snapshots.",
+                  "en": "Fonts used by visible text objects are checked. Missing families appear in the operator area and preflight; authored font choices are preserved and MAIN shows no technical warning. Community status displays the latest data update online and the cached snapshot time offline."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Mehr nutzbare Folienbreite",
+                  "en": "More usable slide width"
+                },
+                "text": {
+                  "de": "Automatische Folien verwenden links und rechts 32 Pixel Sicherheitsrand bei 1920 Pixel Ausgabe. Meldungstext gewinnt Breite, wenn QR-Codes deaktiviert sind; mit QR-Code bleibt eine eigene Spalte erhalten. Gewöhnliche selbst gestaltete Folien werden nicht verändert. Scroll- und Mindestlesezeiten berücksichtigen die verbreiterten Titelbereiche.",
+                  "en": "Automatic slides use a 32-pixel safe edge on a 1920-pixel output. Announcement text expands when QR is disabled and retains a dedicated QR column otherwise. Ordinary authored slides are unchanged. Scroll and minimum reading times account for widened title areas."
+                }
+              },
+              {
+                "label": {
+                  "de": "Wiederherstellung mit getrennten Zwischenständen",
+                  "en": "Recovery with separate checkpoints"
+                },
+                "text": {
+                  "de": "Ungespeicherte Änderungen erhalten nach einer kurzen Eingabepause einen separaten Wiederherstellungsstand; bei laufender Bearbeitung wird spätestens nach fünf Sekunden gesichert. Der regulär gespeicherte Präsentationsstand bleibt getrennt. Beim nächsten Start nach einem Absturz wird eine Wiederherstellung angeboten und nur nach Bestätigung geladen. Ein beschädigter letzter Zwischenstand kann auf den vorherigen gültigen Stand zurückfallen. Ausgaben und Audio werden niemals automatisch fortgesetzt.",
+                  "en": "Unsaved edits receive a separate recovery checkpoint after a short idle period, or within five seconds during continuous editing. The regular saved presentation stays separate. After a crash, recovery is offered at startup and loaded only on confirmation. A corrupt latest checkpoint can fall back to its previous valid generation. Output and audio are never automatically resumed."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Timeline-Linie und Markierungen",
+                  "en": "Timeline rail and markers"
+                },
+                "text": {
+                  "de": "Eine in der nativen Prüfung reproduzierte Verschiebung der Markierungen neben die Timeline-Linie wurde korrigiert. Jede Markierung bleibt an ihrer eigenen Zeilenmitte, einschließlich der letzten sichtbaren Zeile nach dem Scrollen. Titelanimation und vertikale Bewegung verwenden abgestimmte Anzeigezeiten.",
+                  "en": "A marker displacement from the timeline rail reproduced in native testing was corrected. Every marker remains centered on its own row, including the last visible row after scrolling. Title animation and vertical movement use coordinated presentation timing."
+                }
+              },
+              {
+                "label": {
+                  "de": "Geordneter Start und sichere Sicherungsreihenfolge",
+                  "en": "Ordered startup and safe checkpoint ordering"
+                },
+                "text": {
+                  "de": "Normales Speichern und Wiederherstellungsstände werden geordnet verarbeitet, damit eine alte Sicherung keine neuere ausdrücklich gespeicherte Fassung ersetzt. Das Überspringen des Ladescreens überspringt nicht die notwendige Dokument- und Wiederherstellungsentscheidung. Sauberes Beenden wartet auf ausstehende Sicherungen und erzeugt keinen falschen Absturzhinweis.",
+                  "en": "Regular saves and recovery checkpoints are processed in order so an old checkpoint cannot replace a newer explicitly saved document. Skipping the splash does not bypass the document and recovery decision. Clean shutdown waits for pending checkpoints and avoids false crash prompts."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Grenzen der Vorbereitung und Systemintegration",
+                  "en": "Preparation and system integration limits"
+                },
+                "text": {
+                  "de": "Vorbereitung ist keine Garantie für verzögerungsfreie Wiedergabe jedes Netzwerkmediums; Videos und lokale Audiodateien werden zunächst mit Metadaten vorbereitet. Windows-Benachrichtigungen hängen von den Systemeinstellungen ab. Autostart ist in der installierten Windows-App verfügbar. Ein harter Absturz vor dem nächsten Zwischenstand kann die allerletzten Änderungen verlieren. Der frühere graue Programmstart bleibt weiterhin nicht als behoben bestätigt.",
+                  "en": "Preparation does not guarantee zero-delay playback for every network source; video and local audio initially preload metadata. Windows notifications depend on system settings. Login startup is available in the installed Windows app. A hard crash before the next checkpoint may lose the latest edits. The earlier gray startup screen remains unconfirmed as fixed."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.80",
       "builds": [
         {
           "version": "0.80.0",
           "releaseDate": "2026-10-13",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Bessere Meldungen, Veranstaltungslisten und Live-Bedienung",

@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import JSZip from 'jszip';
+import {sanitizeRecoveryDocument} from '../src/presentationRecovery';
 
 export interface PresentationSummary {
   id:string; title:string; date:string; createdAt:string; updatedAt:string;
@@ -45,6 +46,9 @@ export class PresentationRepository {
   private readonly backups:string;
   private readonly recovery:string;
   private readonly stateFile:string;
+  private recoveryWrites:Promise<unknown>=Promise.resolve();
+  private stateWrites:Promise<unknown>=Promise.resolve();
+  private sessionStart?:Promise<{summary:PresentationSummary;document:Record<string,any>}|null>;
   constructor(private readonly root:string){
     this.presentations=path.join(root,'presentations');
     this.backups=path.join(root,'backups');
@@ -53,7 +57,7 @@ export class PresentationRepository {
   }
   async initialize(){await Promise.all([fs.mkdir(this.presentations,{recursive:true}),fs.mkdir(this.backups,{recursive:true}),fs.mkdir(this.recovery,{recursive:true})])}
   private file(id:string){const clean=safeName(id);if(!clean)throw new Error('PRESENTATION_ID_INVALID');return path.join(this.presentations,`${clean}.json`)}
-  private async atomicWrite(target:string,value:unknown){const temporary=`${target}.${process.pid}.tmp`;await fs.writeFile(temporary,JSON.stringify(value,null,2),'utf8');await fs.rename(temporary,target)}
+  private async atomicWrite(target:string,value:unknown){const temporary=`${target}.${randomUUID()}.tmp`;try{await fs.writeFile(temporary,JSON.stringify(value,null,2),'utf8');await fs.rename(temporary,target)}finally{await fs.rm(temporary,{force:true}).catch(()=>{})}}
   async list(includeArchived=false,includeTrashed=false):Promise<PresentationSummary[]>{
     await this.initialize();const names=await fs.readdir(this.presentations);const result:PresentationSummary[]=[];
     for(const name of names.filter(value=>value.endsWith('.json'))){try{const doc=JSON.parse(await fs.readFile(path.join(this.presentations,name),'utf8'));const archived=doc.archived===true,trashed=doc.trashed===true;if((archived&&!includeArchived)||(trashed&&!includeTrashed))continue;result.push(this.summary(doc))}catch{}}
@@ -61,7 +65,33 @@ export class PresentationRepository {
   }
   summary(doc:any):PresentationSummary{return{id:String(doc.presentationId),title:String(doc.title||'Unbenannte Präsentation'),date:String(doc.date||''),createdAt:String(doc.createdAt||now()),updatedAt:String(doc.updatedAt||now()),archived:doc.archived===true,trashed:doc.trashed===true,itemCount:Array.isArray(doc.items)?doc.items.length:0,slideCount:Array.isArray(doc.items)?doc.items.reduce((sum:number,item:any)=>sum+(Array.isArray(item.slides)?item.slides.length:0),0):0}}
   async read(id:string){try{return JSON.parse(await fs.readFile(this.file(id),'utf8'))}catch(error:any){if(error?.code==='ENOENT')return null;throw error}}
-  async save(document:any){await this.initialize();if(!document?.presentationId)throw new Error('PRESENTATION_ID_REQUIRED');const existing=await this.read(String(document.presentationId));const value={...document,title:String(document.title||'Unbenannte Präsentation').slice(0,500),createdAt:existing?.createdAt??document.createdAt??now(),updatedAt:now(),archived:document.archived===true,trashed:document.trashed===true};await this.atomicWrite(this.file(value.presentationId),value);await this.atomicWrite(path.join(this.recovery,`${safeName(value.presentationId)}.json`),value);await this.setState({lastPresentationId:value.presentationId,cleanShutdown:false});return this.summary(value)}
+  save(document:any){
+    if(!document?.presentationId)return Promise.reject(new Error('PRESENTATION_ID_REQUIRED'));
+    const snapshot=JSON.parse(JSON.stringify(document));
+    // Saved documents and checkpoints share invocation order. A completed save
+    // invalidates only the older checkpoint for this presentation; an edit
+    // checkpoint queued after it remains recoverable, even within the same ms.
+    const write=this.recoveryWrites.then(async()=>{
+      await this.initialize();
+      const existing=await this.read(String(snapshot.presentationId));
+      const value={...snapshot,title:String(snapshot.title||'Unbenannte Präsentation').slice(0,500),createdAt:existing?.createdAt??snapshot.createdAt??now(),updatedAt:now(),archived:snapshot.archived===true,trashed:snapshot.trashed===true};
+      await this.atomicWrite(this.file(value.presentationId),value);
+      // Both generations belong to the baseline that this successful save
+      // supersedes. Keeping either would let a later corrupt checkpoint fall
+      // back behind the saved document. No newer checkpoint can run mid-save.
+      const recoveryRoot=path.resolve(this.recovery);
+      for(const suffix of ['.json','.previous.json']){
+        const target=path.resolve(recoveryRoot,`${safeName(value.presentationId)}${suffix}`);
+        if(path.dirname(target)!==recoveryRoot)throw new Error('RECOVERY_PATH_INVALID');
+        await fs.rm(target,{force:true});
+      }
+      const state=await this.getState(),recoveryId=state.recoveryPresentationId??state.lastPresentationId;
+      await this.setState({lastPresentationId:value.presentationId,...(recoveryId===value.presentationId?{recoveryPresentationId:''}:{})});
+      return this.summary(value);
+    });
+    this.recoveryWrites=write.catch(()=>{});
+    return write;
+  }
   async create(input:{title?:string;date?:string;template?:any}){const stamp=now(),id=randomUUID(),template=input.template??{};const document={...template,presentationId:id,title:String(input.title||'Neue Präsentation').slice(0,500),date:String(input.date||stamp.slice(0,10)),createdAt:stamp,updatedAt:stamp,archived:false,trashed:false};await this.save(document);return document}
   async duplicate(id:string,options:DuplicatePresentationOptions={}){
     const source=await this.read(id);if(!source)throw new Error('PRESENTATION_NOT_FOUND');
@@ -78,7 +108,42 @@ export class PresentationRepository {
   async importDocument(sourcePath:string){const extension=path.extname(sourcePath).toLowerCase(),title=path.basename(sourcePath,extension);if(['.pptx','.odp','.key'].includes(extension)){const pages=await officePages(sourcePath,extension);if(!pages.length)throw new Error(extension==='.key'?'KEYNOTE_PREVIEW_NOT_FOUND':'PRESENTATION_CONTENT_NOT_FOUND');return this.create({title,template:importedPresentation(title,pages,extension.slice(1))})}if(extension==='.txt'||extension==='.md'){const text=await fs.readFile(sourcePath,'utf8'),pages=text.split(/\r?\n\s*\r?\n+/).map((body,index)=>({title:body.split(/\r?\n/)[0]?.replace(/^#+\s*/,'')||`Folie ${index+1}`,body:body.replace(/^#+\s*/,'').trim()})).filter(page=>page.body);return this.create({title,template:importedPresentation(title,pages,extension.slice(1))})}const parsed=JSON.parse(await fs.readFile(sourcePath,'utf8'));const id=randomUUID();return this.create({title:parsed.title||title,date:parsed.date,template:{...parsed,presentationId:id,createdAt:undefined,updatedAt:undefined}})}
   async exportDocument(id:string,targetPath:string){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');await this.atomicWrite(targetPath,doc);return targetPath}
   async backup(id:string){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');const stamp=now().replace(/[:.]/g,'-'),target=path.join(this.backups,`${safeName(doc.title).slice(0,40)||'presentation'}-${stamp}.grbackup`);await this.atomicWrite(target,doc);return target}
-  async recoveryInfo(){const state=await this.getState();if(state.cleanShutdown!==false||!state.lastPresentationId)return null;const file=path.join(this.recovery,`${safeName(state.lastPresentationId)}.json`);try{const document=JSON.parse(await fs.readFile(file,'utf8'));return{summary:this.summary(document),document}}catch{return null}}
+  private async readRecovery(file:string,id:string){try{const document=sanitizeRecoveryDocument(JSON.parse(await fs.readFile(file,'utf8')));return document&&document.presentationId===id?document:null}catch{return null}}
+  async recoveryInfo(){
+    const state=await this.getState(),id=state.recoveryPresentationId??state.lastPresentationId;
+    if(state.cleanShutdown!==false||!id)return null;
+    for(const suffix of ['.json','.previous.json']){
+      const document=await this.readRecovery(path.join(this.recovery,`${safeName(id)}${suffix}`),id);
+      if(document)return{summary:this.summary(document),document};
+    }
+    return null;
+  }
+  beginSession(){
+    return this.sessionStart??=(async()=>{
+      await this.initialize();
+      const recovery=await this.recoveryInfo();
+      await this.setState({cleanShutdown:false,...(recovery?{}:{recoveryPresentationId:''})});
+      return recovery;
+    })();
+  }
+  saveRecovery(input:unknown){
+    const document=sanitizeRecoveryDocument(input);
+    if(!document)return Promise.reject(new Error('RECOVERY_DOCUMENT_INVALID'));
+    // Capture at the IPC boundary, before a queued write can observe later edits.
+    const snapshot=JSON.parse(JSON.stringify(document));
+    const write=this.recoveryWrites.then(async()=>{
+      await this.initialize();
+      const id=snapshot.presentationId,target=path.join(this.recovery,`${safeName(id)}.json`);
+      const previous=await this.readRecovery(target,id);
+      if(previous)await this.atomicWrite(path.join(this.recovery,`${safeName(id)}.previous.json`),previous);
+      await this.atomicWrite(target,snapshot);
+      await this.setState({recoveryPresentationId:id,cleanShutdown:false});
+      return true;
+    });
+    this.recoveryWrites=write.catch(()=>{});
+    return write;
+  }
+  markClean(){const clean=this.recoveryWrites.then(()=>this.setState({cleanShutdown:true}));this.recoveryWrites=clean.catch(()=>{});return clean}
   async getState(){try{return JSON.parse(await fs.readFile(this.stateFile,'utf8'))}catch{return{cleanShutdown:true,lastPresentationId:''}}}
-  async setState(patch:Record<string,unknown>){const current=await this.getState();await this.atomicWrite(this.stateFile,{...current,...patch});return true}
+  setState(patch:Record<string,unknown>){const write=this.stateWrites.then(async()=>{await this.initialize();const current=await this.getState();await this.atomicWrite(this.stateFile,{...current,...patch});return true});this.stateWrites=write.catch(()=>{});return write}
 }

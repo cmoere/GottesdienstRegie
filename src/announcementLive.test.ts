@@ -14,7 +14,7 @@ describe('announcement live preparation',()=>{
     for(let revision=1;revision<30;revision++){
       const output=controller.outputForTake(local,item.slides[0],revision,now)!;
       expect(output.elements.some(element=>element.type==='qr')).toBe(false);
-      expect(output.elements.find(element=>element.name==='Meldungstext')!.width).toBe(1660);
+      expect(output.elements.find(element=>element.name==='Meldungstext')!.width).toBe(1856);
       collected.push(output.body);
       if(!controller.hasContinuation(item.id))break;
     }

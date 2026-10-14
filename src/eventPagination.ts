@@ -27,10 +27,10 @@ export type PreparedPostRow=PostProgramEventRow&{lines:number};
 export function paginatePostEvents(events:PostProgramEventRow[]):PreparedPostRow[][]{
  return events.length?[events.map(event=>({...event,lines:2}))]:[];
 }
-export function paginateReducedMotionEvents<T extends {title:string;details?:string}>(events:T[]):Array<Array<T&{eventNumber:number}>>{
+export function paginateReducedMotionEvents<T extends {title:string;details?:string}>(events:T[],titleWidth=520):Array<Array<T&{eventNumber:number}>>{
  const pages:Array<Array<T&{eventNumber:number}>>=[];let page:Array<T&{eventNumber:number}>=[];
  events.forEach((event,index)=>{
-  const lines=wrapEventText(event.title,520,45.12);
+  const lines=wrapEventText(event.title,titleWidth,45.12);
   for(let offset=0;offset<lines.length;offset+=4){
    page.push({...event,eventNumber:index+1,title:lines.filter((_,i)=>i>=offset&&i<offset+4).join('\n')});
    if(page.length===2){pages.push(page);page=[]}

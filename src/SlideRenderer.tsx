@@ -580,9 +580,9 @@ function EventLoopElement({
       ? { ...properties, eventItemsJson: JSON.stringify(events) }
       : properties,
     allItems = eventSlideItems(source),
-    pages=reducedMotion?(settings.design==='table'?Array.from({length:Math.ceil(allItems.length/5)},(_,index)=>allItems.slice(index*5,index*5+5)):paginateReducedMotionEvents(allItems)):[],
+    prepared=prepareEventOverview(source),
+    pages=reducedMotion?(settings.design==='table'?Array.from({length:Math.ceil(allItems.length/5)},(_,index)=>allItems.slice(index*5,index*5+5)):paginateReducedMotionEvents(allItems,prepared.titleWidth)):[],
     items=reducedMotion?(pages[eventPage%pages.length]??[]):allItems;
-  const prepared=prepareEventOverview(source);
   return (
     <div
       data-reduced-motion={reducedMotion}
@@ -599,7 +599,7 @@ function EventLoopElement({
           <article key={`${event.title}:${event.details}:${index}`}>
             <b>{String("eventNumber" in event?event.eventNumber:index + 1).padStart(2, "0")}</b>
             <div>
-              <EventTitle title={event.title}/>
+              <EventTitle title={event.title} elapsed={elapsed} startsAfterMs={prepared.titleStartsAfterMs?.[index]} designWidth={prepared.titleWidth}/>
               {event.details && <span>{event.details}</span>}
             </div>
           </article>

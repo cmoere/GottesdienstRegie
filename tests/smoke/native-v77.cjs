@@ -24,7 +24,7 @@ reg('media-window:open',async()=>{
  media=new BrowserWindow({show:false,width:1440,height:1000,useContentSize:true,webPreferences:{preload:path.join(runtime,'dist-electron/electron/preload.js'),contextIsolation:true,nodeIntegration:false,offscreen:true,backgroundThrottling:false}});
  await media.loadURL('http://127.0.0.1:5173/#media?context=manage&purpose=item');return true;
 });
-reg('community:start',event=>{setTimeout(()=>{event.sender.send('community:connection',true);event.sender.send('community:events',[]);event.sender.send('community:rooms',[]);event.sender.send('community:announcements',[
+reg('community:start',event=>{setTimeout(()=>{event.sender.send('community:connection',{connected:true,mode:'online',updatedAt:Date.parse('2026-10-14T12:34:56Z'),loaded:{events:true,rooms:true,announcements:true}});event.sender.send('community:events',[]);event.sender.send('community:rooms',[]);event.sender.send('community:announcements',[
  {messageId:'demo-one',status:'public',messageScreen:true,titel:'Gemeinsam unterwegs',textMeldung:'Am Sonntag treffen wir uns zum Gemeindecafé.',displayDurationMs:4000},
  {messageId:'demo-two',status:'public',messageScreen:true,titel:'Herzlich eingeladen',textMeldung:'Musik und Begegnung im Gemeindesaal.',displayDurationMs:6000},
 ]);},80);return true});
@@ -60,7 +60,9 @@ app.whenReady().then(async()=>{try{
   await capture('v80-workflow');await js('window.seedV77()');await sleep(100);
   console.log('PASS native v80 workflow:15% pointer resize, persisted width, physical before-row drag, undo and external preview title.');
  }
- await clickText('Einstellungen');await capture('settings-window');await js("document.body.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}))");
+ await clickText('Einstellungen');await capture('settings-window');
+ if(process.argv.includes('--v81')){assert(await js("document.body.innerText.includes('GottesdienstRegie bei der Windows-Anmeldung öffnen')&&document.body.innerText.includes('Bei der Windows-Anmeldung im Hintergrund nach Updates suchen')"),'Both login options appear in settings');}
+ await js("document.body.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}))");
  await clickText('Medien');
  await js("(()=>{const b=[...document.querySelectorAll('button')].find(b=>b.textContent.includes('Medienbibliothek'));if(!b)throw Error('Medienbibliothek menu missing');b.click()})()");
  for(let i=0;i<100&&!media;i++)await sleep(100);

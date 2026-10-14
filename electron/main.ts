@@ -1,4 +1,4 @@
-import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Menu, shell, dialog, protocol, net, clipboard, nativeImage, nativeTheme, type MenuItemConstructorOptions } from 'electron';
+import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Menu, shell, dialog, protocol, net, clipboard, nativeImage, nativeTheme, Notification, type MenuItemConstructorOptions } from 'electron';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs/promises';
@@ -30,6 +30,16 @@ import {createCommunityRealtimeAdapter,FirebaseGemeindeService} from './Firebase
 import {CommunitySnapshotCache} from './CommunitySnapshotCache';
 import {sendToLiveWindow} from './windowSafety';
 import {updatePromptAction} from './updatePromptModel';
+import {loginItemSettings,resolveLoginStartup,runBackgroundUpdateCheck,validateLoginPreferences,shouldCheckAfterWorkspace} from './loginStartup';
+
+const ownsInstance=app.requestSingleInstanceLock();
+if(!ownsInstance)app.quit();
+let normalLaunchRequested=!process.argv.includes('--login-startup');
+let signalNormalLaunch!:()=>void;
+const normalLaunchSignal=new Promise<void>(resolve=>{signalNormalLaunch=resolve});
+let loginUpdateCheckStarted=false;
+let backgroundUpdateOnly=false;
+let updateCheckInFlight:Promise<UpdateStatus>|null=null;
 
 const spellLocale:Record<string,string>={de:'de-DE',gsw:'de-CH',en:'en-US','pt-BR':'pt-BR'};
 function applySpellCheckerLanguage(contents:Electron.WebContents,language:string){const requested=spellLocale[language]??language,available=contents.session.availableSpellCheckerLanguages,exact=available.find(item=>item.toLowerCase()===requested.toLowerCase()),base=available.find(item=>item.toLowerCase().split('-')[0]===requested.toLowerCase().split('-')[0]);contents.session.setSpellCheckerLanguages(exact?[exact]:base?[base]:[]);return exact??base??''}
@@ -51,7 +61,7 @@ const spotifyOEmbed=new SpotifyOEmbedService();
 const radioMetadata=new RadioMetadataService(),radioArtwork=new RadioArtworkService(),radioMetadataStops=new Map<number,()=>void>();
 const spotifyCallback=(url:string)=>{if(url.startsWith('gottesdienstregie://spotify-callback'))void spotifyAuth?.completeCallback(url).then(status=>sendToLiveWindow(controlWindow,'spotify:status',status)).catch(error=>sendToLiveWindow(controlWindow,'spotify:status',{state:'error',message:error instanceof Error?error.message:'SPOTIFY_CALLBACK_FAILED'}))};
 app.on('open-url',(event,url)=>{event.preventDefault();spotifyCallback(url)});
-app.on('second-instance',(_event,argv)=>{const url=argv.find(value=>value.startsWith('gottesdienstregie://spotify-callback'));if(url)spotifyCallback(url)});
+app.on('second-instance',(_event,argv)=>{const url=argv.find(value=>value.startsWith('gottesdienstregie://spotify-callback'));if(url)spotifyCallback(url);if(!argv.includes('--login-startup')){normalLaunchRequested=true;signalNormalLaunch();if(controlWindow&&!controlWindow.isDestroyed()){if(controlWindow.isMinimized())controlWindow.restore();controlWindow.show();controlWindow.focus()}}});
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}},{scheme:'gottesdienst-cloud',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 app.on('web-contents-created',(_event,contents)=>{
@@ -95,9 +105,13 @@ autoUpdater.on('download-progress',progress=>{const speed=Math.max(0,progress.by
 autoUpdater.on('update-downloaded',info=>{updateCancellationToken=null;publishUpdateStatus({state:'downloaded',version:info.version,releaseNotes:releaseNotes(info)});if(installDownloadedUpdateNow)setImmediate(()=>autoUpdater.quitAndInstall(false,true))});
 autoUpdater.on('error',error=>{if(updateCancellationToken?.cancelled)return;publishUpdateStatus({state:'error',message:error.message})});
 
-async function checkForUpdates(){
+async function performUpdateCheck(){
   if(!app.isPackaged)return publishUpdateStatus({state:'development',version:app.getVersion()});
   try{autoUpdater.allowPrerelease=appPreferences.get().betaUpdates;await autoUpdater.checkForUpdates();return lastUpdateStatus}catch(error){return publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)})}
+}
+function checkForUpdates(){
+  if(!updateCheckInFlight)updateCheckInFlight=performUpdateCheck().finally(()=>{updateCheckInFlight=null});
+  return updateCheckInFlight;
 }
 
 async function downloadAvailableUpdate(){
@@ -108,7 +122,7 @@ async function downloadAvailableUpdate(){
 }
 
 async function promptForAvailableUpdate(info:UpdateInfo){
-  if(!appPreferences||promptedUpdateVersions.has(info.version))return;
+  if(backgroundUpdateOnly||!appPreferences||promptedUpdateVersions.has(info.version))return;
   promptedUpdateVersions.add(info.version);
   const owner=controlWindow&&!controlWindow.isDestroyed()?controlWindow:undefined;
   const options:Electron.MessageBoxOptions={type:'info',title:'Neue Version verfügbar',message:`GottesdienstRegie ${info.version} ist verfügbar.`,detail:'Möchtest du die neue Version installieren?',buttons:['Jetzt installieren','Später','Beim Beenden installieren','Abbrechen'],defaultId:0,cancelId:3,noLink:true};
@@ -155,7 +169,7 @@ function createControlWindow(preferences:AppPreferencesData) {
     controlWindow.setResizable(startup.resizable);controlWindow.setMaximizable(startup.maximizable);controlWindow.setMinimumSize(startup.minimumSize.width,startup.minimumSize.height);controlWindow.setBounds(startup.bounds,false);
     if(startup.startMode==='fullscreen')controlWindow.setFullScreen(true);else if(startup.startMode==='maximized')controlWindow.maximize();
     if(process.platform==='win32')controlWindow.setTitleBarOverlay({color:'#282832',symbolColor:'#ffffff',height:28});
-    if(appPreferences.get().automaticUpdates)automaticUpdateTimer=setTimeout(()=>void checkForUpdates(),UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS);
+    if(!loginUpdateCheckStarted&&shouldCheckAfterWorkspace(process.argv,appPreferences.get()))automaticUpdateTimer=setTimeout(()=>void checkForUpdates(),UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS);
   };
   const ready= (event:Electron.IpcMainEvent)=>{
     if(event.sender!==controlWindow?.webContents)return;
@@ -206,6 +220,23 @@ function versionParts(value:string){return value.replace(/^v/,'').split('.').map
 function olderThan(candidate:string,current:string){const a=versionParts(candidate),b=versionParts(current);for(let i=0;i<Math.max(a.length,b.length);i++){if((a[i]??0)<(b[i]??0))return true;if((a[i]??0)>(b[i]??0))return false}return false}
 
 app.whenReady().then(async() => {
+  if(!ownsInstance)return;
+  if(process.platform==='win32')app.setAppUserModelId('de.philippusgemeinde.gottesdienstregie2');
+  appPreferences=new AppPreferences(path.join(app.getPath('userData'),'app-preferences.json'));
+  const initialPreferences=await appPreferences.load();
+  const startupMode=normalLaunchRequested?'normal':resolveLoginStartup(process.argv,initialPreferences);
+  if(startupMode==='exit'){app.quit();return}
+  if(startupMode==='background'){
+    backgroundUpdateOnly=true;
+    loginUpdateCheckStarted=true;
+    // No renderer, output manager, audio, remote server or sleep blocker is started here.
+    autoUpdater.autoDownload=false;autoUpdater.autoInstallOnAppQuit=false;
+    await runBackgroundUpdateCheck({check:checkForUpdates,openRequested:normalLaunchSignal,shouldOpen:()=>normalLaunchRequested,open:()=>{},notify:version=>{
+      if(Notification.isSupported())new Notification({title:'GottesdienstRegie: Update verfügbar',body:`Version ${version} ist verfügbar. Öffne GottesdienstRegie, um das Update zu prüfen und zu installieren.`}).show();
+    },quit:()=>app.quit()});
+    if(!normalLaunchRequested)return;
+    backgroundUpdateOnly=false;
+  }
   const communityService=new FirebaseGemeindeService(await createCommunityRealtimeAdapter(),new CommunitySnapshotCache(path.join(app.getPath('userData'),'community-snapshot.json')));
   const communityStops=new Map<number,Array<()=>void>>();
   ipcMain.handle('community:start',(event)=>{const sender=event.sender;communityStops.get(sender.id)?.forEach(stop=>stop());communityStops.set(sender.id,[communityService.subscribeEvents(value=>!sender.isDestroyed()&&sender.send('community:events',value)),communityService.subscribeRooms(value=>!sender.isDestroyed()&&sender.send('community:rooms',value)),communityService.subscribeAnnouncements(value=>!sender.isDestroyed()&&sender.send('community:announcements',value)),communityService.subscribeConnection(value=>!sender.isDestroyed()&&sender.send('community:connection',value))]);sender.once('destroyed',()=>{communityStops.get(sender.id)?.forEach(stop=>stop());communityStops.delete(sender.id)});return true});
@@ -213,12 +244,10 @@ app.whenReady().then(async() => {
   const translationPacks=new TranslationPackService(path.join(app.getPath('userData'),'translation-packs'),async(item,target,signal,progress)=>{const files=item.requiredFiles??[];let downloadedBytes=0,knownTotal=0,totalKnown=true;for(const fileName of files){const response=await fetch(`https://huggingface.co/${item.model}/resolve/${item.revision}/${fileName}`,{signal});if(!response.ok||!response.body)throw Error(`MODEL_DOWNLOAD_${response.status}`);const length=Number(response.headers.get('content-length')??0);if(length>0)knownTotal+=length;else totalKnown=false;const destination=path.join(target,fileName);await fs.mkdir(path.dirname(destination),{recursive:true});const handle=await fs.open(destination,'w');try{const reader=response.body.getReader();for(;;){if(signal.aborted)throw Error('ABORT');const{done,value}=await reader.read();if(done)break;if(value?.byteLength){await handle.write(value);downloadedBytes+=value.byteLength;progress({key:item.key,status:'downloading',downloadedBytes,totalBytes:totalKnown?knownTotal:undefined,percent:totalKnown&&knownTotal?Math.min(99,Math.round(downloadedBytes/knownTotal*100)):0})}}}finally{await handle.close()}}},translationPackCatalog);
   translationPacks.onProgress(value=>sendToLiveWindow(controlWindow,'translation-packs:progress',value));
   Menu.setApplicationMenu(null);
-  appPreferences=new AppPreferences(path.join(app.getPath('userData'),'app-preferences.json'));
   const deviceSettings=new DeviceSettingsRepository(path.join(app.getPath('userData'),'device-settings.json'));
   app.setAsDefaultProtocolClient('gottesdienstregie');
   const spotifyTokenFile=path.join(app.getPath('userData'),'spotify-refresh-token.bin');
   spotifyAuth=new SpotifyAuthService({clientId:String(process.env.SPOTIFY_CLIENT_ID??''),redirectUri:'gottesdienstregie://spotify-callback',openExternal:url=>shell.openExternal(url),request:fetch,readRefreshToken:async()=>{try{if(!safeStorage.isEncryptionAvailable())return null;return safeStorage.decryptString(await fs.readFile(spotifyTokenFile))}catch{return null}},writeRefreshToken:async token=>{if(!token){await fs.unlink(spotifyTokenFile).catch(()=>{});return}if(!safeStorage.isEncryptionAvailable())throw new Error('SPOTIFY_SECURE_STORAGE_UNAVAILABLE');await fs.writeFile(spotifyTokenFile,safeStorage.encryptString(token))}});
-  const initialPreferences=await appPreferences.load();
   displaySleepProtection.setEnabled(initialPreferences.preventDisplaySleep!==false);
   autoUpdater.autoDownload=false;
   autoUpdater.autoInstallOnAppQuit=initialPreferences.installUpdatesOnQuit;
@@ -304,8 +333,27 @@ app.whenReady().then(async() => {
     await saveStored(session);
     return {user:session.user,permissions:session.permissions,expiresAt};
   }
-  ipcMain.handle('window-preferences:get',()=>appPreferences.get());
-  ipcMain.handle('window-preferences:set',async(_event,patch:Partial<AppPreferencesData>)=>{const allowed:Partial<AppPreferencesData>={};if(['fullscreen','maximized','window','restore'].includes(String(patch.windowStartMode)))allowed.windowStartMode=patch.windowStartMode;if(['primary','last'].includes(String(patch.operatorDisplayTarget)))allowed.operatorDisplayTarget=patch.operatorDisplayTarget;if(typeof patch.automaticUpdates==='boolean')allowed.automaticUpdates=patch.automaticUpdates;if(typeof patch.autoDownloadUpdates==='boolean')allowed.autoDownloadUpdates=patch.autoDownloadUpdates;if(typeof patch.installUpdatesOnQuit==='boolean'){allowed.installUpdatesOnQuit=patch.installUpdatesOnQuit;autoUpdater.autoInstallOnAppQuit=patch.installUpdatesOnQuit}if(typeof patch.betaUpdates==='boolean'){allowed.betaUpdates=patch.betaUpdates;autoUpdater.allowPrerelease=patch.betaUpdates}if(typeof patch.betaWarningAccepted==='boolean')allowed.betaWarningAccepted=patch.betaWarningAccepted;if(typeof patch.preventDisplaySleep==='boolean')allowed.preventDisplaySleep=patch.preventDisplaySleep;const saved=await appPreferences.update(allowed);displaySleepProtection.setEnabled(saved.preventDisplaySleep!==false);return saved});
+  ipcMain.handle('window-preferences:get',()=>({...appPreferences.get(),loginStartupSupported:process.platform==='win32'&&app.isPackaged}));
+  ipcMain.handle('window-preferences:set',async(_event,input:unknown)=>{
+    const patch=(input&&typeof input==='object'?input:{}) as Partial<AppPreferencesData>;
+    const allowed:Partial<AppPreferencesData>={...validateLoginPreferences(patch)};
+    if(['fullscreen','maximized','window','restore'].includes(String(patch.windowStartMode)))allowed.windowStartMode=patch.windowStartMode;
+    if(['primary','last'].includes(String(patch.operatorDisplayTarget)))allowed.operatorDisplayTarget=patch.operatorDisplayTarget;
+    for(const key of ['automaticUpdates','autoDownloadUpdates','installUpdatesOnQuit','betaUpdates','betaWarningAccepted','preventDisplaySleep'] as const)if(typeof patch[key]==='boolean')allowed[key]=patch[key];
+    const previous=appPreferences.get();
+    const changesLogin=allowed.openAtLogin!==undefined||allowed.checkUpdatesAtLogin!==undefined;
+    if(changesLogin&&process.platform==='win32'){
+      if(!app.isPackaged)throw new Error('Windows-Autostart ist nur in der installierten Anwendung verfügbar.');
+      app.setLoginItemSettings({...loginItemSettings({...previous,...allowed}),path:process.execPath});
+    }
+    let saved:AppPreferencesData;
+    try{saved=await appPreferences.update(allowed)}catch(error){
+      if(changesLogin&&process.platform==='win32'&&app.isPackaged)app.setLoginItemSettings({...loginItemSettings(previous),path:process.execPath});
+      throw error;
+    }
+    autoUpdater.autoInstallOnAppQuit=saved.installUpdatesOnQuit;autoUpdater.allowPrerelease=saved.betaUpdates;
+    displaySleepProtection.setEnabled(saved.preventDisplaySleep!==false);return {...saved,loginStartupSupported:process.platform==='win32'&&app.isPackaged};
+  });
   ipcMain.handle('window:toggle-fullscreen',()=>{if(!controlWindow)return false;controlWindow.setFullScreen(!controlWindow.isFullScreen());return controlWindow.isFullScreen()});
   ipcMain.handle('window:fullscreen-state',()=>controlWindow?.isFullScreen()??false);
   ipcMain.handle('window:control',(event,action:string)=>{if(event.sender!==controlWindow?.webContents)return false;if(action==='close')controlWindow.close();else if(action==='minimize')controlWindow.minimize();else if(action==='restore')controlWindow.setFullScreen(false);return true});
@@ -359,6 +407,8 @@ app.whenReady().then(async() => {
   ipcMain.handle('presentation:list',(_event,options?:{archived?:boolean;trashed?:boolean})=>presentationRepository.list(options?.archived===true,options?.trashed===true));
   ipcMain.handle('presentation:create',(_event,input:{title?:string;date?:string;template?:unknown})=>presentationRepository.create(input??{}));
   ipcMain.handle('presentation:save',(_event,document:unknown)=>presentationRepository.save(document));
+  ipcMain.handle('presentation:recovery-save',(_event,document:unknown)=>presentationRepository.saveRecovery(document));
+  ipcMain.handle('presentation:session-start',()=>presentationRepository.beginSession());
   ipcMain.handle('presentation:load',async(_event,id?:string)=>{
     if(id)return presentationRepository.read(id);
     const state=await presentationRepository.getState();
@@ -370,7 +420,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('presentation:archive',(_event,id:string,value:boolean)=>presentationRepository.setFlag(id,'archived',value));
   ipcMain.handle('presentation:trash',(_event,id:string,value:boolean)=>presentationRepository.setFlag(id,'trashed',value));
   ipcMain.handle('presentation:recovery',()=>presentationRepository.recoveryInfo());
-  ipcMain.handle('presentation:mark-clean',()=>presentationRepository.setState({cleanShutdown:true}));
+  ipcMain.handle('presentation:mark-clean',()=>presentationRepository.markClean());
   ipcMain.handle('service-context:open',(event,position:{x:number;y:number},entries:Array<{id?:string;label?:string;type?:'normal'|'separator';enabled?:boolean;accelerator?:string;submenu?:any[]}>,theme?:'system'|'light'|'dark')=>{const owner=BrowserWindow.fromWebContents(event.sender);if(!owner)return false;const build=(items:typeof entries):MenuItemConstructorOptions[]=>items.map(entry=>entry.type==='separator'?{type:'separator'}:{label:String(entry.label??''),enabled:entry.enabled!==false,accelerator:entry.accelerator,submenu:entry.submenu?build(entry.submenu):undefined,click:()=>event.sender.send('service-context:command',entry.id)});const previous=nativeTheme.themeSource;if(theme)nativeTheme.themeSource=theme;Menu.buildFromTemplate(build(entries)).popup({window:owner,x:Math.round(position.x),y:Math.round(position.y),callback:()=>{nativeTheme.themeSource=previous}});return true});
   ipcMain.handle('slide-export:copy',(_event,dataUrl:string)=>{const image=nativeImage.createFromDataURL(dataUrl);if(image.isEmpty())throw new Error('SLIDE_RENDER_FAILED');clipboard.writeImage(image);return true});
   ipcMain.handle('slide-export:save',async(event,dataUrl:string,suggestedName:string,format:'png'|'jpeg'='png')=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,extension=format==='jpeg'?'jpg':'png',picked=await dialog.showSaveDialog(owner,{title:'Folie als Bild speichern',defaultPath:`${suggestedName.replace(/[<>:"/\\|?*]/g,'-')}.${extension}`,filters:[{name:format==='jpeg'?'JPEG-Bild':'PNG-Bild',extensions:[extension]}]});if(picked.canceled||!picked.filePath)return null;const image=nativeImage.createFromDataURL(dataUrl);if(image.isEmpty())throw new Error('SLIDE_RENDER_FAILED');await fs.writeFile(picked.filePath,format==='jpeg'?image.toJPEG(94):image.toPNG());return picked.filePath});
@@ -492,7 +542,7 @@ app.whenReady().then(async() => {
     try{
       await stopPresentationOutputs();
       if(document)await presentationRepository.save(document);
-      await presentationRepository.setState({cleanShutdown:true});
+      await presentationRepository.markClean();
       await new Promise(resolve=>setTimeout(resolve,700));
     }catch(error){
       await dialog.showMessageBox(owner,{type:'error',title:'Speichern fehlgeschlagen',message:'Die Präsentation konnte nicht gespeichert werden. Bitte erneut versuchen.',detail:String(error)});

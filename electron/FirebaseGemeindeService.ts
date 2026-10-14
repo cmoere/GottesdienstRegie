@@ -70,7 +70,7 @@ export class FirebaseGemeindeService{
     this.connectionListeners.add(listener);
     if(this.connectionState)listener(this.connectionState);
     if(!this.stopConnection)this.stopConnection=this.adapter.watchConnection(connected=>{
-      if(connected){this.publishConnection({connected:true,mode:'online',updatedAt:Date.now()});void this.persist();return;}
+      if(connected){this.publishConnection({connected:true,mode:'online',updatedAt:this.connectionState?.updatedAt??(this.synced.size===3?Date.now():0)});void this.persist();return;}
       void this.restoreCache();
     });
     return()=>this.connectionListeners.delete(listener);
@@ -83,13 +83,13 @@ export class FirebaseGemeindeService{
     this.publishAnnouncements();
   }
   private upsertEvent(eventKey:string,value:unknown){if(value&&typeof value==='object')this.events.set(eventKey,{...value as RawCommunityRecord,eventKey});this.publishEvents()}
-  private publishEvents(){const values=[...this.events.values()];this.eventListeners.forEach(next=>next(values));void this.persist()}
+  private publishEvents(){const values=[...this.events.values()];this.eventListeners.forEach(next=>next(values));this.publishReadiness();void this.persist()}
   private upsertRoom(roomId:string,value:unknown){if(value&&typeof value==='object')this.rooms.set(roomId,{...value as RawCommunityRecord,roomId});this.publishRooms()}
-  private publishRooms(){const values=[...this.rooms.values()];this.roomListeners.forEach(next=>next(values));void this.persist()}
-  private publishAnnouncements(){const values=[...this.announcements.values()];this.announcementListeners.forEach(next=>next(values));void this.persist()}
+  private publishRooms(){const values=[...this.rooms.values()];this.roomListeners.forEach(next=>next(values));this.publishReadiness();void this.persist()}
+  private publishAnnouncements(){const values=[...this.announcements.values()];this.announcementListeners.forEach(next=>next(values));this.publishReadiness();void this.persist()}
   private publishConnection(state:CommunityConnectionState){this.connectionState={...state,loaded:{events:this.synced.has('events'),rooms:this.synced.has('rooms'),announcements:this.synced.has('announcements')}};this.connectionListeners.forEach(next=>next(this.connectionState!))}
-  private publishReadiness(){if(this.connectionState)this.publishConnection(this.connectionState)}
-  private async persist(){try{if(this.cache)await this.cache.write({events:[...this.events.values()],rooms:[...this.rooms.values()],announcements:[...this.announcements.values()]})}catch{/* Cache failure must not interrupt live output. */}}
+  private publishReadiness(){if(this.connectionState)this.publishConnection({...this.connectionState,...(this.connectionState.connected&&this.synced.size===3?{updatedAt:Date.now()}: {})})}
+  private async persist(){try{if(this.cache&&this.connectionState?.connected&&this.synced.size===3)await this.cache.write({events:[...this.events.values()],rooms:[...this.rooms.values()],announcements:[...this.announcements.values()]})}catch{/* Cache failure must not interrupt live output. */}}
   private async restoreCache(){
     if(!this.cache){this.publishConnection({connected:false,mode:'empty',updatedAt:Date.now()});return}
     const snapshot=await this.cache.read(record=>this.isStillValid(record));

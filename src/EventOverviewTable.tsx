@@ -2,6 +2,7 @@ import {useLayoutEffect,useRef} from 'react';
 import type {eventSlideItems} from './dynamicEventSlide';
 import type {EventScrollPlan} from './eventScroll';
 import {EventScrollViewport} from './EventScrollViewport';
+import {EVENT_TABLE_TITLE_WIDTH} from './autoSlideLayout';
 
 type EventRow=ReturnType<typeof eventSlideItems>[number];
 
@@ -17,7 +18,7 @@ function TableEventTitle({title,elapsed,reduced,startsAfterMs}:{title:string;ela
    animation?.cancel();animation=undefined;activeMotion.current=undefined;
    const distance=Math.max(0,node.scrollWidth-container.clientWidth);
    if(reduced||distance<=1||!node.animate)return;
-   const scale=container.clientWidth/694;
+   const scale=container.clientWidth/EVENT_TABLE_TITLE_WIDTH;
    const travelMs=distance/scale/35*1000,duration=travelMs+10000;
    animation=node.animate([{transform:'translateX(0)',offset:0},{transform:'translateX(0)',offset:5000/duration},{transform:`translateX(-${distance}px)`,offset:(5000+travelMs)/duration},{transform:`translateX(-${distance}px)`,offset:1}],{duration,delay:startsAfterMs,easing:'linear',fill:'forwards'});
    animation.currentTime=clock.current;

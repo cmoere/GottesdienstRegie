@@ -1,4 +1,4 @@
-import {describe,expect,it} from 'vitest';
+import {describe,expect,it,vi,afterEach} from 'vitest';
 import {FirebaseGemeindeService,type CommunityRealtimeAdapter} from './FirebaseGemeindeService';
 
 function fakeAdapter(){
@@ -13,6 +13,34 @@ function fakeAdapter(){
 }
 
 describe('FirebaseGemeindeService',()=>{
+ afterEach(()=>vi.useRealTimers());
+ it('does not label a reconnect as a new data update',async()=>{
+  vi.useFakeTimers();vi.setSystemTime(1000);
+  const fake=fakeAdapter();let connection!:(connected:boolean)=>void;const seen:any[]=[];
+  const service=new FirebaseGemeindeService({...fake.adapter,watchConnection:listener=>{connection=listener;listener(true);return()=>{}}},{write:async()=>{},read:async()=>({mode:'offline-cache',updatedAt:1000,events:[],rooms:[],announcements:[]})} as any);
+  service.subscribeConnection(value=>seen.push(value));service.subscribeEvents(()=>{});service.subscribeRooms(()=>{});service.subscribeAnnouncements(()=>{});
+  fake.sync('veranstaltungen',[]);fake.sync('rooms',[]);fake.sync('meldungen',[]);
+  connection(false);await Promise.resolve();vi.setSystemTime(5000);connection(true);
+  expect(seen.at(-1).updatedAt).toBe(1000);
+ });
+ it('does not overwrite the last valid offline snapshot with partially loaded startup data',()=>{
+  const fake=fakeAdapter(),writes:any[]=[];
+  const service=new FirebaseGemeindeService(fake.adapter,{write:async(value:unknown)=>{writes.push(value)}} as any);
+  service.subscribeConnection(()=>{});service.subscribeEvents(()=>{});service.subscribeRooms(()=>{});service.subscribeAnnouncements(()=>{});
+  fake.emit('veranstaltungen','added','event',{titel:'Neu'});
+  fake.sync('veranstaltungen',['event']);fake.sync('rooms',[]);
+  expect(writes).toEqual([]);
+  fake.sync('meldungen',[]);
+  expect(writes.at(-1).events[0].eventKey).toBe('event');
+ });
+ it('reports the last synchronized data change rather than only connection time',()=>{
+  vi.useFakeTimers();vi.setSystemTime(1000);
+  const fake=fakeAdapter(),service=new FirebaseGemeindeService(fake.adapter),seen:any[]=[];
+  service.subscribeConnection(value=>seen.push(value));service.subscribeEvents(()=>{});service.subscribeRooms(()=>{});service.subscribeAnnouncements(()=>{});
+  fake.sync('veranstaltungen',[]);fake.sync('rooms',[]);fake.sync('meldungen',[]);
+  vi.setSystemTime(5000);fake.emit('veranstaltungen','changed','event',{titel:'Neu'});
+  expect(seen.at(-1).updatedAt).toBe(5000);
+ });
   it('replays online status and synchronized empty collections to a late preflight subscriber',()=>{
     const fake=fakeAdapter(),service=new FirebaseGemeindeService(fake.adapter);
     service.subscribeConnection(()=>{});
