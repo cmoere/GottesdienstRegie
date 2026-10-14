@@ -3,6 +3,7 @@ import path from 'node:path';
 import {atomicRename} from './atomicRename';
 import type {OsbSettings} from '../src/osb/types';
 import {normalizeOutputDisplayProfile,type OutputDisplayProfile} from './outputDisplayProfile';
+import {normalizeBannerPosition} from '../src/bannerSettings';
 
 export class DeviceSettingsRepository {
   private writes:Promise<void>=Promise.resolve();
@@ -12,6 +13,8 @@ export class DeviceSettingsRepository {
     catch(error){if((error as NodeJS.ErrnoException).code==='ENOENT')return {};throw error}
   }
   async readOsb():Promise<unknown>{await this.writes;try{return (await this.readSettings()).osb??null}catch{return null}}
+  async readBannerPosition(){await this.writes;return normalizeBannerPosition((await this.readSettings()).announcementBannerPosition)}
+  async writeBannerPosition(value:unknown){if(value!=='top'&&value!=='bottom')throw new Error('Ungültige Bannerposition.');await this.update({announcementBannerPosition:value});return value}
   async readOutputDisplays():Promise<OutputDisplayProfile|null>{await this.writes;try{return normalizeOutputDisplayProfile((await this.readSettings()).outputDisplays)}catch{return null}}
   private update(patch:Record<string,unknown>):Promise<void>{
     const operation=this.writes.then(async()=>{

@@ -132,6 +132,11 @@ import {useScheduledOutputSlide} from './outputPresentation';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
 import {subscribeToUpdateStatus} from './updateStatusSubscription';
 import {NORMAL_APP_MODE,setAppOnAir,type AppModeState} from './appMode';
+import {insertCountdownPreset} from './countdownInsertion';
+import {changedOutputLayers,type OutputStateSnapshot,type BannerOutputState} from './outputState';
+import {OutputComposition} from './OutputComposition';
+import {AnnouncementBannerController} from './AnnouncementBannerController';
+import {AnnouncementBannerSettings} from './AnnouncementBannerSettings';
 import {TestModeWatermark,TestModeContext} from './TestModeWatermark';
 import { FileMenu } from "./FileMenu";
 import { MediaBrowser } from "./MediaBrowser";
@@ -6299,6 +6304,7 @@ function SettingsModal({
                 <>
                   <PresentationTransitionSettings />
                   <TimelineSettings />
+                  <AnnouncementBannerSettings />
                   <section className="settings-group"><h3>SONSTIGES · EXTERN · GEMEINWOHL-HINWEISE</h3><p>Optionale, trackingfreie Hinweise offizieller Stellen für Vor- und Nachprogramm. Inhalte können nicht redaktionell verändert werden und sind standardmäßig deaktiviert.</p><label><input type="checkbox" checked={prefs.publicInterest.enabled} onChange={event=>prefs.setPublicInterest({enabled:event.target.checked})}/> Gemeinwohl-Hinweise aktivieren</label><label><input type="checkbox" checked={prefs.publicInterest.preLoop} onChange={event=>prefs.setPublicInterest({preLoop:event.target.checked})}/> Im Vorprogramm</label><label><input type="checkbox" checked={prefs.publicInterest.postLoop} onChange={event=>prefs.setPublicInterest({postLoop:event.target.checked})}/> Im Nachprogramm</label><label>Einblenddauer <input className="settings-number-input" type="number" min="8" max="30" value={prefs.publicInterest.durationSeconds} onChange={event=>prefs.setPublicInterest({durationSeconds:Number(event.target.value)})}/> Sekunden</label><label>Häufigkeit<select value={prefs.publicInterest.interval} onChange={event=>prefs.setPublicInterest({interval:Number(event.target.value) as 3|5|10})}><option value="3">Nach 3 Loop-Elementen</option><option value="5">Nach 5 Loop-Elementen</option><option value="10">Nach 10 Loop-Elementen</option></select></label><label><input type="checkbox" checked={prefs.publicInterest.showQr} onChange={event=>prefs.setPublicInterest({showQr:event.target.checked})}/> QR-Code zur offiziellen Quelle anzeigen</label></section>
                 </>
               ) : tab === "remote" ? (
@@ -8149,6 +8155,8 @@ function AppShell({
     () =>
       (window.desktop as any)?.mediaWindow?.onSelected(
         (payload: {
+          kind?: 'countdown-preset';
+          presetId?: string;
           asset?: CloudMediaAsset;
           assets?: CloudMediaAsset[];
           purpose: "item" | "background" | "foreground" | "audio";
@@ -8156,6 +8164,10 @@ function AppShell({
           targetId?: string;
           mediaKind?: string;
         }) => {
+          if(payload.kind==='countdown-preset'){
+            const current=usePresentation.getState(),sectionId=payload.targetType==='section'?payload.targetId:current.items.find(item=>item.id===payload.targetId)?.sectionId;
+            insertCountdownPreset(payload.presetId??'',sectionId);return;
+          }
           if (
             payload.purpose === "audio" &&
             payload.assets &&
@@ -8606,7 +8618,7 @@ function AppShell({
       const quickType=quickScreenTypeForKey(event.key);
       if(quickType){
         const quick=quickScreens.find(entry=>entry.enabled&&entry.type===quickType);
-        if(quick){event.preventDefault();if(quick.type==='bible')setBibleTextOpen(true);else{const next=previewQuick?.id===quick.id?null:quick;setPreviewQuick(next);if(usePresentation.getState().onAir)void(window.desktop as any)?.sendQuick(quick.targets,next)}}
+        if(quick){event.preventDefault();if(quick.type==='bible')setBibleTextOpen(true);else{const next=previewQuick?.id===quick.id?null:quick.type==='countdown'?{...quick,startedAtMs:Date.now()}:quick;setPreviewQuick(next);if(usePresentation.getState().onAir)void(window.desktop as any)?.sendQuick(quick.targets,next)}}
         return;
       }
       if (matchesShortcut(event, shortcuts.openHelp)) {
@@ -8781,6 +8793,7 @@ function AppShell({
   };
   const applyQuick = async (quick: QuickScreenConfig | null) => {
     if(quick?.type==='bible'){setBibleTextOpen(true);return}
+    if(quick?.type==='countdown')quick={...quick,startedAtMs:Date.now()};
     setPreviewQuick(quick);
     if (state.onAir)
       await (window.desktop as any)?.sendQuick(
@@ -9702,6 +9715,7 @@ function AppShell({
       className={`app production-app mode-${state.mode} ${state.onAir ? "is-on-air" : ""}`}
       onClick={() => setMenuOpen(null)}
     >
+      <AnnouncementBannerController quick={previewQuick}/>
       <div className="menubar">
         <WindowControls />
         <FileMenu
@@ -10068,6 +10082,8 @@ function Clock({ locale }: { locale: string }) {
   );
 }
 function Output() {
+  const previousStateRef=useRef<OutputStateSnapshot|null>(null);
+  const [outputBanner,setOutputBanner]=useState<BannerOutputState|null>(null);
   const stateRevisionRef=useRef(-1);
   const outputRevisionRef=useRef(0);
   const [slide, setSlide] = useScheduledOutputSlide(),
@@ -10087,7 +10103,11 @@ function Output() {
       const apply=(state:import('./outputState').OutputStateSnapshot|null)=>{
         if(disposed||!state||!Number.isFinite(state.revision)||state.revision<=stateRevisionRef.current)return;
         stateRevisionRef.current=state.revision;
-        setSlide(state.slide as Slide|null);setQuick(state.quick as QuickScreenConfig|null);setOutputAppMode(state.appMode);
+        const changed=changedOutputLayers(previousStateRef.current,state);previousStateRef.current=state;
+        if(changed.slide)setSlide(state.slide as Slide|null);
+        if(changed.quick)setQuick(state.quick as QuickScreenConfig|null);
+        if(changed.banner)setOutputBanner(state.banner??null);
+        if(changed.appMode)setOutputAppMode(state.appMode);
       };
       const off=bridge.onOutputState(apply);
       void bridge.getOutputState().then(apply).catch(()=>{});
@@ -10114,6 +10134,7 @@ function Output() {
     <div
       className={`output ${quick?.type === "noText" ? "quick-no-text" : ""}`}
     >
+      <OutputComposition banner={role==='main'?outputBanner:null} testOverlay={<TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/> }>
       {slide && role==='stage' && songOutput ? <div className="stage-song-shell"><header className="stage-song-header"><span>STAGE</span><strong>{slide.title}</strong></header><section className="stage-song-current"><small>JETZT</small>{songOutput.showChords && songOutput.stageRows?.length ? <div className="stage-song-rows">{songOutput.stageRows.map((row,index)=><div className="stage-song-row" key={`${index}-${row.lyrics}`}><span className="stage-song-chords">{row.chords}</span><span>{row.lyrics}</span></div>)}</div> : <div className="stage-song-lyrics">{slide.body}</div>}</section>{songOutput.currentNext && <section className="stage-song-next"><small>ALS NÄCHSTES</small><div>{songOutput.next || '—'}</div></section>}</div> : renderedSlide && (
         lyricScroll && role==='main' ? <LyricScrollRenderer packet={lyricScroll} live/> : <TransitionStage
           slide={renderedSlide}
@@ -10126,8 +10147,9 @@ function Output() {
       )}
       <QuickOverlay quick={quick} />
       {postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={postProgramRoomNotice}/>}
+      </OutputComposition>
       <span hidden data-output-mode={outputAppMode.mode} data-output-on-air={String(outputAppMode.onAir)}/>
-      <TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/>
+      <span hidden data-output-banner-revision={outputBanner?.revision}/>
     </div>
   );
 }

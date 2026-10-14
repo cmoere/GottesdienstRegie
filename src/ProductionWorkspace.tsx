@@ -73,6 +73,8 @@ import { NowPlayingDesigner } from "./NowPlayingDesigner";
 import { EventSlideDesigner } from "./EventSlideDesigner";
 import { AnnouncementSlideDesigner } from './AnnouncementSlideDesigner';
 import {useLiveOutputPreview} from './liveOutputPreview';
+import {OutputComposition} from './OutputComposition';
+import {useAnnouncementBanner} from './AnnouncementBannerController';
 import {PostProgramRoomNoticeView} from './PostProgramRoomNotice';
 import {isPostProgramSystemItem} from './postProgramSystemSlide';
 
@@ -3717,6 +3719,7 @@ function PreviewCenter({
   activeQuick: QuickScreenConfig | null;
 }) {
   const output = useLiveOutputPreview(s=>s.slide);
+  const banner=useAnnouncementBanner(s=>s.banner);
   const state = usePresentation(),
     root = useRef<HTMLDivElement>(null),
     deadline = useRef(0),
@@ -3859,6 +3862,7 @@ function PreviewCenter({
         <div className="main-preview-with-title">
         <h2 className="single-preview-title">{(state.onAir&&output?output.title:slide.title)?.trim()||slideLabel(slide,item.slides.indexOf(slide))}</h2>
         <div className="main-preview-surface">
+          <OutputComposition banner={state.onAir?banner:null} testOverlay={<TestModeWatermark role="main"/>}>
           {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage
             slide={previewSlide(state.onAir&&output?output:slide)}
             transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(
@@ -3870,9 +3874,9 @@ function PreviewCenter({
             role={state.onAir?'main':'operator'}
             renderMode={state.onAir?'mirror':undefined}
           />}
-          <QuickOverlay quick={activeQuick} staticPreview />
+          <QuickOverlay quick={activeQuick} staticPreview={!state.onAir} />
           {state.onAir&&output?.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
-          <TestModeWatermark role="main"/>
+          </OutputComposition>
         </div>
         </div>
         <div className="preview-navigation-rail">
@@ -4083,6 +4087,7 @@ function PreviewRightSidebar({
           title={`${liveItem?.title} · ${live.title || "Live-Folie"}`}
         >
           {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage slide={previewSlide(state.onAir&&output?output:live)} transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(live,liveItem,'main',state.transitionDefault)} role="main" renderMode="mirror" />}
+          <QuickOverlay quick={activeQuick} staticPreview={!state.onAir}/>
           {state.onAir&&output?.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
         </MainLivePreview>
       ) : (

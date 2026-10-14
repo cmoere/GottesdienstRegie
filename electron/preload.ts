@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("desktop", {
   community:{start:()=>ipcRenderer.invoke('community:start'),updateEvent:(eventKey:string,patch:Record<string,unknown>)=>ipcRenderer.invoke('community:update-event',eventKey,patch),onEvents:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('community:events',listener);return()=>ipcRenderer.removeListener('community:events',listener)},onRooms:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('community:rooms',listener);return()=>ipcRenderer.removeListener('community:rooms',listener)},onAnnouncements:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('community:announcements',listener);return()=>ipcRenderer.removeListener('community:announcements',listener)},onConnection:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('community:connection',listener);return()=>ipcRenderer.removeListener('community:connection',listener)}},
-  deviceSettings:{readOsb:()=>ipcRenderer.invoke('device-settings:osb-read'),writeOsb:(value:unknown)=>ipcRenderer.invoke('device-settings:osb-write',value)},
+  deviceSettings:{readOsb:()=>ipcRenderer.invoke('device-settings:osb-read'),writeOsb:(value:unknown)=>ipcRenderer.invoke('device-settings:osb-write',value),readBannerPosition:()=>ipcRenderer.invoke('device-settings:banner-position-read'),writeBannerPosition:(value:'top'|'bottom')=>ipcRenderer.invoke('device-settings:banner-position-write',value)},
   radio:{startMetadata:(stationId:string,streamUrl:string)=>ipcRenderer.invoke('radio:metadata-start',stationId,streamUrl),stopMetadata:()=>ipcRenderer.invoke('radio:metadata-stop'),onMetadata:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('radio:metadata',listener);return()=>ipcRenderer.removeListener('radio:metadata',listener)}},
   spotify:{status:()=>ipcRenderer.invoke('spotify:status'),connect:()=>ipcRenderer.invoke('spotify:connect'),disconnect:()=>ipcRenderer.invoke('spotify:disconnect'),search:(query:string,offset?:number)=>ipcRenderer.invoke('spotify:search',query,offset),resolve:(url:string)=>ipcRenderer.invoke('spotify:resolve',url),open:(url:string)=>ipcRenderer.invoke('spotify:open',url)},
   spelling:{setLanguage:(language:string)=>ipcRenderer.invoke('spelling:set-language',language)},
@@ -52,6 +52,7 @@ contextBridge.exposeInMainWorld("desktop", {
   setOutputAppMode:(state:{mode:'normal'|'test';onAir:boolean})=>ipcRenderer.invoke('outputs:set-app-mode',state),
   getOutputAppMode:()=>ipcRenderer.invoke('outputs:get-app-mode'),
   getOutputState:()=>ipcRenderer.invoke('outputs:get-state'),
+  sendAnnouncementBanner:(banner:import('../src/outputState').BannerOutputState|null)=>ipcRenderer.invoke('outputs:send-banner',banner),
   onOutputState:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:state',listener);return()=>ipcRenderer.removeListener('outputs:state',listener)},
   onLiveSlide: (callback: (payload: unknown) => void) => {
     const listener = (_event: Electron.IpcRendererEvent, payload: unknown) =>
@@ -188,6 +189,7 @@ contextBridge.exposeInMainWorld("desktop", {
         mediaKind,
       ),
     close: () => ipcRenderer.invoke("media-window:close"),
+    selectCountdown: (presetId:string) => ipcRenderer.invoke('media-window:select-countdown',presetId),
     select: (asset: unknown, purpose: string) =>
       ipcRenderer.invoke("media-window:select", asset, purpose),
     selectAudio: (assets: unknown[], targetType: string, targetId: string) =>

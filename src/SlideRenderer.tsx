@@ -6,7 +6,10 @@ import {prepareAnnouncementPages} from './announcementDesign';
 import {buildAnnouncementSlide} from './announcementLive';
 import {announcementSettings} from './announcementSettings';
 import {AnnouncementRichText} from './AnnouncementRichTextRenderer';
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import {CountdownView} from './CountdownView';
+import {remainingCountdownMs} from './countdownClock';
+import {AppClock} from './community/AppClock';
 import type { Slide, SlideElement } from "./store";
 import { fontStack } from "./fonts";
 import {
@@ -264,29 +267,26 @@ function TimedText({
   element,
   mode,
   style,
+  startedAtMs,
 }: {
   element: SlideElement;
   mode: SlideRendererMode;
   style: CSSProperties;
+  startedAtMs:number;
 }) {
   const duration = Math.max(
       0,
       Number(element.properties.timerDurationSeconds ?? 0),
     ),
-    [left, setLeft] = useState(duration);
+    [now, setNow] = useState(()=>AppClock.now().getTime());
   useEffect(() => {
-    setLeft(duration);
+    setNow(AppClock.now().getTime());
     if ((mode !== "live"&&mode!=='mirror') || duration <= 0) return;
-    const started = Date.now(),
-      timer = setInterval(
-        () =>
-          setLeft(
-            Math.max(0, duration - Math.floor((Date.now() - started) / 1000)),
-          ),
-        250,
-      );
+    const timer = setInterval(()=>setNow(AppClock.now().getTime()),250);
     return () => clearInterval(timer);
-  }, [duration, mode, element.id]);
+  }, [duration, mode, element.id,startedAtMs]);
+  const live=mode==='live'||mode==='mirror',left=Math.ceil(remainingCountdownMs(duration*1000,startedAtMs,live?now:startedAtMs)/1000);
+  if(element.properties.countdownPresetId)return <div className="slide-renderer-element" style={style}><CountdownView presetId={String(element.properties.countdownPresetId)} durationMs={duration*1000} startedAtMs={startedAtMs} nowMs={live?now:startedAtMs}/></div>;
   const value =
     left === 0 && element.properties.timerEndText
       ? String(element.properties.timerEndText)
@@ -303,9 +303,11 @@ function TimedText({
 function RenderElement({
   element,
   mode,
+  startedAtMs,
 }: {
   element: SlideElement;
   mode: SlideRendererMode;
+  startedAtMs:number;
 }) {
   if (!element.visible) return null;
   const style = elementStyle(element),
@@ -509,7 +511,7 @@ function RenderElement({
     element.type === "text" &&
     Number(properties.timerDurationSeconds ?? 0) > 0
   )
-    return <TimedText element={element} mode={mode} style={style} />;
+    return <TimedText element={element} mode={mode} style={style} startedAtMs={startedAtMs} />;
   return (
     <div
       className={`slide-renderer-element text ${properties.animation === "fade-in" && (mode === "live"||mode==='mirror') ? "element-animation-fade-in" : ""}`}
@@ -711,6 +713,9 @@ export function SlideRenderer({
   slide: Slide;
   mode?: SlideRendererMode;
 }) {
+  const fallbackStart=useMemo(()=>AppClock.now().getTime(),[slide.id]);
+  const suppliedStart=(slide as Slide&{_presentAtMs?:number})._presentAtMs;
+  const startedAtMs=typeof suppliedStart==='number'&&Number.isFinite(suppliedStart)?suppliedStart:fallbackStart;
   const translationMode = usePreferences((state) => state.songTranslationMode);
   const fallbackText = translationBlocks(
     slide.body,
@@ -748,7 +753,7 @@ export function SlideRenderer({
           .slice()
           .sort((a, b) => a.zIndex - b.zIndex)
           .map((element) => (
-            <RenderElement key={element.id} element={element} mode={mode} />
+            <RenderElement key={element.id} element={element} mode={mode} startedAtMs={startedAtMs}/>
           ))
       ) : (
         <div className="slide-renderer-fallback">

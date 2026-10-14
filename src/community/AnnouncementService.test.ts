@@ -52,3 +52,27 @@ describe('AnnouncementService',()=>{
     expect(service.getForPlacement([{...base,giltAb:'2026-10-05',giltBis:'2026-10-04'}],now,'preLoop')).toEqual([]);
   });
 });
+
+describe('independent announcement banner channel',()=>{
+  const service=new AnnouncementService(),banner={...base,showMeldungBanner:true,textBanner:'Bannertext'};
+  it('accepts banner-only messages without enabling ordinary slides',()=>{
+    const record={...banner,messageScreen:false,gottesdienstRegie:{loopTargets:{}}};
+    expect(service.getBanners([record],now)).toEqual([expect.objectContaining({text:'Bannertext',id:'-Omsg'})]);
+    expect(service.getForPlacement([record],now,'preLoop')).toEqual([]);
+    expect(service.getBanners([base],now)).toEqual([]);
+  });
+  it('rejects private, trashed, disabled, future and expired banners',()=>{
+    for(const patch of [{status:'intern'},{trash:'1'},{showMeldungBanner:false},{gottesdienstRegie:{enabled:false}},{giltAb:'2026-10-04T11:00:00'},{giltBis:'2026-10-04T09:00:00'},{saalscreenUseShowFrom:true,showFrom:'2026-10-05'}])expect(service.getBanners([{...banner,...patch}],now)).toEqual([]);
+    expect(service.getBanners([{...banner,giltBis:now.toISOString()}],now)).toHaveLength(1);
+    expect(service.getBanners([{...banner,giltBis:now.toISOString()}],new Date(now.getTime()+1))).toEqual([]);
+  });
+  it('chooses the first meaningful text and exposes no private fields or executable markup',()=>{
+    const record={...banner,textBanner:'<script>bad()</script> &nbsp;',textLaufbanner:'<p>Bitte <b>beachten</b> &amp; weitersagen.</p>',internalComment:'secret',createdBy:'admin'};
+    expect(service.getBanners([record],now)[0]).toEqual({id:'-Omsg',text:'Bitte beachten & weitersagen.',priority:'normal',validFrom:new Date(base.giltAb).toISOString(),validUntil:undefined});
+    expect(service.getBanners([{...banner,titel:'',beschreibung:'',textBanner:'<br>&nbsp;'}],now)).toEqual([]);
+  });
+  it('orders priority first with stable id ties',()=>{
+    const records=[{...banner,messageId:'z'},{...banner,messageId:'a'},{...banner,messageId:'urgent',priority:'urgent'}];
+    expect(service.getBanners(records,now).map(i=>i.id)).toEqual(['urgent','a','z']);
+  });
+});

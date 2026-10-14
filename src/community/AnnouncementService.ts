@@ -1,10 +1,12 @@
 import type {AnnouncementPlacement, AnnouncementPriority, AnnouncementCategory} from '../loopData';
+import {announcementRuns,announcementRunsText} from '../announcementRichText';
 
 export type RawAnnouncement={messageId:string;[key:string]:unknown};
 export interface PublicAnnouncement {
   id:string; title:string; text:string; category:AnnouncementCategory; priority:AnnouncementPriority;
   validFrom?:string; validUntil?:string; durationMs:number; qrCode:boolean; qrReference?:string;
 }
+export interface PublicBannerAnnouncement {id:string;text:string;priority:AnnouncementPriority;validFrom?:string;validUntil?:string}
 
 const truthy=(value:unknown)=>value===true||value===1||['true','1','ja','yes','on','öffentlich','oeffentlich','public'].includes(String(value??'').trim().toLowerCase());
 const clean=(value:unknown)=>String(value??'').replace(/<\s*(script|style|iframe|object|embed)[^>]*>[\s\S]*?<\/\s*\1\s*>/gi,'').replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi,'').replace(/javascript\s*:/gi,'').trim();
@@ -14,6 +16,22 @@ const priorities=new Set(['urgent','important','normal']);
 const categories=new Set(['general','event','traffic','service','community','info','technical','internal']);
 
 export class AnnouncementService {
+  private isPublicAndCurrent(raw:RawAnnouncement,now:Date):boolean{
+    if(!raw.messageId||truthy(raw.trash)||!publicStatus(raw.status))return false;
+    const config=raw.gottesdienstRegie as {enabled?:unknown}|undefined;
+    if(config?.enabled!==undefined&&!truthy(config.enabled))return false;
+    const from=date(truthy(raw.saalscreenUseShowFrom)&&raw.showFrom?raw.showFrom:raw.giltAb),until=date(raw.giltBis);
+    return !((from&&until&&from>until)||(from&&now<from)||(until&&now>until));
+  }
+  getBanners(records:RawAnnouncement[],now:Date):PublicBannerAnnouncement[]{
+    const rank={urgent:0,important:1,normal:2};
+    return records.filter(raw=>truthy(raw.showMeldungBanner)&&this.isPublicAndCurrent(raw,now)).flatMap(raw=>{
+      const text=[raw.textBanner,raw.textLaufbanner,raw.textMeldung,raw.beschreibung,raw.titel].map(value=>typeof value==='string'?announcementRunsText(announcementRuns(value)).replace(/\s+/g,' ').trim():'').find(Boolean);
+      if(!text)return [];
+      const priority=String(raw.priority??'normal') as AnnouncementPriority;
+      return [{id:raw.messageId,text,priority:priorities.has(priority)?priority:'normal' as AnnouncementPriority,validFrom:date(truthy(raw.saalscreenUseShowFrom)&&raw.showFrom?raw.showFrom:raw.giltAb)?.toISOString(),validUntil:date(raw.giltBis)?.toISOString()}];
+    }).sort((a,b)=>rank[a.priority]-rank[b.priority]||(a.id<b.id?-1:a.id>b.id?1:0));
+  }
   getForPlacement(records:RawAnnouncement[],now=new Date(),placement:AnnouncementPlacement):PublicAnnouncement[]{
     return records.filter(raw=>this.isEligible(raw,now,placement)).map(raw=>this.toPublic(raw)).sort((a,b)=>{
       const rank={urgent:0,important:1,normal:2}; return rank[a.priority]-rank[b.priority]||a.title.localeCompare(b.title,'de');
@@ -21,13 +39,9 @@ export class AnnouncementService {
   }
 
   isEligible(raw:RawAnnouncement,now:Date,placement:AnnouncementPlacement):boolean{
-    if(!raw.messageId||truthy(raw.trash)||!publicStatus(raw.status)||!truthy(raw.messageScreen))return false;
+    if(!this.isPublicAndCurrent(raw,now)||!truthy(raw.messageScreen))return false;
     const config=raw.gottesdienstRegie as {enabled?:unknown;loopTargets?:Record<string,unknown>}|undefined;
-    if(config?.enabled!==undefined&&!truthy(config.enabled))return false;
     if(config?.loopTargets!==undefined&&!truthy(config.loopTargets?.[placement]))return false;
-    const from=date(truthy(raw.saalscreenUseShowFrom)&&raw.showFrom?raw.showFrom:raw.giltAb);
-    const until=date(raw.giltBis);
-    if((from&&until&&from>until)||(from&&now<from)||(until&&now>until))return false;
     return Boolean(clean(raw.titel)||clean(raw.textMeldung)||clean(raw.beschreibung));
   }
 

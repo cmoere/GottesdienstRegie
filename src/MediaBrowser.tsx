@@ -6,6 +6,7 @@ import {AiGenerationStatus} from './AiGenerationStatus';
 import {minimumGenerationDelay} from './release53Model';
 import {nextGenerationSeed} from './release54Model';
 import {SpotifyBrowser} from './spotify/SpotifyBrowser';
+import {CountdownPresetBrowser} from './CountdownPresetBrowser';
 import {generatorDimensions,videoMotionTransform,type GeneratorAspectRatio,type GeneratorMotion,type GeneratorQuality} from './generatorSettingsModel';
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -142,6 +143,7 @@ const drawCover = (
   );
 };
 export function MediaBrowser() {
+  const [countdownsOpen,setCountdownsOpen]=useState(false);
   const prefs = usePreferences();
   const initial = useMemo(() => {
     const q = new URLSearchParams(location.hash.split("?")[1] ?? ""),
@@ -813,6 +815,7 @@ export function MediaBrowser() {
       setBusy("");
     }
   }
+  if(countdownsOpen&&!isAudio)return <main className="cloud-media-browser"><header className="media-window-header"><h1>Countdown-Bibliothek</h1><button onClick={()=>setCountdownsOpen(false)}>Zurück zu Medien</button></header><CountdownPresetBrowser purpose={purpose} onSelect={id=>{void(window.desktop as any)?.mediaWindow?.selectCountdown(id)}}/></main>;
   return (
     <main
       className={`cloud-media-browser ${isAudio ? "audio-browser" : ""} ${generatorOpen ? "generator-active" : ""}`}
@@ -837,6 +840,7 @@ export function MediaBrowser() {
       {isAudio&&<SpotifyBrowser/>}
       {!isAudio && (
         <nav className="media-tabs">
+          <button onClick={()=>{setGeneratorOpen(false);setCountdownsOpen(true)}}>COUNTDOWNS</button>
           <button
             className={!generatorOpen && tab === "cloud" ? "active" : ""}
             onClick={() => switchTab("cloud")}

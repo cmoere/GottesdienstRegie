@@ -1,5 +1,7 @@
 import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Menu, shell, dialog, protocol, net, clipboard, nativeImage, nativeTheme, Notification, type MenuItemConstructorOptions } from 'electron';
 import path from 'node:path';
+import {countdownMediaSelection,type CountdownMediaContext} from './countdownMediaSelection';
+import {readBannerOutputState} from '../src/outputState';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs/promises';
 import os from 'node:os';
@@ -51,7 +53,7 @@ app.on('will-quit',()=>displaySleepProtection.setEnabled(false));
 let controlWindow: BrowserWindow | null = null;
 let mediaWindow: BrowserWindow | null = null;
 let historyWindow: BrowserWindow | null = null;
-let mediaSelectionContext:{targetType?:'section'|'serviceItem';targetId?:string;mediaKind?:string}={};
+let mediaSelectionContext:CountdownMediaContext={};
 let appPreferences:AppPreferences;
 let controlCloseInProgress=false;
 let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
@@ -200,7 +202,7 @@ function createControlWindow(preferences:AppPreferencesData) {
 }
 
 function openMediaWindow(context:'manage'|'select'='manage',purpose:'item'|'background'|'foreground'|'audio'='item',targetType?:'section'|'serviceItem',targetId?:string,mediaKind?:string){
-  mediaSelectionContext={targetType,targetId,mediaKind};
+  mediaSelectionContext={purpose,targetType,targetId,mediaKind};
   if(mediaWindow&&!mediaWindow.isDestroyed()){mediaWindow.setTitle(purpose==='audio'?'GottesdienstRegie - Audiobrowser':'GottesdienstRegie - Medienbibliothek');mediaWindow.focus();mediaWindow.webContents.send('media-window:context',{context,purpose,targetType,targetId});return true}
   const saved=appPreferences.get(),fallback={width:1400,height:850},bounds=saved.mediaBounds??fallback;
   mediaWindow=new BrowserWindow({...bounds,show:false,minWidth:900,minHeight:600,resizable:true,minimizable:true,maximizable:true,closable:true,skipTaskbar:false,alwaysOnTop:false,backgroundColor:'#f4f7f8',title:purpose==='audio'?'GottesdienstRegie - Audiobrowser':'GottesdienstRegie - Medienbibliothek',icon:app.isPackaged?path.join(process.resourcesPath,'icon.png'):path.join(app.getAppPath(),'build/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
@@ -260,6 +262,8 @@ app.whenReady().then(async() => {
   ipcMain.handle('radio:metadata-start',(event,stationId:string,streamUrl:string)=>{radioMetadataStops.get(event.sender.id)?.();const sender=event.sender;radioMetadataStops.set(sender.id,radioMetadata.start(String(stationId),String(streamUrl),value=>{if(sender.isDestroyed())return;sender.send('radio:metadata',value);if(value.title&&value.artist)void radioArtwork.resolve(value.title,value.artist).then(artwork=>{if(artwork&&!sender.isDestroyed())sender.send('radio:metadata',{...value,...artwork})}).catch(()=>{})}));return true});
   ipcMain.handle('radio:metadata-stop',(event)=>{radioMetadataStops.get(event.sender.id)?.();radioMetadataStops.delete(event.sender.id);return true});
   ipcMain.handle('device-settings:osb-read',()=>deviceSettings.readOsb());
+  ipcMain.handle('device-settings:banner-position-read',()=>deviceSettings.readBannerPosition());
+  ipcMain.handle('device-settings:banner-position-write',(event,value:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id)return false;return deviceSettings.writeBannerPosition(value)});
   ipcMain.handle('device-settings:osb-write',(_event,value)=>deviceSettings.writeOsb(value));
   const sessionFile = path.join(app.getPath('userData'), 'community-session.bin');
   const legacyPresentationFile=path.join(app.getPath('userData'),'presentations','default-presentation.json');
@@ -490,6 +494,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('media:cloud-remove',async(_event,id:string)=>{if(outputManager.isActive())throw new Error('MEDIA_IN_LIVE_USE');const local=(await mediaRepository.list()).find(asset=>asset.id===id);const remote=(await onlineMedia.list()).find(item=>item.path===local?.github?.path||item.id===id);if(!remote)throw new Error('MEDIA_NOT_FOUND');const references:any[]=[];for(const summary of await presentationRepository.list(true,true)){const doc=await presentationRepository.read(summary.id),raw=JSON.stringify(doc);if(raw.includes(id)||raw.includes(remote.path)||raw.includes(remote.downloadUrl))references.push(summary)}if(references.length)throw new Error(`MEDIA_IN_PRESENTATIONS:${references.map(entry=>entry.title).join('|')}`);await onlineMedia.remove(remote.path,remote.id);if(local)await mediaRepository.remove(local.id);return true});
   ipcMain.handle('media-window:open',(_event,context:'manage'|'select',purpose:'item'|'background'|'foreground'|'audio',targetType?:'section'|'serviceItem',targetId?:string,mediaKind?:string)=>openMediaWindow(context,purpose,targetType,targetId,mediaKind));
   ipcMain.handle('media-window:close',()=>{mediaWindow?.close();return true});
+  ipcMain.handle('media-window:select-countdown',(event,presetId:unknown)=>{if(!mediaWindow||mediaWindow.isDestroyed())return false;const selection=countdownMediaSelection(presetId,event.sender.id,mediaWindow.webContents.id,mediaSelectionContext);if(!selection)return false;const sent=sendToLiveWindow(controlWindow,'media:selected',selection);if(!sent)return false;controlWindow?.focus();mediaWindow.close();return true});
   ipcMain.handle('media-window:select',(_event,asset:unknown,purpose:string)=>{if(sendToLiveWindow(controlWindow,'media:selected',{asset,purpose,...mediaSelectionContext}))controlWindow?.focus();mediaWindow?.close();return true});
   ipcMain.handle('media-window:select-audio',(_event,assets:unknown[],targetType:string,targetId:string)=>{if(sendToLiveWindow(controlWindow,'media:selected',{assets,purpose:'audio',targetType,targetId}))controlWindow?.focus();mediaWindow?.close();return true});
   ipcMain.handle('history-window:open',()=>openHistoryWindow());
@@ -527,6 +532,7 @@ app.whenReady().then(async() => {
   ipcMain.on('outputs:media-ended',(_event,behavior:string)=>{sendToLiveWindow(controlWindow,'outputs:media-ended',behavior)});
   ipcMain.handle('outputs:send-role',(_event,role:OutputRole,payload:unknown)=>outputManager.sendTo(role,payload));
   ipcMain.handle('outputs:send-quick',(_event,roles:OutputRole[],payload:unknown)=>outputManager.sendQuick(roles,payload));
+  ipcMain.handle('outputs:send-banner',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id)return false;const banner=readBannerOutputState(payload);return banner!==undefined?outputManager.setBanner(banner):false});
   ipcMain.handle('outputs:set-app-mode',(_event,state:{mode:'normal'|'test';onAir:boolean})=>outputManager.setAppMode(state));
   ipcMain.handle('outputs:get-app-mode',()=>outputManager.getAppMode());
   ipcMain.handle('outputs:get-state',(event)=>outputManager.getStateForSender(event.sender.id));

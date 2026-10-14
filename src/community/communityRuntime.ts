@@ -1,10 +1,13 @@
 import type {CommunityPreflightSnapshot} from './communityPreflight';
+import type {RawAnnouncement} from './AnnouncementService';
 
 const snapshot:CommunityPreflightSnapshot={mode:'empty',events:[],rooms:[],announcements:[],loaded:{events:false,rooms:false,announcements:false},postProgramPrepared:false};
 let started=false;
 let synchronized:CommunityPreflightSnapshot['loaded'];
 const listeners=new Set<()=>void>();
 const notify=()=>listeners.forEach(listener=>listener());
+export function subscribeCommunityRuntime(listener:()=>void){listeners.add(listener);return()=>{listeners.delete(listener)}}
+export function getCommunityAnnouncementRecords():RawAnnouncement[]{return snapshot.announcements.filter((value):value is RawAnnouncement=>typeof value.messageId==='string')}
 export function startCommunityRuntime(){
   if(started)return;
   const bridge=(window as any).desktop?.community;if(!bridge)return;
