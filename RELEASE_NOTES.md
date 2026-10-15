@@ -1,3 +1,53 @@
+# GottesdienstRegie 0.82.0
+
+Veröffentlicht: Do., 15.10.2026
+
+Die Medienbibliothek bietet 60 native, offline verfügbare Countdowns in zehn Zeitlängen und sechs ruhigen Designs. Als Meldungsscreen-Banner freigegebene Gemeindemeldungen laufen unabhängig vom Folienwechsel über MAIN und dessen echte Vorschauen; der übrige Inhalt wird proportional eingepasst.
+
+Alle 63 Hilfethemen wurden um praktische Anleitungen und Fehlerbehebung in 17 Sprachen ergänzt. Eine neue Artikelansicht, aktuelle Aufnahmen der Anwendung und ein einheitlich aufbereiteter Versionsverlauf erleichtern die Vorbereitung im Gemeindeteam. Die abschließende Prüfung hat außerdem Countdown-Neustarts durch Editoränderungen und vorzeitig beendete Banner korrigiert.
+
+## Neu
+
+### 60 stille Countdown-Vorlagen
+
+Unter Medienbibliothek → Countdowns stehen 20, 15, 10, 5, 3, 2 und 1 Minute sowie 30, 20 und 10 Sekunden bereit. Jede Dauer gibt es in Klar, Natur, Licht, Kreuz, Kerze und Geometrisch. Nur die ausgewählte Vorschau läuft. Die Übernahme erstellt ein eigenständiges Ablauf-Element; sie ersetzt weder ein Hintergrundbild noch eine Audiodatei. Die Countdowns bleiben standardmäßig ohne Ton und halten bei 00:00, sofern kein anderes Ende-Verhalten gewählt wurde.
+
+### Unabhängiger Meldungsscreen-Banner
+
+Die bestehende Firebase-Freigabe showMeldungBanner steuert einen eigenen öffentlichen Meldungskanal. Der rote Text läuft auf weißem Band im Vor- und Nachprogramm oder über einem Countdown. Oben oder unten wird gerätebezogen unter Einstellungen → Präsentation → Meldungsscreen-Banner festgelegt; unten ist Standard. Schwarz, Logo und OSB haben Vorrang. Textänderungen werden an Laufgrenzen übernommen, die reservierte Bildfläche an sicheren Wechselpunkten. STAGE und andere eigenständige Ausgaben werden nicht ungefragt verändert.
+
+## Verbessert
+
+### Ausführlichere, gegliederte Hilfe
+
+Alle 63 Themen erhalten praktische Schritte, Probe- und Fehlerhinweise sowie passende Themenverweise in allen 17 vorhandenen Sprachen. Inhaltsverzeichnisse, lesbare Abstände, Tastaturfokus und Rechts-nach-links-Darstellung unterstützen die Bedienung. Zehn aktuelle native Aufnahmen zeigen die tatsächliche Oberfläche. Überholte Anweisungen zu Testbetrieb, Schnellanzeigen und Unsplash-Zugangsschlüsseln wurden mit dem heutigen Ablauf abgeglichen.
+
+### Nachvollziehbarer Versionsverlauf
+
+Die bisherigen 118 Builds bleiben mit ihren ursprünglichen Versionsnummern, Daten und ihrer Reihenfolge erhalten. Beschreibungen wurden sachlich und einheitlich aufbereitet; die ursprünglichen ausführlichen Notizen bleiben zusätzlich archiviert. Historische Bildschirmaufnahmen werden weiterhin als historische Ansichten verwendet, nicht als aktuelle Oberfläche ausgegeben.
+
+## Behoben
+
+### Stabile Live-Takes und Countdown-Zeit
+
+Eine Änderung an einem anderen Ablauf-Element startet einen laufenden Countdown nicht mehr neu. MAIN und echte Vorschauen verwenden denselben ursprünglichen Zeitanker; ein bewusster erneuter Take startet weiterhin neu. Banner übernehmen ihren Abschnittskontext aus dem Live-Snapshot. Das Verschieben oder Entfernen des Editor-Elements ändert die sichtbare Bannerfreigabe daher nicht rückwirkend.
+
+### Banner vollständig lesen und Medien weiterlaufen lassen
+
+Eine entfernte oder abgelaufene Meldung beendet ihren aktuellen Lauf beziehungsweise ihre statische Lesephase auch über einen Folienwechsel hinweg; sie wird danach nicht erneut begonnen. Separate Banner-Revisionen vermeiden ein erneutes Laden des aktuellen Medieninhalts. Native Prüfungen bestätigen weiterlaufendes Video und unveränderte Website-Identität beim Bannerwechsel. Das Testwasserzeichen bleibt unabhängig darüber sichtbar.
+
+### Sicherer Abschluss nativer Prüfläufe
+
+Temporäre Chromium-Testprofile werden erst nach dem Ende des zugehörigen Prozesses bereinigt. Gesperrte Dateien erhalten begrenzte Wiederholungsversuche; ein weiterhin belegtes Profil bleibt mit Diagnose erhalten, statt beim Beenden eine unkontrollierte EBUSY-Ausnahme auszulösen. Diese Korrektur betrifft das Prüfwerkzeug und ist keine pauschale Bestätigung für die Behebung des früher gemeldeten grauen Programmstarts.
+
+## Bekannte Einschränkungen
+
+### Unsichtbare Zeichen in Bannertexten
+
+Ein Text, der ausschließlich aus unsichtbaren Zeichen wie einem Zero-Width Space besteht, kann derzeit noch als Bannerinhalt erkannt werden und eine leere Leiste reservieren. Solche Meldungstexte bitte in der Datenquelle bereinigen. Normale Texte mit sichtbaren Zeichen sind davon nicht betroffen.
+
+---
+
 # GottesdienstRegie 0.81.0
 
 Veröffentlicht: Mi., 14.10.2026

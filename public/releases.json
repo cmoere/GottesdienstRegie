@@ -21,12 +21,95 @@
   ],
   "versions": [
     {
+      "line": "0.82",
+      "builds": [
+        {
+          "version": "0.82.0",
+          "releaseDate": "2026-10-15",
+          "current": true,
+          "overview": {
+            "label": {"de": "Countdown-Bibliothek, Gemeindebanner und erweiterte Hilfe", "en": "Countdown library, community banners and expanded help"},
+            "text": {
+              "de": "Die Medienbibliothek bietet 60 native, offline verfügbare Countdowns in zehn Zeitlängen und sechs ruhigen Designs. Als Meldungsscreen-Banner freigegebene Gemeindemeldungen laufen unabhängig vom Folienwechsel über MAIN und dessen echte Vorschauen; der übrige Inhalt wird proportional eingepasst.\n\nAlle 63 Hilfethemen wurden um praktische Anleitungen und Fehlerbehebung in 17 Sprachen ergänzt. Eine neue Artikelansicht, aktuelle Aufnahmen der Anwendung und ein einheitlich aufbereiteter Versionsverlauf erleichtern die Vorbereitung im Gemeindeteam. Die abschließende Prüfung hat außerdem Countdown-Neustarts durch Editoränderungen und vorzeitig beendete Banner korrigiert.",
+              "en": "The media library provides 60 native, offline countdowns in ten durations and six restrained designs. Community announcements enabled for the message-screen banner move independently of slide changes on MAIN and its actual mirrors, while the remaining content is fitted proportionally.\n\nAll 63 help topics now include practical guidance and troubleshooting in 17 languages. A structured article view, current application captures and a consistently presented release history support the congregation team. Final verification also corrected countdown restarts caused by editor changes and prematurely ended banners."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {"de": "60 stille Countdown-Vorlagen", "en": "60 silent countdown presets"},
+                "text": {
+                  "de": "Unter Medienbibliothek → Countdowns stehen 20, 15, 10, 5, 3, 2 und 1 Minute sowie 30, 20 und 10 Sekunden bereit. Jede Dauer gibt es in Klar, Natur, Licht, Kreuz, Kerze und Geometrisch. Nur die ausgewählte Vorschau läuft. Die Übernahme erstellt ein eigenständiges Ablauf-Element; sie ersetzt weder ein Hintergrundbild noch eine Audiodatei. Die Countdowns bleiben standardmäßig ohne Ton und halten bei 00:00, sofern kein anderes Ende-Verhalten gewählt wurde.",
+                  "en": "Media library → Countdowns offers 20, 15, 10, 5, 3, 2 and 1 minute plus 30, 20 and 10 seconds. Each duration has Clear, Nature, Light, Cross, Candle and Geometric designs. Only the selected preview runs. Adding creates a separate rundown item, not a background image or audio file. Presets are silent by default and hold at 00:00 unless another end action is selected."
+                }
+              },
+              {
+                "label": {"de": "Unabhängiger Meldungsscreen-Banner", "en": "Independent message-screen banner"},
+                "text": {
+                  "de": "Die bestehende Firebase-Freigabe showMeldungBanner steuert einen eigenen öffentlichen Meldungskanal. Der rote Text läuft auf weißem Band im Vor- und Nachprogramm oder über einem Countdown. Oben oder unten wird gerätebezogen unter Einstellungen → Präsentation → Meldungsscreen-Banner festgelegt; unten ist Standard. Schwarz, Logo und OSB haben Vorrang. Textänderungen werden an Laufgrenzen übernommen, die reservierte Bildfläche an sicheren Wechselpunkten. STAGE und andere eigenständige Ausgaben werden nicht ungefragt verändert.",
+                  "en": "The existing Firebase showMeldungBanner flag enables a separate public announcement channel. Red text moves on a white band during pre/post-program or over a countdown. Device-level Settings → Presentation → Message-screen banner selects top or bottom, with bottom as default. Black, logo and OSB take priority. Text changes are adopted at cycle boundaries and reserved space at safe takes. STAGE and other independent outputs are not changed unsolicited."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {"de": "Ausführlichere, gegliederte Hilfe", "en": "Expanded, structured help"},
+                "text": {
+                  "de": "Alle 63 Themen erhalten praktische Schritte, Probe- und Fehlerhinweise sowie passende Themenverweise in allen 17 vorhandenen Sprachen. Inhaltsverzeichnisse, lesbare Abstände, Tastaturfokus und Rechts-nach-links-Darstellung unterstützen die Bedienung. Zehn aktuelle native Aufnahmen zeigen die tatsächliche Oberfläche. Überholte Anweisungen zu Testbetrieb, Schnellanzeigen und Unsplash-Zugangsschlüsseln wurden mit dem heutigen Ablauf abgeglichen.",
+                  "en": "All 63 topics include practical steps, rehearsal/troubleshooting guidance and related-topic links in all 17 supported languages. Local contents navigation, readable spacing, keyboard focus and right-to-left layout improve access. Ten current native captures show the actual interface. Obsolete instructions about test operation, quick screens and Unsplash key entry have been reconciled with current workflows."
+                }
+              },
+              {
+                "label": {"de": "Nachvollziehbarer Versionsverlauf", "en": "Consistent release history"},
+                "text": {
+                  "de": "Die bisherigen 118 Builds bleiben mit ihren ursprünglichen Versionsnummern, Daten und ihrer Reihenfolge erhalten. Beschreibungen wurden sachlich und einheitlich aufbereitet; die ursprünglichen ausführlichen Notizen bleiben zusätzlich archiviert. Historische Bildschirmaufnahmen werden weiterhin als historische Ansichten verwendet, nicht als aktuelle Oberfläche ausgegeben.",
+                  "en": "All 118 previous builds retain their original version identities, dates and order. Descriptions have been presented consistently and factually, with the original detailed notes additionally archived. Historical screenshots remain historical views rather than being presented as the current interface."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {"de": "Stabile Live-Takes und Countdown-Zeit", "en": "Stable live takes and countdown timing"},
+                "text": {
+                  "de": "Eine Änderung an einem anderen Ablauf-Element startet einen laufenden Countdown nicht mehr neu. MAIN und echte Vorschauen verwenden denselben ursprünglichen Zeitanker; ein bewusster erneuter Take startet weiterhin neu. Banner übernehmen ihren Abschnittskontext aus dem Live-Snapshot. Das Verschieben oder Entfernen des Editor-Elements ändert die sichtbare Bannerfreigabe daher nicht rückwirkend.",
+                  "en": "Editing another rundown item no longer restarts a running countdown. MAIN and actual mirrors use the same original anchor, while a deliberate retake still restarts it. Banners obtain their section context from the live snapshot, so moving or deleting the editor source does not retroactively alter visible banner eligibility."
+                }
+              },
+              {
+                "label": {"de": "Banner vollständig lesen und Medien weiterlaufen lassen", "en": "Complete banner reading without interrupting media"},
+                "text": {
+                  "de": "Eine entfernte oder abgelaufene Meldung beendet ihren aktuellen Lauf beziehungsweise ihre statische Lesephase auch über einen Folienwechsel hinweg; sie wird danach nicht erneut begonnen. Separate Banner-Revisionen vermeiden ein erneutes Laden des aktuellen Medieninhalts. Native Prüfungen bestätigen weiterlaufendes Video und unveränderte Website-Identität beim Bannerwechsel. Das Testwasserzeichen bleibt unabhängig darüber sichtbar.",
+                  "en": "Removed or expired announcements finish their current moving cycle or static reading phase across a slide take and are not started again. Independent banner revisions avoid reloading current media. Native checks confirm continued video playback and unchanged website identity when banners change. The test watermark remains independently visible above them."
+                }
+              },
+              {
+                "label": {"de": "Sicherer Abschluss nativer Prüfläufe", "en": "Safe native test teardown"},
+                "text": {
+                  "de": "Temporäre Chromium-Testprofile werden erst nach dem Ende des zugehörigen Prozesses bereinigt. Gesperrte Dateien erhalten begrenzte Wiederholungsversuche; ein weiterhin belegtes Profil bleibt mit Diagnose erhalten, statt beim Beenden eine unkontrollierte EBUSY-Ausnahme auszulösen. Diese Korrektur betrifft das Prüfwerkzeug und ist keine pauschale Bestätigung für die Behebung des früher gemeldeten grauen Programmstarts.",
+                  "en": "Temporary Chromium test profiles are cleaned only after their owning process exits. Locked files receive bounded retries; a still-busy profile is retained with a diagnostic instead of raising an uncontrolled EBUSY exception during teardown. This correction concerns test tooling and does not broadly certify a fix for the previously reported gray application startup."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {"de": "Unsichtbare Zeichen in Bannertexten", "en": "Invisible characters in banner text"},
+                "text": {
+                  "de": "Ein Text, der ausschließlich aus unsichtbaren Zeichen wie einem Zero-Width Space besteht, kann derzeit noch als Bannerinhalt erkannt werden und eine leere Leiste reservieren. Solche Meldungstexte bitte in der Datenquelle bereinigen. Normale Texte mit sichtbaren Zeichen sind davon nicht betroffen.",
+                  "en": "Text consisting solely of invisible characters such as a zero-width space may still be treated as banner content and reserve an empty band. Clean such announcement text in the data source. Ordinary text containing visible characters is unaffected."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.81",
       "builds": [
         {
           "version": "0.81.0",
           "releaseDate": "2026-10-14",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Breitere automatische Folien und sicherer Programmstart",
