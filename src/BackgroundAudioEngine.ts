@@ -14,6 +14,7 @@ import { setNowPlayingState } from "./nowPlayingModel";
 import { audioLevelProvider } from "./audio/AudioLevelProvider";
 import {BackgroundAudioRoute} from './audio/BackgroundAudioRoute';
 import {backgroundAudioStatus,type BackgroundAudioHealth} from './audio/backgroundAudioHealth';
+import {DuckingClaims} from './announcements/DuckingClaims';
 
 export interface BackgroundAudioState {
   active: boolean;
@@ -58,6 +59,7 @@ export class BackgroundAudioEngine {
   private routeVolume = 0.8;
   private routeMuted = false;
   private ducked = false;
+  private readonly duckingClaims = new DuckingClaims();
   private radioMetadataOff?: () => void;
   private durationTimer?: number;
   constructor() {
@@ -98,7 +100,7 @@ export class BackgroundAudioEngine {
         : (this.config?.tracks[this.index]?.durationSeconds ?? 0),
       volume: Math.round(
         (this.config?.volume ?? 70) *
-          (this.ducked ? (this.config?.ducking.level ?? 25) / 100 : 1),
+          this.duckingFactor(),
       ),
       sourceKey: this.sourceKey,
       health,
@@ -130,6 +132,7 @@ export class BackgroundAudioEngine {
     this.routeVolume = routing.background.volume / 100;
     this.routeMuted = routing.background.muted;
     this.audio.muted = Boolean(this.config?.muted) || this.routeMuted;
+    this.fadeGeneration++;
     this.audio.volume = this.targetVolume();
     if(changed||!this.route.ready)void this.route.apply(this.outputDevice);
   }
@@ -144,9 +147,17 @@ export class BackgroundAudioEngine {
         1,
         ((this.config?.volume ?? 70) / 100) *
           this.routeVolume *
-          (this.ducked ? (this.config?.ducking.level ?? 25) / 100 : 1),
+          this.duckingFactor(),
       ),
     );
+  }
+  private duckingFactor() {
+    if (this.ducked && this.config?.ducking.enabled) {
+      const level = this.config.ducking.level;
+      this.duckingClaims.set('video', Number.isFinite(level) ? Math.max(0, Math.min(1, level / 100)) : .25);
+    }
+    else this.duckingClaims.delete('video');
+    return this.duckingClaims.factor();
   }
   private fade(to: number, seconds: number) {
     const generation=++this.fadeGeneration;
@@ -370,6 +381,7 @@ export class BackgroundAudioEngine {
   setVolume(value: number) {
     if (!this.config) return;
     this.config = { ...this.config, volume: Math.max(0, Math.min(100, value)) };
+    this.fadeGeneration++;
     this.audio.volume = this.targetVolume();
     this.publish();
   }
@@ -386,6 +398,15 @@ export class BackgroundAudioEngine {
       (value ? this.config.ducking.attackMs : this.config.ducking.releaseMs) /
       1000;
     await this.fade(this.targetVolume(), seconds);
+    this.publish();
+  }
+  /** Caller owns this claim until it explicitly releases it, even across tracks. */
+  async setAnnouncementDucking(percent: number | null): Promise<void> {
+    if (percent !== null && (!Number.isFinite(percent) || percent < 0 || percent > 100))
+      throw new RangeError('Bitte einen Musikpegel von 0 bis 100 Prozent wählen.');
+    if (percent === null) this.duckingClaims.delete('announcement');
+    else this.duckingClaims.set('announcement', percent / 100);
+    await this.fade(this.targetVolume(), percent === null ? .9 : .35);
     this.publish();
   }
 }
