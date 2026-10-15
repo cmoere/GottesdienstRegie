@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { defaultKeyboardShortcuts, type KeyboardShortcuts, type ShortcutAction } from './shortcuts';
 import { defaultAudioRouting, type AudioRoute, type AudioRouteConfig, type AudioRouting } from './audioRouting';
+import { normalizeGermanRegion, type GermanRegionId } from '../shared/regional/catalog';
 
 export type Language='de'|'gsw'|'en'|'nl'|'da'|'no'|'sv'|'fi'|'fr'|'it'|'es'|'uk'|'ru'|'tr'|'ar'|'pl'|'pt-BR';
 export type ThemeMode='system'|'light'|'dark';
@@ -26,6 +27,7 @@ export interface PreferencesState {
   songTranslationMode:import('./songTranslation').SongTranslationMode;
   setSongTranslationMode:(mode:import('./songTranslation').SongTranslationMode)=>void;
   language:Language;
+  germanRegion:GermanRegionId|null;
   theme:ThemeMode;
   blackWhite:boolean;
   reduceMotion:boolean;
@@ -67,6 +69,7 @@ export interface PreferencesState {
   logoutAfterOffAir:boolean;
   logoutAfterOffAirMinutes:number;
   setLanguage:(language:Language)=>void;
+  setGermanRegion:(region:GermanRegionId|null)=>void;
   setTheme:(theme:ThemeMode)=>void;
   setBlackWhite:(blackWhite:boolean)=>void;
   setReduceMotion:(reduceMotion:boolean)=>void;
@@ -132,10 +135,17 @@ export function migratePreferencesForV63(persisted:unknown){
   return remaining;
 }
 
+export function migratePreferencesForV84(persisted:unknown){
+  const previous=persisted&&typeof persisted==='object'&&!Array.isArray(persisted)
+    ? persisted as Record<string,unknown> : {};
+  return {...previous,germanRegion:normalizeGermanRegion(previous.germanRegion)};
+}
+
 export const usePreferences=create<PreferencesState>()(persist(set=>({
   songTranslationMode:'parentheses',
   setSongTranslationMode:songTranslationMode=>set({songTranslationMode}),
   language:detectedLanguage(),
+  germanRegion:null,
   theme:'dark',
   blackWhite:false,
   reduceMotion:false,
@@ -177,6 +187,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   logoutAfterOffAir:false,
   logoutAfterOffAirMinutes:15,
   setLanguage:language=>set({language}),
+  setGermanRegion:germanRegion=>set({germanRegion:normalizeGermanRegion(germanRegion)}),
   setTheme:theme=>set({theme}),
   setBlackWhite:blackWhite=>set({blackWhite}),
   setReduceMotion:reduceMotion=>set({reduceMotion}),
@@ -216,4 +227,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   setAiEnabled:aiEnabled=>set({aiEnabled}),
   setPublicInterest:patch=>set(state=>({publicInterest:{...state.publicInterest,...patch,durationSeconds:Math.max(8,Math.min(30,patch.durationSeconds??state.publicInterest.durationSeconds))}})),
   setSharedDeviceSecurity:patch=>set(patch)
-}),{name:'gottesdienstregie.preferences',version:63,migrate:persisted=>migratePreferencesForV63(persisted)}));
+}),{name:'gottesdienstregie.preferences',version:84,
+  migrate:(persisted,version)=>migratePreferencesForV84(version<63?migratePreferencesForV63(persisted):persisted),
+  merge:(persisted,current)=>({...current,...migratePreferencesForV84(persisted),setGermanRegion:current.setGermanRegion})
+}));
