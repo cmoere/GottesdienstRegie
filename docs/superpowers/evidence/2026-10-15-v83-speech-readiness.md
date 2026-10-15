@@ -123,3 +123,30 @@ Per the approved spec/plan, runtime integration pauses at this unresolved voice-
 - Full suite: 138 test files, 502/502 tests passed, exit 0, 76.58 seconds; `work/v83-text-suite.log`.
 - `npm run typecheck`: passed, exit 0; `work/v83-text-typecheck.log`.
 - No runtime synthesis, no gong playback, no physical audio test and no v83 installer yet.
+
+## User-approved MLS listening probe
+
+User approved checking German MLS and preparing a listening sample. This approves a local probe, not a silent final voice selection or publication.
+
+Pinned model at the same voices repository revision:
+
+- `de/de_DE/mls/medium/de_DE-mls-medium.onnx`: 76,961,079 bytes, SHA256 `69cd1d2aa5a35839a518966fcc4924b5f93e5f8c948ed0752b1a616ad53f65bf` (downloaded and locally verified against upstream LFS metadata).
+- `.onnx.json`: 8,948 bytes, SHA256 `b0af1c89ddfdc72d32e015729b0e89b99eec13c2c8caa1db7488d98e9e570b40`.
+- MODEL_CARD: 223 bytes, SHA256 `ca1bf03a3c287fb6968acfa010e1917f85f0aa59db0f371efc3a2857f4035ffd`.
+- Config confirms 236 speakers and German eSpeak phonemes, 22,050 Hz. OpenSLR 94 independently confirms dataset CC BY 4.0 and authors Vineel Pratap, Qiantong Xu, Anuroop Sriram, Gabriel Synnaeve and Ronan Collobert. Attribution and transformations recorded next to samples.
+
+Verified CPython archive and seven wheel archives were unpacked into ignored `work/v83-mls-probe/runtime` without modifying system/bundled Python or installed GottesdienstRegie. Portable Python's path file was extended only inside this probe. Three real local WAVs were produced using CPUExecutionProvider, one intra-op and one inter-op thread. Runtime 12.91 seconds for all three after model load; output WAVs include the provided gong, a half-second gap and the same sample welcome text. No live application, device routing or media playback was started.
+
+Native failure discovered and traced: the pinned eSpeak bridge could not open its existing data directory under Unicode Windows user path `Mörchen`, falling back to a nonexistent build-machine path. Original phonemization exited with error; resolving the same existing data directory via `GetShortPathNameW` to an ASCII 8.3 alias made German phonemization pass (16 phonemes) and full synthesis succeed. Only the disposable probe uses this workaround. Product integration must validate availability of a suitable path and fail clearly if no alias exists; do not assume 8.3 aliases exist on every PC and do not alter/move user files or operating-system settings.
+
+Probe scripts are ignored scratch, not production implementations: `work/v83-mls-probe-prepare.cjs`, `work/v83-mls-probe-render.py`. Preserved for reproduction, not installed/shipped. No new product-code change since `eb3f1cc`.
+
+| Preview | Model speaker | Duration | WAV SHA256 |
+| --- | ---: | ---: | --- |
+| mls-stimme-1-mit-gong.wav | 0 (source speaker 2422) | 27.98 s | 0a357f8254f12400d87973cd0216c91df88c120cd1c73556052904ec154dcaa7 |
+| mls-stimme-2-mit-gong.wav | 1 (source speaker 4536) | 23.46 s | f960e37a31672ac06877ccdab7cb4488854f6391f1604d64ed0aaf168befd48e |
+| mls-stimme-3-mit-gong.wav | 2 (source speaker 2037) | 21.48 s | 49d8f7a8d1667f4f8e3233913d71c7c78e400a322bdd4922aa1a7a271c70b227 |
+
+Location: `work/v83-mls-probe/audio/`. A separate readback check passed for all three: valid PCM16 mono/22,050 Hz WAVs, identical initial gong segment, nonzero speech RMS and no clipping. Original gong SHA256 remains `5cd14eb1563660fe44a0ea793a38414262cb1ae4a37e1e6bc1cd5dd401231589`. Subjective pronunciation/quality and physical loudspeaker output remain for listening, not claimed from signal measurements.
+
+Task 1 remains partial until the user accepts a voice and package license/source/notice delivery is finalized. No automatic announcements or v83 release is active.
