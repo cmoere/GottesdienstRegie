@@ -84,3 +84,38 @@ describe('independent announcement banner channel',()=>{
     }finally{parse.mockRestore()}
   });
 });
+
+describe('independent spoken hall announcement channel',()=>{
+  const service=new AnnouncementService();
+  const speech={...base,showDurchsage:true,durchsageSaalscreen:true,textDurchsageSaalscreen:'Bitte kommen Sie zum Saal.',durchsageTextModeSaalscreen:'title_description'};
+  it('requiresPublicCurrentHallSpeechChannel independently of visual slides and loop targets',()=>{
+    const raw={...speech,messageScreen:false,gottesdienstRegie:{loopTargets:{}}};
+    expect(service.getSpoken([raw],now)).toEqual([expect.objectContaining({id:'-Omsg',text:'Bitte kommen Sie zum Saal.'})]);
+    for(const patch of [{showDurchsage:false},{durchsageSaalscreen:false},{status:'Entwurf'},{trash:'1'},{giltAb:'2026-10-05'},{giltBis:'2026-10-04T09:00:00'},{gottesdienstRegie:{enabled:false}}]){
+      expect(service.getSpoken([{...speech,...patch}],now)).toEqual([]);
+    }
+  });
+  it('accepts the explicit hall target and compatible flag values',()=>{
+    expect(service.getSpoken([{...speech,durchsageSaalscreen:false,durchsageTargets:{saalscreen:'ja'},showDurchsage:'1'}],now)).toHaveLength(1);
+    expect(service.getSpoken([{...speech,durchsageSaalscreen:false,durchsageTargets:{info:true}}],now)).toEqual([]);
+  });
+  it('exposes only public speech fields and stable identity order',()=>{
+    const rows=service.getSpoken([{...speech,messageId:'z',internalComment:'secret',createdBy:'admin'},{...speech,messageId:'a'},{...speech,messageId:'u',priority:'urgent'}],now);
+    expect(rows.map(row=>row.id)).toEqual(['u','a','z']);
+    expect(Object.keys(rows[0]).sort()).toEqual(['id','priority','revision','text','title']);
+    expect(rows[0].title).toBe('Willkommen');
+  });
+  it('updates revision only for actual speech content or identity changes',()=>{
+    const first=service.getSpoken([speech],now)[0];
+    expect(service.getSpoken([{...speech,internalComment:'changed'}],now)[0].revision).toBe(first.revision);
+    expect(service.getSpoken([{...speech,textDurchsageSaalscreen:'Geänderter Text'}],now)[0].revision).not.toBe(first.revision);
+    expect(service.getSpoken([{...speech,messageId:'other'}],now)[0].revision).not.toBe(first.revision);
+  });
+  it('checks validity every call and never mutates the original Firebase record',()=>{
+    const original=structuredClone(speech);
+    expect(service.getSpoken([{...speech,giltBis:now.toISOString()}],now)).toHaveLength(1);
+    expect(service.getSpoken([{...speech,giltBis:now.toISOString()}],new Date(now.getTime()+1))).toEqual([]);
+    service.getSpoken([speech],now);
+    expect(speech).toEqual(original);
+  });
+});

@@ -1,5 +1,7 @@
 import type {AnnouncementPlacement, AnnouncementPriority, AnnouncementCategory} from '../loopData';
 import {announcementRuns,announcementRunsText} from '../announcementRichText';
+import {selectSpeechText,speechPlainText} from '../announcements/textSelection';
+import type {SpokenAnnouncement} from '../announcements/types';
 
 export type RawAnnouncement={messageId:string;[key:string]:unknown};
 export interface PublicAnnouncement {
@@ -16,6 +18,22 @@ const priorities=new Set(['urgent','important','normal']);
 const categories=new Set(['general','event','traffic','service','community','info','technical','internal']);
 
 export class AnnouncementService {
+  getSpoken(records:RawAnnouncement[],now:Date):SpokenAnnouncement[]{
+    const rank={urgent:0,important:1,normal:2};
+    return records.flatMap(raw=>{
+      const targets=raw.durchsageTargets;
+      const hall=targets&&typeof targets==='object'&&!Array.isArray(targets)
+        ?(targets as Record<string,unknown>).saalscreen:undefined;
+      if(!this.isPublicAndCurrent(raw,now)||!truthy(raw.showDurchsage)
+        ||!(truthy(raw.durchsageSaalscreen)||truthy(hall)))return [];
+      const selected=selectSpeechText(raw);
+      if('reason'in selected)return [];
+      const priority=typeof raw.priority==='string'&&priorities.has(raw.priority)
+        ?raw.priority as AnnouncementPriority:'normal';
+      return [{id:raw.messageId,title:speechPlainText(raw.titel),text:selected.text,
+        revision:JSON.stringify([raw.messageId,selected.text]),priority}];
+    }).sort((a,b)=>rank[a.priority]-rank[b.priority]||(a.id<b.id?-1:a.id>b.id?1:0));
+  }
   private readonly bannerTextCache=new WeakMap<RawAnnouncement,{values:unknown[];text:string|undefined}>();
   private bannerText(raw:RawAnnouncement):string|undefined{
     const values=[raw.textBanner,raw.textLaufbanner,raw.textMeldung,raw.beschreibung,raw.titel],cached=this.bannerTextCache.get(raw);
