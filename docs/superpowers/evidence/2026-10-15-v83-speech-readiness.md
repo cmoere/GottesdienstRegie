@@ -150,3 +150,13 @@ Probe scripts are ignored scratch, not production implementations: `work/v83-mls
 Location: `work/v83-mls-probe/audio/`. A separate readback check passed for all three: valid PCM16 mono/22,050 Hz WAVs, identical initial gong segment, nonzero speech RMS and no clipping. Original gong SHA256 remains `5cd14eb1563660fe44a0ea793a38414262cb1ae4a37e1e6bc1cd5dd401231589`. Subjective pronunciation/quality and physical loudspeaker output remain for listening, not claimed from signal measurements.
 
 Task 1 remains partial until the user accepts a voice and package license/source/notice delivery is finalized. No automatic announcements or v83 release is active.
+
+## Listening rejection and operator-choice requirement
+
+User rejected all three previews as buggy and clarified both crackling/choppy audio and pronunciation/unnatural articulation. No sample is accepted. The user explicitly wants the eventual operator to choose later; further development must not require this commissioning user to select one of these three now.
+
+Read-only analysis of original speech WAVs: zero near-clipped samples (>0.99 full scale); no 20 ms windows below RMS 0.001 for first two samples and at most a 0.18-second quiet run in sample 3. These metrics rule out simple file clipping/long digital dropouts, not audible defects. Re-synthesis diagnosis found four sentences and no missing symbols in the configured phoneme map. Piper's WAV helper directly concatenates sentence chunks; observed boundary discontinuities up to 0.0516 full scale in the diagnostic run could contribute to clicks. They do not explain or resolve wrong pronunciation. No quality-fix claim is made and no new preview is offered as fixed.
+
+Prepared a pure validated settings contract and device persistence, not a finished UI/runtime: model family plus configurable speaker ID, no initially selected speaker, explicit acceptance before activation. Neither saved model-family metadata nor schema validation means a candidate is quality-approved. Missing/invalid historical choices remain disabled. Interval and music-remaining percentage retain prior defaults/bounds. No automatic audio, model install, IPC handler or settings screen has been activated by this change.
+
+Verification: targeted settings/text/device/profile 69/69 tests; full suite 140 files, 529/529 tests, 70.60 seconds; app typecheck and Electron no-emit compilation exit 0. Tests observed failing for absent normalizer/repository methods before implementation. Existing device fields and concurrent writes preserved. Speech renderer/playback quality, model packaging, chooser UI and full v83 remain incomplete.

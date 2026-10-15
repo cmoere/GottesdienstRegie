@@ -31,6 +31,7 @@ Vorgeschlagene, mit dieser Spezifikation zu genehmigende Vorgaben:
 - Intervall: 5 Minuten; numerisch einstellbar von 1 bis 120 Minuten.
 - Hintergrundmusik während der Ansage: 20 % des ansonsten gültigen Pegels, einstellbar 0–100 %. Das ist der verbleibende relative Pegel, nicht „um 20 % reduzieren“.
 - Sprachpaket: eine geprüfte deutsche Piper-Stimme; keine automatische Windows-/Cloud-Ersatzstimme.
+- Ergänzung auf ausdrücklichen Benutzerwunsch: Die Stimme wird erst später vom jeweiligen Operator in den Einstellungen ausgewählt und probegehört, nicht jetzt durch den Auftraggeber und nicht fest beim Build. Modell und Sprecher-ID werden als gerätebezogene Wahl gespeichert. Ohne explizite Wahl und Bestätigung bleiben automatische Ansagen deaktiviert. Die drei MLS-Hörproben wurden vom Benutzer wegen Klang/Aussprache abgelehnt und sind keine abgenommene Standardauswahl.
 - Informationssatz: „Durchsagen laufen nur im Vor- und Nachprogramm. Musik und Hintergrundaudio werden während Gong und Durchsage auf den eingestellten Pegel abgesenkt und danach wiederhergestellt.“
 - Liste der tatsächlich lesbaren Texte mit Meldungstitel, Bereitschaft und verständlichem Grund bei ausgeschlossenen/fehlerhaften Einträgen. Keine Bearbeitung oder Rückschreibung des Firebase-Textes auf dieser Seite.
 - „Probe anhören“ mit separatem Stoppknopf; Wiedergabe über die vorhandene Preview-Route. Keine unbestellte Saalwiedergabe durch Öffnen der Einstellungen.
