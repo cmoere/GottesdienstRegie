@@ -58,6 +58,7 @@ export class BackgroundAudioEngine {
   private outputDevice = "default";
   private routeVolume = 0.8;
   private routeMuted = false;
+  private routingInitialized = false;
   private ducked = false;
   private readonly duckingClaims = new DuckingClaims();
   private radioMetadataOff?: () => void;
@@ -128,6 +129,13 @@ export class BackgroundAudioEngine {
       background: { ...defaultAudioRouting.background, ...value?.background },
     };
     const nextDevice=routeDeviceId(routing, "background") || "default",changed=nextDevice!==this.outputDevice;
+    if (this.routingInitialized && !changed
+        && this.routeVolume === routing.background.volume / 100
+        && this.routeMuted === routing.background.muted) {
+      if (!this.route.ready) void this.route.apply(this.outputDevice);
+      return;
+    }
+    this.routingInitialized = true;
     this.outputDevice = nextDevice;
     this.routeVolume = routing.background.volume / 100;
     this.routeMuted = routing.background.muted;

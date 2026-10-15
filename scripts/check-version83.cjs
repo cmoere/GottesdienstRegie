@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const pkg=require('../package.json');
+const catalog=require('../public/releases.json');
+const lock=require('../package-lock.json');
+const builds=catalog.versions.flatMap(line=>line.builds);
+assert.match(pkg.version,/^0\.\d+\.\d+$/);assert.ok(Number(pkg.version.split('.')[1])>=83);
+assert.equal(pkg.releaseSeries,pkg.version.split('.').slice(0,2).join('.'));
+assert.equal(lock.version,pkg.version);assert.equal(lock.packages[''].version,pkg.version);
+assert.equal(builds[0].version,pkg.version);
+assert.deepEqual(builds.filter(build=>build.current).map(build=>build.version),[pkg.version]);
+assert.equal(new Set(builds.map(build=>build.version)).size,builds.length);
+assert.ok(fs.readFileSync('RELEASE_NOTES.md','utf8').startsWith('# GottesdienstRegie '+pkg.version));
+const preparation=builds.find(build=>build.version==='0.83.0');assert.ok(preparation);
+for(const locale of ['de','en'])assert.ok(preparation.sections.known.some(item=>item.text[locale]?.length>200));
+assert.ok(builds.some(build=>build.version==='0.82.0'));
+console.log('V83 preparation-only release metadata verified.');

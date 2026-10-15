@@ -119,4 +119,22 @@ describe('announcement ducking in the real background engine',()=>{
    expect(audio.volume).toBeCloseTo(.07);expect(audio.muted).toBe(true);
   } finally { await engine.stop(0);usePreferences.setState({audioRouting:original}); }
  });
+
+ it.each(['theme','identical routing'])('preserves an ordinary five-second stop fade after %s changes',async kind=>{
+  const {engine,audio}=await setupDucking();
+  const {usePreferences}=await import('./preferences');
+  const {theme,audioRouting}=usePreferences.getState();
+  try {
+   const stopping=engine.stop(5);
+   await vi.advanceTimersByTimeAsync(1000);
+   if(kind==='theme')usePreferences.setState({theme:theme==='dark'?'light':'dark'});
+   else usePreferences.setState({audioRouting:{...audioRouting,background:{...audioRouting.background}}});
+   await vi.advanceTimersByTimeAsync(100);
+   expect(audio.src).toBe('https://example.test/radio');
+   expect(audio.paused).toBe(false);
+   expect(audio.volume).toBeLessThan(.45);
+   await vi.advanceTimersByTimeAsync(4000);await stopping;
+   expect(audio.src).toBe('');expect(audio.paused).toBe(true);
+  } finally {await engine.stop(0);usePreferences.setState({theme,audioRouting});}
+ });
 });

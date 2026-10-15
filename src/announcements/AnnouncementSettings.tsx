@@ -4,6 +4,7 @@ import {getCommunityAnnouncementRecords, getCommunityRuntimeSnapshot, subscribeC
 import {normalizeAnnouncementSettings, validateAnnouncementSettings} from './settings';
 import type {AnnouncementSettings as Settings, AnnouncementSettingsBridge} from './settings';
 import type {SpokenAnnouncement} from './types';
+import './announcement-preparation.css';
 
 const service = new AnnouncementService();
 
@@ -66,7 +67,7 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
   }
 
   const texts = rows ?? communityRows;
-  return <section className="settings-group" aria-labelledby="announcement-preparation-title">
+  return <section className="settings-group announcement-preparation-settings" aria-labelledby="announcement-preparation-title">
     <h3 id="announcement-preparation-title">ANSAGEN</h3>
     <p>Durchsagen laufen nur im Vor- und Nachprogramm. Musik und Hintergrundaudio werden während Gong und Durchsage auf den eingestellten Pegel abgesenkt und danach wiederhergestellt.</p>
     <p role="note">Vorbereitung: Die Sprachausgabe bleibt deaktiviert, bis eine lokale Sprachengine geprüft ist. Es wird keine Stimme automatisch gewählt und kein Sprachpaket heruntergeladen.</p>

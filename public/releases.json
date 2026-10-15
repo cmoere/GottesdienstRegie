@@ -21,12 +21,31 @@
   ],
   "versions": [
     {
+      "line": "0.83",
+      "builds": [{
+        "version": "0.83.0", "releaseDate": "2026-10-15", "current": true,
+        "overview": {
+          "label": {"de": "Ansagen vorbereiten und Audiosteuerung absichern", "en": "Announcement preparation and safer audio control"},
+          "text": {"de": "Unter Einstellungen → Präsentation → Ansagen lassen sich das spätere Intervall und der verbleibende Musikpegel für diesen Regie-PC speichern. Freigegebene öffentliche Saaltexte kommen aus den bestehenden Gemeindemeldungen; Firebase-Daten bleiben unverändert. Die vorhandene Hintergrund-Audiosteuerung erhält getrennte Absenkungsansprüche und Schutz vor veralteten Fade-Zielwerten. Diese Veröffentlichung enthält ausschließlich die Vorbereitung: Automatische Sprachansagen, Gong, Stimmwahl und Sprachpakete sind noch nicht verfügbar.", "en": "Settings → Presentation → Announcements prepares the future interval and remaining music level for this control PC. Eligible public hall texts come from existing community announcements without changing Firebase records. Background audio gains independent attenuation claims and protection against stale fade targets. This release contains preparation only: automatic speech, gong playback, voice selection and speech packages are not yet available."}
+        },
+        "sections": {
+          "new": [{"label": {"de": "Gerätebezogene Ansagenvorbereitung", "en": "Device-level announcement preparation"}, "text": {"de": "Intervall von 1 bis 120 Minuten und verbleibenden Musikpegel von 0 bis 100 Prozent ausdrücklich speichern. Die Textliste berücksichtigt Freigabe, Gültigkeit, Saalzuordnung und vorhandene Textmodi; interne Kommentare werden ausgeschlossen. Änderungen werden zentral übernommen, abgelaufene Einträge lassen sich mit „Texte aktualisieren“ erneut prüfen. Noch nicht geladene Daten werden von einer leeren gültigen Auswahl unterschieden.", "en": "Explicitly save an interval of 1–120 minutes and a remaining music level of 0–100 percent. The text list applies public eligibility, validity, hall targeting and existing text modes while excluding internal comments. Central updates are adopted and Refresh texts rechecks expiry. Unloaded data is distinguished from an empty eligible selection."}}],
+          "improved": [],
+          "fixed": [{"label": {"de": "Getrennte Audioabsenkung und stabile Fades", "en": "Independent attenuation and stable fades"}, "text": {"de": "Video- und vorbereitete Durchsageabsenkungen heben einander nicht auf. Aktuelle Lautstärke-, Mute- und Ausgangspegeländerungen werden nicht durch alte Fade-Ziele überschrieben. Radioquelle und Wiedergabeposition bleiben durch den neuen Anspruch unverändert. Unbeteiligte Einstellungsänderungen beenden einen laufenden Ausblendvorgang nicht vorzeitig.", "en": "Video and preparatory announcement attenuation claims cannot release one another. Current volume, mute and output-level changes are not overwritten by stale fade targets. The new claim preserves the radio source and playback position. Unrelated preference changes no longer terminate an ongoing fade prematurely."}}],
+          "known": [
+            {"label": {"de": "Sprachausgabe bleibt deaktiviert", "en": "Speech output remains disabled"}, "text": {"de": "Keine automatischen Sprachansagen, kein Gong und kein Sprachpaket werden aktiviert oder heruntergeladen. Oberfläche und Hauptprozess sperren die Aktivierung. Stimmwahl, Probeanhören, Synthese und Scheduler benötigen eine später geprüfte lokale Sprachengine. Neue Ansagenseite und Anleitung sind deutsch; diese Versionsbeschreibung ist deutsch und englisch verfügbar.", "en": "No automatic speech, gong or speech package is activated or downloaded. Both the UI and main process block activation. Voice selection, auditioning, synthesis and scheduling await a verified local engine. The new preparation screen and instructions are German; these release notes are provided in German and English."}},
+            {"label": {"de": "Unsichtbare Zeichen in Bannertexten", "en": "Invisible characters in banner text"}, "text": {"de": "Ein ausschließlich aus unsichtbaren Zeichen bestehender Bannertext kann weiterhin eine leere Leiste reservieren. Bitte solche Meldungstexte in der Datenquelle bereinigen.", "en": "A banner consisting only of invisible characters can still reserve an empty band. Please clean such announcement texts in the source."}}
+          ]
+        }
+      }]
+    },
+    {
       "line": "0.82",
       "builds": [
         {
           "version": "0.82.0",
           "releaseDate": "2026-10-15",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {"de": "Countdown-Bibliothek, Gemeindebanner und erweiterte Hilfe", "en": "Countdown library, community banners and expanded help"},
             "text": {

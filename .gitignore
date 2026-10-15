@@ -11,6 +11,7 @@ dist-web/
 playwright-report/
 test-results/
 release/
+release-v83-preparation/
 work/
 .worktrees/
 *.tsbuildinfo

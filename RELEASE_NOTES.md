@@ -1,3 +1,35 @@
+# GottesdienstRegie 0.83.0
+
+Veröffentlicht: Do., 15.10.2026
+
+Diese Version ergänzt die Vorbereitung von Saal-Durchsagen und sichert die vorhandene Hintergrund-Audiosteuerung ab. Unter Einstellungen → Präsentation → Ansagen lassen sich das spätere Intervall und der verbleibende Musikpegel gerätebezogen speichern. Freigegebene Saaltexte werden aus den bestehenden Gemeindemeldungen angezeigt, ohne Firebase-Daten zu verändern.
+
+## Neu
+
+### Ansageneinstellungen und öffentliche Saaltexte
+
+Das Intervall lässt sich von 1 bis 120 Minuten und der während einer zukünftigen Durchsage verbleibende Musikpegel von 0 bis 100 Prozent vorbereiten. 20 Prozent bedeutet ein Fünftel des ansonsten gültigen Musikpegels. Die Schaltfläche „Ansageneinstellungen speichern“ übernimmt die Werte für diesen Regie-PC. Die Einstellungen bleiben beim Schließen der Seite erhalten.
+
+Die Textliste berücksichtigt öffentliche Freigabe, Gültigkeitszeit, Saalzuordnung und die vorhandene Textauswahl. Interne Kommentare werden nicht angezeigt. Änderungen und zurückgezogene Meldungen werden aus dem zentralen Datenbestand übernommen; „Texte aktualisieren“ prüft zusätzlich inzwischen abgelaufene Einträge. Noch nicht geladene Gemeindedaten werden von einer leeren gültigen Auswahl unterschieden.
+
+## Behoben
+
+### Audiosteuerung ohne gegenseitiges Aufheben
+
+Video- und vorbereitete Durchsageabsenkungen besitzen getrennte Ansprüche. Die stärkere Absenkung hat Vorrang. Änderungen an Lautstärke, Stummschaltung und Ausgangspegel werden nicht durch einen alten Fade-Zielwert zurückgesetzt. Der neue Absenkungsbaustein startet oder trennt weder Radio noch Playlist. Unveränderte Audiozuordnungen und unbeteiligte Einstellungen beenden einen laufenden Musik-Ausblendvorgang nicht vorzeitig.
+
+## Bekannte Einschränkungen
+
+### Automatische Sprachansagen sind deaktiviert
+
+Diese Veröffentlichung enthält ausschließlich die Vorbereitung. Es werden keine automatischen Sprachansagen, kein Gong und kein Sprachpaket aktiviert oder heruntergeladen. Die Aktivierung ist sowohl in der Oberfläche als auch im Hauptprozess gesperrt. Stimmwahl, Probeanhören, Synthese und zeitgesteuerte Wiedergabe sind noch nicht verfügbar; eine geprüfte lokale Sprachengine bleibt Voraussetzung für eine spätere Freigabe. Es wird nicht unbemerkt auf Windows- oder Cloud-Stimmen gewechselt.
+
+### Sprachumfang und bestehende Bannergrenze
+
+Die neue Ansagenseite und ihre Anleitung sind deutsch; die Versionsbeschreibung ist deutsch und englisch verfügbar. Die bestehenden Übersetzungen anderer Hilfethemen bleiben erhalten. Ein ausschließlich aus unsichtbaren Zeichen bestehender Bannertext kann weiterhin eine leere Leiste reservieren; solche Texte bitte in der Datenquelle bereinigen.
+
+---
+
 # GottesdienstRegie 0.82.0
 
 Veröffentlicht: Do., 15.10.2026

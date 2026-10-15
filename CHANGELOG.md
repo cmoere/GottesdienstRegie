@@ -1,5 +1,13 @@
 # Versionshinweise / Release notes
 
+## 0.83.0 – Ansagen vorbereiten und Audiosteuerung absichern
+
+- Gerätebezogene Vorbereitung von Intervall und verbleibendem Musikpegel unter Einstellungen → Präsentation → Ansagen.
+- Freigegebene öffentliche Saaltexte aus der bestehenden Firebase-Struktur, mit Aktualisierung und Gültigkeitsprüfung.
+- Getrennte Absenkungsansprüche und Schutz aktueller Pegel-/Muteänderungen.
+- Laufende Fades bleiben bei unbeteiligten Einstellungsänderungen erhalten.
+- Automatische Sprachansagen, Gong, Stimmwahl und Sprachpakete bleiben ausdrücklich deaktiviert beziehungsweise noch nicht verfügbar.
+
 ## 0.61.0 – Stabiler Start, präzise Audiosteuerung und Spotify-Verknüpfungen
 
 - Schwarzen Bildschirm nach einem sauberen Paket-Build behoben und eine sichtbare Wiederholen-Ansicht ergänzt.
