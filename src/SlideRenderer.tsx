@@ -714,7 +714,8 @@ export function SlideRenderer({
   mode?: SlideRendererMode;
 }) {
   const fallbackStart=useMemo(()=>AppClock.now().getTime(),[slide.id]);
-  const suppliedStart=(slide as Slide&{_presentAtMs?:number})._presentAtMs;
+  const runtime=slide as Slide&{_countdownStartedAtMs?:number;_presentAtMs?:number};
+  const suppliedStart=runtime._countdownStartedAtMs??runtime._presentAtMs;
   const startedAtMs=typeof suppliedStart==='number'&&Number.isFinite(suppliedStart)?suppliedStart:fallbackStart;
   const translationMode = usePreferences((state) => state.songTranslationMode);
   const fallbackText = translationBlocks(

@@ -91,6 +91,14 @@ app.whenReady().then(async()=>{try{
  await media.webContents.executeJavaScript("document.querySelector('.countdown-preset-preview>button').click()");
  await until(operator,"window.v77State().items.some(i=>i.metadata.countdownPresetId==='countdown:60:candle')");
  assert(await js("window.v77State().items.find(i=>i.metadata.countdownPresetId==='countdown:60:candle').autoAdvance===false"));
+ await js('window.seedV82Countdown()');await start('automatic');
+ await until(main,"document.querySelector('.countdown-copy strong')?.textContent==='01:00'");await sleep(2200);
+ const seconds=async()=>main.webContents.executeJavaScript("(()=>{const [m,s]=document.querySelector('.countdown-copy strong').textContent.split(':').map(Number);return m*60+s})()");
+ const beforeEdit=await seconds();assert(beforeEdit<60,'Native countdown must be advancing');
+ await js('window.v82EditNext()');await sleep(350);assert(await seconds()<=beforeEdit,'Editing another item must not restart the live countdown');
+ await js("(()=>{const s=window.v77State();s.goLive('demo-countdown',s.items.find(i=>i.id==='demo-countdown').slides[0].id)})()");
+ await until(main,"document.querySelector('.countdown-copy strong')?.textContent==='01:00'");
+ await js("document.querySelector('.test-session-button').click()");await until(operator,'!window.v77State().onAir');
  await js('window.seedV77()');
  await start('next-events');await js("document.querySelector('.preview-nav.next').click()");await until(main,"document.body.innerText.includes('Testveranstaltung')");await capture('postprogram',main);
  await js("window.dispatchEvent(new CustomEvent('gottesdienstregie:open-help',{detail:'Testbetrieb'}))");await capture('test-help');

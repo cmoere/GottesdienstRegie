@@ -23,11 +23,11 @@ export class BannerSession{
     if(!input.enabled||!input.allowed){this.active=null;this.lastTake='';return null}
     const safeTake=this.lastTake!==input.takeKey;this.lastTake=input.takeKey;
     if(!this.active&&!safeTake)return null;
-    if(!input.items.length&&safeTake){this.active=null;return null}
     if(this.active?.items.length&&input.nowMs<this.active.cycleStartedAtMs+bannerDisplayDuration(this.active)){
       if(safeTake&&this.active.position!==input.position)this.active={...this.active,position:input.position,revision:++this.revision};
       return this.active;
     }
+    if(!input.items.length&&safeTake){this.active=null;return null}
     if(!input.items.length){
       if(this.active?.items.length)this.active={...this.active,items:[],revision:++this.revision};
       return this.active;

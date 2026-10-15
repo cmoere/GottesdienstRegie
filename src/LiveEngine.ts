@@ -16,6 +16,7 @@ import {backgroundAudioEngine} from './BackgroundAudioEngine';
 import {useLiveOutputPreview} from './liveOutputPreview';
 import {outputPresentationDelay} from './outputPresentation';
 import {upcomingMedia} from './mediaWarmup';
+import type {BannerContext} from './announcementBannerModel';
 
 function withSongOutputs(slide: Slide): Slide {
   const snapshot=structuredClone(slide),item=usePresentation.getState().items.find(item=>item.id===slide.itemId);
@@ -28,6 +29,8 @@ function withSongOutputs(slide: Slide): Slide {
 }
 
 export class LiveEngine{
+  private takeRevision:number|undefined;
+  private takeMetadata=new Map<string,{countdownStartedAtMs:number;bannerContext:Pick<BannerContext,'liveSection'|'countdownActive'>}>();
   private revision=0;
   private lastHash=0;
   private delivery=0;
@@ -47,10 +50,24 @@ export class LiveEngine{
     });
   }
   async preflight(assignments:Record<string,DisplayRole>,presentation:{hasPresentation:boolean;activeSlideCount:number;media:string[]}):Promise<DesktopPreflight>{const result=await (window.desktop?.preflight(assignments,presentation)??{ok:false,errors:['Die Desktop-Ausgabe ist nicht verfügbar.'],warnings:[]});const snapshot=await waitForCommunityRuntime();const state=usePresentation.getState();const community=communityPreflight(snapshot,state.eventLink?.eventKey,state.items.filter(item=>item.itemCategory==='loop').map(item=>({id:item.title,type:item.type,target:item.sectionId})));const warnings=await checkLyricLayouts(state.items,state.lyricScrolling),loopWarnings=loopPreflight(state.items,state.sections).warnings;return {...result,warnings:[...result.warnings,...warnings,...loopWarnings,...community.warnings,...audioPreflight(backgroundAudioEngine.getHealth()).warnings]}}
-  private snapshot(slide:Slide){const state=usePresentation.getState(),item=state.items.find(entry=>entry.id===slide.itemId),dynamic=hydrateDynamicEventData(hydrateNowPlayingData(withSongOutputs(slide))),rendered=item?cloneRenderedSlideSnapshot(buildRenderedSlideSnapshot(dynamic,item,'main')).slide:structuredClone(dynamic),hash=outputRevision(rendered);if(hash!==this.lastHash){this.lastHash=hash;this.revision+=1}return {...attachOutputRevision(rendered,this.revision),_mediaWarmup:upcomingMedia(state.items,slide.id,state.sections.map(section=>section.id)),_presentAtMs:Date.now()+100}}
-  async start(assignments:Record<string,DisplayRole>,slide:Slide){if(!window.desktop)throw new Error('Die Desktop-Ausgabe ist nicht verfügbar.');const delivery=++this.delivery,snapshot=this.snapshot(slide),ok=await window.desktop.goOnAir(assignments,snapshot);if(ok)await this.commit(snapshot,delivery);return ok}
+  private snapshot(slide:Slide){
+    const state=usePresentation.getState(),item=state.items.find(entry=>entry.id===slide.itemId),dynamic=hydrateDynamicEventData(hydrateNowPlayingData(withSongOutputs(slide))),rendered=item?cloneRenderedSlideSnapshot(buildRenderedSlideSnapshot(dynamic,item,'main')).slide:structuredClone(dynamic),hash=outputRevision(rendered),presentAtMs=Date.now()+100;
+    if(hash!==this.lastHash){this.lastHash=hash;this.revision+=1}
+    // A delivery can refresh the same take. Editor edits must not restart its clock
+    // or silently replace the section eligibility captured when it went live.
+    if(this.takeRevision!==state.liveTransitionRevision){this.takeRevision=state.liveTransitionRevision;this.takeMetadata.clear()}
+    let take=this.takeMetadata.get(slide.id);
+    if(!take){
+      const type=state.sections.find(section=>section.id===item?.sectionId)?.type;
+      const liveSection:BannerContext['liveSection']=type==='preLoop'||type==='preProgram'?'pre':type==='postLoop'?'post':type==='service'?'service':'other';
+      take={countdownStartedAtMs:presentAtMs,bannerContext:{liveSection,countdownActive:item?.type==='countdown'||item?.type==='loopCountdown'}};
+      this.takeMetadata.set(slide.id,take);
+    }
+    return {...attachOutputRevision(rendered,this.revision),_mediaWarmup:upcomingMedia(state.items,slide.id,state.sections.map(section=>section.id)),_presentAtMs:presentAtMs,_countdownStartedAtMs:take.countdownStartedAtMs,bannerContext:{...take.bannerContext}};
+  }
+  async start(assignments:Record<string,DisplayRole>,slide:Slide){if(!window.desktop)throw new Error('Die Desktop-Ausgabe ist nicht verfügbar.');this.takeRevision=undefined;this.takeMetadata.clear();const delivery=++this.delivery,snapshot=this.snapshot(slide),ok=await window.desktop.goOnAir(assignments,snapshot);if(ok)await this.commit(snapshot,delivery);return ok}
   async show(slide:Slide){const delivery=++this.delivery,snapshot=this.snapshot(slide),ok=await(window.desktop?.sendLiveSlide(snapshot)??false);if(ok)await this.commit(snapshot,delivery);return ok}
-  async stop(){++this.delivery;++this.committedDelivery;this.cancelCommit();useLiveOutputPreview.setState({slide:null});return window.desktop?.goOffAir()??false}
+  async stop(){++this.delivery;++this.committedDelivery;this.cancelCommit();this.takeRevision=undefined;this.takeMetadata.clear();useLiveOutputPreview.setState({slide:null});return window.desktop?.goOffAir()??false}
 }
 
 export const liveEngine=new LiveEngine();

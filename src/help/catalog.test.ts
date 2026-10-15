@@ -4,6 +4,7 @@ import translated from './translated.json';
 import {helpEnglish} from './english';
 import {helpWest} from './localesWest';
 import {helpEnhancementsEnglish} from './enhancementsEnglish';
+import {legacyGerman} from './legacyGerman';
 const extensionFiles=import.meta.glob<Record<string,{body:string;related:string[]}>>('./enhancements/*.json',{eager:true,import:'default'});
 
 describe('offline help catalog',()=>{
@@ -35,6 +36,12 @@ describe('offline help catalog',()=>{
   it('does not mutate the imported source articles while assembling the catalog',()=>{
     expect(getHelpArticle('Erste Schritte','en')?.body).toContain('## Practical workflow');
     expect(helpEnglish['Erste Schritte'].body).not.toContain('## Practical workflow');
+  });
+  it('replaces legacy setup blocks for workflows whose key-entry UI no longer exists',()=>{
+    for(const id of ['Erste Schritte','Unsplash']) {
+      expect(getHelpArticle(id,'de')?.body).not.toContain(legacyGerman[id]);
+      expect(getHelpArticle(id,'de')?.related?.length).toBeGreaterThan(0);
+    }
   });
   it('provides localized practical sections and valid related topics in every language',()=>{
     for(const language of helpLanguages) {

@@ -50,13 +50,16 @@ const packs=Object.fromEntries(Object.entries(sourcePacks).map(([locale,pack])=>
 const enhancements:Record<string,typeof helpEnhancementsEnglish>={en:helpEnhancementsEnglish,de:helpEnhancementsGerman,da:enhancementsDa,pl:enhancementsPl,sv:enhancementsSv,fr:enhancementsFr,es:enhancementsEs,no:enhancementsNo,it:enhancementsIt,'pt-BR':enhancementsPtBr,uk:enhancementsUk,ru:enhancementsRu,fi:enhancementsFi,tr:enhancementsTr,nl:enhancementsNl,ar:enhancementsAr};
 // These old instructions predate independent test operation, protected post-program
 // content and the current countdown/update workflow. Current articles replace them.
-const retiredLegacy=new Set(['ON AIR','Pre-Service & Post-Service','Vorschau','MAIN / STAGE / LIVESTREAM','Timer','Updates','Loop-Elemente','Audio Browser','Einstellungen']);
+const retiredLegacy=new Set(['ON AIR','Pre-Service & Post-Service','Vorschau','MAIN / STAGE / LIVESTREAM','Timer','Updates','Loop-Elemente','Audio Browser','Einstellungen','Erste Schritte']);
 for(const [locale,pack] of Object.entries(packs)){
   const legacy:Record<string,{body:string}>=locale==='de'
     ? Object.fromEntries(Object.entries(legacyGerman).map(([id,body])=>[id,{body}]))
     : (legacyTranslated as Record<string,Record<string,{body:string}>>)[locale]??{};
   for(const [id,article] of Object.entries(pack)){
-    const paragraphs=[...(retiredLegacy.has(id)?[]:(legacy[id]?.body??'').split('\n\n')),...article.body.split('\n\n')].filter(Boolean);
+    const oldParagraphs=(legacy[id]?.body??'').split('\n\n');
+    // The old Unsplash opening described a removed key-entry UI. Keep its useful
+    // selection/rights/troubleshooting guidance, not obsolete credential setup.
+    const paragraphs=[...(retiredLegacy.has(id)?[]:id==='Unsplash'?oldParagraphs.slice(1):oldParagraphs),...article.body.split('\n\n')].filter(Boolean);
     const extra=enhancements[locale]?.[id];
     pack[id]={...article,body:[...new Set(paragraphs)].join('\n\n')+(extra?'\n\n'+extra.body:''),related:extra?.related};
   }

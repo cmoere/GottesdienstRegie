@@ -24,6 +24,14 @@ it('finishes removed text but never starts it again and cycles multiple messages
   expect(session.update({...input,items:[input.items[1]],textWidths:[200],nowMs:2000})?.items[0].id).toBe('a');
   expect(session.update({...input,items:[input.items[1]],textWidths:[200],nowMs:45000})?.items[0].id).toBe('b');
 });
+it.each([false,true])('finishes removed text across a safe take before releasing its reserved band (reduced motion: %s)',reducedMotion=>{
+  const session=new BannerSession(),input={items:[item],position:'bottom' as const,allowed:true,enabled:true,takeKey:'s1',nowMs:1000,textWidths:[600],reducedMotion};
+  const first=session.update(input)!;
+  expect(session.update({...input,items:[],takeKey:'s2',nowMs:2000})).toEqual(first);
+  const finished=session.update({...input,items:[],takeKey:'s2',nowMs:50000});
+  expect(finished?.reserved).toBe(true);expect(finished?.items).toEqual([]);
+  expect(session.update({...input,items:[],takeKey:'s3',nowMs:51000})).toBeNull();
+});
 it('renders plain text only and uses static readable pieces for reduced motion',()=>{
   const state={revision:1,position:'bottom' as const,items:[{...item,text:'<img src=x onerror=bad()> Hallo & willkommen'}],cycleStartedAtMs:1000,reserved:true};
   const view=render(<AnnouncementBanner state={state} nowMs={1000} reducedMotion/>);
