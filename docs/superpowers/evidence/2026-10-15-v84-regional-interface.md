@@ -94,3 +94,25 @@ exited 0; existing large-bundle warnings remain. Logs are ignored
 The standalone complete-corpus check still exits 1 as expected: the source
 classification and full 31-variant corpus remain incomplete. This is not a
 published v84 and no version bump or remote push has been performed.
+
+## Additional authored base packs
+
+Berlinerisch and upper-Bavarian regional draft packs now also contain all 195
+base-interface entries each. Their coverage/security-placeholder tests first
+failed on the absent files, then passed after authorship. They are explicit
+template resources, not runtime whole-string word replacements. No claim of
+external linguistic review is made. Together with Ruhrdeutsch this is three
+base-interface packs, not three complete editions: native dialogs and full
+documentation/history remain missing for all three.
+
+Final three-pack check: `npm run verify:release` exited 0, 152 files / 612 tests
+passed, all historical release guards passed, and the composition/watermark guard
+subrun passed 9/9. `npm run build` exited 0 and emitted separate regional chunks;
+existing large-chunk warnings remain. The previous source-integration web run
+passed desktop/tablet/phone 3/3 (`work/v84-text-integration-web.log`); the later two
+changes add only validated package data and their coverage tests.
+
+Current logs: `work/v84-three-packs-verification.log` and
+`work/v84-three-packs-build.log`. The other 28 base packs and all complete
+documentation/native packs remain outstanding. No v84 release is authorized as
+complete by these results; package version stays 0.83.0.
