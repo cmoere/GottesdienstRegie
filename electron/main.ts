@@ -1,6 +1,7 @@
 import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Menu, shell, dialog, protocol, net, clipboard, nativeImage, nativeTheme, Notification, type MenuItemConstructorOptions } from 'electron';
 import path from 'node:path';
 import {countdownMediaSelection,type CountdownMediaContext} from './countdownMediaSelection';
+import {createAnnouncementSettingsAccess} from './announcements/SettingsAccess';
 import {readBannerOutputState} from '../src/outputState';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs/promises';
@@ -247,6 +248,9 @@ app.whenReady().then(async() => {
   translationPacks.onProgress(value=>sendToLiveWindow(controlWindow,'translation-packs:progress',value));
   Menu.setApplicationMenu(null);
   const deviceSettings=new DeviceSettingsRepository(path.join(app.getPath('userData'),'device-settings.json'));
+  const announcementSettings=createAnnouncementSettingsAccess<import('electron').IpcMainInvokeEvent>(deviceSettings,event=>Boolean(controlWindow&&!controlWindow.isDestroyed()&&!controlWindow.webContents.isDestroyed()&&event.sender.id===controlWindow.webContents.id&&event.senderFrame===controlWindow.webContents.mainFrame));
+  ipcMain.handle('announcements:settings-read',event=>announcementSettings.read(event));
+  ipcMain.handle('announcements:settings-write',(event,value:unknown)=>announcementSettings.write(event,value));
   app.setAsDefaultProtocolClient('gottesdienstregie');
   const spotifyTokenFile=path.join(app.getPath('userData'),'spotify-refresh-token.bin');
   spotifyAuth=new SpotifyAuthService({clientId:String(process.env.SPOTIFY_CLIENT_ID??''),redirectUri:'gottesdienstregie://spotify-callback',openExternal:url=>shell.openExternal(url),request:fetch,readRefreshToken:async()=>{try{if(!safeStorage.isEncryptionAvailable())return null;return safeStorage.decryptString(await fs.readFile(spotifyTokenFile))}catch{return null}},writeRefreshToken:async token=>{if(!token){await fs.unlink(spotifyTokenFile).catch(()=>{});return}if(!safeStorage.isEncryptionAvailable())throw new Error('SPOTIFY_SECURE_STORAGE_UNAVAILABLE');await fs.writeFile(spotifyTokenFile,safeStorage.encryptString(token))}});

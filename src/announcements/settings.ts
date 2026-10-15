@@ -7,6 +7,11 @@ export interface AnnouncementSettings {
   voiceAccepted:boolean;
 }
 
+export interface AnnouncementSettingsBridge {
+  readSettings(): Promise<AnnouncementSettings>;
+  writeSettings(value: AnnouncementSettings): Promise<AnnouncementSettings>;
+}
+
 const fields=new Set(['enabled','intervalMinutes','musicRemainingPercent','voiceId','speakerId','voiceAccepted']);
 const modelId='de_DE-mls-medium';
 const validSpeaker=(value:unknown):value is number=>typeof value==='number'&&Number.isInteger(value)&&value>=0&&value<236;
