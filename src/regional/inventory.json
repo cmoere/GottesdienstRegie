@@ -31654,7 +31654,7 @@
     {
       "key": "ui.loginSubtitle",
       "text": "Mit deinem Konto anmelden",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31662,7 +31662,7 @@
     {
       "key": "ui.email",
       "text": "E-Mail-Adresse",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31670,7 +31670,7 @@
     {
       "key": "ui.password",
       "text": "Passwort",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31678,7 +31678,7 @@
     {
       "key": "ui.showPassword",
       "text": "Passwort anzeigen",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31686,7 +31686,7 @@
     {
       "key": "ui.hidePassword",
       "text": "Passwort ausblenden",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31694,7 +31694,7 @@
     {
       "key": "ui.remember",
       "text": "Angemeldet bleiben",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31702,7 +31702,7 @@
     {
       "key": "ui.signIn",
       "text": "ANMELDEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31710,7 +31710,7 @@
     {
       "key": "ui.signingIn",
       "text": "Anmeldung läuft …",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31718,7 +31718,7 @@
     {
       "key": "ui.forgotPassword",
       "text": "Passwort vergessen?",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31726,7 +31726,7 @@
     {
       "key": "ui.notAvailable",
       "text": "Noch nicht verfügbar",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31734,7 +31734,7 @@
     {
       "key": "ui.firebaseChecking",
       "text": "Firebase wird geprüft …",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31742,7 +31742,7 @@
     {
       "key": "ui.firebaseConnected",
       "text": "Mit Firebase verbunden",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31750,7 +31750,7 @@
     {
       "key": "ui.firebaseDisconnected",
       "text": "Keine Firebase-Verbindung",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 4,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31758,7 +31758,7 @@
     {
       "key": "ui.twoFactorTitle",
       "text": "Zwei-Faktor-Anmeldung",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31766,7 +31766,7 @@
     {
       "key": "ui.twoFactorSubtitle",
       "text": "Zusätzliche Sicherheitsprüfung",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31774,7 +31774,7 @@
     {
       "key": "ui.twoFactorTotp",
       "text": "Öffne deine Authenticator- oder Passwort-App und gib den aktuellen 6-stelligen Code ein.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31782,7 +31782,7 @@
     {
       "key": "ui.twoFactorSent",
       "text": "Ein 6-stelliger Code wurde an {destination} gesendet.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31790,7 +31790,7 @@
     {
       "key": "ui.securityChannel",
       "text": "deinen Sicherheitskanal",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31798,7 +31798,7 @@
     {
       "key": "ui.recoveryIntro",
       "text": "Gib einen deiner einmalig verwendbaren Wiederherstellungscodes ein.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31806,7 +31806,7 @@
     {
       "key": "ui.recoveryCode",
       "text": "Wiederherstellungscode",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31814,7 +31814,7 @@
     {
       "key": "ui.verificationCode",
       "text": "Bestätigungscode",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31822,7 +31822,7 @@
     {
       "key": "ui.recoveryIncomplete",
       "text": "Bitte einen vollständigen Wiederherstellungscode eingeben.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31830,7 +31830,7 @@
     {
       "key": "ui.codeIncomplete",
       "text": "Bitte den 6-stelligen Code eingeben.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31838,7 +31838,7 @@
     {
       "key": "ui.useNormalCode",
       "text": "Normalen 2FA-Code verwenden",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31846,7 +31846,7 @@
     {
       "key": "ui.useRecoveryCode",
       "text": "Wiederherstellungscode verwenden",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31854,7 +31854,7 @@
     {
       "key": "ui.cancel",
       "text": "ABBRECHEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31862,7 +31862,7 @@
     {
       "key": "ui.verifying",
       "text": "PRÜFUNG LÄUFT …",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31870,7 +31870,7 @@
     {
       "key": "ui.confirm",
       "text": "BESTÄTIGEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31878,7 +31878,7 @@
     {
       "key": "ui.codeSafety",
       "text": "Der Code ist fünf Minuten gültig. Teile ihn niemals mit anderen Personen.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 5,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31886,7 +31886,7 @@
     {
       "key": "ui.file",
       "text": "Datei",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 6,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31894,7 +31894,7 @@
     {
       "key": "ui.media",
       "text": "Medien",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 6,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31902,7 +31902,7 @@
     {
       "key": "ui.presentation",
       "text": "Präsentation",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 6,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31910,7 +31910,7 @@
     {
       "key": "ui.view",
       "text": "Ansicht",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 6,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31918,7 +31918,7 @@
     {
       "key": "ui.tools",
       "text": "Werkzeuge",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 6,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31926,7 +31926,7 @@
     {
       "key": "ui.settings",
       "text": "Einstellungen",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 6,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31934,7 +31934,7 @@
     {
       "key": "ui.help",
       "text": "Hilfe",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 6,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31942,7 +31942,7 @@
     {
       "key": "ui.logout",
       "text": "Abmelden",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 6,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31950,7 +31950,7 @@
     {
       "key": "ui.noPermission",
       "text": "Keine Berechtigung",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 6,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31958,7 +31958,7 @@
     {
       "key": "ui.noEditPermission",
       "text": "Keine Berechtigung zum Bearbeiten",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 6,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31966,7 +31966,7 @@
     {
       "key": "ui.notAvailableTitle",
       "text": "Noch nicht verfügbar",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 6,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31974,7 +31974,7 @@
     {
       "key": "ui.orderOfService",
       "text": "ABLAUF",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31982,7 +31982,7 @@
     {
       "key": "ui.addItem",
       "text": "Element hinzufügen",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31990,7 +31990,7 @@
     {
       "key": "ui.song",
       "text": "Song",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -31998,7 +31998,7 @@
     {
       "key": "ui.bible",
       "text": "Bibel",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32006,7 +32006,7 @@
     {
       "key": "ui.content",
       "text": "Inhalt",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32014,7 +32014,7 @@
     {
       "key": "ui.newSong",
       "text": "Neuer Song",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32022,7 +32022,7 @@
     {
       "key": "ui.newBible",
       "text": "Bibelstelle",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32030,7 +32030,7 @@
     {
       "key": "ui.newContent",
       "text": "Neuer Inhalt",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32038,7 +32038,7 @@
     {
       "key": "ui.newMedia",
       "text": "Neues Medium",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32046,7 +32046,7 @@
     {
       "key": "ui.serviceSection",
       "text": "GOTTESDIENST",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32054,7 +32054,7 @@
     {
       "key": "ui.editContent",
       "text": "Inhalt bearbeiten",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32062,7 +32062,7 @@
     {
       "key": "ui.slidesOne",
       "text": "Folie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32070,7 +32070,7 @@
     {
       "key": "ui.slidesMany",
       "text": "Folien",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32078,7 +32078,7 @@
     {
       "key": "ui.noSlides",
       "text": "Noch keine Folien",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32086,7 +32086,7 @@
     {
       "key": "ui.properties",
       "text": "EIGENSCHAFTEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32094,7 +32094,7 @@
     {
       "key": "ui.layers",
       "text": "EBENEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32102,7 +32102,7 @@
     {
       "key": "ui.title",
       "text": "Titel",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32110,7 +32110,7 @@
     {
       "key": "ui.text",
       "text": "Text",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32118,7 +32118,7 @@
     {
       "key": "ui.background",
       "text": "Hintergrund",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32126,7 +32126,7 @@
     {
       "key": "ui.slides",
       "text": "FOLIEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32134,7 +32134,7 @@
     {
       "key": "ui.edit",
       "text": "BEARBEITEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32142,7 +32142,7 @@
     {
       "key": "ui.preview",
       "text": "VORSCHAU",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32150,7 +32150,7 @@
     {
       "key": "ui.singleView",
       "text": "Einzelansicht",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32158,7 +32158,7 @@
     {
       "key": "ui.slideOverview",
       "text": "Folienübersicht",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32166,7 +32166,7 @@
     {
       "key": "ui.previewSize",
       "text": "Vorschaugröße",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 7,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32174,7 +32174,7 @@
     {
       "key": "ui.onAir",
       "text": "AUF SENDUNG",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32182,7 +32182,7 @@
     {
       "key": "ui.offAir",
       "text": "AUS SENDUNG",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32190,7 +32190,7 @@
     {
       "key": "ui.noLivePermission",
       "text": "Keine Berechtigung für Auf Sendung",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32198,7 +32198,7 @@
     {
       "key": "ui.assignMain",
       "text": "MAIN-Anzeige in Einstellungen zuweisen",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32206,7 +32206,7 @@
     {
       "key": "ui.ready",
       "text": "BEREIT",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32214,7 +32214,7 @@
     {
       "key": "ui.local",
       "text": "LOKAL",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32222,7 +32222,7 @@
     {
       "key": "ui.syncOffline",
       "text": "SYNC OFFLINE",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32230,7 +32230,7 @@
     {
       "key": "ui.main",
       "text": "MAIN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32238,7 +32238,7 @@
     {
       "key": "ui.live",
       "text": "LIVE",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32246,7 +32246,7 @@
     {
       "key": "ui.item",
       "text": "ELEMENT",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32254,7 +32254,7 @@
     {
       "key": "ui.slide",
       "text": "FOLIE",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32262,7 +32262,7 @@
     {
       "key": "ui.accountLoading",
       "text": "Konto wird geladen …",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32270,7 +32270,7 @@
     {
       "key": "ui.roleViewer",
       "text": "BETRACHTER",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32278,7 +32278,7 @@
     {
       "key": "ui.rolePresenter",
       "text": "PRÄSENTATOR",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32286,7 +32286,7 @@
     {
       "key": "ui.roleEditor",
       "text": "BEARBEITER",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32294,7 +32294,7 @@
     {
       "key": "ui.roleAdmin",
       "text": "ADMIN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32302,7 +32302,7 @@
     {
       "key": "ui.displayNumber",
       "text": "Anzeige {number}",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32310,7 +32310,7 @@
     {
       "key": "ui.general",
       "text": "Allgemein",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32318,7 +32318,7 @@
     {
       "key": "ui.display",
       "text": "Anzeige",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32326,7 +32326,7 @@
     {
       "key": "ui.audio",
       "text": "Audio",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32334,7 +32334,7 @@
     {
       "key": "ui.videoInput",
       "text": "Videoeingang",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32342,7 +32342,7 @@
     {
       "key": "ui.quickScreens",
       "text": "Schnellanzeigen",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32350,7 +32350,7 @@
     {
       "key": "ui.fonts",
       "text": "Schriftarten",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32358,7 +32358,7 @@
     {
       "key": "ui.defaultMedia",
       "text": "Standardmedien",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32366,7 +32366,7 @@
     {
       "key": "ui.defaultStage",
       "text": "Standard-Bühne",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32374,7 +32374,7 @@
     {
       "key": "ui.remote",
       "text": "Fernsteuerung",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32382,7 +32382,7 @@
     {
       "key": "ui.lightingMidi",
       "text": "Licht/MIDI",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32390,7 +32390,7 @@
     {
       "key": "ui.language",
       "text": "Sprache",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32398,7 +32398,7 @@
     {
       "key": "ui.appearance",
       "text": "Darstellung",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32406,7 +32406,7 @@
     {
       "key": "ui.theme",
       "text": "Farbschema",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32414,7 +32414,7 @@
     {
       "key": "ui.themeSystem",
       "text": "Systemeinstellung",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32422,7 +32422,7 @@
     {
       "key": "ui.themeLight",
       "text": "Hell",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32430,7 +32430,7 @@
     {
       "key": "ui.themeDark",
       "text": "Dunkel",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32438,7 +32438,7 @@
     {
       "key": "ui.blackWhite",
       "text": "Schwarz-Weiß-Modus",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32446,7 +32446,7 @@
     {
       "key": "ui.blackWhiteHelp",
       "text": "Entfernt Farben ausschließlich aus der Bedienoberfläche. Ausgabefenster behalten ihre vorgesehenen Farben.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32454,7 +32454,7 @@
     {
       "key": "ui.generalHelp",
       "text": "Sprache und Darstellung werden sofort angewendet und auf diesem Gerät gespeichert.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32462,7 +32462,7 @@
     {
       "key": "ui.displayTitle",
       "text": "Anzeige",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32470,7 +32470,7 @@
     {
       "key": "ui.displayHelp",
       "text": "MAIN-Ausgabe einem physischen Bildschirm zuweisen.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32478,7 +32478,7 @@
     {
       "key": "ui.unassigned",
       "text": "Nicht zugewiesen",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32486,7 +32486,7 @@
     {
       "key": "ui.controlSurface",
       "text": "Bedienoberfläche",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32494,7 +32494,7 @@
     {
       "key": "ui.displayDesktopOnly",
       "text": "Display-Erkennung ist nur in der Desktop-App verfügbar.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32502,7 +32502,7 @@
     {
       "key": "ui.sectionUnavailable",
       "text": "Dieser Einstellungsbereich ist noch nicht verfügbar.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32510,7 +32510,7 @@
     {
       "key": "ui.updatesTitle",
       "text": "Updates und Version",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32518,7 +32518,7 @@
     {
       "key": "ui.currentVersion",
       "text": "Installierte Version",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32526,7 +32526,7 @@
     {
       "key": "ui.checkUpdates",
       "text": "NACH UPDATES SUCHEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32534,7 +32534,7 @@
     {
       "key": "ui.updateChecking",
       "text": "Suche nach Updates …",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32542,7 +32542,7 @@
     {
       "key": "ui.updateAvailable",
       "text": "Version {version} ist verfügbar.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32550,7 +32550,7 @@
     {
       "key": "ui.updateCurrent",
       "text": "GottesdienstRegie ist aktuell.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32558,7 +32558,7 @@
     {
       "key": "ui.updateDownloading",
       "text": "Update wird heruntergeladen: {percent} %",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32566,7 +32566,7 @@
     {
       "key": "ui.updateDownloaded",
       "text": "Version {version} ist bereit zur Installation.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32574,7 +32574,7 @@
     {
       "key": "ui.updateDownload",
       "text": "UPDATE HERUNTERLADEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32582,7 +32582,7 @@
     {
       "key": "ui.updateInstall",
       "text": "INSTALLIEREN UND NEU STARTEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32590,7 +32590,7 @@
     {
       "key": "ui.updateError",
       "text": "Updatefehler: {detail}",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32598,7 +32598,7 @@
     {
       "key": "ui.updateDevelopment",
       "text": "Updateprüfung ist nur in der installierten App verfügbar.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32606,7 +32606,7 @@
     {
       "key": "ui.releaseNotes",
       "text": "Versionshinweise",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32614,7 +32614,7 @@
     {
       "key": "ui.releaseCurrentBody",
       "text": "Neu in 0.2.0: automatische Updateprüfung über GitHub, sichere manuelle Installation, vollständig mehrsprachige Updateanzeige und integrierte Versionshinweise.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32622,7 +32622,7 @@
     {
       "key": "ui.accessibility",
       "text": "Barrierefreiheit",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32630,7 +32630,7 @@
     {
       "key": "ui.updates",
       "text": "Updates",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32638,7 +32638,7 @@
     {
       "key": "ui.accessibilityHelp",
       "text": "Passe Bewegung, Dichte und Login-Darstellung an deine Bedürfnisse an.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32646,7 +32646,7 @@
     {
       "key": "ui.reduceMotion",
       "text": "Bewegungen reduzieren",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32654,7 +32654,7 @@
     {
       "key": "ui.reduceMotionHelp",
       "text": "Deaktiviert längere Animationen und Übergänge.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32662,7 +32662,7 @@
     {
       "key": "ui.compactMode",
       "text": "Kompakte Bedienoberfläche",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32670,7 +32670,7 @@
     {
       "key": "ui.compactModeHelp",
       "text": "Zeigt mehr Inhalt auf kleineren Bildschirmen.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32678,7 +32678,7 @@
     {
       "key": "ui.showLoginBackgrounds",
       "text": "Wechselnde Login-Hintergründe",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32686,7 +32686,7 @@
     {
       "key": "ui.showLoginBackgroundsHelp",
       "text": "Zeigt bei jedem Programmstart ein anderes lokal mitgeliefertes Motiv.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32694,7 +32694,7 @@
     {
       "key": "ui.onlineReleaseNotes",
       "text": "Online-Versionshinweise",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32702,7 +32702,7 @@
     {
       "key": "ui.backgroundImageCredit",
       "text": "Hintergrundmotiv: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32710,7 +32710,7 @@
     {
       "key": "ui.close",
       "text": "SCHLIESSEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32718,7 +32718,7 @@
     {
       "key": "ui.logoutConfirmTitle",
       "text": "Wirklich abmelden?",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32726,7 +32726,7 @@
     {
       "key": "ui.logoutConfirmText",
       "text": "Deine lokale Sitzung wird beendet. Nicht gespeicherte Änderungen bleiben auf diesem Gerät erhalten.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32734,7 +32734,7 @@
     {
       "key": "ui.staySignedIn",
       "text": "ANGEMELDET BLEIBEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32742,7 +32742,7 @@
     {
       "key": "ui.logoutNow",
       "text": "JETZT ABMELDEN",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32750,7 +32750,7 @@
     {
       "key": "ui.helpTitle",
       "text": "Hilfe und Support",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32758,7 +32758,7 @@
     {
       "key": "ui.helpIntro",
       "text": "Antworten, Bedienhinweise und technische Informationen zu GottesdienstRegie.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32766,7 +32766,7 @@
     {
       "key": "ui.helpGettingStarted",
       "text": "Erste Schritte",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32774,7 +32774,7 @@
     {
       "key": "ui.helpGettingStartedBody",
       "text": "Öffne einen Ablauf, wähle eine Folie und weise unter Einstellungen eine MAIN-Anzeige zu. Danach kannst du die Präsentation auf Sendung schalten.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32782,7 +32782,7 @@
     {
       "key": "ui.helpShortcuts",
       "text": "Bedienung und Tastatur",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32790,7 +32790,7 @@
     {
       "key": "ui.helpShortcutsBody",
       "text": "Nutze die Menüleiste für Einstellungen und Hilfe. Folien lassen sich im Ablauf per Ziehen sortieren; Eingabefelder können wie gewohnt mit Tab gewechselt werden.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32798,7 +32798,7 @@
     {
       "key": "ui.helpUpdates",
       "text": "Updates installieren",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32806,7 +32806,7 @@
     {
       "key": "ui.helpUpdatesBody",
       "text": "Öffne Einstellungen → Updates. Suche nach einer neuen Version, lade sie herunter und bestätige anschließend Installation und Neustart.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32814,7 +32814,7 @@
     {
       "key": "ui.helpSecurity",
       "text": "Konto und Sicherheit",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32822,7 +32822,7 @@
     {
       "key": "ui.helpSecurityBody",
       "text": "Anmeldedaten werden nicht im Klartext gespeichert. Sitzungen werden durch Windows verschlüsselt und die Zwei-Faktor-Anmeldung automatisch geprüft.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32830,7 +32830,7 @@
     {
       "key": "ui.helpImages",
       "text": "Login-Bilder",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32838,7 +32838,7 @@
     {
       "key": "ui.helpImagesBody",
       "text": "Die Motive aus Bielefeld, deutschen Städten und Landschaften sind in der App enthalten und funktionieren ohne Internet. Du kannst sie unter Barrierefreiheit deaktivieren.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32846,7 +32846,7 @@
     {
       "key": "ui.releaseNoteLanguagesTitle",
       "text": "Sieben neue Sprachen",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32854,7 +32854,7 @@
     {
       "key": "ui.releaseNoteLanguagesBody",
       "text": "Spanisch, Schweizerdeutsch, Ukrainisch, Russisch, Türkisch, Arabisch und Polnisch wurden ergänzt.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32862,7 +32862,7 @@
     {
       "key": "ui.releaseNoteLoginTitle",
       "text": "Neuer Login-Bildschirm",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32870,7 +32870,7 @@
     {
       "key": "ui.releaseNoteLoginBody",
       "text": "Wechselnde Fotos aus Bielefeld, deutschen Städten und Landschaften passen sich an Hell- und Dunkelmodus an. Die Sprache wird oben rechts über Flaggen gewählt.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32878,7 +32878,7 @@
     {
       "key": "ui.releaseNoteSecurityTitle",
       "text": "Verbesserte Anmeldung",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32886,7 +32886,7 @@
     {
       "key": "ui.releaseNoteSecurityBody",
       "text": "Sechsstellige 2FA-Codes werden automatisch bestätigt. Vor dem Abmelden erscheint nun eine Sicherheitsabfrage.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32894,7 +32894,7 @@
     {
       "key": "ui.releaseNoteHelpTitle",
       "text": "Mehr Einstellungen und Hilfe",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32902,7 +32902,7 @@
     {
       "key": "ui.releaseNoteHelpBody",
       "text": "Neue Optionen für reduzierte Bewegung, kompakte Darstellung und Login-Hintergründe sowie ein eigener Hilfe-Bereich.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32910,7 +32910,7 @@
     {
       "key": "ui.releaseNoteUpdatesTitle",
       "text": "Aufklappbare Versionshinweise",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32918,7 +32918,7 @@
     {
       "key": "ui.releaseNoteUpdatesBody",
       "text": "Jeder Versionspunkt lässt sich mit Plus und Minus einzeln öffnen oder schließen.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32926,7 +32926,7 @@
     {
       "key": "ui.languageGerman",
       "text": "Deutsch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32934,7 +32934,7 @@
     {
       "key": "ui.languageSwissGerman",
       "text": "Schweizerdeutsch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32942,7 +32942,7 @@
     {
       "key": "ui.languageEnglish",
       "text": "Englisch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32950,7 +32950,7 @@
     {
       "key": "ui.languageDutch",
       "text": "Niederländisch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32958,7 +32958,7 @@
     {
       "key": "ui.languageDanish",
       "text": "Dänisch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32966,7 +32966,7 @@
     {
       "key": "ui.languageNorwegian",
       "text": "Norwegisch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32974,7 +32974,7 @@
     {
       "key": "ui.languageSpanish",
       "text": "Spanisch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32982,7 +32982,7 @@
     {
       "key": "ui.languageUkrainian",
       "text": "Ukrainisch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32990,7 +32990,7 @@
     {
       "key": "ui.languageRussian",
       "text": "Russisch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -32998,7 +32998,7 @@
     {
       "key": "ui.languageTurkish",
       "text": "Türkisch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33006,7 +33006,7 @@
     {
       "key": "ui.languageArabic",
       "text": "Arabisch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33014,7 +33014,7 @@
     {
       "key": "ui.languagePolish",
       "text": "Polnisch",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33022,7 +33022,7 @@
     {
       "key": "ui.authDesktop",
       "text": "Die Anmeldung ist nur in der installierten Desktop-App möglich.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33030,7 +33030,7 @@
     {
       "key": "ui.authStorage",
       "text": "Windows konnte die Sitzung nicht sicher verschlüsseln.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33038,7 +33038,7 @@
     {
       "key": "ui.authGasNetwork",
       "text": "Der bestehende PGB-Login-Service ist nicht erreichbar.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33046,7 +33046,7 @@
     {
       "key": "ui.authGasResponse",
       "text": "Der PGB-Login-Service hat eine ungültige Antwort geliefert.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33054,7 +33054,7 @@
     {
       "key": "ui.authEmailUnverified",
       "text": "Bitte bestätige zuerst deine E-Mail-Adresse.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33062,7 +33062,7 @@
     {
       "key": "ui.authLocked",
       "text": "Das Konto ist vorübergehend gesperrt.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33070,7 +33070,7 @@
     {
       "key": "ui.authInitialPassword",
       "text": "Dieses Einmalpasswort muss zuerst auf der Gemeinde-Webseite geändert werden.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33078,7 +33078,7 @@
     {
       "key": "ui.authTwoFactorCooldown",
       "text": "Es wurde bereits ein Bestätigungscode versendet. Bitte warte kurz und starte die Anmeldung erneut.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33086,7 +33086,7 @@
     {
       "key": "ui.authTwoFactorExpired",
       "text": "Die Zwei-Faktor-Anmeldung ist abgelaufen. Bitte melde dich erneut an.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33094,7 +33094,7 @@
     {
       "key": "ui.authTwoFactorInvalid",
       "text": "Der Bestätigungscode ist nicht korrekt.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33102,7 +33102,7 @@
     {
       "key": "ui.authTwoFactorError",
       "text": "Die Zwei-Faktor-Prüfung konnte nicht gestartet werden.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33110,7 +33110,7 @@
     {
       "key": "ui.authSessionFailed",
       "text": "Der PGB-Login war korrekt, aber die Sitzung konnte nicht erstellt werden.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33118,7 +33118,7 @@
     {
       "key": "ui.authAlgorithm",
       "text": "Der Passwortalgorithmus dieses Kontos wird noch nicht unterstützt.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33126,7 +33126,7 @@
     {
       "key": "ui.authFirebase",
       "text": "Firebase ist nicht erreichbar oder die Datenbankabfrage wurde abgelehnt.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33134,7 +33134,7 @@
     {
       "key": "ui.authAccessUnavailable",
       "text": "Deine GottesdienstRegie-Freigabe konnte gerade nicht aus Firebase geladen werden. Bitte prüfe die Verbindung und versuche es erneut.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33142,7 +33142,7 @@
     {
       "key": "ui.authDisabled",
       "text": "Dieses Benutzerkonto ist deaktiviert oder wurde zentral abgemeldet.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33150,7 +33150,7 @@
     {
       "key": "ui.authNoAccess",
       "text": "Das Konto ist gültig, besitzt aber keinen freigeschalteten GottesdienstRegie-Zugang. Bitte wende dich an den Administrator.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33158,7 +33158,7 @@
     {
       "key": "ui.authInvalid",
       "text": "E-Mail-Adresse oder Passwort ist nicht korrekt.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33166,7 +33166,7 @@
     {
       "key": "ui.authTechnical",
       "text": "Technischer Anmeldefehler: {detail}",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33174,7 +33174,7 @@
     {
       "key": "ui.authUnknown",
       "text": "Unbekannter Fehler",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33182,7 +33182,7 @@
     {
       "key": "ui.serverCodeExpired",
       "text": "Die Anmeldung ist abgelaufen. Bitte melde dich erneut an.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33190,7 +33190,7 @@
     {
       "key": "ui.serverTooMany",
       "text": "Zu viele Fehlversuche. Bitte starte die Anmeldung erneut.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33198,7 +33198,7 @@
     {
       "key": "ui.serverRecoveryInvalid",
       "text": "Der Wiederherstellungscode ist ungültig oder wurde bereits verwendet.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
@@ -33206,415 +33206,415 @@
     {
       "key": "ui.serverTotpInvalid",
       "text": "Der Code der Authenticator-App ist nicht korrekt.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
     },
     {
-      "key": "source.e01a2930375c061a6651.1",
+      "key": "source.7cb0b1fc7895ef28ad56.1",
       "text": "Zeigt bei jedem Programmstart ein anderes lokal mitgeliefertes Motiv.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 164,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.720fe87036fa340b02e5.1",
+      "key": "source.e01469b84015a4d844d3.1",
       "text": "Hintergrundmotiv: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 164,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.cc51173bc3b4dece097b.1",
+      "key": "source.5bac38b004141d3089ea.1",
       "text": "Die Motive aus Bielefeld, deutschen Städten und Landschaften sind in der App enthalten und funktionieren ohne Internet. Du kannst sie unter Barrierefreiheit deaktivieren.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 164,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.5bdeea161afe43fb4e2f.1",
+      "key": "source.bb6022f7cc73bd130b1a.1",
       "text": "Zeigt bi jedem Programmstart es anders lokal mitglieferts Motiv.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 165,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.720fe87036fa340b02e5.2",
+      "key": "source.e01469b84015a4d844d3.2",
       "text": "Hintergrundmotiv: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 165,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.188baecbb57f3eaf7b4d.1",
+      "key": "source.4052422feeea30993fc5.1",
       "text": "D Motive us Bielefeld, dütsche Städt und Landschaften sind i de App dinne und funktioniered ohni Internet. Du chasch sie under Barrierefreiheit abschalte.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 165,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.10db10b119da78856b95.1",
+      "key": "source.318f359466ca45b5feff.1",
       "text": "Shows a different locally bundled scene each time the app starts.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 166,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.237975abc1905c35fa9c.1",
+      "key": "source.f9fa470559399eb43d14.1",
       "text": "Background artwork: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 166,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.54ca84f374a896bd7862.1",
+      "key": "source.de89578b6dfc8c40a6ad.1",
       "text": "The Bielefeld, German city and landscape scenes are bundled with the app and work offline. Disable them under Accessibility.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 166,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.8a4ffa8ec8a7dc7ecc5a.1",
+      "key": "source.2011ee9ef064aaff0c53.1",
       "text": "Toont bij elke programmastart een ander lokaal meegeleverd beeld.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 167,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.69293c78b6ac28c232b3.1",
+      "key": "source.6f5f4fa4510c75895d1d.1",
       "text": "Achtergrondbeeld: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 167,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.ccf6705cc8a8700444eb.1",
+      "key": "source.df01dfacc859cfd2b871.1",
       "text": "De beelden van Bielefeld, Duitse steden en landschappen zijn in de app opgenomen en werken zonder internet. Schakel ze uit onder Toegankelijkheid.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 167,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.db0050873651ebb6eb8d.1",
+      "key": "source.303857891b1b5b4b4d18.1",
       "text": "Viser et nyt lokalt medfølgende motiv, hver gang programmet starter.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 168,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.96f91d37eba75fdb8c13.1",
+      "key": "source.c4f94461c081a8792808.1",
       "text": "Baggrundsmotiv: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 168,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.aad207286bea55b82971.1",
+      "key": "source.af29cb9585b67a50e15d.1",
       "text": "Motiverne fra Bielefeld, tyske byer og landskaber følger med appen og virker uden internet. De kan slås fra under Tilgængelighed.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 168,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.748a8af34f57658de4e3.1",
+      "key": "source.cd19ba19f4a0013886b2.1",
       "text": "Viser et nytt lokalt inkludert motiv hver gang programmet starter.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 169,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.9d4d98fdb71f17a09e69.1",
+      "key": "source.974ea9b3cfe68af0573e.1",
       "text": "Bakgrunnsmotiv: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 169,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.db792e85a70a62a7a344.1",
+      "key": "source.39339cf3fe691535c852.1",
       "text": "Motivene fra Bielefeld, tyske byer og landskap følger med appen og fungerer uten internett. De kan slås av under Tilgjengelighet.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 169,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.896bddbdcab8bd79dedd.1",
+      "key": "source.a165332e3ac4d8c1d042.1",
       "text": "Muestra una escena local diferente cada vez que se inicia la aplicación.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 170,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.acc8eb2cd05c34b3e02a.1",
+      "key": "source.1f204422d8955ce00301.1",
       "text": "Imagen de fondo: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 170,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.d65659932eb8574136d9.1",
+      "key": "source.384e934b1f3c8c4481f8.1",
       "text": "Las escenas de Bielefeld, ciudades alemanas y paisajes están incluidas en la aplicación y funcionan sin internet. Puedes desactivarlas en Accesibilidad.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 170,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.b3bf32c36e135c9b6992.1",
+      "key": "source.0b324951a75a4679df0b.1",
       "text": "Показує інше локально вбудоване зображення під час кожного запуску.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 171,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.41979f8c638f888867fe.1",
+      "key": "source.663eb905600187a982ca.1",
       "text": "Фонове зображення: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 171,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.13274d9a6efb3a6199dc.1",
+      "key": "source.8ecc4cc2f747604ff3ac.1",
       "text": "Зображення Білефельда, німецьких міст і природи вбудовані в застосунок та працюють без інтернету. Їх можна вимкнути в розділі доступності.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 171,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.20e5c9b762d9649b35de.1",
+      "key": "source.ffc7ceefa6088983aa49.1",
       "text": "Показывает новое встроенное изображение при каждом запуске приложения.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 172,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.d46778976ee015c1ea69.1",
+      "key": "source.351bf3880bbbc3529c97.1",
       "text": "Фоновое изображение: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 172,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.92d586f898bacf347ae3.1",
+      "key": "source.e163a07e9400a8d4a42b.1",
       "text": "Изображения Билефельда, немецких городов и природы встроены в приложение и работают без интернета. Их можно отключить в специальных возможностях.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 172,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.de9b0eccc9ca59f713dc.1",
+      "key": "source.5a62d5ebfb3bef4b8af3.1",
       "text": "Uygulama her başladığında yerel olarak eklenmiş farklı bir görsel gösterir.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 173,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.f34ada7f131dbc0a3e08.1",
+      "key": "source.33783b3ce1fa35f91bcf.1",
       "text": "Arka plan görseli: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 173,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.9c7fd873031034e7710d.1",
+      "key": "source.95b608e37f029e0a6d29.1",
       "text": "Bielefeld, Alman şehirleri ve doğa görselleri uygulamaya dahildir ve internet olmadan çalışır. Erişilebilirlik bölümünden kapatılabilir.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 173,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.ba425405afa43d915522.1",
+      "key": "source.1458e434991c1a01208a.1",
       "text": "يعرض مشهدًا محليًا مضمّنًا مختلفًا عند كل تشغيل للتطبيق.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 174,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.4a663bb8c41471e092e4.1",
+      "key": "source.0f9f87fbeabaa208b4af.1",
       "text": "صورة الخلفية: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 174,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.a2e8bb8149011badfc56.1",
+      "key": "source.d2c9d82748d4a47f4062.1",
       "text": "صور بيليفيلد والمدن الألمانية والطبيعة مضمّنة في التطبيق وتعمل دون إنترنت. ويمكن تعطيلها من قسم إمكانية الوصول.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 174,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.37b9e0bf823f5ded8dbc.1",
+      "key": "source.8fbe8d1d0fca3e6414c7.1",
       "text": "Przy każdym uruchomieniu aplikacji pokazuje inny lokalnie dołączony motyw.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 175,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.942abdfac5354f7fa976.1",
+      "key": "source.cd198fba873c7ae420ee.1",
       "text": "Motyw tła: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 175,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.8650baaffbd81bffd1c7.1",
+      "key": "source.a32a820bae7bb5dfa2cd.1",
       "text": "Motywy Bielefeldu, niemieckich miast i krajobrazów są dołączone do aplikacji i działają bez internetu. Można je wyłączyć w Ułatwieniach dostępu.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 175,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.e5f906a8a26c9beb0c71.1",
+      "key": "source.d565155ce662da4c5f98.1",
       "text": "Visar ett nytt lokalt motiv varje gång appen startar.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 176,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.acc0c070d79afd7b0b63.1",
+      "key": "source.f069ae473e8ee8ab70bf.1",
       "text": "Bakgrundsmotiv: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 176,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.8871b940104c9ea8cefa.1",
+      "key": "source.124b1480f9ac7516bc71.1",
       "text": "Motiven ingår i appen och fungerar offline.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 176,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.86e4fa388ddb613141b7.1",
+      "key": "source.7ec0be3a1da09bfffb9c.1",
       "text": "Näyttää eri paikallisen kuvan jokaisella käynnistyskerralla.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 177,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.f276361c4ca6b69c0b0a.1",
+      "key": "source.0f577a8cb8ed8d62f960.1",
       "text": "Taustakuva: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 177,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.562e773761824266222a.1",
+      "key": "source.71e76dc1538de09736a9.1",
       "text": "Kuvat sisältyvät sovellukseen ja toimivat offline-tilassa.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 177,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.0ff299b33136b58b9216.1",
+      "key": "source.5a2337f9338f927b6895.1",
       "text": "Affiche une scène locale différente à chaque démarrage.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 178,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.16609b6298dc8445e317.1",
+      "key": "source.c75027f991db02a379a0.1",
       "text": "Image d’arrière-plan : GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 178,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.6d6fa0379f16dd1e1376.1",
+      "key": "source.633753bd707d6c66fd84.1",
       "text": "Les images sont intégrées à l’application et fonctionnent hors ligne.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 178,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.d6848d9173eeb7b92193.1",
+      "key": "source.487bef2ac5294d315a14.1",
       "text": "Mostra una scena locale diversa a ogni avvio.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 179,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.408cbd48d54b4a4eb186.1",
+      "key": "source.44af847fe8928e3a6961.1",
       "text": "Immagine di sfondo: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 179,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.aa87f84dfc12c326f9b4.1",
+      "key": "source.7ee6bf49eed63892cca7.1",
       "text": "Le immagini sono incluse nell’app e funzionano offline.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 179,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
     {
-      "key": "source.19b708cecad5b14ac3fa.1",
+      "key": "source.c43c777c8b0768815e7d.1",
       "text": "Mostra uma imagem local diferente a cada inicialização.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 180,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
     {
-      "key": "source.f60e9fb590ecdd969333.1",
+      "key": "source.bc961613fd2a4bdda6ca.1",
       "text": "Imagem de fundo: GottesdienstRegie",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 180,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
     {
-      "key": "source.cf7f19b50095141f3bb1.1",
+      "key": "source.fe20e90a3af5e4715011.1",
       "text": "As imagens estão incluídas no aplicativo e funcionam sem internet.",
-      "source": "src/i18n.ts",
+      "source": "src/i18nBase.ts",
       "line": 180,
       "context": "property:helpImagesBody",
       "status": "review-required"

@@ -60,8 +60,37 @@ text fields. Candidate count is not a count of verified user-facing strings.
 All candidates must be classified and all assembled help additions/native surfaces
 covered before claiming complete localization.
 
-No regional UI or documentation text packs have yet been authored. Complete
+At the foundation checkpoint no regional UI or documentation text packs had been authored. Complete
 31-variant translations, source integration, native synchronization, selector,
 race protection, native/layout tests, final review and release metadata remain.
 No version bump, publication, remote push, installer change, speech activation or
 Firebase write has occurred. The public version remains v0.83.0.
+
+## Text integration continuation
+
+The first actual authored interface pack, `shared/regional/packs/ruhr.json`, now
+explicitly covers all 195 current base-dictionary keys. It includes login,
+security, updates and older short release-summary text. This is a colloquial
+regional UI draft, not a claim of native-speaker validation. It has no native
+dialog resources or full help/release-history pack and is not a complete edition.
+
+`src/i18nBase.ts` retains the previous dictionaries and public base translator.
+`src/i18n.ts` now provides the React hook, which loads the requested local pack
+and resolves templates through `src/regional/resources.ts`. Language remains
+separate from regional selection. Packs are validated, cached by ID and loaded
+on demand; an older pending load cannot replace a different selected region.
+The package is emitted in a separate approximately 10.4 kB JavaScript chunk.
+No incomplete selector is advertised in settings.
+
+Observed RED→GREEN: two authored-pack tests, five loader/resolver tests and the
+operator-hook update test. The V73 source-based guard first failed after the
+dictionary moved; its source path now follows the data module. The public
+translation API also retains the original administrator-access guidance.
+
+Continuation verification: `npm run verify:release` exited 0 with 151 files /
+610 tests passing plus nine composition/watermark guard tests. `npm run build`
+exited 0; existing large-bundle warnings remain. Logs are ignored
+`work/v84-text-integration-verification.log` and `work/v84-text-integration-build.log`.
+The standalone complete-corpus check still exits 1 as expected: the source
+classification and full 31-variant corpus remain incomplete. This is not a
+published v84 and no version bump or remote push has been performed.
