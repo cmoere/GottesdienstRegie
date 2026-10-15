@@ -1,0 +1,443 @@
+{
+  "SCHNELLSTART": {
+    "body": "## Uygulamalı iş akışı\n\n1. İbadeti yöneten kişiden ibadet sırasını ve son dakika değişikliklerinden sorumlu kişiyi öğrenin.\n2. Karşılama, topluca söylenecek ilahi ve Kutsal Kitap okuması içeren kısa bir sunum hazırlayın.\n3. Katılımcı ekranını belirleyin ve ziyaretçiler gelmeden açıkça işaretlenmiş test modunda prova yapın.\n\n## Prova ve sorun giderme\n\nProvaya sabit bir slayt, video ve bilinçli bir duraklama ekleyin. Düzenleyicideki seçime güvenmek yerine projektörün gerçek görüntüsünü doğrulayın. Kaydedilmiş sunumu yerelde hazır tutun ve ağ kaynağı kullanılamazsa nasıl devam edileceğini ekiple kararlaştırın.",
+    "related": [
+      "Erste Schritte",
+      "Preflight"
+    ]
+  },
+  "Songübersetzungen": {
+    "body": "## Uygulamalı iş akışı\n\n1. Topluluğun hangi özgün dil ve çeviri dillerine ihtiyaç duyduğunu kararlaştırın.\n2. Çeviriyi, tekrarlanan nakaratlar dahil ilgili söz bölümüyle eşleştirin.\n3. Kaydetmeden önce en uzun iki dilli slaydı gerçek çıkış düzeninde inceleyin.\n\n## Prova ve sorun giderme\n\nÇeviriler katılımı destekler; teolojik anlamın editoryal denetiminin veya sözleri çoğaltma izninin yerine geçmez. Çevrilmemiş bir kıtayı da prova edin: özgün metin kullanılabilir kalmalıdır. Satırlar eşleşmiyorsa dönüşümlü satır düzenini seçmeden eşleştirmeyi düzeltin.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bildschirmschoner": {
+    "body": "## Uygulamalı iş akışı\n\n1. Provadan önce uygulamanın ekran koruma seçeneğini ayarlayın.\n2. Okuma veya vaaz slaytını normal ekran zaman aşımından daha uzun süre değiştirmeden bırakın.\n3. Projektörün ve sinyal yolunun uyanık kaldığını doğrulayın.\n\n## Prova ve sorun giderme\n\nUygulama koruması her projektör ayarını, dizüstü kapağı eylemini veya yönetilen Windows ilkesini geçersiz kılamaz. Kurum ilkelerini bilinçsizce değiştirmeden salondaki gerçek donanımı kontrol edin. GottesdienstRegie kapandıktan sonra normal güç yönetimi sürmelidir; yalnızca uykuyu önlemek için canlı çıkışı açık tutmayın.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Einstellungen"
+    ]
+  },
+  "Installation & Nutzungsbedingungen": {
+    "body": "## Uygulamalı iş akışı\n\n1. Yükleyiciyi doğrulanmış sürüm kaynağından indirin ve devam eden ibadeti düzgünce sonlandırın.\n2. Kurulum koşullarını okuyup kabul edip etmemeye karar verin.\n3. Güncellemeden sonra provadan önce kurulu sürümü ve kayıtlı ekran atamalarını doğrulayın.\n\n## Prova ve sorun giderme\n\nYazılım kurulumu Kutsal Kitap çevirileri, ilahiler, fotoğraflar veya radyo yayınları için hak vermez. Önceki sunumun yedeğini yükleyiciden ayrı tutun. Kurulum kilitli dosya bildirirse yalnızca belirtilen uygulamayı veya test sürecini kapatın; uyarıyı aşmak için tüm kullanıcı profilini asla silmeyin.",
+    "related": [
+      "Updates",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Minimum Viable Product (MVP)": {
+    "body": "## Uygulamalı iş akışı\n\n1. Temel ibadet akışını isteğe bağlı dış entegrasyonlardan ayırın.\n2. Program sonundaki son ekran dahil topluluğun gerçekten kullanacağı özellikleri sınayın.\n3. Bu ibadet için basit, kaydedilmiş bir yedek sıralama hazır tutun.\n\n## Prova ve sorun giderme\n\nİsteğe bağlı bir sağlayıcının kullanılamaması, çalışan yerel sunumdan vazgeçmeyi gerektirmemelidir. Ziyaretçiler gelmeden hemen önce sınanmamış bir entegrasyon eklemeyin. Ekibin bilinçli sınırlamayı tekrarlanabilir hatadan ayırabilmesi için tam olarak eksik davranışı ve kurulu sürümü bildirin.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Erste Schritte": {
+    "body": "## Uygulamalı iş akışı\n\n1. İbadet sunumunu oluşturup adlandırın ve topluluğun gerçek etkinliğine bağlayın.\n2. İçeriği doğru bölümlere ekleyip belgeyi kaydedin.\n3. Yalnızca açılışı değil, son ibadet slaytını, program sonuna geçişi ve OFF AIR işlemini de prova edin.\n\n## Prova ve sorun giderme\n\nSeçili, önizlenen ve canlı içeriği ayrı ayrı kontrol edin. Otomatik salon bildirimi çözümlenebilir bir bağlı etkinlik ve salon gerektirir; test senaryoları gerçek etkinlik kayıtlarını değiştirmeden seçenekleri gösterebilir. İlahi sözlerini ve Kutsal Kitap bölümlerini ibadeti yönetenlerle doğrulamak için zaman ayırın.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Gemeinsame Gemeinde-PCs": {
+    "body": "## Uygulamalı iş akışı\n\n1. Başka gönüllünün bilgileriyle değil, operatöre atanmış hesapla oturum açın.\n2. Çıkış ekranları ve teknik OSB varsayılanları gibi bilgisayara ait ayarları belirleyin.\n3. Sunumu kaydedin ve operatör değişirken canlı durumu açıkça devredin.\n\n## Prova ve sorun giderme\n\nKullanıcı değişimi MAIN'i sessizce taşımamalı veya teknik çıkışın stilini değiştirmemelidir. Kişisel arayüz tercihleri değişebilir; kurulumu ekran tanımlama ve gerçek görüntüyle doğrulayın. Rutin çıkış sırasında paylaşılan uygulama verilerini temizlemeyin: değerli yerel sunum ve kurtarma bilgileri silinebilir.",
+    "related": [
+      "Anmelden & Abmelden",
+      "Virtual Screens & Displays"
+    ]
+  },
+  "Anmelden & Abmelden": {
+    "body": "## Uygulamalı iş akışı\n\n1. Girişten sonra doğru kurum ve kullanıcının gösterildiğini kontrol edin.\n2. Eksik erişimi tekrar tekrar kurulum yapmak yerine topluluk yöneticisiyle çözün.\n3. İş istasyonundan desteklenen çıkış işlemiyle ayrılmadan önce kaydedin ve canlı oynatmayı bitirin.\n\n## Prova ve sorun giderme\n\nGeçerli hesap ve etkin GottesdienstRegie erişimi ayrı koşullardır. Yardım isterken görünen erişim mesajını iletin; parola, kurtarma kodu veya oturum belirtecini asla paylaşmayın. Ortak bilgisayarda sonraki operatörün yetkilerinin öncekiyle aynı olduğunu varsaymadan girişini doğrulayın.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Support"
+    ]
+  },
+  "Veranstaltung verknüpfen": {
+    "body": "## Uygulamalı iş akışı\n\n1. Özellikle aynı başlıklı etkinlikler varsa tarih, başlangıç saati ve salona göre seçin.\n2. Bağlantıyı kaydedip sunum başlığını kontrol edin.\n3. Kaydetme ve yüklemede bağlantının korunduğunu doğrulamak için sunumu yeniden açın.\n\n## Prova ve sorun giderme\n\nBağlantı başlığı değil, sabit etkinlik anahtarını kullanır. Sonraki ad değişikliği bağlantıyı bozmamalı, iptal de bağlı etkinlikle görünür ilişkili kalmalıdır. Salon çözümlenemiyorsa yönetici aracılığıyla merkezi verileri kontrol edin; Firebase anahtarını ziyaretçilere gösterilecek salon adı olarak asla girmeyin.",
+    "related": [
+      "Servicezeit & Verspätung",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Inhalte hinzufügen": {
+    "body": "## Uygulamalı iş akışı\n\n1. Add element'i açmadan hedef bölümü seçin.\n2. Uygun yerleşik öğeyi veya medya kaynağını seçip eklenen öğeyi akışta inceleyin.\n3. Slaytları ve zamanlamayı düzenledikten sonra kaydedin.\n\n## Prova ve sorun giderme\n\nBazı dinamik öğeler yalnızca döngüler içindir ve ibadet bölümüne yerleştirilemez. Korunan ilk program sonu bildirimi otomatik oluşturulur; Add element seçeneği değildir. Ekleme beklenmedik yere olursa içeriği tekrar tekrar çoğaltmak yerine geri alıp hedef bölümü kontrol edin.",
+    "related": [
+      "Ablauf",
+      "Loop-Elemente"
+    ]
+  },
+  "Medien": {
+    "body": "## Uygulamalı iş akışı\n\n1. Göreve uygun dosya türünü seçin: arka plan, ön plan, ses veya tam bir öğe.\n2. Eklemeden kullanılabilirliğini ve haklarını kontrol edin.\n3. İndirilen video yerine yerleşik süreli karşılama için Countdowns bölümünü kullanın.\n\n## Prova ve sorun giderme\n\nGeri sayım hazır ayarları çevrimdışı çalışır; yirmi dakikadan on saniyeye on süre ve her biri için altı sakin tasarım sunar. Akışta ayrı öğe oluşturur ve varsayılan olarak sessizdir. Hazır ayar arka plan resmi veya ses dosyası değildir; tarayıcı bu ayrımı açıkça gösterir.",
+    "related": [
+      "Cloud-Medien",
+      "Timer"
+    ]
+  },
+  "Cloud-Medien": {
+    "body": "## Uygulamalı iş akışı\n\n1. Medyaya güvenmeden önce yükleme veya eşitlemenin tamamlanmasını bekleyin.\n2. İlgili sunuma ekleyip yerel prova görüntüsünü kontrol edin.\n3. Bilgisayarı çevrimdışına almadan önemli medyayı doğrulayın.\n\n## Prova ve sorun giderme\n\nKüçük resim tam indirmeyi veya kullanılabilir oynatma iznini kanıtlamaz. Destekleniyorsa temel ibadet medyasını yerelde hazırlayın. İbadette bulut erişimi kesilirse çalışan canlı görüntüyü koruyup hazır yerel alternatifi kullanın; aktarım beklerken canlı öğeyi tekrar tekrar değiştirmeyin.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Medien"
+    ]
+  },
+  "Unsplash": {
+    "body": "## Uygulamalı iş akışı\n\n1. İbadet veya öğretim bağlamına uygun arka plan arayın.\n2. Sağlayıcının kullanım ve kaynak belirtme bilgilerini okuyun.\n3. Kullanmadan önce resmi gerçek ilahi veya Kutsal Kitap metninin altında önizleyin.\n\n## Prova ve sorun giderme\n\nTopluluğun okumasıyla yarışan yoğun fotoğraf yerine yeterli kontrastlı sakin resim seçin. Ücretsiz indirme tüm hukuki veya mahremiyet konularını ortadan kaldırmaz. Seçilen resmi önceden hazırlayın; canlı ibadette dış arama hizmetine gerek kalmasın.",
+    "related": [
+      "Medien",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "KI-Motive": {
+    "body": "## Uygulamalı iş akışı\n\n1. İstenen atmosferi, kompozisyonu ve okunabilir metin için gereken boşluğu tarif edin.\n2. Medya kitaplığına kaydetmeden taslak üretip inceleyin.\n3. Gerçek sunumda yalnızca gözden geçirilmiş sonucu kullanın.\n\n## Prova ve sorun giderme\n\nEvanjelik ibadette sembolleri, yazıları ve teolojik çağrışımları dikkatle inceleyin; üretilen resim yanıltıcı ayrıntılar içerebilir. İstemlerde tanınabilir kişilerden veya gizli topluluk bilgilerinden kaçının. Üretim hazırlık işidir, canlıya hazır medyanın yerine geçmez: üretim başarısız veya yavaş olursa uygun mevcut bir arka plan bulundurun.",
+    "related": [
+      "Medien",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Songs": {
+    "body": "## Uygulamalı iş akışı\n\n1. İlahi adını, tam sürümünü ve kıta sırasını ibadet yöneticisiyle doğrulayın.\n2. Bölümleri anlamlı okuma noktalarından ayırıp kararlaştırılmış çeviriyi ekleyin.\n3. Tekrarlanan nakaratları ve son kıtayı MAIN ve STAGE üzerinde prova edin.\n\n## Prova ve sorun giderme\n\nFarklı düzenlemelerin sözleri veya köprüleri farklıysa yalnızca ada güvenmeyin. Canlı sözleri beklenmedik biçimde değiştirmeden yazımı, büyük harfleri ve müzikal işaretleri kontrol edin. Sözleri çoğaltma veya yayınlama hakları topluluğun sorumluluğundadır. Sahne akorları ile ziyaretçi metnini ayrı kitlelerine uygun tutun.",
+    "related": [
+      "Songübersetzungen",
+      "Lyric Scrolling"
+    ]
+  },
+  "Virtual Screens & Displays": {
+    "body": "## Uygulamalı iş akışı\n\n1. Rolleri atamadan fiziksel ekranları tanımlayın.\n2. MAIN'i hedef projektöre yerleştirin; STAGE ve diğer çıkışları ayrıca doğrulayın.\n3. Dock, projektör veya USB ekran adaptörü yeniden bağlanınca atamaları kontrol edin.\n\n## Prova ve sorun giderme\n\nDonanım değişince monitör düzeni veya numarası değişebilir. En büyük ekranın MAIN olduğunu varsaymayın. Atanmış ekran yoksa ON AIR'ı tekrar tekrar değiştirmek yerine operatör kontrollerinden atamayı düzeltin. Teknik ekran ayarları güncellemelerde korunmalı ve bu bilgisayara özgü kalmalıdır.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Preflight"
+    ]
+  },
+  "Persönliche Monitore": {
+    "body": "## Uygulamalı iş akışı\n\n1. Kişisel monitör için gerçek çıkış aynası mı, operatör notları mı gerektiğini seçin.\n2. Hedef konumdan içeriği ve izin verilen erişimi kontrol edin.\n3. Slayt değişimini ve geçici Quick Screen'i prova edin.\n\n## Prova ve sorun giderme\n\nGerçek MAIN aynası düzenleyici seçimini değil canlı görüntüyü göstermelidir. Test modunda test işaretini de taşır. Özel notları herkese açık ekranda göstermeyin. Ayna gerideyse geçiş sürelerini değiştirmeden veya rakip oynatma kaynağı oluşturmadan zaman damgalarını ve asıl kaynağı karşılaştırın.",
+    "related": [
+      "Vorschau",
+      "Remote"
+    ]
+  },
+  "Websteuerung": {
+    "body": "## Uygulamalı iş akışı\n\n1. Yetkilendirilmiş uzaktan erişimi ibadetten önce hazırlayın.\n2. Masaüstü operatörü gerçek canlı çıkışı izlerken basit gezinme komutunu sınayın.\n3. Birden çok kişinin eşzamanlı komut göndermemesi için ilerletmeyi kimin yapacağını kararlaştırın.\n\n## Prova ve sorun giderme\n\nTelefon veya tarayıcıda seçili öğe görünmesi MAIN'in değiştiğini kanıtlamaz. Ağ kesintisinden sonra komutu yinelemeden masaüstündeki canlı durumu inceleyin. Prova veya etkinlik bitince geçici erişimi iptal edin. Uzaktan kontroller test işaretini kaldırmamalı veya korunan sistem slaydını aşmamalıdır.",
+    "related": [
+      "Remote",
+      "Current / Next"
+    ]
+  },
+  "Audioausgänge": {
+    "body": "## Uygulamalı iş akışı\n\n1. Her ses rotası için fiziksel çıkış cihazını seçin.\n2. Arka plan müziği, radyo ve videoyu gerçekten yapılandırılmış rotalarıyla sınayın.\n3. Ziyaretçilerden önce salon sistemini uygun prova ses düzeyinde dinleyin.\n\n## Prova ve sorun giderme\n\nRadyo, ilgisiz tarayıcı varsayılanı yerine arka plan ses rotasını kullanır. İlerleyen oynatma sayacı duyulur sinyalin kanıtı değildir. Arayüz çıkarılırsa ana sesi sürekli artırmak yerine rota durumunu ve mevcut cihazları kontrol edin. Önizleme dinlemesini katılımcı sinyalinden ayrı tutun.",
+    "related": [
+      "Routing-Probleme",
+      "Vorhören"
+    ]
+  },
+  "Preflight": {
+    "body": "## Uygulamalı iş akışı\n\n1. Sunum hazırlığını, medya, yazı tipleri, bağlı etkinlik, salonlar ve ses rotalarını inceleyin.\n2. Engelleyici çıkış sorununu isteğe bağlı kullanılamayan döngü kaynağından ayırın.\n3. Önemli bulguları düzelttikten sonra gerçek canlı akışı prova edin.\n\n## Prova ve sorun giderme\n\nÇevrimdışı topluluk önbelleği yararlı olsa da sonraki salon rezervasyonunu artık doğru göstermeyebilir. Görünen veri zaman damgasına bakın. Başarılı test senaryosu, gerçek Firebase etkinlik ve salon verilerinin bulunduğunu doğrulamaz. Operatör tanılaması teknik ID içerebilir; ziyaretçi çıkışı bunları göstermemelidir.",
+    "related": [
+      "ON AIR",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "ON AIR": {
+    "body": "## Uygulamalı iş akışı\n\n1. Üretim çıkışından önce gerçek sunumu ve bağlı topluluk etkinliğini doğrulayın.\n2. Canlı kontrollerle MAIN'in hangi slaydı gösterdiğini kontrol edin.\n3. Katılımcı çıkışı gerekmeyince bilinçli olarak OFF AIR ile bitirin.\n\n## Prova ve sorun giderme\n\nON AIR canlı motoru etkinleştirir; test çalışması ayrı bir moddur. Test içinden ON AIR başlatmak test filigranını korumalıdır. Düzenleyicide vurgulanan öğenin canlı olduğunu varsaymayın. Tam sıraya güvenmeden son ibadet slaydına ve korunan program sonu bildirimine ulaşmayı prova edin.",
+    "related": [
+      "Preflight",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "LIVE-BETRIEB": {
+    "body": "## Uygulamalı iş akışı\n\n1. Sonraki ilahi kıtası, okuma veya duyuru için açık bir işaret kararlaştırın.\n2. İlerlerken Current/Next'i ve gerçek MAIN görüntüsünü izleyin.\n3. Beklenmedik duraklama için uygun Quick Screen hazırlayın.\n\n## Prova ve sorun giderme\n\nİkincil sorunu araştırırken kullanılabilir görüntü ve sesi koruyun. Firebase duyuru değişiklikleri görünür mesajı cümle ortasında değiştirmek yerine güvenli geçişe hazırlanır. Ekibe devrederken neyin canlı olduğunu, hangi Quick Screen'in etkin olduğunu ve sesin sonraki bölüme sürüp sürmeyeceğini belirtin.",
+    "related": [
+      "Current / Next",
+      "Quick Screens"
+    ]
+  },
+  "Vorschau": {
+    "body": "## Uygulamalı iş akışı\n\n1. Düzenleyici önizlemesini canlı MAIN aynasından ayırın.\n2. Tek önizleme üstündeki slayt adını ve gerçek canlı göstergesini kontrol edin.\n3. Quick Screen değişiminden ve normal ilerlemeden sonra görüntüyü karşılaştırın.\n\n## Prova ve sorun giderme\n\nCanlı aynalar video veya arka plan sesinin ikinci duyulur kopyasını oluşturmamalıdır. Geri sayım aynaları yeni sayaç başlatmak yerine MAIN ile aynı başlangıç dayanağını kullanır. Görüntüler saniyelerce farklıysa slaydı, geçişi ve sürümü kaydedin; düzenleyici seçiminin değişmesi canlıya alınmanın kanıtı değildir.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Fehlerbehebung"
+    ]
+  },
+  "MAIN / STAGE / LIVESTREAM": {
+    "body": "## Uygulamalı iş akışı\n\n1. Atamadan önce her çıkışın hangi kitleye hizmet ettiğine karar verin.\n2. MAIN ziyaretçi metnini, STAGE ipuçlarını ve yayın kompozisyonunu ayrı ayrı doğrulayın.\n3. Gerekli her çıkışta normal slayt ve Quick Screen sınayın.\n\n## Prova ve sorun giderme\n\nMAIN aynası gerçek banner ve test işaretini içerir; bağımsız tasarlanan çıkış farklı içerik taşıyabilir. Test kaydı veya yayını görünür biçimde işaretli kalmalıdır. Yalnızca küçük resimden tanı koymayın: gerçek atanmış ekranı veya o çıkışın doğrulanmış yakalamasını kullanın.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Recording"
+    ]
+  },
+  "Quick Screens": {
+    "body": "## Uygulamalı iş akışı\n\n1. İbadetten önce logo, siyah ekran, mesaj, geri sayım ve OSB varsayılanlarını hazırlayın.\n2. MAIN'i izleyerek kısayol veya düğmelerini bilinçli kullanın.\n3. Geçici gösterim bitince normal canlı slaydı geri getirin.\n\n## Prova ve sorun giderme\n\nQuick Screens normal slayt içeriğine göre önceliklidir. Duyuru banner'ı siyah, logo ve OSB ekranlarında bastırılır; geri sayım açıkça birleştirilebilir istisnadır. Testte filigran siyah ekranda bile görünür. OSB görünümü F9 canlı penceresinde her defasında yeniden değil, merkezi olarak yapılandırılır.",
+    "related": [
+      "Bibel",
+      "Timer"
+    ]
+  },
+  "Current / Next": {
+    "body": "## Uygulamalı iş akışı\n\n1. İlerleme işaretini kabul etmeden mevcut canlı slaydı kontrol edin.\n2. Bölüm sınırları ve atlanan boş dinamik öğeler dahil sonraki etkin öğeyi inceleyin.\n3. İleri ve geri gezinmeyi prova edin.\n\n## Prova ve sorun giderme\n\nDüzenleyicide seçilen öğe canlı öğeden farklı olabilir. Geçerli duyuru veya etkinliği olmayan dinamik öğe boş ekran göstermek yerine atlanmalıdır. İbadet bittiğinde korunan program sonu bildirimi sıranın parçasıdır; ilgisiz gezinme sorununu çözmek için kaldırmayın.",
+    "related": [
+      "Ablauf",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Recording": {
+    "body": "## Uygulamalı iş akışı\n\n1. İstenen kayıt kaynağını ve çıkış kompozisyonunu doğrulayın.\n2. Görüntü ve ses içeren kısa test kaydı yapın.\n3. Yalnızca kayıt göstergesine güvenmek yerine kaydedilen dosyayı inceleyin.\n\n## Prova ve sorun giderme\n\nMAIN kaydı gerçek banner'ı ve test sırasında test filigranını içerir. Bağımsız kayıt veya yayın hatları ayrıca kontrol edilmelidir; operatör önizlemesini görmek yakalanan kareyi kanıtlamaz. Kaydı dağıtmadan ilahiler, resimler ve tanınabilir katılımcılar için hak ve rızaları doğrulayın.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Servicezeit & Verspätung": {
+    "body": "## Uygulamalı iş akışı\n\n1. Doğru etkinliği bağlayıp planlanan başlangıç ve bitişi kontrol edin.\n2. Gerçek zaman değişikliğini desteklenen ibadet zamanı kontrolleriyle girin.\n3. Geçerli zamanı başlıkta, geri sayımda ve ilgili etkinlik gösteriminde kontrol edin.\n\n## Prova ve sorun giderme\n\nPlanlanan saatler korunur; gecikme alanları mevcut geçerli saatleri tanımlar. Geri sayım doğru görünsün diye özgün etkinliğin üzerine yazmayın. Gecikmiş etkinlik ve iptali test verisinde prova edin. Salon değişikliği saat değişiminden bağımsızdır ve gerçek salon referansı üzerinden çözülmelidir.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Pre-Service & Post-Service": {
+    "body": "## Uygulamalı iş akışı\n\n1. Program öncesi ve sonrası bölümlerde etkin döngü öğelerini hazırlayın.\n2. Korunan otomatik salon bildirimini program sonunun başında tutun.\n3. Son ibadet slaydını ve ardından program sonuna geçişi prova edin.\n\n## Prova ve sorun giderme\n\nSalon bildirimi geçerli dahili salon ID'lerini ve 61 dakika içindeki gelecek etkinlik başlangıçlarını karşılaştırır. Birden çok eşleşme kronolojik görünür; aksi halde mesaj herkesten salonu boşaltmasını ister. Test hazırlığı gerçek rezervasyonları değiştirmeden seçenekleri gösterir. Oturum başlığı rengi program sonu boyunca sabit kalır.",
+    "related": [
+      "Loop-Elemente",
+      "Veranstaltung verknüpfen"
+    ]
+  },
+  "AUDIO": {
+    "body": "## Uygulamalı iş akışı\n\n1. Hangi seslerin salona, hangilerinin yalnızca operatöre ait olduğunu kararlaştırın.\n2. Sunumu başlatmadan rotaları ve prova düzeylerini ayarlayın.\n3. Bölüm değişimlerinde devam eden müziği ve bilinçli durdurmayı kontrol edin.\n\n## Prova ve sorun giderme\n\nTek yetkili oynatma kaynağı tutun. Önizleme duyulur parçayı ikiye katlamamalıdır. Sunum katmanları, banner'lar ve test işaretleri görseldir; ses rotasını değiştirmemeli veya radyoyu susturmamalıdır. Oynatma göstergesiyle salon sesi uyuşmazsa kaynak sinyali, kazanç, sessiz ve cihaz kullanılabilirliğini ayrı ayrı tanılayın.",
+    "related": [
+      "Audioausgänge",
+      "Background Audio"
+    ]
+  },
+  "Videos": {
+    "body": "## Uygulamalı iş akışı\n\n1. Gerçek video dosyasını hazırlayıp en boy oranını, uzunluğunu ve sesini kontrol edin.\n2. İstenen oynatma ve bitiş davranışını seçin.\n3. İlk kareyi, sesi ve son geçişi MAIN'de prova edin.\n\n## Prova ve sorun giderme\n\nSessiz önizleme aynaları ikinci ses çıkışı veya ek video sonu gezinme komutu oluşturmamalıdır. Banner içerik alanını orantılı küçültür ve oynatmayı yeniden başlatmamalıdır. Sunumu yeniden açtıktan sonra dosyayı kayıtlı konumundan sınayın; küçük resim tam videonun erişilebilir kaldığını kanıtlamaz.",
+    "related": [
+      "Medien",
+      "Audioausgänge"
+    ]
+  },
+  "Background Audio": {
+    "body": "## Uygulamalı iş akışı\n\n1. Rakip oynatıcılar yerine istenen ses parçalarını öğeye veya bölüme ekleyin.\n2. Ses, karıştırma, tekrar ve istenen devam sınırını ayarlayın.\n3. Konuşmalı bölüm dahil bölüme giriş ve çıkışı prova edin.\n\n## Prova ve sorun giderme\n\nRadyo arka plan ses rotasını izler. Müziğin slaytlardan bağımsız bitmesi gerekiyorsa açık durdurma işareti kullanın. Yapılandırılmış müzik program sonuna devam ederse aynı ses grafiğini koruyun. Ses yoksa çıkışı artırmadan sessizi, kazancı, askıdaki ses bağlamını ve fiziksel cihazı inceleyin.",
+    "related": [
+      "Stop Background Audio",
+      "Routing-Probleme"
+    ]
+  },
+  "Vorhören": {
+    "body": "## Uygulamalı iş akışı\n\n1. Donanım destekliyorsa operatör dinleme rotasını katılımcı sinyalinden ayrı seçin.\n2. Aday parçayı güvenli düzeyde kısa süre önizleyin.\n3. Canlı kaynağı başlatmadan önizlemeyi durdurun.\n\n## Prova ve sorun giderme\n\nKulaklık veya önizleme kontrolleri katılımcı rotasının çalıştığını kanıtlamaz. Önizleme de topluluğa beklenmedik biçimde duyulmamalıdır. Gerçek arayüz ve kulaklıkla prova edin. Yeniden bağlantıdan sonra cihaz değişirse sistemin önceki atamayı koruduğunu varsaymadan iki rotayı doğrulayın.",
+    "related": [
+      "Audioausgänge",
+      "Audio Browser"
+    ]
+  },
+  "Systembenachrichtigungen": {
+    "body": "## Uygulamalı iş akışı\n\n1. Sessiz ibadet veya kayıttan önce operatör ses ayarlarını inceleyin.\n2. Uygulama işaretlerini işletim sistemi bildirimlerinden ayırın.\n3. Gerçek operatör ve salon ses rotalarını sınayın.\n\n## Prova ve sorun giderme\n\nOperatör işaretini susturmak için tüm arka plan sesini kapatmayın. Windows bildirimleri ve diğer uygulamalar GottesdienstRegie dışında kendi cihaz atamalarına sahip olabilir. İbadette salon sinyalini koruyun ve doğrulanmamış genel ses değişikliklerini denemeyin; beklenmedik sesin kaynağını ve rotasını sonra düzeltmek üzere belgeleyin.",
+    "related": [
+      "Audioausgänge",
+      "Einstellungen"
+    ]
+  },
+  "Audio Browser": {
+    "body": "## Uygulamalı iş akışı\n\n1. Sese özel tarayıcıyı açıp kitaplığı veya içe aktarmayı kullanın.\n2. Hedef öğe veya bölüm için parçaları seçin.\n3. Oluşan listeyi, sıralamayı ve karıştırma ayarını doğrulayın.\n\n## Prova ve sorun giderme\n\nSes tarayıcısı görsel geri sayım hazır ayarlarını bilinçli olarak içermez. Spotify referansları ve radyo akışları yerel ses dosyasıyla aynı değildir; sağlayıcı kullanılabilirliği ve izinleri geçerlidir. Parça hazırlanamazsa kullanılamaz referansı tekrar eklemek yerine mevcut olduğu bilinen alternatif kullanın.",
+    "related": [
+      "Medien",
+      "Background Audio"
+    ]
+  },
+  "Stop Background Audio": {
+    "body": "## Uygulamalı iş akışı\n\n1. Müziğin bitmesi gereken noktaya durdurma eylemi ekleyin veya yapılandırın.\n2. Tesadüfi bölüm sınırına güvenmek yerine uygun sönüm seçin.\n3. Durdurmayı ve sonraki konuşmalı ya da müzikal öğeyi prova edin.\n\n## Prova ve sorun giderme\n\nDurdurma işareti hedef arka plan kaynağını etkilemeli; listeyi silmemeli veya çıkış cihazlarını sıfırlamamalıdır. Müzik erken biterse veya vaaza taşarsa devam ayarlarını kontrol edin. Bilinçli sessizlik rota arızasından farklıdır: mevcut kaynağın üstüne başka oynatıcı açmadan durumu inceleyin.",
+    "related": [
+      "Background Audio",
+      "Ablauf"
+    ]
+  },
+  "Routing-Probleme": {
+    "body": "## Uygulamalı iş akışı\n\n1. Etkin kaynağı, atanmış rotasını ve fiziksel çıkış cihazını belirleyin.\n2. Sessiz, ses düzeyi, kazanç ve sinyal durumunu ayrı ayrı kontrol edin.\n3. Cihaz çıkarıldıysa kullanılabilir rotayı geri yükleyip güvenli düzeyde sınayın.\n\n## Prova ve sorun giderme\n\nAkış bağlıyken sessizlik iletebilir; geçerli sinyal yanlış cihaza gidebilir. Hareketli sayaç tüm ses yolunun çalıştığı anlamına gelmez. Destek için cihaz adı ve bağlam durumu gibi tanı bilgilerini saklayın; hesap belirteçlerini veya özel topluluk verilerini asla göndermeyin.",
+    "related": [
+      "Audioausgänge",
+      "Fehlerbehebung"
+    ]
+  },
+  "PRÄSENTATION": {
+    "body": "## Uygulamalı iş akışı\n\n1. Akışı kararlaştırılan ibadet düzenine göre kurun.\n2. Bağlı etkinliği, slaytları, medya referanslarını ve zamanlamayı kaydedin.\n3. Herkese göstermeden belgenin tamamını yeniden açıp prova edin.\n\n## Prova ve sorun giderme\n\nSunum hazırlığı ve canlı işletim, aynı kişi yapsa da ayrı sorumluluklardır. Düzenleyici değişiklikleri katılımcı görüntüsünü sessizce değiştirmemelidir. Büyük yeniden düzenlemeden önce yedek alın; içe aktarma veya çoğaltmadan sonra korunan sistem içeriğini ve yalnızca döngüye yerleşim kurallarını doğrulayın.",
+    "related": [
+      "Präsentationen",
+      "Ablauf"
+    ]
+  },
+  "Präsentationen": {
+    "body": "## Uygulamalı iş akışı\n\n1. Belgeyi tekrar eden pazar ibadetlerini ayırt edecek açıklıkta adlandırın.\n2. Etkinliğini bağlayıp önemli hazırlık değişikliklerinden sonra kaydedin.\n3. Mevcut ibadetten yenisini oluştururken çoğaltmayı bilinçli kullanın.\n\n## Prova ve sorun giderme\n\nKopya, kaynağının tarih, zamanlama veya medya varsayımlarını taşıyabilir; yalnızca başlığı değiştirmeden bunları inceleyin. Çökme kurtarması kayıtlı belgeler ve yedeklerin yerine değil, ek güvenlik sağlar. Kontrol noktasını geri yükleyince canlıdan önce akışı doğrulayın; ses ve ON AIR otomatik sürdürülmez.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Speicher verwalten"
+    ]
+  },
+  "Ablauf": {
+    "body": "## Uygulamalı iş akışı\n\n1. Öğeleri doğru program öncesi, ısınma, ibadet veya program sonrası bölümüne yerleştirin.\n2. Öğe önüne veya arkasına sürüklerken açık ekleme hedefini kullanın.\n3. Sonucu kontrol edip istenmeyen taşımayı hemen geri alın.\n\n## Prova ve sorun giderme\n\nYalnızca döngü öğeleri uygunsuz bölümlere bırakılamaz. Zorunlu salon bildirimi program sonunun başında kalır; kaldırılamaz veya çoğaltılamaz. Sol akışı yalnızca izinli aralıkta boyutlandırın; sıralama sonrası gezinmeyi prova edin, böylece sonraki canlı komut hedef sırayı izler.",
+    "related": [
+      "Inhalte hinzufügen",
+      "Current / Next"
+    ]
+  },
+  "Folien": {
+    "body": "## Uygulamalı iş akışı\n\n1. Her slayda yararlı başlık verip okunabilir içerik miktarı seçin.\n2. Metin ve medyayı hedef güvenli alana yerleştirin.\n3. Tam boy önizlemeyi ve gerçek çıkış oranını inceleyin.\n\n## Prova ve sorun giderme\n\nÖzellikle aksanlı harfleri, satır aralığını, alt kenarları ve son paragrafı kontrol edin. Dinamik slaytlar ilgisiz serbest metin yer tutucusu yerine kendi tasarım ayarlarını kullanır. Korunan salon bildirimi bilgilendirici sistem içeriğidir; düzenleme girişimi normal slayt düzenleyicisi açmak yerine otomatik amacını açıklamalıdır.",
+    "related": [
+      "Vorschau",
+      "Loop-Elemente"
+    ]
+  },
+  "Übergänge & Auto-Advance": {
+    "body": "## Uygulamalı iş akışı\n\n1. İbadet, okuma veya duyuruya uygun sade geçiş seçin.\n2. Otomatik süreyi yalnızca tüm içeriğin okunabildiği yerde ayarlayın.\n3. Otomatik ilerlemenin yanında duraklama ve geri adımı prova edin.\n\n## Prova ve sorun giderme\n\nUzun dinamik listeler ve duyuru sayfaları hesaplanmış asgari okuma süresi gerektirebilir. Açıkça daha kısa değer okunmamış içeriği gizlememelidir. Banner'lar kendi saatinde sürer ve slayt geçişiyle solmamalıdır. Bilinçli ilerleme kuralı yoksa geri sayım hazır ayarı sıfırda kalır.",
+    "related": [
+      "Timer",
+      "Current / Next"
+    ]
+  },
+  "Lyric Scrolling": {
+    "body": "## Uygulamalı iş akışı\n\n1. Söz bölümlerini ve hedef kaydırma düzenini ibadet yöneticisiyle inceleyin.\n2. En uzun kıtayı ve tekrar nakaratını prova edin.\n3. MAIN ve canlı aynanın aynı canlı sırayı kullandığını doğrulayın.\n\n## Prova ve sorun giderme\n\nKaydırma sunum yardımcısıdır, tüm ilahiyi okunmaz metinde birleştirme gerekçesi değildir. Söyleyişte beklenmedik değişiklik için uygun kaydırmasız yedek tutun. Sahne işaretlerini ayrı kontrol edin; yalnızca animasyona güvenmeden elle sonraki/önceki komutunun hedef bölüme indiğini doğrulayın.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bibel": {
+    "body": "## Uygulamalı iş akışı\n\n1. Ayet referansını ve gerçekten mevcut, izinli çeviriyi doğrulayın.\n2. Uzun bölümleri önizleyip sonraki/önceki sayfa kontrollerini kullanın.\n3. Anlık OSB için F9'dan önce varsayılanları Presentation, MAIN quick screens, OSB altında merkezi ayarlayın.\n\n## Prova ve sorun giderme\n\nF9 hızlı referans girişidir; çıkışı her defasında yeniden tasarlama yeri değildir. OSB normal sunum konumunu değiştirmemeli ve normal slayt düzenleme, canlı Kutsal Kitap katmanını o düzenleyicide göstermemelidir. Topluluk önünde okumadan yazımı, ayet sınırlarını ve çeviriyi doğrulayın.",
+    "related": [
+      "Quick Screens",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "LiveQuiz": {
+    "body": "## Uygulamalı iş akışı\n\n1. İbadetten önce soru, cevap ve katılım yöntemini inceleyin.\n2. Ayrı cihazdan katılmayı prova edin.\n3. Hangi ekranın katılım kodunu, hangisinin operatör kontrollerini gösterdiğini doğrulayın.\n\n## Prova ve sorun giderme\n\nTopluluğa uygun içerik kullanın ve gereksiz kişisel bilgi toplamayın. Dış katılımcı bağlantısı, sunumun canlı durumuyla aynı değildir. Ağ yoksa etkinlik olmadan sorunsuz devam etmeyi hazırlayın; etkinlik sonunda planlı slaydı veya Quick Screen'i bilinçli geri getirin.",
+    "related": [
+      "Websteuerung",
+      "Quick Screens"
+    ]
+  },
+  "SYSTEM": {
+    "body": "## Uygulamalı iş akışı\n\n1. Bilgisayara özel ekran, ses ve başlangıç ayarlarını canlı ibadet dışında hazırlayın.\n2. Sürümü, depolamayı ve topluluk verilerinin güncelliğini kontrol edin.\n3. Kurtarılabilir kayıtlı sunum ve belgelenmiş yedek yol bulundurun.\n\n## Prova ve sorun giderme\n\nSistem bakımı ibadeti desteklemeli, ibadet sırasında deneye dönüşmemelidir. Ayarları sıfırlamadan veya dosya silmeden tekrarlanabilir sorunu kaydedin. Arka plan güncelleme kontrolü sunum çıkışı veya ses başlatmamalıdır; kurulum ayrı bilinçli eylemdir. Yazılım ya da donanım değişince kritik ayarları tekrar doğrulayın.",
+    "related": [
+      "Updates",
+      "Fehlerbehebung"
+    ]
+  },
+  "Sync / Offline / Preload": {
+    "body": "## Uygulamalı iş akışı\n\n1. Yalnızca yeşil bağlantı simgesini değil, son topluluk verisi güncelleme saatini kontrol edin.\n2. Temel medyayı ibadetten önce hazırlayın.\n3. Yerelde güvenle mevcut içerikle kısa ağ kesintisini prova edin.\n\n## Prova ve sorun giderme\n\nÖn yükleme sınırlı sayıda yaklaşan kaynağı sessizce hazırlar; radyo, web sitesi veya duyulur oynatmayı erken başlatmaz. Önbellekteki etkinlikler özellikle salon değişimi ve iptallerde eskiyebilir. Otomatik kurtarma kontrol noktaları çökmede yardımcıdır, ama önceki son kaydedilmemiş değişiklikler yine kaybolabilir.",
+    "related": [
+      "Preflight",
+      "Präsentationen"
+    ]
+  },
+  "Updates": {
+    "body": "## Uygulamalı iş akışı\n\n1. Sürüm notlarını okuyup kurmadan önce önemli çalışmayı kaydedin.\n2. Hemen kurmayı, ertelemeyi veya çıkışta kurmayı seçin.\n3. Yeniden açınca sürümü, MAIN atamasını ve ses rotalarını doğrulayın.\n\n## Prova ve sorun giderme\n\nAyarlar penceresini kapatmak devam eden güncelleme kontrolünü veya indirmeyi iptal etmemelidir. Windows başlangıcı uygulamayı açabilir veya yalnızca arka planda güncelleme kontrol edebilir; bunlar ayrı seçeneklerdir. Arka plan kontrolü ibadet çıkışları, ses veya uzaktan işletim başlatmamalı; mevcut güncellemeler yine bilinçli kurulmalıdır.",
+    "related": [
+      "Versionsinformationen",
+      "Installation & Nutzungsbedingungen"
+    ]
+  },
+  "Tastenkürzel": {
+    "body": "## Uygulamalı iş akışı\n\n1. Ekibin kullandığı gezinme ve Quick Screen tuşlarını öğrenin.\n2. Gerçek sunum penceresine odaklanarak prova edin.\n3. Emin değilseniz Quick Screen önizlemelerindeki küçük kısayol etiketlerine bakın.\n\n## Prova ve sorun giderme\n\nMetin alanı veya odaklı başka pencere tuşları farklı yorumlayabilir. Düzenleyici vurgusu hareket etmedi diye gezinme tuşuna tekrar basmayın; önce MAIN'i doğrulayın. OSB, kayıtlı varsayılanlarla hızlı giriş için F9 kullanır. Kısayollara alışmamış gönüllüler için fare yolu bulundurun.",
+    "related": [
+      "Quick Screens",
+      "Current / Next"
+    ]
+  },
+  "Benutzeroberfläche": {
+    "body": "## Uygulamalı iş akışı\n\n1. Akışı, düzenleme alanını, tek önizlemeyi ve gerçek MAIN aynasını tanıyın.\n2. Rahat operatör ölçeği ve yan çubuk genişliği seçin.\n3. Pencere açıp kontrollerinin mevcut boyutta erişilir kaldığını doğrulayın.\n\n## Prova ve sorun giderme\n\nOperatör arayüzü, hedef katılımcı düzeni değişmeden boyutlandırılabilir. Test filigranı çıkış yüzeylerinin içinde olmalı; yardım veya ayar pencerelerinin üstünde durmamalıdır. Çalışma alanı küçük ya da gri başlarsa kanıtsız veri silme veya sürekli boyutlandırma yerine durumu ve kurulu sürümü kaydedin.",
+    "related": [
+      "Vorschau",
+      "Fehlerbehebung"
+    ]
+  },
+  "Einstellungen": {
+    "body": "## Uygulamalı iş akışı\n\n1. Kişisel arayüz tercihlerini teknik bilgisayar ayarlarından ayırın.\n2. MAIN quick screens, OSB varsayılanları, banner konumu ve ses rotalarını kendi alanlarında yapılandırın.\n3. İbadetten önce ilgili her değişikliği kaydedip sınayın.\n\n## Prova ve sorun giderme\n\nBanner konumu Regie bilgisayarında saklanır; başka kullanıcı ziyaretçi bilgi şeridini beklenmedik taşımaz. Güncelleme için arka planda başlamak tam uygulamayı açmaktan ayrıdır. Tek sorun tanılarken ilgisiz birkaç ayarı değiştirmeyin; doğrulanmış tek değişiklik yapıp gerçek sonucu karşılaştırın.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Audioausgänge"
+    ]
+  },
+  "Webseiten": {
+    "body": "## Uygulamalı iş akışı\n\n1. Tam herkese açık sayfayı hazırlayıp göstermeden içeriğini doğrulayın.\n2. Ağ erişimini, gömülü oynatmayı ve çıkış boyutunu sınayın.\n3. Önemli bilgi için uygun yerel alternatif tutun.\n\n## Prova ve sorun giderme\n\nWeb sitesi kayıtlı sunumdan bağımsız değişebilir. Özel hesap sayfasını, oturum belirtecini veya yönetim arayüzünü topluluğa asla göstermeyin. Testte sistem filigranı gömülü içeriğin üstünde kalır. Banner site alanını orantılı küçültebilir ama kayan metin değişti diye sayfayı yönlendirmemeli veya yeniden yüklememelidir.",
+    "related": [
+      "Medien",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Timer": {
+    "body": "## Uygulamalı iş akışı\n\n1. Media library, Countdowns'u açıp süre ve tasarım kutucuğunu seçin.\n2. Hazır ayarı ayrı akış öğesi olarak ekleyip yerini kontrol edin.\n3. Başlangıcı, sonradan katılan aynayı ve sıfırdaki davranışı prova edin.\n\n## Prova ve sorun giderme\n\nOn süre yirmi dakikadan on saniyeye uzanır; her biri Klar, Natur, Licht, Kreuz, Kerze ve Geometrisch tasarımlarını sunar. Hazır ayarlar çevrimdışı ve varsayılan sessizdir. Kalan süre pencere başına sayaçtan değil tek canlı başlangıçtan gelir. Açık devam kuralı yoksa 00:00'da kalırlar.",
+    "related": [
+      "Medien",
+      "Übergänge & Auto-Advance"
+    ]
+  },
+  "Remote": {
+    "body": "## Uygulamalı iş akışı\n\n1. Yalnızca prova veya ibadet için gereken erişimi oluşturun.\n2. Masaüstü operatörü MAIN'i izlerken sınayın.\n3. Gerekmeyince geçici oturumları bitirip erişimi iptal edin.\n\n## Prova ve sorun giderme\n\nBirden çok kontrolcü aynı anda ilerletmemelidir. Yeniden bağlanınca sonraki komuttan önce gerçek durumu okuyun. Uzaktan erişim normal çıkış önceliğine ve test işaretine uymalıdır; filigranı aşma veya korunan slaytları değiştirme yolu değildir. Yedek olarak doğrudan masaüstü kontrolünü açık tutun.",
+    "related": [
+      "Websteuerung",
+      "Persönliche Monitore"
+    ]
+  },
+  "Fehlerbehebung": {
+    "body": "## Uygulamalı iş akışı\n\n1. Kurulu sürümü, tam eylemi ve sorunun düzenleyici, önizleme, MAIN veya sesi etkileyip etkilemediğini not edin.\n2. Özel bilgiler olmadan yararlı ekran görüntüsü alın.\n3. Test modunda en küçük güvenli örneği yeniden üretin.\n\n## Prova ve sorun giderme\n\nAraştırırken çalışan canlı görüntüyü koruyun. Kilitli geçici test profili dosyası sunum veritabanı bozulmasının kanıtı değildir. Kilit uyarısını çözmek için gerçek kullanıcı profilini silmeyin. Sessiz radyoda yalnızca hoparlörleri suçlamak yerine kaynak, sinyal, rota, cihaz ve sessiz/bağlam durumunu bildirin.",
+    "related": [
+      "Support",
+      "Routing-Probleme"
+    ]
+  },
+  "Support": {
+    "body": "## Uygulamalı iş akışı\n\n1. Beklediğinizle gerçekte olanı anlatın.\n2. Kurulu sürümü ve kısa tekrarlama sırasını ekleyin.\n3. Özel bilgileri gizlenmiş ekran görüntüsü ekleyip gerçek ibadet arızasını yalnızca test sorunundan ayırın.\n\n## Prova ve sorun giderme\n\nParola, kimlik doğrulama belirteci, kurtarma kodu veya özel topluluk kaydı göndermeyin. Çıkış sorununda rolü ve fiziksel ekranı belirtin. Güncelleme gerilemesinde biliniyorsa son çalışan sürümü yazın. Destek hangi hassas olmayan kanıtın yararlı olduğunu netleştirene kadar sunumu veya tanı günlüğünü yerelde tutun.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Nutzungsbedingungen": {
+    "body": "## Uygulamalı iş akışı\n\n1. Yazılım koşullarını ve sunduğunuz içeriğin haklarını inceleyin.\n2. Kutsal Kitap çevirileri, ilahiler, fotoğraf ve kayıt izinlerini ayrı kontrol edin.\n3. İzinli kullanım belirsizse sorumlu topluluk yöneticisine sorun.\n\n## Prova ve sorun giderme\n\nÇalışan içe aktarma veya akış, gösterme, çoğaltma veya dağıtma izni oluşturmaz. Yazılım erişim hakları ve içerik lisansları ayrıdır. Gerektiğinde kaynak bilgisini koruyun; gizli pastoral veya kişisel bilgileri herkese açık slayt, dış istem veya destek raporlarına koymayın.",
+    "related": [
+      "Installation & Nutzungsbedingungen",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "Versionsinformationen": {
+    "body": "## Uygulamalı iş akışı\n\n1. Kurulu sürümü güncelleme kaynağındaki sürümle karşılaştırın.\n2. İlgili sürümün yeni özelliklerini, iyileştirme, düzeltme ve bilinen sınırlarını okuyun.\n3. Her kurulumun aynı davrandığını varsaymadan güncelleme sonrası etkilenen akışı prova edin.\n\n## Prova ve sorun giderme\n\nEski sürüm notları o dönemde teslim edileni anlatır; sonraki gerilemenin olmayacağına söz vermez. Yayımlanan yükleyici, güncelleyici meta verisi ve çalışan sürüm uyuşmalıdır. Güncelleyici sürüm bulamazsa ilgisiz paketi tekrar kurmak yerine kurulu sürümü ve kanalı bildirin.",
+    "related": [
+      "Updates",
+      "Support"
+    ]
+  },
+  "Über GottesdienstRegie": {
+    "body": "## Uygulamalı iş akışı\n\n1. Uygulamayı ibadet içeriğinin kaynağı değil, topluluk ibadetini destekleyen araç olarak görün.\n2. Kutsal Kitap metni, ilahi sırası, duyuru ve salon bilgisi sorumlularını kararlaştırın.\n3. Teknik akışı gönüllü operatörlerin anlayabileceği halde tutun.\n\n## Prova ve sorun giderme\n\nOkunabilir çıkış, güvenilir ses ve bilinçli canlı kontrol süs efektlerinden önemlidir. Evanjelik Hristiyan ibadetine ve toplanan topluluğun ihtiyaçlarına uygun sakin tasarımlar kullanın. Teknik iddiaları prova ve yayımlanan sürüm bilgisiyle doğrulayın; sınırlamaları başarılı görünen gösterge arkasına gizlemek yerine açık bildirin.",
+    "related": [
+      "SCHNELLSTART",
+      "Support"
+    ]
+  },
+  "Speicher verwalten": {
+    "body": "## Uygulamalı iş akışı\n\n1. Silmeden hangi sunum ve medyanın hâlâ gerekli olduğunu inceleyin.\n2. Önemli ibadet belgelerinin ayrı yedeğini tutun.\n3. Paylaşılan medya kaynağını silmeden referanslarını kontrol edin.\n\n## Prova ve sorun giderme\n\nÖnbellek medyası, kayıtlı belgeler ve kurtarma noktaları farklı amaçlıdır. Önbellek temizlemek sunum silmekle aynı değildir; kurtarma kalıcı arşiv değildir. Süreci etkinken geçici Chromium profillerini temizlemeyin. İbadette yer azalırsa kapsamlı temizliği canlı çıkış ve kaydetme güvenle bitene erteleyin.",
+    "related": [
+      "Präsentationen",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Lokale Sprachpakete": {
+    "body": "## Uygulamalı iş akışı\n\n1. Hazırlıkta istediğiniz desteklenen paketi seçip kullanılabilir olmasını bekleyin.\n2. Çevrimdışı güvenmeden önce hedef dil görevini sınayın.\n3. Üretilen veya çevrilen metni herkese göstermeden inceleyin.\n\n## Prova ve sorun giderme\n\nDil paketleri ve arayüz yardım çevirileri ayrı kaynaklardır. Model kaldırmak kayıtlı ilahi çevirilerini silmemelidir. İndirme boyutu, depolama ve hazırlık süresi bilgisayarı etkiler; ibadetten hemen önce büyük indirme başlatmayın. Teolojik ifadeler ve topluluğa özgü adlarda editoryal sorumluluk ekipte kalır.",
+    "related": [
+      "Songübersetzungen",
+      "Speicher verwalten"
+    ]
+  },
+  "Loop-Elemente": {
+    "body": "## Uygulamalı iş akışı\n\n1. Dinamik etkinlik, duyuru, hava veya müzik bilgisini desteklenen döngü bölümüne koyun.\n2. Öğe kontrollerinden tasarımı ve okuma süresini seçin.\n3. Geçerli içerik ve boş içerik durumlarını sınayın.\n\n## Prova ve sorun giderme\n\nMevcut banner bayraklı mesaj, ön/son döngülerde ve geri sayımlar üstünde bağımsız çalışır; normal mesaj ekranı onayı sıradan duyuru slaytlarını ayrı yönetir. Banner yazısı kırmızıdır, konumu bilgisayar ayarıdır. Boş dinamik öğeler atlanır. Canlı anlık görüntüler okuma sırasında metin değiştirmek yerine güvenli değişime kadar sabit kalır.",
+    "related": [
+      "Pre-Service & Post-Service",
+      "Timer"
+    ]
+  },
+  "Online-Nutzungsbedingungen": {
+    "body": "## Uygulamalı iş akışı\n\n1. Malzemesini veya bağlantısını kullanmadan dış sağlayıcının koşullarını inceleyin.\n2. Varsa hangi verilerin topluluk bilgisayarından çıktığını doğrulayın.\n3. Temel ibadet içeriği için yerel alternatif hazırlayın.\n\n## Prova ve sorun giderme\n\nÜcretsiz hizmet veya API anahtarı gerektirmeyen özellikte de kullanım, mahremiyet veya içerik kısıtları olabilir. Sağlayıcı kullanılabilirliği GottesdienstRegie'den bağımsız değişebilir. Yalnızca resim veya çeviri almak için topluluğun kişisel bilgilerini göndermeyin. Herkese açık çıkış sağlayıcı hata kodları ve dahili hesap ayrıntılarından arınmış kalmalıdır.",
+    "related": [
+      "Nutzungsbedingungen",
+      "Sync / Offline / Preload"
+    ]
+  }
+}

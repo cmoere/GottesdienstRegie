@@ -1,0 +1,443 @@
+{
+  "SCHNELLSTART": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Be gudstjänstledaren om gudstjänstordningen och vem som ansvarar för sena ändringar.\n2. Förbered en kort presentation med välkomstbild, församlingssång och bibelläsning.\n3. Identifiera publikens skärm och öva i tydligt markerat testläge innan besökarna välkomnas.\n\n## Repetition och felsökning\n\nÖva med en stillbild, en video och en avsiktlig paus. Kontrollera projektorns faktiska bild i stället för att lita på markeringen i redigeraren. Ha den sparade presentationen tillgänglig lokalt och kom överens om hur teamet fortsätter om en nätverkskälla blir otillgänglig.",
+    "related": [
+      "Erste Schritte",
+      "Preflight"
+    ]
+  },
+  "Songübersetzungen": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Bestäm vilka originalspråk och översättningsspråk församlingen behöver.\n2. Koppla översättningen till motsvarande sångavsnitt, även upprepade refränger.\n3. Granska den längsta kombinerade bilden i den faktiska utdatalayouten innan du sparar.\n\n## Repetition och felsökning\n\nÖversättningar underlättar deltagande men ersätter inte redaktionell granskning av teologisk innebörd eller tillstånd att återge sångtexter. Öva även en oöversatt vers: originalet måste fortfarande fungera. Om raderna inte motsvarar varandra, rätta kopplingen innan du väljer en layout med växlande rader.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bildschirmschoner": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Ställ in programmets skärmskydd före repetitionen.\n2. Låt en läs- eller predikobild stå oförändrad längre än den vanliga skärmtidsgränsen.\n3. Kontrollera att både projektorn och signalvägen förblir aktiva.\n\n## Repetition och felsökning\n\nProgrammets skydd åsidosätter inte alla projektorinställningar, åtgärder när datorlocket stängs eller hanterade Windows-principer. Kontrollera rummets faktiska utrustning utan att okritiskt ändra organisationens regler. När GottesdienstRegie stängs ska normal energihantering återupptas; håll inte en liveutgång igång enbart för att förhindra viloläge.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Einstellungen"
+    ]
+  },
+  "Installation & Nutzungsbedingungen": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Hämta installationsprogrammet från den verifierade utgivningskällan och avsluta en pågående gudstjänst korrekt.\n2. Läs installationsvillkoren och välj om du vill godkänna dem.\n3. Kontrollera installerad version och sparade skärmtilldelningar efter uppdateringen, före repetitionen.\n\n## Repetition och felsökning\n\nInstallation ger inte rättigheter till bibelöversättningar, psalmer, fotografier eller radiosändningar. Förvara säkerhetskopian av föregående presentation separat från installationsprogrammet. Om en låst fil rapporteras, stäng bara det identifierade programmet eller testprocessen; radera aldrig en hel användarprofil för att kringgå varningen.",
+    "related": [
+      "Updates",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Minimum Viable Product (MVP)": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Skilj gudstjänstens nödvändiga arbetsflöde från valfria externa integrationer.\n2. Testa de funktioner församlingen faktiskt tänker använda, även den sista bilden efter programmet.\n3. Ha en enkel sparad reservsekvens för gudstjänsten.\n\n## Repetition och felsökning\n\nEn otillgänglig valfri leverantör bör inte tvinga teamet att överge en fungerande lokal presentation. Inför inte en oprövad integration precis innan besökarna kommer. Rapportera exakt vilket beteende som saknas och installerad version, så att teamet kan skilja en avsiktlig begränsning från ett reproducerbart fel.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Erste Schritte": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Skapa och namnge gudstjänstens presentation och länka den till den faktiska församlingshändelsen.\n2. Lägg innehållet i rätt avsnitt och spara dokumentet.\n3. Öva sista gudstjänstbilden, övergången till efterprogrammet och OFF AIR, inte bara välkomstbilden.\n\n## Repetition och felsökning\n\nKontrollera valt, förhandsvisat och live innehåll var för sig. Den automatiska rumsinformationen kräver en länkad händelse och ett rum som kan identifieras; testscenarier kan visa alternativen utan att verkliga händelser ändras. Avsätt tid för granskning av sångtexter och bibelställen med gudstjänstens ledare.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Gemeinsame Gemeinde-PCs": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Logga in med operatörens tilldelade konto, inte en annan frivilligs inloggning.\n2. Identifiera datorns egna inställningar, exempelvis utdataskärmar och tekniska OSB-standardvärden.\n3. Spara presentationen och lämna uttryckligen över livetillståndet vid operatörsbyte.\n\n## Repetition och felsökning\n\nEtt användarbyte får inte obemärkt flytta MAIN eller ändra en teknisk utgångs utseende. Personliga gränssnittsinställningar kan skilja sig; använd skärmidentifiering och den faktiska bilden för kontroll. Rensa inte gemensamma programdata som ett rutinmässigt utloggningssteg: värdefull lokal presentations- och återställningsinformation kan försvinna.",
+    "related": [
+      "Anmelden & Abmelden",
+      "Virtual Screens & Displays"
+    ]
+  },
+  "Anmelden & Abmelden": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Kontrollera att rätt organisation och användare visas efter inloggning.\n2. Lös saknad åtkomst med församlingsadministratören i stället för upprepade ominstallationer.\n3. Spara och avsluta liveuppspelningen innan du lämnar arbetsstationen genom programmets utloggning.\n\n## Repetition och felsökning\n\nEtt giltigt konto och aktiverad åtkomst till GottesdienstRegie är separata villkor. När du ber om hjälp, ange det synliga åtkomstmeddelandet men aldrig lösenord, återställningskod eller sessionstoken. På delade datorer ska nästa operatörs inloggning kontrolleras innan du antar att behörigheterna motsvarar föregående operatörs.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Support"
+    ]
+  },
+  "Veranstaltung verknüpfen": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Välj händelsen efter datum, starttid och rum, särskilt om flera har samma titel.\n2. Spara länken och kontrollera presentationens rubrik.\n3. Öppna presentationen igen för att bekräfta att länken bevaras vid sparande och inläsning.\n\n## Repetition och felsökning\n\nLänken använder händelsens stabila nyckel, inte titeln. En senare namnändring bör inte bryta den, och en avbokning ska fortsätta vara synligt kopplad till händelsen. Om rummet inte kan identifieras, låt administratören kontrollera centrala rumsdata; ange aldrig en Firebase-nyckel som rumsnamn för besökare.",
+    "related": [
+      "Servicezeit & Verspätung",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Inhalte hinzufügen": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Välj önskat avsnitt innan du öppnar Lägg till element (Add element).\n2. Välj ett lämpligt inbyggt element eller en mediekälla och kontrollera det infogade objektet i körschemat.\n3. Spara när bilder och tider har ordnats.\n\n## Repetition och felsökning\n\nVissa dynamiska element hör endast hemma i loopar och kan inte placeras i gudstjänstavsnittet. Den skyddade första efterprograminformationen skapas automatiskt och är inget val i Lägg till element. Om infogningen hamnar fel, ångra ändringen och kontrollera målavsnittet i stället för att duplicera innehållet upprepade gånger.",
+    "related": [
+      "Ablauf",
+      "Loop-Elemente"
+    ]
+  },
+  "Medien": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Välj en filtyp som passar uppgiften: bakgrund, förgrund, ljud eller ett helt objekt.\n2. Kontrollera tillgänglighet och rättigheter innan den läggs till.\n3. Använd det inbyggda området Nedräkningar (Countdowns) för en inbyggd tidsstyrd välkomstvisning i stället för en hämtad video.\n\n## Repetition och felsökning\n\nNedräkningsförval finns offline med tio längder, från tjugo minuter till tio sekunder, och sex lugna utformningar vardera. De blir egna objekt i körschemat och är tysta som standard. Ett förval är varken bakgrundsbild eller ljudfil; mediebläddraren visar skillnaden tydligt.",
+    "related": [
+      "Cloud-Medien",
+      "Timer"
+    ]
+  },
+  "Cloud-Medien": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Vänta tills uppladdning eller synkronisering är klar innan du förlitar dig på ett medium.\n2. Lägg det i avsedd presentation och kontrollera bilden under en lokal repetition.\n3. Kontrollera viktiga medier innan datorn kopplas från nätet.\n\n## Repetition och felsökning\n\nEn miniatyr bekräftar varken fullständig hämtning eller fungerande uppspelningsbehörighet. Förbered viktiga gudstjänstmedier lokalt där det stöds. Om molnåtkomsten slutar fungera under gudstjänsten, behåll den fungerande livebilden och använd ett förberett lokalt alternativ; byt inte liveobjekt upprepade gånger medan överföring pågår.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Medien"
+    ]
+  },
+  "Unsplash": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Sök en lämplig bakgrund för lovsång eller undervisning.\n2. Läs leverantörens information om användning och namnangivelse.\n3. Förhandsvisa bilden under de faktiska sång- eller bibeltexterna före användning.\n\n## Repetition och felsökning\n\nVälj en lugn bild med tillräcklig kontrast framför ett rörigt fotografi som konkurrerar med församlingens läsning. Kostnadsfri hämtning undanröjer inte alla juridiska eller integritetsmässiga hänsyn. Förbered bilden i förväg så att en extern söktjänst inte behövs under gudstjänsten.",
+    "related": [
+      "Medien",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "KI-Motive": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Beskriv önskad stämning, komposition och utrymme för läsbar text.\n2. Generera och granska ett utkast innan det sparas i mediebiblioteket.\n3. Använd bara ett granskat resultat i den faktiska presentationen.\n\n## Repetition och felsökning\n\nGranska symboler, bokstäver och teologiska associationer noggrant för evangelisk gudstjänst; genererade bilder kan innehålla vilseledande detaljer. Undvik identifierbara personer och konfidentiell församlingsinformation i instruktioner. Generering är förberedelse, ingen ersättning för färdiga medier: ha en lämplig befintlig bakgrund om genereringen misslyckas eller drar ut på tiden.",
+    "related": [
+      "Medien",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Songs": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Bekräfta psalmens eller sångens titel, exakta version och versordning med gudstjänstledaren.\n2. Dela avsnitten vid meningsfulla läspunkter och lägg till överenskommen översättning.\n3. Öva upprepade refränger och sista versen på MAIN och STAGE.\n\n## Repetition och felsökning\n\nLita inte bara på titeln när olika arrangemang har olika ord eller bryggor. Kontrollera stavning, versaler och musikaliska anvisningar utan att oväntat ändra levande sångtext. Församlingen ansvarar fortsatt för rätt att återge eller strömma texter. Anpassa scenackord och besökartext till deras olika mottagare.",
+    "related": [
+      "Songübersetzungen",
+      "Lyric Scrolling"
+    ]
+  },
+  "Virtual Screens & Displays": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Identifiera de fysiska skärmarna innan roller tilldelas.\n2. Placera MAIN på avsedd projektor och kontrollera STAGE och andra utgångar separat.\n3. Kontrollera tilldelningarna igen efter återanslutning av docka, projektor eller USB-skärmadapter.\n\n## Repetition och felsökning\n\nSkärmarnas placering eller numeriska identifierare kan ändras efter maskinvaruändringar. Anta inte att den största skärmen är MAIN. Om en tilldelad skärm saknas, lös tilldelningen i operatörskontrollerna i stället för att växla ON AIR upprepade gånger. Tekniska skärminställningar ska överleva uppdateringar och förbli specifika för datorn.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Preflight"
+    ]
+  },
+  "Persönliche Monitore": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Bestäm om den personliga monitorn behöver en riktig utgångsspegling eller operatörsanteckningar.\n2. Kontrollera innehåll och tillåten åtkomst från avsedd plats.\n3. Öva ett bildbyte och en tillfällig snabbskärm.\n\n## Repetition och felsökning\n\nEn riktig MAIN-spegel måste visa livebilden, inte bara redigerarens val. I testläge visar den även testmärket. Visa inte privata anteckningar offentligt. Om spegeln verkar släpa efter, jämför tidsstämplar och faktisk källa innan övergångstider ändras eller ytterligare en konkurrerande uppspelningskälla skapas.",
+    "related": [
+      "Vorschau",
+      "Remote"
+    ]
+  },
+  "Websteuerung": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Förbered behörig fjärråtkomst före gudstjänsten.\n2. Testa ett enkelt navigeringskommando medan datoroperatören ser den faktiska liveutgången.\n3. Bestäm vem som styr framåt så att flera personer inte skickar kommandon samtidigt.\n\n## Repetition och felsökning\n\nEtt valt objekt på en telefon eller i en webbläsare bevisar inte att MAIN har ändrats. Efter nätverksavbrott, kontrollera datorns livetillstånd innan ett kommando upprepas. Återkalla tillfällig åtkomst när repetitionen eller evenemanget slutar. Fjärrkontroller får inte ta bort testmärket eller kringgå den skyddade systembilden.",
+    "related": [
+      "Remote",
+      "Current / Next"
+    ]
+  },
+  "Audioausgänge": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Välj fysisk utgångsenhet för varje avsedd ljudväg.\n2. Testa bakgrundsmusik, radio och video via deras faktiskt inställda ljudvägar.\n3. Lyssna i rummets anläggning på lämplig repetitionsnivå innan besökarna kommer.\n\n## Repetition och felsökning\n\nRadio använder bakgrundsljudets ljudväg, inte en orelaterad standardenhet i webbläsaren. En rörlig uppspelningstimer bevisar inte hörbar signal. Om ett ljudinterface kopplas ur, kontrollera ljudvägens status och tillgängliga enheter i stället för att höja huvudvolymen upprepade gånger. Håll förhandslyssning separat från publikljudet.",
+    "related": [
+      "Routing-Probleme",
+      "Vorhören"
+    ]
+  },
+  "Preflight": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Granska presentationsberedskap, medier, typsnitt, länkad händelse, rum och ljudvägar.\n2. Skilj ett blockerande utgångsproblem från en otillgänglig valfri loopkälla.\n3. Öva det exakta liveflödet efter att viktiga problem åtgärdats.\n\n## Repetition och felsökning\n\nEn offlinecache med församlingsdata kan vara användbar men kanske inte längre beskriver nästa rumsbokning korrekt. Kontrollera datans tidsstämpel. Ett lyckat testscenario bekräftar inte att verkliga Firebase-händelse- och rumsdata finns. Operatörsdiagnostik kan innehålla tekniska ID:n; besökarutgången får inte visa dem.",
+    "related": [
+      "ON AIR",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "ON AIR": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Bekräfta faktisk presentation och länkad församlingshändelse före produktionsvisning.\n2. Använd livekontrollerna för att kontrollera vilken bild MAIN visar.\n3. Avsluta avsiktligt med OFF AIR när publikvisningen inte längre behövs.\n\n## Repetition och felsökning\n\nON AIR aktiverar livemotorn; testläge är ett separat läge. ON AIR som startas i testläge måste behålla testvattenstämpeln. Anta aldrig att ett markerat objekt i redigeraren är live. Öva sista gudstjänstbilden och den skyddade efterprograminformationen innan du litar på hela sekvensen.",
+    "related": [
+      "Preflight",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "LIVE-BETRIEB": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Kom överens om en tydlig signal för nästa sångvers, läsning eller meddelande.\n2. Följ Current/Next och den verkliga MAIN-bilden när du går framåt.\n3. Förbered en lämplig snabbskärm för en oväntad paus.\n\n## Repetition och felsökning\n\nBehåll en användbar publikbild och ljud medan ett sekundärt problem undersöks. Ändringar av Firebase-meddelanden förbereds för en säker övergång i stället för att byta synlig text mitt i en mening. Vid överlämning, säg vad som är live, vilken snabbskärm som är aktiv och om ljudet ska fortsätta in i nästa avsnitt.",
+    "related": [
+      "Current / Next",
+      "Quick Screens"
+    ]
+  },
+  "Vorschau": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Skilj redigerarens förhandsvisning från den direkta MAIN-spegeln.\n2. Kontrollera bildtiteln ovanför den enskilda förhandsvisningen och den faktiska liveindikeringen.\n3. Jämför bilden efter både snabbskärmsbyte och vanlig bildframmatning.\n\n## Repetition och felsökning\n\nLivespeglar får inte skapa en andra hörbar kopia av video eller bakgrundsljud. Nedräkningsspeglar använder samma startankare som MAIN i stället för att starta en annan timer. Om bilderna skiljer sig i flera sekunder, notera exakt bild, övergång och version; ändrat val i redigeraren bevisar inte ett livebyte.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Fehlerbehebung"
+    ]
+  },
+  "MAIN / STAGE / LIVESTREAM": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Bestäm varje utgångs målgrupp innan den tilldelas.\n2. Kontrollera besökartext på MAIN, nyttiga scenanvisningar på STAGE och avsedd strömningskomposition separat.\n3. Testa en vanlig bild och en snabbskärm på varje nödvändig utgång.\n\n## Repetition och felsökning\n\nEn MAIN-spegel innehåller dess faktiska banner och testmärke, medan en självständigt utformad utgång kan ha annat innehåll. En testinspelning eller testström måste förbli synligt märkt. Diagnostisera inte en utgång enbart från miniatyren: använd den tilldelade riktiga skärmen eller en verifierad inspelad bild från utgången.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Recording"
+    ]
+  },
+  "Quick Screens": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Förbered standardvärden för logotyp, svart skärm, meddelande, nedräkning och OSB före gudstjänsten.\n2. Använd kortkommandon eller knappar avsiktligt medan du ser MAIN.\n3. Återställ den normala livebilden när tillfällig visning är klar.\n\n## Repetition och felsökning\n\nSnabbskärmar prioriteras framför vanligt bildinnehåll. Meddelandebannern döljs på svart-, logotyp- och OSB-skärmar; nedräkning är det uttryckliga kombinerbara undantaget. I testläge syns vattenstämpeln även på svart. OSB:s utseende ställs in centralt, inte om och om igen i F9:s livedialog.",
+    "related": [
+      "Bibel",
+      "Timer"
+    ]
+  },
+  "Current / Next": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Kontrollera aktuell livebild innan du följer en signal att gå vidare.\n2. Granska nästa aktiverade objekt, även avsnittsgränser och överhoppade tomma dynamiska element.\n3. Öva både framåt- och bakåtnavigering.\n\n## Repetition och felsökning\n\nDet valda objektet i redigeraren kan skilja sig från det aktuella liveobjektet. Ett dynamiskt element utan giltiga meddelanden eller händelser ska hoppas över i stället för att visa tom skärm. När gudstjänsten slutar ingår den skyddade efterprograminformationen i sekvensen; ta inte bort den för att lösa ett orelaterat navigeringsproblem.",
+    "related": [
+      "Ablauf",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Recording": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Bekräfta avsedd inspelningskälla och utdatakomposition.\n2. Gör en kort testinspelning med både bild och ljud.\n3. Granska den sparade filen i stället för att bara lita på inspelningsindikatorn.\n\n## Repetition och felsökning\n\nEn inspelning av MAIN innehåller dess faktiska banner och i testläge testvattenstämpeln. Självständiga inspelnings- eller strömningskedjor måste kontrolleras separat; operatörens förhandsvisning bevisar inte den bild de fångar. Kontrollera rättigheter och samtycke för sånger, bilder och identifierbara deltagare före spridning.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Servicezeit & Verspätung": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Länka rätt händelse och kontrollera planerad start och sluttid.\n2. Ange en faktisk tidsändring via gudstjänsttidens stödda kontroller.\n3. Kontrollera gällande tid i rubriken, nedräkningen och relevant händelsevisning.\n\n## Repetition och felsökning\n\nPlanerade tider bevaras; förseningsfälten beskriver aktuellt gällande tider. Skriv inte över originalhändelsen enbart för att rätta nedräkningens utseende. Öva en försenad händelse och en avbokning i testdata. Rumsbyte är oberoende av tidsändring och ska lösas genom den faktiska rumsreferensen.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Pre-Service & Post-Service": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Förbered aktiverade loopobjekt i för- och efterprogrammets avsnitt.\n2. Behåll den skyddade automatiska rumsinformationen först i efterprogrammet.\n3. Öva sista gudstjänstbilden och övergången till efterprogrammet.\n\n## Repetition och felsökning\n\nRumsinformationen jämför gällande interna rums-ID:n och framtida händelsestarter inom 61 minuter. Flera matchande händelser visas kronologiskt; annars ber besökarmeddelandet alla att lämna rummet. Testförberedelser kan visa alternativen utan att verkliga bokningar ändras. Sessionsrubrikens färg förblir stabil under efterprogrammet.",
+    "related": [
+      "Loop-Elemente",
+      "Veranstaltung verknüpfen"
+    ]
+  },
+  "AUDIO": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Bestäm vilka ljudkällor som ska höras i rummets anläggning och vilka som bara är för operatören.\n2. Ställ in ljudvägar och repetitionsnivåer innan presentationen startas.\n3. Kontrollera musik som fortsätter över avsnittsbyten och ett avsiktligt stopp.\n\n## Repetition och felsökning\n\nBehåll en enda styrande uppspelningskälla. Förhandslyssning får inte dubblera det hörbara spåret. Presentationsöverlägg, bannrar och testmärken är visuella och får inte ändra ljudväg eller tysta radio. Felsök källsignal, förstärkning, tystning och enhetstillgänglighet separat när uppspelningsindikator och rumsljud inte stämmer överens.",
+    "related": [
+      "Audioausgänge",
+      "Background Audio"
+    ]
+  },
+  "Videos": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Förbered den faktiska videofilen och kontrollera bildformat, längd och ljudspår.\n2. Välj avsedd uppspelning och avslutningsfunktion.\n3. Öva första bildrutan, ljudet och slutövergången på MAIN.\n\n## Repetition och felsökning\n\nTysta förhandsvisningsspeglar får inte skapa en extra ljudutgång eller skicka ytterligare ett navigeringskommando när videon slutar. En banner minskar innehållsytan proportionellt och får inte starta om uppspelningen. Testa mediefilen från sin sparade plats efter att presentationen öppnats igen; en miniatyr bevisar inte att hela videon är tillgänglig.",
+    "related": [
+      "Medien",
+      "Audioausgänge"
+    ]
+  },
+  "Background Audio": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Lägg önskade ljudspår i objektet eller avsnittet i stället för att skapa konkurrerande spelare.\n2. Ställ in volym, slumpning, upprepning och önskad fortsättningsgräns.\n3. Öva att gå in i och lämna avsnittet, även ett talat inslag.\n\n## Repetition och felsökning\n\nRadio följer bakgrundsljudets ljudväg. Använd ett uttryckligt stoppkommando när musiken ska sluta oberoende av bildbyten. Behåll samma ljudgraf när inställd musik fortsätter in i efterprogrammet. Om inget hörs, kontrollera tystning, förstärkning, pausad ljudkontext och inställd fysisk enhet innan utgångsnivån höjs.",
+    "related": [
+      "Stop Background Audio",
+      "Routing-Probleme"
+    ]
+  },
+  "Vorhören": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Välj en operatörslyssningsväg separat från publikljudet om maskinvaran stöder det.\n2. Förhandslyssna kort på kandidatspåret på säker nivå.\n3. Stoppa förhandslyssningen innan avsedd livekälla startas.\n\n## Repetition och felsökning\n\nHörlurar eller förhandslyssningskontroller bevisar inte att publikens ljudväg fungerar. Omvänt får förhandslyssning inte oväntat höras i församlingen. Öva med det faktiska interfacet och hörlurarna. Om enheten ändras efter återanslutning, kontrollera båda ljudvägarna i stället för att anta att operativsystemet behöll deras tidigare tilldelning.",
+    "related": [
+      "Audioausgänge",
+      "Audio Browser"
+    ]
+  },
+  "Systembenachrichtigungen": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Granska operatörens ljudinställningar före en stilla gudstjänst eller inspelning.\n2. Skilj programsignaler från operativsystemets aviseringsljud.\n3. Testa operatörens och rummets faktiska ljudvägar.\n\n## Repetition och felsökning\n\nTysta inte allt bakgrundsljud bara för att tysta en operatörssignal. Windows-aviseringar och andra program kan ha egna enhetstilldelningar utanför GottesdienstRegie. Behåll rummets ljud under gudstjänsten och undvik oprövade globala ljudändringar; dokumentera källan och ljudvägen för ett oväntat ljud för senare åtgärd.",
+    "related": [
+      "Audioausgänge",
+      "Einstellungen"
+    ]
+  },
+  "Audio Browser": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Öppna den ljudspecifika mediebläddraren och använd tillgängligt bibliotek eller importflöde.\n2. Välj spår för önskat objekt eller avsnitt.\n3. Kontrollera spellista, ordning och slumpningsinställning.\n\n## Repetition och felsökning\n\nLjudbläddraren utesluter avsiktligt visuella nedräkningsförval. Spotify-referenser och radioströmmar kan inte likställas med en lokal ljudfil; leverantörens tillgänglighet och tillstånd gäller fortfarande. Om ett spår inte kan förberedas, använd ett känt tillgängligt alternativ i stället för att upprepade gånger lägga till samma oanvändbara referens.",
+    "related": [
+      "Medien",
+      "Background Audio"
+    ]
+  },
+  "Stop Background Audio": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Infoga eller ställ in stoppåtgärden där musiken ska sluta.\n2. Välj en lämplig uttoning i stället för att lita på en oavsiktlig avsnittsgräns.\n3. Öva stoppet och nästa talade eller musikaliska inslag.\n\n## Repetition och felsökning\n\nEtt stoppkommando ska påverka avsedd bakgrundskälla, inte radera spellistan eller återställa utgångsenheter. Kontrollera fortsättningsinställningarna om musiken slutar för tidigt eller fortsätter in i predikan. En avsiktlig tyst paus skiljer sig från en felaktig ljudväg: granska uppspelningstillståndet innan en annan spelare startas över befintlig källa.",
+    "related": [
+      "Background Audio",
+      "Ablauf"
+    ]
+  },
+  "Routing-Probleme": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Identifiera aktiv källa, tilldelad ljudväg och vald fysisk utgångsenhet.\n2. Kontrollera tystning, volym, förstärkning och signalstatus var för sig.\n3. Om enheten tagits bort, återställ en tillgänglig ljudväg och testa på säker nivå.\n\n## Repetition och felsökning\n\nEn ström kan vara ansluten men leverera tystnad, och en giltig signal kan skickas till fel enhet. En rörlig timer bevisar inte att hela ljudvägen fungerar. Bevara diagnostiska detaljer som enhetsnamn och kontexttillstånd för support, men skicka aldrig kontotoken eller privata församlingsdata.",
+    "related": [
+      "Audioausgänge",
+      "Fehlerbehebung"
+    ]
+  },
+  "PRÄSENTATION": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Bygg körschemat kring den överenskomna gudstjänstordningen.\n2. Spara länkad händelse, bilder, mediereferenser och avsedda tider.\n3. Öppna och repetera hela dokumentet igen före offentlig användning.\n\n## Repetition och felsökning\n\nPresentationsförberedelse och livekörning är separata ansvarsområden även när samma person gör båda. Ändringar i redigeraren ska inte obemärkt ersätta publikbilden. Ta säkerhetskopia före större omstrukturering och kontrollera skyddat systeminnehåll och regler för element som bara får ligga i loopar efter import eller duplicering.",
+    "related": [
+      "Präsentationen",
+      "Ablauf"
+    ]
+  },
+  "Präsentationen": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Namnge dokumentet så tydligt att återkommande söndagsgudstjänster kan skiljas åt.\n2. Länka händelsen och spara efter betydande förberedelseändringar.\n3. Duplicera med eftertanke när en ny gudstjänst skapas från en befintlig.\n\n## Repetition och felsökning\n\nEn kopia kan innehålla ursprungets antaganden om datum, tider och medier. Granska dem i stället för att bara byta titel. Kraschåterställning är ett extra skydd, ingen ersättning för sparade dokument och säkerhetskopior. Kontrollera körschemat efter återställning från en kontrollpunkt innan livevisning startas; ljud och ON AIR återupptas inte automatiskt.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Speicher verwalten"
+    ]
+  },
+  "Ablauf": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Ordna objekten i rätt förprograms-, uppvärmnings-, gudstjänst- eller efterprogramsavsnitt.\n2. Använd det uttryckliga infogningsmålet när du drar före eller efter ett objekt.\n3. Kontrollera resultatet och ångra omedelbart en oavsiktlig flytt.\n\n## Repetition och felsökning\n\nElement som bara stöds i loopar kan inte släppas i olämpliga avsnitt. Den obligatoriska rumsinformationen ligger kvar först i efterprogrammet och kan varken tas bort eller dupliceras. Ändra bara vänstra körschemats bredd inom tillåtet intervall och öva navigeringen efter omordning så att nästa livekommando följer avsedd sekvens.",
+    "related": [
+      "Inhalte hinzufügen",
+      "Current / Next"
+    ]
+  },
+  "Folien": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Ge varje bild en användbar titel och välj en läsbar mängd innehåll.\n2. Placera text och medier inom avsedd säker yta.\n3. Granska förhandsvisningen i full storlek och utgångens faktiska bildformat.\n\n## Repetition och felsökning\n\nKontrollera särskilt diakritiska tecken, radavstånd, nederkanter och sista stycket. Dynamiska bilder använder egna formgivningsinställningar, inte en irrelevant platshållare för fritext. Den skyddade rumsinformationen är informativt systeminnehåll; redigeringsförsök ska förklara dess automatiska syfte i stället för att öppna en vanlig bildredigerare.",
+    "related": [
+      "Vorschau",
+      "Loop-Elemente"
+    ]
+  },
+  "Übergänge & Auto-Advance": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Välj en återhållsam övergång som passar lovsång, läsning eller meddelanden.\n2. Ange automatisk tid bara där hela innehållet hinner läsas.\n3. Öva en paus och ett steg bakåt liksom automatisk frammatning.\n\n## Repetition och felsökning\n\nLånga dynamiska listor och meddelandesidor kan kräva en beräknad minsta lästid. Ett uttryckligen kortare värde får inte dölja oläst innehåll. Bannrar följer egen tid och ska inte tonas ut med bildövergången. Ett nedräkningsförval stannar på noll om inte en fortsättningsregel medvetet ställts in.",
+    "related": [
+      "Timer",
+      "Current / Next"
+    ]
+  },
+  "Lyric Scrolling": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Granska sångavsnitt och avsedd rullningslayout med gudstjänstledaren.\n2. Öva den längsta versen och en upprepad refräng.\n3. Bekräfta att MAIN och livespegeln använder samma livesekvens.\n\n## Repetition och felsökning\n\nRullning är ett presentationsstöd, ingen anledning att samla hela sången till oläsbar text. Ha ett lämpligt alternativ utan rullning för oväntade ändringar i sången. Kontrollera scenanvisningar separat och se till att manuellt nästa/föregående hamnar på avsett avsnitt i stället för att bara lita på animationens förlopp.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bibel": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Kontrollera bibelhänvisningen och en faktiskt tillgänglig, tillåten översättning.\n2. Förhandsvisa långa avsnitt och använd nästa/föregående sida.\n3. Ställ centralt in standardvärden under Presentation, MAIN-snabbskärmar, OSB före spontan OSB med F9.\n\n## Repetition och felsökning\n\nF9 är snabbflödet för inmatning av bibelhänvisningar, inte platsen att formge utgången på nytt varje gång. OSB får inte flytta presentationens vanliga position, och redigering av en vanlig bild får inte visa livebibelöverlägget i redigeraren. Kontrollera stavning, versgränser och översättning före offentlig läsning.",
+    "related": [
+      "Quick Screens",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "LiveQuiz": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Granska frågor, svar och publikens deltagandesätt före gudstjänsten.\n2. Öva anslutning från en separat enhet.\n3. Bekräfta vilken skärm som visar deltagarkoden och vilken som visar operatörskontroller.\n\n## Repetition och felsökning\n\nAnvänd innehåll som passar församlingen och samla inte onödiga personuppgifter. En extern deltagaranslutning är inte presentationens livetillstånd. Förbered ett smidigt sätt att fortsätta utan frågesport om nätverket saknas och återställ avsiktligt planerad bild eller snabbskärm när aktiviteten slutar.",
+    "related": [
+      "Websteuerung",
+      "Quick Screens"
+    ]
+  },
+  "SYSTEM": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Förbered datorspecifika skärm-, ljud- och startinställningar utanför pågående gudstjänst.\n2. Kontrollera version, lagring och församlingsdatans aktualitet.\n3. Ha en återställningsbar sparad presentation och en dokumenterad reservlösning.\n\n## Repetition och felsökning\n\nSystemunderhåll ska stödja gudstjänsten i stället för att bli ett experiment under den. Dokumentera ett reproducerbart problem innan inställningar återställs eller filer tas bort. Uppdateringssökning i bakgrunden får inte öppna presentationsutgångar eller starta ljud; installation är en separat medveten handling. Kontrollera kritiska inställningar igen efter program- eller maskinvaruändring.",
+    "related": [
+      "Updates",
+      "Fehlerbehebung"
+    ]
+  },
+  "Sync / Offline / Preload": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Kontrollera senaste uppdateringstid för församlingsdata, inte bara om anslutningsikonen är grön.\n2. Förbered viktiga medier före gudstjänsten.\n3. Öva ett kort nätverksavbrott med innehåll som säkert finns lokalt.\n\n## Repetition och felsökning\n\nFörinläsning förbereder ett begränsat antal kommande resurser tyst; den startar inte radio, webbplatser eller hörbar uppspelning i förtid. Cachade händelsedata kan bli inaktuella, särskilt vid rumsbyten och avbokningar. Automatiska återställningspunkter hjälper efter en krasch, men sista osparade ändringar före en kontrollpunkt kan ändå gå förlorade.",
+    "related": [
+      "Preflight",
+      "Präsentationen"
+    ]
+  },
+  "Updates": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Läs versionsinformationen och spara viktigt arbete före installation.\n2. Välj omedelbar installation, senareläggning eller installation vid avslut efter behov.\n3. Kontrollera installerad version, MAIN-tilldelning och ljudvägar efter omstart.\n\n## Repetition och felsökning\n\nStängning av inställningsdialogen får inte avbryta en redan pågående uppdateringssökning eller hämtning. Windows-start kan öppna programmet eller bara söka uppdateringar i bakgrunden; det är olika alternativ. Bakgrundssökning får inte starta gudstjänstutgångar, ljud eller fjärrstyrning, och tillgängliga uppdateringar ska fortfarande installeras medvetet.",
+    "related": [
+      "Versionsinformationen",
+      "Installation & Nutzungsbedingungen"
+    ]
+  },
+  "Tastenkürzel": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Lär dig teamets tangenter för navigering och snabbskärmar.\n2. Öva med fokus i det faktiska presentationsfönstret.\n3. Titta på de små kortkommandoetiketterna på snabbskärmarnas förhandsvisningar vid osäkerhet.\n\n## Repetition och felsökning\n\nEtt textfält eller ett annat fokuserat fönster kan tolka tangenter annorlunda. Tryck inte på en navigeringstangent upprepade gånger bara för att redigerarmarkeringen inte flyttas; kontrollera MAIN först. OSB använder F9 för snabbinmatning med sparade standardvärden. Behåll ett musbaserat arbetssätt för frivilliga som ännu inte kan kortkommandona.",
+    "related": [
+      "Quick Screens",
+      "Current / Next"
+    ]
+  },
+  "Benutzeroberfläche": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Identifiera körschema, redigeringsyta, enskild förhandsvisning och faktisk MAIN-spegel.\n2. Välj bekväm operatörsskalning och sidopanelsbredd.\n3. Öppna en dialog och kontrollera att dess kontroller går att nå vid aktuell fönsterstorlek.\n\n## Repetition och felsökning\n\nOperatörsgränssnittet kan skalas om utan att avsedd publiklayout ändras. En testvattenstämpel hör hemma inne i utdatytor och får inte sväva över hjälp- eller inställningsdialoger. Om arbetsytan startar liten eller grå, dokumentera tillstånd och installerad version i stället för att upprepade gånger ändra storlek eller radera programdata utan belägg.",
+    "related": [
+      "Vorschau",
+      "Fehlerbehebung"
+    ]
+  },
+  "Einstellungen": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Skilj personliga gränssnittsval från datorns tekniska inställningar.\n2. Ställ in MAIN-snabbskärmar, OSB-standardvärden, bannerposition och ljudvägar i deras egna områden.\n3. Spara och testa varje relevant ändring före gudstjänsten.\n\n## Repetition och felsökning\n\nBannerposition sparas för regidatorn så att en annan användare inte oväntat flyttar besökarinformationen. Bakgrundsstart för uppdateringssökning är separat från att öppna hela programmet. Ändra inte flera orelaterade inställningar vid felsökning av ett problem; gör en verifierad ändring och jämför faktiskt resultat.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Audioausgänge"
+    ]
+  },
+  "Webseiten": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Förbered exakt offentlig sida och kontrollera innehållet före visning.\n2. Testa nätverkstillgång, inbäddad uppspelning och avsedd utdatastorlek.\n3. Ha ett lämpligt lokalt alternativ för viktig information.\n\n## Repetition och felsökning\n\nEn webbplats kan ändras oberoende av den sparade presentationen. Visa aldrig en privat kontosida, sessionstoken eller administrationsgränssnitt för församlingen. I testläge förblir systemvattenstämpeln ovanför inbäddat innehåll. En banner kan minska webbplatsens innehållsyta proportionellt men får inte navigera eller ladda om sidan bara för att löptexten ändras.",
+    "related": [
+      "Medien",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Timer": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Öppna Mediebibliotek (Media library), Nedräkningar (Countdowns) och välj tid och designruta.\n2. Lägg till förvalet som eget körschemaobjekt och kontrollera placeringen.\n3. Öva starten, en spegel som ansluter senare och beteendet vid noll.\n\n## Repetition och felsökning\n\nTio tider går från tjugo minuter till tio sekunder; varje tid har utformningarna Klar, Natur, Licht, Kreuz, Kerze och Geometrisch. Förval fungerar offline och är tysta som standard. Återstående tid bygger på ett gemensamt livestartankare, inte en oberoende räknare per fönster. De stannar på 00:00 om ingen uttrycklig fortsättningsregel är inställd.",
+    "related": [
+      "Medien",
+      "Übergänge & Auto-Advance"
+    ]
+  },
+  "Remote": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Skapa bara den åtkomst som repetitionen eller gudstjänsten behöver.\n2. Testa med datoroperatören som ser MAIN.\n3. Avsluta tillfälliga sessioner och återkalla åtkomst när den inte behövs längre.\n\n## Repetition och felsökning\n\nFlera styrenheter bör inte gå framåt samtidigt. Läs faktiskt aktuellt tillstånd efter återanslutning innan ännu ett nästa-kommando skickas. Fjärråtkomst måste följa normal utdataprioritet och testmärkning; den får inte kringgå vattenstämpeln eller ändra skyddade systembilder. Behåll direkt datorstyrning som reserv.",
+    "related": [
+      "Websteuerung",
+      "Persönliche Monitore"
+    ]
+  },
+  "Fehlerbehebung": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Notera installerad version, exakt åtgärd och om problemet gäller redigerare, förhandsvisning, MAIN eller ljud.\n2. Ta en användbar skärmbild utan privata uppgifter.\n3. Återskapa minsta säkra exempel i testläge.\n\n## Repetition och felsökning\n\nBehåll en fungerande livebild under undersökningen. En låst fil i en tillfällig testprofil bevisar inte att presentationsdatabasen är skadad. Ta inte bort en verklig användarprofil för att lösa en låsvarning. För tyst radio, rapportera källa, signal, ljudväg, enhet och tystnings-/kontextstatus i stället för att anta att högtalarna är enda orsaken.",
+    "related": [
+      "Support",
+      "Routing-Probleme"
+    ]
+  },
+  "Support": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Beskriv förväntat och faktiskt resultat.\n2. Ange installerad version och en kort reproducerbar sekvens.\n3. Bifoga en avidentifierad skärmbild och skilj ett verkligt gudstjänstfel från ett rent testproblem.\n\n## Repetition och felsökning\n\nSkicka aldrig lösenord, autentiseringstoken, återställningskoder eller privata församlingsregister. Om problemet gäller en utgång, ange roll och fysisk skärm. Vid regression efter uppdatering, ange senast kända fungerande version om möjligt. Behåll sparad presentation eller diagnostiklogg lokalt tills support klargör vilken icke-känslig dokumentation som är användbar.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Nutzungsbedingungen": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Granska programvillkor och rättigheter för innehållet du visar.\n2. Kontrollera tillstånd för bibelöversättningar, sånger, fotografier och inspelningar separat.\n3. Fråga ansvarig församlingsadministratör när tillåten användning är oklar.\n\n## Repetition och felsökning\n\nEn fungerande import eller ström ger inte tillstånd att visa, återge eller sprida innehållet vidare. Programåtkomst och innehållslicenser är separata. Behåll kreditering där det krävs och undvik konfidentiell själavårds- eller personinformation i offentliga bilder, externa instruktioner eller supportrapporter.",
+    "related": [
+      "Installation & Nutzungsbedingungen",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "Versionsinformationen": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Jämför installerad version med den som uppdateringskällan visar.\n2. Läs nya funktioner, förbättringar, rättningar och kända begränsningar för relevant utgåva.\n3. Öva berört arbetsflöde efter uppdatering i stället för att anta att alla installationer beter sig lika.\n\n## Repetition och felsökning\n\nHistorisk versionsinformation beskriver vad som levererades då. Den lovar inte att en senare regression är omöjlig. Publicerat installationsprogram, uppdateringsmetadata och körande version måste stämma överens. Om uppdateraren inte hittar en ny utgåva, rapportera installerad version och kanal i stället för att upprepade gånger installera ett orelaterat paket.",
+    "related": [
+      "Updates",
+      "Support"
+    ]
+  },
+  "Über GottesdienstRegie": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Se programmet som ett verktyg för församlingens gudstjänst, inte som innehållets källa.\n2. Fördela ansvar för bibeltext, sångordning, meddelanden och rumsinformation.\n3. Håll det tekniska arbetsflödet begripligt för frivilliga operatörer.\n\n## Repetition och felsökning\n\nLäsbar visning, pålitligt ljud och avsiktlig livestyrning är viktigare än dekorativa effekter. Använd lugna utformningar som passar evangelisk kristen gudstjänst och den samlade församlingens behov. Verifiera tekniska påståenden genom repetition och publicerad versionsinformation; redovisa begränsningar tydligt i stället för att dölja dem bakom en till synes lyckad indikator.",
+    "related": [
+      "SCHNELLSTART",
+      "Support"
+    ]
+  },
+  "Speicher verwalten": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Granska vilka presentationer och medier som fortfarande behövs innan något tas bort.\n2. Ha en separat säkerhetskopia av viktiga gudstjänstdokument.\n3. Kontrollera referenser innan en delad medieresurs raderas.\n\n## Repetition och felsökning\n\nCachade medier, sparade dokument och återställningspunkter har olika syften. Att rensa en cache är inte att radera en presentation, och återställning är inget permanent arkiv. Rensa inte tillfälliga Chromium-profiler medan deras process körs. Om lagringsutrymmet blir lågt under gudstjänsten, vänta med större rensning tills liveutgång och sparande har avslutats säkert.",
+    "related": [
+      "Präsentationen",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Lokale Sprachpakete": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Välj önskat språkpaket som stöds under förberedelsen och vänta tills det blir tillgängligt.\n2. Testa avsedd språkuppgift innan du förlitar dig på offlinebruk.\n3. Granska genererad eller översatt text före offentlig visning.\n\n## Repetition och felsökning\n\nSpråkpaket och gränssnittets hjälpöversättningar är separata resurser. Borttagning av en modell får inte radera redan sparade sångöversättningar. Hämtningsstorlek, lagring och förberedelsetid kan påverka datorn; starta inte stora hämtningar precis före gudstjänsten. Teamet behåller redaktionellt ansvar för teologiska formuleringar och församlingsspecifika namn.",
+    "related": [
+      "Songübersetzungen",
+      "Speicher verwalten"
+    ]
+  },
+  "Loop-Elemente": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Placera dynamisk information om händelser, meddelanden, väder eller musik i ett loopavsnitt som stöds.\n2. Välj utformning och lästid i elementkontrollerna.\n3. Testa både giltigt och tomt innehåll.\n\n## Repetition och felsökning\n\nEtt meddelande med befintlig bannerflagga körs oberoende i för-/efterloopar och över nedräkningar; normalt godkännande för meddelandeskärm styr vanliga meddelandebilder separat. Bannertext är röd och placeringen är en datorinställning. Tomma dynamiska element hoppas över. Liveögonblicksbilder hålls stabila till ett säkert byte i stället för att ersätta besökartext mitt under läsning.",
+    "related": [
+      "Pre-Service & Post-Service",
+      "Timer"
+    ]
+  },
+  "Online-Nutzungsbedingungen": {
+    "body": "## Praktiskt arbetsflöde\n\n1. Läs den externa leverantörens villkor innan material eller anslutning används.\n2. Bekräfta vilka data som eventuellt lämnar församlingsdatorn.\n3. Förbered ett lokalt alternativ för nödvändigt gudstjänstinnehåll.\n\n## Repetition och felsökning\n\nEn kostnadsfri tjänst eller funktion utan API-nyckel kan ändå ha begränsningar för användning, integritet eller innehåll. Leverantörens tillgänglighet kan ändras oberoende av GottesdienstRegie. Skicka inte personlig församlingsinformation bara för en bild eller översättning. Offentlig visning ska vara fri från leverantörsfelkoder och interna kontouppgifter.",
+    "related": [
+      "Nutzungsbedingungen",
+      "Sync / Offline / Preload"
+    ]
+  }
+}

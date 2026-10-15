@@ -1,0 +1,443 @@
+{
+  "SCHNELLSTART": {
+    "body": "## Käytännön työnkulku\n\n1. Pyydä jumalanpalveluksen johtajalta ohjelmajärjestys ja tieto viime hetken muutoksista vastaavasta henkilöstä.\n2. Valmistele lyhyt esitys, jossa on tervetulotoivotus, yhteislaulu ja raamatunluku.\n3. Tunnista yleisön näyttö ja harjoittele selvästi merkityssä testitilassa ennen vieraiden vastaanottamista.\n\n## Harjoittelu ja vianmääritys\n\nHarjoittele kokonaisuus, jossa on pysäytyskuva, video ja tarkoituksellinen tauko. Varmista projektorin todellinen kuva äläkä luota vain editorin valintaan. Pidä tallennettu esitys saatavilla paikallisesti ja sovi tiimin kanssa, miten jatkatte, jos verkkolähde ei ole käytettävissä.",
+    "related": [
+      "Erste Schritte",
+      "Preflight"
+    ]
+  },
+  "Songübersetzungen": {
+    "body": "## Käytännön työnkulku\n\n1. Sovi, mitä alkuperäis- ja käännöskieliä seurakunta tarvitsee.\n2. Yhdistä käännös vastaavaan laulun osaan, myös toistuviin kertosäkeisiin.\n3. Tarkista pisin yhdistetty dia todellisessa ulostuloasettelussa ennen tallentamista.\n\n## Harjoittelu ja vianmääritys\n\nKäännökset auttavat osallistumaan, mutta eivät korvaa teologisen merkityksen toimituksellista tarkastusta tai lupaa laulutekstien julkaisemiseen. Harjoittele myös kääntämätön säkeistö: alkuperäisen pitää säilyä käyttökelpoisena. Jos rivit eivät vastaa toisiaan, korjaa niiden yhdistäminen ennen vuorottelevien rivien asettelun valitsemista.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bildschirmschoner": {
+    "body": "## Käytännön työnkulku\n\n1. Aseta sovelluksen näytönsuojaus ennen harjoitusta.\n2. Jätä luku- tai saarnadia muuttumattomaksi näytön tavallista aikakatkaisua pidemmäksi ajaksi.\n3. Varmista, että projektori ja sen signaaliketju pysyvät aktiivisina.\n\n## Harjoittelu ja vianmääritys\n\nSovelluksen suojaus ei ohita kaikkia projektorin asetuksia, kannettavan kannen sulkemistoimintoja tai hallittuja Windows-käytäntöjä. Tarkista tilan todellinen laitteisto muuttamatta organisaation käytäntöjä harkitsematta. Tavallisen virranhallinnan tulee palautua GottesdienstRegien sulkemisen jälkeen; älä pidä suoraa ulostuloa käynnissä vain lepotilan estämiseksi.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Einstellungen"
+    ]
+  },
+  "Installation & Nutzungsbedingungen": {
+    "body": "## Käytännön työnkulku\n\n1. Lataa asennusohjelma varmennetusta julkaisulähteestä ja päätä mahdollinen käynnissä oleva jumalanpalvelus hallitusti.\n2. Lue asennusehdot ja päätä, hyväksytkö ne.\n3. Tarkista päivityksen jälkeen asennettu versio ja tallennetut näyttömääritykset ennen harjoitusta.\n\n## Harjoittelu ja vianmääritys\n\nOhjelmiston asennus ei anna oikeuksia raamatunkäännöksiin, virsiin, valokuviin tai radiolähetyksiin. Säilytä aiemman esityksen varmuuskopio erillään asennusohjelmasta. Jos asennus ilmoittaa lukitusta tiedostosta, sulje vain tunnistettu sovellus tai testiprosessi; älä koskaan poista koko käyttäjäprofiilia varoituksen kiertämiseksi.",
+    "related": [
+      "Updates",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Minimum Viable Product (MVP)": {
+    "body": "## Käytännön työnkulku\n\n1. Erota jumalanpalveluksen välttämätön työnkulku valinnaisista ulkoisista integraatioista.\n2. Testaa seurakunnan todella tarvitsemat toiminnot, myös loppuohjelman viimeinen näyttö.\n3. Pidä jumalanpalvelusta varten yksinkertainen tallennettu varajärjestys.\n\n## Harjoittelu ja vianmääritys\n\nValinnaisen palveluntarjoajan puuttuminen ei saisi pakottaa tiimiä luopumaan toimivasta paikallisesta esityksestä. Älä ota kokeilematonta integraatiota käyttöön juuri ennen vieraiden saapumista. Ilmoita tarkasti puuttuva toiminta ja asennettu versio, jotta tiimi voi erottaa tarkoituksellisen rajoituksen toistettavasta virheestä.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Erste Schritte": {
+    "body": "## Käytännön työnkulku\n\n1. Luo ja nimeä jumalanpalveluksen esitys ja liitä se oikeaan seurakunnan tapahtumaan.\n2. Lisää sisältö oikeisiin osioihin ja tallenna asiakirja.\n3. Harjoittele viimeinen jumalanpalvelusdia, siirtyminen loppuohjelmaan ja OFF AIR, ei vain alkutervehdystä.\n\n## Harjoittelu ja vianmääritys\n\nTarkista valittu, esikatseltu ja suorassa lähetyksessä näkyvä sisältö erikseen. Automaattinen tilailmoitus edellyttää linkitettyä tapahtumaa ja tunnistettavaa tilaa; testiskenaarioilla voi näyttää vaihtoehdot muuttamatta oikeita tapahtumatietoja. Varaa aikaa laulutekstien ja raamatunkohtien tarkistamiseen jumalanpalvelusta johtavien kanssa.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Gemeinsame Gemeinde-PCs": {
+    "body": "## Käytännön työnkulku\n\n1. Kirjaudu operaattorille osoitetulla tilillä, älä toisen vapaaehtoisen tunnuksilla.\n2. Selvitä tietokonekohtaiset asetukset, kuten ulostulonäytöt ja tekniset OSB-oletukset.\n3. Tallenna esitys ja luovuta suoran esityksen tila selkeästi operaattorin vaihtuessa.\n\n## Harjoittelu ja vianmääritys\n\nKäyttäjän vaihtuminen ei saa huomaamatta siirtää MAIN-ulostuloa tai muuttaa teknisen ulostulon ulkoasua. Henkilökohtaiset käyttöliittymäasetukset voivat vaihdella, joten tarkista kokonaisuus näyttöjen tunnistuksella ja todellisella kuvalla. Älä tyhjennä yhteisiä sovellustietoja rutiininomaisesti uloskirjautuessa: arvokkaita paikallisia esitys- ja palautustietoja voi hävitä.",
+    "related": [
+      "Anmelden & Abmelden",
+      "Virtual Screens & Displays"
+    ]
+  },
+  "Anmelden & Abmelden": {
+    "body": "## Käytännön työnkulku\n\n1. Tarkista kirjautumisen jälkeen, että oikea organisaatio ja käyttäjä näkyvät.\n2. Selvitä puuttuva käyttöoikeus seurakunnan ylläpitäjän kanssa toistuvien uudelleenasennusten sijaan.\n3. Tallenna ja päätä suora toisto ennen työasemalta poistumista sovelluksen tuetulla uloskirjautumistoiminnolla.\n\n## Harjoittelu ja vianmääritys\n\nKelvollinen tili ja aktivoitu GottesdienstRegie-käyttöoikeus ovat eri asioita. Kun pyydät apua, kerro näkyvä käyttöoikeusilmoitus, mutta älä koskaan salasanaa, palautuskoodia tai istuntotunnistetta. Varmista yhteiskoneella seuraavan operaattorin kirjautuminen ennen kuin oletat oikeuksien vastaavan edellisen operaattorin oikeuksia.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Support"
+    ]
+  },
+  "Veranstaltung verknüpfen": {
+    "body": "## Käytännön työnkulku\n\n1. Valitse tapahtuma päivämäärän, alkamisajan ja tilan perusteella, etenkin jos usealla tapahtumalla on sama nimi.\n2. Tallenna linkitys ja tarkista esityksen otsake.\n3. Avaa esitys uudelleen ja varmista, että linkitys säilyy tallennuksessa ja latauksessa.\n\n## Harjoittelu ja vianmääritys\n\nLinkitys käyttää tapahtuman pysyvää avainta, ei nimeä. Myöhempi nimenmuutos ei saisi rikkoa linkitystä, ja peruutuksen tulee pysyä näkyvästi yhteydessä tapahtumaan. Jos tilaa ei voida tunnistaa, pyydä ylläpitäjää tarkistamaan keskitetyt tilatiedot; älä koskaan käytä Firebase-avainta vieraille näkyvänä tilan nimenä.",
+    "related": [
+      "Servicezeit & Verspätung",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Inhalte hinzufügen": {
+    "body": "## Käytännön työnkulku\n\n1. Valitse haluttu osio ennen Lisää elementti (Add element) -toiminnon avaamista.\n2. Valitse sopiva sisäänrakennettu elementti tai medialähde ja tarkista lisätty kohde ajolistasta.\n3. Tallenna diojen ja ajoituksen järjestämisen jälkeen.\n\n## Harjoittelu ja vianmääritys\n\nOsa dynaamisista elementeistä kuuluu vain toistosilmukoihin eikä sovi jumalanpalvelusosioon. Loppuohjelman suojattu ensimmäinen ilmoitus luodaan automaattisesti, eikä sitä valita Lisää elementti -toiminnolla. Jos lisäys menee odottamattomaan paikkaan, kumoa muutos ja tarkista kohdeosio sen sijaan, että monistaisit sisältöä toistuvasti.",
+    "related": [
+      "Ablauf",
+      "Loop-Elemente"
+    ]
+  },
+  "Medien": {
+    "body": "## Käytännön työnkulku\n\n1. Valitse tehtävään sopiva tiedostotyyppi: tausta, etuala, ääni tai kokonainen kohde.\n2. Tarkista saatavuus ja oikeudet ennen lisäämistä.\n3. Käytä sisäänrakennettua Lähtölaskennat (Countdowns) -aluetta, kun tarvitset sovelluksen oman ajastetun tervetulon ladatun videon sijaan.\n\n## Harjoittelu ja vianmääritys\n\nLähtölaskentojen esiasetukset toimivat ilman verkkoa kymmenellä kestolla kahdestakymmenestä minuutista kymmeneen sekuntiin; jokaisessa on kuusi rauhallista ulkoasua. Ne lisätään omina ajolistan kohteinaan ja ovat oletusarvoisesti äänettömiä. Esiasetus ei ole taustakuva eikä äänitiedosto; selain tekee eron selväksi.",
+    "related": [
+      "Cloud-Medien",
+      "Timer"
+    ]
+  },
+  "Cloud-Medien": {
+    "body": "## Käytännön työnkulku\n\n1. Odota latauksen tai synkronoinnin valmistumista ennen mediaan luottamista.\n2. Lisää se haluttuun esitykseen ja tarkista kuva paikallisessa harjoituksessa.\n3. Varmista tärkeät mediat ennen tietokoneen irrottamista verkosta.\n\n## Harjoittelu ja vianmääritys\n\nPienoiskuva ei vahvista täydellistä latausta eikä toimivia toistolupia. Valmistele tärkeät jumalanpalvelusmediat paikallisesti, kun se on tuettua. Jos pilviyhteys katkeaa jumalanpalveluksen aikana, säilytä toimiva suora kuva ja käytä valmisteltua paikallista vaihtoehtoa; älä vaihda suoraa kohdetta toistuvasti siirron ollessa kesken.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Medien"
+    ]
+  },
+  "Unsplash": {
+    "body": "## Käytännön työnkulku\n\n1. Etsi ylistykseen tai opetukseen sopiva taustakuva.\n2. Lue palveluntarjoajan käyttöä ja tekijän mainitsemista koskevat tiedot.\n3. Esikatsele kuva oikeiden laulu- tai raamattutekstien alla ennen käyttöä.\n\n## Harjoittelu ja vianmääritys\n\nSuosi rauhallista, riittävän kontrastista kuvaa levottoman, seurakunnan lukemista häiritsevän valokuvan sijaan. Ilmainen lataaminen ei poista kaikkia oikeudellisia tai yksityisyyteen liittyviä näkökohtia. Valmistele valittu kuva etukäteen, jotta ulkoista hakupalvelua ei tarvita suoran jumalanpalveluksen aikana.",
+    "related": [
+      "Medien",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "KI-Motive": {
+    "body": "## Käytännön työnkulku\n\n1. Kuvaile haluttu tunnelma, sommittelu ja luettavan tekstin tarvitsema tila.\n2. Luo ja tarkista luonnos ennen sen tallentamista mediakirjastoon.\n3. Käytä varsinaisessa esityksessä vain tarkistettua tulosta.\n\n## Harjoittelu ja vianmääritys\n\nArvioi evankelisessa jumalanpalveluksessa symbolit, kirjoitus ja teologiset mielleyhtymät huolellisesti; luodut kuvat voivat sisältää harhaanjohtavia yksityiskohtia. Vältä tunnistettavia ihmisiä ja luottamuksellisia seurakuntatietoja kehotteissa. Kuvien luonti on valmistelua, ei korvike käyttövalmiille medialle: pidä sopiva valmis tausta saatavilla epäonnistumisen tai viiveen varalta.",
+    "related": [
+      "Medien",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Songs": {
+    "body": "## Käytännön työnkulku\n\n1. Varmista virren tai laulun nimi, tarkka versio ja säkeistöjärjestys jumalanpalveluksen johtajalta.\n2. Jaa osat mielekkäistä lukukohdista ja lisää sovittu käännös.\n3. Harjoittele toistuvat kertosäkeet ja viimeinen säkeistö MAIN- ja STAGE-ulostuloilla.\n\n## Harjoittelu ja vianmääritys\n\nÄlä luota pelkkään nimeen, jos sovituksissa on eri sanat tai väliosat. Tarkista oikeinkirjoitus, isot kirjaimet ja musiikilliset vihjeet muuttamatta yllättäen suorana näkyvää tekstiä. Laulutekstien esittämis- ja suoratoisto-oikeudet ovat seurakunnan vastuulla. Sovita lavan soinnut ja vieraille näkyvä teksti niiden eri yleisöille.",
+    "related": [
+      "Songübersetzungen",
+      "Lyric Scrolling"
+    ]
+  },
+  "Virtual Screens & Displays": {
+    "body": "## Käytännön työnkulku\n\n1. Tunnista fyysiset näytöt ennen roolien määrittämistä.\n2. Sijoita MAIN halutulle projektorille ja tarkista STAGE ja muut ulostulot erikseen.\n3. Tarkista määritykset uudelleen telakan, projektorin tai USB-näyttösovittimen kytkemisen jälkeen.\n\n## Harjoittelu ja vianmääritys\n\nNäyttöjen järjestys tai numerotunniste voi muuttua laitteistomuutoksissa. Älä oleta suurimman näytön olevan MAIN. Jos määritetty näyttö puuttuu, korjaa määritys operaattorin säätimillä toistuvan ON AIR -vaihtelun sijaan. Teknisten näyttöasetusten tulee säilyä päivityksissä ja pysyä tietokonekohtaisina.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Preflight"
+    ]
+  },
+  "Persönliche Monitore": {
+    "body": "## Käytännön työnkulku\n\n1. Valitse, tarvitseeko henkilökohtainen näyttö todellisen ulostulopeilin vai operaattorin muistiinpanot.\n2. Tarkista sisältö ja sallittu käyttö tarkoitetulta paikalta.\n3. Harjoittele dianvaihto ja tilapäinen pikanäyttö.\n\n## Harjoittelu ja vianmääritys\n\nAidossa MAIN-peilissä näkyy suora kuva, ei vain editorin valinta. Testitilassa siinä näkyy myös testimerkintä. Älä paljasta yksityisiä muistiinpanoja julkisella näytöllä. Jos peili näyttää jäävän jälkeen, vertaa aikaleimoja ja todellista lähdettä ennen siirtymäaikojen muuttamista tai uuden kilpailevan toistolähteen luomista.",
+    "related": [
+      "Vorschau",
+      "Remote"
+    ]
+  },
+  "Websteuerung": {
+    "body": "## Käytännön työnkulku\n\n1. Valmistele valtuutettu etäkäyttö ennen jumalanpalvelusta.\n2. Testaa yksinkertainen navigointikomento työpöytäoperaattorin tarkkaillessa todellista suoraa ulostuloa.\n3. Sovi, kuka siirtyy eteenpäin, jotta useat ihmiset eivät lähetä komentoja samanaikaisesti.\n\n## Harjoittelu ja vianmääritys\n\nPuhelimen tai selaimen näyttämä valittu kohde ei todista MAIN-kuvan muuttuneen. Tarkista verkkokatkon jälkeen työpöydän todellinen suora tila ennen komennon toistamista. Peru väliaikainen käyttöoikeus harjoituksen tai tapahtuman päätyttyä. Etäohjaus ei saa poistaa testimerkintää eikä ohittaa suojattua järjestelmädiaa.",
+    "related": [
+      "Remote",
+      "Current / Next"
+    ]
+  },
+  "Audioausgänge": {
+    "body": "## Käytännön työnkulku\n\n1. Valitse fyysinen ulostulolaite kullekin halutulle äänireitille.\n2. Testaa taustamusiikki, radio ja video niiden oikeilla määritetyillä reiteillä.\n3. Kuuntele tilan äänentoistosta sopivalla harjoitusvoimakkuudella ennen vieraiden saapumista.\n\n## Harjoittelu ja vianmääritys\n\nRadio käyttää taustaäänen reittiä eikä selaimen asiaankuulumatonta oletusta. Liikkuva toistoajastin ei todista kuuluvaa signaalia. Jos ääniliitäntä irrotetaan, tarkista reitin tila ja käytettävissä olevat laitteet sen sijaan, että nostaisit päävoimakkuutta toistuvasti. Pidä esikuuntelu erillään yleisön äänestä.",
+    "related": [
+      "Routing-Probleme",
+      "Vorhören"
+    ]
+  },
+  "Preflight": {
+    "body": "## Käytännön työnkulku\n\n1. Tarkista esityksen valmius, mediat, fontit, linkitetty tapahtuma, tilat ja äänireititys.\n2. Erota estävä ulostulo-ongelma valinnaisesta puuttuvasta silmukkalähteestä.\n3. Harjoittele tarkka suora työnkulku tärkeiden havaintojen korjaamisen jälkeen.\n\n## Harjoittelu ja vianmääritys\n\nSeurakuntatietojen paikallinen välimuisti voi auttaa, mutta seuraava tilavaraus ei ehkä enää ole oikein. Tarkista näytetty tietojen aikaleima. Onnistunut testiskenaario ei vahvista todellisten Firebase-tapahtuma- ja tilatietojen saatavuutta. Operaattorin diagnostiikka voi sisältää teknisiä tunnisteita; niitä ei saa näyttää vieraille.",
+    "related": [
+      "ON AIR",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "ON AIR": {
+    "body": "## Käytännön työnkulku\n\n1. Varmista oikea esitys ja linkitetty seurakuntatapahtuma ennen varsinaista ulostuloa.\n2. Tarkista suorilla säätimillä, mitä diaa MAIN näyttää.\n3. Päätä tarkoituksellisesti OFF AIR -toiminnolla, kun yleisöulostuloa ei enää tarvita.\n\n## Harjoittelu ja vianmääritys\n\nON AIR aktivoi suoran toistomoottorin; testikäyttö on erillinen tila. ON AIR -käynnistys testitilassa ei saa poistaa testivesileimaa. Älä koskaan oleta editorissa korostetun kohteen näkyvän suorana. Harjoittele viimeinen jumalanpalvelusdia ja suojattu loppuohjelman tilailmoitus ennen koko järjestykseen luottamista.",
+    "related": [
+      "Preflight",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "LIVE-BETRIEB": {
+    "body": "## Käytännön työnkulku\n\n1. Sovi selkeä merkki seuraavalle laulunsäkeistölle, lukemiselle tai ilmoitukselle.\n2. Seuraa Current/Next-näkymää ja todellista MAIN-kuvaa edetessäsi.\n3. Valmistele sopiva pikanäyttö odottamatonta taukoa varten.\n\n## Harjoittelu ja vianmääritys\n\nSäilytä toimiva yleisökuva ja ääni toissijaisen ongelman selvittämisen aikana. Firebase-ilmoitusten muutokset valmistellaan turvalliseen siirtymään sen sijaan, että näkyvä viesti korvattaisiin kesken lauseen. Kerro vuoronvaihdossa, mitä näytetään suorana, mikä pikanäyttö on aktiivinen ja pitääkö äänen jatkua seuraavaan osioon.",
+    "related": [
+      "Current / Next",
+      "Quick Screens"
+    ]
+  },
+  "Vorschau": {
+    "body": "## Käytännön työnkulku\n\n1. Erota editorin esikatselu suorasta MAIN-peilistä.\n2. Tarkista dian otsikko yksittäisen esikatselun yläpuolelta ja todellinen suoran tilan ilmaisin.\n3. Vertaa kuvaa sekä pikanäytön vaihdon että tavallisen dianvaihdon jälkeen.\n\n## Harjoittelu ja vianmääritys\n\nSuorat peilit eivät saa luoda toista kuuluvaa kopiota videosta tai taustaäänestä. Lähtölaskentapeilit käyttävät samaa aloitusankkuria kuin MAIN eivätkä käynnistä uutta ajastinta. Jos kuvat eroavat sekuntien ajan, kirjaa tarkka dia, siirtymä ja versio; editorin valinnan muuttuminen ei todista suoran kuvan vaihtoa.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Fehlerbehebung"
+    ]
+  },
+  "MAIN / STAGE / LIVESTREAM": {
+    "body": "## Käytännön työnkulku\n\n1. Päätä kunkin ulostulon yleisö ennen määritystä.\n2. Tarkista MAIN-vierasteksti, STAGE-lavavihjeet ja haluttu suoratoiston sommittelu erikseen.\n3. Testaa tavallinen dia ja pikanäyttö kaikilla tarvittavilla ulostuloilla.\n\n## Harjoittelu ja vianmääritys\n\nMAIN-peili sisältää sen todellisen bannerin ja testimerkinnän, kun taas itsenäisesti suunnitellussa ulostulossa voi olla eri sisältö. Testitallenteen tai -suoratoiston on pysyttävä näkyvästi merkittynä. Älä diagnosoi ulostuloa vain pienoiskuvasta: käytä oikeaa määritettyä näyttöä tai varmennettua kaappausta siitä.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Recording"
+    ]
+  },
+  "Quick Screens": {
+    "body": "## Käytännön työnkulku\n\n1. Valmistele logon, mustan näytön, viestin, lähtölaskennan ja OSB:n oletukset ennen jumalanpalvelusta.\n2. Käytä pikanäppäimiä tai painikkeita harkitusti ja tarkkaile MAIN-kuvaa.\n3. Palauta normaali suora dia tilapäisen näytön käytön päätyttyä.\n\n## Harjoittelu ja vianmääritys\n\nPikanäytöillä on etusija tavalliseen diasisältöön nähden. Ilmoitusbanneri piilotetaan mustalla, logo- ja OSB-näytöllä; lähtölaskenta on nimenomainen yhdisteltävä poikkeus. Testitilassa vesileima näkyy myös mustalla. OSB:n ulkoasu määritetään keskitetysti, ei uudelleen jokaisessa F9-suoravalintaikkunassa.",
+    "related": [
+      "Bibel",
+      "Timer"
+    ]
+  },
+  "Current / Next": {
+    "body": "## Käytännön työnkulku\n\n1. Tarkista nykyinen suora dia ennen etenemismerkin hyväksymistä.\n2. Tarkista seuraava käytössä oleva kohde, myös osioiden rajat ja ohitetut tyhjät dynaamiset elementit.\n3. Harjoittele eteneminen ja palaaminen.\n\n## Harjoittelu ja vianmääritys\n\nEditorissa valittu kohde voi poiketa suorana näkyvästä kohteesta. Dynaaminen elementti ilman kelvollisia ilmoituksia tai tapahtumia tulee ohittaa tyhjän näytön sijaan. Jumalanpalveluksen päättyessä suojattu loppuohjelmailmoitus kuuluu järjestykseen; älä poista sitä muun navigointiongelman korjaamiseksi.",
+    "related": [
+      "Ablauf",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Recording": {
+    "body": "## Käytännön työnkulku\n\n1. Varmista haluttu tallennuslähde ja ulostulon sommittelu.\n2. Tee lyhyt testitallenne, jossa on sekä kuva että ääni.\n3. Tarkista tallennettu tiedosto äläkä luota vain tallennusilmaisimeen.\n\n## Harjoittelu ja vianmääritys\n\nMAIN-tallenne sisältää oikean bannerin ja testitilassa testivesileiman. Itsenäiset tallennus- tai suoratoistoketjut on tarkistettava erikseen; operaattorin esikatselu ei todista niiden tallentamaa kuvaa. Varmista laulujen, kuvien ja tunnistettavien osallistujien oikeudet ja suostumukset ennen tallenteen jakamista.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Servicezeit & Verspätung": {
+    "body": "## Käytännön työnkulku\n\n1. Linkitä oikea tapahtuma ja tarkista suunniteltu alku ja loppu.\n2. Kirjaa todellinen aikamuutos tuetuilla jumalanpalvelusajan säätimillä.\n3. Tarkista voimassa oleva aika otsakkeessa, lähtölaskennassa ja asianmukaisessa tapahtumanäytössä.\n\n## Harjoittelu ja vianmääritys\n\nSuunnitellut ajat säilyvät; viivekentät kuvaavat nyt voimassa olevia aikoja. Älä korvaa alkuperäistä tapahtumaa vain lähtölaskennan korjaamiseksi. Harjoittele viivästynyt tapahtuma ja peruutus testitiedoilla. Tilanmuutos on aikamuutoksesta riippumaton ja on ratkaistava todellisen tilaviittauksen kautta.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Pre-Service & Post-Service": {
+    "body": "## Käytännön työnkulku\n\n1. Valmistele käytössä olevat silmukkakohteet alku- ja loppuohjelman osioihin.\n2. Säilytä suojattu automaattinen tilailmoitus loppuohjelman alussa.\n3. Harjoittele viimeinen jumalanpalvelusdia ja siirtymä loppuohjelmaan.\n\n## Harjoittelu ja vianmääritys\n\nTilailmoitus vertaa voimassa olevia sisäisiä tilatunnisteita ja tulevien tapahtumien aloituksia 61 minuutin sisällä. Useat vastaavat tapahtumat näkyvät aikajärjestyksessä; muuten vierasviesti pyytää kaikkia poistumaan tilasta. Testivalmistelu voi näyttää vaihtoehdot muuttamatta todellisia varauksia. Istunnon otsakkeen väri pysyy vakaana loppuohjelman aikana.",
+    "related": [
+      "Loop-Elemente",
+      "Veranstaltung verknüpfen"
+    ]
+  },
+  "AUDIO": {
+    "body": "## Käytännön työnkulku\n\n1. Sovi, mitkä äänilähteet kuuluvat tilan järjestelmään ja mitkä vain operaattorin kuunteluun.\n2. Aseta reitit ja harjoitustasot ennen esityksen käynnistämistä.\n3. Tarkista musiikin jatkuminen osioiden yli ja tarkoituksellinen pysäytys.\n\n## Harjoittelu ja vianmääritys\n\nPidä käytössä yksi määräävä toistolähde. Esikuuntelu ei saa kaksinkertaistaa kuuluvaa raitaa. Esityksen päällekkäiskerrokset, bannerit ja testimerkinnät ovat visuaalisia, eivätkä ne saa muuttaa äänireittiä tai mykistää radiota. Tutki lähdesignaali, vahvistus, mykistys ja laitteen saatavuus erikseen, jos toistoilmaisin ja tilan ääni eivät vastaa toisiaan.",
+    "related": [
+      "Audioausgänge",
+      "Background Audio"
+    ]
+  },
+  "Videos": {
+    "body": "## Käytännön työnkulku\n\n1. Valmistele oikea videotiedosto ja tarkista kuvasuhde, pituus ja ääniraita.\n2. Valitse haluttu toisto- ja lopetustoiminta.\n3. Harjoittele ensimmäinen kuva, ääni ja loppusiirtymä MAIN-ulostulolla.\n\n## Harjoittelu ja vianmääritys\n\nÄänettömät esikatselupeilit eivät saa luoda toista ääniulostuloa tai lähettää ylimääräistä etenemiskomentoa videon päättyessä. Banneri pienentää sisältöaluetta suhteellisesti eikä saa käynnistää toistoa uudelleen. Testaa media tallennetusta sijainnista esityksen uudelleenavaamisen jälkeen; pienoiskuva ei yksin todista koko videon saatavuutta.",
+    "related": [
+      "Medien",
+      "Audioausgänge"
+    ]
+  },
+  "Background Audio": {
+    "body": "## Käytännön työnkulku\n\n1. Lisää halutut ääniraidat kohteeseen tai osioon kilpailevien soittimien luomisen sijaan.\n2. Aseta voimakkuus, sekoitus, toisto ja haluttu jatkumisraja.\n3. Harjoittele osioon siirtyminen ja siitä poistuminen, myös puheosuus.\n\n## Harjoittelu ja vianmääritys\n\nRadio seuraa taustaäänen reittiä. Käytä nimenomaista pysäytysmerkkiä, kun musiikin tulee loppua dianvaihdoista riippumatta. Säilytä sama äänigraafi, kun määritetty musiikki jatkuu loppuohjelmaan. Jos mitään ei kuulu, tarkista mykistys, vahvistus, keskeytetty äänikonteksti ja määritetty fyysinen laite ennen ulostulotason nostamista.",
+    "related": [
+      "Stop Background Audio",
+      "Routing-Probleme"
+    ]
+  },
+  "Vorhören": {
+    "body": "## Käytännön työnkulku\n\n1. Valitse operaattorille yleisöäänestä erillinen kuuntelureitti, jos laitteisto tukee sitä.\n2. Esikuuntele ehdolla olevaa raitaa lyhyesti turvallisella tasolla.\n3. Lopeta esikuuntelutoisto ennen halutun suoran lähteen käynnistämistä.\n\n## Harjoittelu ja vianmääritys\n\nKuulokkeet tai esikuuntelusäätimet eivät todista yleisöreitin toimivuutta. Esikuuntelu ei myöskään saa yllättäen kuulua seurakunnalle. Harjoittele oikealla ääniliitännällä ja kuulokkeilla. Jos laite vaihtuu uudelleenkytkennässä, tarkista molemmat reitit äläkä oleta käyttöjärjestelmän säilyttäneen aiempia määrityksiä.",
+    "related": [
+      "Audioausgänge",
+      "Audio Browser"
+    ]
+  },
+  "Systembenachrichtigungen": {
+    "body": "## Käytännön työnkulku\n\n1. Tarkista operaattorin ääniasetukset ennen hiljaista jumalanpalvelusta tai tallennusta.\n2. Erota sovelluksen merkit käyttöjärjestelmän ilmoitusäänistä.\n3. Testaa operaattorin ja tilan todelliset äänireitit.\n\n## Harjoittelu ja vianmääritys\n\nÄlä mykistä kaikkea taustaääntä vain operaattorimerkin vaientamiseksi. Windows-ilmoituksilla ja muilla sovelluksilla voi olla omat laitemäärityksensä GottesdienstRegien ulkopuolella. Säilytä tilan ääni jumalanpalveluksen aikana ja vältä varmentamattomia yleisiä äänimuutoksia; kirjaa odottamattoman äänen lähde ja reitti myöhempää korjausta varten.",
+    "related": [
+      "Audioausgänge",
+      "Einstellungen"
+    ]
+  },
+  "Audio Browser": {
+    "body": "## Käytännön työnkulku\n\n1. Avaa äänikohtainen selain ja käytä tarjolla olevaa kirjastoa tai tuontityönkulkua.\n2. Valitse raidat haluttuun kohteeseen tai osioon.\n3. Tarkista syntynyt soittolista, järjestys ja sekoitusasetus.\n\n## Harjoittelu ja vianmääritys\n\nÄäniselain jättää tarkoituksella pois visuaaliset lähtölaskentaesiasetukset. Spotify-viittaukset ja radiovirrat eivät vastaa paikallista äänitiedostoa; palveluntarjoajan saatavuus ja luvat pätevät edelleen. Jos raitaa ei voida valmistella, käytä varmasti saatavilla olevaa vaihtoehtoa sen sijaan, että lisäisit saman käyttökelvottoman viittauksen toistuvasti.",
+    "related": [
+      "Medien",
+      "Background Audio"
+    ]
+  },
+  "Stop Background Audio": {
+    "body": "## Käytännön työnkulku\n\n1. Lisää tai määritä pysäytystoiminto kohtaan, jossa musiikin tulee loppua.\n2. Valitse sopiva häivytys sattumanvaraiseen osiorajaan luottamisen sijaan.\n3. Harjoittele pysäytys ja seuraava puhe- tai musiikkiosuus.\n\n## Harjoittelu ja vianmääritys\n\nPysäytysmerkin tulee vaikuttaa haluttuun taustalähteeseen, ei poistaa soittolistaa tai nollata ulostulolaitteita. Tarkista jatkumisasetukset, jos musiikki loppuu liian aikaisin tai jatkuu saarnaan. Tarkoituksellinen hiljainen tauko eroaa viallisesta reitistä: tarkista toistotila ennen toisen soittimen käynnistämistä nykyisen lähteen päälle.",
+    "related": [
+      "Background Audio",
+      "Ablauf"
+    ]
+  },
+  "Routing-Probleme": {
+    "body": "## Käytännön työnkulku\n\n1. Tunnista aktiivinen lähde, sille määritetty reitti ja valittu fyysinen ulostulolaite.\n2. Tarkista mykistys, voimakkuus, vahvistus ja signaalitila erikseen.\n3. Jos laite irrotettiin, palauta käytettävissä oleva reitti ja testaa turvallisella tasolla.\n\n## Harjoittelu ja vianmääritys\n\nVirta voi olla yhdistetty mutta äänetön, ja kelvollinen signaali voi mennä väärään laitteeseen. Liikkuva ajastin ei osoita koko ääniketjun toimivan. Säilytä tuelle diagnostiikkatiedot, kuten laitteen nimi ja kontekstin tila, mutta älä koskaan lähetä tilitunnisteita tai yksityisiä seurakuntatietoja.",
+    "related": [
+      "Audioausgänge",
+      "Fehlerbehebung"
+    ]
+  },
+  "PRÄSENTATION": {
+    "body": "## Käytännön työnkulku\n\n1. Rakenna ajolista sovitun jumalanpalvelusjärjestyksen ympärille.\n2. Tallenna linkitetty tapahtuma, diat, mediaviittaukset ja suunniteltu ajoitus.\n3. Avaa koko asiakirja uudelleen ja harjoittele se ennen julkista käyttöä.\n\n## Harjoittelu ja vianmääritys\n\nEsityksen valmistelu ja suora ajaminen ovat eri vastuita, vaikka sama henkilö hoitaisi molemmat. Editorin muutokset eivät saa huomaamatta korvata yleisökuvaa. Ota varmuuskopio ennen suurta uudelleenjärjestelyä ja varmista tuonnin tai monistamisen jälkeen suojattu järjestelmäsisältö sekä vain silmukoihin sallittujen elementtien sijoittelusäännöt.",
+    "related": [
+      "Präsentationen",
+      "Ablauf"
+    ]
+  },
+  "Präsentationen": {
+    "body": "## Käytännön työnkulku\n\n1. Nimeä asiakirja niin selkeästi, että toistuvat sunnuntaijumalanpalvelukset erottuvat.\n2. Linkitä tapahtuma ja tallenna merkittävien valmistelumuutosten jälkeen.\n3. Käytä monistamista harkitusti luodessasi uuden jumalanpalveluksen vanhan pohjalta.\n\n## Harjoittelu ja vianmääritys\n\nKopioitu esitys voi sisältää alkuperän päivämäärä-, ajoitus- tai mediaoletuksia. Tarkista ne pelkän otsikon vaihtamisen sijaan. Kaatumisesta palautus on lisäsuoja, ei tallennettujen asiakirjojen ja varmuuskopioiden korvaaja. Varmista palautuspisteestä palautuksen jälkeen ajolista ennen suoraa ulostuloa; ääni ja ON AIR eivät jatku automaattisesti.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Speicher verwalten"
+    ]
+  },
+  "Ablauf": {
+    "body": "## Käytännön työnkulku\n\n1. Järjestä kohteet oikeaan alkuohjelma-, lämmittely-, jumalanpalvelus- tai loppuohjelmaosioon.\n2. Käytä nimenomaista lisäyskohdetta vetäessäsi kohteen eteen tai taakse.\n3. Tarkista tulos ja kumoa tahaton siirto heti.\n\n## Harjoittelu ja vianmääritys\n\nVain silmukoihin sopivia elementtejä ei voi pudottaa sopimattomiin osioihin. Pakollinen tilailmoitus pysyy loppuohjelman alussa, eikä sitä voi poistaa tai monistaa. Muuta vasemman ajolistan kokoa vain sallituissa rajoissa ja harjoittele navigointi uudelleenjärjestelyn jälkeen, jotta seuraava suora komento noudattaa haluttua järjestystä.",
+    "related": [
+      "Inhalte hinzufügen",
+      "Current / Next"
+    ]
+  },
+  "Folien": {
+    "body": "## Käytännön työnkulku\n\n1. Anna jokaiselle dialle hyödyllinen otsikko ja valitse luettava sisältömäärä.\n2. Sijoita teksti ja media tarkoitetun turva-alueen sisään.\n3. Tarkista täysikokoinen esikatselu ja ulostulon todellinen kuvasuhde.\n\n## Harjoittelu ja vianmääritys\n\nKiinnitä huomiota erityisesti ääkkösiin, riviväliin, alareunoihin ja viimeiseen kappaleeseen. Dynaamiset diat käyttävät omia ulkoasuasetuksiaan eivätkä asiaankuulumatonta vapaan tekstin paikkamerkkiä. Suojattu tilailmoitus on tiedottavaa järjestelmäsisältöä; muokkausyrityksen tulisi selittää sen automaattinen tehtävä tavallisen diaeditorin avaamisen sijaan.",
+    "related": [
+      "Vorschau",
+      "Loop-Elemente"
+    ]
+  },
+  "Übergänge & Auto-Advance": {
+    "body": "## Käytännön työnkulku\n\n1. Valitse hillitty siirtymä, joka sopii ylistykseen, lukemiseen tai ilmoituksiin.\n2. Aseta automaattinen ajoitus vain, jos koko sisältö ehditään lukea.\n3. Harjoittele tauko ja askel taaksepäin automaattisen etenemisen lisäksi.\n\n## Harjoittelu ja vianmääritys\n\nPitkät dynaamiset luettelot ja ilmoitussivut voivat vaatia lasketun vähimmäislukuajan. Nimenomaisesti lyhyempi arvo ei saa peittää lukematonta sisältöä. Bannerit seuraavat omaa kelloaan eikä niiden tule häipyä diasiirtymän mukana. Lähtölaskentaesiasetus pysyy nollassa, ellei etenemissääntöä ole tietoisesti määritetty.",
+    "related": [
+      "Timer",
+      "Current / Next"
+    ]
+  },
+  "Lyric Scrolling": {
+    "body": "## Käytännön työnkulku\n\n1. Tarkista laulun osat ja haluttu vieritysasettelu jumalanpalveluksen johtajan kanssa.\n2. Harjoittele pisin säkeistö ja toistuva kertosäe.\n3. Varmista MAIN-ulostulon ja suoran peilin käyttävän samaa suoraa järjestystä.\n\n## Harjoittelu ja vianmääritys\n\nVieritys on esittämisen apuväline, ei syy yhdistää koko laulua lukukelvottomaksi tekstiksi. Pidä sopiva vierittämätön vaihtoehto laulamisen odottamattomiin muutoksiin. Tarkista lavavihjeet erikseen ja varmista, että manuaalinen seuraava/edellinen päätyy haluttuun osaan sen sijaan, että luottaisit vain animaation etenemiseen.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bibel": {
+    "body": "## Käytännön työnkulku\n\n1. Varmista raamatunkohta ja oikeasti saatavilla oleva, luvallinen käännös.\n2. Esikatsele pitkät jaksot ja käytä niiden seuraavan/edellisen sivun säätimiä.\n3. Määritä spontaania OSB:tä varten oletukset keskitetysti kohdassa Esitys (Presentation), MAIN-pikanäytöt, OSB ennen F9:n käyttöä.\n\n## Harjoittelu ja vianmääritys\n\nF9 on nopea raamatunkohtien syöttötoiminto, ei paikka ulostulon uudelleensuunnittelulle joka kerta. OSB ei saa siirtää esityksen normaalia sijaintia, eikä tavallisen dian muokkaus saa paljastaa suoraa raamattukerrosta editorissa. Varmista oikeinkirjoitus, jaerajat ja käännös ennen julkista lukemista.",
+    "related": [
+      "Quick Screens",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "LiveQuiz": {
+    "body": "## Käytännön työnkulku\n\n1. Tarkista kysymykset, vastaukset ja yleisön osallistumistapa ennen jumalanpalvelusta.\n2. Harjoittele liittyminen erillisellä laitteella.\n3. Varmista, millä näytöllä osallistumiskoodi näkyy ja millä operaattorin säätimet.\n\n## Harjoittelu ja vianmääritys\n\nKäytä seurakunnalle sopivaa sisältöä äläkä kerää tarpeettomia henkilötietoja. Ulkoisen osallistujan yhteys ei ole sama asia kuin esityksen suora tila. Valmistele sujuva jatko ilman tietovisaa verkkoyhteyden puuttuessa ja palauta suunniteltu dia tai pikanäyttö tarkoituksellisesti toiminnan päättyessä.",
+    "related": [
+      "Websteuerung",
+      "Quick Screens"
+    ]
+  },
+  "SYSTEM": {
+    "body": "## Käytännön työnkulku\n\n1. Valmistele tietokonekohtaiset näyttö-, ääni- ja käynnistysasetukset jumalanpalveluksen ulkopuolella.\n2. Tarkista versio, tallennustila ja seurakuntatietojen ajantasaisuus.\n3. Pidä palautettavissa oleva tallennettu esitys ja dokumentoitu varareitti.\n\n## Harjoittelu ja vianmääritys\n\nJärjestelmän ylläpidon tulee tukea jumalanpalvelusta, ei muuttua kokeeksi sen aikana. Kirjaa toistettava ongelma ennen asetusten nollausta tai tiedostojen poistoa. Taustalla tehtävä päivitystarkistus ei saa avata esitysulostuloja tai käynnistää ääntä; asennus on erillinen harkittu toimi. Tarkista kriittiset asetukset uudelleen ohjelmisto- tai laitteistomuutoksen jälkeen.",
+    "related": [
+      "Updates",
+      "Fehlerbehebung"
+    ]
+  },
+  "Sync / Offline / Preload": {
+    "body": "## Käytännön työnkulku\n\n1. Tarkista seurakuntatietojen viimeisin päivitysaika, ei vain yhteyskuvakkeen vihreyttä.\n2. Valmistele välttämättömät mediat ennen jumalanpalvelusta.\n3. Harjoittele lyhyt verkkokatko varmasti paikallisesti saatavilla olevalla sisällöllä.\n\n## Harjoittelu ja vianmääritys\n\nEsilataus valmistelee rajatun määrän tulevia resursseja äänettömästi; se ei käynnistä radiota, verkkosivuja tai kuuluvaa toistoa etukäteen. Välimuistin tapahtumatiedot voivat vanhentua, erityisesti tilamuutoksissa ja peruutuksissa. Automaattiset palautuspisteet auttavat kaatumisen jälkeen, mutta viimeiset tallentamattomat muutokset ennen palautuspistettä voivat silti kadota.",
+    "related": [
+      "Preflight",
+      "Präsentationen"
+    ]
+  },
+  "Updates": {
+    "body": "## Käytännön työnkulku\n\n1. Lue julkaisutiedot ja tallenna tärkeä työ ennen asennusta.\n2. Valitse tilanteeseen sopiva välitön asennus, lykkäys tai asennus suljettaessa.\n3. Tarkista uudelleenavaamisen jälkeen asennettu versio, MAIN-määritys ja äänireitit.\n\n## Harjoittelu ja vianmääritys\n\nAsetusikkunan sulkeminen ei saa perua jo käynnissä olevaa päivitystarkistusta tai latausta. Windowsin käynnistyessä voidaan avata sovellus tai vain tarkistaa päivitykset taustalla; nämä ovat eri vaihtoehtoja. Taustatarkistus ei saa käynnistää jumalanpalveluksen ulostuloja, ääntä tai etäkäyttöä, ja saatavilla olevat päivitykset on yhä asennettava tarkoituksellisesti.",
+    "related": [
+      "Versionsinformationen",
+      "Installation & Nutzungsbedingungen"
+    ]
+  },
+  "Tastenkürzel": {
+    "body": "## Käytännön työnkulku\n\n1. Opettele tiimisi navigointi- ja pikanäyttönäppäimet.\n2. Harjoittele kohdistuksen ollessa oikeassa esitysikkunassa.\n3. Tarkista epävarmana pikanäyttöjen esikatselujen pienet pikanäppäinmerkinnät.\n\n## Harjoittelu ja vianmääritys\n\nTekstikenttä tai toinen aktiivinen ikkuna voi tulkita näppäimet eri tavoin. Älä paina navigointinäppäintä toistuvasti vain siksi, ettei editorin korostus liikkunut; tarkista ensin MAIN. OSB käyttää F9:ää nopeaan syöttöön tallennetuilla oletuksilla. Säilytä hiirellä käytettävä reitti vapaaehtoisille, jotka eivät vielä tunne pikanäppäimiä.",
+    "related": [
+      "Quick Screens",
+      "Current / Next"
+    ]
+  },
+  "Benutzeroberfläche": {
+    "body": "## Käytännön työnkulku\n\n1. Tunnista ajolista, muokkausalue, yksittäinen esikatselu ja todellinen MAIN-peili.\n2. Valitse mukava operaattorin skaalaus ja sivupalkin leveys.\n3. Avaa valintaikkuna ja varmista säätimien saavutettavuus nykyisessä ikkunakoossa.\n\n## Harjoittelu ja vianmääritys\n\nOperaattorin käyttöliittymän kokoa voidaan muuttaa muuttamatta haluttua yleisöasettelua. Testivesileima kuuluu ulostulopintojen sisään eikä saa kellua ohje- tai asetusikkunoiden päällä. Jos työtila käynnistyy pienenä tai harmaana, tallenna tila ja asennettu versio sen sijaan, että muuttaisit kokoa toistuvasti tai poistaisit sovellustietoja ilman näyttöä.",
+    "related": [
+      "Vorschau",
+      "Fehlerbehebung"
+    ]
+  },
+  "Einstellungen": {
+    "body": "## Käytännön työnkulku\n\n1. Erota henkilökohtaiset käyttöliittymävalinnat teknisistä tietokoneasetuksista.\n2. Määritä MAIN-pikanäytöt, OSB-oletukset, bannerin sijainti ja äänireititys omilla alueillaan.\n3. Tallenna ja testaa jokainen olennainen muutos ennen jumalanpalvelusta.\n\n## Harjoittelu ja vianmääritys\n\nBannerin sijainti tallennetaan ohjaustietokoneelle, jotta toinen käyttäjä ei yllättäen siirrä vieraille näkyvää tietokaistaa. Käynnistys taustalle päivitystarkistuksia varten on eri asia kuin koko sovelluksen avaaminen. Älä muuta useita asiaankuulumattomia asetuksia yhden ongelman vianmäärityksessä; tee yksi varmennettu muutos ja vertaa todellista tulosta.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Audioausgänge"
+    ]
+  },
+  "Webseiten": {
+    "body": "## Käytännön työnkulku\n\n1. Valmistele tarkka julkinen sivu ja tarkista sisältö ennen näyttämistä.\n2. Testaa verkkoyhteys, upotettu toisto ja haluttu ulostulokoko.\n3. Pidä tärkeille tiedoille sopiva paikallinen vaihtoehto.\n\n## Harjoittelu ja vianmääritys\n\nVerkkosivu voi muuttua tallennetusta esityksestä riippumatta. Älä koskaan näytä seurakunnalle yksityistä tilisivua, istuntotunnistetta tai ylläpitoliittymää. Testitilassa järjestelmän vesileima pysyy upotetun sisällön yläpuolella. Banneri voi pienentää verkkosivun sisältöaluetta suhteellisesti, mutta se ei saa navigoida tai ladata sivua uudelleen vain juoksevan tekstin muuttuessa.",
+    "related": [
+      "Medien",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Timer": {
+    "body": "## Käytännön työnkulku\n\n1. Avaa Mediakirjasto (Media library), Lähtölaskennat (Countdowns), ja valitse kesto ja ulkoasuruutu.\n2. Lisää esiasetus omaksi ajolistan kohteekseen ja tarkista sen paikka.\n3. Harjoittele käynnistys, myöhemmin liittyvä peili ja toiminta nollassa.\n\n## Harjoittelu ja vianmääritys\n\nKymmenen kestoa ulottuvat kahdestakymmenestä minuutista kymmeneen sekuntiin; kaikissa on ulkoasut Klar, Natur, Licht, Kreuz, Kerze ja Geometrisch. Esiasetukset toimivat ilman verkkoa ja ovat oletuksena äänettömiä. Jäljellä oleva aika tulee yhdestä suoran aloitusankkurista, ei ikkunakohtaisista laskureista. Ne pysyvät kohdassa 00:00 ilman erikseen asetettua jatkumissääntöä.",
+    "related": [
+      "Medien",
+      "Übergänge & Auto-Advance"
+    ]
+  },
+  "Remote": {
+    "body": "## Käytännön työnkulku\n\n1. Luo vain harjoituksen tai jumalanpalveluksen tarvitsema käyttöoikeus.\n2. Testaa työpöytäoperaattorin katsellessa MAIN-kuvaa.\n3. Päätä väliaikaiset istunnot ja peru käyttöoikeus, kun sitä ei enää tarvita.\n\n## Harjoittelu ja vianmääritys\n\nUseiden ohjainten ei pidä edetä samanaikaisesti. Lue uudelleenyhdistämisen jälkeen todellinen nykytila ennen uutta seuraava-komentoa. Etäkäytön on noudatettava normaalia ulostuloprioriteettia ja testimerkintöjä; sillä ei saa ohittaa vesileimaa tai muuttaa suojattuja järjestelmädioja. Pidä suora työpöytäohjaus varavaihtoehtona.",
+    "related": [
+      "Websteuerung",
+      "Persönliche Monitore"
+    ]
+  },
+  "Fehlerbehebung": {
+    "body": "## Käytännön työnkulku\n\n1. Kirjaa asennettu versio, tarkka toiminto ja koskeeko ongelma editoria, esikatselua, MAIN-kuvaa vai ääntä.\n2. Ota hyödyllinen kuvakaappaus ilman yksityisiä tietoja.\n3. Toista pienin turvallinen esimerkki testitilassa.\n\n## Harjoittelu ja vianmääritys\n\nSäilytä toimiva suora kuva selvityksen aikana. Lukittu väliaikaisen testiprofiilin tiedosto ei todista esitystietokannan vioittumista. Älä poista oikeaa käyttäjäprofiilia lukitusvaroituksen korjaamiseksi. Ilmoita äänettömästä radiosta lähde, signaali, reitti, laite ja mykistys-/kontekstitila äläkä oleta fyysisten kaiuttimien olevan ainoa syy.",
+    "related": [
+      "Support",
+      "Routing-Probleme"
+    ]
+  },
+  "Support": {
+    "body": "## Käytännön työnkulku\n\n1. Kuvaile odotettu ja todellinen toiminta.\n2. Liitä asennettu versio ja lyhyt toistettava toimintasarja.\n3. Lisää peitetty kuvakaappaus ja erota oikean jumalanpalveluksen vika pelkästä testiongelmasta.\n\n## Harjoittelu ja vianmääritys\n\nÄlä koskaan lähetä salasanoja, todennustunnisteita, palautuskoodeja tai yksityisiä seurakuntarekistereitä. Kerro ulostulo-ongelmassa kyseinen rooli ja fyysinen näyttö. Ilmoita päivityksen jälkeisessä heikentymisessä viimeinen toimiva versio, jos se on tiedossa. Säilytä esitys tai diagnostiikkaloki paikallisesti, kunnes tuki kertoo, mikä ei-arkaluonteinen aineisto on hyödyllistä.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Nutzungsbedingungen": {
+    "body": "## Käytännön työnkulku\n\n1. Tarkista ohjelmiston ehdot ja esittämäsi sisällön oikeudet.\n2. Tarkista raamatunkäännösten, laulujen, valokuvien ja tallenteiden luvat erikseen.\n3. Kysy vastuulliselta seurakunnan ylläpitäjältä, jos sallittu käyttö on epäselvää.\n\n## Harjoittelu ja vianmääritys\n\nToimiva tuonti tai suoratoisto ei osoita lupaa esittämiseen, jäljentämiseen tai edelleenjakeluun. Ohjelmiston käyttöoikeudet ja sisältölisenssit ovat erillisiä. Säilytä vaaditut tekijämaininnat ja vältä luottamuksellisia sielunhoito- tai henkilötietoja julkisissa dioissa, ulkoisissa kehotteissa tai tukiraporteissa.",
+    "related": [
+      "Installation & Nutzungsbedingungen",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "Versionsinformationen": {
+    "body": "## Käytännön työnkulku\n\n1. Vertaa asennettua versiota päivityslähteessä näkyvään versioon.\n2. Lue kyseisen julkaisun uudet ominaisuudet, parannukset, korjaukset ja tunnetut rajoitukset.\n3. Harjoittele muutoksen kohteena ollut työnkulku päivityksen jälkeen äläkä oleta kaikkien kokoonpanojen toimivan samoin.\n\n## Harjoittelu ja vianmääritys\n\nVanhat julkaisutiedot kuvaavat silloin toimitettua versiota. Ne eivät takaa myöhempien regressioiden mahdottomuutta. Julkaistun asennusohjelman, päivitysmetatietojen ja käynnissä olevan version pitää vastata toisiaan. Jos päivittäjä ei löydä uutta julkaisua, ilmoita asennettu versio ja kanava sen sijaan, että asentaisit asiaankuulumatonta pakettia toistuvasti.",
+    "related": [
+      "Updates",
+      "Support"
+    ]
+  },
+  "Über GottesdienstRegie": {
+    "body": "## Käytännön työnkulku\n\n1. Pidä sovellusta seurakunnan jumalanpalvelusta tukevana välineenä, ei sen sisällön lähteenä.\n2. Sovi vastuut raamattutekstistä, laulujärjestyksestä, ilmoituksista ja tilatiedoista.\n3. Pidä tekninen työnkulku vapaaehtoisille operaattoreille ymmärrettävänä.\n\n## Harjoittelu ja vianmääritys\n\nLuettava kuva, luotettava ääni ja harkittu suora ohjaus ovat koristeellisia tehosteita tärkeämpiä. Käytä rauhallisia ulkoasuja, jotka sopivat evankeliseen kristilliseen jumalanpalvelukseen ja kokoontuneen seurakunnan tarpeisiin. Varmista tekniset väitteet harjoituksilla ja julkaistuilla versiotiedoilla; ilmoita rajoitukset selkeästi sen sijaan, että peittäisit ne onnistuneelta näyttävän ilmaisimen taakse.",
+    "related": [
+      "SCHNELLSTART",
+      "Support"
+    ]
+  },
+  "Speicher verwalten": {
+    "body": "## Käytännön työnkulku\n\n1. Selvitä ennen poistamista, mitä esityksiä ja medioita vielä tarvitaan.\n2. Säilytä tärkeistä jumalanpalvelusasiakirjoista erillinen varmuuskopio.\n3. Tarkista viittaukset ennen yhteisen mediaresurssin poistamista.\n\n## Harjoittelu ja vianmääritys\n\nVälimuistimediat, tallennetut asiakirjat ja palautuspisteet palvelevat eri tarkoituksia. Välimuistin poistaminen ei ole esityksen poistamista, eikä palautus ole pysyvä arkisto. Älä siivoa väliaikaisia Chromium-profiileja niiden prosessin ollessa käynnissä. Jos tila loppuu jumalanpalveluksen aikana, lykkää laajaa siivousta, kunnes suora ulostulo ja tallennus ovat päättyneet turvallisesti.",
+    "related": [
+      "Präsentationen",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Lokale Sprachpakete": {
+    "body": "## Käytännön työnkulku\n\n1. Valitse haluttu tuettu paketti valmistelun aikana ja odota sen saatavuutta.\n2. Testaa aiottu kielitehtävä ennen verkkoyhteydettömään käyttöön luottamista.\n3. Tarkista luotu tai käännetty teksti ennen julkista esittämistä.\n\n## Harjoittelu ja vianmääritys\n\nKielipaketit ja käyttöliittymän ohjekäännökset ovat erillisiä resursseja. Mallin poistaminen ei saa hävittää tallennettuja laulukäännöksiä. Latauksen koko, tallennustila ja valmisteluaika voivat kuormittaa tietokonetta, joten älä aloita suuria latauksia juuri ennen jumalanpalvelusta. Teologisen sanamuodon ja seurakuntakohtaisten nimien toimituksellinen vastuu säilyy tiimillä.",
+    "related": [
+      "Songübersetzungen",
+      "Speicher verwalten"
+    ]
+  },
+  "Loop-Elemente": {
+    "body": "## Käytännön työnkulku\n\n1. Sijoita dynaamiset tapahtuma-, ilmoitus-, sää- tai musiikkitiedot tuettuun silmukkaosioon.\n2. Valitse ulkoasu ja lukuaika elementin säätimillä.\n3. Testaa sekä kelvollinen että tyhjä sisältö.\n\n## Harjoittelu ja vianmääritys\n\nViesti, jolla on olemassa oleva bannerilippu, pyörii itsenäisesti alku-/loppusilmukoissa ja lähtölaskentojen päällä; tavallinen ilmoitusnäytön hyväksyntä ohjaa normaaleja ilmoitusdioja erikseen. Bannerin teksti on punainen ja sijainti tietokoneasetus. Tyhjät dynaamiset elementit ohitetaan. Suoran sisällön tilannekuvat pysyvät vakaina turvalliseen vaihtoon asti, jotta vierastekstiä ei korvata kesken lukemisen.",
+    "related": [
+      "Pre-Service & Post-Service",
+      "Timer"
+    ]
+  },
+  "Online-Nutzungsbedingungen": {
+    "body": "## Käytännön työnkulku\n\n1. Lue ulkoisen palveluntarjoajan ehdot ennen materiaalin tai yhteyden käyttämistä.\n2. Varmista, mitä tietoja mahdollisesti lähtee seurakunnan tietokoneelta.\n3. Valmistele paikallinen vaihtoehto välttämättömälle jumalanpalvelussisällölle.\n\n## Harjoittelu ja vianmääritys\n\nIlmaisellakin palvelulla tai toiminnolla ilman API-avainta voi olla käyttö-, tietosuoja- tai sisältörajoituksia. Palveluntarjoajan saatavuus voi muuttua GottesdienstRegiestä riippumatta. Älä lähetä henkilökohtaisia seurakuntatietoja vain saadaksesi kuvan tai käännöksen. Julkisessa ulostulossa ei saa näkyä palveluntarjoajan virhekoodeja tai sisäisiä tilitietoja.",
+    "related": [
+      "Nutzungsbedingungen",
+      "Sync / Offline / Preload"
+    ]
+  }
+}

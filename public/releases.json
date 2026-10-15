@@ -1938,7 +1938,7 @@
               "en": "Native web editor preview for desktop, tablet and phone"
             },
             "text": {
-              "de": "Version 0.46.0 veröffentlicht erstmals den gemeinsamen GottesdienstRegie-Editor als Browser-Vorschau. Präsentationen werden lokal und revisionsgeschützt im Browser gespeichert. Responsive Arbeitsbereiche ermöglichen die Vorbereitung auf PC, Tablet und Smartphone, während Liveausgaben weiterhin sicher der Desktop-App vorbehalten bleiben.",
+          "de": "Version 0.46.0 veröffentlicht erstmals den gemeinsamen GottesdienstRegie-Editor als native Browser-Vorschau. Präsentationen werden lokal und revisionsgeschützt im Browser gespeichert. Responsive Arbeitsbereiche ermöglichen die Vorbereitung auf PC, Tablet und Smartphone, während Liveausgaben weiterhin sicher der Desktop-App vorbehalten bleiben.",
               "en": "Version 0.46.0 publishes the shared GottesdienstRegie editor as a browser preview. Presentations are stored locally with revision protection, responsive workspaces support desktop, tablet and phone, and live outputs remain safely limited to the desktop app."
             }
           },

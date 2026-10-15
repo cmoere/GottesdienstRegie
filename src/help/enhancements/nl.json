@@ -1,0 +1,443 @@
+{
+  "SCHNELLSTART": {
+    "body": "## Praktische werkwijze\n\n1. Vraag de dienstleider om de orde van dienst en wie verantwoordelijk is voor wijzigingen op het laatste moment.\n2. Bereid een korte presentatie voor met welkom, gemeentezang en Bijbellezing.\n3. Identificeer het publieksscherm en oefen in duidelijk gemarkeerde testmodus voordat bezoekers worden verwelkomd.\n\n## Repetitie en probleemoplossing\n\nOefen met een stilstaande dia, een video en een bewuste pauze. Controleer het werkelijke projectorbeeld in plaats van op de selectie in de editor te vertrouwen. Houd de opgeslagen presentatie lokaal beschikbaar en spreek met het team af hoe u doorgaat als een netwerkbron uitvalt.",
+    "related": [
+      "Erste Schritte",
+      "Preflight"
+    ]
+  },
+  "Songübersetzungen": {
+    "body": "## Praktische werkwijze\n\n1. Spreek af welke oorspronkelijke en vertaalde talen de gemeente nodig heeft.\n2. Koppel de vertaling aan het bijbehorende liedgedeelte, inclusief herhaalde refreinen.\n3. Controleer vóór het opslaan de langste gecombineerde dia in de werkelijke uitvoerindeling.\n\n## Repetitie en probleemoplossing\n\nVertalingen ondersteunen deelname, maar vervangen geen redactionele controle van de theologische betekenis of toestemming om liedteksten weer te geven. Oefen ook een onvertaald couplet: het origineel moet bruikbaar blijven. Als regels niet overeenkomen, corrigeer dan hun koppeling voordat u een indeling met afwisselende regels kiest.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bildschirmschoner": {
+    "body": "## Praktische werkwijze\n\n1. Stel vóór de repetitie de schermbeveiligingsoptie van de toepassing in.\n2. Laat een lees- of preekdia langer ongewijzigd staan dan de normale schermtime-out.\n3. Controleer dat zowel de projector als de signaalweg actief blijven.\n\n## Repetitie en probleemoplossing\n\nDe bescherming van de toepassing heeft niet voorrang op elke projectorinstelling, laptopdekselactie of beheerde Windows-regel. Controleer de echte apparatuur in de ruimte zonder blindelings organisatiebeleid te wijzigen. Na het sluiten van GottesdienstRegie moet normaal energiebeheer hervatten; laat geen live-uitvoer draaien alleen om slaapstand te voorkomen.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Einstellungen"
+    ]
+  },
+  "Installation & Nutzungsbedingungen": {
+    "body": "## Praktische werkwijze\n\n1. Download het installatieprogramma van de geverifieerde uitgavebron en sluit een eventuele lopende dienst correct af.\n2. Lees de installatievoorwaarden en bepaal of u ze accepteert.\n3. Controleer na de update de geïnstalleerde versie en opgeslagen schermtoewijzingen voordat u oefent.\n\n## Repetitie en probleemoplossing\n\nInstallatie verleent geen rechten op Bijbelvertalingen, gezangen, foto's of radio-uitzendingen. Bewaar de back-up van de vorige presentatie los van het installatieprogramma. Meldt de installatie een vergrendeld bestand, sluit dan alleen de geïdentificeerde toepassing of het testproces; verwijder nooit een volledig gebruikersprofiel om de waarschuwing te omzeilen.",
+    "related": [
+      "Updates",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Minimum Viable Product (MVP)": {
+    "body": "## Praktische werkwijze\n\n1. Onderscheid de noodzakelijke werkwijze voor de dienst van optionele externe integraties.\n2. Test de functies die uw gemeente werkelijk wil gebruiken, inclusief het laatste scherm van het naprogramma.\n3. Houd een eenvoudige opgeslagen terugvalsequentie voor die dienst gereed.\n\n## Repetitie en probleemoplossing\n\nEen onbereikbare optionele aanbieder mag het team niet dwingen een werkende lokale presentatie op te geven. Introduceer geen ongeteste integratie vlak voordat bezoekers aankomen. Meld precies welk gedrag ontbreekt en welke versie is geïnstalleerd, zodat het team een bewuste beperking van een reproduceerbare fout kan onderscheiden.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Erste Schritte": {
+    "body": "## Praktische werkwijze\n\n1. Maak en benoem de dienstpresentatie en koppel de werkelijke gemeenteactiviteit.\n2. Voeg inhoud in de juiste onderdelen toe en sla het document op.\n3. Oefen de laatste dienstdia, de overgang naar het naprogramma en OFF AIR, niet alleen het openingswelkom.\n\n## Repetitie en probleemoplossing\n\nControleer geselecteerde, voorvertoonde en live-inhoud afzonderlijk. De automatische ruimtemelding vereist een gekoppelde activiteit en een identificeerbare ruimte; testscenario's kunnen alternatieven tonen zonder echte activiteiten te wijzigen. Neem voldoende tijd om liedteksten en Bijbelgedeelten met de dienstleiders te controleren.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Gemeinsame Gemeinde-PCs": {
+    "body": "## Praktische werkwijze\n\n1. Meld u aan met het account dat aan de bediener is toegewezen, niet met de gegevens van een andere vrijwilliger.\n2. Bepaal welke instellingen bij de computer horen, zoals uitvoerschermen en technische OSB-standaarden.\n3. Sla de presentatie op en draag de live-status uitdrukkelijk over bij een wisseling van bediener.\n\n## Repetitie en probleemoplossing\n\nEen gebruikerswissel mag MAIN niet ongemerkt verplaatsen of een technische uitvoer anders vormgeven. Persoonlijke interfacevoorkeuren kunnen verschillen; gebruik schermidentificatie en het werkelijke beeld om de opstelling te controleren. Wis gedeelde toepassingsgegevens niet standaard bij afmelding: waardevolle lokale presentatie- en herstelgegevens kunnen verloren gaan.",
+    "related": [
+      "Anmelden & Abmelden",
+      "Virtual Screens & Displays"
+    ]
+  },
+  "Anmelden & Abmelden": {
+    "body": "## Praktische werkwijze\n\n1. Controleer na aanmelding dat de juiste organisatie en gebruiker worden getoond.\n2. Bespreek ontbrekende toegang met de gemeentebeheerder in plaats van herhaaldelijk opnieuw te installeren.\n3. Sla op en beëindig live-afspelen voordat u de werkplek via de ondersteunde afmeldfunctie verlaat.\n\n## Repetitie en probleemoplossing\n\nEen geldig account en ingeschakelde toegang tot GottesdienstRegie zijn afzonderlijke voorwaarden. Geef bij een hulpvraag de zichtbare toegangsmelding door, maar nooit een wachtwoord, herstelcode of sessietoken. Controleer op gedeelde pc's de aanmelding van de volgende bediener voordat u aanneemt dat diens rechten gelijk zijn aan die van de vorige.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Support"
+    ]
+  },
+  "Veranstaltung verknüpfen": {
+    "body": "## Praktische werkwijze\n\n1. Selecteer de activiteit op datum, begintijd en ruimte, vooral wanneer meerdere activiteiten dezelfde titel hebben.\n2. Sla de koppeling op en controleer de presentatiekop.\n3. Open de presentatie opnieuw om te controleren dat de koppeling bij opslaan en laden behouden blijft.\n\n## Repetitie en probleemoplossing\n\nDe koppeling gebruikt de stabiele activiteitssleutel, niet de titel. Een latere naamswijziging mag haar niet verbreken, en een annulering moet zichtbaar met de gekoppelde activiteit verbonden blijven. Kan de ruimte niet worden bepaald, laat de beheerder dan de centrale ruimtegegevens controleren; voer nooit een Firebase-sleutel in als ruimtenaam voor bezoekers.",
+    "related": [
+      "Servicezeit & Verspätung",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Inhalte hinzufügen": {
+    "body": "## Praktische werkwijze\n\n1. Kies het bedoelde onderdeel voordat u Element toevoegen (Add element) opent.\n2. Selecteer een geschikt ingebouwd element of een mediabron en controleer het ingevoegde item in het draaiboek.\n3. Sla op nadat dia's en timing zijn geordend.\n\n## Repetitie en probleemoplossing\n\nSommige dynamische elementen horen alleen in lussen en kunnen niet in het dienstonderdeel worden geplaatst. De beschermde eerste melding van het naprogramma wordt automatisch gemaakt en is geen optie bij Element toevoegen. Komt invoeging onverwacht ergens anders terecht, maak de wijziging ongedaan en controleer het doelonderdeel in plaats van de inhoud herhaaldelijk te dupliceren.",
+    "related": [
+      "Ablauf",
+      "Loop-Elemente"
+    ]
+  },
+  "Medien": {
+    "body": "## Praktische werkwijze\n\n1. Kies een bestandstype dat bij de taak past: achtergrond, voorgrond, audio of een volledig item.\n2. Controleer beschikbaarheid en rechten voordat u het toevoegt.\n3. Gebruik het ingebouwde onderdeel Aftellingen (Countdowns) voor een ingebouwd welkom met timer in plaats van een gedownloade video.\n\n## Repetitie en probleemoplossing\n\nAftelvoorinstellingen zijn offline beschikbaar in tien looptijden, van twintig minuten tot tien seconden, elk met zes rustige ontwerpen. Ze worden een eigen draaiboekitem en zijn standaard stil. Een voorinstelling is geen achtergrondafbeelding of audiobestand; de browser maakt dat onderscheid duidelijk.",
+    "related": [
+      "Cloud-Medien",
+      "Timer"
+    ]
+  },
+  "Cloud-Medien": {
+    "body": "## Praktische werkwijze\n\n1. Wacht tot uploaden of synchroniseren klaar is voordat u op een media-item vertrouwt.\n2. Voeg het aan de bedoelde presentatie toe en controleer het beeld tijdens een lokale repetitie.\n3. Controleer belangrijke media voordat de computer offline gaat.\n\n## Repetitie en probleemoplossing\n\nEen miniatuur bevestigt geen volledige download of bruikbare afspeelrechten. Bereid essentiële dienstmedia waar mogelijk lokaal voor. Valt cloudtoegang tijdens de dienst uit, behoud dan het werkende livebeeld en gebruik een voorbereid lokaal alternatief; vervang het live-item niet telkens terwijl een overdracht nog loopt.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Medien"
+    ]
+  },
+  "Unsplash": {
+    "body": "## Praktische werkwijze\n\n1. Zoek een passende achtergrond voor aanbidding of onderwijs.\n2. Lees de informatie van de aanbieder over gebruik en naamsvermelding.\n3. Bekijk de afbeelding vóór gebruik onder de werkelijke lied- of Bijbeltekst.\n\n## Repetitie en probleemoplossing\n\nKies een rustige afbeelding met voldoende contrast boven een drukke foto die het lezen door de gemeente hindert. Gratis downloaden neemt niet elke juridische of privacyoverweging weg. Bereid de gekozen afbeelding vooraf voor, zodat tijdens de live-dienst geen externe zoekdienst nodig is.",
+    "related": [
+      "Medien",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "KI-Motive": {
+    "body": "## Praktische werkwijze\n\n1. Beschrijf de gewenste sfeer, compositie en benodigde ruimte voor leesbare tekst.\n2. Genereer en controleer een concept voordat u het in de mediabibliotheek opslaat.\n3. Gebruik alleen een beoordeeld resultaat in de werkelijke presentatie.\n\n## Repetitie en probleemoplossing\n\nControleer bij evangelische erediensten symbolen, letters en theologische associaties zorgvuldig; gegenereerde beelden kunnen misleidende details bevatten. Vermijd herkenbare personen of vertrouwelijke gemeentegegevens in prompts. Genereren is voorbereiding, geen vervanging voor gebruiksklare media: houd een passende bestaande achtergrond beschikbaar als genereren mislukt of langer duurt.",
+    "related": [
+      "Medien",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Songs": {
+    "body": "## Praktische werkwijze\n\n1. Bevestig titel, exacte versie en coupletvolgorde van het lied met de dienstleider.\n2. Verdeel gedeelten op betekenisvolle leespunten en voeg de afgesproken vertaling toe.\n3. Oefen herhaalde refreinen en het laatste couplet op MAIN en STAGE.\n\n## Repetitie en probleemoplossing\n\nVertrouw niet alleen op een liedtitel wanneer arrangementen verschillende woorden of bruggen hebben. Controleer spelling, hoofdletters en muzikale aanwijzingen zonder live-liedteksten onverwacht te wijzigen. Rechten voor weergave of streaming blijven de verantwoordelijkheid van de gemeente. Stem podiumakkoorden en bezoekerstekst af op hun afzonderlijke doelgroepen.",
+    "related": [
+      "Songübersetzungen",
+      "Lyric Scrolling"
+    ]
+  },
+  "Virtual Screens & Displays": {
+    "body": "## Praktische werkwijze\n\n1. Identificeer de fysieke schermen voordat u rollen toewijst.\n2. Plaats MAIN op de bedoelde projector en controleer STAGE en andere uitvoeren afzonderlijk.\n3. Controleer toewijzingen opnieuw na het aansluiten van een dock, projector of USB-schermadapter.\n\n## Repetitie en probleemoplossing\n\nSchermvolgorde of numerieke identificatie kan na hardwarewijzigingen veranderen. Neem niet aan dat het grootste scherm MAIN is. Ontbreekt een toegewezen scherm, herstel dan de toewijzing via de bedieningsfuncties in plaats van herhaaldelijk ON AIR te schakelen. Technische scherminstellingen moeten updates overleven en specifiek voor deze computer blijven.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Preflight"
+    ]
+  },
+  "Persönliche Monitore": {
+    "body": "## Praktische werkwijze\n\n1. Bepaal of de persoonlijke monitor een echte uitvoerspiegel of bedienersnotities nodig heeft.\n2. Controleer inhoud en toegestane toegang vanaf de bedoelde positie.\n3. Oefen een diawisseling en een tijdelijk snelscherm.\n\n## Repetitie en probleemoplossing\n\nEen echte MAIN-spiegel moet het livebeeld tonen, niet alleen de editorselectie. In testmodus bevat die ook de testmarkering. Toon geen privénotities op een openbaar scherm. Lijkt een spiegel achter te lopen, vergelijk dan tijdstempels en de werkelijke bron voordat u overgangstijden wijzigt of nog een concurrerende afspeelbron maakt.",
+    "related": [
+      "Vorschau",
+      "Remote"
+    ]
+  },
+  "Websteuerung": {
+    "body": "## Praktische werkwijze\n\n1. Bereid toegestane toegang op afstand vóór de dienst voor.\n2. Test een eenvoudige navigatieopdracht terwijl de desktopbediener de werkelijke live-uitvoer bekijkt.\n3. Spreek af wie vooruit navigeert, zodat niet meerdere personen tegelijk opdrachten sturen.\n\n## Repetitie en probleemoplossing\n\nEen geselecteerd item op een telefoon of in een browser bewijst niet dat MAIN is veranderd. Controleer na een netwerkonderbreking de live-status op de desktop voordat u een opdracht herhaalt. Trek tijdelijke toegang na de repetitie of activiteit in. Afstandsbediening mag de testmarkering niet verwijderen of de beschermde systeemdia omzeilen.",
+    "related": [
+      "Remote",
+      "Current / Next"
+    ]
+  },
+  "Audioausgänge": {
+    "body": "## Praktische werkwijze\n\n1. Selecteer het fysieke uitvoerapparaat voor elke bedoelde audioroute.\n2. Test achtergrondmuziek, radio en video via hun werkelijk ingestelde routes.\n3. Luister vóór de komst van bezoekers op een geschikt repetitievolume naar de zaalinstallatie.\n\n## Repetitie en probleemoplossing\n\nRadio gebruikt de route voor achtergrondaudio, niet een willekeurige browserstandaard. Een lopende afspeeltimer bewijst geen hoorbaar signaal. Is een interface losgekoppeld, controleer dan routestatus en beschikbare apparaten in plaats van het hoofdvolume steeds te verhogen. Houd voorbeluisteren gescheiden van het publiekssignaal.",
+    "related": [
+      "Routing-Probleme",
+      "Vorhören"
+    ]
+  },
+  "Preflight": {
+    "body": "## Praktische werkwijze\n\n1. Controleer presentatiegereedheid, media, lettertypen, gekoppelde activiteit, ruimten en audiorouting.\n2. Onderscheid een blokkerend uitvoerprobleem van een optionele onbereikbare lusbron.\n3. Oefen de exacte live-werkwijze na het oplossen van belangrijke bevindingen.\n\n## Repetitie en probleemoplossing\n\nEen offlinecache met gemeentegegevens kan nuttig zijn, maar beschrijft de volgende ruimteboeking mogelijk niet meer correct. Controleer de getoonde tijdstempel. Een geslaagd testscenario bevestigt niet dat echte Firebase-activiteits- en ruimtegegevens beschikbaar zijn. Bedienersdiagnostiek kan technische ID's bevatten; de bezoekersuitvoer mag die niet tonen.",
+    "related": [
+      "ON AIR",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "ON AIR": {
+    "body": "## Praktische werkwijze\n\n1. Bevestig de werkelijke presentatie en gekoppelde gemeenteactiviteit vóór productie-uitvoer.\n2. Gebruik de live-bediening om te controleren welke dia MAIN toont.\n3. Sluit bewust af met OFF AIR wanneer publieksuitvoer niet meer nodig is.\n\n## Repetitie en probleemoplossing\n\nON AIR activeert de live-engine; testbedrijf is een afzonderlijke modus. ON AIR starten binnen testmodus moet het testwatermerk behouden. Neem nooit aan dat een gemarkeerd editoritem live is. Oefen het bereiken van de laatste dienstdia en de beschermde naprogrammamelding voordat u op de volledige dienstvolgorde vertrouwt.",
+    "related": [
+      "Preflight",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "LIVE-BETRIEB": {
+    "body": "## Praktische werkwijze\n\n1. Spreek een duidelijk signaal af voor het volgende couplet, de lezing of mededeling.\n2. Volg Current/Next en het echte MAIN-beeld tijdens het vooruitgaan.\n3. Bereid een geschikt snelscherm voor een onverwachte pauze voor.\n\n## Repetitie en probleemoplossing\n\nBehoud bruikbaar publieksbeeld en geluid terwijl u een bijkomend probleem onderzoekt. Wijzigingen in Firebase-mededelingen worden voorbereid voor een veilige overgang in plaats van een zichtbare boodschap midden in een zin te vervangen. Vertel bij overdracht wat live is, welk snelscherm actief is en of audio moet doorgaan in het volgende onderdeel.",
+    "related": [
+      "Current / Next",
+      "Quick Screens"
+    ]
+  },
+  "Vorschau": {
+    "body": "## Praktische werkwijze\n\n1. Onderscheid het editorvoorbeeld van de live MAIN-spiegel.\n2. Controleer de diatitel boven het enkele voorbeeld en de werkelijke live-indicatie.\n3. Vergelijk het beeld na zowel een snelschermwissel als een gewone diawisseling.\n\n## Repetitie en probleemoplossing\n\nLive-spiegels mogen geen tweede hoorbare kopie van video of achtergrondaudio maken. Aftelspiegels gebruiken hetzelfde startanker als MAIN in plaats van een nieuwe timer te starten. Verschillen beelden secondenlang, noteer dan de specifieke dia, overgang en versie; een veranderde editorselectie bewijst geen live-overname.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Fehlerbehebung"
+    ]
+  },
+  "MAIN / STAGE / LIVESTREAM": {
+    "body": "## Praktische werkwijze\n\n1. Bepaal vóór toewijzing voor welk publiek elke uitvoer bedoeld is.\n2. Controleer bezoekerstekst op MAIN, bruikbare aanwijzingen op STAGE en de bedoelde streamcompositie afzonderlijk.\n3. Test een gewone dia en een snelscherm op elke benodigde uitvoer.\n\n## Repetitie en probleemoplossing\n\nEen MAIN-spiegel bevat de werkelijke banner en testmarkering, terwijl een zelfstandig ontworpen uitvoer andere inhoud kan hebben. Een testopname of teststream moet zichtbaar gemarkeerd blijven. Diagnoseer een uitvoer niet alleen via een miniatuur: gebruik het echte toegewezen scherm of een geverifieerde vastlegging van die uitvoer.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Recording"
+    ]
+  },
+  "Quick Screens": {
+    "body": "## Praktische werkwijze\n\n1. Bereid vóór de dienst de standaardinstellingen voor logo, zwart scherm, boodschap, aftelling en OSB voor.\n2. Gebruik sneltoetsen of knoppen bewust terwijl u MAIN bekijkt.\n3. Herstel de normale live-dia wanneer de tijdelijke weergave klaar is.\n\n## Repetitie en probleemoplossing\n\nSnelschermen krijgen voorrang op gewone dia-inhoud. De mededelingenbanner wordt onderdrukt op zwarte, logo- en OSB-schermen; aftellen is de expliciete combineerbare uitzondering. In testmodus blijft het watermerk ook op zwart zichtbaar. Het OSB-uiterlijk wordt centraal ingesteld, niet telkens opnieuw in het F9-livevenster ontworpen.",
+    "related": [
+      "Bibel",
+      "Timer"
+    ]
+  },
+  "Current / Next": {
+    "body": "## Praktische werkwijze\n\n1. Controleer de huidige live-dia voordat u een aanwijzing om verder te gaan opvolgt.\n2. Bekijk het volgende ingeschakelde item, inclusief onderdeelgrenzen en overgeslagen lege dynamische elementen.\n3. Oefen zowel vooruit- als achteruitnavigatie.\n\n## Repetitie en probleemoplossing\n\nHet geselecteerde editoritem kan verschillen van het huidige live-item. Een dynamisch element zonder geldige mededelingen of activiteiten moet worden overgeslagen in plaats van een leeg scherm te tonen. Aan het einde van de dienst hoort de beschermde naprogrammamelding bij de volgorde; verwijder die niet om een losstaand navigatieprobleem op te lossen.",
+    "related": [
+      "Ablauf",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Recording": {
+    "body": "## Praktische werkwijze\n\n1. Bevestig de bedoelde opnamebron en uitvoercompositie.\n2. Maak een korte testopname met zowel beeld als geluid.\n3. Controleer het opgeslagen bestand in plaats van alleen op een opname-indicator te vertrouwen.\n\n## Repetitie en probleemoplossing\n\nEen opname van MAIN bevat de werkelijke banner en in testmodus het testwatermerk. Onafhankelijke opname- of streamingketens moeten apart worden gecontroleerd; het bedienersvoorbeeld bewijst niet welk beeld zij vastleggen. Controleer rechten en toestemming voor liederen, afbeeldingen en herkenbare deelnemers voordat u een opname verspreidt.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Servicezeit & Verspätung": {
+    "body": "## Praktische werkwijze\n\n1. Koppel de juiste activiteit en controleer geplande begin- en eindtijd.\n2. Voer een werkelijke tijdwijziging in via de ondersteunde diensttijdinstellingen.\n3. Controleer de geldende tijd in de kop, aftelling en relevante activiteitsweergave.\n\n## Repetitie en probleemoplossing\n\nGeplande tijden blijven behouden; vertragingsvelden beschrijven de momenteel geldende tijden. Overschrijf de oorspronkelijke activiteit niet alleen om een aftelling correct te laten lijken. Oefen een vertraagde activiteit en annulering met testgegevens. Een ruimtewijziging staat los van een tijdwijziging en moet via de werkelijke ruimteverwijzing worden opgelost.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Pre-Service & Post-Service": {
+    "body": "## Praktische werkwijze\n\n1. Bereid ingeschakelde lusitems in het voor- en naprogramma voor.\n2. Houd de beschermde automatische ruimtemelding aan het begin van het naprogramma.\n3. Oefen de laatste dienstdia gevolgd door de overgang naar het naprogramma.\n\n## Repetitie en probleemoplossing\n\nDe ruimtemelding vergelijkt geldende interne ruimte-ID's en toekomstige activiteitstarts binnen 61 minuten. Meerdere overeenkomende activiteiten verschijnen chronologisch; anders vraagt de bezoekersboodschap iedereen de ruimte te verlaten. Testvoorbereiding kan alternatieven tonen zonder echte boekingen te bewerken. De kleur van de sessiekop blijft stabiel terwijl het naprogramma loopt.",
+    "related": [
+      "Loop-Elemente",
+      "Veranstaltung verknüpfen"
+    ]
+  },
+  "AUDIO": {
+    "body": "## Praktische werkwijze\n\n1. Spreek af welke audiobronnen op de zaalinstallatie horen en welke alleen voor de bediener zijn.\n2. Stel routes en repetitieniveaus in voordat de presentatie start.\n3. Controleer doorlopende muziek bij onderdeelwissels en een bewuste stop.\n\n## Repetitie en probleemoplossing\n\nBehoud één gezaghebbende afspeelbron. Voorbeluisteren mag de hoorbare track niet verdubbelen. Presentatie-overlays, banners en testmarkeringen zijn visueel en mogen geen audioroute wijzigen of radio dempen. Onderzoek bronsignaal, versterking, demping en apparaatbeschikbaarheid afzonderlijk wanneer de afspeelindicator en het zaalgeluid niet overeenkomen.",
+    "related": [
+      "Audioausgänge",
+      "Background Audio"
+    ]
+  },
+  "Videos": {
+    "body": "## Praktische werkwijze\n\n1. Bereid het werkelijke videobestand voor en controleer beeldverhouding, lengte en geluidsspoor.\n2. Kies het bedoelde afspeel- en eindgedrag.\n3. Oefen eerste beeld, geluid en eindovergang op MAIN.\n\n## Repetitie en probleemoplossing\n\nStille voorbeeldspiegels mogen geen tweede audio-uitvoer maken of een extra navigatieopdracht aan het einde van de video sturen. Een banner verkleint het inhoudsgebied evenredig en mag afspelen niet herstarten. Test het mediabestand vanaf de opgeslagen locatie nadat u de presentatie opnieuw hebt geopend; een miniatuur bewijst niet dat de volledige video toegankelijk blijft.",
+    "related": [
+      "Medien",
+      "Audioausgänge"
+    ]
+  },
+  "Background Audio": {
+    "body": "## Praktische werkwijze\n\n1. Voeg de bedoelde audiotracks aan het item of onderdeel toe in plaats van concurrerende spelers te maken.\n2. Stel volume, willekeurige volgorde, herhaling en gewenste voortzettingsgrens in.\n3. Oefen het betreden en verlaten van het onderdeel, inclusief een gesproken gedeelte.\n\n## Repetitie en probleemoplossing\n\nRadio volgt de route voor achtergrondaudio. Gebruik een expliciete stopaanwijzing wanneer muziek onafhankelijk van diawissels moet eindigen. Houd dezelfde audiograaf wanneer ingestelde muziek doorloopt in het naprogramma. Hoort u niets, controleer dan demping, versterking, onderbroken audiocontext en het ingestelde fysieke apparaat voordat u het uitvoerniveau verhoogt.",
+    "related": [
+      "Stop Background Audio",
+      "Routing-Probleme"
+    ]
+  },
+  "Vorhören": {
+    "body": "## Praktische werkwijze\n\n1. Kies waar de hardware dit ondersteunt een luisterroute voor de bediener die losstaat van het publiekssignaal.\n2. Beluister de kandidaat-track kort op een veilig niveau.\n3. Stop voorbeluisteren voordat u de bedoelde live-bron start.\n\n## Repetitie en probleemoplossing\n\nEen hoofdtelefoon of voorbeluisterbediening bewijst niet dat de publieksroute werkt. Omgekeerd mag voorbeluisteren niet onverwacht hoorbaar worden in de gemeente. Oefen met de werkelijke interface en hoofdtelefoon. Verandert het apparaat na opnieuw aansluiten, controleer dan beide routes in plaats van aan te nemen dat het besturingssysteem hun eerdere toewijzing behield.",
+    "related": [
+      "Audioausgänge",
+      "Audio Browser"
+    ]
+  },
+  "Systembenachrichtigungen": {
+    "body": "## Praktische werkwijze\n\n1. Controleer de geluidsinstellingen voor de bediener vóór een rustige dienst of opname.\n2. Onderscheid toepassingssignalen van meldingsgeluiden van het besturingssysteem.\n3. Test de werkelijke audioroutes voor bediener en zaal.\n\n## Repetitie en probleemoplossing\n\nDemp niet alle achtergrondaudio alleen om een bedienerssignaal te onderdrukken. Windows-meldingen en andere toepassingen kunnen buiten GottesdienstRegie eigen apparaattoewijzingen hebben. Behoud tijdens de dienst het zaalsignaal en experimenteer niet met ongecontroleerde algemene geluidswijzigingen; documenteer bron en route van onverwacht geluid voor latere correctie.",
+    "related": [
+      "Audioausgänge",
+      "Einstellungen"
+    ]
+  },
+  "Audio Browser": {
+    "body": "## Praktische werkwijze\n\n1. Open de audiospecifieke browser en gebruik de beschikbare bibliotheek of importwerkwijze.\n2. Selecteer tracks voor het bedoelde item of onderdeel.\n3. Controleer de resulterende afspeellijst, volgorde en instelling voor willekeurig afspelen.\n\n## Repetitie en probleemoplossing\n\nDe audiobrowser sluit visuele aftelvoorinstellingen bewust uit. Spotify-verwijzingen en radiostreams zijn niet uitwisselbaar met een lokaal audiobestand; beschikbaarheid en toestemmingen van aanbieders blijven gelden. Kan een track niet worden voorbereid, gebruik dan een bekend beschikbaar alternatief in plaats van dezelfde onbruikbare verwijzing herhaaldelijk toe te voegen.",
+    "related": [
+      "Medien",
+      "Background Audio"
+    ]
+  },
+  "Stop Background Audio": {
+    "body": "## Praktische werkwijze\n\n1. Voeg de stopactie in of stel haar in waar de muziek moet eindigen.\n2. Kies een geschikte uitfade in plaats van op een toevallige onderdeelgrens te vertrouwen.\n3. Oefen de stop en het volgende gesproken of muzikale item.\n\n## Repetitie en probleemoplossing\n\nEen stopaanwijzing moet de bedoelde achtergrondbron beïnvloeden, niet de afspeellijst wissen of uitvoerapparaten resetten. Controleer voortzettingsinstellingen als muziek te vroeg stopt of in de preek doorloopt. Een bewuste stille pauze verschilt van een defecte route: controleer de afspeelstatus voordat u een andere speler over de bestaande bron start.",
+    "related": [
+      "Background Audio",
+      "Ablauf"
+    ]
+  },
+  "Routing-Probleme": {
+    "body": "## Praktische werkwijze\n\n1. Identificeer de actieve bron, toegewezen route en geselecteerde fysieke uitvoerapparaat.\n2. Controleer demping, volume, versterking en signaalstatus afzonderlijk.\n3. Is het apparaat verwijderd, herstel dan een beschikbare route en test op een veilig niveau.\n\n## Repetitie en probleemoplossing\n\nEen stream kan verbonden zijn en toch stilte leveren, en een geldig signaal kan naar het verkeerde apparaat gaan. Neem niet aan dat een lopende timer bewijst dat de hele audioketen werkt. Bewaar diagnostische details zoals apparaatnaam en contextstatus voor ondersteuning, maar stuur nooit accounttokens of privégegevens van de gemeente.",
+    "related": [
+      "Audioausgänge",
+      "Fehlerbehebung"
+    ]
+  },
+  "PRÄSENTATION": {
+    "body": "## Praktische werkwijze\n\n1. Bouw het draaiboek rond de afgesproken orde van dienst.\n2. Sla gekoppelde activiteit, dia's, mediaverwijzingen en bedoelde timing op.\n3. Open het volledige document opnieuw en oefen het voordat u het publiek gebruikt.\n\n## Repetitie en probleemoplossing\n\nPresentatievoorbereiding en live-bediening zijn afzonderlijke verantwoordelijkheden, ook als één persoon beide uitvoert. Editorwijzigingen mogen het publieksbeeld niet ongemerkt vervangen. Maak een back-up vóór ingrijpende herstructurering en controleer na importeren of dupliceren beschermde systeeminhoud en plaatsingsregels voor elementen die alleen in lussen passen.",
+    "related": [
+      "Präsentationen",
+      "Ablauf"
+    ]
+  },
+  "Präsentationen": {
+    "body": "## Praktische werkwijze\n\n1. Geef het document een duidelijke naam waarmee terugkerende zondagsdiensten te onderscheiden zijn.\n2. Koppel de activiteit en sla op na belangrijke voorbereidingswijzigingen.\n3. Dupliceer bewust wanneer u een nieuwe dienst uit een bestaande maakt.\n\n## Repetitie en probleemoplossing\n\nEen gekopieerde presentatie kan aannames over datum, timing of media uit de bron bevatten. Controleer die in plaats van alleen de titel te wijzigen. Crashherstel is een extra vangnet, geen vervanging voor opgeslagen documenten en back-ups. Bevestig na herstel van een controlepunt het draaiboek voordat u live-uitvoer start; audio en ON AIR worden niet automatisch hervat.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Speicher verwalten"
+    ]
+  },
+  "Ablauf": {
+    "body": "## Praktische werkwijze\n\n1. Orden items in het juiste voorprogramma-, opwarm-, dienst- of naprogrammaonderdeel.\n2. Gebruik het expliciete invoegdoel wanneer u vóór of na een item sleept.\n3. Controleer het resultaat en maak een onbedoelde verplaatsing direct ongedaan.\n\n## Repetitie en probleemoplossing\n\nElementen die alleen in lussen mogen staan, kunnen niet in ongeschikte onderdelen worden neergezet. De verplichte ruimtemelding blijft aan het begin van het naprogramma en kan niet worden verwijderd of gedupliceerd. Pas het linker draaiboek alleen binnen het toegestane bereik aan en oefen na herschikken de navigatie, zodat de volgende live-opdracht de bedoelde volgorde volgt.",
+    "related": [
+      "Inhalte hinzufügen",
+      "Current / Next"
+    ]
+  },
+  "Folien": {
+    "body": "## Praktische werkwijze\n\n1. Geef elke dia een bruikbare titel en kies een leesbare hoeveelheid inhoud.\n2. Plaats tekst en media binnen de bedoelde veilige zone.\n3. Controleer het voorbeeld op volledig formaat en de werkelijke beeldverhouding van de uitvoer.\n\n## Repetitie en probleemoplossing\n\nLet extra op diakritische tekens, regelafstand, onderranden en de laatste alinea. Dynamische dia's gebruiken hun eigen ontwerpinstellingen in plaats van een irrelevante vrije-tekstplaceholder. De beschermde ruimtemelding is informatieve systeeminhoud; een bewerkingspoging moet haar automatische doel uitleggen in plaats van een gewone dia-editor te openen.",
+    "related": [
+      "Vorschau",
+      "Loop-Elemente"
+    ]
+  },
+  "Übergänge & Auto-Advance": {
+    "body": "## Praktische werkwijze\n\n1. Kies een ingetogen overgang die bij aanbidding, lezen of mededelingen past.\n2. Stel automatische timing alleen in waar de volledige inhoud gelezen kan worden.\n3. Oefen een pauze en een stap terug naast automatisch vooruitgaan.\n\n## Repetitie en probleemoplossing\n\nLange dynamische lijsten en mededelingenpagina's kunnen een berekende minimale leestijd vereisen. Een expliciet kortere waarde mag ongelezen inhoud niet verbergen. Banners volgen hun eigen klok en mogen niet met de diaovergang vervagen. Een aftelvoorinstelling blijft op nul staan tenzij bewust een doorschakelregel is ingesteld.",
+    "related": [
+      "Timer",
+      "Current / Next"
+    ]
+  },
+  "Lyric Scrolling": {
+    "body": "## Praktische werkwijze\n\n1. Bespreek liedgedeelten en de bedoelde scrollindeling met de dienstleider.\n2. Oefen het langste couplet en een herhaald refrein.\n3. Bevestig dat MAIN en de live-spiegel dezelfde live-volgorde gebruiken.\n\n## Repetitie en probleemoplossing\n\nScrollen helpt bij presenteren, maar is geen reden om een heel lied tot onleesbare tekst samen te voegen. Houd een passend alternatief zonder scrollen beschikbaar voor onverwachte veranderingen in het zingen. Controleer podiumaanwijzingen afzonderlijk en zorg dat handmatig volgende/vorige op het bedoelde gedeelte uitkomt in plaats van alleen op de animatievoortgang te vertrouwen.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bibel": {
+    "body": "## Praktische werkwijze\n\n1. Controleer de Bijbelverwijzing en een werkelijk beschikbare, toegestane vertaling.\n2. Bekijk lange gedeelten vooraf en gebruik hun volgende/vorige-paginabediening.\n3. Stel voor spontane OSB de standaarden centraal in onder Presentatie (Presentation), MAIN-snelschermen, OSB voordat u F9 gebruikt.\n\n## Repetitie en probleemoplossing\n\nF9 is de snelle werkwijze voor het invoeren van verwijzingen, niet de plek om uitvoer telkens opnieuw vorm te geven. OSB mag de normale presentatiepositie niet verplaatsen en bewerking van een gewone dia mag de live-Bijbeloverlay niet in die editor tonen. Controleer spelling, versgrenzen en vertaling voordat er publiek wordt gelezen.",
+    "related": [
+      "Quick Screens",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "LiveQuiz": {
+    "body": "## Praktische werkwijze\n\n1. Controleer vóór de dienst vragen, antwoorden en de manier waarop het publiek deelneemt.\n2. Oefen aanmelden vanaf een afzonderlijk apparaat.\n3. Bevestig welk scherm de deelnamecode toont en welk de bedieningsfuncties.\n\n## Repetitie en probleemoplossing\n\nGebruik passende inhoud voor de gemeente en verzamel geen onnodige persoonsgegevens. Een externe deelnemersverbinding is niet hetzelfde als de live-status van de presentatie. Bereid een soepele voortzetting zonder quiz voor als netwerktoegang ontbreekt en herstel bewust de geplande dia of het snelscherm wanneer de activiteit eindigt.",
+    "related": [
+      "Websteuerung",
+      "Quick Screens"
+    ]
+  },
+  "SYSTEM": {
+    "body": "## Praktische werkwijze\n\n1. Bereid computerspecifieke scherm-, audio- en opstartinstellingen buiten een live-dienst voor.\n2. Controleer versie, opslag en actualiteit van gemeentegegevens.\n3. Houd een herstelbare opgeslagen presentatie en een gedocumenteerde terugvalroute gereed.\n\n## Repetitie en probleemoplossing\n\nSysteemonderhoud moet de dienst ondersteunen in plaats van tijdens de dienst een experiment te worden. Leg een reproduceerbaar probleem vast voordat u instellingen reset of bestanden verwijdert. Achtergrondcontrole op updates mag geen presentatie-uitvoer openen of audio starten; installeren is een afzonderlijke bewuste handeling. Controleer kritieke instellingen opnieuw na een software- of hardwarewijziging.",
+    "related": [
+      "Updates",
+      "Fehlerbehebung"
+    ]
+  },
+  "Sync / Offline / Preload": {
+    "body": "## Praktische werkwijze\n\n1. Controleer het tijdstip van de laatste gemeentegegevensupdate, niet alleen of een verbindingspictogram groen is.\n2. Bereid essentiële media vóór de dienst voor.\n3. Oefen een korte netwerkonderbreking met inhoud die veilig lokaal beschikbaar is.\n\n## Repetitie en probleemoplossing\n\nVoorladen bereidt stil een begrensd aantal komende bronnen voor; het start geen radio, websites of hoorbaar afspelen te vroeg. Activiteitsgegevens in de cache kunnen verouderen, vooral bij ruimtewijzigingen en annuleringen. Automatische herstelpunten helpen na een crash, maar de laatste niet-opgeslagen wijzigingen vóór een controlepunt kunnen nog steeds verloren gaan.",
+    "related": [
+      "Preflight",
+      "Präsentationen"
+    ]
+  },
+  "Updates": {
+    "body": "## Praktische werkwijze\n\n1. Lees de uitgavenotities en sla belangrijk werk op vóór installatie.\n2. Kies naar behoefte directe installatie, uitstel of installatie bij afsluiten.\n3. Controleer na heropenen de geïnstalleerde versie, MAIN-toewijzing en audioroutes.\n\n## Repetitie en probleemoplossing\n\nHet sluiten van het instellingenvenster mag een lopende updatecontrole of download niet annuleren. Bij Windows-start kan de toepassing openen of alleen op de achtergrond naar updates zoeken; dit zijn verschillende opties. Een achtergrondcontrole mag geen dienstuitvoer, audio of afstandsbediening starten, en beschikbare updates moeten nog steeds bewust worden geïnstalleerd.",
+    "related": [
+      "Versionsinformationen",
+      "Installation & Nutzungsbedingungen"
+    ]
+  },
+  "Tastenkürzel": {
+    "body": "## Praktische werkwijze\n\n1. Leer de navigatie- en snelschermtoetsen die uw team gebruikt.\n2. Oefen met de focus in het werkelijke presentatievenster.\n3. Controleer bij twijfel de kleine sneltoetslabels op de snelschermvoorbeelden.\n\n## Repetitie en probleemoplossing\n\nEen tekstveld of ander actief venster kan toetsen anders interpreteren. Druk niet herhaaldelijk op een navigatietoets alleen omdat de editormarkering niet verschoof; controleer eerst MAIN. OSB gebruikt F9 voor snelle invoer met opgeslagen standaarden. Houd een muisgestuurde route beschikbaar voor vrijwilligers die de sneltoetsen nog niet kennen.",
+    "related": [
+      "Quick Screens",
+      "Current / Next"
+    ]
+  },
+  "Benutzeroberfläche": {
+    "body": "## Praktische werkwijze\n\n1. Identificeer draaiboek, bewerkingsgebied, enkel voorbeeld en werkelijke MAIN-spiegel.\n2. Kies een comfortabele bedienersschaal en zijbalkbreedte.\n3. Open een venster en controleer of de bedieningsfuncties bij de huidige venstergrootte bereikbaar blijven.\n\n## Repetitie en probleemoplossing\n\nDe bedienersinterface kan worden geschaald zonder de bedoelde publieksindeling te veranderen. Een testwatermerk hoort binnen uitvoervlakken en mag niet boven hulp- of instellingenvensters zweven. Start de werkruimte heel klein of grijs, leg dan toestand en geïnstalleerde versie vast in plaats van herhaaldelijk te schalen of zonder bewijs toepassingsgegevens te verwijderen.",
+    "related": [
+      "Vorschau",
+      "Fehlerbehebung"
+    ]
+  },
+  "Einstellungen": {
+    "body": "## Praktische werkwijze\n\n1. Onderscheid persoonlijke interfacevoorkeuren van technische computerinstellingen.\n2. Configureer MAIN-snelschermen, OSB-standaarden, bannerpositie en audiorouting in hun eigen onderdelen.\n3. Sla elke relevante wijziging op en test haar vóór de dienst.\n\n## Repetitie en probleemoplossing\n\nDe bannerpositie wordt voor de regiecomputer opgeslagen, zodat een andere gebruiker de informatiebalk voor bezoekers niet onverwacht verplaatst. Opstarten op de achtergrond voor updatecontroles staat los van het openen van de volledige toepassing. Wijzig bij onderzoek naar één probleem niet meerdere ongerelateerde instellingen; voer één geverifieerde wijziging uit en vergelijk het werkelijke resultaat.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Audioausgänge"
+    ]
+  },
+  "Webseiten": {
+    "body": "## Praktische werkwijze\n\n1. Bereid de exacte openbare pagina voor en controleer de inhoud vóór weergave.\n2. Test netwerktoegang, ingebed afspelen en de bedoelde uitvoergrootte.\n3. Houd voor belangrijke informatie een geschikt lokaal alternatief gereed.\n\n## Repetitie en probleemoplossing\n\nEen website kan onafhankelijk van de opgeslagen presentatie veranderen. Toon de gemeente nooit een privéaccountpagina, sessietoken of beheerinterface. In testmodus blijft het systeemwatermerk boven ingebedde inhoud. Een banner mag het inhoudsgebied van de website evenredig verkleinen, maar mag niet navigeren of herladen alleen omdat de lichtkranttekst verandert.",
+    "related": [
+      "Medien",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Timer": {
+    "body": "## Praktische werkwijze\n\n1. Open Mediabibliotheek (Media library), Aftellingen (Countdowns) en kies looptijd en ontwerptegel.\n2. Voeg de voorinstelling als eigen draaiboekitem toe en controleer de plaatsing.\n3. Oefen de start, een spiegel die later aansluit en het gedrag bij nul.\n\n## Repetitie en probleemoplossing\n\nTien looptijden variëren van twintig minuten tot tien seconden; elk biedt Klar, Natur, Licht, Kreuz, Kerze en Geometrisch. Voorinstellingen werken offline en zijn standaard stil. De resterende tijd komt van één live-startanker, niet van een onafhankelijke teller per venster. Ze blijven op 00:00 tenzij een expliciete voortzettingsregel is ingesteld.",
+    "related": [
+      "Medien",
+      "Übergänge & Auto-Advance"
+    ]
+  },
+  "Remote": {
+    "body": "## Praktische werkwijze\n\n1. Maak alleen de toegang die voor repetitie of dienst nodig is.\n2. Test terwijl de desktopbediener MAIN bekijkt.\n3. Beëindig tijdelijke sessies en trek toegang in wanneer die niet meer nodig is.\n\n## Repetitie en probleemoplossing\n\nMeerdere bedieningen mogen niet tegelijk vooruitgaan. Lees na opnieuw verbinden de werkelijke huidige status voordat u nog een volgende-opdracht stuurt. Toegang op afstand moet normale uitvoerprioriteit en testmarkering respecteren; het is geen manier om het watermerk te omzeilen of beschermde systeemdia's te wijzigen. Houd directe desktopbediening als terugval beschikbaar.",
+    "related": [
+      "Websteuerung",
+      "Persönliche Monitore"
+    ]
+  },
+  "Fehlerbehebung": {
+    "body": "## Praktische werkwijze\n\n1. Noteer geïnstalleerde versie, exacte handeling en of het probleem editor, voorbeeld, MAIN of geluid raakt.\n2. Maak een bruikbare schermafbeelding zonder privégegevens.\n3. Reproduceer het kleinste veilige voorbeeld in testmodus.\n\n## Repetitie en probleemoplossing\n\nBehoud een werkend livebeeld tijdens het onderzoek. Een vergrendeld tijdelijk testprofielbestand bewijst geen beschadigde presentatiedatabase. Verwijder geen echt gebruikersprofiel om een vergrendelingswaarschuwing op te lossen. Meld bij stille radio bron, signaal, route, apparaat en dempings-/contextstatus in plaats van aan te nemen dat de fysieke luidsprekers de enige oorzaak zijn.",
+    "related": [
+      "Support",
+      "Routing-Probleme"
+    ]
+  },
+  "Support": {
+    "body": "## Praktische werkwijze\n\n1. Beschrijf wat u verwachtte en wat werkelijk gebeurde.\n2. Vermeld de geïnstalleerde versie en een korte reproduceerbare reeks.\n3. Voeg een geanonimiseerde schermafbeelding toe en onderscheid een echte dienststoring van een probleem dat alleen in tests optreedt.\n\n## Repetitie en probleemoplossing\n\nStuur nooit wachtwoorden, authenticatietokens, herstelcodes of privégegevens uit gemeenteregisters. Betreft het een uitvoer, vermeld dan rol en fysiek scherm. Noem bij een regressie na bijwerken zo mogelijk de laatst bekende werkende versie. Bewaar presentatie of diagnostisch log lokaal totdat ondersteuning aangeeft welke niet-gevoelige informatie nuttig is.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Nutzungsbedingungen": {
+    "body": "## Praktische werkwijze\n\n1. Controleer softwarevoorwaarden en de rechten op de inhoud die u presenteert.\n2. Controleer toestemmingen voor Bijbelvertalingen, liederen, foto's en opnamen afzonderlijk.\n3. Vraag de verantwoordelijke gemeentebeheerder om uitleg wanneer toegestaan gebruik onduidelijk is.\n\n## Repetitie en probleemoplossing\n\nEen werkende import of stream bewijst geen toestemming voor vertonen, reproduceren of verder verspreiden. Softwaretoegang en inhoudslicenties zijn afzonderlijke zaken. Behoud verplichte naamsvermelding en zet geen vertrouwelijke pastorale of persoonlijke informatie in openbare dia's, externe prompts of ondersteuningsmeldingen.",
+    "related": [
+      "Installation & Nutzungsbedingungen",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "Versionsinformationen": {
+    "body": "## Praktische werkwijze\n\n1. Vergelijk de geïnstalleerde versie met de versie van de updatebron.\n2. Lees nieuwe functies, verbeteringen, correcties en bekende beperkingen van de betreffende uitgave.\n3. Oefen na bijwerken de betrokken werkwijze in plaats van aan te nemen dat elke opstelling identiek werkt.\n\n## Repetitie en probleemoplossing\n\nHistorische uitgavenotities beschrijven wat destijds is geleverd. Ze beloven niet dat later geen regressie kan ontstaan. Gepubliceerd installatieprogramma, updatemetadata en actieve versie moeten overeenkomen. Vindt de updater geen nieuwe uitgave, meld dan geïnstalleerde versie en kanaal in plaats van herhaaldelijk een ongerelateerd pakket te installeren.",
+    "related": [
+      "Updates",
+      "Support"
+    ]
+  },
+  "Über GottesdienstRegie": {
+    "body": "## Praktische werkwijze\n\n1. Beschouw de toepassing als hulpmiddel voor de eredienst, niet als bron van de dienstinhoud.\n2. Spreek verantwoordelijkheden af voor Bijbeltekst, liedvolgorde, mededelingen en ruimte-informatie.\n3. Houd de technische werkwijze begrijpelijk voor vrijwillige bedieners.\n\n## Repetitie en probleemoplossing\n\nLeesbare uitvoer, betrouwbaar geluid en bewuste live-bediening zijn belangrijker dan decoratieve effecten. Gebruik rustige ontwerpen die passen bij evangelisch-christelijke erediensten en de behoeften van de aanwezige gemeente. Verifieer technische beweringen via repetities en gepubliceerde versie-informatie; meld beperkingen duidelijk in plaats van ze achter een geslaagd ogende indicator te verbergen.",
+    "related": [
+      "SCHNELLSTART",
+      "Support"
+    ]
+  },
+  "Speicher verwalten": {
+    "body": "## Praktische werkwijze\n\n1. Controleer welke presentaties en media nog nodig zijn voordat u iets verwijdert.\n2. Bewaar een afzonderlijke back-up van belangrijke dienstdocumenten.\n3. Controleer verwijzingen voordat u een gedeelde mediabron verwijdert.\n\n## Repetitie en probleemoplossing\n\nMedia in de cache, opgeslagen documenten en herstelpunten hebben verschillende doelen. Een cache wissen is niet hetzelfde als een presentatie verwijderen, en herstel is geen permanent archief. Ruim tijdelijke Chromium-profielen niet op terwijl hun proces actief is. Is er tijdens een dienst weinig ruimte, stel dan brede opruiming uit totdat live-uitvoer en opslaan veilig zijn afgerond.",
+    "related": [
+      "Präsentationen",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Lokale Sprachpakete": {
+    "body": "## Praktische werkwijze\n\n1. Kies tijdens de voorbereiding het gewenste ondersteunde pakket en wacht totdat het beschikbaar is.\n2. Test de bedoelde taaltaak voordat u op offlinegebruik vertrouwt.\n3. Controleer gegenereerde of vertaalde tekst voordat u die publiek toont.\n\n## Repetitie en probleemoplossing\n\nTaalpakketten en de vertaalde interfacehulp zijn afzonderlijke bronnen. Het verwijderen van een model mag opgeslagen liedvertalingen niet wissen. Downloadgrootte, opslag en voorbereidingstijd kunnen de computer beïnvloeden; start geen grote downloads vlak vóór de dienst. Houd redactionele verantwoordelijkheid voor theologische formuleringen en gemeentespecifieke namen bij het team.",
+    "related": [
+      "Songübersetzungen",
+      "Speicher verwalten"
+    ]
+  },
+  "Loop-Elemente": {
+    "body": "## Praktische werkwijze\n\n1. Zet dynamische informatie over activiteiten, mededelingen, weer of muziek in een ondersteund lusonderdeel.\n2. Kies ontwerp en leestijd via de elementinstellingen.\n3. Test zowel geldige als lege inhoud.\n\n## Repetitie en probleemoplossing\n\nEen bericht met de bestaande bannervlag loopt onafhankelijk in voor-/nalussen en boven aftellingen; normale goedkeuring voor het mededelingenscherm regelt gewone mededelingendia's apart. Bannertekst is rood en de positie is een computerinstelling. Lege dynamische elementen worden overgeslagen. Live-momentopnamen blijven stabiel tot een veilige wissel in plaats van bezoekerstekst tijdens het lezen te vervangen.",
+    "related": [
+      "Pre-Service & Post-Service",
+      "Timer"
+    ]
+  },
+  "Online-Nutzungsbedingungen": {
+    "body": "## Praktische werkwijze\n\n1. Lees de voorwaarden van de externe aanbieder voordat u diens materiaal of verbinding gebruikt.\n2. Controleer welke gegevens eventueel de gemeentecomputer verlaten.\n3. Bereid een lokaal alternatief voor essentiële dienstinhoud voor.\n\n## Repetitie en probleemoplossing\n\nEen gratis dienst of functie zonder API-sleutel kan nog steeds gebruiks-, privacy- of inhoudsbeperkingen hebben. Beschikbaarheid van aanbieders kan onafhankelijk van GottesdienstRegie veranderen. Stuur geen persoonlijke gemeentegegevens alleen om een afbeelding of vertaling te krijgen. Openbare uitvoer moet vrij blijven van foutcodes van aanbieders en interne accountgegevens.",
+    "related": [
+      "Nutzungsbedingungen",
+      "Sync / Offline / Preload"
+    ]
+  }
+}

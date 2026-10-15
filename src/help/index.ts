@@ -5,6 +5,20 @@ import legacyTranslated from './legacyTranslated.json';
 import {legacyGerman} from './legacyGerman';
 import {helpEnhancementsEnglish} from './enhancementsEnglish';
 import {helpEnhancementsGerman} from './enhancementsGerman';
+import enhancementsDa from './enhancements/da.json';
+import enhancementsPl from './enhancements/pl.json';
+import enhancementsSv from './enhancements/sv.json';
+import enhancementsFr from './enhancements/fr.json';
+import enhancementsEs from './enhancements/es.json';
+import enhancementsNo from './enhancements/no.json';
+import enhancementsIt from './enhancements/it.json';
+import enhancementsPtBr from './enhancements/pt-BR.json';
+import enhancementsUk from './enhancements/uk.json';
+import enhancementsRu from './enhancements/ru.json';
+import enhancementsFi from './enhancements/fi.json';
+import enhancementsTr from './enhancements/tr.json';
+import enhancementsNl from './enhancements/nl.json';
+import enhancementsAr from './enhancements/ar.json';
 
 export type HelpArticle = { id: string; title: string; body: string; section?: boolean;related?:string[] };
 export type HelpUI = { title: string; searchPlaceholder: string; noResults: string; screenshotLabel: string };
@@ -30,8 +44,10 @@ const uiRows: Record<string, [string,string,string,string]> = {
   ar: ['المساعدة','البحث في مواضيع المساعدة …','لم يتم العثور على مواضيع مطابقة.','عرض توضيحي'],
 };
 const sectionIds = new Set(['SCHNELLSTART','LIVE-BETRIEB','AUDIO','PRÄSENTATION','SYSTEM']);
-const packs: Record<string, Record<string, {title:string;body:string;related?:string[]}>> = { ...translated, ...helpWest, en:helpEnglish };
-const enhancements:Record<string,typeof helpEnhancementsEnglish>={en:helpEnhancementsEnglish,de:helpEnhancementsGerman};
+const sourcePacks: Record<string, Record<string, {title:string;body:string;related?:string[]}>> = { ...translated, ...helpWest, en:helpEnglish };
+// Assemble into separate maps: hot reloads must never append guidance to source packs.
+const packs=Object.fromEntries(Object.entries(sourcePacks).map(([locale,pack])=>[locale,{...pack}]));
+const enhancements:Record<string,typeof helpEnhancementsEnglish>={en:helpEnhancementsEnglish,de:helpEnhancementsGerman,da:enhancementsDa,pl:enhancementsPl,sv:enhancementsSv,fr:enhancementsFr,es:enhancementsEs,no:enhancementsNo,it:enhancementsIt,'pt-BR':enhancementsPtBr,uk:enhancementsUk,ru:enhancementsRu,fi:enhancementsFi,tr:enhancementsTr,nl:enhancementsNl,ar:enhancementsAr};
 // These old instructions predate independent test operation, protected post-program
 // content and the current countdown/update workflow. Current articles replace them.
 const retiredLegacy=new Set(['ON AIR','Pre-Service & Post-Service','Vorschau','MAIN / STAGE / LIVESTREAM','Timer','Updates','Loop-Elemente','Audio Browser','Einstellungen']);

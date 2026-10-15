@@ -96,7 +96,14 @@ app.whenReady().then(async()=>{try{
  await js("window.dispatchEvent(new CustomEvent('gottesdienstregie:open-help',{detail:'Testbetrieb'}))");await capture('test-help');
  assert(await js("(()=>{const mark=document.querySelector('.test-mode-watermark'),r=mark?.getBoundingClientRect();return !r||!!document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('.help-dialog')})()"),'Watermark cannot escape the output surface above help');
  await js("window.v82Locale('en');window.dispatchEvent(new CustomEvent('gottesdienstregie:open-help',{detail:'Timer'}))");await sleep(300);
- await js("[...document.querySelectorAll('.help-layout>nav button')].find(b=>b.textContent==='Timers and countdowns'||b.textContent==='Timers'||b.textContent==='Timer')?.click()");await capture('help-article');
+ await js("[...document.querySelectorAll('.help-layout>nav button')].find(b=>b.textContent==='Timers and countdowns'||b.textContent==='Timers'||b.textContent==='Timer')?.click()");
+ await until(operator,"document.querySelector('.help-article-view img')?.naturalWidth>0");await capture('help-article');
+ await js("window.v82Locale('ar')");
+ await until(operator,"!!document.querySelector('.help-article-view[lang=ar][dir=rtl]')");
+ assert(await js("document.querySelectorAll('.help-article-section h3').length>=2"),'Arabic help includes the localized practical sections');
+ operator.setSize(900,900);await sleep(200);
+ assert(await js("(()=>{const article=document.querySelector('.help-layout>article');return article.scrollWidth<=article.clientWidth+2})()"),'Narrow RTL help must not overflow its article horizontally');
+ await capture('help-arabic-narrow');operator.setSize(1440,1000);
  await js("window.v82Locale('de')");
  await js("document.body.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}))");await js("document.querySelector('.test-session-button').click()");await until(operator,'!window.v77State().onAir');
  await js('window.seedV77(true)');await sleep(200);sent.length=0;
@@ -106,7 +113,7 @@ app.whenReady().then(async()=>{try{
  assert(sent[0]?.slide?.body?.includes('Gemeindecafé'),'First announcement must contain prepared public text');
  await until(operator,"window.v79Frames.length>0");
  const mainFrame=(await main.webContents.executeJavaScript('window.v79Frames'))[0],previewFrame=(await js('window.v79Frames'))[0];
- assert(mainFrame&&Math.abs(mainFrame.at-previewFrame.at)<80,'MAIN and preview must present the shared snapshot within 80 ms');
+ assert(mainFrame&&Math.abs(mainFrame.at-previewFrame.at)<80,'MAIN and preview must present the shared snapshot within 80 ms, measured '+Math.abs(mainFrame?.at-previewFrame.at)+' ms');
  assert(mainFrame.at>=sent[0].slide._presentAtMs-5&&previewFrame.at>=sent[0].slide._presentAtMs-5,'Neither output commits before the shared deadline');
  console.log('Native MAIN/preview presentation difference:',Math.abs(mainFrame.at-previewFrame.at),'ms');
  await capture('meldungen',main);await capture('meldungen-operator');

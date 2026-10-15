@@ -1,0 +1,443 @@
+{
+  "SCHNELLSTART": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Poproś osobę prowadzącą uwielbienie o porządek nabożeństwa i wskazanie osoby odpowiedzialnej za zmiany w ostatniej chwili.\n2. Przygotuj krótką prezentację z powitaniem, pieśnią zborową i czytaniem Biblii.\n3. Zidentyfikuj ekran dla uczestników i przeprowadź próbę w wyraźnie oznaczonym trybie testowym przed przybyciem gości.\n\n## Próba i rozwiązywanie problemów\n\nPróba powinna obejmować nieruchomy slajd, film i celową pauzę. Sprawdź rzeczywisty obraz projektora, zamiast polegać na zaznaczeniu w edytorze. Zachowaj lokalnie zapisaną prezentację i uzgodnij z zespołem sposób kontynuowania, jeśli źródło sieciowe stanie się niedostępne.",
+    "related": [
+      "Erste Schritte",
+      "Preflight"
+    ]
+  },
+  "Songübersetzungen": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Uzgodnij, jakich języków oryginału i tłumaczenia potrzebuje zbór.\n2. Powiąż tłumaczenie z odpowiednią częścią tekstu pieśni, także z powtarzanymi refrenami.\n3. Przed zapisaniem sprawdź najdłuższy dwujęzyczny slajd w rzeczywistym układzie wyjściowym.\n\n## Próba i rozwiązywanie problemów\n\nTłumaczenia ułatwiają uczestnictwo, lecz nie zastępują redakcyjnej kontroli znaczenia teologicznego ani zezwolenia na powielanie tekstów. Przećwicz także zwrotkę bez tłumaczenia: oryginał musi pozostać użyteczny. Jeśli wiersze sobie nie odpowiadają, popraw ich powiązanie przed wybraniem układu z naprzemiennymi wierszami.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bildschirmschoner": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przed próbą ustaw w aplikacji opcję ochrony wyświetlania.\n2. Pozostaw slajd z czytaniem lub kazaniem bez zmian dłużej niż zwykły czas wygaszania ekranu.\n3. Upewnij się, że projektor i cały tor sygnału pozostają aktywne.\n\n## Próba i rozwiązywanie problemów\n\nOchrona aplikacji nie zastępuje wszystkich ustawień projektora, działań po zamknięciu pokrywy laptopa ani zarządzanych zasad Windows. Sprawdź sprzęt w sali, nie zmieniając bezrefleksyjnie zasad organizacji. Po zamknięciu GottesdienstRegie powinno wrócić zwykłe zarządzanie energią; nie utrzymuj transmisji na żywo tylko po to, by zapobiec uśpieniu.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Einstellungen"
+    ]
+  },
+  "Installation & Nutzungsbedingungen": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Pobierz instalator ze zweryfikowanego źródła wydania i prawidłowo zakończ trwające nabożeństwo.\n2. Przeczytaj warunki instalacji i zdecyduj, czy je akceptujesz.\n3. Po aktualizacji sprawdź zainstalowaną wersję i zapisane przypisania ekranów przed próbą.\n\n## Próba i rozwiązywanie problemów\n\nInstalacja programu nie daje praw do przekładów Biblii, pieśni, zdjęć ani audycji radiowych. Przechowuj kopię poprzedniej prezentacji oddzielnie od instalatora. Jeśli instalator zgłasza zablokowany plik, zamknij wyłącznie wskazaną aplikację lub proces testowy; nigdy nie usuwaj całego profilu użytkownika, aby obejść ostrzeżenie.",
+    "related": [
+      "Updates",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Minimum Viable Product (MVP)": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Odróżnij podstawowy przebieg nabożeństwa od opcjonalnych integracji zewnętrznych.\n2. Przetestuj funkcje, których zbór zamierza używać, także końcowy ekran po programie.\n3. Zachowaj prostą, zapisaną sekwencję awaryjną dla tego nabożeństwa.\n\n## Próba i rozwiązywanie problemów\n\nNiedostępność opcjonalnego dostawcy nie powinna zmuszać zespołu do porzucenia działającej lokalnej prezentacji. Nie wprowadzaj niesprawdzonej integracji tuż przed przybyciem gości. Zgłoś dokładnie brakujące zachowanie i zainstalowaną wersję, aby odróżnić zamierzone ograniczenie od powtarzalnego błędu.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Erste Schritte": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Utwórz i nazwij prezentację nabożeństwa, a następnie powiąż ją z właściwym wydarzeniem zboru.\n2. Dodaj treści do odpowiednich sekcji i zapisz dokument.\n3. Przećwicz ostatni slajd nabożeństwa, przejście do programu końcowego i OFF AIR, nie tylko powitanie.\n\n## Próba i rozwiązywanie problemów\n\nSprawdzaj osobno treści zaznaczone, podglądane i emitowane na żywo. Automatyczny komunikat o sali wymaga poprawnego powiązania z wydarzeniem i salą; scenariusze testowe pokazują jego warianty bez zmiany rzeczywistych wydarzeń. Zarezerwuj czas na sprawdzenie pieśni i fragmentów Biblii z prowadzącymi nabożeństwo.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Gemeinsame Gemeinde-PCs": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Zaloguj się na konto przypisane operatorowi, nie danymi innego wolontariusza.\n2. Ustal, które ustawienia należą do komputera, np. ekrany wyjściowe i techniczne ustawienia domyślne OSB.\n3. Zapisz prezentację i wyraźnie przekaż stan emisji przy zmianie operatora.\n\n## Próba i rozwiązywanie problemów\n\nZmiana użytkownika nie może niepostrzeżenie przenosić MAIN ani zmieniać stylu wyjścia technicznego. Osobiste preferencje interfejsu mogą się różnić, dlatego sprawdzaj konfigurację przez identyfikację ekranów i rzeczywisty obraz. Nie usuwaj wspólnych danych aplikacji przy zwykłym wylogowaniu: mogą zawierać cenne lokalne prezentacje i dane odzyskiwania.",
+    "related": [
+      "Anmelden & Abmelden",
+      "Virtual Screens & Displays"
+    ]
+  },
+  "Anmelden & Abmelden": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Po zalogowaniu sprawdź, czy widoczna jest właściwa organizacja i użytkownik.\n2. Brak dostępu wyjaśnij z administratorem zboru zamiast wielokrotnie reinstalować program.\n3. Zapisz pracę i zakończ odtwarzanie na żywo przed opuszczeniem stanowiska za pomocą obsługiwanej funkcji wylogowania.\n\n## Próba i rozwiązywanie problemów\n\nWażne konto i włączony dostęp do GottesdienstRegie to osobne warunki. Prosząc o pomoc, podaj widoczny komunikat o dostępie, ale nigdy hasło, kod odzyskiwania ani token sesji. Na wspólnych komputerach sprawdź logowanie następnego operatora, zanim założysz, że ma uprawnienia poprzednika.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Support"
+    ]
+  },
+  "Veranstaltung verknüpfen": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Wybierz wydarzenie według daty, godziny rozpoczęcia i sali, zwłaszcza gdy kilka ma ten sam tytuł.\n2. Zapisz powiązanie i sprawdź nagłówek prezentacji.\n3. Otwórz prezentację ponownie, aby potwierdzić zachowanie powiązania po zapisie i wczytaniu.\n\n## Próba i rozwiązywanie problemów\n\nPowiązanie używa stałego klucza wydarzenia, nie jego tytułu. Późniejsza zmiana nazwy nie powinna go zerwać, a odwołanie powinno pozostać widocznie związane z wydarzeniem. Jeśli nie można ustalić sali, poproś administratora o sprawdzenie centralnych danych; nigdy nie wpisuj klucza Firebase jako nazwy sali dla gości.",
+    "related": [
+      "Servicezeit & Verspätung",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Inhalte hinzufügen": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Wybierz docelową sekcję przed otwarciem Add element.\n2. Wybierz odpowiedni element natywny lub źródło multimediów i sprawdź dodaną pozycję w planie.\n3. Zapisz po ułożeniu slajdów i ustawieniu czasu.\n\n## Próba i rozwiązywanie problemów\n\nNiektóre elementy dynamiczne są przeznaczone tylko do pętli i nie mogą trafić do sekcji nabożeństwa. Chroniony pierwszy komunikat programu końcowego powstaje automatycznie i nie jest opcją Add element. Gdy element pojawi się w złym miejscu, cofnij zmianę i sprawdź sekcję docelową zamiast wielokrotnie powielać treść.",
+    "related": [
+      "Ablauf",
+      "Loop-Elemente"
+    ]
+  },
+  "Medien": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Wybierz plik odpowiedniego rodzaju: tło, pierwszy plan, dźwięk lub pełną pozycję.\n2. Sprawdź dostępność i prawa przed dodaniem.\n3. Do natywnego powitania z odliczaniem użyj wbudowanej sekcji Countdowns zamiast pobranego filmu.\n\n## Próba i rozwiązywanie problemów\n\nGotowe odliczania działają offline w dziesięciu długościach, od dwudziestu minut do dziesięciu sekund, każda w sześciu spokojnych wzorach. Tworzą osobne pozycje planu i domyślnie są ciche. Preset nie jest obrazem tła ani plikiem audio; przeglądarka wyraźnie to rozróżnia.",
+    "related": [
+      "Cloud-Medien",
+      "Timer"
+    ]
+  },
+  "Cloud-Medien": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Poczekaj na zakończenie przesyłania lub synchronizacji, zanim oprzesz się na danym medium.\n2. Dodaj je do właściwej prezentacji i sprawdź obraz podczas lokalnej próby.\n3. Zweryfikuj ważne multimedia przed odłączeniem komputera od sieci.\n\n## Próba i rozwiązywanie problemów\n\nMiniatura nie potwierdza pełnego pobrania ani uprawnień do odtwarzania. Przygotuj lokalnie kluczowe multimedia, jeśli jest to obsługiwane. Gdy dostęp do chmury zawiedzie podczas nabożeństwa, zachowaj działający obraz i użyj przygotowanej lokalnej alternatywy; nie podmieniaj wielokrotnie pozycji na żywo podczas oczekiwania na transfer.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Medien"
+    ]
+  },
+  "Unsplash": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Wyszukaj tło odpowiednie do uwielbienia lub nauczania.\n2. Przeczytaj informacje dostawcy o użytkowaniu i podawaniu autorstwa.\n3. Przed użyciem obejrzyj obraz pod rzeczywistym tekstem pieśni lub Biblii.\n\n## Próba i rozwiązywanie problemów\n\nWybieraj spokojny obraz o wystarczającym kontraście zamiast szczegółowego zdjęcia utrudniającego czytanie. Bezpłatne pobieranie nie usuwa wszystkich kwestii prawnych i prywatności. Przygotuj wybrany obraz wcześniej, aby nabożeństwo na żywo nie wymagało zewnętrznej wyszukiwarki.",
+    "related": [
+      "Medien",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "KI-Motive": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Opisz oczekiwany nastrój, kompozycję i miejsce na czytelny tekst.\n2. Wygeneruj i obejrzyj wersję roboczą przed zapisaniem w bibliotece mediów.\n3. Używaj w prezentacji wyłącznie sprawdzonego wyniku.\n\n## Próba i rozwiązywanie problemów\n\nW kontekście ewangelikalnego nabożeństwa starannie sprawdzaj symbole, napisy i skojarzenia teologiczne; generowany obraz może zawierać mylące szczegóły. Nie podawaj w poleceniach rozpoznawalnych osób ani poufnych informacji zboru. Generowanie służy przygotowaniu, nie zastępuje gotowych mediów: zachowaj odpowiednie istniejące tło na wypadek błędu lub długiego oczekiwania.",
+    "related": [
+      "Medien",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Songs": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Potwierdź z prowadzącym tytuł pieśni, dokładną wersję i kolejność zwrotek.\n2. Dziel tekst w miejscach ułatwiających czytanie i dodaj uzgodnione tłumaczenie.\n3. Przećwicz powtarzane refreny i ostatnią zwrotkę na MAIN i STAGE.\n\n## Próba i rozwiązywanie problemów\n\nNie polegaj wyłącznie na tytule, gdy różne aranżacje mają odmienne słowa lub łączniki. Sprawdź pisownię, wielkie litery i wskazówki muzyczne bez niespodziewanych zmian tekstu na żywo. Prawa do powielania i transmitowania tekstów są odpowiedzialnością zboru. Dopasuj akordy sceniczne i tekst dla gości do ich odbiorców.",
+    "related": [
+      "Songübersetzungen",
+      "Lyric Scrolling"
+    ]
+  },
+  "Virtual Screens & Displays": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Zidentyfikuj fizyczne ekrany przed przypisaniem ról.\n2. Umieść MAIN na właściwym projektorze i osobno sprawdź STAGE oraz inne wyjścia.\n3. Sprawdź przypisania ponownie po podłączeniu stacji dokującej, projektora lub adaptera USB.\n\n## Próba i rozwiązywanie problemów\n\nUkład monitora lub jego numer może zmienić się po zmianie sprzętu. Nie zakładaj, że największy ekran to MAIN. Jeśli przypisany ekran jest niedostępny, popraw przypisanie w kontrolkach operatora zamiast wielokrotnie przełączać ON AIR. Techniczne ustawienia ekranów powinny przetrwać aktualizacje i pozostać właściwe dla tego komputera.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Preflight"
+    ]
+  },
+  "Persönliche Monitore": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Ustal, czy monitor osobisty ma pokazywać rzeczywiste wyjście czy notatki operatora.\n2. Sprawdź treść i dozwolony dostęp z docelowego miejsca.\n3. Przećwicz zmianę slajdu i tymczasowy Quick Screen.\n\n## Próba i rozwiązywanie problemów\n\nPrawdziwe lustro MAIN musi pokazywać obraz na żywo, nie samo zaznaczenie edytora. W trybie testowym zawiera także znak testu. Nie ujawniaj prywatnych notatek na publicznym ekranie. Jeśli lustro się opóźnia, porównaj znaczniki czasu i rzeczywiste źródło przed zmianą przejść lub utworzeniem konkurencyjnego odtwarzania.",
+    "related": [
+      "Vorschau",
+      "Remote"
+    ]
+  },
+  "Websteuerung": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przygotuj autoryzowany dostęp zdalny przed nabożeństwem.\n2. Przetestuj prostą komendę nawigacji, gdy operator komputera obserwuje rzeczywiste wyjście.\n3. Uzgodnij, kto steruje przechodzeniem dalej, aby kilka osób nie wysyłało komend jednocześnie.\n\n## Próba i rozwiązywanie problemów\n\nZaznaczona pozycja na telefonie lub w przeglądarce nie dowodzi zmiany MAIN. Po przerwie sieciowej sprawdź stan emisji na komputerze przed powtórzeniem komendy. Cofnij tymczasowy dostęp po próbie lub wydarzeniu. Sterowanie zdalne nie może usuwać oznaczenia testu ani omijać chronionego slajdu systemowego.",
+    "related": [
+      "Remote",
+      "Current / Next"
+    ]
+  },
+  "Audioausgänge": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Wybierz fizyczne urządzenie wyjściowe dla każdej trasy audio.\n2. Przetestuj muzykę tła, radio i film na ich rzeczywiście skonfigurowanych trasach.\n3. Przed przybyciem gości odsłuchaj dźwięk na nagłośnieniu sali przy odpowiednim poziomie próbnym.\n\n## Próba i rozwiązywanie problemów\n\nRadio korzysta z trasy dźwięku tła, nie z przypadkowego domyślnego wyjścia przeglądarki. Przesuwający się licznik nie dowodzi słyszalnego sygnału. Po odłączeniu interfejsu sprawdź stan trasy i dostępne urządzenia zamiast zwiększać głośność główną. Oddziel odsłuch podglądu od sygnału dla uczestników.",
+    "related": [
+      "Routing-Probleme",
+      "Vorhören"
+    ]
+  },
+  "Preflight": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Sprawdź gotowość prezentacji, multimedia, czcionki, powiązane wydarzenie, sale i trasy audio.\n2. Odróżnij blokujący problem wyjścia od niedostępnego opcjonalnego źródła pętli.\n3. Po poprawieniu ważnych problemów przećwicz dokładny przebieg emisji.\n\n## Próba i rozwiązywanie problemów\n\nLokalna pamięć danych zboru bywa przydatna, ale może już nie odzwierciedlać kolejnej rezerwacji sali. Sprawdź czas aktualizacji danych. Udany scenariusz testowy nie potwierdza dostępności rzeczywistych danych wydarzeń i sal w Firebase. Diagnostyka operatora może zawierać identyfikatory techniczne; wyjście dla gości nie może ich pokazywać.",
+    "related": [
+      "ON AIR",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "ON AIR": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przed emisją sprawdź właściwą prezentację i powiązane wydarzenie zboru.\n2. W kontrolkach emisji potwierdź, który slajd pokazuje MAIN.\n3. Zakończ świadomie przez OFF AIR, gdy wyjście dla uczestników nie jest już potrzebne.\n\n## Próba i rozwiązywanie problemów\n\nON AIR uruchamia silnik emisji; tryb testowy jest osobnym trybem. Włączenie ON AIR podczas testu musi zachować znak wodny testu. Nie zakładaj, że podświetlona pozycja edytora jest emitowana. Przećwicz dojście do ostatniego slajdu nabożeństwa i chronionego komunikatu po programie przed zaufaniem całej sekwencji.",
+    "related": [
+      "Preflight",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "LIVE-BETRIEB": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Uzgodnij wyraźny sygnał do następnej zwrotki, czytania lub ogłoszenia.\n2. Przechodząc dalej, śledź Current/Next i rzeczywisty obraz MAIN.\n3. Przygotuj odpowiedni Quick Screen na niespodziewaną przerwę.\n\n## Próba i rozwiązywanie problemów\n\nPodczas badania pobocznego problemu zachowaj użyteczny obraz i dźwięk dla uczestników. Zmiany ogłoszeń Firebase przygotowuje się do bezpiecznego przejścia, zamiast zastępować widoczną wiadomość w połowie zdania. Przekazując stanowisko, powiedz, co jest emitowane, jaki Quick Screen działa i czy dźwięk ma trwać w następnej sekcji.",
+    "related": [
+      "Current / Next",
+      "Quick Screens"
+    ]
+  },
+  "Vorschau": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Odróżniaj podgląd edytora od lustra MAIN na żywo.\n2. Sprawdzaj tytuł slajdu nad pojedynczym podglądem i rzeczywisty wskaźnik emisji.\n3. Porównuj obraz po zmianie Quick Screen i po zwykłym przejściu slajdu.\n\n## Próba i rozwiązywanie problemów\n\nLustra emisji nie mogą tworzyć drugiej słyszalnej kopii filmu lub dźwięku tła. Lustra odliczania używają tego samego punktu startu co MAIN, zamiast uruchamiać nowy licznik. Jeśli obrazy różnią się przez kilka sekund, zapisz slajd, przejście i wersję; zmiana zaznaczenia w edytorze nie dowodzi przełączenia emisji.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Fehlerbehebung"
+    ]
+  },
+  "MAIN / STAGE / LIVESTREAM": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przed przypisaniem wyjść ustal ich odbiorców.\n2. Osobno sprawdź tekst dla gości na MAIN, przydatne wskazówki na STAGE i zamierzoną kompozycję transmisji.\n3. Przetestuj zwykły slajd i Quick Screen na każdym wymaganym wyjściu.\n\n## Próba i rozwiązywanie problemów\n\nLustro MAIN zawiera jego rzeczywisty baner i oznaczenie testu; niezależnie zaprojektowane wyjście może mieć inną treść. Nagranie lub transmisja testowa musi pozostać wyraźnie oznaczona. Nie oceniaj wyjścia tylko po miniaturze: użyj przypisanego ekranu lub zweryfikowanego przechwycenia tego wyjścia.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Recording"
+    ]
+  },
+  "Quick Screens": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przed nabożeństwem przygotuj domyślne ustawienia logo, czerni, komunikatu, odliczania i OSB.\n2. Świadomie używaj ich przycisków lub skrótów, obserwując MAIN.\n3. Po zakończeniu tymczasowego wyświetlania przywróć normalny slajd emisji.\n\n## Próba i rozwiązywanie problemów\n\nQuick Screens mają pierwszeństwo przed zwykłą treścią slajdu. Baner ogłoszeń jest ukryty na czerni, logo i OSB; odliczanie jest wyraźnym wyjątkiem pozwalającym na połączenie. W trybie testowym znak wodny pozostaje widoczny także na czerni. Wygląd OSB konfiguruje się centralnie, nie projektuje ponownie w oknie F9.",
+    "related": [
+      "Bibel",
+      "Timer"
+    ]
+  },
+  "Current / Next": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Sprawdź bieżący slajd emisji przed przyjęciem sygnału do przejścia dalej.\n2. Sprawdź następną włączoną pozycję, także granice sekcji i pomijane puste elementy dynamiczne.\n3. Przećwicz nawigację w przód i wstecz.\n\n## Próba i rozwiązywanie problemów\n\nPozycja zaznaczona w edytorze może różnić się od emitowanej. Element dynamiczny bez prawidłowych ogłoszeń lub wydarzeń powinien zostać pominięty zamiast pokazywać pusty ekran. Po zakończeniu nabożeństwa chroniony komunikat programu końcowego należy do sekwencji; nie usuwaj go dla naprawy niezwiązanego problemu nawigacji.",
+    "related": [
+      "Ablauf",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Recording": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Potwierdź źródło nagrania i kompozycję wyjścia.\n2. Wykonaj krótkie nagranie próbne z obrazem i dźwiękiem.\n3. Obejrzyj zapisany plik, zamiast ufać samemu wskaźnikowi nagrywania.\n\n## Próba i rozwiązywanie problemów\n\nNagranie MAIN obejmuje jego rzeczywisty baner oraz znak wodny w trybie testowym. Niezależne tory nagrywania lub transmisji wymagają osobnego sprawdzenia; sam podgląd operatora nie dowodzi przechwyconego kadru. Przed rozpowszechnianiem nagrania sprawdź prawa i zgody dotyczące pieśni, obrazów i rozpoznawalnych uczestników.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Servicezeit & Verspätung": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Powiąż właściwe wydarzenie i sprawdź planowany początek i koniec.\n2. Wprowadź rzeczywistą zmianę czasu w obsługiwanych kontrolkach czasu nabożeństwa.\n3. Sprawdź obowiązujący czas w nagłówku, odliczaniu i odpowiednim widoku wydarzenia.\n\n## Próba i rozwiązywanie problemów\n\nPlanowane godziny pozostają zachowane; pola opóźnienia opisują bieżące godziny faktyczne. Nie nadpisuj pierwotnego wydarzenia tylko po to, by poprawić wygląd odliczania. Przećwicz opóźnienie i odwołanie na danych testowych. Zmiana sali jest niezależna od zmiany czasu i wymaga poprawienia rzeczywistego odwołania do sali.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Pre-Service & Post-Service": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przygotuj włączone elementy pętli w sekcjach przed programem i po programie.\n2. Zachowaj chroniony automatyczny komunikat o sali na początku programu końcowego.\n3. Przećwicz ostatni slajd nabożeństwa i przejście do programu końcowego.\n\n## Próba i rozwiązywanie problemów\n\nKomunikat porównuje obowiązujące wewnętrzne identyfikatory sal i początki przyszłych wydarzeń w ciągu 61 minut. Kilka pasujących wydarzeń jest pokazywanych chronologicznie; w innym przypadku komunikat prosi wszystkich o opuszczenie sali. Testy pokazują warianty bez zmiany prawdziwych rezerwacji. Kolor nagłówka sesji pozostaje stały podczas programu końcowego.",
+    "related": [
+      "Loop-Elemente",
+      "Veranstaltung verknüpfen"
+    ]
+  },
+  "AUDIO": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Uzgodnij, które źródła audio trafiają do nagłośnienia sali, a które tylko do odsłuchu operatora.\n2. Ustaw trasy i poziomy próbne przed uruchomieniem prezentacji.\n3. Sprawdź ciągłość muzyki przy zmianach sekcji i celowe zatrzymanie.\n\n## Próba i rozwiązywanie problemów\n\nZachowaj jedno nadrzędne źródło odtwarzania. Podgląd nie może dublować słyszalnej ścieżki. Nakładki, banery i oznaczenia testu są wizualne i nie mogą zmieniać trasy audio ani wyciszać radia. Gdy wskaźnik odtwarzania nie odpowiada dźwiękowi w sali, osobno diagnozuj sygnał źródła, wzmocnienie, wyciszenie i dostępność urządzenia.",
+    "related": [
+      "Audioausgänge",
+      "Background Audio"
+    ]
+  },
+  "Videos": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przygotuj właściwy plik filmu i sprawdź proporcje, długość oraz ścieżkę dźwiękową.\n2. Wybierz zamierzone zachowanie odtwarzania i zakończenia.\n3. Przećwicz pierwszą klatkę, dźwięk i końcowe przejście na MAIN.\n\n## Próba i rozwiązywanie problemów\n\nCiche lustra podglądu nie mogą tworzyć drugiego wyjścia audio ani wysyłać dodatkowej komendy przejścia po końcu filmu. Baner proporcjonalnie zmniejsza obszar treści i nie może uruchamiać filmu od początku. Po ponownym otwarciu prezentacji sprawdź plik w zapisanej lokalizacji; miniatura nie dowodzi dostępności całego filmu.",
+    "related": [
+      "Medien",
+      "Audioausgänge"
+    ]
+  },
+  "Background Audio": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Dodaj zamierzone utwory do pozycji lub sekcji zamiast tworzyć konkurencyjne odtwarzacze.\n2. Ustaw głośność, losowanie, powtarzanie i granicę kontynuacji.\n3. Przećwicz wejście do sekcji i wyjście z niej, także fragment mówiony.\n\n## Próba i rozwiązywanie problemów\n\nRadio korzysta z trasy dźwięku tła. Użyj jawnej komendy stop, gdy muzyka ma kończyć się niezależnie od slajdów. Zachowaj ten sam graf audio, gdy skonfigurowana muzyka trwa w programie końcowym. Przy ciszy sprawdź wyciszenie, wzmocnienie, wstrzymany kontekst audio i fizyczne urządzenie przed zwiększeniem poziomu wyjściowego.",
+    "related": [
+      "Stop Background Audio",
+      "Routing-Probleme"
+    ]
+  },
+  "Vorhören": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Jeśli sprzęt pozwala, wybierz trasę odsłuchu operatora oddzielną od sygnału dla uczestników.\n2. Krótko odsłuchaj wybrany utwór na bezpiecznym poziomie.\n3. Zatrzymaj podgląd przed uruchomieniem właściwego źródła na żywo.\n\n## Próba i rozwiązywanie problemów\n\nSłuchawki ani kontrolki podglądu nie dowodzą działania trasy dla uczestników. Podgląd nie może też niespodziewanie zabrzmieć w zborze. Przećwicz użycie rzeczywistego interfejsu i słuchawek. Po zmianie urządzenia wskutek ponownego podłączenia sprawdź obie trasy zamiast zakładać, że system zachował ich przypisania.",
+    "related": [
+      "Audioausgänge",
+      "Audio Browser"
+    ]
+  },
+  "Systembenachrichtigungen": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przed cichym nabożeństwem lub nagrywaniem sprawdź dźwięki operatora.\n2. Odróżniaj sygnały aplikacji od powiadomień systemu operacyjnego.\n3. Przetestuj rzeczywiste trasy audio operatora i sali.\n\n## Próba i rozwiązywanie problemów\n\nNie wyciszaj całego dźwięku tła tylko po to, by uciszyć sygnał operatora. Powiadomienia Windows i inne aplikacje mogą mieć własne przypisania urządzeń poza GottesdienstRegie. Podczas nabożeństwa zachowaj sygnał sali i unikaj prób niesprawdzonych zmian globalnych; zapisz źródło i trasę niespodziewanego dźwięku do późniejszej korekty.",
+    "related": [
+      "Audioausgänge",
+      "Einstellungen"
+    ]
+  },
+  "Audio Browser": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Otwórz przeglądarkę audio i użyj dostępnej biblioteki lub importu.\n2. Wybierz utwory dla właściwej pozycji lub sekcji.\n3. Sprawdź powstałą playlistę, kolejność i losowanie.\n\n## Próba i rozwiązywanie problemów\n\nPrzeglądarka audio celowo nie zawiera wizualnych presetów odliczania. Odwołania Spotify i strumienie radiowe nie są zamienne z lokalnym plikiem audio; nadal obowiązują dostępność i uprawnienia dostawcy. Jeśli nie można przygotować utworu, użyj znanej dostępnej alternatywy zamiast wielokrotnie dodawać to samo bezużyteczne odwołanie.",
+    "related": [
+      "Medien",
+      "Background Audio"
+    ]
+  },
+  "Stop Background Audio": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Wstaw lub skonfiguruj akcję zatrzymania w miejscu, w którym muzyka ma się skończyć.\n2. Wybierz odpowiednie wyciszenie zamiast polegać na przypadkowej granicy sekcji.\n3. Przećwicz zatrzymanie i następną pozycję mówioną lub muzyczną.\n\n## Próba i rozwiązywanie problemów\n\nKomenda stop powinna działać na wskazane źródło tła, nie usuwać playlisty ani resetować urządzeń wyjściowych. Jeśli muzyka kończy się za wcześnie lub trwa w kazaniu, sprawdź kontynuację. Celowa cisza różni się od awarii trasy: sprawdź stan odtwarzania przed uruchomieniem kolejnego odtwarzacza na istniejącym źródle.",
+    "related": [
+      "Background Audio",
+      "Ablauf"
+    ]
+  },
+  "Routing-Probleme": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Ustal aktywne źródło, przypisaną trasę i wybrane fizyczne urządzenie wyjściowe.\n2. Osobno sprawdź wyciszenie, głośność, wzmocnienie i stan sygnału.\n3. Jeśli urządzenie odłączono, przywróć dostępną trasę i sprawdź na bezpiecznym poziomie.\n\n## Próba i rozwiązywanie problemów\n\nPołączony strumień może dostarczać ciszę, a poprawny sygnał może trafiać do złego urządzenia. Ruch licznika nie oznacza działania całego toru audio. Zachowaj dla pomocy technicznej nazwę urządzenia i stan kontekstu, ale nigdy nie wysyłaj tokenów konta ani prywatnych danych zboru.",
+    "related": [
+      "Audioausgänge",
+      "Fehlerbehebung"
+    ]
+  },
+  "PRÄSENTATION": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Ułóż plan zgodnie z uzgodnionym porządkiem nabożeństwa.\n2. Zapisz powiązane wydarzenie, slajdy, odwołania do mediów i planowane czasy.\n3. Przed publicznym użyciem ponownie otwórz i przećwicz cały dokument.\n\n## Próba i rozwiązywanie problemów\n\nPrzygotowanie prezentacji i prowadzenie emisji to osobne obowiązki, nawet gdy wykonuje je jedna osoba. Zmiany w edytorze nie powinny niepostrzeżenie podmieniać obrazu uczestników. Przed większą przebudową wykonaj kopię; po imporcie lub powieleniu sprawdź chronione treści systemowe i zasady umieszczania elementów przeznaczonych tylko do pętli.",
+    "related": [
+      "Präsentationen",
+      "Ablauf"
+    ]
+  },
+  "Präsentationen": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Nazwij dokument tak, by odróżnić powtarzające się niedzielne nabożeństwa.\n2. Powiąż wydarzenie i zapisuj po istotnych zmianach przygotowawczych.\n3. Świadomie używaj powielania przy tworzeniu nabożeństwa na podstawie istniejącego.\n\n## Próba i rozwiązywanie problemów\n\nKopia może zawierać założenia dotyczące daty, czasu lub mediów ze źródła. Sprawdź je zamiast zmieniać tylko tytuł. Odzyskiwanie po awarii to dodatkowe zabezpieczenie, nie zamiennik zapisanych dokumentów i kopii. Po przywróceniu punktu odzyskiwania sprawdź plan przed emisją; dźwięk i ON AIR nie wznawiają się automatycznie.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Speicher verwalten"
+    ]
+  },
+  "Ablauf": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Umieść pozycje w odpowiedniej sekcji: przed programem, rozgrzewka, nabożeństwo lub po programie.\n2. Przeciągając przed lub za pozycję, użyj jawnego celu wstawienia.\n3. Sprawdź wynik i natychmiast cofnij niezamierzone przesunięcie.\n\n## Próba i rozwiązywanie problemów\n\nElementów wyłącznie do pętli nie można upuszczać w nieodpowiednich sekcjach. Obowiązkowy komunikat o sali pozostaje na początku programu końcowego; nie można go usunąć ani powielić. Zmieniaj szerokość lewego planu tylko w dozwolonym zakresie. Po zmianie kolejności przećwicz nawigację, by kolejna komenda emisji prowadziła zgodnie z planem.",
+    "related": [
+      "Inhalte hinzufügen",
+      "Current / Next"
+    ]
+  },
+  "Folien": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Nadaj każdemu slajdowi przydatny tytuł i dobierz czytelną ilość treści.\n2. Umieść tekst i multimedia w zamierzonym obszarze bezpiecznym.\n3. Sprawdź pełnowymiarowy podgląd i rzeczywiste proporcje wyjścia.\n\n## Próba i rozwiązywanie problemów\n\nZwróć uwagę na znaki diakrytyczne, odstępy między wierszami, dolne krawędzie i ostatni akapit. Slajdy dynamiczne używają własnych ustawień projektu zamiast nieistotnego pola tekstowego. Chroniony komunikat o sali jest informacją systemową; próba edycji powinna wyjaśnić jego automatyczne przeznaczenie, nie otwierać zwykłego edytora slajdu.",
+    "related": [
+      "Vorschau",
+      "Loop-Elemente"
+    ]
+  },
+  "Übergänge & Auto-Advance": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Wybierz spokojne przejście odpowiednie do uwielbienia, czytania lub ogłoszeń.\n2. Ustaw czas automatyczny tylko tam, gdzie można przeczytać całą treść.\n3. Przećwicz pauzę i cofnięcie oraz automatyczne przechodzenie.\n\n## Próba i rozwiązywanie problemów\n\nDługie listy dynamiczne i strony ogłoszeń mogą wymagać wyliczonego minimalnego czasu czytania. Jawnie krótsza wartość nie może ukrywać nieprzeczytanej treści. Banery działają według własnego zegara i nie powinny zanikać z przejściem slajdu. Preset odliczania zatrzymuje się na zerze, chyba że świadomie ustawiono regułę kontynuacji.",
+    "related": [
+      "Timer",
+      "Current / Next"
+    ]
+  },
+  "Lyric Scrolling": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Sprawdź z prowadzącym części tekstu i planowany układ przewijania.\n2. Przećwicz najdłuższą zwrotkę i powtarzany refren.\n3. Potwierdź, że MAIN i lustro emisji korzystają z tej samej sekwencji na żywo.\n\n## Próba i rozwiązywanie problemów\n\nPrzewijanie pomaga prezentować tekst, lecz nie uzasadnia łączenia całej pieśni w nieczytelny blok. Zachowaj odpowiednią wersję bez przewijania na niespodziewane zmiany śpiewu. Osobno sprawdź wskazówki sceniczne i upewnij się, że ręczne dalej/wstecz trafia do właściwej części zamiast polegać jedynie na postępie animacji.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bibel": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Sprawdź odnośnik biblijny i faktycznie dostępny, dozwolony przekład.\n2. Przejrzyj długie fragmenty i używaj kontrolek następnej/poprzedniej strony.\n3. Dla spontanicznego OSB skonfiguruj centralnie ustawienia w Presentation, MAIN quick screens, OSB przed użyciem F9.\n\n## Próba i rozwiązywanie problemów\n\nF9 służy do szybkiego wpisania odnośnika, nie do każdorazowej przebudowy wyjścia. OSB nie może zmieniać normalnej pozycji prezentacji, a edycja zwykłego slajdu nie może ujawniać w tym edytorze nakładki biblijnej na żywo. Przed publicznym czytaniem sprawdź pisownię, granice wersetów i przekład.",
+    "related": [
+      "Quick Screens",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "LiveQuiz": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przed nabożeństwem sprawdź pytania, odpowiedzi i sposób udziału uczestników.\n2. Przećwicz dołączanie z osobnego urządzenia.\n3. Potwierdź, który ekran pokazuje kod udziału, a który kontrolki operatora.\n\n## Próba i rozwiązywanie problemów\n\nDobierz treść do zboru i nie zbieraj zbędnych danych osobowych. Zewnętrzne połączenie uczestnika nie jest tym samym co stan emisji prezentacji. Przygotuj płynne kontynuowanie bez quizu, gdy sieć jest niedostępna, i świadomie przywróć planowany slajd lub Quick Screen po zakończeniu aktywności.",
+    "related": [
+      "Websteuerung",
+      "Quick Screens"
+    ]
+  },
+  "SYSTEM": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przygotuj ustawienia ekranów, audio i uruchamiania właściwe dla komputera poza trwającym nabożeństwem.\n2. Sprawdź wersję, miejsce na dysku i aktualność danych zboru.\n3. Zachowaj możliwą do odzyskania zapisaną prezentację i opisaną drogę awaryjną.\n\n## Próba i rozwiązywanie problemów\n\nKonserwacja systemu powinna wspierać nabożeństwo, nie stawać się eksperymentem w jego trakcie. Zapisz powtarzalny problem przed resetowaniem ustawień lub usuwaniem plików. Sprawdzanie aktualizacji w tle nie może otwierać wyjść ani uruchamiać dźwięku; instalacja jest osobnym świadomym działaniem. Po zmianie oprogramowania lub sprzętu sprawdź krytyczne ustawienia.",
+    "related": [
+      "Updates",
+      "Fehlerbehebung"
+    ]
+  },
+  "Sync / Offline / Preload": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Sprawdź czas ostatniej aktualizacji danych zboru, nie tylko zieloną ikonę połączenia.\n2. Przygotuj kluczowe multimedia przed nabożeństwem.\n3. Przećwicz krótką przerwę sieciową z treściami bezpiecznie dostępnymi lokalnie.\n\n## Próba i rozwiązywanie problemów\n\nWstępne ładowanie po cichu przygotowuje ograniczoną liczbę nadchodzących zasobów; nie uruchamia wcześniej radia, stron ani słyszalnego odtwarzania. Buforowane wydarzenia mogą się zdezaktualizować, zwłaszcza po zmianach sal i odwołaniach. Automatyczne punkty odzyskiwania pomagają po awarii, ale ostatnie niezapisane zmiany przed punktem nadal mogą przepaść.",
+    "related": [
+      "Preflight",
+      "Präsentationen"
+    ]
+  },
+  "Updates": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przeczytaj informacje o wydaniu i zapisz ważną pracę przed instalacją.\n2. Wybierz instalację od razu, odroczenie lub instalację przy wyjściu.\n3. Po ponownym otwarciu sprawdź wersję, przypisanie MAIN i trasy audio.\n\n## Próba i rozwiązywanie problemów\n\nZamknięcie ustawień nie może anulować trwającego sprawdzania lub pobierania aktualizacji. Uruchamianie z Windows może otwierać aplikację albo tylko sprawdzać aktualizacje w tle; są to różne opcje. Sprawdzanie w tle nie może uruchamiać wyjść nabożeństwa, audio ani sterowania zdalnego, a dostępne aktualizacje nadal wymagają świadomej instalacji.",
+    "related": [
+      "Versionsinformationen",
+      "Installation & Nutzungsbedingungen"
+    ]
+  },
+  "Tastenkürzel": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Poznaj klawisze nawigacji i Quick Screens używane przez zespół.\n2. Przećwicz je, gdy aktywne jest rzeczywiste okno prezentacji.\n3. W razie wątpliwości sprawdź małe etykiety skrótów na podglądach Quick Screens.\n\n## Próba i rozwiązywanie problemów\n\nPole tekstowe lub inne aktywne okno może inaczej interpretować klawisze. Nie powtarzaj klawisza nawigacji tylko dlatego, że zaznaczenie edytora się nie przesunęło; najpierw sprawdź MAIN. OSB używa F9 do szybkiego wpisywania z zapisanymi ustawieniami. Zapewnij obsługę myszą wolontariuszom nieznającym jeszcze skrótów.",
+    "related": [
+      "Quick Screens",
+      "Current / Next"
+    ]
+  },
+  "Benutzeroberfläche": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Zidentyfikuj plan, obszar edycji, pojedynczy podgląd i rzeczywiste lustro MAIN.\n2. Wybierz wygodną skalę operatora i szerokość panelu bocznego.\n3. Otwórz okno dialogowe i sprawdź dostępność kontrolek przy bieżącym rozmiarze okna.\n\n## Próba i rozwiązywanie problemów\n\nInterfejs operatora można skalować bez zmiany układu dla uczestników. Znak wodny testu należy do powierzchni wyjściowych i nie może unosić się nad pomocą ani ustawieniami. Jeśli obszar roboczy uruchamia się maleńki lub szary, zapisz stan i wersję zamiast wielokrotnie zmieniać rozmiar lub bez dowodów usuwać dane aplikacji.",
+    "related": [
+      "Vorschau",
+      "Fehlerbehebung"
+    ]
+  },
+  "Einstellungen": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Odróżniaj osobiste preferencje interfejsu od technicznych ustawień komputera.\n2. Konfiguruj MAIN quick screens, ustawienia OSB, pozycję banera i trasy audio w ich własnych obszarach.\n3. Zapisz i przetestuj każdą istotną zmianę przed nabożeństwem.\n\n## Próba i rozwiązywanie problemów\n\nPozycja banera jest zapisywana dla komputera Regie, aby inny użytkownik nie przesunął niespodziewanie paska informacji dla gości. Uruchamianie w tle do aktualizacji jest odrębne od otwierania pełnej aplikacji. Diagnozując jeden problem, nie zmieniaj wielu niezwiązanych ustawień; wprowadź jedną sprawdzoną zmianę i porównaj wynik.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Audioausgänge"
+    ]
+  },
+  "Webseiten": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przygotuj dokładną publiczną stronę i sprawdź treść przed pokazaniem.\n2. Przetestuj sieć, osadzone odtwarzanie i rozmiar wyjścia.\n3. Zachowaj lokalną alternatywę dla ważnych informacji.\n\n## Próba i rozwiązywanie problemów\n\nStrona może zmieniać się niezależnie od zapisanej prezentacji. Nigdy nie pokazuj zborowi prywatnego konta, tokenu sesji ani panelu administratora. W trybie testowym systemowy znak wodny pozostaje nad osadzoną treścią. Baner może proporcjonalnie zmniejszać obszar strony, ale zmiana tekstu paska nie może powodować nawigacji ani przeładowania.",
+    "related": [
+      "Medien",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Timer": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Otwórz Media library, Countdowns i wybierz długość oraz kafelek wzoru.\n2. Dodaj preset jako osobną pozycję planu i sprawdź położenie.\n3. Przećwicz start, później dołączone lustro i zachowanie przy zerze.\n\n## Próba i rozwiązywanie problemów\n\nDziesięć długości obejmuje zakres od dwudziestu minut do dziesięciu sekund; każda ma wzory Klar, Natur, Licht, Kreuz, Kerze i Geometrisch. Presety działają offline i domyślnie bez dźwięku. Pozostały czas pochodzi z jednego punktu startu emisji, nie z osobnego licznika w każdym oknie. Pozostają na 00:00 bez jawnej reguły kontynuacji.",
+    "related": [
+      "Medien",
+      "Übergänge & Auto-Advance"
+    ]
+  },
+  "Remote": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Utwórz tylko dostęp potrzebny na próbę lub nabożeństwo.\n2. Przetestuj go, gdy operator komputera obserwuje MAIN.\n3. Kończ tymczasowe sesje i cofaj dostęp, gdy nie jest potrzebny.\n\n## Próba i rozwiązywanie problemów\n\nKilku sterujących nie powinno jednocześnie przechodzić dalej. Po ponownym połączeniu odczytaj rzeczywisty stan przed następną komendą. Zdalny dostęp musi respektować priorytety wyjść i oznaczenia testu; nie służy obchodzeniu znaku wodnego ani zmianie chronionych slajdów. Zachowaj bezpośrednią obsługę komputera jako drogę awaryjną.",
+    "related": [
+      "Websteuerung",
+      "Persönliche Monitore"
+    ]
+  },
+  "Fehlerbehebung": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Zapisz wersję, dokładną czynność i informację, czy problem dotyczy edytora, podglądu, MAIN czy dźwięku.\n2. Wykonaj użyteczny zrzut bez prywatnych informacji.\n3. Odtwórz najmniejszy bezpieczny przykład w trybie testowym.\n\n## Próba i rozwiązywanie problemów\n\nPodczas badania zachowaj działający obraz emisji. Zablokowany plik tymczasowego profilu testowego nie dowodzi uszkodzenia bazy prezentacji. Nie usuwaj prawdziwego profilu dla naprawy blokady. Przy cichym radiu zgłoś źródło, sygnał, trasę, urządzenie i stan wyciszenia/kontekstu zamiast zakładać, że przyczyną są tylko głośniki.",
+    "related": [
+      "Support",
+      "Routing-Probleme"
+    ]
+  },
+  "Support": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Opisz oczekiwanie i rzeczywisty wynik.\n2. Podaj zainstalowaną wersję i krótką sekwencję odtwarzającą problem.\n3. Dodaj zanonimizowany zrzut i odróżnij awarię rzeczywistego nabożeństwa od problemu tylko testowego.\n\n## Próba i rozwiązywanie problemów\n\nNigdy nie wysyłaj haseł, tokenów uwierzytelnienia, kodów odzyskiwania ani prywatnych danych zboru. Przy problemie wyjścia podaj rolę i fizyczny ekran. Przy regresji po aktualizacji wskaż ostatnią działającą wersję, jeśli ją znasz. Zachowaj lokalnie prezentację lub log, aż pomoc określi przydatne niesensytywne dowody.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Nutzungsbedingungen": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przejrzyj warunki programu i prawa do prezentowanych treści.\n2. Osobno sprawdź zezwolenia dla przekładów Biblii, pieśni, zdjęć i nagrań.\n3. Gdy dozwolone użycie jest niejasne, zapytaj odpowiedzialnego administratora zboru.\n\n## Próba i rozwiązywanie problemów\n\nDziałający import lub strumień nie daje zezwolenia na wyświetlanie, powielanie ani rozpowszechnianie. Dostęp do programu i licencje treści są odrębne. Zachowuj wymagane informacje o autorstwie i nie umieszczaj poufnych informacji duszpasterskich lub osobowych w publicznych slajdach, zewnętrznych poleceniach ani zgłoszeniach pomocy.",
+    "related": [
+      "Installation & Nutzungsbedingungen",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "Versionsinformationen": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Porównaj zainstalowaną wersję z wersją w źródle aktualizacji.\n2. Przeczytaj funkcje, ulepszenia, poprawki i znane ograniczenia danego wydania.\n3. Po aktualizacji przećwicz dotknięty nią przebieg zamiast zakładać identyczne działanie każdej konfiguracji.\n\n## Próba i rozwiązywanie problemów\n\nHistoryczne informacje o wydaniu opisują ówczesny stan i nie gwarantują braku późniejszej regresji. Opublikowany instalator, metadane aktualizacji i uruchomiona wersja muszą się zgadzać. Jeśli aktualizator nie znajduje wydania, zgłoś wersję i kanał zamiast wielokrotnie instalować niepowiązany pakiet.",
+    "related": [
+      "Updates",
+      "Support"
+    ]
+  },
+  "Über GottesdienstRegie": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Traktuj aplikację jako narzędzie wspierające nabożeństwo zboru, nie źródło jego treści.\n2. Uzgodnij odpowiedzialność za tekst Biblii, kolejność pieśni, ogłoszenia i informacje o sali.\n3. Utrzymuj zrozumiały przebieg techniczny dla operatorów wolontariuszy.\n\n## Próba i rozwiązywanie problemów\n\nCzytelny obraz, niezawodny dźwięk i świadome sterowanie emisją są ważniejsze od efektów ozdobnych. Stosuj spokojne wzory pasujące do ewangelikalnego nabożeństwa i potrzeb zgromadzonego zboru. Weryfikuj twierdzenia techniczne próbą i publikowanymi informacjami o wersji; jasno zgłaszaj ograniczenia zamiast ukrywać je za pozornie poprawnym wskaźnikiem.",
+    "related": [
+      "SCHNELLSTART",
+      "Support"
+    ]
+  },
+  "Speicher verwalten": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przed usunięciem sprawdź, które prezentacje i multimedia są nadal potrzebne.\n2. Zachowaj oddzielną kopię ważnych dokumentów nabożeństwa.\n3. Przed usunięciem wspólnego medium sprawdź odwołania.\n\n## Próba i rozwiązywanie problemów\n\nBuforowane multimedia, zapisane dokumenty i punkty odzyskiwania mają różne cele. Usunięcie pamięci podręcznej nie jest usunięciem prezentacji, a odzyskiwanie nie jest stałym archiwum. Nie czyść tymczasowych profili Chromium, gdy ich proces działa. Przy braku miejsca w trakcie nabożeństwa odłóż szerokie porządki do bezpiecznego zakończenia emisji i zapisu.",
+    "related": [
+      "Präsentationen",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Lokale Sprachpakete": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Podczas przygotowań wybierz obsługiwany pakiet i poczekaj na jego dostępność.\n2. Przetestuj zadanie językowe przed użyciem offline.\n3. Sprawdź wygenerowany lub przetłumaczony tekst przed publicznym wyświetleniem.\n\n## Próba i rozwiązywanie problemów\n\nPakiety językowe i tłumaczenia pomocy interfejsu to osobne zasoby. Usunięcie modelu nie może kasować zapisanych tłumaczeń pieśni. Rozmiar pobierania, miejsce i czas przygotowania obciążają komputer, dlatego nie zaczynaj dużych pobrań tuż przed nabożeństwem. Odpowiedzialność redakcyjna za teologię i nazwy zborowe pozostaje przy zespole.",
+    "related": [
+      "Songübersetzungen",
+      "Speicher verwalten"
+    ]
+  },
+  "Loop-Elemente": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Umieszczaj dynamiczne informacje o wydarzeniach, ogłoszeniach, pogodzie lub muzyce w obsługiwanej sekcji pętli.\n2. W kontrolkach elementu wybierz wzór i czas czytania.\n3. Sprawdź przypadek poprawnej treści i braku treści.\n\n## Próba i rozwiązywanie problemów\n\nWiadomość z istniejącą flagą banera działa niezależnie w pętlach przed/po programie i nad odliczaniem; zwykłe zatwierdzanie ekranu wiadomości steruje osobno slajdami ogłoszeń. Tekst banera jest czerwony, a pozycja jest ustawieniem komputera. Puste elementy dynamiczne są pomijane. Migawki emisji pozostają stabilne do bezpiecznej zmiany, bez podmiany tekstu w trakcie czytania.",
+    "related": [
+      "Pre-Service & Post-Service",
+      "Timer"
+    ]
+  },
+  "Online-Nutzungsbedingungen": {
+    "body": "## Praktyczny przebieg pracy\n\n1. Przeczytaj warunki zewnętrznego dostawcy przed użyciem jego materiału lub połączenia.\n2. Ustal, jakie dane, jeśli w ogóle, opuszczają komputer zboru.\n3. Przygotuj lokalną alternatywę dla kluczowych treści nabożeństwa.\n\n## Próba i rozwiązywanie problemów\n\nBezpłatna usługa lub funkcja bez klucza API nadal może mieć ograniczenia użycia, prywatności lub treści. Dostępność dostawcy może zmieniać się niezależnie od GottesdienstRegie. Nie wysyłaj danych osobowych zboru tylko po to, by uzyskać obraz lub tłumaczenie. Publiczne wyjście nie powinno zawierać kodów błędów dostawcy ani wewnętrznych danych konta.",
+    "related": [
+      "Nutzungsbedingungen",
+      "Sync / Offline / Preload"
+    ]
+  }
+}

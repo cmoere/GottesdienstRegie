@@ -1282,7 +1282,7 @@ Die bisherige feste Grenze von 220 Zeichen konnte Sätze mitten im Wort beenden.
 
 Veröffentlicht: Fr., 25.09.2026
 
-Version 0.46.0 veröffentlicht erstmals den gemeinsamen GottesdienstRegie-Editor als Browser-Vorschau. Präsentationen werden lokal und revisionsgeschützt im Browser gespeichert. Responsive Arbeitsbereiche ermöglichen die Vorbereitung auf PC, Tablet und Smartphone, während Liveausgaben weiterhin sicher der Desktop-App vorbehalten bleiben.
+Version 0.46.0 veröffentlicht erstmals den gemeinsamen GottesdienstRegie-Editor als native Browser-Vorschau. Präsentationen werden lokal und revisionsgeschützt im Browser gespeichert. Responsive Arbeitsbereiche ermöglichen die Vorbereitung auf PC, Tablet und Smartphone, während Liveausgaben weiterhin sicher der Desktop-App vorbehalten bleiben.
 
 ## Neu
 

@@ -7,10 +7,12 @@ app.whenReady().then(async()=>{try{
   const win=new BrowserWindow({show:false,width:1920,height:1080,useContentSize:true,webPreferences:{offscreen:true,backgroundThrottling:false}}),js=code=>win.webContents.executeJavaScript(code);
   win.webContents.on('console-message',event=>{if(event.level==='error')console.error(event.message)});
   await win.loadURL('http://127.0.0.1:5173/tests/smoke/native-v82.html');
+  console.log('Native v82 fixture loaded');
   for(let i=0;i<200&&!await js('!!window.v82');i++)await sleep(100);
   assert(await js('!!window.v82'),'native fixture initialized');
   assert.deepEqual(await js('window.v82.flow()'),{sameAnchor:true,service:false,black:false,countdown:true});
   for(const design of ['clear','nature','light','cross','candle','geometric']){
+    console.log('Native v82 countdown:',design);
     await js(`window.v82.show('${design}')`);
     const layout=await js(`(()=>{const fit=document.querySelector('.output-content-fit').getBoundingClientRect(),band=document.querySelector('.output-banner-layer').getBoundingClientRect(),text=document.querySelector('.announcement-banner');return {width:fit.width,height:fit.height,bottom:fit.bottom,bandTop:band.top,bandHeight:band.height,color:getComputedStyle(text).color,timer:document.querySelector('.countdown-copy strong').textContent,watermark:!!document.querySelector('.test-mode-watermark')}})()`);
     assert(Math.abs(layout.width/layout.height-16/9)<.001,JSON.stringify(layout));assert(layout.bottom<=layout.bandTop+.1,JSON.stringify(layout));assert(Math.abs(layout.bandHeight-84)<1,JSON.stringify(layout));assert.equal(layout.color,'rgb(166, 83, 83)');assert.equal(layout.timer,'04:35');assert(layout.watermark);
@@ -20,5 +22,11 @@ app.whenReady().then(async()=>{try{
   const top=await js(`(()=>{const fit=document.querySelector('.output-content-fit').getBoundingClientRect(),band=document.querySelector('.output-banner-layer').getBoundingClientRect();return {fit:fit.top,band:band.bottom}})()`);assert(top.fit>=top.band-.1);
   await js(`window.v82.show('clear','bottom',true,true)`);assert.equal(await js('window.v82.update()'),true,'banner update preserved website iframe');
   fs.writeFileSync(path.join(out,'website-top.png'),(await win.webContents.capturePage()).toPNG());
+  console.log('Native v82 recording synthetic video');await js('window.v82.video()');await sleep(200);
+  const beforeVideo=await js('document.querySelector("video").currentTime');
+  assert.equal(await js('window.v82.updateVideo()'),true,'Banner change keeps the same playing video node');await sleep(350);
+  const afterVideo=await js('({time:document.querySelector("video").currentTime,paused:document.querySelector("video").paused})');
+  assert(!afterVideo.paused&&afterVideo.time>beforeVideo+.1,'Banner change must not reset or pause actual video playback');
+  fs.writeFileSync(path.join(out,'video-banner.png'),(await win.webContents.capturePage()).toPNG());
   clearTimeout(deadline);console.log('NATIVE_V82_COMPOSITION_PASS: six countdown designs, shared clock, proportional top/bottom banner, overlay over website, unchanged iframe identity, test/normal watermark.');app.exit(0);
 }catch(error){console.error(error);app.exit(1)}});

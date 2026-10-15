@@ -1,0 +1,443 @@
+{
+  "SCHNELLSTART": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Be gudstjenestelederen om gudstjenesteordningen og hvem som har ansvar for endringer i siste øyeblikk.\n2. Forbered en kort presentasjon med velkomst, fellessang og bibellesning.\n3. Identifiser publikumsskjermen og øv i tydelig merket testdrift før besøkende ønskes velkommen.\n\n## Øvelse og feilsøking\n\nØv med et stillbilde, en video og en bevisst pause. Kontroller det faktiske projektorbildet fremfor å stole på valget i redigeringsvinduet. Ha den lagrede presentasjonen tilgjengelig lokalt, og avtal hvordan teamet fortsetter hvis en nettverkskilde blir utilgjengelig.",
+    "related": [
+      "Erste Schritte",
+      "Preflight"
+    ]
+  },
+  "Songübersetzungen": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Avtal hvilke originalspråk og oversettelsesspråk menigheten trenger.\n2. Knytt oversettelsen til tilsvarende sangavsnitt, også gjentatte refrenger.\n3. Se gjennom det lengste kombinerte lysbildet i det faktiske utdataoppsettet før lagring.\n\n## Øvelse og feilsøking\n\nOversettelser støtter deltakelse, men erstatter verken redaksjonell vurdering av teologisk betydning eller tillatelse til gjengivelse av sangtekster. Øv også et uoversatt vers: originalen må fortsatt fungere. Hvis linjene ikke samsvarer, rett koblingen før du velger et oppsett med vekslende linjer.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bildschirmschoner": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Still inn programmets skjermbeskyttelse før øvelsen.\n2. La et lese- eller prekenlysbilde stå uendret lenger enn vanlig skjermtidsavbrudd.\n3. Kontroller at både projektoren og signalveien holder seg aktive.\n\n## Øvelse og feilsøking\n\nProgrambeskyttelsen overstyrer ikke alle projektorinnstillinger, handlinger når lokket på en bærbar datamaskin lukkes, eller administrerte Windows-policyer. Kontroller rommets faktiske utstyr uten ukritisk å endre organisasjonens regler. Vanlig strømstyring skal gjenopptas etter at GottesdienstRegie lukkes; ikke hold en direktevisning i gang bare for å hindre hvilemodus.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Einstellungen"
+    ]
+  },
+  "Installation & Nutzungsbedingungen": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Last ned installasjonsprogrammet fra den verifiserte utgivelseskilden og avslutt eventuell aktiv gudstjeneste på riktig måte.\n2. Les installasjonsvilkårene og velg om du vil godta dem.\n3. Kontroller installert versjon og lagrede skjermtildelinger etter oppdateringen, før øvelsen.\n\n## Øvelse og feilsøking\n\nInstallasjon gir ikke rettigheter til bibeloversettelser, salmer, bilder eller radiosendinger. Oppbevar sikkerhetskopien av forrige presentasjon separat fra installasjonsprogrammet. Hvis installasjonen melder om en låst fil, lukk bare det identifiserte programmet eller testprosessen; slett aldri en hel brukerprofil for å omgå advarselen.",
+    "related": [
+      "Updates",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Minimum Viable Product (MVP)": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Skill gudstjenestens nødvendige arbeidsflyt fra valgfrie eksterne integrasjoner.\n2. Test funksjonene menigheten faktisk vil bruke, også den siste etterprogramskjermen.\n3. Ha en enkel lagret reservesekvens for gudstjenesten.\n\n## Øvelse og feilsøking\n\nEn utilgjengelig valgfri leverandør bør ikke tvinge teamet til å oppgi en fungerende lokal presentasjon. Unngå en uprøvd integrasjon rett før besøkende kommer. Rapporter nøyaktig manglende funksjon og installert versjon, slik at teamet kan skille en tilsiktet begrensning fra en reproduserbar feil.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Erste Schritte": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Opprett og navngi gudstjenestepresentasjonen, og knytt den til den faktiske menighetshendelsen.\n2. Legg innhold i riktige deler og lagre dokumentet.\n3. Øv siste gudstjenestelysbilde, overgangen til etterprogrammet og OFF AIR, ikke bare velkomsten.\n\n## Øvelse og feilsøking\n\nKontroller valgt, forhåndsvist og direktevist innhold hver for seg. Den automatiske rombeskjeden krever en tilknyttet hendelse og et rom som kan identifiseres; testscenarioer kan vise alternativene uten å endre virkelige hendelser. Sett av tid til å kontrollere sangtekster og bibelsteder med gudstjenestens ledere.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Gemeinsame Gemeinde-PCs": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Logg inn med operatørens tildelte konto, ikke en annen frivilligs innlogging.\n2. Identifiser maskinens egne innstillinger, som utdataskjermer og tekniske OSB-standarder.\n3. Lagre presentasjonen og overlever den aktive direktetilstanden uttrykkelig ved operatørbytte.\n\n## Øvelse og feilsøking\n\nBrukerbytte må ikke ubemerket flytte MAIN eller endre utseendet på en teknisk utgang. Personlige grensesnittvalg kan variere; bruk skjermidentifikasjon og det faktiske bildet til kontroll. Ikke tøm felles programdata som rutine ved utlogging: verdifull lokal presentasjons- og gjenopprettingsinformasjon kan gå tapt.",
+    "related": [
+      "Anmelden & Abmelden",
+      "Virtual Screens & Displays"
+    ]
+  },
+  "Anmelden & Abmelden": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Kontroller at riktig organisasjon og bruker vises etter innlogging.\n2. Avklar manglende tilgang med menighetsadministratoren fremfor gjentatte reinstallasjoner.\n3. Lagre og avslutt direkteavspilling før du forlater arbeidsstasjonen via programmets utlogging.\n\n## Øvelse og feilsøking\n\nGyldig konto og aktivert tilgang til GottesdienstRegie er separate betingelser. Oppgi den synlige tilgangsmeldingen når du ber om hjelp, men aldri passord, gjenopprettingskode eller økttoken. På delte maskiner må neste operatørs innlogging kontrolleres før du antar at vedkommende har samme rettigheter som forrige operatør.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Support"
+    ]
+  },
+  "Veranstaltung verknüpfen": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Velg hendelsen etter dato, starttid og rom, særlig når flere har samme tittel.\n2. Lagre koblingen og kontroller presentasjonens topptekst.\n3. Åpne presentasjonen på nytt for å bekrefte at koblingen bevares ved lagring og innlasting.\n\n## Øvelse og feilsøking\n\nKoblingen bruker hendelsens stabile nøkkel, ikke tittelen. Senere navneendring bør ikke bryte den, og en avlysning skal fortsatt være synlig knyttet til hendelsen. Hvis rommet ikke kan identifiseres, la administratoren kontrollere sentrale romdata; angi aldri en Firebase-nøkkel som romnavn for besøkende.",
+    "related": [
+      "Servicezeit & Verspätung",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Inhalte hinzufügen": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Velg ønsket del før du åpner Legg til element (Add element).\n2. Velg et passende innebygd element eller en mediekilde og kontroller det innsatte elementet i kjøreplanen.\n3. Lagre etter at lysbilder og tidsinnstillinger er ordnet.\n\n## Øvelse og feilsøking\n\nNoen dynamiske elementer hører bare hjemme i løkker og kan ikke plasseres i gudstjenestedelen. Den beskyttede første etterprogrambeskjeden opprettes automatisk og er ikke et valg under Legg til element. Hvis innsettingen havner feil, angre og kontroller måldelen fremfor gjentatt duplisering av innholdet.",
+    "related": [
+      "Ablauf",
+      "Loop-Elemente"
+    ]
+  },
+  "Medien": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Velg filtype etter oppgaven: bakgrunn, forgrunn, lyd eller et helt element.\n2. Kontroller tilgjengelighet og rettigheter før filen legges til.\n3. Bruk det innebygde området Nedtellinger (Countdowns) når du trenger en innebygd tidsstyrt velkomst fremfor en nedlastet video.\n\n## Øvelse og feilsøking\n\nNedtellingsforvalg finnes uten nett med ti varigheter fra tjue minutter til ti sekunder, hver med seks rolige utforminger. De blir egne kjøreplanelementer og er lydløse som standard. Et forvalg er verken bakgrunnsbilde eller lydfil; medieleseren viser forskjellen tydelig.",
+    "related": [
+      "Cloud-Medien",
+      "Timer"
+    ]
+  },
+  "Cloud-Medien": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Vent til opplasting eller synkronisering er fullført før du stoler på et medieelement.\n2. Legg det i ønsket presentasjon og kontroller bildet under en lokal øvelse.\n3. Kontroller viktige medier før maskinen kobles fra nettet.\n\n## Øvelse og feilsøking\n\nEt miniatyrbilde bekrefter verken fullstendig nedlasting eller fungerende avspillingstillatelser. Forbered viktige gudstjenestemedier lokalt der det støttes. Ved bortfall av skytilgang under gudstjenesten, behold det fungerende direktebildet og bruk et forberedt lokalt alternativ; ikke erstatt direkteelementet gjentatte ganger mens overføring pågår.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Medien"
+    ]
+  },
+  "Unsplash": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Søk etter passende bakgrunn til lovsang eller undervisning.\n2. Les leverandørens informasjon om bruk og kreditering.\n3. Forhåndsvis bildet under de faktiske sang- eller bibeltekstene før bruk.\n\n## Øvelse og feilsøking\n\nVelg et rolig bilde med god kontrast fremfor et urolig fotografi som konkurrerer med menighetens lesing. Gratis nedlasting fjerner ikke alle juridiske hensyn eller personvernhensyn. Forbered bildet på forhånd så en ekstern søketjeneste ikke trengs under gudstjenesten.",
+    "related": [
+      "Medien",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "KI-Motive": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Beskriv ønsket stemning, komposisjon og plass til lesbar tekst.\n2. Generer og vurder et utkast før lagring i mediebiblioteket.\n3. Bruk bare et gjennomgått resultat i den faktiske presentasjonen.\n\n## Øvelse og feilsøking\n\nVed evangelisk gudstjeneste må symboler, bokstaver og teologiske assosiasjoner vurderes nøye; genererte bilder kan inneholde villedende detaljer. Unngå gjenkjennelige personer eller fortrolig menighetsinformasjon i ledetekster. Generering er forberedelse, ingen erstatning for ferdige medier: ha en passende eksisterende bakgrunn hvis genereringen mislykkes eller tar lengre tid.",
+    "related": [
+      "Medien",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Songs": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Bekreft salmens eller sangens tittel, nøyaktige versjon og versrekkefølge med gudstjenestelederen.\n2. Del teksten ved meningsfulle lesepunkter og legg til avtalt oversettelse.\n3. Øv gjentatte refrenger og siste vers på MAIN og STAGE.\n\n## Øvelse og feilsøking\n\nIkke stol bare på tittelen når arrangementer kan ha ulike ord eller mellompartier. Kontroller stavemåte, store bokstaver og musikalske anvisninger uten uventet å endre sangtekster som vises direkte. Menigheten har fortsatt ansvar for gjengivelses- og strømmerettigheter. Tilpass sceneakkorder og publikumstekst til deres ulike målgrupper.",
+    "related": [
+      "Songübersetzungen",
+      "Lyric Scrolling"
+    ]
+  },
+  "Virtual Screens & Displays": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Identifiser de fysiske skjermene før du tildeler roller.\n2. Plasser MAIN på ønsket projektor og kontroller STAGE og andre utganger separat.\n3. Kontroller tildelingene igjen etter tilkobling av dokk, projektor eller USB-skjermadapter.\n\n## Øvelse og feilsøking\n\nSkjermplassering eller numerisk identifikator kan endres etter maskinvareendringer. Ikke anta at den største skjermen er MAIN. Hvis en tildelt skjerm mangler, løs tildelingen i operatørkontrollene fremfor gjentatte ON AIR-skift. Tekniske skjerminnstillinger skal overleve oppdateringer og forbli spesifikke for denne maskinen.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Preflight"
+    ]
+  },
+  "Persönliche Monitore": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Velg om den personlige monitoren trenger ekte utgangsspeiling eller operatørnotater.\n2. Kontroller innhold og tillatt tilgang fra ønsket posisjon.\n3. Øv et lysbildeskift og en midlertidig hurtigskjerm.\n\n## Øvelse og feilsøking\n\nEt ekte MAIN-speil må vise direktebildet, ikke bare valget i redigeringsvinduet. I testdrift viser det også testmerket. Ikke vis private notater offentlig. Hvis speilet henger etter, sammenlign tidsstempler og faktisk kilde før du endrer overgangstider eller oppretter enda en konkurrerende avspillingskilde.",
+    "related": [
+      "Vorschau",
+      "Remote"
+    ]
+  },
+  "Websteuerung": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Forbered autorisert fjerntilgang før gudstjenesten.\n2. Test en enkel navigasjonskommando mens datamaskinoperatøren ser den faktiske direktevisningen.\n3. Avtal hvem som styrer fremdriften, så flere ikke sender kommandoer samtidig.\n\n## Øvelse og feilsøking\n\nAt en telefon eller nettleser viser et valgt element, beviser ikke at MAIN har endret seg. Etter nettverksbrudd, kontroller maskinens direktetilstand før kommandoen gjentas. Tilbakekall midlertidig tilgang etter øvelsen eller arrangementet. Fjernkontroller må ikke fjerne testmerket eller omgå det beskyttede systemlysbildet.",
+    "related": [
+      "Remote",
+      "Current / Next"
+    ]
+  },
+  "Audioausgänge": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Velg fysisk utgangsenhet for hver ønsket lydrute.\n2. Test bakgrunnsmusikk, radio og video via deres faktisk konfigurerte ruter.\n3. Lytt på rommets anlegg ved passende øvingsnivå før besøkende kommer.\n\n## Øvelse og feilsøking\n\nRadio bruker bakgrunnslydens rute, ikke en uvedkommende nettleserstandard. En løpende avspillingstimer beviser ikke hørbart signal. Hvis et lydgrensesnitt kobles fra, kontroller rutestatus og tilgjengelige enheter fremfor gjentatte økninger av hovedvolumet. Hold forhåndslytting atskilt fra publikumslyden.",
+    "related": [
+      "Routing-Probleme",
+      "Vorhören"
+    ]
+  },
+  "Preflight": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Vurder presentasjonsberedskap, medier, skrifter, tilknyttet hendelse, rom og lydruting.\n2. Skill et blokkerende utgangsproblem fra en utilgjengelig valgfri løkkekilde.\n3. Øv den nøyaktige direktearbeidsflyten etter at viktige funn er rettet.\n\n## Øvelse og feilsøking\n\nEn frakoblet hurtigbuffer med menighetsdata kan være nyttig, men beskriver kanskje ikke neste rombestilling riktig lenger. Kontroller datatidsstempelet. Et vellykket testscenario bekrefter ikke at virkelige Firebase-hendelses- og romdata er tilgjengelige. Operatørdiagnostikk kan inneholde tekniske ID-er; publikumsvisningen må ikke vise dem.",
+    "related": [
+      "ON AIR",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "ON AIR": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Bekreft faktisk presentasjon og tilknyttet menighetshendelse før produksjonsvisning.\n2. Bruk direktekontrollene til å kontrollere hvilket lysbilde MAIN viser.\n3. Avslutt bevisst med OFF AIR når publikumsvisningen ikke lenger trengs.\n\n## Øvelse og feilsøking\n\nON AIR aktiverer direktemotoren; testdrift er en separat modus. ON AIR startet i testdrift må beholde testvannmerket. Anta aldri at et markert element i redigeringsvinduet er direktevist. Øv siste gudstjenestelysbilde og beskyttet etterprogrambeskjed før du stoler på hele sekvensen.",
+    "related": [
+      "Preflight",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "LIVE-BETRIEB": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Avtal et tydelig signal for neste sangvers, lesning eller kunngjøring.\n2. Følg Current/Next og det virkelige MAIN-bildet under fremdriften.\n3. Forbered en passende hurtigskjerm for en uventet pause.\n\n## Øvelse og feilsøking\n\nBehold et brukbart publikumsbilde og lyd mens et sekundært problem undersøkes. Endringer i Firebase-kunngjøringer forberedes til en trygg overgang fremfor å erstatte synlig tekst midt i en setning. Ved overlevering, si hva som vises direkte, hvilken hurtigskjerm som er aktiv, og om lyden skal fortsette inn i neste del.",
+    "related": [
+      "Current / Next",
+      "Quick Screens"
+    ]
+  },
+  "Vorschau": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Skill redigeringsforhåndsvisningen fra det direkte MAIN-speilet.\n2. Kontroller lysbildetittelen over enkeltforhåndsvisningen og den faktiske direkteindikatoren.\n3. Sammenlign bildet etter både hurtigskjermbytte og vanlig lysbildeskift.\n\n## Øvelse og feilsøking\n\nDirektespeil må ikke lage en ekstra hørbar kopi av video eller bakgrunnslyd. Nedtellingsspeil bruker samme startanker som MAIN fremfor å starte en ny timer. Hvis bildene avviker i flere sekunder, noter nøyaktig lysbilde, overgang og versjon; endret valg i redigeringsvinduet beviser ikke et direktebytte.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Fehlerbehebung"
+    ]
+  },
+  "MAIN / STAGE / LIVESTREAM": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Avklar målgruppen for hver utgang før tildeling.\n2. Kontroller publikumstekst på MAIN, nyttige anvisninger på STAGE og ønsket strømmesammensetning separat.\n3. Test et vanlig lysbilde og en hurtigskjerm på alle nødvendige utganger.\n\n## Øvelse og feilsøking\n\nEt MAIN-speil inneholder det faktiske banneret og testmerket, mens en selvstendig utformet utgang kan ha annet innhold. Et testopptak eller en teststrøm må være synlig merket. Ikke diagnostiser bare fra et miniatyrbilde: bruk den faktiske tildelte skjermen eller et verifisert bildeopptak av utgangen.",
+    "related": [
+      "Virtual Screens & Displays",
+      "Recording"
+    ]
+  },
+  "Quick Screens": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Forbered standarder for logo, svart skjerm, melding, nedtelling og OSB før gudstjenesten.\n2. Bruk hurtigtaster eller knapper bevisst mens du ser MAIN.\n3. Gjenopprett vanlig direktelysbilde når midlertidig visning er ferdig.\n\n## Øvelse og feilsøking\n\nHurtigskjermer har prioritet over vanlig lysbildeinnhold. Kunngjøringsbanneret skjules på svart-, logo- og OSB-skjermer; nedtelling er det uttrykkelige kombinerbare unntaket. I testdrift vises vannmerket også på svart. OSB-utseendet konfigureres sentralt, ikke på nytt hver gang i F9-direktedialogen.",
+    "related": [
+      "Bibel",
+      "Timer"
+    ]
+  },
+  "Current / Next": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Kontroller gjeldende direktelysbilde før du følger et signal om å gå videre.\n2. Se gjennom neste aktiverte element, inkludert delgrenser og overhoppede tomme dynamiske elementer.\n3. Øv både fremover- og bakovernavigasjon.\n\n## Øvelse og feilsøking\n\nDet valgte elementet i redigeringsvinduet kan avvike fra direkteelementet. Et dynamisk element uten gyldige kunngjøringer eller hendelser skal hoppes over fremfor å vise tom skjerm. Ved gudstjenestens slutt er den beskyttede etterprogrambeskjeden en del av sekvensen; ikke fjern den for å reparere et uvedkommende navigasjonsproblem.",
+    "related": [
+      "Ablauf",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Recording": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Bekreft ønsket opptakskilde og utgangssammensetning.\n2. Lag et kort testopptak med både bilde og lyd.\n3. Se gjennom lagret fil fremfor å stole bare på opptaksindikatoren.\n\n## Øvelse og feilsøking\n\nEt MAIN-opptak inneholder faktisk banner og, i testdrift, testvannmerket. Selvstendige opptaks- eller strømmekjeder må kontrolleres separat; operatørens forhåndsvisning beviser ikke hvilket bilde de fanger. Kontroller rettigheter og samtykke for sanger, bilder og gjenkjennelige deltakere før distribusjon.",
+    "related": [
+      "MAIN / STAGE / LIVESTREAM",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "Servicezeit & Verspätung": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Knytt til riktig hendelse og kontroller planlagt start og slutt.\n2. Registrer faktisk tidsendring gjennom de støttede gudstjenestetidskontrollene.\n3. Kontroller gjeldende tid i toppteksten, nedtellingen og relevant hendelsesvisning.\n\n## Øvelse og feilsøking\n\nPlantider bevares; forsinkelsesfeltene beskriver gjeldende effektive tider. Ikke overskriv originalhendelsen bare for å få nedtellingen til å se riktig ut. Øv en forsinket hendelse og en avlysning i testdata. Romendring er uavhengig av tidsendring og må løses gjennom den faktiske romreferansen.",
+    "related": [
+      "Veranstaltung verknüpfen",
+      "Pre-Service & Post-Service"
+    ]
+  },
+  "Pre-Service & Post-Service": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Forbered aktiverte løkkeelementer i før- og etterprogramdelene.\n2. Behold den beskyttede automatiske rombeskjeden først i etterprogrammet.\n3. Øv siste gudstjenestelysbilde og overgangen til etterprogrammet.\n\n## Øvelse og feilsøking\n\nRombeskjeden sammenligner gjeldende interne rom-ID-er og fremtidige hendelsesstarter innen 61 minutter. Flere treff vises kronologisk; ellers ber publikumsbeskjeden alle forlate rommet. Testforberedelser kan vise alternativene uten å redigere virkelige bestillinger. Øktoverskriftens farge forblir stabil mens etterprogrammet kjører.",
+    "related": [
+      "Loop-Elemente",
+      "Veranstaltung verknüpfen"
+    ]
+  },
+  "AUDIO": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Avtal hvilke lydkilder skal gå til rommets anlegg og hvilke bare er til operatørlytting.\n2. Still inn ruter og øvingsnivåer før presentasjonen startes.\n3. Kontroller musikk som fortsetter over delskift og et bevisst stopp.\n\n## Øvelse og feilsøking\n\nBehold én autoritativ avspillingskilde. Forhåndslytting må ikke doble det hørbare sporet. Presentasjonsoverlegg, bannere og testmerker er visuelle og må ikke endre lydruten eller dempe radio. Diagnostiser kildesignal, forsterkning, demping og enhetstilgjengelighet separat når avspillingsindikator og romlyd ikke stemmer overens.",
+    "related": [
+      "Audioausgänge",
+      "Background Audio"
+    ]
+  },
+  "Videos": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Forbered den faktiske videofilen og kontroller bildeformat, lengde og lydspor.\n2. Velg ønsket avspillings- og avslutningsatferd.\n3. Øv første bilde, lyd og sluttovergang på MAIN.\n\n## Øvelse og feilsøking\n\nLydløse forhåndsvisningsspeil må ikke skape en ekstra lydutgang eller sende en ny navigasjonskommando ved videoslutt. Et banner reduserer innholdsområdet proporsjonalt og må ikke starte avspillingen på nytt. Test filen fra lagret plassering etter at presentasjonen åpnes igjen; et miniatyrbilde beviser ikke at hele videoen er tilgjengelig.",
+    "related": [
+      "Medien",
+      "Audioausgänge"
+    ]
+  },
+  "Background Audio": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Legg ønskede lydspor til elementet eller delen fremfor å opprette konkurrerende spillere.\n2. Still inn volum, tilfeldig rekkefølge, gjentakelse og ønsket fortsettelsesgrense.\n3. Øv inngang i og utgang fra delen, inkludert et talt innslag.\n\n## Øvelse og feilsøking\n\nRadio følger bakgrunnslydens rute. Bruk en uttrykkelig stoppkommando når musikken skal slutte uavhengig av lysbildeskift. Behold samme lydgraf når konfigurert musikk fortsetter inn i etterprogrammet. Ved stillhet, undersøk demping, forsterkning, suspendert lydkontekst og konfigurert fysisk enhet før utgangsnivået økes.",
+    "related": [
+      "Stop Background Audio",
+      "Routing-Probleme"
+    ]
+  },
+  "Vorhören": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Velg operatørens lytterute separat fra publikumslyden der maskinvaren støtter det.\n2. Forhåndslytt kort på ønsket spor ved trygt nivå.\n3. Stopp forhåndsavspilling før den ønskede direktekilden startes.\n\n## Øvelse og feilsøking\n\nHodetelefoner eller forhåndslyttingskontroller beviser ikke at publikumsruten virker. Omvendt må ikke forhåndslytting uventet høres i menigheten. Øv med faktisk lydgrensesnitt og hodetelefoner. Hvis enheten endres etter tilkobling, kontroller begge ruter fremfor å anta at operativsystemet beholdt tidligere tildelinger.",
+    "related": [
+      "Audioausgänge",
+      "Audio Browser"
+    ]
+  },
+  "Systembenachrichtigungen": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Se gjennom operatørens lydinnstillinger før en stille gudstjeneste eller et opptak.\n2. Skill programsignaler fra operativsystemets varslingslyder.\n3. Test de faktiske operatør- og romlydrutene.\n\n## Øvelse og feilsøking\n\nIkke demp all bakgrunnslyd bare for å stoppe et operatørsignal. Windows-varsler og andre programmer kan ha egne enhetstildelinger utenfor GottesdienstRegie. Behold romlyden under gudstjenesten og unngå uprøvde globale lydendringer; dokumenter kilde og rute for uventet lyd til senere korrigering.",
+    "related": [
+      "Audioausgänge",
+      "Einstellungen"
+    ]
+  },
+  "Audio Browser": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Åpne den lydspesifikke medieleseren og bruk tilgjengelig bibliotek eller importflyt.\n2. Velg spor til ønsket element eller del.\n3. Kontroller spilleliste, rekkefølge og innstilling for tilfeldig avspilling.\n\n## Øvelse og feilsøking\n\nLydleseren utelater bevisst visuelle nedtellingsforvalg. Spotify-referanser og radiostrømmer kan ikke likestilles med en lokal lydfil; leverandørtilgjengelighet og tillatelser gjelder fortsatt. Hvis et spor ikke kan forberedes, bruk et kjent tilgjengelig alternativ fremfor gjentatt innsetting av samme ubrukelige referanse.",
+    "related": [
+      "Medien",
+      "Background Audio"
+    ]
+  },
+  "Stop Background Audio": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Sett inn eller konfigurer stopphandlingen der musikken skal slutte.\n2. Velg en passende uttoning fremfor å stole på en tilfeldig delgrense.\n3. Øv stoppet og neste talte eller musikalske innslag.\n\n## Øvelse og feilsøking\n\nEn stoppkommando skal påvirke tiltenkt bakgrunnskilde, ikke slette spillelisten eller tilbakestille utgangsenheter. Kontroller fortsettelsesinnstillinger hvis musikken stopper for tidlig eller fortsetter inn i prekenen. En tilsiktet stille pause skiller seg fra en defekt rute: se avspillingstilstanden før du starter en ny spiller over eksisterende kilde.",
+    "related": [
+      "Background Audio",
+      "Ablauf"
+    ]
+  },
+  "Routing-Probleme": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Identifiser aktiv kilde, tildelt rute og valgt fysisk utgangsenhet.\n2. Kontroller demping, volum, forsterkning og signalstatus hver for seg.\n3. Hvis enheten er fjernet, gjenopprett en tilgjengelig rute og test ved trygt nivå.\n\n## Øvelse og feilsøking\n\nEn strøm kan være tilkoblet og likevel levere stillhet, og et gyldig signal kan sendes til feil enhet. En løpende timer beviser ikke at hele lydveien virker. Behold diagnostiske detaljer som enhetsnavn og konteksttilstand for support, men send aldri kontotokens eller private menighetsdata.",
+    "related": [
+      "Audioausgänge",
+      "Fehlerbehebung"
+    ]
+  },
+  "PRÄSENTATION": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Bygg kjøreplanen rundt avtalt gudstjenesteordning.\n2. Lagre tilknyttet hendelse, lysbilder, mediereferanser og ønskede tider.\n3. Åpne igjen og øv hele dokumentet før offentlig bruk.\n\n## Øvelse og feilsøking\n\nPresentasjonsforberedelse og direkteavvikling er separate ansvar, også når samme person gjør begge. Endringer i redigeringsvinduet skal ikke ubemerket erstatte publikumsbildet. Ta sikkerhetskopi før større omstrukturering, og kontroller beskyttet systeminnhold og plasseringsregler for løkkeelementer etter import eller duplisering.",
+    "related": [
+      "Präsentationen",
+      "Ablauf"
+    ]
+  },
+  "Präsentationen": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Navngi dokumentet tydelig nok til å skille gjentatte søndagsgudstjenester.\n2. Knytt til hendelsen og lagre etter vesentlige forberedelsesendringer.\n3. Bruk duplisering bevisst når en ny gudstjeneste opprettes fra en eksisterende.\n\n## Øvelse og feilsøking\n\nEn kopi kan inneholde antakelser om dato, tid eller medier fra originalen. Vurder dem fremfor bare å endre tittel. Krasjgjenoppretting er ekstra sikkerhet, ikke erstatning for lagrede dokumenter og sikkerhetskopier. Etter gjenoppretting fra kontrollpunkt, bekreft kjøreplanen før direktevisning startes; lyd og ON AIR gjenopptas ikke automatisk.",
+    "related": [
+      "Sync / Offline / Preload",
+      "Speicher verwalten"
+    ]
+  },
+  "Ablauf": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Ordne elementene i riktig førprogram-, oppvarmings-, gudstjeneste- eller etterprogramdel.\n2. Bruk det uttrykkelige innsettingsmålet ved trekking før eller etter et element.\n3. Kontroller resultatet og angre en utilsiktet flytting straks.\n\n## Øvelse og feilsøking\n\nElementer som bare støttes i løkker, kan ikke slippes i uegnede deler. Den obligatoriske rombeskjeden blir først i etterprogrammet og kan ikke fjernes eller dupliseres. Endre venstre kjøreplans størrelse bare innen tillatt område, og øv navigasjon etter omordning så neste direktekommando følger ønsket sekvens.",
+    "related": [
+      "Inhalte hinzufügen",
+      "Current / Next"
+    ]
+  },
+  "Folien": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Gi hvert lysbilde en nyttig tittel og velg en lesbar innholdsmengde.\n2. Plasser tekst og medier innen tiltenkt sikkert område.\n3. Kontroller forhåndsvisning i full størrelse og faktisk utgangsformat.\n\n## Øvelse og feilsøking\n\nVær særlig oppmerksom på spesialtegn, linjeavstand, nedre kanter og siste avsnitt. Dynamiske lysbilder bruker egne designinnstillinger fremfor en irrelevant fritekstplassholder. Den beskyttede rombeskjeden er informativt systeminnhold; redigeringsforsøk skal forklare dens automatiske formål fremfor å åpne vanlig lysbilderedigering.",
+    "related": [
+      "Vorschau",
+      "Loop-Elemente"
+    ]
+  },
+  "Übergänge & Auto-Advance": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Velg en dempet overgang som passer lovsang, lesning eller kunngjøringer.\n2. Angi automatisk tid bare der hele innholdet kan leses.\n3. Øv en pause og et steg tilbake i tillegg til automatisk fremdrift.\n\n## Øvelse og feilsøking\n\nLange dynamiske lister og kunngjøringssider kan kreve beregnet minste lesetid. En uttrykkelig kortere verdi må ikke skjule ulest innhold. Bannere følger egen klokke og bør ikke tone ut med lysbildeovergangen. Et nedtellingsforvalg holder på null med mindre en fortsettelsesregel bevisst konfigureres.",
+    "related": [
+      "Timer",
+      "Current / Next"
+    ]
+  },
+  "Lyric Scrolling": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Se gjennom sangavsnitt og ønsket rulleoppsett med gudstjenestelederen.\n2. Øv lengste vers og et gjentatt refreng.\n3. Bekreft at MAIN og direktespeilet bruker samme direktesekvens.\n\n## Øvelse og feilsøking\n\nRulling er et presentasjonshjelpemiddel, ingen grunn til å samle hele sangen i uleselig tekst. Ha et passende alternativ uten rulling ved uventede endringer i sangen. Kontroller sceneanvisninger separat, og sørg for at manuell neste/forrige havner på ønsket avsnitt fremfor å stole bare på animasjonsfremdrift.",
+    "related": [
+      "Songs",
+      "Vorschau"
+    ]
+  },
+  "Bibel": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Kontroller bibelreferansen og en faktisk tilgjengelig, tillatt oversettelse.\n2. Forhåndsvis lange avsnitt og bruk neste/forrige side.\n3. Konfigurer standarder sentralt under Presentasjon (Presentation), MAIN-hurtigskjermer, OSB før spontan OSB med F9.\n\n## Øvelse og feilsøking\n\nF9 er hurtigflyten for referanseinntasting, ikke stedet å redesigne utgangen hver gang. OSB må ikke flytte vanlig presentasjonsposisjon, og redigering av et vanlig lysbilde må ikke vise det direkte bibeloverlegget i redigeringsvinduet. Bekreft stavemåte, versgrenser og oversettelse før offentlig lesning.",
+    "related": [
+      "Quick Screens",
+      "Nutzungsbedingungen"
+    ]
+  },
+  "LiveQuiz": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Se gjennom spørsmål, svar og publikums deltakelsesmetode før gudstjenesten.\n2. Øv tilkobling fra en separat enhet.\n3. Bekreft hvilken skjerm viser deltakerkoden og hvilken viser operatørkontrollene.\n\n## Øvelse og feilsøking\n\nBruk innhold som passer menigheten og unngå unødvendige personopplysninger. En ekstern deltakertilkobling er ikke presentasjonens direktetilstand. Forbered en smidig fortsettelse uten quiz hvis nettverket mangler, og gjenopprett bevisst planlagt lysbilde eller hurtigskjerm når aktiviteten slutter.",
+    "related": [
+      "Websteuerung",
+      "Quick Screens"
+    ]
+  },
+  "SYSTEM": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Forbered maskinspesifikke skjerm-, lyd- og oppstartsinnstillinger utenfor en aktiv gudstjeneste.\n2. Kontroller versjon, lagring og menighetsdataenes aktualitet.\n3. Ha en gjenopprettbar lagret presentasjon og en dokumentert reserveløsning.\n\n## Øvelse og feilsøking\n\nSystemvedlikehold skal støtte gudstjenesten fremfor å bli et eksperiment underveis. Dokumenter et reproduserbart problem før innstillinger tilbakestilles eller filer fjernes. Bakgrunnssøk etter oppdateringer må ikke åpne presentasjonsutganger eller starte lyd; installasjon er en separat bevisst handling. Kontroller kritiske innstillinger igjen etter program- eller maskinvareendringer.",
+    "related": [
+      "Updates",
+      "Fehlerbehebung"
+    ]
+  },
+  "Sync / Offline / Preload": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Kontroller tidspunkt for siste menighetsdataoppdatering, ikke bare et grønt tilkoblingsikon.\n2. Forbered nødvendige medier før gudstjenesten.\n3. Øv et kort nettverksbrudd med innhold som trygt er tilgjengelig lokalt.\n\n## Øvelse og feilsøking\n\nForhåndsinnlasting forbereder et begrenset antall kommende ressurser lydløst; den starter ikke radio, nettsider eller hørbar avspilling for tidlig. Bufrede hendelsesdata kan bli utdaterte, særlig ved romendringer og avlysninger. Automatiske gjenopprettingspunkter hjelper etter krasj, men siste ulagrede endringer før et kontrollpunkt kan fortsatt gå tapt.",
+    "related": [
+      "Preflight",
+      "Präsentationen"
+    ]
+  },
+  "Updates": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Les utgivelsesnotater og lagre viktig arbeid før installasjon.\n2. Velg umiddelbar installasjon, utsettelse eller installasjon ved avslutning etter behov.\n3. Kontroller installert versjon, MAIN-tildeling og lydruter etter ny åpning.\n\n## Øvelse og feilsøking\n\nLukking av innstillingsdialogen må ikke avbryte et pågående oppdateringssøk eller en nedlasting. Windows-oppstart kan åpne programmet eller bare se etter oppdateringer i bakgrunnen; dette er ulike valg. Bakgrunnssøk må ikke starte gudstjenesteutganger, lyd eller fjernstyring, og tilgjengelige oppdateringer må fortsatt installeres bevisst.",
+    "related": [
+      "Versionsinformationen",
+      "Installation & Nutzungsbedingungen"
+    ]
+  },
+  "Tastenkürzel": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Lær teamets navigasjons- og hurtigskjermtaster.\n2. Øv med fokus i det faktiske presentasjonsvinduet.\n3. Se de små hurtigtastetikettene på hurtigskjermforhåndsvisningene ved tvil.\n\n## Øvelse og feilsøking\n\nEt tekstfelt eller et annet fokusert vindu kan tolke taster annerledes. Ikke trykk gjentatte ganger på navigasjonstasten bare fordi markeringen i redigeringsvinduet ikke flyttet seg; kontroller MAIN først. OSB bruker F9 til hurtigregistrering med lagrede standarder. Behold en musebasert fremgangsmåte for frivillige som ennå ikke kjenner hurtigtastene.",
+    "related": [
+      "Quick Screens",
+      "Current / Next"
+    ]
+  },
+  "Benutzeroberfläche": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Identifiser kjøreplan, redigeringsområde, enkeltforhåndsvisning og faktisk MAIN-speil.\n2. Velg behagelig operatørskalering og sidefeltbredde.\n3. Åpne en dialog og kontroller at kontrollene er tilgjengelige ved gjeldende vindusstørrelse.\n\n## Øvelse og feilsøking\n\nOperatørgrensesnittet kan endre størrelse uten å endre ønsket publikumsoppsett. Et testvannmerke hører hjemme inni utgangsflatene og må ikke flyte over hjelp eller innstillingsdialoger. Hvis arbeidsområdet starter lite eller grått, dokumenter tilstand og installert versjon fremfor gjentatt størrelsesendring eller sletting av programdata uten grunnlag.",
+    "related": [
+      "Vorschau",
+      "Fehlerbehebung"
+    ]
+  },
+  "Einstellungen": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Skill personlige grensesnittvalg fra tekniske maskininnstillinger.\n2. Konfigurer MAIN-hurtigskjermer, OSB-standarder, bannerplassering og lydruting i egne områder.\n3. Lagre og test hver relevant endring før gudstjenesten.\n\n## Øvelse og feilsøking\n\nBannerplasseringen lagres for regimaskinen så en annen bruker ikke uventet flytter publikumsinformasjonen. Bakgrunnsstart for oppdateringssøk er separat fra åpning av hele programmet. Unngå flere uvedkommende innstillingsendringer ved feilsøking av ett problem; gjør én bekreftet endring og sammenlign faktisk resultat.",
+    "related": [
+      "Gemeinsame Gemeinde-PCs",
+      "Audioausgänge"
+    ]
+  },
+  "Webseiten": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Forbered den nøyaktige offentlige siden og kontroller innholdet før visning.\n2. Test nettverk, innebygd avspilling og ønsket utgangsstørrelse.\n3. Ha et passende lokalt alternativ til viktig informasjon.\n\n## Øvelse og feilsøking\n\nEn nettside kan endres uavhengig av lagret presentasjon. Vis aldri en privat kontoside, et økttoken eller administrasjonsgrensesnitt til menigheten. I testdrift forblir systemvannmerket over innebygd innhold. Et banner kan redusere nettsidens innholdsområde proporsjonalt, men må ikke navigere eller laste siden på nytt bare fordi løpende tekst endres.",
+    "related": [
+      "Medien",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Timer": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Åpne Mediebibliotek (Media library), Nedtellinger (Countdowns), og velg varighet og designrute.\n2. Legg forvalget til som eget kjøreplanelement og kontroller plasseringen.\n3. Øv starten, et speil som kobler seg til senere, og atferden ved null.\n\n## Øvelse og feilsøking\n\nTi varigheter går fra tjue minutter til ti sekunder; hver tilbyr designene Klar, Natur, Licht, Kreuz, Kerze og Geometrisch. Forvalg virker uten nett og er lydløse som standard. Gjenstående tid kommer fra ett felles direktestartanker, ikke én uavhengig teller per vindu. De holder på 00:00 uten en uttrykkelig fortsettelsesregel.",
+    "related": [
+      "Medien",
+      "Übergänge & Auto-Advance"
+    ]
+  },
+  "Remote": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Opprett bare tilgangen øvelsen eller gudstjenesten trenger.\n2. Test mens datamaskinoperatøren ser MAIN.\n3. Avslutt midlertidige økter og tilbakekall tilgang når den ikke lenger trengs.\n\n## Øvelse og feilsøking\n\nFlere kontrollenheter bør ikke gå videre samtidig. Etter ny tilkobling, les faktisk gjeldende tilstand før neste-kommando sendes igjen. Fjerntilgang må følge vanlig utgangsprioritet og testmerking; den er ingen vei rundt vannmerket eller beskyttede systemlysbilder. Behold direkte maskinkontroll som reserve.",
+    "related": [
+      "Websteuerung",
+      "Persönliche Monitore"
+    ]
+  },
+  "Fehlerbehebung": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Noter installert versjon, nøyaktig handling og om problemet rammer redigeringsvindu, forhåndsvisning, MAIN eller lyd.\n2. Ta et nyttig skjermbilde uten private opplysninger.\n3. Gjenskap minste trygge eksempel i testdrift.\n\n## Øvelse og feilsøking\n\nBehold et fungerende direktebilde under undersøkelsen. En låst midlertidig testprofilfil beviser ikke at presentasjonsdatabasen er skadet. Ikke fjern en ekte brukerprofil for å løse en låseadvarsel. Ved lydløs radio, rapporter kilde, signal, rute, enhet og dempings-/kontekststatus fremfor å anta at høyttalerne er eneste årsak.",
+    "related": [
+      "Support",
+      "Routing-Probleme"
+    ]
+  },
+  "Support": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Beskriv forventet og faktisk resultat.\n2. Oppgi installert versjon og en kort reproduserbar sekvens.\n3. Legg ved et sladdet skjermbilde og skill en virkelig gudstjenestefeil fra et rent testproblem.\n\n## Øvelse og feilsøking\n\nSend aldri passord, autentiseringstokens, gjenopprettingskoder eller private menighetsregistre. Ved utgangsproblemer, oppgi rolle og fysisk skjerm. Ved tilbakegang etter oppdatering, oppgi siste kjente fungerende versjon hvis mulig. Behold lagret presentasjon eller diagnostikklogg lokalt til support avklarer hvilke ikke-sensitive bevis som er nyttige.",
+    "related": [
+      "Fehlerbehebung",
+      "Versionsinformationen"
+    ]
+  },
+  "Nutzungsbedingungen": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Se gjennom programvilkår og rettigheter til innholdet du viser.\n2. Kontroller tillatelser for bibeloversettelser, sanger, fotografier og opptak separat.\n3. Spør ansvarlig menighetsadministrator ved uklar tillatt bruk.\n\n## Øvelse og feilsøking\n\nEn fungerende import eller strøm gir ikke tillatelse til visning, gjengivelse eller videreformidling. Programtilgang og innholdslisenser er separate. Behold kreditering der det kreves, og unngå fortrolige sjelesorgs- eller personopplysninger i offentlige lysbilder, eksterne ledetekster eller supportrapporter.",
+    "related": [
+      "Installation & Nutzungsbedingungen",
+      "Online-Nutzungsbedingungen"
+    ]
+  },
+  "Versionsinformationen": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Sammenlign installert versjon med versjonen i oppdateringskilden.\n2. Les nye funksjoner, forbedringer, rettinger og kjente begrensninger for relevant utgivelse.\n3. Øv berørt arbeidsflyt etter oppdatering fremfor å anta at alle oppsett oppfører seg likt.\n\n## Øvelse og feilsøking\n\nHistoriske utgivelsesnotater beskriver det som ble levert da. De garanterer ikke at senere tilbakefall er umulige. Publisert installasjonsprogram, oppdateringsmetadata og kjørende versjon må samsvare. Hvis oppdateringsfunksjonen ikke finner en ny utgivelse, rapporter installert versjon og kanal fremfor gjentatt installasjon av en uvedkommende pakke.",
+    "related": [
+      "Updates",
+      "Support"
+    ]
+  },
+  "Über GottesdienstRegie": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Se programmet som et verktøy for menighetens gudstjeneste, ikke kilden til innholdet.\n2. Fordel ansvar for bibeltekst, sangrekkefølge, kunngjøringer og rominformasjon.\n3. Hold teknisk arbeidsflyt forståelig for frivillige operatører.\n\n## Øvelse og feilsøking\n\nLesbar visning, pålitelig lyd og bevisst direktestyring er viktigere enn dekorative effekter. Bruk rolige utforminger som passer evangelisk kristen gudstjeneste og den samlede menighetens behov. Etterprøv tekniske påstander gjennom øvelse og publisert versjonsinformasjon; rapporter begrensninger tydelig fremfor å skjule dem bak en indikator som ser vellykket ut.",
+    "related": [
+      "SCHNELLSTART",
+      "Support"
+    ]
+  },
+  "Speicher verwalten": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Vurder hvilke presentasjoner og medier som fortsatt trengs før noe fjernes.\n2. Ha en separat sikkerhetskopi av viktige gudstjenestedokumenter.\n3. Kontroller referanser før en delt medieressurs slettes.\n\n## Øvelse og feilsøking\n\nBufrede medier, lagrede dokumenter og gjenopprettingspunkter har ulike formål. Å fjerne en hurtigbuffer er ikke det samme som å slette en presentasjon, og gjenoppretting er ikke et permanent arkiv. Ikke rydd midlertidige Chromium-profiler mens prosessen kjører. Ved lite plass under gudstjenesten, utsett omfattende opprydding til direktevisning og lagring er trygt avsluttet.",
+    "related": [
+      "Präsentationen",
+      "Sync / Offline / Preload"
+    ]
+  },
+  "Lokale Sprachpakete": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Velg ønsket støttet pakke under forberedelsen og vent til den blir tilgjengelig.\n2. Test ønsket språkoppgave før du stoler på frakoblet bruk.\n3. Se gjennom generert eller oversatt tekst før offentlig visning.\n\n## Øvelse og feilsøking\n\nSpråkpakker og grensesnittets hjelpeoversettelser er separate ressurser. Fjerning av en modell må ikke slette lagrede sangoversettelser. Nedlastingsstørrelse, lagring og forberedelsestid kan påvirke maskinen; ikke start store nedlastinger rett før gudstjenesten. Teamet beholder redaksjonelt ansvar for teologiske formuleringer og menighetsspesifikke navn.",
+    "related": [
+      "Songübersetzungen",
+      "Speicher verwalten"
+    ]
+  },
+  "Loop-Elemente": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Legg dynamisk hendelses-, kunngjørings-, vær- eller musikkinformasjon i en støttet løkkedel.\n2. Velg design og lesetid i elementkontrollene.\n3. Test både gyldig og tomt innhold.\n\n## Øvelse og feilsøking\n\nEn melding med eksisterende bannerflagg kjører uavhengig i før-/etterløkker og over nedtellinger; vanlig godkjenning for meldingsskjerm styrer ordinære kunngjøringslysbilder separat. Bannerteksten er rød og plasseringen er en maskininnstilling. Tomme dynamiske elementer hoppes over. Direkteøyeblikksbilder holdes stabile til et trygt skifte fremfor å erstatte publikumstekst midt i lesingen.",
+    "related": [
+      "Pre-Service & Post-Service",
+      "Timer"
+    ]
+  },
+  "Online-Nutzungsbedingungen": {
+    "body": "## Praktisk arbeidsflyt\n\n1. Les den eksterne leverandørens vilkår før bruk av materiale eller forbindelse.\n2. Bekreft hvilke data som eventuelt forlater menighetens maskin.\n3. Forbered et lokalt alternativ til nødvendig gudstjenesteinnhold.\n\n## Øvelse og feilsøking\n\nEn gratis tjeneste eller funksjon uten API-nøkkel kan fortsatt ha bruks-, personvern- eller innholdsbegrensninger. Leverandørtilgjengelighet kan endres uavhengig av GottesdienstRegie. Ikke send personlige menighetsopplysninger bare for et bilde eller en oversettelse. Offentlig visning skal ikke inneholde leverandørfeilkoder eller interne kontoopplysninger.",
+    "related": [
+      "Nutzungsbedingungen",
+      "Sync / Offline / Preload"
+    ]
+  }
+}

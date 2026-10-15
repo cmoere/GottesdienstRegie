@@ -29,4 +29,19 @@ function flow(){
   const start=session.update(input),next=session.update({...input,takeKey:'post',nowMs:2000});
   return {sameAnchor:start?.cycleStartedAtMs===next?.cycleStartedAtMs,service:isBannerAllowed({liveSection:'service',quickType:null,countdownActive:false}),black:isBannerAllowed({liveSection:'post',quickType:'black',countdownActive:false}),countdown:isBannerAllowed({liveSection:'service',quickType:'countdown',countdownActive:true})};
 }
-(window as any).v82={show,update,flow};
+let videoUrl='';
+function renderVideo(position:'top'|'bottom'){
+  banner={...banner,revision:banner.revision+1,position};
+  root.render(<div style={{position:'relative',width:'100vw',height:'100vh'}}><OutputComposition banner={banner} testOverlay={<TestModeWatermark role="main" visible/>}><video src={videoUrl} autoPlay muted loop style={{width:'100%',height:'100%',objectFit:'contain'}}/></OutputComposition></div>);
+}
+async function video(){
+  const canvas=document.createElement('canvas');canvas.width=640;canvas.height=360;
+  const ctx=canvas.getContext('2d')!,stream=canvas.captureStream(15),recorder=new MediaRecorder(stream,{mimeType:'video/webm'}),chunks:Blob[]=[];
+  recorder.ondataavailable=event=>chunks.push(event.data);
+  const stopped=new Promise<void>(resolve=>recorder.onstop=()=>resolve());
+  let frame=0;const draw=()=>{ctx.fillStyle='#608f9a';ctx.fillRect(0,0,640,360);ctx.fillStyle='white';ctx.font='36px sans-serif';ctx.fillText('Gottesdienst · Videoprobe',40,180);frame=requestAnimationFrame(draw)};draw();recorder.start();
+  await new Promise(resolve=>setTimeout(resolve,2500));recorder.stop();await stopped;cancelAnimationFrame(frame);stream.getTracks().forEach(track=>track.stop());
+  videoUrl=URL.createObjectURL(new Blob(chunks,{type:'video/webm'}));renderVideo('bottom');await settle();await document.querySelector('video')!.play();return true;
+}
+async function updateVideo(){const before=document.querySelector('video');renderVideo('top');await settle();return before===document.querySelector('video')}
+(window as any).v82={show,update,flow,video,updateVideo};
