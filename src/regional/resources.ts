@@ -19,9 +19,12 @@ export function createRegionalResourceStore(loaders:Partial<Record<GermanRegionI
     const previous=pending.get(id);
     if(previous)return previous;
     const operation=Promise.resolve().then(()=>loaders[id]!()).then(candidate=>{
-      if(validateRegionalPack(candidate,id,base).length)return false;
+      if(!candidate||typeof candidate!=='object'||Array.isArray(candidate)||!own(candidate,'id')||!own(candidate,'ui'))return false;
+      const fields=candidate as RegionalPack;
+      // Each process validates only its consumed namespace. The publication gate validates both.
+      if(validateRegionalPack({id:fields.id,ui:fields.ui,native:{}},id,{ui:base.ui,native:{}}).length)return false;
       const pack=candidate as RegionalPack;
-      loaded.set(id,Object.freeze({id,ui:Object.freeze({...pack.ui}),native:Object.freeze({...pack.native})}));
+      loaded.set(id,Object.freeze({id,ui:Object.freeze({...pack.ui}),native:Object.freeze({})}));
       revision++;
       for(const listener of listeners)listener();
       return true;
@@ -47,7 +50,7 @@ for(const [filename,load] of Object.entries(packageImports)){
   if(id)loaders[id]=load;
 }
 
-// Native-dialog resources are added only after their source inventory is classified.
+// Native-dialog resources are validated independently in the main process.
 export const regionalResourceStore=createRegionalResourceStore(loaders,{ui:germanBaseTemplates,native:{}});
 export const loadRegionalInterfacePack=regionalResourceStore.load;
 

@@ -1,4 +1,5 @@
 import {getHelpCatalog} from './help';
+import {startNativeSelectionSync} from './regional/nativeSelectionSync';
 import {sanitizeRecoveryDocument} from './presentationRecovery';
 import {initializePresentationStartup} from './presentationStartup';
 import {upcomingMedia,useMediaWarmup,type WarmupAsset} from './mediaWarmup';
@@ -10187,6 +10188,10 @@ export function App() {
   const output = useMemo(() => location.hash.startsWith("#output"), []),
     mediaBrowser = useMemo(() => location.hash.startsWith("#media"), []),
     historyWindow = useMemo(() => location.hash.startsWith("#history"), []);
+  useEffect(()=>{
+    if(output||mediaBrowser||historyWindow||!window.desktop?.regionalSettings)return;
+    return startNativeSelectionSync(usePreferences,window.desktop.regionalSettings,error=>console.error('Native Sprachauswahl konnte nicht gespeichert werden.',error));
+  },[output,mediaBrowser,historyWindow]);
   useEffect(()=>{if(output)return;void (window.desktop as any)?.platform?.appearance?.().then((value:{liquidGlass?:boolean})=>{document.documentElement.dataset.liquidGlass=String(Boolean(value?.liquidGlass))})},[output]);
   useEffect(() => {
     void installCeraPro().catch(() => false);

@@ -116,3 +116,31 @@ Current logs: `work/v84-three-packs-verification.log` and
 `work/v84-three-packs-build.log`. The other 28 base packs and all complete
 documentation/native packs remain outstanding. No v84 release is authorized as
 complete by these results; package version stays 0.83.0.
+
+## Full short-text packs and native synchronization
+
+With explicit permission to delegate translation work only, the remaining28
+base-interface packages were authored. All31 packages now have195 UI and33
+native-dialog templates. Independent checks cover exact keys, IDs, placeholders
+and invisible characters. These are source-informed drafts, not native-speaker
+certified translations. Root implemented the code and retained all audio/output
+state boundaries.
+
+Native settings IPC accepts only validated language/region metadata from the
+control window's main frame. Writes preserve the existing device settings;
+queued selection changes are coalesced without sending display/audio state.
+Dialogs use separate validated per-ID snapshots. Raw JSON assets are copied into
+the desktop build, independently of Vite's31 lazy interface chunks.
+
+The full German documentation source is now exported from all63 assembled help
+articles,4 help labels and1446 stable historical release fields. The new
+documentation store rejects partial packs and validates links, placeholders,
+paragraph counts and related-topic identities. It is not yet wired into help.
+Regional documentation is still partial and blocks publication.
+
+Focused tests:16 files /70 tests PASS. Typecheck PASS. Build PASS with the known
+large-chunk warnings, copying31 native assets. Full verification log:
+`work/v84-native-verification-final.log` (exit0, all historical guards PASS).
+The V72 source guard now follows the localized four-action prompt and verifies
+the German canonical labels; it first failed on the old literal assertion.
+No v84 version bump, push or publication occurred.

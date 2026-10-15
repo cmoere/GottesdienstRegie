@@ -3,6 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import inventory from './inventory.json';
 import { formatRegionalTemplate, validateRegionalPack } from '../../shared/regional/validation';
+import {nativeBaseTemplates} from '../../shared/regional/nativeBase';
 
 describe('authored Ruhrdeutsch base-interface resources',()=>{
   it('supplies every existing base-interface key explicitly, with intact placeholders',()=>{
@@ -10,7 +11,7 @@ describe('authored Ruhrdeutsch base-interface resources',()=>{
     const ui=Object.fromEntries(inventory.entries.filter(entry=>entry.key.startsWith('ui.'))
       .map(entry=>[entry.key.slice(3),entry.text]));
     expect(Object.keys(ui)).toHaveLength(195);
-    expect(validateRegionalPack(candidate,'ruhr',{ui,native:{}})).toEqual([]);
+    expect(validateRegionalPack(candidate,'ruhr',{ui,native:nativeBaseTemplates})).toEqual([]);
   });
   it('contains actual regional update and login text instead of inheriting German defaults',()=>{
     const candidate=JSON.parse(readFileSync(path.resolve('shared/regional/packs/ruhr.json'),'utf8'));

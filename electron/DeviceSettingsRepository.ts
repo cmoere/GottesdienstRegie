@@ -5,6 +5,7 @@ import type {OsbSettings} from '../src/osb/types';
 import {normalizeOutputDisplayProfile,type OutputDisplayProfile} from './outputDisplayProfile';
 import {normalizeBannerPosition} from '../src/bannerSettings';
 import {normalizeAnnouncementSettings,validateAnnouncementSettings} from '../src/announcements/settings';
+import {normalizeRegionalSelection,validateRegionalSelection} from '../shared/regional/selection';
 
 export class DeviceSettingsRepository {
   private writes:Promise<void>=Promise.resolve();
@@ -16,6 +17,8 @@ export class DeviceSettingsRepository {
   async readOsb():Promise<unknown>{await this.writes;try{return (await this.readSettings()).osb??null}catch{return null}}
   async readAnnouncements(){await this.writes;return normalizeAnnouncementSettings((await this.readSettings()).announcements)}
   async writeAnnouncements(value:unknown){const normalized=validateAnnouncementSettings(value);await this.update({announcements:normalized});return normalized}
+  async readRegionalSelection(){await this.writes;try{return normalizeRegionalSelection((await this.readSettings()).regionalSelection)}catch{return normalizeRegionalSelection(undefined)}}
+  async writeRegionalSelection(value:unknown){const normalized=validateRegionalSelection(value);await this.update({regionalSelection:normalized});return normalized}
   async readBannerPosition(){await this.writes;return normalizeBannerPosition((await this.readSettings()).announcementBannerPosition)}
   async writeBannerPosition(value:unknown){if(value!=='top'&&value!=='bottom')throw new Error('Ungültige Bannerposition.');await this.update({announcementBannerPosition:value});return value}
   async readOutputDisplays():Promise<OutputDisplayProfile|null>{await this.writes;try{return normalizeOutputDisplayProfile((await this.readSettings()).outputDisplays)}catch{return null}}

@@ -26,6 +26,8 @@ import {SpotifyAuthService} from './SpotifyAuthService';
 import {normalizeSpotifyTrackUrl,SpotifyOEmbedService} from './SpotifyOEmbedService';
 import {RadioMetadataService} from './RadioMetadataService';
 import {RadioArtworkService} from './RadioArtworkService';
+import {createRegionalSettingsAccess} from './regionalSettings';
+import {createNativeRegionalText} from './nativeRegionalText';
 import {DeviceSettingsRepository} from './DeviceSettingsRepository';
 import {mergeOutputDisplayProfile,resolveOutputDisplayProfile} from './outputDisplayProfile';
 import type {OutputDisplayWriteOptions} from '../src/outputDisplayProfileTypes';
@@ -67,6 +69,8 @@ app.on('open-url',(event,url)=>{event.preventDefault();spotifyCallback(url)});
 app.on('second-instance',(_event,argv)=>{const url=argv.find(value=>value.startsWith('gottesdienstregie://spotify-callback'));if(url)spotifyCallback(url);if(!argv.includes('--login-startup')){normalLaunchRequested=true;signalNormalLaunch();if(controlWindow&&!controlWindow.isDestroyed()){if(controlWindow.isMinimized())controlWindow.restore();controlWindow.show();controlWindow.focus()}}});
 protocol.registerSchemesAsPrivileged([{scheme:'gottesdienst-media',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}},{scheme:'gottesdienst-cloud',privileges:{standard:true,secure:true,supportFetchAPI:true,stream:true}}]);
 const rendererUrl = process.env.VITE_DEV_SERVER_URL;
+const nativeRegionalText=createNativeRegionalText(async id=>JSON.parse(await fs.readFile(path.join(__dirname,'../shared/regional/packs',`${id}.json`),'utf8')));
+const nativeText=nativeRegionalText.text;
 app.on('web-contents-created',(_event,contents)=>{
   contents.on('context-menu',(_event,params)=>{
     if(!params.isEditable)return;
@@ -128,7 +132,7 @@ async function promptForAvailableUpdate(info:UpdateInfo){
   if(backgroundUpdateOnly||!appPreferences||promptedUpdateVersions.has(info.version))return;
   promptedUpdateVersions.add(info.version);
   const owner=controlWindow&&!controlWindow.isDestroyed()?controlWindow:undefined;
-  const options:Electron.MessageBoxOptions={type:'info',title:'Neue Version verfügbar',message:`GottesdienstRegie ${info.version} ist verfügbar.`,detail:'Möchtest du die neue Version installieren?',buttons:['Jetzt installieren','Später','Beim Beenden installieren','Abbrechen'],defaultId:0,cancelId:3,noLink:true};
+  const options:Electron.MessageBoxOptions={type:'info',title:nativeText('updateAvailableTitle'),message:nativeText('updateAvailableMessage',{version:info.version}),detail:nativeText('updateInstallQuestion'),buttons:[nativeText('updateInstallNow'),nativeText('updateLater'),nativeText('updateInstallOnExit'),nativeText('cancel')],defaultId:0,cancelId:3,noLink:true};
   const result=await (owner?dialog.showMessageBox(owner,options):dialog.showMessageBox(options));
   const action=updatePromptAction(result.response);
   if(action==='install-now'){installDownloadedUpdateNow=true;autoUpdater.autoInstallOnAppQuit=false;if(lastUpdateStatus.state==='downloaded')setImmediate(()=>autoUpdater.quitAndInstall(false,true));else void downloadAvailableUpdate()}
@@ -248,9 +252,13 @@ app.whenReady().then(async() => {
   translationPacks.onProgress(value=>sendToLiveWindow(controlWindow,'translation-packs:progress',value));
   Menu.setApplicationMenu(null);
   const deviceSettings=new DeviceSettingsRepository(path.join(app.getPath('userData'),'device-settings.json'));
+  await nativeRegionalText.select(await deviceSettings.readRegionalSelection());
   const announcementSettings=createAnnouncementSettingsAccess<import('electron').IpcMainInvokeEvent>(deviceSettings,event=>Boolean(controlWindow&&!controlWindow.isDestroyed()&&!controlWindow.webContents.isDestroyed()&&event.sender.id===controlWindow.webContents.id&&event.senderFrame===controlWindow.webContents.mainFrame));
   ipcMain.handle('announcements:settings-read',event=>announcementSettings.read(event));
   ipcMain.handle('announcements:settings-write',(event,value:unknown)=>announcementSettings.write(event,value));
+  const regionalSettings=createRegionalSettingsAccess<import('electron').IpcMainInvokeEvent>(deviceSettings,event=>Boolean(controlWindow&&!controlWindow.isDestroyed()&&!controlWindow.webContents.isDestroyed()&&event.sender.id===controlWindow.webContents.id&&event.senderFrame===controlWindow.webContents.mainFrame));
+  ipcMain.handle('regional:selection-read',event=>regionalSettings.read(event));
+  ipcMain.handle('regional:selection-set',async(event,value:unknown)=>{const selection=await regionalSettings.write(event,value);await nativeRegionalText.select(selection);return selection});
   app.setAsDefaultProtocolClient('gottesdienstregie');
   const spotifyTokenFile=path.join(app.getPath('userData'),'spotify-refresh-token.bin');
   spotifyAuth=new SpotifyAuthService({clientId:String(process.env.SPOTIFY_CLIENT_ID??''),redirectUri:'gottesdienstregie://spotify-callback',openExternal:url=>shell.openExternal(url),request:fetch,readRefreshToken:async()=>{try{if(!safeStorage.isEncryptionAvailable())return null;return safeStorage.decryptString(await fs.readFile(spotifyTokenFile))}catch{return null}},writeRefreshToken:async token=>{if(!token){await fs.unlink(spotifyTokenFile).catch(()=>{});return}if(!safeStorage.isEncryptionAvailable())throw new Error('SPOTIFY_SECURE_STORAGE_UNAVAILABLE');await fs.writeFile(spotifyTokenFile,safeStorage.encryptString(token))}});
@@ -431,10 +439,10 @@ app.whenReady().then(async() => {
   ipcMain.handle('presentation:mark-clean',()=>presentationRepository.markClean());
   ipcMain.handle('service-context:open',(event,position:{x:number;y:number},entries:Array<{id?:string;label?:string;type?:'normal'|'separator';enabled?:boolean;accelerator?:string;submenu?:any[]}>,theme?:'system'|'light'|'dark')=>{const owner=BrowserWindow.fromWebContents(event.sender);if(!owner)return false;const build=(items:typeof entries):MenuItemConstructorOptions[]=>items.map(entry=>entry.type==='separator'?{type:'separator'}:{label:String(entry.label??''),enabled:entry.enabled!==false,accelerator:entry.accelerator,submenu:entry.submenu?build(entry.submenu):undefined,click:()=>event.sender.send('service-context:command',entry.id)});const previous=nativeTheme.themeSource;if(theme)nativeTheme.themeSource=theme;Menu.buildFromTemplate(build(entries)).popup({window:owner,x:Math.round(position.x),y:Math.round(position.y),callback:()=>{nativeTheme.themeSource=previous}});return true});
   ipcMain.handle('slide-export:copy',(_event,dataUrl:string)=>{const image=nativeImage.createFromDataURL(dataUrl);if(image.isEmpty())throw new Error('SLIDE_RENDER_FAILED');clipboard.writeImage(image);return true});
-  ipcMain.handle('slide-export:save',async(event,dataUrl:string,suggestedName:string,format:'png'|'jpeg'='png')=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,extension=format==='jpeg'?'jpg':'png',picked=await dialog.showSaveDialog(owner,{title:'Folie als Bild speichern',defaultPath:`${suggestedName.replace(/[<>:"/\\|?*]/g,'-')}.${extension}`,filters:[{name:format==='jpeg'?'JPEG-Bild':'PNG-Bild',extensions:[extension]}]});if(picked.canceled||!picked.filePath)return null;const image=nativeImage.createFromDataURL(dataUrl);if(image.isEmpty())throw new Error('SLIDE_RENDER_FAILED');await fs.writeFile(picked.filePath,format==='jpeg'?image.toJPEG(94):image.toPNG());return picked.filePath});
-  ipcMain.handle('presentation:import',async(_event,kind:'office'|'text'|'gottesdienstregie'|'all'='all')=>{const groups={office:{name:'PowerPoint, Keynote und OpenDocument',extensions:['pptx','key','odp']},text:{name:'Text und Markdown',extensions:['txt','md']},gottesdienstregie:{name:'GottesdienstRegie',extensions:['json','grpresentation','grbackup']}},selected=kind==='all'?{name:'Unterstützte Präsentationen',extensions:['pptx','key','odp','txt','md','json','grpresentation','grbackup']}:groups[kind];const picked=await dialog.showOpenDialog(controlWindow!,{title:'Präsentation importieren',properties:['openFile'],filters:[selected,{name:'Alle unterstützten Formate',extensions:['pptx','key','odp','txt','md','json','grpresentation','grbackup']}]});if(picked.canceled||!picked.filePaths[0])return null;try{return await presentationRepository.importDocument(picked.filePaths[0])}catch(error){void dialog.showMessageBox(controlWindow!,{type:'error',title:'Präsentation konnte nicht importiert werden',message:'Die ausgewählte Präsentation konnte nicht importiert werden.',detail:error instanceof Error&&error.message==='KEYNOTE_PREVIEW_NOT_FOUND'?'Diese Keynote-Datei enthält keine verwendbare Vorschau. Exportiere sie in Keynote als PowerPoint-Datei (.pptx) und versuche es erneut.':'Prüfe, ob die Datei vollständig ist und in einem unterstützten Format gespeichert wurde.'});return null}});
+  ipcMain.handle('slide-export:save',async(event,dataUrl:string,suggestedName:string,format:'png'|'jpeg'='png')=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,extension=format==='jpeg'?'jpg':'png',picked=await dialog.showSaveDialog(owner,{title:nativeText('saveSlideTitle'),defaultPath:`${suggestedName.replace(/[<>:"/\\|?*]/g,'-')}.${extension}`,filters:[{name:format==='jpeg'?nativeText('jpegImage'):nativeText('pngImage'),extensions:[extension]}]});if(picked.canceled||!picked.filePath)return null;const image=nativeImage.createFromDataURL(dataUrl);if(image.isEmpty())throw new Error('SLIDE_RENDER_FAILED');await fs.writeFile(picked.filePath,format==='jpeg'?image.toJPEG(94):image.toPNG());return picked.filePath});
+  ipcMain.handle('presentation:import',async(_event,kind:'office'|'text'|'gottesdienstregie'|'all'='all')=>{const groups={office:{name:nativeText('officeFormats'),extensions:['pptx','key','odp']},text:{name:nativeText('textFormats'),extensions:['txt','md']},gottesdienstregie:{name:'GottesdienstRegie',extensions:['json','grpresentation','grbackup']}},selected=kind==='all'?{name:nativeText('presentationFormats'),extensions:['pptx','key','odp','txt','md','json','grpresentation','grbackup']}:groups[kind];const picked=await dialog.showOpenDialog(controlWindow!,{title:nativeText('importPresentationTitle'),properties:['openFile'],filters:[selected,{name:nativeText('allSupportedFormats'),extensions:['pptx','key','odp','txt','md','json','grpresentation','grbackup']}]});if(picked.canceled||!picked.filePaths[0])return null;try{return await presentationRepository.importDocument(picked.filePaths[0])}catch(error){void dialog.showMessageBox(controlWindow!,{type:'error',title:nativeText('importPresentationErrorTitle'),message:nativeText('importPresentationErrorMessage'),detail:error instanceof Error&&error.message==='KEYNOTE_PREVIEW_NOT_FOUND'?nativeText('keynotePreviewMissing'):nativeText('importPresentationErrorHelp')});return null}});
   ipcMain.handle('songs:import',async(event)=>{
-    const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,picked=await dialog.showOpenDialog(owner,{title:'Songs importieren',properties:['openFile','multiSelections'],filters:[{name:'Songtexte',extensions:['txt','md','song','csv','json']},{name:'Alle Dateien',extensions:['*']}]});
+    const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,picked=await dialog.showOpenDialog(owner,{title:nativeText('importSongsTitle'),properties:['openFile','multiSelections'],filters:[{name:nativeText('songTextFormats'),extensions:['txt','md','song','csv','json']},{name:nativeText('allFiles'),extensions:['*']}]});
     if(picked.canceled)return [];
     const imported:Array<{title:string;author:string;lyrics:string;sections:Array<{title:string;body:string}>;fileName:string}>=[];
     for(const file of picked.filePaths){
@@ -461,7 +469,7 @@ app.whenReady().then(async() => {
     }
     return imported;
   });
-  ipcMain.handle('presentation:export',async(_event,id:string)=>{const doc=await presentationRepository.read(id);if(!doc)return null;const picked=await dialog.showSaveDialog(controlWindow!,{title:'Präsentation exportieren',defaultPath:`${String(doc.title||'Praesentation').replace(/[<>:"/\\|?*]/g,'-')}.grpresentation`,filters:[{name:'GottesdienstRegie Präsentation',extensions:['grpresentation']}]});if(picked.canceled||!picked.filePath)return null;return presentationRepository.exportDocument(id,picked.filePath)});
+  ipcMain.handle('presentation:export',async(_event,id:string)=>{const doc=await presentationRepository.read(id);if(!doc)return null;const picked=await dialog.showSaveDialog(controlWindow!,{title:nativeText('exportPresentationTitle'),defaultPath:`${String(doc.title||'Praesentation').replace(/[<>:"/\\|?*]/g,'-')}.grpresentation`,filters:[{name:nativeText('presentationFileFormat'),extensions:['grpresentation']}]});if(picked.canceled||!picked.filePath)return null;return presentationRepository.exportDocument(id,picked.filePath)});
   ipcMain.handle('presentation:backup',(_event,id:string)=>presentationRepository.backup(id));
   ipcMain.handle('spotify:status',()=>spotifyAuth!.status());
   ipcMain.handle('spotify:connect',()=>spotifyAuth!.connect());
@@ -484,7 +492,7 @@ app.whenReady().then(async() => {
   });
   ipcMain.handle('media:list',()=>mediaRepository.list());
   ipcMain.handle('media:mark-used',(_event,id:string)=>mediaRepository.markUsed(id));
-  ipcMain.handle('media:import',async(event,kind?:'audio'|'video')=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,audio=kind==='audio',video=kind==='video',filter=audio?{name:'Unterstütztes Audio',extensions:['mp3','m4a','aac','wav','flac','ogg']}:video?{name:'Unterstützte Videos',extensions:['mp4','mov','webm','m4v']}:{name:'Medien',extensions:['png','jpg','jpeg','webp','gif','svg','mp4','mov','webm','m4v','mp3','wav','m4a','aac','ogg','flac','pdf']};const picked=await dialog.showOpenDialog(owner,{title:audio?'Audio zum Hochladen auswählen':video?'Video auswählen':'Medien zum Hochladen auswählen',properties:video?['openFile']:['openFile','multiSelections'],filters:[filter]});if(picked.canceled)return[];return mediaRepository.import(picked.filePaths)});
+  ipcMain.handle('media:import',async(event,kind?:'audio'|'video')=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,audio=kind==='audio',video=kind==='video',filter=audio?{name:nativeText('supportedAudio'),extensions:['mp3','m4a','aac','wav','flac','ogg']}:video?{name:nativeText('supportedVideo'),extensions:['mp4','mov','webm','m4v']}:{name:nativeText('media'),extensions:['png','jpg','jpeg','webp','gif','svg','mp4','mov','webm','m4v','mp3','wav','m4a','aac','ogg','flac','pdf']};const picked=await dialog.showOpenDialog(owner,{title:audio?nativeText('selectUploadAudio'):video?nativeText('selectVideo'):nativeText('selectUploadMedia'),properties:video?['openFile']:['openFile','multiSelections'],filters:[filter]});if(picked.canceled)return[];return mediaRepository.import(picked.filePaths)});
   ipcMain.handle('media:save-generated',(_event,input:{name:string;kind:'image'|'video';extension:string;data:Uint8Array;tags?:string[]})=>mediaRepository.importGenerated({...input,data:Buffer.from(input.data)}));
   ipcMain.handle('media:update',async(_event,id:string,patch:any)=>{try{return await mediaRepository.update(id,patch)}catch(error){if(!String(error).includes('MEDIA_NOT_FOUND'))throw error;const remote=(await onlineMedia.list()).find(item=>item.id===id);if(!remote)throw error;return mediaRepository.upsertRemote(remote,patch)}});
   ipcMain.handle('media:remove',(_event,id:string)=>mediaRepository.remove(id));
@@ -555,7 +563,7 @@ app.whenReady().then(async() => {
       await presentationRepository.markClean();
       await new Promise(resolve=>setTimeout(resolve,700));
     }catch(error){
-      await dialog.showMessageBox(owner,{type:'error',title:'Speichern fehlgeschlagen',message:'Die Präsentation konnte nicht gespeichert werden. Bitte erneut versuchen.',detail:String(error)});
+      await dialog.showMessageBox(owner,{type:'error',title:nativeText('saveErrorTitle'),message:nativeText('saveErrorMessage'),detail:String(error)});
       throw error;
     }
   };
