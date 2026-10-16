@@ -15,6 +15,18 @@ function applyReviewedTechnicalFile(rows,filename,source,reviews){
   return rows.map(row=>({...row,status:'excluded',exclusionReason:review.reason,technicalReviewHash:review.sha256}));
 }
 
+/** A mixed file needs entry-level review: never hide its neighboring operator copy. */
+function applyReviewedSourceEntries(rows,reviews={}){
+  return rows.map(row=>{
+    if(row.status!=='review-required'||!row.key.startsWith('source.')||!Object.hasOwn(reviews,row.key))return row;
+    const review=reviews[row.key];
+    if(!review||review.source!==row.source||review.context!==row.context||review.text!==row.text
+      ||typeof review.reason!=='string'||!review.reason.trim())return row;
+    const technicalReviewHash=createHash('sha256').update(JSON.stringify({key:row.key,source:row.source,context:row.context,text:row.text})).digest('hex');
+    return {...row,status:'excluded',exclusionReason:review.reason,technicalReviewHash};
+  });
+}
+
 function scanOperatorSource(filename, source) {
   const file = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true,
     filename.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
@@ -97,7 +109,8 @@ function inventorySourceFingerprint(entries){
 
 function generateInventory(root) {
   const entries = [];
-  const reviews=JSON.parse(fs.readFileSync(path.join(root,'scripts/regional-source-classification.json'),'utf8')).reviewedTechnicalFiles;
+  const classification=JSON.parse(fs.readFileSync(path.join(root,'scripts/regional-source-classification.json'),'utf8'));
+  const reviews=classification.reviewedTechnicalFiles;
   function walk(directory) {
     for (const name of fs.readdirSync(directory).sort()) {
       const absolute = path.join(directory,name);
@@ -132,14 +145,15 @@ function generateInventory(root) {
   }
   for(const [key,text] of Object.entries(documentation.helpUI))entries.push({key:`helpUI.${key}`,text,
     source:'src/help/base.ts',context:'help-ui',status:'app-owned'});
-  return { schemaVersion:1, complete:false,sourceFingerprint:inventorySourceFingerprint(entries),
+  const classifiedEntries=applyReviewedSourceEntries(entries,classification.reviewedSourceEntries);
+  return { schemaVersion:1, complete:false,sourceFingerprint:inventorySourceFingerprint(classifiedEntries),
     note:'Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.',
     preserveLiteral:['TESTBETRIEB','GottesdienstRegie','MAIN','LIVESTREAM','STAGE','ON AIR','OFF AIR'],
     excludedContent:['User-authored presentation content','Firebase raw records and public content','Bible and song text','Speech text','Third-party websites and operating-system-owned dialog chrome'],
-    entries };
+    entries:classifiedEntries };
 }
 
-module.exports = { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile,inventorySourceFingerprint };
+module.exports = { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile,applyReviewedSourceEntries,inventorySourceFingerprint };
 if (require.main === module) {
   const root = path.resolve(__dirname,'..');
   const result = generateInventory(root);

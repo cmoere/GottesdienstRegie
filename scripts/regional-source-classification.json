@@ -1,4 +1,66 @@
 {
+  "reviewedSourceEntries": {
+    "source.8066ad9095dba53545fe.1": {
+      "source": "src/equalizerBands.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "31 Hz",
+      "reason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion."
+    },
+    "source.5fcf31f2d217dfa8a981.1": {
+      "source": "src/equalizerBands.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "63 Hz",
+      "reason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion."
+    },
+    "source.a0e2219641b2195eb27e.1": {
+      "source": "src/equalizerBands.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "125 Hz",
+      "reason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion."
+    },
+    "source.d247103269f5e8a65b3c.1": {
+      "source": "src/equalizerBands.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "250 Hz",
+      "reason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion."
+    },
+    "source.36f14ed15539bf2cb22b.1": {
+      "source": "src/equalizerBands.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "500 Hz",
+      "reason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion."
+    },
+    "source.ab9928b5121246e87435.1": {
+      "source": "src/equalizerBands.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "1 kHz",
+      "reason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion."
+    },
+    "source.6bab5f98e136c318fdb4.1": {
+      "source": "src/equalizerBands.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "2 kHz",
+      "reason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion."
+    },
+    "source.14aa119d8b2cde23cb97.1": {
+      "source": "src/equalizerBands.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "4 kHz",
+      "reason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion."
+    },
+    "source.048927a57c0829af828f.1": {
+      "source": "src/equalizerBands.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "8 kHz",
+      "reason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion."
+    },
+    "source.e2590a80b5ea860ffd66.1": {
+      "source": "src/equalizerBands.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "16 kHz",
+      "reason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion."
+    }
+  },
   "reviewedTechnicalFiles": {
     "src/mediaSelection.ts": {
       "sha256": "e75278e91f5d4fcb913ed13b6fb6cbc3c22449474c3a0c7afa45d1eaa6646656",

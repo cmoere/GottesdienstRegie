@@ -4,9 +4,28 @@ import { describe, expect, it } from 'vitest';
 
 const require = createRequire(import.meta.url);
 // The scanner must retain ambiguous text for review, never localize user data itself.
-const { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile,inventorySourceFingerprint } = require('../../scripts/inventory-regional-texts.cjs');
+const { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile,applyReviewedSourceEntries,inventorySourceFingerprint } = require('../../scripts/inventory-regional-texts.cjs');
 
 describe('regional text source inventory', () => {
+  it('excludes only the individually reviewed exact source entry in a mixed UI module',()=>{
+    const rows=scanOperatorSource('src/mixed.tsx',"const fault='DEVICE_UNAVAILABLE'; const view=<button>Gerät auswählen</button>;");
+    const row=rows[0],review={[row.key]:{source:row.source,context:row.context,text:row.text,reason:'Stable machine code, not operator prose.'}};
+    const classified=applyReviewedSourceEntries(rows,review);
+    expect(classified[0]).toMatchObject({status:'excluded',exclusionReason:review[row.key].reason});
+    expect(classified[0].technicalReviewHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(classified[1]).toEqual(rows[1]);
+    expect(rows[0].status).toBe('review-required');
+    expect(inventorySourceFingerprint(classified)).not.toBe(inventorySourceFingerprint(rows));
+  });
+  it('revokes individual exclusions after source changes and cannot hide canonical owned resources',()=>{
+    const [row]=scanOperatorSource('src/mixed.ts',"const fault='DEVICE_UNAVAILABLE';");
+    const review={[row.key]:{source:row.source,context:row.context,text:row.text,reason:'Stable machine code.'}};
+    for(const altered of [{...row,text:'Gerät nicht verfügbar'},{...row,source:'src/other.ts'},{...row,context:'jsx-text:button'},{...row,key:'ui.device',status:'app-owned'}]){
+      expect(applyReviewedSourceEntries([altered],review)[0]).toEqual(altered);
+    }
+    expect(applyReviewedSourceEntries([row],{[row.key]:{...review[row.key],reason:' '}})[0]).toEqual(row);
+    expect(applyReviewedSourceEntries([row],Object.create(review))[0]).toEqual(row);
+  });
   it('retains uppercase-only labels in nested German dictionaries for review',()=>{
     const found=scanOperatorSource('src/fixture.ts',"const copy={de:{confirm:'OK',cancel:'ABBRECHEN'},en:{confirm:'OK',cancel:'CANCEL'}};");
     expect(found.map((entry:{text:string})=>entry.text)).toEqual(['OK','ABBRECHEN']);

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": false,
-  "sourceFingerprint": "af0a5c0efb8e9f94da997f23996f567e41a727acbf36c02f47f409667e1e9088",
+  "sourceFingerprint": "99df7788149a5cc9815926bb7a53523052babbe5554631a343e66a52511c8498",
   "note": "Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -23814,7 +23814,9 @@
       "source": "src/equalizerBands.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion.",
+      "technicalReviewHash": "af30f137752ea055519f855ce7ac66f3de089ff27a0e363e5dd478ac110bb6df"
     },
     {
       "key": "source.d519e2029ac834117f1f.1",
@@ -23838,7 +23840,9 @@
       "source": "src/equalizerBands.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion.",
+      "technicalReviewHash": "40c0b9731f0b2149314641d6a32fcf0d032a9e00a9905a59bbd0a9b39d72abc6"
     },
     {
       "key": "source.2030298d535cf7dca83b.1",
@@ -23862,7 +23866,9 @@
       "source": "src/equalizerBands.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion.",
+      "technicalReviewHash": "430810c7cf2c79054b4ef0328e405e61f5347930bcd9b265c40c61ee91c054f9"
     },
     {
       "key": "source.4e6b33688ea202e05712.1",
@@ -23886,7 +23892,9 @@
       "source": "src/equalizerBands.ts",
       "line": 4,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion.",
+      "technicalReviewHash": "870c0cb0a88d7e7d6dd4dcd0a1446d1ab47cbff863b70dfddaac84bc17816410"
     },
     {
       "key": "source.6650e93288b05937d444.1",
@@ -23910,7 +23918,9 @@
       "source": "src/equalizerBands.ts",
       "line": 4,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion.",
+      "technicalReviewHash": "c10cfc956369aef64847f430998bc8dda33b07ad7e67887e2c378c1b5bbfce0d"
     },
     {
       "key": "source.9658a1c13fb51edf59c3.1",
@@ -23934,7 +23944,9 @@
       "source": "src/equalizerBands.ts",
       "line": 5,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion.",
+      "technicalReviewHash": "2725a6f5c5aaba2a60bcad242e42681f06705df63cbe2c4260240f314e0679fc"
     },
     {
       "key": "source.fe16d882fdd14eb13c35.1",
@@ -23958,7 +23970,9 @@
       "source": "src/equalizerBands.ts",
       "line": 5,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion.",
+      "technicalReviewHash": "e2cdeaf2c1a40f561cb0f82ee4b8f1184dcd74cde03cfa2adbb0cb8dc71b25b7"
     },
     {
       "key": "source.7502300af2aeea37d3ed.1",
@@ -23982,7 +23996,9 @@
       "source": "src/equalizerBands.ts",
       "line": 6,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion.",
+      "technicalReviewHash": "264fa3b16a593eef9de51cc4548ba8937d8c04a128076e149f1efbd9a07b09ed"
     },
     {
       "key": "source.a47a42550a392d9e3c41.1",
@@ -24006,7 +24022,9 @@
       "source": "src/equalizerBands.ts",
       "line": 6,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion.",
+      "technicalReviewHash": "bf3fcbfffa7013b733bb373a0302997646250316948de13e4299e75e87f88933"
     },
     {
       "key": "source.9bcfeff3421c9ef1a5f5.1",
@@ -24030,7 +24048,9 @@
       "source": "src/equalizerBands.ts",
       "line": 6,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion.",
+      "technicalReviewHash": "8317b5505ca69d51989737e892e23e13283b59595f42dc31df46e63d8988208e"
     },
     {
       "key": "source.fbfe69e54f3d937a6021.1",
@@ -34196,7 +34216,7 @@
       "key": "source.aa6ff704fded0dfb3563.1",
       "text": "Text",
       "source": "electron/PresentationRepository.ts",
-      "line": 26,
+      "line": 27,
       "context": "property:name",
       "status": "review-required"
     },
@@ -34204,7 +34224,7 @@
       "key": "source.421ff612f522d4c56390.1",
       "text": "Cera Pro",
       "source": "electron/PresentationRepository.ts",
-      "line": 26,
+      "line": 27,
       "context": "property:fontFamily",
       "status": "review-required"
     },
@@ -34212,7 +34232,7 @@
       "key": "source.ff20d186c2b161fab292.1",
       "text": "Importierte Vorschau",
       "source": "electron/PresentationRepository.ts",
-      "line": 26,
+      "line": 27,
       "context": "property:name",
       "status": "review-required"
     },
@@ -34220,7 +34240,7 @@
       "key": "source.76d28623924620da8033.1",
       "text": "Importierte Präsentation",
       "source": "electron/PresentationRepository.ts",
-      "line": 27,
+      "line": 28,
       "context": "property:title",
       "status": "review-required"
     },
@@ -34228,7 +34248,7 @@
       "key": "source.f2183a0481654f16ef54.1",
       "text": "Keine lesbaren Folieninhalte gefunden.",
       "source": "electron/PresentationRepository.ts",
-      "line": 27,
+      "line": 28,
       "context": "property:body",
       "status": "review-required"
     },
@@ -34236,7 +34256,7 @@
       "key": "source.bb0be762a24661197a52.1",
       "text": "Folie {expression1}",
       "source": "electron/PresentationRepository.ts",
-      "line": 27,
+      "line": 28,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -34244,7 +34264,7 @@
       "key": "source.bb0be762a24661197a52.2",
       "text": "Folie {expression1}",
       "source": "electron/PresentationRepository.ts",
-      "line": 27,
+      "line": 28,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -34252,7 +34272,7 @@
       "key": "source.9b2babe1cbd51fc11293.1",
       "text": "VORPROGRAMM",
       "source": "electron/PresentationRepository.ts",
-      "line": 28,
+      "line": 29,
       "context": "property:title",
       "status": "review-required"
     },
@@ -34260,7 +34280,7 @@
       "key": "source.8e133ec48f1e15771490.1",
       "text": "WARM-UP",
       "source": "electron/PresentationRepository.ts",
-      "line": 28,
+      "line": 29,
       "context": "property:title",
       "status": "review-required"
     },
@@ -34268,7 +34288,7 @@
       "key": "source.00233d5485f90c577782.1",
       "text": "GOTTESDIENST",
       "source": "electron/PresentationRepository.ts",
-      "line": 28,
+      "line": 29,
       "context": "property:title",
       "status": "review-required"
     },
@@ -34276,7 +34296,7 @@
       "key": "source.bed1cd2e3832922d3db6.1",
       "text": "NACHPROGRAMM",
       "source": "electron/PresentationRepository.ts",
-      "line": 28,
+      "line": 29,
       "context": "property:title",
       "status": "review-required"
     },
@@ -34284,7 +34304,7 @@
       "key": "source.608c23327f9f5bb70e5a.1",
       "text": "GOTTESDIENST",
       "source": "electron/PresentationRepository.ts",
-      "line": 28,
+      "line": 29,
       "context": "property:section",
       "status": "review-required"
     },
@@ -34292,7 +34312,7 @@
       "key": "source.bb0be762a24661197a52.3",
       "text": "Folie {expression1}",
       "source": "electron/PresentationRepository.ts",
-      "line": 34,
+      "line": 35,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -34300,7 +34320,7 @@
       "key": "source.bb0be762a24661197a52.4",
       "text": "Folie {expression1}",
       "source": "electron/PresentationRepository.ts",
-      "line": 38,
+      "line": 39,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -34308,7 +34328,7 @@
       "key": "source.d06ea0b8e0d9a82af784.1",
       "text": "PRESENTATION_ID_INVALID",
       "source": "electron/PresentationRepository.ts",
-      "line": 59,
+      "line": 60,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -34316,7 +34336,7 @@
       "key": "source.fc2f9ce16a1b8151938c.1",
       "text": "Unbenannte Präsentation",
       "source": "electron/PresentationRepository.ts",
-      "line": 66,
+      "line": 67,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -34324,7 +34344,7 @@
       "key": "source.4bfb342cf256efe0f51c.1",
       "text": "ENOENT",
       "source": "electron/PresentationRepository.ts",
-      "line": 67,
+      "line": 68,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -34332,7 +34352,7 @@
       "key": "source.bcc4e2a60dc7de0ea0da.1",
       "text": "PRESENTATION_ID_REQUIRED",
       "source": "electron/PresentationRepository.ts",
-      "line": 69,
+      "line": 70,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -34340,7 +34360,7 @@
       "key": "source.fc2f9ce16a1b8151938c.2",
       "text": "Unbenannte Präsentation",
       "source": "electron/PresentationRepository.ts",
-      "line": 77,
+      "line": 78,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -34348,7 +34368,7 @@
       "key": "source.bd3a50722cc2c4d23ca2.1",
       "text": "RECOVERY_PATH_INVALID",
       "source": "electron/PresentationRepository.ts",
-      "line": 85,
+      "line": 86,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -34356,7 +34376,7 @@
       "key": "source.8293c84dbda4e5b0b11e.1",
       "text": "Neue Präsentation",
       "source": "electron/PresentationRepository.ts",
-      "line": 95,
+      "line": 96,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -34364,7 +34384,7 @@
       "key": "source.2d4b29d96248eafcf789.1",
       "text": "PRESENTATION_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 97,
+      "line": 98,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -34372,7 +34392,7 @@
       "key": "source.0d66989b75ec7c20c9c6.1",
       "text": "{expression1} – Kopie",
       "source": "electron/PresentationRepository.ts",
-      "line": 104,
+      "line": 105,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -34380,7 +34400,7 @@
       "key": "source.2d4b29d96248eafcf789.2",
       "text": "PRESENTATION_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 106,
+      "line": 107,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -34388,7 +34408,7 @@
       "key": "source.2d4b29d96248eafcf789.3",
       "text": "PRESENTATION_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 107,
+      "line": 108,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -34396,7 +34416,7 @@
       "key": "source.e2508e8a6bddff39ac6a.1",
       "text": "KEYNOTE_PREVIEW_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 108,
+      "line": 109,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -34404,7 +34424,7 @@
       "key": "source.29cef50e7623e0194520.1",
       "text": "PRESENTATION_CONTENT_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 108,
+      "line": 109,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -34412,7 +34432,7 @@
       "key": "source.bb0be762a24661197a52.5",
       "text": "Folie {expression1}",
       "source": "electron/PresentationRepository.ts",
-      "line": 108,
+      "line": 109,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -34420,7 +34440,7 @@
       "key": "source.2d4b29d96248eafcf789.4",
       "text": "PRESENTATION_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 109,
+      "line": 110,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -34428,7 +34448,7 @@
       "key": "source.2d4b29d96248eafcf789.5",
       "text": "PRESENTATION_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 110,
+      "line": 111,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -34436,7 +34456,7 @@
       "key": "source.cf0a9b50782764be542c.1",
       "text": "RECOVERY_DOCUMENT_INVALID",
       "source": "electron/PresentationRepository.ts",
-      "line": 131,
+      "line": 132,
       "context": "NewExpression",
       "status": "review-required"
     },
