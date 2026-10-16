@@ -1,0 +1,8 @@
+{
+  "reviewedTechnicalFiles": {
+    "src/fonts.ts": {
+      "sha256": "4d4087ef6180e3785bd255dbc7c5cd59d1f1dc8c49de0fbd966d245c1c370dc5",
+      "reason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
+    }
+  }
+}

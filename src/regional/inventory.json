@@ -23193,7 +23193,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.88e3bca1914b83b09b5d.1",
@@ -23201,7 +23202,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4b339987cb7bd7466753.1",
@@ -23209,7 +23211,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.ec6cf1be1de073830001.1",
@@ -23217,7 +23220,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.d3662369f58a2be94942.1",
@@ -23225,7 +23229,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.86dad8f6bf69da5330ea.1",
@@ -23233,7 +23238,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.983e241a1174f9b07051.1",
@@ -23241,7 +23247,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.45004b8dc27792a81505.1",
@@ -23249,7 +23256,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.305bbbeaf4d85a77e58f.1",
@@ -23257,7 +23265,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.b0fd3f5fd8272c5bde30.1",
@@ -23265,7 +23274,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.03bd19f29b10f327489d.1",
@@ -23273,7 +23283,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.ee283171567ca1851a39.1",
@@ -23281,7 +23292,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.ece740b8bebbd5af120c.1",
@@ -23289,7 +23301,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4de3257c2b894bc39013.1",
@@ -23297,7 +23310,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.0a6f7511d65b8487f588.1",
@@ -23305,7 +23319,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.8e49234e6fe9dc152d55.1",
@@ -23313,7 +23328,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.75be5991bd765a7194e7.1",
@@ -23321,7 +23337,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.52a563d730458e5918f6.1",
@@ -23329,7 +23346,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.64fc45cc3987dea881d8.1",
@@ -23337,7 +23355,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.772de1041dafd25e2715.1",
@@ -23345,7 +23364,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.ad03703defb43483aca0.1",
@@ -23353,7 +23373,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.32f873c8cdeb38ac33ec.1",
@@ -23361,7 +23382,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.7fee14e100bfed968145.1",
@@ -23369,7 +23391,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.bf2f466e6d266f28ce2e.1",
@@ -23377,7 +23400,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.ba9979142525942c2432.1",
@@ -23385,7 +23409,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.61ad49c9b44e6d6d6e62.1",
@@ -23393,7 +23418,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.d988672d4f45054ee6a7.1",
@@ -23401,7 +23427,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e6057f4d86d46af7999a.1",
@@ -23409,7 +23436,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.44ce77ed2dead807c866.1",
@@ -23417,7 +23445,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.b073586c248314de0606.1",
@@ -23425,7 +23454,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.792e1a5d5620b45fe8de.1",
@@ -23433,7 +23463,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.979bcf17fde1a2146d1d.1",
@@ -23441,7 +23472,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.1ddc0fa2fca410c83b5e.1",
@@ -23449,7 +23481,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.91c7b91b04c567f8041b.1",
@@ -23457,7 +23490,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.59cafcc1825d8899cdd7.1",
@@ -23465,7 +23499,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.ee452581b098fdef4e06.1",
@@ -23473,7 +23508,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.f5844872d4a44f1cf460.1",
@@ -23481,7 +23517,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.25c15c9c029273921d7b.1",
@@ -23489,7 +23526,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.170b54989928ae2bd233.1",
@@ -23497,7 +23535,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.0bdcaea91d1a0ae5d2de.1",
@@ -23505,7 +23544,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.a299009424b753e255b3.1",
@@ -23513,7 +23553,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.b6e75566282557e7b8d9.1",
@@ -23521,7 +23562,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.a54b37b0d20efc8b4a1b.1",
@@ -23529,7 +23571,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.765ac10714b4f3cdda0e.1",
@@ -23537,7 +23580,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.714c4a3e1c7e444a676a.1",
@@ -23545,7 +23589,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.2fd7cdb641e9075bbc85.1",
@@ -23553,7 +23598,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.b679f77d1e9448862ba0.1",
@@ -23561,7 +23607,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4e2786d94287b18e7e1e.1",
@@ -23569,7 +23616,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.6e8726dfa6cae55ee91c.1",
@@ -23577,7 +23625,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.2ee453dffabef7d8709b.1",
@@ -23585,7 +23634,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.bb345e9d38027ab58283.1",
@@ -23593,7 +23643,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.8b8bc4267b0d4cb85d97.1",
@@ -23601,7 +23652,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.b9f603c44dc52d21c571.1",
@@ -23609,7 +23661,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.5b47d69f2ec751ff2679.1",
@@ -23617,7 +23670,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.17cbd5cfb4a00d4e8f6d.1",
@@ -23625,7 +23679,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c80dd1ab64befa30d1ef.1",
@@ -23633,7 +23688,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.1f73d075871ae00d672f.1",
@@ -23641,7 +23697,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.178f402eea60986f671c.1",
@@ -23649,7 +23706,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.da5a7d88a19d8e75fcda.1",
@@ -23657,7 +23715,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c6a074b4cc44e105cc5e.1",
@@ -23665,7 +23724,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4232c5ccacc6fc25dc89.1",
@@ -23673,7 +23733,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.1496decc6c51683854f8.1",
@@ -23681,7 +23742,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.96f1a8634c47503332ab.1",
@@ -23689,7 +23751,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c8212274e220db93d47d.1",
@@ -23697,7 +23760,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.463215b6cd32248ccdc3.1",
@@ -23705,7 +23769,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c33ee531e7211ff29277.1",
@@ -23713,7 +23778,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.922f5d813f97469fe439.1",
@@ -23721,7 +23787,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4c087324d627fa273516.1",
@@ -23729,7 +23796,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.a51d91399427db3cb473.1",
@@ -23737,7 +23805,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.18d6045aa73a75f09d22.1",
@@ -23745,7 +23814,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.be972d1ec29e28dc50ed.1",
@@ -23753,7 +23823,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.05098ad850d6a81ad80d.1",
@@ -23761,7 +23832,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.1bf6adb4bd8e541a0daa.1",
@@ -23769,7 +23841,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.bff8fc97d8b951654f18.1",
@@ -23777,7 +23850,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.15f3b695f1bdfd3514d6.1",
@@ -23785,7 +23859,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.156df1fe799701f7800d.1",
@@ -23793,7 +23868,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.2306d5414de89380d582.1",
@@ -23801,7 +23877,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e710322b2705e1cf8bd3.1",
@@ -23809,7 +23886,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.cfae8c05d8c15e81a87f.1",
@@ -23817,7 +23895,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.d30c7cc4dd7088848a9f.1",
@@ -23825,7 +23904,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.f0d800b6e136b79ec698.1",
@@ -23833,7 +23913,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.29c0f667628131f041b7.1",
@@ -23841,7 +23922,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.388530cd187828a58469.1",
@@ -23849,7 +23931,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.44ff81973c78d23076b7.1",
@@ -23857,7 +23940,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.167f9c144fb048d7304c.1",
@@ -23865,7 +23949,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.65cc133f2c05d3070e8e.1",
@@ -23873,7 +23958,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.5b6da9b6478f8b3f46d7.1",
@@ -23881,7 +23967,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.6d22f01dd84f659cb3ee.1",
@@ -23889,7 +23976,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.f02f8f13391c353c836c.1",
@@ -23897,7 +23985,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.dfd8cf5fbb43b4fe7cb3.1",
@@ -23905,7 +23994,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.bac8ec041d0c9d5795b8.1",
@@ -23913,7 +24003,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.f592b69b9c7482ec7c56.1",
@@ -23921,7 +24012,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.57a03ba430a35ff1b0be.1",
@@ -23929,7 +24021,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.28fe5246b92882bdf629.1",
@@ -23937,7 +24030,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.01284ecd687053b0f1df.1",
@@ -23945,7 +24039,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.b23ee4405d5eee9d2194.1",
@@ -23953,7 +24048,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.6fb29e88582e6f474f05.1",
@@ -23961,7 +24057,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.0b79dbdfa0c5a41e28c1.1",
@@ -23969,7 +24066,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.fc113b3aa969f6eacbff.1",
@@ -23977,7 +24075,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.8b5401c340564d419b2a.1",
@@ -23985,7 +24084,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e1dd71d9189eb0723c5f.1",
@@ -23993,7 +24093,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.ed75140606c1bc8b3991.1",
@@ -24001,7 +24102,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.3017f5f4d0355982c94a.1",
@@ -24009,7 +24111,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.3f9ed287208f2113fac0.1",
@@ -24017,7 +24120,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.6996bded97a06077ced0.1",
@@ -24025,7 +24129,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.9ea8d171e8635dcadf34.1",
@@ -24033,7 +24138,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.65fddd38b677d1152094.1",
@@ -24041,7 +24147,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.1df0fb04b5fb724d4071.1",
@@ -24049,7 +24156,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.963a23b7d2e5433350a8.1",
@@ -24057,7 +24165,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.73f440252a8e53d70852.1",
@@ -24065,7 +24174,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.d7f4bfec18eb74fb11b0.1",
@@ -24073,7 +24183,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e631347b35e819928626.1",
@@ -24081,7 +24192,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.7532644d87728076d5bf.1",
@@ -24089,7 +24201,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.3681140356eaaa498a66.1",
@@ -24097,7 +24210,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.1f37e18ea2167223e36b.1",
@@ -24105,7 +24219,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.3838005eb9b49e0c67b0.1",
@@ -24113,7 +24228,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c87e011e94e09fdf7571.1",
@@ -24121,7 +24237,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.28cf0ed4255e51cb9cb0.1",
@@ -24129,7 +24246,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.7c3731470111404e3cd2.1",
@@ -24137,7 +24255,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.66cae039d3365aec59fa.1",
@@ -24145,7 +24264,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.5c3f6cf65f125e4abb5d.1",
@@ -24153,7 +24273,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.ecfa2a09be7ab577435e.1",
@@ -24161,7 +24282,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c780d56d9331f07026fd.1",
@@ -24169,7 +24291,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e27d223518e62e35d1ed.1",
@@ -24177,7 +24300,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.907bc72fe4ed08b5a013.1",
@@ -24185,7 +24309,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.b1cf35bfb8aed6697f47.1",
@@ -24193,7 +24318,8 @@
       "source": "src/fonts.ts",
       "line": 1,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.3fb820d05521c3f60e36.1",
@@ -24201,7 +24327,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4ccac016c7ab3a62fe50.1",
@@ -24209,7 +24336,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.7540b7a698456c1194c9.1",
@@ -24217,7 +24345,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.1a1793d459f94b2117e6.1",
@@ -24225,7 +24354,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.42567c018d542c8f44ce.1",
@@ -24233,7 +24363,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.379a7bf7320ed4c06f90.1",
@@ -24241,7 +24372,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.9cf7777d0387c57556e3.1",
@@ -24249,7 +24381,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.fedb0542fe5a33a6d35f.1",
@@ -24257,7 +24390,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.6ada0bc7c4670d12b509.1",
@@ -24265,7 +24399,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.0b7676adbe3c6a02706f.1",
@@ -24273,7 +24408,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.7d766f0d447f112b9142.1",
@@ -24281,7 +24417,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.16c6081bcc99fc6ea17b.1",
@@ -24289,7 +24426,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c313520ed7b721863b62.1",
@@ -24297,7 +24435,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.12da38cfc0fcd841d2da.1",
@@ -24305,7 +24444,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.d3febed7dd45cdfe16cc.1",
@@ -24313,7 +24453,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.3e77c96db93c0088d4cb.1",
@@ -24321,7 +24462,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.96300fc05cb285bfb516.1",
@@ -24329,7 +24471,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.2ea5ee4c52bba824098d.1",
@@ -24337,7 +24480,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.91e1d8e1b3f3f8159fb0.1",
@@ -24345,7 +24489,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.907e6dc20b5663c5ce19.1",
@@ -24353,7 +24498,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.5073737e3df50ec4e464.1",
@@ -24361,7 +24507,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4804f07ea36d2ef9da18.1",
@@ -24369,7 +24516,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.10f126efc6f949e5f89d.1",
@@ -24377,7 +24525,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.1f0661fb593df384697f.1",
@@ -24385,7 +24534,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.5988d297dd6b48d8b08d.1",
@@ -24393,7 +24543,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.2fd6de461d2f50a853ce.1",
@@ -24401,7 +24552,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.9446780702811d68b212.1",
@@ -24409,7 +24561,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.94f9bfdaa14ae2371481.1",
@@ -24417,7 +24570,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e007e928eaa6b47007ae.1",
@@ -24425,7 +24579,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4d52c57aa3049b74a878.1",
@@ -24433,7 +24588,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4da587cd8041f529cdc1.1",
@@ -24441,7 +24597,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.7b4fe561feae10677462.1",
@@ -24449,7 +24606,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.9283e7c1e4ea9ae89d94.1",
@@ -24457,7 +24615,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.0a74773c5af0b5421426.1",
@@ -24465,7 +24624,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.95059495ceeed41c159a.1",
@@ -24473,7 +24633,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.11cc1e6fa56721dac7f5.1",
@@ -24481,7 +24642,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.399fb67a0733fc8ab135.1",
@@ -24489,7 +24651,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4c5b9c669aa4a0f79971.1",
@@ -24497,7 +24660,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.5883ae4b046986524dc4.1",
@@ -24505,7 +24669,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.756a96fb235237641397.1",
@@ -24513,7 +24678,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.6a5663cf0b6e969b906d.1",
@@ -24521,7 +24687,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.63ba6ae51c0d8674cdeb.1",
@@ -24529,7 +24696,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e4d0d69d8f8a9b2e162f.1",
@@ -24537,7 +24705,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.064e8ee375d7ab70e65c.1",
@@ -24545,7 +24714,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.7dfd8b8dde311094f1c6.1",
@@ -24553,7 +24723,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.062f5cdb777ef8722b40.1",
@@ -24561,7 +24732,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.94ae67bcab1d2b0902ce.1",
@@ -24569,7 +24741,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.42e638aadcb7f6e0af73.1",
@@ -24577,7 +24750,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.36e40e3881b12b42f299.1",
@@ -24585,7 +24759,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.34bf5dd9d9e207d63866.1",
@@ -24593,7 +24768,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.d00e3f99a95c213fa2bb.1",
@@ -24601,7 +24777,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.5f28210e88f1a2275cab.1",
@@ -24609,7 +24786,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.bad0dfe485d859685114.1",
@@ -24617,7 +24795,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.8ce703459c30f5e3c1bb.1",
@@ -24625,7 +24804,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.6df72b21dad5a50fa4e5.1",
@@ -24633,7 +24813,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.a88df5a8c70c0b9cf4af.1",
@@ -24641,7 +24822,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.d82d50063b758cac0eb8.1",
@@ -24649,7 +24831,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e9d42b95120e323aa7be.1",
@@ -24657,7 +24840,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.24e8e80422f0fee65015.1",
@@ -24665,7 +24849,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.1ad5dd3199c371f7807e.1",
@@ -24673,7 +24858,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.3a217fb53d036c278d03.1",
@@ -24681,7 +24867,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.2d318c70ea2fff27962e.1",
@@ -24689,7 +24876,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.9de06ae9c1a2c9cc5986.1",
@@ -24697,7 +24885,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.32705b552dacbadfeae4.1",
@@ -24705,7 +24894,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c600bdc857486697dceb.1",
@@ -24713,7 +24903,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.64938e48f3cd22f0e6f9.1",
@@ -24721,7 +24912,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.570976b4fd61eaecf43d.1",
@@ -24729,7 +24921,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.6274e3ed510f16eccd21.1",
@@ -24737,7 +24930,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.cd2e4d65914c78eedc8d.1",
@@ -24745,7 +24939,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.97a5d54df56f98c3eba9.1",
@@ -24753,7 +24948,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.cf8e89b46740db25d83d.1",
@@ -24761,7 +24957,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.a4e9946f26964aa25117.1",
@@ -24769,7 +24966,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e2ba0929356c0c138a06.1",
@@ -24777,7 +24975,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.6105b64ac30b78e0ae2e.1",
@@ -24785,7 +24984,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.da1990d2029177604ec9.1",
@@ -24793,7 +24993,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.d6390f662f0004d99ab2.1",
@@ -24801,7 +25002,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.63c08047e55003a7a67d.1",
@@ -24809,7 +25011,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c1f7599850b8d681818f.1",
@@ -24817,7 +25020,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c4b35911010b9c2e48cb.1",
@@ -24825,7 +25029,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.04710a9349ad21493cef.1",
@@ -24833,7 +25038,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.21d3707c607fc6f7b98f.1",
@@ -24841,7 +25047,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.918e79ed92f259cfc227.1",
@@ -24849,7 +25056,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.a9017694d39978e59040.1",
@@ -24857,7 +25065,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.35698f36df2c53082ca9.1",
@@ -24865,7 +25074,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.3034190039e69664732d.1",
@@ -24873,7 +25083,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.19983e0cb4dbcb54f9b2.1",
@@ -24881,7 +25092,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.324a2e8718048b3315c6.1",
@@ -24889,7 +25101,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.0070b22fdde7e6bbe6ba.1",
@@ -24897,7 +25110,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.ca7ab0b589587898392c.1",
@@ -24905,7 +25119,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.912ebad5113a99f53b52.1",
@@ -24913,7 +25128,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.fc514097e268d725ceb3.1",
@@ -24921,7 +25137,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.127f2cc9e6c16694780e.1",
@@ -24929,7 +25146,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.6817bd64a603b039664f.1",
@@ -24937,7 +25155,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.f96dc467f2c8b66bd000.1",
@@ -24945,7 +25164,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.0820da8c5b893863b2ec.1",
@@ -24953,7 +25173,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.40e02c4b6d8fcfe1a7dd.1",
@@ -24961,7 +25182,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.414069e45a5e1e4d77a6.1",
@@ -24969,7 +25191,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e4e230c0d590ff39e96a.1",
@@ -24977,7 +25200,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.a6e98c270f4cd328cd78.1",
@@ -24985,7 +25209,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4d7dca706e0136337b8c.1",
@@ -24993,7 +25218,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.ce2979fd6563e8188db3.1",
@@ -25001,7 +25227,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.13dc731786cd2d5af855.1",
@@ -25009,7 +25236,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.aab6f8119a047fe0a5d9.1",
@@ -25017,7 +25245,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.50dcaee4635beae5f877.1",
@@ -25025,7 +25254,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.49580bbd7538dec643e2.1",
@@ -25033,7 +25263,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.fecd3c10dc9a9216b74f.1",
@@ -25041,7 +25272,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.364e1bfd4ec670b7117b.1",
@@ -25049,7 +25281,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.29a271fba7848145a347.1",
@@ -25057,7 +25290,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.3bf5bffad1d2abdef67d.1",
@@ -25065,7 +25299,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c4a2fe0b63183df7d7cf.1",
@@ -25073,7 +25308,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.725dfad15c01357cbc2e.1",
@@ -25081,7 +25317,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.a4e0e09f7a8af210b8bb.1",
@@ -25089,7 +25326,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.4932071e51398ddd24f9.1",
@@ -25097,7 +25335,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.7bc095f29e8a46953a1a.1",
@@ -25105,7 +25344,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.0a3679ed0b7ebf2be891.1",
@@ -25113,7 +25353,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e12e4422a7086eede22a.1",
@@ -25121,7 +25362,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.bc82a2e6c76101c52db2.1",
@@ -25129,7 +25371,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.b5345ecb798da5423d2f.1",
@@ -25137,7 +25380,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.2c4b5beefbb513ba6168.1",
@@ -25145,7 +25389,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.f46cb8d02e2dc649fd67.1",
@@ -25153,7 +25398,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.468235e3de65a8c29ff3.1",
@@ -25161,7 +25407,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.9f41568063caf2436584.1",
@@ -25169,7 +25416,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.9f0a3c25c6c74c7ad833.1",
@@ -25177,7 +25425,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.87a8b2c878955347070d.1",
@@ -25185,7 +25434,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.7e3d4e5ac409e328b714.1",
@@ -25193,7 +25443,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.7cfb8221044a3ad7ec7a.1",
@@ -25201,7 +25452,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.1575a78a9bb1ac725835.1",
@@ -25209,7 +25461,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.45687ebafcde80c201df.1",
@@ -25217,7 +25470,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.6e3aec040e052c0cab3a.1",
@@ -25225,7 +25479,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.df3e12a925ee355642b1.1",
@@ -25233,7 +25488,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.77d744868f3d0d0373f1.1",
@@ -25241,7 +25497,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.dbff5f601d9a75560e17.1",
@@ -25249,7 +25506,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.8b540b5ab1c38ca2bdef.1",
@@ -25257,7 +25515,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.2c84cef3457a99361584.1",
@@ -25265,7 +25524,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.a8f665bf1ed3c5876145.1",
@@ -25273,7 +25533,8 @@
       "source": "src/fonts.ts",
       "line": 3,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.a0a83baa140e530af231.1",
@@ -25281,7 +25542,8 @@
       "source": "src/fonts.ts",
       "line": 5,
       "context": "BinaryExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.e6feb1268cae6f70604d.1",
@@ -25289,7 +25551,8 @@
       "source": "src/fonts.ts",
       "line": 5,
       "context": "ConditionalExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.a0a83baa140e530af231.2",
@@ -25297,7 +25560,8 @@
       "source": "src/fonts.ts",
       "line": 8,
       "context": "BinaryExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.c78a2d9ccfcf0424ad87.1",
@@ -25305,7 +25569,8 @@
       "source": "src/fonts.ts",
       "line": 13,
       "context": "VariableDeclaration",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.d1d9f0903aa4a35dbff4.1",
@@ -25313,7 +25578,8 @@
       "source": "src/fonts.ts",
       "line": 16,
       "context": "CallExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.ef1fdb467b83107e0104.1",
@@ -25321,7 +25587,8 @@
       "source": "src/fonts.ts",
       "line": 20,
       "context": "BinaryExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.3c1cc4ca5f0e9a8920cf.1",
@@ -25329,7 +25596,8 @@
       "source": "src/fonts.ts",
       "line": 20,
       "context": "BinaryExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
     },
     {
       "key": "source.f8279a16775a840adf26.1",

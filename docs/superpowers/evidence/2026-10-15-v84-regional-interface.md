@@ -177,3 +177,12 @@ Complete documentation remains outstanding. Bavarian, Ruhr and Bielefeld have63
 help articles each but partial release histories; the other28 complete document
 packs are absent. The strict source/documentation gates remain nonzero. No v84
 version bump, push, installer publication or native-smoke completion is claimed.
+
+Further safety verification adds a numeric-fact mismatch test (RED→GREEN) for
+technical timings/build versions inside translated prose. All currently authored
+documentation passes non-missing structure/link/placeholder/number checks.
+The reviewed font-family catalog is classified as technical metadata through an
+LF-normalized content hash; changes invalidate that review. Missing-font warning
+UI is not excluded. The candidate inventory remains incomplete at3,606 pending
+review entries. `work/v84-facts-review-verification.log` exits0 with640 tests and
+all historical guards passing. None of these checks certifies the missing corpus.

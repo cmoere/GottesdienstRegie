@@ -10,6 +10,7 @@ export interface RegionalDocumentation extends DocumentationSource {id:GermanReg
 const record=(value:unknown):value is Record<string,unknown>=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const own=(object:object,key:string)=>Object.prototype.hasOwnProperty.call(object,key);
 const links=(text:string)=>(text.match(/https?:\/\/[^\s<>)\]]+/g)??[]).sort();
+const numericFacts=(text:string)=>(text.match(/\d+(?:[.,]\d+)*/g)??[]).sort();
 
 /** Full-document validation: fallback never turns a partial translation into a completed pack. */
 export function validateRegionalDocumentation(candidate:unknown,id:GermanRegionId,source:DocumentationSource):string[]{
@@ -25,6 +26,7 @@ export function validateRegionalDocumentation(candidate:unknown,id:GermanRegionI
     const errors=validateRegionalPack({id,ui:{text:value},native:{}},id,{ui:{text:base},native:{}});
     if(errors.length)issues.push(`${key}: ${errors[0].code}`);
     if(JSON.stringify(links(value))!==JSON.stringify(links(base)))issues.push(`${key}: link-mismatch`);
+    if(JSON.stringify(numericFacts(value))!==JSON.stringify(numericFacts(base)))issues.push(`${key}: numeric-fact-mismatch`);
     if(base.includes('\n\n')&&value.split(/\n\s*\n/).length!==base.split(/\n\s*\n/).length)issues.push(`${key}: paragraph-mismatch`);
   }
   for(const key of Object.keys(candidate))if(!['id','help','helpUI','releases'].includes(key))issues.push(`${key}: unexpected-key`);

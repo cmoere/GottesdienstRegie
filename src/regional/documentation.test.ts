@@ -3,6 +3,11 @@ import {createRegionalDocumentationStore,validateRegionalDocumentation} from './
 const source={help:{updates:{title:'Updates',body:'Version {version} prüfen.\n\nMehr: https://example.test/help',related:['live']}},helpUI:{title:'Hilfe'},releases:{'versions[0.83].title':'Version {version}'}};
 const pack=(id='ruhr')=>({id,help:{updates:{title:'Updates angucken',body:'Version {version} nachgucken.\n\nMehr: https://example.test/help',related:['live']}},helpUI:{title:'Hilfe für dich'},releases:{'versions[0.83].title':'Version {version} für dich'}});
 describe('regional documentation boundaries',()=>{
+  it('rejects changed technical numbers and build versions inside translated prose',()=>{
+    const numbered={...source,releases:{'versions[0.83].title':'Version 0.83.0 prüft das Fenster von 61 Minuten.'}};
+    const changed=pack();changed.releases['versions[0.83].title']='Version 0.83.1 prüft das Fenster von 62 Minuten.';
+    expect(validateRegionalDocumentation(changed,'ruhr',numbered)).toContain('releases.versions[0.83].title: numeric-fact-mismatch');
+  });
   it('requires complete help, labels and stable release paths without losing links or placeholders',()=>{
     expect(validateRegionalDocumentation(pack(),'ruhr',source)).toEqual([]);
     const missing=pack();delete (missing.releases as Record<string,string>)['versions[0.83].title'];

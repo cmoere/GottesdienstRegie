@@ -8,6 +8,13 @@ const dictionaryNames = new Set(['en','nl','da','no','sv','fi','fr','it','es','u
 const technicalAttributes = new Set(['className','id','key','ref','type','name','value','src','href','role','style','target','rel','data-testid']);
 const visibleAttributes = new Set(['title','placeholder','aria-label','alt','label']);
 
+function applyReviewedTechnicalFile(rows,filename,source,reviews){
+  const review=reviews[filename];
+  const digest=createHash('sha256').update(source.replace(/\r\n/g,'\n')).digest('hex');
+  if(!review||review.sha256!==digest||typeof review.reason!=='string'||!review.reason.trim())return rows;
+  return rows.map(row=>({...row,status:'excluded',exclusionReason:review.reason}));
+}
+
 function scanOperatorSource(filename, source) {
   const file = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true,
     filename.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
@@ -83,6 +90,7 @@ function collectGermanResources(value, prefix = '') {
 
 function generateInventory(root) {
   const entries = [];
+  const reviews=JSON.parse(fs.readFileSync(path.join(root,'scripts/regional-source-classification.json'),'utf8')).reviewedTechnicalFiles;
   function walk(directory) {
     for (const name of fs.readdirSync(directory).sort()) {
       const absolute = path.join(directory,name);
@@ -91,7 +99,8 @@ function generateInventory(root) {
       if (!/\.tsx?$/.test(name) || /\.(test|spec|d)\.tsx?$/.test(name) || relative.includes('/test/') || relative.startsWith('src/regional/')) continue;
       // Imported translated help is inventoried separately from application source.
       if (relative.startsWith('src/help/')) continue;
-      entries.push(...scanOperatorSource(relative,fs.readFileSync(absolute,'utf8')));
+      const source=fs.readFileSync(absolute,'utf8');
+      entries.push(...applyReviewedTechnicalFile(scanOperatorSource(relative,source),relative,source,reviews));
     }
   }
   walk(path.join(root,'src'));
@@ -120,7 +129,7 @@ function generateInventory(root) {
     entries };
 }
 
-module.exports = { scanOperatorSource, collectGermanResources, generateInventory };
+module.exports = { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile };
 if (require.main === module) {
   const root = path.resolve(__dirname,'..');
   const result = generateInventory(root);

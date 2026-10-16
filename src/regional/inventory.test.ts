@@ -1,11 +1,19 @@
 import { createRequire } from 'node:module';
+import {createHash} from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 
 const require = createRequire(import.meta.url);
 // The scanner must retain ambiguous text for review, never localize user data itself.
-const { scanOperatorSource, collectGermanResources, generateInventory } = require('../../scripts/inventory-regional-texts.cjs');
+const { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile } = require('../../scripts/inventory-regional-texts.cjs');
 
 describe('regional text source inventory', () => {
+  it('excludes reviewed technical metadata only while the exact reviewed file content remains unchanged',()=>{
+    const source="const fonts=['Cera Pro'];",rows=scanOperatorSource('src/fonts.ts',source);
+    const review={'src/fonts.ts':{sha256:createHash('sha256').update(source).digest('hex'),reason:'Proper font family names, not UI prose.'}};
+    expect(applyReviewedTechnicalFile(rows,'src/fonts.ts',source,review)[0]).toMatchObject({status:'excluded',exclusionReason:review['src/fonts.ts'].reason});
+    expect(applyReviewedTechnicalFile(rows,'src/fonts.ts',source+' // changed',review)[0].status).toBe('review-required');
+    expect(rows[0].status).toBe('review-required');
+  });
   it('does not demand retranslating existing non-German siblings inside local language dictionaries',()=>{
     const found=scanOperatorSource('src/fixture.ts',`const copy={de:{message:'Datei öffnen'},en:{message:'Open file'},'pt-BR':{message:'Abrir arquivo'}}; const unrelated={en:'Visible code without a German sibling'};`);
     expect(found.map((entry:{text:string})=>entry.text)).toEqual(['Datei öffnen','Visible code without a German sibling']);
