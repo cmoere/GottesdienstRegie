@@ -278,3 +278,17 @@ Verification this continuation:
 
 Full source migration,27 complete documentation packs, final layout/review and
 release metadata remain outstanding. No version bump, push or publication.
+
+## Six complete documentation packs
+
+Hamburg and Cologne now each independently validate without issues against all
+63 help articles,4 help labels and1446 history fields. The actual offline
+integration test includes both and passes6/6 in `work/v84-six-doc-offline.log`.
+The earlier five-pack checkpoint also passed5/5. These are structural/content-fact
+checks and authored-prose review, not native-speaker certification.
+
+A fresh full verification before these two data-only integrations also exits0:
+`work/v84-selector-committed-verification.log`,167 files/651 tests,9 output guards
+and historical guards. Lower Bavarian and Upper Palatinate are still drafts;
+25 complete documentation packs plus the remaining app-literal migration,
+layout/review and release metadata remain outstanding. No v84 publication.
