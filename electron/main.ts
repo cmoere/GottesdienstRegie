@@ -125,7 +125,7 @@ async function downloadAvailableUpdate(){
   if(lastUpdateStatus.state!=='available'&&lastUpdateStatus.state!=='cancelled')return false;
   updateCancellationToken=new CancellationToken();smoothedDownloadSpeed=0;
   try{await autoUpdater.downloadUpdate(updateCancellationToken);updateCancellationToken=null;return true}
-  catch(error){if(updateCancellationToken?.cancelled){updateCancellationToken=null;publishUpdateStatus({state:'cancelled',version:pendingUpdateVersion,message:'Der Update-Download wurde abgebrochen.'});return true}updateCancellationToken=null;publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)});return false}
+  catch(error){if(updateCancellationToken?.cancelled){updateCancellationToken=null;publishUpdateStatus({state:'cancelled',version:pendingUpdateVersion,message:nativeText('updateDownloadCancelled')});return true}updateCancellationToken=null;publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)});return false}
 }
 
 async function promptForAvailableUpdate(info:UpdateInfo){
@@ -522,7 +522,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});
   ipcMain.handle('updates:check',()=>checkForUpdates());
   ipcMain.handle('updates:download',()=>downloadAvailableUpdate());
-  ipcMain.handle('updates:cancel-download',()=>{if(!updateCancellationToken||lastUpdateStatus.state!=='downloading')return false;updateCancellationToken.cancel();publishUpdateStatus({state:'cancelled',version:pendingUpdateVersion,message:'Der Update-Download wurde abgebrochen.'});return true});
+  ipcMain.handle('updates:cancel-download',()=>{if(!updateCancellationToken||lastUpdateStatus.state!=='downloading')return false;updateCancellationToken.cancel();publishUpdateStatus({state:'cancelled',version:pendingUpdateVersion,message:nativeText('updateDownloadCancelled')});return true});
   ipcMain.handle('updates:install',()=>{if(lastUpdateStatus.state!=='downloaded')return false;setImmediate(()=>autoUpdater.quitAndInstall(false,true));return true});
   async function previousRelease(){const response=await fetch('https://api.github.com/repos/cmoere/GottesdienstRegie/releases?per_page=20',{headers:{'user-agent':`GottesdienstRegie/${app.getVersion()}`},signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error(`GitHub ${response.status}`);const releases=await response.json() as any[];for(const release of releases){if(release.draft||release.prerelease||!olderThan(String(release.tag_name),app.getVersion()))continue;const asset=(release.assets??[]).find((entry:any)=>/GottesdienstRegie-Setup-.*\.exe$/i.test(String(entry.name)));if(asset)return{version:String(release.tag_name).replace(/^v/,''),publishedAt:String(release.published_at??''),size:Number(asset.size??0),url:String(asset.browser_download_url)}}return null}
   ipcMain.handle('updates:previous',()=>previousRelease());

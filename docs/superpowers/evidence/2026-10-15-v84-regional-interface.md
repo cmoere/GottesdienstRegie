@@ -186,3 +186,36 @@ LF-normalized content hash; changes invalidate that review. Missing-font warning
 UI is not excluded. The candidate inventory remains incomplete at3,606 pending
 review entries. `work/v84-facts-review-verification.log` exits0 with640 tests and
 all historical guards passing. None of these checks certifies the missing corpus.
+
+## First complete authored documentation and native smoke
+
+Upper Bavarian now has63/63 help articles,4 help labels and1446/1446 historical
+release fields. Independent validation against assembled current source returns
+no issues. A real offline integration test was RED while its history was partial,
+then GREEN after complete authorship. It verifies translated help/history loading,
+stable article IDs and unchanged German/English source catalogs. Ruhr documentation
+has subsequently also reached full source coverage; independent final review is
+still pending. No native-speaker certification is claimed.
+
+The canonical update-download cancellation template is now wired at both desktop
+status sites. A wiring guard was RED on the missed key and GREEN afterward;
+all33 canonical native keys are connected.
+
+`work/v84-first-documentation-verification.log` exits0 with642 unit tests,
+historical guards and9 composition/watermark tests passing. Desktop build exits0
+in `work/v84-first-documentation-build.log`; large-chunk warnings remain.
+
+`node tests/smoke/native-v84-regional.cjs` passes against the actual built desktop
+main, preload and renderer in an isolated temporary profile. It checks saved
+control-window selection, rejects a secondary-window IPC write and captures the
+localized four-action native update dialog with download/install disabled.
+Windows are hidden, login/protocol registration is intercepted, and the parent
+cleans only the validated owned profile after Electron exits. The expected denied
+IPC request is logged. Its first harness attempt used the smoke directory as
+appPath and hit the fallback renderer; a new built-renderer URL assertion failed,
+then passed after explicitly setting appPath and waiting for React. Only the latter
+run (`work/v84-native-smoke-green.log`) is counted as native smoke success.
+
+This remains an incomplete v84 implementation: the full31-document corpus,
+remaining app-literal review/migration, selector and final release review are
+outstanding. No publication has occurred.
