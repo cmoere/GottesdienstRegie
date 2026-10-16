@@ -1,6 +1,7 @@
 {
   "id": "aachen",
   "ui": {
+    "germanRegionalVariant": "Dütsche Regionalvariant",
     "loginSubtitle": "Meld dich met deng Konto aan",
     "email": "E-Mail-Adress",
     "password": "Passwoert",

@@ -1,6 +1,7 @@
 {
   "id": "upper-palatinate",
   "ui": {
+    "germanRegionalVariant": "Deitsche Regionalvariant",
     "loginSubtitle": "Mit deim Konto oameldn",
     "email": "E-Mail-Adress",
     "password": "Passwort",

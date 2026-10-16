@@ -1,6 +1,7 @@
 {
   "id": "bielefeld-ravensberg",
   "ui": {
+    "germanRegionalVariant": "Düütske Regionalvariant",
     "loginSubtitle": "Mell di met duin Konto an",
     "email": "E-Mail-Adresse",
     "password": "Passwuort",

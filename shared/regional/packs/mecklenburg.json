@@ -1,6 +1,7 @@
 {
   "id": "mecklenburg",
   "ui": {
+    "germanRegionalVariant": "Düütsche Regionalvariant",
     "loginSubtitle": "Mell di mit din Konto an",
     "email": "E-Mail-Adress",
     "password": "Passwurt",

@@ -18,6 +18,7 @@ function runRegionalPublicationGate(directory=path.resolve(__dirname,'..')){
   const {loadLocalDataModule}=require('./export-regional-corpus.cjs');
   const {checkDocumentationCorpus}=require('./check-regional-documentation.cjs');
   const {regionalVariants:regions}=loadLocalDataModule(directory,'shared/regional/catalog.ts');
+  const {isRegionalSelectionAvailable}=loadLocalDataModule(directory,'shared/regional/availability.ts');
   const packs={},docs={};
   for(const {id} of regions){
     const pack=`shared/regional/packs/${id}.json`,doc=`src/regional/docs/${id}.json`;
@@ -27,7 +28,7 @@ function runRegionalPublicationGate(directory=path.resolve(__dirname,'..')){
   const inventory=read('src/regional/inventory.json');
   const issues=regionalPublicationIssues(version,
     [...checkInventoryFreshness(inventory,generateInventory(directory)),...checkRegionalCoverage({regions,inventory,packs,docs})],
-    checkDocumentationCorpus(directory).issues);
+    [...checkDocumentationCorpus(directory).issues,...(isRegionalSelectionAvailable(read('shared/regional/availability.json'))?[]:['regional selector: complete31-variant manifest not enabled'])]);
   if(issues.length){
     console.error(`v84 publication blocked: ${issues.length} incomplete or invalid resource entries.`);
     for(const issue of issues.slice(0,15))console.error(`- ${issue}`);

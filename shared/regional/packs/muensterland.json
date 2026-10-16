@@ -1,6 +1,7 @@
 {
   "id": "muensterland",
   "ui": {
+    "germanRegionalVariant": "Düütske Regionalvariant",
     "loginSubtitle": "Mell di met dien Konto an",
     "email": "E-Mail-Adress",
     "password": "Passwaort",

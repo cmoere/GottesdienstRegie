@@ -1,6 +1,7 @@
 {
   "id": "thuringian",
   "ui": {
+    "germanRegionalVariant": "Deutsche Regionalvariante",
     "loginSubtitle": "Meld dich mit deim Konto an",
     "email": "E-Mail-Adress",
     "password": "Passwort",

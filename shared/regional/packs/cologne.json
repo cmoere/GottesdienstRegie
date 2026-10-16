@@ -1,6 +1,7 @@
 {
   "id": "cologne",
   "ui": {
+    "germanRegionalVariant": "Düütsche Rejionalvariant",
     "loginSubtitle": "Meld dich met dingem Konto aan",
     "email": "E-Mail-Adress",
     "password": "Passwoot",

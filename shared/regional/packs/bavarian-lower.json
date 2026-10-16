@@ -1,6 +1,7 @@
 {
   "id": "bavarian-lower",
   "ui": {
+    "germanRegionalVariant": "Deitsche Regionalvariant",
     "loginSubtitle": "Mit deim Konto omelden",
     "email": "E-Mail-Adress",
     "password": "Passwort",

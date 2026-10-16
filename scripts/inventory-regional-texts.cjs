@@ -118,6 +118,9 @@ function generateInventory(root) {
   const {getGermanDocumentationSource,loadLocalDataModule}=require('./export-regional-corpus.cjs');
   const documentation=getGermanDocumentationSource(root);
   const {nativeBaseTemplates}=loadLocalDataModule(root,'shared/regional/nativeBase.ts');
+  const {regionalControlBaseTemplates}=loadLocalDataModule(root,'shared/regional/interfaceBaseExtras.ts');
+  for(const [key,text] of Object.entries(regionalControlBaseTemplates))entries.push({key:`ui.${key}`,text,
+    source:'shared/regional/interfaceBaseExtras.ts',context:'regional-controls',status:'app-owned'});
   for(const [key,text] of Object.entries(nativeBaseTemplates))entries.push({key:`native.${key}`,text,
     source:'shared/regional/nativeBase.ts',context:'native-canonical',status:'app-owned'});
   const help = documentation.help;

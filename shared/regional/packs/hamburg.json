@@ -1,6 +1,7 @@
 {
   "id": "hamburg",
   "ui": {
+    "germanRegionalVariant": "Düütsche Regionalvariant",
     "loginSubtitle": "Mell di mit dien Konto an",
     "email": "E-Mail-Adress",
     "password": "Passwoort",

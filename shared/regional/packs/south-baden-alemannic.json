@@ -1,6 +1,7 @@
 {
  "id":"south-baden-alemannic",
  "ui":{
+   "germanRegionalVariant": "Düütschi Regionalvariant",
  "loginSubtitle":"Mit dim Konto aamälde",
  "email":"E-Mail-Adräss",
  "password":"Passwort",

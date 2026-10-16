@@ -1,6 +1,7 @@
 {
   "id": "ruhr",
   "ui": {
+    "germanRegionalVariant": "Deutsche Regionalvariante",
     "loginSubtitle": "Meld dich mit deinem Konto an",
     "email": "E-Mail-Adresse",
     "password": "Passwort",

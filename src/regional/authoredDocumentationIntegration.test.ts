@@ -4,7 +4,7 @@ import {getHelpCatalog} from '../help';
 import {loadRegionalDocumentation,regionalDocumentationRuntime} from './documentationRuntime';
 import {indexReleaseTextObjects,localizeReleaseText} from './releaseIdentity';
 afterEach(()=>vi.unstubAllGlobals());
-it.each(['bavarian-upper','ruhr','bielefeld-ravensberg'] as const)('loads complete authored %s help/history offline without mutating other languages',async id=>{
+it.each(['bavarian-upper','ruhr','bielefeld-ravensberg','berlin'] as const)('loads complete authored %s help/history offline without mutating other languages',async id=>{
   const releaseFile=JSON.parse(readFileSync('public/releases.json','utf8'));
   vi.stubGlobal('fetch',async(url:string)=>{
     expect(url).toBe('./releases.json');

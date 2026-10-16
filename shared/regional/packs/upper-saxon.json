@@ -1,6 +1,7 @@
 {
   "id": "upper-saxon",
   "ui": {
+    "germanRegionalVariant": "Deidsche Rechionalvariante",
     "loginSubtitle": "Meld dich mid deim Gondo an",
     "email": "E-Mail-Adresse",
     "password": "Bassword",

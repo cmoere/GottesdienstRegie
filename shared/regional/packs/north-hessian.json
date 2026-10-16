@@ -1,6 +1,7 @@
 {
   "id": "north-hessian",
   "ui": {
+    "germanRegionalVariant": "Deutsche Regionalvariante",
     "loginSubtitle": "Meld dich mit dim Konto an",
     "email": "E-Mail-Adresse",
     "password": "Passwort",

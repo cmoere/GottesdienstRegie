@@ -1,6 +1,7 @@
 {
   "id": "moselle-trier",
   "ui": {
+    "germanRegionalVariant": "Däitsch Regionalvariant",
     "loginSubtitle": "Mell dich mit deim Konto an",
     "email": "E-Mail-Adress",
     "password": "Passwort",

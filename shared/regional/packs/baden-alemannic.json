@@ -1,6 +1,7 @@
 {
  "id":"baden-alemannic",
  "ui":{
+   "germanRegionalVariant": "Ditschi Regionalvariante",
  "loginSubtitle":"Mit dim Konto aamelde",
  "email":"E-Mail-Adress",
  "password":"Passwort",

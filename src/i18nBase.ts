@@ -1,4 +1,5 @@
 import type { Language } from './preferences';
+import {regionalControlBaseTemplates,regionalControlEnglishTemplates} from '../shared/regional/interfaceBaseExtras';
 
 const de={
   loginSubtitle:'Mit deinem Konto anmelden',email:'E-Mail-Adresse',password:'Passwort',showPassword:'Passwort anzeigen',hidePassword:'Passwort ausblenden',remember:'Angemeldet bleiben',signIn:'ANMELDEN',signingIn:'Anmeldung läuft …',forgotPassword:'Passwort vergessen?',notAvailable:'Noch nicht verfügbar',firebaseChecking:'Firebase wird geprüft …',firebaseConnected:'Mit Firebase verbunden',firebaseDisconnected:'Keine Firebase-Verbindung',
@@ -15,8 +16,8 @@ const de={
   authDesktop:'Die Anmeldung ist nur in der installierten Desktop-App möglich.',authStorage:'Windows konnte die Sitzung nicht sicher verschlüsseln.',authGasNetwork:'Der bestehende PGB-Login-Service ist nicht erreichbar.',authGasResponse:'Der PGB-Login-Service hat eine ungültige Antwort geliefert.',authEmailUnverified:'Bitte bestätige zuerst deine E-Mail-Adresse.',authLocked:'Das Konto ist vorübergehend gesperrt.',authInitialPassword:'Dieses Einmalpasswort muss zuerst auf der Gemeinde-Webseite geändert werden.',authTwoFactorCooldown:'Es wurde bereits ein Bestätigungscode versendet. Bitte warte kurz und starte die Anmeldung erneut.',authTwoFactorExpired:'Die Zwei-Faktor-Anmeldung ist abgelaufen. Bitte melde dich erneut an.',authTwoFactorInvalid:'Der Bestätigungscode ist nicht korrekt.',authTwoFactorError:'Die Zwei-Faktor-Prüfung konnte nicht gestartet werden.',authSessionFailed:'Der PGB-Login war korrekt, aber die Sitzung konnte nicht erstellt werden.',authAlgorithm:'Der Passwortalgorithmus dieses Kontos wird noch nicht unterstützt.',authFirebase:'Firebase ist nicht erreichbar oder die Datenbankabfrage wurde abgelehnt.',authAccessUnavailable:'Deine GottesdienstRegie-Freigabe konnte gerade nicht aus Firebase geladen werden. Bitte prüfe die Verbindung und versuche es erneut.',authDisabled:'Dieses Benutzerkonto ist deaktiviert oder wurde zentral abgemeldet.',authNoAccess:'Das Konto ist gültig, besitzt aber keinen freigeschalteten GottesdienstRegie-Zugang. Bitte wende dich an den Administrator.',authInvalid:'E-Mail-Adresse oder Passwort ist nicht korrekt.',authTechnical:'Technischer Anmeldefehler: {detail}',authUnknown:'Unbekannter Fehler',serverCodeExpired:'Die Anmeldung ist abgelaufen. Bitte melde dich erneut an.',serverTooMany:'Zu viele Fehlversuche. Bitte starte die Anmeldung erneut.',serverRecoveryInvalid:'Der Wiederherstellungscode ist ungültig oder wurde bereits verwendet.',serverTotpInvalid:'Der Code der Authenticator-App ist nicht korrekt.'
 } as const;
 
-export type TranslationKey=keyof typeof de;
-type Dictionary=Record<TranslationKey,string>;
+export type TranslationKey=keyof typeof de|keyof typeof regionalControlBaseTemplates;
+type Dictionary=Record<keyof typeof de,string>;
 
 const en:Dictionary={
   loginSubtitle:'Sign in with your account',email:'Email address',password:'Password',showPassword:'Show password',hidePassword:'Hide password',remember:'Stay signed in',signIn:'SIGN IN',signingIn:'SIGNING IN …',forgotPassword:'Forgot password?',notAvailable:'Not available yet',firebaseChecking:'Checking Firebase …',firebaseConnected:'Connected to Firebase',firebaseDisconnected:'No Firebase connection',
@@ -181,10 +182,11 @@ const localImageCopy:Record<Language,Record<LocalImageKey,string>>={
 };
 
 export function getBaseTemplate(language:Language,key:TranslationKey){
-  return key in localImageCopy[language]?localImageCopy[language][key as LocalImageKey]:dictionaries[language][key];
+  if(Object.hasOwn(regionalControlBaseTemplates,key))return (language==='de'?regionalControlBaseTemplates:regionalControlEnglishTemplates)[key as keyof typeof regionalControlBaseTemplates];
+  return key in localImageCopy[language]?localImageCopy[language][key as LocalImageKey]:dictionaries[language][key as keyof typeof de];
 }
 
-export const germanBaseTemplates:Readonly<Record<TranslationKey,string>>={...de,...localImageCopy.de};
+export const germanBaseTemplates:Readonly<Record<TranslationKey,string>>={...de,...localImageCopy.de,...regionalControlBaseTemplates};
 
 export function translate(language:Language,key:TranslationKey,values:Record<string,string|number>={}){
   const source=getBaseTemplate(language,key);

@@ -1,6 +1,7 @@
 {
  "id":"south-hessian",
  "ui":{
+   "germanRegionalVariant": "Deitsche Regionalvariante",
  "loginSubtitle":"Mit deim Konto aamelde",
  "email":"E-Mail-Adress",
  "password":"Passwort",

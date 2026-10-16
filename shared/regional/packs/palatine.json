@@ -1,6 +1,7 @@
 {
  "id":"palatine",
  "ui":{
+   "germanRegionalVariant": "Deitschi Regionalvariant",
  "loginSubtitle":"Mit deim Konto amelde",
  "email":"E-Mail-Adress",
  "password":"Passwort",

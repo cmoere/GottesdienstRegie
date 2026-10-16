@@ -1,6 +1,7 @@
 {
   "id": "east-frisian",
   "ui": {
+    "germanRegionalVariant": "Düütske Regionalvariant",
     "loginSubtitle": "Mell di mit dien Konto an",
     "email": "E-Mail-Adress",
     "password": "Passwoord",

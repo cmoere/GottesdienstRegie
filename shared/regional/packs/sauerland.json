@@ -1,6 +1,7 @@
 {
   "id": "sauerland",
   "ui": {
+    "germanRegionalVariant": "Düütske Regionalvariant",
     "loginSubtitle": "Mell dek met dinem Konto an",
     "email": "E-Mail-Adresse",
     "password": "Passwuort",

@@ -239,3 +239,42 @@ exclusions must still be reviewed individually.
 
 `work/v84-three-doc-verification.log` exits0, all historical guards and9 output
 composition/watermark tests pass. No0.84 metadata bump or publication occurred.
+
+## Guarded selector and fourth complete document pack
+
+Berlin now independently passes the same complete offline help/history integration
+as Upper Bavarian, Ruhr and Bielefeld/Ravensberg:63 articles,4 help labels and1446
+historical release fields. Four complete documentation packs are not31. Cologne,
+Hamburg and Lower Bavarian remain drafts; missing corpus blocks publication.
+
+The German-only regional selector is implemented at Settings → General → Language,
+with all31 registered choices plus Hochdeutsch. A separate checked-in availability
+manifest remains disabled, so incomplete choices are not exposed. Its tests cover
+all31 selections, persistence, unchanged presentation/audio state, stable video DOM,
+unchanged public fixtures and TESTBETRIEB. Partial/inherited manifests are rejected.
+The new selector label is explicitly authored in every short pack (196 UI keys plus
+33 native keys). German/English scope and reset guidance is documented separately.
+
+Nine additional source files were read completely and excluded only by exact,
+LF-normalized content hashes: output-only watermark/title/lyrics code, technical
+font/canvas configuration, machine codes and cache transport. No blanket module
+exclusion was added; changed source revokes each review. The inventory remains
+incomplete:5998 candidates,3915 pending classifications. These are candidates, not
+a claim that3915 new prose translations are required.
+
+Verification this continuation:
+
+- `work/v84-selector-verification.log`: full release verification exits0,
+  167 files/651 tests plus9 output guards and historical guards pass. The package
+  remains0.83.0; that success does not certify v84 completeness.
+- `work/v84-selector-final-focused.log`:4 files/18 tests pass, including the
+  complete four-document offline integration, selector and inventory checks.
+- `work/v84-selector-build.log`: desktop build exits0,31 raw native packs copied;
+  existing large-chunk warnings remain.
+- `work/v84-selector-web.log`: desktop/tablet/phone3/3 pass.
+- `work/v84-selector-native.log`: actual compiled main/preload/renderer smoke
+  passes in an isolated profile; expected unauthorized IPC denial is logged.
+- `git diff --check`: exits0, with line-ending normalization warnings only.
+
+Full source migration,27 complete documentation packs, final layout/review and
+release metadata remain outstanding. No version bump, push or publication.

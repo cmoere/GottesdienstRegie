@@ -1,6 +1,7 @@
 {
   "id": "berlin",
   "ui": {
+    "germanRegionalVariant": "Deutsche Rejionalvariante",
     "loginSubtitle": "Meld dich mit deinem Konto an",
     "email": "E-Mail-Adresse",
     "password": "Passwort",

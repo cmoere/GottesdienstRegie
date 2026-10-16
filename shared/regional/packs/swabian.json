@@ -1,6 +1,7 @@
 {
  "id":"swabian",
  "ui":{
+   "germanRegionalVariant": "Deitsche Regionalvariant",
  "loginSubtitle":"Mit deim Konto amelde",
  "email":"E-Mail-Adress",
  "password":"Passwort",

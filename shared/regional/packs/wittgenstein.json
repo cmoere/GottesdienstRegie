@@ -1,6 +1,7 @@
 {
   "id": "wittgenstein",
   "ui": {
+    "germanRegionalVariant": "Dütsche Regionalvariant",
     "loginSubtitle": "Meld dech med deim Konto o",
     "email": "E-Mail-Adress",
     "password": "Password",

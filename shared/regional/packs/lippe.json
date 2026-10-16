@@ -1,6 +1,7 @@
 {
   "id": "lippe",
   "ui": {
+    "germanRegionalVariant": "Düütske Regionalvariant",
     "loginSubtitle": "Mell düi met düinem Konto an",
     "email": "E-Mail-Adresse",
     "password": "Passwuort",

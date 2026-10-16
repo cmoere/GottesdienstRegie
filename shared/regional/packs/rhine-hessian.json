@@ -1,6 +1,7 @@
 {
  "id":"rhine-hessian",
  "ui":{
+   "germanRegionalVariant": "Deitsche Regionalvariant",
  "loginSubtitle":"Mit deim Konto aamelde",
  "email":"E-Mail-Adress",
  "password":"Passwort",

@@ -1,6 +1,7 @@
 {
   "id": "saarbruecken",
   "ui": {
+    "germanRegionalVariant": "Deitsche Regionalvariante",
     "loginSubtitle": "Mell dich mit deim Konto an",
     "email": "E-Mail-Adress",
     "password": "Passwort",

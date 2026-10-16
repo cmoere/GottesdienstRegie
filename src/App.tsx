@@ -1,5 +1,6 @@
 import {getHelpCatalog} from './help';
 import {startNativeSelectionSync} from './regional/nativeSelectionSync';
+import {RegionalSelector} from './regional/RegionalSelector';
 import {regionalDocumentationRuntime} from './regional/documentationRuntime';
 import {indexReleaseTextObjects,localizeReleaseText} from './regional/releaseIdentity';
 import {sanitizeRecoveryDocument} from './presentationRecovery';
@@ -5762,6 +5763,7 @@ function SettingsModal({
                         ))}
                       </select>
                     </label>
+                    <RegionalSelector/>
                   </div>
                   <div className="settings-group">
                     <h4>{t("appearance")}</h4>

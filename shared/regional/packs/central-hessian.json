@@ -1,6 +1,7 @@
 {
   "id": "central-hessian",
   "ui": {
+    "germanRegionalVariant": "Deitsche Regionalvariante",
     "loginSubtitle": "Meld dich mit deim Konto aa",
     "email": "E-Mail-Adress",
     "password": "Passwort",

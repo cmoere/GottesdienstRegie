@@ -1,6 +1,7 @@
 {
   "id": "lower-rhine",
   "ui": {
+    "germanRegionalVariant": "Düütsche Regionalvariant",
     "loginSubtitle": "Meld dich met dien Konto an",
     "email": "E-Mail-Adräss",
     "password": "Passwoort",

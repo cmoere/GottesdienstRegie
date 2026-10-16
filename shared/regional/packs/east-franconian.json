@@ -1,6 +1,7 @@
 {
  "id":"east-franconian",
  "ui":{
+   "germanRegionalVariant": "Deidsche Regionalvariant",
  "loginSubtitle":"Mit deim Kondo omlädn",
  "email":"E-Mail-Adress",
  "password":"Passwort",

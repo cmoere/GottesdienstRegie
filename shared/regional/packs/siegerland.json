@@ -1,6 +1,7 @@
 {
   "id": "siegerland",
   "ui": {
+    "germanRegionalVariant": "Dütsche Regionalvariant",
     "loginSubtitle": "Meld dech met dengem Konto a",
     "email": "E-Mail-Adress",
     "password": "Passwuert",

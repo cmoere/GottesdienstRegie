@@ -1,5 +1,41 @@
 {
   "reviewedTechnicalFiles": {
+    "src/mediaSelection.ts": {
+      "sha256": "e75278e91f5d4fcb913ed13b6fb6cbc3c22449474c3a0c7afa45d1eaa6646656",
+      "reason": "Manually read in full 2026-10-16: stable VIDEO_ASSET_REQUIRED machine error code and technical media properties. Displayed asset titles come from user assets, not app prose. Any source change revokes this review."
+    },
+    "src/customFonts.ts": {
+      "sha256": "7c4f848658c6681640acbb65489250078a079d58de9f6173177c4cd624cf61a6",
+      "reason": "Manually read in full 2026-10-16: IndexedDB identities and proper font-family name Cera Pro are technical. No app-authored operator prose. Any source change revokes this review."
+    },
+    "src/community/EventCommandService.ts": {
+      "sha256": "667b3f9108f07950a8b6f17b8893a3e889e9590bdde10bfc809d50037308746b",
+      "reason": "Manually read in full 2026-10-16: stable EVENT_KEY_REQUIRED code, date/time formatting and existing Firebase field identities must stay intact. No prose templates. Any source change revokes this review."
+    },
+    "electron/CommunitySnapshotCache.ts": {
+      "sha256": "0d51cc6a6b82f59a187a6c4e4d8b31eb7901deb3a9e3ab57a095ef5a47feb01b",
+      "reason": "Manually read in full 2026-10-16: cache transport/persistence only, with machine states and OS error codes. Supplied raw community data is not rewritten; no operator labels. Any source change revokes this review."
+    },
+    "src/TestModeWatermark.tsx": {
+      "sha256": "cf62a352055588cf85e08073d71671f6245cb4b144d5ef53beb9743c96082358",
+      "reason": "Manually read in full 2026-10-16: output-only system overlay. TESTBETRIEB is explicitly preserved verbatim by the approved regional-interface scope; CSS classes and test IDs are technical. No operator prose. Any source change revokes this exact review."
+    },
+    "src/EventTitle.tsx": {
+      "sha256": "67d3734dcb87743fe3ffee11043258db2948b39e6a634897ca790841442c25f2",
+      "reason": "Manually read in full 2026-10-16: measures and animates externally supplied public event titles without authored operator prose. CSS transforms, media query and layout tokens must not be translated. Any source change revokes this exact review."
+    },
+    "src/LyricScrollRenderer.tsx": {
+      "sha256": "1b06dbe0be9c56855d5814d259a5662fbf212a0610005f6e147c7a8da99fd5f6",
+      "reason": "Manually read in full 2026-10-16: output renderer for supplied song and translation content, excluded from regional UI rewriting. Its authored strings are CSS/layout/element identities, not operator labels. Any source change revokes this exact review."
+    },
+    "src/AnnouncementBannerController.tsx": {
+      "sha256": "4c5b1e6bfa98d11058215bd8861262efb1473a6c64b1be45efcad14130209bcc",
+      "reason": "Manually read in full 2026-10-16: controller transports normalized public announcement content unchanged; sole text candidate is the technical canvas font definition. No operator prose. Any source change revokes this exact review."
+    },
+    "src/eventPagination.ts": {
+      "sha256": "74330f287123cc15d40f80edfaf311018af9305d3ea51a3e417e1e468c84b905",
+      "reason": "Manually read in full 2026-10-16: public event text measurement/pagination utility. Authored candidate is technical canvas font configuration; event titles/details remain supplied content. No operator prose. Any source change revokes this exact review."
+    },
     "src/fonts.ts": {
       "sha256": "4d4087ef6180e3785bd255dbc7c5cd59d1f1dc8c49de0fbd966d245c1c370dc5",
       "reason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
