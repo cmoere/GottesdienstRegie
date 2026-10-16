@@ -4,7 +4,7 @@ import {getHelpCatalog} from '../help';
 import {loadRegionalDocumentation,regionalDocumentationRuntime} from './documentationRuntime';
 import {indexReleaseTextObjects,localizeReleaseText} from './releaseIdentity';
 afterEach(()=>vi.unstubAllGlobals());
-it('loads the complete authored Bavarian help/history offline without mutating German or other languages',async()=>{
+it.each(['bavarian-upper','ruhr','bielefeld-ravensberg'] as const)('loads complete authored %s help/history offline without mutating other languages',async id=>{
   const releaseFile=JSON.parse(readFileSync('public/releases.json','utf8'));
   vi.stubGlobal('fetch',async(url:string)=>{
     expect(url).toBe('./releases.json');
@@ -12,13 +12,14 @@ it('loads the complete authored Bavarian help/history offline without mutating G
   });
   const german=getHelpCatalog('de'),english=getHelpCatalog('en');
   const before=JSON.stringify(german);
-  expect(await loadRegionalDocumentation('bavarian-upper')).toBe(true);
-  const pack=regionalDocumentationRuntime.get({language:'de',germanRegion:'bavarian-upper'})!;
-  expect(Object.keys(pack.help)).toHaveLength(63);expect(Object.keys(pack.releases)).toHaveLength(1446);
-  const regional=getHelpCatalog('de','bavarian-upper');
-  expect(regional.topics[0].title).toBe('SCHNELL LOSLEGEN');
+  expect(await loadRegionalDocumentation(id)).toBe(true);
+  const pack=regionalDocumentationRuntime.get({language:'de',germanRegion:id})!;
+  expect(Object.keys(pack.help)).toHaveLength(german.topics.length);
+  expect(Object.keys(pack.releases)).toHaveLength(Object.keys(indexReleaseTextObjects(releaseFile).texts).length);
+  const regional=getHelpCatalog('de',id);
+  expect(regional.topics[0].body).not.toBe(german.topics[0].body);
   expect(regional.topics.map(topic=>topic.id)).toEqual(german.topics.map(topic=>topic.id));
-  expect(getHelpCatalog('en','bavarian-upper')).toBe(english);
+  expect(getHelpCatalog('en',id)).toBe(english);
   expect(JSON.stringify(german)).toBe(before);
   const value=releaseFile.versions[0].builds[0].overview.label;
   const identity=indexReleaseTextObjects(releaseFile).paths.get(value)!;

@@ -1,7 +1,7 @@
 import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
 const require = createRequire(import.meta.url);
-const { checkRegionalCoverage } = require('../../scripts/check-regional-resources.cjs');
+const { checkRegionalCoverage,checkInventoryFreshness } = require('../../scripts/check-regional-resources.cjs');
 
 const regions=[{id:'ruhr',name:'Ruhrdeutsch'}];
 const inventory={complete:true,entries:[
@@ -19,6 +19,11 @@ const docs={ruhr:{
 }};
 
 describe('v84 release resource coverage gate',()=>{
+  it('rejects a reviewed inventory when the current source corpus has changed',()=>{
+    expect(checkInventoryFreshness({complete:true,sourceFingerprint:'before'},{sourceFingerprint:'after'})).toEqual(['inventory: stale source fingerprint']);
+    expect(checkInventoryFreshness({sourceFingerprint:'same'},{sourceFingerprint:'same'})).toEqual([]);
+    expect(checkInventoryFreshness({},{})).toEqual(['inventory: stale source fingerprint']);
+  });
   it('requires translated help chrome independently of complete articles',()=>{
     expect(checkRegionalCoverage({regions,inventory,packs,docs:{ruhr:{...docs.ruhr,helpUI:{}}}}))
       .toContain('ruhr: helpUI.title missing-text');

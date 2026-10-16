@@ -4,14 +4,29 @@ import { describe, expect, it } from 'vitest';
 
 const require = createRequire(import.meta.url);
 // The scanner must retain ambiguous text for review, never localize user data itself.
-const { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile } = require('../../scripts/inventory-regional-texts.cjs');
+const { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile,inventorySourceFingerprint } = require('../../scripts/inventory-regional-texts.cjs');
 
 describe('regional text source inventory', () => {
+  it('retains uppercase-only labels in nested German dictionaries for review',()=>{
+    const found=scanOperatorSource('src/fixture.ts',"const copy={de:{confirm:'OK',cancel:'ABBRECHEN'},en:{confirm:'OK',cancel:'CANCEL'}};");
+    expect(found.map((entry:{text:string})=>entry.text)).toEqual(['OK','ABBRECHEN']);
+    expect(found.every((entry:{status:string})=>entry.status==='review-required')).toBe(true);
+  });
+  it('fingerprints source text independently of line positions and review decisions',()=>{
+    const rows=scanOperatorSource('src/fixture.tsx','const view=<button>Abbrechen</button>;');
+    const moved=scanOperatorSource('src/fixture.tsx','\n\nconst view=<button>Abbrechen</button>;');
+    expect(inventorySourceFingerprint(rows)).toBe(inventorySourceFingerprint(moved));
+    expect(inventorySourceFingerprint(rows)).toBe(inventorySourceFingerprint(rows.map((row:object)=>({...row,status:'app-owned'}))));
+    const changed=scanOperatorSource('src/fixture.tsx','const view=<button>Jetzt abbrechen</button>;');
+    expect(inventorySourceFingerprint(changed)).not.toBe(inventorySourceFingerprint(rows));
+  });
   it('excludes reviewed technical metadata only while the exact reviewed file content remains unchanged',()=>{
     const source="const fonts=['Cera Pro'];",rows=scanOperatorSource('src/fonts.ts',source);
     const review={'src/fonts.ts':{sha256:createHash('sha256').update(source).digest('hex'),reason:'Proper font family names, not UI prose.'}};
     expect(applyReviewedTechnicalFile(rows,'src/fonts.ts',source,review)[0]).toMatchObject({status:'excluded',exclusionReason:review['src/fonts.ts'].reason});
     expect(applyReviewedTechnicalFile(rows,'src/fonts.ts',source+' // changed',review)[0].status).toBe('review-required');
+    expect(inventorySourceFingerprint(applyReviewedTechnicalFile(rows,'src/fonts.ts',source,review)))
+      .not.toBe(inventorySourceFingerprint(applyReviewedTechnicalFile(rows,'src/fonts.ts',source+' // changed',review)));
     expect(rows[0].status).toBe('review-required');
   });
   it('does not demand retranslating existing non-German siblings inside local language dictionaries',()=>{

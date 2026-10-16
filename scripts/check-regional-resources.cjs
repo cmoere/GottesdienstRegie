@@ -69,7 +69,13 @@ function checkRegionalCoverage({regions,inventory,packs,docs}) {
   return issues;
 }
 
-module.exports={checkRegionalCoverage};
+
+function checkInventoryFreshness(inventory,current){
+  return typeof inventory?.sourceFingerprint==='string'&&inventory.sourceFingerprint===current?.sourceFingerprint
+    ?[]:['inventory: stale source fingerprint'];
+}
+
+module.exports={checkRegionalCoverage,checkInventoryFreshness};
 if (require.main===module) {
   const root=path.resolve(__dirname,'..');
   const {regionalVariants:regions}=loadShared('catalog.ts');
@@ -80,7 +86,8 @@ if (require.main===module) {
     packs[region.id]=read(path.join(root,`shared/regional/packs/${region.id}.json`));
     docs[region.id]=read(path.join(root,`src/regional/docs/${region.id}.json`));
   }
-  const issues=checkRegionalCoverage({regions,inventory,packs,docs});
+  const {generateInventory}=require('./inventory-regional-texts.cjs');
+  const issues=[...checkInventoryFreshness(inventory,generateInventory(root)),...checkRegionalCoverage({regions,inventory,packs,docs})];
   if (issues.length) {
     console.error(`Regional interface NOT release-ready: ${issues.length} issue(s).`);
     for (const issue of issues.slice(0,15)) console.error(`- ${issue}`);

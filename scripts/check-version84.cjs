@@ -13,7 +13,8 @@ function runRegionalPublicationGate(directory=path.resolve(__dirname,'..')){
   if(regionalPublicationIssues(version,['required'],[]).length===0){
     console.log(`v84 completeness gate not activated for package ${version}; this does not certify v84 resources.`);return [];
   }
-  const {checkRegionalCoverage}=require('./check-regional-resources.cjs');
+  const {checkRegionalCoverage,checkInventoryFreshness}=require('./check-regional-resources.cjs');
+  const {generateInventory}=require('./inventory-regional-texts.cjs');
   const {loadLocalDataModule}=require('./export-regional-corpus.cjs');
   const {checkDocumentationCorpus}=require('./check-regional-documentation.cjs');
   const {regionalVariants:regions}=loadLocalDataModule(directory,'shared/regional/catalog.ts');
@@ -23,8 +24,9 @@ function runRegionalPublicationGate(directory=path.resolve(__dirname,'..')){
     if(fs.existsSync(path.join(directory,pack)))packs[id]=read(pack);
     if(fs.existsSync(path.join(directory,doc)))docs[id]=read(doc);
   }
+  const inventory=read('src/regional/inventory.json');
   const issues=regionalPublicationIssues(version,
-    checkRegionalCoverage({regions,inventory:read('src/regional/inventory.json'),packs,docs}),
+    [...checkInventoryFreshness(inventory,generateInventory(directory)),...checkRegionalCoverage({regions,inventory,packs,docs})],
     checkDocumentationCorpus(directory).issues);
   if(issues.length){
     console.error(`v84 publication blocked: ${issues.length} incomplete or invalid resource entries.`);

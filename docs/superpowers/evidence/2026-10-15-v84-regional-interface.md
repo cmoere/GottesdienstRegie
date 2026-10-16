@@ -219,3 +219,23 @@ run (`work/v84-native-smoke-green.log`) is counted as native smoke success.
 This remains an incomplete v84 implementation: the full31-document corpus,
 remaining app-literal review/migration, selector and final release review are
 outstanding. No publication has occurred.
+
+## Three complete document packs and source freshness
+
+Ruhr and Bielefeld/Ravensberg now each contain63 complete help articles,4 help
+labels and1446 release fields. Independent full validation returns no issues for
+both. The offline help/history integration test passes for all three completed
+packs; Bielefeld first failed while incomplete and passed after full authorship.
+The other28 full documentation packs are still outstanding; Berlin, Cologne and
+Hamburg have translation drafts in progress.
+
+The v84 publication gate now rejects a stale source inventory even if its old
+review flag is true. The source fingerprint ignores line movement/manual review
+status but detects changed source text/identity and revoked hash-bound technical
+exclusions. Uppercase-only German dictionary labels are also retained for review.
+The candidate inventory is explicitly incomplete at3924 pending classifications.
+These are not claimed to be3924 necessary translations: technical/public-content
+exclusions must still be reviewed individually.
+
+`work/v84-three-doc-verification.log` exits0, all historical guards and9 output
+composition/watermark tests pass. No0.84 metadata bump or publication occurred.

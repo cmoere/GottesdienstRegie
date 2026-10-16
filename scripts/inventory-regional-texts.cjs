@@ -12,7 +12,7 @@ function applyReviewedTechnicalFile(rows,filename,source,reviews){
   const review=reviews[filename];
   const digest=createHash('sha256').update(source.replace(/\r\n/g,'\n')).digest('hex');
   if(!review||review.sha256!==digest||typeof review.reason!=='string'||!review.reason.trim())return rows;
-  return rows.map(row=>({...row,status:'excluded',exclusionReason:review.reason}));
+  return rows.map(row=>({...row,status:'excluded',exclusionReason:review.reason,technicalReviewHash:review.sha256}));
 }
 
 function scanOperatorSource(filename, source) {
@@ -67,7 +67,7 @@ function scanOperatorSource(filename, source) {
       const text = ts.isTemplateExpression(node)
         ? node.head.text + node.templateSpans.map((span,index) => `{expression${index + 1}}${span.literal.text}`).join('')
         : node.text;
-      if (/\s|[äöüÄÖÜß]/u.test(text) || /^[A-Z][a-z]+$/.test(text)) {
+      if (/\s|[äöüÄÖÜß]/u.test(text) || /^[A-Z][a-z]+$/.test(text) || /^[A-ZÄÖÜ][A-ZÄÖÜ0-9_-]+$/.test(text)) {
         add(node, text, ts.isPropertyAssignment(parent) ? `property:${parent.name.getText(file)}` : ts.SyntaxKind[parent.kind]);
       }
       return;
@@ -87,6 +87,13 @@ function collectGermanResources(value, prefix = '') {
   });
   return Object.entries(value).flatMap(([key,item]) => collectGermanResources(item, prefix ? `${prefix}.${key}` : key));
 }
+
+function inventorySourceFingerprint(entries){
+  const source=entries.map(({key,text,source,context,technicalReviewHash})=>({key,text,source,context,technicalReviewHash}))
+    .sort((a,b)=>a.key<b.key?-1:a.key>b.key?1:0);
+  return createHash('sha256').update(JSON.stringify(source)).digest('hex');
+}
+
 
 function generateInventory(root) {
   const entries = [];
@@ -122,14 +129,14 @@ function generateInventory(root) {
   }
   for(const [key,text] of Object.entries(documentation.helpUI))entries.push({key:`helpUI.${key}`,text,
     source:'src/help/base.ts',context:'help-ui',status:'app-owned'});
-  return { schemaVersion:1, complete:false,
+  return { schemaVersion:1, complete:false,sourceFingerprint:inventorySourceFingerprint(entries),
     note:'Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.',
     preserveLiteral:['TESTBETRIEB','GottesdienstRegie','MAIN','LIVESTREAM','STAGE','ON AIR','OFF AIR'],
     excludedContent:['User-authored presentation content','Firebase raw records and public content','Bible and song text','Speech text','Third-party websites and operating-system-owned dialog chrome'],
     entries };
 }
 
-module.exports = { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile };
+module.exports = { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile,inventorySourceFingerprint };
 if (require.main === module) {
   const root = path.resolve(__dirname,'..');
   const result = generateInventory(root);
