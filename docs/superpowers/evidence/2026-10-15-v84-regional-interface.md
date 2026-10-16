@@ -292,3 +292,43 @@ A fresh full verification before these two data-only integrations also exits0:
 and historical guards. Lower Bavarian and Upper Palatinate are still drafts;
 25 complete documentation packs plus the remaining app-literal migration,
 layout/review and release metadata remain outstanding. No v84 publication.
+
+## Entry-level review and Windows lock regression
+
+Mixed files now support individually reviewed exact source entries. The source
+key, file, context and full text must all match; only pending `source.*` entries
+may be excluded. Canonical owned resources cannot be hidden this way. Changed
+source or an empty review reason revokes the exclusion, and review hashes are
+part of source freshness. Two new tests failed before implementation and passed
+after it; the focused inventory/coverage run passes21/21
+(`work/v84-entry-review-{red,green,final}.log`). Ten manually checked abbreviated
+SI frequency labels are excluded; group names and screenreader prose remain
+pending. Inventory remains incomplete at3905 pending candidates of5998.
+
+`work/v84-entry-review-verification.log` is a FAILED run:654/655 tests passed;
+the existing crash-recovery test hit EPERM replacing presentation-state.json.
+It is not reported as a green suite. Investigation found PresentationRepository
+used direct fs.rename, unlike the existing bounded atomicRename helper used
+elsewhere. Two deterministic regression tests first failed: transient EPERM was
+not retried, and permanent EBUSY had no bounded retry sequence. The repository
+now reuses that helper without unlinking the old destination. Targeted12/12 pass
+in `work/v84-recovery-lock-green.log`; the old state remains intact on permanent
+failure and temporary files are cleaned. This does not claim every possible
+filesystem error is solved. Fresh full verification/build are pending below.
+
+The next full run (`work/v84-storage-and-corpus-verification.log`) is also not
+green:656/657 passed. Recovery tests passed, but the whole-repository inventory
+scan exceeded the default5-second test timeout (5.588 seconds) while the desktop
+build ran concurrently. No assertions or timeout limits were weakened. The same
+inventory/recovery pair passes25/25 in isolation, with the scan taking1.688 seconds
+(`work/v84-storage-and-inventory-isolated.log`). The full suite is being repeated
+without a parallel build. `work/v84-storage-and-corpus-build.log` exits0, including
+TypeScript and native compilation, with the pre-existing large-chunk warnings.
+
+The non-concurrent full rerun exits0 in
+`work/v84-storage-and-corpus-verification-rerun.log`:167 files/657 tests,9 output
+guards and historical guards pass. The rebuilt native smoke also exits0 in
+`work/v84-storage-native-smoke.log`, including the expected unauthorized IPC
+rejection and no download/install. `git diff --check` exits0. These results verify
+the changes made here, not complete v84 coverage. The package remains0.83.0 and
+the selector manifest disabled; no push, version bump or publication occurred.

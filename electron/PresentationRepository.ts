@@ -3,6 +3,7 @@ import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import JSZip from 'jszip';
 import {sanitizeRecoveryDocument} from '../src/presentationRecovery';
+import {atomicRename} from './atomicRename';
 
 export interface PresentationSummary {
   id:string; title:string; date:string; createdAt:string; updatedAt:string;
@@ -57,7 +58,7 @@ export class PresentationRepository {
   }
   async initialize(){await Promise.all([fs.mkdir(this.presentations,{recursive:true}),fs.mkdir(this.backups,{recursive:true}),fs.mkdir(this.recovery,{recursive:true})])}
   private file(id:string){const clean=safeName(id);if(!clean)throw new Error('PRESENTATION_ID_INVALID');return path.join(this.presentations,`${clean}.json`)}
-  private async atomicWrite(target:string,value:unknown){const temporary=`${target}.${randomUUID()}.tmp`;try{await fs.writeFile(temporary,JSON.stringify(value,null,2),'utf8');await fs.rename(temporary,target)}finally{await fs.rm(temporary,{force:true}).catch(()=>{})}}
+  private async atomicWrite(target:string,value:unknown){const temporary=`${target}.${randomUUID()}.tmp`;try{await fs.writeFile(temporary,JSON.stringify(value,null,2),'utf8');await atomicRename(temporary,target)}finally{await fs.rm(temporary,{force:true}).catch(()=>{})}}
   async list(includeArchived=false,includeTrashed=false):Promise<PresentationSummary[]>{
     await this.initialize();const names=await fs.readdir(this.presentations);const result:PresentationSummary[]=[];
     for(const name of names.filter(value=>value.endsWith('.json'))){try{const doc=JSON.parse(await fs.readFile(path.join(this.presentations,name),'utf8'));const archived=doc.archived===true,trashed=doc.trashed===true;if((archived&&!includeArchived)||(trashed&&!includeTrashed))continue;result.push(this.summary(doc))}catch{}}

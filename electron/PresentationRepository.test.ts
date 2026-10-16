@@ -1,15 +1,42 @@
-import {afterEach,describe,expect,it} from 'vitest';
+import {afterEach,describe,expect,it,vi} from 'vitest';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import {PresentationRepository} from './PresentationRepository';
 
 const directories:string[]=[];
-afterEach(async()=>{await Promise.all(directories.splice(0).map(dir=>fs.rm(dir,{recursive:true,force:true})))});
+afterEach(async()=>{vi.restoreAllMocks();await Promise.all(directories.splice(0).map(dir=>fs.rm(dir,{recursive:true,force:true})))});
 async function setup(){const root=await fs.mkdtemp(path.join(os.tmpdir(),'gr-recovery-'));directories.push(root);return{root,repo:new PresentationRepository(root)}}
 const document=(title:string)=>({presentationId:'service',title,date:'2026-10-14',createdAt:'2026-10-14T08:00:00Z',updatedAt:'2026-10-14T08:00:00Z',sections:[],items:[]});
 
 describe('presentation crash recovery',()=>{
+  it('retries a transient Windows state-file lock without losing the prior valid state',async()=>{
+    const {root,repo}=await setup();await repo.setState({lastPresentationId:'before'});
+    const rename=fs.rename.bind(fs),target=path.join(root,'presentation-state.json');let attempts=0;
+    vi.spyOn(fs,'rename').mockImplementation(async(source,destination)=>{
+      if(destination===target&&attempts++===0){
+        expect(JSON.parse(await fs.readFile(target,'utf8')).lastPresentationId).toBe('before');
+        throw Object.assign(new Error('transient Windows lock'),{code:'EPERM'});
+      }
+      return rename(source,destination);
+    });
+    await expect(repo.setState({lastPresentationId:'after'})).resolves.toBe(true);
+    expect(attempts).toBe(2);
+    expect((await repo.getState()).lastPresentationId).toBe('after');
+    expect((await fs.readdir(root)).some(name=>name.endsWith('.tmp'))).toBe(false);
+  });
+  it('keeps the prior state and reports a permanent lock after bounded retries',async()=>{
+    const {root,repo}=await setup();await repo.setState({lastPresentationId:'before'});
+    const target=path.join(root,'presentation-state.json'),rename=fs.rename.bind(fs);let attempts=0;
+    vi.spyOn(fs,'rename').mockImplementation(async(source,destination)=>{
+      if(destination===target){attempts++;throw Object.assign(new Error('persistent Windows lock'),{code:'EBUSY'})}
+      return rename(source,destination);
+    });
+    await expect(repo.setState({lastPresentationId:'after'})).rejects.toMatchObject({code:'EBUSY'});
+    expect(attempts).toBe(6);
+    expect((await repo.getState()).lastPresentationId).toBe('before');
+    expect((await fs.readdir(root)).some(name=>name.endsWith('.tmp'))).toBe(false);
+  });
   it('does not offer an older checkpoint over a newer explicit save',async()=>{
     const {root,repo}=await setup();await repo.beginSession();
     await repo.save(document('Original'));
