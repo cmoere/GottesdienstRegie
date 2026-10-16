@@ -3,9 +3,22 @@ import { describe, expect, it } from 'vitest';
 
 const require = createRequire(import.meta.url);
 // The scanner must retain ambiguous text for review, never localize user data itself.
-const { scanOperatorSource, collectGermanResources } = require('../../scripts/inventory-regional-texts.cjs');
+const { scanOperatorSource, collectGermanResources, generateInventory } = require('../../scripts/inventory-regional-texts.cjs');
 
 describe('regional text source inventory', () => {
+  it('does not demand retranslating existing non-German siblings inside local language dictionaries',()=>{
+    const found=scanOperatorSource('src/fixture.ts',`const copy={de:{message:'Datei öffnen'},en:{message:'Open file'},'pt-BR':{message:'Abrir arquivo'}}; const unrelated={en:'Visible code without a German sibling'};`);
+    expect(found.map((entry:{text:string})=>entry.text)).toEqual(['Datei öffnen','Visible code without a German sibling']);
+  });
+  it('inventories assembled current help and canonical native dialogs rather than retired raw help',()=>{
+    const inventory=generateInventory(process.cwd());
+    const entries=inventory.entries as Array<{key:string;text:string;status:string}>;
+    expect(entries.filter(entry=>entry.key.startsWith('native.'))).toHaveLength(33);
+    expect(entries.find(entry=>entry.key==='help.Erste Schritte.body')?.text).toContain('## ');
+    expect(entries.find(entry=>entry.key==='helpUI.title')?.text).toBe('Hilfe');
+    expect(entries.find(entry=>entry.key==='native.updateInstallOnExit')?.text).toBe('Beim Beenden installieren');
+    expect(inventory.complete).toBe(false);
+  });
   it('recognizes the real const-asserted German dictionary rather than losing its stable keys', () => {
     expect(scanOperatorSource('src/i18n.ts', "const de = {close:'SCHLIESSEN'} as const;"))
       .toEqual([expect.objectContaining({key:'ui.close',text:'SCHLIESSEN',status:'app-owned'})]);

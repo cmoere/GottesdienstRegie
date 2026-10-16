@@ -8,15 +8,21 @@ const inventory={complete:true,entries:[
   {key:'ui.close',text:'Schließen',status:'app-owned'},
   {key:'native.error',text:'Fehler: {detail}',status:'app-owned'},
   {key:'help.Start.title',text:'Erste Schritte',status:'app-owned'},
+  {key:'helpUI.title',text:'Hilfe',status:'app-owned'},
   {key:'release.versions[0.83].builds[0.83.0].title',text:'Ansagen',status:'app-owned'},
 ]};
 const packs={ruhr:{id:'ruhr',ui:{close:'Zumachen'},native:{error:'Fehler: {detail}'}}};
 const docs={ruhr:{
   help:{Start:{title:'Erste Schritte'}},
+  helpUI:{title:'Hilfe'},
   releases:{'versions[0.83].builds[0.83.0]':{title:'Ansagen'}},
 }};
 
 describe('v84 release resource coverage gate',()=>{
+  it('requires translated help chrome independently of complete articles',()=>{
+    expect(checkRegionalCoverage({regions,inventory,packs,docs:{ruhr:{...docs.ruhr,helpUI:{}}}}))
+      .toContain('ruhr: helpUI.title missing-text');
+  });
   it('accepts a reviewed complete inventory with every required UI, native, help and release field',()=>{
     expect(checkRegionalCoverage({regions,inventory,packs,docs})).toEqual([]);
   });

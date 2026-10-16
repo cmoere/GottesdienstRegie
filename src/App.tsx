@@ -1,5 +1,7 @@
 import {getHelpCatalog} from './help';
 import {startNativeSelectionSync} from './regional/nativeSelectionSync';
+import {regionalDocumentationRuntime} from './regional/documentationRuntime';
+import {indexReleaseTextObjects,localizeReleaseText} from './regional/releaseIdentity';
 import {sanitizeRecoveryDocument} from './presentationRecovery';
 import {initializePresentationStartup} from './presentationStartup';
 import {upcomingMedia,useMediaWarmup,type WarmupAsset} from './mediaWarmup';
@@ -4580,15 +4582,17 @@ function versionLabel(version: string) {
     : `Version ${version}`;
 }
 function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
-  const { language, locale } = useI18n(),
+  const { language, locale, germanRegion } = useI18n(),
     [data, setData] = useState<ReleaseFile | null>(null);
+  const releaseIdentity=useMemo(()=>indexReleaseTextObjects(data),[data]);
+  const regionalReleaseTexts=regionalDocumentationRuntime.get({language,germanRegion})?.releases;
   useEffect(() => {
     void fetch("./releases.json")
       .then((response) => response.json())
       .then(setData);
   }, []);
   const local = (value: ReleaseText) =>
-      value[language] ?? value.en ?? value.de ?? "",
+      localizeReleaseText(value,language,releaseIdentity.paths.get(value),regionalReleaseTexts),
     categories: Record<string, string> = {
       new: language === "de" ? "Neu" : "New",
       improved: language === "de" ? "Verbessert" : "Improved",
@@ -6596,8 +6600,8 @@ function roleLabel(t: Translator, role: string) {
 }
 
 function HelpModal({ close }: { close: () => void }) {
-  const { t, language } = useI18n();
-  const catalog = getHelpCatalog(language);
+  const { t, language, germanRegion } = useI18n();
+  const catalog = getHelpCatalog(language,germanRegion);
   const [query,setQuery]=useState('');
   const [selected,setSelected]=useState(()=>localStorage.getItem('gottesdienstregie.help-topic')||'Erste Schritte');
   const article=catalog.topics.find(topic=>topic.id===selected)??catalog.topics[0];

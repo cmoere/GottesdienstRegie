@@ -24,6 +24,11 @@ function scanOperatorSource(filename, source) {
   }
   function visit(node) {
     if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && dictionaryNames.has(node.name.text)) return;
+    if(ts.isPropertyAssignment(node)&&ts.isObjectLiteralExpression(node.parent)){
+      const propertyName=node.name.getText(file).replace(/^['"]|['"]$/g,'');
+      const hasGermanSibling=node.parent.properties.some(property=>ts.isPropertyAssignment(property)&&property.name.getText(file).replace(/^['"]|['"]$/g,'')==='de');
+      if(hasGermanSibling&&(dictionaryNames.has(propertyName)||propertyName==='pt-BR'))return;
+    }
     if (ts.isImportDeclaration(node) || ts.isExportDeclaration(node) || ts.isTypeNode(node)) return;
     let initializer = ts.isVariableDeclaration(node) ? node.initializer : undefined;
     while (initializer && (ts.isAsExpression(initializer) || ts.isSatisfiesExpression(initializer) || ts.isParenthesizedExpression(initializer))) initializer = initializer.expression;
@@ -85,7 +90,7 @@ function generateInventory(root) {
       if (fs.statSync(absolute).isDirectory()) { walk(absolute); continue; }
       if (!/\.tsx?$/.test(name) || /\.(test|spec|d)\.tsx?$/.test(name) || relative.includes('/test/') || relative.startsWith('src/regional/')) continue;
       // Imported translated help is inventoried separately from application source.
-      if (/^src\/help\/(english|enhancementsEnglish|localesWest)\.ts$/.test(relative)) continue;
+      if (relative.startsWith('src/help/')) continue;
       entries.push(...scanOperatorSource(relative,fs.readFileSync(absolute,'utf8')));
     }
   }
@@ -94,13 +99,20 @@ function generateInventory(root) {
   const releases = JSON.parse(fs.readFileSync(path.join(root,'public/releases.json'),'utf8'));
   for (const row of collectGermanResources(releases)) entries.push({ ...row, key:`release.${row.key}`,
     source:'public/releases.json', context:'release-history', status:'app-owned' });
-  const help = JSON.parse(fs.readFileSync(path.join(root,'src/help/translated.json'),'utf8')).de;
+  const {getGermanDocumentationSource,loadLocalDataModule}=require('./export-regional-corpus.cjs');
+  const documentation=getGermanDocumentationSource(root);
+  const {nativeBaseTemplates}=loadLocalDataModule(root,'shared/regional/nativeBase.ts');
+  for(const [key,text] of Object.entries(nativeBaseTemplates))entries.push({key:`native.${key}`,text,
+    source:'shared/regional/nativeBase.ts',context:'native-canonical',status:'app-owned'});
+  const help = documentation.help;
   for (const [id,article] of Object.entries(help ?? {})) {
     for (const field of ['title','body']) if (typeof article[field] === 'string') {
-      entries.push({ key:`help.${id}.${field}`, text:article[field], source:'src/help/translated.json',
-        context:'help-base', status:'app-owned' });
+      entries.push({ key:`help.${id}.${field}`, text:article[field], source:'src/help/base.ts',
+        context:'help-assembled', status:'app-owned' });
     }
   }
+  for(const [key,text] of Object.entries(documentation.helpUI))entries.push({key:`helpUI.${key}`,text,
+    source:'src/help/base.ts',context:'help-ui',status:'app-owned'});
   return { schemaVersion:1, complete:false,
     note:'Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.',
     preserveLiteral:['TESTBETRIEB','GottesdienstRegie','MAIN','LIVESTREAM','STAGE','ON AIR','OFF AIR'],

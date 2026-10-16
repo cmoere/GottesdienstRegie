@@ -1,4 +1,5 @@
 const {spawn}=require('node:child_process');
+if(require('./check-version84.cjs').runRegionalPublicationGate().length)throw new Error('REGIONAL_RELEASE_INCOMPLETE');
 const args=process.argv.slice(2);
 if(!args.length)throw new Error('electron-builder arguments required');
 const child=spawn('npx',['electron-builder',...args],{env:process.env,stdio:['inherit','pipe','pipe'],shell:process.platform==='win32'});

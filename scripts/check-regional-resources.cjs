@@ -42,12 +42,12 @@ function checkRegionalCoverage({regions,inventory,packs,docs}) {
     if (typeof entry.text!=='string'||!entry.text.trim()) { issues.push(`inventory: ${entry.key} has empty source text`); continue; }
     if (entry.key.startsWith('ui.')) base.ui[entry.key.slice(3)]=entry.text;
     else if (entry.key.startsWith('native.')) base.native[entry.key.slice(7)]=entry.text;
-    else if (/^(help|release)\./.test(entry.key)) documentation[entry.key]=entry.text;
+    else if (/^(help|helpUI|release)\./.test(entry.key)) documentation[entry.key]=entry.text;
     else issues.push(`inventory: ${entry.key} has no resource namespace`);
   }
   if (!Object.keys(base.ui).length) issues.push('inventory: missing ui corpus');
   if (!Object.keys(base.native).length) issues.push('inventory: missing native corpus');
-  for (const category of ['help','release']) {
+  for (const category of ['help','helpUI','release']) {
     if (!Object.keys(documentation).some(key=>key.startsWith(`${category}.`))) issues.push(`inventory: missing ${category} corpus`);
   }
   for (const region of regions) {
@@ -56,7 +56,7 @@ function checkRegionalCoverage({regions,inventory,packs,docs}) {
     else for (const issue of validateRegionalPack(pack,region.id,base)) issues.push(`${region.id}: ${issue.path} ${issue.code}`);
     const doc=own(docs,region.id)?docs[region.id]:null;
     if (!record(doc)) { issues.push(`${region.id}: missing documentation pack`); continue; }
-    const translated={...flatten(doc.help,'help'),...flatten(doc.releases,'release')};
+    const translated={...flatten(doc.help,'help'),...flatten(doc.helpUI,'helpUI'),...flatten(doc.releases,'release')};
     for (const [key,source] of Object.entries(documentation)) {
       if (!own(translated,key)||!translated[key].trim()) { issues.push(`${region.id}: ${key} missing-text`); continue; }
       const problem=validateRegionalPack({id:region.id,ui:{text:translated[key]},native:{}},region.id,{ui:{text:source},native:{}});

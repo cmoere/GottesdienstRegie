@@ -37,7 +37,7 @@ function loadLocalDataModule(root,entry){
 
 function getGermanDocumentationSource(root){
   root=path.resolve(root);
-  const catalog=loadLocalDataModule(root,'src/help/index.ts').getHelpCatalog('de');
+  const catalog=loadLocalDataModule(root,'src/help/base.ts').getHelpCatalog('de');
   const help=Object.fromEntries(catalog.topics.map(article=>[article.id,{
     title:article.title,body:article.body,...(article.related?{related:[...article.related]}:{}),
   }]));
@@ -45,7 +45,7 @@ function getGermanDocumentationSource(root){
   return {help,helpUI:{...catalog.ui},releases:Object.fromEntries(collectGermanResources(releases).map(row=>[row.key,row.text]))};
 }
 
-module.exports={getGermanDocumentationSource};
+module.exports={getGermanDocumentationSource,loadLocalDataModule};
 if(require.main===module){
   const root=path.resolve(__dirname,'..');
   const source=getGermanDocumentationSource(root);

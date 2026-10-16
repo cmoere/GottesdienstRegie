@@ -144,3 +144,36 @@ large-chunk warnings, copying31 native assets. Full verification log:
 The V72 source guard now follows the localized four-action prompt and verifies
 the German canonical labels; it first failed on the old literal assertion.
 No v84 version bump, push or publication occurred.
+
+## Lazy documentation integration and publication safety
+
+The help data module is now separate from its regional wrapper. Existing article
+IDs, screenshots and related-topic identities stay intact. Help and release-note
+views subscribe to validated documentation packs. Release objects are indexed by
+version/section identity; unknown future release content remains its source text.
+Large documentation resources remain separate lazy chunks.
+
+The authoring inventory now covers current assembled help and native canonical
+templates. Existing non-German dictionary siblings are not counted as new German
+source text. A regression test first failed with those false candidates and then
+passed. The candidate inventory still has3,874 review-required entries and is
+explicitly incomplete; no blanket classification was applied.
+
+Installer and CI packaging now enforce the full v84 resource gate for v84 and
+later versions. Current package0.83.0 is explicitly not a v84 certification.
+Both missing interface classifications and incomplete documentation block v84.
+
+Verification: `npm run verify:release` exit0 in
+`work/v84-docintegration-final-verification.log`; desktop build exit0 in
+`work/v84-docintegration-build.log` (known large-chunk warnings remain).
+`npm run test:web` passed desktop/tablet/phone3/3 in
+`work/v84-docintegration-web.log`. One earlier full run encountered an EPERM
+rename on the recovery test's own temporary state file, followed by failed temp
+cleanup. The isolated recovery tests10/10 and the complete rerun passed without
+code changes. This is recorded as an intermittent Windows file-lock observation,
+not claimed as fixed.
+
+Complete documentation remains outstanding. Bavarian, Ruhr and Bielefeld have63
+help articles each but partial release histories; the other28 complete document
+packs are absent. The strict source/documentation gates remain nonzero. No v84
+version bump, push, installer publication or native-smoke completion is claimed.
