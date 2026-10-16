@@ -9,7 +9,7 @@ Eine vorhandene Übersetzungsdatei allein bedeutet keine fertige Sprachvariante.
 
 Nach der Freigabe: Öffne **Einstellungen → Allgemein → Sprache**, wähle Deutsch
 und anschließend **Deutsche Regionalvariante**. Die Beschriftung dieses Feldes
-kann selbst regional formuliert sein. Zur Auswahl gehören die31 registrierten
+kann selbst regional formuliert sein. Zur Auswahl gehören die 31 registrierten
 Varianten und **Hochdeutsch** als Standard. Die Auswahl wird auf diesem Gerät
 gespeichert. Mit Hochdeutsch lässt sie sich wieder zurücksetzen. Andere
 Basissprachen bleiben unverändert; eine gespeicherte deutsche Regionalvariante
@@ -42,7 +42,7 @@ constitute a finished regional edition.
 
 After release: open **Settings → General → Language**, select German and then
 **German regional variant**. The field label itself may use regional wording.
-The choices are the31 registered variants plus **Hochdeutsch** (Standard German).
+The choices are the 31 registered variants plus **Hochdeutsch** (Standard German).
 The choice is saved on this device; select Hochdeutsch to reset it. Other base
 languages remain unchanged. A saved German variant is neither applied to another
 base language nor discarded when switching languages.
