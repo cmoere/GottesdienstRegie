@@ -493,3 +493,45 @@ Draft preservation only: Badisch/alemannisch63/4/360 and Pfälzisch45/4/0 are
 saved in Git separately after the workers' usage-limit stop. They remain
 incomplete and are rejected by the complete-document runtime/gate; neither is
 advertised as ready. No translation was fabricated for the missing entries.
+
+## Additional regional texts: Pfälzisch and Südbadisch
+
+The next request was to continue the languages. Translation workers still report
+usage-limit errors; no worker was resumed or replaced. Root authored the texts
+directly, without an online translator, model/account switch or word-replacement
+translation. Only regional JSON documentation changes; runtime code, preferences,
+public outputs, audio and Firebase are untouched.
+
+Pfälzisch received its18 missing help articles (now63/63), including system,
+offline/sync, updates, keyboard/UI, remote, support, rights and storage guidance.
+The first60 historical fields were added, covering the supplied v0.83–v0.80
+source prefix. Release limitations, numeric parameters, paragraph boundaries and
+technical identifiers are retained; the v0.83 speech preparation is explicitly
+not described as functioning automated speech.
+
+Südbadisch–hochalemannisch has a new draft with6 full help articles and4 help
+labels: quick start, song translations, screensaver protection, installation,
+development/feedback and first steps. Related-topic IDs are copied unchanged
+from the canonical source rather than translated as keys.
+
+Independent corpus check reports no nonmissing validation errors for any saved
+pack; focused documentation/runtime/help tests39/39 PASS
+(`work/v84-more-help-focused.log`). Pfälzisch63/4/60 and Südbadisch6/4/0 remain
+incomplete against63/4/1446. Ten full packs remain ten; no partial pack is counted
+complete. Full verification pending in `work/v84-more-languages-verification.log`.
+No linguistic native-speaker certification or v84 release claim.
+
+Fresh whole suite169 files/675 tests PASS, unchanged historical guards and9
+output tests PASS (`work/v84-more-languages-verification.log`). Direct two-worker
+run took209.05s; no timeout or assertions changed. Actual documentation-store
+boundary checks for both saved partial packs return loaded:false/exposed:false
+(`work/v84-partial-language-boundary.log`), retaining the strict completeness
+rule even though Pfälzisch help is complete. Desktop rebuild pending in
+`work/v84-more-languages-build.log`; no compiled result claimed yet.
+
+Desktop build exits0, including the new lazy Südbadisch document chunk and31
+native JSON assets; existing large-chunk warnings remain. Diff-check PASS.
+This continuation changes documentation data only; no new native/browser-smoke
+result is claimed beyond the previous verified unchanged runtime. The draft
+checkpoint is committed locally, not enabled as a complete language package.
+Package0.83.0 and disabled readiness manifest remain unchanged; no publication.

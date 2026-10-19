@@ -1,0 +1,60 @@
+{
+  "id": "south-baden-alemannic",
+  "help": {
+    "SCHNELLSTART": {
+      "title": "SCHNÄLL AAFANGE",
+      "body": "Fang mit ere neue Präsentation aa, verknüpf die passendi Veranstaltung, bau de Ablauf uf un richt unter Iistellige zerscht Displays un Audioausgäng ii. Prüef Medie un Vorschau, mach Preflight un start erscht dänn ON AIR. D Unterseite füehre di Schritt für Schritt dur alli Pünkt.\n\nMach vor dim erschte Gottesdienscht e churzi Prob: Leg e Präsentation aa, verknüpf s richtige Ereignis, füeg e Lied un e Bild dezue un speicher alles. Mach jedi Folie in de Vorschau uf un prüef, ob d Reihefolg zum Plan vom Team passt.\n\nSchließ de Beamer aa un identifizier d Displays, bevor du MAIN zueteilsch. Prob de Ton über de vorgsehene Saalausgang, mach Preflight un start bewusst ON AIR. Gang zwei Folie vor un beend d Prob mit OFF AIR. So prüefsch de ganze Wäg vo de Vorbereitung bis zur tatsächliche Technik fürs Publikum.\n\n## So gohsch praktisch vor\n\n1. Klär mit de Gottesdienschtleitig Ablauf, Zuständigkeit un s Zeiche zum Wiiterschalte.\n2. Bereit e churzi Präsentation mit Begrüessig, Gmeindlied un Bibelläsig vor.\n3. Identifizier MAIN un prob d Ausgabe im deutlich kennzeichnete Testbetrieb.\n\n## Prob un Fehler behebe\n\nProb au e Video, e bewussti Pause un s Änd vom Gottesdienscht. Entscheidend isch s tatsächliche Beamerbild, nit d Auswahl im Editor. Halt d gspeichereti Präsentation lokal bereit un vereinbar mit em Team en Ersatz für Netzinhalte, wo nit erreichbar sin.",
+      "related": [
+        "Erste Schritte",
+        "Preflight"
+      ]
+    },
+    "Songübersetzungen": {
+      "title": "Lieder übersetze",
+      "body": "Mach de Inhaltseditor vo eme Song uf un füeg unter jedem Textabschnitt e Übersetzig ii. Wähl d Sproch un gib bloß d Übersetzig vo däm Abschnitt ii. Wiederholige vom gliiche Refrain teile sich d Übersetzig; leg zum Speichere kei zweite Vers aa.\n\nWähl in de Präsentationsiistellige s Layout für d Liedübersetzig: unter em Original, abwächslendi Ziile, zwei Spalte oder bloß d Übersetzig. Bi abwächslende Ziile muess d passendi Reihefolg erhalte bliibe. Prüef langi Wörter in de Vorschau un kontrollier jedi Folie uf Überlauf.\n\nFählt e Übersetzig, bliibt s Original sichtbar. Teil langi übersetzti Abschnitt vo Hand uf, damit Original un Übersetzig als Paar zämmebliibe. De gspeichereti Text ghört zur Präsentation; s Herunterlade oder Entferne vo eme Übersetzigsmodell ersetzt en nit.\n\n## So gohsch praktisch vor\n\n1. Vereinbar mit de Lobpreisleitig, weli Sproche brucht wärde.\n2. Ordne d Übersetzig em richtige Liedabschnitt zue, au bi wiederholte Refrains.\n3. Prüef d längscht zweisprochigi Folie im verwendete Ausgabelayout.\n\n## Prob un Fehler behebe\n\nÜbersetzige helfe bim Mitmache, ersetze aber weder d Prüefig vo theologische Ussage no d nötige Nutzigsrächt. Prob au en nit übersetzte Vers: De Originaltext muess wiiter brauchbar bliibe. Korrigier Ziilepaare, wo nit zämmepasse, bevor du abwächslendi Ziiledarstellung wählsch.",
+      "related": [
+        "Songs",
+        "Vorschau"
+      ]
+    },
+    "Bildschirmschoner": {
+      "title": "Schutz vorm Bildschirmschoner",
+      "body": "Schalt in de allgemeine Iistellige d Option ii, wo de Bildschirmschoner un s automatische Abschalte vo de Anzeige verhindert, solang GottesdienstRegie offe isch. Des hilft bi Predigte oder Läsige, wenn niemer d Muus aafasst. D Auswahl wird für dä Rechner gspeichert.\n\nProb mit ere stehende Folie länger als d üeblichi Abschaltziit. De Sleep-Timer vom Beamer, s Zueklappe vom Laptop, manuelles Sperre un Richtlinie vo de Organisation chönne s Bild trotzdem unterbräche. Prüef des eigens. Bim Zuemache vo de Anwendung wird d Anzeigeanforderig freigäh. De dauerhafte Energieplan vom Betriebssystem wird nit umgschriebe.\n\n## So gohsch praktisch vor\n\n1. Schalt de gwünschte Displayschutz vor de Prob ii.\n2. Lass e Läsigs- oder Predigtfolie länger stoh als d üeblichi Abschaltziit.\n3. Kontrollier, dass Beamer un Signalwäg iigschaltet bliibe.\n\n## Prob un Fehler behebe\n\nD Anwendung cha nit jedi Beamereinstellung, Aktion bim Zueklappe oder verwalteti Windows-Richtlinie überstüüre. Prüef d tatsächliche Saaltechnik, ohne Organisationsrichtlinie unüberlegt z ändere. Noch em Zuemache soll d normali Energieverwaltig wieder gelte. Lass kei Live-Ausgabe bloß zum Wachhalte vom Rechner laufe.",
+      "related": [
+        "Virtual Screens & Displays",
+        "Einstellungen"
+      ]
+    },
+    "Installation & Nutzungsbedingungen": {
+      "title": "Installation un Bedingige",
+      "body": "Lies d Bedingige im Windows-Installationsassistent un stimm ihne ausdrücklich zue, wenn du e interaktivi Installation wiiterfüehre willsch. Bisch nit iiverstande, mach de Assistent zue. D vollständige Bedingige bliibe noch de Installation über d Hilf zugänglich.\n\nInstallier Updates außerhalb vom Gottesdienscht. Sicher zerscht wichtigi Präsentatione un kontrollier vor de nächschte Prob d installierte Version, Bildschirmzueteilige un Audioroute. Bi unbeaufsichtigte Installatione wird d interaktivi Zustimmigsseite nit zeigt. D Annahm vo de Softwarebedingige git kei Rächt aa Lieder, Fotos, Videos oder Schriftarte, wo in dinere Präsentation verwendet wärde.\n\n## So gohsch praktisch vor\n\n1. Lad de Installer vo de überprüefte Veröffentlichigsquell un beend laufendi Gottesdienschtusgabe geordnet.\n2. Lies d Installationsbedingige un entscheid, ob du se aannimmsch.\n3. Kontrollier noch em Update Version un gspeichereti Bildschirmzueteilig.\n\n## Prob un Fehler behebe\n\nD Installation git kei Rächt aa Bibelübersetzige, Lieder, Bilder oder Radiosendige. Sicher wichtigi Präsentatione getrennt vom Installer. Meldet en Vorgang e gsperrti Datei, beend bloß de eindeutig dezueghörige Prozess. Lösch nie es vollständigs Benutzerprofil, bloß zum Umgoh vo ere Dateisperre.",
+      "related": [
+        "Updates",
+        "Nutzungsbedingungen"
+      ]
+    },
+    "Minimum Viable Product (MVP)": {
+      "title": "Entwicklig un Rückmeldige",
+      "body": "D Software isch als Minimum Viable Product (MVP) entwickelt worde.\n\nDes heisst: Si isch als erschte minimal funktionsfähige Version veröffentlicht worde, um Nutzerrückmeldige z sammle un d Wiiterentwicklig direkt aa de Bedürfniss vo de Nutzerinne un Nutzer uszrichte. So solle Fehlentwicklige vermiede wärde.\n\nDrum freue mir üs über jedi Rückmeldig, damit mir d Software so programmiere chönne, wie ihr se bruchet.\n\nGottesdienstRegie het als Minimum Viable Product aagfange: Nützliche Kernabläuf sin bereitgstellt worde, damit tatsächliche Bediener d Verbesserige mitbestimme chönne. Au e sichtbari Funktion muess mit dinere eigene Ausrüstig un dine Gottesdienschtinhalte probt wärde.\n\nBeschrieb bi eme Verbesserungsvorschlag dini Ufgab, d jetzige Schritt un s gwünschte Ergebnis. Erklär zum Biispiel, weli wiederholti Aktion d Liedvorbereitung langsam macht. Nenn bi eme Fehler Version un Schritt zum Nochstelle für de Support. Anmeldedate un privati Gmeindinformatione ghöre nit in de Bericht.\n\n## So gohsch praktisch vor\n\n1. Unterscheid de nötige Gottesdienschtablauf vo optionale externe Integrationen.\n2. Prob d tatsächlich benötigte Funktione, au d letscht Nachprogrammfolie.\n3. Speicher e eifachi Ersatzabfolg für dä Gottesdienscht.\n\n## Prob un Fehler behebe\n\nEn nit verfüegbare optionaler Anbieter muess e funktionierendi lokali Präsentation nit unbrauchbar mache. Richt churz vor em Iiträffe vo de Bsuecher kei ungeprüefti Integration ii. Nenn bi Rückmeldige s genau fehlende Verhalte un d installierte Version, damit mer e bekannti Einschränkig vo eme nochstellbare Fehler unterscheide cha.",
+      "related": [
+        "Fehlerbehebung",
+        "Versionsinformationen"
+      ]
+    },
+    "Erste Schritte": {
+      "title": "Erschti Schritt",
+      "body": "Leg e Präsentation aa oder mach eini uf un bestätig ihre Titel, Veranstaltung un geplanti Startziit. Stell Lieder, Läsige, Aakündigige un Medie in dere Reihefolg zämme, wo s Team brucht. Mach jedes Element in de Vorschau uf, au d letscht Folie un s Änd vo jedem Video.\n\nTeil MAIN de Publikumsanzeige zue un prüef STAGE- un LIVESTREAM-Ausgabe jede für sich. Prob Medieton un Bediener-Kopfhörer uf eigene Wäge. Mach Preflight un beheb fehlendi Medie oder Textüberlauf, bevor du ON AIR startisch.\n\nSpeicher un prüef de Synchronisierungsstatus, bevor du d Präsentation an en andere Bediener übergisch. Vorbereitete Inhalte bearbeite un in de Vorschau prüefe; d Live-Ausgabe ändersch bloß über Live-Aktione. Halt e bekannt brauchbari Folie für e unerwarteti Pause bereit.\n\n## So gohsch praktisch vor\n\n1. Leg d Gottesdienschtpräsentation aa un gib ihre en Name; verknüpf d tatsächlich passendi Gmeindveranstaltung.\n2. Ergänz d Inhalte in de richtige Abschnitt un speicher.\n3. Prob d letscht Gottesdienschtfolie, de Übergang ins Nachprogramm un OFF AIR.\n\n## Prob un Fehler behebe\n\nAuswahl, Vorschau un Live-Inhalt sin verschiedeni Zuständ. De automatische Raumhinweis brucht e uflösbari Veranstaltung un en interne Raum. Testszenarie zeige d Alternative, ohne tatsächliche Veranstaltungsdate umzschriibe. Plan gnueg Ziit ii, um Lieder un Bibelstelle mit de verantwortliche Persone inhaltlich z prüefe.",
+      "related": [
+        "Veranstaltung verknüpfen",
+        "Pre-Service & Post-Service"
+      ]
+    }
+  },
+  "helpUI": {
+    "title": "Hilf",
+    "searchPlaceholder": "Hilfetheme durchsueche …",
+    "noResults": "Kei passende Hilfetheme gfunde.",
+    "screenshotLabel": "Biispielansicht"
+  },
+  "releases": {}
+}
