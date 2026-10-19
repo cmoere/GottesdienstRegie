@@ -1,6 +1,11 @@
 {
   "id": "east-frisian",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeentedaten online · tolest verneeit {time}",
+    "communityDataOnlineLoading": "Gemeentedaten online · worden laden",
+    "communityDataOfflineUpdated": "Gemeentedaten offline · leste Stand {time}",
+    "communityDataOfflineUnknown": "Gemeentedaten offline · leste Stand nich bekannt",
+    "communityDataUnavailable": "Gemeentedaten sünd nich verfügbar",
     "germanRegionalVariant": "Düütske Regionalvariant",
     "windowMinimize": "Finster lütter maken",
     "windowExitFullscreen": "Vullbild verlaten",

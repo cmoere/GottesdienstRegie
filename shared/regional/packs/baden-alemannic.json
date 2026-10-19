@@ -1,6 +1,11 @@
 {
  "id":"baden-alemannic",
  "ui":{
+    "communityDataOnlineUpdated": "Gmeindedate online · zletscht aktualisiert {time}",
+    "communityDataOnlineLoading": "Gmeindedate online · werde glade",
+    "communityDataOfflineUpdated": "Gmeindedate offline · letschter Stand {time}",
+    "communityDataOfflineUnknown": "Gmeindedate offline · letschter Stand nit bekannt",
+    "communityDataUnavailable": "Gmeindedate sin nit verfügbar",
    "germanRegionalVariant": "Ditschi Regionalvariante",
     "windowMinimize": "Fenschter kleiner mache",
     "windowExitFullscreen": "Vollbild verlasse",

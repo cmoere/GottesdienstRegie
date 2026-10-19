@@ -1,6 +1,11 @@
 {
  "id":"palatine",
  "ui":{
+    "communityDataOnlineUpdated": "Gemeindedate online · zuletscht aktualisiert {time}",
+    "communityDataOnlineLoading": "Gemeindedate online · werre gelade",
+    "communityDataOfflineUpdated": "Gemeindedate offline · letschter Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedate offline · letschter Stand unbekannt",
+    "communityDataUnavailable": "Gemeindedate sin net verfügbar",
    "germanRegionalVariant": "Deitschi Regionalvariant",
     "windowMinimize": "Fenschter klääner mache",
     "windowExitFullscreen": "Ausm Vollbild raus",

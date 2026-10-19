@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": false,
-  "sourceFingerprint": "d468d609edaa293cc59e9cc90cf74581dbde9f0045ac36697b39d4f9c82ce9f2",
+  "sourceFingerprint": "278d95f4d02914bbecff6b3f7414004e4afe48f786af0c5d89e59b5c8686312c",
   "note": "Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -9944,30 +9944,6 @@
       "source": "src/ChangeHistoryWindow.tsx",
       "line": 19,
       "context": "jsx-text:p",
-      "status": "review-required"
-    },
-    {
-      "key": "source.db52e15605ae10489425.1",
-      "text": "Gemeindedaten online · {expression1}",
-      "source": "src/CommunityDataStatus.tsx",
-      "line": 4,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.6d9a4eba62b33ec4d8e4.1",
-      "text": "Gemeindedaten offline · letzter Stand {expression1}",
-      "source": "src/CommunityDataStatus.tsx",
-      "line": 4,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.ef82e9dbc4319e02e319.1",
-      "text": "Gemeindedaten nicht verfügbar",
-      "source": "src/CommunityDataStatus.tsx",
-      "line": 4,
-      "context": "ConditionalExpression",
       "status": "review-required"
     },
     {
@@ -46154,6 +46130,41 @@
       "text": "Der erste hier archivierte Stand umfasst Grundsystem, Benutzeroberfläche und Gemeindekonto. Er bildet den Ausgangspunkt der weiteren Entwicklung. Die Versionsnummer lautet 0.1.0; eine veröffentlichte Version 1.0 ist in diesem Archiv bislang nicht enthalten.",
       "source": "public/releases.json",
       "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.communityDataOnlineUpdated",
+      "text": "Gemeindedaten online · zuletzt aktualisiert {time}",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.communityDataOnlineLoading",
+      "text": "Gemeindedaten online · werden geladen",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.communityDataOfflineUpdated",
+      "text": "Gemeindedaten offline · letzter Stand {time}",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.communityDataOfflineUnknown",
+      "text": "Gemeindedaten offline · letzter Stand unbekannt",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.communityDataUnavailable",
+      "text": "Gemeindedaten nicht verfügbar",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
       "status": "app-owned"
     },
     {

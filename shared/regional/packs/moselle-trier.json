@@ -1,6 +1,11 @@
 {
   "id": "moselle-trier",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeindedaten online · zulescht aktualisiert {time}",
+    "communityDataOnlineLoading": "Gemeindedaten online · ginn gelueden",
+    "communityDataOfflineUpdated": "Gemeindedaten offline · leschte Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedaten offline · leschte Stand net bekannt",
+    "communityDataUnavailable": "Gemeindedaten sinn net verfügbar",
     "germanRegionalVariant": "Däitsch Regionalvariant",
     "windowMinimize": "Fënster klenger maachen",
     "windowExitFullscreen": "Vollbild verloossen",

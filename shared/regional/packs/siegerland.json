@@ -1,6 +1,11 @@
 {
   "id": "siegerland",
   "ui": {
+    "communityDataOnlineUpdated": "Gemennedate online · zuletzt erneuert {time}",
+    "communityDataOnlineLoading": "Gemennedate online · wern gelade",
+    "communityDataOfflineUpdated": "Gemennedate offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gemennedate offline · letzter Stand net bekannt",
+    "communityDataUnavailable": "Gemennedate sinn net verfügbar",
     "germanRegionalVariant": "Dütsche Regionalvariant",
     "windowMinimize": "Fänster klänner mache",
     "windowExitFullscreen": "Vollbild verlosse",

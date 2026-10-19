@@ -1,6 +1,11 @@
 {
   "id": "bavarian-lower",
   "ui": {
+    "communityDataOnlineUpdated": "Gmoanddaten online · zletzt erneiert {time}",
+    "communityDataOnlineLoading": "Gmoanddaten online · wern glodn",
+    "communityDataOfflineUpdated": "Gmoanddaten offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gmoanddaten offline · letzter Stand ned bekannt",
+    "communityDataUnavailable": "Gmoanddaten san ned verfügbar",
     "germanRegionalVariant": "Deitsche Regionalvariant",
     "windowMinimize": "Fensta kloa macha",
     "windowExitFullscreen": "Ausm Voibild aussi",

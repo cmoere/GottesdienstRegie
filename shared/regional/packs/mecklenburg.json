@@ -1,6 +1,11 @@
 {
   "id": "mecklenburg",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeindedaten online · tauletzt verniegt {time}",
+    "communityDataOnlineLoading": "Gemeindedaten online · warden laden",
+    "communityDataOfflineUpdated": "Gemeindedaten offline · letzten Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedaten offline · letzten Stand nich bekannt",
+    "communityDataUnavailable": "Gemeindedaten sünd nich verfügbar",
     "germanRegionalVariant": "Düütsche Regionalvariant",
     "windowMinimize": "Finster lütter maken",
     "windowExitFullscreen": "Vullbild verlaten",

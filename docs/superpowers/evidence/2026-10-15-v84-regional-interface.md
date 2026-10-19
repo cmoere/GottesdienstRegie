@@ -440,3 +440,51 @@ Inventory now6000 candidates/3708 pending; focused inventory/coverage22/22 PASS
 after this data-only review (`work/v84-output-source-review.log`). The previous
 full672-test pass and build precede this classification-only update. Completeness
 remains false and public v84 release remains blocked by unfinished scope.
+
+## Further continuation: ten full packs and connection-status localization
+
+All three translation-only workers stopped at their usage limit. Saved drafts
+remain intact: Badisch63 help/4 labels/360 history, Pfälzisch45 help/4 labels/0
+history; Ostfränkisch was63/4/1310. No replacement worker/account/model was used.
+Root authored its136 missing historical entries directly, retaining all previous
+translations. Independent strict validation reports complete:true/issues:[];
+the actual offline loader test was RED on the partial pack and GREEN10/10 after
+completion (`work/v84-ten-doc-{red,green}.log`). Ten full packs, not31.
+
+CommunityDataStatus now localizes only its operator copy, with five separate
+states (online timestamp/loading, offline known/unknown timestamp, unavailable).
+All31 short packs and all17 existing base languages have explicit authored
+templates. Timestamp formatting remains de-DE/Europe/Berlin; connection data is
+not mutated and no Firebase/audio/output logic was changed. Two real-component
+tests failed before implementation and pass after it; the previous German test
+explicitly sets its German fixture rather than relying on browser defaults.
+Focused19/19 PASS, including ten full offline packs and all-language coverage:
+`work/v84-community-status-{red,green}.log`,
+`work/v84-community-and-ten-doc-focused.log`.
+
+Short packs now209 UI/33 native keys. Current inventory6002 candidates/3705
+pending, complete:false. Full direct-Vitest two-worker verification is running in
+`work/v84-community-full-verification.log`; no overall success claim yet.
+Package remains0.83.0, readiness manifest disabled;21 documentation packs,
+remaining literal migration and final review still block publication.
+
+The standalone strict resource check was also executed rather than treating the
+0.83 preparation guard as v84 approval. It correctly exits1: inventory incomplete
+and6293 coverage/classification issues (`work/v84-current-readiness.log`). These
+are unresolved readiness records, not6293 newly diagnosed runtime bugs. The
+readiness manifest stays disabled; no gate was bypassed to publish this increment.
+
+Fresh whole verification completed successfully:169 files/675 tests PASS,
+followed by all unchanged historical guards and9 output tests
+(`work/v84-community-full-verification.log`). Vitest was invoked directly with
+maxWorkers=2 this time; no timeout or assertion changes,249.75s full suite.
+Desktop rebuild pending in `work/v84-community-build.log`.
+
+Desktop rebuild exits0; existing large-chunk warnings remain. Actual compiled
+isolated native smoke PASS, expected denied secondary-frame locale change and
+no download/install. Browser desktop/tablet/phone checks3/3 PASS.
+Logs: `work/v84-community-{build,native,web}.log`. Independent final Ostfränkisch
+validation remains complete:true/issues:[], and all saved documentation fields
+have no nonmissing validation errors. Diff-check PASS. This verified increment
+is committed locally; incomplete drafts will be preserved separately, not counted
+as completed packs. No version bump, readiness enablement, push or publication.

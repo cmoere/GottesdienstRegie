@@ -1,6 +1,11 @@
 {
   "id": "upper-saxon",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeendedadn online · zuleedzd aktualisiert {time}",
+    "communityDataOnlineLoading": "Gemeendedadn online · wärn geladn",
+    "communityDataOfflineUpdated": "Gemeendedadn offline · leedzdor Stand {time}",
+    "communityDataOfflineUnknown": "Gemeendedadn offline · leedzdor Stand ni bekannt",
+    "communityDataUnavailable": "Gemeendedadn sin ni verfügbar",
     "germanRegionalVariant": "Deidsche Rechionalvariante",
     "windowMinimize": "Fensder gleener machen",
     "windowExitFullscreen": "Ausm Vollbild raus",

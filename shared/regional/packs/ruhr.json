@@ -1,6 +1,11 @@
 {
   "id": "ruhr",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeindedaten sind online · Stand von {time}",
+    "communityDataOnlineLoading": "Gemeindedaten sind online · werden grad geladen",
+    "communityDataOfflineUpdated": "Gemeindedaten sind offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedaten sind offline · letzter Stand is unbekannt",
+    "communityDataUnavailable": "Gemeindedaten sind grad nich verfügbar",
     "germanRegionalVariant": "Deutsche Regionalvariante",
     "windowMinimize": "Fenster klein machen",
     "windowExitFullscreen": "Aussem Vollbild raus",

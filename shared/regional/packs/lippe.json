@@ -1,6 +1,11 @@
 {
   "id": "lippe",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeendedaten online · tauletzt verneiet {time}",
+    "communityDataOnlineLoading": "Gemeendedaten online · werrn laden",
+    "communityDataOfflineUpdated": "Gemeendedaten offline · leste Stand {time}",
+    "communityDataOfflineUnknown": "Gemeendedaten offline · leste Stand nich bekannt",
+    "communityDataUnavailable": "Gemeendedaten sind nich verfügbar",
     "germanRegionalVariant": "Düütske Regionalvariant",
     "windowMinimize": "Finster lütter maken",
     "windowExitFullscreen": "Vullbild verlaoten",

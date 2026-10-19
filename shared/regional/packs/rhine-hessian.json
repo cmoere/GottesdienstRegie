@@ -1,6 +1,11 @@
 {
  "id":"rhine-hessian",
  "ui":{
+    "communityDataOnlineUpdated": "Gemeindedate online · zuletzt erneuert {time}",
+    "communityDataOnlineLoading": "Gemeindedate online · werre gelade",
+    "communityDataOfflineUpdated": "Gemeindedate offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedate offline · letzter Stand net bekannt",
+    "communityDataUnavailable": "Gemeindedate sin net verfügbar",
    "germanRegionalVariant": "Deitsche Regionalvariant",
     "windowMinimize": "Fenster klääner mache",
     "windowExitFullscreen": "Vollbild verlasse",

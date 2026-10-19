@@ -8,7 +8,7 @@ import {germanBaseTemplates,getBaseTemplate,locales} from '../i18nBase';
 import type {Language} from '../preferences';
 import {regionalControlBaseTemplates,regionalControlEnglishTemplates,regionalControlOtherTemplates} from '../../shared/regional/interfaceBaseExtras';
 it('has explicit operator-control/status translations in every existing base language, not just a fallback',()=>{
-  const keys=['windowMinimize','windowExitFullscreen','windowClose','fontMissing','fontCheckIncomplete','livePreviewHeading','helpContents','helpRelatedTopics'] as const;
+  const keys=['windowMinimize','windowExitFullscreen','windowClose','fontMissing','fontCheckIncomplete','livePreviewHeading','helpContents','helpRelatedTopics','communityDataOnlineUpdated','communityDataOnlineLoading','communityDataOfflineUpdated','communityDataOfflineUnknown','communityDataUnavailable'] as const;
   const source=Object.fromEntries(keys.map(key=>[key,germanBaseTemplates[key]]));
   for(const language of Object.keys(locales) as Language[]){
     const authored=language==='de'?regionalControlBaseTemplates:language==='en'?regionalControlEnglishTemplates:regionalControlOtherTemplates[language];
@@ -24,7 +24,7 @@ it('has all 31 explicitly authored UI and native namespaces with exact placehold
   for(const {id} of regionalVariants){
     const pack=JSON.parse(readFileSync(path.join(directory,`${id}.json`),'utf8'));
     expect(validateRegionalPack(pack,id,{ui:germanBaseTemplates,native:nativeBaseTemplates}),id).toEqual([]);
-    expect(Object.keys(pack.ui),id).toHaveLength(204);
+    expect(Object.keys(pack.ui),id).toHaveLength(209);
     expect(Object.keys(pack.native),id).toHaveLength(33);
     for(const text of [...Object.values(pack.ui),...Object.values(pack.native)]){
       expect(text,id).not.toMatch(/[\u200B\u200C\u200D\uFEFF]/);

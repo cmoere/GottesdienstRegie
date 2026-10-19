@@ -1,6 +1,11 @@
 {
   "id": "lower-rhine",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeindedate online · zuletzt bijgewerkt {time}",
+    "communityDataOnlineLoading": "Gemeindedate online · werde gelade",
+    "communityDataOfflineUpdated": "Gemeindedate offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedate offline · letzter Stand nit bekannt",
+    "communityDataUnavailable": "Gemeindedate sin nit verfügbar",
     "germanRegionalVariant": "Düütsche Regionalvariant",
     "windowMinimize": "Finster kleiner maake",
     "windowExitFullscreen": "Vollbild verlaate",

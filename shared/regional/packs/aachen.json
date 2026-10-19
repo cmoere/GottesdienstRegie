@@ -1,6 +1,11 @@
 {
   "id": "aachen",
   "ui": {
+    "communityDataOnlineUpdated": "Jemeindedate online · zuletzt aktualiseert {time}",
+    "communityDataOnlineLoading": "Jemeindedate online · werde jelade",
+    "communityDataOfflineUpdated": "Jemeindedate offline · letzte Stand {time}",
+    "communityDataOfflineUnknown": "Jemeindedate offline · letzte Stand net bekannt",
+    "communityDataUnavailable": "Jemeindedate send net verfügbar",
     "germanRegionalVariant": "Dütsche Regionalvariant",
     "windowMinimize": "Fenster kleenger maache",
     "windowExitFullscreen": "Vollbild verlaate",

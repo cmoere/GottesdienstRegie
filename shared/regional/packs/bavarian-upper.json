@@ -1,6 +1,11 @@
 {
   "id": "bavarian-upper",
   "ui": {
+    "communityDataOnlineUpdated": "Gmoandedaten online · zletzt aktualisiert {time}",
+    "communityDataOnlineLoading": "Gmoandedaten online · werdn glodn",
+    "communityDataOfflineUpdated": "Gmoandedaten offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gmoandedaten offline · letzter Stand unbekannt",
+    "communityDataUnavailable": "Gmoandedaten san ned verfügbar",
     "germanRegionalVariant": "Deitsche Regionalvariant",
     "windowMinimize": "Fensta kloa macha",
     "windowExitFullscreen": "Vollbild valassn",

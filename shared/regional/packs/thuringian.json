@@ -1,6 +1,11 @@
 {
   "id": "thuringian",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeindedadn online · zuletzt erneuert {time}",
+    "communityDataOnlineLoading": "Gemeindedadn online · wern geladen",
+    "communityDataOfflineUpdated": "Gemeindedadn offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedadn offline · letzter Stand nich bekannt",
+    "communityDataUnavailable": "Gemeindedadn sin nich verfügbar",
     "germanRegionalVariant": "Deutsche Regionalvariante",
     "windowMinimize": "Fenster kleener machen",
     "windowExitFullscreen": "Ausm Vollbild raus",

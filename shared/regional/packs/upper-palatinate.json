@@ -1,6 +1,11 @@
 {
   "id": "upper-palatinate",
   "ui": {
+    "communityDataOnlineUpdated": "Gmoinddaten online · zletzt aktualisiert {time}",
+    "communityDataOnlineLoading": "Gmoinddaten online · wern glodn",
+    "communityDataOfflineUpdated": "Gmoinddaten offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gmoinddaten offline · letzter Stand unbekannt",
+    "communityDataUnavailable": "Gmoinddaten san net verfügbar",
     "germanRegionalVariant": "Deitsche Regionalvariant",
     "windowMinimize": "Fensta kloa machn",
     "windowExitFullscreen": "Ausm Vollbild raus",

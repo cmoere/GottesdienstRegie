@@ -10,7 +10,7 @@ describe('authored Ruhrdeutsch base-interface resources',()=>{
     const candidate=JSON.parse(readFileSync(path.resolve('shared/regional/packs/ruhr.json'),'utf8'));
     const ui=Object.fromEntries(inventory.entries.filter(entry=>entry.key.startsWith('ui.'))
       .map(entry=>[entry.key.slice(3),entry.text]));
-    expect(Object.keys(ui)).toHaveLength(204);
+    expect(Object.keys(ui)).toHaveLength(209);
     expect(validateRegionalPack(candidate,'ruhr',{ui,native:nativeBaseTemplates})).toEqual([]);
   });
   it('contains actual regional update and login text instead of inheriting German defaults',()=>{

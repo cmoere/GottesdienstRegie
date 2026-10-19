@@ -1,6 +1,11 @@
 {
  "id":"south-baden-alemannic",
  "ui":{
+    "communityDataOnlineUpdated": "Gmeinddate online · zletscht erneuert {time}",
+    "communityDataOnlineLoading": "Gmeinddate online · wärde glade",
+    "communityDataOfflineUpdated": "Gmeinddate offline · letschte Stand {time}",
+    "communityDataOfflineUnknown": "Gmeinddate offline · letschte Stand nit bekannt",
+    "communityDataUnavailable": "Gmeinddate sin nit verfügbar",
    "germanRegionalVariant": "Düütschi Regionalvariant",
     "windowMinimize": "Fenschter chliiner mache",
     "windowExitFullscreen": "Vollbild verloo",

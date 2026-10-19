@@ -1,6 +1,11 @@
 {
   "id": "saarbruecken",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeindedate online · zuletscht aktualisiert {time}",
+    "communityDataOnlineLoading": "Gemeindedate online · werre gelad",
+    "communityDataOfflineUpdated": "Gemeindedate offline · letschter Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedate offline · letschter Stand net bekannt",
+    "communityDataUnavailable": "Gemeindedate sinn net verfügbar",
     "germanRegionalVariant": "Deitsche Regionalvariante",
     "windowMinimize": "Fenschter klääner mache",
     "windowExitFullscreen": "Vollbild verlasse",

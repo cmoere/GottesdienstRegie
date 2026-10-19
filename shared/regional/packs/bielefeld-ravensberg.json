@@ -1,6 +1,11 @@
 {
   "id": "bielefeld-ravensberg",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeindedaten online · tauletzt verneiet {time}",
+    "communityDataOnlineLoading": "Gemeindedaten online · wern jüst laden",
+    "communityDataOfflineUpdated": "Gemeindedaten offline · letzte Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedaten offline · letzte Stand nich bekannt",
+    "communityDataUnavailable": "Gemeindedaten sind nich verfügbar",
     "germanRegionalVariant": "Düütske Regionalvariant",
     "windowMinimize": "Finster lütter maaken",
     "windowExitFullscreen": "Vullbild verlaoten",

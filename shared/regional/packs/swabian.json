@@ -1,6 +1,11 @@
 {
  "id":"swabian",
  "ui":{
+    "communityDataOnlineUpdated": "Gmeinddate online · zletscht aktualisiert {time}",
+    "communityDataOnlineLoading": "Gmeinddate online · werdet glade",
+    "communityDataOfflineUpdated": "Gmeinddate offline · letschter Stand {time}",
+    "communityDataOfflineUnknown": "Gmeinddate offline · letschter Stand unbekannt",
+    "communityDataUnavailable": "Gmeinddate send net verfügbar",
    "germanRegionalVariant": "Deitsche Regionalvariant",
     "windowMinimize": "Fenschder kloiner mache",
     "windowExitFullscreen": "Vollbild verlassa",

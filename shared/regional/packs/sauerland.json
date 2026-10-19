@@ -1,6 +1,11 @@
 {
   "id": "sauerland",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeindedaten online · tolest erneiert {time}",
+    "communityDataOnlineLoading": "Gemeindedaten online · werd laden",
+    "communityDataOfflineUpdated": "Gemeindedaten offline · leste Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedaten offline · leste Stand nit bekannt",
+    "communityDataUnavailable": "Gemeindedaten sind nit verfügbar",
     "germanRegionalVariant": "Düütske Regionalvariant",
     "windowMinimize": "Finster lütter maken",
     "windowExitFullscreen": "Vullbild verlaoten",

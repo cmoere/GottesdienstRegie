@@ -1,6 +1,11 @@
 {
   "id": "hamburg",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeendedaten online · tolest verniegt {time}",
+    "communityDataOnlineLoading": "Gemeendedaten online · warrt laden",
+    "communityDataOfflineUpdated": "Gemeendedaten offline · leste Stand {time}",
+    "communityDataOfflineUnknown": "Gemeendedaten offline · leste Stand nich bekannt",
+    "communityDataUnavailable": "Gemeendedaten sünd nich verfügbar",
     "germanRegionalVariant": "Düütsche Regionalvariant",
     "windowMinimize": "Finster lütter maken",
     "windowExitFullscreen": "Vullbild verlaten",

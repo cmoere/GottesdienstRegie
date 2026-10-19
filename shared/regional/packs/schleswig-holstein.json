@@ -1,6 +1,11 @@
 {
   "id": "schleswig-holstein",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeendedaten online · tolest verniegt {time}",
+    "communityDataOnlineLoading": "Gemeendedaten online · warrt laden",
+    "communityDataOfflineUpdated": "Gemeendedaten offline · letzten Stand {time}",
+    "communityDataOfflineUnknown": "Gemeendedaten offline · letzten Stand nich bekannt",
+    "communityDataUnavailable": "Gemeendedaten sünd nich verfügbar",
     "germanRegionalVariant": "Düütsche Regionalvariant",
     "windowMinimize": "Finster lütter maken",
     "windowExitFullscreen": "Vullbild verlaten",

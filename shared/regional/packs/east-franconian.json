@@ -1,6 +1,11 @@
 {
  "id":"east-franconian",
  "ui":{
+    "communityDataOnlineUpdated": "Gemeindedaten online · zletzt aktualisiert {time}",
+    "communityDataOnlineLoading": "Gemeindedaten online · wern gladen",
+    "communityDataOfflineUpdated": "Gemeindedaten offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedaten offline · letzter Stand ned bekannt",
+    "communityDataUnavailable": "Gemeindedaten sin ned verfügbar",
    "germanRegionalVariant": "Deidsche Regionalvariant",
     "windowMinimize": "Fensder gläiner machn",
     "windowExitFullscreen": "Ausm Vollbild raus",

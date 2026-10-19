@@ -1,6 +1,11 @@
 {
   "id": "cologne",
   "ui": {
+    "communityDataOnlineUpdated": "Jemeindedate online · zoletz aktualiseert {time}",
+    "communityDataOnlineLoading": "Jemeindedate online · wäde jelade",
+    "communityDataOfflineUpdated": "Jemeindedate offline · letzte Stand {time}",
+    "communityDataOfflineUnknown": "Jemeindedate offline · letzte Stand nit bekannt",
+    "communityDataUnavailable": "Jemeindedate sin nit verfügbar",
     "germanRegionalVariant": "Düütsche Rejionalvariant",
     "windowMinimize": "Finster kleiner maache",
     "windowExitFullscreen": "Vollbild verloße",

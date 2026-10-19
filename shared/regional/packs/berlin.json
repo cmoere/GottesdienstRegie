@@ -1,6 +1,11 @@
 {
   "id": "berlin",
   "ui": {
+    "communityDataOnlineUpdated": "Jemeindedaten online · zuletzt aktualisiert {time}",
+    "communityDataOnlineLoading": "Jemeindedaten online · werden jrade jeladen",
+    "communityDataOfflineUpdated": "Jemeindedaten offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Jemeindedaten offline · letzter Stand unbekannt",
+    "communityDataUnavailable": "Jemeindedaten sind nich verfügbar",
     "germanRegionalVariant": "Deutsche Rejionalvariante",
     "windowMinimize": "Fenster kleen machen",
     "windowExitFullscreen": "Ausm Vollbild raus",

@@ -1,6 +1,11 @@
 {
   "id": "muensterland",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeendedaten online · tolest vernieget {time}",
+    "communityDataOnlineLoading": "Gemeendedaten online · warrt laden",
+    "communityDataOfflineUpdated": "Gemeendedaten offline · leste Stand {time}",
+    "communityDataOfflineUnknown": "Gemeendedaten offline · leste Stand nich bekannt",
+    "communityDataUnavailable": "Gemeendedaten sünd nich verfügbar",
     "germanRegionalVariant": "Düütske Regionalvariant",
     "windowMinimize": "Finster lütter maaken",
     "windowExitFullscreen": "Vullbild verlaoten",

@@ -1,6 +1,11 @@
 {
   "id": "wittgenstein",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeindedate online · zuletzt erneuert {time}",
+    "communityDataOnlineLoading": "Gemeindedate online · wern gelade",
+    "communityDataOfflineUpdated": "Gemeindedate offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedate offline · letzter Stand nich bekannt",
+    "communityDataUnavailable": "Gemeindedate sin nich verfügbar",
     "germanRegionalVariant": "Dütsche Regionalvariant",
     "windowMinimize": "Fenster kläner mache",
     "windowExitFullscreen": "Vollbild verlosse",

@@ -1,6 +1,11 @@
 {
   "id": "central-hessian",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeindedate online · zuletzt erneuert {time}",
+    "communityDataOnlineLoading": "Gemeindedate online · wern gelade",
+    "communityDataOfflineUpdated": "Gemeindedate offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedate offline · letzter Stand unbekannt",
+    "communityDataUnavailable": "Gemeindedate sei net verfügbar",
     "germanRegionalVariant": "Deitsche Regionalvariante",
     "windowMinimize": "Fenster klaaner mache",
     "windowExitFullscreen": "Vollbild verlasse",

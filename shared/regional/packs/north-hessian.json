@@ -1,6 +1,11 @@
 {
   "id": "north-hessian",
   "ui": {
+    "communityDataOnlineUpdated": "Gemeindedaten online · zuletzt erneuert {time}",
+    "communityDataOnlineLoading": "Gemeindedaten online · wärn geladen",
+    "communityDataOfflineUpdated": "Gemeindedaten offline · letzter Stand {time}",
+    "communityDataOfflineUnknown": "Gemeindedaten offline · letzter Stand nich bekannt",
+    "communityDataUnavailable": "Gemeindedaten sin nich verfügbar",
     "germanRegionalVariant": "Deutsche Regionalvariante",
     "windowMinimize": "Fenster kleiner machen",
     "windowExitFullscreen": "Ausm Vollbild raus",
