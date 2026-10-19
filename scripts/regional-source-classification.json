@@ -62,6 +62,22 @@
     }
   },
   "reviewedTechnicalFiles": {
+    "src/bible/provider.ts": {
+      "sha256": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b",
+      "reason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review."
+    },
+    "src/bible/text.ts": {
+      "sha256": "05933ba298a379e3e59515501f36e0679e687ebc3a353222031940bdd0c4a471",
+      "reason": "Manually read in full 2026-10-16: bundled Bible quotations and stable reference lookup only. Biblical output is explicitly outside regional UI translation. Any content change revokes this exact review."
+    },
+    "src/announcementRichText.ts": {
+      "sha256": "ecb14761efe2d95d0d03d92a7e556f3f8c00db368b4df2edcd5e3775ea286f39",
+      "reason": "Manually read in full 2026-10-16: sanitizes supplied announcement content into non-executable text/style data. Candidate strings are HTML selectors/tags and list formatting, not operator prose; supplied public content is unchanged. Any content change revokes this exact review."
+    },
+    "src/songLayout.ts": {
+      "sha256": "d10b01f5fb24f35271edbae8d31be0e409a3c04b05d48fd7a3503b68dd7b6773",
+      "reason": "Manually read in full 2026-10-16: line measurement/splitting for supplied song content. Authored templates concatenate supplied text only, with no operator labels. Lyrics must not be regionalized. Any content change revokes this exact review."
+    },
     "src/mediaSelection.ts": {
       "sha256": "e75278e91f5d4fcb913ed13b6fb6cbc3c22449474c3a0c7afa45d1eaa6646656",
       "reason": "Manually read in full 2026-10-16: stable VIDEO_ASSET_REQUIRED machine error code and technical media properties. Displayed asset titles come from user assets, not app prose. Any source change revokes this review."
@@ -101,6 +117,30 @@
     "src/fonts.ts": {
       "sha256": "4d4087ef6180e3785bd255dbc7c5cd59d1f1dc8c49de0fbd966d245c1c370dc5",
       "reason": "Manually reviewed 2026-10-16: font-family proper names, CSS stacks and font-probing metadata must retain their technical identities. User-facing missing-font warnings live in separate components and remain in scope. The hash is over LF-normalized source; any content change requires a fresh review."
+    },
+    "src/EventOverviewTable.tsx": {
+      "sha256": "b1a468fb6f36aaa977bbd15d4ec5c34abc47c52c2c22d22af2616fdd27620676",
+      "reason": "Manually read in full 2026-10-19: Public event-table output, including visitor-facing headings and accessibility labels; supplied titles/location/date and animation mechanics must not follow operator dialect. Any source content change revokes this exact review."
+    },
+    "src/EventScrollViewport.tsx": {
+      "sha256": "abd02c7d19ecb6cf40138598ee185252b04650f18d1a63cc5a9943e2865a4493",
+      "reason": "Manually read in full 2026-10-19: Output animation/clock and CSS reduced-motion media-query tokens only; no operator prose. Any source content change revokes this exact review."
+    },
+    "src/PostProgramRoomNotice.tsx": {
+      "sha256": "0af7f52257cd9514ee2b36402574b8fddd5ba89579104f6831aa479d9c6e33a9",
+      "reason": "Manually read in full 2026-10-19: Public post-program room notice and visitor-facing table labels; supplied event data and fixed visitor copy are outside operator localization. Any source content change revokes this exact review."
+    },
+    "src/CountdownView.tsx": {
+      "sha256": "25f3911b26e7dd9e5ed2457840d287846d92ea337c91cf2bcdf7408defcf091e",
+      "reason": "Manually read in full 2026-10-19: Public countdown output with fixed visitor greeting and numeric timer; not operator-interface prose. Any source content change revokes this exact review."
+    },
+    "src/AnnouncementBanner.tsx": {
+      "sha256": "3751534c7bd16e675af56eaf3b704748f239e8d2dd1126886b74c56d741b35a2",
+      "reason": "Manually read in full 2026-10-19: Public announcement marquee and accessibility label; supplied announcement text is displayed unchanged. Any source content change revokes this exact review."
+    },
+    "src/BibleQuickOverlay.tsx": {
+      "sha256": "98f0f0a9eb7ac9e491abdb59e828ada9b9b029a6e522a963af35861c5e10b0a9",
+      "reason": "Manually read in full 2026-10-19: Public OSB/Bible output; supplied reference/translation/verses, technical style tokens and page numbering must remain unchanged. Any source content change revokes this exact review."
     }
   }
 }

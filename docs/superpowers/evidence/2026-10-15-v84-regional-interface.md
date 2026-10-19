@@ -332,3 +332,111 @@ guards and historical guards pass. The rebuilt native smoke also exits0 in
 rejection and no download/install. `git diff --check` exits0. These results verify
 the changes made here, not complete v84 coverage. The package remains0.83.0 and
 the selector manifest disabled; no push, version bump or publication occurred.
+
+## Operator controls, font status and seventh full documentation pack
+
+Niederbayerisch now independently validates all63 help articles,4 help labels and
+1446 historical release fields with no issues. The actual offline integration
+table passes7/7 (`work/v84-operator-seven-doc-green.log`). Oberpfälzisch, Schwäbisch
+and Ostfränkisch remain partial. Seven complete documentation packs are not31.
+
+Six more operator templates are now explicitly authored in all31 regional packs:
+minimize, exit fullscreen, close application, missing fonts, unavailable font
+checking and the MAIN-preview heading. These six templates also have explicit
+resources in all17 existing base languages. Short regional packs now contain202
+UI keys plus33 native keys; this is still not complete app-literal coverage.
+
+Window controls first failed2/2 against the untranslated source and then passed;
+the final six-case control test checks regional/English/German/French/Arabic/
+Ukrainian labels, unchanged native command IDs and audio routing. Three status
+tests also failed before implementation and pass afterwards: font names remain
+opaque (including placeholder-like text), switching language does not rescan
+fonts, unchecked fonts stay distinct from missing fonts, the preview retains its
+mounted video/public title/Bible text and TESTBETRIEB stays literal. New data
+coverage rejects fallback-only status/control resources in any existing language.
+
+The first whole run after localizing the preview heading failed665/666 because
+MainOutputSurface.test.tsx assumed fixed German while the default locale was
+English. Its original badge/output assertions are retained; the German fixture
+now explicitly selects German. The subsequent whole run passes169 files/667 tests
+plus9 output tests and historical guards (`work/v84-seven-doc-operator-verification.log`).
+The later explicit17-language resource test passes in the focused11-test run
+(`work/v84-all-base-operator-coverage.log`). Earlier focused runs pass14 and24
+tests, including all seven full offline document packs.
+
+Four more modules were read in full and excluded by exact source hash: Bible
+provider/reference identities, bundled Bible quotations, public announcement
+rich-text parsing and supplied lyric layout. There are no authored operator
+sentences in these exact versions. Human-facing errors in consuming UI and other
+mixed modules remain pending. The refreshed inventory is incomplete at5998
+candidates/3724 pending reviews; it is not a count of3724 necessary translations.
+
+The seven-document desktop build exits0, with existing large-chunk warnings and31
+raw native packs copied. Browser checks pass3/3 and the actual compiled isolated
+native smoke passes (expected unauthorized IPC denial, no download/install).
+Logs: `work/v84-seven-doc-operator-{build,web,native}.log`. A fresh continuation
+verification is running in `work/v84-operator-resume-verification.log`.
+No v84 readiness claim or publication.
+
+## 2026-10-19: Help navigation and nine complete documentation packs
+
+The earlier continuation verification completed successfully:169 files/668 tests,
+historical guards and9 output guards PASS (`work/v84-operator-resume-verification.log`).
+Desktop build, actual compiled isolated native smoke and browser3/3 also passed
+(`work/v84-operator-resume-{build,native,web}.log`). These precede the help changes
+below and are not presented as verification of later compiled code.
+
+Help navigation labels and related-topic titles now respect the explicit regional
+selection while stable article IDs, callback values and section anchors remain
+unchanged. An actual offline Ruhr rendering test failed before the change and
+passes afterwards. The source inventory no longer skips the entire help folder:
+only named assembled article-data modules are omitted. Injected renderer and
+helper-module regressions both failed before this correction and pass afterwards.
+Logs: `work/v84-help-region-{red,green}.log` and
+`work/v84-help-helper-scan-{red,green}.log` (17 focused tests PASS).
+
+All31 short packs now contain204 UI/33 native templates, including help chrome.
+All17 existing base languages have explicit equivalents for the8 new operator
+keys; fallback is not counted as authorship. Inventory remains incomplete:
+6000 candidates/3724 pending source reviews. This is not a count of necessary
+translations and is not release readiness.
+
+Lower Bavarian, Upper Palatinate and Swabian are independently validated complete
+at63 help articles/4 help labels/1446 release fields each. The actual offline
+loader integration passes9/9 completed packs (`work/v84-nine-doc-offline.log`).
+Swabian's independent corpus validator reports complete:true/issues:[].
+Badisch/alemannisch, Ostfränkisch and Pfälzisch translation work continues.
+No version bump, selector exposure, push or publication;22 complete documentation
+packs and full source migration/review remain outstanding.
+
+The new help-scanner regression exceeded the unchanged5-second limit in both
+whole-suite runs (670/671 and671/672 passed); these are failed runs, not green
+verification. Investigation identified redundant whole-repository scanning in
+the injected directory-policy test. It now walks only the two actual help modules
+under test, retaining the independent full-repository inventory test and every
+assertion. Focused14/14 PASS: injected policy337ms, full scan1228ms
+(`work/v84-help-scan-fixture-green.log`). No production behavior, timeout or
+release criterion was weakened. Fresh unmodified verify:release rerun pending.
+
+That rerun failed671/672 on the separately retained full-inventory test's same
+5-second timeout. Windows npm.ps1 also dropped the requested concurrency options;
+the subsequent log named `v84-help-serial-verification.log` is therefore NOT
+evidence of serial execution. It does contain a fresh successful complete suite:
+169 files/672 tests PASS, followed by every unchanged verify:release guard,
+including9 output tests. No timeout was raised and no failing run is relabeled.
+Desktop rebuild currently running in `work/v84-help-final-build.log`.
+
+Desktop build exits0 (existing large-chunk warnings); compiled isolated native
+smoke PASS, expected secondary-window IPC denial only, no download/install.
+Browser checks3/3 PASS. Logs `work/v84-help-final-{build,native,web}.log`.
+Diff-check PASS. No actual operator profile, output assignment or Firebase changed.
+
+Six additional modules were read in full: EventOverviewTable,
+EventScrollViewport, PostProgramRoomNotice, CountdownView, AnnouncementBanner and
+BibleQuickOverlay. Exact LF-hash-bound exclusions preserve their public-output
+labels/copy, supplied Bible/event/announcement content and technical animation
+tokens rather than applying operator dialect. No broad directory exclusion added.
+Inventory now6000 candidates/3708 pending; focused inventory/coverage22/22 PASS
+after this data-only review (`work/v84-output-source-review.log`). The previous
+full672-test pass and build precede this classification-only update. Completeness
+remains false and public v84 release remains blocked by unfinished scope.

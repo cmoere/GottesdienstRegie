@@ -1,5 +1,5 @@
 import type { Language } from './preferences';
-import {regionalControlBaseTemplates,regionalControlEnglishTemplates} from '../shared/regional/interfaceBaseExtras';
+import {regionalControlBaseTemplates,regionalControlEnglishTemplates,regionalControlOtherTemplates} from '../shared/regional/interfaceBaseExtras';
 
 const de={
   loginSubtitle:'Mit deinem Konto anmelden',email:'E-Mail-Adresse',password:'Passwort',showPassword:'Passwort anzeigen',hidePassword:'Passwort ausblenden',remember:'Angemeldet bleiben',signIn:'ANMELDEN',signingIn:'Anmeldung läuft …',forgotPassword:'Passwort vergessen?',notAvailable:'Noch nicht verfügbar',firebaseChecking:'Firebase wird geprüft …',firebaseConnected:'Mit Firebase verbunden',firebaseDisconnected:'Keine Firebase-Verbindung',
@@ -182,7 +182,10 @@ const localImageCopy:Record<Language,Record<LocalImageKey,string>>={
 };
 
 export function getBaseTemplate(language:Language,key:TranslationKey){
-  if(Object.hasOwn(regionalControlBaseTemplates,key))return (language==='de'?regionalControlBaseTemplates:regionalControlEnglishTemplates)[key as keyof typeof regionalControlBaseTemplates];
+  if(Object.hasOwn(regionalControlBaseTemplates,key)){
+    const controlKey=key as keyof typeof regionalControlBaseTemplates;
+    return language==='de'?regionalControlBaseTemplates[controlKey]:regionalControlOtherTemplates[language]?.[controlKey]??regionalControlEnglishTemplates[controlKey];
+  }
   return key in localImageCopy[language]?localImageCopy[language][key as LocalImageKey]:dictionaries[language][key as keyof typeof de];
 }
 

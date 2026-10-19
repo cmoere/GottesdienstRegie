@@ -1,12 +1,38 @@
 import { createRequire } from 'node:module';
 import {createHash} from 'node:crypto';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it,vi } from 'vitest';
 
 const require = createRequire(import.meta.url);
 // The scanner must retain ambiguous text for review, never localize user data itself.
 const { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile,applyReviewedSourceEntries,inventorySourceFingerprint } = require('../../scripts/inventory-regional-texts.cjs');
 
 describe('regional text source inventory', () => {
+  it('still scans help UI renderers and helpers while imported article data is separately inventoried',()=>{
+    const fs=require('node:fs'),read=fs.readFileSync;
+    // Exercise directory-selection policy with the two real help modules, not a
+    // second expensive whole-repository scan (covered separately below).
+    const list=fs.readdirSync;
+    const walk=vi.spyOn(fs,'readdirSync').mockImplementation((...args:unknown[])=>{
+      const directory=String(args[0]).replaceAll('\\','/');
+      if(directory===process.cwd().replaceAll('\\','/')+'/src')return ['help'];
+      if(directory.endsWith('/src/help'))return ['HelpArticleView.tsx','index.ts'];
+      if(directory===process.cwd().replaceAll('\\','/')+'/electron')return [];
+      return list(...args);
+    });
+    const spy=vi.spyOn(fs,'readFileSync').mockImplementation((...args:unknown[])=>{
+      const result=read(...args);
+      const file=String(args[0]).replaceAll('\\','/');
+      if(file.endsWith('/src/help/HelpArticleView.tsx'))return String(result)+'\nconst injected=<button>Zusätzliche Hilfeaktion</button>;';
+      if(file.endsWith('/src/help/index.ts'))return String(result)+"\nconst injected='Zusätzliche Hilfefunktion';";
+      return result;
+    });
+    try{
+      const inventory=generateInventory(process.cwd());
+      const rows=inventory.entries as Array<{source:string;text:string;status:string}>;
+      expect(rows.find(row=>row.source==='src/help/HelpArticleView.tsx'&&row.text==='Zusätzliche Hilfeaktion')).toMatchObject({status:'review-required'});
+      expect(rows.find(row=>row.source==='src/help/index.ts'&&row.text==='Zusätzliche Hilfefunktion')).toMatchObject({status:'review-required'});
+    }finally{spy.mockRestore();walk.mockRestore()}
+  });
   it('excludes only the individually reviewed exact source entry in a mixed UI module',()=>{
     const rows=scanOperatorSource('src/mixed.tsx',"const fault='DEVICE_UNAVAILABLE'; const view=<button>Gerät auswählen</button>;");
     const row=rows[0],review={[row.key]:{source:row.source,context:row.context,text:row.text,reason:'Stable machine code, not operator prose.'}};

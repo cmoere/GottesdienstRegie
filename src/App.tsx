@@ -6617,7 +6617,7 @@ function HelpModal({ close }: { close: () => void }) {
       <div className="help-layout">
         <nav>{filtered.length===0&&<p>{catalog.ui.noResults}</p>}{filtered.map(topic=><button key={topic.id} className={`${selected===topic.id?'active ':''}${topic.section?'help-section-title':''}`} onClick={()=>setSelected(topic.id)}>{topic.title}</button>)}</nav>
         <article key={article.id}>
-          <HelpArticleView article={article} locale={language} onOpenTopic={setSelected} screenshot={screenshot?{src:'./help/'+screenshot,caption:`${catalog.ui.screenshotLabel} · ${article.title}`,alt:article.title}:undefined}/>
+          <HelpArticleView article={article} locale={language} germanRegion={germanRegion} onOpenTopic={setSelected} screenshot={screenshot?{src:'./help/'+screenshot,caption:`${catalog.ui.screenshotLabel} · ${article.title}`,alt:article.title}:undefined}/>
           {article.id==='Versionsinformationen'&&<ReleaseNotesView/>}
           {article.id==='Support'&&<button onClick={()=>void window.desktop?.openExternal('https://cmoere.github.io/GottesdienstRegie/report/')}>{article.title} <Icon name="open_in_new"/></button>}
         </article>

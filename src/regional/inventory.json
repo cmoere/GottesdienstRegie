@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": false,
-  "sourceFingerprint": "99df7788149a5cc9815926bb7a53523052babbe5554631a343e66a52511c8498",
+  "sourceFingerprint": "d468d609edaa293cc59e9cc90cf74581dbde9f0045ac36697b39d4f9c82ce9f2",
   "note": "Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -50,7 +50,9 @@
       "source": "src/AnnouncementBanner.tsx",
       "line": 7,
       "context": "jsx-attribute:aria-label",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public announcement marquee and accessibility label; supplied announcement text is displayed unchanged. Any source content change revokes this exact review.",
+      "technicalReviewHash": "3751534c7bd16e675af56eaf3b704748f239e8d2dd1126886b74c56d741b35a2"
     },
     {
       "key": "source.b980d648d1c4a42285c3.1",
@@ -9116,7 +9118,9 @@
       "source": "src/BibleQuickOverlay.tsx",
       "line": 20,
       "context": "JsxExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public OSB/Bible output; supplied reference/translation/verses, technical style tokens and page numbering must remain unchanged. Any source content change revokes this exact review.",
+      "technicalReviewHash": "98f0f0a9eb7ac9e491abdb59e828ada9b9b029a6e522a963af35861c5e10b0a9"
     },
     {
       "key": "source.92212a18e99f37667c86.1",
@@ -10060,7 +10064,9 @@
       "source": "src/CountdownView.tsx",
       "line": 10,
       "context": "jsx-text:span",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public countdown output with fixed visitor greeting and numeric timer; not operator-interface prose. Any source content change revokes this exact review.",
+      "technicalReviewHash": "25f3911b26e7dd9e5ed2457840d287846d92ea337c91cf2bcdf7408defcf091e"
     },
     {
       "key": "source.9808734642a2ccc1d439.1",
@@ -10068,7 +10074,9 @@
       "source": "src/CountdownView.tsx",
       "line": 10,
       "context": "jsx-text:small",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public countdown output with fixed visitor greeting and numeric timer; not operator-interface prose. Any source content change revokes this exact review.",
+      "technicalReviewHash": "25f3911b26e7dd9e5ed2457840d287846d92ea337c91cf2bcdf7408defcf091e"
     },
     {
       "key": "source.d1679592f300b769d6c7.1",
@@ -10148,7 +10156,9 @@
       "source": "src/EventOverviewTable.tsx",
       "line": 38,
       "context": "jsx-attribute:aria-label",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public event-table output, including visitor-facing headings and accessibility labels; supplied titles/location/date and animation mechanics must not follow operator dialect. Any source content change revokes this exact review.",
+      "technicalReviewHash": "b1a468fb6f36aaa977bbd15d4ec5c34abc47c52c2c22d22af2616fdd27620676"
     },
     {
       "key": "source.1d46e2dc5f727d8f9058.1",
@@ -10156,7 +10166,9 @@
       "source": "src/EventOverviewTable.tsx",
       "line": 39,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public event-table output, including visitor-facing headings and accessibility labels; supplied titles/location/date and animation mechanics must not follow operator dialect. Any source content change revokes this exact review.",
+      "technicalReviewHash": "b1a468fb6f36aaa977bbd15d4ec5c34abc47c52c2c22d22af2616fdd27620676"
     },
     {
       "key": "source.1fa1efbb1a0317722d95.1",
@@ -10164,7 +10176,9 @@
       "source": "src/EventOverviewTable.tsx",
       "line": 39,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public event-table output, including visitor-facing headings and accessibility labels; supplied titles/location/date and animation mechanics must not follow operator dialect. Any source content change revokes this exact review.",
+      "technicalReviewHash": "b1a468fb6f36aaa977bbd15d4ec5c34abc47c52c2c22d22af2616fdd27620676"
     },
     {
       "key": "source.ee0b9d5506c9c2f0d349.1",
@@ -10172,7 +10186,9 @@
       "source": "src/EventOverviewTable.tsx",
       "line": 39,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public event-table output, including visitor-facing headings and accessibility labels; supplied titles/location/date and animation mechanics must not follow operator dialect. Any source content change revokes this exact review.",
+      "technicalReviewHash": "b1a468fb6f36aaa977bbd15d4ec5c34abc47c52c2c22d22af2616fdd27620676"
     },
     {
       "key": "source.d43e209789aafdfab52d.1",
@@ -10180,7 +10196,9 @@
       "source": "src/EventScrollViewport.tsx",
       "line": 5,
       "context": "CallExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Output animation/clock and CSS reduced-motion media-query tokens only; no operator prose. Any source content change revokes this exact review.",
+      "technicalReviewHash": "abd02c7d19ecb6cf40138598ee185252b04650f18d1a63cc5a9943e2865a4493"
     },
     {
       "key": "source.d43e209789aafdfab52d.2",
@@ -10188,7 +10206,9 @@
       "source": "src/EventScrollViewport.tsx",
       "line": 6,
       "context": "CallExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Output animation/clock and CSS reduced-motion media-query tokens only; no operator prose. Any source content change revokes this exact review.",
+      "technicalReviewHash": "abd02c7d19ecb6cf40138598ee185252b04650f18d1a63cc5a9943e2865a4493"
     },
     {
       "key": "source.687aab61b2f46a0ddaca.1",
@@ -11497,22 +11517,6 @@
       "status": "review-required"
     },
     {
-      "key": "source.0eed5e46152c69ff0236.1",
-      "text": "Fehlende Schriftarten:",
-      "source": "src/FontAvailabilityWarning.tsx",
-      "line": 6,
-      "context": "BinaryExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.eeae83cdbd5f05b43602.1",
-      "text": "Schriftprüfung nicht vollständig verfügbar",
-      "source": "src/FontAvailabilityWarning.tsx",
-      "line": 6,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
       "key": "source.791fd40a1f07033a8bb3.1",
       "text": "arrow_drop_down",
       "source": "src/LanguagePicker.tsx",
@@ -11720,14 +11724,6 @@
       "source": "src/LyricScrollingSettings.tsx",
       "line": 11,
       "context": "jsx-text:label",
-      "status": "review-required"
-    },
-    {
-      "key": "source.4820a27d1f631e36fee7.1",
-      "text": "LIVE AUF MAIN",
-      "source": "src/MainLivePreview.tsx",
-      "line": 9,
-      "context": "jsx-text:h2",
       "status": "review-required"
     },
     {
@@ -14264,7 +14260,9 @@
       "source": "src/PostProgramRoomNotice.tsx",
       "line": 24,
       "context": "jsx-attribute:aria-label",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public post-program room notice and visitor-facing table labels; supplied event data and fixed visitor copy are outside operator localization. Any source content change revokes this exact review.",
+      "technicalReviewHash": "0af7f52257cd9514ee2b36402574b8fddd5ba89579104f6831aa479d9c6e33a9"
     },
     {
       "key": "source.c0b208c6d3341e21ea6f.1",
@@ -14272,7 +14270,9 @@
       "source": "src/PostProgramRoomNotice.tsx",
       "line": 25,
       "context": "ConditionalExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public post-program room notice and visitor-facing table labels; supplied event data and fixed visitor copy are outside operator localization. Any source content change revokes this exact review.",
+      "technicalReviewHash": "0af7f52257cd9514ee2b36402574b8fddd5ba89579104f6831aa479d9c6e33a9"
     },
     {
       "key": "source.c6b3749d1bd49fc20cbf.1",
@@ -14280,7 +14280,9 @@
       "source": "src/PostProgramRoomNotice.tsx",
       "line": 26,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public post-program room notice and visitor-facing table labels; supplied event data and fixed visitor copy are outside operator localization. Any source content change revokes this exact review.",
+      "technicalReviewHash": "0af7f52257cd9514ee2b36402574b8fddd5ba89579104f6831aa479d9c6e33a9"
     },
     {
       "key": "source.24c8a80ff403aff8590f.1",
@@ -14288,7 +14290,9 @@
       "source": "src/PostProgramRoomNotice.tsx",
       "line": 26,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public post-program room notice and visitor-facing table labels; supplied event data and fixed visitor copy are outside operator localization. Any source content change revokes this exact review.",
+      "technicalReviewHash": "0af7f52257cd9514ee2b36402574b8fddd5ba89579104f6831aa479d9c6e33a9"
     },
     {
       "key": "source.94d6019a74780c3feaff.1",
@@ -14296,7 +14300,9 @@
       "source": "src/PostProgramRoomNotice.tsx",
       "line": 26,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public post-program room notice and visitor-facing table labels; supplied event data and fixed visitor copy are outside operator localization. Any source content change revokes this exact review.",
+      "technicalReviewHash": "0af7f52257cd9514ee2b36402574b8fddd5ba89579104f6831aa479d9c6e33a9"
     },
     {
       "key": "source.b05aed5ea5a7394d33d5.1",
@@ -14304,7 +14310,9 @@
       "source": "src/PostProgramRoomNotice.tsx",
       "line": 26,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-19: Public post-program room notice and visitor-facing table labels; supplied event data and fixed visitor copy are outside operator localization. Any source content change revokes this exact review.",
+      "technicalReviewHash": "0af7f52257cd9514ee2b36402574b8fddd5ba89579104f6831aa479d9c6e33a9"
     },
     {
       "key": "source.3ce9289684270b584a58.1",
@@ -20709,30 +20717,6 @@
       "status": "review-required"
     },
     {
-      "key": "source.b628bf88cd7421c5eb16.1",
-      "text": "Minimieren",
-      "source": "src/WindowControls.tsx",
-      "line": 2,
-      "context": "jsx-attribute:aria-label",
-      "status": "review-required"
-    },
-    {
-      "key": "source.6519c1d2937fa485a0e0.1",
-      "text": "Vollbild verlassen",
-      "source": "src/WindowControls.tsx",
-      "line": 2,
-      "context": "jsx-attribute:aria-label",
-      "status": "review-required"
-    },
-    {
-      "key": "source.13fcc984b34b665790f9.1",
-      "text": "Programm schließen",
-      "source": "src/WindowControls.tsx",
-      "line": 2,
-      "context": "jsx-attribute:aria-label",
-      "status": "review-required"
-    },
-    {
       "key": "source.567b812418ec80a83631.1",
       "text": "Inhalt",
       "source": "src/addElementCatalog.ts",
@@ -21338,7 +21322,9 @@
       "source": "src/announcementRichText.ts",
       "line": 26,
       "context": "BinaryExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: sanitizes supplied announcement content into non-executable text/style data. Candidate strings are HTML selectors/tags and list formatting, not operator prose; supplied public content is unchanged. Any content change revokes this exact review.",
+      "technicalReviewHash": "ecb14761efe2d95d0d03d92a7e556f3f8c00db368b4df2edcd5e3775ea286f39"
     },
     {
       "key": "source.998bfba0985ae546444d.1",
@@ -21346,7 +21332,9 @@
       "source": "src/announcementRichText.ts",
       "line": 28,
       "context": "BinaryExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: sanitizes supplied announcement content into non-executable text/style data. Candidate strings are HTML selectors/tags and list formatting, not operator prose; supplied public content is unchanged. Any content change revokes this exact review.",
+      "technicalReviewHash": "ecb14761efe2d95d0d03d92a7e556f3f8c00db368b4df2edcd5e3775ea286f39"
     },
     {
       "key": "source.6d2a9c9f8660d009f316.1",
@@ -21354,7 +21342,9 @@
       "source": "src/announcementRichText.ts",
       "line": 28,
       "context": "ConditionalExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: sanitizes supplied announcement content into non-executable text/style data. Candidate strings are HTML selectors/tags and list formatting, not operator prose; supplied public content is unchanged. Any content change revokes this exact review.",
+      "technicalReviewHash": "ecb14761efe2d95d0d03d92a7e556f3f8c00db368b4df2edcd5e3775ea286f39"
     },
     {
       "key": "source.afc00cd61d22a78f266f.1",
@@ -21954,7 +21944,9 @@
       "source": "src/bible/provider.ts",
       "line": 8,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.50f5609ec34233f9b613.1",
@@ -21962,7 +21954,9 @@
       "source": "src/bible/provider.ts",
       "line": 8,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.a66f665a95b4bb3d620f.1",
@@ -21970,7 +21964,9 @@
       "source": "src/bible/provider.ts",
       "line": 9,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.50f5609ec34233f9b613.2",
@@ -21978,7 +21974,9 @@
       "source": "src/bible/provider.ts",
       "line": 9,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.b23e0a8691fd5bf9c37a.1",
@@ -21986,7 +21984,9 @@
       "source": "src/bible/provider.ts",
       "line": 10,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.50f5609ec34233f9b613.3",
@@ -21994,7 +21994,9 @@
       "source": "src/bible/provider.ts",
       "line": 10,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.0b0eaed26b9a426a0a7f.1",
@@ -22002,7 +22004,9 @@
       "source": "src/bible/provider.ts",
       "line": 11,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.50f5609ec34233f9b613.4",
@@ -22010,7 +22014,9 @@
       "source": "src/bible/provider.ts",
       "line": 11,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.7f2ba021530143351a40.1",
@@ -22018,7 +22024,9 @@
       "source": "src/bible/provider.ts",
       "line": 12,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.bc18f199c452ea408d1f.1",
@@ -22026,7 +22034,9 @@
       "source": "src/bible/provider.ts",
       "line": 12,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.f59d04e5bf07c4a5bf3f.1",
@@ -22034,7 +22044,9 @@
       "source": "src/bible/provider.ts",
       "line": 13,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.bc18f199c452ea408d1f.2",
@@ -22042,7 +22054,9 @@
       "source": "src/bible/provider.ts",
       "line": 13,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.804dde3752f2cef18988.1",
@@ -22050,7 +22064,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.1aafb11635df288ce2cf.1",
@@ -22058,7 +22074,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.78011b05dd888869590f.1",
@@ -22066,7 +22084,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.e3619cb38f4739b7ee65.1",
@@ -22074,7 +22094,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.54a187af8f2677f0b6f5.1",
@@ -22082,7 +22104,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.427ba24963d2c9d495d3.1",
@@ -22090,7 +22114,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.e638acfebc3fb9701355.1",
@@ -22098,7 +22124,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.45388ae321c044163aa2.1",
@@ -22106,7 +22134,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.0b365d247d45d8d0ebf6.1",
@@ -22114,7 +22144,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.9a1b26f959db8430ced9.1",
@@ -22122,7 +22154,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.3752687c5bcdf0f8db10.1",
@@ -22130,7 +22164,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.7a89638211f483f884e6.1",
@@ -22138,7 +22174,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.15c42775c96cd5bf539a.1",
@@ -22146,7 +22184,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.d188514a7dea14c90afd.1",
@@ -22154,7 +22194,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.7190b76d2970dfead2de.1",
@@ -22162,7 +22204,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.5390bc9245da34ef93fd.1",
@@ -22170,7 +22214,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.aa8c5e2bfa64a9c54cf8.1",
@@ -22178,7 +22224,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.e5706c08516bd3471194.1",
@@ -22186,7 +22234,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.433f0bfb54d46f95297d.1",
@@ -22194,7 +22244,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.51b7a430d28f2d0ab299.1",
@@ -22202,7 +22254,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.0e4f9472b46075757482.1",
@@ -22210,7 +22264,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.9a27953805011257c7ac.1",
@@ -22218,7 +22274,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.767cb9059ba869ae9824.1",
@@ -22226,7 +22284,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.2e8943b798b81844bf58.1",
@@ -22234,7 +22294,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.4570223ad9ec6018b29a.1",
@@ -22242,7 +22304,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.9227ef79ae1309aaf4d3.1",
@@ -22250,7 +22314,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.2601a84dd418fd15cd88.1",
@@ -22258,7 +22324,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.444c647ee6a592f24ea4.1",
@@ -22266,7 +22334,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.ee509ffc18b2b8d5dd24.1",
@@ -22274,7 +22344,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.9e041db88f982d3477dd.1",
@@ -22282,7 +22354,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.067ed3cdbcdf222d95e4.1",
@@ -22290,7 +22364,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.fdbc6217fd2c4625c785.1",
@@ -22298,7 +22374,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.7f36c4c6dcd0c2d84c0a.1",
@@ -22306,7 +22384,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.64acd936459ff4c64724.1",
@@ -22314,7 +22394,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.3116874c368304e376f2.1",
@@ -22322,7 +22404,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.84f2539d64f4910b72e0.1",
@@ -22330,7 +22414,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.04d8ab9ad7983efb19e6.1",
@@ -22338,7 +22424,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.d1d9b20c727db7d5bc1d.1",
@@ -22346,7 +22434,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.5f7d5347374f80e478f3.1",
@@ -22354,7 +22444,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.8282d0a43fe6bb26f9d9.1",
@@ -22362,7 +22454,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.b6f2b05e9676660f7daa.1",
@@ -22370,7 +22464,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.7685989f7de6d5f609ed.1",
@@ -22378,7 +22474,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.224aad9514ca1cd3b7ca.1",
@@ -22386,7 +22484,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.8d61216a6a08a79d4c3b.1",
@@ -22394,7 +22494,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.bf174754c1f1ee5e1533.1",
@@ -22402,7 +22504,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.84823e65a400dedb3758.1",
@@ -22410,7 +22514,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.1ec9f0967fcde636291f.1",
@@ -22418,7 +22524,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.a176c0dee99571277f1a.1",
@@ -22426,7 +22534,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.2096c20b461b39f80f57.1",
@@ -22434,7 +22544,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.c422124436333db2b541.1",
@@ -22442,7 +22554,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.d0236fafb307d623262f.1",
@@ -22450,7 +22564,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.0484fe4dd17f3e44ad94.1",
@@ -22458,7 +22574,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.845c6ee6570df0a48455.1",
@@ -22466,7 +22584,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.845c6ee6570df0a48455.2",
@@ -22474,7 +22594,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.e694b536dde526a81aae.1",
@@ -22482,7 +22604,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.e694b536dde526a81aae.2",
@@ -22490,7 +22614,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.9bd7c93e4f9b34fd9ade.1",
@@ -22498,7 +22624,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.9bd7c93e4f9b34fd9ade.2",
@@ -22506,7 +22634,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.0f9b491a6164d35e7781.1",
@@ -22514,7 +22644,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.0f9b491a6164d35e7781.2",
@@ -22522,7 +22654,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.ab4c748a83235cd8db61.1",
@@ -22530,7 +22664,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.131c417fc438acefb0ad.1",
@@ -22538,7 +22674,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.b28064534a7359cd5aa5.1",
@@ -22546,7 +22684,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.e035c8edcc7a0bd13752.1",
@@ -22554,7 +22694,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.2ada84758f3357519e0f.1",
@@ -22562,7 +22704,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.ad7f1287c1f53f18d702.1",
@@ -22570,7 +22714,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.fac698edb66e2128596c.1",
@@ -22578,7 +22724,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.fac698edb66e2128596c.2",
@@ -22586,7 +22734,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.7cdce85a37519e8b3735.1",
@@ -22594,7 +22744,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.e3e0eba3d704a69cb673.1",
@@ -22602,7 +22754,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.a5cbaa190253e5d85d44.1",
@@ -22610,7 +22764,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.2a9c8c2db701f43a70e5.1",
@@ -22618,7 +22774,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.d3d3bdb8163fc44228f9.1",
@@ -22626,7 +22784,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.d3d3bdb8163fc44228f9.2",
@@ -22634,7 +22794,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.0f12be6efb6957ceb1d7.1",
@@ -22642,7 +22804,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.de1e24c5b8c14b3ecc57.1",
@@ -22650,7 +22814,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.0d52805745a0701bf0b9.1",
@@ -22658,7 +22824,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.c928282a58012105e9f3.1",
@@ -22666,7 +22834,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.b13696dd40389964778a.1",
@@ -22674,7 +22844,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.752487f3de195275db7d.1",
@@ -22682,7 +22854,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.6f4bbd53210509c4920b.1",
@@ -22690,7 +22864,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.859e48955f2c26d8f574.1",
@@ -22698,7 +22874,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.d7dd71639145bb615184.1",
@@ -22706,7 +22884,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.92af7ba01ea064a67ca2.1",
@@ -22714,7 +22894,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.e57c0f4549c347f720d8.1",
@@ -22722,7 +22904,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.6e71daa4d3bfe6292f17.1",
@@ -22730,7 +22914,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.428a86f9202d801f9791.1",
@@ -22738,7 +22924,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.083f6823f73b734a8b08.1",
@@ -22746,7 +22934,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.ff27b1d1606caefc74d2.1",
@@ -22754,7 +22944,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.6496e0230fb7dd79be8c.1",
@@ -22762,7 +22954,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.61e77abc5baf303c9bb2.1",
@@ -22770,7 +22964,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.974ca333f5c4e1451752.1",
@@ -22778,7 +22974,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.e6b5b5492d45719e5ae6.1",
@@ -22786,7 +22984,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.b78d5fe7f0b6ef0fddc2.1",
@@ -22794,7 +22994,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.e2f885e96a71e999b59a.1",
@@ -22802,7 +23004,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.dd4431f3f32bd9dd8b71.1",
@@ -22810,7 +23014,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.dbf655e07a0917d830b6.1",
@@ -22818,7 +23024,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.9a26816b5b9d79949545.1",
@@ -22826,7 +23034,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.7e14ea37cf8687b15636.1",
@@ -22834,7 +23044,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.3033ee11cc71c2d5b00a.1",
@@ -22842,7 +23054,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.362ba3c7cf17c1add594.1",
@@ -22850,7 +23064,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.e0037c14dfbfcf776827.1",
@@ -22858,7 +23074,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.047c1b678fc242b14be2.1",
@@ -22866,7 +23084,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.8bcd436c0db5ab5a27fd.1",
@@ -22874,7 +23094,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.9f5cd305533488686e44.1",
@@ -22882,7 +23104,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.1d15a078e377f660fb2c.1",
@@ -22890,7 +23114,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.ddb71aef3a9af3f10cef.1",
@@ -22898,7 +23124,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.c5b8407e8ea7fba3b24c.1",
@@ -22906,7 +23134,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.884e0b8f7bf96210abc1.1",
@@ -22914,7 +23144,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.4e0bbaf7e941042cc9b0.1",
@@ -22922,7 +23154,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.ec8f934099d51806b4b0.1",
@@ -22930,7 +23164,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.ec8f934099d51806b4b0.2",
@@ -22938,7 +23174,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.2dba20f6d069da19ac8f.1",
@@ -22946,7 +23184,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.2dba20f6d069da19ac8f.2",
@@ -22954,7 +23194,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.4c04fe93fe0506ca714a.1",
@@ -22962,7 +23204,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.369f55c7e51607d9bd4c.1",
@@ -22970,7 +23214,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.efd93c3325dd5480e9f1.1",
@@ -22978,7 +23224,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.977304deb06f32a55832.1",
@@ -22986,7 +23234,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.0a4637dd7d059da53721.1",
@@ -22994,7 +23244,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.576a692fd239be64cb28.1",
@@ -23002,7 +23254,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.14989102c8c22adc67b8.1",
@@ -23010,7 +23264,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.94e32d759f6a60bf85a2.1",
@@ -23018,7 +23274,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.eb9e03c1e378ab43edb9.1",
@@ -23026,7 +23284,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.37f5675a6496caa90213.1",
@@ -23034,7 +23294,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.4e88947796e3028ee5bd.1",
@@ -23042,7 +23304,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.3dc4bca3efd6476ee2fb.1",
@@ -23050,7 +23314,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.235021ad337e217934a8.1",
@@ -23058,7 +23324,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.f0603237f6eb92af9b57.1",
@@ -23066,7 +23334,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.5f49d868fa02c559c7dd.1",
@@ -23074,7 +23344,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.92c98de95a3f1fb81b3d.1",
@@ -23082,7 +23354,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.855ef5d5367b7e944cf2.1",
@@ -23090,7 +23364,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.580f24ab71f8dd0189b0.1",
@@ -23098,7 +23374,9 @@
       "source": "src/bible/provider.ts",
       "line": 17,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.87710f6e24b29fa7f5de.1",
@@ -23106,7 +23384,9 @@
       "source": "src/bible/provider.ts",
       "line": 26,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.8c4917943795fda6e394.1",
@@ -23114,7 +23394,9 @@
       "source": "src/bible/provider.ts",
       "line": 26,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.1ae7f7a96a2424bc3826.1",
@@ -23122,7 +23404,9 @@
       "source": "src/bible/provider.ts",
       "line": 26,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.2eda97559840c1e75b41.1",
@@ -23130,7 +23414,9 @@
       "source": "src/bible/provider.ts",
       "line": 47,
       "context": "VariableDeclaration",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.71d5558dddd9f44aae15.1",
@@ -23138,7 +23424,9 @@
       "source": "src/bible/provider.ts",
       "line": 52,
       "context": "NewExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.025739c6a74ad5159dc8.1",
@@ -23146,7 +23434,9 @@
       "source": "src/bible/provider.ts",
       "line": 53,
       "context": "property:reference",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.16c8a02543c3fa2c2824.1",
@@ -23154,7 +23444,9 @@
       "source": "src/bible/provider.ts",
       "line": 58,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.50f5609ec34233f9b613.5",
@@ -23162,7 +23454,9 @@
       "source": "src/bible/provider.ts",
       "line": 58,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.a140cea46445ca74e1ef.1",
@@ -23170,7 +23464,9 @@
       "source": "src/bible/provider.ts",
       "line": 59,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.50f5609ec34233f9b613.6",
@@ -23178,7 +23474,9 @@
       "source": "src/bible/provider.ts",
       "line": 59,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.95f8afa6a3a693dfd539.1",
@@ -23186,7 +23484,9 @@
       "source": "src/bible/provider.ts",
       "line": 60,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.50f5609ec34233f9b613.7",
@@ -23194,7 +23494,9 @@
       "source": "src/bible/provider.ts",
       "line": 60,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.595c5909a19a27529b96.1",
@@ -23202,7 +23504,9 @@
       "source": "src/bible/provider.ts",
       "line": 61,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.50f5609ec34233f9b613.8",
@@ -23210,7 +23514,9 @@
       "source": "src/bible/provider.ts",
       "line": 61,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.b5c5e243164aca9b067b.1",
@@ -23218,7 +23524,9 @@
       "source": "src/bible/provider.ts",
       "line": 62,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.bc18f199c452ea408d1f.3",
@@ -23226,7 +23534,9 @@
       "source": "src/bible/provider.ts",
       "line": 62,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.85a4a9366f670cd98814.1",
@@ -23234,7 +23544,9 @@
       "source": "src/bible/provider.ts",
       "line": 63,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.bc18f199c452ea408d1f.4",
@@ -23242,7 +23554,9 @@
       "source": "src/bible/provider.ts",
       "line": 63,
       "context": "property:language",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.999cf94aa03c2598eea9.1",
@@ -23250,7 +23564,9 @@
       "source": "src/bible/provider.ts",
       "line": 70,
       "context": "ConditionalExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.f0cad36d92207b287d5b.1",
@@ -23258,7 +23574,9 @@
       "source": "src/bible/provider.ts",
       "line": 70,
       "context": "ConditionalExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.83e19fa3714e342367f5.1",
@@ -23266,7 +23584,9 @@
       "source": "src/bible/provider.ts",
       "line": 78,
       "context": "VariableDeclaration",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.71d5558dddd9f44aae15.2",
@@ -23274,7 +23594,9 @@
       "source": "src/bible/provider.ts",
       "line": 88,
       "context": "NewExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.025739c6a74ad5159dc8.2",
@@ -23282,7 +23604,9 @@
       "source": "src/bible/provider.ts",
       "line": 90,
       "context": "property:reference",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review.",
+      "technicalReviewHash": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b"
     },
     {
       "key": "source.d6573ed341e67ad1a176.1",
@@ -23394,7 +23718,9 @@
       "source": "src/bible/text.ts",
       "line": 2,
       "context": "property:'JHN:3:16-16'",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: bundled Bible quotations and stable reference lookup only. Biblical output is explicitly outside regional UI translation. Any content change revokes this exact review.",
+      "technicalReviewHash": "05933ba298a379e3e59515501f36e0679e687ebc3a353222031940bdd0c4a471"
     },
     {
       "key": "source.baf28dde2e989d8b10d4.1",
@@ -23402,7 +23728,9 @@
       "source": "src/bible/text.ts",
       "line": 3,
       "context": "property:'JHN:3:16-18'",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: bundled Bible quotations and stable reference lookup only. Biblical output is explicitly outside regional UI translation. Any content change revokes this exact review.",
+      "technicalReviewHash": "05933ba298a379e3e59515501f36e0679e687ebc3a353222031940bdd0c4a471"
     },
     {
       "key": "source.9be1f1cd65a0ad106b0a.1",
@@ -23410,7 +23738,9 @@
       "source": "src/bible/text.ts",
       "line": 4,
       "context": "property:'PSA:23:1-1'",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: bundled Bible quotations and stable reference lookup only. Biblical output is explicitly outside regional UI translation. Any content change revokes this exact review.",
+      "technicalReviewHash": "05933ba298a379e3e59515501f36e0679e687ebc3a353222031940bdd0c4a471"
     },
     {
       "key": "source.2959800656869afc063d.1",
@@ -31640,7 +31970,9 @@
       "source": "src/songLayout.ts",
       "line": 24,
       "context": "ConditionalExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: line measurement/splitting for supplied song content. Authored templates concatenate supplied text only, with no operator labels. Lyrics must not be regionalized. Any content change revokes this exact review.",
+      "technicalReviewHash": "d10b01f5fb24f35271edbae8d31be0e409a3c04b05d48fd7a3503b68dd7b6773"
     },
     {
       "key": "source.d9833b7d528de626f10f.1",
@@ -31648,7 +31980,9 @@
       "source": "src/songLayout.ts",
       "line": 50,
       "context": "BinaryExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read in full 2026-10-16: line measurement/splitting for supplied song content. Authored templates concatenate supplied text only, with no operator labels. Lyrics must not be regionalized. Any content change revokes this exact review.",
+      "technicalReviewHash": "d10b01f5fb24f35271edbae8d31be0e409a3c04b05d48fd7a3503b68dd7b6773"
     },
     {
       "key": "source.0686383fa160f4486c14.1",
@@ -45825,6 +46159,62 @@
     {
       "key": "ui.germanRegionalVariant",
       "text": "Deutsche Regionalvariante",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.windowMinimize",
+      "text": "Minimieren",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.windowExitFullscreen",
+      "text": "Vollbild verlassen",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.windowClose",
+      "text": "Programm schließen",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.fontMissing",
+      "text": "Fehlende Schriftarten: {fonts}",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.fontCheckIncomplete",
+      "text": "Schriftprüfung nicht vollständig verfügbar",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.livePreviewHeading",
+      "text": "LIVE AUF MAIN",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.helpContents",
+      "text": "Auf dieser Seite",
+      "source": "shared/regional/interfaceBaseExtras.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.helpRelatedTopics",
+      "text": "Passende Themen",
       "source": "shared/regional/interfaceBaseExtras.ts",
       "context": "regional-controls",
       "status": "app-owned"

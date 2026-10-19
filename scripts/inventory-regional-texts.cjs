@@ -7,6 +7,7 @@ const { createHash } = require('node:crypto');
 const dictionaryNames = new Set(['en','nl','da','no','sv','fi','fr','it','es','uk','ru','tr','ar','pl','ptBR','gsw']);
 const technicalAttributes = new Set(['className','id','key','ref','type','name','value','src','href','role','style','target','rel','data-testid']);
 const visibleAttributes = new Set(['title','placeholder','aria-label','alt','label']);
+const assembledHelpDataModules=new Set(['src/help/base.ts','src/help/english.ts','src/help/legacyGerman.ts','src/help/localesWest.ts','src/help/enhancementsEnglish.ts','src/help/enhancementsGerman.ts']);
 
 function applyReviewedTechnicalFile(rows,filename,source,reviews){
   const review=reviews[filename];
@@ -117,8 +118,8 @@ function generateInventory(root) {
       const relative = path.relative(root,absolute).replaceAll('\\','/');
       if (fs.statSync(absolute).isDirectory()) { walk(absolute); continue; }
       if (!/\.tsx?$/.test(name) || /\.(test|spec|d)\.tsx?$/.test(name) || relative.includes('/test/') || relative.startsWith('src/regional/')) continue;
-      // Imported translated help is inventoried separately from application source.
-      if (relative.startsWith('src/help/')) continue;
+      // Imported article data is inventoried separately; help UI must still be scanned.
+      if (assembledHelpDataModules.has(relative)||relative.startsWith('src/help/enhancements/')) continue;
       const source=fs.readFileSync(absolute,'utf8');
       entries.push(...applyReviewedTechnicalFile(scanOperatorSource(relative,source),relative,source,reviews));
     }
