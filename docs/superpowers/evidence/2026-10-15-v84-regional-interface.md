@@ -488,3 +488,8 @@ validation remains complete:true/issues:[], and all saved documentation fields
 have no nonmissing validation errors. Diff-check PASS. This verified increment
 is committed locally; incomplete drafts will be preserved separately, not counted
 as completed packs. No version bump, readiness enablement, push or publication.
+
+Draft preservation only: Badisch/alemannisch63/4/360 and Pfälzisch45/4/0 are
+saved in Git separately after the workers' usage-limit stop. They remain
+incomplete and are rejected by the complete-document runtime/gate; neither is
+advertised as ready. No translation was fabricated for the missing entries.
