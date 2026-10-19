@@ -570,3 +570,53 @@ with existing large-chunk warnings (`work/v84-twelve-doc-build.log`). Diff-check
 PASS. No new native/browser smoke result is claimed for documentation-only data;
 runtime code is unchanged from the earlier compiled smoke. This is a locally
 verified increment, not a complete v84 release or native-speaker certification.
+
+### 2026-10-20 — Südbadisch complete; two Hessian drafts
+
+Südbadisch has63help articles,4helpUI fields and all1446historical release
+fields. Independent validation against the current canonical source reports
+issues:[]. Root authored600fields; a translation-only worker authored the other
+566missing fields. Existing63/4/280content was preserved. Disjoint ranges were
+checked before integration, after the worker explicitly stopped writing.
+
+The actual offline loader regression failed on the incomplete package and passed
+13/13 after integration (`work/v84-thirteen-doc-red.log`,
+`work/v84-thirteen-doc-green.log`). Thirteen regional documentation packs are
+complete;18remain incomplete or absent. Full UI migration is still unfinished,
+and no native-speaker certification is implied. Rheinhessisch and Südhessisch
+are being authored as separate partial drafts. No runtime translation service,
+fallback-based completion, account/model switch or publication bypass was used.
+The official account check allowed ordinary usage before resuming existing
+translation-only workers. Package0.83.0/readinessfalse remain unchanged.
+Full-suite/build verification and final draft checkpoint validation are pending.
+
+A separate read-only translation proofread identified a misleading repeated
+overview heading in38root-authored fields. Root checked each exact key against
+the canonical meaning and changed the heading to `Iiordnig vo dere Version`.
+No other concrete material fact omission was reported. Independent validation
+still reports issues:[]; the real offline suite remains13/13 PASS after the edit
+(`work/v84-thirteen-doc-reviewed-green.log`). This is not native-speaker approval.
+
+Rheinhessisch and Südhessisch now each contain63help articles,4helpUI fields and
+the first100historical fields. Both translation workers explicitly stopped
+writing. Root independently confirmed all present fields valid,1346history
+fields missing in each draft, and actual documentation stores rejecting both
+with loaded:false/exposed:false (`work/v84-thirteen-doc-corpus.log`). Thirteen
+complete packs, two partial packs and sixteen missing packs remain. No incomplete
+pack is counted as complete. Fresh full-suite verification is running in
+`work/v84-thirteen-doc-verification.log`; desktop build remains pending.
+
+Fresh verification passes169files/678tests plus9additional output tests and the
+unchanged historical guards (`work/v84-thirteen-doc-verification.log`). Direct
+two-worker suite took220.98s; no assertions or timeouts changed. Desktop build is
+running in `work/v84-thirteen-doc-build.log`. New Hessian drafts remain63/4/100
+each, not full language packages. No runtime or public-content behavior changed.
+
+Desktop build exits0 and copies31native assets; the complete Südbadisch package
+and two new lazy Hessian draft chunks are included. Existing large-chunk warnings
+remain (`work/v84-thirteen-doc-build.log`). Diff-check PASS. No new native/browser
+smoke is claimed for this documentation-only increment; the unchanged runtime
+was previously smoked. This checkpoint is saved locally, not published or enabled
+as a complete31-variant feature. Remaining Hessian history starts at source index
+100;16other regional documentation packs are absent. UI-source migration and
+final release-readiness checks remain incomplete.
