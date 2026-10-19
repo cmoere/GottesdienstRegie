@@ -535,3 +535,38 @@ This continuation changes documentation data only; no new native/browser-smoke
 result is claimed beyond the previous verified unchanged runtime. The draft
 checkpoint is committed locally, not enabled as a complete language package.
 Package0.83.0 and disabled readiness manifest remain unchanged; no publication.
+
+### 2026-10-20 — Badisch and Pfälzisch full documentation
+
+Two more regional documentation packs now independently validate against the
+canonical63help/4helpUI/1446historical-field source: Badisch and Pfälzisch,
+both issues:[]. Root wrote500Badisch and430Pfälzisch historical fields directly;
+translation-only workers supplied the preceding disjoint prefixes. Exact source
+keys, URLs, numeric facts, paragraph blocks and related-topic identities remain
+validated. No automated dialect substitutions or source-fallback completion.
+
+Actual offline loader regressions were observed failing on partial data, then
+passing on complete data:11/11 and12/12, respectively. Logs:
+`work/v84-eleven-doc-{red,green}.log`, `work/v84-twelve-doc-{red,green}.log`.
+Twelve documentation packs are complete;19remain partial or missing. This count
+does not certify full UI migration or linguistic native-speaker review.
+
+Südbadisch now has63complete help articles,4helpUI fields and280historical
+fields. It remains an incomplete draft, not a selectable complete language.
+The existing workers reached a fresh usage limit after saving their checkpoints;
+none were replaced or resumed following that limit. Program implementation,
+integration, testing and release authority remain with root. Full-suite/build
+verification for this data increment is pending. Package0.83.0/readinessfalse
+remain unchanged; no publication is claimed.
+
+Fresh verification for this increment:169files/677tests PASS, additional9output
+tests and unchanged historical guards PASS (`work/v84-twelve-doc-verification.log`).
+After a final Südbadisch recording-word transcription correction, focused help/
+documentation tests41/41 PASS (`work/v84-twelve-doc-final-focused.log`). Independent
+validation against the live canonical source reports no nonmissing errors in
+any changed pack; actual store still refuses the incomplete Südbadisch draft
+(`work/v84-twelve-doc-corpus.log`). Desktop build exits0,31native assets copied,
+with existing large-chunk warnings (`work/v84-twelve-doc-build.log`). Diff-check
+PASS. No new native/browser smoke result is claimed for documentation-only data;
+runtime code is unchanged from the earlier compiled smoke. This is a locally
+verified increment, not a complete v84 release or native-speaker certification.
