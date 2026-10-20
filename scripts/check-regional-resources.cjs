@@ -78,7 +78,7 @@ function checkInventoryFreshness(inventory,current){
 module.exports={checkRegionalCoverage,checkInventoryFreshness};
 if (require.main===module) {
   const root=path.resolve(__dirname,'..');
-  const {regionalVariants:regions}=loadShared('catalog.ts');
+  const {releaseRegionalVariants:regions}=loadShared('catalog.ts');
   const read=filename=>fs.existsSync(filename)?JSON.parse(fs.readFileSync(filename,'utf8')):undefined;
   const inventory=read(path.join(root,'src/regional/inventory.json'));
   const packs={},docs={};

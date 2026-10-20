@@ -20,7 +20,10 @@ describe('regional selection shared contract',()=>{
   it('accepts valid selections but rejects foreign fields, invalid IDs and inherited payload fields',()=>{
     expect(validateRegionalSelection({language:'de',germanRegion:'bielefeld-ravensberg'}))
       .toEqual({language:'de',germanRegion:'bielefeld-ravensberg'});
+    expect(normalizeRegionalSelection({language:'de',germanRegion:'central-hessian'}))
+      .toEqual({language:'de',germanRegion:null});
     for(const value of [null,[],{language:'de'}, {language:'de',germanRegion:'de-DE'},
+      {language:'de',germanRegion:'central-hessian'},
       {language:'invalid',germanRegion:null}, {language:'de',germanRegion:null,path:'C:/outside'},
       Object.create({language:'de',germanRegion:'ruhr'})]){
       expect(()=>validateRegionalSelection(value)).toThrow();

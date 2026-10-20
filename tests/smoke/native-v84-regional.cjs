@@ -43,6 +43,14 @@ async function desktop(){
   assert.ok(control,'real control preload bridge did not become ready');
   assert.ok(control.webContents.getURL().endsWith('/dist/index.html'),'control did not load the built application');
   await control.webContents.executeJavaScript('new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))');
+  const released=['bavarian-upper','bavarian-lower','upper-palatinate','east-franconian','swabian','baden-alemannic','south-baden-alemannic','palatine','rhine-hessian','south-hessian','cologne','ruhr','hamburg','berlin','bielefeld-ravensberg'];
+  for(const germanRegion of released){
+    const selected=await control.webContents.executeJavaScript(`window.desktop.regionalSettings.write(${JSON.stringify({language:'de',germanRegion})})`);
+    assert.deepEqual(selected,{language:'de',germanRegion});
+  }
+  const deferredDenied=await control.webContents.executeJavaScript("window.desktop.regionalSettings.write({language:'de',germanRegion:'central-hessian'}).then(()=>false,()=>true)");
+  assert.equal(deferredDenied,true,'unfinished regional selection unexpectedly accepted');
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(profile,'device-settings.json'),'utf8')).regionalSelection,{language:'de',germanRegion:'bielefeld-ravensberg'},'invalid selection changed the saved locale');
   const selection=await control.webContents.executeJavaScript("window.desktop.regionalSettings.write({language:'de',germanRegion:'bavarian-upper'})");
   assert.deepEqual(selection,{language:'de',germanRegion:'bavarian-upper'});
   assert.equal(app.getPath('userData'),profile);
@@ -70,7 +78,7 @@ async function desktop(){
   assert.equal(autoUpdater.autoDownload,false);
   assert.equal(autoUpdater.autoInstallOnAppQuit,false);
   clearTimeout(timeout);
-  console.log('NATIVE_REGIONAL_SMOKE_PASS: isolated real main/preload; control-only persisted selection; secondary window denied; localized four-action dialog; no download/install');
+  console.log('NATIVE_REGIONAL_SMOKE_PASS: isolated real main/preload; all15 released selections; deferred selection denied without saved-state mutation; control-only persisted selection; secondary window denied; localized four-action dialog; no download/install');
   app.exit(0);
 }
 if(process.versions.electron)desktop().catch(error=>{console.error(error);require('electron').app.exit(1)});

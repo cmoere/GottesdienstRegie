@@ -34,6 +34,15 @@ export const regionalVariants = [
 ] as const;
 
 export type GermanRegionId = typeof regionalVariants[number]['id'];
+/** Approved first release: the13 completed documentation variants plus both Hessian packs. */
+const releaseRegionIds:ReadonlySet<GermanRegionId>=new Set(["bavarian-upper","bavarian-lower","upper-palatinate","east-franconian","swabian","baden-alemannic","south-baden-alemannic","palatine","rhine-hessian","south-hessian","cologne","ruhr","hamburg","berlin","bielefeld-ravensberg"]);
+export const releaseRegionalVariants=regionalVariants.filter(region=>releaseRegionIds.has(region.id));
+
+/** Keep future catalog IDs stable, but never select an unfinished/deferred variant. */
+export function normalizeReleasedGermanRegion(value:unknown):GermanRegionId|null{
+  const id=normalizeGermanRegion(value);
+  return id&&releaseRegionIds.has(id)?id:null;
+}
 export interface RegionalSelection { language: string; germanRegion: GermanRegionId | null }
 export interface RegionalPack {
   id: GermanRegionId;

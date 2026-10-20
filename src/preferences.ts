@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { defaultKeyboardShortcuts, type KeyboardShortcuts, type ShortcutAction } from './shortcuts';
 import { defaultAudioRouting, type AudioRoute, type AudioRouteConfig, type AudioRouting } from './audioRouting';
-import { normalizeGermanRegion, type GermanRegionId } from '../shared/regional/catalog';
+import { normalizeReleasedGermanRegion, type GermanRegionId } from '../shared/regional/catalog';
 
 export type Language='de'|'gsw'|'en'|'nl'|'da'|'no'|'sv'|'fi'|'fr'|'it'|'es'|'uk'|'ru'|'tr'|'ar'|'pl'|'pt-BR';
 export type ThemeMode='system'|'light'|'dark';
@@ -138,7 +138,7 @@ export function migratePreferencesForV63(persisted:unknown){
 export function migratePreferencesForV84(persisted:unknown){
   const previous=persisted&&typeof persisted==='object'&&!Array.isArray(persisted)
     ? persisted as Record<string,unknown> : {};
-  return {...previous,germanRegion:normalizeGermanRegion(previous.germanRegion)};
+  return {...previous,germanRegion:normalizeReleasedGermanRegion(previous.germanRegion)};
 }
 
 export const usePreferences=create<PreferencesState>()(persist(set=>({
@@ -187,7 +187,7 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   logoutAfterOffAir:false,
   logoutAfterOffAirMinutes:15,
   setLanguage:language=>set({language}),
-  setGermanRegion:germanRegion=>set({germanRegion:normalizeGermanRegion(germanRegion)}),
+  setGermanRegion:germanRegion=>set({germanRegion:normalizeReleasedGermanRegion(germanRegion)}),
   setTheme:theme=>set({theme}),
   setBlackWhite:blackWhite=>set({blackWhite}),
   setReduceMotion:reduceMotion=>set({reduceMotion}),

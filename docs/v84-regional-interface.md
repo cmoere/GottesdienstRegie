@@ -9,8 +9,12 @@ Eine vorhandene Übersetzungsdatei allein bedeutet keine fertige Sprachvariante.
 
 Nach der Freigabe: Öffne **Einstellungen → Allgemein → Sprache**, wähle Deutsch
 und anschließend **Deutsche Regionalvariante**. Die Beschriftung dieses Feldes
-kann selbst regional formuliert sein. Zur Auswahl gehören die 31 registrierten
-Varianten und **Hochdeutsch** als Standard. Die Auswahl wird auf diesem Gerät
+kann selbst regional formuliert sein. Für die erste Freigabe sind 15 Varianten
+vorgesehen: Oberbayerisch, Niederbayerisch, Oberpfälzisch, Ostfränkisch,
+Schwäbisch, Badisch-Alemannisch, Südbadisch, Pfälzisch, Rheinhessisch,
+Südhessisch, Kölsch, Ruhrdeutsch, Hamburgisch, Berlinerisch und
+Bielefeld/Ravensberg. **Hochdeutsch** bleibt der Standard. Die übrigen 16
+registrierten Entwicklungsvarianten bleiben verborgen. Die Auswahl wird auf diesem Gerät
 gespeichert. Mit Hochdeutsch lässt sie sich wieder zurücksetzen. Andere
 Basissprachen bleiben unverändert; eine gespeicherte deutsche Regionalvariante
 wird dort nicht angewendet und beim Sprachwechsel nicht gelöscht.
@@ -42,7 +46,11 @@ constitute a finished regional edition.
 
 After release: open **Settings → General → Language**, select German and then
 **German regional variant**. The field label itself may use regional wording.
-The choices are the 31 registered variants plus **Hochdeutsch** (Standard German).
+The initial release scope is 15 variants: Upper Bavarian, Lower Bavarian,
+Upper Palatinate, East Franconian, Swabian, Baden Alemannic, South Baden,
+Palatine, Rhine Hessian, South Hessian, Cologne, Ruhr, Hamburg, Berlin and
+Bielefeld/Ravensberg, plus **Hochdeutsch** (Standard German). The other 16
+registered development variants remain hidden.
 The choice is saved on this device; select Hochdeutsch to reset it. Other base
 languages remain unchanged. A saved German variant is neither applied to another
 base language nor discarded when switching languages.

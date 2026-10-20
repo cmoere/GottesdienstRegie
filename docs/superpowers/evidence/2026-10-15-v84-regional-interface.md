@@ -620,3 +620,106 @@ was previously smoked. This checkpoint is saved locally, not published or enable
 as a complete31-variant feature. Remaining Hessian history starts at source index
 100;16other regional documentation packs are absent. UI-source migration and
 final release-readiness checks remain incomplete.
+
+### 2026-10-20 — Approved15-variant scope and complete documentation
+
+The user approved the first15variants (the13completed editions plus Rhine and
+South Hessian), with the other16development IDs hidden. The31-ID registry is
+preserved. Renderer selection, preference migration, trusted native writes,
+documentation/resource collection and the release manifest now share the same
+ordered15-ID allowlist. Completeness, source-freshness and placeholder validation
+remain mandatory. Readiness is still false and package version remains0.83.0.
+Selection regressions were observed RED→GREEN; the focused scope suite passes
+16/16 (`work/v84-release15-scope-green.log`).
+
+Both Hessian packages now have63help articles,4helpUI fields and1446historical
+release fields. The actual offline integration suite was observed failing on the
+two partials and now passes15/15 (`work/v84-fifteen-doc-red.log`,
+`work/v84-fifteen-doc-green.log`). The production documentation collector reports
+complete:true/issues:[]. Independently checked prior saved help/UI/history
+fields remain unchanged (`work/v84-fifteen-doc-corpus.log`). Root merged the
+Rheinhessisch1046-field prefix and disjoint400-field tail only after both
+translation workers explicitly stopped writing. This is not native-speaker
+certification or proof of full UI completion.
+
+Event-link controls and existing media-generation statuses now consume explicit
+templates across17base languages and15released regional packs. Given event
+titles, technical error data, IDs, dates and output copy are not rewritten.
+Reactive-language and timing/data-preservation component tests were observed
+RED→GREEN. The focused group passes22/22
+(`work/v84-release15-operator-final-focused.log`). The first desktop build exposed
+an incomplete newly added event test fixture; filling its required date/time
+fields, without casting around the type checker, restored a successful build
+(`work/v84-release15-build-rerun.log`). Existing large-chunk warnings remain.
+
+Actual isolated compiled main/preload smoke passes all15locale writes, rejects
+a deferred locale without modifying the saved locale, rejects a secondary-window
+write and checks the localized four-action updater dialog without download or
+installation (`work/v84-release15-native-allowlist.log`). Browser smoke passes
+3/3desktop/tablet/phone (`work/v84-release15-web.log`). These runs precede the next
+Quick Screen copy migration; fresh final verification is required afterward.
+
+Quick Screen settings are being fully localized beyond the earlier six reused
+labels. Two actual component tests currently fail on untranslated add/countdown/
+logo controls, and the explicit base/regional resource tests fail on the14missing
+keys (`work/v84-quick-complete-red.log`, `work/v84-quick-packs-red.log`). This is
+an in-progress checkpoint, not a passing final build or permission to publish.
+
+The Quick Screen component/resource group now passes5/5 after those RED runs
+(`work/v84-quick-complete-green.log`):14new operator templates explicitly authored
+in17base languages and15regional variants. Two exact reviewed non-prose sites
+are excluded: the aria-hidden drag glyph and the registered organization name
+used as an example output-text placeholder. No file-wide exclusion was added.
+
+The first full run reports172files,686passing tests and3failing tests in the
+two older pack tests, all retaining the former209-key expectation
+(`work/v84-release15-full-verification.log`). Their expected corpus size was
+updated, not their completeness/placeholder assertions. A further30existing
+settings templates have now been integrated, bringing each released short pack
+to269UI/33native fields. Existing360values across12base-language maps were
+independently compared to HEAD and preserved exactly; five missing base maps
+and15regional maps were explicitly authored, not filled from fallback
+(`work/v84-settings-extra-preservation.log`). No audio implementation or device
+selection code was changed.
+
+Actual browser regression setup was corrected to mark the unrelated introductory
+tour complete; the first attempt had been intercepted by that tour. A subsequent
+test-only typing failure from future expected keys was corrected before the
+real pre-implementation RED: the opened French settings page did not contain
+the expected French high-contrast control
+(`work/v84-settings-extra-browser-red-fixture.log`). The settings now resolve
+those labels through the same reactive translator as other controls, including
+the rollback confirmation. Focused component/resource/inventory tests pass23/23
+(`work/v84-settings-extra-focused-green.log`). Full-suite rerun, fresh browser
+results and a fresh compiled desktop smoke remain pending at this checkpoint.
+
+Strict regional coverage was run separately and correctly exits1, with3637issues
+(inventory incomplete plus3636unreviewed source sites)
+(`work/v84-release15-readiness.log`). These are remaining localization/review
+work, not3637new runtime defects. Inventory remains complete:false and the
+selector remains disabled; completed documentation does not certify complete UI
+localization. No package bump, publication or installer claim is made.
+
+Final verification of this increment passes172files/689tests, followed by the
+unchanged historical release guards and9additional output tests
+(`work/v84-release15-final-verification.log`). No timeout or completeness
+assertion was relaxed. The final browser run passes4/4, including actual French
+settings → German settings, the requested high-contrast edit and unchanged
+saved speaker/microphone IDs (`work/v84-settings-extra-browser-final.log`).
+An intermediate browser run had passed the French controls but failed to locate
+the language select by exact label text; the test now uses its observed accessible
+combobox role/name, without changing application behavior or forcing a click.
+
+Fresh desktop build exits0 and copies31native assets; existing chunk warnings
+remain (`work/v84-release15-compiled-final.log`). Actual isolated compiled
+main/preload smoke passes all15allowed writes, deferred-selection rejection with
+no saved-state mutation, secondary-window denial and the localized updater
+dialog, without download/install (`work/v84-release15-native-final.log`).
+Independent comparison preserves all6479prior UI values across31packs, every
+native namespace and all16deferred packs byte-for-value
+(`work/v84-release15-resource-preservation.log`). Diff-check passes.
+
+This verified increment is saved locally. Overall UI source migration,
+classification, whole-feature review and publication remain incomplete. The
+strict3637-issue readiness result is not bypassed: no version bump, readiness
+enable, push, tag, GitHub release or installer publication occurred.

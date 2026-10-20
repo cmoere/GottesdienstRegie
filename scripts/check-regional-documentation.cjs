@@ -14,13 +14,13 @@ function checkDocumentationPacks(regions,source,docs){
     sourceReleaseFields:Object.keys(source.releases).length,complete:issues.length===0,issues};
 }
 function checkDocumentationCorpus(directory=root){
-  const {regionalVariants}=loadLocalDataModule(directory,'shared/regional/catalog.ts');
+  const {releaseRegionalVariants}=loadLocalDataModule(directory,'shared/regional/catalog.ts');
   const source=getGermanDocumentationSource(directory),docs={};
-  for(const {id} of regionalVariants){
+  for(const {id} of releaseRegionalVariants){
     const filename=path.join(directory,'src/regional/docs',`${id}.json`);
     if(fs.existsSync(filename))docs[id]=JSON.parse(fs.readFileSync(filename,'utf8'));
   }
-  return checkDocumentationPacks(regionalVariants,source,docs);
+  return checkDocumentationPacks(releaseRegionalVariants,source,docs);
 }
 module.exports={checkDocumentationPacks,checkDocumentationCorpus};
 if(require.main===module){

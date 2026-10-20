@@ -7,7 +7,7 @@ import {usePresentation} from '../store';
 import {OutputComposition} from '../OutputComposition';
 import {TestModeWatermark} from '../TestModeWatermark';
 const initial=usePreferences.getState();
-const complete={schemaVersion:1,complete:true,regionIds:regionalVariants.map(region=>region.id)};
+const complete={schemaVersion:1,complete:true,regionIds:["bavarian-upper","bavarian-lower","upper-palatinate","east-franconian","swabian","baden-alemannic","south-baden-alemannic","palatine","rhine-hessian","south-hessian","cologne","ruhr","hamburg","berlin","bielefeld-ravensberg"]};
 afterEach(()=>{cleanup();usePreferences.setState(initial,true);localStorage.removeItem('gottesdienstregie.preferences')});
 it('hides unready resources and never shows the German variant selector for another base language',()=>{
   usePreferences.setState({language:'de',germanRegion:null});
@@ -20,16 +20,18 @@ it('hides unready resources and never shows the German variant selector for anot
   expect(screen.queryByRole('combobox')).toBeNull();
   expect(usePreferences.getState().germanRegion).toBe('ruhr');
 });
-it('offers exactly31 variants plus Hochdeutsch and persists choices without changing the live/audio/output fixtures',()=>{
+it('offers only the approved15 variants plus Hochdeutsch and preserves live/audio/output fixtures',()=>{
   usePreferences.setState({language:'de',germanRegion:null});
   const presentation=usePresentation.getState(),audio=usePreferences.getState().audioRouting;
   render(<><RegionalSelector availability={complete}/><OutputComposition banner={null} testOverlay={<TestModeWatermark role="main" visible/>}>
     <video data-testid="running-video"/><p>Am Anfang schuf Gott Himmel und Erde.</p><p>Gemeindeforum</p><p>Bitte den Seiteneingang benutzen.</p>
   </OutputComposition></>);
   const select=screen.getByRole('combobox',{name:'Deutsche Regionalvariante'}),video=screen.getByTestId('running-video');
-  expect(screen.getAllByRole('option')).toHaveLength(32);
+  expect(screen.getAllByRole('option')).toHaveLength(16);
+  expect(screen.queryByRole('option',{name:'Mittelhessisch'})).toBeNull();
+  expect(screen.queryByRole('option',{name:'Obersächsisch'})).toBeNull();
   expect(screen.getByRole('option',{name:'Hochdeutsch'})).toHaveValue('');
-  for(const region of regionalVariants){
+  for(const region of regionalVariants.filter(region=>complete.regionIds.includes(region.id))){
     expect(screen.getByRole('option',{name:region.name})).toHaveValue(region.id);
     fireEvent.change(select,{target:{value:region.id}});
     expect(usePreferences.getState().germanRegion).toBe(region.id);

@@ -12,3 +12,10 @@ it('never treats complete help alone as a complete regional edition',()=>{
   expect(report.issues).toContain('ruhr: releases.versions[0.83].title: missing-text');
   expect(report.issues.some((issue:string)=>issue.includes('missing documentation pack'))).toBe(true);
 });
+
+it('checks exactly the approved15 release variants without demanding deferred documentation packs',()=>{
+  const {checkDocumentationCorpus}=require('../../scripts/check-regional-documentation.cjs');
+  const report=checkDocumentationCorpus();
+  expect(report.regions).toBe(15);
+  expect(report.issues.some((issue:string)=>issue.startsWith('central-hessian:'))).toBe(false);
+});

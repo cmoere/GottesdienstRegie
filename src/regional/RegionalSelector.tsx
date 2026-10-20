@@ -1,5 +1,5 @@
 import {useId} from 'react';
-import {normalizeGermanRegion,regionalVariants} from '../../shared/regional/catalog';
+import {normalizeReleasedGermanRegion,releaseRegionalVariants} from '../../shared/regional/catalog';
 import {isRegionalSelectionAvailable} from '../../shared/regional/availability';
 import bundledAvailability from '../../shared/regional/availability.json';
 import {usePreferences} from '../preferences';
@@ -13,9 +13,9 @@ export function RegionalSelector({availability=bundledAvailability}:{availabilit
   if(language!=='de'||!isRegionalSelectionAvailable(availability))return null;
   return <label htmlFor={id} className="regional-selector" lang="de-DE">
     {t('germanRegionalVariant')}
-    <select id={id} value={germanRegion??''} onChange={event=>setGermanRegion(normalizeGermanRegion(event.target.value))}>
+    <select id={id} value={germanRegion??''} onChange={event=>setGermanRegion(normalizeReleasedGermanRegion(event.target.value))}>
       <option value="">Hochdeutsch</option>
-      {regionalVariants.map(region=><option key={region.id} value={region.id}>{region.name}</option>)}
+      {releaseRegionalVariants.map(region=><option key={region.id} value={region.id}>{region.name}</option>)}
     </select>
   </label>;
 }

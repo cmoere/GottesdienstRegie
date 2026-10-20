@@ -1,5 +1,23 @@
 {
   "reviewedSourceEntries": {
+    "source.50794ac7100088072d75.1": {
+      "source": "src/QuickScreenSettings.tsx",
+      "context": "jsx-text:span",
+      "text": "drag_indicator",
+      "reason": "Manually read full QuickScreenSettings.tsx 2026-10-20: Material Symbols glyph name in an aria-hidden drag icon, not prose. Operator labels and prompt are translated separately; no full-file exclusion."
+    },
+    "source.a3c334eddd80615dd80a.1": {
+      "source": "src/QuickScreenSettings.tsx",
+      "context": "ConditionalExpression",
+      "text": "Philippus Gemeinde Bielefeld e. V.",
+      "reason": "Manually read full QuickScreenSettings.tsx 2026-10-20: registered organization proper name used as an example placeholder for visitor-facing logo text. It must not be dialect-rewritten; the editable user-provided output text is preserved."
+    },
+    "source.daa997b54b98d59e50c0.1": {
+      "source": "src/AiGenerationStatus.tsx",
+      "context": "jsx-text:span",
+      "text": "error",
+      "reason": "Manually read full AiGenerationStatus.tsx 2026-10-20: Material Symbols glyph name in an aria-hidden icon, not visible operator prose. Retry and phase text are separately translated through explicit keys; supplied error data remains unchanged."
+    },
     "source.8066ad9095dba53545fe.1": {
       "source": "src/equalizerBands.ts",
       "context": "ArrayLiteralExpression",

@@ -5,8 +5,10 @@ import {
   type QuickScreenType,
 } from "./preferences";
 import { OsbSettings } from './osb/OsbSettings';
+import {useI18n} from './i18n';
 
 export function QuickScreenSettings() {
+  const {t}=useI18n();
   const items = usePreferences((s) => s.quickScreens),
     save = usePreferences((s) => s.setQuickScreens),
     [selected, setSelected] = useState(items[0]?.id ?? "logo"),
@@ -23,7 +25,7 @@ export function QuickScreenSettings() {
     save(ordered.map((item, order) => ({ ...item, order })));
   };
   const add = () => {
-    const name = prompt("Name der Schnellanzeige");
+    const name = prompt(t('quickScreenNamePrompt'));
     if (!name) return;
     const id = `custom-${Date.now()}`;
     save([
@@ -47,18 +49,14 @@ export function QuickScreenSettings() {
     reader.onload = () => patch(active.id, { imageUrl: String(reader.result) });
     reader.readAsDataURL(file);
   };
-  if(active?.type==='bible')return <section><button onClick={()=>setSelected(items.find(item=>item.type!=='bible')?.id??'logo')}>← Schnellanzeigen</button><OsbSettings/></section>;
+  if(active?.type==='bible')return <section><button onClick={()=>setSelected(items.find(item=>item.type!=='bible')?.id??'logo')}>← {t('quickScreens')}</button><OsbSettings/></section>;
   return (
     <section>
-      <h3>Schnellanzeigen</h3>
-      <p>
-        Schnellanzeigen verändern den Gottesdienstablauf nicht. Sie liegen
-        temporär über dem bekannten Live-Zustand und LAST SHOWN stellt ihn
-        wieder her.
-      </p>
+      <h3>{t('quickScreens')}</h3>
+      <p>{t('quickScreensExplanation')}</p>
       <div className="quick-settings-layout">
         <div className="quick-list">
-          <h4>SCHNELLANZEIGEN</h4>
+          <h4>{t('quickScreens').toUpperCase()}</h4>
           {[...items]
             .sort((a, b) => a.order - b.order)
             .map((item) => (
@@ -75,7 +73,7 @@ export function QuickScreenSettings() {
                 key={item.id}
                 onClick={() => setSelected(item.id)}
               >
-                <span className="material-symbols-outlined">
+                <span className="material-symbols-outlined" aria-hidden="true">
                   drag_indicator
                 </span>
                 <input
@@ -87,18 +85,18 @@ export function QuickScreenSettings() {
                   }
                 />
                 <b>{item.name}</b>
-                <small>{item.enabled ? "Aktiv" : "Aus"}</small>
+                <small>{item.enabled ? t('quickScreenActive') : t('quickScreenInactive')}</small>
               </button>
             ))}
           <button className="add-quick" onClick={add}>
-            + SCHNELLANZEIGE
+            {t('quickScreenAdd')}
           </button>
         </div>
         {active && (
           <div className="quick-details">
             <h4>{active.name.toUpperCase()}</h4>
             <label>
-              Name
+              {t('quickScreenName')}
               <input
                 value={active.name}
                 onChange={(e) => patch(active.id, { name: e.target.value })}
@@ -106,7 +104,7 @@ export function QuickScreenSettings() {
             </label>
             {!["black", "noText"].includes(active.type) && (
               <label>
-                Text
+                {t('text')}
                 <input
                   value={active.text ?? ""}
                   placeholder={
@@ -121,7 +119,7 @@ export function QuickScreenSettings() {
             {active.type === "logo" && (
               <>
                 <label>
-                  Gemeindelogo
+                  {t('quickScreenChurchLogo')}
                   <input
                     type="file"
                     accept="image/*"
@@ -132,14 +130,14 @@ export function QuickScreenSettings() {
                   <button
                     onClick={() => patch(active.id, { imageUrl: undefined })}
                   >
-                    EIGENES LOGO ENTFERNEN
+                    {t('quickScreenRemoveLogo')}
                   </button>
                 )}
               </>
             )}
             {!["black", "noText"].includes(active.type) && (
               <label>
-                Hintergrund
+                {t('background')}
                 <input
                   type="color"
                   value={active.background ?? "#000000"}
@@ -152,7 +150,7 @@ export function QuickScreenSettings() {
             {active.type === "countdown" && (
               <>
                 <label>
-                  Dauer (Sekunden)
+                  {t('quickScreenDurationSeconds')}
                   <input
                     type="number"
                     min="1"
@@ -163,7 +161,7 @@ export function QuickScreenSettings() {
                   />
                 </label>
                 <label>
-                  Endtext
+                  {t('quickScreenEndText')}
                   <input
                     value={active.endText ?? ""}
                     onChange={(e) =>
@@ -174,7 +172,7 @@ export function QuickScreenSettings() {
               </>
             )}
             <fieldset>
-              <legend>Anzeigen auf</legend>
+              <legend>{t('quickScreenTargets')}</legend>
               {["main", "stage", "notes", "livestream"].map((role) => (
                 <label className="setting-check" key={role}>
                   <input
@@ -196,7 +194,7 @@ export function QuickScreenSettings() {
             </fieldset>
             {active.type === "custom" && (
               <label>
-                Typ
+                {t('quickScreenType')}
                 <select
                   value={active.type}
                   onChange={(e) =>
@@ -205,9 +203,9 @@ export function QuickScreenSettings() {
                     })
                   }
                 >
-                  <option value="custom">Text</option>
-                  <option value="logo">Bild / Logo</option>
-                  <option value="countdown">Countdown</option>
+                  <option value="custom">{t('text')}</option>
+                  <option value="logo">{t('quickScreenImageLogo')}</option>
+                  <option value="countdown">{t('quickScreenCountdown')}</option>
                 </select>
               </label>
             )}

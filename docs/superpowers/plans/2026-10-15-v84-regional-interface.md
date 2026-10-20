@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox syntax for tracking. The user's preserved execution preference is native implementation, not delegated implementation.
 
-**Goal:** Provide complete offline operator-interface localization for the approved 31 German regional variants, including help and historical in-app release notes.
+**Goal:** Provide complete offline operator-interface localization for the approved first15 German regional variants, including help and historical in-app release notes. The user approved this first-release subset on2026-10-20; the long-term31-ID catalog remains stable, with16deferred variants hidden.
 
 **Architecture:** Keep the existing base-language preference and introduce a separate validated regional preference. Resolve app-owned strings through shared data-only catalogs usable by React and Electron. Load large regional documentation packs on demand; do not transform user or output content.
 
@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Exactly 31 regional variants plus Hochdeutsch; the names and order are those in the approved spec.
+- Exactly15 released regional variants plus Hochdeutsch, using the explicit approved IDs in the amended spec. Preserve the31-ID development catalog, but exclude16deferred IDs from selection, stored/native selection and publication checks.
 - Default and invalid stored values resolve to Hochdeutsch; date/number locale stays de-DE.
 - No changes to Firebase records, user text, Bible/song content, announcements or public outputs.
 - TESTBETRIEB remains the literal system output watermark.
@@ -31,6 +31,20 @@
 5. A modal or output window must not gain authority to change localization through unrestricted IPC (Task 5).
 
 ## File and ownership map
+
+### Approved first-release adjustment (2026-10-20)
+
+Before enabling or publishing: demonstrate RED→GREEN that the selector accepts
+only the exact ordered15-ID manifest, hides all16deferred options, and rejects or
+safely normalizes deferred IDs in renderer/native stored selections. Scope both
+documentation and interface coverage tooling to these same15IDs without bypassing
+inventory completeness, source freshness, missing text or placeholder checks.
+Keep readinessfalse and package0.83.0 until every15-pack/UI/final release gate
+passes. Complete both Hessian histories and the pending app-owned UI inventory.
+All earlier31-count tasks below are interpreted against this approved release
+subset where they concern selectable/release-ready variants; registry stability
+and existing17base languages remain unchanged. Existing translation-only delegation
+authorization remains; program changes/tests/releases are performed by root.
 
 - `shared/regional/catalog.ts`: data-only ID/name registry, German base keys and typed catalog interfaces; importable by both build targets.
 - `shared/regional/packs/<id>.json`: complete short UI/native-dialog resources per registered variant.

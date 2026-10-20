@@ -1,6 +1,27 @@
 # v84: vollständige deutsche Regionalvarianten der Bedienoberfläche
 
-Stand: 15.10.2026. Entwurf zur Benutzerprüfung, noch keine Implementierung.
+Stand: 20.10.2026. Bestätigter Entwurf mit nachträglich bestätigter erster Freigabe von15Varianten; Implementierung läuft.
+
+## Bestätigte erste Freigabe am20.10.2026
+
+Der Benutzer begrenzt die erste Veröffentlichung ausdrücklich auf die bisherigen
+13vollständigen Dokumentationsvarianten plus Rheinhessisch und Südhessisch.
+Diese15Varianten werden erst nach vollständiger UI-, Dialog-, Hilfe- und
+Versionsübersetzung veröffentlicht. Die übrigen16Varianten bleiben ausgeblendet.
+Der langfristige31er-Katalog und seine stabilen IDs bleiben erhalten, zählen aber
+nicht als verfügbare oder geprüfte Release-Sprachen. Ungültige oder zurückgestellte
+gespeicherte Regionalauswahlen fallen auf Hochdeutsch zurück, ohne Audio-, Anzeige-
+oder andere gespeicherte Einstellungen zu ersetzen. Die17bestehenden Basissprachen
+bleiben unverändert verfügbar. Fehlende UI-Texte oder unvollständige Dokumentation
+innerhalb der15Releasevarianten blockieren die Veröffentlichung weiterhin.
+
+Release-IDs in Katalogreihenfolge: bavarian-upper, bavarian-lower,
+upper-palatinate, east-franconian, swabian, baden-alemannic,
+south-baden-alemannic, palatine, rhine-hessian, south-hessian, cologne, ruhr,
+hamburg, berlin, bielefeld-ravensberg.
+
+Die folgenden31er-Angaben beschreiben den langfristigen Gesamtkatalog; für diese
+erste Freigabe gilt die vorstehende bestätigte15er-Teilmenge.
 
 ## Ziel und bestätigter Umfang
 

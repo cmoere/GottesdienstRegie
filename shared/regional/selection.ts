@@ -1,4 +1,4 @@
-import {normalizeGermanRegion,type RegionalSelection} from './catalog';
+import {normalizeReleasedGermanRegion,type RegionalSelection} from './catalog';
 
 export const regionalBaseLanguages=['de','gsw','en','nl','da','no','sv','fi','fr','it','es','uk','ru','tr','ar','pl','pt-BR'] as const;
 const languages:ReadonlySet<string>=new Set(regionalBaseLanguages);
@@ -9,7 +9,7 @@ export function normalizeRegionalSelection(value:unknown):RegionalSelection{
   const source=record(value)?value:{};
   return {
     language:typeof source.language==='string'&&languages.has(source.language)?source.language:'de',
-    germanRegion:normalizeGermanRegion(source.germanRegion),
+    germanRegion:normalizeReleasedGermanRegion(source.germanRegion),
   };
 }
 
@@ -17,10 +17,10 @@ export function validateRegionalSelection(value:unknown):RegionalSelection{
   if(!record(value)||Object.keys(value).some(key=>key!=='language'&&key!=='germanRegion')
     ||!own(value,'language')||!own(value,'germanRegion')
     ||typeof value.language!=='string'||!languages.has(value.language)
-    ||(value.germanRegion!==null&&normalizeGermanRegion(value.germanRegion)===null)){
+    ||(value.germanRegion!==null&&normalizeReleasedGermanRegion(value.germanRegion)===null)){
     throw new Error('Ungültige regionale Sprachauswahl.');
   }
-  return {language:value.language,germanRegion:normalizeGermanRegion(value.germanRegion)};
+  return {language:value.language,germanRegion:normalizeReleasedGermanRegion(value.germanRegion)};
 }
 
 export interface RegionalSettingsBridge{
