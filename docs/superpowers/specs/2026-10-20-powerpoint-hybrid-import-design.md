@@ -1,7 +1,8 @@
 # PowerPoint-Hybridimport: Originaltreue vor Bearbeitbarkeit
 
-Status: Entwurf zur Nutzerprüfung. Keine Produktimplementierung und keine
-Veröffentlichung durch diesen Entwurf freigegeben.
+Status: Vom Nutzer am20.10.2026 mit „ja“ zur anschließenden Erstellung des
+Umsetzungsplans freigegeben. Produktimplementierung erst nach Planprüfung;
+keine Veröffentlichung freigegeben.
 
 ## Ziel und bestätigte Entscheidungen
 
