@@ -793,3 +793,25 @@ All44historical guards then exit0 in
 `work/v84-normal-update-legacy-green.log`, including9output-composition tests
 and the explicitly disclosed partial-v84 gate. This supplements the successful
 build,5browser cases and actual isolated native smoke described above.
+
+## Published normal update0.84.0 —2026-10-20
+
+Source1e01d3effe4abb207fa2cd8d33cede11abbbbe84 was fast-forwarded to main.
+[Cross-platform release](https://github.com/cmoere/GottesdienstRegie/actions/runs/39497421093)
+has successful prepare, Windows, Linux and macOS jobs. The
+[Pages deployment](https://github.com/cmoere/GottesdienstRegie/actions/runs/39497421259)
+also succeeded; its public releases.json lists0.84.0 as current.
+
+Public verification at21:21UTC confirms
+[v0.84.0](https://github.com/cmoere/GottesdienstRegie/releases/tag/v0.84.0)
+is latest, draft:false and prerelease:false, and its tag resolves to the exact
+source commit. All11platform assets are present. latest.yml, latest-mac.yml and
+latest-linux.yml each identify0.84.0 and reference present release assets.
+The public release body includes the partial-UI disclosure.
+
+The Windows installer was downloaded, never executed:290172829bytes;
+SHA512 matches latest.yml and SHA256 matches GitHub's asset digest:
+`d258f04de44aea7e1fdd3e860b6f33935ddc2a689dde3a072f0a40923cfde65b`.
+Local generated report:`work/v84-public-verification/report.json`.
+This proves publication/integrity, not installation on the user's machine or
+complete regional UI translation. Worktree retained; unrelated diagnostic intact.
