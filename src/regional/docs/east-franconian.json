@@ -324,6 +324,16 @@
     "screenshotLabel": "Beispielansicht"
   },
   "releases": {
+    "versions[0.84].builds[0.84.0].overview.label": "Regionale Bedienoberfläch mit 15 Varianten",
+    "versions[0.84].builds[0.84.0].overview.text": "Die reguläre Aktualisierung macht die erstn 15 deutschn Regionalvarianten unter Einstellungen → Allgemein → Sprache auswählbar. Hilf und bisheriger Versionsverlauf sind regional hinterlegt; weitere Bedienelemente kumma nach und nach dazu. Der Hinweis auf den unvollständign UI-Umfang bleibt in der Sprachauswahl sichtbar. Eigene Inhalte und die Bild- und Tonausgab werdn durch die Sprachwahl ned verändert.",
+    "versions[0.84].builds[0.84.0].sections.new.0.label": "Regionale Spracheinstellungen",
+    "versions[0.84].builds[0.84.0].sections.new.0.text": "Bei deutscher Basissprach gibt's 15 regionale Varianten und Hochdeutsch. Die Auswahl wird auf dem Gerät gspeichert und kann jederzeit auf Hochdeutsch zruckgsetzt werdn. Andere Basissprachn bleim eigenständig. Ned freigegebene Regionalvarianten werdn ned angebotn.",
+    "versions[0.84].builds[0.84.0].sections.improved.0.label": "Regionale Hilf, Versionstexte und Bedienelemente",
+    "versions[0.84].builds[0.84.0].sections.improved.0.text": "Die 63 Hilfeartikel und die bisherign Versionshinweise bis 0.83.0 sind für alle freigegebnen Varianten lokal hinterlegt. Regionale Texte ergänzn unter anderem die Veranstaltungsverknüpfung, Schnellanzeigen und ausgewählte Audio-, Barrierefreiheits- und Versionsdetails. Vorhandene Gerätezuordnungen, Radio und Liveposition bleim erhaltn.",
+    "versions[0.84].builds[0.84.0].sections.known.0.label": "UI-Übersetzung noch ned vollständig",
+    "versions[0.84].builds[0.84.0].sections.known.0.text": "Die Regionalvarianten sind noch ned vollständig übersetzt. Fehlende UI-Texte werdn auf Hochdeutsch angezeigt. Die Version wird auf ausdrücklichen Wunsch als normales Update mit dem eingeschränkten Sprachumfang veröffentlicht. A vollständige Übersetzung sämtlicher Menüs, Dialoge und Werkzeig wird ned zugesichert.",
+    "versions[0.84].builds[0.84.0].sections.known.1.label": "Ausgabeinhalte und Sprachansagn bleim unverändert",
+    "versions[0.84].builds[0.84.0].sections.known.1.text": "Bibel- und Liedtexte, eigene Folientexte sowie Veranstaltungen, Räume und Meldungen aus Firebase werdn ned in Dialekt umgschriebn. TESTBETRIEB bleibt als System-Wasserzeichen unverändert. Automatische Sprachansagn, Gong, Stimmwahl und Sprachpakete bleim wie bisher ausgschaltet; die Regionalauswahl schaltet kaa Sprachausgab ei.",
     "versions[0.15].builds[0.15.0].sections.new.0.label": "Teilnahmecode und QR-Code",
     "versions[0.15].builds[0.15.0].sections.new.0.text": "A bewusster LiveQuiz-Start erzeugt an echten sechsstelligen Teilnahmecode und an lokal gerenderten QR-Code.",
     "versions[0.15].builds[0.15.0].sections.new.1.label": "Mobile Teilnahme",

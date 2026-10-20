@@ -1,3 +1,26 @@
+# GottesdienstRegie 0.84.0
+
+Veröffentlicht: Di., 20.10.2026
+
+Diese reguläre Aktualisierung macht die ersten 15 deutschen Regionalvarianten unter **Einstellungen → Allgemein → Sprache** auswählbar. Sie enthält regionale Hilfe, den bisherigen Versionsverlauf sowie weitere Beschriftungen für die Bedienoberfläche. Die Regionalauswahl betrifft ausschließlich die Bedienung, nicht die Inhalte der Ausgaben.
+
+## Neu und verbessert
+
+- 15 deutsche Regionalvarianten und Hochdeutsch als jederzeit erreichbarer Standard. Die Auswahl wird gerätebezogen gespeichert; die übrigen Regionalvarianten bleiben verborgen.
+- 63 Hilfeartikel und die bisherigen Versionshinweise bis einschließlich 0.83.0 sind für die freigegebenen Varianten lokal hinterlegt. Es wird kein Online-Übersetzungsdienst benötigt.
+- Regionale Beschriftungen für die Veranstaltungsverknüpfung, Schnellanzeigen und ausgewählte Audio-, Barrierefreiheits- und Versionsdetails. Bereits vorhandene Übersetzungen anderer Basissprachen bleiben erhalten.
+- Sprachwechsel verändern weder gespeicherte Audio-Geräte noch Präsentationsinhalte oder die aktuelle Liveposition. Eigene Titel, Bibel- und Liedtexte und Firebase-Inhalte werden nicht umgeschrieben.
+
+## Bekannte Einschränkungen
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.
+
+Diese Veröffentlichung erfolgt auf ausdrücklichen Wunsch als normales Update mit eingeschränktem regionalem UI-Umfang. Die Sprachauswahl weist sichtbar darauf hin. Eine vollständige Übersetzung aller Menüs, Dialoge und Werkzeuge wird nicht behauptet. Hochdeutsch bleibt jederzeit auswählbar.
+
+Automatische Sprachansagen, Gong, Stimmwahl und Sprachpakete bleiben deaktiviert. Die Regionalauswahl aktiviert keine Sprachausgabe und verändert nicht die Besucher-Ausgaben. Das System-Wasserzeichen **TESTBETRIEB** bleibt unverändert.
+
+---
+
 # GottesdienstRegie 0.83.0
 
 Veröffentlicht: Do., 15.10.2026

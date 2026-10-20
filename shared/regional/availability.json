@@ -1,5 +1,15 @@
 {
   "schemaVersion": 1,
   "complete": false,
-  "regionIds": []
+  "regionIds": [
+    "bavarian-upper", "bavarian-lower", "upper-palatinate", "east-franconian",
+    "swabian", "baden-alemannic", "south-baden-alemannic", "palatine",
+    "rhine-hessian", "south-hessian", "cologne", "ruhr", "hamburg", "berlin",
+    "bielefeld-ravensberg"
+  ],
+  "partialRelease": {
+    "version": "0.84.0",
+    "inventoryFingerprint": "b2f04ec1d4943b6982dc3d2feb33b29dc14e985974501a104d60c3021d2615af",
+    "notice": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt."
+  }
 }

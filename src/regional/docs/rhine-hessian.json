@@ -324,6 +324,16 @@
     "screenshotLabel": "Beispielansicht"
   },
   "releases": {
+    "versions[0.84].builds[0.84.0].overview.label": "Regionale Bedienoberfläch mit 15 Variante",
+    "versions[0.84].builds[0.84.0].overview.text": "Mit der reguläre Aktualisierung kannste die erschde 15 deitsche Regionalvariante unner Einstellunge → Allgemein → Sprooch auswähle. Hilf un bisherijer Versionsverlauf sin regional hinterlegt; weidere Bedienelemente komme Schritt für Schritt dezu. De Hinweis uff de unvollständije UI-Umfang bleibt in de Sproochauswahl sichtbar. Eijene Inhalte un die Bild- un Tonausgab werre durch die Sproochwahl net verändert.",
+    "versions[0.84].builds[0.84.0].sections.new.0.label": "Regionale Sproocheinstellunge",
+    "versions[0.84].builds[0.84.0].sections.new.0.text": "Bei deitscher Basissprooch gibt's 15 regionale Variante un Hochdeitsch. Die Auswahl werd uff dem Gerät gespeischert un lässt sich jederzeit uff Hochdeitsch zuricksetze. Annere Basissprooche bleiwe eijeständij. Net freigegebene Regionalvariante werre net aagebote.",
+    "versions[0.84].builds[0.84.0].sections.improved.0.label": "Regionale Hilf, Versionstexte un Bedienelemente",
+    "versions[0.84].builds[0.84.0].sections.improved.0.text": "Die 63 Hilfeartikel un die bisherije Versionshinweise bis 0.83.0 sin für alle freigegebene Variante lokal hinterlegt. Regionale Texte ergänze unner annerm die Veranstaltungsverknüpfung, Schnellanzeije un ausgewählte Audio-, Barrierefreiheits- un Versionsdetails. Vorhandene Gerätezuordnunge, Radio un Liveposition bleiwe erhalte.",
+    "versions[0.84].builds[0.84.0].sections.known.0.label": "UI-Lokalisierung noch unvollständij",
+    "versions[0.84].builds[0.84.0].sections.known.0.text": "Regionalvariante sin noch net vollständig iwwersetzt. Fehlende UI-Texte werre uff Hochdeitsch gezeijt. Die Version werd uff ausdrickliche Wunsch als normales Update mit dem eingeschränkte Sproochumfang veröffentlicht. E vollständije Iwwersetzung vun sämtliche Menüs, Dialoge un Werkzeig werd net zugesichert.",
+    "versions[0.84].builds[0.84.0].sections.known.1.label": "Ausgabeinhalte un Sprochaasage bleiwe unverändert",
+    "versions[0.84].builds[0.84.0].sections.known.1.text": "Bibel- un Liedtexte, eijene Folietexte sowie Veranstaltunge, Räum un Meldunge aus Firebase werre net in Dialekt umgeschriwwe. TESTBETRIEB bleibt als System-Wasserzeiche unverändert. Automatische Sprochaasage, Gong, Stimmwahl un Sprochpakete bleiwe wie bisher deaktiviert; die Regionalauswahl schaltet kää Sprochausgab aa.",
     "versions[0.83].builds[0.83.0].overview.label": "Aasage vorbereide un Audiosteuerung sichere",
     "versions[0.83].builds[0.83.0].overview.text": "Unner Einstellunge → Präsentation → Aasage lasse sich des spätere Intervall un de verbleibende Musikpegel fer den Regie-PC speichere. Freigegebene öffentliche Saaltexte kumme aus de bestehende Gemeindemeldunge; Firebase-Date bleiwe unverändert. Die vorhandene Hinnergrundaudiosteuerung kriegt getrennte Absenkungsansprüch un Schutz vor veraltete Fade-Zielwerte. Die Veröffentlichung enthält bloß die Vorbereitung: Automatische Sprochaasage, Gong, Stimmwahl un Sprochpakete sin noch net verfügbar.",
     "versions[0.83].builds[0.83.0].sections.new.0.label": "Gerätebezogene Aasagevorbereitung",

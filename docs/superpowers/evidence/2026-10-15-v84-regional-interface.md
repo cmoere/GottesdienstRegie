@@ -723,3 +723,73 @@ This verified increment is saved locally. Overall UI source migration,
 classification, whole-feature review and publication remain incomplete. The
 strict3637-issue readiness result is not bypassed: no version bump, readiness
 enable, push, tag, GitHub release or installer publication occurred.
+
+### 2026-10-20 — User-approved normal0.84 update with disclosed partial UI
+
+After being told the UI remained incomplete, the user first agreed to a
+disclosed prerelease, then expressly requested `als normales update`. This
+changes the release scope for0.84.0, not the truth of its completeness claim.
+`docs/releases/v84-partial-ui-scope.md` records the amended requirements. The
+manifest remains complete:false and binds the partial UI disclosure to0.84.0
+and inventory fingerprint
+`b2f04ec1d4943b6982dc3d2feb33b29dc14e985974501a104d60c3021d2615af`.
+
+The selector offers only15variants plus Hochdeutsch and exposes a visible,
+accessible notice that UI translation remains incomplete. The publication policy
+accepts only the explicitly recorded pending UI classifications for this version
+and source fingerprint. Missing resources/documents, malformed placeholders,
+stale inventory, absent disclosure or another release version still block it.
+Three real regressions were observed RED→GREEN,7/7tests
+(`work/v84-normal-partial-red.log`, `work/v84-normal-partial-green.log`). The
+ordinary strict coverage checker remains unchanged and does not claim complete
+UI coverage.
+
+Current0.84release notes were added in German/English and10fields explicitly
+translated for each of the15regional editions by a translation-only worker.
+Root merged only after write-stop and independent canonical validation. The
+actual publication gate correctly failed300missing-document checks before
+integration, then passed after it (`work/v84-normal-update-gate-red.log`,
+`work/v84-normal-update-gate-green.log`). The15actual offline loaders now validate
+63help articles,4helpUI fields and1456release fields per edition. All21690prior
+history values and existing help/helpUI remain unchanged
+(`work/v84-normal-update-preservation.log`).
+
+Focused checks pass22/22. The first full run reports691/692passing, with one
+obsolete1446-field count after adding10new release fields. The count was updated
+to1456 while retaining old-version identity assertions and adding current
+disclosure coverage; the focused source suite passes3/3
+(`work/v84-normal-update-source-green.log`). Final full-suite rerun is pending
+in `work/v84-normal-update-final-verification.log`.
+
+Actual browser tests pass5/5, including visible partial-scope disclosure,
+15selectable variants, retained audio preferences and desktop/tablet layout
+(`work/v84-normal-update-browser.log`). Both generated settings captures were
+visually inspected: the notice is readable and not clipped. Desktop build exits0
+and copies31native assets, with existing chunk warnings
+(`work/v84-normal-update-build.log`). Isolated compiled main/preload smoke passes
+all15locale writes, deferred-write rejection without saved-state mutation,
+secondary-window denial and the localized four-action updater dialog; no install
+or real update download was started (`work/v84-normal-update-native.log`).
+
+Final review is self-review by root because the user's delegation authorization
+permits translation work only. The reviewed production paths include resource
+and documentation loading/races, literal interpolation, preference preservation,
+control-frame IPC authorization, stable version/section identities, partial
+manifest validation, source freshness and the normal-update release metadata.
+No further critical/important blocker was found. This is weaker assurance than
+an independent fresh reviewer and is not native-speaker certification. Remaining
+UI wording/classification is intentionally disclosed, not silently marked done.
+Existing large-chunk warnings are retained. The unrelated untracked startup
+diagnostic is untouched. No push/publication has occurred at this checkpoint.
+
+Final normal-update verification: all172test files /692tests pass in
+`work/v84-normal-update-final-verification.log`. The following historical guard
+chain exposed a test-loader incompatibility: v43/v44/v45 used CommonJS
+transpilation without Vite JSON-glob support. The original v43 invocation failed
+with `exports is not defined` at the real regional-resource import. A shared
+test-only adapter now enumerates the actual local JSON packages, preserving
+lazy loading and the original assertions; no production renderer was changed.
+All44historical guards then exit0 in
+`work/v84-normal-update-legacy-green.log`, including9output-composition tests
+and the explicitly disclosed partial-v84 gate. This supplements the successful
+build,5browser cases and actual isolated native smoke described above.

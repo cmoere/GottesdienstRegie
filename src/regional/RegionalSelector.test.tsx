@@ -11,7 +11,7 @@ const complete={schemaVersion:1,complete:true,regionIds:["bavarian-upper","bavar
 afterEach(()=>{cleanup();usePreferences.setState(initial,true);localStorage.removeItem('gottesdienstregie.preferences')});
 it('hides unready resources and never shows the German variant selector for another base language',()=>{
   usePreferences.setState({language:'de',germanRegion:null});
-  const view=render(<RegionalSelector/>);
+  const view=render(<RegionalSelector availability={{schemaVersion:1,complete:false,regionIds:[]}}/>);
   expect(screen.queryByRole('combobox')).toBeNull();
   view.rerender(<RegionalSelector availability={{...complete,regionIds:complete.regionIds.slice(1)}}/>);
   expect(screen.queryByRole('combobox')).toBeNull();
@@ -19,6 +19,20 @@ it('hides unready resources and never shows the German variant selector for anot
   view.rerender(<RegionalSelector availability={complete}/>);
   expect(screen.queryByRole('combobox')).toBeNull();
   expect(usePreferences.getState().germanRegion).toBe('ruhr');
+});
+
+it('discloses incomplete UI translations while offering the15 partial-release variants and Hochdeutsch reset',()=>{
+  usePreferences.setState({language:'de',germanRegion:null});
+  const notice='Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.';
+  render(<RegionalSelector availability={{...complete,complete:false,partialRelease:{version:'0.84.0',inventoryFingerprint:'a'.repeat(64),notice}}}/>);
+  expect(screen.getByRole('note')).toHaveTextContent(notice);
+  const selector=screen.getByRole('combobox',{name:'Deutsche Regionalvariante'});
+  expect(selector).toHaveAccessibleDescription(notice);
+  expect(screen.getAllByRole('option')).toHaveLength(16);
+  fireEvent.change(selector,{target:{value:'rhine-hessian'}});
+  expect(usePreferences.getState().germanRegion).toBe('rhine-hessian');
+  fireEvent.change(selector,{target:{value:''}});
+  expect(usePreferences.getState().germanRegion).toBeNull();
 });
 it('offers only the approved15 variants plus Hochdeutsch and preserves live/audio/output fixtures',()=>{
   usePreferences.setState({language:'de',germanRegion:null});

@@ -12,6 +12,16 @@
 
 ## Global Constraints
 
+**Spätere Benutzeranweisung (20.10.2026):** Nach ausdrücklicher Aufklärung über
+die unvollständige UI wurde Veröffentlichung „als normales update“ verlangt.
+Für genau0.84.0 gilt der dokumentierte eingeschränkte Umfang in
+`docs/releases/v84-partial-ui-scope.md` statt der früheren UI-Vollständigkeitssperre.
+Das Manifest bleibtcomplete:false; offene UI-Stellen werden ausdrücklich
+angezeigt und an Inventarfingerabdruck/Version gebunden. Ressourcenvalidierung,
+Quelldatenaktualität, vollständige Dokumentationspakete und Tests bleiben Pflicht.
+Die frühere Freigabebedingung bleibt darunter als historischer Planstand erhalten,
+nicht als Behauptung, diese vollständige Lokalisierung sei bereits erreicht.
+
 - Exactly15 released regional variants plus Hochdeutsch, using the explicit approved IDs in the amended spec. Preserve the31-ID development catalog, but exclude16deferred IDs from selection, stored/native selection and publication checks.
 - Default and invalid stored values resolve to Hochdeutsch; date/number locale stays de-DE.
 - No changes to Firebase records, user text, Bible/song content, announcements or public outputs.

@@ -2,12 +2,12 @@
 
 ## Deutsch
 
-Entwicklungsstand: v84 ist noch nicht veröffentlicht. Die nachfolgende Bedienung
-beschreibt die vorgesehene vollständige Funktion. Der Auswahlschalter bleibt im
-normalen Entwicklungsbuild verborgen, bis sämtliche Ressourcen freigegeben sind.
-Eine vorhandene Übersetzungsdatei allein bedeutet keine fertige Sprachvariante.
+Version0.84.0 wird auf ausdrücklichen Wunsch als normales Update mit eingeschränktem
+regionalem UI-Umfang freigegeben. Die Sprachauswahl ist verfügbar und weist darauf
+hin: Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte
+werden auf Hochdeutsch angezeigt. Vollständige UI-Lokalisierung wird nicht behauptet.
 
-Nach der Freigabe: Öffne **Einstellungen → Allgemein → Sprache**, wähle Deutsch
+Öffne **Einstellungen → Allgemein → Sprache**, wähle Deutsch
 und anschließend **Deutsche Regionalvariante**. Die Beschriftung dieses Feldes
 kann selbst regional formuliert sein. Für die erste Freigabe sind 15 Varianten
 vorgesehen: Oberbayerisch, Niederbayerisch, Oberpfälzisch, Ostfränkisch,
@@ -35,16 +35,18 @@ Sprachnamen werden nicht wie Fließtext umformuliert.
 Alle regionalen Ressourcen werden mit der Anwendung ausgeliefert; es gibt keinen
 Online-Übersetzungsdienst im Livebetrieb. Bei beschädigten oder künftig ergänzten
 Ressourcen dient Hochdeutsch als defensiver Rückfall. Das ist kein Ersatz für die
-Vollständigkeitsprüfung: fehlende vereinbarte Texte verhindern die Freigabe.
+Vollständigkeitsprüfung: fehlende bekannte Ressourcen und fehlerhafte Übersetzungen
+verhindern die Freigabe weiterhin. Der ausdrücklich offengelegte unvollständige
+UI-Umfang ist nur für0.84.0 an den aktuellen Inventarfingerabdruck gebunden.
 
 ## English
 
-Development status: v84 has not been published. The instructions below describe
-the intended complete feature. The selector remains hidden in normal development
-builds until all resources are approved. A translation file by itself does not
-constitute a finished regional edition.
+Version0.84.0 is being released as a regular update with explicitly limited
+regional UI coverage at the user's request. The selector is available and visibly
+states that regional variants are not fully translated; missing UI text remains
+in Standard German. Complete interface localization is not claimed.
 
-After release: open **Settings → General → Language**, select German and then
+Open **Settings → General → Language**, select German and then
 **German regional variant**. The field label itself may use regional wording.
 The initial release scope is 15 variants: Upper Bavarian, Lower Bavarian,
 Upper Palatinate, East Franconian, Swabian, Baden Alemannic, South Baden,
@@ -71,4 +73,5 @@ as prose.
 Regional resources ship with the application; no online translation service runs
 in the live path. Standard German is a defensive fallback for damaged resources
 or future additions, not a substitute for complete translations. Missing agreed
-content blocks publication.
+known resources or invalid translations block publication. The disclosed partial
+UI scope is bound to0.84.0 and its current inventory fingerprint only.

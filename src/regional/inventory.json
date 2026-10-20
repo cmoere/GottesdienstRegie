@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": false,
-  "sourceFingerprint": "a4f39258b661a1b4d09ec10314adca17e072517d4aba032c3aa1143d9fa460c7",
+  "sourceFingerprint": "b2f04ec1d4943b6982dc3d2feb33b29dc14e985974501a104d60c3021d2615af",
   "note": "Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -35487,6 +35487,76 @@
       "line": 26,
       "context": "NewExpression",
       "status": "review-required"
+    },
+    {
+      "key": "release.versions[0.84].builds[0.84.0].overview.label",
+      "text": "Regionale Bedienoberfläche mit 15 Varianten",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.84].builds[0.84.0].overview.text",
+      "text": "Diese reguläre Aktualisierung macht die ersten 15 deutschen Regionalvarianten unter Einstellungen → Allgemein → Sprache auswählbar. Hilfe und bisheriger Versionsverlauf sind regional hinterlegt; weitere Bedienelemente werden schrittweise ergänzt. Der Hinweis auf den unvollständigen UI-Umfang bleibt in der Sprachauswahl sichtbar. Eigene Inhalte und die Bild- und Tonausgabe werden durch die Sprachwahl nicht verändert.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.84].builds[0.84.0].sections.new.0.label",
+      "text": "Regionale Spracheinstellungen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.84].builds[0.84.0].sections.new.0.text",
+      "text": "Bei deutscher Basissprache stehen 15 regionale Varianten sowie Hochdeutsch bereit. Die Auswahl wird auf diesem Gerät gespeichert und kann jederzeit auf Hochdeutsch zurückgesetzt werden. Andere Basissprachen bleiben eigenständig. Nicht freigegebene Regionalvarianten werden nicht angeboten.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.84].builds[0.84.0].sections.improved.0.label",
+      "text": "Regionale Hilfe, Versionstexte und Bedienelemente",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.84].builds[0.84.0].sections.improved.0.text",
+      "text": "Die 63 Hilfeartikel und die bisherigen Versionshinweise bis 0.83.0 sind für alle freigegebenen Varianten lokal hinterlegt. Regionale Texte ergänzen unter anderem die Veranstaltungsverknüpfung, Schnellanzeigen und ausgewählte Audio-, Barrierefreiheits- und Versionsdetails. Vorhandene Gerätezuordnungen, Radio und Liveposition bleiben erhalten.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.84].builds[0.84.0].sections.known.0.label",
+      "text": "UI-Lokalisierung noch unvollständig",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.84].builds[0.84.0].sections.known.0.text",
+      "text": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Diese Version wird auf ausdrücklichen Wunsch als normales Update mit diesem eingeschränkten Sprachumfang veröffentlicht. Eine vollständige Übersetzung sämtlicher Menüs, Dialoge und Werkzeuge wird nicht zugesichert.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.84].builds[0.84.0].sections.known.1.label",
+      "text": "Ausgabeinhalte und Sprachansagen bleiben unverändert",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.84].builds[0.84.0].sections.known.1.text",
+      "text": "Bibel- und Liedtexte, eigene Folientexte sowie Veranstaltungen, Räume und Meldungen aus Firebase werden nicht in Dialekt umgeschrieben. TESTBETRIEB bleibt als System-Wasserzeichen unverändert. Automatische Sprachansagen, Gong, Stimmwahl und Sprachpakete bleiben wie bisher deaktiviert; die Regionalauswahl schaltet keine Sprachausgabe ein.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
     },
     {
       "key": "release.versions[0.83].builds[0.83.0].overview.label",

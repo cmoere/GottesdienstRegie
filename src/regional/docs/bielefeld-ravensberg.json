@@ -324,6 +324,16 @@
     "screenshotLabel": "Buispilansicht"
   },
   "releases": {
+    "versions[0.84].builds[0.84.0].overview.label": "Regionale Bedienoberfläche met 15 Varianten",
+    "versions[0.84].builds[0.84.0].overview.text": "Met düsse reguläre Aktualiseering sind de iersten 15 düütsken Regionalvarianten unner Instellungen → Allgemein → Sproke uutwählbar. Hülpe un de bisherige Versionsverloop sind regional hinnerleggt; wiedere Bedienelemente kuomet noh un noh doteo. De Henwies up den unvullstännigen UI-Umfang bluiwet in de Sprokoutwahl sichtbor. Eigene Inholte un de Bild- un Tonoutgabe waiern dör de Sprokwahl nich verännert.",
+    "versions[0.84].builds[0.84.0].sections.new.0.label": "Regionale Sprokinstellungen",
+    "versions[0.84].builds[0.84.0].sections.new.0.text": "Bi düütsker Basissproke stoht 15 regionale Varianten un Hauchdüütsk parat. De Outwahl wärt up düssen Apparat spiekert un kann jümmers wier up Hauchdüütsk torüggesett waiern. Annere Basissproken bluiwet eigenstännig. Nich fruigewene Regionalvarianten waiern nich anbuoden.",
+    "versions[0.84].builds[0.84.0].sections.improved.0.label": "Regionale Hülpe, Versionstexte un Bedienelemente",
+    "versions[0.84].builds[0.84.0].sections.improved.0.text": "De 63 Hülpeartikel un de bisherigen Versionshenwiese bit 0.83.0 sind for alle fruigewenen Varianten lokal hinnerleggt. Regionale Texte ergänzt unner annerem de Veranstaltungsverknüppung, Gau-Anzeigen un uutwählte Audio-, Barrierefreiheits- un Versionsdetails. Vörhannene Gerätezuordnungen, Radio un Liveposition bluiwet erhaulen.",
+    "versions[0.84].builds[0.84.0].sections.known.0.label": "UI-Öäwersetzung nau unvullstännig",
+    "versions[0.84].builds[0.84.0].sections.known.0.text": "Regionalvarianten sind nau nich vullstännig öäwersett. Fehlende UI-Texte waiern up Hauchdüütsk wiest. Düsse Version wärt up uutdrücklichen Wunsch as normales Update met düssen begrenzten Sprokumfang veröffentlicht. Ene vullstännige Öäwersetzung van sämtliche Menüs, Dialoge un Wiärktüge wärt nich tooseggt.",
+    "versions[0.84].builds[0.84.0].sections.known.1.label": "Outgabeinholte un Sprokansaagen bluiwet unverännert",
+    "versions[0.84].builds[0.84.0].sections.known.1.text": "Bibel- un Leedtexte, eigene Folientexte as auk Veranstaltungen, Rüme un Mellungen out Firebase waiern nich in Dialekt ummeschriäwen. TESTBETRIEB bluiwet as System-Waterteiken unverännert. Automatische Sprokansaagen, Gong, Stimmoutwahl un Sprokpakete bluiwet as bisher deaktiviert; de Regionaloutwahl schaltet kiene Sprokoutgabe in.",
     "versions[0.83].builds[0.83.0].overview.label": "Ansaagen vörbereiten un Audiostüerung afsekern",
     "versions[0.83].builds[0.83.0].overview.text": "Unner Instellungen → Präsentation → Ansaagen laaten sik dat spätere Intervall un de iäwrige Musikpegel for düssen Regie-PC spiekern. Fruigegewene öffentliche Saaltexte kuomet out de bestohnden Gemeendemellungen; Firebase-Daten bluiwet unverännert. De vörhannene Achtergrund-Audiostüerung kriggt getrennte Afsiänkungsansprüche un Schutz vor veralderten Fade-Ziälwiärten. Düsse Veröffentlichung enthält blaut de Vörbereitung: Automatische Sprokansaagen, Gong, Stimmoutwahl un Sprokpakete sind nau nich verfügbar.",
     "versions[0.83].builds[0.83.0].sections.new.0.label": "Gerätebezogene Ansaagenvörbereitung",

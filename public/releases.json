@@ -21,9 +21,28 @@
   ],
   "versions": [
     {
+      "line": "0.84",
+      "builds": [{
+        "version": "0.84.0", "releaseDate": "2026-10-20", "current": true,
+        "overview": {
+          "label": {"de": "Regionale Bedienoberfläche mit 15 Varianten", "en": "Regional operator interface with 15 variants"},
+          "text": {"de": "Diese reguläre Aktualisierung macht die ersten 15 deutschen Regionalvarianten unter Einstellungen → Allgemein → Sprache auswählbar. Hilfe und bisheriger Versionsverlauf sind regional hinterlegt; weitere Bedienelemente werden schrittweise ergänzt. Der Hinweis auf den unvollständigen UI-Umfang bleibt in der Sprachauswahl sichtbar. Eigene Inhalte und die Bild- und Tonausgabe werden durch die Sprachwahl nicht verändert.", "en": "This regular update makes the first 15 German regional variants available under Settings → General → Language. Regional help and the previous release history are included; further operator controls will be added incrementally. The language selector keeps a visible notice that UI coverage is incomplete. Selecting a variant does not change user content or visual and audio outputs."}
+        },
+        "sections": {
+          "new": [{"label": {"de": "Regionale Spracheinstellungen", "en": "Regional language settings"}, "text": {"de": "Bei deutscher Basissprache stehen 15 regionale Varianten sowie Hochdeutsch bereit. Die Auswahl wird auf diesem Gerät gespeichert und kann jederzeit auf Hochdeutsch zurückgesetzt werden. Andere Basissprachen bleiben eigenständig. Nicht freigegebene Regionalvarianten werden nicht angeboten.", "en": "With German selected as the base language, 15 regional variants and Standard German are available. The choice is saved on this device and can be reset to Standard German at any time. Other base languages remain independent. Regional variants outside the released selection are not offered."}}],
+          "improved": [{"label": {"de": "Regionale Hilfe, Versionstexte und Bedienelemente", "en": "Regional help, release history and controls"}, "text": {"de": "Die 63 Hilfeartikel und die bisherigen Versionshinweise bis 0.83.0 sind für alle freigegebenen Varianten lokal hinterlegt. Regionale Texte ergänzen unter anderem die Veranstaltungsverknüpfung, Schnellanzeigen und ausgewählte Audio-, Barrierefreiheits- und Versionsdetails. Vorhandene Gerätezuordnungen, Radio und Liveposition bleiben erhalten.", "en": "The 63 help articles and previous release notes through 0.83.0 are packaged locally for every released variant. Regional copy covers event linking, Quick Screens and selected audio, accessibility and version details. Existing device assignments, radio playback and the live position are preserved."}}],
+          "fixed": [],
+          "known": [
+            {"label": {"de": "UI-Lokalisierung noch unvollständig", "en": "UI localization remains incomplete"}, "text": {"de": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Diese Version wird auf ausdrücklichen Wunsch als normales Update mit diesem eingeschränkten Sprachumfang veröffentlicht. Eine vollständige Übersetzung sämtlicher Menüs, Dialoge und Werkzeuge wird nicht zugesichert.", "en": "Regional variants are not fully translated yet. Missing UI translations remain in Standard German. This version is published as a regular update with this explicitly limited language scope. Complete translation of every menu, dialog and tool is not claimed."}},
+            {"label": {"de": "Ausgabeinhalte und Sprachansagen bleiben unverändert", "en": "Output content and speech announcements remain unchanged"}, "text": {"de": "Bibel- und Liedtexte, eigene Folientexte sowie Veranstaltungen, Räume und Meldungen aus Firebase werden nicht in Dialekt umgeschrieben. TESTBETRIEB bleibt als System-Wasserzeichen unverändert. Automatische Sprachansagen, Gong, Stimmwahl und Sprachpakete bleiben wie bisher deaktiviert; die Regionalauswahl schaltet keine Sprachausgabe ein.", "en": "Bible and song texts, user-authored slide text and Firebase events, rooms and announcements are not rewritten into dialect. The TESTBETRIEB system watermark stays unchanged. Automatic speech announcements, gong playback, voice selection and speech packages remain disabled; selecting a regional interface does not enable speech output."}}
+          ]
+        }
+      }]
+    },
+    {
       "line": "0.83",
       "builds": [{
-        "version": "0.83.0", "releaseDate": "2026-10-15", "current": true,
+        "version": "0.83.0", "releaseDate": "2026-10-15", "current": false,
         "overview": {
           "label": {"de": "Ansagen vorbereiten und Audiosteuerung absichern", "en": "Announcement preparation and safer audio control"},
           "text": {"de": "Unter Einstellungen → Präsentation → Ansagen lassen sich das spätere Intervall und der verbleibende Musikpegel für diesen Regie-PC speichern. Freigegebene öffentliche Saaltexte kommen aus den bestehenden Gemeindemeldungen; Firebase-Daten bleiben unverändert. Die vorhandene Hintergrund-Audiosteuerung erhält getrennte Absenkungsansprüche und Schutz vor veralteten Fade-Zielwerten. Diese Veröffentlichung enthält ausschließlich die Vorbereitung: Automatische Sprachansagen, Gong, Stimmwahl und Sprachpakete sind noch nicht verfügbar.", "en": "Settings → Presentation → Announcements prepares the future interval and remaining music level for this control PC. Eligible public hall texts come from existing community announcements without changing Firebase records. Background audio gains independent attenuation claims and protection against stale fade targets. This release contains preparation only: automatic speech, gong playback, voice selection and speech packages are not yet available."}

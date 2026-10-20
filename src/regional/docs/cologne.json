@@ -324,6 +324,16 @@
     "screenshotLabel": "Beispillaanzicht"
   },
   "releases": {
+    "versions[0.84].builds[0.84.0].overview.label": "Regionale Bedienoberfläch met 15 Variante",
+    "versions[0.84].builds[0.84.0].overview.text": "Met dä reguläre Aktualisierung sin de eeschte 15 dütsche Regionalvariante onger Enstellunge → Allgemein → Sprooch ussöökbar. Hilf un dä bisherije Versionsverlauf sin regional hingerlaat; wigger Bedienelemente kumme noh un noh dobei. Dä Hinweis op dä unvollständije UI-Umfang bliev en dä Sproochusswahl sichtbar. Eije Enhalte un de Beld- un Tonausjav wäde durch de Sproochwahl nit verännert.",
+    "versions[0.84].builds[0.84.0].sections.new.0.label": "Regionale Sproochenstellunge",
+    "versions[0.84].builds[0.84.0].sections.new.0.text": "Bei dütscher Basissprooch jit et 15 regionale Variante un Huhdütsch. De Usswahl weed op däm Jerät jespeichert un kann jederzick op Huhdütsch zeröckjesatz wäde. Andere Basissprooche blieve eijeständig. Nit freijejevve Regionalvariante wäde nit aanjebode.",
+    "versions[0.84].builds[0.84.0].sections.improved.0.label": "Regionale Hilf, Versionstexte un Bedienelemente",
+    "versions[0.84].builds[0.84.0].sections.improved.0.text": "De 63 Hilfeartikel un de bisherije Versionshinweise bes 0.83.0 sin för all freijejevve Variante lokal hingerlaat. Regionale Texte ergänze onger anderem de Veranstaltungsverknüppung, Schnellanzeije un usjesöök Audio-, Barrierefreiheits- un Versionsdetails. Vorhandene Jerätezuordnunge, Radio un Liveposition blieve erhalde.",
+    "versions[0.84].builds[0.84.0].sections.known.0.label": "UI-Lokalisierung noch nit vollständig",
+    "versions[0.84].builds[0.84.0].sections.known.0.text": "Regionalvariante sin noch nit vollständig övversatz. Fehlende UI-Texte wäde op Huhdütsch aanjezeij. Die Version weed op ausdröckliche Wunsch als normales Update met däm enjeschränkte Sproochumfang veröffentlicht. En vollständije Övversetzung vun sämtliche Menüs, Dialoje un Werkzüch weed nit zojesichert.",
+    "versions[0.84].builds[0.84.0].sections.known.1.label": "Usjav-Enhalte un Sprochaansare blieve unverännert",
+    "versions[0.84].builds[0.84.0].sections.known.1.text": "Bibel- un Leedtexte, eije Folientexte sowie Veranstaltunge, Rüüm un Meldunge us Firebase wäde nit en Dialekt ömjeschrieve. TESTBETRIEB bliev als System-Wasserzeiche unverännert. Automatische Sprochaansare, Gong, Stimmusswahl un Sprochpakete blieve wie bisher deaktiviert; de Regionalusswahl schalt kein Sprochusjav en.",
     "versions[0.83].builds[0.83.0].overview.label": "Aansare vörbereide un Audiostürung afsichere",
     "versions[0.83].builds[0.83.0].overview.text": "Onger Enstellunge → Präsentation → Aansare losse sich dat spätere Intervall un dä übrije Musikpejel för diese Regie-PC speichere. Freijejevve öffentliche Saaltexte kumme us de vorhandene Jemeindemeldunge; Firebase-Date blieve wie se sin. De vorhandene Hingerjrund-Audiostürung krijje getrennte Affsenkungsanspröch un Schutz vör övverholte Fade-Zielwerte. Die Veröffentlichung enthällt bloß de Vörbereitung: Automatische Sprochaansare, Gong, Stimmusswahl un Sprochpakete sin noch nit verfügbar.",
     "versions[0.83].builds[0.83.0].sections.new.0.label": "Jerätebezoje Aansarevörbereitung",

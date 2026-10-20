@@ -324,6 +324,16 @@
     "screenshotLabel": "Beispielansicht"
   },
   "releases": {
+    "versions[0.84].builds[0.84.0].overview.label": "Regionale Bedienoberfläch mit 15 Varianten",
+    "versions[0.84].builds[0.84.0].overview.text": "De reguläre Aktualisierung macht de ersten 15 deutschen Regionalvarianten unter Einstellungen → Allgemein → Sprache auswählbar. Hilf und bisheriger Versionsverlauf san regional hinterlegt; weitere Bedienelemente kemman Schritt für Schritt dazu. Dass da UI-Umfang no unvollständig is, steht weiterhin sichtbar in da Sprachauswahl. Eigene Inhalte und d Bild- und Tonausgab bleim vo da Sprachwahl unberührt.",
+    "versions[0.84].builds[0.84.0].sections.new.0.label": "Regionale Spracheinstellungen",
+    "versions[0.84].builds[0.84.0].sections.new.0.text": "Mit Deutsch als Basissprach stehn 15 regionale Varianten und Hochdeutsch bereit. D Auswahl werd auf dem Gerät gspeichert; du kannst jederzeit wieder Hochdeutsch einstelln. Andere Basissprachen bleim eigenständig. Ned freigegebene Regionalvarianten gibt's ned zum Auswähln.",
+    "versions[0.84].builds[0.84.0].sections.improved.0.label": "Regionale Hilf, Versionstexte und Bedienelemente",
+    "versions[0.84].builds[0.84.0].sections.improved.0.text": "De 63 Hilfeartikel und de bisherigen Versionshinweis bis 0.83.0 san für alle freigegebenen Varianten lokal hinterlegt. Regionale Texte ergänzen unter anderem d Veranstaltungsverknüpfung, Schnellanzeigen und ausgewählte Audio-, Barrierefreiheits- und Versionsdetails. Vorhandene Gerätezuordnungen, Radio und Liveposition bleim erhalten.",
+    "versions[0.84].builds[0.84.0].sections.known.0.label": "D UI is no ned ganz übersetzt",
+    "versions[0.84].builds[0.84.0].sections.known.0.text": "Regionalvarianten san no ned vollständig übersetzt. Wo UI-Texte fehln, erscheint Hochdeutsch. De Version werd auf ausdrücklichen Wunsch als normales Update mit dem begrenzten Sprachumfang veröffentlicht. A vollständige Übersetzung vo sämtlichen Menüs, Dialogen und Werkzeugen wird ned zugesichert.",
+    "versions[0.84].builds[0.84.0].sections.known.1.label": "Ausgabeinhalte und Sprachansagen bleim unverändert",
+    "versions[0.84].builds[0.84.0].sections.known.1.text": "Bibel- und Liedtexte, eigene Folientexte sowie Veranstaltungen, Räume und Meldungen aus Firebase werdn ned in Dialekt umgschriebm. TESTBETRIEB bleibt als System-Wasserzeichen unverändert. Automatische Sprachansagen, Gong, Stimmwahl und Sprachpakete bleim wie bisher deaktiviert; durch d Regionalauswahl geht koa Sprachausgab an.",
     "versions[0.7].builds[0.7.0].sections.fixed.1.label": "Live-Ausgab",
     "versions[0.7].builds[0.7.0].sections.fixed.1.text": "Editor-, Vorschau- und Live-Auswahl bleim ganz getrennt, damit des Bearbeiten vo andern Inhalten de laufende MAIN-Ausgab ned ändert.",
     "versions[0.7].builds[0.7.0].sections.security.0.label": "Diagnose",

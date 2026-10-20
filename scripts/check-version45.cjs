@@ -1,5 +1,5 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),ts=require('typescript'),Module=require('node:module');
-const cache=new Map();function load(relative){const file=path.resolve(relative);if(cache.has(file))return cache.get(file).exports;const mod=new Module(file,module);mod.paths=Module._nodeModulePaths(path.dirname(file));cache.set(file,mod);const original=mod.require.bind(mod);mod.require=id=>id.startsWith('.')?load(path.resolve(path.dirname(file),/\.(ts|tsx)$/.test(id)?id:`${id}.ts`)):original(id);mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);return mod.exports}
+const load=require("./legacy-ts-loader.cjs").createLegacyLoader(module);
 const languages=load('src/languageCatalog.ts').translationLanguages;
 const countries=load('src/flags/flagCountryCatalog.ts');
 for(const language of languages)assert.match(countries.flagCountryForLanguage(language.code),/^[a-z]{2}$/i,`missing flag mapping for ${language.code}`);

@@ -57,7 +57,7 @@ jobs:
         run: node scripts/check-version74.cjs
       - name: Anwendung bauen
         # V75 guard also protects the published update feed metadata.
-        run: node scripts/check-version75.cjs && node scripts/check-version83.cjs && npm run build
+        run: node scripts/check-version75.cjs && node scripts/check-version83.cjs && node scripts/check-version84.cjs && npm run build
       - name: Windows-Installer erstellen
         run: node scripts/package-ci.cjs --win nsis --publish never
       - name: Release samt Update-Dateien veröffentlichen
@@ -66,6 +66,8 @@ jobs:
           tag_name: ${{ needs.prepare.outputs.tag }}
           target_commitish: ${{ github.sha }}
           body_path: RELEASE_NOTES.md
+          prerelease: false
+          draft: false
           fail_on_unmatched_files: true
           files: |
             release/GottesdienstRegie-Setup-*.exe
@@ -88,6 +90,8 @@ jobs:
           tag_name: ${{ needs.prepare.outputs.tag }}
           target_commitish: ${{ github.sha }}
           body_path: RELEASE_NOTES.md
+          prerelease: false
+          draft: false
           files: |
             release/GottesdienstRegie-*.dmg
             release/GottesdienstRegie-*.zip
@@ -109,6 +113,8 @@ jobs:
           tag_name: ${{ needs.prepare.outputs.tag }}
           target_commitish: ${{ github.sha }}
           body_path: RELEASE_NOTES.md
+          prerelease: false
+          draft: false
           files: |
             release/GottesdienstRegie-*.AppImage
             release/GottesdienstRegie-*.deb

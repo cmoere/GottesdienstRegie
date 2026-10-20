@@ -324,6 +324,16 @@
     "screenshotLabel": "So kann's aussehen"
   },
   "releases": {
+    "versions[0.84].builds[0.84.0].overview.label": "Regionale Bedienoberfläche mit 15 Varianten",
+    "versions[0.84].builds[0.84.0].overview.text": "Mit diesem regulären Update kannste die ersten 15 deutschen Regionalvarianten unter Einstellungen → Allgemein → Sprache auswählen. Hilfe und bisheriger Versionsverlauf sind regional hinterlegt; weitere Bedienelemente kommen nach und nach dazu. Der Hinweis auf den noch unvollständigen UI-Umfang bleibt in der Sprachauswahl sichtbar. Deine eigenen Inhalte und die Bild- und Tonausgabe ändert die Sprachwahl nich.",
+    "versions[0.84].builds[0.84.0].sections.new.0.label": "Regionale Spracheinstellungen",
+    "versions[0.84].builds[0.84.0].sections.new.0.text": "Bei Deutsch als Basissprache gibt's 15 regionale Varianten und Hochdeutsch. Die Auswahl wird auf diesem Gerät gespeichert; du kannst jederzeit wieder auf Hochdeutsch zurückstellen. Andere Basissprachen bleiben eigenständig. Regionalvarianten ohne Freigabe werden nich angeboten.",
+    "versions[0.84].builds[0.84.0].sections.improved.0.label": "Regionale Hilfe, Versionstexte und Bedienelemente",
+    "versions[0.84].builds[0.84.0].sections.improved.0.text": "Die 63 Hilfeartikel und die bisherigen Versionshinweise bis 0.83.0 sind für alle freigegebenen Varianten lokal hinterlegt. Regionale Texte ergänzen unter anderem die Veranstaltungsverknüpfung, Schnellanzeigen und ausgewählte Audio-, Barrierefreiheits- und Versionsdetails. Vorhandene Gerätezuordnungen, Radio und Liveposition bleiben erhalten.",
+    "versions[0.84].builds[0.84.0].sections.known.0.label": "Die UI is noch nich komplett übersetzt",
+    "versions[0.84].builds[0.84.0].sections.known.0.text": "Regionalvarianten sind noch nich vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Auf ausdrücklichen Wunsch wird diese Version als normales Update mit dem eingeschränkten Sprachumfang veröffentlicht. Eine vollständige Übersetzung sämtlicher Menüs, Dialoge und Werkzeuge wird nich zugesichert.",
+    "versions[0.84].builds[0.84.0].sections.known.1.label": "Ausgabeinhalte und Sprachansagen bleiben unverändert",
+    "versions[0.84].builds[0.84.0].sections.known.1.text": "Bibel- und Liedtexte, eigene Folientexte sowie Veranstaltungen, Räume und Meldungen aus Firebase werden nich in Dialekt umgeschrieben. TESTBETRIEB bleibt als System-Wasserzeichen unverändert. Automatische Sprachansagen, Gong, Stimmwahl und Sprachpakete bleiben wie bisher deaktiviert; die Regionalauswahl schaltet keine Sprachausgabe ein.",
     "versions[0.83].builds[0.83.0].overview.label": "Ansagen vorbereiten und Audiosteuerung absichern",
     "versions[0.83].builds[0.83.0].overview.text": "Unter Einstellungen → Präsentation → Ansagen kannste das spätere Intervall und den übrigen Musikpegel für diesen Regie-PC speichern. Freigegebene öffentliche Saaltexte kommen aus den bestehenden Gemeindemeldungen; Firebase-Daten bleiben unverändert. Die vorhandene Hintergrund-Audiosteuerung kriegt getrennte Absenkungsansprüche und Schutz vor alten Fade-Zielwerten. Diese Veröffentlichung enthält ausschließlich die Vorbereitung: Automatische Sprachansagen, Gong, Stimmwahl und Sprachpakete gibt's noch nich.",
     "versions[0.83].builds[0.83.0].sections.new.0.label": "Ansagenvorbereitung für dieses Gerät",

@@ -324,6 +324,16 @@
     "screenshotLabel": "Bispeelansicht"
   },
   "releases": {
+    "versions[0.84].builds[0.84.0].overview.label": "Regionale Bedeenböversiet mit 15 Varianten",
+    "versions[0.84].builds[0.84.0].overview.text": "Mit disse reguläre Aktualiseeren sünd de eersten 15 düütschen Regionalvarianten ünner Instellungen → Allgemeen → Spraak uttowählen. Hülp un de bisherige Verschoonsverloop sünd regional hinnerleggt; mehr Bedeelementen kaamt nah un nah dorto. De Henwies op den unvullstännigen UI-Umfang blifft in de Spraakutwahl sichtbor. Egen Inholt un de Bild- un Tonutgaav warrt dör de Spraakwahl nich verännert.",
+    "versions[0.84].builds[0.84.0].sections.new.0.label": "Regionale Spraakinstellungen",
+    "versions[0.84].builds[0.84.0].sections.new.0.text": "Bi Düütsch as Basisspraak staht 15 regionale Varianten un Hoochdüütsch praat. De Utwahl warrt op dit Gerät spiekert un kann jümmers wedder op Hoochdüütsch torüchsett warrn. Annere Basisspraken blievt egenstännig. Regionalvarianten ahn Freegaav warrt nich anbaden.",
+    "versions[0.84].builds[0.84.0].sections.improved.0.label": "Regionale Hülp, Verschoonstexte un Bedeelementen",
+    "versions[0.84].builds[0.84.0].sections.improved.0.text": "De 63 Hülpartikels un de bisherigen Verschoonshenwiesen bet 0.83.0 sünd för all freegeven Varianten lokaal hinnerleggt. Regionale Texte ergänzt ünner annern de Veranstaltungsverknüppen, Fixanzeigen un utsöchte Audio-, Barrierefreeheits- un Verschoonsdetails. Vörhannene Gerätezuordnungen, Radio un Liveposition blievt erhalten.",
+    "versions[0.84].builds[0.84.0].sections.known.0.label": "UI-Översetten noch unvullstännig",
+    "versions[0.84].builds[0.84.0].sections.known.0.text": "Regionalvarianten sünd noch nich vullstännig översett. Fehlende UI-Texte warrt op Hoochdüütsch wiest. Disse Verschoon warrt op utdrücklichen Wunsch as normales Update mit dissen begrenzten Spraakumfang veröffentlicht. En vullstännige Översetten vun all Menüs, Dialogen un Warktüüch warrt nich toseggt.",
+    "versions[0.84].builds[0.84.0].sections.known.1.label": "Utgaavinholt un Spraakansagen blievt unverännert",
+    "versions[0.84].builds[0.84.0].sections.known.1.text": "Bibel- un Leedtexte, egen Folientexte sowie Veranstaltungen, Rüüm un Mellen ut Firebase warrt nich in Dialekt ümschreven. TESTBETRIEB blifft as System-Waterteken unverännert. Automatische Spraakansagen, Gong, Stimmenutwahl un Spraakpaketen blievt as bisher afschalt; de Regionalutwahl schalt keen Spraakutgaav an.",
     "versions[0.83].builds[0.83.0].overview.label": "Ansagen vörbereiden un Audiostüerung afsekern",
     "versions[0.83].builds[0.83.0].overview.text": "Ünner Instellungen → Präsentatschoon → Ansagen laat sik dat latere Intervall un de överblieven Musikpegel för dissen Regie-PC spiekern. Fregeven öffentliche Saaltexte kümmt ut de bestahn Gemeendemellen; Firebase-Daten blievt unverännert. De vörhannene Achtergrund-Audiostüerung kriggt trennte Afsenkansprööch un Schuul vör överhaalte Fade-Zielweerten. Disse Veröffentlichung hett bloots de Vörbereitung: Automatische Spraakansagen, Gong, Stimmenutwahl un Spraakpaketen sünd noch nich dor.",
     "versions[0.83].builds[0.83.0].sections.new.0.label": "Gerätebundene Ansagenvörbereitung",

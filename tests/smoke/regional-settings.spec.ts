@@ -24,3 +24,31 @@ test('settings localize accessibility controls reactively without changing saved
   expect(saved.highContrast).toBe(true);
   expect(saved.language).toBe('de');
 });
+
+test('normal-update regional selection visibly discloses partial UI coverage and preserves audio preferences',async({page})=>{
+  await page.addInitScript(()=>{
+    localStorage.setItem('gottesdienstregie.interface-tour','done');
+    localStorage.setItem('gottesdienstregie.preferences',JSON.stringify({version:84,state:{language:'de',germanRegion:null,audioOutputDevice:'retained-usb-output',audioInputDevice:'retained-input',theme:'light'}}));
+  });
+  await page.goto('/',{waitUntil:'domcontentloaded'});
+  await page.getByRole('button',{name:'Einstellungen',exact:true}).click();
+  const settings=page.locator('.settings-modal');
+  const notice='Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.';
+  await expect(settings.getByRole('note')).toHaveText(notice);
+  const selector=settings.locator('.regional-selector select');
+  await expect(selector).toHaveAccessibleName('Deutsche Regionalvariante');
+  await expect(selector).toHaveAccessibleDescription(notice);
+  await expect(selector.locator('option')).toHaveCount(16);
+  await selector.selectOption('hamburg');
+  await expect(selector).toHaveValue('hamburg');
+  await expect(settings.getByRole('note')).toHaveText(notice);
+  const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('gottesdienstregie.preferences')!).state);
+  expect(saved.germanRegion).toBe('hamburg');
+  expect(saved.audioOutputDevice).toBe('retained-usb-output');
+  expect(saved.audioInputDevice).toBe('retained-input');
+  await page.screenshot({path:'work/v84-normal-update-settings-desktop.png'});
+  await page.setViewportSize({width:900,height:1100});
+  await expect(settings.getByRole('note')).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  await page.screenshot({path:'work/v84-normal-update-settings-tablet.png'});
+});

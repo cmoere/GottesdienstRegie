@@ -20,7 +20,9 @@ describe('complete German documentation translation source',()=>{
     expect(source.help['Erste Schritte'].body).toContain('## ');
   });
   it('keeps all historical release text fields keyed by stable version identity',()=>{
-    expect(Object.keys(source.releases)).toHaveLength(1446);
+    expect(Object.keys(source.releases)).toHaveLength(1456);
+    expect(source.releases['versions[0.84].builds[0.84.0].overview.label']).toBe('Regionale Bedienoberfläche mit 15 Varianten');
+    expect(source.releases['versions[0.84].builds[0.84.0].sections.known.0.text']).toContain('Fehlende UI-Texte werden auf Hochdeutsch angezeigt.');
     expect(source.releases['versions[0.83].builds[0.83.0].overview.label']).toBe('Ansagen vorbereiten und Audiosteuerung absichern');
     expect(source.releases['versions[0.83].builds[0.83.0].overview.text']).toContain('ausschließlich die Vorbereitung');
   });
