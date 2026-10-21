@@ -10,7 +10,7 @@ describe.each<GermanRegionId>(['berlin','bavarian-upper'])('%s authored base-int
   it('has explicit complete base-interface coverage and preserves security/update placeholders',()=>{
     const candidate=JSON.parse(readFileSync(path.resolve(`shared/regional/packs/${id}.json`),'utf8'));
     expect(validateRegionalPack(candidate,id,{ui:germanBaseTemplates,native:nativeBaseTemplates})).toEqual([]);
-    expect(Object.keys(candidate.ui)).toHaveLength(269);
+    expect(Object.keys(candidate.ui).sort()).toEqual(Object.keys(germanBaseTemplates).sort());
     expect(candidate.ui.authNoAccess).toContain('Administrator');
     expect(candidate.ui.updateAvailable).toContain('{version}');
     expect(candidate.ui.updateDownloading).toContain('{percent}');

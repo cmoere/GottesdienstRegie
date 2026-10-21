@@ -1,0 +1,53 @@
+import {afterEach,expect,it} from 'vitest';
+import {cleanup,render,screen,waitFor} from '@testing-library/react';
+import {AnnouncementBannerSettings} from './AnnouncementBannerSettings';
+import {AnnouncementSlideDesigner} from './AnnouncementSlideDesigner';
+import {AnnouncementSettings} from './announcements/AnnouncementSettings';
+import {usePreferences} from './preferences';
+import {createServiceItem,usePresentation} from './store';
+import {readFileSync} from 'node:fs';
+import {releaseRegionalVariants} from '../shared/regional/catalog';
+import {loadRegionalInterfacePack} from './regional/resources';
+const savedPreferences=usePreferences.getState(),savedPresentation=usePresentation.getState();
+afterEach(()=>{cleanup();usePreferences.setState(savedPreferences,true);usePresentation.setState(savedPresentation,true)});
+it('localizes banner controls independently of the banner message content',()=>{
+ usePreferences.setState({language:'en',germanRegion:null});
+ render(<AnnouncementBannerSettings/>);
+ expect(screen.getByRole('heading',{name:'ANNOUNCEMENT SCREEN BANNER'})).toBeInTheDocument();
+ expect(screen.getByRole('option',{name:'Bottom'})).toHaveValue('bottom');
+ expect(screen.getByRole('option',{name:'Top'})).toHaveValue('top');
+});
+it('localizes announcement settings without rewriting public category ids or preview text',()=>{
+ usePreferences.setState({language:'en',germanRegion:null});
+ const item=createServiceItem('announcement',{itemCategory:'loop'});
+ usePresentation.setState({items:[item]});
+ render(<AnnouncementSlideDesigner item={item} canEdit/>);
+ expect(screen.getByRole('checkbox',{name:'Show QR codes'})).toBeInTheDocument();
+ expect(screen.getByRole('option',{name:'Events'})).toHaveValue('event');
+ expect(screen.getByRole('button',{name:/Side column/})).toBeInTheDocument();
+ expect(screen.getAllByText('Meldung')).toHaveLength(8);
+ expect(usePresentation.getState().items[0].metadata).toEqual(item.metadata);
+});
+it('localizes preparatory speech controls and preserves every public source text verbatim',async()=>{
+ usePreferences.setState({language:'en',germanRegion:null});
+ const settings={enabled:false,intervalMinutes:5,musicRemainingPercent:20,voiceId:'de_DE-mls-medium',speakerId:null,voiceAccepted:false};
+ const row={id:'one',title:'Gemeindehinweis',text:'Bitte nehmen Sie im Saal Platz.',revision:'1',priority:'normal' as const};
+ render(<AnnouncementSettings bridge={{readSettings:async()=>settings,writeSettings:async value=>value}} rows={[row]}/>);
+ await waitFor(()=>expect(screen.getByRole('button',{name:'Save announcement settings'})).toBeEnabled());
+ expect(screen.getByLabelText('Interval (minutes)')).toHaveValue(5);
+ expect(screen.getByText('Gemeindehinweis')).toBeInTheDocument();
+ expect(screen.getByText(row.text)).toBeInTheDocument();
+ expect(screen.getByRole('checkbox',{name:'Enable automatic announcements'})).toBeDisabled();
+});
+it.each(releaseRegionalVariants)('loads the authored $id controls without changing public content',async({id})=>{
+ const pack=JSON.parse(readFileSync(`shared/regional/packs/${id}.json`,'utf8'));
+ expect(await loadRegionalInterfacePack(id)).toBe(true);
+ usePreferences.setState({language:'de',germanRegion:id});
+ const item=createServiceItem('announcement',{itemCategory:'loop'});
+ usePresentation.setState({items:[item]});
+ render(<><AnnouncementBannerSettings/><AnnouncementSlideDesigner item={item} canEdit/></>);
+ expect(screen.getByRole('heading',{name:pack.ui.announcementBannerHeading})).toBeInTheDocument();
+ expect(screen.getByRole('checkbox',{name:pack.ui.announcementQrEnabled})).toBeInTheDocument();
+ expect(screen.getByRole('option',{name:pack.ui.announcementCategoryEvent})).toHaveValue('event');
+ expect(screen.getAllByText('Meldung')).toHaveLength(8);
+});

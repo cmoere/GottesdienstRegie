@@ -24,7 +24,7 @@ it('preserves the31-ID resource catalog and requires complete authored UI/native
   for(const {id} of releaseRegionalVariants){
     const pack=JSON.parse(readFileSync(path.join(directory,`${id}.json`),'utf8'));
     expect(validateRegionalPack(pack,id,{ui:germanBaseTemplates,native:nativeBaseTemplates}),id).toEqual([]);
-    expect(Object.keys(pack.ui),id).toHaveLength(269);
+    expect(Object.keys(pack.ui).sort(),id).toEqual(Object.keys(germanBaseTemplates).sort());
     expect(Object.keys(pack.native),id).toHaveLength(33);
     for(const text of [...Object.values(pack.ui),...Object.values(pack.native)]){
       expect(text,id).not.toMatch(/[\u200B\u200C\u200D\uFEFF]/);

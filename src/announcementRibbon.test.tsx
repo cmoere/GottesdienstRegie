@@ -1,7 +1,7 @@
 import {afterEach,expect,it} from 'vitest';
 import {cleanup,render} from '@testing-library/react';
 import {AnnouncementBanner} from './AnnouncementBanner';
-import {BannerSession} from './announcementBannerSession';
+import {BannerSession,bannerRibbonText} from './announcementBannerSession';
 import {isBannerAllowed} from './announcementBannerModel';
 import {bannerDisplayDuration} from './announcementBannerSession';
 afterEach(cleanup);
@@ -10,8 +10,20 @@ it('renders all messages as a repeated continuous ribbon separated by a middle d
  const {container}=render(<AnnouncementBanner state={{revision:1,position:'top',items:messages,cycleStartedAtMs:1000,reserved:true,textWidth:600}} nowMs={1000} reducedMotion={false}/>);
  expect(container.textContent).toContain('Zweite Meldung');
  const units=container.querySelectorAll('[data-banner-unit]');expect(units.length).toBeGreaterThanOrEqual(3);
- expect(units[0].textContent).toContain(' · ');expect(units[0].textContent).toContain('Erste Meldung');
+ expect(units[0].textContent).toContain('        ·        ');expect(units[0].textContent).toContain('Erste Meldung');
  expect(container.querySelector('[data-banner-track]')?.getAttribute('style')).toContain('translateX(0');
+});
+it('preserves complete message text with generous symmetric separator spacing including the repeat seam',()=>{
+ const items=[{...messages[0],text:'Konzertveranstaltung'},{...messages[1],text:'PGB: Gottesdienst'}];
+ expect(bannerRibbonText(items)).toBe('Konzertveranstaltung        ·        PGB: Gottesdienst        ·        ');
+ expect(bannerRibbonText([])).toBe('');
+});
+it('adds no hidden extra gap at the repeated ribbon seam',()=>{
+ const state={revision:1,position:'top' as const,items:messages,cycleStartedAtMs:1000,reserved:true,textWidth:960};
+ const view=render(<AnnouncementBanner state={state} nowMs={17000} reducedMotion={false}/>);
+ expect(view.container.querySelector('[data-banner-unit]')).toHaveStyle({width:'50cqw'});
+ expect(view.container.querySelector('[data-banner-track]')?.getAttribute('style')).toContain('translateX(0');
+ expect(bannerDisplayDuration(state)).toBe(16000);
 });
 it('retains its clock through countdown takes and after complete unchanged cycles',()=>{
  const session=new BannerSession(),input={items:messages,position:'bottom' as const,allowed:true,enabled:true,takeKey:'pre',nowMs:1000,textWidths:[300,300],reducedMotion:false};

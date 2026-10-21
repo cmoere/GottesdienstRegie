@@ -26,11 +26,13 @@ app.whenReady().then(async()=>{try{
   await win.webContents.executeJavaScript(`window.liveAnnouncementUpdate.banner(${elapsed})`);await sleep(80);
   const result=await win.webContents.executeJavaScript(`(()=>{const units=[...document.querySelectorAll('[data-banner-unit]')].map(e=>e.getBoundingClientRect());return {visible:units.filter(r=>r.right>0&&r.left<1920).length,weight:getComputedStyle(document.querySelector('.announcement-banner')).fontWeight,text:document.querySelector('[data-banner-unit]').textContent}})()`);
   assert(result.visible>=2);assert.equal(result.weight,'700');assert(result.text.includes(' · '));
+  const seam=await win.webContents.executeJavaScript(`(()=>{const unit=document.querySelector('[data-banner-unit]'),range=document.createRange();range.selectNodeContents(unit);return unit.getBoundingClientRect().width-range.getBoundingClientRect().width})()`);
+  assert(Math.abs(seam)<5,'Short ribbon text must not overlap the next repeated unit');
  }
  fs.writeFileSync(path.join(out,'banner.png'),(await win.webContents.capturePage()).toPNG());
  await win.webContents.executeJavaScript('window.liveAnnouncementUpdate.longBanner()');await sleep(250);
  const longGap=await win.webContents.executeJavaScript(`(()=>{const unit=document.querySelector('[data-banner-unit]'),range=document.createRange();range.selectNodeContents(unit);return unit.getBoundingClientRect().width-range.getBoundingClientRect().width})()`);
- console.log('Long ribbon repeat gap:',longGap);assert(Math.abs(longGap-64)<5,'Long ribbon must have the same small repeat gap, not an empty screen');
+ console.log('Long ribbon repeat gap:',longGap);assert(Math.abs(longGap)<5,'Repeat seam must not add an asymmetric gap after the separator');
  await win.loadURL('http://127.0.0.1:5173/release-notes/index.html?lang=de#version-0.85.0');
  for(let n=0;n<100&&!await win.webContents.executeJavaScript('!!document.getElementById("version-0.85.0")');n++)await sleep(100);
  assert(await win.webContents.executeJavaScript('!!document.getElementById("version-0.85.0")'));

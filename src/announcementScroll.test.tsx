@@ -1,4 +1,4 @@
-import {afterEach,expect,it} from 'vitest';
+import {afterEach,beforeEach,expect,it} from 'vitest';
 import {cleanup,render,screen,fireEvent} from '@testing-library/react';
 import {prepareAnnouncementPages} from './announcementDesign';
 import {AnnouncementLiveController} from './announcementLive';
@@ -6,7 +6,9 @@ import {AnnouncementSlideDesigner} from './AnnouncementSlideDesigner';
 import {createServiceItem,usePresentation} from './store';
 import {AnnouncementScrollingText} from './AnnouncementScrollingText';
 import {usePreferences} from './preferences';
-afterEach(cleanup);
+const savedPreferences=usePreferences.getState();
+beforeEach(()=>usePreferences.setState({language:'de',germanRegion:null}));
+afterEach(()=>{cleanup();usePreferences.setState(savedPreferences,true)});
 it('keeps a long formatted message on one top-aligned scrolling surface',()=>{
  const body='<p><b>'+('Lesbarer vollständiger Text. '.repeat(200))+'</b></p>';
  const pages=prepareAnnouncementPages({title:'Wichtig',body,qrCode:true,design:'classic'});

@@ -1,11 +1,14 @@
-import {describe,it,expect,afterEach} from 'vitest';
+import {describe,it,expect,afterEach,beforeEach} from 'vitest';
 import {render,screen,fireEvent,cleanup} from '@testing-library/react';
 import {AnnouncementSlideDesigner} from './AnnouncementSlideDesigner';
 import {createServiceItem,usePresentation} from './store';
 import {announcementSettings} from './announcementSettings';
 import {SlideRenderer} from './SlideRenderer';
+import {usePreferences} from './preferences';
 
-afterEach(cleanup);
+const savedPreferences=usePreferences.getState();
+beforeEach(()=>usePreferences.setState({language:'de',germanRegion:null}));
+afterEach(()=>{cleanup();usePreferences.setState(savedPreferences,true)});
 describe('announcement editor controls',()=>{
  it('removes the QR area from the actual editable slide preview',()=>{
   const item=createServiceItem('announcement',{itemCategory:'loop'});

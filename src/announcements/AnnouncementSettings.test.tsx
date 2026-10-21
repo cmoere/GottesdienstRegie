@@ -1,9 +1,12 @@
-import {afterEach,describe,expect,it,vi} from 'vitest';
+import {afterEach,beforeEach,describe,expect,it,vi} from 'vitest';
 import {act,cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react';
 import {AnnouncementSettings} from './AnnouncementSettings';
 import type {AnnouncementSettings as Settings} from './settings';
+import {usePreferences} from '../preferences';
 const initial:Settings={enabled:false,intervalMinutes:5,musicRemainingPercent:20,voiceId:'de_DE-mls-medium',speakerId:null,voiceAccepted:false};
-afterEach(cleanup);
+const savedPreferences=usePreferences.getState();
+beforeEach(()=>usePreferences.setState({language:'de',germanRegion:null}));
+afterEach(()=>{cleanup();usePreferences.setState(savedPreferences,true)});
 
 describe('inactive announcement preparation settings',()=>{
  it('loads and saves numeric values without choosing a voice or enabling speech',async()=>{

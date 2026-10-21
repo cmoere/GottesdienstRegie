@@ -2,7 +2,8 @@ import type {PublicBannerAnnouncement} from './community/AnnouncementService';
 import type {BannerPosition} from './announcementBannerModel';
 import {bannerCycleDurationMs} from './announcementBannerModel';
 import type {BannerOutputState} from './outputState';
-export const bannerRibbonText=(items:PublicBannerAnnouncement[])=>items.map(item=>item.text.trim()).filter(Boolean).join(' · ')+(items.length?' · ':'');
+export const BANNER_SEPARATOR='        ·        ';
+export const bannerRibbonText=(items:PublicBannerAnnouncement[])=>items.map(item=>item.text.trim()).filter(Boolean).join(BANNER_SEPARATOR)+(items.length?BANNER_SEPARATOR:'');
 export function bannerTextPages(text:string):string[]{
   const pages:string[]=[];let page='';
   for(const word of text.split(/\s+/u)){

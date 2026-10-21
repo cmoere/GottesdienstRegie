@@ -6,5 +6,5 @@ export function isBannerAllowed(context:BannerContext):boolean{
 }
 export function bannerCycleDurationMs(textWidth:number,_viewportWidth:number):number{
   const safe=(value:number)=>Number.isFinite(value)?Math.max(0,value):0;
-  return Math.max(64,safe(textWidth)+64)/60*1000;
+  return Math.max(64,safe(textWidth))/60*1000;
 }

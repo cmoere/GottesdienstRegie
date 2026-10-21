@@ -39,8 +39,18 @@ describe('AnnouncementService',()=>{
     expect(values.every(value=>service.getForPlacement([value],now,'preLoop').length===0)).toBe(true);
   });
 
-  it('retains the message id as QR reference',()=>{
-    expect(service.getForPlacement([{...base,qrCode:true}],now,'preLoop')[0]).toMatchObject({id:'-Omsg',qrCode:true,qrReference:'-Omsg'});
+  it('links each QR code to the public message hash without replacing its stable id',()=>{
+    const messageId='-P49djrVYOXf-YqsM0YQ';
+    expect(service.getForPlacement([{...base,messageId,qrCode:true}],now,'preLoop')[0]).toMatchObject({id:messageId,qrCode:true,qrReference:'https://pgbielefeld.neocities.org/meldungen#-P49djrVYOXf-YqsM0YQ'});
+    expect(service.getForPlacement([{...base,messageId:'other-id',qrCode:true}],now,'preLoop')[0].qrReference).toBe('https://pgbielefeld.neocities.org/meldungen#other-id');
+    expect(service.getForPlacement([{...base,qrCode:false}],now,'preLoop')[0].qrReference).toBeUndefined();
+  });
+
+  it('encodes hash-special characters without adding spaces or changing the message identity',()=>{
+    const messageId='Hinweis & Ä';
+    const result=service.getForPlacement([{...base,messageId,qrCode:true}],now,'preLoop')[0];
+    expect(result.id).toBe(messageId);
+    expect(result.qrReference).toBe('https://pgbielefeld.neocities.org/meldungen#Hinweis%20%26%20%C3%84');
   });
 
   it('accepts compatible public and truthy values and sanitizes the fallback text',()=>{

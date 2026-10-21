@@ -5,6 +5,15 @@ import {AnnouncementBannerController,useAnnouncementBanner} from './Announcement
 import {useLiveOutputPreview} from './liveOutputPreview';
 import {createServiceItem,usePresentation} from './store';
 afterEach(()=>{cleanup();useLiveOutputPreview.setState({slide:null});vi.restoreAllMocks()});
+it('measures the same symmetric separator rendered between full banner messages',()=>{
+  vi.spyOn(HTMLCanvasElement.prototype,'getContext').mockReturnValue({font:'',measureText:(text:string)=>({width:text==='Willkommen zum Gottesdienst'?600:text==='        ·        '?180:32})} as any);
+  const saved=usePresentation.getState(),item=createServiceItem('content',{sectionId:'pre'});
+  usePresentation.setState({onAir:true,items:[item]});useLiveOutputPreview.setState({slide:{...item.slides[0],bannerContext:{liveSection:'pre',countdownActive:false}} as any});
+  try{
+    render(<AnnouncementBannerController quick={null}/>);
+    expect(useAnnouncementBanner.getState().banner?.textWidth).toBe(780);
+  }finally{cleanup();usePresentation.setState(saved,true)}
+});
 it('keeps the committed banner when its editor source moves or disappears until another take',()=>{
   vi.spyOn(HTMLCanvasElement.prototype,'getContext').mockReturnValue({font:'',measureText:()=>({width:600})} as any);
   const saved=usePresentation.getState(),item=createServiceItem('content',{sectionId:'pre'}),slide={...item.slides[0],bannerContext:{liveSection:'pre',countdownActive:false}} as any;

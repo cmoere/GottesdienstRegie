@@ -77,6 +77,6 @@ export class AnnouncementService {
     const category=String(raw.kategorie??raw.category??'general') as AnnouncementCategory;
     const explicit=Number(raw.displayDurationMs),calculated=Math.min(Math.max((title.length+text.replace(/<[^>]*>/g,'').length)*80+4_000,12_000),180_000);
     const qrCode=truthy(raw.qrCode);
-    return {id:raw.messageId,title,text,priority:priorities.has(priority)?priority:'normal',category:categories.has(category)?category:'general',validFrom:String(raw.giltAb??'')||undefined,validUntil:String(raw.giltBis??'')||undefined,durationMs:Number.isFinite(explicit)&&explicit>0?explicit:calculated,qrCode,qrReference:qrCode?raw.messageId:undefined};
+    return {id:raw.messageId,title,text,priority:priorities.has(priority)?priority:'normal',category:categories.has(category)?category:'general',validFrom:String(raw.giltAb??'')||undefined,validUntil:String(raw.giltBis??'')||undefined,durationMs:Number.isFinite(explicit)&&explicit>0?explicit:calculated,qrCode,qrReference:qrCode?`https://pgbielefeld.neocities.org/meldungen#${encodeURIComponent(raw.messageId)}`:undefined};
   }
 }

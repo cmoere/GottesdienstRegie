@@ -3,6 +3,7 @@ import {SlideRenderer} from '../../src/SlideRenderer';
 import {prepareAnnouncementPages} from '../../src/announcementDesign';
 import {buildAnnouncementSlide} from '../../src/announcementLive';
 import {AnnouncementBanner} from '../../src/AnnouncementBanner';
+import {BANNER_SEPARATOR} from '../../src/announcementBannerSession';
 import {AnnouncementBannerController,useAnnouncementBanner} from '../../src/AnnouncementBannerController';
 import {createServiceItem,usePresentation} from '../../src/store';
 import {useLiveOutputPreview} from '../../src/liveOutputPreview';
@@ -21,8 +22,13 @@ async function notice(design:string,atEnd=false){
  root.render(<div style={{width:'100vw',height:'100vh'}}><SlideRenderer slide={slide} mode="mirror"/></div>);
  return {duration:slide.timing!.durationSeconds,distance:page.scrollPlan.distance};
 }
-function banner(elapsed:number){
- root.render(<div style={{width:'100vw',height:84,containerType:'inline-size'}}><AnnouncementBanner state={{revision:1,position:'top',items:[{id:'a',text:'Herzlich willkommen',priority:'normal'},{id:'b',text:'Gottesdienst um 10:30 Uhr',priority:'normal'}],cycleStartedAtMs:0,reserved:true,textWidth:1100}} nowMs={elapsed} reducedMotion={false}/></div>);
+async function banner(elapsed:number){
+ await document.fonts.load('700 44px "Cera Pro"');
+ const items=[{id:'a',text:'Konzertveranstaltung',priority:'normal' as const},{id:'b',text:'PGB: Gottesdienst',priority:'normal' as const}];
+ const context=document.createElement('canvas').getContext('2d')!;
+ context.font='700 44px "Cera Pro", system-ui';context.letterSpacing='-0.44px';
+ const textWidth=items.reduce((width,item)=>width+context.measureText(item.text).width+context.measureText(BANNER_SEPARATOR).width,0);
+ root.render(<div style={{width:'100vw',height:84,containerType:'inline-size'}}><AnnouncementBanner state={{revision:1,position:'top',items,cycleStartedAtMs:0,reserved:true,textWidth}} nowMs={elapsed} reducedMotion={false}/></div>);
 }
 function MeasuredBanner(){const state=useAnnouncementBanner(value=>value.banner);return <div style={{width:'100vw',height:84,containerType:'inline-size'}}>{state&&<AnnouncementBanner state={state} nowMs={state.cycleStartedAtMs} reducedMotion={false}/>}</div>}
 async function longBanner(){

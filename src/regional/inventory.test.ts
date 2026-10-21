@@ -85,6 +85,7 @@ describe('regional text source inventory', () => {
     expect(entries.find(entry=>entry.key==='help.Erste Schritte.body')?.text).toContain('## ');
     expect(entries.find(entry=>entry.key==='helpUI.title')?.text).toBe('Hilfe');
     expect(entries.find(entry=>entry.key==='native.updateInstallOnExit')?.text).toBe('Beim Beenden installieren');
+    expect(entries.find(entry=>entry.key==='ui.speechSettingsInterval')).toMatchObject({text:'Intervall (Minuten)',status:'app-owned'});
     expect(inventory.complete).toBe(false);
   });
   it('recognizes the real const-asserted German dictionary rather than losing its stable keys', () => {
