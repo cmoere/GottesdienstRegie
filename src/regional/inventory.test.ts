@@ -86,6 +86,8 @@ describe('regional text source inventory', () => {
     expect(entries.find(entry=>entry.key==='helpUI.title')?.text).toBe('Hilfe');
     expect(entries.find(entry=>entry.key==='native.updateInstallOnExit')?.text).toBe('Beim Beenden installieren');
     expect(entries.find(entry=>entry.key==='ui.speechSettingsInterval')).toMatchObject({text:'Intervall (Minuten)',status:'app-owned'});
+    expect(entries.find(entry=>entry.key==='ui.shapeGallerySearch')).toMatchObject({text:'2D-Objekte suchen …',source:'shared/regional/shapeControlTemplates.ts',status:'app-owned'});
+    expect(entries.find(entry=>entry.key==='ui.radioBrowserSearchFailed')).toMatchObject({text:'Radiosuche fehlgeschlagen: {detail}. Bitte erneut versuchen.',source:'shared/regional/radioControlTemplates.ts',status:'app-owned'});
     expect(inventory.complete).toBe(false);
   });
   it('recognizes the real const-asserted German dictionary rather than losing its stable keys', () => {

@@ -1,6 +1,10 @@
-import {fireEvent,render,screen} from '@testing-library/react';
-import {describe,expect,it} from 'vitest';
+import {cleanup,fireEvent,render,screen} from '@testing-library/react';
+import {afterEach,beforeEach,describe,expect,it} from 'vitest';
 import {RadioStationBrowser} from './RadioStationBrowser';
+import {usePreferences} from './preferences';
+const preferences=usePreferences.getState();
+beforeEach(()=>usePreferences.setState({language:'de',germanRegion:null}));
+afterEach(()=>{cleanup();usePreferences.setState(preferences,true)});
 
 describe('RadioStationBrowser query',()=>{
   it('offers an accessible clear control only while the query has text',()=>{

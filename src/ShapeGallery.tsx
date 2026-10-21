@@ -1,2 +1,21 @@
-import {useMemo,useState} from 'react';import {searchShapes} from './shapeCatalog';import {ShapeArtwork} from './ShapeArtwork';
-export function ShapeGallery({disabled,onSelect}:{disabled?:boolean;onSelect:(kind:string,name:string)=>void}){const[open,setOpen]=useState(false),[query,setQuery]=useState(''),shapes=useMemo(()=>searchShapes(query),[query]);return <div className="shape-gallery"><button type="button" disabled={disabled} onClick={()=>setOpen(v=>!v)}><span className="material-symbols-outlined" aria-hidden="true">category</span> 2D-OBJEKT</button>{open&&<div className="shape-gallery-popover" role="dialog" aria-label="2D-Objekte"><input autoFocus value={query} onChange={e=>setQuery(e.target.value)} placeholder="2D-Objekte suchen …"/><div>{shapes.map(shape=><button type="button" key={shape.kind} title={shape.category} onClick={()=>{onSelect(shape.kind,shape.name);setOpen(false)}}><span><ShapeArtwork kind={shape.kind}/></span><small>{shape.name}</small></button>)}</div></div>}</div>}
+import {useState} from 'react';
+import {shapeCatalog} from './shapeCatalog';
+import {ShapeArtwork} from './ShapeArtwork';
+import {useI18n} from './i18n';
+import {shapeLabel,shapeCategoryLabel} from './shapeLabels';
+
+export function ShapeGallery({disabled,onSelect}:{disabled?:boolean;onSelect:(kind:string,name:string)=>void}){
+ const [open,setOpen]=useState(false),[query,setQuery]=useState('');
+ const {t,locale}=useI18n(),needle=query.trim().toLocaleLowerCase(locale);
+ const shapes=shapeCatalog.filter(shape=>!needle||`${shape.name} ${shape.category} ${shapeLabel(shape.kind,t)} ${shapeCategoryLabel(shape.category,t)}`.toLocaleLowerCase(locale).includes(needle));
+ return <div className="shape-gallery">
+  <button type="button" disabled={disabled} onClick={()=>setOpen(value=>!value)}><span className="material-symbols-outlined" aria-hidden="true">category</span> {t('shapeGalleryButton')}</button>
+  {open&&<div className="shape-gallery-popover" role="dialog" aria-label={t('shapeGalleryTitle')}>
+   <input autoFocus value={query} onChange={event=>setQuery(event.target.value)} placeholder={t('shapeGallerySearch')}/>
+   <div>{shapes.map(shape=><button type="button" key={shape.kind} title={shapeCategoryLabel(shape.category,t)} onClick={()=>{
+    // Document metadata stays canonical; only the operator labels are regional.
+    onSelect(shape.kind,shape.name);setOpen(false);
+   }}><span><ShapeArtwork kind={shape.kind}/></span><small>{shapeLabel(shape.kind,t)}</small></button>)}</div>
+  </div>}
+ </div>;
+}

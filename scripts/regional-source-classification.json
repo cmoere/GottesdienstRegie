@@ -1,5 +1,47 @@
 {
   "reviewedSourceEntries": {
+    "source.e28c7cc280b4c1de4e5a.1": {
+      "source": "src/RadioStationBrowser.tsx",
+      "context": "BinaryExpression",
+      "text": "Enter",
+      "reason": "Manually read complete RadioStationBrowser 2026-10-21: KeyboardEvent.key comparison, not a displayed label. Changing this protocol token to a dialect would break search submission; surrounding operator copy uses explicit radioBrowser keys."
+    },
+    "source.84c017c20e73512e8c52.1": {
+      "source": "src/RadioStationBrowser.tsx",
+      "context": "jsx-text:span",
+      "text": "close",
+      "reason": "Manually reviewed 2026-10-21: aria-hidden Material Symbols glyph token. The enclosing clear-search button's accessible name/title are separately localized; no neighboring operator text is excluded."
+    },
+    "source.65d897c6a58c259ddd45.1": {
+      "source": "src/RadioStationBrowser.tsx",
+      "context": "ConditionalExpression",
+      "text": "{expression1} kbit/s",
+      "reason": "Manually reviewed 2026-10-21: supplied station bitrate with invariant numeric SI unit, not an authored operator sentence. Station codec/country/language metadata remain unchanged; controls are translated separately."
+    },
+    "source.2adb3104a88d9214846e.1": {
+      "source": "src/RadioStationBrowser.tsx",
+      "context": "BinaryExpression",
+      "text": "Stream",
+      "reason": "Manually reviewed 2026-10-21: canonical format fallback written into a selected background-audio track alongside its unchanged station URL/name. This saved presentation/media metadata is not regional operator chrome; add/play controls are localized independently."
+    },
+    "source.f84ad554d5ebcf3e8652.1": {
+      "source": "src/RadioStationBrowser.tsx",
+      "context": "jsx-text:span",
+      "text": "radio",
+      "reason": "Manually reviewed 2026-10-21: aria-hidden Material Symbols artwork fallback token, not operator prose. Loading/playback feedback uses radioBrowser keys."
+    },
+    "source.99db4a9a472d84d0c584.1": {
+      "source": "src/ShapeGallery.tsx",
+      "context": "PropertyAccessExpression",
+      "text": "{expression1} {expression2} {expression3} {expression4}",
+      "reason": "Manually reviewed complete ShapeGallery 2026-10-21: search-only concatenation of canonical document aliases and separately localized shape/category labels. Contains no fixed authored prose to translate and is never rendered as output text."
+    },
+    "source.3df72ba6324a0d07a3a3.1": {
+      "source": "src/ShapeGallery.tsx",
+      "context": "jsx-text:span",
+      "text": "category",
+      "reason": "Manually reviewed complete ShapeGallery 2026-10-21: aria-hidden Material Symbols glyph token. Button/title/search and all actual shapes/categories are localized through independently inventoried shapeControlTemplates."
+    },
     "source.50794ac7100088072d75.1": {
       "source": "src/QuickScreenSettings.tsx",
       "context": "jsx-text:span",
@@ -80,6 +122,10 @@
     }
   },
   "reviewedTechnicalFiles": {
+    "src/shapeCatalog.ts": {
+      "sha256": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95",
+      "reason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded."
+    },
     "src/bible/provider.ts": {
       "sha256": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b",
       "reason": "Manually read in full 2026-10-16: canonical Bible book IDs/names and aliases, translation/version names and language metadata, provider URLs, cache keys, public Bible references and machine error codes. These must retain Biblical/reference/provider identities, not become regional operator prose. Human-facing error mapping belongs in consuming UI and remains in scope. Any content change revokes this exact review."

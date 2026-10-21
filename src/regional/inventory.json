@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": false,
-  "sourceFingerprint": "4877da82d1e29c2a4da96ddad364ea302c2150337258a42f86143f3b1d6c8943",
+  "sourceFingerprint": "e65cbd55c45e574636013a29c6279170f590aaa34789881b1655efd3182091d8",
   "note": "Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -18017,68 +18017,14 @@
       "technicalReviewHash": "d09da3ebeaeb7295173b1344f303e76f0645475ab8afb93573e6046f02a3db66"
     },
     {
-      "key": "source.b1e0659259e2c8c669af.1",
-      "text": "Keine passenden, erreichbaren HTTPS-Radiosender gefunden.",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 31,
-      "context": "CallExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.8ae0406ed226d7925956.1",
-      "text": "Radiosuche fehlgeschlagen: {expression1}. Bitte erneut versuchen.",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 34,
-      "context": "CallExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.039f0521e49193dab646.1",
-      "text": "Radiosender",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 71,
-      "context": "jsx-text:h4",
-      "status": "review-required"
-    },
-    {
-      "key": "source.41a919de692461a36235.1",
-      "text": "Sender suchen, anhören und als Hintergrundaudio hinzufügen.",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 72,
-      "context": "jsx-text:p",
-      "status": "review-required"
-    },
-    {
       "key": "source.e28c7cc280b4c1de4e5a.1",
       "text": "Enter",
       "source": "src/RadioStationBrowser.tsx",
       "line": 80,
       "context": "BinaryExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.280007ece217cfb32b4c.1",
-      "text": "Sender, Ort oder Musikrichtung",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 85,
-      "context": "jsx-attribute:placeholder",
-      "status": "review-required"
-    },
-    {
-      "key": "source.be26216eae60c8cec55a.1",
-      "text": "Suchtext löschen",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 90,
-      "context": "jsx-attribute:aria-label",
-      "status": "review-required"
-    },
-    {
-      "key": "source.b5c27ad04d7ef9ccf3a6.1",
-      "text": "Suchtext löschen",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 91,
-      "context": "jsx-attribute:title",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete RadioStationBrowser 2026-10-21: KeyboardEvent.key comparison, not a displayed label. Changing this protocol token to a dialect would break search submission; surrounding operator copy uses explicit radioBrowser keys.",
+      "technicalReviewHash": "37d2826c187de95bc16260df0c9ef8736d9b8a3e00a9f1b05bd1922937bdb91a"
     },
     {
       "key": "source.84c017c20e73512e8c52.1",
@@ -18086,31 +18032,9 @@
       "source": "src/RadioStationBrowser.tsx",
       "line": 94,
       "context": "jsx-text:span",
-      "status": "review-required"
-    },
-    {
-      "key": "source.48bb98fc2e2861a30b84.1",
-      "text": "Suchen …",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 99,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.bf89dc57f1c816d180cf.1",
-      "text": "Suchen",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 99,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.268f97c03b662e7b58bc.1",
-      "text": "{expression1} abspielen",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 109,
-      "context": "JsxExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-21: aria-hidden Material Symbols glyph token. The enclosing clear-search button's accessible name/title are separately localized; no neighboring operator text is excluded.",
+      "technicalReviewHash": "48abb8060d3c438a25d37ec36f8f95e123d88f8e2f44a4e7b5c308ca89409b57"
     },
     {
       "key": "source.65d897c6a58c259ddd45.1",
@@ -18118,7 +18042,9 @@
       "source": "src/RadioStationBrowser.tsx",
       "line": 124,
       "context": "ConditionalExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-21: supplied station bitrate with invariant numeric SI unit, not an authored operator sentence. Station codec/country/language metadata remain unchanged; controls are translated separately.",
+      "technicalReviewHash": "07e110b33a9a9d93905f4f8b44190516b458b6106011de8fb42f7f4a54a82392"
     },
     {
       "key": "source.2adb3104a88d9214846e.1",
@@ -18126,31 +18052,9 @@
       "source": "src/RadioStationBrowser.tsx",
       "line": 139,
       "context": "BinaryExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.53735a9f66156f4d2dd2.1",
-      "text": "Hinzufügen",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 144,
-      "context": "jsx-text:button",
-      "status": "review-required"
-    },
-    {
-      "key": "source.9f9ebb8815bec53e4b3b.1",
-      "text": "Mehr laden",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 159,
-      "context": "jsx-text:button",
-      "status": "review-required"
-    },
-    {
-      "key": "source.ef4fb4ad45dabaca4999.1",
-      "text": "Weniger anzeigen",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 164,
-      "context": "jsx-text:button",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-21: canonical format fallback written into a selected background-audio track alongside its unchanged station URL/name. This saved presentation/media metadata is not regional operator chrome; add/play controls are localized independently.",
+      "technicalReviewHash": "a9ff50c28f8f0cdea62298e916ab2306367630ae5737561cfc38163e9f37242f"
     },
     {
       "key": "source.f84ad554d5ebcf3e8652.1",
@@ -18158,31 +18062,9 @@
       "source": "src/RadioStationBrowser.tsx",
       "line": 182,
       "context": "jsx-text:span",
-      "status": "review-required"
-    },
-    {
-      "key": "source.f1291b1f04c501e5c669.1",
-      "text": "Wird geladen",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 188,
-      "context": "jsx-text:fragment",
-      "status": "review-required"
-    },
-    {
-      "key": "source.344478342f72b5ab42ac.1",
-      "text": "Wiedergabe nicht möglich",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 192,
-      "context": "ParenthesizedExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.a0e40dd043a2c0908e48.1",
-      "text": "Jetzt live",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 194,
-      "context": "ParenthesizedExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed 2026-10-21: aria-hidden Material Symbols artwork fallback token, not operator prose. Loading/playback feedback uses radioBrowser keys.",
+      "technicalReviewHash": "c56120d2d72370d9c9eb893ec8702fca7e4f7c9cc6788d4cd1b1af3005b04106"
     },
     {
       "key": "source.6fb7bf0e816843e3ad9a.1",
@@ -18665,36 +18547,24 @@
       "status": "review-required"
     },
     {
+      "key": "source.99db4a9a472d84d0c584.1",
+      "text": "{expression1} {expression2} {expression3} {expression4}",
+      "source": "src/ShapeGallery.tsx",
+      "line": 10,
+      "context": "PropertyAccessExpression",
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed complete ShapeGallery 2026-10-21: search-only concatenation of canonical document aliases and separately localized shape/category labels. Contains no fixed authored prose to translate and is never rendered as output text.",
+      "technicalReviewHash": "c943b573b53d50e09473674bbbae3132302ca396f9359caa2e1f15512f9293ac"
+    },
+    {
       "key": "source.3df72ba6324a0d07a3a3.1",
       "text": "category",
       "source": "src/ShapeGallery.tsx",
-      "line": 2,
+      "line": 12,
       "context": "jsx-text:span",
-      "status": "review-required"
-    },
-    {
-      "key": "source.a46c4ab132e821c9068e.1",
-      "text": "2D-OBJEKT",
-      "source": "src/ShapeGallery.tsx",
-      "line": 2,
-      "context": "jsx-text:button",
-      "status": "review-required"
-    },
-    {
-      "key": "source.03ffa91df70874c5a174.1",
-      "text": "2D-Objekte",
-      "source": "src/ShapeGallery.tsx",
-      "line": 2,
-      "context": "jsx-attribute:aria-label",
-      "status": "review-required"
-    },
-    {
-      "key": "source.252d39b02759834a5d85.1",
-      "text": "2D-Objekte suchen …",
-      "source": "src/ShapeGallery.tsx",
-      "line": 2,
-      "context": "jsx-attribute:placeholder",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually reviewed complete ShapeGallery 2026-10-21: aria-hidden Material Symbols glyph token. Button/title/search and all actual shapes/categories are localized through independently inventoried shapeControlTemplates.",
+      "technicalReviewHash": "8261e2f082b3916593ffa7352e3f8cb8a0fa95ec3288c8832d62a25efc9edfdc"
     },
     {
       "key": "source.aa9d6dcc59cc0d9905e6.1",
@@ -26404,7 +26274,7 @@
       "key": "ui.loginSubtitle",
       "text": "Mit deinem Konto anmelden",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26412,7 +26282,7 @@
       "key": "ui.email",
       "text": "E-Mail-Adresse",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26420,7 +26290,7 @@
       "key": "ui.password",
       "text": "Passwort",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26428,7 +26298,7 @@
       "key": "ui.showPassword",
       "text": "Passwort anzeigen",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26436,7 +26306,7 @@
       "key": "ui.hidePassword",
       "text": "Passwort ausblenden",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26444,7 +26314,7 @@
       "key": "ui.remember",
       "text": "Angemeldet bleiben",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26452,7 +26322,7 @@
       "key": "ui.signIn",
       "text": "ANMELDEN",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26460,7 +26330,7 @@
       "key": "ui.signingIn",
       "text": "Anmeldung läuft …",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26468,7 +26338,7 @@
       "key": "ui.forgotPassword",
       "text": "Passwort vergessen?",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26476,7 +26346,7 @@
       "key": "ui.notAvailable",
       "text": "Noch nicht verfügbar",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26484,7 +26354,7 @@
       "key": "ui.firebaseChecking",
       "text": "Firebase wird geprüft …",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26492,7 +26362,7 @@
       "key": "ui.firebaseConnected",
       "text": "Mit Firebase verbunden",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26500,7 +26370,7 @@
       "key": "ui.firebaseDisconnected",
       "text": "Keine Firebase-Verbindung",
       "source": "src/i18nBase.ts",
-      "line": 6,
+      "line": 8,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26508,7 +26378,7 @@
       "key": "ui.twoFactorTitle",
       "text": "Zwei-Faktor-Anmeldung",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26516,7 +26386,7 @@
       "key": "ui.twoFactorSubtitle",
       "text": "Zusätzliche Sicherheitsprüfung",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26524,7 +26394,7 @@
       "key": "ui.twoFactorTotp",
       "text": "Öffne deine Authenticator- oder Passwort-App und gib den aktuellen 6-stelligen Code ein.",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26532,7 +26402,7 @@
       "key": "ui.twoFactorSent",
       "text": "Ein 6-stelliger Code wurde an {destination} gesendet.",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26540,7 +26410,7 @@
       "key": "ui.securityChannel",
       "text": "deinen Sicherheitskanal",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26548,7 +26418,7 @@
       "key": "ui.recoveryIntro",
       "text": "Gib einen deiner einmalig verwendbaren Wiederherstellungscodes ein.",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26556,7 +26426,7 @@
       "key": "ui.recoveryCode",
       "text": "Wiederherstellungscode",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26564,7 +26434,7 @@
       "key": "ui.verificationCode",
       "text": "Bestätigungscode",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26572,7 +26442,7 @@
       "key": "ui.recoveryIncomplete",
       "text": "Bitte einen vollständigen Wiederherstellungscode eingeben.",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26580,7 +26450,7 @@
       "key": "ui.codeIncomplete",
       "text": "Bitte den 6-stelligen Code eingeben.",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26588,7 +26458,7 @@
       "key": "ui.useNormalCode",
       "text": "Normalen 2FA-Code verwenden",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26596,7 +26466,7 @@
       "key": "ui.useRecoveryCode",
       "text": "Wiederherstellungscode verwenden",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26604,7 +26474,7 @@
       "key": "ui.cancel",
       "text": "ABBRECHEN",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26612,7 +26482,7 @@
       "key": "ui.verifying",
       "text": "PRÜFUNG LÄUFT …",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26620,7 +26490,7 @@
       "key": "ui.confirm",
       "text": "BESTÄTIGEN",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26628,7 +26498,7 @@
       "key": "ui.codeSafety",
       "text": "Der Code ist fünf Minuten gültig. Teile ihn niemals mit anderen Personen.",
       "source": "src/i18nBase.ts",
-      "line": 7,
+      "line": 9,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26636,7 +26506,7 @@
       "key": "ui.file",
       "text": "Datei",
       "source": "src/i18nBase.ts",
-      "line": 8,
+      "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26644,7 +26514,7 @@
       "key": "ui.media",
       "text": "Medien",
       "source": "src/i18nBase.ts",
-      "line": 8,
+      "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26652,7 +26522,7 @@
       "key": "ui.presentation",
       "text": "Präsentation",
       "source": "src/i18nBase.ts",
-      "line": 8,
+      "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26660,7 +26530,7 @@
       "key": "ui.view",
       "text": "Ansicht",
       "source": "src/i18nBase.ts",
-      "line": 8,
+      "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26668,7 +26538,7 @@
       "key": "ui.tools",
       "text": "Werkzeuge",
       "source": "src/i18nBase.ts",
-      "line": 8,
+      "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26676,7 +26546,7 @@
       "key": "ui.settings",
       "text": "Einstellungen",
       "source": "src/i18nBase.ts",
-      "line": 8,
+      "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26684,7 +26554,7 @@
       "key": "ui.help",
       "text": "Hilfe",
       "source": "src/i18nBase.ts",
-      "line": 8,
+      "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26692,7 +26562,7 @@
       "key": "ui.logout",
       "text": "Abmelden",
       "source": "src/i18nBase.ts",
-      "line": 8,
+      "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26700,7 +26570,7 @@
       "key": "ui.noPermission",
       "text": "Keine Berechtigung",
       "source": "src/i18nBase.ts",
-      "line": 8,
+      "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26708,7 +26578,7 @@
       "key": "ui.noEditPermission",
       "text": "Keine Berechtigung zum Bearbeiten",
       "source": "src/i18nBase.ts",
-      "line": 8,
+      "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26716,7 +26586,7 @@
       "key": "ui.notAvailableTitle",
       "text": "Noch nicht verfügbar",
       "source": "src/i18nBase.ts",
-      "line": 8,
+      "line": 10,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26724,7 +26594,7 @@
       "key": "ui.orderOfService",
       "text": "ABLAUF",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26732,7 +26602,7 @@
       "key": "ui.addItem",
       "text": "Element hinzufügen",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26740,7 +26610,7 @@
       "key": "ui.song",
       "text": "Song",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26748,7 +26618,7 @@
       "key": "ui.bible",
       "text": "Bibel",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26756,7 +26626,7 @@
       "key": "ui.content",
       "text": "Inhalt",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26764,7 +26634,7 @@
       "key": "ui.newSong",
       "text": "Neuer Song",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26772,7 +26642,7 @@
       "key": "ui.newBible",
       "text": "Bibelstelle",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26780,7 +26650,7 @@
       "key": "ui.newContent",
       "text": "Neuer Inhalt",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26788,7 +26658,7 @@
       "key": "ui.newMedia",
       "text": "Neues Medium",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26796,7 +26666,7 @@
       "key": "ui.serviceSection",
       "text": "GOTTESDIENST",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26804,7 +26674,7 @@
       "key": "ui.editContent",
       "text": "Inhalt bearbeiten",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26812,7 +26682,7 @@
       "key": "ui.slidesOne",
       "text": "Folie",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26820,7 +26690,7 @@
       "key": "ui.slidesMany",
       "text": "Folien",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26828,7 +26698,7 @@
       "key": "ui.noSlides",
       "text": "Noch keine Folien",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26836,7 +26706,7 @@
       "key": "ui.properties",
       "text": "EIGENSCHAFTEN",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26844,7 +26714,7 @@
       "key": "ui.layers",
       "text": "EBENEN",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26852,7 +26722,7 @@
       "key": "ui.title",
       "text": "Titel",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26860,7 +26730,7 @@
       "key": "ui.text",
       "text": "Text",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26868,7 +26738,7 @@
       "key": "ui.background",
       "text": "Hintergrund",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26876,7 +26746,7 @@
       "key": "ui.slides",
       "text": "FOLIEN",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26884,7 +26754,7 @@
       "key": "ui.edit",
       "text": "BEARBEITEN",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26892,7 +26762,7 @@
       "key": "ui.preview",
       "text": "VORSCHAU",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26900,7 +26770,7 @@
       "key": "ui.singleView",
       "text": "Einzelansicht",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26908,7 +26778,7 @@
       "key": "ui.slideOverview",
       "text": "Folienübersicht",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26916,7 +26786,7 @@
       "key": "ui.previewSize",
       "text": "Vorschaugröße",
       "source": "src/i18nBase.ts",
-      "line": 9,
+      "line": 11,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26924,7 +26794,7 @@
       "key": "ui.onAir",
       "text": "AUF SENDUNG",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26932,7 +26802,7 @@
       "key": "ui.offAir",
       "text": "AUS SENDUNG",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26940,7 +26810,7 @@
       "key": "ui.noLivePermission",
       "text": "Keine Berechtigung für Auf Sendung",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26948,7 +26818,7 @@
       "key": "ui.assignMain",
       "text": "MAIN-Anzeige in Einstellungen zuweisen",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26956,7 +26826,7 @@
       "key": "ui.ready",
       "text": "BEREIT",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26964,7 +26834,7 @@
       "key": "ui.local",
       "text": "LOKAL",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26972,7 +26842,7 @@
       "key": "ui.syncOffline",
       "text": "SYNC OFFLINE",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26980,7 +26850,7 @@
       "key": "ui.main",
       "text": "MAIN",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26988,7 +26858,7 @@
       "key": "ui.live",
       "text": "LIVE",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -26996,7 +26866,7 @@
       "key": "ui.item",
       "text": "ELEMENT",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27004,7 +26874,7 @@
       "key": "ui.slide",
       "text": "FOLIE",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27012,7 +26882,7 @@
       "key": "ui.accountLoading",
       "text": "Konto wird geladen …",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27020,7 +26890,7 @@
       "key": "ui.roleViewer",
       "text": "BETRACHTER",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27028,7 +26898,7 @@
       "key": "ui.rolePresenter",
       "text": "PRÄSENTATOR",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27036,7 +26906,7 @@
       "key": "ui.roleEditor",
       "text": "BEARBEITER",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27044,7 +26914,7 @@
       "key": "ui.roleAdmin",
       "text": "ADMIN",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27052,7 +26922,7 @@
       "key": "ui.displayNumber",
       "text": "Anzeige {number}",
       "source": "src/i18nBase.ts",
-      "line": 10,
+      "line": 12,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27060,7 +26930,7 @@
       "key": "ui.general",
       "text": "Allgemein",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27068,7 +26938,7 @@
       "key": "ui.display",
       "text": "Anzeige",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27076,7 +26946,7 @@
       "key": "ui.audio",
       "text": "Audio",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27084,7 +26954,7 @@
       "key": "ui.videoInput",
       "text": "Videoeingang",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27092,7 +26962,7 @@
       "key": "ui.quickScreens",
       "text": "Schnellanzeigen",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27100,7 +26970,7 @@
       "key": "ui.fonts",
       "text": "Schriftarten",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27108,7 +26978,7 @@
       "key": "ui.defaultMedia",
       "text": "Standardmedien",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27116,7 +26986,7 @@
       "key": "ui.defaultStage",
       "text": "Standard-Bühne",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27124,7 +26994,7 @@
       "key": "ui.remote",
       "text": "Fernsteuerung",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27132,7 +27002,7 @@
       "key": "ui.lightingMidi",
       "text": "Licht/MIDI",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27140,7 +27010,7 @@
       "key": "ui.language",
       "text": "Sprache",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27148,7 +27018,7 @@
       "key": "ui.appearance",
       "text": "Darstellung",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27156,7 +27026,7 @@
       "key": "ui.theme",
       "text": "Farbschema",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27164,7 +27034,7 @@
       "key": "ui.themeSystem",
       "text": "Systemeinstellung",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27172,7 +27042,7 @@
       "key": "ui.themeLight",
       "text": "Hell",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27180,7 +27050,7 @@
       "key": "ui.themeDark",
       "text": "Dunkel",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27188,7 +27058,7 @@
       "key": "ui.blackWhite",
       "text": "Schwarz-Weiß-Modus",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27196,7 +27066,7 @@
       "key": "ui.blackWhiteHelp",
       "text": "Entfernt Farben ausschließlich aus der Bedienoberfläche. Ausgabefenster behalten ihre vorgesehenen Farben.",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27204,7 +27074,7 @@
       "key": "ui.generalHelp",
       "text": "Sprache und Darstellung werden sofort angewendet und auf diesem Gerät gespeichert.",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27212,7 +27082,7 @@
       "key": "ui.displayTitle",
       "text": "Anzeige",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27220,7 +27090,7 @@
       "key": "ui.displayHelp",
       "text": "MAIN-Ausgabe einem physischen Bildschirm zuweisen.",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27228,7 +27098,7 @@
       "key": "ui.unassigned",
       "text": "Nicht zugewiesen",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27236,7 +27106,7 @@
       "key": "ui.controlSurface",
       "text": "Bedienoberfläche",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27244,7 +27114,7 @@
       "key": "ui.displayDesktopOnly",
       "text": "Display-Erkennung ist nur in der Desktop-App verfügbar.",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27252,7 +27122,7 @@
       "key": "ui.sectionUnavailable",
       "text": "Dieser Einstellungsbereich ist noch nicht verfügbar.",
       "source": "src/i18nBase.ts",
-      "line": 11,
+      "line": 13,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27260,7 +27130,7 @@
       "key": "ui.updatesTitle",
       "text": "Updates und Version",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27268,7 +27138,7 @@
       "key": "ui.currentVersion",
       "text": "Installierte Version",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27276,7 +27146,7 @@
       "key": "ui.checkUpdates",
       "text": "NACH UPDATES SUCHEN",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27284,7 +27154,7 @@
       "key": "ui.updateChecking",
       "text": "Suche nach Updates …",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27292,7 +27162,7 @@
       "key": "ui.updateAvailable",
       "text": "Version {version} ist verfügbar.",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27300,7 +27170,7 @@
       "key": "ui.updateCurrent",
       "text": "GottesdienstRegie ist aktuell.",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27308,7 +27178,7 @@
       "key": "ui.updateDownloading",
       "text": "Update wird heruntergeladen: {percent} %",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27316,7 +27186,7 @@
       "key": "ui.updateDownloaded",
       "text": "Version {version} ist bereit zur Installation.",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27324,7 +27194,7 @@
       "key": "ui.updateDownload",
       "text": "UPDATE HERUNTERLADEN",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27332,7 +27202,7 @@
       "key": "ui.updateInstall",
       "text": "INSTALLIEREN UND NEU STARTEN",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27340,7 +27210,7 @@
       "key": "ui.updateError",
       "text": "Updatefehler: {detail}",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27348,7 +27218,7 @@
       "key": "ui.updateDevelopment",
       "text": "Updateprüfung ist nur in der installierten App verfügbar.",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27356,7 +27226,7 @@
       "key": "ui.releaseNotes",
       "text": "Versionshinweise",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27364,7 +27234,7 @@
       "key": "ui.releaseCurrentBody",
       "text": "Neu in 0.2.0: automatische Updateprüfung über GitHub, sichere manuelle Installation, vollständig mehrsprachige Updateanzeige und integrierte Versionshinweise.",
       "source": "src/i18nBase.ts",
-      "line": 12,
+      "line": 14,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27372,7 +27242,7 @@
       "key": "ui.accessibility",
       "text": "Barrierefreiheit",
       "source": "src/i18nBase.ts",
-      "line": 13,
+      "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27380,7 +27250,7 @@
       "key": "ui.updates",
       "text": "Updates",
       "source": "src/i18nBase.ts",
-      "line": 13,
+      "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27388,7 +27258,7 @@
       "key": "ui.accessibilityHelp",
       "text": "Passe Bewegung, Dichte und Login-Darstellung an deine Bedürfnisse an.",
       "source": "src/i18nBase.ts",
-      "line": 13,
+      "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27396,7 +27266,7 @@
       "key": "ui.reduceMotion",
       "text": "Bewegungen reduzieren",
       "source": "src/i18nBase.ts",
-      "line": 13,
+      "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27404,7 +27274,7 @@
       "key": "ui.reduceMotionHelp",
       "text": "Deaktiviert längere Animationen und Übergänge.",
       "source": "src/i18nBase.ts",
-      "line": 13,
+      "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27412,7 +27282,7 @@
       "key": "ui.compactMode",
       "text": "Kompakte Bedienoberfläche",
       "source": "src/i18nBase.ts",
-      "line": 13,
+      "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27420,7 +27290,7 @@
       "key": "ui.compactModeHelp",
       "text": "Zeigt mehr Inhalt auf kleineren Bildschirmen.",
       "source": "src/i18nBase.ts",
-      "line": 13,
+      "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27428,7 +27298,7 @@
       "key": "ui.showLoginBackgrounds",
       "text": "Wechselnde Login-Hintergründe",
       "source": "src/i18nBase.ts",
-      "line": 13,
+      "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27436,7 +27306,7 @@
       "key": "ui.showLoginBackgroundsHelp",
       "text": "Zeigt bei jedem Programmstart ein anderes lokal mitgeliefertes Motiv.",
       "source": "src/i18nBase.ts",
-      "line": 13,
+      "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27444,7 +27314,7 @@
       "key": "ui.onlineReleaseNotes",
       "text": "Online-Versionshinweise",
       "source": "src/i18nBase.ts",
-      "line": 13,
+      "line": 15,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27452,7 +27322,7 @@
       "key": "ui.backgroundImageCredit",
       "text": "Hintergrundmotiv: GottesdienstRegie",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27460,7 +27330,7 @@
       "key": "ui.close",
       "text": "SCHLIESSEN",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27468,7 +27338,7 @@
       "key": "ui.logoutConfirmTitle",
       "text": "Wirklich abmelden?",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27476,7 +27346,7 @@
       "key": "ui.logoutConfirmText",
       "text": "Deine lokale Sitzung wird beendet. Nicht gespeicherte Änderungen bleiben auf diesem Gerät erhalten.",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27484,7 +27354,7 @@
       "key": "ui.staySignedIn",
       "text": "ANGEMELDET BLEIBEN",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27492,7 +27362,7 @@
       "key": "ui.logoutNow",
       "text": "JETZT ABMELDEN",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27500,7 +27370,7 @@
       "key": "ui.helpTitle",
       "text": "Hilfe und Support",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27508,7 +27378,7 @@
       "key": "ui.helpIntro",
       "text": "Antworten, Bedienhinweise und technische Informationen zu GottesdienstRegie.",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27516,7 +27386,7 @@
       "key": "ui.helpGettingStarted",
       "text": "Erste Schritte",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27524,7 +27394,7 @@
       "key": "ui.helpGettingStartedBody",
       "text": "Öffne einen Ablauf, wähle eine Folie und weise unter Einstellungen eine MAIN-Anzeige zu. Danach kannst du die Präsentation auf Sendung schalten.",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27532,7 +27402,7 @@
       "key": "ui.helpShortcuts",
       "text": "Bedienung und Tastatur",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27540,7 +27410,7 @@
       "key": "ui.helpShortcutsBody",
       "text": "Nutze die Menüleiste für Einstellungen und Hilfe. Folien lassen sich im Ablauf per Ziehen sortieren; Eingabefelder können wie gewohnt mit Tab gewechselt werden.",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27548,7 +27418,7 @@
       "key": "ui.helpUpdates",
       "text": "Updates installieren",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27556,7 +27426,7 @@
       "key": "ui.helpUpdatesBody",
       "text": "Öffne Einstellungen → Updates. Suche nach einer neuen Version, lade sie herunter und bestätige anschließend Installation und Neustart.",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27564,7 +27434,7 @@
       "key": "ui.helpSecurity",
       "text": "Konto und Sicherheit",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27572,7 +27442,7 @@
       "key": "ui.helpSecurityBody",
       "text": "Anmeldedaten werden nicht im Klartext gespeichert. Sitzungen werden durch Windows verschlüsselt und die Zwei-Faktor-Anmeldung automatisch geprüft.",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27580,7 +27450,7 @@
       "key": "ui.helpImages",
       "text": "Login-Bilder",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27588,7 +27458,7 @@
       "key": "ui.helpImagesBody",
       "text": "Die Motive aus Bielefeld, deutschen Städten und Landschaften sind in der App enthalten und funktionieren ohne Internet. Du kannst sie unter Barrierefreiheit deaktivieren.",
       "source": "src/i18nBase.ts",
-      "line": 14,
+      "line": 16,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27596,7 +27466,7 @@
       "key": "ui.releaseNoteLanguagesTitle",
       "text": "Sieben neue Sprachen",
       "source": "src/i18nBase.ts",
-      "line": 15,
+      "line": 17,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27604,7 +27474,7 @@
       "key": "ui.releaseNoteLanguagesBody",
       "text": "Spanisch, Schweizerdeutsch, Ukrainisch, Russisch, Türkisch, Arabisch und Polnisch wurden ergänzt.",
       "source": "src/i18nBase.ts",
-      "line": 15,
+      "line": 17,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27612,7 +27482,7 @@
       "key": "ui.releaseNoteLoginTitle",
       "text": "Neuer Login-Bildschirm",
       "source": "src/i18nBase.ts",
-      "line": 15,
+      "line": 17,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27620,7 +27490,7 @@
       "key": "ui.releaseNoteLoginBody",
       "text": "Wechselnde Fotos aus Bielefeld, deutschen Städten und Landschaften passen sich an Hell- und Dunkelmodus an. Die Sprache wird oben rechts über Flaggen gewählt.",
       "source": "src/i18nBase.ts",
-      "line": 15,
+      "line": 17,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27628,7 +27498,7 @@
       "key": "ui.releaseNoteSecurityTitle",
       "text": "Verbesserte Anmeldung",
       "source": "src/i18nBase.ts",
-      "line": 15,
+      "line": 17,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27636,7 +27506,7 @@
       "key": "ui.releaseNoteSecurityBody",
       "text": "Sechsstellige 2FA-Codes werden automatisch bestätigt. Vor dem Abmelden erscheint nun eine Sicherheitsabfrage.",
       "source": "src/i18nBase.ts",
-      "line": 15,
+      "line": 17,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27644,7 +27514,7 @@
       "key": "ui.releaseNoteHelpTitle",
       "text": "Mehr Einstellungen und Hilfe",
       "source": "src/i18nBase.ts",
-      "line": 15,
+      "line": 17,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27652,7 +27522,7 @@
       "key": "ui.releaseNoteHelpBody",
       "text": "Neue Optionen für reduzierte Bewegung, kompakte Darstellung und Login-Hintergründe sowie ein eigener Hilfe-Bereich.",
       "source": "src/i18nBase.ts",
-      "line": 15,
+      "line": 17,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27660,7 +27530,7 @@
       "key": "ui.releaseNoteUpdatesTitle",
       "text": "Aufklappbare Versionshinweise",
       "source": "src/i18nBase.ts",
-      "line": 15,
+      "line": 17,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27668,7 +27538,7 @@
       "key": "ui.releaseNoteUpdatesBody",
       "text": "Jeder Versionspunkt lässt sich mit Plus und Minus einzeln öffnen oder schließen.",
       "source": "src/i18nBase.ts",
-      "line": 15,
+      "line": 17,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27676,7 +27546,7 @@
       "key": "ui.languageGerman",
       "text": "Deutsch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27684,7 +27554,7 @@
       "key": "ui.languageSwissGerman",
       "text": "Schweizerdeutsch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27692,7 +27562,7 @@
       "key": "ui.languageEnglish",
       "text": "Englisch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27700,7 +27570,7 @@
       "key": "ui.languageDutch",
       "text": "Niederländisch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27708,7 +27578,7 @@
       "key": "ui.languageDanish",
       "text": "Dänisch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27716,7 +27586,7 @@
       "key": "ui.languageNorwegian",
       "text": "Norwegisch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27724,7 +27594,7 @@
       "key": "ui.languageSpanish",
       "text": "Spanisch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27732,7 +27602,7 @@
       "key": "ui.languageUkrainian",
       "text": "Ukrainisch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27740,7 +27610,7 @@
       "key": "ui.languageRussian",
       "text": "Russisch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27748,7 +27618,7 @@
       "key": "ui.languageTurkish",
       "text": "Türkisch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27756,7 +27626,7 @@
       "key": "ui.languageArabic",
       "text": "Arabisch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27764,7 +27634,7 @@
       "key": "ui.languagePolish",
       "text": "Polnisch",
       "source": "src/i18nBase.ts",
-      "line": 16,
+      "line": 18,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27772,7 +27642,7 @@
       "key": "ui.authDesktop",
       "text": "Die Anmeldung ist nur in der installierten Desktop-App möglich.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27780,7 +27650,7 @@
       "key": "ui.authStorage",
       "text": "Windows konnte die Sitzung nicht sicher verschlüsseln.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27788,7 +27658,7 @@
       "key": "ui.authGasNetwork",
       "text": "Der bestehende PGB-Login-Service ist nicht erreichbar.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27796,7 +27666,7 @@
       "key": "ui.authGasResponse",
       "text": "Der PGB-Login-Service hat eine ungültige Antwort geliefert.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27804,7 +27674,7 @@
       "key": "ui.authEmailUnverified",
       "text": "Bitte bestätige zuerst deine E-Mail-Adresse.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27812,7 +27682,7 @@
       "key": "ui.authLocked",
       "text": "Das Konto ist vorübergehend gesperrt.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27820,7 +27690,7 @@
       "key": "ui.authInitialPassword",
       "text": "Dieses Einmalpasswort muss zuerst auf der Gemeinde-Webseite geändert werden.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27828,7 +27698,7 @@
       "key": "ui.authTwoFactorCooldown",
       "text": "Es wurde bereits ein Bestätigungscode versendet. Bitte warte kurz und starte die Anmeldung erneut.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27836,7 +27706,7 @@
       "key": "ui.authTwoFactorExpired",
       "text": "Die Zwei-Faktor-Anmeldung ist abgelaufen. Bitte melde dich erneut an.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27844,7 +27714,7 @@
       "key": "ui.authTwoFactorInvalid",
       "text": "Der Bestätigungscode ist nicht korrekt.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27852,7 +27722,7 @@
       "key": "ui.authTwoFactorError",
       "text": "Die Zwei-Faktor-Prüfung konnte nicht gestartet werden.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27860,7 +27730,7 @@
       "key": "ui.authSessionFailed",
       "text": "Der PGB-Login war korrekt, aber die Sitzung konnte nicht erstellt werden.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27868,7 +27738,7 @@
       "key": "ui.authAlgorithm",
       "text": "Der Passwortalgorithmus dieses Kontos wird noch nicht unterstützt.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27876,7 +27746,7 @@
       "key": "ui.authFirebase",
       "text": "Firebase ist nicht erreichbar oder die Datenbankabfrage wurde abgelehnt.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27884,7 +27754,7 @@
       "key": "ui.authAccessUnavailable",
       "text": "Deine GottesdienstRegie-Freigabe konnte gerade nicht aus Firebase geladen werden. Bitte prüfe die Verbindung und versuche es erneut.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27892,7 +27762,7 @@
       "key": "ui.authDisabled",
       "text": "Dieses Benutzerkonto ist deaktiviert oder wurde zentral abgemeldet.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27900,7 +27770,7 @@
       "key": "ui.authNoAccess",
       "text": "Das Konto ist gültig, besitzt aber keinen freigeschalteten GottesdienstRegie-Zugang. Bitte wende dich an den Administrator.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27908,7 +27778,7 @@
       "key": "ui.authInvalid",
       "text": "E-Mail-Adresse oder Passwort ist nicht korrekt.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27916,7 +27786,7 @@
       "key": "ui.authTechnical",
       "text": "Technischer Anmeldefehler: {detail}",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27924,7 +27794,7 @@
       "key": "ui.authUnknown",
       "text": "Unbekannter Fehler",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27932,7 +27802,7 @@
       "key": "ui.serverCodeExpired",
       "text": "Die Anmeldung ist abgelaufen. Bitte melde dich erneut an.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27940,7 +27810,7 @@
       "key": "ui.serverTooMany",
       "text": "Zu viele Fehlversuche. Bitte starte die Anmeldung erneut.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27948,7 +27818,7 @@
       "key": "ui.serverRecoveryInvalid",
       "text": "Der Wiederherstellungscode ist ungültig oder wurde bereits verwendet.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27956,7 +27826,7 @@
       "key": "ui.serverTotpInvalid",
       "text": "Der Code der Authenticator-App ist nicht korrekt.",
       "source": "src/i18nBase.ts",
-      "line": 17,
+      "line": 19,
       "context": "base-dictionary",
       "status": "app-owned"
     },
@@ -27964,7 +27834,7 @@
       "key": "source.7cb0b1fc7895ef28ad56.1",
       "text": "Zeigt bei jedem Programmstart ein anderes lokal mitgeliefertes Motiv.",
       "source": "src/i18nBase.ts",
-      "line": 166,
+      "line": 168,
       "context": "property:showLoginBackgroundsHelp",
       "status": "review-required"
     },
@@ -27972,7 +27842,7 @@
       "key": "source.e01469b84015a4d844d3.1",
       "text": "Hintergrundmotiv: GottesdienstRegie",
       "source": "src/i18nBase.ts",
-      "line": 166,
+      "line": 168,
       "context": "property:backgroundImageCredit",
       "status": "review-required"
     },
@@ -27980,7 +27850,7 @@
       "key": "source.5bac38b004141d3089ea.1",
       "text": "Die Motive aus Bielefeld, deutschen Städten und Landschaften sind in der App enthalten und funktionieren ohne Internet. Du kannst sie unter Barrierefreiheit deaktivieren.",
       "source": "src/i18nBase.ts",
-      "line": 166,
+      "line": 168,
       "context": "property:helpImagesBody",
       "status": "review-required"
     },
@@ -30360,7 +30230,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ab0e03b24860ce75f2aa.1",
@@ -30368,7 +30240,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.3a7c36971c235b405fed.1",
@@ -30376,7 +30250,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ab0e03b24860ce75f2aa.2",
@@ -30384,7 +30260,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ed55c4832bce4577ca7c.1",
@@ -30392,7 +30270,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ab0e03b24860ce75f2aa.3",
@@ -30400,7 +30280,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.3f1541d7975379e3c055.1",
@@ -30408,7 +30290,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ab0e03b24860ce75f2aa.4",
@@ -30416,7 +30300,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.fe3e2a8e655628ba34a2.1",
@@ -30424,7 +30310,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ab0e03b24860ce75f2aa.5",
@@ -30432,7 +30320,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.af4607c7ae39241e4e9a.1",
@@ -30440,7 +30330,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ab0e03b24860ce75f2aa.6",
@@ -30448,7 +30340,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.fa23ecfbdddb2e76a7a3.1",
@@ -30456,7 +30350,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ab0e03b24860ce75f2aa.7",
@@ -30464,7 +30360,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.dcc24a776c46d8c3e668.1",
@@ -30472,7 +30370,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ab0e03b24860ce75f2aa.8",
@@ -30480,7 +30380,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.3969e7a85b3d66387365.1",
@@ -30488,7 +30390,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ab0e03b24860ce75f2aa.9",
@@ -30496,7 +30400,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.c58bfd8d0b9b1ec3ec08.1",
@@ -30504,7 +30410,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ab0e03b24860ce75f2aa.10",
@@ -30512,7 +30420,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.4d9aef55fa0ead270377.1",
@@ -30520,7 +30430,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.b9d4a69f9907cfac2c4e.1",
@@ -30528,7 +30440,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.9c1d4eb04a9fa4a871f1.1",
@@ -30536,7 +30450,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.b9d4a69f9907cfac2c4e.2",
@@ -30544,7 +30460,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.cc77673aeaa84edbb02a.1",
@@ -30552,7 +30470,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.b9d4a69f9907cfac2c4e.3",
@@ -30560,7 +30480,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.940c066304e6a091ea26.1",
@@ -30568,7 +30490,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.b9d4a69f9907cfac2c4e.4",
@@ -30576,7 +30500,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.85cd6bdabd8ee66bbce3.1",
@@ -30584,7 +30510,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.b9d4a69f9907cfac2c4e.5",
@@ -30592,7 +30520,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.48da17217df86908bab8.1",
@@ -30600,7 +30530,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.b9d4a69f9907cfac2c4e.6",
@@ -30608,7 +30540,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.24b3ce80b24b7b55b43d.1",
@@ -30616,7 +30550,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.1",
@@ -30624,7 +30560,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.ab8ff3833002d1920ce5.1",
@@ -30632,7 +30570,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.2",
@@ -30640,7 +30580,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.bc84a3864597a6d99464.1",
@@ -30648,7 +30590,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.3",
@@ -30656,7 +30600,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.282301df7a0c15110b6f.1",
@@ -30664,7 +30610,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.4",
@@ -30672,7 +30620,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.b770b855a4d7481a8a95.1",
@@ -30680,7 +30630,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.5",
@@ -30688,7 +30640,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.9aad16f1eadf60060f97.1",
@@ -30696,7 +30650,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.6",
@@ -30704,7 +30660,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.eb87b07c921780df4a57.1",
@@ -30712,7 +30670,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.7",
@@ -30720,7 +30680,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.4758e057282f017792e1.1",
@@ -30728,7 +30690,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.8",
@@ -30736,7 +30700,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.80c9269c303add18479e.1",
@@ -30744,7 +30710,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.9",
@@ -30752,7 +30720,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.f7fd5802d3d5c8b2d4ac.1",
@@ -30760,7 +30730,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.10",
@@ -30768,7 +30740,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.099bfa1f5614e4a3a3bd.1",
@@ -30776,7 +30750,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.11",
@@ -30784,7 +30760,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.76651b88de11ac6b86ea.1",
@@ -30792,7 +30770,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.12",
@@ -30800,7 +30780,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.a2bef26ca28ab383452a.1",
@@ -30808,7 +30790,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.5db9c183645c8793c154.13",
@@ -30816,7 +30800,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.a4e7f5a5c384367d6fb2.1",
@@ -30824,7 +30810,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.c02056857b67a8ed9f33.1",
@@ -30832,7 +30820,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.055114e925e175f94c45.1",
@@ -30840,7 +30830,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.c02056857b67a8ed9f33.2",
@@ -30848,7 +30840,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.c02056857b67a8ed9f33.3",
@@ -30856,7 +30850,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.c02056857b67a8ed9f33.4",
@@ -30864,7 +30860,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.a9d2ff873ce1a1f489c2.1",
@@ -30872,7 +30870,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.c02056857b67a8ed9f33.5",
@@ -30880,7 +30880,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.bfc7c8215ed2eeeea10e.1",
@@ -30888,7 +30890,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.c02056857b67a8ed9f33.6",
@@ -30896,7 +30900,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.b4462939ddc5a93558bb.1",
@@ -30904,7 +30910,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.c02056857b67a8ed9f33.7",
@@ -30912,7 +30920,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 2,
       "context": "ArrayLiteralExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.f3941e9f2d58450fa494.1",
@@ -30920,7 +30930,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 3,
       "context": "property:rectangle",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.c56105c59a4534289c16.1",
@@ -30928,7 +30940,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 3,
       "context": "property:ellipse",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.c8c984b37a2dff99e89a.1",
@@ -30936,7 +30950,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 3,
       "context": "property:triangle",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.1137a99815717a9a448f.1",
@@ -30944,7 +30960,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 3,
       "context": "property:diamond",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.d10a0c8e5779fbf78403.1",
@@ -30952,7 +30970,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 3,
       "context": "property:arrow",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.7feb08b980797001ccac.1",
@@ -30960,7 +30980,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 3,
       "context": "property:cross",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.d2fed6b88cffa5e5b129.1",
@@ -30968,7 +30990,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 3,
       "context": "property:church",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.649f144f8b25cd49bf6e.1",
@@ -30976,7 +31000,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 3,
       "context": "property:bible",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.722b3a5a453eac77a9ed.1",
@@ -30984,7 +31010,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 4,
       "context": "BinaryExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.3f315101e71b6c4b4cf7.1",
@@ -30992,7 +31020,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 5,
       "context": "property:name",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.4ff54c9ecb4b913e48c6.1",
@@ -31000,7 +31030,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 5,
       "context": "AsExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.6c934505b33ac43cfdde.1",
@@ -31008,7 +31040,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 5,
       "context": "property:path",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.1da90faef3c02a4bcebf.1",
@@ -31016,7 +31050,9 @@
       "source": "src/shapeCatalog.ts",
       "line": 6,
       "context": "PropertyAccessExpression",
-      "status": "review-required"
+      "status": "excluded",
+      "exclusionReason": "Manually read complete six-line catalog 2026-10-21: immutable shape IDs, SVG geometry, German canonical document names/category aliases and legacy search. ShapeGallery now renders/searches localized operator labels and ShapeArtwork uses localized accessibility via shapeControlTemplates; all 35 actual items and 43 UI keys are covered separately. Selection intentionally passes the unchanged canonical name to document storage; user/presentation metadata must not be dialect-rewritten. Hash changes revoke this review; no selector or operator prose file is excluded.",
+      "technicalReviewHash": "047b4d77000800aa0ff5177e35fcae537ebafa67d11725906b9575599bbf2b95"
     },
     {
       "key": "source.0f249bc2cf0f201ea27c.1",
@@ -45466,6 +45502,412 @@
       "text": "Der erste hier archivierte Stand umfasst Grundsystem, Benutzeroberfläche und Gemeindekonto. Er bildet den Ausgangspunkt der weiteren Entwicklung. Die Versionsnummer lautet 0.1.0; eine veröffentlichte Version 1.0 ist in diesem Archiv bislang nicht enthalten.",
       "source": "public/releases.json",
       "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserHeading",
+      "text": "Radiosender",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserIntro",
+      "text": "Sender suchen, anhören und als Hintergrundaudio hinzufügen.",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserQuery",
+      "text": "Sender, Ort oder Musikrichtung",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserClear",
+      "text": "Suchtext löschen",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserSearch",
+      "text": "Suchen",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserSearching",
+      "text": "Suchen …",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserEmpty",
+      "text": "Keine passenden, erreichbaren HTTPS-Radiosender gefunden.",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserSearchFailed",
+      "text": "Radiosuche fehlgeschlagen: {detail}. Bitte erneut versuchen.",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserPlay",
+      "text": "{station} abspielen",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserAdd",
+      "text": "Hinzufügen",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserMore",
+      "text": "Mehr laden",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserLess",
+      "text": "Weniger anzeigen",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserLoading",
+      "text": "Wird geladen",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserPlaybackFailed",
+      "text": "Wiedergabe nicht möglich",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.radioBrowserNowLive",
+      "text": "Jetzt live",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeGalleryButton",
+      "text": "2D-OBJEKT",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeGalleryTitle",
+      "text": "2D-Objekte",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeGallerySearch",
+      "text": "2D-Objekte suchen …",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeCategoryBasic",
+      "text": "Grundformen",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeCategoryArrows",
+      "text": "Pfeile",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeCategorySymbols",
+      "text": "Symbole",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeCategoryChurch",
+      "text": "Kirche",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeUnknown",
+      "text": "Unbekannte Form",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeRectangle",
+      "text": "Rechteck",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeRoundedRectangle",
+      "text": "Abgerundetes Rechteck",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeEllipse",
+      "text": "Kreis / Ellipse",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeTriangle",
+      "text": "Dreieck",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeDiamond",
+      "text": "Raute",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapePentagon",
+      "text": "Fünfeck",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeHexagon",
+      "text": "Sechseck",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeOctagon",
+      "text": "Achteck",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeParallelogram",
+      "text": "Parallelogramm",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeTrapezoid",
+      "text": "Trapez",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeArrowRight",
+      "text": "Pfeil rechts",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeArrowLeft",
+      "text": "Pfeil links",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeArrowUp",
+      "text": "Pfeil oben",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeArrowDown",
+      "text": "Pfeil unten",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeChevron",
+      "text": "Chevron",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeDoubleArrow",
+      "text": "Doppelpfeil",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeStar",
+      "text": "Stern",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeBurst",
+      "text": "Strahlenform",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeSpeechBubble",
+      "text": "Sprechblase",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeHeart",
+      "text": "Herz",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeLightning",
+      "text": "Blitz",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeShield",
+      "text": "Schild",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeCloud",
+      "text": "Wolke",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeHome",
+      "text": "Haus",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeMoon",
+      "text": "Halbmond",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeSun",
+      "text": "Sonne",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeCheck",
+      "text": "Haken",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeInfo",
+      "text": "Information",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeWarning",
+      "text": "Warnung",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeCross",
+      "text": "Kreuz",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeFish",
+      "text": "Fisch",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeChurch",
+      "text": "Kirche",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeBible",
+      "text": "Bibel",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeCandle",
+      "text": "Kerze",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.shapeDove",
+      "text": "Taube",
+      "source": "shared/regional/shapeControlTemplates.ts",
+      "context": "regional-controls",
       "status": "app-owned"
     },
     {

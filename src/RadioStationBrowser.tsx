@@ -2,17 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import { searchRadioStations, type RadioStation } from "./radioStations";
 import type { BackgroundAudioTrack } from "./store";
 import { startRadioPreview } from "./radioPlayback";
+import {useI18n} from './i18n';
 const PAGE_SIZE = 10;
 export function RadioStationBrowser({
   add,
 }: {
   add: (track: BackgroundAudioTrack) => void;
 }) {
+  const {t}=useI18n();
   const [query, setQuery] = useState(""),
     [stations, setStations] = useState<RadioStation[]>([]),
     [visible, setVisible] = useState(PAGE_SIZE),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState(""),
+    [error, setError] = useState<{kind:'empty'}|{kind:'search';detail:string}|null>(null),
     [active, setActive] = useState<RadioStation | null>(null),
     [status, setStatus] = useState<"idle" | "loading" | "playing" | "error">(
       "idle",
@@ -22,17 +24,15 @@ export function RadioStationBrowser({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const search = async () => {
     setBusy(true);
-    setError("");
+    setError(null);
     setVisible(PAGE_SIZE);
     try {
       const found = await searchRadioStations(query);
       setStations(found);
       if (!found.length)
-        setError("Keine passenden, erreichbaren HTTPS-Radiosender gefunden.");
+        setError({kind:'empty'});
     } catch (reason) {
-      setError(
-        `Radiosuche fehlgeschlagen: ${reason instanceof Error ? reason.message : String(reason)}. Bitte erneut versuchen.`,
-      );
+      setError({kind:'search',detail:reason instanceof Error?reason.message:String(reason)});
     } finally {
       setBusy(false);
     }
@@ -68,8 +68,8 @@ export function RadioStationBrowser({
   return (
     <section className="radio-station-browser">
       <header>
-        <h4>Radiosender</h4>
-        <p>Sender suchen, anhören und als Hintergrundaudio hinzufügen.</p>
+        <h4>{t('radioBrowserHeading')}</h4>
+        <p>{t('radioBrowserIntro')}</p>
       </header>
       <div className="radio-search">
         <span className="radio-query">
@@ -82,31 +82,31 @@ export function RadioStationBrowser({
                 void search();
               }
             }}
-            placeholder="Sender, Ort oder Musikrichtung"
+            placeholder={t('radioBrowserQuery')}
           />
           {query && (
             <button
               type="button"
-              aria-label="Suchtext löschen"
-              title="Suchtext löschen"
+              aria-label={t('radioBrowserClear')}
+              title={t('radioBrowserClear')}
               onClick={() => setQuery("")}
             >
-              <span className="material-symbols-outlined">close</span>
+              <span className="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
           )}
         </span>
         <button disabled={busy} onClick={() => void search()}>
-          {busy ? "Suchen …" : "Suchen"}
+          {busy ? t('radioBrowserSearching') : t('radioBrowserSearch')}
         </button>
       </div>
-      {error && <p role="alert">{error}</p>}
+      {error && <p role="alert">{error.kind==='empty'?t('radioBrowserEmpty'):t('radioBrowserSearchFailed',{detail:error.detail})}</p>}
       <div className="radio-results">
         {stations.slice(0, visible).map((station) => (
           <article key={station.id}>
             <button
               className="radio-play"
               onClick={() => play(station)}
-              aria-label={`${station.name} abspielen`}
+              aria-label={t('radioBrowserPlay',{station:station.name})}
             >
               <span className="material-symbols-outlined">
                 {active?.id === station.id && status === "playing"
@@ -141,7 +141,7 @@ export function RadioStationBrowser({
                 })
               }
             >
-              Hinzufügen
+              {t('radioBrowserAdd')}
             </button>
           </article>
         ))}
@@ -156,12 +156,12 @@ export function RadioStationBrowser({
                 )
               }
             >
-              Mehr laden
+              {t('radioBrowserMore')}
             </button>
           )}
           {visible > PAGE_SIZE && (
             <button onClick={() => setVisible(PAGE_SIZE)}>
-              Weniger anzeigen
+              {t('radioBrowserLess')}
             </button>
           )}
         </div>
@@ -179,19 +179,19 @@ export function RadioStationBrowser({
           {active.artworkUrl ? (
             <img src={active.artworkUrl} alt="" />
           ) : (
-            <span className="material-symbols-outlined">radio</span>
+            <span className="material-symbols-outlined" aria-hidden="true">radio</span>
           )}
           <div>
             <small>
               {status === "loading" ? (
                 <>
-                  Wird geladen
+                  {t('radioBrowserLoading')}
                   <span className="loading-dots" />
                 </>
               ) : status === "error" ? (
-                "Wiedergabe nicht möglich"
+                t('radioBrowserPlaybackFailed')
               ) : (
-                "Jetzt live"
+                t('radioBrowserNowLive')
               )}
             </small>
             <b>{liveTitle || active.name}</b>

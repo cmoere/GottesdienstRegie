@@ -134,6 +134,12 @@ function generateInventory(root) {
   const {nativeBaseTemplates}=loadLocalDataModule(root,'shared/regional/nativeBase.ts');
   const {regionalControlBaseTemplates}=loadLocalDataModule(root,'shared/regional/interfaceBaseExtras.ts');
   const {announcementControlGermanTemplates}=loadLocalDataModule(root,'shared/regional/announcementControlTemplates.ts');
+  const {shapeControlGermanTemplates}=loadLocalDataModule(root,'shared/regional/shapeControlTemplates.ts');
+  const {radioControlGermanTemplates}=loadLocalDataModule(root,'shared/regional/radioControlTemplates.ts');
+  for(const [key,text] of Object.entries(radioControlGermanTemplates))entries.push({key:`ui.${key}`,text,
+    source:'shared/regional/radioControlTemplates.ts',context:'regional-controls',status:'app-owned'});
+  for(const [key,text] of Object.entries(shapeControlGermanTemplates))entries.push({key:`ui.${key}`,text,
+    source:'shared/regional/shapeControlTemplates.ts',context:'regional-controls',status:'app-owned'});
   for(const [key,text] of Object.entries(announcementControlGermanTemplates))entries.push({key:`ui.${key}`,text,
     source:'shared/regional/announcementControlTemplates.ts',context:'regional-controls',status:'app-owned'});
   for(const [key,text] of Object.entries(regionalControlBaseTemplates))entries.push({key:`ui.${key}`,text,
