@@ -55,3 +55,29 @@ placeholder without replacing a valid already-visible notice.
 Local verification does not itself certify publication. The GitHub release jobs,
 normal-update status, exact source tag, all platform manifests, public RSS feed,
 and downloaded Windows installer hash must be verified after the source push.
+
+### Confirmed public release
+
+Verified at 2026-10-21T02:41:33.434Z. The release is public, non-draft,
+non-prerelease and the normal latest update:
+[v0.85.0](https://github.com/cmoere/GottesdienstRegie/releases/tag/v0.85.0).
+
+- Installer/tag source: `69cb4f48bdcbdd472130fb9c76d502a7dad971da`.
+- Cross-platform release run: [39533738689](https://github.com/cmoere/GottesdienstRegie/actions/runs/39533738689), success.
+- Source website run: [39533738672](https://github.com/cmoere/GottesdienstRegie/actions/runs/39533738672), success.
+- Website-only RSS deep-link correction: `e0245ad494890d6937986de072ab45602a9f4d18`;
+  [39534125322](https://github.com/cmoere/GottesdienstRegie/actions/runs/39534125322), success.
+  Native regression reproduced the dotted-ID selector error before correction;
+  the public page was checked for the corrected fragment resolution afterwards.
+- All **11 release assets** are present and non-empty. `latest.yml`,
+  `latest-mac.yml` and `latest-linux.yml` identify 0.85.0 and reference uploaded
+  assets with matching byte sizes.
+- The Windows installer was streamed from the public release and hashed without
+  execution: **290177220 bytes**. Its SHA-512 matches `latest.yml`:
+  `8IoY+VwGrcwZI08El5HBiBL3JnxLAwiR9VY9I1B2j1MkHPnxPPdP0Gw9MKUSm+rl9fcIA+jTDO+uGHgx0SZOxQ==`.
+- Windows SHA-256: `ee6db0aa1d8760d56c512ee0238f4beb8429bf4c466ed4cb4ff6656679402433`.
+- [Public RSS feed](https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml) contains 0.85.0.
+
+No installer was executed, no existing presentation was removed, and unfinished
+PowerPoint diagnostics and the unrelated startup diagnostic were not included
+in the release commit.
