@@ -1,9 +1,10 @@
 # PowerPoint: begrenzte native Bildverteilung statt doppelter Videokodierung
 
-Status: Entwurf zur Nutzerprüfung, keine Implementierungsfreigabe. Der Nutzer
-hat am 22.10.2026 die Fortsetzung nach dem Vorschlag einer grundlegenden
-Überarbeitung verlangt. Das bestätigt die Untersuchung und den Entwurf, nicht
-bereits diesen neuen technischen Vertrag oder dessen ungeprüfte Leistungsfähigkeit.
+Status: Der Nutzer hat den schriftlichen Entwurf am22.10.2026 mit „ja umsetzen“
+freigegeben. Der daraus erstellte
+[Umsetzungsplan](../plans/2026-10-22-powerpoint-native-frame-probe.md) wird vor
+Implementierung separat zur Prüfung vorgelegt. Die Zustimmung ist kein
+Funktions-/Leistungsnachweis und keine Freigabe eines ungeprüften Original-Players.
 
 ## Ziel und unveränderte Anforderungen
 
