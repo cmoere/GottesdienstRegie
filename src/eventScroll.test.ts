@@ -13,3 +13,13 @@ it('reserves enough final-row time to read a long horizontally scrolling title',
  expect(plan.distance).toBe(0);
  expect(plan.minDurationMs).toBe(75000);
 });
+it('scrolls a round-trip announcement to the bottom, pauses and returns before repeating',()=>{
+ const plan=prepareEventScrollPlan({contentHeight:2000,viewportHeight:800,roundTrip:true});
+ expect(plan.minDurationMs).toBe(130000);
+ expect(eventScrollOffset(plan,4000)).toBe(0);
+ expect(eventScrollOffset(plan,35000)).toBe(600);
+ expect(eventScrollOffset(plan,68000)).toBe(1200);
+ expect(eventScrollOffset(plan,100000)).toBe(600);
+ expect(eventScrollOffset(plan,130000)).toBe(0);
+ expect(eventScrollOffset(plan,165000)).toBe(600);
+});

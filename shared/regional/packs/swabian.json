@@ -287,7 +287,7 @@
  "announcementMinDuration":"Mindestanzeigedauer (Sekunde)",
  "announcementAutomatic":"Automatisch",
  "announcementMinDurationHelp":"Leer: automatisch. Lange Meldunge behaltet d Mindestlesedauer, die se brauchet.",
- "announcementScrollHelp":"Lange Meldunge scrollet langsam ond ganz durch. D Anzeigedauer wird bei Bedarf automatisch verlängert; dr QR-Code bleibt stehe.",
+ "announcementScrollHelp":"Lange Meldunge scrollet langsam bis ans End ond wieder zruck, mit ra Pause an beide Ende. D Mindestanzeigedauer umfasst dr ganze Hin- ond Rücklauf; Titel ond QR-Code bleibet stehe.",
  "announcementDesignClassic":"Klar",
  "announcementDesignLight":"Hell",
  "announcementDesignAccent":"Akzent",
@@ -323,7 +323,9 @@
  "speechSettingsEmpty":"Koine gültige Saal-Durchsage do.",
  "speechSettingsNotLoaded":"D Gmeindemeldunge send no net glade.",
  "announcementBannerLoadError":"D Bannereinstellung hat net glade werde könne.",
- "announcementBannerSaveError":"D Bannereinstellung hat net gspeichert werde könne."
+ "announcementBannerSaveError":"D Bannereinstellung hat net gspeichert werde könne.",
+ "onAirReminderTitle":"ON AIR net vergesse",
+ "onAirReminderBody":"Dr Gottesdienscht fängt in {minutes} Minute a. Gang bitte rechtzeitig ON AIR."
  },
  "native":{
  "updateAvailableTitle":"Neie Version verfügbar",

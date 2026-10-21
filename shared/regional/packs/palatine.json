@@ -287,7 +287,7 @@
  "announcementMinDuration":"Mindestanzeichedauer (Sekunne)",
  "announcementAutomatic":"Automatisch",
  "announcementMinDurationHelp":"Leer: automatisch. Langi Meldunge behalte die Mindestlesedauer, die se brauche.",
- "announcementScrollHelp":"Langi Meldunge scrolle langsam un vollständich. Die Anzeichedauer werd bei Bedarf automatisch verlängert; de QR-Code bleibt stehe.",
+ "announcementScrollHelp":"Langi Meldunge scrolle langsam bis ans End un widder zerick, mit ere Paus an beide Enne. Die Mindestanzeichedauer umfasst de ganze Hin- un Ricklauf; Titel un QR-Code bleiwe stehe.",
  "announcementDesignClassic":"Klar",
  "announcementDesignLight":"Hell",
  "announcementDesignAccent":"Akzent",
@@ -323,7 +323,9 @@
  "speechSettingsEmpty":"Kää gültiche Saal-Durchsage do.",
  "speechSettingsNotLoaded":"Die Gmeindemeldunge sin noch net gelade.",
  "announcementBannerLoadError":"Die Bannereinstellung hot net gelade werre könne.",
- "announcementBannerSaveError":"Die Bannereinstellung hot net gspeichert werre könne."
+ "announcementBannerSaveError":"Die Bannereinstellung hot net gspeichert werre könne.",
+ "onAirReminderTitle":"ON AIR net vergesse",
+ "onAirReminderBody":"De Gottesdienscht fangt in {minutes} Minute aa. Geh bitte rechtzeitich ON AIR."
  },
  "native":{
  "updateAvailableTitle":"Neie Version verfügbar",

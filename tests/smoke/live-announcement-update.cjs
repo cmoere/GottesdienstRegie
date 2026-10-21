@@ -15,12 +15,18 @@ app.whenReady().then(async()=>{try{
  for(const design of ['classic','light','split','frame','footer'])for(const atEnd of [false,true]){
   console.log('Checking',design,atEnd);
   const plan=await win.webContents.executeJavaScript(`window.liveAnnouncementUpdate.notice('${design}',${atEnd})`);
-  assert(plan.distance>0);assert(plan.duration>60);await sleep(150);
+  assert(plan.distance>0);assert(plan.duration>60);assert(plan.duration*1000>=plan.minimum);await sleep(150);
   const boxes=await win.webContents.executeJavaScript(`(()=>{const box=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom}};return {qr:box('.qr'),viewport:box('.announcement-scroll-viewport'),end:[...document.querySelectorAll('.event-scroll-content span')].find(e=>e.textContent.includes('ENDE DER MELDUNG'))?.getBoundingClientRect().bottom}})()`);
   console.log('Geometry',JSON.stringify(boxes));
   assert.equal(Math.round(boxes.qr.width),360);assert.equal(Math.round(boxes.qr.y),360);assert(boxes.viewport.y>=0&&boxes.viewport.bottom<=1049);
   if(atEnd)assert(boxes.end<=boxes.viewport.bottom+2,JSON.stringify(boxes));
   fs.writeFileSync(path.join(out,`${design}-${atEnd?'end':'start'}.png`),(await win.webContents.capturePage()).toPNG());
+ }
+ for(const phase of ['return','top']){
+  const plan=await win.webContents.executeJavaScript(`window.liveAnnouncementUpdate.notice('classic','${phase}')`);await sleep(150);
+  const offset=await win.webContents.executeJavaScript(`-new DOMMatrixReadOnly(getComputedStyle(document.querySelector('.event-scroll-content')).transform).m42`);
+  const expected=phase==='return'?plan.distance/2:0;
+  assert(Math.abs(offset-expected)<8,`${phase} must use the shared round-trip clock: ${offset} vs ${expected}`);
  }
  for(const elapsed of [0,19399,19401,39000]){
   await win.webContents.executeJavaScript(`window.liveAnnouncementUpdate.banner(${elapsed})`);await sleep(80);
@@ -33,6 +39,13 @@ app.whenReady().then(async()=>{try{
  await win.webContents.executeJavaScript('window.liveAnnouncementUpdate.longBanner()');await sleep(250);
  const longGap=await win.webContents.executeJavaScript(`(()=>{const unit=document.querySelector('[data-banner-unit]'),range=document.createRange();range.selectNodeContents(unit);return unit.getBoundingClientRect().width-range.getBoundingClientRect().width})()`);
  console.log('Long ribbon repeat gap:',longGap);assert(Math.abs(longGap)<5,'Repeat seam must not add an asymmetric gap after the separator');
+ await win.webContents.executeJavaScript('window.liveAnnouncementUpdate.reminder()');await sleep(150);
+ const reminder=await win.webContents.executeJavaScript(`(()=>{const node=document.querySelector('.service-on-air-reminder');if(!node)return null;const r=node.getBoundingClientRect();return {text:node.textContent,x:r.x,y:r.y,right:r.right,bottom:r.bottom}})()`);
+ assert(reminder?.text.includes('ON AIR nicht vergessen')&&reminder.text.includes('19 Minuten'));
+ assert(reminder.x>=0&&reminder.y>=0&&reminder.right<=1920&&reminder.bottom<=1080,'Operator reminder must fit inside the window');
+ fs.writeFileSync(path.join(out,'operator-on-air-reminder.png'),(await win.webContents.capturePage()).toPNG());
+ await win.webContents.executeJavaScript('window.liveAnnouncementUpdate.reminder(true)');await sleep(100);
+ assert(await win.webContents.executeJavaScript("!document.querySelector('.service-on-air-reminder')"),'ON AIR must hide the operator reminder');
  await win.loadURL('http://127.0.0.1:5173/release-notes/index.html?lang=de#version-0.85.0');
  for(let n=0;n<100&&!await win.webContents.executeJavaScript('!!document.getElementById("version-0.85.0")');n++)await sleep(100);
  assert(await win.webContents.executeJavaScript('!!document.getElementById("version-0.85.0")'));

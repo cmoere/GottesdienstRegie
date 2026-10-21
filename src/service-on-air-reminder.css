@@ -1,0 +1,2 @@
+.service-on-air-reminder{position:fixed;right:20px;bottom:48px;z-index:1200;max-width:min(410px,calc(100vw - 40px));padding:18px 20px;background:var(--panel);color:var(--text-primary);border:1px solid #608f9a;box-shadow:0 8px 28px #0004;font-size:14px;line-height:1.5}
+.service-on-air-reminder strong{font-size:16px;font-weight:600}.service-on-air-reminder p{margin:8px 0 14px}.service-on-air-reminder button{display:block;margin-left:auto;min-width:70px;padding:7px 14px;background:#608f9a;color:#fff;cursor:pointer}

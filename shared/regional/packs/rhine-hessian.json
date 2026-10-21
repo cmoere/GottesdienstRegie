@@ -287,7 +287,7 @@
  "announcementMinDuration":"Mindestanzeijedauer (Sekunde)",
  "announcementAutomatic":"Automatisch",
  "announcementMinDurationHelp":"Leer: automatisch. Lange Meldunge behalde die Mindestlesedauer, die se brauche.",
- "announcementScrollHelp":"Lange Meldunge scrolle langsam un vollständisch. Die Anzeijedauer werd bei Bedarf automatisch verlängert; de QR-Code bleibt stehe.",
+ "announcementScrollHelp":"Lange Meldunge scrolle langsam bis ans End un widder zerick, mit ere Paus an beide Enne. Die Mindestanzeijedauer umfasst de ganze Hin- un Ricklauf; Titel un QR-Code bleiwe stehe.",
  "announcementDesignClassic":"Klar",
  "announcementDesignLight":"Hell",
  "announcementDesignAccent":"Akzent",
@@ -323,7 +323,9 @@
  "speechSettingsEmpty":"Kään gültije Saal-Durchsage do.",
  "speechSettingsNotLoaded":"Die Gemeindemeldunge sin noch net gelade.",
  "announcementBannerLoadError":"Die Bannereinstellung hot net gelade werre könne.",
- "announcementBannerSaveError":"Die Bannereinstellung hot net gespeischert werre könne."
+ "announcementBannerSaveError":"Die Bannereinstellung hot net gespeischert werre könne.",
+ "onAirReminderTitle":"ON AIR net vergesse",
+ "onAirReminderBody":"De Gottesdienst fängt in {minutes} Minute aa. Geh bitte rechtzeitisch ON AIR."
  },
  "native":{
  "updateAvailableTitle":"Neie Version verfügbar",

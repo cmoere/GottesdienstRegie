@@ -15,7 +15,7 @@ it('renders all messages as a repeated continuous ribbon separated by a middle d
 });
 it('preserves complete message text with generous symmetric separator spacing including the repeat seam',()=>{
  const items=[{...messages[0],text:'Konzertveranstaltung'},{...messages[1],text:'PGB: Gottesdienst'}];
- expect(bannerRibbonText(items)).toBe('Konzertveranstaltung        ·        PGB: Gottesdienst        ·        ');
+ expect(bannerRibbonText(items)).toBe('Konzertveranstaltung                ·                PGB: Gottesdienst                ·                ');
  expect(bannerRibbonText([])).toBe('');
 });
 it('adds no hidden extra gap at the repeated ribbon seam',()=>{

@@ -287,7 +287,7 @@
  "announcementMinDuration":"Mindestaazeigeduur (Sekunde)",
  "announcementAutomatic":"Automatisch",
  "announcementMinDurationHelp":"Läär: automatisch. Langi Mäldige bhalte d Mindestläseduur, wo si bruche.",
- "announcementScrollHelp":"Langi Mäldige scrolle langsam un vollständig. D Aazeigeduur wird bi Bedarf automatisch verlängert; dr QR-Code bliibt stoo.",
+ "announcementScrollHelp":"Langi Mäldige scrolle langsam bis ans Änd un wider zrugg, mit ere Paus an beide Ände. D Mindestaazeigeduur umfasst dr ganz Hi- un Rücklauf; Titel un QR-Code bliibe stoo.",
  "announcementDesignClassic":"Klar",
  "announcementDesignLight":"Hell",
  "announcementDesignAccent":"Akzänt",
@@ -323,7 +323,9 @@
  "speechSettingsEmpty":"Kei gültigi Saal-Durchsage do.",
  "speechSettingsNotLoaded":"D Gmeindmäldige sin no nit glade.",
  "announcementBannerLoadError":"D Banneriistellig hät nit glade wärde könne.",
- "announcementBannerSaveError":"D Banneriistellig hät nit gspeicheret wärde könne."
+ "announcementBannerSaveError":"D Banneriistellig hät nit gspeicheret wärde könne.",
+ "onAirReminderTitle":"ON AIR nit vergässe",
+ "onAirReminderBody":"Dr Gottesdienscht fangt in {minutes} Minute aa. Gang bitte rächtziitig ON AIR."
  },
  "native":{
  "updateAvailableTitle":"Neui Version verfügbar",

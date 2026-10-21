@@ -145,6 +145,7 @@ import {insertCountdownPreset} from './countdownInsertion';
 import {changedOutputLayers,type OutputStateSnapshot,type BannerOutputState} from './outputState';
 import {OutputComposition} from './OutputComposition';
 import {AnnouncementBannerController} from './AnnouncementBannerController';
+import {ServiceOnAirReminder} from './ServiceOnAirReminder';
 import {AnnouncementBannerSettings} from './AnnouncementBannerSettings';
 import {AnnouncementSettings} from './announcements/AnnouncementSettings';
 import {HelpArticleView} from './help/HelpArticleView';
@@ -9353,6 +9354,7 @@ function AppShell({
       onClick={() => setMenuOpen(null)}
     >
       <AnnouncementBannerController quick={previewQuick}/>
+      <ServiceOnAirReminder/>
       <div className="menubar">
         <WindowControls />
         <FileMenu

@@ -16,7 +16,7 @@ describe('readable announcement layouts',()=>{
    expect(qr.bodyFontSize).toBe(plain.bodyFontSize);
   }
  });
- it('provides eight distinct selectable layouts with safe pagination and approved palette accents',()=>{
+ it('provides eight distinct selectable layouts with safe text geometry and approved palette accents',()=>{
   expect(ANNOUNCEMENT_DESIGNS).toHaveLength(8);
   const pages=ANNOUNCEMENT_DESIGNS.map(design=>prepareAnnouncementPages({title:'<u>Titel</u>',body:'<p><strong>Text</strong></p><p>Absatz</p>',qrCode:true,design})[0]);
   expect(new Set(pages.map(page=>JSON.stringify({background:page.background,decorations:page.decorations,body:page.bodyElement}))).size).toBe(8);
@@ -29,7 +29,7 @@ describe('readable announcement layouts',()=>{
   const fills=pages.flatMap(page=>page.decorations.map(decoration=>decoration.fill));
   expect(fills).toContain('#699f3e');expect(fills).toContain('#608f9a');expect(fills).toContain('#b6bec3');
  });
- it('preserves a long notice across complete readable pages beside its QR code',()=>{
+ it('preserves a long notice in one scrolling body beside its fixed QR code',()=>{
   const title='Fehlerhafte Abendmahlstermine in der Veranstaltungsauskunft';
   const body='Derzeit werden in der Veranstaltungsauskunft teilweise fehlerhafte Abendmahlstermine angezeigt. Bitte beachte die aktuellen Aushänge sowie den Monatsplan. Diese enthalten die gültigen Termine.\n\nWir arbeiten bereits mit Hochdruck an der Behebung des technischen Fehlers. '.repeat(9);
   const pages=prepareAnnouncementPages({title,body,qrCode:true,design:'classic'});
@@ -40,6 +40,8 @@ describe('readable announcement layouts',()=>{
    expect(page.bodyElement.y+page.bodyElement.height).toBeLessThanOrEqual(1048);
    expect(page.bodyHeight).toBeGreaterThan(page.bodyElement.height);
    expect(page.scrollPlan.distance).toBe(page.bodyHeight-page.bodyElement.height);
+   expect(page.scrollPlan.roundTrip).toBe(true);
+   expect(page.scrollPlan.minDurationMs).toBe(page.scrollPlan.startPauseMs+2*page.scrollPlan.travelMs+page.scrollPlan.endPauseMs);
    expect(page.titleHeight).toBeLessThanOrEqual(page.titleElement.height);
    expect(page.bodyElement.x+page.bodyElement.width).toBeLessThan(page.qrElement!.x);
   }
@@ -57,7 +59,7 @@ describe('readable announcement layouts',()=>{
     :box.height===3&&box.width<=200&&box.y>=page.titleElement.y+page.titleElement.height&&box.y<page.bodyElement.y)).toBe(true);
   }
  });
- it('paginates all styled text without losing styles or overflowing the available body height',()=>{
+ it('scrolls all styled text inside the body viewport without losing formatting',()=>{
   const body='<p><strong>'+('UnunterbrocheneZeichenfolge'.repeat(110))+'</strong></p><ul><li><em>Ende</em></li></ul>';
   for(const design of ANNOUNCEMENT_DESIGNS){
    const pages=prepareAnnouncementPages({title:'<u>Titel</u>',body,qrCode:true,design});

@@ -3,7 +3,7 @@ import {EventScrollViewport,useEventPresentationClock} from './EventScrollViewpo
 import {eventScrollOffset,prepareEventScrollPlan} from './eventScroll';
 import {usePreferences} from './preferences';
 export function AnnouncementScrollingText({properties,startedAtMs,live}:{properties:Record<string,string|number|boolean>;startedAtMs:number;live:boolean}){
- const plan=prepareEventScrollPlan({contentHeight:Number(properties.announcementScrollHeight),viewportHeight:Number(properties.announcementViewportHeight)});
+ const plan=prepareEventScrollPlan({contentHeight:Number(properties.announcementScrollHeight),viewportHeight:Number(properties.announcementViewportHeight),roundTrip:true});
  const reduceMotion=usePreferences(state=>state.reduceMotion);
  const {elapsed,reduced}=useEventPresentationClock(startedAtMs,reduceMotion);
  const content=<AnnouncementRichText value={properties.announcementRichLines} text={String(properties.text??'')}/>;

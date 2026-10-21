@@ -13,10 +13,11 @@ export function EventScrollViewport({plan,elapsed,reduced=false,children,classNa
  useLayoutEffect(()=>{
   const node=content.current;if(!node||reduced||plan.distance<=0||!node.animate)return;
   const duration=plan.minDurationMs,end=`translateY(-${plan.distance/19.2}cqw)`;
-  const motion=node.animate([{transform:'translateY(0)',offset:0},{transform:'translateY(0)',offset:plan.startPauseMs/duration},{transform:end,offset:(plan.startPauseMs+plan.travelMs)/duration},{transform:end,offset:1}],{duration,easing:'linear',fill:'forwards'});
+  const frames=plan.roundTrip?[{transform:'translateY(0)',offset:0},{transform:'translateY(0)',offset:plan.startPauseMs/duration},{transform:end,offset:(plan.startPauseMs+plan.travelMs)/duration},{transform:end,offset:(plan.startPauseMs+plan.travelMs+plan.endPauseMs)/duration},{transform:'translateY(0)',offset:1}]:[{transform:'translateY(0)',offset:0},{transform:'translateY(0)',offset:plan.startPauseMs/duration},{transform:end,offset:(plan.startPauseMs+plan.travelMs)/duration},{transform:end,offset:1}];
+  const motion=node.animate(frames,{duration,easing:'linear',fill:'forwards',iterations:plan.roundTrip?Infinity:1});
   motion.currentTime=elapsedRef.current;animation.current=motion;
   return()=>{motion.cancel();animation.current=null};
- },[plan.distance,plan.startPauseMs,plan.travelMs,plan.minDurationMs,reduced]);
+ },[plan.distance,plan.startPauseMs,plan.travelMs,plan.endPauseMs,plan.minDurationMs,plan.roundTrip,reduced]);
  useLayoutEffect(()=>{if(animation.current)animation.current.currentTime=elapsed},[elapsed]);
  return <div className={`event-scroll-viewport ${className}`} data-scroll-distance={plan.distance}><div ref={content} className="event-scroll-content" style={{transform:reduced?'none':`translateY(-${eventScrollOffset(plan,elapsed)/19.2}cqw)`} as CSSProperties}>{children}</div></div>;
 }

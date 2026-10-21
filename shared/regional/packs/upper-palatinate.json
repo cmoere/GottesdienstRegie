@@ -287,7 +287,7 @@
     "announcementMinDuration": "Mindestanzeigedauer (Sekundn)",
     "announcementAutomatic": "Automatisch",
     "announcementMinDurationHelp": "Leer: automatisch. Lange Meldungen bhaltn de Mindestlesedauer, de s brauchn.",
-    "announcementScrollHelp": "Lange Meldungen scrolln langsam und ganz durch. D Anzeigedauer werd bei Bedarf automatisch verlängert; da QR-Code bleibt stehn.",
+    "announcementScrollHelp": "Lange Meldungen scrolln langsam bis ans End und wieder zruck, mit a Pause an beide Endn. D Mindestanzeigedauer umfasst den ganzn Hin- und Rücklauf; Titel und QR-Code bleim stehn.",
     "announcementDesignClassic": "Klar",
     "announcementDesignLight": "Hell",
     "announcementDesignAccent": "Akzent",
@@ -323,7 +323,9 @@
     "speechSettingsEmpty": "Koa gültige Saal-Durchsag vorhanden.",
     "speechSettingsNotLoaded": "D Gmoindmeldungen san nou ned glodn.",
     "announcementBannerLoadError": "D Bannereinstellung hat ned glodn wern kinna.",
-    "announcementBannerSaveError": "D Bannereinstellung hat ned gspeichert wern kinna."
+    "announcementBannerSaveError": "D Bannereinstellung hat ned gspeichert wern kinna.",
+    "onAirReminderTitle": "ON AIR ned vergessn",
+    "onAirReminderBody": "Da Gottesdienst fangt in {minutes} Minuten o. Geh bitte rechtzeitig ON AIR."
   },
   "native": {
     "updateAvailableTitle":"Neie Version verfügbar",

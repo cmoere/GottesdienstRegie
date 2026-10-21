@@ -66,7 +66,7 @@ export function prepareAnnouncementPages(input:{title:string;body:string;qrCode:
  if(design==='footer')decorations.push({x:0,y:1040,width:1920,height:40,fill:'#608f9a'});
  if(split)decorations.push({x:0,y:0,width:560,height:1080,fill:'#608f9a'});
  decorations.push(split?{x:585,y:110,width:3,height:160,fill:'#608f9a'}:{x:AUTO_SLIDE_EDGE,y:titleElement.y+titleElement.height+20,width:160,height:3,fill:light?'#699f3e':'#608f9a'});
- const bodyHeight=bodyLines.length*lineHeight,scrollPlan=prepareEventScrollPlan({contentHeight:bodyHeight,viewportHeight:bodyElement.height});
+ const bodyHeight=bodyLines.length*lineHeight,scrollPlan=prepareEventScrollPlan({contentHeight:bodyHeight,viewportHeight:bodyElement.height,roundTrip:true});
  return [{background,color,titleElement,bodyElement,qrElement:input.qrCode?qrElement:undefined,titleFontSize,bodyFontSize,titleHeight,bodyHeight,titleText:titleLines.map(line=>line.text).join('\n'),bodyText:bodyLines.map(line=>line.source).join(''),bodyLines:bodyLines.map(line=>line.text),titleRichLines:titleLines.map(line=>line.runs),bodyRichLines:bodyLines.map(line=>line.runs),scrollPlan,decorations}];
 }
 export function announcementTextElement(id:string,name:string,box:Box,text:string,size:number,color:string,weight:number,richLines?:AnnouncementRichLines):SlideElement{
