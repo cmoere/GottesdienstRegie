@@ -52,3 +52,33 @@ A different capture arrangement or fallback requires an explicit, reviewed
 decision. We do not replace this with desktop capture, expose a PowerPoint
 window over MAIN, relax latency limits, or silently substitute a video export.
 The existing native import remains unchanged.
+
+## Follow-up: explicitly authorized visible probe on Monitor 1
+
+The user authorized Monitor 1 for the isolated diagnostic. `--monitor=1` now
+selects Windows `DISPLAY1` explicitly and fails if it is unavailable; it does
+not silently use another monitor. Before placing the owned PowerPoint app,
+the helper refuses to move an application containing existing presentations.
+Only its generated source and sentinel are used. No MAIN/display preference
+or user document is modified. The default probe remains offscreen.
+
+- `work/v86-powerpoint-monitor1.log`, `work/powerpoint-probe-T1xw2o/`:
+  60,902 ms, 59 samples; mirror skew p95 102 ms, command-to-frame p95 660 ms.
+- `work/v86-powerpoint-stage-timing.log`, `work/powerpoint-probe-IUZI7j/`:
+  60,466 ms, 60 samples; skew p95 92 ms, command-to-frame p95 471 ms.
+  Added host pixel observations separate command-to-source p95 (187 ms) from
+  source-to-consumer p95 (301 ms). Stage percentiles are diagnostic summaries,
+  not quantities to add together. The unchanged 250 ms overall gate fails.
+- Controlled hypothesis: set supported receivers' `jitterBufferTarget` to 0.
+  Both receivers confirmed target 0 without setter errors. This did not
+  produce a passing run: a later command did not reach both consumers within
+  the existing observation deadline. Raw failure and receiver observations:
+  `work/v86-powerpoint-lowbuffer.log`, `work/powerpoint-probe-p8SWGf/`.
+  The experimental setter was removed rather than retained as a claimed fix.
+
+All three reports keep `visual:false`, audio remains unsupported, and their
+sentinel checks pass. No own PowerPoint/probe process remained after cleanup.
+The visible arrangement proves that this source can update; it does not prove
+stable 1080p/30 fps delivery or acceptable production latency. Moving-marker,
+resolution/fps and isolated-audio criteria remain open. Task 1 remains incomplete;
+the original player is not enabled or released.

@@ -5,7 +5,7 @@ const path=require('node:path');
   try{probe=require('../../scripts/probe-powerpoint.cjs');}
   catch(error){if(error.code!=='MODULE_NOT_FOUND')throw error;}
   assert.equal(typeof probe?.runProbe,'function','Original PowerPoint playback/capture probe is not implemented');
-  const result=await probe.runProbe({root:path.resolve(__dirname,'../..')});
+  const result=await probe.runProbe({root:path.resolve(__dirname,'../..'),monitor:process.argv.includes('--monitor=1')?1:undefined});
   assert.equal(result.visual,true,`Original show is not capture-ready: ${JSON.stringify(result.results)}`);
   const metrics=result.results.metrics;
   assert.ok(metrics&&metrics.durationMs>=60000,'requires an actual sixty-second capture observation');

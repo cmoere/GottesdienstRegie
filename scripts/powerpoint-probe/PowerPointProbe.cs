@@ -11,6 +11,7 @@ class PowerPointProbe {
   static JavaScriptSerializer json=new JavaScriptSerializer();
   static dynamic app,source,sentinel,show;
   static string root,sentinelPath,sentinelHash;
+  static Screen authorizedScreen;
   [DllImport("user32.dll")] static extern bool MoveWindow(IntPtr hwnd,int x,int y,int w,int h,bool repaint);
   [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr hwnd,out uint processId);
   [DllImport("user32.dll")] static extern IntPtr GetAncestor(IntPtr hwnd,uint flags);
@@ -49,6 +50,14 @@ class PowerPointProbe {
   }
   static void Setup(){
     app=Activator.CreateInstance(Type.GetTypeFromProgID("PowerPoint.Application",true));
+    if(authorizedScreen!=null){
+      // Never reposition an Office application containing somebody else's work.
+      if((int)app.Presentations.Count!=0)throw new Exception("PROBE_VISIBLE_APP_ALREADY_IN_USE");
+      long appHwnd=(long)((Microsoft.Office.Interop.PowerPoint.Application)app).HWND;
+      var bounds=authorizedScreen.Bounds;
+      if(!MoveWindow(new IntPtr(appHwnd),bounds.X,bounds.Y,Math.Min(1920,bounds.Width),Math.Min(1080,bounds.Height),true))throw new Exception("PROBE_APP_POSITION_FAILED");
+      app.Visible=-1;
+    }
     // No external presentation is opened and no Trust Center setting is changed.
     sentinel=app.Presentations.Add(0);sentinel.Slides.Add(1,12);
     sentinelPath=Path.Combine(root,"owned-sentinel.pptx");sentinel.SaveAs(sentinelPath,24);sentinelHash=Hash(sentinelPath);
@@ -63,12 +72,14 @@ class PowerPointProbe {
     IntPtr rootWindow=GetAncestor(new IntPtr(hwnd),2);uint rootPid;GetWindowThreadProcessId(rootWindow,out rootPid);
     if(rootPid!=pid||(string)show.Presentation.FullName!=(string)source.FullName)throw new Exception("PROBE_WINDOW_OWNER_MISMATCH");
     // HWND is the child slide surface; move the owned show frame, not its child.
-    if(!MoveWindow(rootWindow,-2400,-1200,1920,1080,true))throw new Exception("PROBE_WINDOW_POSITION_FAILED");
+    int left=-2400,top=-1200,width=1920,height=1080;
+    if(authorizedScreen!=null){var bounds=authorizedScreen.Bounds;left=bounds.X;top=bounds.Y;width=Math.Min(width,bounds.Width);height=Math.Min(height,bounds.Height);}
+    if(!MoveWindow(rootWindow,left,top,width,height,true))throw new Exception("PROBE_WINDOW_POSITION_FAILED");
     System.Threading.Thread.Sleep(200);
     Rect outer,inner;Point origin=new Point();
     if(!GetWindowRect(rootWindow,out outer)||!GetClientRect(new IntPtr(hwnd),out inner)||!ClientToScreen(new IntPtr(hwnd),ref origin))throw new Exception("PROBE_WINDOW_RECT_FAILED");
     show.View.State=2;
-    Emit(new {kind="ready",version=(string)app.Version,windowHandle=hwnd.ToString(),rootWindowHandle=rootWindow.ToInt64().ToString(),windowVisible=IsWindowVisible(new IntPtr(hwnd)),crop=new{x=origin.x-outer.left,y=origin.y-outer.top,width=inner.right,height=inner.bottom,outerWidth=outer.right-outer.left,outerHeight=outer.bottom-outer.top},processId=pid,status=State(),sourcePath=Path.Combine(root,"owned-source.pptx")});
+    Emit(new {kind="ready",version=(string)app.Version,monitor=authorizedScreen==null?"offscreen":authorizedScreen.DeviceName,windowHandle=hwnd.ToString(),rootWindowHandle=rootWindow.ToInt64().ToString(),windowVisible=IsWindowVisible(new IntPtr(hwnd)),crop=new{x=origin.x-outer.left,y=origin.y-outer.top,width=inner.right,height=inner.bottom,outerWidth=outer.right-outer.left,outerHeight=outer.bottom-outer.top},processId=pid,status=State(),sourcePath=Path.Combine(root,"owned-source.pptx")});
   }
   static bool Cleanup(){
     bool unchanged=false;
@@ -82,10 +93,14 @@ class PowerPointProbe {
   [STAThread] static int Main(string[] args){
     Console.OutputEncoding=new System.Text.UTF8Encoding(false);
     Console.InputEncoding=new System.Text.UTF8Encoding(false);
-    if(args.Length!=1)return 2;
+    if(args.Length<1||args.Length>2||(args.Length==2&&args[1]!="--monitor=1"))return 2;
     root=Path.GetFullPath(args[0]);
     if(!Directory.Exists(root)||!File.Exists(Path.Combine(root,".probe-owned")))return 2;
     try{
+      if(args.Length==2){
+        foreach(var screen in Screen.AllScreens)if(screen.DeviceName.EndsWith("DISPLAY1",StringComparison.OrdinalIgnoreCase))authorizedScreen=screen;
+        if(authorizedScreen==null)throw new Exception("PROBE_MONITOR_1_NOT_FOUND");
+      }
       Setup();string line;
       while((line=Console.ReadLine())!=null){
         if(line.Length>4096)throw new Exception("PROBE_COMMAND_TOO_LARGE");

@@ -1,6 +1,7 @@
 // Standalone diagnostic: never imports the application main process or starts ON AIR.
 const fs=require('node:fs/promises'),path=require('node:path'),{spawn}=require('node:child_process'),readline=require('node:readline');
-async function runProbe({root}){
+async function runProbe({root,monitor}){
+  if(monitor!==undefined&&monitor!==1)throw Error('PROBE_MONITOR_NOT_AUTHORIZED');
   root=path.resolve(root);
   if(process.platform!=='win32')return {visual:false,audio:'unsupported',results:{reason:'WINDOWS_REQUIRED'}};
   const folder=await fs.mkdtemp(path.join(root,'work/powerpoint-probe-'));
@@ -11,7 +12,7 @@ async function runProbe({root}){
   let compileOutput='';build.stdout.on('data',c=>compileOutput+=c);build.stderr.on('data',c=>compileOutput+=c);
   const buildCode=await new Promise((resolve,reject)=>{build.once('error',reject);build.once('close',resolve)});
   if(buildCode!==0)throw Error('PROBE_COMPILE_FAILED: '+compileOutput);
-  const helper=spawn(exe,[folder],{windowsHide:true,stdio:['pipe','pipe','pipe']});
+  const helper=spawn(exe,[folder,...(monitor===1?['--monitor=1']:[])],{windowsHide:true,stdio:['pipe','pipe','pipe']});
   const pending=new Map();let serial=0,readyResolve,readyReject;
   const ready=new Promise((resolve,reject)=>{readyResolve=resolve;readyReject=reject});
   const readyTimeout=setTimeout(()=>readyReject(Error('PROBE_OFFICE_TIMEOUT')),30000);
