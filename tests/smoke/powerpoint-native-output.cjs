@@ -1,0 +1,21 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+const {spawn} = require('node:child_process');
+(async () => {
+  const root = path.resolve(__dirname, '../..');
+  const harness = path.join(root, 'scripts/powerpoint-native-probe/output-harness.cjs');
+  assert.ok(await fs.stat(harness).catch(() => null), 'Sandboxed native frame outputs are missing');
+  const folder = await fs.mkdtemp(path.join(root, 'work/powerpoint-native-output-'));
+  await fs.writeFile(path.join(folder, '.probe-owned'), 'Own isolated output frames only\n');
+  const env = {...process.env}; delete env.ELECTRON_RUN_AS_NODE;
+  const child = spawn(require('electron'), [harness, folder], {env, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe']});
+  let log = ''; child.stdout.on('data', value => log += value); child.stderr.on('data', value => log += value);
+  const timer = setTimeout(() => child.kill(), 40000);
+  const code = await new Promise((resolve, reject) => {child.once('error', reject); child.once('close', resolve);});
+  clearTimeout(timer); await fs.writeFile(path.join(folder, 'output.log'), log);
+  if (code !== 0) process.stderr.write(log.slice(-6000));
+  assert.equal(code, 0, 'Actual Electron frame output checks failed');
+  assert.match(log, /NATIVE_OUTPUT_PASS/);
+  console.log('NATIVE_OUTPUT_PASS ' + folder);
+})().catch(error => {console.error(error); process.exitCode = 1;});

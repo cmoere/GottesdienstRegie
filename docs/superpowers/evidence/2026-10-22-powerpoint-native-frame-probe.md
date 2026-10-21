@@ -1,7 +1,7 @@
 # Native PowerPoint frame probe: implementation evidence
 
-Status: Tasks1–2 implemented and tested against own generated sources; output
-distribution and full PowerPoint performance acceptance remain unproved. No product player or
+Status: Tasks1–3 implemented and tested against own generated sources; full
+PowerPoint performance acceptance remains unproved. No product player or
 release enabled. Implementation and review by the author only, in accordance
 with the user's native/translation-only restriction; this is weaker than an
 independent review.
@@ -117,9 +117,44 @@ No PowerPoint document, product output, audio route or display preference was
 opened/changed by Task2. Probe Node tests use `*-tests.cjs` rather than
 `*.test.cjs` to keep Node's built-in runner separate from Vitest discovery.
 
+## Task3: bounded broker and actual sandboxed outputs
+
+RED `work/v86-native-broker-red.log`:13cases fail for missing broker. Final
+`work/v86-native-transport-unit-final.log`:30/30pass across broker and reader.
+Broker scenarios cover a stalled recipient without queued old frames, four-client
+limit, duplicate identities, wrong ACK generation/sequence, reconnect with a new
+trusted window identity, ACK expiry, send failure, overlapping reads, revocation
+during read, native reader failure, invalid frame identity/size/geometry and a new
+window receiving the current frame. Data packets contain only selected public
+descriptor fields, never native window/mapping identifiers.
+
+RED `work/v86-native-output-red.log`: missing sandboxed output implementation.
+Final `work/v86-native-output-final.log`, artifact49UcLn: actual Electron outputs
+pass with sandboxtrue, contextIsolationtrue, nodeIntegrationfalse, CSP and a
+narrow preload API. Main binds ACKs to the actual registered WebContents/main
+frame, not a client ID supplied by the renderer. Popups/navigation are blocked.
+Renderer uploads BGRA through WebGL with explicit channel swizzle, then verifies
+actual GPU pixels after two animation-frame callbacks before acknowledging.
+
+The harness deliberately ignores ACKs from one output. That output is
+disconnected by the unchanged500msdeadline while retaining its last red image;
+the healthy output advances to green. A newly opened mirror receives current
+green, not the first frame. Both then render black with the test overlay. Final
+1920×1080composed pixels and overlay ink are independently checked through
+capturePage; representative black PNG visually inspected. Separate captures
+are retained for healthy/stalled/current/black states. The watermark is part of
+this isolated test composition, not a newly integrated product watermark fix.
+
+One controller-owned30Hzpump drives the broker; it does not create a competing
+timer. Each recipient holds at most one unacknowledged delivery. The source
+snapshot and controls remain separate from generic live/document state. Reader
+failure freezes the last valid snapshot and exposes a fixed status; revoke
+closes the owned reader and recipients. Own windows/profile only, no audience
+MAIN assignment or actual radio/playback route changed.
+
 ## Open acceptance
 
-Tasks3–5 from the written plan remain open. Sandboxed output delivery,60-second actual source-motion
+Tasks4–5 from the written plan remain open.60-second actual source-motion
 cadence,150/250-ms latency, unobtrusive source behavior, failure cleanup and
 audio isolation are not established by Task1. The existing product and package
 version0.85.0 remain unchanged; regional completion is separately unfinished.
