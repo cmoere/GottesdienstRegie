@@ -9,6 +9,7 @@ import {useI18n} from './i18n';
 
 export function QuickScreenSettings() {
   const {t}=useI18n();
+  const showServiceCountdown=usePreferences(state=>state.showServiceCountdown),setShowServiceCountdown=usePreferences(state=>state.setShowServiceCountdown);
   const items = usePreferences((s) => s.quickScreens),
     save = usePreferences((s) => s.setQuickScreens),
     [selected, setSelected] = useState(items[0]?.id ?? "logo"),
@@ -54,6 +55,7 @@ export function QuickScreenSettings() {
     <section>
       <h3>{t('quickScreens')}</h3>
       <p>{t('quickScreensExplanation')}</p>
+      <label><input type="checkbox" checked={showServiceCountdown} onChange={event=>setShowServiceCountdown(event.target.checked)}/>Kleinen Countdown bis zum Gottesdienst unten links auf MAIN anzeigen</label>
       <div className="quick-settings-layout">
         <div className="quick-list">
           <h4>{t('quickScreens').toUpperCase()}</h4>

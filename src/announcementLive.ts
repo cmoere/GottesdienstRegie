@@ -26,7 +26,9 @@ export function buildAnnouncementSlide(slide:Slide,message:{title:string;text:st
  ];
  const readingMs=Math.max(12000,page.bodyText.length*80+4000);
  const durationMs=readingSeconds>0?Math.max(readingSeconds*1000,count>1?readingMs:0):count>1?Math.max(message.durationMs/count,readingMs):message.durationMs;
- const output:Slide={...structuredClone(slide),title,body:page.bodyText,background:page.background,backgroundImage:undefined,notes:'',timing:{...slide.timing,durationSeconds:Math.ceil(durationMs/1000)},elements:[...elements,...textElements]};
+ const scrollMinimum=page.scrollPlan.distance>0?page.scrollPlan.minDurationMs:0;
+ if(scrollMinimum>0)Object.assign(textElements[1].properties,{announcementScrollHeight:page.bodyHeight,announcementViewportHeight:page.bodyElement.height});
+ const output:Slide={...structuredClone(slide),title,body:page.bodyText,background:page.background,backgroundImage:undefined,notes:'',timing:{...slide.timing,durationSeconds:Math.ceil(Math.max(durationMs,scrollMinimum)/1000)},elements:[...elements,...textElements]};
  if(count>1)output.elements.push(announcementTextElement(`${slide.id}-announcement-page`,'Meldungsseite',{x:130,y:990,width:1250,height:45},`${index+1} / ${count}`,24,page.color,400));
  if(page.qrElement&&message.qrReference)output.elements.push({id:`${slide.id}-public-announcement-qr`,type:'qr',name:'Meldungs-QR-Code',...page.qrElement,rotation:0,opacity:1,locked:true,visible:true,zIndex:2,properties:{src:qrImage(message.qrReference),text:message.qrReference}});
  return output;
@@ -50,7 +52,7 @@ export class AnnouncementLiveController {
     const pending=this.continuation.get(item.id),continuedIndex=pending?rows.findIndex(row=>row.id===pending.messageId):-1;
     const index=continuedIndex>=0?continuedIndex:(this.nextIndex.get(item.id)??0)%rows.length,message=rows[index];
     const title=message.title.trim(),body=message.text.trim(),qrCode=message.qrCode&&settings.qrEnabled,signature=JSON.stringify([title,body,qrCode,item.metadata.announcementDesign]);
-    const pages=prepareAnnouncementPages({title,body,qrCode,design:item.metadata.announcementDesign});
+    const pages=prepareAnnouncementPages({title,body,qrCode,qrSize:settings.qrSize,design:item.metadata.announcementDesign});
     const page=pending?.signature===signature?Math.min(pending.page,pages.length-1):0;
     if(page+1<pages.length)this.continuation.set(item.id,{messageId:message.id,signature,page:page+1});
     else{this.continuation.delete(item.id);this.nextIndex.set(item.id,index+1)}

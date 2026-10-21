@@ -1,9 +1,10 @@
 import {useEffect,useLayoutEffect,useRef,useState,type CSSProperties,type ReactNode} from 'react';
 import {eventScrollOffset,type EventScrollPlan} from './eventScroll';
-export function useEventPresentationClock(startedAtMs:number){
+export function useEventPresentationClock(startedAtMs:number,forceReduced=false){
  const [elapsed,setElapsed]=useState(()=>Math.max(0,Date.now()-startedAtMs));
- const [reduced,setReduced]=useState(()=>typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);
- useEffect(()=>{const media=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):undefined;const update=()=>setReduced(media?.matches??false);media?.addEventListener('change',update);return()=>media?.removeEventListener('change',update)},[]);
+ const [systemReduced,setSystemReduced]=useState(()=>typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+ const reduced=forceReduced||systemReduced;
+ useEffect(()=>{const media=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):undefined;const update=()=>setSystemReduced(media?.matches??false);media?.addEventListener('change',update);return()=>media?.removeEventListener('change',update)},[]);
  useEffect(()=>{const tick=()=>setElapsed(Math.max(0,Date.now()-startedAtMs));tick();if(!reduced)return;const timer=setInterval(tick,1000);return()=>clearInterval(timer)},[startedAtMs,reduced]);
  return {elapsed,reduced};
 }

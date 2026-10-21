@@ -57,7 +57,7 @@ jobs:
         run: node scripts/check-version74.cjs
       - name: Anwendung bauen
         # V75 guard also protects the published update feed metadata.
-        run: node scripts/check-version75.cjs && node scripts/check-version83.cjs && node scripts/check-version84.cjs && npm run build
+        run: node scripts/check-version75.cjs && node scripts/check-version83.cjs && node scripts/check-version84.cjs && node scripts/check-version85.cjs && npm run build
       - name: Windows-Installer erstellen
         run: node scripts/package-ci.cjs --win nsis --publish never
       - name: Release samt Update-Dateien veröffentlichen

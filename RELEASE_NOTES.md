@@ -1,3 +1,41 @@
+# GottesdienstRegie 0.85.0
+
+Veröffentlicht: Mi., 21.10.2026
+
+Diese Aktualisierung verbessert die Besucherinformationen vor und nach dem Gottesdienst. Meldungslaufbänder bleiben beim Wechsel zum Ankommen und Countdown in Bewegung. Lange Meldungen werden auf einer zusammenhängenden Fläche langsam gescrollt, während der QR-Code fest an seiner Position bleibt. Neue Schnellanzeigen, ein optionaler kleiner Gottesdienst-Countdown und ein RSS-Feed für die Versionshinweise ergänzen den Ablauf.
+
+## Neu
+
+### Schnellanzeigen und Versionsfeed
+
+MAIN erhält eine vorbereitete Schnellanzeige für technische Störungen. Unter den Schnellanzeigen lässt sich außerdem ein kleiner Countdown bis zur effektiven Gottesdienstzeit unten links aktivieren. Die Versionswebseite bietet einen RSS-Link zum Abonnieren der vollständigen Versionshinweise. Infokarten werden nicht mehr zum Hinzufügen angeboten; vorhandene Inhalte und die geschützte Nachprogrammfolie bleiben erhalten.
+
+## Verbessert
+
+### Durchlaufende Meldungen
+
+Das kräftiger gesetzte Laufband verbindet mehrere Meldungen mit Abstand und einem mittigen Punkt. Wiederholte Textgruppen verhindern eine vollständig leere Laufbandfläche. Die Startposition bleibt bei Wechseln zwischen Vorprogramm, Ankommen und Countdown erhalten. Meldungsfolien beginnen weiter oben und bewahren Fettdruck, Kursivschrift, Unterstreichungen und Absätze. Die QR-Code-Größe ist von 120 bis 480 Pixeln bei 1920 × 1080 einstellbar. Die Mindestanzeigedauer wird automatisch verlängert, damit ein langer Scrolltext vollständig durchlaufen kann.
+
+## Behoben
+
+### Countdown und geschütztes Nachprogramm
+
+Ein abgelaufener Countdown im Vorprogramm oder Ankommen führt zum ersten freigegebenen Gottesdienstinhalt. Verspätete Abschlussereignisse eines bereits verlassenen Countdowns lösen keinen weiteren Sprung aus. Die automatische Folie Nächste Veranstaltung / Raum verlassen ist während ihrer ersten 60 Sekunden gegen NEXT, PREV und direktes Anspringen anderer Inhalte geschützt. Der automatische Loop wartet auf dieselbe Freigabe. Schwarz, Schnellanzeigen und OFF AIR bleiben für Notfälle verfügbar.
+
+## Bekannte Einschränkungen
+
+### Regionalübersetzungen weiterhin unvollständig
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Auch diese Version erscheint mit ausdrücklicher Freigabe als normales Update mit diesem eingeschränkten Sprachumfang. Der Hinweis bleibt in der Sprachauswahl sichtbar.
+
+### Originalgetreue PowerPoint-Wiedergabe noch in Prüfung
+
+Die neue originalgetreue PowerPoint-Wiedergabe ist noch nicht freigeschaltet. Native Steuerung und isolierte Testdateien werden geprüft; die Bildübertragung und Synchronität müssen die vorgesehenen Abnahmekriterien noch erfüllen. Der bisherige Import bleibt verfügbar.
+
+[Versionshinweise per RSS abonnieren](https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml)
+
+---
+
 # GottesdienstRegie 0.84.0
 
 Veröffentlicht: Di., 20.10.2026

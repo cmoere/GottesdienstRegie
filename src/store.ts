@@ -9,6 +9,8 @@ import { canInsertItem, canInsertItemType, resolveInsertionSectionId } from './i
 import { alignRects, distributeRects, nudgeRect, type AlignMode, type Rect } from './canvasGeometry';
 import {isLoopCandidateAvailable} from './nowPlayingModel';
 import {getCountdownPreset} from './countdownPresets';
+import {AppClock} from './community/AppClock';
+import {useLiveOutputPreview} from './liveOutputPreview';
 
 export type ItemType='content'|'image'|'video'|'videoInput'|'audio'|'song'|'bible'|'web'|'pdf'|'timer'|'countdown'|'announcement'|'slideshow'|'stageMessage'|'quickScreen'|'liveQuiz'|LoopItemType;
 export type ElementType='text'|'image'|'shape'|'line'|'video'|'audio'|'videoInput'|'web'|'qr'|'loop';
@@ -43,6 +45,8 @@ interface State{
   setTestPostProgramScenario:(scenario:PostProgramTestScenario|undefined)=>void;
   presentationId:string;title:string;date:string;createdAt:string;updatedAt:string;archived:boolean;trashed:boolean;eventId:string;eventLink?:EventLink;templateId:string;serviceTime:string;createdBy:string;historyUserId:string;historyDisplayName:string;historyDeviceId:string;historyDeviceName:string;editHistory:EditHistoryEntry[];restorePoints:RestorePoint[];transitionDefault:SlideTransition;sections:ServiceSection[];items:ServiceItem[];
   selectedItemId:string;selectedServiceItemIds:string[];selectedSlideId:string;previewItemId:string;previewSlideId:string;liveItemId:string;liveSlideId:string;liveTransitionRevision:number;
+  liveProtectedUntilMs?:number;
+  liveTakenAtMs?:number;
   mode:'edit'|'preview';previewLayout:'single'|'grid';activeVirtualScreen:'main'|'livestream'|'stage'|'notes'|'signals';gridSize:number;smartGuides:boolean;marginGuides:boolean;ruleOfThirds:boolean;onAir:boolean;liveTimerPausedSlideId?:string;mainDisplayId?:number;displayRoles:Record<string,DisplayRole>;saveState:SaveState;history:Snapshot[];future:Snapshot[];clipboard?:Slide;selectedElementIds:string[];
   loadDocument:(document:unknown)=>void;newDocument:(title:string,date?:string)=>PresentationDocument;updatePresentation:(patch:Partial<Pick<State,'title'|'date'|'eventId'|'eventLink'|'templateId'|'serviceTime'|'createdBy'|'transitionDefault'|'lyricScrolling'>>)=>void;setHistoryActor:(userId:string,displayName:string,deviceId?:string,deviceName?:string)=>void;restoreHistoryEntry:(id:string)=>boolean;createRestorePoint:(name:string)=>void;restoreFromPoint:(id:string)=>boolean;
   select:(itemId:string,slideId?:string)=>void;selectServiceItems:(ids:string[],primary?:string)=>void;selectPreview:(itemId:string,slideId:string)=>void;setMode:(mode:'edit'|'preview')=>void;setPreviewLayout:(layout:'single'|'grid')=>void;setActiveVirtualScreen:(screen:'main'|'livestream'|'stage'|'notes'|'signals')=>void;setGridSize:(n:number)=>void;setGuide:(guide:'smartGuides'|'marginGuides'|'ruleOfThirds',value:boolean)=>void;
@@ -97,6 +101,30 @@ function nextLiveTarget(state:State){
 }
 export function canAdvanceLive(state:State){
   return Boolean(nextLiveTarget(state)||((state.eventLink?.eventKey||state.testPostProgramScenario)&&state.items.some(item=>item.id===state.liveItemId&&item.sectionId==='service')));
+}
+export function liveProtectionRemainingMs(state:Pick<State,'onAir'|'liveProtectedUntilMs'>){
+ return state.onAir?Math.max(0,(state.liveProtectedUntilMs??0)-AppClock.now().getTime()):0;
+}
+export function firstServiceContentTarget(state:State){
+ return activeSlides(state).find(entry=>state.items.some(item=>item.id===entry.itemId&&item.sectionId==='service'));
+}
+/** Internal reconciliation only: an unavailable placeholder must not lock MAIN
+ * blank. Never release a stale take or disturb an already committed notice. */
+export function releaseUnavailablePostProgramTake(itemId:string,slideId:string,revision:number){
+ const state=usePresentation.getState(),output=useLiveOutputPreview.getState().slide;
+ if(!state.onAir||state.liveItemId!==itemId||state.liveSlideId!==slideId||state.liveTransitionRevision!==revision||!isPostProgramSystemItem(state.items.find(item=>item.id===itemId)))return false;
+ if(output?.id===slideId&&output.postProgramRoomNotice)return false;
+ usePresentation.setState({liveProtectedUntilMs:undefined});return true;
+}
+export function finishLiveCountdown(itemId:string,slideId:string){
+  const state=usePresentation.getState(),item=state.items.find(entry=>entry.id===itemId);
+  if(!state.onAir||state.liveItemId!==itemId||state.liveSlideId!==slideId||item?.type!=='countdown')return;
+  if(item.sectionId==='pre'||item.sectionId==='warmup'){
+    const target=firstServiceContentTarget(state);
+    if(target)state.goLive(target.itemId,target.slideId);
+    return;
+  }
+  state.nextLive();
 }
 const updateSelectedGeometry=(state:State,mutate:(elements:Rect[])=>Rect[])=>{
   const items=structuredClone(state.items),slide=items.flatMap(item=>item.slides).find(entry=>entry.id===state.selectedSlideId);
@@ -207,7 +235,14 @@ selectServiceItems:(ids,primary)=>set(state=>{const selectedServiceItemIds=[...n
   setMainDisplay:mainDisplayId=>set(state=>{const displayRoles={...state.displayRoles};for(const key of Object.keys(displayRoles))if(displayRoles[key]==='main')delete displayRoles[key];if(mainDisplayId!==undefined)displayRoles[String(mainDisplayId)]='main';return{mainDisplayId,displayRoles}}),
   setDisplayRole:(id,role)=>set(state=>{const displayRoles={...state.displayRoles};if(role!=='unused')for(const key of Object.keys(displayRoles))if(displayRoles[key]===role)delete displayRoles[key];if(role==='unused')delete displayRoles[String(id)];else displayRoles[String(id)]=role;const mainEntry=Object.entries(displayRoles).find(([,value])=>value==='main');return{displayRoles,mainDisplayId:mainEntry?Number(mainEntry[0]):undefined}}),
   setTestPostProgramScenario:testPostProgramScenario=>set({testPostProgramScenario}),
-  setOnAir:onAir=>set({onAir,...(!onAir?{testPostProgramScenario:undefined,liveItemId:'',liveSlideId:'',liveTimerPausedSlideId:undefined}:{})}),goLive:(liveItemId,liveSlideId)=>set(state=>({liveItemId,liveSlideId,liveTransitionRevision:(state.liveTransitionRevision??0)+1,liveTimerPausedSlideId:undefined})),setLiveTimerPaused:liveTimerPausedSlideId=>set({liveTimerPausedSlideId}),
+  setOnAir:onAir=>set(state=>({onAir,...(onAir&&!state.onAir&&isPostProgramSystemItem(state.items.find(item=>item.id===state.liveItemId))?{liveProtectedUntilMs:Math.max(AppClock.now().getTime(),state.liveTakenAtMs??0)+60000}:{}),...(!onAir?{testPostProgramScenario:undefined,liveItemId:'',liveSlideId:'',liveTimerPausedSlideId:undefined,liveTakenAtMs:undefined,liveProtectedUntilMs:undefined}:{})})),goLive:(liveItemId,liveSlideId)=>set(state=>{
+    const now=AppClock.now().getTime();
+    const sameTake=state.liveItemId===liveItemId&&state.liveSlideId===liveSlideId;
+    // All navigation routes converge here. Quick screens and OFF AIR are
+    // independent output controls and remain available during this minimum take.
+    if(state.onAir&&isPostProgramSystemItem(state.items.find(item=>item.id===state.liveItemId))&&now<(state.liveProtectedUntilMs??0))return state;
+    return {liveItemId,liveSlideId,liveTransitionRevision:(state.liveTransitionRevision??0)+1,liveTakenAtMs:now+100,liveTimerPausedSlideId:undefined,liveProtectedUntilMs:sameTake?state.liveProtectedUntilMs:state.onAir&&isPostProgramSystemItem(state.items.find(item=>item.id===liveItemId))?now+60100:undefined};
+  }),setLiveTimerPaused:liveTimerPausedSlideId=>set({liveTimerPausedSlideId}),
   nextLive:()=>{
     const state=get(),currentItem=state.items.find(item=>item.id===state.liveItemId);
     let next=nextLiveTarget(state);
@@ -224,6 +259,6 @@ selectServiceItems:(ids,primary)=>set(state=>{const selectedServiceItemIds=[...n
   },previousLive:()=>{const state=get(),all=activeSlides(state),index=all.findIndex(entry=>entry.slideId===state.liveSlideId),previous=all[Math.max(0,index<0?0:index-1)];if(previous)state.goLive(previous.itemId,previous.slideId)},
   undo:()=>set(state=>{const previous=state.history.at(-1);return previous?{...previous,items:ensurePostProgramSystemSlide(previous.items),history:state.history.slice(0,-1),future:[snap(state),...state.future].slice(0,50),saveState:'dirty',updatedAt:iso()}:state}),redo:()=>set(state=>{const next=state.future[0];return next?{...next,items:ensurePostProgramSystemSlide(next.items),history:[...state.history,snap(state)].slice(-50),future:state.future.slice(1),saveState:'dirty',updatedAt:iso()}:state}),
   markSaving:()=>set(state=>({saveState:'saving',editHistory:state.editHistory.map(entry=>entry.syncStatus==='LOCAL'?{...entry,syncStatus:'PENDING' as const}:entry)})),markSaved:()=>set(state=>({saveState:'saved',editHistory:state.editHistory.map(entry=>entry.syncStatus==='PENDING'||entry.syncStatus==='LOCAL'?{...entry,syncStatus:'SYNCED' as const}:entry)})),markSaveError:()=>set(state=>({saveState:'error',editHistory:state.editHistory.map(entry=>entry.syncStatus==='PENDING'?{...entry,syncStatus:'ERROR' as const}:entry)}))
-}),{name:'gottesdienstregie2.presentation',version:15,partialize:state=>({...state,onAir:false,testPostProgramScenario:undefined,liveItemId:'',liveSlideId:'',liveTimerPausedSlideId:undefined,saveState:'saved',history:[],future:[]}),migrate:(persisted:any)=>{const presentationId=String(persisted?.presentationId??'');return{...persisted,activeVirtualScreen:'main',transitionDefault:normalizeTransition(persisted?.transitionDefault)??{...defaultTransition},sections:ensurePostProgramSection(Array.isArray(persisted?.sections)&&persisted.sections.length?persisted.sections.map(normalizeSection):sections.map(normalizeSection)),items:ensurePostProgramSystemSlide((persisted?.items??initial).map(normalizeItem)),archived:persisted?.archived===true,trashed:persisted?.trashed===true,eventId:persisted?.eventId??'',eventLink:persisted?.eventLink??(persisted?.eventId?{eventKey:persisted.eventId}:undefined),templateId:persisted?.templateId??'',serviceTime:persisted?.serviceTime??persisted?.serviceTimes?.[0]??'',createdBy:persisted?.createdBy??'',historyUserId:persisted?.historyUserId??'',historyDisplayName:persisted?.historyDisplayName??'',editHistory:Array.isArray(persisted?.editHistory)?persisted.editHistory.map((entry:any,index:number)=>legacyHistory(entry,presentationId,index)).slice(-1000):[],restorePoints:Array.isArray(persisted?.restorePoints)?persisted.restorePoints.slice(-50):[],selectedElementIds:[],previewItemId:persisted?.previewItemId??persisted?.selectedItemId,previewSlideId:persisted?.previewSlideId??persisted?.selectedSlideId,displayRoles:persisted?.displayRoles??(persisted?.mainDisplayId?{[String(persisted.mainDisplayId)]:'main'}:{}),liveItemId:'',liveSlideId:'',liveTimerPausedSlideId:undefined,onAir:false,history:[],future:[],saveState:'saved'}}}));
+}),{name:'gottesdienstregie2.presentation',version:15,partialize:state=>({...state,liveTakenAtMs:undefined,liveProtectedUntilMs:undefined,onAir:false,testPostProgramScenario:undefined,liveItemId:'',liveSlideId:'',liveTimerPausedSlideId:undefined,saveState:'saved',history:[],future:[]}),migrate:(persisted:any)=>{const presentationId=String(persisted?.presentationId??'');return{...persisted,activeVirtualScreen:'main',transitionDefault:normalizeTransition(persisted?.transitionDefault)??{...defaultTransition},sections:ensurePostProgramSection(Array.isArray(persisted?.sections)&&persisted.sections.length?persisted.sections.map(normalizeSection):sections.map(normalizeSection)),items:ensurePostProgramSystemSlide((persisted?.items??initial).map(normalizeItem)),archived:persisted?.archived===true,trashed:persisted?.trashed===true,eventId:persisted?.eventId??'',eventLink:persisted?.eventLink??(persisted?.eventId?{eventKey:persisted.eventId}:undefined),templateId:persisted?.templateId??'',serviceTime:persisted?.serviceTime??persisted?.serviceTimes?.[0]??'',createdBy:persisted?.createdBy??'',historyUserId:persisted?.historyUserId??'',historyDisplayName:persisted?.historyDisplayName??'',editHistory:Array.isArray(persisted?.editHistory)?persisted.editHistory.map((entry:any,index:number)=>legacyHistory(entry,presentationId,index)).slice(-1000):[],restorePoints:Array.isArray(persisted?.restorePoints)?persisted.restorePoints.slice(-50):[],selectedElementIds:[],previewItemId:persisted?.previewItemId??persisted?.selectedItemId,previewSlideId:persisted?.previewSlideId??persisted?.selectedSlideId,displayRoles:persisted?.displayRoles??(persisted?.mainDisplayId?{[String(persisted.mainDisplayId)]:'main'}:{}),liveItemId:'',liveSlideId:'',liveTakenAtMs:undefined,liveProtectedUntilMs:undefined,liveTimerPausedSlideId:undefined,onAir:false,history:[],future:[],saveState:'saved'}}}));
 
 export function presentationDocument(state:State):PresentationDocument{return{linkedEventKey:state.eventLink?.eventKey,lyricScrolling:state.lyricScrolling,presentationId:state.presentationId,title:state.title,date:state.date,createdAt:state.createdAt,updatedAt:state.updatedAt,archived:state.archived,trashed:state.trashed,eventId:state.eventLink?.eventKey??state.eventId,eventLink:state.eventLink,templateId:state.templateId,serviceTime:state.serviceTime,createdBy:state.createdBy,editHistory:state.editHistory,restorePoints:state.restorePoints,transitionDefault:state.transitionDefault,sections:state.sections,items:state.items,selectedItemId:state.selectedItemId,selectedSlideId:state.selectedSlideId,previewItemId:state.previewItemId,previewSlideId:state.previewSlideId}}

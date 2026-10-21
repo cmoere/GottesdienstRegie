@@ -2,6 +2,7 @@ import type {PublicBannerAnnouncement} from './community/AnnouncementService';
 import type {BannerPosition} from './announcementBannerModel';
 import {bannerCycleDurationMs} from './announcementBannerModel';
 import type {BannerOutputState} from './outputState';
+export const bannerRibbonText=(items:PublicBannerAnnouncement[])=>items.map(item=>item.text.trim()).filter(Boolean).join(' · ')+(items.length?' · ':'');
 export function bannerTextPages(text:string):string[]{
   const pages:string[]=[];let page='';
   for(const word of text.split(/\s+/u)){
@@ -12,28 +13,33 @@ export function bannerTextPages(text:string):string[]{
   if(page)pages.push(page);return pages.length?pages:[''];
 }
 export function bannerDisplayDuration(state:BannerOutputState):number{
-  const text=state.items[0]?.text??'';
+  const text=bannerRibbonText(state.items);
   return state.reducedMotion?bannerTextPages(text).reduce((sum,page)=>sum+Math.max(4000,page.length*80),0):bannerCycleDurationMs(state.textWidth??text.length*24,1920);
 }
 export class BannerSession{
   private active:BannerOutputState|null=null;
   private revision=0;
   private lastTake='';
-  update(input:{items:PublicBannerAnnouncement[];position:BannerPosition;allowed:boolean;enabled:boolean;takeKey:string;nowMs:number;textWidths:number[];reducedMotion:boolean}):BannerOutputState|null{
-    if(!input.enabled||!input.allowed){this.active=null;this.lastTake='';return null}
+  private lastCycleIndex=0;
+  update(input:{items:PublicBannerAnnouncement[];position:BannerPosition;allowed:boolean;enabled:boolean;takeKey:string;nowMs:number;textWidths:number[];separatorWidth?:number;reducedMotion:boolean}):BannerOutputState|null{
+    if(!input.enabled||!input.allowed){this.active=null;this.lastTake='';this.lastCycleIndex=0;return null}
     const safeTake=this.lastTake!==input.takeKey;this.lastTake=input.takeKey;
     if(!this.active&&!safeTake)return null;
-    if(this.active?.items.length&&input.nowMs<this.active.cycleStartedAtMs+bannerDisplayDuration(this.active)){
+    const textWidth=input.items.reduce((sum,item,index)=>sum+(input.textWidths[index]??item.text.length*24)+(input.separatorWidth??32),0);
+    if(this.active?.items.length){
       if(safeTake&&this.active.position!==input.position)this.active={...this.active,position:input.position,revision:++this.revision};
-      return this.active;
+      const cycle=Math.floor(Math.max(0,input.nowMs-this.active.cycleStartedAtMs)/bannerDisplayDuration(this.active));
+      const crossed=cycle>this.lastCycleIndex;this.lastCycleIndex=cycle;
+      if(!crossed)return this.active;
+      if(JSON.stringify(this.active.items)===JSON.stringify(input.items)&&this.active.reducedMotion===input.reducedMotion&&this.active.textWidth===textWidth)return this.active;
     }
     if(!input.items.length&&safeTake){this.active=null;return null}
     if(!input.items.length){
       if(this.active?.items.length)this.active={...this.active,items:[],revision:++this.revision};
       return this.active;
     }
-    const oldId=this.active?.items[0]?.id,oldIndex=input.items.findIndex(item=>item.id===oldId),index=oldIndex>=0?(oldIndex+1)%input.items.length:0;
-    this.active={revision:++this.revision,position:safeTake?input.position:this.active?.position??input.position,items:[structuredClone(input.items[index])],cycleStartedAtMs:input.nowMs,reserved:true,textWidth:input.textWidths[index]??input.items[index].text.length*24,reducedMotion:input.reducedMotion};
+    this.active={revision:++this.revision,position:safeTake?input.position:this.active?.position??input.position,items:structuredClone(input.items),cycleStartedAtMs:input.nowMs,reserved:true,textWidth,reducedMotion:input.reducedMotion};
+    this.lastCycleIndex=0;
     return this.active;
   }
 }

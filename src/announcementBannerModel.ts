@@ -1,10 +1,10 @@
 export type BannerPosition='top'|'bottom';
-export type BannerContext={liveSection:'pre'|'service'|'post'|'other';quickType:string|null;countdownActive:boolean};
+export type BannerContext={liveSection:'pre'|'warmup'|'service'|'post'|'other';quickType:string|null;countdownActive:boolean};
 export function isBannerAllowed(context:BannerContext):boolean{
   if(context.quickType)return context.quickType==='countdown';
-  return context.countdownActive||context.liveSection==='pre'||context.liveSection==='post';
+  return context.countdownActive||context.liveSection==='pre'||context.liveSection==='warmup'||context.liveSection==='post';
 }
-export function bannerCycleDurationMs(textWidth:number,viewportWidth:number):number{
+export function bannerCycleDurationMs(textWidth:number,_viewportWidth:number):number{
   const safe=(value:number)=>Number.isFinite(value)?Math.max(0,value):0;
-  return 2000+(safe(textWidth)+safe(viewportWidth))/60*1000;
+  return Math.max(64,safe(textWidth)+64)/60*1000;
 }

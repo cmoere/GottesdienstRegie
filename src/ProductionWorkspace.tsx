@@ -3862,7 +3862,7 @@ function PreviewCenter({
         <div className="main-preview-with-title">
         <h2 className="single-preview-title">{(state.onAir&&output?output.title:slide.title)?.trim()||slideLabel(slide,item.slides.indexOf(slide))}</h2>
         <div className="main-preview-surface">
-          <OutputComposition banner={state.onAir?banner:null} testOverlay={<TestModeWatermark role="main"/>}>
+          <OutputComposition hideCountdown={Boolean(activeQuick)} serviceCountdownAtMs={state.onAir?output?._serviceCountdownAtMs:undefined} banner={state.onAir?banner:null} testOverlay={<TestModeWatermark role="main"/>}>
           {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage
             slide={previewSlide(state.onAir&&output?output:slide)}
             transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(
@@ -4084,6 +4084,7 @@ function PreviewRightSidebar({
       </header>
       {live ? (
         <MainLivePreview
+          hideCountdown={Boolean(activeQuick)}
           title={`${liveItem?.title} · ${live.title || "Live-Folie"}`}
         >
           {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage slide={previewSlide(state.onAir&&output?output:live)} transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(live,liveItem,'main',state.transitionDefault)} role="main" renderMode="mirror" />}

@@ -1,6 +1,6 @@
 import {releaseRegionalVariants} from './catalog';
 export const REGIONAL_PARTIAL_NOTICE='Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.';
-type PartialRelease={version:'0.84.0';inventoryFingerprint:string;notice:typeof REGIONAL_PARTIAL_NOTICE};
+type PartialRelease={version:'0.84.0'|'0.85.0';inventoryFingerprint:string;notice:typeof REGIONAL_PARTIAL_NOTICE};
 function manifest(value:unknown):value is {schemaVersion:1;complete:boolean;regionIds:unknown[];partialRelease?:unknown}{
   if(!value||typeof value!=='object'||Array.isArray(value))return false;
   if(!['schemaVersion','complete','regionIds'].every(key=>Object.hasOwn(value,key)))return false;
@@ -11,14 +11,14 @@ function manifest(value:unknown):value is {schemaVersion:1;complete:boolean;regi
     &&releaseRegionalVariants.every((region,index)=>(item.regionIds as unknown[])[index]===region.id);
 }
 
-/** The user's scoped0.84 normal-update approval does not claim complete UI coverage. */
+/** Explicit version-pinned normal-update approvals never claim complete UI coverage. */
 export function getRegionalPartialRelease(value:unknown):PartialRelease|null{
   if(!manifest(value)||value.complete!==false||!Object.hasOwn(value,'partialRelease'))return null;
   const partial=value.partialRelease;
   if(!partial||typeof partial!=='object'||Array.isArray(partial))return null;
   if(!['version','inventoryFingerprint','notice'].every(key=>Object.hasOwn(partial,key))||Object.keys(partial).length!==3)return null;
   const item=partial as PartialRelease;
-  return item.version==='0.84.0'&&typeof item.inventoryFingerprint==='string'&&/^[a-f0-9]{64}$/.test(item.inventoryFingerprint)
+  return (item.version==='0.84.0'||item.version==='0.85.0')&&typeof item.inventoryFingerprint==='string'&&/^[a-f0-9]{64}$/.test(item.inventoryFingerprint)
     &&item.notice===REGIONAL_PARTIAL_NOTICE?item:null;
 }
 

@@ -10,3 +10,4 @@
 .announcement-loop-settings .announcement-setting-check input{width:auto;margin:0;accent-color:#699f3e}
 .announcement-loop-settings small{font-size:11px;line-height:1.4;opacity:.8}
 .announcement-loop-settings input[type=number],.announcement-loop-settings select{width:100%;box-sizing:border-box;min-height:32px;font:inherit}
+.announcement-scroll-viewport{width:100%;height:100%;overflow:hidden}

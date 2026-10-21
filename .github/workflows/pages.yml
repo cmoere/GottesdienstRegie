@@ -27,6 +27,8 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - name: RSS-Feed aus dem Versionsverlauf erzeugen
+        run: node scripts/generate-release-feed.cjs
       - name: Nutzungsbedingungen prüfen
         run: node scripts/generate-terms.cjs && node scripts/check-version43.cjs && git diff --exit-code -- build/terms.txt public/terms/index.html
       - name: Web-Editor bauen

@@ -5,6 +5,7 @@ import {createServiceItem,usePresentation} from './store';
 import {liveEngine} from './LiveEngine';
 import {withPostProgramRoomNotice} from './community/PostProgramRoomNoticeService';
 import {TestModeContext} from './TestModeWatermark';
+import {AppClock} from './community/AppClock';
 
 beforeEach(()=>{
   usePresentation.getState().newDocument('Nachprogramm-Test');
@@ -12,7 +13,7 @@ beforeEach(()=>{
   Element.prototype.scrollIntoView=()=>{};
   window.desktop={sendLiveSlide:async()=>true,goOffAir:async()=>true} as unknown as typeof window.desktop;
 });
-afterEach(()=>{cleanup();vi.unstubAllGlobals();delete window.desktop});
+afterEach(()=>{cleanup();vi.restoreAllMocks();vi.unstubAllGlobals();delete window.desktop});
 
 it.each([false,true])('allows the final service Next button to enter post program (test mode: %s)',testMode=>{
   const service=createServiceItem('content',{id:'service',sectionId:'service'});
@@ -26,6 +27,9 @@ it.each([false,true])('allows the final service Next button to enter post progra
   expect(screen.queryAllByTestId('test-mode-watermark')).toHaveLength(testMode?2:0);
   expect(screen.getByTitle('Nächste MAIN-Folie')).toBeEnabled();
   const revision=state.liveTransitionRevision;
+  fireEvent.click(screen.getByTitle('Nächste MAIN-Folie'));
+  expect(usePresentation.getState().liveTransitionRevision).toBe(revision);
+  vi.spyOn(AppClock,'now').mockReturnValue(new Date(Date.now()+60101));
   fireEvent.click(screen.getByTitle('Nächste MAIN-Folie'));
   expect(usePresentation.getState().liveTransitionRevision).toBe(revision+1);
 });

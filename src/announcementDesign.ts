@@ -1,12 +1,13 @@
 import type {SlideElement} from './store';
 import {announcementRuns,announcementRunsText,type AnnouncementRun,type AnnouncementRichLines} from './announcementRichText';
-import {AUTO_SLIDE_EDGE,AUTO_SLIDE_WIDTH,AUTO_SLIDE_QR,AUTO_SLIDE_QR_TEXT_RIGHT} from './autoSlideLayout';
+import {AUTO_SLIDE_EDGE,AUTO_SLIDE_WIDTH} from './autoSlideLayout';
+import {prepareEventScrollPlan,type EventScrollPlan} from './eventScroll';
 export const ANNOUNCEMENT_DESIGNS=['classic','light','accent','split','green','silver','frame','footer'] as const;
 export type AnnouncementDesign=(typeof ANNOUNCEMENT_DESIGNS)[number];
 export const ANNOUNCEMENT_DESIGN_LABELS:Record<AnnouncementDesign,string>={classic:'Klar',light:'Hell',accent:'Akzent',split:'Seitenspalte',green:'Grün',silver:'Silber',frame:'Rahmen',footer:'Fußband'};
 export function announcementDesign(value:unknown):AnnouncementDesign{return ANNOUNCEMENT_DESIGNS.includes(value as AnnouncementDesign)?value as AnnouncementDesign:'classic'}
 type Box={x:number;y:number;width:number;height:number};
-export type PreparedAnnouncementPage={background:string;color:string;titleElement:Box;bodyElement:Box;qrElement?:Box;titleFontSize:number;bodyFontSize:number;titleHeight:number;bodyHeight:number;titleText:string;bodyText:string;bodyLines:string[];titleRichLines:AnnouncementRichLines;bodyRichLines:AnnouncementRichLines;decorations:Array<Box&{fill:string}>};
+export type PreparedAnnouncementPage={background:string;color:string;titleElement:Box;bodyElement:Box;qrElement?:Box;titleFontSize:number;bodyFontSize:number;titleHeight:number;bodyHeight:number;titleText:string;bodyText:string;bodyLines:string[];titleRichLines:AnnouncementRichLines;bodyRichLines:AnnouncementRichLines;scrollPlan:EventScrollPlan;decorations:Array<Box&{fill:string}>};
 let context:CanvasRenderingContext2D|null|undefined;
 function width(text:string,size:number,weight:number,italic=false){
  if(typeof document!=='undefined'&&!navigator.userAgent.includes('jsdom')){
@@ -37,10 +38,12 @@ function lines(runs:AnnouncementRun[],maxWidth:number,size:number,weight:number)
 
 // Layout is prepared in the operator at 1920×1080 and shared with every output.
 // Source segments retain all characters; added visual line breaks never remove text.
-export function prepareAnnouncementPages(input:{title:string;body:string;qrCode:boolean;design:unknown}):PreparedAnnouncementPage[]{
+export function prepareAnnouncementPages(input:{title:string;body:string;qrCode:boolean;qrSize?:number;design:unknown}):PreparedAnnouncementPage[]{
  const design=announcementDesign(input.design),split=design==='split',light=design==='light'||design==='silver';
  const background=design==='green'?'#699f3e':design==='silver'?'#b6bec3':light?'#f4f7f8':'#18232f',color=light?'#18232f':'#ffffff';
- const x=split?610:AUTO_SLIDE_EDGE,bodyWidth=(input.qrCode?AUTO_SLIDE_QR_TEXT_RIGHT:1920-AUTO_SLIDE_EDGE)-x;
+ const qrSize=Number.isFinite(input.qrSize)?Math.max(120,Math.min(480,Math.round(input.qrSize!))):280;
+ const qrElement={x:1920-AUTO_SLIDE_EDGE-qrSize,y:(1080-qrSize)/2,width:qrSize,height:qrSize};
+ const x=split?610:AUTO_SLIDE_EDGE,bodyWidth=(input.qrCode?qrElement.x-32:1920-AUTO_SLIDE_EDGE)-x;
  const titleWidth=split?528:AUTO_SLIDE_WIDTH;
  const titleRuns=announcementRuns(input.title),bodyRuns=announcementRuns(input.body);
  let titleFontSize=56,titleLines=lines(titleRuns,titleWidth-24,titleFontSize,600);
@@ -48,10 +51,11 @@ export function prepareAnnouncementPages(input:{title:string;body:string;qrCode:
  const oversizedTitle=titleLines.length>4;
  if(oversizedTitle)titleLines=lines([{text:'Information'}],titleWidth-24,titleFontSize,600);
  const titleHeight=Math.max(titleFontSize*1.25,titleLines.length*titleFontSize*1.25);
- const titleElement={x:AUTO_SLIDE_EDGE,y:110,width:titleWidth,height:Math.ceil(titleHeight+16)};
- const bodyY=split?110:titleElement.y+titleElement.height+44;
- const bodyElement={x,y:bodyY,width:bodyWidth,height:970-bodyY};
- const bodyFontSize=44,lineHeight=bodyFontSize*1.3,maxLines=Math.max(1,Math.floor(bodyElement.height/lineHeight)-1);
+ const titleElement={x:AUTO_SLIDE_EDGE,y:40,width:titleWidth,height:Math.ceil(titleHeight+16)};
+ const bodyY=split?40:titleElement.y+titleElement.height+44;
+ const bodyBottom=design==='frame'?1011:design==='footer'?1024:1080-AUTO_SLIDE_EDGE;
+ const bodyElement={x,y:bodyY,width:bodyWidth,height:bodyBottom-bodyY};
+ const bodyFontSize=44,lineHeight=bodyFontSize*1.3;
  const fullBody=oversizedTitle?[...titleRuns,{text:'\n\n'},...bodyRuns]:bodyRuns;
  const bodyLines=lines(fullBody,bodyWidth-24,bodyFontSize,400);
  const decorations:Array<Box&{fill:string}>=[];
@@ -62,12 +66,8 @@ export function prepareAnnouncementPages(input:{title:string;body:string;qrCode:
  if(design==='footer')decorations.push({x:0,y:1040,width:1920,height:40,fill:'#608f9a'});
  if(split)decorations.push({x:0,y:0,width:560,height:1080,fill:'#608f9a'});
  decorations.push(split?{x:585,y:110,width:3,height:160,fill:'#608f9a'}:{x:AUTO_SLIDE_EDGE,y:titleElement.y+titleElement.height+20,width:160,height:3,fill:light?'#699f3e':'#608f9a'});
- const pages:PreparedAnnouncementPage[]=[];
- for(let start=0;start<bodyLines.length;start+=maxLines){
-  const part=bodyLines.slice(start,start+maxLines);
-  pages.push({background,color,titleElement,bodyElement,qrElement:input.qrCode?{...AUTO_SLIDE_QR}:undefined,titleFontSize,bodyFontSize,titleHeight,bodyHeight:part.length*lineHeight,titleText:titleLines.map(line=>line.text).join('\n'),bodyText:part.map(line=>line.source).join(''),bodyLines:part.map(line=>line.text),titleRichLines:titleLines.map(line=>line.runs),bodyRichLines:part.map(line=>line.runs),decorations});
- }
- return pages;
+ const bodyHeight=bodyLines.length*lineHeight,scrollPlan=prepareEventScrollPlan({contentHeight:bodyHeight,viewportHeight:bodyElement.height});
+ return [{background,color,titleElement,bodyElement,qrElement:input.qrCode?qrElement:undefined,titleFontSize,bodyFontSize,titleHeight,bodyHeight,titleText:titleLines.map(line=>line.text).join('\n'),bodyText:bodyLines.map(line=>line.source).join(''),bodyLines:bodyLines.map(line=>line.text),titleRichLines:titleLines.map(line=>line.runs),bodyRichLines:bodyLines.map(line=>line.runs),scrollPlan,decorations}];
 }
 export function announcementTextElement(id:string,name:string,box:Box,text:string,size:number,color:string,weight:number,richLines?:AnnouncementRichLines):SlideElement{
  return {id,type:'text',name,...box,rotation:0,opacity:1,locked:true,visible:true,zIndex:2,properties:{text,fontFamily:'Cera Pro',fontSize:size,fontWeight:weight,color,align:'left',verticalAlign:'top',lineHeight:weight===600?1.25:1.3,padding:0,preparedAnnouncementText:true,...(richLines?{announcementRichLines:JSON.stringify(richLines)}:{})}};

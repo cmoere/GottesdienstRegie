@@ -17,6 +17,8 @@ import {useLiveOutputPreview} from './liveOutputPreview';
 import {outputPresentationDelay} from './outputPresentation';
 import {upcomingMedia} from './mediaWarmup';
 import type {BannerContext} from './announcementBannerModel';
+import {prepareServiceCountdown} from './ServiceCountdownBadge';
+import {getCommunityRuntimeSnapshot} from './community/communityRuntime';
 
 function withSongOutputs(slide: Slide): Slide {
   const snapshot=structuredClone(slide),item=usePresentation.getState().items.find(item=>item.id===slide.itemId);
@@ -30,7 +32,7 @@ function withSongOutputs(slide: Slide): Slide {
 
 export class LiveEngine{
   private takeRevision:number|undefined;
-  private takeMetadata=new Map<string,{countdownStartedAtMs:number;bannerContext:Pick<BannerContext,'liveSection'|'countdownActive'>}>();
+  private takeMetadata=new Map<string,{countdownStartedAtMs:number;serviceCountdownAtMs?:number;bannerContext:Pick<BannerContext,'liveSection'|'countdownActive'>}>();
   private revision=0;
   private lastHash=0;
   private delivery=0;
@@ -59,11 +61,11 @@ export class LiveEngine{
     let take=this.takeMetadata.get(slide.id);
     if(!take){
       const type=state.sections.find(section=>section.id===item?.sectionId)?.type;
-      const liveSection:BannerContext['liveSection']=type==='preLoop'||type==='preProgram'?'pre':type==='postLoop'?'post':type==='service'?'service':'other';
-      take={countdownStartedAtMs:presentAtMs,bannerContext:{liveSection,countdownActive:item?.type==='countdown'||item?.type==='loopCountdown'}};
+      const liveSection:BannerContext['liveSection']=type==='preLoop'||type==='preProgram'?'pre':type==='postLoop'?'post':type==='warmup'?'warmup':type==='service'?'service':'other';
+      take={countdownStartedAtMs:state.liveSlideId===slide.id?state.liveTakenAtMs??presentAtMs:presentAtMs,serviceCountdownAtMs:prepareServiceCountdown({enabled:usePreferences.getState().showServiceCountdown,sectionId:item?.sectionId??'',eventKey:state.eventLink?.eventKey,date:state.date,serviceTime:state.serviceTime},getCommunityRuntimeSnapshot().events),bannerContext:{liveSection,countdownActive:item?.type==='countdown'||item?.type==='loopCountdown'}};
       this.takeMetadata.set(slide.id,take);
     }
-    return {...attachOutputRevision(rendered,this.revision),_mediaWarmup:upcomingMedia(state.items,slide.id,state.sections.map(section=>section.id)),_presentAtMs:presentAtMs,_countdownStartedAtMs:take.countdownStartedAtMs,bannerContext:{...take.bannerContext}};
+    return {...attachOutputRevision(rendered,this.revision),_serviceCountdownAtMs:take.serviceCountdownAtMs,_mediaWarmup:upcomingMedia(state.items,slide.id,state.sections.map(section=>section.id)),_presentAtMs:presentAtMs,_countdownStartedAtMs:take.countdownStartedAtMs,bannerContext:{...take.bannerContext}};
   }
   async start(assignments:Record<string,DisplayRole>,slide:Slide){if(!window.desktop)throw new Error('Die Desktop-Ausgabe ist nicht verfügbar.');this.takeRevision=undefined;this.takeMetadata.clear();const delivery=++this.delivery,snapshot=this.snapshot(slide),ok=await window.desktop.goOnAir(assignments,snapshot);if(ok)await this.commit(snapshot,delivery);return ok}
   async show(slide:Slide){const delivery=++this.delivery,snapshot=this.snapshot(slide),ok=await(window.desktop?.sendLiveSlide(snapshot)??false);if(ok)await this.commit(snapshot,delivery);return ok}

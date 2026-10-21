@@ -12,10 +12,11 @@ export function AnnouncementSlideDesigner({item,canEdit}:{item:ServiceItem;canEd
   <fieldset className="announcement-loop-settings" disabled={!canEdit}><legend>Meldungsschleife</legend>
    <label className="announcement-setting-check"><input type="checkbox" checked={settings.qrEnabled} onChange={event=>update({announcementQrEnabled:event.target.checked})}/>QR-Codes anzeigen</label>
    <small>Gilt für alle Meldungsseiten; Freigaben der Quelle bleiben maßgeblich.</small>
+   <label>QR-Code-Größe (Pixel bei 1920 × 1080)<input type="number" min="120" max="480" step="10" value={settings.qrSize} onChange={event=>update({announcementQrSize:announcementSettings({announcementQrSize:event.target.value}).qrSize})}/></label>
    <label>Kategorie<select value={settings.category} onChange={event=>update({announcementCategory:event.target.value})}><option value="all">Alle Kategorien</option>{Object.entries(ANNOUNCEMENT_CATEGORIES).map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>
    <label className="announcement-setting-check"><input type="checkbox" checked={settings.prioritySort} onChange={event=>update({announcementPrioritySort:event.target.checked})}/>Nach Priorität sortieren</label>
    <small>Ohne Priorität werden Meldungen alphabetisch sortiert.</small>
-   <label>Lesedauer je Seite (Sekunden)<input type="number" min="1" max="3600" step="1" value={settings.readingSeconds||''} placeholder="Automatisch" onChange={event=>update({announcementReadingSeconds:announcementSettings({announcementReadingSeconds:event.target.value}).readingSeconds})}/></label>
+   <label>Mindestanzeigedauer (Sekunden)<input type="number" min="1" max="3600" step="1" value={settings.readingSeconds||''} placeholder="Automatisch" onChange={event=>update({announcementReadingSeconds:announcementSettings({announcementReadingSeconds:event.target.value}).readingSeconds})}/></label>
    <small>Leer: automatisch. Lange Meldungen behalten die erforderliche Mindestlesedauer.</small>
-  </fieldset><p>Lange Meldungen werden vollständig auf mehrere lesbare Seiten verteilt.</p></section>;
+  </fieldset><p>Lange Meldungen scrollen langsam und vollständig. Die Anzeigedauer wird bei Bedarf automatisch verlängert; der QR-Code bleibt stehen.</p></section>;
 }

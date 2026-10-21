@@ -5,7 +5,8 @@ export const ANNOUNCEMENT_CATEGORIES:Record<AnnouncementCategory,string>={genera
 export function announcementSettings(metadata:Record<string,unknown>){
  const category=String(metadata.announcementCategory??'all');
  const seconds=Number(metadata.announcementReadingSeconds);
- return {qrEnabled:metadata.announcementQrEnabled!==false,category:Object.hasOwn(ANNOUNCEMENT_CATEGORIES,category)?category as AnnouncementCategory:'all' as const,prioritySort:metadata.announcementPrioritySort!==false,readingSeconds:Number.isFinite(seconds)&&seconds>0?Math.min(3600,Math.max(1,Math.round(seconds))):0};
+ const size=Number(metadata.announcementQrSize);
+ return {qrEnabled:metadata.announcementQrEnabled!==false,qrSize:Number.isFinite(size)&&size>0?Math.max(120,Math.min(480,Math.round(size))):280,category:Object.hasOwn(ANNOUNCEMENT_CATEGORIES,category)?category as AnnouncementCategory:'all' as const,prioritySort:metadata.announcementPrioritySort!==false,readingSeconds:Number.isFinite(seconds)&&seconds>0?Math.min(3600,Math.max(1,Math.round(seconds))):0};
 }
 // Eligibility is owned exclusively by AnnouncementService; these are operator preferences.
 export function configuredAnnouncements(rows:PublicAnnouncement[],metadata:Record<string,unknown>):PublicAnnouncement[]{

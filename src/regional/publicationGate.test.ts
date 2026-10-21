@@ -25,6 +25,10 @@ it('permits only the disclosed0.84 partial scope and still blocks stale inventor
   expect(regionalPublicationIssues('0.84.0',[...pending,'inventory: stale source fingerprint'],[],partial)).toEqual(['inventory: stale source fingerprint']);
   expect(regionalPublicationIssues('0.84.0',[...pending,'inventory: source.unapproved.1 requires classification'],[],partial)).toEqual(['inventory: source.unapproved.1 requires classification']);
   expect(regionalPublicationIssues('0.85.0',pending,[],partial)).not.toEqual([]);
+  const newlyApproved={...partial,manifest:{...partial.manifest,partialRelease:{...partial.manifest.partialRelease,version:'0.85.0'}}};
+  expect(regionalPublicationIssues('0.85.0',pending,[],newlyApproved)).toEqual([]);
+  expect(regionalPublicationIssues('0.85.0',pending,['ruhr: missing help'],newlyApproved)).toEqual(['ruhr: missing help']);
+  expect(regionalPublicationIssues('0.86.0',pending,[],newlyApproved)).not.toEqual([]);
   expect(regionalPublicationIssues('0.84.0',pending,[],{...partial,disclosed:false})).not.toEqual([]);
   expect(regionalPublicationIssues('0.84.0',pending,[],{...partial,inventory:{...partial.inventory,sourceFingerprint:'b'.repeat(64)}})).not.toEqual([]);
 });

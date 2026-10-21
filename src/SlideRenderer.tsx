@@ -6,6 +6,7 @@ import {prepareAnnouncementPages} from './announcementDesign';
 import {buildAnnouncementSlide} from './announcementLive';
 import {announcementSettings} from './announcementSettings';
 import {AnnouncementRichText} from './AnnouncementRichTextRenderer';
+import {AnnouncementScrollingText} from './AnnouncementScrollingText';
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import {CountdownView} from './CountdownView';
 import {remainingCountdownMs} from './countdownClock';
@@ -517,7 +518,7 @@ function RenderElement({
       className={`slide-renderer-element text ${properties.animation === "fade-in" && (mode === "live"||mode==='mirror') ? "element-animation-fade-in" : ""}`}
       style={properties.preparedAnnouncementText===true?{...style,display:'block',whiteSpace:'pre',overflow:'hidden'}:style}
     >
-      {properties.preparedAnnouncementText===true?<AnnouncementRichText value={properties.announcementRichLines} text={String(properties.text??'')}/>:String(properties.text ?? "")}
+      {Number(properties.announcementScrollHeight)>0?<AnnouncementScrollingText properties={properties} startedAtMs={startedAtMs} live={mode==='live'||mode==='mirror'}/>:properties.preparedAnnouncementText===true?<AnnouncementRichText value={properties.announcementRichLines} text={String(properties.text??'')}/>:String(properties.text ?? "")}
     </div>
   );
 }
@@ -613,8 +614,8 @@ function EventLoopElement({
 }
 
 function AnnouncementLoopPreview({style,properties}:{style:CSSProperties;properties:Record<string,string|number|boolean>}){
- const qrCode=announcementSettings(properties).qrEnabled;
- const page=prepareAnnouncementPages({title:'Beispielmeldung',body:'Aktuelle Meldungen werden für diese Anzeige vorbereitet. Lange Texte bleiben vollständig lesbar und werden automatisch auf mehrere Seiten verteilt.',qrCode,design:properties.announcementDesign})[0];
+ const {qrEnabled:qrCode,qrSize}=announcementSettings(properties);
+ const page=prepareAnnouncementPages({title:'Beispielmeldung',body:'Aktuelle Meldungen werden für diese Anzeige vorbereitet. Lange Texte scrollen langsam und bleiben vollständig lesbar. Der QR-Code bleibt an seiner Position.',qrCode,qrSize,design:properties.announcementDesign})[0];
  const slide=buildAnnouncementSlide({id:'announcement-preview',itemId:'preview',order:0,enabled:true,title:'',body:'',background:page.background,transition:'none',transitionDuration:0,notes:'',elements:[]},{title:'Beispielmeldung',text:page.bodyText,durationMs:15000,qrCode,qrReference:'https://example.org'},page,0,1);
  return <div className="slide-renderer-element announcement-loop-preview" style={style}><SlideRenderer slide={slide} mode="preview"/></div>;
 }

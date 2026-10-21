@@ -6,9 +6,9 @@ it('uses live section and quick-screen priority rather than editor selection',()
   expect(isBannerAllowed({liveSection:'service',quickType:'countdown',countdownActive:true})).toBe(true);
   for(const quick of ['black','logo','bible','amen','custom','empty','noText'])expect(isBannerAllowed({liveSection:'pre',quickType:quick,countdownActive:false})).toBe(false);
 });
-it('allows both reading pauses and the full travel distance at 60 px per second',()=>{
-  expect(bannerCycleDurationMs(1920,1920)).toBe(66000);
-  expect(bannerCycleDurationMs(0,0)).toBe(2000);
-  expect(bannerCycleDurationMs(NaN,Infinity)).toBe(2000);
-  expect(bannerCycleDurationMs(12000,1920)).toBe(234000);
+it('repeats a measured text unit plus64px spacing at60px per second without an empty-screen pause',()=>{
+  expect(bannerCycleDurationMs(1920,1920)).toBeCloseTo(33066.6667,3);
+  expect(bannerCycleDurationMs(0,0)).toBeCloseTo(1066.6667,3);
+  expect(bannerCycleDurationMs(NaN,Infinity)).toBeCloseTo(1066.6667,3);
+  expect(bannerCycleDurationMs(12000,1920)).toBeCloseTo(201066.6667,3);
 });

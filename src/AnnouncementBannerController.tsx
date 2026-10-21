@@ -24,8 +24,8 @@ export function AnnouncementBannerController({quick}:{quick:QuickScreenConfig|nu
       const quick=quickRef.current;
       const state=usePresentation.getState(),output=useLiveOutputPreview.getState().slide;
       const liveContext=output?.bannerContext??{liveSection:'other' as const,countdownActive:false};
-      const items=service.getBanners(records,AppClock.now()),textWidths=items.map(message=>{let width=widths.get(message.text);if(width===undefined){if(context){context.font='400 44px "Cera Pro", system-ui';width=context.measureText(message.text).width}else width=message.text.length*24;widths.set(message.text,width)}return width});
-      const banner=session.update({items,textWidths,nowMs:AppClock.now().getTime(),takeKey:`${output?.id??''}:${output?._countdownStartedAtMs??(output as any)?._presentAtMs??''}:${quick?.id??''}:${quick?.startedAtMs??''}`,enabled:state.onAir&&Boolean(output),allowed:isBannerAllowed({...liveContext,quickType:quick?.type??null}),position:useBannerSettings.getState().position,reducedMotion:usePreferences.getState().reduceMotion});
+      const items=service.getBanners(records,AppClock.now()),textWidths=items.map(message=>{let width=widths.get(message.text);if(width===undefined){if(context){context.font='700 44px "Cera Pro", system-ui';context.letterSpacing='-0.44px';width=context.measureText(message.text).width}else width=message.text.length*24;widths.set(message.text,width)}return width});
+      const banner=session.update({items,textWidths,separatorWidth:context?.measureText(' · ').width??32,nowMs:AppClock.now().getTime(),takeKey:`${output?.id??''}:${output?._countdownStartedAtMs??(output as any)?._presentAtMs??''}:${quick?.id??''}:${quick?.startedAtMs??''}`,enabled:state.onAir&&Boolean(output),allowed:isBannerAllowed({...liveContext,quickType:quick?.type??null}),position:useBannerSettings.getState().position,reducedMotion:usePreferences.getState().reduceMotion});
       if(banner!==previous){previous=banner;useAnnouncementBanner.setState({banner});void(window.desktop as any)?.sendAnnouncementBanner?.(banner)}
     };
     tickRef.current=tick;

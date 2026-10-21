@@ -11,3 +11,9 @@ it('keeps content mounted as banner state changes and puts the watermark outside
   expect(view.container.querySelector('.output-composition')).toHaveAttribute('data-banner-position','top');
   expect(view.container.querySelector('.output-content-fit')).toContainElement(video);
 });
+it('keeps emergency quick screens free of the optional service countdown',()=>{
+ const view=render(<OutputComposition banner={null} serviceCountdownAtMs={Date.now()+60000}><div/></OutputComposition>);
+ expect(screen.getByText(/Beginn in/)).toBeVisible();
+ view.rerender(<OutputComposition banner={null} serviceCountdownAtMs={Date.now()+60000} hideCountdown><div/></OutputComposition>);
+ expect(screen.queryByText(/Beginn in/)).toBeNull();
+});

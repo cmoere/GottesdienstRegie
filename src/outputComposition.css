@@ -4,5 +4,7 @@
 .output-composition[data-banner-position=top]>.output-content-area{top:7.777778%}.output-composition[data-banner-position=bottom]>.output-content-area{bottom:7.777778%}
 .output-banner-layer{position:absolute;left:0;right:0;height:7.777778%;z-index:10;container-type:inline-size;background:#fff}
 .output-composition[data-banner-position=top]>.output-banner-layer{top:0}.output-composition[data-banner-position=bottom]>.output-banner-layer{bottom:0}
-.announcement-banner{width:100%;height:100%;overflow:hidden;display:flex;align-items:center;color:#a65353;background:#fff;font:400 2.291667cqw/1.2 'Cera Pro',system-ui,sans-serif;white-space:nowrap}
-.banner-moving{display:block;flex:none;will-change:transform}.banner-static{display:block;text-align:center;width:100%;padding-inline:1.5cqw}
+.announcement-banner{width:100%;height:100%;overflow:hidden;display:flex;align-items:center;color:#a65353;background:#fff;font:700 2.291667cqw/1.2 'Cera Pro',system-ui,sans-serif;letter-spacing:-.01em;white-space:nowrap}
+.banner-moving{display:flex;flex:none;width:max-content;will-change:transform}.banner-moving>[data-banner-unit]{display:block;flex:none;white-space:pre}.banner-static{display:block;text-align:center;width:100%;padding-inline:1.5cqw}
+.service-countdown-badge{position:absolute;left:1.25%;bottom:2.2%;z-index:15;padding:.3em .55em;background:#000b;color:#fff;border-radius:.2em;font:400 1.25cqw/1.3 'Cera Pro',system-ui,sans-serif;pointer-events:none}
+.output-composition[data-banner-position=bottom]>.service-countdown-badge{bottom:10%}

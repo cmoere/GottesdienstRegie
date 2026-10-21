@@ -48,6 +48,10 @@ import { CSS } from "@dnd-kit/utilities";
 import {
   defaultTransition,
   usePresentation,
+  finishLiveCountdown,
+  liveProtectionRemainingMs,
+  firstServiceContentTarget,
+  releaseUnavailablePostProgramTake,
   presentationDocument,
   blankPresentationDocument,
   formatDuration,
@@ -1567,7 +1571,6 @@ function AddPopover({
     { type: "clock", label: "Uhrzeit", title: "Uhrzeit", icon: "schedule" },
     { type: "bibleVerse", label: "Bibelvers", title: "Bibelvers", icon: "menu_book" },
     { type: "loopQr", label: "QR-Code", title: "QR-Code", icon: "qr_code_2" },
-    { type: "infoCard", label: "Infokarte", title: "Infokarte", icon: "info" },
     { type: "today", label: "Heute bei uns", title: "Heute bei uns", icon: "today" },
     { type: "nextEvents", label: "Nächste Termine", title: "Nächste Termine", icon: "event_upcoming" },
     { type: "nowPlaying", label: "Läuft gerade", title: "Läuft gerade", icon: "graphic_eq" },
@@ -7953,6 +7956,7 @@ function AppShell({
         postProgramNoticeController.current.enterPostProgram();
         const notice=postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'});
         if(isPostProgramSystemItem(item)&&!notice){
+          releaseUnavailablePostProgramTake(item.id,liveSlide.id,state.liveTransitionRevision);
           const target=unavailablePostProgramTarget(state.items,availableForOutput);
           if(target){state.goLive(target.itemId,target.slideId);if(state.items.find(entry=>entry.id===target.itemId)?.sectionId!=='post')state.setLiveTimerPaused(target.slideId)}
           else state.setLiveTimerPaused(state.liveSlideId);
@@ -8065,6 +8069,14 @@ function AppShell({
     const item = state.items.find((entry) => entry.id === state.liveItemId),
       slide = item?.slides.find((entry) => entry.id === state.liveSlideId);
     if(item&&shouldSkipNowPlaying(item)){const timer=window.setTimeout(()=>usePresentation.getState().nextLive(),0);return()=>window.clearTimeout(timer)}
+    if(item?.type==='countdown'&&slide){
+      const duration=Number(slide.elements.find(element=>Number(element.properties.timerDurationSeconds)>0)?.properties.timerDurationSeconds??item.metadata.countdownDurationSeconds??item.metadata.durationSeconds??item.timing.slideDurationSeconds);
+      if(Number.isFinite(duration)&&duration>0){
+        const started=state.liveTakenAtMs??AppClock.now().getTime();
+        const timer=window.setTimeout(()=>finishLiveCountdown(item.id,slide.id),Math.max(0,started+duration*1000-AppClock.now().getTime()));
+        return()=>window.clearTimeout(timer);
+      }
+    }
     if (item?.itemCategory === "loop") {
       const sectionItems = item.sectionId==='post'?postProgramCandidates(state.items.filter(availableForOutput),Boolean(postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'}))):state.items
         .filter((entry) => entry.sectionId === item.sectionId && entry.itemCategory === "loop" && availableForOutput(entry)&&!shouldSkipNowPlaying(entry))
@@ -8100,7 +8112,7 @@ function AppShell({
         else usePresentation.getState().nextLive();
       }, isAnnouncementLoop(item)&&slide
         ? (announcementController.current.outputForTake(item,slide,state.liveTransitionRevision,AppClock.now())?.timing?.durationSeconds??loopDurationMs(item)/1000)*1000
-        : Math.max(loopDurationMs(item),eventOverviewMinimumDuration(slide),isPostProgramSystemItem(item)?postProgramNoticeController.current.current()?.minDurationMs??0:0));
+        : Math.max(loopDurationMs(item),eventOverviewMinimumDuration(slide),liveProtectionRemainingMs(state),isPostProgramSystemItem(item)?postProgramNoticeController.current.current()?.minDurationMs??0:0));
       return () => { active = false; window.clearTimeout(timer); loopController.current.stop(); };
     }
     if (item?.type === "weather") {
@@ -8142,6 +8154,20 @@ function AppShell({
     state.liveTransitionRevision,
     state.items,
   ]);
+  useEffect(()=>{
+    if(!state.onAir||previewQuick?.type!=='countdown'||!Number.isFinite(previewQuick.startedAtMs))return;
+    const quick=previewQuick,duration=Number(quick.duration??0);
+    if(!Number.isFinite(duration)||duration<=0)return;
+    const timer=window.setTimeout(()=>{
+      const current=usePresentation.getState();if(!current.onAir)return;
+      setPreviewQuick(null);void(window.desktop as any)?.sendQuick(quick.targets,null);
+      const live=current.items.find(item=>item.id===current.liveItemId);
+      if(live?.sectionId==='pre'||live?.sectionId==='warmup'){
+        const target=firstServiceContentTarget(current);if(target)current.goLive(target.itemId,target.slideId);
+      }
+    },Math.max(0,quick.startedAtMs!+duration*1000-AppClock.now().getTime()));
+    return()=>window.clearTimeout(timer);
+  },[state.onAir,previewQuick]);
   useEffect(
     () =>
       (window.desktop as any)?.onMediaEnded((behavior: string) => {
@@ -9251,6 +9277,7 @@ function AppShell({
           if(appMode.mode==='test'&&current.onAir&&sessionMode==='live'){
             await backgroundAudioEngine.stop();
             await liveEngine.stop();
+            state.setOnAir(false);
           }
           const nextMode:AppModeState={mode:sessionMode==='test'?'test':'normal',onAir:true};
           await (window.desktop as any)?.setOutputAppMode?.(nextMode);
@@ -9744,7 +9771,7 @@ function Output() {
     <div
       className={`output ${quick?.type === "noText" ? "quick-no-text" : ""}`}
     >
-      <OutputComposition banner={role==='main'?outputBanner:null} testOverlay={<TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/> }>
+      <OutputComposition hideCountdown={Boolean(quick)} serviceCountdownAtMs={role==='main'?(slide as import('./liveOutputPreview').LiveOutputSlide|null)?._serviceCountdownAtMs:undefined} banner={role==='main'?outputBanner:null} testOverlay={<TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/> }>
       {slide && role==='stage' && songOutput ? <div className="stage-song-shell"><header className="stage-song-header"><span>STAGE</span><strong>{slide.title}</strong></header><section className="stage-song-current"><small>JETZT</small>{songOutput.showChords && songOutput.stageRows?.length ? <div className="stage-song-rows">{songOutput.stageRows.map((row,index)=><div className="stage-song-row" key={`${index}-${row.lyrics}`}><span className="stage-song-chords">{row.chords}</span><span>{row.lyrics}</span></div>)}</div> : <div className="stage-song-lyrics">{slide.body}</div>}</section>{songOutput.currentNext && <section className="stage-song-next"><small>ALS NÄCHSTES</small><div>{songOutput.next || '—'}</div></section>}</div> : renderedSlide && (
         lyricScroll && role==='main' ? <LyricScrollRenderer packet={lyricScroll} live/> : <TransitionStage
           slide={renderedSlide}

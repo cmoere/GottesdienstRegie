@@ -50,7 +50,7 @@ describe('announcement live preparation',()=>{
       if(output.title==='Zweite Meldung')break;
       pages.push(output.body);
     }
-    expect(pages.length).toBeGreaterThan(1);
+    expect(pages).toHaveLength(1);
     expect(pages.join('')).toBe(body.trim());
   });
   it('uses PRE targets for PRE and POST targets for POST',()=>{

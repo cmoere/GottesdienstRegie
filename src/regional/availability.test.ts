@@ -15,9 +15,10 @@ it('requires the explicit complete approved15-region manifest, not inherited or 
 it('accepts an explicitly disclosed version-pinned partial release, but not misleading or inherited disclosures',()=>{
   const partial={...complete,complete:false,partialRelease:{version:'0.84.0',inventoryFingerprint:'a'.repeat(64),notice:'Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.'}};
   expect(isRegionalSelectionAvailable(partial)).toBe(true);
+  expect(isRegionalSelectionAvailable({...partial,partialRelease:{...partial.partialRelease,version:'0.85.0'}})).toBe(true);
   for(const value of [
     {...partial,complete:true},
-    {...partial,partialRelease:{...partial.partialRelease,version:'0.85.0'}},
+    {...partial,partialRelease:{...partial.partialRelease,version:'0.86.0'}},
     {...partial,partialRelease:{...partial.partialRelease,notice:'Alle Texte sind vollständig.'}},
     {...partial,partialRelease:{...partial.partialRelease,inventoryFingerprint:'unknown'}},
     {...partial,partialRelease:Object.create(partial.partialRelease)},

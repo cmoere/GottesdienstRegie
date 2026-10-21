@@ -33,12 +33,13 @@ describe('readable announcement layouts',()=>{
   const title='Fehlerhafte Abendmahlstermine in der Veranstaltungsauskunft';
   const body='Derzeit werden in der Veranstaltungsauskunft teilweise fehlerhafte Abendmahlstermine angezeigt. Bitte beachte die aktuellen Aushänge sowie den Monatsplan. Diese enthalten die gültigen Termine.\n\nWir arbeiten bereits mit Hochdruck an der Behebung des technischen Fehlers. '.repeat(9);
   const pages=prepareAnnouncementPages({title,body,qrCode:true,design:'classic'});
-  expect(pages.length).toBeGreaterThan(1);
+  expect(pages).toHaveLength(1);
   expect(pages.map(page=>page.bodyText).join('')).toBe(body);
   for(const page of pages){
    expect(page.bodyElement.y).toBeGreaterThanOrEqual(page.titleElement.y+page.titleElement.height);
-   expect(page.bodyElement.y+page.bodyElement.height).toBeLessThanOrEqual(990);
-   expect(page.bodyHeight).toBeLessThanOrEqual(page.bodyElement.height);
+   expect(page.bodyElement.y+page.bodyElement.height).toBeLessThanOrEqual(1048);
+   expect(page.bodyHeight).toBeGreaterThan(page.bodyElement.height);
+   expect(page.scrollPlan.distance).toBe(page.bodyHeight-page.bodyElement.height);
    expect(page.titleHeight).toBeLessThanOrEqual(page.titleElement.height);
    expect(page.bodyElement.x+page.bodyElement.width).toBeLessThan(page.qrElement!.x);
   }
@@ -60,13 +61,14 @@ describe('readable announcement layouts',()=>{
   const body='<p><strong>'+('UnunterbrocheneZeichenfolge'.repeat(110))+'</strong></p><ul><li><em>Ende</em></li></ul>';
   for(const design of ANNOUNCEMENT_DESIGNS){
    const pages=prepareAnnouncementPages({title:'<u>Titel</u>',body,qrCode:true,design});
-   expect(pages.length).toBeGreaterThan(1);
+   expect(pages).toHaveLength(1);
    expect(pages.map(page=>page.bodyText).join('')).toBe('UnunterbrocheneZeichenfolge'.repeat(110)+'\n• Ende');
    for(const page of pages){
     const rich=(page as unknown as {bodyRichLines:Array<Array<{text:string;bold?:boolean}>>}).bodyRichLines;
     expect(rich).toBeDefined();
     expect(rich.flat().filter(run=>run.text.includes('Zeichen')).every(run=>run.bold)).toBe(true);
-    expect(page.bodyHeight).toBeLessThanOrEqual(page.bodyElement.height);
+    expect(page.bodyHeight).toBeGreaterThan(page.bodyElement.height);
+    expect(page.scrollPlan.minDurationMs).toBeGreaterThan(10000);
    }
   }
  });

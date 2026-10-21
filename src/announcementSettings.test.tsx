@@ -33,7 +33,7 @@ describe('announcement editor controls',()=>{
   expect(usePresentation.getState().items[0].metadata.announcementCategory).toBe('event');
   fireEvent.click(screen.getByRole('checkbox',{name:'Nach Priorität sortieren'}));
   expect(usePresentation.getState().items[0].metadata.announcementPrioritySort).toBe(false);
-  fireEvent.change(screen.getByLabelText('Lesedauer je Seite (Sekunden)'),{target:{value:'25'}});
+  fireEvent.change(screen.getByLabelText('Mindestanzeigedauer (Sekunden)'),{target:{value:'25'}});
   expect(usePresentation.getState().items[0].metadata.announcementReadingSeconds).toBe(25);
  });
 });
