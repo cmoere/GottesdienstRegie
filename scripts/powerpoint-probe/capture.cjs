@@ -55,15 +55,26 @@ if(process.versions.electron){
       const answer=await consumer.webContents.executeJavaScript(`(async()=>{await pc.setRemoteDescription(${JSON.stringify(offer)});await pc.setLocalDescription(await pc.createAnswer());await ${gathered};return pc.localDescription.toJSON()})()`);
       await host.webContents.executeJavaScript(`peers[${JSON.stringify(role)}].setRemoteDescription(${JSON.stringify(answer)})`);
     }
+    // Observe real yellow-marker positions, not merely advancing video clocks.
+    for(const win of windows){
+      const region=win.probeRole==='host'?{x:crop.x/crop.outerWidth,y:(crop.y+crop.height*.89)/crop.outerHeight,width:crop.width/crop.outerWidth}:{x:0,y:.89,width:1};
+      await win.webContents.executeJavaScript(`(()=>{globalThis.motionSamples=[];const video=document.querySelector('video'),canvas=document.createElement('canvas');canvas.width=960;canvas.height=1;const context=canvas.getContext('2d',{willReadFrequently:true}),region=${JSON.stringify(region)};setInterval(()=>{if(video.readyState<2||motionSamples.length>=5000)return;context.drawImage(video,video.videoWidth*region.x,video.videoHeight*region.y,video.videoWidth*region.width,1,0,0,960,1);const data=context.getImageData(0,0,960,1).data;let sum=0,count=0;for(let x=0;x<960;x++)if(data[x*4]>150&&data[x*4+1]>150&&data[x*4+2]<100){sum+=x;count++}motionSamples.push({at:Date.now(),mediaTime:video.currentTime,x:count?sum/count:null})},33);return true})()`);
+    }
     const deadline=Date.now()+12000;
     while(Date.now()<deadline&&(!latest.has('main')||!latest.has('mirror')))await wait(100);
     await fs.writeFile(path.join(folder,'initial-frames.json'),JSON.stringify(frames,null,2));
-    const transport=[];
-    for(const win of windows){
-      const status=await win.webContents.executeJavaScript(`(async()=>{const video=document.querySelector('video'),peersToCheck=globalThis.peers?Object.entries(globalThis.peers):globalThis.pc?[['consumer',globalThis.pc]]:[];const connections=[];for(const [role,peer] of peersToCheck){const stats=await peer.getStats();connections.push({role,connection:peer.connectionState,ice:peer.iceConnectionState,stats:[...stats.values()].filter(row=>['inbound-rtp','outbound-rtp','transport','candidate-pair','media-source'].includes(row.type))})}return {visibility:document.visibilityState,video:{readyState:video.readyState,width:video.videoWidth,height:video.videoHeight,currentTime:video.currentTime,paused:video.paused,error:video.error?.message},tracks:[...(globalThis.stream?.getTracks()??video.srcObject?.getTracks()??[])].map(track=>({kind:track.kind,state:track.readyState,muted:track.muted,settings:track.getSettings()})),connections}})()`);
-      transport.push({role:win.probeRole,...status});
+    async function observeTransport(filename){
+      const transport=[];
+      for(const win of windows){
+        const status=await win.webContents.executeJavaScript(`(async()=>{const video=document.querySelector('video'),quality=video.getVideoPlaybackQuality(),peersToCheck=globalThis.peers?Object.entries(globalThis.peers):globalThis.pc?[['consumer',globalThis.pc]]:[];const connections=[];for(const [role,peer] of peersToCheck){const stats=await peer.getStats();connections.push({role,connection:peer.connectionState,ice:peer.iceConnectionState,stats:[...stats.values()].filter(row=>['inbound-rtp','outbound-rtp','transport','candidate-pair','media-source','codec'].includes(row.type))})}return {observedAt:Date.now(),visibility:document.visibilityState,video:{readyState:video.readyState,width:video.videoWidth,height:video.videoHeight,currentTime:video.currentTime,paused:video.paused,error:video.error?.message,totalVideoFrames:quality.totalVideoFrames,droppedVideoFrames:quality.droppedVideoFrames},tracks:[...(globalThis.stream?.getTracks()??video.srcObject?.getTracks()??[])].map(track=>({kind:track.kind,state:track.readyState,muted:track.muted,settings:track.getSettings()})),connections}})()`);
+        transport.push({role:win.probeRole,...status});
+      }
+      await fs.writeFile(path.join(folder,filename),JSON.stringify(transport,null,2));
+      const motion=[];
+      for(const win of windows)motion.push({role:win.probeRole,samples:await win.webContents.executeJavaScript('globalThis.motionSamples')});
+      await fs.writeFile(path.join(folder,'motion-'+filename),JSON.stringify(motion,null,2));
     }
-    await fs.writeFile(path.join(folder,'transport-diagnostics.json'),JSON.stringify(transport,null,2));
+    await observeTransport('transport-diagnostics.json');
     assert.equal(latest.get('main')?.marker,1,'MAIN did not decode the owned red slide marker');
     assert.equal(latest.get('mirror')?.marker,1,'Mirror did not decode the owned red slide marker');
     await office('play');
@@ -78,12 +89,14 @@ if(process.versions.electron){
         const videos=[];
         for(const win of windows)videos.push({role:win.probeRole,...await win.webContents.executeJavaScript(`(()=>{const video=document.querySelector('video');const canvas=document.createElement('canvas');canvas.width=canvas.height=1;const context=canvas.getContext('2d',{willReadFrequently:true});if(video.readyState>=2)context.drawImage(video,video.videoWidth*.5,video.videoHeight*.15,1,1,0,0,1,1);return {readyState:video.readyState,currentTime:video.currentTime,width:video.videoWidth,height:video.videoHeight,paused:video.paused,pixel:Array.from(context.getImageData(0,0,1,1).data)}})()`)});
         await fs.writeFile(path.join(folder,'failed-command-observation.json'),JSON.stringify({start,target,office:await office('status'),latest:Object.fromEntries(latest),frames,videos},null,2));
+        await observeTransport('transport-at-failure.json');
       }
       assert.ok(a?.marker===target&&b?.marker===target&&a.at>=start&&b.at>=start,'Original frame did not reach both outputs');
       const source=latest.get('host');
       samples.push({start,target,sourceAt:source?.marker===target?source.at:undefined,mainAt:a.at,mirrorAt:b.at,mirrorSkewMs:Math.abs(a.at-b.at),commandToFrameMs:Math.max(a.at,b.at)-start});
       await wait(Math.max(0,1000-(Date.now()-start)));
     }
+    await observeTransport('transport-after-measurement.json');
     const percentile=values=>values.sort((a,b)=>a-b)[Math.ceil(values.length*.95)-1];
     const measuredSource=samples.filter(sample=>Number.isFinite(sample.sourceAt)&&sample.sourceAt>=sample.start);
     const metrics={durationMs:Date.now()-started,sampleCount:samples.length,mirrorSkewP95Ms:percentile(samples.map(x=>x.mirrorSkewMs)),commandToFrameP95Ms:percentile(samples.map(x=>x.commandToFrameMs)),commandToSourceP95Ms:percentile(measuredSource.map(x=>x.sourceAt-x.start)),sourceToFrameP95Ms:percentile(measuredSource.map(x=>Math.max(x.mainAt,x.mirrorAt)-x.sourceAt))};

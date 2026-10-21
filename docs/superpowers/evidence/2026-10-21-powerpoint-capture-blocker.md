@@ -82,3 +82,57 @@ The visible arrangement proves that this source can update; it does not prove
 stable 1080p/30 fps delivery or acceptable production latency. Moving-marker,
 resolution/fps and isolated-audio criteria remain open. Task 1 remains incomplete;
 the original player is not enabled or released.
+
+## Follow-up: source motion and transport counters
+
+The capture diagnostic now records initial/final WebRTC counters and codec
+information. On a failed command it preserves the same counters and actual
+decoded pixel observations. This is instrumentation, not a production fix.
+No transport buffer, codec, bitrate, latency limit or release gate was changed.
+
+Quiet static baseline `work/powerpoint-probe-H9bZJj/`, log
+`work/v86-powerpoint-final-transport.log`: 60,092 ms, 60 samples. Mirror skew
+p95 is 50 ms, command-to-frame p95 is 401 ms, command-to-source p95 is 188 ms,
+and source-to-frame p95 is 217 ms. The unchanged 250 ms overall gate fails.
+The separate percentiles are not additive. Both consumers eventually report
+1920×1080, but this does not establish 30 fps. VP8/libvpx counters show roughly
+18 encoded/decoded frames per second on average. Mean receive jitter-buffer
+delay is about 13–16 ms, so it cannot by itself explain the measured delay.
+
+The owned source fixture now contains a repeating yellow moving marker on
+slides 1 and 3. Slide 2's automatic timing and slide 1's two explicit click
+steps remain independently checked and still pass. Samples record the yellow
+pixel centroid, rather than interpreting an advancing video clock as motion.
+
+An earlier marker run was interrupted by user input before completion:
+`work/powerpoint-probe-1y1HH7/`. It has no completed report and is not a pass.
+After identifying both exact generated paths through the Office presentation
+collection, only its `owned-source.pptx` and `owned-sentinel.pptx` were closed.
+No user presentation or directory was deleted.
+
+Completed resumed run: `work/powerpoint-probe-wqSotB/`, log
+`work/v86-powerpoint-moving-marker-resumed.log`. The test exits 1: after about
+46 seconds a requested slide did not reach both consumers within the existing
+two-second deadline. No sixty-second motion PASS or p95 is invented from this
+partial run. The source and both consumers show hundreds of distinct yellow
+marker positions, confirming actual captured motion. Counter deltas locate a
+substantial cadence reduction between the source video and the encoded streams:
+
+| Observation | Source | MAIN | Mirror |
+| --- | ---: | ---: | ---: |
+| Observation interval | 46.289 s | 46.403 s | 46.539 s |
+| New decoded source/consumer frames | 1,163 | 509 | 507 |
+| Approximate frames per second | 25.1 | 11.0 | 10.9 |
+| Distinct observed yellow positions | 366 | 286 | 281 |
+
+Host outbound counters independently show about 11 fps to each peer. Mean
+encode time is 28–29 ms per frame, mean decode time is 4.5–5.0 ms, and mean
+jitter-buffer delay is 16–17 ms. WebRTC reports bandwidth-limited durations of
+34–36 seconds and no CPU-limited duration; these are diagnostic classifications,
+not proof that the physical network or encoder alone is the root cause.
+Raw counter snapshots and motion arrays remain in the owned artifact folder.
+
+The resumed run preserves the sentinel hash/saved state and closes its own
+documents. Audio remains unsupported. The native capture/distribution design
+requires review before more speculative performance changes: original-player
+tasks 5–9 remain blocked, Task 1 remains incomplete, and no v86 release is made.

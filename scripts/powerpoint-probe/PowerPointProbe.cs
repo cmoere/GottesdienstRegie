@@ -34,6 +34,16 @@ class PowerPointProbe {
       dynamic text=slide.Shapes.AddTextbox(1,100,160,760,100);
       text.TextFrame.TextRange.Text="GottesdienstRegie · own probe " + i;
       text.TextFrame.TextRange.Font.Size=36;text.TextFrame.TextRange.Font.Color.RGB=16777215;
+      // Continuous motion on the measured slides; keep slide2's timed-control fixture unchanged.
+      if(i!=2){
+        dynamic marker=slide.Shapes.AddShape(1,40,460,40,40);
+        marker.Fill.ForeColor.RGB=65535;marker.Line.Visible=0;
+        dynamic movement=slide.TimeLine.MainSequence.AddEffect(marker,0);
+        dynamic behavior=movement.Behaviors.Add(1);
+        behavior.MotionEffect.ByX=60;behavior.MotionEffect.ByY=0;
+        movement.Timing.TriggerType=2;movement.Timing.Duration=1.5;
+        movement.Timing.RepeatCount=200;movement.Timing.AutoReverse=-1;
+      }
       if(i==1){
         for(int n=0;n<2;n++){
           dynamic shape=slide.Shapes.AddShape(1,100+n*300,320,240,80);
