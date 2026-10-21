@@ -23,7 +23,7 @@ class PowerPointProbe {
   [DllImport("user32.dll")] static extern bool ClientToScreen(IntPtr hwnd,ref Point point);
   static void Emit(object value){Console.WriteLine(json.Serialize(value));Console.Out.Flush();}
   static string Hash(string path){using(var stream=File.OpenRead(path))using(var sha=SHA256.Create())return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-","").ToLowerInvariant();}
-  static object State(){return new {slideId=(int)show.View.Slide.SlideID,slideIndex=(int)show.View.Slide.SlideIndex,clickIndex=(int)show.View.GetClickIndex(),clickCount=(int)show.View.GetClickCount(),state=(int)show.View.State};}
+  static object State(){return new {slideId=(int)show.View.Slide.SlideID,slideIndex=(int)show.View.Slide.SlideIndex,clickIndex=(int)show.View.GetClickIndex(),clickCount=(int)show.View.GetClickCount(),state=(int)show.View.State,observedQpc=System.Diagnostics.Stopwatch.GetTimestamp().ToString(System.Globalization.CultureInfo.InvariantCulture)};}
   static void MakeSource(){
     source=app.Presentations.Add(0);
     source.PageSetup.SlideWidth=960;source.PageSetup.SlideHeight=540;
@@ -89,7 +89,9 @@ class PowerPointProbe {
     Rect outer,inner;Point origin=new Point();
     if(!GetWindowRect(rootWindow,out outer)||!GetClientRect(new IntPtr(hwnd),out inner)||!ClientToScreen(new IntPtr(hwnd),ref origin))throw new Exception("PROBE_WINDOW_RECT_FAILED");
     show.View.State=2;
-    Emit(new {kind="ready",version=(string)app.Version,monitor=authorizedScreen==null?"offscreen":authorizedScreen.DeviceName,windowHandle=hwnd.ToString(),rootWindowHandle=rootWindow.ToInt64().ToString(),windowVisible=IsWindowVisible(new IntPtr(hwnd)),crop=new{x=origin.x-outer.left,y=origin.y-outer.top,width=inner.right,height=inner.bottom,outerWidth=outer.right-outer.left,outerHeight=outer.bottom-outer.top},processId=pid,status=State(),sourcePath=Path.Combine(root,"owned-source.pptx")});
+    string createdAt;
+    using(var ownerProcess=System.Diagnostics.Process.GetProcessById((int)pid)){createdAt=ownerProcess.StartTime.ToFileTimeUtc().ToString(System.Globalization.CultureInfo.InvariantCulture);}
+    Emit(new {kind="ready",version=(string)app.Version,monitor=authorizedScreen==null?"offscreen":authorizedScreen.DeviceName,windowHandle=hwnd.ToString(),rootWindowHandle=rootWindow.ToInt64().ToString(),windowVisible=IsWindowVisible(new IntPtr(hwnd)),crop=new{x=origin.x-outer.left,y=origin.y-outer.top,width=inner.right,height=inner.bottom,outerWidth=outer.right-outer.left,outerHeight=outer.bottom-outer.top},processId=pid,createdAt=createdAt,qpcFrequency=System.Diagnostics.Stopwatch.Frequency.ToString(System.Globalization.CultureInfo.InvariantCulture),status=State(),sourcePath=Path.Combine(root,"owned-source.pptx")});
   }
   static bool Cleanup(){
     bool unchanged=false;

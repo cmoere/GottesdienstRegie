@@ -15,7 +15,8 @@ function run(exe, args, options) {
 }
 async function buildProbe({root, target}) {
   if (process.platform !== 'win32' || process.arch !== 'x64') throw Error('NATIVE_BUILD_WINDOWS_X64_REQUIRED');
-  if (target !== 'frame-ring-tests') throw Error('NATIVE_BUILD_UNKNOWN_TARGET');
+  const targets = {'frame-ring-tests': 'frame-ring-tests.cpp', 'native-reader': 'reader.cpp', 'frame-ring-writer': 'frame-ring-writer-fixture.cpp', 'native-capture': 'capture.cpp', 'owned-window': 'owned-window-fixture.cpp'};
+  if (!Object.hasOwn(targets, target)) throw Error('NATIVE_BUILD_UNKNOWN_TARGET');
   root = path.resolve(root);
   const folder = await fs.mkdtemp(path.join(root, 'work/powerpoint-native-probe-'));
   await fs.writeFile(path.join(folder, '.probe-owned'), 'GottesdienstRegie isolated native probe\n');
@@ -34,7 +35,7 @@ async function buildProbe({root, target}) {
   const executable = path.join(folder, target + '.exe');
   if (!env.VCToolsInstallDir) throw Error('NATIVE_BUILD_COMPILER_MISSING');
   const compiler = path.join(env.VCToolsInstallDir, 'bin/Hostx64/x64/cl.exe');
-  const built = await run(compiler, ['/nologo', '/std:c++17', '/EHsc', '/O2', '/W4', '/utf-8', '/DUNICODE', '/D_UNICODE', '/D_WIN32_WINNT=0x0A00', '/Fe:' + executable, path.join(source, 'frame-ring.cpp'), path.join(source, 'frame-ring-tests.cpp'), '/link', 'advapi32.lib', 'bcrypt.lib'], {cwd: folder, env});
+  const built = await run(compiler, ['/nologo', '/std:c++17', '/EHsc', '/O2', '/W4', '/utf-8', '/DUNICODE', '/D_UNICODE', '/D_WIN32_WINNT=0x0A00', '/Fe:' + executable, path.join(source, 'frame-ring.cpp'), path.join(source, targets[target]), '/link', 'advapi32.lib', 'bcrypt.lib', 'user32.lib', 'gdi32.lib', 'd3d11.lib', 'dxgi.lib', 'd3dcompiler.lib', 'windowsapp.lib'], {cwd: folder, env});
   await fs.writeFile(path.join(folder, 'build.log'), built.stdout + built.stderr);
   if (built.code !== 0) throw Error('NATIVE_BUILD_FAILED: ' + built.stdout + built.stderr);
   return {folder, executable};
