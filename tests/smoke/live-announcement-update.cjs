@@ -31,11 +31,12 @@ app.whenReady().then(async()=>{try{
  await win.webContents.executeJavaScript('window.liveAnnouncementUpdate.longBanner()');await sleep(250);
  const longGap=await win.webContents.executeJavaScript(`(()=>{const unit=document.querySelector('[data-banner-unit]'),range=document.createRange();range.selectNodeContents(unit);return unit.getBoundingClientRect().width-range.getBoundingClientRect().width})()`);
  console.log('Long ribbon repeat gap:',longGap);assert(Math.abs(longGap-64)<5,'Long ribbon must have the same small repeat gap, not an empty screen');
- await win.loadURL('http://127.0.0.1:5173/release-notes/index.html?lang=de');
+ await win.loadURL('http://127.0.0.1:5173/release-notes/index.html?lang=de#version-0.85.0');
  for(let n=0;n<100&&!await win.webContents.executeJavaScript('!!document.getElementById("version-0.85.0")');n++)await sleep(100);
  assert(await win.webContents.executeJavaScript('!!document.getElementById("version-0.85.0")'));
  const rss=await win.webContents.executeJavaScript(`(async()=>{const link=document.querySelector('a[href="feed.xml"]'),xml=await(await fetch(link.href)).text(),doc=new DOMParser().parseFromString(xml,'application/xml');return {link:link.textContent,discovered:!!document.querySelector('link[rel="alternate"][type="application/rss+xml"]'),valid:!doc.querySelector('parsererror'),latest:doc.querySelector('item title').textContent,items:doc.querySelectorAll('item').length}})()`);
  assert.equal(rss.link,'RSS');assert(rss.discovered&&rss.valid);assert.equal(rss.latest,'GottesdienstRegie 0.85.0');assert(rss.items>100);
+ assert(await win.webContents.executeJavaScript('getComputedStyle(document.getElementById("empty")).display!=="block"'),'RSS deep links must not show a false empty-history error');
  fs.writeFileSync(path.join(out,'release-notes-rss.png'),(await win.webContents.capturePage()).toPNG());
  console.log('NATIVE_LIVE_ANNOUNCEMENTS_PASS');app.exit(0);
 }catch(error){console.error(error);app.exit(1)}});
