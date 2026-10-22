@@ -1,0 +1,25 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+const {spawn} = require('node:child_process');
+const {createHash} = require('node:crypto');
+const {buildGpuProbe} = require('../../scripts/powerpoint-gpu-probe/build.cjs');
+const {buildProbe} = require('../../scripts/powerpoint-native-probe/build.cjs');
+(async () => {
+  const root = path.resolve(__dirname, '../..');
+  assert.ok(await fs.stat(path.join(root, 'scripts/powerpoint-gpu-probe/output-harness.cjs')).catch(() => null), 'GPU output harness is missing');
+  assert.ok(process.argv.includes('--monitor=1'), 'Monitor1 authorization required');
+  const arg = process.argv.find(v => v.startsWith('--electron=')); assert.ok(arg, 'Separate pinned runtime required');
+  const electronPath = path.resolve(root, arg.slice(11));
+  const archive = path.resolve(electronPath, '../../electron-v45.0.0-win32-x64.zip');
+  assert.equal(createHash('sha256').update(await fs.readFile(archive)).digest('hex'), 'ae53887a23bb640369c93dbd38c408a2af5c0deb86f2fa76c6c244cb444b7f47');
+  const built = await buildGpuProbe({root, target: 'producer'}), source = await buildProbe({root, target: 'owned-window'});
+  const configPath = path.join(built.folder, 'output-config.json');
+  await fs.writeFile(configPath, JSON.stringify({folder: built.folder, producer: built.executable, source: source.executable, sourceFolder: source.folder, monitor: 1}));
+  const child = spawn(electronPath, [path.join(root, 'scripts/powerpoint-gpu-probe/output-harness.cjs'), '--config=' + configPath], {cwd: root, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe']});
+  let log = ''; child.stdout.on('data', b => {log += b;}); child.stderr.on('data', b => {log += b;});
+  const timer = setTimeout(() => child.kill(), 90000);
+  const code = await new Promise((resolve, reject) => {child.once('error', reject); child.once('close', resolve);}); clearTimeout(timer);
+  await fs.writeFile(path.join(built.folder, 'output-process.log'), log);
+  assert.equal(code, 0, log.slice(-5000)); console.log('GPU_OUTPUT_PASS ' + built.folder);
+})().catch(e => {console.error(e); process.exitCode = 1;});

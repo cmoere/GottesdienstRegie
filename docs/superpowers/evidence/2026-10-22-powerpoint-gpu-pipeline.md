@@ -159,9 +159,46 @@ Regression183Dateien/756Tests PASS244,88s
 (`work/gpu-pipeline-task4-unit.log`). Autorreview, keine unabhängige Prüfung.
 Die API-Grenztests ersetzen noch nicht den echten Renderer-/Kompositionsnachweis.
 
+## Task5 — zwei echte geschützte GPU-Ausgaben
+
+Source und53Bit-Sequenzstempel werden im selben WebGL-Pass gezeichnet,
+einschließlich Prüfsumme. GPU-Fence vor RenderAck; keinerlei Pixelreadback im
+Receiver. Ein unabhängiger Observer erfasst einen einzigen1920×9-Streifen
+mit Stempel und unverdeckter Quellbewegungszeile. Nur geänderte Quellhashes
+zählen, nicht steigende Stempel. Maximal16Zuordnungen, ein Capture plus Dirty-Bit.
+
+RED fehlender Module/Outputharness beobachtet. Zusätzlicher Autorreview-Test
+fand eine ausgefallene Importfreigabe bei VideoFrame.close-Fehler;
+`work/gpu-pipeline-task5-release-red.log` und `release-green.log` belegen die
+Korrektur durch voneinander unabhängige Cleanup-Schritte.
+
+Echter abschließender Output-Smoke PASS:
+`work/gpu-pipeline-task5-output-verified.log`,
+`work/powerpoint-gpu-probe-P5qydI/output-report.json`.
+Getrennte Renderer,1920×1080, korrekte Kanäle/Toolbar-Crop,4:3-Seitenränder,
+Wasserzeichen auch über Schwarz, bewegte Quellbilder, eigener hängender
+Empfänger kontrolliert geschlossen, gesunder Empfänger weiter versorgt,
+Reconnect erhält aktuellen Stand. Page-require und Page-Electron undefined.
+Nach Quellverlust erst Drain und tatsächlich komponierten letzten ACK-Stempel
+bestätigt; danach gesamter Bildstreifen unverändert. Keine bloße ACK-Annahme.
+
+Die absichtlich hängende Ausgabe löste eine Electron-Warnung zur Freigabe ihrer
+beim Fensterschluss noch vorhandenen Referenz aus. Diese ist Teil dieses
+Fehlerfalls, kein normaler Dauerlauf. Beide Generationen regulär drained.
+Wide-/Standard-PNGs unter IdcSqz visuell geprüft; roter/blauer Quellbereich,
+gelber Bewegungsmarker, schwarze Seitenränder und lesbares TESTBETRIEB korrekt.
+Eine zunächst falsche Testpunkt-Erwartung bei x1700 wurde nicht durch andere
+Geometrie umgangen: Dieser Punkt liegt bei4:3 korrekt im schwarzen Seitenrand.
+
+107/107 Node-Fälle PASS (`work/gpu-pipeline-task5-node-verified.log`, enthält
+bereits fünf vorbereitende Task6-Fälle und wiederholte Stempel-Fälle).
+Vollständige Regression183Dateien/756Tests PASS243,86s
+(`work/gpu-pipeline-task5-unit.log`). Prüfung durch den Autor, nicht unabhängig.
+Diese kurzen Bild-/Fehlerprüfungen belegen noch nicht die60s-Cadence.
+
 ## Offen
 
-Task5–7 sind nicht vollständig:
+Task6–7 sind nicht vollständig:
 unabhängige Empfänger/Freigaben, tatsächliche Komposition,
 60s-Cadence, Office-Befehle, Fehler-/Handle-Lebensdauer und Gesamtregression.
 Zustandstests allein belegen weder GPU-Transport noch Original-PowerPoint.

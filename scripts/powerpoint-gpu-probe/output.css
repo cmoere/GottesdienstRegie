@@ -1,0 +1,4 @@
+html,body{margin:0;width:1920px;height:1080px;background:#000;overflow:hidden}
+canvas{display:block;width:1920px;height:1080px}
+.watermark{position:fixed;bottom:24px;right:24px;z-index:10;color:#fff;background:#2229;padding:6px 10px;font:22px system-ui;opacity:.6;pointer-events:none}
+.fault{position:fixed;top:24px;left:24px;z-index:9;color:#fff;background:#222c;padding:8px;font:18px system-ui}
