@@ -114,9 +114,32 @@ Autorreview fand und korrigierte die oben beschriebenen Replay-/Handle-Fälle;
 keine unabhängige Codeprüfung. Task2 ist damit als native Komponentenprüfung
 abgeschlossen, ausdrücklich nicht als Produktions- oder Leistungsfreigabe.
 
+## Task3 — Main-only-Protokollclient
+
+25 neue Tests verwenden echte Kindprozess-Pipes und prüfen den Client selbst,
+einschließlich fragmentierter und gebündelter Nachrichten, ungültiger Daten,
+Timeouts, Warteschlangengrenze, Stop und doppelter Antworten. Initiales RED:
+`work/gpu-pipeline-task3-red.log`. Zwei zusätzliche Regressionstests fanden
+einen bei voller Queue dauerhaft blockierten Release und eine doppelte
+Fehlerbenachrichtigung bei Registrierung während der Zustellung. Beide REDs
+in `work/gpu-pipeline-task3-review-red.log`, anschließend korrigiert.
+
+Neue25 plus bestehende49 Node-Tests:74/74 PASS,
+`work/gpu-pipeline-task3-node.log`. Echte native Integration PASS:
+`work/gpu-pipeline-task3-native.log` und
+`work/powerpoint-gpu-probe-OgU1p7/client-observations.json`.
+Drei Claims, vierter EMPTY, unverfälschte native Zeitfelder und vorhandene
+Leases nach Quellverlust kontrolliert freigegeben. Source-Loss bleibt ein
+nichtterminales Ereignis; Protokollfehler bleiben terminal. Keine
+Rendererkonfiguration und keine Handles im Page-Kontext.
+
+Vollständige Regression183Dateien/756Tests PASS in237,19s,
+`work/gpu-pipeline-task3-unit.log`. Autorreview nach der Review-Checkliste,
+keine unabhängige Prüfung und weiterhin keine Kompositions-/FPS-Freigabe.
+
 ## Offen
 
-Task3–7 sind nicht vollständig: Main-only-Client,
+Task4–7 sind nicht vollständig:
 unabhängige Empfänger/Freigaben, tatsächliche Komposition,
 60s-Cadence, Office-Befehle, Fehler-/Handle-Lebensdauer und Gesamtregression.
 Zustandstests allein belegen weder GPU-Transport noch Original-PowerPoint.
