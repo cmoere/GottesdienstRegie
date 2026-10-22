@@ -1,6 +1,6 @@
 // Standalone diagnostic: never imports the application main process or starts ON AIR.
 const fs=require('node:fs/promises'),path=require('node:path'),{spawn}=require('node:child_process'),readline=require('node:readline');
-async function runProbe({root,monitor}){
+async function runProbe({root,monitor,captureAdapter}){
   if(monitor!==undefined&&monitor!==1)throw Error('PROBE_MONITOR_NOT_AUTHORIZED');
   root=path.resolve(root);
   if(process.platform!=='win32')return {visual:false,audio:'unsupported',results:{reason:'WINDOWS_REQUIRED'}};
@@ -25,6 +25,7 @@ async function runProbe({root,monitor}){
   try{
     const state=await ready;report.results.office=state;
     if(state.sourcePath!==path.join(folder,'owned-source.pptx'))throw Error('PROBE_UNICODE_PATH_MISMATCH');
+    const sourceHash=require('node:crypto').createHash('sha256').update(await fs.readFile(state.sourcePath)).digest('hex');
     console.log('POWERPOINT_PROBE_READY '+JSON.stringify({version:state.version,windowHandle:state.windowHandle,status:state.status}));
     const assert=require('node:assert/strict');
     await command('play');
@@ -38,9 +39,10 @@ async function runProbe({root,monitor}){
     await command('goto',{index:1});await command('pause');
     // Capture implementation is deliberately gated by the native helper being operational.
     if(!require('node:fs').existsSync(path.join(root,'scripts/powerpoint-probe/capture.cjs')))report.results.reason='CAPTURE_PROBE_NOT_IMPLEMENTED';
-    else report.results= {...report.results,...await require('./powerpoint-probe/capture.cjs').captureProbe({root,folder,state,command})};
+    else report.results= {...report.results,...await (captureAdapter||require('./powerpoint-probe/capture.cjs').captureProbe)({root,folder,state,command})};
     const closed=await command('close');report.results.foreignDocumentUnchanged=closed.foreignDocumentUnchanged;
-    report.visual=report.results.captureReady===true&&closed.foreignDocumentUnchanged===true;
+    report.results.originalUnchanged=sourceHash===require('node:crypto').createHash('sha256').update(await fs.readFile(state.sourcePath)).digest('hex');
+    report.visual=report.results.captureReady===true&&closed.foreignDocumentUnchanged===true&&report.results.originalUnchanged===true;
   }catch(error){report.results.reason=error.message;try{const closed=await command('close');report.results.foreignDocumentUnchanged=closed.foreignDocumentUnchanged}catch{}}
   finally{clearTimeout(readyTimeout);lines.close();if(helper.exitCode===null){helper.stdin.end();setTimeout(()=>{if(helper.exitCode===null)helper.kill()},3000).unref()}}
   await fs.writeFile(path.join(folder,'report.json'),JSON.stringify(report,null,2)+'\n');

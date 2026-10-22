@@ -137,6 +137,12 @@ float4 ps(V v):SV_TARGET{float4 c=source.Sample(sampleState,crop.xy+v.uv*crop.zw
   void lose(const char* reason) {
     if (!stopping && !failed.exchange(true)) status("source-lost", reason);
   }
+  void clock(uint64_t requestId) {
+    LARGE_INTEGER now{};
+    if (!QueryPerformanceCounter(&now)) throw std::runtime_error("SOURCE_CLOCK_FAILED");
+    std::lock_guard<std::mutex> lock(statusMutex);
+    std::cout << "{\"status\":\"clock\",\"requestId\":" << requestId << ",\"qpcNow\":\"" << now.QuadPart << "\",\"qpcFrequency\":\"" << frequency.QuadPart << "\"}" << std::endl;
+  }
   void frame(const Direct3D11CaptureFramePool& sender) {
     std::lock_guard<std::mutex> lock(work);
     if (stopping || failed) return;
@@ -216,7 +222,15 @@ int main() {
     regie::RingConfig config{wide(words[10]), regie::tokenFromHex(wide(words[11])), regie::tokenFromHex(wide(words[12]))};
     cropValid(owner); validateOwner(owner);
     capture = std::make_shared<Capture>(owner, config); capture->initialize();
-    while (std::cin.getline(buffer, sizeof(buffer))) {if (std::strcmp(buffer, "stop") != 0) throw std::runtime_error("SOURCE_COMMAND_INVALID"); break;}
+    while (std::cin.getline(buffer, sizeof(buffer))) {
+      const std::string command(buffer, static_cast<size_t>(std::cin.gcount()) - 1);
+      if (command.find('\0') != std::string::npos) throw std::runtime_error("SOURCE_COMMAND_INVALID");
+      if (command == "stop") break;
+      std::istringstream request(command); std::string mode, id, extra;
+      if (!(request >> mode >> id) || mode != "clock" || (request >> extra)) throw std::runtime_error("SOURCE_COMMAND_INVALID");
+      const auto serial = number(id); if (!serial || serial > 9007199254740991ULL) throw std::runtime_error("SOURCE_COMMAND_INVALID");
+      capture->clock(serial);
+    }
     capture->stop(); return 0;
   } catch (const std::exception& e) {status("error", e.what());}
   catch (...) {status("error", "SOURCE_CAPTURE_FAILED");}

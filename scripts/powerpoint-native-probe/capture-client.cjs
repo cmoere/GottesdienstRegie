@@ -1,7 +1,7 @@
 const {spawn} = require('node:child_process');
 function lineProcess(executable, args, cwd) {
   const child = spawn(executable, args, {cwd, windowsHide: true, stdio: ['pipe', 'pipe', 'pipe']});
-  let buffer = '', closed = false, failure;
+  let buffer = '', closed = false, failure, lifecycle = 'starting';
   const values = [], waiters = new Set();
   const exited = new Promise(resolve => child.once('close', resolve));
   function fail(error) {if (failure || closed) return; failure = error; for (const waiter of waiters) {clearTimeout(waiter.timer); waiter.reject(error);} waiters.clear(); child.kill();}
@@ -18,6 +18,7 @@ function lineProcess(executable, args, cwd) {
       const line = buffer.slice(0, end); buffer = buffer.slice(end + 1);
       let value; try {value = JSON.parse(line);} catch {fail(Error('NATIVE_SOURCE_PROTOCOL')); return;}
       if (value.status === 'error') {fail(Error(/^[A-Z0-9_]{1,80}$/.test(value.code) ? value.code : 'NATIVE_SOURCE_FAILED')); return;}
+      if (['ready', 'capturing', 'source-lost', 'closed'].includes(value.status)) lifecycle = value.status;
       if (values.length >= 16) {fail(Error('NATIVE_SOURCE_PROTOCOL')); return;}
       values.push(value);
       for (const waiter of waiters) if (waiter.match(value)) {clearTimeout(waiter.timer); waiter.resolve(value); waiters.delete(waiter);}
@@ -36,7 +37,7 @@ function lineProcess(executable, args, cwd) {
     try {await Promise.race([exited, new Promise((_, reject) => {timer = setTimeout(() => reject(Error('NATIVE_SOURCE_CLOSE_TIMEOUT')), 4000);})]);}
     finally {clearTimeout(kill); clearTimeout(timer);}
   }
-  return {waitFor, write: value => child.stdin.write(value + '\n'), close};
+  return {waitFor, status: () => closed ? 'closed' : failure ? 'error' : lifecycle, write(value) {if (closed || failure) throw failure || Error('NATIVE_SOURCE_CLOSED'); child.stdin.write(value + '\n');}, close};
 }
 async function startOwnedWindow({executable, cwd, monitor, aspect}) {
   if (monitor !== 1 || !['wide', 'standard'].includes(aspect)) throw Error('NATIVE_SOURCE_MONITOR_NOT_AUTHORIZED');
@@ -52,7 +53,17 @@ async function startNativeCapture({executable, cwd, owner, mapping, sessionId, g
   const process = lineProcess(executable, [], cwd);
   const line = ['capture', owner.hwnd, owner.pid, owner.createdAt, crop.x, crop.y, crop.width, crop.height, crop.outerWidth, crop.outerHeight, mapping, sessionId, generation].join(' ');
   process.write(line);
-  try {await process.waitFor(value => value.status === 'ready', 'ready'); return {waitForStatus: status => process.waitFor(value => value.status === status, status), close: process.close};}
+  try {
+    await process.waitFor(value => value.status === 'ready', 'ready');
+    let requestId = 0;
+    return {waitForStatus: status => process.waitFor(value => value.status === status, status), getStatus: process.status,
+      async clock() {
+        const id = ++requestId; process.write('clock ' + id);
+        const value = await process.waitFor(value => value.status === 'clock' && value.requestId === id, 'clock');
+        if (!/^[1-9][0-9]{0,19}$/.test(value.qpcNow) || !/^[1-9][0-9]{0,19}$/.test(value.qpcFrequency)) throw Error('SOURCE_CLOCK_INVALID');
+        return {qpcNow: value.qpcNow, qpcFrequency: value.qpcFrequency};
+      }, close: process.close};
+  }
   catch (error) {await process.close(); throw error;}
 }
 module.exports = {startOwnedWindow, startNativeCapture};

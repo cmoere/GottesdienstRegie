@@ -1,4 +1,5 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow} = require('electron');
+const {createComposedFrameSink} = require('./composed-frame-sink.cjs');
 const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const path = require('node:path');
@@ -21,14 +22,17 @@ async function until(predicate, name) {
   throw Error('OUTPUT_PROBE_TIMEOUT ' + name + ' ' + JSON.stringify({broker: broker.status(), acknowledgements}));
 }
 async function createOutput(role) {
-  const win = new BrowserWindow({show: false, width: 1920, height: 1080, useContentSize: true, webPreferences: {preload: path.join(__dirname, 'output-preload.cjs'), offscreen: true, backgroundThrottling: false, sandbox: true, contextIsolation: true, nodeIntegration: false}});
-  win.webContents.setFrameRate(60); win.webContents.setWindowOpenHandler(() => ({action: 'deny'}));
+  const win = new BrowserWindow({show: false, width: 1920, height: 1080, useContentSize: true, webPreferences: {preload: path.join(__dirname, 'output-preload.cjs'), offscreen: {useSharedTexture:true}, backgroundThrottling: false, sandbox: true, contextIsolation: true, nodeIntegration: false}});
+  win.webContents.setFrameRate(60);win.webContents.on('paint',event=>event.texture?.release());
+  win.webContents.setWindowOpenHandler(() => ({action: 'deny'}));
   win.webContents.on('will-navigate', event => event.preventDefault());
   win.webContents.on('console-message', event => console.log('OUTPUT_RENDERER ' + event.message));
   const entry = {win, role, active: true}; windows.set(win.webContents.id, entry);
   await win.loadFile(path.join(__dirname, 'output.html'));
   assert.equal(await win.webContents.executeJavaScript('typeof require'), 'undefined');
-  entry.unregister = broker.register({id: String(win.webContents.id), send: packet => win.webContents.send('native-probe:frame', packet), close: () => {entry.active = false;}});
+  entry.connection = createComposedFrameSink({win, diagnostic:false, onAck(value) {if (entry.active && entry.role !== 'slow' && broker.ack(String(win.webContents.id), value.generation, value.sequence)) acknowledgements.push({role, sequence:value.sequence, at:Date.now()});}, onDisconnect() {entry.active=false; entry.unregister?.();}});
+  await entry.connection.ready;
+  entry.unregister = broker.register({id: String(win.webContents.id), send: packet => entry.connection.send(packet), close: () => {entry.active = false;entry.connection.close();}});
   return entry;
 }
 async function verifyImage(entry, wanted, name) {
@@ -42,11 +46,6 @@ async function verifyImage(entry, wanted, name) {
   assert.ok(ink > 50, 'test overlay is present in final output frame');
   await fs.writeFile(path.join(folder, name + '.png'), image.toPNG());
 }
-ipcMain.on('native-probe:ack', (event, value) => {
-  const entry = windows.get(event.sender.id);
-  if (!entry?.active || entry.win.webContents !== event.sender || event.senderFrame !== event.sender.mainFrame || entry.role === 'slow') return;
-  if (broker.ack(String(event.sender.id), value?.generation, value?.sequence)) acknowledgements.push({role: entry.role, sequence: value.sequence, at: Date.now()});
-});
 app.whenReady().then(async () => {
   try {
     await fs.access(path.join(folder, '.probe-owned'));

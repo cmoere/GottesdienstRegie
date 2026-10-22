@@ -1,7 +1,8 @@
 # Native PowerPoint frame probe: implementation evidence
 
-Status: Tasks1–3 implemented and tested against own generated sources; full
-PowerPoint performance acceptance remains unproved. No product player or
+Status: Tasks1–3 implemented and tested against own generated sources; Task4
+performance acceptance **fails on the generated Win32 source already**. No native
+PowerPoint performance run, product player or
 release enabled. Implementation and review by the author only, in accordance
 with the user's native/translation-only restriction; this is weaker than an
 independent review.
@@ -152,9 +153,103 @@ failure freezes the last valid snapshot and exposes a fixed status; revoke
 closes the owned reader and recipients. Own windows/profile only, no audience
 MAIN assignment or actual radio/playback route changed.
 
-## Open acceptance
+## Task4: measured transport failure, not a PowerPoint approval
 
-Tasks4–5 from the written plan remain open.60-second actual source-motion
-cadence,150/250-ms latency, unobtrusive source behavior, failure cleanup and
-audio isolation are not established by Task1. The existing product and package
-version0.85.0 remain unchanged; regional completion is separately unfinished.
+The standalone runner builds only existing native targets, starts an own moving
+Win32 source on authorized Monitor1 and measures at least60seconds after warm-up.
+Only a passing transport phase permits the own PowerPoint source to start. That
+gate never passed, so the new PowerPoint adapter has **not** been exercised at
+runtime. No unsupported original player was enabled. Audio remains unsupported.
+
+Metrics tests were written first, including exact limits, short duration, late
+freeze, low actual source cadence, missing outputs/commands, excess skew/command
+latency and document-integrity gates. A transport-only result cannot approve
+PowerPoint. A private `captureReady` value excludes only the pending parent-side
+hash check; final visual approval still requires actual source/sentinel hashes.
+The existing COM probe adapter now independently hashes its own source as well
+as checking the foreign sentinel. These new Office branches remain untested at
+runtime because the preceding transport gate failed.
+
+QPC calibration uses three private capture clock replies at start/end, selects
+minimum round-trip samples and checks drift. Missing clock API first failed
+`work/v86-native-clock-red.log`; `work/v86-native-clock-green.log`, PyTlug,
+then passed both aspect/crop/lifetime cases plus increasing clock/frequency checks.
+
+Actual compositor pixels, not receipt counters, determine observations. Each
+delivery has a diagnostic sequence strip and an independently compared source
+pixel row. Row hashes determine changed source frames; the sequence strip does
+not substitute for motion. Credit is released only after renderer GPU checks
+**and** matching composed capturePage pixels. There is still one outstanding
+delivery per client. One RAF plus the independent composed proof supersedes
+Task3's earlier double-RAF-only acknowledgement. This strengthens visibility
+verification rather than relaxing the acceptance limits.
+
+Controlled full measurements (all FAIL; raw observations retained):
+
+| Artifact under work/ | MAIN changed fps | Mirror changed fps | Largest gap ms |
+| --- | ---: | ---: | ---: |
+| powerpoint-native-run-5lrtDd | 6.216 | 6.083 | 315 |
+| powerpoint-native-run-E3JbZg | 7.564 | 7.547 | 232 |
+| powerpoint-native-run-fKDFdk | 7.899 | 7.383 | 246 |
+
+Required: each recipient at least29.5changed frames/s, maximum gap150ms. Final
+duration60006.3427ms, MAIN474 and mirror443 changed frames.182same-sequence pairs,
+553unmatched deliveries. Paired p95skew81.6011ms is **not** proof of whole-output
+synchrony, given missing overlap and the failed cadence. There are zero Office
+commands in this transport-only run; command latency remains unproved.
+
+The first run Bp1KBl recorded a complete60-second observation set but auto-quit
+on closing its last window before awaiting report persistence. It is retained
+as an incomplete failed run. The runner now suppresses automatic last-window
+quit and explicitly exits only after awaited reports and owned cleanup.
+
+Profiling separated binary read, send, renderer work and composition. A dedicated
+Main-created MessagePort handoff removes the8MB contextBridge callback from the
+probe only; sandbox/context isolation remain enabled and page API remains
+frame/ACK-only. Main validates exact ACK shape/generation/sequence and binds
+the port to its own window. Typed-array subviews are copied into exact-size
+buffers, preventing prefix/tail disclosure. No zero-copy claim. This supported
+handoff follows Electron's MessagePort guidance:
+https://www.electronjs.org/docs/latest/tutorial/message-ports
+
+A normal hidden-window arrangement did not provide complete composed proof;
+some ACKs arrived, so a precise cause is **not** claimed. The final arrangement
+uses Electron37's existing offscreen GPU textures, releases every exported
+paint texture and verifies small composed regions rather than reading two
+complete8MB bitmaps each delivery. No external GPU-texture import, runtime
+upgrade or dependency was introduced. It improves measurement cost, but still
+does not meet the original limits. Final native read p50/p95 approximately
+29/42ms and send19/28ms show that further work cannot be justified as a proven
+small fix. No fourth speculative performance rearrangement was attempted.
+
+## Task5: verification and author review
+
+Fresh regression evidence, run outside the60-second performance measurements:
+
+- `work/v86-native-full-unit-final.log`:183files/756tests pass,242.32s.
+- `work/v86-native-probe-build.log`:desktop build succeeds13.56s.
+- `work/v86-native-web-build.log`:web build succeeds13.51s.
+- `work/v86-native-web-tests.log`:5browser tests pass.
+- `work/v86-native-app-regressions.log`:desktop selection, native live
+  announcements, and17native language selections pass. This does not prove
+  full regional prose coverage. Development-mode CSP/deprecation and one GPU
+  diagnostic remain visible in the log; no production security fix is claimed.
+- `work/v86-native-probe-unit-verified.log`:49Node tests pass,0failures.
+- `work/v86-native-output-verified.log`:actual isolated output harness passes,
+  artifactIrLyNU; stalled/healthy/current/black and overlay checks retained.
+
+Author-only review checked native identity/length limits, private port exposure,
+one-inflight delivery, generation ACKs, bounded row history, report gates and
+owned-process cleanup. Independent review was not delegated per the user's
+translation-only restriction. This review is weaker than independent review.
+The old WebRTC diagnostic still asks desktopCapturer for window thumbnails
+before selecting its own source. That legacy enumeration must be restricted
+before any future WebRTC runtime probe; it was not used by the new HWND-native
+transport. No claim of a completed legacy privacy review.
+
+Open: passing60-second source cadence, PowerPoint native command/animation
+latency, unobtrusive/occluded source suitability, remaining integrated failure
+scenarios, actual Office source/sentinel integrity in the new adapter, audio
+isolation and full product integration. No passing capability is handed to the
+hybrid import plan. Package stays0.85.0; full regional completion remains a
+separate unmet release condition. No tag, push, installer or publication.

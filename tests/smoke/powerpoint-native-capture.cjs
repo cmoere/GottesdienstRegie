@@ -25,6 +25,10 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
       await assert.rejects(startNativeCapture({executable: captureBuild.executable, cwd: captureBuild.folder, owner: {...source.owner, crop: {...source.owner.crop, x: -1}}, ...config}), /SOURCE_CROP_INVALID/);
       await assert.rejects(startNativeCapture({executable: captureBuild.executable, cwd: captureBuild.folder, owner: {...source.owner, crop: {...source.owner.crop, width: source.owner.crop.outerWidth + 1}}, ...config}), /SOURCE_CROP_INVALID/);
       capture = await startNativeCapture({executable: captureBuild.executable, cwd: captureBuild.folder, owner: source.owner, ...config});
+      assert.equal(typeof capture.clock, 'function', 'Native QPC calibration is missing');
+      const beforeClock = await capture.clock(); await wait(10); const afterClock = await capture.clock();
+      assert.ok(BigInt(afterClock.qpcNow) > BigInt(beforeClock.qpcNow));
+      assert.equal(afterClock.qpcFrequency, beforeClock.qpcFrequency);
       await assert.rejects(startNativeCapture({executable: captureBuild.executable, cwd: captureBuild.folder, owner: source.owner, ...config}), /RING_ALREADY_EXISTS/);
       reader = await createNativeReader({executable: readerBuild.executable, cwd: readerBuild.folder, ...config});
       async function next(after = 0) {

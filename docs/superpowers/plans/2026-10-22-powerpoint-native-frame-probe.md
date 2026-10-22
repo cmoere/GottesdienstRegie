@@ -8,7 +8,16 @@
 
 **Tech Stack:** Installiertes Electron37.10.3, Node, VS2022 BuildTools14.44.35207 und Windows-SDK10.0.26100.0, C++17/C++/WinRT, Win32/D3D11, bestehende C#-COM-Probe. Keine neue npm-/Produktabhängigkeit, kein Electron-Upgrade, keine N-API-Header oder Node-ABI-Bindings: Der native Reader wird als begrenzter Kindprozess betrieben.
 
-**Spec:** [Freigegebener Entwurf](../specs/2026-10-22-powerpoint-frame-transport-design.md), Nutzerfreigabe „ja umsetzen“ nach schriftlicher Vorlage. Dieser Umsetzungsplan benötigt noch eigene Nutzerprüfung vor Implementierung.
+**Spec:** [Freigegebener Entwurf](../specs/2026-10-22-powerpoint-frame-transport-design.md), Nutzerfreigabe „ja umsetzen“ nach schriftlicher Vorlage; anschließende Planfreigabe „ja los“.
+
+**Prüfstatus 22.10.2026:** Aufgaben1–3 als isolierte Grundlagen nachgewiesen.
+Aufgabe4 implementiert und gemessen, aber **FAIL** bereits mit eigener Win32-Quelle:
+MAIN7,899 und Mirror7,383 statt mindestens29,5 geänderter Quellbilder/s.
+Die native PowerPoint-Messphase wird deshalb nicht gestartet. Aufgabe5:
+Regressionen bestanden und Autor-Eigenreview dokumentiert; keine Übergabe einer
+freigegebenen Original-Player-Fähigkeit. Historische Schritt-Checkboxen unten
+bleiben ohne pauschale Erledigt-Markierung; maßgeblich sind die Einzelbelege in
+[der Evidenz](../evidence/2026-10-22-powerpoint-native-frame-probe.md).
 
 ## Global Constraints
 

@@ -10,6 +10,11 @@
 
 **Spec:** [Freigegebener Entwurf](../specs/2026-10-20-powerpoint-hybrid-import-design.md)
 
+**22.10.2026 Prüfstatus:** Die separat freigegebene native Aufnahme-/Transportprobe
+verfehlt bereits mit eigener Win32-Quelle die unveränderte Bildratenabnahme.
+Keine Original-Player-Fähigkeit freigegeben; keine Produktintegration oder
+Veröffentlichung. [Messwerte und offene Grenzen](../evidence/2026-10-22-powerpoint-native-frame-probe.md).
+
 ## Global Constraints
 
 - Originaltreue vor Bearbeitbarkeit; keine vollständige PowerPoint-Kompatibilität behaupten.
