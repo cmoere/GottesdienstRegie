@@ -83,3 +83,102 @@ website/video output composition and is not a bounded workaround.
 No application code or dependencies changed, so no new application regression
 claim is made. Existing native transport acceptance remains FAIL, regional
 completion remains open, package stays0.85.0 and v86 remains unpublished.
+
+## Follow-up approved: separate Electron45 runtime
+
+The user subsequently approved downloading a newer isolated test runtime. The
+official GitHub latest-stable release lookup selected v45.0.0 (published
+2026-10-21, draftfalse/prereleasefalse). Download is pinned to that exact tag,
+not a floating latest binary. Nothing was installed into node_modules or the
+application. Throwaway files remain ignored under `work/gpu-runtime-v45.0.0/`.
+
+Archive `electron-v45.0.0-win32-x64.zip`,158223852bytes, SHA256:
+`ae53887a23bb640369c93dbd38c408a2af5c0deb86f2fa76c6c244cb444b7f47`.
+Matches both the release asset API digest and the pinned release's SHASUMS256.
+Manifest SHA256:
+`5882ee4d3f943f567cdb6df9bf86e78de9c369e41d9093daaa2e3acaa630093b`.
+These are checksums from the official origin, not an independent signature.
+The extracted electron.exe reports NotSigned under Authenticode; no signature
+verification is claimed. The checksum parser initially rejected the manifest's
+binary-mode `*filename` entry before extraction; accepting the documented star
+delimiter preserves the exact expected digest check. No mismatched binary ran.
+
+Pinned API/reference sources reviewed completely:
+
+- https://raw.githubusercontent.com/electron/electron/v45.0.0/docs/api/shared-texture.md
+- https://raw.githubusercontent.com/electron/electron/v45.0.0/shell/common/api/shared_texture/README.md
+- https://raw.githubusercontent.com/electron/electron/v45.0.0/spec/api-shared-texture.spec.ts
+- https://raw.githubusercontent.com/electron/electron/v45.0.0/spec/fixtures/api/shared-texture/managed/preload.js
+- https://raw.githubusercontent.com/electron/electron/v45.0.0/spec/fixtures/api/shared-texture/managed/renderer.js
+
+Upstream shared-texture specs explicitly skip outside macOSarm64. Their presence
+is not Windows support/performance evidence; actual local Windows checks follow.
+Runtime reports Electron45.0.0/Chromium156.0.8078.48 and callable import API.
+
+### Electron-exported texture control: PASS
+
+An own128×128offscreen source exports GPU textures. Main imports each texture
+and fans out the same imported resource to two distinct renderer OS processes.
+Both use sandboxtrue/contextIsolationtrue/nodeIntegrationfalse and separate
+temporary partitions. The narrow preload draws inside the isolated world;
+neither raw handles nor Node APIs are exposed to the page.
+
+Red, blue and black match independently captured composed pixel values in both
+receivers. Each imported resource's allReferencesReleased callback occurs once,
+then its source exported texture is released. `report.json`, exit0. This is a
+small static control, not a30fps or native PowerPoint claim.
+
+### External Direct3D1080p source: PASS twice
+
+A throwaway C++fixture compiled with the already installed VS/SDK creates three
+immutable1920×1080BGRA D3D11 textures: red, blue and black. No window, screen,
+Office document or live media is captured. Texture creation uploads generated
+test colors once and waits for its GPU initialization event. The fixture uses
+unnamed non-inheritable NT handles, duplicates only into its explicitly spawned
+own Electron parent and keeps all source textures alive until owned teardown.
+Private pipe carries a decimal handle only to Main, never to output pages.
+No full-frame pixel data crosses that pipe. The helper closes its duplicated
+parent handles and its own handles on EOF/stop; it is a fixture, not a reviewed
+production handle protocol.
+
+Main imports the external handle with `sharedTexture.importSharedTexture`, sends
+to both isolated output processes, releases its imported reference after sends,
+and observes exactly one allReferencesReleased callback per stage. Renderer
+closes VideoFrame and releases its imported resource after drawing. Output
+capture verifies full1920×1080geometry and actual BGRA pixels at three separated
+coordinates. Small renderer readback is diagnostic only; no zero-copy-everywhere
+or persistent resource-leak-free claim. Own black screenshot visually inspected:
+test overlay present on the composed frame, not on the raw source texture.
+
+The first external run failed its exact output-size assertion: normal decorated
+hidden window content was1904×1041. Recorded bounds/content/innerWidth confirm
+the frame/client geometry mismatch. Only the fixture's `frame:false` option was
+changed; source texture, pixel assertions and security settings were unchanged.
+The resulting window/content/inner size is1920×1080, and the same three-color
+two-output test then passed twice. Failed reports are retained as
+`native-report-initial.json` and `native-report-geometry.json`; successful reports
+are `native-report-first-pass.json` and `native-report.json`, with corresponding
+native-final-stdout/stderr logs. Final console assertion:
+`NATIVE_GPU_IMPORT_PASS 3 stages 2 isolated outputs 1920x1080`; exit0,
+native fixture exit0, no own probe processes remaining. No compiler warnings.
+
+Windows handle/reference requirements checked against:
+https://learn.microsoft.com/en-us/windows/win32/api/dxgi1_2/nf-dxgi1_2-idxgiresource1-createsharedhandle
+and the pinned Electron shared-texture README. Resources are immutable here;
+concurrent writes, slot reuse, GPU synchronization and delayed-recipient failure
+are intentionally not represented by this test.
+
+### Revised recommendation, unchanged release gate
+
+The newer isolated runtime demonstrates a real external-native-GPU-import to
+two sandboxed outputs on this machine. This is a positive feasibility result,
+not production PowerPoint readiness. Next proposed scope is a separately
+designed capture-to-GPU probe: existing owned-window capture without CPU image
+readback, bounded texture ownership/fan-out, real-motion60-second acceptance,
+then actual own PowerPoint command/animation latency and failure scenarios.
+No adoption or production runtime upgrade is authorized by this spike.
+
+Product package/lockfile and installed Electron37.10.3 are unchanged. No new
+application-code regression claim, no v86 release, no installer/push/tag.
+The previously failed raw-BGRA transport gate remains failed; successful static
+GPU fixtures do not retroactively pass it. Regional completion remains open.
