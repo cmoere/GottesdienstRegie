@@ -23,6 +23,25 @@ addEventListener('DOMContentLoaded', async () => {
     gl.uniform1i(gl.getUniformLocation(program, 'source'), 0); gl.viewport(0, 0, 1920, 1080);
     const lo = gl.getUniformLocation(program, 'seqLo'), hi = gl.getUniformLocation(program, 'seqHi');
     let busy = false, lastSequence = 0;
+    let observationKey, readyObservation, pendingObservation, observationScheduled = false, observationDirty = false;
+    function sendObservation() {
+      if (pendingObservation || !readyObservation) return;
+      pendingObservation = readyObservation; readyObservation = null;
+      ipcRenderer.send('gpu-probe:observe', {key: pendingObservation});
+    }
+    function scheduleObservation() {
+      if (observationScheduled || !observationDirty) return;
+      observationScheduled = true;
+      requestAnimationFrame(() => {
+        observationScheduled = false; observationDirty = false; readyObservation = observationKey;
+        sendObservation();
+      });
+    }
+    ipcRenderer.on('gpu-probe:observed', (_event, value) => {
+      const key = value?.key;
+      if (!pendingObservation || key?.sequence !== pendingObservation.sequence || key.sessionId !== config.sessionId || key.generation !== config.generation || key.slotId !== pendingObservation.slotId) return;
+      pendingObservation = null; sendObservation(); scheduleObservation();
+    });
     const valid = key => key && Object.keys(key).length === 4 && key.sessionId === config.sessionId && key.generation === config.generation
       && Number.isInteger(key.slotId) && key.slotId >= 0 && key.slotId < 3 && Number.isSafeInteger(key.sequence) && key.sequence > lastSequence;
     const waitForGpu = sync => new Promise((resolve, reject) => {
@@ -46,8 +65,10 @@ addEventListener('DOMContentLoaded', async () => {
         gl.drawArrays(gl.TRIANGLES, 0, 3); sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0); gl.flush();
         if (!sync || gl.getError() !== gl.NO_ERROR) throw Error('GPU_DRAW');
         await waitForGpu(sync); lastSequence = key.sequence;
+        if (config.releaseDelayMs === 150) await new Promise(resolve => setTimeout(resolve, 150)); // Own shutdown fixture only.
         const drawnFrame = frame; frame = null; drawnFrame.close(); released = true; imported.release();
         ipcRenderer.send('gpu-probe:ack', {key});
+        observationKey = key; observationDirty = true; scheduleObservation();
       } catch {fault();}
       finally {
         if (sync) gl.deleteSync(sync);

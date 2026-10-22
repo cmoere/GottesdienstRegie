@@ -16,6 +16,7 @@ test('stamp change alone is not source motion; source and stamp come from one ca
   f.set(2, 1); f.observer.remember(record(2)); await f.observer.request();
   f.set(3, 2); f.observer.remember(record(3)); await f.observer.request();
   assert.equal(f.observations.length, 2); assert.deepEqual(f.observations.map(x => x.sequence), [1, 3]);
+  assert.equal(f.observer.status().unchangedSource, 1);
   assert.deepEqual(f.captures, Array(3).fill({x: 0, y: 953, width: 1920, height: 9})); f.observer.close();
 });
 test('unknown, evicted record and old generation cannot prove a frame', async () => {
@@ -43,4 +44,12 @@ test('100 requests during capture coalesce to exactly one follow-up', async () =
   for (let i = 0; i < 100; ++i) observer.request();
   assert.equal(calls, 1); done({pixels: strip(1), width: 1920, height: 9}); await flush();
   assert.equal(calls, 2); done({pixels: strip(1), width: 1920, height: 9}); await first; assert.equal(calls, 2); observer.close();
+});
+
+test('reports actual capture cost independently from changed-frame counts', async () => {
+  let clock=10; const seen=[];
+  const observer=createComposedObserver({captureStrip:async()=>{clock+=25;return {pixels:strip(1),width:1920,height:9};},now:()=>clock,onObservation:x=>seen.push(x)});
+  observer.reset('b'.repeat(32));observer.remember(record(1));await observer.request();await observer.request();
+  assert.equal(seen.length,1);assert.equal(seen[0].captureMs,25);
+  assert.equal(observer.status().captures,2);assert.equal(observer.status().totalCaptureMs,50);assert.equal(observer.status().staleStamp,1);observer.close();
 });

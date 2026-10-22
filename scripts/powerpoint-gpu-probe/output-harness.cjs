@@ -10,30 +10,45 @@ const stamp = require('./frame-stamp.js');
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function until(predicate, label, ms = 5000) {const end = performance.now() + ms; while (!predicate()) {if (performance.now() >= end) throw Error('GPU_OUTPUT_TIMEOUT_' + label); await wait(10);}}
 
-function createGpuOutputs({producer, sessionId, generation, onObservation, onFault}) {
+function createGpuOutputs({producer, sessionId, generation, onObservation, onFault, onSend = () => {}, onAck = () => {}}) {
   const {BrowserWindow, ipcMain, sharedTexture} = require('electron');
   const entries = new Map(), api = createManagedTextureApi({sharedTexture});
+  let gracefulClosing = false;
   const broker = createGpuFrameBroker({producer, textureApi: {import(claim, callback) {
     for (const entry of entries.values()) entry.observer.remember(claim.record);
-    return api.import(claim, callback);
+    const ref = api.import(claim, callback);
+    return {send(frame, key) {
+      const entry = [...entries.values()].find(e => !e.win.isDestroyed() && e.win.webContents.mainFrame === frame);
+      if (entry) onSend({role: entry.role, sequence: key.sequence, at: performance.now()});
+      return ref.send(frame, key);
+    }, releaseMain: () => ref.releaseMain()};
   }}});
   const ownEntry = event => {const e = entries.get(event.sender.id); return e && !e.win.isDestroyed() && event.senderFrame === e.win.webContents.mainFrame ? e : null;};
   const ready = event => {const e = ownEntry(event); if (e) e.ready = true;};
   const ack = (event, value) => {const e = ownEntry(event); if (!e || !value || Object.keys(value).length !== 1 || !broker.ack(event.sender.id, value.key)) return;
-    e.lastAck = value.key; e.observer.request().catch(() => {if (!e.closed) onFault('GPU_OBSERVATION_FAILED');});};
+    e.lastAck = value.key; onAck({role: e.role, sequence: value.key.sequence, at: performance.now()});};
+  const observe = (event, value) => {
+    const e = ownEntry(event), key = value?.key;
+    if (!e || !value || Object.keys(value).length !== 1 || !key || Object.keys(key).length !== 4 || key.sessionId !== sessionId || key.generation !== generation
+        || !Number.isInteger(key.slotId) || key.slotId < 0 || key.slotId > 2 || !Number.isSafeInteger(key.sequence) || key.sequence <= (e.lastHintSeq || 0) || key.sequence > (e.lastAck?.sequence || 0)) return;
+    e.lastHintSeq = key.sequence;
+    const done = () => {if (!e.closed && !e.win.isDestroyed()) e.win.webContents.send('gpu-probe:observed', {key});};
+    e.observer.request().then(done, () => {if (!e.closed) onFault('GPU_OBSERVATION_FAILED'); done();});
+  };
   const fault = event => {if (ownEntry(event)) onFault('GPU_RECEIVER_FAILED');};
   ipcMain.handle('gpu-probe:boot', event => {
     const e = ownEntry(event); if (!e || event.senderFrame.url !== pathToFileURL(path.join(__dirname, 'output.html')).href) throw Error('GPU_OUTPUT_SENDER');
-    return {sessionId, generation, stall: e.stall, vertexShader: stamp.vertexShader, fragmentShader: stamp.fragmentShader};
+    return {sessionId, generation, stall: e.stall, releaseDelayMs: e.releaseDelayMs, vertexShader: stamp.vertexShader, fragmentShader: stamp.fragmentShader};
   });
-  ipcMain.on('gpu-probe:ready', ready); ipcMain.on('gpu-probe:ack', ack); ipcMain.on('gpu-probe:fault', fault);
+  ipcMain.on('gpu-probe:ready', ready); ipcMain.on('gpu-probe:ack', ack); ipcMain.on('gpu-probe:observe', observe); ipcMain.on('gpu-probe:fault', fault);
   const unsubscribe = producer.onFault(error => {if (error.terminal === false) {for (const e of entries.values()) if (!e.win.isDestroyed()) e.win.webContents.send('gpu-probe:source-lost');} else onFault('GPU_PRODUCER_FAILED');});
   return {
     broker,
-    async add(role, {stall = false} = {}) {
+    async add(role, {stall = false, releaseDelayMs = 0} = {}) {
+      if (![0, 150].includes(releaseDelayMs)) throw Error('GPU_OUTPUT_FIXTURE_DELAY');
       const win = new BrowserWindow({show: false, frame: false, width: 1920, height: 1080, useContentSize: true,
         webPreferences: {preload: path.join(__dirname, 'output-preload.cjs'), partition: 'gpu-probe-' + randomBytes(8).toString('hex'), sandbox: true, contextIsolation: true, nodeIntegration: false, backgroundThrottling: false}});
-      const entry = {win, role, stall, ready: false, lastAck: null, closed: false};
+      const entry = {win, role, stall, releaseDelayMs, ready: false, lastAck: null, closed: false};
       entry.observer = createComposedObserver({captureStrip: async rect => {
         const image = await win.webContents.capturePage(rect); return {...image.getSize(), pixels: image.toBitmap()};
       }, onObservation: observation => onObservation({...observation, role})}); entry.observer.reset(generation);
@@ -45,15 +60,20 @@ function createGpuOutputs({producer, sessionId, generation, onObservation, onFau
       win.once('closed', () => {entry.closed = true; entry.observer.close(); entry.unregister?.(); entries.delete(entry.id);});
       entry.id = win.webContents.id;
       await win.loadFile(path.join(__dirname, 'output.html')); await until(() => entry.ready, 'READY');
-      entry.unregister = broker.register({id: entry.id, frame: win.webContents.mainFrame, close: () => {entry.closed = true; entry.observer.close(); if (!win.isDestroyed()) win.destroy();}});
+      entry.unregister = broker.register({id: entry.id, frame: win.webContents.mainFrame, close: () => {entry.closed = true; entry.observer.close(); if (!gracefulClosing && !win.isDestroyed()) win.destroy();}});
       return entry;
     },
     async close() {
-      unsubscribe(); for (const e of entries.values()) {e.closed = true; e.observer.close();}
-      await broker.revoke();
-      for (const e of entries.values()) if (!e.win.isDestroyed()) e.win.destroy();
-      await until(() => broker.status().drained, 'DRAIN', 4000);
-      ipcMain.removeHandler('gpu-probe:boot'); ipcMain.removeListener('gpu-probe:ready', ready); ipcMain.removeListener('gpu-probe:ack', ack); ipcMain.removeListener('gpu-probe:fault', fault);
+      gracefulClosing = true; unsubscribe(); for (const e of entries.values()) {e.closed = true; e.observer.close();}
+      try {
+        await broker.revoke();
+        // Healthy receivers must finish their real import cleanup BEFORE their
+        // webContents are destroyed. This is not an ACK-based native release.
+        await until(() => broker.status().drained, 'DRAIN', 4000);
+      } finally {
+        for (const e of entries.values()) if (!e.win.isDestroyed()) e.win.destroy();
+        ipcMain.removeHandler('gpu-probe:boot'); ipcMain.removeListener('gpu-probe:ready', ready); ipcMain.removeListener('gpu-probe:ack', ack); ipcMain.removeListener('gpu-probe:observe', observe); ipcMain.removeListener('gpu-probe:fault', fault);
+      }
     },
   };
 }
@@ -63,6 +83,22 @@ async function smoke(config) {
   const {startOwnedWindow} = require('../powerpoint-native-probe/capture-client.cjs');
   const report = {electron: process.versions.electron, passed: false, productionReady: false, cases: []};
   assert.equal(process.versions.electron, '45.0.0'); assert.equal(config.monitor, 1);
+  if (config.drainOnly) {
+    const source = await startOwnedWindow({executable: config.source, cwd: config.sourceFolder, monitor: 1, aspect: 'wide'});
+    let producer, outputs; const faults = []; let sent = false;
+    try {
+      const sessionId = randomBytes(16).toString('hex'), generation = randomBytes(16).toString('hex');
+      producer = await startGpuProducer({executable: config.producer, cwd: config.folder, owner: source.owner, sessionId, generation});
+      outputs = createGpuOutputs({producer, sessionId, generation, onObservation() {}, onFault: code => faults.push(code), onSend() {sent = true;}});
+      await outputs.add('own-delayed-close', {releaseDelayMs: 150}); await until(() => sent, 'PENDING_SEND');
+      // Ensure the own preload has imported the frame and is inside its deliberate
+      // release delay, not merely waiting for the first transfer to arrive.
+      await wait(50); await outputs.close(); outputs = null;
+      assert.deepEqual(faults, []); assert.equal((await producer.stop()).drained, true);
+      report.passed = true; report.cases.push({normalDrainWhileSourceRunning: true});
+      await fs.writeFile(path.join(config.folder, 'output-report.json'), JSON.stringify(report)); return;
+    } finally {if (outputs) await outputs.close().catch(() => {}); if (producer) await producer.stop(); await source.close();}
+  }
   for (const aspect of ['wide', 'standard']) {
     let source, producer, outputs; const observations = [], faults = [];
     try {

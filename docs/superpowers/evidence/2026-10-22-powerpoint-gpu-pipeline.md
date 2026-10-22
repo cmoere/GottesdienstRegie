@@ -5,6 +5,11 @@ Stand22.10.2026. [Plan](../plans/2026-10-22-powerpoint-gpu-pipeline.md) und
 freigegeben. Nur isolierte Probe, keine installierte Anwendung verändert,
 keine Produktveröffentlichung. Root-Eigenreview, keine unabhängige Zweitprüfung.
 
+**Aktueller Ausgang:** Tasks1–5 bestanden. Die60s-Leistungsabnahme bleibt FAIL:
+zuletzt29,495568/29,345591statt jeweils mindestens29,5nachgewiesenen geänderten
+Bildern/s. Kein Office-Start, kein Original-Player aktiviert und kein Publish.
+Task6/7 sind nicht als vollständig abgeschlossen markiert.
+
 ## Task1: begrenzte native Eigentumszustände
 
 Implementiert: drei Slots, FREE/WRITING/READY/LEASED, versionierte Claims und
@@ -196,11 +201,111 @@ Vollständige Regression183Dateien/756Tests PASS243,86s
 (`work/gpu-pipeline-task5-unit.log`). Prüfung durch den Autor, nicht unabhängig.
 Diese kurzen Bild-/Fehlerprüfungen belegen noch nicht die60s-Cadence.
 
+## Task6 — gemessene Grenze, keine Freigabe
+
+Vier getrennte60s-Läufe ohne parallele schwere Tests; keine Grenzwerte
+verändert. Alle Laufzeiten/Zuordnungen und native Rohzeitfelder stehen in
+den jeweiligen `benchmark-report.json` unter `work/powerpoint-gpu-probe-*`.
+Dies sind aufeinanderfolgende Einzelmessungen, kein allgemeines
+Leistungsversprechen und keine30Hz-Freigabe.
+
+| Artefaktordner | MAIN geänderte Bilder/s | Mirror geänderte Bilder/s | Gepaarte / ungepaarte Bilder | p95Versatz | Ergebnis |
+| --- | ---: | ---: | ---: | ---: | --- |
+| TuVJP4 | 19,616052 | 19,682717 | 1150 / 58 | 10,902ms | FAIL |
+| 6vrsRD | 24,061199 | 24,111188 | 1431 / 29 | 13,7651ms | FAIL |
+| 80mTji | 27,332921 | 27,582917 | 1623 / 49 | 15,186ms | FAIL |
+| SavMho | 29,495568 | 29,345591 | 1736 / 59 | 16,1681ms | FAIL |
+
+Die letzte Messung dauerte60009,0153ms. MAIN1770, Mirror1761 unabhängig
+beobachtete geänderte Quellbilder; größte Lücken70,2492/74,0813ms.
+**Auch29,495568 ist kleiner als29,5 und wird nicht auf PASS gerundet.**
+Gute Lücken-/Versatzwerte ersetzen nicht die fehlende Bildrate beider Outputs.
+
+### Diagnose und begrenzte Änderungen
+
+Der native Client claimte je Lauf1811Frames einschließlich Vor-/Nachlauf.
+In der profilierten Phase bestätigten beide Renderer1800Zeichenvorgänge
+innerhalb der Messzeit. Dennoch enthielten358/353der1810/1805Bildaufnahmen
+einen bereits gesehenen Stempel. Kein unbekannter Stempel, kein unveränderter
+Quellhash bei neuem Stempel in diesem Lauf. Die Lieferung allein ist daher
+nicht der fehlende Nachweis; die Kompositions-/Beobachtungsgrenze bleibt
+entscheidend. Daraus folgt ausdrücklich nicht, dass30Bilder/s sichtbar waren.
+
+Observerkosten und Gründe für nicht gezählte Bilder werden nun getrennt
+erfasst. Tests dafür zuerst RED, dann GREEN:
+`work/gpu-pipeline-task6-{cost,counters}-{red,green}.log`.
+Weitere Änderung innerhalb derselben Drei-Textur-Probe: unabhängiger,
+RAF-geplanter Beobachtungshinweis statt sofortiger Aufnahme beim RenderAck.
+Nur ein Hinweis outstanding; Main gibt ausschließlich Beobachtungskredit
+zurück. Eine weitere RAF-Vorbereitung und ein neuester fertiger Schlüssel
+dürfen parallel zur Aufnahme bestehen, keine Pixel-/Frame-FIFO. FrameKey ist
+weiterhin der einzige IPC-Inhalt. Hint und ACK beweisen keine Komposition und
+geben niemals native Slots frei. Sichtbare Pixel bleiben die einzige Abnahme.
+Tests mit100weiterlaufenden RenderAck bei nur einem offenen Hinweis sowie
+überlappender Vorbereitung zuerst RED, dann GREEN;110Node-Fälle bestanden.
+
+Damit sanken im letzten Lauf die alten Stempel auf31/40, die Abnahme ist
+dennoch nicht erfüllt. Keine vierte Transportarchitektur ergänzt und keine
+PowerPoint-Phase gestartet. Ein weiterer Ansatz braucht eine neu bewertete
+Beobachtungs-/Kompositionsstrategie, nicht andere PASS-Kriterien.
+
+### Uhren und Lebensdauer
+
+Jeweils drei Clock-Roundtrips vor/nach dem Lauf, minimale RTT ausgewertet.
+Zuletzt Drift0,0724ms, Unsicherheit0,2569ms. Der bekannte zukünftige
+WGC-sourceReportedQpc bleibt unverändert als Diagnose erhalten;
+`sourceLatencyAvailable:false`. Keine negative oder korrigierte Quelllatenz.
+Alle normalen Messläufe endeten native `drained:true`, Exit0, ohne
+aufgezeichneten Runtimefehler.
+
+Autorreview fand trotzdem eine Cleanup-Warnung beim normalen Fensterschluss:
+Der Controller zerstörte einen noch gesunden Receiver zu früh. Der eigene
+`--drain-only`-Test hält eine echte Importreferenz150ms, während die Quelle
+weiterläuft; er reproduzierte die Warnung
+(`work/gpu-pipeline-task6-drain-red.log`). Jetzt wird neue Arbeit widerrufen,
+aber der gesunde Receiver erst **nach echtem Broker-Drain** zerstört.
+Keine Freigabe durch ACK oder Timeout. GREEN:
+`work/gpu-pipeline-task6-drain-green.log`, Ordner `cbSzev`, ohne Dangling-Warnung.
+Vollständiger eigener Output-Smoke anschließend PASS, Ordner `xCV1J5`;
+absichtlich hängende/geschlossene Testempfänger bleiben getrennte Fehlerfälle.
+
+### Weitere Regression, noch keine Gesamtfertigstellung
+
+Desktop-Build PASS13,93s; Web-Build PASS11,77s;
+Browser-Smoke5/5PASS; native UI-Prüfungen für Desktop-Selektion,
+Meldungsdesigns und17Sprachvarianten PASS. Logs:
+`work/gpu-pipeline-final-{build,build-web,web-tests,native-ui}.log`.
+Bekannte große Bundle-/Entwicklungs-CSP-/NO_COLOR-Warnungen nicht behoben.
+Dies bestätigt weder vollständige regionale Prosa noch Original-PowerPoint.
+Nach dem letzten Cleanup110/110Node-Fälle PASS
+(`work/gpu-pipeline-task6-node-final.log`) und vollständige
+Anwendungsregression183Dateien/756Tests PASS243,70s
+(`work/gpu-pipeline-task6-unit-final.log`). Das schließt die fehlende
+Leistungs-/Office-/Supervisorabnahme nicht ein; Task6/7 bleiben ausdrücklich offen.
+
+Weitere native Regressionen abschließend seriell PASS: Slots
+(`work/gpu-pipeline-final-slots.log`, `ozHmMq`), erweiterter Producer mit
+Owner-/Replay-/Resize-/Minimize-Fällen und GPU-Musterprüfung
+(`final-producer.log`, `whXtcS`), alter10000Full-HD-Frame-Ring
+(`final-ring.log`, `NnHMV7`), Reader (`final-reader.log`, `4f1SM0`) und
+WGC-Capture wide/standard (`final-capture.log`, `kOqBND`). Alle genannten
+Logs unter `work/gpu-pipeline-*`. Produktmanifest/Lockfile unverändert:
+0.85.0 und installierte Electron37.10.3; fremde startup-diagnostic-Datei
+unverändert und nicht gestaged. Keine eigene GPU-Probe mehr aktiv.
+
+Abschließendes Autorreview: READY/Claim-Versionen, Kredit versus GPU-Referenzen,
+Rückstau, tatsächlicher Pixelnachweis und zukünftige Quellzeiten geprüft.
+Wichtige Cleanup- und Beobachtungskopplungsbefunde sind mit RED→GREEN behandelt;
+die Bildrate bleibt trotzdem FAIL. Nicht als geprüft ausgegeben werden die
+gesperrte Office-Phase, harte Helper-Tod-Wiederherstellung und Produktintegration.
+Keine unabhängige Review-Delegation. Dieser Commit ist ein geprüfter
+Zwischenstand mit gemessener Grenze, kein vollständiger Planabschluss.
+
 ## Offen
 
-Task6–7 sind nicht vollständig:
-unabhängige Empfänger/Freigaben, tatsächliche Komposition,
-60s-Cadence, Office-Befehle, Fehler-/Handle-Lebensdauer und Gesamtregression.
-Zustandstests allein belegen weder GPU-Transport noch Original-PowerPoint.
+Task6–7 sind nicht vollständig: belastbare60s-Cadence-Abnahme beider Outputs,
+Office-Adapter/-Befehle, kompletter harter Helper-Tod-/Handle-Supervisor,
+restliche Lebensdauerfälle und vollständige Gesamtabschlussprüfung.
+Statische GPU-/Kompositionsprüfungen sind bestanden, die Leistungsabnahme nicht.
 Produktintegration, Originalaudio, Runtime-Upgrade und vollständige Regionaltexte
 bleiben eigene Releasebedingungen. `productionReady` bleibt false.
