@@ -8,7 +8,7 @@
 
 **Tech Stack:** Vorhandene VS2022-BuildTools/WindowsSDK, C++17/C++/WinRT/D3D11, Node-Testwerkzeuge und die bereits separat geprüfte Electron45.0.0-Laufzeit. Keine Produktabhängigkeit oder Installation; installierte Electron37.10.3 bleibt unverändert.
 
-**Spec:** [Freigegebener GPU-Entwurf](../specs/2026-10-22-powerpoint-gpu-pipeline-design.md), vom Nutzer am22.10.2026 nach schriftlicher Vorlage mit „ja“ bestätigt. Dieser Plan benötigt vor Implementierung eine eigene Nutzerprüfung; die native Ausführungsmethode bleibt bestehen.
+**Spec:** [Freigegebener GPU-Entwurf](../specs/2026-10-22-powerpoint-gpu-pipeline-design.md), vom Nutzer am22.10.2026 nach schriftlicher Vorlage mit „ja“ bestätigt. Auch diesen Plan hat der Nutzer nach Vorlage mit „ja“ freigegeben; die native Ausführungsmethode bleibt bestehen. [Laufender Prüfbericht](../evidence/2026-10-22-powerpoint-gpu-pipeline.md).
 
 ## Global Constraints
 
@@ -55,11 +55,11 @@ benennen. Keine neuen exports in Produktcode. Gemeinsame Verträge:
 
 **Interfaces:** `resolveNativeToolchain():Promise<{compiler,env}>` verwendet vorhandene vswhere/VsDevCmd-Werkzeuge, hält Environmentwerte nur im Speicher. Bestehendes `buildProbe({root,target})` bleibt unverändert aufrufbar. Neues `buildGpuProbe({root,target})` liefert eigenes markiertes `{folder,executable}`, Targets nur `slot-tests|producer|gpu-pattern-tests`. `SlotPool(session,generation)` liefert `beginWrite():optional<FrameKey>`, `completeWrite(key,times):bool`, `claimLatest():optional<FrameRecord>`, `release(key):bool`, `revoke()`, `drained():bool`.
 
-- [ ] RED-Fälle schreiben: `initial_three_free`, `reclaim_ready_never_leased`, `claim_after_notice_uses_current`, `late_release_cannot_free_reused_slot`, `revoke_drains_without_new_generation`. Kernassertion: Nach drei LEASED-Claims ist `beginWrite()==nullopt`; nach falschem/doppeltem Release bleibt das unverändert.
-- [ ] `node tests/smoke/powerpoint-gpu-slots.cjs` ausführen; fehlende Implementierung als RED feststellen, keine absichtlich falschen Compilerflags.
-- [ ] Toolchain-Auflösung extrahieren, ohne Logs mit Environmentwerten; beide Builder nutzen sie. SlotPool implementieren: FREE→WRITING→READY→LEASED→FREE auf einem Besitzerthread; Reclaim nur READY; Revoke blockiert neue Claims/Writes, lässt alte exakte Releases und GPU-Abschluss zum Drain zu. Begrenzte Sequenz läuft nie über.
-- [ ] Mindestens10000deterministische Zustandsoperationen mit gemischter Schreib-/Claim-/Release-Reihenfolge prüfen, inklusive unsicherer Sequenz, falscher Tokens, ungültigem Slot und Rückwärtszeiten. GREEN: `GPU_SLOT_PASS`; zusätzlich bestehende `node tests/smoke/powerpoint-frame-ring.cjs` und49bestehende Node-Probetests unverändert grün, alte Builder-Signatur funktioniert.
-- [ ] Eigenreview und Commit `test: establish versioned three-slot GPU ownership`. Keine Fenster/Office/Audio in dieser Aufgabe.
+- [x] RED-Fälle schreiben: `initial_three_free`, `reclaim_ready_never_leased`, `claim_after_notice_uses_current`, `late_release_cannot_free_reused_slot`, `revoke_drains_without_new_generation`. Kernassertion: Nach drei LEASED-Claims ist `beginWrite()==nullopt`; nach falschem/doppeltem Release bleibt das unverändert.
+- [x] `node tests/smoke/powerpoint-gpu-slots.cjs` ausführen; fehlende Implementierung als RED feststellen, keine absichtlich falschen Compilerflags.
+- [x] Toolchain-Auflösung extrahieren, ohne Logs mit Environmentwerten; beide Builder nutzen sie. SlotPool implementieren: FREE→WRITING→READY→LEASED→FREE auf einem Besitzerthread; Reclaim nur READY; Revoke blockiert neue Claims/Writes, lässt alte exakte Releases und GPU-Abschluss zum Drain zu. Begrenzte Sequenz läuft nie über.
+- [x] Mindestens10000deterministische Zustandsoperationen mit gemischter Schreib-/Claim-/Release-Reihenfolge prüfen, inklusive unsicherer Sequenz, falscher Tokens, ungültigem Slot und Rückwärtszeiten. GREEN: `GPU_SLOT_PASS`; zusätzlich bestehende `node tests/smoke/powerpoint-frame-ring.cjs` und49bestehende Node-Probetests unverändert grün, alte Builder-Signatur funktioniert.
+- [x] Eigenreview und Commit `test: establish versioned three-slot GPU ownership`. Keine Fenster/Office/Audio in dieser Aufgabe.
 
 ## Task 2: echter nativer GPU-Produzent und begrenztes Protokoll
 

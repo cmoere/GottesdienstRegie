@@ -2,8 +2,9 @@
 
 Status: Der Nutzer hat diesen schriftlichen Entwurf am22.10.2026 nach Vorlage
 mit „ja“ bestätigt. Der daraus erstellte [Umsetzungsplan](../plans/2026-10-22-powerpoint-gpu-pipeline.md)
-benötigt vor Implementierung eine eigene Prüfung. Kein Produkt-Upgrade ist damit
-freigegeben. Native Umsetzung durch den Hauptagenten; keine Programmierungs-/Review-Delegation.
+wurde anschließend ebenfalls mit „ja“ freigegeben. Die isolierte Umsetzung hat
+begonnen; kein Produkt-Upgrade ist damit freigegeben. Native Umsetzung durch den
+Hauptagenten; keine Programmierungs-/Review-Delegation.
 
 ## Ziel und Umfang
 
@@ -289,5 +290,6 @@ v86-Publish aus diesem Probeentwurf.
 Die Quellen definieren API-Verträge, nicht den Nachweis dieses neuen Aufbaus.
 Eigenprüfung vor Vorlage: Slot-/Claim-Zustände, RenderAck vs Freigabe vs sichtbare
 Beobachtung, Observer-Rückstau, Handle-Absturzgrenze und unveränderte Abnahme
-aufeinander abgestimmt. Der separate Umsetzungsplan ist erstellt; noch keine
-Implementierung dieses Entwurfs.
+aufeinander abgestimmt. Der freigegebene Umsetzungsplan wird ausgeführt;
+[Prüfstand](../evidence/2026-10-22-powerpoint-gpu-pipeline.md) trennt erledigte
+Zustandstests von weiterhin offenen GPU-/PowerPoint-Nachweisen.
