@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <iostream>
 #include <string>
+#include <sstream>
 namespace {
 uint64_t frame = 0; int contentWidth = 1600, contentHeight = 900;
 RECT screen{}; bool found = false;
@@ -52,7 +53,7 @@ int wmain(int argc, wchar_t** argv) {
   HANDLE timer = CreateWaitableTimerExW(nullptr, nullptr, CREATE_WAITABLE_TIMER_HIGH_RESOLUTION, TIMER_ALL_ACCESS);
   LARGE_INTEGER due{}; due.QuadPart = -160000;
   if (!timer || !SetWaitableTimer(timer, &due, 16, nullptr, nullptr, FALSE)) {if (timer) CloseHandle(timer); DestroyWindow(window); return 7;}
-  bool running = true;
+  bool running = true; std::string commandBuffer;
   while (running) {
     const auto reason = MsgWaitForMultipleObjectsEx(1, &timer, 100, QS_ALLINPUT, MWMO_INPUTAVAILABLE);
     if (reason == WAIT_OBJECT_0) {++frame; InvalidateRect(window, nullptr, FALSE); UpdateWindow(window);}
@@ -61,7 +62,25 @@ int wmain(int argc, wchar_t** argv) {
     DWORD available = 0;
     const auto input = GetStdHandle(STD_INPUT_HANDLE);
     if (!PeekNamedPipe(input, nullptr, 0, nullptr, &available, nullptr)) running = false;
-    else if (available) {char stop[64]; DWORD count = 0; ReadFile(input, stop, sizeof(stop), &count, nullptr); running = false;}
+    else if (available) {
+      char bytes[64]; DWORD count = 0;
+      if (!ReadFile(input, bytes, sizeof(bytes), &count, nullptr) || !count) running = false;
+      else {
+        commandBuffer.append(bytes, count);
+        if (commandBuffer.size() > 64) running = false;
+        std::size_t end;
+        while (running && (end = commandBuffer.find('\n')) != std::string::npos) {
+          const auto line = commandBuffer.substr(0, end); commandBuffer.erase(0, end + 1);
+          std::istringstream command(line); std::string mode, extra; uint64_t requestId = 0;
+          if (!(command >> mode >> requestId) || (command >> extra) || !requestId || requestId > 9007199254740991ULL) { running = false; break; }
+          // These controls address only this generated fixture's own HWND.
+          if (mode == "resize") SetWindowPos(window, nullptr, 0, 0, contentWidth - 32, contentHeight + 64, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+          else if (mode == "minimize") ShowWindow(window, SW_MINIMIZE);
+          else { running = false; break; }
+          std::cout << "{\"fixture\":\"" << mode << "\",\"requestId\":" << requestId << "}" << std::endl;
+        }
+      }
+    }
   }
   CancelWaitableTimer(timer); CloseHandle(timer);
   if (IsWindow(window)) DestroyWindow(window);

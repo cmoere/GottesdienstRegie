@@ -42,7 +42,15 @@ function lineProcess(executable, args, cwd) {
 async function startOwnedWindow({executable, cwd, monitor, aspect}) {
   if (monitor !== 1 || !['wide', 'standard'].includes(aspect)) throw Error('NATIVE_SOURCE_MONITOR_NOT_AUTHORIZED');
   const process = lineProcess(executable, ['--monitor=1', aspect], cwd);
-  try {const owner = await process.waitFor(value => typeof value.hwnd === 'string', 'owner'); return {owner, close: process.close};}
+  try {
+    const owner = await process.waitFor(value => typeof value.hwnd === 'string', 'owner');
+    let commandId = 0;
+    return {owner, close: process.close, async change(mode) {
+      if (!['resize', 'minimize'].includes(mode) || commandId >= Number.MAX_SAFE_INTEGER) throw Error('NATIVE_FIXTURE_COMMAND_INVALID');
+      const id = ++commandId; process.write(mode + ' ' + id);
+      await process.waitFor(value => value.fixture === mode && value.requestId === id, 'fixture-' + mode);
+    }};
+  }
   catch (error) {await process.close(); throw error;}
 }
 async function startNativeCapture({executable, cwd, owner, mapping, sessionId, generation}) {
