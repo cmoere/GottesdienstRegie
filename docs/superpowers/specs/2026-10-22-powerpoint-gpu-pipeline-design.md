@@ -1,9 +1,9 @@
 # PowerPoint: drei begrenzte GPU-Puffer mit unabhängiger Ausgabe
 
-Status: Schriftlicher Entwurf zur Nutzerprüfung. „Ja“ zur Ausarbeitung ist keine
-Freigabe dieses noch nicht geprüften Dokuments, seiner Implementierung oder eines
-Produkt-Upgrades. Nach Dokumentfreigabe folgt ein eigener Umsetzungsplan mit
-nativer Umsetzung durch den Hauptagenten; keine Programmierungs-/Review-Delegation.
+Status: Der Nutzer hat diesen schriftlichen Entwurf am22.10.2026 nach Vorlage
+mit „ja“ bestätigt. Der daraus erstellte [Umsetzungsplan](../plans/2026-10-22-powerpoint-gpu-pipeline.md)
+benötigt vor Implementierung eine eigene Prüfung. Kein Produkt-Upgrade ist damit
+freigegeben. Native Umsetzung durch den Hauptagenten; keine Programmierungs-/Review-Delegation.
 
 ## Ziel und Umfang
 
@@ -289,4 +289,5 @@ v86-Publish aus diesem Probeentwurf.
 Die Quellen definieren API-Verträge, nicht den Nachweis dieses neuen Aufbaus.
 Eigenprüfung vor Vorlage: Slot-/Claim-Zustände, RenderAck vs Freigabe vs sichtbare
 Beobachtung, Observer-Rückstau, Handle-Absturzgrenze und unveränderte Abnahme
-aufeinander abgestimmt. Keine Implementierung und kein Umsetzungsplan erstellt.
+aufeinander abgestimmt. Der separate Umsetzungsplan ist erstellt; noch keine
+Implementierung dieses Entwurfs.
