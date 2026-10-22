@@ -182,3 +182,132 @@ Product package/lockfile and installed Electron37.10.3 are unchanged. No new
 application-code regression claim, no v86 release, no installer/push/tag.
 The previously failed raw-BGRA transport gate remains failed; successful static
 GPU fixtures do not retroactively pass it. Regional completion remains open.
+
+## Moving capture follow-up: visible cadence remains FAIL
+
+User requested “weiter machen!” after the proposed moving-source/PowerPoint
+duration check. Work continued as an isolated throwaway spike, not product code.
+The newer runtime remains in its separate folder; no dependency adoption or
+installer change. All new fixture/runner sources remain ignored under work/.
+Primary agent implements and reviews; no programming/review delegation.
+
+### Pipeline and actual observations
+
+The existing native WGC ownership/crop/letterbox code was adapted into a separate
+throwaway helper. HWND/PID/process-creation time and fixed geometry are still
+validated, source lifetime is watched independently, and only the own generated
+Win32 fixture on authorized Monitor1 is captured. The GPU target is an unnamed
+1920×1080BGRA NT-shared texture, duplicated only into the own Electron parent.
+No staging Map,8MB pixel pipe, shared-memory pixel ring or full CPU frame copy
+is used by this trial's native producer.
+
+One target texture is immutable while leased: one read request, one delivery to
+each of two sandboxed/context-isolated recipients, actual drawing/composed
+pixel proof, release of renderer/Main imported references, then native reuse.
+The source sends only private metadata/handle values to Main. The output page
+gets no handle/Node/IPC API; isolated preload draws the imported VideoFrame with
+WebGL, checks a source row, and releases the imported resource. Main compares
+that row to independent capturePage composition. Only actual changing row
+hashes, not rising native sequence IDs, count towards visible cadence. The row
+contains the own fixture's moving marker; the composed PNG was visually checked
+for source counter/crop, moving marker and separate test overlay.
+
+No full-frame CPU transport does **not** prove zero-copy rendering everywhere:
+VideoFrame/WebGL and Chromium may internally copy GPU resources. Small CPU
+readbacks remain deliberate test observations. Source/import and compositor
+proof are serial in this candidate; it is not a production multi-client broker.
+
+The existing unmodified metrics module enforces60seconds, at least29.5changed
+source frames/s per recipient, maxgap150ms and p95paired skew150ms. Actual own
+PowerPoint command/control tests are reachable only after transportPass. No run
+passed that gate, so no PowerPoint application was launched by this follow-up.
+
+Full results, artifact folders under work/:
+
+| Artifact | Duration ms | MAIN / mirror changed fps | Paired / unmatched | Max gap ms | Paired p95 skew ms |
+| --- | ---: | ---: | --- | ---: | ---: |
+| gpu45-moving-run-r9vkMQ | 60032.7078 | 15.524870 / 15.524870 | 932 / 0 | 110.8361 | 15.5657 |
+| gpu45-moving-run-5nSwHC | 60014.7333 | 15.646158 / 15.646158 | 939 / 0 | 97.3076 | 13.3447 |
+| gpu45-moving-run-0D6TlM | 60013.2531 | 19.079119 / 19.079119 | 1145 / 0 | 88.4119 | 22.9054 |
+
+All three fail CADENCE_MAIN and CADENCE_MIRROR. Unlike the old raw-BGRA run,
+every measured sequence here has a matching composed observation at the other
+recipient; the paired skew therefore covers all recorded deliveries. This is
+not a general live application synchronization fix. No lowered limits, omitted
+late samples, downgraded resolution or video-export substitute.
+
+### Profile, controlled wait change, and rejected cache experiment
+
+Initial build setup had a local variable collision (`state` sampler vs HRESULT),
+then omitted user32 import library. Both compiler/linker errors were fixed in
+the throwaway builder/source. A prematurely started benchmark reported
+CAPTURE_START/missing executable, artifactrJeIry; no performance or passing claim
+is based on that setup failure. Successful native builds emit no warnings.
+
+Stage instrumentation (second full run) p50/p95ms: native response15.83/28.73,
+send0.78/1.86, render ACK13.64/18.71, actual composed proof16.21/34.79, reference
+release14.84/15.63. Polling intended for2ms introduces real delay. A separate
+hidden-window timing control requested2ms thirty times: p50 9.018ms, p95 18.199ms,
+not a universal Windows timer-resolution assertion. No system clock/power policy
+was changed.
+
+Only ACK/reference wait delivery was changed to direct bounded notifications;
+the same5000ms failure deadlines and independent composed checks remain. In
+the third full run render-ACK p50 falls to3.68ms, release to0.142ms; native response
+still15.23ms and composed proof30.73ms. FPS improves to19.079 but still fails.
+Native/send/ACK/composed/release p95:25.73/1.52/9.40/42.22/0.314ms. Profiling is
+measurement-boundary evidence, not proof that a particular buffering redesign
+will meet the final limit.
+
+One subsequent experiment retained the newest WGC source frame and attempted
+to consume it directly on a read request. It blocked after the warm-up frame,
+then CAPTURE_TIMEOUT and CAPTURE_CLEANUP occurred (ddyAG1). The owned helper was
+terminated by its bounded cleanup; the private Electron process exited and no
+own source/helper/output process remains. Exact lock/WinRT-lifetime root cause
+is not established; do not claim it fixed. Failed source preserved separately as
+`live-capture-cached-failed.cpp`; active code was reverted to event-only frame
+consumption. This rejection is not another accepted performance improvement.
+
+Restored-helper short sanity checkczUAs2:8measured matched frame pairs, no runtime
+errors, native helper exit0, clean owned-source shutdown. It is explicitly
+diagnosticOnly with350.2213ms duration and correctly fails DURATION/cadence. Its
+short-run rate is not substituted for the latest full60-second result. A short
+clock probezpid1M is likewise retained as a diagnostic, never a passing run.
+
+### Unresolved source timestamp discrepancy
+
+The WGC SystemRelativeTime-derived QPC values were observed ahead of native
+publication/receipt. A dedicated native QueryPerformanceCounter immediately
+before frame metadata publication disambiguates this from JavaScript clock
+mapping: in the short diagnostic, reported source time leads that same-process
+publication QPC by approximately16–29ms; native publication to Main receipt is
+approximately0.2–1.1ms. Calibration round trips are below0.2ms and start/end
+offsets differ by only0.0063ms. Thus no source-to-visible latency is claimed from
+the WGC timestamp. Earlier raw `sourceCapturedMs` fields are diagnostic inputs,
+not trustworthy latency results. Exact Windows/driver cause remains unproved.
+
+Microsoft documents that property as compositor QPC time:
+https://learn.microsoft.com/en-us/uwp/api/windows.graphics.capture.direct3d11captureframe.systemrelativetime
+The discrepancy is not explained away by the documentation. Visible cadence
+and paired-output skew above use the same Main performance clock exclusively;
+they do not depend on this source timestamp. Actual PowerPoint command-to-visible
+latency has not been measured here. This clock issue must be resolved before any
+claim of trusted source timing or production integration.
+
+### Handoff limits
+
+The direct native-GPU import works on this machine; the serial moving pipeline
+is still below the acceptance cadence. A bounded multi-texture pipeline with
+separate capture/publication and output-consumption lifetimes is a proposed next
+design, **not implemented or approved for product use by this experiment**.
+No further speculative cache/performance fix was stacked on the failed variant.
+Any replacement must retain per-client backpressure, generation revocation,
+last-valid-frame/system-overlay behavior and all original acceptance limits.
+
+Fresh unmodified protocol/broker/metrics regression tests:
+`work/gpu-runtime-v45.0.0/unchanged-probe-tests.log`,49pass/0fail. No application
+files changed, so no new full application regression or independent review is
+claimed. Existing user-owned startup-diagnostic remains untouched. Package/
+lockfile unchanged, installed Electron37.10.3, application0.85.0; no push/tag/
+installer/release. Regional completion and complete original PowerPoint import
+remain open. The root-only review is weaker than independent review.
