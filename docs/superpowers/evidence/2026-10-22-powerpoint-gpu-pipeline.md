@@ -137,9 +137,31 @@ Vollständige Regression183Dateien/756Tests PASS in237,19s,
 `work/gpu-pipeline-task3-unit.log`. Autorreview nach der Review-Checkliste,
 keine unabhängige Prüfung und weiterhin keine Kompositions-/FPS-Freigabe.
 
+## Task4 — Lieferkredit getrennt von GPU-Lebensdauer
+
+Elf Broker- und drei API-Grenztests PASS nach beobachtetem RED der fehlenden
+Module. Nachweise: `work/gpu-pipeline-task4-red.log`,
+`work/gpu-pipeline-task4-managed-red.log`,
+`work/gpu-pipeline-task4-components.log`. ACK, Timeout und Revoke erfinden
+keine native Freigabe. Verspätete/doppelte Callbacks, Sendfehler, sofortige
+Callbacks,100überlappende Pumps und echte500ms-Empfängerfrist sind abgedeckt.
+Maximal vier Empfänger/drei Imports/ein Claim; kein gemeinsames Send-Await.
+
+Die Main-only-Bindung nutzt ausschließlich die separat geprüfte
+[Electron45-API](https://raw.githubusercontent.com/electron/electron/v45.0.0/docs/api/shared-texture.md),
+ohne Transportfallback. Ein Import-Throw bleibt konservativ unklar und hält
+den Lease; eine möglicherweise teilweise erstellte Referenz darf nicht
+zeitbasiert freigegeben werden. Revoke-Rückkehr ist kein Drain-Nachweis:
+der isolierte Supervisor muss den tatsächlichen Zustand prüfen.
+
+88/88 Node-Tests PASS (`work/gpu-pipeline-task4-node.log`), vollständige
+Regression183Dateien/756Tests PASS244,88s
+(`work/gpu-pipeline-task4-unit.log`). Autorreview, keine unabhängige Prüfung.
+Die API-Grenztests ersetzen noch nicht den echten Renderer-/Kompositionsnachweis.
+
 ## Offen
 
-Task4–7 sind nicht vollständig:
+Task5–7 sind nicht vollständig:
 unabhängige Empfänger/Freigaben, tatsächliche Komposition,
 60s-Cadence, Office-Befehle, Fehler-/Handle-Lebensdauer und Gesamtregression.
 Zustandstests allein belegen weder GPU-Transport noch Original-PowerPoint.
