@@ -26,6 +26,7 @@ import {SpotifyAuthService} from './SpotifyAuthService';
 import {normalizeSpotifyTrackUrl,SpotifyOEmbedService} from './SpotifyOEmbedService';
 import {RadioMetadataService} from './RadioMetadataService';
 import {RadioArtworkService} from './RadioArtworkService';
+import {RadioMetadataCoordinator} from './RadioMetadataCoordinator';
 import {createRegionalSettingsAccess} from './regionalSettings';
 import {createNativeRegionalText} from './nativeRegionalText';
 import {DeviceSettingsRepository} from './DeviceSettingsRepository';
@@ -65,7 +66,7 @@ let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
 let finishClose:()=>Promise<void>=async()=>{};
 let spotifyAuth:SpotifyAuthService|null=null;
 const spotifyOEmbed=new SpotifyOEmbedService();
-const radioMetadata=new RadioMetadataService(),radioArtwork=new RadioArtworkService(),radioMetadataStops=new Map<number,()=>void>();
+const radioMetadataCoordinator=new RadioMetadataCoordinator(new RadioMetadataService(),new RadioArtworkService());
 const spotifyCallback=(url:string)=>{if(url.startsWith('gottesdienstregie://spotify-callback'))void spotifyAuth?.completeCallback(url).then(status=>sendToLiveWindow(controlWindow,'spotify:status',status)).catch(error=>sendToLiveWindow(controlWindow,'spotify:status',{state:'error',message:error instanceof Error?error.message:'SPOTIFY_CALLBACK_FAILED'}))};
 app.on('open-url',(event,url)=>{event.preventDefault();spotifyCallback(url)});
 app.on('second-instance',(_event,argv)=>{const url=argv.find(value=>value.startsWith('gottesdienstregie://spotify-callback'));if(url)spotifyCallback(url);if(!argv.includes('--login-startup')){normalLaunchRequested=true;signalNormalLaunch();if(controlWindow&&!controlWindow.isDestroyed()){if(controlWindow.isMinimized())controlWindow.restore();controlWindow.show();controlWindow.focus()}}});
@@ -74,6 +75,7 @@ const rendererUrl = process.env.VITE_DEV_SERVER_URL;
 const nativeRegionalText=createNativeRegionalText(async id=>JSON.parse(await fs.readFile(path.join(__dirname,'../shared/regional/packs',`${id}.json`),'utf8')));
 const nativeText=nativeRegionalText.text;
 app.on('web-contents-created',(_event,contents)=>{
+  const contentsId=contents.id;contents.once('destroyed',()=>radioMetadataCoordinator.stopAll(contentsId));
   contents.on('context-menu',(_event,params)=>{
     if(!params.isEditable)return;
     const items:MenuItemConstructorOptions[]=[];
@@ -277,8 +279,8 @@ app.whenReady().then(async() => {
   const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
   stopPresentationOutputs=()=>outputManager.stop();
   ipcMain.handle('spelling:set-language',(event,language:string)=>applySpellCheckerLanguage(event.sender,String(language||'de')));
-  ipcMain.handle('radio:metadata-start',(event,stationId:string,streamUrl:string)=>{radioMetadataStops.get(event.sender.id)?.();const sender=event.sender;radioMetadataStops.set(sender.id,radioMetadata.start(String(stationId),String(streamUrl),value=>{if(sender.isDestroyed())return;sender.send('radio:metadata',value);if(value.title&&value.artist)void radioArtwork.resolve(value.title,value.artist).then(artwork=>{if(artwork&&!sender.isDestroyed())sender.send('radio:metadata',{...value,...artwork})}).catch(()=>{})}));return true});
-  ipcMain.handle('radio:metadata-stop',(event)=>{radioMetadataStops.get(event.sender.id)?.();radioMetadataStops.delete(event.sender.id);return true});
+  ipcMain.handle('radio:metadata-start',(event,stationId:string,streamUrl:string,sessionId?:string,channel?:string)=>{const sender=event.sender,id=typeof sessionId==='string'&&/^[\w-]{1,128}$/.test(sessionId)?sessionId:undefined;return radioMetadataCoordinator.start(sender.id,String(stationId),String(streamUrl),value=>{if(!sender.isDestroyed())sender.send('radio:metadata',value)},id,channel==='background'?'background':'preview')});
+  ipcMain.handle('radio:metadata-stop',(event,sessionId?:string,channel?:string)=>{radioMetadataCoordinator.stop(event.sender.id,channel==='background'?'background':'preview',sessionId);return true});
   ipcMain.handle('device-settings:osb-read',()=>deviceSettings.readOsb());
   ipcMain.handle('device-settings:banner-position-read',()=>deviceSettings.readBannerPosition());
   ipcMain.handle('device-settings:banner-position-write',(event,value:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id)return false;return deviceSettings.writeBannerPosition(value)});

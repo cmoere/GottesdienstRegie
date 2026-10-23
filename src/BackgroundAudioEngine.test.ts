@@ -4,8 +4,24 @@ class Media extends EventTarget{
  src='';preload='';paused=true;ended=false;muted=false;volume=1;currentTime=0;duration=0;sink='';
  async setSinkId(id:string){this.sink=id}async play(){this.paused=false;this.dispatchEvent(new Event('play'))}pause(){this.paused=true}load(){}removeAttribute(){this.src=''}
 }
-afterEach(()=>{vi.useRealTimers();vi.unstubAllGlobals();vi.resetModules()});
+afterEach(()=>{delete window.desktop;vi.useRealTimers();vi.unstubAllGlobals();vi.resetModules()});
 describe('background engine integration',()=>{
+ it('clears predecessor album and cover on a new radio title and rejects a former session',async()=>{
+  vi.useFakeTimers();vi.stubGlobal('Audio',Media);
+  let receive!:(value:any)=>void,session='';
+  window.desktop={radio:{startMetadata:async(_id:string,_url:string,id:string)=>{session=id},stopMetadata:async()=>{},onMetadata:(callback:typeof receive)=>{receive=callback;return()=>{}}}} as any;
+  const {backgroundAudioEngine:engine}=await import('./BackgroundAudioEngine');
+  const config={tracks:[{assetId:'radio:one',name:'Station',url:'https://example.test/radio'}],volume:70,muted:false,shuffle:false,repeat:true,continueUntil:'stopCue',fadeInSeconds:0,fadeOutSeconds:0,crossfadeSeconds:0,ducking:{enabled:false,level:25,attackMs:0,releaseMs:0}} as any;
+  await engine.start('pre',config);
+  receive({stationId:'one',sessionId:session,title:'Lied A',artist:'Band',album:'Album A',imageUrl:'https://example.test/a.jpg'});
+  expect(engine.getState().track?.imageUrl).toBe('https://example.test/a.jpg');
+  receive({stationId:'one',sessionId:session,title:'Lied B',artist:'Band'});
+  expect(engine.getState().track).toMatchObject({name:'Lied B',album:'',imageUrl:''});
+  const former=session;await engine.stop(0);await engine.start('post',config);
+  receive({stationId:'one',sessionId:former,title:'Lied A',artist:'Band',imageUrl:'https://example.test/a.jpg'});
+  expect(engine.getState().track?.name).toBe('Station');
+  await engine.stop(0);
+ });
  it('keeps continuing radio connected between sections and reports real progress',async()=>{
   vi.useFakeTimers();const media:Media[]=[];
   vi.stubGlobal('Audio',class extends Media{constructor(){super();media.push(this)}});

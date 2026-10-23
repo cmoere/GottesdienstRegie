@@ -15,6 +15,7 @@ import { audioLevelProvider } from "./audio/AudioLevelProvider";
 import {BackgroundAudioRoute} from './audio/BackgroundAudioRoute';
 import {backgroundAudioStatus,type BackgroundAudioHealth} from './audio/backgroundAudioHealth';
 import {DuckingClaims} from './announcements/DuckingClaims';
+import {radioTrackIdentity} from './radioNowPlaying';
 
 export interface BackgroundAudioState {
   active: boolean;
@@ -62,6 +63,7 @@ export class BackgroundAudioEngine {
   private ducked = false;
   private readonly duckingClaims = new DuckingClaims();
   private radioMetadataOff?: () => void;
+  private radioSessionId?: string;
   private durationTimer?: number;
   constructor() {
     this.audio.preload = "auto";
@@ -228,7 +230,8 @@ export class BackgroundAudioEngine {
     const radio = (window.desktop as any)?.radio;
     if (!radio) return;
     const stationId = track.assetId.slice("radio:".length),
-      stationName = track.name;
+      stationName = track.name, sessionId=crypto.randomUUID();
+    this.radioSessionId=sessionId;let previousKey='';
     this.radioMetadataOff = radio.onMetadata?.(
       (value: {
         stationId: string;
@@ -236,27 +239,30 @@ export class BackgroundAudioEngine {
         artist?: string;
         album?: string;
         imageUrl?: string;
+        sessionId?:string;
       }) => {
-        if (value.stationId !== stationId || !this.config?.tracks[index])
+        if (value.stationId !== stationId || value.sessionId!==sessionId || this.radioSessionId!==sessionId || this.index!==index || this.config?.tracks[index]?.assetId!==track.assetId)
           return;
         const tracks = [...this.config.tracks];
+        const key=radioTrackIdentity(value.title??'',value.artist??''),changed=key!==previousKey;previousKey=key;
         tracks[index] = {
           ...tracks[index],
           name: value.title || stationName,
           artist: value.artist || "Online-Radio",
-          album: value.album || tracks[index].album || stationName,
-          imageUrl: value.imageUrl || tracks[index].imageUrl,
+          album: value.album || (changed?'':tracks[index].album) || '',
+          imageUrl: value.imageUrl || (changed?'':tracks[index].imageUrl) || '',
         };
         this.config = { ...this.config, tracks };
         this.publish();
       },
     );
-    void radio.startMetadata?.(stationId, track.url);
+    void radio.startMetadata?.(stationId, track.url,sessionId,'background');
   }
   private stopRadioMetadata() {
+    const sessionId=this.radioSessionId;this.radioSessionId=undefined;
     this.radioMetadataOff?.();
     this.radioMetadataOff = undefined;
-    void (window.desktop as any)?.radio?.stopMetadata?.();
+    if(sessionId)void (window.desktop as any)?.radio?.stopMetadata?.(sessionId,'background');
   }
   async start(
     sourceKey: string,

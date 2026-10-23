@@ -40,17 +40,18 @@ export function RadioStationBrowser({
   useEffect(() => {
     if (!active) return;
     const radio = (window.desktop as any)?.radio;
+    const sessionId=crypto.randomUUID();
     const off = radio?.onMetadata?.(
-      (value: { stationId: string; title: string; artist: string }) => {
-        if (value.stationId !== active.id) return;
+      (value: { stationId: string; title: string; artist: string;sessionId?:string }) => {
+        if (value.stationId !== active.id||value.sessionId!==sessionId) return;
         setLiveTitle(value.title);
         setLiveArtist(value.artist);
       },
     );
-    void radio?.startMetadata?.(active.id, active.streamUrl);
+    void radio?.startMetadata?.(active.id, active.streamUrl,sessionId,'preview');
     return () => {
       off?.();
-      void radio?.stopMetadata?.();
+      void radio?.stopMetadata?.(sessionId,'preview');
     };
   }, [active]);
   const play = (station: RadioStation) => {
