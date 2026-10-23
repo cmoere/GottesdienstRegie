@@ -5,7 +5,8 @@ assert.equal(releases.versions.flatMap(entry=>entry.builds).filter(entry=>entry.
 assert.ok(releases.versions.flatMap(entry=>entry.builds).some(entry=>entry.version==='0.58.0'));
 assert.match(fs.readFileSync('src/App.tsx','utf8'),/playAudioInPreview/);
 assert.match(fs.readFileSync('src/ProductionWorkspace.tsx','utf8'),/Folie dauerhaft anzeigen/);
-assert.match(fs.readFileSync('src/RadioStationBrowser.tsx','utf8'),/Suchtext löschen/);
+assert.match(fs.readFileSync('src/RadioStationBrowser.tsx','utf8'),/t\('radioBrowserClear'\)/);
+assert.match(fs.readFileSync('shared/regional/radioControlTemplates.ts','utf8'),/radioBrowserClear:'Suchtext löschen'/);
 assert.match(fs.readFileSync('src/BibleTextDialog.tsx','utf8'),/translationGroups/);
 assert.match(fs.readFileSync('src/termsContent.ts','utf8'),/localizedSectionCopy/);
 console.log('Version 0.58 checks passed.');

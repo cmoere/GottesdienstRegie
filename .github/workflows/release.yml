@@ -2,6 +2,11 @@ name: Cross-platform release
 
 on:
   workflow_dispatch:
+    inputs:
+      windows_only:
+        description: 'Nur fehlende Windows-Dateien eines bestehenden Releases ergänzen'
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths: ['package.json']
@@ -67,7 +72,7 @@ jobs:
           target_commitish: ${{ github.sha }}
           body_path: RELEASE_NOTES.md
           prerelease: false
-          draft: false
+          draft: true
           fail_on_unmatched_files: true
           files: |
             release/GottesdienstRegie-Setup-*.exe
@@ -75,6 +80,7 @@ jobs:
             release/latest.yml
   macos:
     needs: prepare
+    if: ${{ github.event.inputs.windows_only != 'true' }}
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -91,13 +97,14 @@ jobs:
           target_commitish: ${{ github.sha }}
           body_path: RELEASE_NOTES.md
           prerelease: false
-          draft: false
+          draft: true
           files: |
             release/GottesdienstRegie-*.dmg
             release/GottesdienstRegie-*.zip
             release/latest-mac.yml
   linux:
     needs: prepare
+    if: ${{ github.event.inputs.windows_only != 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -114,8 +121,23 @@ jobs:
           target_commitish: ${{ github.sha }}
           body_path: RELEASE_NOTES.md
           prerelease: false
-          draft: false
+          draft: true
           files: |
             release/GottesdienstRegie-*.AppImage
             release/GottesdienstRegie-*.deb
             release/latest-linux.yml
+  publish:
+    needs: [prepare, windows, macos, linux]
+    if: ${{ always() && needs.windows.result == 'success' && (needs.macos.result == 'success' || needs.macos.result == 'skipped') && (needs.linux.result == 'success' || needs.linux.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Vollständiges normales Update freigeben
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+        run: |
+          gh release view "$RELEASE_TAG" --json assets > release-assets.json
+          node scripts/check-release-assets.cjs release-assets.json "${RELEASE_TAG#v}"
+          gh release edit "$RELEASE_TAG" --draft=false

@@ -26,3 +26,11 @@ The original-fidelity PowerPoint player remains unapproved and inactive. Its sep
 ## Publication
 
 Pending. Local commits/builds do not prove an uploaded update. After the authorized fast-forward source push, verify the release workflow, normal/non-draft release state, installer/blockmap/update manifests, source SHA, installer hash and public release-feed entry. No installer is executed during verification.
+
+### First CI run and recovery
+
+Source commit 4a6f704 started run39955556526. Windows failed at historical v57/v58 source-regex guards after the previously implemented radio-browser localization. Both failures were reproduced locally; guards now assert the actual translation calls and the original German dictionary values. No radio behavior was modified and no tests were disabled. All46 workflow version guards then passed locally.
+
+The existing per-platform publisher exposed a partially populated release before Windows succeeded. The failed run was cancelled and the same release was reversibly held as a draft; no assets or tags were deleted. Eight macOS/Linux files had already uploaded and were retained. Recovery adds a Windows-only dispatch, uploads as draft, and a final publication job that requires successful requested platforms plus all eleven nonempty expected binary/update assets. Missing/empty asset cases and publication ordering were observed RED→GREEN. The successful final source/tag and workflow IDs are recorded after verification below.
+
+Recovery verification: 204 files / 848 tests passed (198.31 seconds), TypeScript passed, and the expanded v86 guard passed all 90 focused tests. The recovery commit changes only CI, release guard scripts, tests and this verification document; application runtime sources remain identical to the existing v0.86.0 tag at 4a6f704. Existing macOS/Linux artifacts are therefore retained without rewriting the tag. The unrelated untracked startup diagnostic remains untouched (SHA256 B7E42819F91D0D2D1BF1BBB5DE782A26749BD1A26E2D802BBC8F5327BB570AB5).
