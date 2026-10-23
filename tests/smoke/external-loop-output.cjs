@@ -6,7 +6,9 @@ app.setPath('userData',path.join(folder,'profile'));app.commandLine.appendSwitch
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));let win;
 const deadline=setTimeout(()=>app.exit(2),150000);
 app.whenReady().then(async()=>{try{
- win=new BrowserWindow({show:false,frame:false,width:1920,height:1080,useContentSize:true,webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true,backgroundThrottling:false}});
+ const offscreen=process.env.V89_WARNING_PROBE==='offscreen';
+ win=new BrowserWindow({show:false,frame:false,width:1920,height:1080,useContentSize:true,webPreferences:{offscreen,contextIsolation:true,nodeIntegration:false,sandbox:true,backgroundThrottling:false}});
+ if(offscreen){win.webContents.on('paint',()=>{});win.webContents.setFrameRate(60)}
  await win.loadURL(url);
  for(let i=0;i<100&&!await win.webContents.executeJavaScript('!!window.externalFixture');i++)await sleep(50);
  const results=[];
@@ -37,13 +39,25 @@ app.whenReady().then(async()=>{try{
   const image=await win.webContents.capturePage();fs.writeFileSync(path.join(folder,'announcement-'+design+'.png'),image.toPNG());
   const pixels=image.crop({x:112,y:42,width:550,height:80}).toBitmap();let white=0;for(let i=0;i<pixels.length;i+=4)if(pixels[i]>220&&pixels[i+1]>220&&pixels[i+2]>220)white++;assert(white>100,'Info label must paint above its green badge');
  }
- for(const mode of ['warning','warning-black']){
+ for(const mode of ['warning','warning-second','warning-black']){
   await win.webContents.executeJavaScript('window.externalFixture.mode('+JSON.stringify(mode)+')');await sleep(300);
-  const state=await win.webContents.executeJavaScript("(()=>{const node=document.querySelector('#warning-content'),r=node.getBoundingClientRect();return {top:r.top,bottom:r.bottom,warning:!!document.querySelector('.weather-warning-banner'),source:document.querySelector('.weather-warning-banner footer')?.textContent,watermark:!!document.querySelector('.test-mode-watermark')}})()");
-  assert.equal(state.warning,mode==='warning');assert(state.watermark);assert(state.bottom<=1080);
-  if(mode==='warning'){assert(state.top>=280);assert.equal(state.source,'Quelle: Deutscher Wetterdienst')}else assert.equal(state.top,0);
-  fs.writeFileSync(path.join(folder,mode+'.png'),(await win.webContents.capturePage()).toPNG());
+  const state=await win.webContents.executeJavaScript("(()=>{const node=document.querySelector('#warning-content'),r=node.getBoundingClientRect();return {top:r.top,bottom:r.bottom,width:r.width,height:r.height,background:getComputedStyle(node).backgroundColor,warning:!!document.querySelector('.weather-warning-banner'),source:document.querySelector('.weather-warning-banner footer')?.textContent,watermark:!!document.querySelector('.test-mode-watermark')}})()");
+  console.log('WARNING_GEOMETRY',mode,JSON.stringify(state));assert(state.width>=1400&&state.height>=790,'Warning overlay must retain the actual content dimensions');
+  assert.equal(state.warning,mode!=='warning-black');assert(state.watermark);assert(state.bottom<=1080);
+  if(mode!=='warning-black'){
+   assert(state.top>=280);assert.equal(state.source,'Quelle: Deutscher Wetterdienst');
+   assert.equal(await win.webContents.executeJavaScript("document.querySelector('.weather-warning-counter')?.textContent"),mode==='warning-second'?'2/2':'1/2');
+   assert.equal(await win.webContents.executeJavaScript("document.querySelector('.weather-warning-icon')?.getAttribute('aria-label')"),mode==='warning-second'?'Gewitter':'Glätte und Frost');
+  }else assert.equal(state.top,0);
+  const warningImage=await win.webContents.capturePage();
+  if(offscreen){const pixel=warningImage.crop({x:500,y:500,width:1,height:1}).toBitmap();assert.equal(pixel[1],143);assert.equal(Math.min(pixel[0],pixel[2]),96);assert.equal(Math.max(pixel[0],pixel[2]),154);assert.equal(pixel[3],255)}
+  fs.writeFileSync(path.join(folder,mode+'.png'),warningImage.toPNG());
  }
+ await win.setContentSize(640,360);await win.webContents.executeJavaScript("window.externalFixture.mode('warning-long')");await sleep(300);
+ const narrow=await win.webContents.executeJavaScript("(()=>{const banner=document.querySelector('.weather-warning-banner'),header=banner.querySelector('header');return {width:banner.getBoundingClientRect().width,headerBottom:header.getBoundingClientRect().bottom,bottom:banner.getBoundingClientRect().bottom,overflow:banner.scrollWidth>banner.clientWidth+1,count:document.querySelector('.weather-warning-counter')?.textContent}})()");
+ assert.equal(narrow.width,640);assert(!narrow.overflow);assert(narrow.headerBottom<narrow.bottom);assert.equal(narrow.count,'1/2');
+ fs.writeFileSync(path.join(folder,'warning-narrow.png'),(await win.webContents.capturePage()).toPNG());await win.setContentSize(1920,1080);
+ if(process.env.V89_WARNING_PROBE){console.log('WARNING_FOCUSED_PASS '+folder);clearTimeout(deadline);if(offscreen){win.webContents.stopPainting();win.webContents.removeAllListeners('paint');await win.loadURL('about:blank');await sleep(300);win.close();app.quit()}else{win.destroy();app.exit(0)}return}
  await win.webContents.executeJavaScript("window.externalFixture.mode('screen-report')");await sleep(300);
  assert(await win.webContents.executeJavaScript("document.querySelector('iframe').contentDocument.body.textContent.includes('keine physische Bild-')"));
  fs.writeFileSync(path.join(folder,'screen-report.png'),(await win.webContents.capturePage()).toPNG());

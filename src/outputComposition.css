@@ -13,5 +13,6 @@
 .output-weather-layer{position:absolute;top:0;left:0;right:0;height:26%;z-index:11;container-type:inline-size;overflow:hidden;background:#fff}
 .output-composition[data-banner-position=top]>.output-weather-layer{top:7.777778%}
 .weather-warning-banner{height:100%;box-sizing:border-box;border-block:.12cqw solid #a65353;padding:.65cqw 1.5cqw;color:#18232f;background:#fff;display:flex;flex-direction:column;gap:.4cqw;font:400 1.15cqw/1.35 'Cera Pro',system-ui,sans-serif}
-.weather-warning-banner header{display:flex;gap:1cqw;justify-content:space-between;flex:none;color:#a65353}.weather-warning-banner header strong{font-size:1.35cqw}.weather-warning-banner header span{font-size:.9cqw;flex:none}
+.weather-warning-banner header{display:flex;gap:.4cqw 1cqw;align-items:flex-start;flex-wrap:wrap;justify-content:space-between;flex:none;color:#a65353}.weather-warning-banner header strong{font-size:1.35cqw;min-width:0;overflow-wrap:anywhere}
+.weather-warning-heading{display:flex;align-items:flex-start;gap:.45cqw;flex:1 1 45%;min-width:0}.weather-warning-icon{width:1.8cqw;height:1.8cqw;flex:none}.weather-warning-counter{flex:none;font-size:1.05cqw;font-weight:600;line-height:1.4;padding:0 .35cqw;border:1px solid currentColor;border-radius:.2cqw}.weather-warning-meta{font-size:.9cqw;flex:0 1 auto;text-align:right}
 .weather-warning-viewport{flex:1;overflow:hidden;min-height:0;white-space:pre-wrap}.weather-warning-viewport p{margin:.35em 0}.weather-warning-banner footer{font-size:.8cqw;flex:none}
