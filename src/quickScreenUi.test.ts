@@ -5,6 +5,14 @@ import type {QuickScreenConfig} from './preferences';
 import {normalizeBibleDisplayText,quickScreenShortcut,quickScreenTypeForKey,shouldRenderOperatorQuick} from './quickScreenUi';
 
 describe('quick-screen UI rules',()=>{
+  it('stamps one shared technical activation time and preserves it across restored dispatch',async()=>{
+    const quick:QuickScreenConfig={id:'technical-issue',type:'custom',name:'Technische Störung',enabled:true,targets:['main'],order:0};
+    const setQuick=vi.fn(),sendQuick=vi.fn().mockResolvedValue(true),actions={setQuick,sendQuick,openBible:vi.fn(),onAir:true,now:()=>1000};
+    await applyQuickScreen(quick,actions);
+    expect(setQuick).toHaveBeenLastCalledWith(expect.objectContaining({activatedAtMs:1000}));
+    await applyQuickScreen({...quick,activatedAtMs:1000} as QuickScreenConfig,{...actions,now:()=>9000});
+    expect(sendQuick).toHaveBeenLastCalledWith(['main'],expect.objectContaining({activatedAtMs:1000}));
+  });
   it('shows stable keys for every built-in quick screen',()=>{
     expect(quickScreenShortcut('logo')).toBe('F2');
     expect(quickScreenShortcut('bible')).toBe('F9');

@@ -4,6 +4,7 @@ import {
   type LoopItemType,
 } from './loopDomain';
 import {normalizeNowPlayingSettings,nowPlayingSettingsPatch} from './nowPlayingModel';
+import {normalizeClockSettings,clockSettingsPatch} from './clockLoop/model';
 
 export interface LoopItemDraft {
   type: LoopItemType;
@@ -57,6 +58,7 @@ export function createLoopItem(
     metadata.questionDurationMs = 8_000;
   } else if (type === 'clock') {
     metadata.format = 'HH:mm:ss';
+    Object.assign(metadata,clockSettingsPatch(normalizeClockSettings(metadata)));
     body ||= 'Aktuelle Uhrzeit';
   } else if (type === 'nowPlaying') {
     Object.assign(metadata,nowPlayingSettingsPatch(normalizeNowPlayingSettings({})));

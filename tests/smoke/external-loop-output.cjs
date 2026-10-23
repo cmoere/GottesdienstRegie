@@ -4,7 +4,7 @@ const folder=process.env.EXTERNAL_PROBE_FOLDER,url=process.env.EXTERNAL_PROBE_UR
 assert(folder&&fs.existsSync(path.join(folder,'.probe-owned'))&&url?.startsWith('http://127.0.0.1:'));
 app.setPath('userData',path.join(folder,'profile'));app.commandLine.appendSwitch('force-device-scale-factor','1');
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));let win;
-const deadline=setTimeout(()=>app.exit(2),60000);
+const deadline=setTimeout(()=>app.exit(2),150000);
 app.whenReady().then(async()=>{try{
  win=new BrowserWindow({show:false,frame:false,width:1920,height:1080,useContentSize:true,webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true,backgroundThrottling:false}});
  await win.loadURL(url);
@@ -19,6 +19,18 @@ app.whenReady().then(async()=>{try{
   const image=await win.webContents.capturePage();assert.deepEqual(image.getSize(),{width:1920,height:1080});fs.writeFileSync(path.join(folder,mode+'.png'),image.toPNG());results.push(result);
   if(mode==='news')for(const x of [1272,1582]){const pixels=image.crop({x,y:76,width:274,height:64}).toBitmap();let contrast=0;for(let i=0;i<pixels.length;i+=4)if(x===1272?pixels[i]<80&&pixels[i+1]<80&&pixels[i+2]<80:pixels[i]>220&&pixels[i+1]>220&&pixels[i+2]>220)contrast++;assert(contrast>100,'Original source logos must be painted with readable contrast, not only loaded');}
  }
- fs.writeFileSync(path.join(folder,'report.json'),JSON.stringify({electron:process.versions.electron,results,physicalDisplayVerified:false},null,2));
+ for(const design of ['digital-classic','digital-compact','digital-seconds','analog-light','analog-dark','analog-digital']){
+  await win.webContents.executeJavaScript('window.externalFixture.mode('+JSON.stringify(design)+')');await sleep(100);
+  assert.equal(await win.webContents.executeJavaScript("document.querySelector('[data-clock-design]')?.getAttribute('data-clock-design')"),design);
+  await win.webContents.executeJavaScript("(async()=>{await document.fonts.ready;for(let i=0;i<2;i++)await new Promise(requestAnimationFrame)})()");
+  fs.writeFileSync(path.join(folder,design+'.png'),(await win.webContents.capturePage()).toPNG());
+ }
+ await win.webContents.executeJavaScript("window.externalFixture.mode('technical')");await sleep(100);
+ assert.equal(await win.webContents.executeJavaScript("document.querySelector('h1')?.textContent"),'Technical difficulties');
+ assert(await win.webContents.executeJavaScript("!!document.querySelector('.technical-issue-mark svg')&&!!document.querySelector('.test-mode-watermark')"));
+ fs.writeFileSync(path.join(folder,'technical-en.png'),(await win.webContents.capturePage()).toPNG());
+ const mirror=new BrowserWindow({show:false,frame:false,width:1920,height:1080,webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true,backgroundThrottling:false}});
+ try{await mirror.loadURL(url+'#technical');for(let i=0;i<100&&!await mirror.webContents.executeJavaScript('!!window.externalFixture');i++)await sleep(50);assert.equal(await mirror.webContents.executeJavaScript("document.querySelector('h1')?.textContent"),'Technical difficulties')}finally{mirror.destroy()}
+ fs.writeFileSync(path.join(folder,'report.json'),JSON.stringify({electron:process.versions.electron,results,clockDesigns:6,technicalLateMirror:'en',physicalDisplayVerified:false},null,2));
  console.log('EXTERNAL_LOOP_NATIVE_PASS '+folder);win.destroy();clearTimeout(deadline);app.exit(0);
 }catch(error){console.error(error);if(win&&!win.isDestroyed())win.destroy();clearTimeout(deadline);app.exit(1)}});

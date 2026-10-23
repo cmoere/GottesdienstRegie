@@ -74,6 +74,7 @@ import { NowPlayingDesigner } from "./NowPlayingDesigner";
 import { EventSlideDesigner } from "./EventSlideDesigner";
 import { AnnouncementSlideDesigner } from './AnnouncementSlideDesigner';
 import {ExternalLoopDesigner} from './externalLoop/Designer';
+import {ClockLoopDesigner} from './clockLoop/ClockLoopDesigner';
 import {useLiveOutputPreview} from './liveOutputPreview';
 import {OutputComposition} from './OutputComposition';
 import {useAnnouncementBanner} from './AnnouncementBannerController';
@@ -1579,6 +1580,8 @@ function ContentEditor({
           </div>
           {item.type === "nowPlaying" ? (
             <NowPlayingDesigner item={item} canEdit={canEdit} />
+          ) : item.type==='clock' ? (
+            <><ClockLoopDesigner item={item} canEdit={canEdit}/><label>Anzeigedauer (Sekunden)<input type="number" min="1" step="1" disabled={!canEdit} value={durationSeconds} onChange={event=>changeDuration(Math.max(1,Number(event.target.value)||1))}/></label></>
           ) : (item.type==='news'||item.type==='football') ? (
             <ExternalLoopDesigner item={item} canEdit={canEdit}/>
           ) : (item.type === "event" || item.type === "nextEvents") ? (

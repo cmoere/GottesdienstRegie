@@ -1,0 +1,20 @@
+.clock-loop-view{box-sizing:border-box;width:100%;height:100%;padding:3.125cqw;display:flex;flex-direction:column;justify-content:center;gap:1.5625cqw;font-family:"Cera Pro",sans-serif;overflow:hidden}
+.clock-loop-view .clock-digits{font-size:11.45833cqw;font-weight:500;line-height:1.2;white-space:nowrap;font-variant-numeric:tabular-nums}
+.clock-loop-view.digital-compact .clock-digits{font-size:8.33333cqw;border-left:.41667cqw solid var(--clock-accent);padding-left:2.08333cqw}
+.clock-loop-view.digital-seconds .clock-digits{font-size:10.41667cqw;color:var(--clock-accent);letter-spacing:.20833cqw}
+.clock-loop-view .clock-date{font-size:2.5cqw;font-weight:400;line-height:1.4;margin:0}
+.clock-analog{width:31.25cqw;height:31.25cqw;flex:none;color:#000}
+.clock-face{fill:#fff;stroke:var(--clock-accent);stroke-width:3}
+.clock-analog.dark{color:#fff}.clock-analog.dark .clock-face{fill:#000}
+.clock-tick,.clock-hour-mark{stroke:currentColor;stroke-width:1}.clock-hour-mark{stroke-width:3}
+.clock-analog text{fill:currentColor;font-family:"Cera Pro",sans-serif;font-size:25px}
+.clock-hour-hand,.clock-minute-hand{stroke:currentColor;stroke-linecap:round;stroke-width:9}.clock-minute-hand{stroke-width:6}
+.clock-second-hand{stroke:var(--clock-accent);stroke-width:2}.clock-center{fill:var(--clock-accent)}
+.clock-loop-view.analog-digital .clock-analog{width:26.04167cqw;height:26.04167cqw}
+.clock-loop-view.analog-digital .clock-digits{font-size:4.16667cqw}
+.clock-design-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.clock-design-cards button{border:1px solid #b6bec3;padding:4px;min-width:0}
+.clock-design-cards button[aria-pressed=true]{border:2px solid #608f9a}
+.clock-design-tile{display:block;container-type:inline-size;aspect-ratio:16/9;overflow:hidden}
+.clock-design-cards small{display:block;font-size:12px;margin:6px 0}
+.clock-loop-designer label{display:flex;align-items:center;gap:8px;margin:12px 0}

@@ -1,4 +1,6 @@
 import {ExternalLoopElement} from './externalLoop/Element';
+import {ActiveClockLoopView} from './clockLoop/ClockLoopView';
+import {normalizeClockSettings} from './clockLoop/model';
 import {paginateReducedMotionEvents} from './eventPagination';
 import {EventScrollViewport,useEventPresentationClock} from './EventScrollViewport';
 import {prepareEventOverview} from './eventOverviewPresentation';
@@ -328,7 +330,7 @@ function RenderElement({
           sandbox="allow-scripts allow-same-origin"
         />
       );
-    if (loopType === "clock") return <ClockLoopElement style={style} />;
+    if (loopType === "clock") return <div className="slide-renderer-element" style={style}><ActiveClockLoopView settings={normalizeClockSettings(properties)} staticPreview={mode==='thumbnail'||mode==='editor'}/></div>;
     if(loopType==='announcement')return mode==='live'||mode==='mirror'?<div className="slide-renderer-element" style={style}/>:<AnnouncementLoopPreview style={style} properties={properties}/>;
     if (loopType === "nowPlaying")
       return <NowPlayingLoopElement style={style} properties={properties} />;
@@ -521,35 +523,6 @@ function RenderElement({
       style={properties.preparedAnnouncementText===true?{...style,display:'block',whiteSpace:'pre',overflow:'hidden'}:style}
     >
       {Number(properties.announcementScrollHeight)>0?<AnnouncementScrollingText properties={properties} startedAtMs={startedAtMs} live={mode==='live'||mode==='mirror'}/>:properties.preparedAnnouncementText===true?<AnnouncementRichText value={properties.announcementRichLines} text={String(properties.text??'')}/>:String(properties.text ?? "")}
-    </div>
-  );
-}
-
-function ClockLoopElement({ style }: { style: CSSProperties }) {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const timer = window.setInterval(() => setNow(new Date()), 1000);
-    return () => window.clearInterval(timer);
-  }, []);
-  return (
-    <div
-      className="slide-renderer-element loop-clock"
-      style={{
-        ...style,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <strong>{now.toLocaleTimeString("de-DE")}</strong>
-      <span>
-        {now.toLocaleDateString("de-DE", {
-          weekday: "long",
-          day: "2-digit",
-          month: "long",
-        })}
-      </span>
     </div>
   );
 }

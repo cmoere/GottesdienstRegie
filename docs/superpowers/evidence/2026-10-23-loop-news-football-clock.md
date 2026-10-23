@@ -55,3 +55,13 @@ Source toggles, league/known-team choices, mode selection, persisted reload, dat
 Native Electron 37 isolated hidden fixture captured news, matchday, upcoming and a 24-row table. Original source logos are bundled unchanged with source names; their differing ink colors require white (WB) and black (WDR) display backgrounds. Logo box and composed-pixel assertions exposed the initial unreadable logos, then passed after correction. Capture waits for image decode, fonts and actual renderer frames. News and table captures were visually inspected. Evidence folder: work/external-loop-native-gW4YGx. No physical display, audio device, installed app or production ON AIR was operated.
 
 The new native fixture is partial at task4: clock/technical phase and immutable-take integrated assertions remain task6 work. No publication claim.
+
+## Task5 clock and technical issue screen
+
+Six selectable preview tiles, scalar persistence, legacy HH:mm, four date formats, 12/24-hour time, seconds/analog second hand, alignment and validated colors implemented through one shared clock renderer. Static preview tiles have no timer; mounted clock cleanup verified.
+
+Technical screen uses native information SVG, preserved German custom text/background and separately editable English text. Its DE/EN phase derives from the one dispatched activation epoch, eight seconds per language; static tiles remain German. Restored/reopened output receives the same phase without restarting navigation or audio.
+
+Tests: eight initial failures plus missing editor controls reproduced before implementation; 28 targeted tests passed, including exact 7999/8000/16000-ms boundaries, malformed optional fields, mounted/static timer lifecycle, previous logo variants, Bible navigation and screen-test regressions. Full suite 202 files / 841 tests passed (192.66s); two further lifecycle/boundary tests passed in the final targeted run and will be included in task6 full suite. Frontend typecheck passed.
+
+Native Electron37 probe first failed at missing clock integration, then passed six clock designs and an English-phase late mirror window. Captures in work/external-loop-native-uW2vuR visually inspected for all six clocks, technical icon/text/watermark and the four external-data modes. Physical display and audio were not exercised.

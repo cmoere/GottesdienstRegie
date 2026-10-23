@@ -121,6 +121,7 @@ export function QuickScreenSettings() {
                 />
               </label>
             )}
+            {active.id==='technical-issue'&&active.type==='custom'&&<label>English text (automatischer Wechsel alle 8 Sekunden)<textarea value={active.technicalIssueEnglishText??'Technical difficulties\nThank you for your patience.'} maxLength={5000} onChange={event=>patch(active.id,{technicalIssueEnglishText:event.target.value})}/></label>}
             {active.type === "logo" && (
               <>
                 <label>
