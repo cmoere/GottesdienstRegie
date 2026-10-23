@@ -1,0 +1,12 @@
+export type NewsSource='westfalen-blatt'|'wdr-owl';
+export type FootballLeague='bl1'|'bl2'|'bl3';
+export type FootballMode='matchday'|'upcoming'|'table';
+export type NewsEntry={id:string;title:string;source:NewsSource;publishedAt:string|null;url:string};
+export type FootballTeam={id:number;name:string};
+export type FootballMatch={id:number;startsAt:string;home:FootballTeam;away:FootballTeam;status:'scheduled'|'in-progress'|'finished';score:null|{home:number;away:number}};
+export type FootballTableRow={rank:number;team:FootballTeam;played:number;goalsFor:number;goalsAgainst:number;goalDifference:number;points:number};
+export type ExternalPayload={kind:'news';entries:NewsEntry[]}|{kind:'football';league:FootballLeague;season:number;mode:FootballMode;teams:FootballTeam[];matches:FootballMatch[];table:FootballTableRow[]};
+export type ExternalRequest={kind:'news';sources:NewsSource[]}|{kind:'football';league:FootballLeague;mode:FootballMode};
+export type ExternalSnapshot={version:1;key:string;revision:string;fetchedAt:number;stale:boolean;payload:ExternalPayload};
+export type ExternalReply={snapshot:ExternalSnapshot|null;status:'ready'|'stale'|'empty'|'unavailable'};
+export type ExternalSettings=({kind:'news';sources:NewsSource[];limit:number}|{kind:'football';league:FootballLeague;mode:FootballMode;teamId:number|null})&{durationSeconds:number};

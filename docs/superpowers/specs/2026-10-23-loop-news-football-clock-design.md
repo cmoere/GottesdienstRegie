@@ -2,6 +2,8 @@
 
 Status: Entwurf zur schriftlichen Freigabe. Keine Implementierungs- oder Releasefreigabe durch dieses Dokument.
 
+Nachtrag23.10.2026: Spezifikation und Implementierungsplan wurden im Chat freigegeben. Nutzer bestätigt ausdrückliche Quellennutzung mit Bedingung „quellenangaben mit logo“ und erlaubt anschließend das Speichern. Daher Original-Quellenlogos zusätzlich zur Namensnennung verwenden; keine Artikelbilder/Vereinslogos. Der begrenzte24h-Ausfallcache ist erlaubt, kein dauerhaftes Archiv. Diese Nutzerauskunft ist keine unabhängig geprüfte Lizenzurkunde.
+
 ## Ziel und bestätigter Umfang
 
 Besucher erhalten im Vor- und Nachprogramm lokale Nachrichten sowie Fußball-Spieltermine, Ergebnisse und Tabellen. Der Operator kann Quellen, Liga und optional einen Verein auswählen. Die vorhandene Uhr erhält Designkacheln und Anzeigeoptionen. Die MAIN-Schnellanzeige „Technische Störung“ wechselt zwischen Deutsch und Englisch und zeigt ein Informationssymbol statt der bisherigen Linie.
