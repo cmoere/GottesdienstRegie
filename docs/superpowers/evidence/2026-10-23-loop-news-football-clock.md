@@ -29,3 +29,10 @@ No installer, release, tag, push, installation, live monitor or audio configurat
 Read official OpenLigaDB GitHub/API docs. Actual HTTP200 responses checked for getmatchdata/bl1 (nine current matchday records), getavailableteams/bl1/2026 (18teams), getbltable/bl1/2026 (18rows). Current match fields include leagueSeason, leagueShortcut, matchDateTimeUTC, matchIsFinished, matchResults. Table has teamInfoId/teamName/matches/goals/opponentGoals/goalDiff/points; API row order supplies ranking.
 
 Completed match from getmatchdata/bl1/2026/6 has resultTypeKind HalfTime/type1 and After90Minutes/type2. Parse by documented result metadata, never by array position. Empty result arrays observed for future games, not fabricated0:0. Team icon URLs are deliberately not forwarded/downloaded.
+
+## Task2 verification
+
+- Nine football behavioral tests RED→GREEN.33combined external-data testsPASS. Direct strict TypeScript compilePASS.
+- Compiled realservice probe: all9 combinations of leagues bl1/bl2/bl3 and modes matchday/upcoming/table returnedready. Season2026 discovered from API; team counts18/18/20; tablecounts18/18/20; currentmatchcounts9/9/10. Live log: work/loop-external-task2-live.log.
+- Default full-suite run809PASS/oneexisting regional inventory5000ms timeout. A purported two-worker npm launch actually dropped its forwarding argument (printed command onlyvitest run):808PASS/twoexisting timeouts in regional/inventory and regional/documentationSource corpus export. No assertion or timeout changed.
+- Direct invocation retained worker arguments: `node node_modules/vitest/vitest.mjs run --maxWorkers=2 --minWorkers=1` —191files/810testsPASS,279.75s, work/loop-external-task2-suite-two-workers.log. This verifies the complete suite with lower CPU contention, not a filtered subset. Default-parallel instability remains disclosed.
