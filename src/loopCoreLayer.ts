@@ -1,11 +1,12 @@
 import type { ServiceItem, Slide, SlideElement } from './store';
 import { isLoopOnlyItem } from './loopDomain';
 
-export type LoopCoreKind = 'weather' | 'clock' | 'birthdays' | 'events' | 'screen-message';
+export type LoopCoreKind = 'weather' | 'clock' | 'birthdays' | 'events' | 'screen-message' | 'news' | 'football';
 export type LoopCoreLayer = Readonly<{ id: `loop-core:${string}`; protected: true; kind: LoopCoreKind }>;
 
 const kinds: Readonly<Record<string, LoopCoreKind>> = Object.freeze({
   weather: 'weather', clock: 'clock', birthday: 'birthdays', event: 'events',
+  news: 'news', football: 'football',
   announcement: 'screen-message', infoCard: 'screen-message', today: 'events', nextEvents: 'events',
 });
 

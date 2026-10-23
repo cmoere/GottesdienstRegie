@@ -134,6 +134,8 @@ import {setPostProgramPrepared} from './community/communityRuntime';
 import {EventSlideDesigner} from './EventSlideDesigner';
 import {AnnouncementSlideDesigner} from './AnnouncementSlideDesigner';
 import {eventOverviewMinimumDuration,hydrateNowPlayingData,nowPlayingSnapshotMatches} from './liveDynamicData';
+import {ExternalLoopController,startExternalLoopDemand} from './externalLoop/controller';
+import {isExternalLoop} from './externalLoop/model';
 import {formatEventDate} from './dynamicEventSlide';
 import {useLiveOutputPreview} from './liveOutputPreview';
 import {useOutputDisplayProfile} from './useOutputDisplayProfile';
@@ -1168,6 +1170,8 @@ function SortableItem({
     today: "today",
     nextEvents: "event_upcoming",
     nowPlaying: "graphic_eq",
+    news: "newspaper",
+    football: "sports_soccer",
   };
   const commit = () => {
     const seconds = parseDuration(durationValue);
@@ -1578,6 +1582,8 @@ function AddPopover({
     { type: "today", label: "Heute bei uns", title: "Heute bei uns", icon: "today" },
     { type: "nextEvents", label: "Nächste Termine", title: "Nächste Termine", icon: "event_upcoming" },
     { type: "nowPlaying", label: "Läuft gerade", title: "Läuft gerade", icon: "graphic_eq" },
+    { type: "news", label: "Nachrichten", title: "Nachrichten", icon: "newspaper" },
+    { type: "football", label: "Fußball", title: "Fußball", icon: "sports_soccer" },
   ];
   async function addImported(option: (typeof options)[number]) {
     void option;
@@ -7407,10 +7413,13 @@ function AppShell({
   const outputProfileWarning=useOutputDisplayProfile();
   const loopController = useRef(new LoopController<ServiceItem>());
   const announcementController=useRef(new AnnouncementLiveController());
+  const externalController=useRef(new ExternalLoopController(request=>window.desktop?.externalLoop?.read(request)??Promise.resolve({snapshot:null,status:'unavailable'}),()=>AppClock.now().getTime()));
+  useEffect(()=>startExternalLoopDemand(externalController.current,state.items),[state.items,state.presentationId]);
+  useEffect(()=>{const dispose=()=>externalController.current.dispose();window.addEventListener('beforeunload',dispose);return()=>window.removeEventListener('beforeunload',dispose)},[]);
   const [protectedSlideOpen,setProtectedSlideOpen]=useState(false);
   useEffect(()=>{const show=()=>setProtectedSlideOpen(true);window.addEventListener('gottesdienstregie:protected-slide',show);return()=>window.removeEventListener('gottesdienstregie:protected-slide',show)},[]);
   useEffect(()=>{const bridge=(window.desktop as unknown as {community?:{onAnnouncements:(listener:(rows:import('./community/AnnouncementService').RawAnnouncement[])=>void)=>()=>void}})?.community;return bridge?.onAnnouncements(rows=>announcementController.current.setRecords(rows))},[]);
-  const availableForOutput=(item:ServiceItem|undefined)=>isLoopCandidateAvailable(item)&&(!isAnnouncementLoop(item)||announcementController.current.hasEligible(item,AppClock.now()));
+  const availableForOutput=(item:ServiceItem|undefined)=>isLoopCandidateAvailable(item)&&(!isAnnouncementLoop(item)||announcementController.current.hasEligible(item,AppClock.now()))&&(!item||!isExternalLoop(item)||externalController.current.hasEligible(item));
   const communityEventService=useRef(new EventService());
   const postProgramNoticeController=useRef(new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(communityEventService.current)));
   useEffect(()=>{
@@ -7946,8 +7955,8 @@ function AppShell({
           state.transitionDefault,
         ),
       };
-      if(isAnnouncementLoop(item)){
-        const prepared=announcementController.current.outputForTake(item,base,state.liveTransitionRevision,AppClock.now());
+      if(item&&(isAnnouncementLoop(item)||isExternalLoop(item))){
+        const prepared=isExternalLoop(item)?externalController.current.outputForTake(item,base,state.liveTransitionRevision,AppClock.now().getTime()):announcementController.current.outputForTake(item,base,state.liveTransitionRevision,AppClock.now());
         if(!prepared){
           const noticeReady=Boolean(postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'}));
           const candidates=state.items.filter(entry=>entry.id!==item.id&&availableForOutput(entry)&&(!isPostProgramSystemItem(entry)||noticeReady)&&entry.slides.some(slide=>slide.enabled));
@@ -8117,7 +8126,9 @@ function AppShell({
         const nextSlide=nextItem?.slides.find(entry=>entry.enabled);
         if (nextItem&&nextSlide) usePresentation.getState().goLive(nextItem.id, nextSlide.id);
         else usePresentation.getState().nextLive();
-      }, isAnnouncementLoop(item)&&slide
+      }, item&&isExternalLoop(item)&&slide
+        ? (externalController.current.outputForTake(item,slide,state.liveTransitionRevision,AppClock.now().getTime())?.timing?.durationSeconds??loopDurationMs(item)/1000)*1000
+        : isAnnouncementLoop(item)&&slide
         ? (announcementController.current.outputForTake(item,slide,state.liveTransitionRevision,AppClock.now())?.timing?.durationSeconds??loopDurationMs(item)/1000)*1000
         : Math.max(loopDurationMs(item),eventOverviewMinimumDuration(slide),liveProtectionRemainingMs(state),isPostProgramSystemItem(item)?postProgramNoticeController.current.current()?.minDurationMs??0:0));
       return () => { active = false; window.clearTimeout(timer); loopController.current.stop(); };
@@ -9247,7 +9258,7 @@ function AppShell({
         )
         .filter(Boolean),
     });
-    preflight.warnings.push(...warnings);
+    preflight.warnings.push(...warnings,...externalController.current.preflightWarnings(state.items));
     if (!slide || !enabledSlides.some(entry => entry.id === slide.id)) {
       preflight.ok = false;
       preflight.errors.push('Bitte eine aktive Folie für den Start auswählen.');
@@ -9284,8 +9295,8 @@ function AppShell({
           }
           const nextMode:AppModeState={mode:sessionMode==='test'?'test':'normal',onAir:true};
           await (window.desktop as any)?.setOutputAppMode?.(nextMode);
-          const preparedStart=isAnnouncementLoop(item)?announcementController.current.outputForTake(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now()):startSlide;
-          if(!preparedStart)throw new Error('Zurzeit sind keine freigegebenen Meldungen verfügbar.');
+          const preparedStart=item&&isExternalLoop(item)?externalController.current.outputForTake(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now().getTime()):isAnnouncementLoop(item)?announcementController.current.outputForTake(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now()):startSlide;
+          if(!preparedStart)throw new Error('Zurzeit sind keine freigegebenen dynamischen Inhalte verfügbar.');
           const started = await liveEngine.start(assignments, {
             ...preparedStart, transitionOverride: resolveTransition(startSlide, item, 'main', current.transitionDefault),
           });

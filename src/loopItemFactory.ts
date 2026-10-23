@@ -28,6 +28,8 @@ const titles: Record<LoopItemType, string> = {
   today: 'Heute bei uns',
   nextEvents: 'Nächste Termine',
   nowPlaying: 'Läuft gerade',
+  news: 'Nachrichten',
+  football: 'Fußball',
 };
 
 export function createLoopItem(
@@ -41,7 +43,9 @@ export function createLoopItem(
   const metadata: Record<string, string | number | boolean> = {
     source: ['announcement', 'birthday', 'event'].includes(type) ? 'firebase' : 'local',
   };
-  if (type === 'weather') {
+  if(type==='news'||type==='football'){
+    Object.assign(metadata,{source:'external',externalKind:type,durationSeconds:15,...(type==='news'?{newsSources:'westfalen-blatt,wdr-owl',newsLimit:10}:{footballLeague:'bl1',footballMode:'matchday',footballTeamId:0})});
+  } else if (type === 'weather') {
     metadata.weatherScreenUrl = WEATHER_SCREEN_URL;
     metadata.weatherDurationMs = durationMs;
     body ||= 'Wetterscreen · empfohlen: 20 Sekunden';

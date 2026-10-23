@@ -36,3 +36,15 @@ Completed match from getmatchdata/bl1/2026/6 has resultTypeKind HalfTime/type1 a
 - Compiled realservice probe: all9 combinations of leagues bl1/bl2/bl3 and modes matchday/upcoming/table returnedready. Season2026 discovered from API; team counts18/18/20; tablecounts18/18/20; currentmatchcounts9/9/10. Live log: work/loop-external-task2-live.log.
 - Default full-suite run809PASS/oneexisting regional inventory5000ms timeout. A purported two-worker npm launch actually dropped its forwarding argument (printed command onlyvitest run):808PASS/twoexisting timeouts in regional/inventory and regional/documentationSource corpus export. No assertion or timeout changed.
 - Direct invocation retained worker arguments: `node node_modules/vitest/vitest.mjs run --maxWorkers=2 --minWorkers=1` —191files/810testsPASS,279.75s, work/loop-external-task2-suite-two-workers.log. This verifies the complete suite with lower CPU contention, not a filtered subset. Default-parallel instability remains disclosed.
+
+## Task3 verification
+
+- Controller/model/placement/IPC behavioral RED:9failures/2passes. Added RED→GREEN tests for direct insertion protection and rejection of private transport fields/nonblocking preflight warnings.
+-57targeted testsPASS, including actual production preload imports (no externalLoop on MAIN/STAGE), actual LiveEngine.start and operator mirrored store, shared datarevision/activation time, existing protectedpost-program take tests. The delivery timing assertion was made independently against literal1100ms; its earlier broad Slide annotation lacked the transport-only property and failed TypeScript. Corrected assertion without a runtime change; frontend typecheck and7controller tests thenPASS.
+- Shared public snapshot validation extracted from cache so cache and IPC consumer do not grow separate normalization logic. Source loading only on operator mainframe; initialON AIR and normal take use the same immutable controller method. No network call added to MAIN/SlideRenderer/LiveEngine.
+- Existing typed Window bridge file mechanically reformatted with TypeScript printer before adding the optional member. No runtime behavior from that formatting.
+- Desktop buildPASS, Vite13.81s, Electron typesPASS and31regionalassets copied. Existing largechunk warning remains.
+- Frozen complete suite with2workers825/825PASS(263.00s); final stronger assertion build/typecheck verification followed by complete4worker suite196files/825testsPASS(177.84s), work/loop-external-task3-suite-final.log. No timeout/assertion weakened.
+- AppClock remains the existing local wallclock (externallyTrusted=false); no claim of externally authenticated time. No actual native output windows, device routing or installed app touched in this task.
+
+Original source logo URLs discovered on official pages, then read and checked for script/foreignObject/image/href/src/url() content (none). WDR SVG sha25639bef66d1683386da5925ac27e5ae47d0a053303afccd413d3c03269936ffb45; WB SVG sha2569af482cb2de2b3a3f43297f16064f75992bb5d3f2e4429fe8b0103c03de17b1f. Actual assets still to be added with Task4; no fake logo substituted.
