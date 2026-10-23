@@ -544,6 +544,8 @@ app.whenReady().then(async() => {
   ipcMain.on('outputs:media-ended',(_event,behavior:string)=>{sendToLiveWindow(controlWindow,'outputs:media-ended',behavior)});
   ipcMain.handle('outputs:send-role',(_event,role:OutputRole,payload:unknown)=>outputManager.sendTo(role,payload));
   ipcMain.handle('outputs:send-quick',(_event,roles:OutputRole[],payload:unknown)=>outputManager.sendQuick(roles,payload));
+  ipcMain.handle('outputs:screen-test-report',(event,value:unknown)=>{if(event.senderFrame!==event.sender.mainFrame)return false;const result=outputManager.acceptScreenTestResult(event.sender.id,value);if(!result)return false;sendToLiveWindow(controlWindow,'outputs:screen-test-result',result);return true});
+  ipcMain.handle('outputs:screen-test-restore',(event,runId:string,previous:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;return outputManager.restoreScreenTest(runId,previous)});
   ipcMain.handle('outputs:send-banner',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id)return false;const banner=readBannerOutputState(payload);return banner!==undefined?outputManager.setBanner(banner):false});
   ipcMain.handle('outputs:set-app-mode',(_event,state:{mode:'normal'|'test';onAir:boolean})=>outputManager.setAppMode(state));
   ipcMain.handle('outputs:get-app-mode',()=>outputManager.getAppMode());

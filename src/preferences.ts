@@ -11,8 +11,9 @@ export type AudioEqualizerMode='standard'|'custom';
 export interface AudioEqualizerSettings{mode:AudioEqualizerMode;bands:number[]}
 export interface PublicInterestSettings{enabled:boolean;preLoop:boolean;postLoop:boolean;durationSeconds:number;interval:3|5|10;showQr:boolean;categories:string[]}
 export interface VideoInputSource{id:string;deviceId:string;name:string;enabled:boolean;width:number;height:number;frameRate:number;audioEnabled:boolean;audioDeviceId:string;volume:number;monitoring:'off'|'operator'|'live';fit:VideoFit;crop:{left:number;right:number;top:number;bottom:number};brightness:number;contrast:number;saturation:number;hue:number}
-export type QuickScreenType='logo'|'black'|'empty'|'noText'|'amen'|'countdown'|'bible'|'custom'|'quizJoin';
-export interface QuickScreenConfig{id:string;type:QuickScreenType;name:string;enabled:boolean;targets:string[];text?:string;background?:string;duration?:number;startedAtMs?:number;endText?:string;order:number;imageUrl?:string;joinUrl?:string;joinCode?:string;pages?:string[][];pageIndex?:number;reference?:string;translation?:string;osb?:import('./osb/types').OsbSettings}
+export type QuickScreenType='logo'|'black'|'empty'|'noText'|'amen'|'countdown'|'bible'|'custom'|'quizJoin'|'screenTest';
+export interface QuickScreenConfig{id:string;type:QuickScreenType;name:string;enabled:boolean;targets:string[];text?:string;background?:string;duration?:number;startedAtMs?:number;endText?:string;order:number;imageUrl?:string;joinUrl?:string;joinCode?:string;pages?:string[][];pageIndex?:number;reference?:string;translation?:string;osb?:import('./osb/types').OsbSettings;testPattern?:import('./screenTest').ScreenTestPatternId;testRunId?:string}
+const screenTestQuickScreen:QuickScreenConfig={id:'screen-test',type:'screenTest',name:'Bildschirmtest',enabled:true,targets:['main'],testPattern:'bars',order:8};
 const technicalIssueQuickScreen:QuickScreenConfig={id:'technical-issue',type:'custom',name:'Technische Störung',text:'Technische Störung\nWir bitten um etwas Geduld.',enabled:true,targets:['main'],background:'#000000',order:7};
 const defaultQuickScreens:QuickScreenConfig[]=[
   {id:'logo',type:'logo',name:'Logo',enabled:true,targets:['main'],background:'#000000',order:0},
@@ -22,7 +23,7 @@ const defaultQuickScreens:QuickScreenConfig[]=[
   {id:'amen',type:'amen',name:'Amen',enabled:true,targets:['main'],text:'Amen!',background:'#162d36',duration:6,order:4},
   {id:'countdown',type:'countdown',name:'Countdown',enabled:true,targets:['main'],duration:300,endText:'Wir beginnen gleich',background:'#000000',order:5},
   {id:'bible',type:'bible',name:'Bibel einblenden',enabled:true,targets:['main'],order:6},
-  technicalIssueQuickScreen
+  technicalIssueQuickScreen,screenTestQuickScreen
 ];
 
 export interface PreferencesState {
@@ -143,7 +144,9 @@ export function migratePreferencesForV84(persisted:unknown){
   const previous=persisted&&typeof persisted==='object'&&!Array.isArray(persisted)
     ? persisted as Record<string,unknown> : {};
   const quickScreens=Array.isArray(previous.quickScreens)?previous.quickScreens:undefined;
-  return {...previous,germanRegion:normalizeReleasedGermanRegion(previous.germanRegion),...(quickScreens?{quickScreens:quickScreens.some(quick=>quick?.id===technicalIssueQuickScreen.id)?quickScreens:[...quickScreens,{...technicalIssueQuickScreen,order:quickScreens.length}]}:{})};
+  const normalized=quickScreens?[...quickScreens]:undefined;
+  if(normalized)for(const item of [technicalIssueQuickScreen,screenTestQuickScreen])if(!normalized.some(quick=>quick?.id===item.id))normalized.push({...item,order:normalized.length});
+  return {...previous,germanRegion:normalizeReleasedGermanRegion(previous.germanRegion),...(normalized?{quickScreens:normalized}:{})};
 }
 
 export const usePreferences=create<PreferencesState>()(persist(set=>({

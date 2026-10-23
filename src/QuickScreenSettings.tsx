@@ -6,6 +6,8 @@ import {
 } from "./preferences";
 import { OsbSettings } from './osb/OsbSettings';
 import {useI18n} from './i18n';
+import {ScreenTestPattern} from './ScreenTestPattern';
+import {screenTestPatterns} from './screenTest';
 
 export function QuickScreenSettings() {
   const {t}=useI18n();
@@ -97,6 +99,7 @@ export function QuickScreenSettings() {
         {active && (
           <div className="quick-details">
             <h4>{active.name.toUpperCase()}</h4>
+            {active.type==='screenTest'&&<><p>Der automatische Bildschirmtest schaltet erst nach erfolgreicher Rückmeldung aus dem MAIN-Ausgabefenster weiter. Keine feste Anzeigedauer. Bei einer fehlenden Rückmeldung wird der Test mit einem Hinweis beendet. Schärfe, Kabel und Beamerfarben benötigen eine Sichtprüfung.</p><div className="screen-test-tiles">{screenTestPatterns.map(pattern=><button key={pattern.id} type="button" aria-label={pattern.label} aria-pressed={(active.testPattern??'bars')===pattern.id} onClick={()=>patch(active.id,{testPattern:pattern.id})}><ScreenTestPattern pattern={pattern.id}/><span>{pattern.label}</span></button>)}</div><p>Die Auswahl bestimmt das Vorschaubild. Der automatische Durchlauf prüft immer alle acht Muster, ohne Ton und ohne den ON-AIR-Status zu verändern.</p></>}
             <label>
               {t('quickScreenName')}
               <input
@@ -104,10 +107,10 @@ export function QuickScreenSettings() {
                 onChange={(e) => patch(active.id, { name: e.target.value })}
               />
             </label>
-            {!["black", "noText"].includes(active.type) && (
+            {!["black", "noText", "screenTest"].includes(active.type) && (
               <label>
                 {t('text')}
-                <input
+                <textarea
                   value={active.text ?? ""}
                   placeholder={
                     active.type === "logo"
@@ -137,7 +140,7 @@ export function QuickScreenSettings() {
                 )}
               </>
             )}
-            {!["black", "noText"].includes(active.type) && (
+            {!["black", "noText", "screenTest"].includes(active.type) && (
               <label>
                 {t('background')}
                 <input
@@ -173,7 +176,7 @@ export function QuickScreenSettings() {
                 </label>
               </>
             )}
-            <fieldset>
+            {active.type!=='screenTest'&&<fieldset>
               <legend>{t('quickScreenTargets')}</legend>
               {["main", "stage", "notes", "livestream"].map((role) => (
                 <label className="setting-check" key={role}>
@@ -193,7 +196,7 @@ export function QuickScreenSettings() {
                   </span>
                 </label>
               ))}
-            </fieldset>
+            </fieldset>}
             {active.type === "custom" && (
               <label>
                 {t('quickScreenType')}

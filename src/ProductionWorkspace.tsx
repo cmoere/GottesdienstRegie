@@ -67,7 +67,8 @@ import { nextTimerHold, timerProgress } from "./previewTimer";
 import { shouldHandlePreviewArrow } from "./previewKeyboard";
 import { MainLivePreview } from "./MainLivePreview";
 import {TestModeWatermark} from './TestModeWatermark';
-import { quickScreenShortcut } from "./quickScreenUi";
+import { quickScreenShortcut,quickOverridesRoomNotice } from "./quickScreenUi";
+import {ScreenTestPattern} from './ScreenTestPattern';
 import { usesAutomaticLoopEditor } from "./loopEditorModel";
 import { NowPlayingDesigner } from "./NowPlayingDesigner";
 import { EventSlideDesigner } from "./EventSlideDesigner";
@@ -3875,7 +3876,7 @@ function PreviewCenter({
             renderMode={state.onAir?'mirror':undefined}
           />}
           <QuickOverlay quick={activeQuick} staticPreview={!state.onAir} />
-          {state.onAir&&output?.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
+          {state.onAir&&!quickOverridesRoomNotice(activeQuick)&&output?.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
           </OutputComposition>
         </div>
         </div>
@@ -4012,7 +4013,7 @@ function QuickScreenThumb({ quick }: { quick: QuickScreenConfig }) {
           quick.background ?? (quick.type === "black" ? "#000" : "#162d36"),
       }}
     >
-      {quick.type === "logo" ? (
+      {quick.type==='screenTest'?<ScreenTestPattern pattern={quick.testPattern}/>:quick.type === "logo" ? (
         <img
           src={quick.imageUrl || logoWhite}
           alt="Philippus Gemeinde Bielefeld e. V."

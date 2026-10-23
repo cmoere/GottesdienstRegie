@@ -58,4 +58,29 @@ describe('OutputWindowManager app mode',()=>{
     expect(Number.isFinite(main.startedAtMs)).toBe(true);expect(stage.startedAtMs).toBe(main.startedAtMs);
     manager.sendQuick(['main'],{type:'countdown',duration:60,startedAtMs:1234});expect((manager.getStateForSender(1)!.quick as any).startedAtMs).toBe(1234);
   });
+  it('accepts test results only from the current managed MAIN and its exact active run/pattern',async()=>{
+    const manager=new OutputWindowManager('preload',async()=>{},()=>{});await manager.start({'1':'main','2':'stage'} as any,{});
+    const runId='a'.repeat(32),result={runId,pattern:'bars',ok:true,width:1920,height:1080,frames:60,elapsedMs:1100};
+    manager.sendQuick(['main'],{type:'screenTest',testRunId:runId,testPattern:'bars'});
+    expect(manager.acceptScreenTestResult(1,result)).toEqual(result);
+    expect(manager.acceptScreenTestResult(2,result)).toBeNull();expect(manager.acceptScreenTestResult(999,result)).toBeNull();
+    expect(manager.acceptScreenTestResult(1,{...result,runId:'b'.repeat(32)})).toBeNull();
+    expect(manager.acceptScreenTestResult(1,{...result,pattern:'white'})).toBeNull();
+    expect(manager.acceptScreenTestResult(1,{...result,frames:1})).toBeNull();
+    manager.sendQuick(['main'],{type:'black'});expect(manager.acceptScreenTestResult(1,result)).toBeNull();
+    windows[0].destroyed=true;expect(manager.acceptScreenTestResult(1,result)).toBeNull();
+  });
+  it('atomically restores only its own active test, never a later remote emergency screen',async()=>{
+    const manager=new OutputWindowManager('preload',async()=>{},()=>{});await manager.start({'1':'main','2':'stage'} as any,{});
+    const runId='a'.repeat(32),previous={type:'custom',text:'Vorher'};
+    manager.sendQuick(['main'],{type:'screenTest',testRunId:runId,testPattern:'bars'});
+    expect(manager.restoreScreenTest('b'.repeat(32),previous)).toBe(false);
+    manager.sendQuick(['main'],{type:'black'});
+    expect(manager.restoreScreenTest(runId,previous)).toBe(false);expect(manager.getStateForSender(1)?.quick).toEqual({type:'black'});
+    manager.sendQuick(['main'],{type:'screenTest',testRunId:runId,testPattern:'bars'});
+    expect(manager.restoreScreenTest(runId,previous)).toBe(true);expect(manager.getStateForSender(1)?.quick).toEqual(previous);
+    expect(manager.getStateForSender(2)?.quick).toBeNull();
+    manager.sendQuick(['main'],{type:'screenTest',testRunId:runId,testPattern:'bars'});
+    expect(manager.restoreScreenTest(runId,null)).toBe(true);expect(manager.getStateForSender(1)?.quick).toBeNull();
+  });
 });

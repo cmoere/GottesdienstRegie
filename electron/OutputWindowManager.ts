@@ -2,6 +2,7 @@ import { BrowserWindow, screen } from 'electron';
 import type { DisplayAssignments, OutputRole } from './DisplayManager';
 import type {AppModeState} from '../src/appMode';
 import type {OutputStateSnapshot,BannerOutputState} from '../src/outputState';
+import {readScreenTestReceipt} from '../src/screenTest';
 
 type ManagedOutput={displayId:number;role:OutputRole;window:BrowserWindow};
 const outputRoles:OutputRole[]=['main','stage','notes','livestream','lobby'];
@@ -12,6 +13,16 @@ export class OutputWindowManager{
   private states=new Map<OutputRole,OutputStateSnapshot>();
   private revision=0;
   getStateForSender(id:number){const entry=[...this.outputs.values()].find(entry=>!entry.window.isDestroyed()&&entry.window.webContents.id===id);return entry?structuredClone(this.states.get(entry.role)??null):null}
+  acceptScreenTestResult(senderId:number,value:unknown){
+    const main=this.outputs.get('main');if(!main||main.window.isDestroyed()||main.window.webContents.id!==senderId)return null;
+    const receipt=readScreenTestReceipt(value),quick=this.states.get('main')?.quick as {type?:string;testRunId?:string;testPattern?:string}|null;
+    return receipt&&quick?.type==='screenTest'&&quick.testRunId===receipt.runId&&quick.testPattern===receipt.pattern?receipt:null;
+  }
+  restoreScreenTest(runId:string,previous:unknown){
+    const main=this.outputs.get('main'),quick=this.states.get('main')?.quick as {type?:string;testRunId?:string}|null;
+    if(typeof runId!=='string'||!/^[a-f0-9]{32}$/.test(runId)||!main||main.window.isDestroyed()||quick?.type!=='screenTest'||quick.testRunId!==runId)return false;
+    this.update('main',{quick:previous});return true;
+  }
   private update(role:OutputRole,patch:Partial<OutputStateSnapshot>){const old=this.states.get(role)??{revision:0,slide:null,quick:null,appMode:this.appMode},revision=++this.revision;const state={...old,...structuredClone(patch),revision,slideRevision:'slide' in patch?revision:old.slideRevision??0,quickRevision:'quick' in patch?revision:old.quickRevision??0};this.states.set(role,state);const entry=this.outputs.get(role);if(entry&&!entry.window.isDestroyed())entry.window.webContents.send('outputs:state',state)}
   setBanner(banner:BannerOutputState|null){this.update('main',{banner});return true}
   getAppMode(){return {...this.appMode}}

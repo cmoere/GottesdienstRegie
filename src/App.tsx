@@ -174,6 +174,9 @@ import {
   TransitionStage,
 } from "./transitions";
 import { QuickOverlay } from "./QuickOverlay";
+import {applyQuickScreen,quickOverridesRoomNotice} from './quickScreenUi';
+import {useScreenTest,type ScreenTestBridge} from './useScreenTest';
+import type {ScreenTestReceipt} from './screenTest';
 import { WEB_EDITOR_URL } from "./platformLinks";
 import {BibleTextDialog} from './BibleTextDialog';
 import {shouldApplyOutputRevision} from './release54Model';
@@ -7459,6 +7462,8 @@ function AppShell({
       step: number;
       text: string;
     }>({ state: "idle", step: 0, text: "" });
+  const screenTestBridge=useMemo<ScreenTestBridge|undefined>(()=>{const bridge=window.desktop as any;return bridge?.screenTest?.onResult&&bridge.screenTest.restore?{sendQuick:(roles,quick)=>bridge.sendQuick(roles,quick),restore:(runId,quick)=>bridge.screenTest.restore(runId,quick),onResult:callback=>bridge.screenTest.onResult(callback)}:undefined},[]);
+  const screenTest=useScreenTest({current:previewQuick,onAir:state.onAir,setQuick:setPreviewQuick,bridge:screenTestBridge});
   useEffect(()=>{void (window.desktop as any)?.deviceSettings?.readOsb?.().then((value:unknown)=>setOsbSettings(normalizeOsbSettings(value,[...BIBLE_TRANSLATIONS])))},[]);
   useMediaWarmup(useMemo(()=>upcomingMedia(state.items,state.onAir?state.liveSlideId:state.previewSlideId||state.selectedSlideId,state.sections.map(section=>section.id)),[state.items,state.onAir,state.liveSlideId,state.previewSlideId,state.selectedSlideId,state.sections]));
   const [checkpointError,setCheckpointError]=useState(false);
@@ -7744,6 +7749,7 @@ function AppShell({
     const showQuizJoin = (event: Event) => {
       const quick = (event as CustomEvent<QuickScreenConfig>).detail;
       if (!quick) return;
+      screenTest.interrupt();
       setPreviewQuick(quick);
       if (usePresentation.getState().onAir)
         void (window.desktop as any)?.sendQuick(quick.targets, quick);
@@ -8255,7 +8261,7 @@ function AppShell({
       const quickType=quickScreenTypeForKey(event.key);
       if(quickType){
         const quick=quickScreens.find(entry=>entry.enabled&&entry.type===quickType);
-        if(quick){event.preventDefault();if(quick.type==='bible')setBibleTextOpen(true);else{const next=previewQuick?.id===quick.id?null:quick.type==='countdown'?{...quick,startedAtMs:Date.now()}:quick;setPreviewQuick(next);if(usePresentation.getState().onAir)void(window.desktop as any)?.sendQuick(quick.targets,next)}}
+        if(quick){event.preventDefault();screenTest.interrupt(quick.type==='bible');if(quick.type==='bible')setBibleTextOpen(true);else{const next=previewQuick?.id===quick.id?null:quick.type==='countdown'?{...quick,startedAtMs:Date.now()}:quick;setPreviewQuick(next);if(usePresentation.getState().onAir)void(window.desktop as any)?.sendQuick(quick.targets,next)}}
         return;
       }
       if (matchesShortcut(event, shortcuts.openHelp)) {
@@ -8429,14 +8435,9 @@ function AppShell({
     else await liveEngine.show(slide);
   };
   const applyQuick = async (quick: QuickScreenConfig | null) => {
-    if(quick?.type==='bible'){setBibleTextOpen(true);return}
-    if(quick?.type==='countdown')quick={...quick,startedAtMs:Date.now()};
-    setPreviewQuick(quick);
-    if (state.onAir)
-      await (window.desktop as any)?.sendQuick(
-        quick?.targets ?? ["main"],
-        quick,
-      );
+    if(quick?.type==='screenTest'){screenTest.request();return}
+    screenTest.interrupt(quick?.type==='bible'&&!quick.pages?.length&&!quick.text?.trim());
+    await applyQuickScreen(quick,{onAir:usePresentation.getState().onAir,openBible:()=>setBibleTextOpen(true),setQuick:setPreviewQuick,sendQuick:async(roles,value)=>(window.desktop as any)?.sendQuick(roles,value)});
   };
   const importSongs = async () => {
     const imported = (await window.desktop?.songs?.import()) ?? [];
@@ -9118,6 +9119,7 @@ function AppShell({
     const sessionAction=resolveSessionAction({...appMode,onAir:state.onAir},requestedMode);
     if(!preflightOnly&&sessionAction==='confirm-production'&&!confirm('Testbetrieb beenden und die verknüpfte Veranstaltung wirklich ON AIR starten?'))return;
     if (sessionAction==='stop' && !preflightOnly) {
+      screenTest.interrupt();
       await backgroundAudioEngine.stop();
       await liveEngine.stop();
       state.setOnAir(false);
@@ -9354,6 +9356,7 @@ function AppShell({
       onClick={() => setMenuOpen(null)}
     >
       <AnnouncementBannerController quick={previewQuick}/>
+      {screenTest.dialog}
       <ServiceOnAirReminder/>
       <div className="menubar">
         <WindowControls />
@@ -9721,6 +9724,7 @@ function Clock({ locale }: { locale: string }) {
   );
 }
 function Output() {
+  const reportScreenTest=useCallback((receipt:ScreenTestReceipt)=>{void(window.desktop as any)?.screenTest?.report(receipt).catch(()=>{})},[]);
   const previousStateRef=useRef<OutputStateSnapshot|null>(null);
   const [outputBanner,setOutputBanner]=useState<BannerOutputState|null>(null);
   const stateRevisionRef=useRef(-1);
@@ -9773,7 +9777,7 @@ function Output() {
     <div
       className={`output ${quick?.type === "noText" ? "quick-no-text" : ""}`}
     >
-      <OutputComposition hideCountdown={Boolean(quick)} serviceCountdownAtMs={role==='main'?(slide as import('./liveOutputPreview').LiveOutputSlide|null)?._serviceCountdownAtMs:undefined} banner={role==='main'?outputBanner:null} testOverlay={<TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/> }>
+      <OutputComposition hideCountdown={Boolean(quick)} serviceCountdownAtMs={role==='main'?(slide as import('./liveOutputPreview').LiveOutputSlide|null)?._serviceCountdownAtMs:undefined} banner={role==='main'&&quick?.type!=='screenTest'?outputBanner:null} testOverlay={<TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/> }>
       {slide && role==='stage' && songOutput ? <div className="stage-song-shell"><header className="stage-song-header"><span>STAGE</span><strong>{slide.title}</strong></header><section className="stage-song-current"><small>JETZT</small>{songOutput.showChords && songOutput.stageRows?.length ? <div className="stage-song-rows">{songOutput.stageRows.map((row,index)=><div className="stage-song-row" key={`${index}-${row.lyrics}`}><span className="stage-song-chords">{row.chords}</span><span>{row.lyrics}</span></div>)}</div> : <div className="stage-song-lyrics">{slide.body}</div>}</section>{songOutput.currentNext && <section className="stage-song-next"><small>ALS NÄCHSTES</small><div>{songOutput.next || '—'}</div></section>}</div> : renderedSlide && (
         lyricScroll && role==='main' ? <LyricScrollRenderer packet={lyricScroll} live/> : <TransitionStage
           slide={renderedSlide}
@@ -9784,8 +9788,8 @@ function Output() {
           role={role}
         />
       )}
-      <QuickOverlay quick={quick} />
-      {postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={postProgramRoomNotice}/>}
+      <QuickOverlay quick={quick} onScreenTestResult={role==='main'?reportScreenTest:undefined}/>
+      {postProgramRoomNotice&&!quickOverridesRoomNotice(quick)&&<PostProgramRoomNoticeView snapshot={postProgramRoomNotice}/>}
       </OutputComposition>
       <span hidden data-output-mode={outputAppMode.mode} data-output-on-air={String(outputAppMode.onAir)}/>
       <span hidden data-output-banner-revision={outputBanner?.revision}/>

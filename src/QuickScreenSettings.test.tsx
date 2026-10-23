@@ -50,3 +50,11 @@ it('localizes countdown and logo controls while applying only the requested save
   fireEvent.click(screen.getByRole('button',{name:'REMOVE CUSTOM LOGO'}));
   expect(usePreferences.getState().quickScreens).toEqual([{...logo,imageUrl:undefined}]);
 });
+it('offers screen-test preview tiles without a fixed slide-duration setting',()=>{
+  usePreferences.setState({language:'de',quickScreens:[{id:'screen-test',type:'screenTest',name:'Bildschirmtest',enabled:true,targets:['main'],order:0}] as any});
+  render(<QuickScreenSettings/>);
+  fireEvent.click(screen.getByRole('button',{name:'Weiß'}));
+  expect(usePreferences.getState().quickScreens[0]).toMatchObject({testPattern:'white'});
+  expect(screen.getByText(/nach erfolgreicher Rückmeldung/)).toBeVisible();
+  expect(screen.queryByLabelText('Anzeigedauer')).not.toBeInTheDocument();
+});

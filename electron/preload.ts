@@ -51,6 +51,7 @@ contextBridge.exposeInMainWorld("desktop", {
     ipcRenderer.invoke("outputs:send-role", role, payload),
   sendQuick: (roles: string[], payload: unknown) =>
     ipcRenderer.invoke("outputs:send-quick", roles, payload),
+  screenTest:{restore:(runId:string,previous:unknown)=>ipcRenderer.invoke('outputs:screen-test-restore',runId,previous),report:(result:import('../src/screenTest').ScreenTestReceipt)=>ipcRenderer.invoke('outputs:screen-test-report',result),onResult:(callback:(result:import('../src/screenTest').ScreenTestReceipt)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,result:import('../src/screenTest').ScreenTestReceipt)=>callback(result);ipcRenderer.on('outputs:screen-test-result',listener);return()=>ipcRenderer.removeListener('outputs:screen-test-result',listener)}},
   setOutputAppMode:(state:{mode:'normal'|'test';onAir:boolean})=>ipcRenderer.invoke('outputs:set-app-mode',state),
   getOutputAppMode:()=>ipcRenderer.invoke('outputs:get-app-mode'),
   getOutputState:()=>ipcRenderer.invoke('outputs:get-state'),
