@@ -324,6 +324,18 @@
     "screenshotLabel": "Buispilansicht"
   },
   "releases": {
+    "versions[0.86].builds[0.86.0].overview.label": "Lokale Nachrichten, Fautball un veelsiedige Uhren",
+    "versions[0.86].builds[0.86.0].overview.text": "Dat Vör- un Nohprogramm kriggt lokale Nachrichten met Quellenlogos un Fautball-Speeltermine, Ergebnisse un Tabellen. Niege Uhrdesigns, en automatischen Bildschirmtest un en twäisprokigen Störungshenwies helpt bi de Vörbereitung. Besucheroutgaaw un Live-Voransicht bruukt en gemeensamen vörbereiteten Datenstand; Aktualiseeringen waiern eerst bi'm sicheren Folienwessel iäwernuomen.",
+    "versions[0.86].builds[0.86.0].sections.new.0.label": "Nachrichten un Fautball",
+    "versions[0.86].builds[0.86.0].sections.new.0.text": "Westfalen-Blatt un WDR lot sik trennt outsoöken. Fautball bitt Bundesliga-Outwahl, Vereinsfilter, Ergebnisse un vullstännige Tabellen. Quellen un Datenstand bluiwet sichtbor. En begrenzten Offline-Cache iäwerbrückt Netzfehler; aune gültige Daten wärt dat wahlwiese Element iäwersprungen.",
+    "versions[0.86].builds[0.86.0].sections.improved.0.label": "Uhrtied un Live-Dorstellung",
+    "versions[0.86].builds[0.86.0].sections.improved.0.text": "Söss Designkacheln verbinnt digitale un analoge Uhren met Datum, Sekunden, Farwen un Outrichtung. Lange Listen kriegt automatisch ene liäsbare Mindestduer. Bi reduzierter Bewegung bluiwet de Inholte as statische Däilansichten vullstännig liäsbar. De technische Störungsanzeige wesselt met gemeensamem Tiedbezug tüsken Deutsch un Englisch un wiest en Informationssymbol.",
+    "versions[0.86].builds[0.86.0].sections.fixed.0.label": "Bildschirmtest un Bibelnavigation",
+    "versions[0.86].builds[0.86.0].sections.fixed.0.text": "De Bildschirmtest wacht up de Rückmeldung van'n tatsächlichen MAIN-Renderer, bitt Afbreken un stellt de vörige Outgaaw wier her. Vör un torügge in ener all geladenen Bibel-Gau-Anzeige maakt den Ingawedialog nich erneut up. Aktualiseerte Nachrichtendaten verändert kiene all sichtbare Folie.",
+    "versions[0.86].builds[0.86.0].sections.known.0.label": "Unvullstännige Regionalöversettungen",
+    "versions[0.86].builds[0.86.0].sections.known.0.text": "Regionalvarianten sind noch nich vullstännig översett. Fehlende UI-Texte waiern up Hauchdüütsk anzeigt. Düsse Version is met düssem apenleggten Umfang as normales Update fruigewen.",
+    "versions[0.86].builds[0.86.0].sections.known.1.label": "PowerPoint-Originalmodus bluiwet deaktiviert",
+    "versions[0.86].builds[0.86.0].sections.known.1.text": "De experimentelle originaltrue PowerPoint-Speler is noch nich fruigewen un bluiwet deaktiviert. Düsse Aktualiseering verkläärt em nich for färrig. Bildschirmtests ersetzt kiene Sichtprüfung van de tatsächlichen Projektoren un Luutspreker.",
     "versions[0.85].builds[0.85.0].overview.label": "Rauhigere Meldungsanzeigen un sichere Afloopwessel",
     "versions[0.85].builds[0.85.0].overview.text": "Düsse Aktualiseering verbetert de Besucherinfos vör un noh dem Gottesdeenst. Meldungsloopbänner bluiwet bi'm Wessel teo Ankuomen un Countdown in Bewegung. Lange Meldungen waiern up einer tosommenhängenden Fläche langsam scrollt, wiels de QR-Code fast up siener Stie bluiwet. Niege Gau-Anzeigen, en wahlwies lütken Gottesdeenst-Countdown un en RSS-Feed for de Versionshenwiese ergänzt den Afloop.",
     "versions[0.85].builds[0.85.0].sections.new.0.label": "Gau-Anzeigen un Versionsfeed",

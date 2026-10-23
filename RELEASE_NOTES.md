@@ -1,3 +1,29 @@
+# GottesdienstRegie 0.86.0
+
+Veröffentlicht: Fr., 23.10.2026
+
+Das Vor- und Nachprogramm erhält lokale Nachrichten mit Quellenlogos sowie Fußball-Spieltermine, Ergebnisse und Tabellen. Neue Uhrdesigns, ein automatischer Bildschirmtest und ein zweisprachiger Störungshinweis unterstützen die Vorbereitung. Besucherausgabe und Live-Vorschau verwenden einen gemeinsamen vorbereiteten Datenstand; Aktualisierungen werden erst beim sicheren Folienwechsel übernommen.
+
+## Neu
+
+Westfalen-Blatt und WDR sind getrennt auswählbar. Fußball bietet Bundesliga-Auswahl, Vereinsfilter, Ergebnisse und vollständige Tabellen. Quellen und Datenstand bleiben sichtbar. Ein begrenzter Offline-Cache überbrückt Netzfehler; ohne gültige Daten wird das optionale Element übersprungen.
+
+## Verbessert
+
+Sechs Designkacheln verbinden digitale und analoge Uhren mit Datum, Sekunden, Farben und Ausrichtung. Lange Listen erhalten automatisch eine lesbare Mindestdauer. Bei reduzierter Bewegung bleiben Inhalte als statische Teilansichten vollständig lesbar. Die technische Störungsanzeige wechselt mit gemeinsamem Zeitbezug zwischen Deutsch und Englisch und zeigt ein Informationssymbol.
+
+## Behoben
+
+Der Bildschirmtest wartet auf die Rückmeldung des tatsächlichen MAIN-Renderers, bietet Abbrechen und stellt die vorherige Ausgabe wieder her. Vor und zurück in einer bereits geladenen Bibelschnellanzeige öffnet nicht erneut den Eingabedialog. Aktualisierte Nachrichtendaten verändern keine bereits sichtbare Folie.
+
+## Bekannte Einschränkungen
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Diese Version ist mit diesem offengelegten Umfang als normales Update freigegeben.
+
+Der experimentelle originalgetreue PowerPoint-Spieler ist noch nicht freigegeben und bleibt deaktiviert. Diese Aktualisierung erklärt ihn nicht für fertig. Bildschirmtests ersetzen keine Sichtprüfung der tatsächlichen Projektoren und Lautsprecher.
+
+---
+
 # GottesdienstRegie 0.85.0
 
 Veröffentlicht: Mi., 21.10.2026

@@ -324,6 +324,18 @@
     "screenshotLabel": "So kann's aussehen"
   },
   "releases": {
+    "versions[0.86].builds[0.86.0].overview.label": "Lokale Nachrichten, Fußball und vielseitige Uhren",
+    "versions[0.86].builds[0.86.0].overview.text": "Fürs Vor- und Nachprogramm gibt's jetzt lokale Nachrichten mit Quellenlogos sowie Fußball-Spieltermine, Ergebnisse und Tabellen. Neue Uhrdesigns, 'n automatischer Bildschirmtest und 'n zweisprachiger Störungshinweis helfen bei der Vorbereitung. Besucherausgabe und Live-Vorschau nutzen denselben vorbereiteten Datenstand; Aktualisierungen kommen erst beim sicheren Folienwechsel dazu.",
+    "versions[0.86].builds[0.86.0].sections.new.0.label": "Nachrichten und Fußball",
+    "versions[0.86].builds[0.86.0].sections.new.0.text": "Westfalen-Blatt und WDR kannste getrennt auswählen. Beim Fußball gibt's Bundesliga-Auswahl, Vereinsfilter, Ergebnisse und vollständige Tabellen. Quellen und Datenstand bleiben sichtbar. 'N begrenzter Offline-Cache überbrückt Netzfehler; ohne gültige Daten wird das optionale Element übersprungen.",
+    "versions[0.86].builds[0.86.0].sections.improved.0.label": "Uhrzeit und Live-Darstellung",
+    "versions[0.86].builds[0.86.0].sections.improved.0.text": "Sechs Designkacheln verbinden digitale und analoge Uhren mit Datum, Sekunden, Farben und Ausrichtung. Lange Listen kriegen automatisch 'ne lesbare Mindestdauer. Bei reduzierter Bewegung bleiben die Inhalte als statische Teilansichten vollständig lesbar. Die technische Störungsanzeige wechselt mit gemeinsamem Zeitbezug zwischen Deutsch und Englisch und zeigt 'n Informationssymbol.",
+    "versions[0.86].builds[0.86.0].sections.fixed.0.label": "Bildschirmtest und Bibelnavigation",
+    "versions[0.86].builds[0.86.0].sections.fixed.0.text": "Der Bildschirmtest wartet auf die Rückmeldung vom tatsächlichen MAIN-Renderer, lässt sich abbrechen und stellt die vorherige Ausgabe wieder her. Wenn du in 'ner schon geladenen Bibelschnellanzeige vor- oder zurückgehst, geht der Eingabedialog nich noch mal auf. Aktualisierte Nachrichtendaten ändern keine Folie, die schon sichtbar is.",
+    "versions[0.86].builds[0.86.0].sections.known.0.label": "Unvollständige Regionalübersetzungen",
+    "versions[0.86].builds[0.86.0].sections.known.0.text": "Die Regionalvarianten sind noch nich vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Diese Version is mit diesem offengelegten Umfang als normales Update freigegeben.",
+    "versions[0.86].builds[0.86.0].sections.known.1.label": "PowerPoint-Originalmodus bleibt deaktiviert",
+    "versions[0.86].builds[0.86.0].sections.known.1.text": "Der experimentelle originalgetreue PowerPoint-Spieler is noch nich freigegeben und bleibt deaktiviert. Dieses Update erklärt ihn nich für fertig. Bildschirmtests ersetzen keine Sichtprüfung der tatsächlichen Projektoren und Lautsprecher.",
     "versions[0.85].builds[0.85.0].overview.label": "Ruhigere Meldungsanzeigen und sichere Ablaufwechsel",
     "versions[0.85].builds[0.85.0].overview.text": "Mit diesem Update kriegen die Besucher vor und nach'm Gottesdienst bessere Infos. Die Meldungslaufbänder laufen beim Wechsel zum Ankommen und Countdown weiter. Lange Meldungen scrollen langsam auf einer zusammenhängenden Fläche, während der QR-Code fest an seiner Stelle bleibt. Neue Schnellanzeigen, ein optionaler kleiner Gottesdienst-Countdown und ein RSS-Feed für die Versionshinweise kommen für den Ablauf dazu.",
     "versions[0.85].builds[0.85.0].sections.new.0.label": "Schnellanzeigen und Versionsfeed",

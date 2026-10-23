@@ -378,6 +378,18 @@
     "screenshotLabel": "Beispielansicht"
   },
   "releases": {
+    "versions[0.86].builds[0.86.0].overview.label": "Lokali Nachrichte, Fußball un vielseitichi Uhre",
+    "versions[0.86].builds[0.86.0].overview.text": "Des Vor- un Nachprogramm kriegt lokali Nachrichte mit Quellelogos sowie Fußball-Spieltermine, Ergebnisse un Tabelle. Neie Uhrdesigns, e automatischer Bildschirmtest un e zweesproochicher Störungshinweis unterstütze die Vorbereitung. Besucherausgab un Live-Vorschau verwende e gemeinsame vorbereetete Datestand; Aktualisierunge werre erschd beim sichere Foliewechsel iwwernomme.",
+    "versions[0.86].builds[0.86.0].sections.new.0.label": "Nachrichte un Fußball",
+    "versions[0.86].builds[0.86.0].sections.new.0.text": "Westfalen-Blatt un WDR sin getrennt auswählbar. Fußball bietet Bundesliga-Auswahl, Vereinsfilter, Ergebnisse un vollständichi Tabelle. Quelle un Datestand bleiwe sichtbar. E begrenzter Offline-Cache iwwerbrickt Netzfehler; ohne giltichi Date werd des optionale Element iwwersprunge.",
+    "versions[0.86].builds[0.86.0].sections.improved.0.label": "Uhrzeit un Live-Darstellung",
+    "versions[0.86].builds[0.86.0].sections.improved.0.text": "Sechs Designkachele verbinde digitali un analogi Uhre mit Datum, Sekunde, Farwe un Ausrichtung. Langi Liste kriege automatisch e lesbari Mindestdauer. Bei reduzierter Bewejung bleiwe Inhalte als statischi Teilansichte vollständich lesbar. Die technisch Störungsanzeich wechselt mit gemeinsame Zeitbezug zwische Deitsch un Englisch un zeigt e Informationssymbol.",
+    "versions[0.86].builds[0.86.0].sections.fixed.0.label": "Bildschirmtest un Bibelnavigation",
+    "versions[0.86].builds[0.86.0].sections.fixed.0.text": "De Bildschirmtest wart uff die Rickmeldung vum tatsächliche MAIN-Renderer, bietet Abbreche un stellt die vorherichi Ausgab widder her. Vor un zerick in ere schun geladene Bibelschnellanzeich macht net noch emol de Eingabedialog uff. Aktualisierti Nachrichtedate ändere kää Folie, wo schun sichtbar is.",
+    "versions[0.86].builds[0.86.0].sections.known.0.label": "Unvollständichi Regionalübersetzunge",
+    "versions[0.86].builds[0.86.0].sections.known.0.text": "Regionalvariante sin noch net vollständich übersetzt. Fehlendi UI-Texte werre uff Hochdeitsch aagezeigt. Die Version is mit dem offegelegte Umfang als normales Update freigegewe.",
+    "versions[0.86].builds[0.86.0].sections.known.1.label": "PowerPoint-Originalmodus bleibt deaktiviert",
+    "versions[0.86].builds[0.86.0].sections.known.1.text": "De experimentelle originalgetreii PowerPoint-Spieler is noch net freigegewe un bleibt deaktiviert. Die Aktualisierung erklärt ihn net fer fertich. Bildschirmtests ersetze kää Sichtprifung vun de tatsächliche Projektore un Lautsprecher.",
     "versions[0.85].builds[0.85.0].overview.label": "Ruhicheri Meldungsanzeiche un sichere Ablaufwechsel",
     "versions[0.85].builds[0.85.0].overview.text": "Die Aktualisierung verbessert die Information fer die Besucher vor un nooch em Gottesdienst. Meldungslaufbänder bleiwe beim Wechsel zum Aakumme un Countdown in Bewejung. Langi Meldunge werre uff ere zämmehängende Fläch langsam gscrollt, während de QR-Code fescht an seim Platz bleibt. Neie Schnellanzeiche, e wahlweis zuschaltbarer klääner Gottesdienst-Countdown un e RSS-Feed fer die Versionshinweise ergänze de Ablauf.",
     "versions[0.85].builds[0.85.0].sections.new.0.label": "Schnellanzeiche un Versionsfeed",

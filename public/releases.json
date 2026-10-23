@@ -21,9 +21,28 @@
   ],
   "versions": [
     {
+      "line": "0.86",
+      "builds": [{
+        "version": "0.86.0", "releaseDate": "2026-10-23", "current": true,
+        "overview": {
+          "label": {"de":"Lokale Nachrichten, Fußball und vielseitige Uhren","en":"Local news, football and versatile clocks"},
+          "text": {"de":"Das Vor- und Nachprogramm erhält lokale Nachrichten mit Quellenlogos sowie Fußball-Spieltermine, Ergebnisse und Tabellen. Neue Uhrdesigns, ein automatischer Bildschirmtest und ein zweisprachiger Störungshinweis unterstützen die Vorbereitung. Besucherausgabe und Live-Vorschau verwenden einen gemeinsamen vorbereiteten Datenstand; Aktualisierungen werden erst beim sicheren Folienwechsel übernommen.","en":"Pre- and post-program loops gain local news with source logos, football fixtures, results and tables. New clock designs, an automatic screen test and a bilingual technical-issue screen support preparation. Audience output and the live mirror share one prepared snapshot; updates are applied only at a safe slide transition."}
+        },
+        "sections": {
+          "new":[{"label":{"de":"Nachrichten und Fußball","en":"News and football"},"text":{"de":"Westfalen-Blatt und WDR sind getrennt auswählbar. Fußball bietet Bundesliga-Auswahl, Vereinsfilter, Ergebnisse und vollständige Tabellen. Quellen und Datenstand bleiben sichtbar. Ein begrenzter Offline-Cache überbrückt Netzfehler; ohne gültige Daten wird das optionale Element übersprungen.","en":"Westfalen-Blatt and WDR can be selected separately. Football offers league selection, a club filter, results and complete tables. Sources and update times remain visible. A bounded offline cache covers network failures; optional elements without valid data are skipped."}}],
+          "improved":[{"label":{"de":"Uhrzeit und Live-Darstellung","en":"Clocks and live presentation"},"text":{"de":"Sechs Designkacheln verbinden digitale und analoge Uhren mit Datum, Sekunden, Farben und Ausrichtung. Lange Listen erhalten automatisch eine lesbare Mindestdauer. Bei reduzierter Bewegung bleiben Inhalte als statische Teilansichten vollständig lesbar. Die technische Störungsanzeige wechselt mit gemeinsamem Zeitbezug zwischen Deutsch und Englisch und zeigt ein Informationssymbol.","en":"Six design tiles combine digital and analog clocks with date, seconds, colors and alignment. Long lists receive a readable minimum duration automatically. Reduced-motion output keeps all content readable through static continuation frames. The technical-issue screen shares one timing reference for its German/English cycle and displays an information icon."}}],
+          "fixed":[{"label":{"de":"Bildschirmtest und Bibelnavigation","en":"Screen testing and Bible navigation"},"text":{"de":"Der Bildschirmtest wartet auf die Rückmeldung des tatsächlichen MAIN-Renderers, bietet Abbrechen und stellt die vorherige Ausgabe wieder her. Vor und zurück in einer bereits geladenen Bibelschnellanzeige öffnet nicht erneut den Eingabedialog. Aktualisierte Nachrichtendaten verändern keine bereits sichtbare Folie.","en":"Screen testing waits for feedback from the actual MAIN renderer, supports cancellation and restores the previous output. Moving backward or forward in a loaded Bible Quick Screen no longer reopens the input dialog. Refreshed news data does not alter a slide that is already visible."}}],
+          "known":[
+            {"label":{"de":"Unvollständige Regionalübersetzungen","en":"Incomplete regional translations"},"text":{"de":"Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Diese Version ist mit diesem offengelegten Umfang als normales Update freigegeben.","en":"Regional variants are not fully translated yet. Missing UI text appears in Standard German. This version is approved as a regular update with this disclosed scope."}},
+            {"label":{"de":"PowerPoint-Originalmodus bleibt deaktiviert","en":"Original PowerPoint mode remains disabled"},"text":{"de":"Der experimentelle originalgetreue PowerPoint-Spieler ist noch nicht freigegeben und bleibt deaktiviert. Diese Aktualisierung erklärt ihn nicht für fertig. Bildschirmtests ersetzen keine Sichtprüfung der tatsächlichen Projektoren und Lautsprecher.","en":"The experimental original-fidelity PowerPoint player is not approved yet and remains disabled. This update does not declare it complete. Screen tests do not replace checking the actual projectors and speakers."}}
+          ]
+        }
+      }]
+    },
+    {
       "line": "0.85",
       "builds": [{
-        "version": "0.85.0", "releaseDate": "2026-10-21", "current": true,
+        "version": "0.85.0", "releaseDate": "2026-10-21", "current": false,
         "overview": {
           "label": {"de": "Ruhigere Meldungsanzeigen und sichere Ablaufwechsel", "en": "Calmer announcements and safer service transitions"},
           "text": {"de": "Diese Aktualisierung verbessert die Besucherinformationen vor und nach dem Gottesdienst. Meldungslaufbänder bleiben beim Wechsel zum Ankommen und Countdown in Bewegung. Lange Meldungen werden auf einer zusammenhängenden Fläche langsam gescrollt, während der QR-Code fest an seiner Position bleibt. Neue Schnellanzeigen, ein optionaler kleiner Gottesdienst-Countdown und ein RSS-Feed für die Versionshinweise ergänzen den Ablauf.", "en": "This update improves visitor information before and after the service. Announcement ribbons keep moving through arrival and countdown transitions. Long announcements scroll slowly on one continuous surface while the QR code stays in place. Additional Quick Screens, an optional small service countdown and an RSS feed for release notes complement the workflow."}

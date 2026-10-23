@@ -324,6 +324,18 @@
     "screenshotLabel": "Beispillaanzicht"
   },
   "releases": {
+    "versions[0.86].builds[0.86.0].overview.label": "Lokale Nachrichte, Fußball un vielseitije Uhre",
+    "versions[0.86].builds[0.86.0].overview.text": "Dat Vör- un Nohprogramm kritt lokale Nachrichte met Quellelogos suwie Fußball-Spieltermin, Erjebnisse un Tabelle. Neue Uhrdesigns, en automatische Bildschirmtest un ene zweisprochije Störungshinweis hälfe bei dä Vörbereitung. Besucherussjaav un Live-Vorschau bruche ene jemeinsame vörbereitete Datebestand; Aktualisierunge wäde eets beim sichere Foliewechsel övernomme.",
+    "versions[0.86].builds[0.86.0].sections.new.0.label": "Nachrichte un Fußball",
+    "versions[0.86].builds[0.86.0].sections.new.0.text": "Westfalen-Blatt un WDR loße sich jetrennt ussöke. Fußball bietet Bundesliga-Usswahl, Vereinsfilter, Erjebnisse un vollständije Tabelle. Quelle un Datestand blieve sichtbar. Ene bejrenzte Offline-Cache överbröck Netzfehler; ohne jöltije Date weed dat optionale Element övversprunge.",
+    "versions[0.86].builds[0.86.0].sections.improved.0.label": "Uhrzick un Live-Darstellung",
+    "versions[0.86].builds[0.86.0].sections.improved.0.text": "Sechs Designkachele verbinde digitale un analoge Uhre met Datum, Sekunde, Farbe un Ussrichtung. Lange Liste krieje automatisch en lesbare Mindestdauer. Bei reduzierte Bewegung blieve de Enhalte als statische Deilansichte vollständig lesbar. De technische Störungsanzeij wechselt met jemeinsamem Zickbezoch zwesche Deutsch un Englisch un zeij e Informationssymbol.",
+    "versions[0.86].builds[0.86.0].sections.fixed.0.label": "Bildschirmtest un Bibelnavigation",
+    "versions[0.86].builds[0.86.0].sections.fixed.0.text": "Dä Bildschirmtest waat op de Röckmeldung vum tatsächliche MAIN-Renderer, bietet Avbreche un stellt de vörherije Ussjaav widder her. Vör un zoröck en ener ald jeladene Bibelschnellanzeij määt dä Enjavedialog nit noch ens op. Aktualisierte Nachrichtedate verändere kein ald sichtbare Folie.",
+    "versions[0.86].builds[0.86.0].sections.known.0.label": "Unvollständije Regionalövversetzunge",
+    "versions[0.86].builds[0.86.0].sections.known.0.text": "Regionalvariante sin noch nit vollständig övversatz. Fehlende UI-Texte wäde op Huhdütsch aanjezeij. Die Version es met däm offejeleichte Umfang als normal Update freijejevve.",
+    "versions[0.86].builds[0.86.0].sections.known.1.label": "PowerPoint-Originalmodus bliev deaktiviert",
+    "versions[0.86].builds[0.86.0].sections.known.1.text": "Dä experimentelle originaljetreue PowerPoint-Spieler es noch nit freijejevve un bliev deaktiviert. Die Aktualisierung erkläät en nit för fäädich. Bildschirmtests ersetze kein Sichtprüfung vun de tatsächliche Projektore un Lautsprecher.",
     "versions[0.85].builds[0.85.0].overview.label": "Ruhijere Meldungsanzeije un sichere Afloufwechsel",
     "versions[0.85].builds[0.85.0].overview.text": "Die Aktualisierung verbessert de Besucherinfo vör un noh däm Jottesdeenst. Meldungsloufbänder blieve beim Wechsel zom Aankumme un Countdown en Bewegung. Lange Meldunge wäde op ener zosammehängende Fläch langsam jescrollt, während dä QR-Code fass op singer Stell bliev. Neue Schnellanzeije, en optionale kleine Jottesdeenst-Countdown un en RSS-Feed för de Versionshinweise ergänze dä Aflouf.",
     "versions[0.85].builds[0.85.0].sections.new.0.label": "Schnellanzeije un Versionsfeed",
