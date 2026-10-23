@@ -5,6 +5,7 @@ const {resolveNativeToolchain, runNativeCommand} = require('../native-probe-tool
 async function buildGpuProbe({root, target}) {
   if (process.platform !== 'win32' || process.arch !== 'x64') throw Error('NATIVE_BUILD_WINDOWS_X64_REQUIRED');
   const targets = {
+    'cadence-tests': ['capture-cadence-tests.cpp'],
     'slot-tests': ['slot-pool.cpp', 'slot-pool-tests.cpp'],
     'gpu-pattern-tests': ['slot-pool.cpp', 'producer-io.cpp', 'gpu-targets.cpp', 'gpu-pattern-tests.cpp'],
     'producer': ['slot-pool.cpp', 'producer-io.cpp', 'gpu-targets.cpp', 'producer.cpp'],

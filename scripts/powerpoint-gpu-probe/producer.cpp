@@ -1,5 +1,6 @@
 #include "gpu-targets.h"
 #include "producer-io.h"
+#include "capture-cadence.h"
 #include <tlhelp32.h>
 #include <bcrypt.h>
 #include <d3dcompiler.h>
@@ -132,7 +133,7 @@ struct Capture {
   SlotPool slots;
   GpuTargets gpu;
   const std::shared_ptr<Signals> signals = std::make_shared<Signals>();
-  std::uint64_t frequency = 0, nextFrame = 0, origin = 0, frameTick = 0, ownerCheck = 0;
+  std::uint64_t frequency = 0, nextFrame = 0, origin = 0, ownerCheck = 0;
   bool running = true, framesHooked = false, closedHooked = false, announcedLost = false;
   GraphicsCaptureItem item{nullptr}; Direct3D11CaptureFramePool pool{nullptr}; GraphicsCaptureSession session{nullptr};
   event_token framesToken{}, closedToken{};
@@ -207,22 +208,19 @@ float4 ps(V v):SV_TARGET{float4 c=source.Sample(sampleState,crop.xy+v.uv*crop.zw
     if (!running) return;
     if (signals->closed) throw std::runtime_error("SOURCE_WINDOW_CLOSED");
     if (now >= ownerCheck) { validateOwner(config.owner); ownerCheck = now + frequency / 10; }
-    if (now < nextFrame) return;
-    // Absolute30Hz deadlines: skip missed windows, never replay a FIFO or reject a frame for being fractionally early.
-    frameTick = ((now - origin) * 30) / frequency + 1;
-    nextFrame = origin + (frameTick * frequency) / 30;
+    captureAtDeadline(now, origin, frequency, nextFrame, [&]() -> bool {
     Direct3D11CaptureFrame frame{nullptr};
     try {
       for (unsigned i = 0; i < 3; ++i) {
         auto newer = pool.TryGetNextFrame(); if (!newer) break;
         if (frame) frame.Close(); frame = newer;
       }
-      if (!frame) return;
+      if (!frame) return false;
       const auto& o = config.owner;
       const auto size = frame.ContentSize();
       if (size.Width != static_cast<int>(o.outerWidth) || size.Height != static_cast<int>(o.outerHeight)) throw std::runtime_error("SOURCE_GEOMETRY_CHANGED");
       const auto key = slots.beginWrite();
-      if (!key) { frame.Close(); return; }
+      if (!key) { frame.Close(); return false; }
       const auto acquired = qpc();
       auto access = frame.Surface().as<::Windows::Graphics::DirectX::Direct3D11::IDirect3DDxgiInterfaceAccess>();
       com_ptr<ID3D11Texture2D> source;
@@ -248,7 +246,9 @@ float4 ps(V v):SV_TARGET{float4 c=source.Sample(sampleState,crop.xy+v.uv*crop.zw
         acquired, 0, frequency};
       copy.frame = frame; frame = nullptr;
       gpu.submit(key->slotId);
+      return true;
     } catch (...) { if (frame) frame.Close(); throw; }
+    });
   }
   ~Capture() {
     try { if (framesHooked) pool.FrameArrived(framesToken); } catch (...) {}
