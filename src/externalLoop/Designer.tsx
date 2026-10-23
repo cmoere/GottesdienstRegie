@@ -3,6 +3,7 @@ import {usePresentation,type ServiceItem} from '../store';
 import {ExternalLoopContext} from './context';
 import {externalSettingsForItem,requestForExternalItem,externalLoopMinimumDuration} from './model';
 import './styles.css';
+import {WeatherDesigner} from './WeatherDesigner';
 
 export function ExternalLoopDesigner({item,canEdit=true}:{item:ServiceItem;canEdit?:boolean}){
  const controller=useContext(ExternalLoopContext);
@@ -17,7 +18,7 @@ export function ExternalLoopDesigner({item,canEdit=true}:{item:ServiceItem;canEd
  };
  const teams=snapshot?.payload.kind==='football'?snapshot.payload.teams:[];
  return <section className="external-loop-designer">
-  {settings.kind==='news'?<fieldset disabled={!canEdit}><legend>Nachrichtenquellen</legend>
+  {settings.kind==='weather'?<WeatherDesigner settings={settings} canEdit={canEdit} onChange={change}/>:settings.kind==='news'?<fieldset disabled={!canEdit}><legend>Nachrichtenquellen</legend>
    {(['westfalen-blatt','wdr-owl'] as const).map(source=><label key={source}><input type="checkbox" checked={settings.sources.includes(source)} onChange={()=>change({newsSources:(settings.sources.includes(source)?settings.sources.filter(value=>value!==source):[...settings.sources,source]).join(',')})}/>{source==='wdr-owl'?'WDR · Ostwestfalen-Lippe':'Westfalen-Blatt · Bielefeld'}</label>)}
    <label>Anzahl Nachrichten<input type="number" min="1" max="10" value={settings.limit} onChange={event=>change({newsLimit:Math.max(1,Math.min(10,Number(event.target.value)||1))})}/></label>
   </fieldset>:<fieldset disabled={!canEdit}><legend>Fußball</legend>
@@ -27,7 +28,7 @@ export function ExternalLoopDesigner({item,canEdit=true}:{item:ServiceItem;canEd
    {settings.teamId!==null&&!teams.some(team=>team.id===settings.teamId)&&<p>Der gewählte Verein ist im aktuellen Datenstand nicht verfügbar.</p>}
   </fieldset>}
   <label>Anzeigedauer in Sekunden<input type="number" min="1" max="86400" disabled={!canEdit} value={settings.durationSeconds} onChange={event=>change({durationSeconds:Math.max(1,Math.min(86400,Number(event.target.value)||1))})}/></label>
-  <p>Lesbare Mindestdauer: {Math.ceil(minimum/1000)} Sekunden. Bei Platzmangel wird automatisch gescrollt; die Ausgabe dauert mindestens so lange.</p>
+  <p>Lesbare Mindestdauer: {Math.ceil(minimum/1000)} Sekunden. {settings.kind==='news'?'Die Anzeigedauer gilt je Nachricht, mindestens 20 Sekunden. Jede Nachricht erscheint einzeln; längere Texte erhalten mehr Zeit.':'Bei Platzmangel wird automatisch gescrollt; die Ausgabe dauert mindestens so lange.'}</p>
   {snapshot?<p>Datenstand: {new Date(snapshot.fetchedAt).toLocaleString('de-DE')}{reply?.status==='stale'?' · Offline / letzter gültiger Stand':''}</p>:<p>Keine gültigen Daten verfügbar. Das Element wird bei der Ausgabe übersprungen.</p>}
  </section>;
 }

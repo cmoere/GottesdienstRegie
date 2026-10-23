@@ -84,7 +84,6 @@ import type {OsbSettings} from './osb/types';
 import {BIBLE_TRANSLATIONS} from './bible/provider';
 import { PersonalNotesPanel } from "./PersonalNotesPanel";
 import { prepareStandardTranslationPacks } from "./translationPackManager";
-import { weatherScreenController } from "./weatherController";
 import { LoopPreview } from "./LoopPreview";
 import { liveEngine } from "./LiveEngine";
 import {
@@ -8101,23 +8100,6 @@ function AppShell({
       loopController.current.setItems(sectionItems);
       loopController.current.select(item.id);
       let active = true;
-      if (item.type === "weather") {
-        void weatherScreenController.preload().then((ready) => {
-          if (!active || !ready) {
-            if (active) usePresentation.getState().nextLive();
-            return;
-          }
-          weatherScreenController.take(() => {
-            if (active && usePresentation.getState().onAir && usePresentation.getState().liveItemId === item.id) {
-              const nextId = loopController.current.advance(), nextItem = usePresentation.getState().items.find((entry) => entry.id === nextId);
-              const nextSlide=nextItem?.slides.find(entry=>entry.enabled);
-              if (nextItem&&nextSlide) usePresentation.getState().goLive(nextItem.id, nextSlide.id);
-              else usePresentation.getState().nextLive();
-            }
-          }, loopDurationMs(item));
-        });
-        return () => { active = false; weatherScreenController.cancel(); loopController.current.stop(); };
-      }
       const timer = window.setTimeout(() => {
         if (!active) return;
         if(isAnnouncementLoop(item)&&slide&&announcementController.current.hasContinuation(item.id)){
@@ -8133,19 +8115,6 @@ function AppShell({
         ? (announcementController.current.outputForTake(item,slide,state.liveTransitionRevision,AppClock.now())?.timing?.durationSeconds??loopDurationMs(item)/1000)*1000
         : Math.max(loopDurationMs(item),eventOverviewMinimumDuration(slide),liveProtectionRemainingMs(state),isPostProgramSystemItem(item)?postProgramNoticeController.current.current()?.minDurationMs??0:0));
       return () => { active = false; window.clearTimeout(timer); loopController.current.stop(); };
-    }
-    if (item?.type === "weather") {
-      let active = true;
-      void weatherScreenController.preload().then((ready) => {
-        if (!active || !ready) {
-          if (active) usePresentation.getState().nextLive();
-          return;
-        }
-        weatherScreenController.take(() => {
-          if (active && usePresentation.getState().onAir && usePresentation.getState().liveItemId === item.id) usePresentation.getState().nextLive();
-        }, loopDurationMs(item));
-      });
-      return () => { active = false; weatherScreenController.cancel(); };
     }
     if (
       !item?.timing.autoAdvance ||

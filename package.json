@@ -38,9 +38,10 @@
     "jszip": "^3.10.1",
     "material-symbols": "^0.30.0",
     "qrcode": "^1.5.4",
-    "saxes": "6.0.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "saxes": "6.0.0",
+    "sharp": "0.34.5",
     "zustand": "^5.0.8"
   },
   "devDependencies": {

@@ -34,3 +34,30 @@
 .external-reduced-title{font-size:2.1875cqw;font-weight:500;line-height:2.8125cqw;white-space:pre-wrap;overflow-wrap:anywhere}
 .external-loop-frame[data-reduced=true] .external-news-row,.external-loop-frame[data-reduced=true] .external-match-row,.external-loop-frame[data-reduced=true] .external-table-row:not(.external-table-heading){height:auto;min-height:6.25cqw;padding:.625cqw 0}
 .external-table-row .external-reduced-title{font-size:1.77083cqw}
+.news-story{height:100%;display:grid;grid-template-columns:44% minmax(0,1fr);gap:3.125cqw}
+.news-story[data-has-image=false]{grid-template-columns:minmax(0,1fr)}
+.news-story figure{margin:0;display:flex;flex-direction:column;min-height:0;justify-content:center}
+.news-story figure>img{width:100%;max-height:35.41667cqw;object-fit:contain}
+.news-story figcaption{color:#608f9a;font-size:1.04167cqw;line-height:1.5;margin-top:.52083cqw}
+.news-story-text{min-width:0;overflow:hidden}
+.news-story .event-scroll-viewport{height:39.58333cqw}
+.news-story-title{font-size:3.33333cqw;font-weight:600;line-height:4.16667cqw;white-space:pre}
+.news-story-body{font-size:1.97917cqw;font-weight:400;line-height:2.8125cqw;white-space:pre}
+.football-club-cell{display:flex;align-items:center;gap:.625cqw;min-width:0}
+.football-club-cell>.event-title-container{flex:1;min-width:0}
+.football-club-logo{width:2.60417cqw;height:2.60417cqw;object-fit:contain;flex:none;background:#fff;border-radius:.20833cqw}
+.football-logo-pair{display:flex;gap:.52083cqw;flex:none}
+.native-weather header h2{font-size:3.125cqw}
+.native-weather .weather-current{display:flex;align-items:center;gap:3.125cqw;padding:1.5625cqw 3.125cqw;color:#608f9a;flex:none}
+.weather-current>svg{width:12.5cqw;height:9.375cqw}
+.weather-current strong{display:block;font-size:5.20833cqw;font-weight:500;line-height:1.15;color:#000}
+.weather-current p{font-size:1.66667cqw}
+.weather-current .weather-wind{margin-left:auto;font-size:1.45833cqw}
+.weather-current .weather-wind strong{font-size:2.5cqw}
+.weather-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.08333cqw;flex:1;min-height:0}
+.weather-days article{border-top:.20833cqw solid #699f3e;background:#f3f5f4;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.04167cqw;gap:.52083cqw}
+.weather-days h3{font-size:1.66667cqw;font-weight:500;margin:0}
+.weather-days svg{width:8.33333cqw;height:6.25cqw;color:#608f9a}
+.weather-days strong{font-size:2.5cqw;font-weight:500}
+.weather-days strong span{color:#608f9a;font-size:1.875cqw}
+.weather-days small{font-size:1.14583cqw;margin-top:.52083cqw}

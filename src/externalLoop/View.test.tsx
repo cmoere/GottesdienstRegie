@@ -7,18 +7,23 @@ import type {ExternalSnapshot} from '../../shared/externalLoop';
 afterEach(()=>{cleanup();vi.useRealTimers();vi.unstubAllGlobals()});
 const news:ExternalSnapshot={version:1,key:'news:wdr-owl',revision:'a',fetchedAt:Date.now(),stale:false,payload:{kind:'news',entries:[{id:'one',title:'Lange vollständige Nachricht über den Gemeindegottesdienst',source:'wdr-owl',publishedAt:'2026-10-23T12:00:00Z',url:'https://www1.wdr.de/a'}]}};
 describe('public external loop frame',()=>{
+ it('associates club logos with team IDs in the table without replacing readable names or ranks',()=>{
+  const snapshot:ExternalSnapshot={version:1,key:'football:bl1:table',revision:'r',fetchedAt:1000,stale:false,payload:{kind:'football',league:'bl1',season:2026,mode:'table',teams:[{id:1,name:'Verein A',logoDataUrl:'data:image/jpeg;base64,/9j/AA=='}],matches:[],table:[{rank:1,team:{id:1,name:'Verein A'},played:1,goalsFor:2,goalsAgainst:0,goalDifference:2,points:3}]}};
+  render(<ExternalLoopView snapshot={snapshot} startedAt={1000} settings={normalizeExternalSettings({externalKind:'football',footballMode:'table'})} staticPreview/>);
+  expect(screen.getByAltText('Logo Verein A')).toHaveAttribute('src','data:image/jpeg;base64,/9j/AA==');expect(screen.getByText('Verein A')).toBeInTheDocument();expect(screen.getByText('2:0')).toBeInTheDocument();
+ });
  it('keeps every row readable as static pages when motion is reduced',()=>{
   vi.useFakeTimers();vi.setSystemTime(1000);vi.stubGlobal('matchMedia',()=>({matches:true,addEventListener(){},removeEventListener(){}}));
   const snapshot=structuredClone(news);if(snapshot.payload.kind==='news'){const entry=snapshot.payload.entries[0];snapshot.payload.entries=Array.from({length:10},(_,i)=>({...entry,id:String(i),title:'Nachricht '+(i+1)}))}
   render(<ExternalLoopView snapshot={snapshot} startedAt={1000} settings={normalizeExternalSettings({newsSources:'wdr-owl'})}/>);
   expect(screen.queryByText('Nachricht 10')).toBeNull();
-  act(()=>vi.advanceTimersByTime(40000));
+  act(()=>vi.advanceTimersByTime(180000));
   expect(screen.getByText('Nachricht 10')).toBeInTheDocument();
  });
  it('keeps full headlines, source branding and static date metadata without article images or HTML execution',()=>{
   const snapshot=structuredClone(news);if(snapshot.payload.kind==='news')snapshot.payload.entries[0].title='<script>bad()</script> und die vollständige Nachricht';
   const {container}=render(<ExternalLoopView snapshot={snapshot} startedAt={Date.now()} settings={normalizeExternalSettings({externalKind:'news',newsSources:'wdr-owl'})}/>);
-  expect(screen.getAllByText('<script>bad()</script> und die vollständige Nachricht').length).toBeGreaterThan(0);
+  expect(screen.getByRole('article',{name:'<script>bad()</script> und die vollständige Nachricht'})).toHaveTextContent('<script>bad()</script> und die vollständige Nachricht');
   expect(container.querySelector('script')).toBeNull();expect(screen.getByAltText('WDR')).toHaveAttribute('src',expect.stringContaining('news-logos/wdr.svg'));
   expect(screen.getByText(/Quelle: WDR.de/)).toBeInTheDocument();expect(screen.getByText(/Fr\., 23\.10\.2026/)).toBeInTheDocument();
   expect(container.querySelectorAll('img')).toHaveLength(1);

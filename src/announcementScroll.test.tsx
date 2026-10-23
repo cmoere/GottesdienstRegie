@@ -13,7 +13,9 @@ it('keeps a long formatted message on one top-aligned scrolling surface',()=>{
  const body='<p><b>'+('Lesbarer vollständiger Text. '.repeat(200))+'</b></p>';
  const pages=prepareAnnouncementPages({title:'Wichtig',body,qrCode:true,design:'classic'});
  expect(pages).toHaveLength(1);
- expect(pages[0].titleElement.y).toBeLessThanOrEqual(40);
+ // The new system info badge occupies y=32..132; the actual title follows it.
+ expect(pages[0].titleElement.y).toBe(164);
+ expect(pages[0].bodyElement.y).toBeGreaterThan(pages[0].titleElement.y+pages[0].titleElement.height);
  expect(pages[0].bodyText).toContain('Lesbarer vollständiger Text. '.repeat(199));
  expect(pages[0].bodyHeight).toBeGreaterThan(pages[0].bodyElement.height);
  expect(pages[0].bodyRichLines.flat().every(run=>run.bold)).toBe(true);

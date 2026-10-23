@@ -18,6 +18,12 @@ Aus dem eingefrorenen Snapshot entsteht eine gemeinsame Zeitleiste. Pro Nachrich
 
 Großes Bild links, Titel und Beschreibung rechts; ohne Bild volle Textbreite. Neutrale Cera-Pro-Typografie und bestehende Gemeindefarben. Lange Texte niemals abschneiden oder verkleinern: ruhiger vertikaler Textlauf innerhalb des Textbereichs; im Modus für reduzierte Bewegung statische vollständige Fortsetzungen. Keine Ausführung von Feed-HTML. Diese Layoutdetails sind Implementierungsentscheidungen innerhalb der bestätigten Einzelansicht.
 
+## Bestätigte Ergänzungen
+
+Am 23.10.2026 zusätzlich bestätigt: Vereinslogos in Fußballpaarungen und Tabelle; eigene Wetterfolie statt externer Wetter-Webseite; grüner Meldungskopf mit Info-Symbol und „Aktuelle Infos“ entsprechend Vorlage, mit weißer Schrift und unten rechts abgerundeter Ecke. Der einzelne Meldungstitel und Rich-Text-/QR-/Scroll-Funktionen bleiben darunter erhalten. Für Wetter ist Bielefeld als änderbarer Standard und eine Drei-Tage-Vorschau bestätigt.
+
+Implementierung: vorhandene ExternalLoop-Kette um normalisierte Wetterdaten erweitern, Open-Meteo mit Quellenangabe und ohne API-Schlüssel für die nichtkommerzielle Gemeindeanzeige verwenden. Geocoding nur auf ausdrückliche Ortssuche, keine automatische Standortermittlung. Zeitzone Europe/Berlin, °C und km/h, begrenzte Aktualisierung mit Offline-Cache. Keine externen Webseiten in Wettervorschau oder Ausgabe. Vereinslogos nur von den durch die Liga-API genannten zugelassenen Quellen zentral als begrenzte Rasterbilder vorbereiten; fehlende Logos beeinträchtigen keine Namen/Ergebnisse.
+
 ## Nicht enthalten
 
-Keine Änderung an Meldungen, Werbeanzeigen, Fußball, Audio oder Ausgangszuordnung. Keine Behauptung einer bereits veröffentlichten neuen Version; das veröffentlichte 0.86.0 bleibt unverändert. Keine neuen Abhängigkeiten oder Delegation von Programmierung.
+Keine Änderung an Werbeanzeigen, Audio oder Ausgangszuordnung. Keine Behauptung einer bereits veröffentlichten neuen Version; das veröffentlichte 0.86.0 bleibt unverändert. Keine neuen Abhängigkeiten oder Delegation von Programmierung.

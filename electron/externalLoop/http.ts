@@ -1,5 +1,5 @@
 export const EXTERNAL_RESPONSE_LIMIT=2*1024*1024;
-const hosts=new Set(['www.westfalen-blatt.de','www1.wdr.de','api.openligadb.de']);
+const hosts=new Set(['www.westfalen-blatt.de','www1.wdr.de','api.openligadb.de','api.open-meteo.com','geocoding-api.open-meteo.com']);
 function approved(value:string):URL{
  const url=new URL(value);
  if(url.protocol!=='https:'||!hosts.has(url.hostname)||url.username||url.password||url.port)throw Error('blocked-url');

@@ -1,11 +1,17 @@
 import {useEffect,useLayoutEffect,useRef,useState,type CSSProperties,type ReactNode} from 'react';
 import {eventScrollOffset,type EventScrollPlan} from './eventScroll';
-export function useEventPresentationClock(startedAtMs:number,forceReduced=false){
+export function useEventPresentationClock(startedAtMs:number,forceReduced=false,tickAlways=false){
  const [elapsed,setElapsed]=useState(()=>Math.max(0,Date.now()-startedAtMs));
  const [systemReduced,setSystemReduced]=useState(()=>typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches);
  const reduced=forceReduced||systemReduced;
  useEffect(()=>{const media=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):undefined;const update=()=>setSystemReduced(media?.matches??false);media?.addEventListener('change',update);return()=>media?.removeEventListener('change',update)},[]);
- useEffect(()=>{const tick=()=>setElapsed(Math.max(0,Date.now()-startedAtMs));tick();if(!reduced)return;const timer=setInterval(tick,1000);return()=>clearInterval(timer)},[startedAtMs,reduced]);
+ useEffect(()=>{
+  const tick=()=>setElapsed(Math.max(0,Date.now()-startedAtMs));tick();if(!reduced&&!tickAlways)return;
+  if(!tickAlways){const timer=setInterval(tick,1000);return()=>clearInterval(timer)}
+  let timer:ReturnType<typeof setTimeout>,active=true;
+  const schedule=()=>{timer=setTimeout(()=>{if(!active)return;tick();schedule()},1000-((Date.now()-startedAtMs)%1000+1000)%1000)};
+  schedule();return()=>{active=false;clearTimeout(timer)};
+ },[startedAtMs,reduced,tickAlways]);
  return {elapsed,reduced};
 }
 export function EventScrollViewport({plan,elapsed,reduced=false,children,className=''}:{plan:EventScrollPlan;elapsed:number;reduced?:boolean;children:ReactNode;className?:string}){

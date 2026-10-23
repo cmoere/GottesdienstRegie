@@ -89,7 +89,7 @@ interface ImportedSong {
 }
 interface Window {
     desktop?: {
-        externalLoop?: {read: (request: import('../shared/externalLoop').ExternalRequest) => Promise<import('../shared/externalLoop').ExternalReply>};
+        externalLoop?: {read: (request: import('../shared/externalLoop').ExternalRequest) => Promise<import('../shared/externalLoop').ExternalReply>;searchLocations?:(query:string)=>Promise<import('../shared/externalLoop').WeatherLocation[]>};
         regionalSettings?: import('../shared/regional/selection').RegionalSettingsBridge;
         announcements?: import('./announcements/settings').AnnouncementSettingsBridge;
         outputDisplays?: {

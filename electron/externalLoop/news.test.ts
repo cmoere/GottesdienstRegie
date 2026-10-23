@@ -13,7 +13,7 @@ describe('external loop news normalization',()=>{
  it('stripsHtmlAndKeepsSource without forwarding raw feed fields',async()=>{
   const entries=parseNews(await rss(),'westfalen-blatt');
   expect(entries).toMatchObject([{title:'Gottesdienst & Begegnung',source:'westfalen-blatt',publishedAt:'2026-10-22T12:00:00.000Z',url:'https://www.westfalen-blatt.de/owl/bielefeld/begegnung'},{title:'Ohne Datum',publishedAt:null}]);
-  expect(Object.keys(entries[0]).sort()).toEqual(['id','publishedAt','source','title','url']);
+  expect(Object.keys(entries[0]).sort()).toEqual(['description','id','publishedAt','source','title','url']);
   expect(parseNews(await atom(),'wdr-owl')).toMatchObject([{title:'Gemeinde & Stadt',url:'https://www1.wdr.de/nrw/bielefeld/stadt.html'}]);
  });
  it('rejectsDtdAndOversizedXml and malformed documents',()=>{

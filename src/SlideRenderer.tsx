@@ -319,17 +319,7 @@ function RenderElement({
     src = String(properties.src ?? properties.url ?? "");
   if (element.type === "loop") {
     const loopType = String(properties.loopType ?? "announcement");
-    if(loopType==='news'||loopType==='football')return <ExternalLoopElement properties={properties} style={style} mode={mode}/>;
-    if (loopType === "weather")
-      return (
-        <iframe
-          className="slide-renderer-element web loop-weather"
-          style={{ ...style, pointerEvents: "none" }}
-          src="https://weather.crbnm06.workers.dev"
-          title="Wetterscreen"
-          sandbox="allow-scripts allow-same-origin"
-        />
-      );
+    if(loopType==='news'||loopType==='football'||loopType==='weather')return <ExternalLoopElement properties={properties} style={style} mode={mode}/>;
     if (loopType === "clock") return <div className="slide-renderer-element" style={style}><ActiveClockLoopView settings={normalizeClockSettings(properties)} staticPreview={mode==='thumbnail'||mode==='editor'}/></div>;
     if(loopType==='announcement')return mode==='live'||mode==='mirror'?<div className="slide-renderer-element" style={style}/>:<AnnouncementLoopPreview style={style} properties={properties}/>;
     if (loopType === "nowPlaying")

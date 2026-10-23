@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import {ActiveClockLoopView} from './clockLoop/ClockLoopView';
 import {normalizeClockSettings} from './clockLoop/model';
 import type { ServiceItem } from './store';
-import { WEATHER_SCREEN_URL } from './loopDomain';
+import {ExternalLoopElement} from './externalLoop/Element';
 import { AnnouncementService } from './loopDataService';
 import type { PublicAnnouncement } from './loopData';
 import { announcementPlacement } from './announcementLive';
@@ -15,7 +15,7 @@ export function LoopPreview({ item }: { item: ServiceItem }) {
     const service = new AnnouncementService();
     return service.subscribe(placement, (items) => setAnnouncements(items), () => setAnnouncements([]));
   }, [item.type, item.sectionId]);
-  if (item.type === 'weather') return <div className="loop-preview loop-preview-weather"><iframe src={WEATHER_SCREEN_URL} title="Wetterscreen-Vorschau" sandbox="allow-scripts allow-same-origin" /></div>;
+  if (item.type === 'weather') return <div className="loop-preview loop-preview-weather"><ExternalLoopElement properties={{...item.metadata,loopType:'weather'}} style={{width:'100%',height:'100%'}} mode="editor"/></div>;
   if (item.type === 'clock') return <ActiveClockLoopView settings={normalizeClockSettings(item.metadata)}/>;
   const announcement = announcements[0];
   const text = announcement?.text || String(item.slides[0]?.body || item.metadata.text || item.title);

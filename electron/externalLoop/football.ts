@@ -89,7 +89,12 @@ export class FootballAdapter{
   const key=`football:${league}:${season}:teams`,cached=await this.dependencies.cache.read(key,21600000).catch(()=>null);
   if(this.disposed||signal.aborted)throw Error('cancelled');
   if(cached?.payload.kind==='football'&&cached.payload.league===league&&cached.payload.season===season&&this.now()-cached.fetchedAt<21600000)return cached.payload.teams;
-  const seen=new Set<number>(),teams=(await this.resource(`getavailableteams/${league}/${season}`,21600000,signal)).flatMap(row=>{const value=team(row);if(!value||seen.has(value.id))return[];seen.add(value.id);return[value]});
+  const seen=new Set<number>(),rows=await this.resource(`getavailableteams/${league}/${season}`,21600000,signal);
+  const selected=rows.flatMap(row=>{const value=team(row);if(!value||seen.has(value.id))return[];seen.add(value.id);return[{value,icon:record(row)&&typeof row.teamIconUrl==='string'?row.teamIconUrl:null}]});
+  const teams=await Promise.all(selected.map(async({value,icon},index)=>{
+   if(!icon||index>=64||this.disposed||signal.aborted)return value;
+   const logo=await this.dependencies.loadImage?.('football',icon,signal).catch(()=>null);return logo?{...value,logoDataUrl:logo}:value;
+  }));
   if(!teams.length)throw Error('unavailable-teams');
   const payload:FootballPayload={kind:'football',league,season,mode:'matchday',teams,matches:[],table:[]};
   await this.dependencies.cache.write({version:1,key,revision:createHash('sha256').update(JSON.stringify(payload)).digest('hex'),fetchedAt:this.now(),stale:false,payload}).catch(()=>{});

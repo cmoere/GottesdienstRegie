@@ -20,6 +20,11 @@ async function setup(){
  return{adapter,data,clock,state,requests};
 }
 describe('OpenLigaDB normalized football snapshots',()=>{
+ it('loads prepared club logos by stable team ID without forwarding provider URLs',async()=>{
+  const data=await fixture(),logo='data:image/jpeg;base64,/9j/AA==';data.teams[0].teamIconUrl='https://i.imgur.com/club.png';
+  const adapter=new FootballAdapter({cache:new ExternalCache(null,()=>start),now:()=>start,loadImage:async(source,url)=>source==='football'&&url==='https://i.imgur.com/club.png'?logo:null,fetchText:async url=>JSON.stringify(url.includes('getavailableteams')?data.teams:data.current)});
+  const result=payload(await adapter.load(request()));expect(result.teams[0].logoDataUrl).toBe(logo);expect(JSON.stringify(result)).not.toContain('https://i.imgur.com');expect(result.matches[0].score).toEqual({home:0,away:0});
+ });
  it('preservesZeroButNotMissingScore and never forwards team icons',async()=>{
   const {adapter}=await setup(),matches=payload(await adapter.load(request())).matches;
   expect(matches).toMatchObject([{id:11,status:'finished',score:{home:0,away:0}},{id:12,status:'in-progress',score:{home:1,away:0}},{id:13,status:'scheduled',score:null}]);

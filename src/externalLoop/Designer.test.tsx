@@ -10,6 +10,7 @@ import type {ExternalReply,ExternalRequest} from '../../shared/externalLoop';
 const saved=usePresentation.getState();
 afterEach(()=>{cleanup();usePresentation.setState(saved,true)});
 function response(request:ExternalRequest):ExternalReply{
+ if(request.kind==='weather')return{snapshot:null,status:'unavailable'};
  const payload=request.kind==='news'?{kind:'news' as const,entries:[{id:'one',title:'Nachricht aus Bielefeld',source:'wdr-owl' as const,publishedAt:'2026-10-23T12:00:00Z',url:'https://www1.wdr.de/a'}]}:{kind:'football' as const,league:request.league,season:2026,mode:request.mode,teams:[{id:1,name:'Verein A'},{id:2,name:'Verein B'}],matches:[{id:1,startsAt:'2026-10-23T12:00:00Z',home:{id:1,name:'Verein A'},away:{id:2,name:'Verein B'},score:null,status:'scheduled' as const}],table:[]};
  return{status:'ready',snapshot:{version:1,key:request.kind==='news'?`news:${request.sources.slice().sort().join(',')}`:`football:${request.league}:${request.mode}`,revision:'a',fetchedAt:1000,stale:false,payload}};
 }

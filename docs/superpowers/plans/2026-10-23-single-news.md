@@ -15,7 +15,7 @@
 - Minimum 20 seconds per story; configured duration is a per-story lower bound.
 - Keep the frozen take, common epoch, source logos, 24-hour news retention and bounded cache.
 - No network requests in outputs; only feed-provided descriptions/images; no HTML execution or article scraping.
-- Preserve football behavior and unrelated `tests/smoke/startup-diagnostic.cjs`.
+- Preserve football results/ranking behavior while adding logos; preserve unrelated `tests/smoke/startup-diagnostic.cjs`.
 - No dependency additions, monitor/audio changes, incomplete-localization claims or overwrite of published 0.86.0.
 
 ## Review Focus
@@ -58,3 +58,11 @@
 - [ ] Run `node node_modules/vitest/vitest.mjs run --maxWorkers=4 --minWorkers=1`, `npx tsc --noEmit`, `npm run build`, `node scripts/test-external-loop-native.cjs` and `git diff --check`.
 - [ ] Inspect captured first/second/no-image/long-text frames; verify no overlap/cropping, logo readability, watermark above content and mirror consistency. Keep original installed app and physical outputs untouched.
 - [ ] Record exact outcomes and any limitations, review all changes natively, commit own changes and report what is implemented versus published. No automatic re-publication of the existing version.
+
+### Approved expansion (execute before Task 3)
+
+- [ ] Task 4: Reuse bounded raster-image preparation for optional FootballTeam.logoDataUrl; hydrate provider teamIconUrl centrally, join by stable team ID for table/matches. RED→GREEN tests for association, unsafe/missing images and unchanged scores/ranks; render beside club names.
+- [ ] Task 5: Extend strict request/snapshot/settings unions with weather, using fixed Open-Meteo forecast/geocoding endpoints, Bielefeld defaults (52.0302, 8.5325), Europe/Berlin, current conditions and three daily forecasts. Add bounded adapter/cache tests (invalid dates/units/null data, stale expiry, request validation), operator-only explicit location search, native shared WeatherView and designer. Route weather through the frozen ExternalLoop path; remove active external iframe/preload branches. Test view/designer/frozen-output behavior and legacy migration.
+- [ ] Task 6: Reserve a header region in all prepared announcement designs. Add info icon and green #699f3e „Aktuelle Infos“ badge with white text and bottom-right rounding; preserve per-message title, QR and rich-text scrolling. RED→GREEN geometry and rendered-slide tests; verify no clipping in all eight designs.
+
+Execution is native by the root author as previously requested. The user approved the plan and these additions; no further duplicate approval gate is needed. Author review is not an independent review. No publication is implied by local implementation.

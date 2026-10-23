@@ -51,8 +51,8 @@ export function prepareAnnouncementPages(input:{title:string;body:string;qrCode:
  const oversizedTitle=titleLines.length>4;
  if(oversizedTitle)titleLines=lines([{text:'Information'}],titleWidth-24,titleFontSize,600);
  const titleHeight=Math.max(titleFontSize*1.25,titleLines.length*titleFontSize*1.25);
- const titleElement={x:AUTO_SLIDE_EDGE,y:40,width:titleWidth,height:Math.ceil(titleHeight+16)};
- const bodyY=split?40:titleElement.y+titleElement.height+44;
+ const titleElement={x:AUTO_SLIDE_EDGE,y:164,width:titleWidth,height:Math.ceil(titleHeight+16)};
+ const bodyY=split?164:titleElement.y+titleElement.height+44;
  const bodyBottom=design==='frame'?1011:design==='footer'?1024:1080-AUTO_SLIDE_EDGE;
  const bodyElement={x,y:bodyY,width:bodyWidth,height:bodyBottom-bodyY};
  const bodyFontSize=44,lineHeight=bodyFontSize*1.3;

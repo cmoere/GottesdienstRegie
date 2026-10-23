@@ -10,14 +10,32 @@ app.whenReady().then(async()=>{try{
  await win.loadURL(url);
  for(let i=0;i<100&&!await win.webContents.executeJavaScript('!!window.externalFixture');i++)await sleep(50);
  const results=[];
- for(const mode of ['news','matchday','upcoming','table']){
+ for(const mode of ['news','news-second','news-long','news-reduced','weather','matchday','upcoming','table']){
   await win.webContents.executeJavaScript('window.externalFixture.mode('+JSON.stringify(mode)+')');await sleep(100);
   await win.webContents.executeJavaScript("(async()=>{await document.fonts.ready;await Promise.all([...document.images].map(img=>img.decode()));for(let i=0;i<4;i++)await new Promise(requestAnimationFrame)})()");
-  const result=await win.webContents.executeJavaScript(`(()=>{const frame=document.querySelector('.external-loop-frame'),footer=frame.querySelector('footer'),logos=[...frame.querySelectorAll('img')];return {mode:${JSON.stringify(mode)},width:frame.getBoundingClientRect().width,footerBottom:footer.getBoundingClientRect().bottom,bodyBottom:frame.querySelector('.external-loop-body').getBoundingClientRect().bottom,logos:logos.map(img=>img.complete&&img.naturalWidth>0),rows:frame.querySelectorAll('[role=row]').length,watermark:!!document.querySelector('.test-mode-watermark'),font:getComputedStyle(frame).fontFamily}})()`);
+  const result=await win.webContents.executeJavaScript(`(()=>{const frame=document.querySelector('.external-loop-frame'),footer=frame.querySelector('footer'),logos=[...frame.querySelectorAll('img')];return {mode:${JSON.stringify(mode)},width:frame.getBoundingClientRect().width,footerBottom:footer.getBoundingClientRect().bottom,bodyBottom:frame.querySelector('.external-loop-body,.weather-days').getBoundingClientRect().bottom,logos:logos.map(img=>img.complete&&img.naturalWidth>0),rows:frame.querySelectorAll('[role=row]').length,watermark:!!document.querySelector('.test-mode-watermark'),font:getComputedStyle(frame).fontFamily}})()`);
   assert.equal(result.width,1920);assert(result.footerBottom<=1080);assert(result.bodyBottom<=1080);assert(result.watermark);assert(result.font.includes('Cera Pro'));assert(result.logos.every(Boolean));if(mode==='table')assert.equal(result.rows,25);
-  if(mode==='news'){const bounds=await win.webContents.executeJavaScript("[...document.querySelectorAll('.external-source-logos img')].map(img=>({width:img.getBoundingClientRect().width,height:img.getBoundingClientRect().height}))");console.log('LOGO_BOUNDS',JSON.stringify(bounds));assert(bounds.every(box=>box.width>=100&&box.height>=20),'Source logos must occupy readable space');}
+  if(mode.startsWith('news')){
+   assert.equal(await win.webContents.executeJavaScript("document.querySelectorAll('article').length"),1);
+   const bounds=await win.webContents.executeJavaScript("[...document.querySelectorAll('.external-source-logos img')].map(img=>({width:img.getBoundingClientRect().width,height:img.getBoundingClientRect().height}))");assert.equal(bounds.length,1);assert(bounds.every(box=>box.width>=100&&box.height>=20),'Current source logo must occupy readable space');
+   if(mode==='news-second'){assert.equal(await win.webContents.executeJavaScript("document.querySelectorAll('.news-story figure').length"),0);assert.equal(await win.webContents.executeJavaScript("document.querySelector('.news-story')?.getAttribute('aria-label')"),'Weitere Nachrichten aus OWL')}
+   if(mode==='news')assert.equal(await win.webContents.executeJavaScript("document.querySelectorAll('.news-story figure img').length"),1);
+   assert(await win.webContents.executeJavaScript("[...document.querySelectorAll('.news-story-title,.news-story-body')].every(node=>node.scrollWidth<=node.clientWidth+2)"),'Prepared story lines must not clip horizontally');
+  }
+  if(mode==='weather'){assert.equal(await win.webContents.executeJavaScript("document.querySelectorAll('.weather-days article').length"),3);assert.equal(await win.webContents.executeJavaScript("document.querySelectorAll('iframe').length"),0)}
+  if(['matchday','upcoming','table'].includes(mode))assert(await win.webContents.executeJavaScript("document.querySelectorAll('.football-club-logo').length>0"),'Prepared club logos must render');
   const image=await win.webContents.capturePage();assert.deepEqual(image.getSize(),{width:1920,height:1080});fs.writeFileSync(path.join(folder,mode+'.png'),image.toPNG());results.push(result);
-  if(mode==='news')for(const x of [1272,1582]){const pixels=image.crop({x,y:76,width:274,height:64}).toBitmap();let contrast=0;for(let i=0;i<pixels.length;i+=4)if(x===1272?pixels[i]<80&&pixels[i+1]<80&&pixels[i+2]<80:pixels[i]>220&&pixels[i+1]>220&&pixels[i+2]>220)contrast++;assert(contrast>100,'Original source logos must be painted with readable contrast, not only loaded');}
+  if(mode==='news'||mode==='news-second'){
+   const box=await win.webContents.executeJavaScript("(()=>{const r=document.querySelector('.external-source-logos img').getBoundingClientRect();return {x:Math.ceil(r.x),y:Math.ceil(r.y),width:Math.floor(r.width),height:Math.floor(r.height)}})()");
+   const pixels=image.crop(box).toBitmap();let contrast=0;for(let i=0;i<pixels.length;i+=4)if(mode==='news'?pixels[i]<80&&pixels[i+1]<80&&pixels[i+2]<80:pixels[i]>220&&pixels[i+1]>220&&pixels[i+2]>220)contrast++;assert(contrast>100,'Current source logo must be painted with readable contrast');
+  }
+ }
+ for(const design of ['classic','light','accent','split','green','silver','frame','footer']){
+  await win.webContents.executeJavaScript('window.externalFixture.mode('+JSON.stringify('announcement-'+design)+')');await sleep(100);
+  await win.webContents.executeJavaScript("(async()=>{await document.fonts.ready;await Promise.all([...document.images].map(img=>img.decode()));for(let i=0;i<4;i++)await new Promise(requestAnimationFrame)})()");
+  assert(await win.webContents.executeJavaScript("document.body.textContent.includes('Aktuelle Infos')&&document.body.textContent.replace(/\\s/g,'').includes('WichtigeInformationfürunsereGemeinde')"));
+  const image=await win.webContents.capturePage();fs.writeFileSync(path.join(folder,'announcement-'+design+'.png'),image.toPNG());
+  const pixels=image.crop({x:112,y:42,width:550,height:80}).toBitmap();let white=0;for(let i=0;i<pixels.length;i+=4)if(pixels[i]>220&&pixels[i+1]>220&&pixels[i+2]>220)white++;assert(white>100,'Info label must paint above its green badge');
  }
  for(const design of ['digital-classic','digital-compact','digital-seconds','analog-light','analog-dark','analog-digital']){
   await win.webContents.executeJavaScript('window.externalFixture.mode('+JSON.stringify(design)+')');await sleep(100);

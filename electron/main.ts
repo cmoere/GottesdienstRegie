@@ -33,7 +33,7 @@ import {mergeOutputDisplayProfile,resolveOutputDisplayProfile} from './outputDis
 import type {OutputDisplayWriteOptions} from '../src/outputDisplayProfileTypes';
 import {createCommunityRealtimeAdapter,FirebaseGemeindeService} from './FirebaseGemeindeService';
 import {ExternalLoopService} from './externalLoop/service';
-import {handleExternalLoopRead} from './externalLoop/ipc';
+import {handleExternalLoopRead,handleWeatherLocationSearch} from './externalLoop/ipc';
 import {CommunitySnapshotCache} from './CommunitySnapshotCache';
 import {sendToLiveWindow} from './windowSafety';
 import {updatePromptAction} from './updatePromptModel';
@@ -250,6 +250,7 @@ app.whenReady().then(async() => {
   const communityStops=new Map<number,Array<()=>void>>();
   const externalLoopService=new ExternalLoopService({cacheDirectory:path.join(app.getPath('userData'),'cache','external-loop')});
   ipcMain.handle('external-loop:read',(event,value:unknown)=>handleExternalLoopRead(event,value,controlWindow&&!controlWindow.isDestroyed()?controlWindow.webContents.id:null,externalLoopService));
+  ipcMain.handle('external-loop:weather-locations',(event,value:unknown)=>handleWeatherLocationSearch(event,value,controlWindow&&!controlWindow.isDestroyed()?controlWindow.webContents.id:null,externalLoopService));
   app.once('will-quit',()=>externalLoopService.dispose());
   ipcMain.handle('community:start',(event)=>{const sender=event.sender;communityStops.get(sender.id)?.forEach(stop=>stop());communityStops.set(sender.id,[communityService.subscribeEvents(value=>!sender.isDestroyed()&&sender.send('community:events',value)),communityService.subscribeRooms(value=>!sender.isDestroyed()&&sender.send('community:rooms',value)),communityService.subscribeAnnouncements(value=>!sender.isDestroyed()&&sender.send('community:announcements',value)),communityService.subscribeConnection(value=>!sender.isDestroyed()&&sender.send('community:connection',value))]);sender.once('destroyed',()=>{communityStops.get(sender.id)?.forEach(stop=>stop());communityStops.delete(sender.id)});return true});
   ipcMain.handle('community:update-event',(_event,eventKey:string,patch:Record<string,unknown>)=>communityService.updateEvent(String(eventKey),patch));
