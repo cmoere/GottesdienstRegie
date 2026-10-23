@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.87.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.87.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.87.0</guid><pubDate>Fri, 23 Oct 2026 00:00:00 GMT</pubDate><description>Nachrichten im Fokus und eigene Wetteranzeige
+Das Vor- und Nachprogramm zeigt Nachrichten einzeln und groß mit Titel, Beschreibung, Quellenlogo und verfügbarem Artikelbild. Eine eigene Wetterfolie ersetzt die externe Wetterseite. Vereinslogos und der neue Meldungskopf Aktuelle Infos ergänzen die Besucherinformation.
+
+Eigene Wetterfolie
+Aktuelles Wetter und eine Vorschau für die nächsten Tage erscheinen direkt in GottesdienstRegie. Bielefeld ist voreingestellt; andere Orte lassen sich gezielt suchen und auswählen. Quelle und Datenstand bleiben sichtbar. Es wird kein Standort automatisch ermittelt.
+
+Lesbare Nachrichten und Vereinslogos
+Jede Nachricht erhält eine eigene Ansicht mit mindestens 20 Sekunden Lesezeit. Lange Texte verlängern die Dauer automatisch und scrollen ruhig; bei reduzierter Bewegung bleiben sie in statischen Teilansichten vollständig lesbar. Fußballansichten zeigen verfügbare Vereinslogos neben den bestehenden Spiel- und Tabellendaten.
+
+Meldungskopf und stabile Ausgabe
+Meldungen erhalten oberhalb ihres Titels ein Informationssymbol und den grünen Kopf Aktuelle Infos. Die vorhandenen Designs behalten Textformatierung und QR-Codes. Nachrichten, Wetter und Fußball verwenden vorbereitete Datenstände; laufende Besucherfolien werden nicht durch Netzwerkaktualisierungen ersetzt. Nicht verfügbare Bilder lassen den Text weiterhin lesbar.
+
+Regionalübersetzungen weiterhin unvollständig
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Diese Version erscheint mit diesem offengelegten Umfang als normales Update.
+
+PowerPoint-Originalmodus bleibt deaktiviert
+Der experimentelle originalgetreue PowerPoint-Spieler bleibt deaktiviert. Artikelbilder und Vereinslogos werden nur angezeigt, wenn die jeweilige Quelle geeignete und erreichbare Dateien liefert. Die Prüfung der Software ersetzt keine Sicht- und Tonprüfung an der tatsächlichen Anlage.</description></item>
 <item><title>GottesdienstRegie 0.86.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.86.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.86.0</guid><pubDate>Fri, 23 Oct 2026 00:00:00 GMT</pubDate><description>Lokale Nachrichten, Fußball und vielseitige Uhren
 Das Vor- und Nachprogramm erhält lokale Nachrichten mit Quellenlogos sowie Fußball-Spieltermine, Ergebnisse und Tabellen. Neue Uhrdesigns, ein automatischer Bildschirmtest und ein zweisprachiger Störungshinweis unterstützen die Vorbereitung. Besucherausgabe und Live-Vorschau verwenden einen gemeinsamen vorbereiteten Datenstand; Aktualisierungen werden erst beim sicheren Folienwechsel übernommen.
 

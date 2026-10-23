@@ -1,3 +1,39 @@
+# GottesdienstRegie 0.87.0
+
+Veröffentlicht: Fr., 23.10.2026
+
+Das Vor- und Nachprogramm zeigt Nachrichten einzeln und groß mit Titel, Beschreibung, Quellenlogo und verfügbarem Artikelbild. Eine eigene Wetterfolie ersetzt die externe Wetterseite. Vereinslogos und der neue Meldungskopf Aktuelle Infos ergänzen die Besucherinformation.
+
+## Neu
+
+### Eigene Wetterfolie
+
+Aktuelles Wetter und eine Vorschau für die nächsten Tage erscheinen direkt in GottesdienstRegie. Bielefeld ist voreingestellt; andere Orte lassen sich gezielt suchen und auswählen. Quelle und Datenstand bleiben sichtbar. Es wird kein Standort automatisch ermittelt.
+
+## Verbessert
+
+### Lesbare Nachrichten und Vereinslogos
+
+Jede Nachricht erhält eine eigene Ansicht mit mindestens 20 Sekunden Lesezeit. Lange Texte verlängern die Dauer automatisch und scrollen ruhig; bei reduzierter Bewegung bleiben sie in statischen Teilansichten vollständig lesbar. Fußballansichten zeigen verfügbare Vereinslogos neben den bestehenden Spiel- und Tabellendaten.
+
+## Behoben
+
+### Meldungskopf und stabile Ausgabe
+
+Meldungen erhalten oberhalb ihres Titels ein Informationssymbol und den grünen Kopf Aktuelle Infos. Die vorhandenen Designs behalten Textformatierung und QR-Codes. Nachrichten, Wetter und Fußball verwenden vorbereitete Datenstände; laufende Besucherfolien werden nicht durch Netzwerkaktualisierungen ersetzt. Nicht verfügbare Bilder lassen den Text weiterhin lesbar.
+
+## Bekannte Einschränkungen
+
+### Regionalübersetzungen weiterhin unvollständig
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Diese Version erscheint mit diesem offengelegten Umfang als normales Update.
+
+### PowerPoint-Originalmodus bleibt deaktiviert
+
+Der experimentelle originalgetreue PowerPoint-Spieler bleibt deaktiviert. Artikelbilder und Vereinslogos werden nur angezeigt, wenn die jeweilige Quelle geeignete und erreichbare Dateien liefert. Die Prüfung der Software ersetzt keine Sicht- und Tonprüfung an der tatsächlichen Anlage.
+
+---
+
 # GottesdienstRegie 0.86.0
 
 Veröffentlicht: Fr., 23.10.2026

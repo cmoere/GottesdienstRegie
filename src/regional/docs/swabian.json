@@ -324,6 +324,18 @@
     "screenshotLabel": "Ansicht als Beispiel"
   },
   "releases": {
+    "versions[0.87].builds[0.87.0].overview.label": "Nachrichte im Fokus ond a eigene Wetteranzeige",
+    "versions[0.87].builds[0.87.0].overview.text": "Des Vor- ond Nachprogramm zeigt Nachrichte einzeln ond groß mit Titel, Beschreibung, Quellenlogo ond verfügbarem Artikelbild. A eigene Wetterfolie ersetzt d'externe Wetterseite. Vereinslogos ond dr neue Meldungskopf Aktuelle Infos ergänzet d'Besucherinformation.",
+    "versions[0.87].builds[0.87.0].sections.new.0.label": "Eigene Wetterfolie",
+    "versions[0.87].builds[0.87.0].sections.new.0.text": "Aktuelles Wetter ond a Vorschau für d'nächste Tage erscheinet direkt in GottesdienstRegie. Bielefeld isch voreingestellt; andere Orte lasset sich gezielt suche ond auswähle. Quelle ond Datenstand bleibet sichtbar. Es wird koi Standort automatisch ermittelt.",
+    "versions[0.87].builds[0.87.0].sections.improved.0.label": "Lesbare Nachrichte ond Vereinslogos",
+    "versions[0.87].builds[0.87.0].sections.improved.0.text": "Jede Nachricht kriagt a eigene Ansicht mit mindestens 20 Sekunde Lesezeit. Lange Texte verlängert d'Dauer automatisch ond scrollet ruhig; bei reduzierter Bewegung bleibet sie in statische Teilansichte vollständig lesbar. Fußballansichte zeiget verfügbare Vereinslogos neben de bestehende Spiel- ond Tabellendate.",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.label": "Meldungskopf ond stabile Ausgab",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.text": "Meldunge kriaget oberhalb vo ihrem Titel a Informationssymbol ond den grüne Kopf Aktuelle Infos. Die vorhandene Designs behaltet Textformatierung ond QR-Codes. Nachrichte, Wetter ond Fußball verwendet vorbereitete Datenstände; laufende Besucherfolie werdet net durch Netzwerkaktualisierunge ersetzt. Bei net verfügbare Bilder bleibt dr Text weiterhin lesbar.",
+    "versions[0.87].builds[0.87.0].sections.known.0.label": "Regionalübersetzunge weiterhin unvollständig",
+    "versions[0.87].builds[0.87.0].sections.known.0.text": "Regionalvariante send no net vollständig übersetzt. Fehlende UI-Texte werdet auf Hochdeutsch angezeigt. Die Version erscheint mit dem offengelegte Umfang als normales Update.",
+    "versions[0.87].builds[0.87.0].sections.known.1.label": "PowerPoint-Originalmodus bleibt deaktiviert",
+    "versions[0.87].builds[0.87.0].sections.known.1.text": "Dr experimentelle originalgetreue PowerPoint-Spieler bleibt deaktiviert. Artikelbilder ond Vereinslogos werdet nur angezeigt, wenn d'jeweilige Quelle geeignete ond erreichbare Dateie liefert. D'Prüfung vo dr Software ersetzt koi Sicht- ond Tonprüfung an dr tatsächliche Anlage.",
     "versions[0.86].builds[0.86.0].overview.label": "Lokale Nachrichte, Fußball ond vielseitige Uhre",
     "versions[0.86].builds[0.86.0].overview.text": "Des Vor- ond Nachprogramm kriagt lokale Nachrichte mit Quellenlogos sowie Fußball-Spieltermine, Ergebnisse ond Tabelle. Neue Uhrdesigns, a automatischer Bildschirmtest ond a zweisprochiger Störungshinweis unterstützet d'Vorbereitung. Besucherausgab ond Live-Vorschau verwendet en gemeinsame vorbereitete Datenstand; Aktualisierunge werdet erscht beim sichere Folienwechsel übernomme.",
     "versions[0.86].builds[0.86.0].sections.new.0.label": "Nachrichte ond Fußball",

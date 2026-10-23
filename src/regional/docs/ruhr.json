@@ -324,6 +324,18 @@
     "screenshotLabel": "So kann's aussehen"
   },
   "releases": {
+    "versions[0.87].builds[0.87.0].overview.label": "Nachrichten im Fokus und eigene Wetteranzeige",
+    "versions[0.87].builds[0.87.0].overview.text": "Das Vor- und Nachprogramm zeigt Nachrichten einzeln und groß mit Titel, Beschreibung, Quellenlogo und verfügbarem Artikelbild. 'Ne eigene Wetterfolie ersetzt die externe Wetterseite. Vereinslogos und der neue Meldungskopf Aktuelle Infos ergänzen die Besucherinformation.",
+    "versions[0.87].builds[0.87.0].sections.new.0.label": "Eigene Wetterfolie",
+    "versions[0.87].builds[0.87.0].sections.new.0.text": "Aktuelles Wetter und 'ne Vorschau für die nächsten Tage siehste direkt in GottesdienstRegie. Bielefeld is voreingestellt; andere Orte kannste gezielt suchen und auswählen. Quelle und Datenstand bleiben sichtbar. 'N Standort wird nich automatisch ermittelt.",
+    "versions[0.87].builds[0.87.0].sections.improved.0.label": "Lesbare Nachrichten und Vereinslogos",
+    "versions[0.87].builds[0.87.0].sections.improved.0.text": "Jede Nachricht kriegt 'ne eigene Ansicht mit mindestens 20 Sekunden Lesezeit. Lange Texte verlängern die Dauer automatisch und scrollen ruhig; bei reduzierter Bewegung bleiben se in statischen Teilansichten vollständig lesbar. Fußballansichten zeigen verfügbare Vereinslogos neben den bestehenden Spiel- und Tabellendaten.",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.label": "Meldungskopf und stabile Ausgabe",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.text": "Meldungen kriegen über ihrem Titel 'n Informationssymbol und den grünen Kopf Aktuelle Infos. Die vorhandenen Designs behalten Textformatierung und QR-Codes. Nachrichten, Wetter und Fußball nutzen vorbereitete Datenstände; laufende Besucherfolien werden nich durch Netzwerkaktualisierungen ersetzt. Wenn Bilder nich verfügbar sind, bleibt der Text weiterhin lesbar.",
+    "versions[0.87].builds[0.87.0].sections.known.0.label": "Regionalübersetzungen weiterhin unvollständig",
+    "versions[0.87].builds[0.87.0].sections.known.0.text": "Die Regionalvarianten sind noch nich vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Diese Version erscheint mit diesem offengelegten Umfang als normales Update.",
+    "versions[0.87].builds[0.87.0].sections.known.1.label": "PowerPoint-Originalmodus bleibt deaktiviert",
+    "versions[0.87].builds[0.87.0].sections.known.1.text": "Der experimentelle originalgetreue PowerPoint-Spieler bleibt deaktiviert. Artikelbilder und Vereinslogos werden nur angezeigt, wenn die jeweilige Quelle geeignete und erreichbare Dateien liefert. Die Prüfung der Software ersetzt keine Sicht- und Tonprüfung an der tatsächlichen Anlage.",
     "versions[0.86].builds[0.86.0].overview.label": "Lokale Nachrichten, Fußball und vielseitige Uhren",
     "versions[0.86].builds[0.86.0].overview.text": "Fürs Vor- und Nachprogramm gibt's jetzt lokale Nachrichten mit Quellenlogos sowie Fußball-Spieltermine, Ergebnisse und Tabellen. Neue Uhrdesigns, 'n automatischer Bildschirmtest und 'n zweisprachiger Störungshinweis helfen bei der Vorbereitung. Besucherausgabe und Live-Vorschau nutzen denselben vorbereiteten Datenstand; Aktualisierungen kommen erst beim sicheren Folienwechsel dazu.",
     "versions[0.86].builds[0.86.0].sections.new.0.label": "Nachrichten und Fußball",

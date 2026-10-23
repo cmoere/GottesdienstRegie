@@ -324,6 +324,18 @@
     "screenshotLabel": "Buispilansicht"
   },
   "releases": {
+    "versions[0.87].builds[0.87.0].overview.label": "Nachrichten in'n Fokus un äigene Wetteranzeige",
+    "versions[0.87].builds[0.87.0].overview.text": "Dat Vör- un Nohprogramm wiest Nachrichten einzeln un graut met Titel, Beschriewung, Quellenlogo un verfügborem Artikelbild. Ene äigene Wetterfolie ersetzt de externe Wettersiete. Vereinslogos un de niege Meldungskopp Aktuelle Infos ergänzt de Besucherinformatschoon.",
+    "versions[0.87].builds[0.87.0].sections.new.0.label": "Äigene Wetterfolie",
+    "versions[0.87].builds[0.87.0].sections.new.0.text": "Aktuelles Wetter un ene Voransicht for de nächsten Dage erschient direkt in GottesdienstRegie. Bielefeld is vörinstellt; annere Orte lot sik gezielt sööken un outsoöken. Quelle un Datenstand bluiwet sichtbor. En Standort wärt nich automatisch ermittelt.",
+    "versions[0.87].builds[0.87.0].sections.improved.0.label": "Liäsbare Nachrichten un Vereinslogos",
+    "versions[0.87].builds[0.87.0].sections.improved.0.text": "Jede Nachricht kriggt ene äigene Ansicht met mindestens 20 Sekunden Liästied. Lange Texte verlängert de Duer automatisch un scrollt ruhig; bi reduzierter Bewegung bluiwet se in statischen Däilansichten vullstännig liäsbar. Fautballansichten wiest verfügbore Vereinslogos näwen de vorhandenen Speel- un Tabellendaten.",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.label": "Meldungskopp un stabile Outgaaw",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.text": "Meldungen kriegt iäwer iährem Titel en Informationssymbol un den grönen Kopp Aktuelle Infos. De vorhandenen Designs behollt Textformatierung un QR-Codes. Nachrichten, Wetter un Fautball bruukt vörbereitete Datenstände; laufende Besucherfolien waiern nich dör Netzaktualiseeringen ersetzt. Nich verfügbore Bilder lot den Text wieter liäsbar.",
+    "versions[0.87].builds[0.87.0].sections.known.0.label": "Regionalöversettungen wieter unvullstännig",
+    "versions[0.87].builds[0.87.0].sections.known.0.text": "Regionalvarianten sind noch nich vullstännig översett. Fehlende UI-Texte waiern up Hauchdüütsk anzeigt. Düsse Version erschient met düssem apenleggten Umfang as normales Update.",
+    "versions[0.87].builds[0.87.0].sections.known.1.label": "PowerPoint-Originalmodus bluiwet deaktiviert",
+    "versions[0.87].builds[0.87.0].sections.known.1.text": "De experimentelle originaltrue PowerPoint-Speler bluiwet deaktiviert. Artikelbilder un Vereinslogos waiern blot anzeigt, wenn de jeweilige Quelle passende un erreichbore Dateien liefert. De Prüfung van de Software ersetzt kiene Sicht- un Tonprüfung an de tatsächliche Anlage.",
     "versions[0.86].builds[0.86.0].overview.label": "Lokale Nachrichten, Fautball un veelsiedige Uhren",
     "versions[0.86].builds[0.86.0].overview.text": "Dat Vör- un Nohprogramm kriggt lokale Nachrichten met Quellenlogos un Fautball-Speeltermine, Ergebnisse un Tabellen. Niege Uhrdesigns, en automatischen Bildschirmtest un en twäisprokigen Störungshenwies helpt bi de Vörbereitung. Besucheroutgaaw un Live-Voransicht bruukt en gemeensamen vörbereiteten Datenstand; Aktualiseeringen waiern eerst bi'm sicheren Folienwessel iäwernuomen.",
     "versions[0.86].builds[0.86.0].sections.new.0.label": "Nachrichten un Fautball",

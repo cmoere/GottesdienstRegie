@@ -324,6 +324,18 @@
     "screenshotLabel": "Bispeelansicht"
   },
   "releases": {
+    "versions[0.87].builds[0.87.0].overview.label": "Narichten in'n Fokus un egen Wetteranzeig",
+    "versions[0.87].builds[0.87.0].overview.text": "Dat Vör- un Naprogramm wiest Narichten einzeln un groot mit Titel, Beschrieven, Quellenlogo un verfügborem Artikelbild. En egen Wetterfolie ersetzt de externe Wettersiet. Vereinslogos un de niege Mellenkopp Aktuelle Infos ergänzt de Besucherinformatschoon.",
+    "versions[0.87].builds[0.87.0].sections.new.0.label": "Egen Wetterfolie",
+    "versions[0.87].builds[0.87.0].sections.new.0.text": "Aktuell Wetter un en Vöransicht för de nächsten Daag warrt direkt in GottesdienstRegie wiest. Bielefeld is vörinstellt; annere Oorten laat sik gezielt söken un utwählen. Quell un Datenstand blievt sichtbor. En Standort warrt nich automaatsch ermiddelt.",
+    "versions[0.87].builds[0.87.0].sections.improved.0.label": "Leesbore Narichten un Vereinslogos",
+    "versions[0.87].builds[0.87.0].sections.improved.0.text": "Elke Naricht kriggt en egen Ansicht mit minstens 20 Sekunnen Leestiet. Lange Texte maakt de Duer automaatsch länger un scrollt ruhig; bi reduzierte Bewegung blievt se in statische Deelansichten vullstännig leesbor. Footballansichten wiest verfügbore Vereinslogos blangen de vörhannen Speel- un Tabellendaten.",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.label": "Mellenkopp un stabile Utgaav",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.text": "Mellen kriggt över ehren Titel en Informationssymbol un den grönen Kopp Aktuelle Infos. De vörhannen Designs behoolt Textformatierung un QR-Codes. Narichten, Wetter un Football bruukt vörbereite Datenstänn; lopen Besucherfolien warrt nich dörch Nettwarkaktualiseeren ersetzt. Nich verfügbore Biller laat den Text wiedder leesbor.",
+    "versions[0.87].builds[0.87.0].sections.known.0.label": "Regionalöversetten wiedder unvullstännig",
+    "versions[0.87].builds[0.87.0].sections.known.0.text": "Regionalvarianten sünd noch nich vullstännig översett. Fehlende UI-Texte warrt op Hoochdüütsch wiest. Disse Verschoon kümmt mit dissen apenlegten Umfang as normaal Update rut.",
+    "versions[0.87].builds[0.87.0].sections.known.1.label": "PowerPoint-Originalmodus blifft deaktiveert",
+    "versions[0.87].builds[0.87.0].sections.known.1.text": "De experimentelle originaltrue PowerPoint-Speler blifft deaktiveert. Artikelbiller un Vereinslogos warrt bloots wiest, wenn de jeweilige Quell passende un erreichbore Dateien levert. De Prööv vun de Software ersetzt keen Sicht- un Toonprööv an de tatsächliche Anlaag.",
     "versions[0.86].builds[0.86.0].overview.label": "Lokale Narichten, Football un veelsiedige Uhren",
     "versions[0.86].builds[0.86.0].overview.text": "Dat Vör- un Naprogramm kriggt lokale Narichten mit Quellenlogos un Football-Speeltermine, Resultaten un Tabellen. Niege Uhrdesigns, en automaatschen Bildschirmtest un en tweesprakigen Störungshenwies helpt bi de Vörbereitung. Besucherutgaav un Live-Vöransicht bruukt een gemeensamen vörbereiten Datenstand; Aktualiseeren warrt eerst bi'n sekeren Folienwessel övernahmen.",
     "versions[0.86].builds[0.86.0].sections.new.0.label": "Narichten un Football",

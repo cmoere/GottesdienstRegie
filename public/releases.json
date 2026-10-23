@@ -21,9 +21,89 @@
   ],
   "versions": [
     {
+      "line": "0.87",
+      "builds": [
+        {
+          "version": "0.87.0",
+          "releaseDate": "2026-10-23",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Nachrichten im Fokus und eigene Wetteranzeige",
+              "en": "Focused news and native weather"
+            },
+            "text": {
+              "de": "Das Vor- und Nachprogramm zeigt Nachrichten einzeln und groß mit Titel, Beschreibung, Quellenlogo und verfügbarem Artikelbild. Eine eigene Wetterfolie ersetzt die externe Wetterseite. Vereinslogos und der neue Meldungskopf Aktuelle Infos ergänzen die Besucherinformation.",
+              "en": "Pre- and post-program loops show one large news story at a time with title, description, source logo and an available article photo. A native weather slide replaces the external weather page. Club logos and the new Current information announcement header complement visitor information."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Eigene Wetterfolie",
+                  "en": "Native weather slide"
+                },
+                "text": {
+                  "de": "Aktuelles Wetter und eine Vorschau für die nächsten Tage erscheinen direkt in GottesdienstRegie. Bielefeld ist voreingestellt; andere Orte lassen sich gezielt suchen und auswählen. Quelle und Datenstand bleiben sichtbar. Es wird kein Standort automatisch ermittelt.",
+                  "en": "Current weather and a forecast for the coming days appear directly in GottesdienstRegie. Bielefeld is the default; other locations can be searched and selected explicitly. Source and update time remain visible. Location is never detected automatically."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Lesbare Nachrichten und Vereinslogos",
+                  "en": "Readable news and club logos"
+                },
+                "text": {
+                  "de": "Jede Nachricht erhält eine eigene Ansicht mit mindestens 20 Sekunden Lesezeit. Lange Texte verlängern die Dauer automatisch und scrollen ruhig; bei reduzierter Bewegung bleiben sie in statischen Teilansichten vollständig lesbar. Fußballansichten zeigen verfügbare Vereinslogos neben den bestehenden Spiel- und Tabellendaten.",
+                  "en": "Each story gets its own view with at least 20 seconds of reading time. Long descriptions extend the duration automatically and scroll gently; reduced-motion output preserves full text in static continuation views. Football views add available club logos alongside existing fixtures and table data."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Meldungskopf und stabile Ausgabe",
+                  "en": "Announcement header and stable output"
+                },
+                "text": {
+                  "de": "Meldungen erhalten oberhalb ihres Titels ein Informationssymbol und den grünen Kopf Aktuelle Infos. Die vorhandenen Designs behalten Textformatierung und QR-Codes. Nachrichten, Wetter und Fußball verwenden vorbereitete Datenstände; laufende Besucherfolien werden nicht durch Netzwerkaktualisierungen ersetzt. Nicht verfügbare Bilder lassen den Text weiterhin lesbar.",
+                  "en": "Announcements gain an information icon and green Current information header above their title. Existing designs retain rich text and QR codes. News, weather and football use prepared snapshots; network updates do not replace an active audience slide. Unavailable images leave the text readable."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Regionalübersetzungen weiterhin unvollständig",
+                  "en": "Regional translations remain incomplete"
+                },
+                "text": {
+                  "de": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Diese Version erscheint mit diesem offengelegten Umfang als normales Update.",
+                  "en": "Regional variants are not fully translated yet. Missing UI text appears in Standard German. This version is released as a regular update with this disclosed scope."
+                }
+              },
+              {
+                "label": {
+                  "de": "PowerPoint-Originalmodus bleibt deaktiviert",
+                  "en": "Original PowerPoint mode remains disabled"
+                },
+                "text": {
+                  "de": "Der experimentelle originalgetreue PowerPoint-Spieler bleibt deaktiviert. Artikelbilder und Vereinslogos werden nur angezeigt, wenn die jeweilige Quelle geeignete und erreichbare Dateien liefert. Die Prüfung der Software ersetzt keine Sicht- und Tonprüfung an der tatsächlichen Anlage.",
+                  "en": "The experimental original-fidelity PowerPoint player remains disabled. Article photos and club logos appear only when the source provides suitable, reachable files. Software checks do not replace checking picture and sound on the actual equipment."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.86",
       "builds": [{
-        "version": "0.86.0", "releaseDate": "2026-10-23", "current": true,
+        "version": "0.86.0", "releaseDate": "2026-10-23", "current": false,
         "overview": {
           "label": {"de":"Lokale Nachrichten, Fußball und vielseitige Uhren","en":"Local news, football and versatile clocks"},
           "text": {"de":"Das Vor- und Nachprogramm erhält lokale Nachrichten mit Quellenlogos sowie Fußball-Spieltermine, Ergebnisse und Tabellen. Neue Uhrdesigns, ein automatischer Bildschirmtest und ein zweisprachiger Störungshinweis unterstützen die Vorbereitung. Besucherausgabe und Live-Vorschau verwenden einen gemeinsamen vorbereiteten Datenstand; Aktualisierungen werden erst beim sicheren Folienwechsel übernommen.","en":"Pre- and post-program loops gain local news with source logos, football fixtures, results and tables. New clock designs, an automatic screen test and a bilingual technical-issue screen support preparation. Audience output and the live mirror share one prepared snapshot; updates are applied only at a safe slide transition."}

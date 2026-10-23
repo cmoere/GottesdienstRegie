@@ -324,6 +324,18 @@
     "screenshotLabel": "Beispielansicht"
   },
   "releases": {
+    "versions[0.87].builds[0.87.0].overview.label": "Nachrichte im Fokus un e eijene Wetteranzeij",
+    "versions[0.87].builds[0.87.0].overview.text": "Des Vor- un Nachprogramm zeigt Nachrichte einzeln un groß mit Titel, Beschreiwung, Quellelogo un verfügbarem Artikelbild. E eijene Wetterfolie ersetzt die externe Wetterseit. Vereinslogos un de neue Meldungskopp Aktuelle Infos ergänze die Besucherinformation.",
+    "versions[0.87].builds[0.87.0].sections.new.0.label": "Eijene Wetterfolie",
+    "versions[0.87].builds[0.87.0].sections.new.0.text": "Des aktuelle Wetter un e Vorschau fer die nächste Daag erscheine direkt in GottesdienstRegie. Bielefeld is voreingestellt; annere Orte losse sich gezielt suche un auswähle. Quelle un Datestand bleiwe sichtbar. Es werd kee Standort automatisch ermittelt.",
+    "versions[0.87].builds[0.87.0].sections.improved.0.label": "Lesbare Nachrichte un Vereinslogos",
+    "versions[0.87].builds[0.87.0].sections.improved.0.text": "Jede Nachricht kriegt e eijene Ansicht mit mindestens 20 Sekunde Lesezeit. Lange Texte verlängere die Dauer automatisch un scrolle ruhig; bei reduzierter Bewejung bleiwe se in statische Teilansichte vollständij lesbar. Fußballansichte zeige verfügbare Vereinslogos newe de bestehende Spiel- un Tabelledate.",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.label": "Meldungskopp un stabile Ausgab",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.text": "Meldunge kriege iwwer ihrem Titel e Informationssymbol un de griene Kopp Aktuelle Infos. Die vorhandene Designs behalte Textformatierung un QR-Codes. Nachrichte, Wetter un Fußball verwende vorbereedete Datestänn; laufende Besucherfolie werre net durch Netzwerkaktualisierunge ersetzt. Net verfügbare Bilder losse de Text weiderhin lesbar.",
+    "versions[0.87].builds[0.87.0].sections.known.0.label": "Regionalübersetzunge weiderhin unvollständij",
+    "versions[0.87].builds[0.87.0].sections.known.0.text": "Regionalvariante sin noch net vollständij übersetzt. Fehlende UI-Texte werre uff Hochdeitsch aagezeigt. Die Version erscheint mit dem offegelegte Umfang als normales Update.",
+    "versions[0.87].builds[0.87.0].sections.known.1.label": "PowerPoint-Originalmodus bleibt deaktiviert",
+    "versions[0.87].builds[0.87.0].sections.known.1.text": "De experimentelle originalgetreue PowerPoint-Spieler bleibt deaktiviert. Artikelbilder un Vereinslogos werre nur aagezeigt, wenn die jeweilije Quelle geeijnete un erreichbare Dateie liefert. Die Prifung vun de Software ersetzt kee Sicht- un Tonprifung an de tatsächliche Anlag.",
     "versions[0.86].builds[0.86.0].overview.label": "Lokale Nachrichte, Fußball un vielseitije Uhre",
     "versions[0.86].builds[0.86.0].overview.text": "Des Vor- un Nachprogramm kriegt lokale Nachrichte mit Quellelogos sowie Fußball-Spieltermine, Ergebnisse un Tabelle. Neue Uhrdesigns, e automatischer Bildschirmtest un e zweesproochijer Störungshinweis unterstütze die Vorbereitung. Besucherausgab un Live-Vorschau verwende e gemeinsame vorbereedete Datestand; Aktualisierunge werre erschd beim sichere Foliewechsel iwwernomme.",
     "versions[0.86].builds[0.86.0].sections.new.0.label": "Nachrichte un Fußball",

@@ -324,6 +324,18 @@
     "screenshotLabel": "Beispielansicht"
   },
   "releases": {
+    "versions[0.87].builds[0.87.0].overview.label": "Nachrichten im Fokus und a eigne Wetteranzeige",
+    "versions[0.87].builds[0.87.0].overview.text": "Des Vor- und Nachprogramm zeigt Nachrichten einzeln und groß mit Titel, Beschreibung, Quellenlogo und verfügbarem Artikelbild. A eigne Wetterfolie ersetzt d'externe Wetterseite. Vereinslogos und da neie Meldungskopf Aktuelle Infos ergänzen d'Besucherinformation.",
+    "versions[0.87].builds[0.87.0].sections.new.0.label": "Eigne Wetterfolie",
+    "versions[0.87].builds[0.87.0].sections.new.0.text": "Aktuelles Wetter und a Vorschau für d'nächsten Tage erscheinen direkt in GottesdienstRegie. Bielefeld is voreingestellt; andere Orte lassen si gezielt suchen und auswählen. Quelle und Datenstand bleim sichtbar. Es werd koa Standort automatisch ermittelt.",
+    "versions[0.87].builds[0.87.0].sections.improved.0.label": "Lesbare Nachrichten und Vereinslogos",
+    "versions[0.87].builds[0.87.0].sections.improved.0.text": "Jede Nachricht kriagt a eigne Ansicht mit mindestens 20 Sekunden Lesezeit. Lange Texte verlängern d'Dauer automatisch und scrollen ruhig; bei reduzierter Bewegung bleim sie in statischen Teilansichten vollständig lesbar. Fuaßboiansichten zeigen verfügbare Vereinslogos neben de bestehenden Spiel- und Tabellendaten.",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.label": "Meldungskopf und stabile Ausgab",
+    "versions[0.87].builds[0.87.0].sections.fixed.0.text": "Meldungen kriagn oberhalb vo ihrem Titel a Informationssymbol und den grünen Kopf Aktuelle Infos. De vorhandenen Designs behalten Textformatierung und QR-Codes. Nachrichten, Wetter und Fuaßboi verwenden vorbereitete Datenstände; laufende Besucherfolien werdn ned durch Netzwerkaktualisierungen ersetzt. Ned verfügbare Bilder lassen den Text weiterhin lesbar.",
+    "versions[0.87].builds[0.87.0].sections.known.0.label": "Regionalübersetzungen weiterhin unvollständig",
+    "versions[0.87].builds[0.87.0].sections.known.0.text": "Regionalvarianten san no ned vollständig übersetzt. Fehlende UI-Texte werdn auf Hochdeutsch ozeigt. De Version erscheint mit dem offengelegten Umfang als normales Update.",
+    "versions[0.87].builds[0.87.0].sections.known.1.label": "PowerPoint-Originalmodus bleibt deaktiviert",
+    "versions[0.87].builds[0.87.0].sections.known.1.text": "Da experimentelle originalgetreie PowerPoint-Spieler bleibt deaktiviert. Artikelbilder und Vereinslogos werdn nur ozeigt, wenn d'jeweilige Quelle geeignete und erreichbare Dateien liefert. D'Prüfung vo da Software ersetzt koa Sicht- und Tonprüfung an da tatsächlichen Anlage.",
     "versions[0.86].builds[0.86.0].overview.label": "Lokale Nachrichten, Fuaßboi und vielseitige Uhren",
     "versions[0.86].builds[0.86.0].overview.text": "Des Vor- und Nachprogramm kriagt lokale Nachrichten mit Quellenlogos sowie Fuaßboi-Spieltermine, Ergebnisse und Tabellen. Neie Uhrdesigns, a automatischer Bildschirmtest und a zweisprachiger Störungshinweis unterstützen d'Vorbereitung. Besucherausgab und Live-Vorschau verwenden an gemeinsamen vorbereiteten Datenstand; Aktualisierungen werdn erst beim sicheren Folienwechsel übernomma.",
     "versions[0.86].builds[0.86.0].sections.new.0.label": "Nachrichten und Fuaßboi",
