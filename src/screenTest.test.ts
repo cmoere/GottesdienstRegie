@@ -1,7 +1,7 @@
 import {afterEach,expect,it,vi} from 'vitest';
 import {createScreenTestSession,readScreenTestReceipt,screenTestPatterns} from './screenTest';
 const runId='a'.repeat(32);
-const receipt=(pattern:string,patch={})=>({runId,pattern,ok:true,width:1920,height:1080,frames:60,elapsedMs:1100,...patch});
+const receipt=(pattern:string,patch={})=>({runId,pattern,ok:true,width:1920,height:1080,frames:300,elapsedMs:5100,...patch});
 afterEach(()=>vi.useRealTimers());
 it('waits for matching MAIN checks, not an arbitrary three-second slide timer',async()=>{
   vi.useFakeTimers();const show=vi.fn().mockResolvedValue(true),restore=vi.fn();
@@ -19,7 +19,7 @@ it('waits for matching MAIN checks, not an arbitrary three-second slide timer',a
 it('stops on a missing output response instead of claiming that sending means displayed',async()=>{
   vi.useFakeTimers();const show=vi.fn().mockResolvedValue(true),restore=vi.fn();
   const session=createScreenTestSession({runId,show,restore});const done=session.start();
-  await vi.advanceTimersByTimeAsync(15000);
+  await vi.advanceTimersByTimeAsync(20000);
   expect((await done).status).toBe('error');expect(show).toHaveBeenCalledTimes(1);expect(restore).toHaveBeenCalledTimes(1);
 });
 it('cancels without overwriting an emergency replacement, and ignores late reports',async()=>{

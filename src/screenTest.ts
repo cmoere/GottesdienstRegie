@@ -2,12 +2,13 @@ export const screenTestPatterns=[{id:'bars',label:'Farbbalken'},{id:'grid',label
 export type ScreenTestPatternId=typeof screenTestPatterns[number]['id'];
 export type ScreenTestReceipt={runId:string;pattern:ScreenTestPatternId;ok:boolean;width:number;height:number;frames:number;elapsedMs:number;reason?:'canvas-unavailable'|'pattern-mismatch'|'geometry'};
 export type ScreenTestSummary={status:'complete'|'error'|'cancelled';steps:ScreenTestReceipt[];message:string};
+export const SCREEN_TEST_STABLE_MS=5000,SCREEN_TEST_TIMEOUT_MS=20000;
 export function readScreenTestReceipt(value:unknown):ScreenTestReceipt|null{
   if(!value||typeof value!=='object'||Array.isArray(value))return null;
   const v=value as ScreenTestReceipt;
   if(Object.keys(v).some(k=>!['runId','pattern','ok','width','height','frames','elapsedMs','reason'].includes(k))||typeof v.runId!=='string'||!/^[a-f0-9]{32}$/.test(v.runId)||!screenTestPatterns.some(p=>p.id===v.pattern)||typeof v.ok!=='boolean')return null;
   if(![v.width,v.height].every(n=>Number.isInteger(n)&&n>=0&&n<=32768)||!Number.isInteger(v.frames)||v.frames<0||v.frames>10000||!Number.isFinite(v.elapsedMs)||v.elapsedMs<0||v.elapsedMs>60000)return null;
-  if(v.ok&&(v.width===0||v.height===0||v.frames<12||v.elapsedMs<1000))return null;
+  if(v.ok&&(v.width===0||v.height===0||v.frames<12||v.elapsedMs<SCREEN_TEST_STABLE_MS))return null;
   if(v.reason!==undefined&&!['canvas-unavailable','pattern-mismatch','geometry'].includes(v.reason))return null;
   return {...v};
 }
@@ -29,7 +30,7 @@ export function createScreenTestSession(options:{runId:string;show:(pattern:Scre
           if(stopped)break;
           options.onProgress?.(id,steps.length);
           let timer:ReturnType<typeof setTimeout>|undefined;
-          const result=new Promise<ScreenTestReceipt|null>(resolve=>{pending={pattern:id,resolve};timer=setTimeout(()=>{pending=null;resolve(null)},15000)});
+          const result=new Promise<ScreenTestReceipt|null>(resolve=>{pending={pattern:id,resolve};timer=setTimeout(()=>{pending=null;resolve(null)},SCREEN_TEST_TIMEOUT_MS)});
           try{
             // Dispatch and receipt are raced against the same bounded wait; even
             // a hanging IPC Promise cannot keep this session alive indefinitely.

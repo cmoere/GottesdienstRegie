@@ -60,7 +60,7 @@ describe('OutputWindowManager app mode',()=>{
   });
   it('accepts test results only from the current managed MAIN and its exact active run/pattern',async()=>{
     const manager=new OutputWindowManager('preload',async()=>{},()=>{});await manager.start({'1':'main','2':'stage'} as any,{});
-    const runId='a'.repeat(32),result={runId,pattern:'bars',ok:true,width:1920,height:1080,frames:60,elapsedMs:1100};
+    const runId='a'.repeat(32),result={runId,pattern:'bars',ok:true,width:1920,height:1080,frames:300,elapsedMs:5100};
     manager.sendQuick(['main'],{type:'screenTest',testRunId:runId,testPattern:'bars'});
     expect(manager.acceptScreenTestResult(1,result)).toEqual(result);
     expect(manager.acceptScreenTestResult(2,result)).toBeNull();expect(manager.acceptScreenTestResult(999,result)).toBeNull();

@@ -27,6 +27,7 @@ import {normalizeSpotifyTrackUrl,SpotifyOEmbedService} from './SpotifyOEmbedServ
 import {RadioMetadataService} from './RadioMetadataService';
 import {RadioArtworkService} from './RadioArtworkService';
 import {RadioMetadataCoordinator} from './RadioMetadataCoordinator';
+import {screenTestReport} from '../src/screenTestReport';
 import {createRegionalSettingsAccess} from './regionalSettings';
 import {createNativeRegionalText} from './nativeRegionalText';
 import {DeviceSettingsRepository} from './DeviceSettingsRepository';
@@ -281,6 +282,12 @@ app.whenReady().then(async() => {
   ipcMain.handle('spelling:set-language',(event,language:string)=>applySpellCheckerLanguage(event.sender,String(language||'de')));
   ipcMain.handle('radio:metadata-start',(event,stationId:string,streamUrl:string,sessionId?:string,channel?:string)=>{const sender=event.sender,id=typeof sessionId==='string'&&/^[\w-]{1,128}$/.test(sessionId)?sessionId:undefined;return radioMetadataCoordinator.start(sender.id,String(stationId),String(streamUrl),value=>{if(!sender.isDestroyed())sender.send('radio:metadata',value)},id,channel==='background'?'background':'preview')});
   ipcMain.handle('radio:metadata-stop',(event,sessionId?:string,channel?:string)=>{radioMetadataCoordinator.stop(event.sender.id,channel==='background'?'background':'preview',sessionId);return true});
+  ipcMain.handle('screen-test:export',async(event,summary:import('../src/screenTest').ScreenTestSummary,format:'html'|'json')=>{
+    if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return null;
+    const report=screenTestReport(summary,{version:app.getVersion(),createdAt:new Date().toISOString()},format);
+    const picked=await dialog.showSaveDialog(controlWindow,{title:'Bildschirmtest-Bericht speichern',defaultPath:report.filename,filters:[{name:format==='html'?'HTML-Bericht':'JSON-Auswertung',extensions:[format]}]});
+    if(picked.canceled||!picked.filePath)return null;await fs.writeFile(picked.filePath,report.text,'utf8');return picked.filePath;
+  });
   ipcMain.handle('device-settings:osb-read',()=>deviceSettings.readOsb());
   ipcMain.handle('device-settings:banner-position-read',()=>deviceSettings.readBannerPosition());
   ipcMain.handle('device-settings:banner-position-write',(event,value:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id)return false;return deviceSettings.writeBannerPosition(value)});

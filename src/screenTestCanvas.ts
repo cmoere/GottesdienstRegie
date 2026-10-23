@@ -1,4 +1,5 @@
 import type {ScreenTestPatternId,ScreenTestReceipt} from './screenTest';
+import {SCREEN_TEST_STABLE_MS} from './screenTest';
 const colors:Record<string,string[]>={bars:['#ffffff','#ffff00','#00ffff','#00ff00','#ff00ff','#ff0000','#0000ff','#000000'],grayscale:['#000000','#242424','#494949','#6d6d6d','#929292','#b6b6b6','#dbdbdb','#ffffff'],white:['#ffffff'],black:['#000000'],red:['#ff0000'],green:['#00ff00'],blue:['#0000ff']};
 export type PatternRect={x:number;y:number;width:number;height:number;color:string};
 export function screenTestRects(pattern:ScreenTestPatternId):PatternRect[]{
@@ -24,7 +25,7 @@ export function observeScreenTestPattern(canvas:HTMLCanvasElement,test:{runId:st
    const bounds=canvas.getBoundingClientRect(),width=Math.round(bounds.width),height=Math.round(bounds.height),now=performance.now(),size=`${width}x${height}`;
    if(size!==lastSize){lastSize=size;stableSince=now;frames=0}
    frames++;
-   if(width>0&&height>0&&frames>=12&&now-stableSince>=1000){
+   if(width>0&&height>0&&frames>=12&&now-stableSince>=SCREEN_TEST_STABLE_MS){
     try{const ok=verify(context,test.pattern);finish(ok,width,height,ok?undefined:'pattern-mismatch')}catch{finish(false,width,height,'canvas-unavailable')}
    }else frame=requestAnimationFrame(sample);
   };
