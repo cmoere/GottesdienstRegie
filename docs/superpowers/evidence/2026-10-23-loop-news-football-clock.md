@@ -65,3 +65,15 @@ Technical screen uses native information SVG, preserved German custom text/backg
 Tests: eight initial failures plus missing editor controls reproduced before implementation; 28 targeted tests passed, including exact 7999/8000/16000-ms boundaries, malformed optional fields, mounted/static timer lifecycle, previous logo variants, Bible navigation and screen-test regressions. Full suite 202 files / 841 tests passed (192.66s); two further lifecycle/boundary tests passed in the final targeted run and will be included in task6 full suite. Frontend typecheck passed.
 
 Native Electron37 probe first failed at missing clock integration, then passed six clock designs and an English-phase late mirror window. Captures in work/external-loop-native-uW2vuR visually inspected for all six clocks, technical icon/text/watermark and the four external-data modes. Physical display and audio were not exercised.
+
+## Task6 integrated checks and author review
+
+Complete unit suite after the final runtime fixes: **202 files / 846 tests passed**, 190.02 seconds, four workers. No assertion or timeout was weakened. Earlier default/high-parallel runs timed out in preexisting regional inventory tests; bounded direct Vitest runs are recorded separately.
+
+Final root-author review is weaker than independent review and was performed without development/review agents, as requested. HTTP/cache/schema/IPC/private-field boundaries, both initial and regular takes, actual editor dispatch, output rendering, shared clocks, teardown and exact dependency diff were inspected. Two important findings were reproduced and fixed: reduced-motion output now cycles complete static continuation frames rather than hiding overflow; the technical issue screen reserves the entire height so different DE/EN text lengths cannot recenter the heading. Existing large-chunk build warnings remain.
+
+Native composed-pixel verification: **work/external-loop-native-kqGhi2**, Electron37. Pending refresh leaves the visible title pixels and frozen envelope unchanged; the next take changes revision, epoch and actual title pixels. Four data modes, original logo contrast, six clocks, late English-phase mirror and test watermark pass. The stronger assertion also caught a zero-height probe wrapper; fixture geometry was corrected to match the actual 1080-pixel output. Existing screen-test/Bible native regressions: **work/screen-test-native-659fs5**, eight actual pattern receipts and pixel checks pass. No task-owned Electron processes remain.
+
+Fresh bounded compiled-adapter requests returned ready: Westfalen-Blatt and WDR each ten headlines, Bundesliga matchday eighteen teams/nine matches, second-league table eighteen rows, third-league upcoming twenty teams/280 matches. The season is supplied by the provider, not fixed in application code.
+
+The user explicitly changed the earlier publication gate: **“jetzt alles so veröffentlichen”**. A normal update is now authorized with incomplete regional UI disclosed and the unfinished original PowerPoint player left disabled. This is not evidence that publication has already happened.

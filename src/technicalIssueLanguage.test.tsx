@@ -25,3 +25,7 @@ it('defaults English copy without overwriting custom German text or background',
  const {container}=render(<QuickOverlay quick={{...base,technicalIssueEnglishText:undefined} as QuickScreenConfig}/>);
  expect(screen.getByRole('heading',{name:'Technical difficulties'})).toBeVisible();expect(container.querySelector('.quick-overlay')).toHaveStyle({'--quick-bg':'#699f3e'});
 });
+it('reserves the full output height so different text lengths cannot recenter the heading',()=>{
+ const {container}=render(<QuickOverlay quick={base} staticPreview/>);
+ expect(container.querySelector('.technical-issue-message')).toHaveStyle({height:'100%'});
+});

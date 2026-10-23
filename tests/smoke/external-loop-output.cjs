@@ -31,6 +31,23 @@ app.whenReady().then(async()=>{try{
  fs.writeFileSync(path.join(folder,'technical-en.png'),(await win.webContents.capturePage()).toPNG());
  const mirror=new BrowserWindow({show:false,frame:false,width:1920,height:1080,webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true,backgroundThrottling:false}});
  try{await mirror.loadURL(url+'#technical');for(let i=0;i<100&&!await mirror.webContents.executeJavaScript('!!window.externalFixture');i++)await sleep(50);assert.equal(await mirror.webContents.executeJavaScript("document.querySelector('h1')?.textContent"),'Technical difficulties')}finally{mirror.destroy()}
- fs.writeFileSync(path.join(folder,'report.json'),JSON.stringify({electron:process.versions.electron,results,clockDesigns:6,technicalLateMirror:'en',physicalDisplayVerified:false},null,2));
+ await win.webContents.executeJavaScript("window.externalFixture.mode('boundary')");await sleep(200);
+ assert(await win.webContents.executeJavaScript("!!window.externalBoundary"),'Actual controller/renderer boundary fixture must be prepared');
+ await win.webContents.executeJavaScript("(async()=>{await document.fonts.ready;await Promise.all([...document.images].map(img=>img.decode()));for(let i=0;i<4;i++)await new Promise(requestAnimationFrame)})()");
+ const first=await win.webContents.executeJavaScript("window.externalBoundary.frame()");
+ assert.equal(await win.webContents.executeJavaScript("document.querySelector('.external-loop-frame').getBoundingClientRect().height"),1080);
+ fs.writeFileSync(path.join(folder,'frozen-first.png'),(await win.webContents.capturePage()).toPNG());
+ const firstPixels=(await win.webContents.capturePage()).crop({x:60,y:210,width:1500,height:100}).toPNG();
+ await win.webContents.executeJavaScript("window.externalBoundary.pending()");await sleep(100);
+ assert.deepEqual(await win.webContents.executeJavaScript("window.externalBoundary.frame()"),first,'Pending refresh must not mutate visible pixels/envelope');
+ assert.deepEqual((await win.webContents.capturePage()).crop({x:60,y:210,width:1500,height:100}).toPNG(),firstPixels,'Visible title pixels must remain stable during pending refresh');
+ await win.webContents.executeJavaScript("window.externalBoundary.take()");await sleep(100);
+ await win.webContents.executeJavaScript("(async()=>{for(let i=0;i<4;i++)await new Promise(requestAnimationFrame)})()");
+ const next=await win.webContents.executeJavaScript("window.externalBoundary.frame()");
+ assert.notEqual(next.revision,first.revision);assert.equal(next.epoch,first.epoch+1000);
+ assert.equal(next.revision,'Nächste Revision');
+ fs.writeFileSync(path.join(folder,'frozen-next.png'),(await win.webContents.capturePage()).toPNG());
+ assert.notDeepEqual((await win.webContents.capturePage()).crop({x:60,y:210,width:1500,height:100}).toPNG(),firstPixels,'New take must repaint the changed title');
+ fs.writeFileSync(path.join(folder,'report.json'),JSON.stringify({electron:process.versions.electron,results,clockDesigns:6,technicalLateMirror:'en',frozenTake:{first,next},physicalDisplayVerified:false},null,2));
  console.log('EXTERNAL_LOOP_NATIVE_PASS '+folder);win.destroy();clearTimeout(deadline);app.exit(0);
 }catch(error){console.error(error);if(win&&!win.isDestroyed())win.destroy();clearTimeout(deadline);app.exit(1)}});

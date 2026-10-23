@@ -1,12 +1,20 @@
-import {cleanup,render,screen} from '@testing-library/react';
-import {afterEach,describe,expect,it} from 'vitest';
+import {act,cleanup,render,screen} from '@testing-library/react';
+import {afterEach,describe,expect,it,vi} from 'vitest';
 import {ExternalLoopView} from './View';
 import {normalizeExternalSettings} from './model';
 import type {ExternalSnapshot} from '../../shared/externalLoop';
 
-afterEach(cleanup);
+afterEach(()=>{cleanup();vi.useRealTimers();vi.unstubAllGlobals()});
 const news:ExternalSnapshot={version:1,key:'news:wdr-owl',revision:'a',fetchedAt:Date.now(),stale:false,payload:{kind:'news',entries:[{id:'one',title:'Lange vollständige Nachricht über den Gemeindegottesdienst',source:'wdr-owl',publishedAt:'2026-10-23T12:00:00Z',url:'https://www1.wdr.de/a'}]}};
 describe('public external loop frame',()=>{
+ it('keeps every row readable as static pages when motion is reduced',()=>{
+  vi.useFakeTimers();vi.setSystemTime(1000);vi.stubGlobal('matchMedia',()=>({matches:true,addEventListener(){},removeEventListener(){}}));
+  const snapshot=structuredClone(news);if(snapshot.payload.kind==='news'){const entry=snapshot.payload.entries[0];snapshot.payload.entries=Array.from({length:10},(_,i)=>({...entry,id:String(i),title:'Nachricht '+(i+1)}))}
+  render(<ExternalLoopView snapshot={snapshot} startedAt={1000} settings={normalizeExternalSettings({newsSources:'wdr-owl'})}/>);
+  expect(screen.queryByText('Nachricht 10')).toBeNull();
+  act(()=>vi.advanceTimersByTime(40000));
+  expect(screen.getByText('Nachricht 10')).toBeInTheDocument();
+ });
  it('keeps full headlines, source branding and static date metadata without article images or HTML execution',()=>{
   const snapshot=structuredClone(news);if(snapshot.payload.kind==='news')snapshot.payload.entries[0].title='<script>bad()</script> und die vollständige Nachricht';
   const {container}=render(<ExternalLoopView snapshot={snapshot} startedAt={Date.now()} settings={normalizeExternalSettings({externalKind:'news',newsSources:'wdr-owl'})}/>);

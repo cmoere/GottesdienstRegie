@@ -1,7 +1,7 @@
 import type {ExternalPayload,ExternalRequest,ExternalSettings,ExternalSnapshot,NewsSource} from '../../shared/externalLoop';
 import type {ServiceItem,Slide} from '../store';
 import {prepareEventScrollPlan} from '../eventScroll';
-import {eventTextWidth} from '../eventPagination';
+import {eventTextWidth,paginateReducedMotionEvents} from '../eventPagination';
 
 export const EXTERNAL_VIEWPORT_HEIGHT=760;
 export function isExternalLoop(item:Pick<ServiceItem,'type'>|null|undefined):boolean{return item?.type==='news'||item?.type==='football'}
@@ -39,7 +39,12 @@ export function prepareExternalPresentation(snapshot:ExternalSnapshot,settings:E
   plan.minDurationMs=plan.startPauseMs+plan.travelMs*2+plan.endPauseMs;
  }
  const titleStartsAfterMs=titles.map((_title,index)=>{const distance=Math.max(0,(index+1)*rowHeight-EXTERNAL_VIEWPORT_HEIGHT);return distance>0&&plan.distance>0?plan.startPauseMs+distance/plan.distance*plan.travelMs:0});
- return{payload,plan,rowHeight,titleWidth,fontSize,titleStartsAfterMs,minDurationMs:Math.max(settings.durationSeconds*1000,plan.minDurationMs)};
+ return{payload,plan,rowHeight,titleWidth,fontSize,titleStartsAfterMs,minDurationMs:Math.max(settings.durationSeconds*1000,plan.minDurationMs,Math.ceil(titles.length/2)*10000)};
+}
+export function externalReducedPages(snapshot:ExternalSnapshot,settings:ExternalSettings){
+ const payload=visibleExternalPayload(snapshot,settings),table=payload.kind==='football'&&payload.mode==='table';
+ const titles=payload.kind==='news'?payload.entries.map(entry=>entry.title):table?payload.table.map(row=>row.team.name):payload.matches.map(match=>match.home.name+' – '+match.away.name);
+ return paginateReducedMotionEvents(titles.map((title,index)=>({title,index})),table?840:1650);
 }
 export function externalLoopMinimumDuration(snapshot:ExternalSnapshot,settings:ExternalSettings):number{return prepareExternalPresentation(snapshot,settings).minDurationMs}
 export function hydrateExternalLoopData(slide:Slide,snapshot:ExternalSnapshot,startedAt:number,settings?:ExternalSettings):Slide{

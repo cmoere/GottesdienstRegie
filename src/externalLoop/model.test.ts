@@ -1,8 +1,15 @@
 import {describe,expect,it} from 'vitest';
-import {normalizeExternalSettings,externalLoopMinimumDuration,visibleExternalPayload} from './model';
+import {normalizeExternalSettings,externalLoopMinimumDuration,visibleExternalPayload,externalReducedPages} from './model';
 import type {ExternalSnapshot} from '../../shared/externalLoop';
 
 describe('external loop settings and shared presentation planning',()=>{
+ it('preserves every headline character across reduced-motion continuation frames with adequate duration',()=>{
+  const title='Eine vollständige Nachricht über den Gottesdienst und das Gemeindeleben. '.repeat(20);
+  const snapshot:ExternalSnapshot={version:1,key:'news:wdr-owl',revision:'r',fetchedAt:1000,stale:false,payload:{kind:'news',entries:[{id:'one',title,source:'wdr-owl',publishedAt:null,url:'https://www1.wdr.de/a'}]}};
+  const settings=normalizeExternalSettings({newsSources:'wdr-owl',durationSeconds:1}),pages=externalReducedPages(snapshot,settings);
+  expect(pages.length).toBeGreaterThan(1);expect(pages.flat().map(row=>row.title.replace(/\n/g,'')).join('')).toBe(title);
+  expect(externalLoopMinimumDuration(snapshot,settings)).toBeGreaterThanOrEqual(pages.length*10000);
+ });
  it('normalizes source and football selections independently of other settings',()=>{
   expect(normalizeExternalSettings({externalKind:'news'})).toEqual({kind:'news',sources:['westfalen-blatt','wdr-owl'],limit:10,durationSeconds:15});
   expect(normalizeExternalSettings({externalKind:'football',footballLeague:'bl2',footballMode:'invalid',footballTeamId:42,durationSeconds:0})).toEqual({kind:'football',league:'bl2',mode:'matchday',teamId:42,durationSeconds:1});

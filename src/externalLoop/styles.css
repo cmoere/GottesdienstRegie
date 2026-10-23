@@ -31,3 +31,6 @@
 .external-match-row{height:5.625cqw;display:flex;gap:1.5625cqw;align-items:center;justify-content:space-between;border-bottom:.052083cqw solid #b6bec3;box-sizing:border-box}
 .external-match-row>div{width:85.9375cqw;min-width:0}
 .external-match-row>strong{font-size:2.1875cqw;font-weight:500;min-width:6.25cqw;text-align:right}
+.external-reduced-title{font-size:2.1875cqw;font-weight:500;line-height:2.8125cqw;white-space:pre-wrap;overflow-wrap:anywhere}
+.external-loop-frame[data-reduced=true] .external-news-row,.external-loop-frame[data-reduced=true] .external-match-row,.external-loop-frame[data-reduced=true] .external-table-row:not(.external-table-heading){height:auto;min-height:6.25cqw;padding:.625cqw 0}
+.external-table-row .external-reduced-title{font-size:1.77083cqw}
