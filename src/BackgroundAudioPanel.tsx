@@ -6,6 +6,7 @@ import type {
 } from "./store";
 import { backgroundAudioEngine } from "./BackgroundAudioEngine";
 import { RadioStationBrowser } from "./RadioStationBrowser";
+import {replaceRadioTrack} from './backgroundAudioSelection';
 
 const Icon = ({ name }: { name: string }) => (
   <span className="material-symbols-outlined" aria-hidden="true">
@@ -51,7 +52,7 @@ export function BackgroundAudioPanel({
   const config = value ?? defaultBackgroundAudio(),
     [dragIndex, setDragIndex] = useState(-1),
     [radioOpen, setRadioOpen] = useState(initialRadio),
-    previewKey = useRef("");
+    previewKey = useRef(""),radioSelectionTaken=useRef(false);
   useEffect(
     () => () => {
       if (backgroundAudioEngine.snapshot().sourceKey === previewKey.current)
@@ -61,6 +62,13 @@ export function BackgroundAudioPanel({
   );
   const update = (patch: Partial<BackgroundAudioConfig>) =>
     onChange({ ...config, ...patch });
+  const addRadio=(track:BackgroundAudioTrack)=>{
+    if(radioSelectionTaken.current)return;
+    radioSelectionTaken.current=true;
+    try{update({tracks:replaceRadioTrack(config.tracks,track)})}
+    catch(error){radioSelectionTaken.current=false;throw error}
+    if(initialRadio)onClose();else setRadioOpen(false);
+  };
   const reorder = (to: number) => {
     if (dragIndex < 0 || dragIndex === to) return;
     const tracks = [...config.tracks],
@@ -113,14 +121,7 @@ export function BackgroundAudioPanel({
             <Icon name="close" />
           </button>
         </header>
-        <RadioStationBrowser
-          add={(track) => update({ tracks: [...config.tracks, track] })}
-        />
-        <footer>
-          <button className="primary" onClick={onClose}>
-            FERTIG
-          </button>
-        </footer>
+        <RadioStationBrowser add={addRadio}/>
       </div>
     );
   return (
@@ -182,14 +183,12 @@ export function BackgroundAudioPanel({
         >
           <Icon name="upload_file" /> IMPORTIEREN
         </button>
-        <button onClick={() => setRadioOpen((value) => !value)}>
+        <button onClick={() => {if(!radioOpen)radioSelectionTaken.current=false;setRadioOpen((value) => !value)}}>
           <Icon name="radio" /> RADIO
         </button>
       </div>
       {radioOpen && (
-        <RadioStationBrowser
-          add={(track) => update({ tracks: [...config.tracks, track] })}
-        />
+        <RadioStationBrowser add={addRadio}/>
       )}
       {config.tracks.length ? (
         <div className="background-audio-tracks">

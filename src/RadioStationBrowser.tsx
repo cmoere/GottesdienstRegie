@@ -22,6 +22,10 @@ export function RadioStationBrowser({
     [liveTitle, setLiveTitle] = useState(""),
     [liveArtist, setLiveArtist] = useState("");
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(()=>{
+    const media=audioRef.current;
+    return()=>{if(media?.getAttribute('src')){media.pause();media.removeAttribute('src');media.load()}};
+  },[]);
   const search = async () => {
     setBusy(true);
     setError(null);
