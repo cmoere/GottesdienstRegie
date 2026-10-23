@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.88.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.88.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.88.0</guid><pubDate>Sat, 24 Oct 2026 00:00:00 GMT</pubDate><description>Klarere Besucherinformationen und synchronisierte Übergänge
+Dieses Update verbessert Meldungsfolien, Wettervorschau und die Folienübersicht. Radio-Metadaten werden der aktiven Wiedergabe zugeordnet; Ausgabefenster verwenden einen gemeinsamen Übergangszeitpunkt. Nachrichten stammen ausschließlich vom Westfalen-Blatt.
+
+Amtliche Wetterwarnungen und Bildschirmtest-Berichte
+DWD-Warnungen für den eingestellten Wetterort erscheinen im Vor- und Nachprogramm sowie beim Countdown, nicht während Gottesdienstinhalten. Quelle und Gültigkeit bleiben sichtbar. Der verlängerte Bildschirmtest prüft jedes Muster mindestens fünf Sekunden und bietet seine technische Auswertung als HTML oder JSON zum Speichern an.
+
+Meldungsdesign, Wetter und Folienübersicht
+Das Standard-Meldungsdesign nutzt eine weiße Fläche, den grünen Kopf Aktuelle Infos, das Gemeindelogo, eine dünne Trennlinie und den QR-Code unten rechts. Textformatierungen bleiben erhalten. Die Wetterfolie ergänzt sechs Vorschauzeitpunkte im Zweistundenabstand und den nächsten Tag. Die Folienübersicht zeigt vollständige Titel; die Ansichtsschalter sind ohne vorangestellte Symbole beschriftet.
+
+Passende Radioinformationen und gemeinsame Übergänge
+Titelwechsel entfernen veraltete Album- und Coverdaten. Verspätete Metadatenantworten aus früheren Wiedergabesitzungen werden verworfen; Vorhören und Hintergrundradio besitzen getrennte Zuordnungen. MAIN und Vorschau berechnen den Übergangsfortschritt aus demselben Zeitpunkt, statt beim Empfang jeweils eine neue Animation zu beginnen.
+
+Regionalübersetzungen weiterhin unvollständig
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Diese Version erscheint mit diesem offengelegten Umfang als normales Update.
+
+PowerPoint-Originalmodus und technische Prüfgrenzen
+Der experimentelle originalgetreue PowerPoint-Spieler bleibt deaktiviert. Wetter und Warnungen benötigen erreichbare Datenquellen; bei fehlendem gültigem Warnungsstand wird keine Entwarnung behauptet. Bildschirmtest und Softwareprüfungen ersetzen keine Sicht- und Tonprüfung an der tatsächlichen Anlage. Eine physische Monitorlatenz wurde nicht gemessen.</description></item>
 <item><title>GottesdienstRegie 0.87.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.87.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.87.0</guid><pubDate>Fri, 23 Oct 2026 00:00:00 GMT</pubDate><description>Nachrichten im Fokus und eigene Wetteranzeige
 Das Vor- und Nachprogramm zeigt Nachrichten einzeln und groß mit Titel, Beschreibung, Quellenlogo und verfügbarem Artikelbild. Eine eigene Wetterfolie ersetzt die externe Wetterseite. Vereinslogos und der neue Meldungskopf Aktuelle Infos ergänzen die Besucherinformation.
 

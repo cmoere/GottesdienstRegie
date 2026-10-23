@@ -5,6 +5,19 @@ describe('readable announcement layouts',()=>{
  it('uses the available slide width and reserves only the QR column when enabled',()=>{
   for(const design of ANNOUNCEMENT_DESIGNS.filter(value=>value!=='split')){
    const plain=prepareAnnouncementPages({title:'Information',body:'Ein Text',qrCode:false,design})[0];
+   if(design==='classic'){
+    expect(plain.titleElement.x).toBe(60);
+    expect(plain.titleElement.x+plain.titleElement.width).toBe(1860);
+    expect(plain.bodyElement.x).toBe(60);
+    expect(plain.bodyElement.x+plain.bodyElement.width).toBe(1860);
+    const qr=prepareAnnouncementPages({title:'Information',body:'Ein Text',qrCode:true,design})[0];
+    expect(qr.bodyElement.x+qr.bodyElement.width).toBe(1860);
+    expect(qr.qrElement!.x).toBe(1736);
+    expect(qr.qrElement!.x+qr.qrElement!.width).toBe(1896);
+    expect(qr.bodyElement.y+qr.bodyElement.height).toBeLessThan(qr.qrElement!.y);
+    expect(qr.bodyFontSize).toBe(plain.bodyFontSize);
+    continue;
+   }
    expect(plain.titleElement.x).toBe(32);
    expect(plain.titleElement.x+plain.titleElement.width).toBe(1888);
    expect(plain.bodyElement.x).toBe(32);
@@ -21,7 +34,8 @@ describe('readable announcement layouts',()=>{
   const pages=ANNOUNCEMENT_DESIGNS.map(design=>prepareAnnouncementPages({title:'<u>Titel</u>',body:'<p><strong>Text</strong></p><p>Absatz</p>',qrCode:true,design})[0]);
   expect(new Set(pages.map(page=>JSON.stringify({background:page.background,decorations:page.decorations,body:page.bodyElement}))).size).toBe(8);
   for(const page of pages){
-   expect(page.bodyElement.x+page.bodyElement.width).toBeLessThan(page.qrElement!.x);
+   if(page.referenceLayout) expect(page.bodyElement.y+page.bodyElement.height).toBeLessThan(page.qrElement!.y);
+   else expect(page.bodyElement.x+page.bodyElement.width).toBeLessThan(page.qrElement!.x);
    expect(page.bodyHeight).toBeLessThanOrEqual(page.bodyElement.height);
    expect(page.titleRichLines.flat().some(run=>run.underline)).toBe(true);
    expect(page.bodyRichLines.flat().some(run=>run.bold)).toBe(true);
@@ -43,7 +57,7 @@ describe('readable announcement layouts',()=>{
    expect(page.scrollPlan.roundTrip).toBe(true);
    expect(page.scrollPlan.minDurationMs).toBe(page.scrollPlan.startPauseMs+2*page.scrollPlan.travelMs+page.scrollPlan.endPauseMs);
    expect(page.titleHeight).toBeLessThanOrEqual(page.titleElement.height);
-   expect(page.bodyElement.x+page.bodyElement.width).toBeLessThan(page.qrElement!.x);
+   expect(page.bodyElement.y+page.bodyElement.height).toBeLessThan(page.qrElement!.y);
   }
  });
  it('falls back to a supported design and gives four distinct output layouts',()=>{
@@ -54,7 +68,9 @@ describe('readable announcement layouts',()=>{
  it('places a small thin separator between title and body in every design',()=>{
   for(const design of ANNOUNCEMENT_DESIGNS){
    const page=prepareAnnouncementPages({title:'Information',body:'Ein Text',qrCode:true,design})[0];
-   expect(page.decorations.some(box=>design==='split'
+   expect(page.decorations.some(box=>design==='classic'
+    ?box.height===2&&box.width===1800&&box.fill==='#000000'&&box.y>=page.titleElement.y+page.titleElement.height&&box.y<page.bodyElement.y
+    :design==='split'
     ?box.width===3&&box.x>=page.titleElement.x+page.titleElement.width&&box.x<page.bodyElement.x
     :box.height===3&&box.width<=200&&box.y>=page.titleElement.y+page.titleElement.height&&box.y<page.bodyElement.y)).toBe(true);
   }

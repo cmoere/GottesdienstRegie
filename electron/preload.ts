@@ -57,6 +57,8 @@ contextBridge.exposeInMainWorld("desktop", {
   getOutputAppMode:()=>ipcRenderer.invoke('outputs:get-app-mode'),
   getOutputState:()=>ipcRenderer.invoke('outputs:get-state'),
   sendAnnouncementBanner:(banner:import('../src/outputState').BannerOutputState|null)=>ipcRenderer.invoke('outputs:send-banner',banner),
+  weatherWarnings:{read:(location:import('../shared/externalLoop').WeatherLocation)=>ipcRenderer.invoke('weather-warnings:read',location)},
+  sendWeatherWarnings:(state:import('../shared/weatherWarnings').WeatherWarningState|null)=>ipcRenderer.invoke('outputs:send-weather-warnings',state),
   onOutputState:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:state',listener);return()=>ipcRenderer.removeListener('outputs:state',listener)},
   onLiveSlide: (callback: (payload: unknown) => void) => {
     const listener = (_event: Electron.IpcRendererEvent, payload: unknown) =>

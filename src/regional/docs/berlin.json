@@ -324,6 +324,18 @@
   "screenshotLabel":"Beispielansicht"
  },
  "releases":{
+    "versions[0.88].builds[0.88.0].overview.label": "Klarere Besucherinformationen und synchronisierte Übergänge",
+    "versions[0.88].builds[0.88.0].overview.text": "Dit Update verbessert Meldungsfolien, Wettervorschau und die Folienübersicht. Radio-Metadaten werden der aktiven Wiedergabe zujeordnet; Ausjabefenster nehmen 'nen jemeinsamen Übergangszeitpunkt. Nachrichten kommen ausschließlich vom Westfalen-Blatt.",
+    "versions[0.88].builds[0.88.0].sections.new.0.label": "Amtliche Wetterwarnungen und Bildschirmtest-Berichte",
+    "versions[0.88].builds[0.88.0].sections.new.0.text": "DWD-Warnungen für den einjestellten Wetterort erscheinen im Vor- und Nachprogramm sowie beim Countdown, nich während Gottesdienstinhalten. Quelle und Jültigkeit bleiben sichtbar. Der verlängerte Bildschirmtest prüft jedet Muster mindestens fünf Sekunden und bietet seine technische Auswertung als HTML oder JSON zum Speichern an.",
+    "versions[0.88].builds[0.88.0].sections.improved.0.label": "Meldungsdesign, Wetter und Folienübersicht",
+    "versions[0.88].builds[0.88.0].sections.improved.0.text": "Dit Standard-Meldungsdesign nimmt 'ne weiße Fläche, den jrünen Kopf Aktuelle Infos, dit Gemeindelogo, 'ne dünne Trennlinie und den QR-Code unten rechts. Textformatierungen bleiben erhalten. Die Wetterfolie ergänzt sechs Vorschauzeitpunkte im Zweistundenabstand und den nächsten Tag. Die Folienübersicht zeigt vollständije Titel; die Ansichtsschalter sind ohne voranjestellte Symbole beschriftet.",
+    "versions[0.88].builds[0.88.0].sections.fixed.0.label": "Passende Radioinformationen und jemeinsame Übergänge",
+    "versions[0.88].builds[0.88.0].sections.fixed.0.text": "Titelwechsel entfernen veraltete Album- und Coverdaten. Verspätete Metadatenantworten aus früheren Wiedergabesitzungen werden verworfen; Vorhören und Hintergrundradio haben jetrennte Zuordnungen. MAIN und Vorschau berechnen den Übergangsfortschritt aus demselben Zeitpunkt, statt beim Empfang jeweils 'ne neue Animation zu beginnen.",
+    "versions[0.88].builds[0.88.0].sections.known.0.label": "Regionalübersetzungen weiterhin unvollständich",
+    "versions[0.88].builds[0.88.0].sections.known.0.text": "Regionalvarianten sind noch nich vollständich übersetzt. Fehlende UI-Texte werden uff Hochdeutsch anjezeigt. Diese Version erscheint mit diesem offenjelegten Umfang als normales Update.",
+    "versions[0.88].builds[0.88.0].sections.known.1.label": "PowerPoint-Originalmodus und technische Prüfjrenzen",
+    "versions[0.88].builds[0.88.0].sections.known.1.text": "Der experimentelle originaljetreue PowerPoint-Spieler bleibt deaktiviert. Wetter und Warnungen brauchen erreichbare Datenquellen; bei fehlendem jültijem Warnungsstand wird keene Entwarnung behauptet. Bildschirmtest und Softwareprüfungen ersetzen keene Sicht- und Tonprüfung an der tatsächlichen Anlage. 'Ne physische Monitorlatenz wurde nich jemessen.",
     "versions[0.87].builds[0.87.0].overview.label": "Nachrichten im Fokus und eijene Wetteranzeije",
     "versions[0.87].builds[0.87.0].overview.text": "Dit Vor- und Nachprogramm zeigt Nachrichten einzeln und jroß mit Titel, Beschreibung, Quellenlogo und verfügbarem Artikelbild. 'Ne eijene Wetterfolie ersetzt die externe Wetterseite. Vereinslogos und der neue Meldungskopf Aktuelle Infos ergänzen die Besucherinformation.",
     "versions[0.87].builds[0.87.0].sections.new.0.label": "Eijene Wetterfolie",

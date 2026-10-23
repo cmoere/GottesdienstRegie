@@ -14,7 +14,7 @@ describe('announcement live preparation',()=>{
     for(let revision=1;revision<30;revision++){
       const output=controller.outputForTake(local,item.slides[0],revision,now)!;
       expect(output.elements.some(element=>element.type==='qr')).toBe(false);
-      expect(output.elements.find(element=>element.name==='Meldungstext')!.width).toBe(1856);
+      expect(output.elements.find(element=>element.name==='Meldungstext')!.width).toBe(1800);
       collected.push(output.body);
       if(!controller.hasContinuation(item.id))break;
     }
@@ -84,7 +84,7 @@ describe('announcement live preparation',()=>{
     const output=controller.outputForTake(item,{...item.slides[0],background:'#ffffff'},1,now)!;
     expect(output.elements.find(element=>element.name==='Meldungstitel')?.properties.text).toBe('Öffentliche Meldung');
     expect(output.elements.find(element=>element.name==='Meldungstext')?.properties.text).toBe('Hallo & willkommen\nZweite Zeile');
-    expect(output.background).toBe('#18232f');
+    expect(output.background).toBe('#ffffff');
     expect(output.timing?.durationSeconds).toBe(24);
     expect(output.elements.find(element=>element.type==='qr')?.properties.src).toMatch(/^data:image\/svg\+xml/);
   });

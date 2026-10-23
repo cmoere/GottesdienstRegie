@@ -138,6 +138,7 @@ import {ExternalLoopContext} from './externalLoop/context';
 import {isExternalLoop} from './externalLoop/model';
 import {formatEventDate} from './dynamicEventSlide';
 import {useLiveOutputPreview} from './liveOutputPreview';
+import{WeatherWarningsController}from'./weatherWarnings/controller';
 import {useOutputDisplayProfile} from './useOutputDisplayProfile';
 import {useScheduledOutputSlide} from './outputPresentation';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
@@ -9337,6 +9338,7 @@ function AppShell({
       onClick={() => setMenuOpen(null)}
     >
       <AnnouncementBannerController quick={previewQuick}/>
+      <WeatherWarningsController quick={previewQuick}/>
       {screenTest.dialog}
       <ServiceOnAirReminder/>
       <div className="menubar">
@@ -9708,6 +9710,7 @@ function Output() {
   const reportScreenTest=useCallback((receipt:ScreenTestReceipt)=>{void(window.desktop as any)?.screenTest?.report(receipt).catch(()=>{})},[]);
   const previousStateRef=useRef<OutputStateSnapshot|null>(null);
   const [outputBanner,setOutputBanner]=useState<BannerOutputState|null>(null);
+  const [outputWeatherWarnings,setOutputWeatherWarnings]=useState<import('../shared/weatherWarnings').WeatherWarningState|null>(null);
   const stateRevisionRef=useRef(-1);
   const outputRevisionRef=useRef(0);
   const [slide, setSlide] = useScheduledOutputSlide(),
@@ -9731,6 +9734,7 @@ function Output() {
         if(changed.slide)setSlide(state.slide as Slide|null);
         if(changed.quick)setQuick(state.quick as QuickScreenConfig|null);
         if(changed.banner)setOutputBanner(state.banner??null);
+        if(changed.weatherWarnings)setOutputWeatherWarnings(state.weatherWarnings??null);
         if(changed.appMode)setOutputAppMode(state.appMode);
       };
       const off=bridge.onOutputState(apply);
@@ -9758,7 +9762,7 @@ function Output() {
     <div
       className={`output ${quick?.type === "noText" ? "quick-no-text" : ""}`}
     >
-      <OutputComposition hideCountdown={Boolean(quick)} serviceCountdownAtMs={role==='main'?(slide as import('./liveOutputPreview').LiveOutputSlide|null)?._serviceCountdownAtMs:undefined} banner={role==='main'&&quick?.type!=='screenTest'?outputBanner:null} testOverlay={<TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/> }>
+      <OutputComposition weatherWarnings={role==='main'&&(!quick||quick.type==='countdown')?outputWeatherWarnings:null} hideCountdown={Boolean(quick)} serviceCountdownAtMs={role==='main'?(slide as import('./liveOutputPreview').LiveOutputSlide|null)?._serviceCountdownAtMs:undefined} banner={role==='main'&&quick?.type!=='screenTest'?outputBanner:null} testOverlay={<TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/> }>
       {slide && role==='stage' && songOutput ? <div className="stage-song-shell"><header className="stage-song-header"><span>STAGE</span><strong>{slide.title}</strong></header><section className="stage-song-current"><small>JETZT</small>{songOutput.showChords && songOutput.stageRows?.length ? <div className="stage-song-rows">{songOutput.stageRows.map((row,index)=><div className="stage-song-row" key={`${index}-${row.lyrics}`}><span className="stage-song-chords">{row.chords}</span><span>{row.lyrics}</span></div>)}</div> : <div className="stage-song-lyrics">{slide.body}</div>}</section>{songOutput.currentNext && <section className="stage-song-next"><small>ALS NÄCHSTES</small><div>{songOutput.next || '—'}</div></section>}</div> : renderedSlide && (
         lyricScroll && role==='main' ? <LyricScrollRenderer packet={lyricScroll} live/> : <TransitionStage
           slide={renderedSlide}

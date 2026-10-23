@@ -26,6 +26,12 @@
 .quick-screen-shortcut{position:absolute;left:4px;bottom:4px;min-width:18px;padding:2px 4px;border:1px solid #ffffff38;border-radius:3px;background:#050508c9;color:#fff;font:700 7px/1.1 "Cera Pro",sans-serif;text-align:center;text-shadow:none}
 
 /* A completed transition must stay fully visible. Initial effect states only apply while two layers overlap. */
+.production-grid .preview-slide-card{aspect-ratio:auto;display:flex;flex-direction:column;text-align:left}
+.preview-slide-image{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#111}
+.preview-slide-caption{display:block;padding:7px 9px;color:#fff;font:400 12px/1.35 'Cera Pro',system-ui,sans-serif;white-space:normal;overflow-wrap:anywhere}
+.production-grid .preview-item-group>div{gap:14px!important}.preview-item-group>h3 span{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:1050px){.preview-mode-toolbar button{font-size:10px!important}.preview-mode-toolbar{flex-wrap:wrap}.preview-mode{grid-template-rows:auto minmax(0,1fr)!important}}
+:root[data-theme="light"] .preview-slide-caption{color:#18232f;background:#fff}
 .transition-layer{transition-delay:var(--transition-delay,0ms)}
 .transition-stage.transitioning:not(.active) .transition-layer{transition:none!important}
 .transition-stage:not(.transitioning) .entering{opacity:1!important;transform:none!important;clip-path:inset(0)!important;filter:none!important}

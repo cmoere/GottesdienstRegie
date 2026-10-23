@@ -28,6 +28,7 @@ import {RadioMetadataService} from './RadioMetadataService';
 import {RadioArtworkService} from './RadioArtworkService';
 import {RadioMetadataCoordinator} from './RadioMetadataCoordinator';
 import {screenTestReport} from '../src/screenTestReport';
+import{WeatherWarningAdapter}from'./weatherWarnings/adapter';import{readWeatherWarningState}from'../shared/weatherWarnings';import{readExternalRequest}from'../shared/externalLoopRequest';
 import {createRegionalSettingsAccess} from './regionalSettings';
 import {createNativeRegionalText} from './nativeRegionalText';
 import {DeviceSettingsRepository} from './DeviceSettingsRepository';
@@ -252,6 +253,12 @@ app.whenReady().then(async() => {
   const communityService=new FirebaseGemeindeService(await createCommunityRealtimeAdapter(),new CommunitySnapshotCache(path.join(app.getPath('userData'),'community-snapshot.json')));
   const communityStops=new Map<number,Array<()=>void>>();
   const externalLoopService=new ExternalLoopService({cacheDirectory:path.join(app.getPath('userData'),'cache','external-loop')});
+  const weatherWarningAdapter=new WeatherWarningAdapter();app.once('will-quit',()=>weatherWarningAdapter.dispose());
+  ipcMain.handle('weather-warnings:read',async(event,value:unknown)=>{
+    const unavailable={status:'unavailable',fetchedAt:0,warnings:[]},request=readExternalRequest(value&&typeof value==='object'?{...value,kind:'weather'}:null);
+    if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame||request?.kind!=='weather')return unavailable;
+    return weatherWarningAdapter.load({name:request.name,latitude:request.latitude,longitude:request.longitude});
+  });
   ipcMain.handle('external-loop:read',(event,value:unknown)=>handleExternalLoopRead(event,value,controlWindow&&!controlWindow.isDestroyed()?controlWindow.webContents.id:null,externalLoopService));
   ipcMain.handle('external-loop:weather-locations',(event,value:unknown)=>handleWeatherLocationSearch(event,value,controlWindow&&!controlWindow.isDestroyed()?controlWindow.webContents.id:null,externalLoopService));
   app.once('will-quit',()=>externalLoopService.dispose());
@@ -562,6 +569,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('outputs:screen-test-report',(event,value:unknown)=>{if(event.senderFrame!==event.sender.mainFrame)return false;const result=outputManager.acceptScreenTestResult(event.sender.id,value);if(!result)return false;sendToLiveWindow(controlWindow,'outputs:screen-test-result',result);return true});
   ipcMain.handle('outputs:screen-test-restore',(event,runId:string,previous:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;return outputManager.restoreScreenTest(runId,previous)});
   ipcMain.handle('outputs:send-banner',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id)return false;const banner=readBannerOutputState(payload);return banner!==undefined?outputManager.setBanner(banner):false});
+  ipcMain.handle('outputs:send-weather-warnings',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;const state=payload===null?null:readWeatherWarningState(payload);return payload!==null&&!state?false:outputManager.setWeatherWarnings(state)});
   ipcMain.handle('outputs:set-app-mode',(_event,state:{mode:'normal'|'test';onAir:boolean})=>outputManager.setAppMode(state));
   ipcMain.handle('outputs:get-app-mode',()=>outputManager.getAppMode());
   ipcMain.handle('outputs:get-state',(event)=>outputManager.getStateForSender(event.sender.id));

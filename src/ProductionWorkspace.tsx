@@ -77,6 +77,7 @@ import {ExternalLoopDesigner} from './externalLoop/Designer';
 import {ClockLoopDesigner} from './clockLoop/ClockLoopDesigner';
 import {useLiveOutputPreview} from './liveOutputPreview';
 import {OutputComposition} from './OutputComposition';
+import{useWeatherWarnings}from'./weatherWarnings/controller';
 import {useAnnouncementBanner} from './AnnouncementBannerController';
 import {PostProgramRoomNoticeView} from './PostProgramRoomNotice';
 import {isPostProgramSystemItem} from './postProgramSystemSlide';
@@ -3709,13 +3710,14 @@ function PreviewSlideCard({
       className={`preview-slide-card ${selected ? "active" : ""} ${live ? "live" : ""}`}
       onClick={() => state.selectPreview(item.id, slide.id)}
     >
-      <SlideRenderer slide={rendered} mode="thumbnail" />
+      <div className="preview-slide-image"><SlideRenderer slide={rendered} mode="thumbnail" />
       <span className="preview-slide-number">{index + 1}</span>
       {slide.transitionOverride && (
         <i className="preview-transition-icon">
           <Icon name="animation" />
         </i>
       )}
+      </div><span className="preview-slide-caption">{slide.title?.trim()||`Folie ${index+1}`}</span>
     </button>
   );
 }
@@ -3727,6 +3729,7 @@ function PreviewCenter({
 }) {
   const output = useLiveOutputPreview(s=>s.slide);
   const banner=useAnnouncementBanner(s=>s.banner);
+  const weatherWarnings=useWeatherWarnings(s=>s.state);
   const state = usePresentation(),
     root = useRef<HTMLDivElement>(null),
     deadline = useRef(0),
@@ -3869,7 +3872,7 @@ function PreviewCenter({
         <div className="main-preview-with-title">
         <h2 className="single-preview-title">{(state.onAir&&output?output.title:slide.title)?.trim()||slideLabel(slide,item.slides.indexOf(slide))}</h2>
         <div className="main-preview-surface">
-          <OutputComposition hideCountdown={Boolean(activeQuick)} serviceCountdownAtMs={state.onAir?output?._serviceCountdownAtMs:undefined} banner={state.onAir?banner:null} testOverlay={<TestModeWatermark role="main"/>}>
+          <OutputComposition weatherWarnings={state.onAir&&(!activeQuick||activeQuick.type==='countdown')?weatherWarnings:null} hideCountdown={Boolean(activeQuick)} serviceCountdownAtMs={state.onAir?output?._serviceCountdownAtMs:undefined} banner={state.onAir?banner:null} testOverlay={<TestModeWatermark role="main"/>}>
           {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage
             slide={previewSlide(state.onAir&&output?output:slide)}
             transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(
@@ -4092,6 +4095,7 @@ function PreviewRightSidebar({
       {live ? (
         <MainLivePreview
           hideCountdown={Boolean(activeQuick)}
+          suppressWeatherWarnings={Boolean(activeQuick&&activeQuick.type!=='countdown')}
           title={`${liveItem?.title} · ${live.title || "Live-Folie"}`}
         >
           {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage slide={previewSlide(state.onAir&&output?output:live)} transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(live,liveItem,'main',state.transitionDefault)} role="main" renderMode="mirror" />}
@@ -4207,14 +4211,14 @@ export function ProductionWorkspace({
             aria-pressed={state.previewLayout === "single"}
             onClick={() => state.setPreviewLayout("single")}
           >
-            <Icon name="cast_connected" /> MAIN LIVE
+            EINZELVORSCHAU
           </button>
           <button
             className={state.previewLayout === "grid" ? "active" : ""}
             aria-pressed={state.previewLayout === "grid"}
             onClick={() => state.setPreviewLayout("grid")}
           >
-            <Icon name="grid_view" /> FOLIENÜBERSICHT
+            FOLIENÜBERSICHT
           </button>
           {state.previewLayout === "grid" && (
             <label>

@@ -1,13 +1,14 @@
 import type {AppModeState} from './appMode';
 import type {PublicBannerAnnouncement} from './community/AnnouncementService';
 import type {BannerPosition} from './announcementBannerModel';
+import type{WeatherWarningState}from'../shared/weatherWarnings';
 export type BannerOutputState={revision:number;position:BannerPosition;items:PublicBannerAnnouncement[];cycleStartedAtMs:number;reserved:boolean;textWidth?:number;reducedMotion?:boolean};
-export type OutputStateSnapshot={revision:number;slide:unknown|null;quick:unknown|null;appMode:AppModeState;slideRevision?:number;quickRevision?:number;banner?:BannerOutputState|null};
+export type OutputStateSnapshot={revision:number;slide:unknown|null;quick:unknown|null;appMode:AppModeState;slideRevision?:number;quickRevision?:number;banner?:BannerOutputState|null;weatherWarnings?:WeatherWarningState|null};
 export function shouldApplyOutputState(currentRevision:number,incomingRevision:number){return Number.isFinite(incomingRevision)&&incomingRevision>currentRevision}
 export function changedOutputLayers(previous:OutputStateSnapshot|null,next:OutputStateSnapshot){
-  const none={slide:false,quick:false,banner:false,appMode:false};
+  const none={slide:false,quick:false,banner:false,appMode:false,weatherWarnings:false};
   if(previous&&!shouldApplyOutputState(previous.revision,next.revision))return none;
-  return {slide:!previous||(next.slideRevision===undefined?previous.slide!==next.slide:previous.slideRevision!==next.slideRevision),quick:!previous||(next.quickRevision===undefined?previous.quick!==next.quick:previous.quickRevision!==next.quickRevision),banner:!previous||previous.banner?.revision!==next.banner?.revision||Boolean(previous.banner)!==Boolean(next.banner),appMode:!previous||previous.appMode.mode!==next.appMode.mode||previous.appMode.onAir!==next.appMode.onAir};
+  return {slide:!previous||(next.slideRevision===undefined?previous.slide!==next.slide:previous.slideRevision!==next.slideRevision),quick:!previous||(next.quickRevision===undefined?previous.quick!==next.quick:previous.quickRevision!==next.quickRevision),banner:!previous||previous.banner?.revision!==next.banner?.revision||Boolean(previous.banner)!==Boolean(next.banner),weatherWarnings:!previous||previous.weatherWarnings?.revision!==next.weatherWarnings?.revision||Boolean(previous.weatherWarnings)!==Boolean(next.weatherWarnings),appMode:!previous||previous.appMode.mode!==next.appMode.mode||previous.appMode.onAir!==next.appMode.onAir};
 }
 /** Undefined means invalid; null deliberately clears the layer. Reject private keys. */
 export function readBannerOutputState(value:unknown):BannerOutputState|null|undefined{

@@ -1,3 +1,39 @@
+# GottesdienstRegie 0.88.0
+
+Veröffentlicht: Sa., 24.10.2026
+
+Dieses Update verbessert Meldungsfolien, Wettervorschau und die Folienübersicht. Radio-Metadaten werden der aktiven Wiedergabe zugeordnet; Ausgabefenster verwenden einen gemeinsamen Übergangszeitpunkt. Nachrichten stammen ausschließlich vom Westfalen-Blatt.
+
+## Neu
+
+### Amtliche Wetterwarnungen und Bildschirmtest-Berichte
+
+DWD-Warnungen für den eingestellten Wetterort erscheinen im Vor- und Nachprogramm sowie beim Countdown, nicht während Gottesdienstinhalten. Quelle und Gültigkeit bleiben sichtbar. Der verlängerte Bildschirmtest prüft jedes Muster mindestens fünf Sekunden und bietet seine technische Auswertung als HTML oder JSON zum Speichern an.
+
+## Verbessert
+
+### Meldungsdesign, Wetter und Folienübersicht
+
+Das Standard-Meldungsdesign nutzt eine weiße Fläche, den grünen Kopf Aktuelle Infos, das Gemeindelogo, eine dünne Trennlinie und den QR-Code unten rechts. Textformatierungen bleiben erhalten. Die Wetterfolie ergänzt sechs Vorschauzeitpunkte im Zweistundenabstand und den nächsten Tag. Die Folienübersicht zeigt vollständige Titel; die Ansichtsschalter sind ohne vorangestellte Symbole beschriftet.
+
+## Behoben
+
+### Passende Radioinformationen und gemeinsame Übergänge
+
+Titelwechsel entfernen veraltete Album- und Coverdaten. Verspätete Metadatenantworten aus früheren Wiedergabesitzungen werden verworfen; Vorhören und Hintergrundradio besitzen getrennte Zuordnungen. MAIN und Vorschau berechnen den Übergangsfortschritt aus demselben Zeitpunkt, statt beim Empfang jeweils eine neue Animation zu beginnen.
+
+## Bekannte Einschränkungen
+
+### Regionalübersetzungen weiterhin unvollständig
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Diese Version erscheint mit diesem offengelegten Umfang als normales Update.
+
+### PowerPoint-Originalmodus und technische Prüfgrenzen
+
+Der experimentelle originalgetreue PowerPoint-Spieler bleibt deaktiviert. Wetter und Warnungen benötigen erreichbare Datenquellen; bei fehlendem gültigem Warnungsstand wird keine Entwarnung behauptet. Bildschirmtest und Softwareprüfungen ersetzen keine Sicht- und Tonprüfung an der tatsächlichen Anlage. Eine physische Monitorlatenz wurde nicht gemessen.
+
+---
+
 # GottesdienstRegie 0.87.0
 
 Veröffentlicht: Fr., 23.10.2026

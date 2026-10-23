@@ -3,6 +3,7 @@ import type { DisplayAssignments, OutputRole } from './DisplayManager';
 import type {AppModeState} from '../src/appMode';
 import type {OutputStateSnapshot,BannerOutputState} from '../src/outputState';
 import {readScreenTestReceipt} from '../src/screenTest';
+import type{WeatherWarningState}from'../shared/weatherWarnings';
 
 type ManagedOutput={displayId:number;role:OutputRole;window:BrowserWindow};
 const outputRoles:OutputRole[]=['main','stage','notes','livestream','lobby'];
@@ -25,6 +26,7 @@ export class OutputWindowManager{
   }
   private update(role:OutputRole,patch:Partial<OutputStateSnapshot>){const old=this.states.get(role)??{revision:0,slide:null,quick:null,appMode:this.appMode},revision=++this.revision;const state={...old,...structuredClone(patch),revision,slideRevision:'slide' in patch?revision:old.slideRevision??0,quickRevision:'quick' in patch?revision:old.quickRevision??0};this.states.set(role,state);const entry=this.outputs.get(role);if(entry&&!entry.window.isDestroyed())entry.window.webContents.send('outputs:state',state)}
   setBanner(banner:BannerOutputState|null){this.update('main',{banner});return true}
+  setWeatherWarnings(weatherWarnings:WeatherWarningState|null){this.update('main',{weatherWarnings});return true}
   getAppMode(){return {...this.appMode}}
   constructor(private readonly preload:string,private readonly load:(window:BrowserWindow,route:string)=>Promise<void>,private readonly status:(role:OutputRole,state:'ready'|'missing'|'closed')=>void){}
   async start(assignments:DisplayAssignments,payload:unknown){

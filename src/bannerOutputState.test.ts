@@ -10,15 +10,22 @@ it('updates only the banner layer and preserves the current media take',async()=
   await manager.start({'1':'main','2':'stage'} as any,{id:'video',_presentAtMs:1000});
   const before=manager.getStateForSender(1)!;manager.setBanner(banner);const after=manager.getStateForSender(1)!;
   expect(after.slide).toEqual(before.slide);expect(after.slideRevision).toBe(before.slideRevision);expect(after.quickRevision).toBe(before.quickRevision);
-  expect(changedOutputLayers(before,after)).toEqual({slide:false,quick:false,banner:true,appMode:false});
+  expect(changedOutputLayers(before,after)).toEqual({slide:false,quick:false,banner:true,appMode:false,weatherWarnings:false});
   expect(after.revision).toBeGreaterThan(before.revision);expect(after.banner).toEqual(banner);
   expect(manager.getStateForSender(2)?.banner??null).toBeNull();
-  manager.setAppMode({mode:'test',onAir:true});expect(changedOutputLayers(after,manager.getStateForSender(1)!)).toEqual({slide:false,quick:false,banner:false,appMode:true});
+  manager.setAppMode({mode:'test',onAir:true});expect(changedOutputLayers(after,manager.getStateForSender(1)!)).toEqual({slide:false,quick:false,banner:false,appMode:true,weatherWarnings:false});
 });
 it('replays complete banner state for late subscribers and rejects older snapshots',async()=>{
   const manager=new OutputWindowManager('',async()=>{},()=>{});manager.setBanner(banner);await manager.start({'1':'main'} as any,{id:'first'});
   const state=manager.getStateForSender(1)!;expect(state.banner).toEqual(banner);
-  expect(changedOutputLayers(state,{...state,revision:state.revision-1})).toEqual({slide:false,quick:false,banner:false,appMode:false});
+  expect(changedOutputLayers(state,{...state,revision:state.revision-1})).toEqual({slide:false,quick:false,banner:false,appMode:false,weatherWarnings:false});
+});
+it('replays weather warnings only on MAIN without restarting slide, quick screen or ticker',async()=>{
+ const manager=new OutputWindowManager('',async()=>{},()=>{}),warnings={revision:1,cycleStartedAtMs:100000,fetchedAt:100000,items:[]};
+ manager.setBanner(banner);manager.setWeatherWarnings(warnings);await manager.start({'1':'main','2':'stage'} as any,{id:'countdown',_presentAtMs:1000});
+ const before=manager.getStateForSender(1)!;expect(before.weatherWarnings).toEqual(warnings);expect(manager.getStateForSender(2)?.weatherWarnings??null).toBeNull();
+ manager.setWeatherWarnings({...warnings,revision:2});const after=manager.getStateForSender(1)!;
+ expect(changedOutputLayers(before,after)).toEqual({slide:false,quick:false,banner:false,appMode:false,weatherWarnings:true});expect(after.slide).toEqual(before.slide);expect(after.banner).toEqual(before.banner);
 });
 it('rejects malformed or private-field payloads instead of forwarding raw Firebase data',()=>{
   expect(readBannerOutputState(banner)).toEqual(banner);expect(readBannerOutputState(null)).toBeNull();

@@ -2,6 +2,12 @@ import {cleanup,render,screen} from '@testing-library/react';
 import {afterEach,expect,it} from 'vitest';
 import {OutputComposition} from './OutputComposition';
 afterEach(cleanup);
+it('reserves independent warning space without remounting content or hiding the test overlay',()=>{
+ const now=Date.now(),warning:any={revision:1,cycleStartedAtMs:now,fetchedAt:now,items:[{id:'dwd',event:'Wind',headline:'Amtliche Warnung',description:'Originaltext',validFrom:new Date(now-1000).toISOString(),validUntil:new Date(now+60000).toISOString(),severity:'Minor',areaName:'Bielefeld',source:'DWD'}]};
+ const view=render(<OutputComposition banner={null} testOverlay={<span>TESTBETRIEB</span>}><video data-testid="preserved"/></OutputComposition>),video=screen.getByTestId('preserved');
+ view.rerender(<OutputComposition banner={null} weatherWarnings={warning} testOverlay={<span>TESTBETRIEB</span>}><video data-testid="preserved"/></OutputComposition>);
+ expect(view.container.querySelector('.output-composition')).toHaveAttribute('data-weather-warning','true');expect(screen.getByTestId('preserved')).toBe(video);expect(screen.getByText('Quelle: Deutscher Wetterdienst')).toBeVisible();expect(screen.getByText('TESTBETRIEB').closest('.output-weather-layer')).toBeNull();
+});
 it('keeps content mounted as banner state changes and puts the watermark outside its scaled layer',()=>{
   const state={revision:1,position:'bottom' as const,items:[{id:'x',text:'Meldung',priority:'normal' as const}],cycleStartedAtMs:1000,reserved:true};
   const view=render(<OutputComposition banner={state} testOverlay={<span>TESTBETRIEB</span>}><video data-testid="movie"/></OutputComposition>),video=screen.getByTestId('movie');

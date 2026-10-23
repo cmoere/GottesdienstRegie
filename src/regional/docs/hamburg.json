@@ -324,6 +324,18 @@
     "screenshotLabel": "Bispeelansicht"
   },
   "releases": {
+    "versions[0.88].builds[0.88.0].overview.label": "Klorere Besucherinformatschonen un synkroniseerde Övergäng",
+    "versions[0.88].builds[0.88.0].overview.text": "Dit Update verbetert Mellenfolien, Wettervöransicht un de Folienöversicht. Radio-Metadaten warrt dat aktive Afspeelen toordnet; Utgaavfinstern bruukt en gemeensamen Övergangstietpunkt. Narichten kaamt bloots vun't Westfalen-Blatt.",
+    "versions[0.88].builds[0.88.0].sections.new.0.label": "Amtliche Wetterwarnungen un Bildschirmtest-Berichten",
+    "versions[0.88].builds[0.88.0].sections.new.0.text": "DWD-Warnungen för den instellten Wetteroort verschient in't Vör- un Naprogramm un bi'n Countdown, nich bi Gottsdenstinholten. Quell un Gülligkeit blievt sichtbor. De verlängerte Bildschirmtest pröövt elk Muster minstens fief Sekunnen un beedt sien technische Utweerten as HTML oder JSON to'n Spiekern an.",
+    "versions[0.88].builds[0.88.0].sections.improved.0.label": "Mellendesign, Wetter un Folienöversicht",
+    "versions[0.88].builds[0.88.0].sections.improved.0.text": "Dat Standard-Mellendesign bruukt en witte Fläch, den grönen Kopp Aktuelle Infos, dat Gemeendlogo, en dünne Trennlien un den QR-Code ünnen rechts. Textformate blievt erhollen. De Wetterfolie ergänzt söss Vöransichtstietpunkten in Afstänn vun twee Stünnen un den nächsten Dag. De Folienöversicht wiest vullstännige Titel; de Ansichtsschalters sünd ahn vöranstellte Symbole beschrift.",
+    "versions[0.88].builds[0.88.0].sections.fixed.0.label": "Passen Radioinformatschonen un gemeensame Övergäng",
+    "versions[0.88].builds[0.88.0].sections.fixed.0.text": "Bi'n Titelwessel warrt veröllerte Album- un Coverdaten wegmaakt. Verspätete Metadatenantwoorden ut fröhere Afspeelsitten warrt verworpen; Vörhören un Achtergrundradio hebbt trennte Toordnungen. MAIN un Vöransicht berekent den Övergangsfortschritt ut densülvigen Tietpunkt, statt bi'n Empfang elkmaal en niege Animatschoon antofangen.",
+    "versions[0.88].builds[0.88.0].sections.known.0.label": "Regionalöversetten wiederhen nich vullstännig",
+    "versions[0.88].builds[0.88.0].sections.known.0.text": "Regionalvarianten sünd noch nich vullstännig översett. Fehlende UI-Texte warrt op Hoochdüütsch wiest. Disse Verschoon verschient mit dissen apenlegten Ümfang as normales Update.",
+    "versions[0.88].builds[0.88.0].sections.known.1.label": "PowerPoint-Originalmodus un technische Pröövgrenzen",
+    "versions[0.88].builds[0.88.0].sections.known.1.text": "De experimentelle originalgetrü PowerPoint-Speler blifft utschalt. Wetter un Warnungen bruukt erreichbore Datenquellen; fehlt en gülligen Warnungsstand, warrt keen Entwarnung behaupt. Bildschirmtest un Softwarepröven ersetzt keen Sicht- un Toonprööv an de tatsächliche Anlaag. En physische Monitorlatenz is nich meten worrn.",
     "versions[0.87].builds[0.87.0].overview.label": "Narichten in'n Fokus un egen Wetteranzeig",
     "versions[0.87].builds[0.87.0].overview.text": "Dat Vör- un Naprogramm wiest Narichten einzeln un groot mit Titel, Beschrieven, Quellenlogo un verfügborem Artikelbild. En egen Wetterfolie ersetzt de externe Wettersiet. Vereinslogos un de niege Mellenkopp Aktuelle Infos ergänzt de Besucherinformatschoon.",
     "versions[0.87].builds[0.87.0].sections.new.0.label": "Egen Wetterfolie",

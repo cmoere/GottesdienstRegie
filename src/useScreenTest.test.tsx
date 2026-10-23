@@ -10,7 +10,7 @@ function Fixture({onAir=true}:{onAir?:boolean}){
  const test=useScreenTest({current:quick,onAir,setQuick,bridge:{sendQuick:send,restore:async(_runId,value)=>{await send(['main'],value);return true},onResult:cb=>{listener=cb;return off}}});
  return <><button onClick={test.request}>Test öffnen</button><button onClick={()=>{test.interrupt();setQuick({...previous,id:'black',type:'black'})}}>Schwarz</button><output data-testid="current">{quick?.id}:{quick?.testPattern}:{quick?.testRunId}</output>{test.dialog}</>;
 }
-afterEach(()=>{cleanup();send.mockClear();off.mockClear()});
+afterEach(()=>{cleanup();send.mockClear();off.mockClear();delete window.desktop});
 it('requires confirmation and existing ON AIR, and cancels back to the exact previous quick screen',async()=>{
  render(<Fixture/>);fireEvent.click(screen.getByText('Test öffnen'));
  expect(send).not.toHaveBeenCalled();fireEvent.click(screen.getByRole('button',{name:'Bildschirmtest starten'}));
@@ -30,4 +30,19 @@ it('does not restore over an emergency quick screen and reports technical vs vis
  await waitFor(()=>expect(screen.getByText('Bildschirmtest abgebrochen.')).toBeVisible());
  expect(send).toHaveBeenCalledTimes(2);expect(screen.getByTestId('current').textContent).toContain('black:');
  expect(screen.getByText(/Keine automatische Prüfung von Kabel/)).toBeVisible();
+});
+it('exports a completed report in both supported formats through the desktop save bridge',async()=>{
+ const exportReport=vi.fn().mockResolvedValue(true);window.desktop={screenTest:{exportReport}} as any;
+ render(<Fixture/>);fireEvent.click(screen.getByText('Test öffnen'));fireEvent.click(screen.getByRole('button',{name:'Bildschirmtest starten'}));
+ for(let index=0;index<8;index++){
+  await waitFor(()=>expect(send.mock.calls.length).toBeGreaterThan(index));const quick=send.mock.calls[index][1];
+  act(()=>listener({runId:quick.testRunId,pattern:quick.testPattern,ok:true,width:1920,height:1080,frames:300,elapsedMs:5100}));
+ }
+ await screen.findByText('Bildschirmtest – Auswertung');
+ fireEvent.click(screen.getByRole('button',{name:'Bericht herunterladen'}));
+ await waitFor(()=>expect(exportReport).toHaveBeenCalledWith(expect.objectContaining({status:'complete',steps:expect.any(Array)}),'html'));
+ expect(exportReport.mock.calls[0][0].steps).toHaveLength(8);
+ fireEvent.click(screen.getByRole('button',{name:'JSON herunterladen'}));
+ await waitFor(()=>expect(exportReport).toHaveBeenLastCalledWith(expect.objectContaining({status:'complete'}),'json'));
+ expect(await screen.findByText('Bericht gespeichert.')).toBeVisible();
 });
