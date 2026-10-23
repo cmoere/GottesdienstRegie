@@ -6,7 +6,7 @@ import {eventTextWidth} from '../eventPagination';
 export const EXTERNAL_VIEWPORT_HEIGHT=760;
 export function isExternalLoop(item:Pick<ServiceItem,'type'>|null|undefined):boolean{return item?.type==='news'||item?.type==='football'}
 export function normalizeExternalSettings(metadata:Record<string,unknown>):ExternalSettings{
- const seconds=Number(metadata.durationSeconds??15),durationSeconds=Number.isFinite(seconds)?Math.max(1,seconds):15;
+ const seconds=Number(metadata.durationSeconds??15),durationSeconds=Number.isFinite(seconds)?Math.min(86400,Math.max(1,seconds)):15;
  if(metadata.externalKind==='football')return{kind:'football',league:['bl1','bl2','bl3'].includes(String(metadata.footballLeague))?metadata.footballLeague as 'bl1'|'bl2'|'bl3':'bl1',mode:['matchday','upcoming','table'].includes(String(metadata.footballMode))?metadata.footballMode as 'matchday'|'upcoming'|'table':'matchday',teamId:Number.isSafeInteger(Number(metadata.footballTeamId))&&Number(metadata.footballTeamId)>0?Number(metadata.footballTeamId):null,durationSeconds};
  const raw=metadata.newsSources===undefined?['westfalen-blatt','wdr-owl']:Array.isArray(metadata.newsSources)?metadata.newsSources:String(metadata.newsSources).split(','),sources=[...new Set(raw.filter((source):source is NewsSource=>source==='westfalen-blatt'||source==='wdr-owl'))];
  const limit=Number(metadata.newsLimit??10);

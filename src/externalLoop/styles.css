@@ -1,0 +1,33 @@
+.external-loop-designer fieldset{border:1px solid #b6bec3;padding:12px;margin:12px 0}
+.external-loop-designer label{display:flex;align-items:center;gap:8px;margin:12px 0}
+.external-loop-designer p{font-size:13px;line-height:1.5}
+.external-mode-cards{display:flex;gap:8px;margin:12px 0}
+.external-mode-cards button{flex:1;display:flex;flex-direction:column;gap:8px;padding:14px;border:1px solid #b6bec3}
+.external-mode-cards button[aria-pressed=true]{border:2px solid #608f9a;background:#eef2f3}
+.external-mode-cards button span{font-size:24px;color:#608f9a}
+.external-loop-frame{width:100%;height:100%;box-sizing:border-box;overflow:hidden;background:#fff;color:#000;font-family:"Cera Pro",sans-serif;padding:2.08333cqw 3.125cqw;display:flex;flex-direction:column;text-align:left}
+.external-loop-frame header{height:7.29167cqw;flex:none;display:flex;align-items:center;justify-content:space-between;border-bottom:.10417cqw solid #608f9a;gap:2cqw}
+.external-loop-frame h2{font-size:2.5cqw;font-weight:500;line-height:1.2;margin:0}
+.external-loop-frame header>span{font-size:1.45833cqw;color:#608f9a}
+.external-source-logos{display:flex;gap:1.5cqw;align-items:center}
+.external-source-logos img{width:14.58333cqw;height:3.64583cqw;flex:none;object-fit:contain;background:#000;padding:.52083cqw .625cqw}
+.external-source-logos img[alt="Westfalen-Blatt"]{background:#fff}
+.external-loop-body{margin-top:1.04167cqw;overflow:hidden;flex:1;min-height:0}
+.external-loop-frame .event-scroll-viewport{height:39.58333cqw;overflow:hidden}
+.external-loop-frame .event-scroll-content{will-change:transform}
+.external-loop-frame .event-title-container{position:relative;overflow:hidden;width:100%;height:2.8125cqw;text-align:left}
+.external-loop-frame .event-title-probe{position:absolute;visibility:hidden;white-space:nowrap}
+.external-loop-frame .event-title-text{display:block;white-space:nowrap;width:max-content;max-width:none}
+.external-loop-frame .event-title-probe,.external-loop-frame .event-title-text{font-size:2.1875cqw;font-weight:500;line-height:2.8125cqw}
+.external-loop-frame p{font-size:1.25cqw;line-height:1.5;margin:.20833cqw 0;color:#608f9a}
+.external-news-row{height:6.25cqw;box-sizing:border-box;padding:.625cqw 0;border-bottom:.052083cqw solid #b6bec3}
+.external-news-row .event-title-container{width:85.9375cqw}
+.external-loop-frame footer{font-size:1.04167cqw;color:#608f9a;flex:none;line-height:1.5;margin-top:.52083cqw}
+.external-table-row{display:grid;grid-template-columns:5% 48% 8% 13% 10% 11%;gap:1%;height:3.95833cqw;align-items:center;border-bottom:.052083cqw solid #b6bec3;box-sizing:border-box;font-size:1.77083cqw;font-weight:500}
+.external-table-row>div{min-width:0;padding-right:.625cqw}
+.external-table-row .event-title-text,.external-table-row .event-title-probe{font-size:1.77083cqw}
+.external-table-heading{height:2.08333cqw;font-size:1.04167cqw;color:#608f9a}
+.external-table-row[data-selected-club=true]{background:#699f3e;color:#000}
+.external-match-row{height:5.625cqw;display:flex;gap:1.5625cqw;align-items:center;justify-content:space-between;border-bottom:.052083cqw solid #b6bec3;box-sizing:border-box}
+.external-match-row>div{width:85.9375cqw;min-width:0}
+.external-match-row>strong{font-size:2.1875cqw;font-weight:500;min-width:6.25cqw;text-align:right}

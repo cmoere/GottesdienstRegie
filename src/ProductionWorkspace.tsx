@@ -73,6 +73,7 @@ import { usesAutomaticLoopEditor } from "./loopEditorModel";
 import { NowPlayingDesigner } from "./NowPlayingDesigner";
 import { EventSlideDesigner } from "./EventSlideDesigner";
 import { AnnouncementSlideDesigner } from './AnnouncementSlideDesigner';
+import {ExternalLoopDesigner} from './externalLoop/Designer';
 import {useLiveOutputPreview} from './liveOutputPreview';
 import {OutputComposition} from './OutputComposition';
 import {useAnnouncementBanner} from './AnnouncementBannerController';
@@ -1578,6 +1579,8 @@ function ContentEditor({
           </div>
           {item.type === "nowPlaying" ? (
             <NowPlayingDesigner item={item} canEdit={canEdit} />
+          ) : (item.type==='news'||item.type==='football') ? (
+            <ExternalLoopDesigner item={item} canEdit={canEdit}/>
           ) : (item.type === "event" || item.type === "nextEvents") ? (
             <>
               <EventSlideDesigner item={item} canEdit={canEdit} />

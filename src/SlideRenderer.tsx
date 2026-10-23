@@ -1,3 +1,4 @@
+import {ExternalLoopElement} from './externalLoop/Element';
 import {paginateReducedMotionEvents} from './eventPagination';
 import {EventScrollViewport,useEventPresentationClock} from './EventScrollViewport';
 import {prepareEventOverview} from './eventOverviewPresentation';
@@ -316,6 +317,7 @@ function RenderElement({
     src = String(properties.src ?? properties.url ?? "");
   if (element.type === "loop") {
     const loopType = String(properties.loopType ?? "announcement");
+    if(loopType==='news'||loopType==='football')return <ExternalLoopElement properties={properties} style={style} mode={mode}/>;
     if (loopType === "weather")
       return (
         <iframe

@@ -48,3 +48,10 @@ Completed match from getmatchdata/bl1/2026/6 has resultTypeKind HalfTime/type1 a
 - AppClock remains the existing local wallclock (externallyTrusted=false); no claim of externally authenticated time. No actual native output windows, device routing or installed app touched in this task.
 
 Original source logo URLs discovered on official pages, then read and checked for script/foreignObject/image/href/src/url() content (none). WDR SVG sha25639bef66d1683386da5925ac27e5ae47d0a053303afccd413d3c03269936ffb45; WB SVG sha2569af482cb2de2b3a3f43297f16064f75992bb5d3f2e4429fe8b0103c03de17b1f. Actual assets still to be added with Task4; no fake logo substituted.
+# Task4 editor and composed output verification
+
+Source toggles, league/known-team choices, mode selection, persisted reload, data status and minimum duration: 22 targeted tests passed after eight expected initial failures. Complete suite: 198 files / 832 tests passed (192.74 seconds, four workers). Frontend TypeScript noEmit passed.
+
+Native Electron 37 isolated hidden fixture captured news, matchday, upcoming and a 24-row table. Original source logos are bundled unchanged with source names; their differing ink colors require white (WB) and black (WDR) display backgrounds. Logo box and composed-pixel assertions exposed the initial unreadable logos, then passed after correction. Capture waits for image decode, fonts and actual renderer frames. News and table captures were visually inspected. Evidence folder: work/external-loop-native-gW4YGx. No physical display, audio device, installed app or production ON AIR was operated.
+
+The new native fixture is partial at task4: clock/technical phase and immutable-take integrated assertions remain task6 work. No publication claim.

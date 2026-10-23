@@ -4,7 +4,7 @@ import {usesAutomaticLoopEditor} from './loopEditorModel';
 
 describe('automatic loop editor',()=>{
   it('replaces the generic text editor for data-driven loop elements',()=>{
-    for(const type of ['announcement','birthday','event','weather','clock','today','nextEvents','nowPlaying']){
+    for(const type of ['announcement','birthday','event','weather','clock','today','nextEvents','nowPlaying','news','football']){
       expect(usesAutomaticLoopEditor(type),type).toBe(true);
     }
   });

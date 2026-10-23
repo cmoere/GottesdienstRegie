@@ -135,6 +135,7 @@ import {EventSlideDesigner} from './EventSlideDesigner';
 import {AnnouncementSlideDesigner} from './AnnouncementSlideDesigner';
 import {eventOverviewMinimumDuration,hydrateNowPlayingData,nowPlayingSnapshotMatches} from './liveDynamicData';
 import {ExternalLoopController,startExternalLoopDemand} from './externalLoop/controller';
+import {ExternalLoopContext} from './externalLoop/context';
 import {isExternalLoop} from './externalLoop/model';
 import {formatEventDate} from './dynamicEventSlide';
 import {useLiveOutputPreview} from './liveOutputPreview';
@@ -9616,12 +9617,12 @@ function AppShell({
         <div
           className={`workspace-quick-host ${previewQuick?.type === "noText" ? "quick-no-text" : ""}`}
         >
-          <TestModeContext.Provider value={appMode.mode==='test'}><ProductionWorkspace
+          <ExternalLoopContext.Provider value={externalController.current}><TestModeContext.Provider value={appMode.mode==='test'}><ProductionWorkspace
             canEdit={canEdit}
             quickScreens={quickScreens}
             activeQuick={previewQuick}
             onQuick={(quick) => void applyQuick(quick)}
-          /></TestModeContext.Provider>
+          /></TestModeContext.Provider></ExternalLoopContext.Provider>
         </div>
       </div>
       <BackgroundAudioController />
