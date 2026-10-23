@@ -20,19 +20,24 @@ const opposite={left:'right',right:'left',up:'down',down:'up'} as const;
 const easing={standard:'cubic-bezier(.2,0,0,1)',linear:'linear','ease-in':'ease-in','ease-out':'ease-out','ease-in-out':'ease-in-out'} as const;
 
 export function TransitionStage({slide,transition,role='main',previewToken=0,renderMode}:{slide:Slide;transition:SlideTransition;role?:DisplayRole;previewToken?:number;renderMode?:SlideRendererMode}){
-  const [shown,setShown]=useState(slide),[leaving,setLeaving]=useState<Slide|null>(null),[active,setActive]=useState(false),timer=useRef<number|undefined>(undefined),previous=useRef(slide);
+  const [shown,setShown]=useState(slide),[leaving,setLeaving]=useState<Slide|null>(null),[active,setActive]=useState(false),[elapsedMs,setElapsedMs]=useState(0),timer=useRef<number|undefined>(undefined),previous=useRef(slide);
   const effective=role==='stage'?{...transition,type:'cut' as const,durationMs:100}:transition;
   useEffect(()=>{
     const old=previous.current,next=slide;previous.current=next;window.clearTimeout(timer.current);
     if(effective.type==='cut'||old.id===next.id&&previewToken===0){setLeaving(null);setShown(next);setActive(false);return}
+    const scheduled=(next as Slide&{_presentAtMs?:number})._presentAtMs;
+    const startedAt=previewToken===0&&typeof scheduled==='number'&&Number.isFinite(scheduled)&&scheduled<=Date.now()+1000?scheduled:Date.now();
+    const elapsed=Math.max(0,Date.now()-startedAt);
+    if(elapsed>=effective.durationMs){setLeaving(null);setShown(next);setActive(false);return}
     const previewLeaving=previewToken>0&&old.id===next.id?{...old,id:`${old.id}-preview-${previewToken}`,background:old.background.toLowerCase()==='#162d36'?'#6a4d32':'#162d36'}:old;
-    setLeaving(previewLeaving);setShown(next);setActive(false);const frame=requestAnimationFrame(()=>requestAnimationFrame(()=>setActive(true)));
-    timer.current=window.setTimeout(()=>{setLeaving(null);setActive(false)},effective.durationMs+80);
-    return()=>{cancelAnimationFrame(frame);window.clearTimeout(timer.current)};
+    setLeaving(previewLeaving);setShown(next);setActive(false);setElapsedMs(elapsed);
+    let secondFrame=0;const frame=requestAnimationFrame(()=>{secondFrame=requestAnimationFrame(()=>{setElapsedMs(Math.max(0,Date.now()-startedAt));setActive(true)})});
+    timer.current=window.setTimeout(()=>{setLeaving(null);setActive(false)},effective.durationMs-elapsed+80);
+    return()=>{cancelAnimationFrame(frame);cancelAnimationFrame(secondFrame);window.clearTimeout(timer.current)};
   },[slide.id,previewToken,effective.type,effective.durationMs]);
   const backwards=leaving?.itemId===shown.itemId&&shown.order<leaving.order&&effective.reverseOnPrevious;
   const direction=backwards?opposite[effective.direction]:effective.direction;
-  const style=useMemo(()=>({'--transition-duration':`${effective.durationMs}ms`,'--transition-easing':easing[effective.easing]}) as CSSProperties,[effective.durationMs,effective.easing]);
+  const style=useMemo(()=>({'--transition-duration':`${effective.durationMs}ms`,'--transition-easing':easing[effective.easing],'--transition-delay':`${-elapsedMs}ms`}) as CSSProperties,[effective.durationMs,effective.easing,elapsedMs]);
   return <div className={`transition-stage transition-${effective.type} direction-${direction} ${leaving?'transitioning':''} ${active?'active':''}`} style={style}>
     {leaving&&<div className="transition-layer leaving"><SlideRenderer slide={leaving} mode={renderMode??(role==='operator'?'preview':'live')}/></div>}
     <div className="transition-layer entering"><SlideRenderer slide={leaving&&shown.id!==slide.id?shown:slide} mode={renderMode??(role==='operator'?'preview':'live')}/></div>

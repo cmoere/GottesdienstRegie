@@ -26,6 +26,8 @@
 .quick-screen-shortcut{position:absolute;left:4px;bottom:4px;min-width:18px;padding:2px 4px;border:1px solid #ffffff38;border-radius:3px;background:#050508c9;color:#fff;font:700 7px/1.1 "Cera Pro",sans-serif;text-align:center;text-shadow:none}
 
 /* A completed transition must stay fully visible. Initial effect states only apply while two layers overlap. */
+.transition-layer{transition-delay:var(--transition-delay,0ms)}
+.transition-stage.transitioning:not(.active) .transition-layer{transition:none!important}
 .transition-stage:not(.transitioning) .entering{opacity:1!important;transform:none!important;clip-path:inset(0)!important;filter:none!important}
 .transition-stage{perspective:1400px}.transition-layer{backface-visibility:hidden;will-change:opacity,transform,clip-path,filter}
 .transitioning.transition-zoom .entering{opacity:0;transform:scale(1.16)}.transition-zoom.active .entering{opacity:1;transform:scale(1)}.transition-zoom.active .leaving{opacity:0;transform:scale(.92)}

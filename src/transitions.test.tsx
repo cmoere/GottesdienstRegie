@@ -12,3 +12,12 @@ it('updates the entering snapshot immediately when the same slide changes during
  view.rerender(<TransitionStage slide={page('new','Aktuelle Fassung')} transition={transition}/>);
  expect(view.container.querySelector('.entering')?.textContent).toContain('Aktuelle Fassung');
 });
+it('a late mirror completes its transition at the original presentation deadline',async()=>{
+ vi.useFakeTimers();vi.setSystemTime(10000);
+ const transition={type:'crossfade' as const,durationMs:2000,direction:'left' as const,easing:'linear' as const,reverseOnPrevious:true};
+ const view=render(<TransitionStage slide={page('old','Alt')} transition={transition} renderMode="mirror"/>);
+ vi.setSystemTime(11000);view.rerender(<TransitionStage slide={{...page('new','Neu'),_presentAtMs:10000} as Slide} transition={transition} renderMode="mirror"/>);
+ expect(view.container.querySelector('.leaving')).not.toBeNull();
+ await vi.advanceTimersByTimeAsync(1100);
+ expect(view.container.querySelector('.leaving')).toBeNull();
+});
