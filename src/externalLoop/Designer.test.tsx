@@ -11,7 +11,7 @@ const saved=usePresentation.getState();
 afterEach(()=>{cleanup();usePresentation.setState(saved,true)});
 function response(request:ExternalRequest):ExternalReply{
  if(request.kind==='weather')return{snapshot:null,status:'unavailable'};
- const payload=request.kind==='news'?{kind:'news' as const,entries:[{id:'one',title:'Nachricht aus Bielefeld',source:'wdr-owl' as const,publishedAt:'2026-10-23T12:00:00Z',url:'https://www1.wdr.de/a'}]}:{kind:'football' as const,league:request.league,season:2026,mode:request.mode,teams:[{id:1,name:'Verein A'},{id:2,name:'Verein B'}],matches:[{id:1,startsAt:'2026-10-23T12:00:00Z',home:{id:1,name:'Verein A'},away:{id:2,name:'Verein B'},score:null,status:'scheduled' as const}],table:[]};
+ const payload=request.kind==='news'?{kind:'news' as const,entries:[{id:'one',title:'Nachricht aus Bielefeld',source:'westfalen-blatt' as const,publishedAt:'2026-10-23T12:00:00Z',url:'https://www.westfalen-blatt.de/a'}]}:{kind:'football' as const,league:request.league,season:2026,mode:request.mode,teams:[{id:1,name:'Verein A'},{id:2,name:'Verein B'}],matches:[{id:1,startsAt:'2026-10-23T12:00:00Z',home:{id:1,name:'Verein A'},away:{id:2,name:'Verein B'},score:null,status:'scheduled' as const}],table:[]};
  return{status:'ready',snapshot:{version:1,key:request.kind==='news'?`news:${request.sources.slice().sort().join(',')}`:`football:${request.league}:${request.mode}`,revision:'a',fetchedAt:1000,stale:false,payload}};
 }
 async function fixture(type:'news'|'football',read:(request:ExternalRequest)=>Promise<ExternalReply>=async request=>response(request)){
@@ -23,12 +23,13 @@ async function fixture(type:'news'|'football',read:(request:ExternalRequest)=>Pr
  render(<Editor/>);return{controller,doc};
 }
 describe('real stored news and football configuration',()=>{
- it('offers both source toggles and persists choices without saving runtime data',async()=>{
+ it('offers WB only and persists an explicit disabled source without saving runtime data',async()=>{
   const {doc}=await fixture('news');
-  fireEvent.click(screen.getByRole('checkbox',{name:/WDR/}));
-  expect(usePresentation.getState().items[0].metadata.newsSources).toBe('westfalen-blatt');
+  expect(screen.queryByRole('checkbox',{name:/WDR/})).toBeNull();
+  fireEvent.click(screen.getByRole('checkbox',{name:/Westfalen-Blatt/}));
+  expect(usePresentation.getState().items[0].metadata.newsSources).toBe('');
   const state=usePresentation.getState();act(()=>state.loadDocument({...doc,items:state.items,sections:state.sections}));
-  expect(screen.getByRole('checkbox',{name:/WDR/})).not.toBeChecked();
+  expect(screen.getByRole('checkbox',{name:/Westfalen-Blatt/})).not.toBeChecked();
   expect(usePresentation.getState().items[0].slides[0].elements[0].properties.externalSnapshotJson).toBeUndefined();
  });
  it('shows only available club choices and clears the club on a league change',async()=>{

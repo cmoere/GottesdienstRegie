@@ -6,9 +6,9 @@ import {LiveEngine} from '../LiveEngine';
 import {useLiveOutputPreview} from '../liveOutputPreview';
 import type {ExternalReply,ExternalRequest} from '../../shared/externalLoop';
 
-const request:ExternalRequest={kind:'news',sources:['wdr-owl']};
-function ready(title:string):ExternalReply{return{status:'ready',snapshot:{version:1,key:'news:wdr-owl',revision:title,fetchedAt:1000,stale:false,payload:{kind:'news',entries:[{id:'one',title,source:'wdr-owl',publishedAt:null,url:'https://www1.wdr.de/a'}]}}}}
-function item(){const result=createServiceItem('news' as ItemType,{id:'item',sectionId:'pre',title:'Nachrichten',metadata:{externalKind:'news',newsSources:'wdr-owl'}});result.slides[0].elements=[{id:'news-core',type:'loop',name:'News',x:0,y:0,width:1920,height:1080,rotation:0,opacity:1,locked:true,visible:true,zIndex:1,properties:{loopType:'news'}}];return result}
+const request:ExternalRequest={kind:'news',sources:['westfalen-blatt']};
+function ready(title:string):ExternalReply{return{status:'ready',snapshot:{version:1,key:'news:westfalen-blatt',revision:title,fetchedAt:1000,stale:false,payload:{kind:'news',entries:[{id:'one',title,source:'westfalen-blatt',publishedAt:null,url:'https://www.westfalen-blatt.de/a'}]}}}}
+function item(){const result=createServiceItem('news' as ItemType,{id:'item',sectionId:'pre',title:'Nachrichten',metadata:{externalKind:'news',newsSources:'westfalen-blatt'}});result.slides[0].elements=[{id:'news-core',type:'loop',name:'News',x:0,y:0,width:1920,height:1080,rotation:0,opacity:1,locked:true,visible:true,zIndex:1,properties:{loopType:'news'}}];return result}
 afterEach(()=>vi.useRealTimers());
 describe('immutable external loop takes',()=>{
  it('prepareDoesNotMutateVisibleSnapshot and changes only at a new take',async()=>{

@@ -7,6 +7,7 @@ import {ExternalCache} from './cache';
 
 const rss=()=>fs.readFile('tests/fixtures/external-loop/news.xml','utf8');
 const atom=()=>fs.readFile('tests/fixtures/external-loop/news-atom.xml','utf8');
+const wbAtom=async()=>(await atom()).replaceAll('www1.wdr.de','www.westfalen-blatt.de');
 const directories:string[]=[];
 afterEach(async()=>{for(const dir of directories.splice(0))await fs.rm(dir,{recursive:true,force:true})});
 describe('external loop news normalization',()=>{
@@ -34,10 +35,10 @@ describe('external loop news normalization',()=>{
   expect(parseNews(xml,'wdr-owl')).toMatchObject([{title:'A',url:'https://www1.wdr.de/a'}]);
   expect(parseNews(xml,'wdr-owl')).toHaveLength(1);
  });
- it('keepsSuccessfulSourceWhenOtherFails and marks the partial reply stale',async()=>{
+ it('migrates a mixed selection without requesting the retired source',async()=>{
   const adapter=new NewsAdapter({fetchText:async url=>{if(url.includes('westfalen-blatt'))return rss();throw Error('offline')},cache:new ExternalCache(null,()=>1000000),now:()=>1000000});
   const result=await adapter.load(['westfalen-blatt','wdr-owl']);
-  expect(result.status).toBe('stale');expect(result.snapshot?.payload).toMatchObject({entries:[{title:'Gottesdienst & Begegnung'},{title:'Ohne Datum'}]});
+  expect(result.status).toBe('ready');expect(result.snapshot?.payload).toMatchObject({entries:[{title:'Gottesdienst & Begegnung'},{title:'Ohne Datum'}]});
  });
  it('coalescesAndRespectsFiveMinutes including failed-attempt backoff',async()=>{
   let now=1000000,count=0;
@@ -49,7 +50,7 @@ describe('external loop news normalization',()=>{
   expect((await offline.load(['wdr-owl'])).status).toBe('unavailable');await offline.load(['wdr-owl']);expect(failures).toBe(1);
  });
  it('merges newest first and takes ten without inventing unknown dates',async()=>{
-  const xml=`<rss><channel>${Array.from({length:12},(_,i)=>`<item><title>News ${i}</title><link>https://www1.wdr.de/${i}</link><pubDate>2026-10-${String(i+1).padStart(2,'0')}T12:00:00Z</pubDate></item>`).join('')}</channel></rss>`;
+  const xml=`<rss><channel>${Array.from({length:12},(_,i)=>`<item><title>News ${i}</title><link>https://www.westfalen-blatt.de/${i}</link><pubDate>2026-10-${String(i+1).padStart(2,'0')}T12:00:00Z</pubDate></item>`).join('')}</channel></rss>`;
   const adapter=new NewsAdapter({fetchText:async()=>xml,cache:new ExternalCache(null,()=>1000000),now:()=>1000000});
   const result=await adapter.load(['wdr-owl']);
   expect(result.snapshot?.payload.kind==='news'&&result.snapshot.payload.entries).toHaveLength(10);
@@ -57,11 +58,11 @@ describe('external loop news normalization',()=>{
  });
  it('uses last valid snapshot on failure, expires it, and survives cache write failure',async()=>{
   let now=1000000,offline=false;const cache=new ExternalCache(null,()=>now);
-  const adapter=new NewsAdapter({fetchText:async()=>{if(offline)throw Error('offline');return atom()},cache,now:()=>now});
+  const adapter=new NewsAdapter({fetchText:async()=>{if(offline)throw Error('offline');return wbAtom()},cache,now:()=>now});
   await adapter.load(['wdr-owl']);offline=true;now+=300000;
   expect((await adapter.load(['wdr-owl'])).status).toBe('stale');now+=86400001;
   expect((await adapter.load(['wdr-owl'])).snapshot).toBeNull();
-  const unwritable=new NewsAdapter({fetchText:atom,cache:{read:async()=>null,write:async()=>{throw Error('disk')}},now:()=>now});
+  const unwritable=new NewsAdapter({fetchText:wbAtom,cache:{read:async()=>null,write:async()=>{throw Error('disk')}},now:()=>now});
   expect((await unwritable.load(['wdr-owl'])).status).toBe('ready');
  });
  it('does not start a network request after disposal while a cache read was pending',async()=>{

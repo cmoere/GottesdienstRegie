@@ -3,6 +3,7 @@ import type {ServiceItem,Slide} from '../store';
 import {prepareEventScrollPlan} from '../eventScroll';
 import {eventTextWidth,paginateReducedMotionEvents} from '../eventPagination';
 import {prepareNewsPresentation} from './newsPresentation';
+import {currentNewsSources,isCurrentNewsEntry} from '../../shared/newsSourcePolicy';
 
 export const EXTERNAL_VIEWPORT_HEIGHT=760;
 export function isExternalLoop(item:Pick<ServiceItem,'type'>|null|undefined):boolean{return item?.type==='news'||item?.type==='football'||item?.type==='weather'}
@@ -13,7 +14,7 @@ export function normalizeExternalSettings(metadata:Record<string,unknown>):Exter
   return{kind:'weather',name:name&&name.length<=160?name:'Bielefeld',latitude:Number.isFinite(lat)&&Math.abs(lat)<=90?Math.round(lat*10000)/10000:52.0302,longitude:Number.isFinite(lon)&&Math.abs(lon)<=180?Math.round(lon*10000)/10000:8.5325,durationSeconds:metadata.durationSeconds===undefined?Math.max(1,Math.min(86400,Number(metadata.weatherDurationMs)/1000||20)):durationSeconds};
  }
  if(metadata.externalKind==='football')return{kind:'football',league:['bl1','bl2','bl3'].includes(String(metadata.footballLeague))?metadata.footballLeague as 'bl1'|'bl2'|'bl3':'bl1',mode:['matchday','upcoming','table'].includes(String(metadata.footballMode))?metadata.footballMode as 'matchday'|'upcoming'|'table':'matchday',teamId:Number.isSafeInteger(Number(metadata.footballTeamId))&&Number(metadata.footballTeamId)>0?Number(metadata.footballTeamId):null,durationSeconds};
- const raw=metadata.newsSources===undefined?['westfalen-blatt','wdr-owl']:Array.isArray(metadata.newsSources)?metadata.newsSources:String(metadata.newsSources).split(','),sources=[...new Set(raw.filter((source):source is NewsSource=>source==='westfalen-blatt'||source==='wdr-owl'))];
+ const raw=metadata.newsSources===undefined?['westfalen-blatt']:Array.isArray(metadata.newsSources)?metadata.newsSources:String(metadata.newsSources).split(','),sources=currentNewsSources(raw);
  const limit=Number(metadata.newsLimit??10);
  return{kind:'news',sources,limit:Number.isFinite(limit)?Math.max(1,Math.min(10,Math.floor(limit))):10,durationSeconds};
 }
@@ -25,7 +26,7 @@ export function requestForExternalItem(item:Pick<ServiceItem,'type'|'metadata'>)
 export function externalRequestForSettings(settings:ExternalSettings):ExternalRequest{return settings.kind==='weather'?{kind:'weather',name:settings.name,latitude:settings.latitude,longitude:settings.longitude}:settings.kind==='news'?{kind:'news',sources:settings.sources}:{kind:'football',league:settings.league,mode:settings.mode}}
 export function visibleExternalPayload(snapshot:ExternalSnapshot,settings:ExternalSettings):ExternalPayload{
  const payload=structuredClone(snapshot.payload);
- if(payload.kind==='news'&&settings.kind==='news')payload.entries=payload.entries.filter(entry=>settings.sources.includes(entry.source)).slice(0,settings.limit);
+ if(payload.kind==='news'&&settings.kind==='news')payload.entries=payload.entries.filter(entry=>isCurrentNewsEntry(entry)&&currentNewsSources(settings.sources).includes(entry.source)).slice(0,settings.limit);
  if(payload.kind==='football'&&settings.kind==='football'&&settings.teamId!==null)payload.matches=payload.matches.filter(match=>match.home.id===settings.teamId||match.away.id===settings.teamId);
  return payload;
 }

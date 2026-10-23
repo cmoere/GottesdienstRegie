@@ -1,6 +1,7 @@
 import type {ExternalReply,ExternalSnapshot,NewsEntry,NewsSource} from '../../shared/externalLoop';
 import {createHash} from 'node:crypto';
 import {SaxesParser} from 'saxes';
+import {currentNewsSources,isCurrentNewsEntry} from '../../shared/newsSourcePolicy';
 import {EXTERNAL_RESPONSE_LIMIT} from './http';
 import type {ImageSource} from './newsImages';
 export type SnapshotCache={read(key:string,maxAgeMs:number):Promise<ExternalSnapshot|null>;write(snapshot:ExternalSnapshot):Promise<void>};
@@ -62,11 +63,11 @@ export class NewsAdapter{
  constructor(private readonly dependencies:NewsDependencies){this.now=dependencies.now??Date.now}
  async load(sources:NewsSource[]):Promise<ExternalReply>{
   if(this.disposed)return{snapshot:null,status:'unavailable'};
-  const unique=[...new Set(sources)].filter(source=>Object.hasOwn(NEWS_FEEDS,source));
+  const unique=currentNewsSources(sources);
   if(!unique.length)return{snapshot:null,status:'empty'};
   const snapshots=await Promise.all(unique.map(source=>this.source(source)));
   if(this.disposed)return{snapshot:null,status:'unavailable'};
-  const valid=snapshots.filter((snapshot):snapshot is ExternalSnapshot=>snapshot!==null),entries=valid.flatMap(snapshot=>snapshot.payload.kind==='news'?snapshot.payload.entries:[]);
+  const valid=snapshots.filter((snapshot):snapshot is ExternalSnapshot=>snapshot!==null),entries=valid.flatMap(snapshot=>snapshot.payload.kind==='news'?snapshot.payload.entries.filter(isCurrentNewsEntry):[]);
   const seen=new Set<string>(),merged=entries.sort((a,b)=>(Date.parse(b.publishedAt??'')||0)-(Date.parse(a.publishedAt??'')||0)).filter(entry=>{if(seen.has(entry.url))return false;seen.add(entry.url);return true}).slice(0,10);
   if(!valid.length)return{snapshot:null,status:'unavailable'};
   const stale=valid.length<unique.length||valid.some(snapshot=>snapshot.stale),payload={kind:'news' as const,entries:merged};
@@ -87,7 +88,7 @@ export class NewsAdapter{
   const controller=new AbortController();this.controllers.add(controller);
   try{
    const parsed=parseNews(await this.dependencies.fetchText(NEWS_FEEDS[source],controller.signal),source);
-   const newest=[...parsed].sort((a,b)=>(Date.parse(b.publishedAt??'')||0)-(Date.parse(a.publishedAt??'')||0)).slice(0,10);
+   const newest=parsed.filter(isCurrentNewsEntry).sort((a,b)=>(Date.parse(b.publishedAt??'')||0)-(Date.parse(a.publishedAt??'')||0)).slice(0,10);
    const entries=await Promise.all(newest.map(async({imageUrl,...entry})=>{
     if(!imageUrl||!newest.some(value=>value.id===entry.id)||this.disposed||controller.signal.aborted)return entry;
     const image=await this.dependencies.loadImage?.(source,imageUrl,controller.signal).catch(()=>null);
