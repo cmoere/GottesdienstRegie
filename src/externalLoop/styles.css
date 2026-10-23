@@ -61,3 +61,11 @@
 .weather-days strong{font-size:2.5cqw;font-weight:500}
 .weather-days strong span{color:#608f9a;font-size:1.875cqw}
 .weather-days small{font-size:1.14583cqw;margin-top:.52083cqw}
+.native-weather header h2{overflow-wrap:anywhere;font-size:2.6cqw;max-width:67cqw}
+.weather-forecast{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,1fr);gap:2cqw;flex:1;min-height:0}
+.weather-forecast h3{font-size:1.55cqw;font-weight:500;margin:.5cqw 0 1cqw;color:#608f9a}
+.weather-hours{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.6cqw}
+.weather-forecast article{border-top:.16cqw solid #699f3e;padding:.8cqw .35cqw;display:flex;align-items:center;flex-direction:column;gap:.8cqw;min-width:0}
+.weather-forecast h4{font-size:1.4cqw;font-weight:500;margin:0}.weather-hours svg{width:6.5cqw;height:5.4cqw;color:#608f9a}
+.weather-forecast strong{font-size:1.9cqw;font-weight:500;white-space:nowrap}.weather-forecast small{font-size:1cqw;line-height:1.3;text-align:center}
+.weather-tomorrow{border-left:.1cqw solid #b6bec3;padding-left:1.5cqw}.weather-tomorrow svg{width:7cqw;height:6cqw;color:#608f9a}.weather-tomorrow p{font-size:1.2cqw;line-height:1.3}

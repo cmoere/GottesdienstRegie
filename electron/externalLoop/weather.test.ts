@@ -5,6 +5,14 @@ import {readExternalRequest} from '../../shared/externalLoopRequest';
 const now=Date.parse('2026-10-23T12:00:00Z');
 const data={current_units:{temperature_2m:'°C',weather_code:'wmo code',wind_speed_10m:'km/h'},daily_units:{temperature_2m_max:'°C',temperature_2m_min:'°C',precipitation_probability_max:'%'},current:{time:1792756800,temperature_2m:12,weather_code:3,wind_speed_10m:8},daily:{time:[1792713600,1792800000,1792886400],weather_code:[3,61,0],temperature_2m_max:[14,12,13],temperature_2m_min:[6,5,4],precipitation_probability_max:[10,70,0]}};
 const request={kind:'weather' as const,name:'Bielefeld',latitude:52.0302,longitude:8.5325};
+Object.assign(data,{hourly_units:{temperature_2m:'°C',precipitation_probability:'%'},hourly:{time:[1792764000,1792767600],temperature_2m:[13,14],weather_code:[3,0],precipitation_probability:[10,0]}});
+it('requests and validates hourly forecast samples instead of forwarding malformed units or mismatched arrays',async()=>{
+ const hourly={time:[1792764000,1792767600],temperature_2m:[13,14],weather_code:[3,0],precipitation_probability:[10,0]};
+ const units={temperature_2m:'°C',weather_code:'wmo code',precipitation_probability:'%'};
+ let requested='';const adapter=new WeatherAdapter({cache:new ExternalCache(null,()=>now),now:()=>now,fetchText:async url=>{requested=url;return JSON.stringify({...data,hourly,hourly_units:units})}});
+ const result=await adapter.load(request);expect(new URL(requested).searchParams.get('hourly')).toContain('temperature_2m');expect(result.snapshot?.payload).toMatchObject({hourly:[{temperature:13,code:3,rainProbability:10},{temperature:14,code:0,rainProbability:0}]});
+ const invalid=new WeatherAdapter({cache:new ExternalCache(null,()=>now),now:()=>now,fetchText:async()=>JSON.stringify({...data,hourly:{...hourly,temperature_2m:[13]},hourly_units:units})});expect((await invalid.load(request)).snapshot).toBeNull();
+});
 it('normalizes current weather and three days, reuses cache and never loads an external website',async()=>{
  let calls=0;const adapter=new WeatherAdapter({cache:new ExternalCache(null,()=>now),now:()=>now,fetchText:async url=>{calls++;expect(url).toContain('https://api.open-meteo.com/v1/forecast?');expect(url).toContain('timezone=Europe%2FBerlin');return JSON.stringify(data)}});
  const result=await adapter.load(request);expect(result.status).toBe('ready');expect(result.snapshot?.payload).toMatchObject({kind:'weather',location:{name:'Bielefeld',latitude:52.0302,longitude:8.5325},temperature:12,wind:8,days:[{maximum:14,minimum:6,rainProbability:10},{maximum:12,minimum:5,rainProbability:70},{maximum:13,minimum:4,rainProbability:0}]});

@@ -12,6 +12,6 @@ export function WeatherDesigner({settings,canEdit,onChange}:{settings:Extract<Ex
   <button type="button" onClick={()=>void search()} disabled={query.trim().length<2||!canEdit}>Ort suchen</button>
   <button type="button" onClick={()=>onChange({weatherName:'Bielefeld',weatherLatitude:52.0302,weatherLongitude:8.5325})}>Bielefeld verwenden</button>
   <p role="status">{status}</p><div className="weather-location-results">{results.map((place,index)=><button type="button" key={index} onClick={()=>{onChange({weatherName:place.name,weatherLatitude:place.latitude,weatherLongitude:place.longitude});setResults([]);setStatus('Ort übernommen.')}}>{place.name}</button>)}</div>
-  <p>Aktuelles Wetter und Drei-Tage-Vorschau · °C · km/h · Datenquelle Open-Meteo. Keine externe Wetter-Webseite.</p>
+  <p>Aktuelles Wetter, Zweistunden-Vorschau und morgen · °C · km/h · Datenquelle Open-Meteo. Keine externe Wetter-Webseite.</p>
  </fieldset>;
 }
