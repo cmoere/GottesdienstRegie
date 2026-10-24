@@ -38,4 +38,4 @@ Consumes Task 1 bridge and existing store/AnnouncementService; produces one sche
 Files: release metadata, notices/help, regional release identity and generated RSS.
 - [x] Review changes natively, record known limitations and test evidence.
 - [x] Prepare 0.89.0 with radio/warning increment and optional announcements, truthful partial regional/PPT status.
-- [ ] Run release gates, publish via existing workflow only after successful checks, verify installer/update manifests and public latest.
+- [x] Run release gates, publish via existing workflow only after successful checks, verify installer/update manifests and public latest. Published as corrected patch 0.89.1; failed 0.89.0 draft was not published.

@@ -48,3 +48,14 @@ Source 3dda4c3 started workflow 40077796827. Windows stopped in the historical V
 The failed 0.89.0 remains an unpublished draft, not a normal update. The next publication uses **0.89.1** so artifacts from the failed attempt cannot be mistaken for the corrected source. Release/catalog/region keys and the RSS feed agree on 0.89.1, while the release series stays 0.89. Its exact disclosed partial-UI fingerprint is `16ff88cdc103d53b7d7c547c314c33da1a3bea699e1124c5755672242ca0213d`; 0.89.2 and 0.90.0 remain unapproved.
 
 The complete historical command chain V39–V75 (including patch-version guards), V83 and V84 now passes locally (`work/v891-historical-gates.log`). Production build passed (`work/v891-shipping-build.log`, Vite 14.61s). Final 0.89.1 suite: **230 files / 950 tests PASS**, 209.47s (`work/v891-shipping-full.log`). Publication verification pending below.
+
+## Verified public normal update: 0.89.1
+
+- Public release: https://github.com/cmoere/GottesdienstRegie/releases/tag/v0.89.1 — not draft, not prerelease, API normal latest.
+- Tested shipping commit and public source tag: `9f619b4fe2d5d194f53a9694dce42008d24e8b64`.
+- Cross-platform workflow **40078674657** completed successfully, including prepare, Windows, macOS, Linux and final publication. Pages workflow **40078674606** completed successfully. The failed **40077796827** did not publish 0.89.0.
+- Public check (`work/v891-public-verification.log`, `work/release-verify-iSE4k1/report.json`) confirms all 11 nonempty platform assets and Windows/macOS/Linux update manifests, correct versions and referenced asset sizes. Public RSS includes 0.89.1.
+- Windows installer downloaded, never executed: **291155538 bytes**, SHA256 `e582479a9dcd59f74367e3ca5cbb79c67ebd72881b8ba51a8bdd144793f490d2`. Its SHA512 agrees with `latest.yml` and its SHA256 agrees with the GitHub asset digest.
+- Targeted archive inspection (`work/v891-package-verification.log`) confirms packaged version/main entry, native speech/indicator modules, provided gong, absence of a bundled eSpeak executable and the normal GitHub update provider. Gong SHA256 `5cd14eb1563660fe44a0ea793a38414262cb1ae4a37e1e6bc1cd5dd401231589` matches the supplied source.
+- The old local extraction utility could not decode five ARM-platform dependency entries during a full extraction attempt. This is recorded, not treated as a successful full extraction. Targeted extraction and CRC checking of `resources/app.asar` and `resources/app-update.yml` succeeded. No installer execution or full physical installation test is claimed. A newer-tool web fetch was restricted and was not retried through another channel.
+- Installed application, physical display assignments and audio system were not modified. The engine still requires explicit separate installation/selection and enabling under Settings → Presentation → Announcements. All remaining PowerPoint/regional and physical verification limitations above stand.
