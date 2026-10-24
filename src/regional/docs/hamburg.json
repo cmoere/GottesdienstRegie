@@ -324,6 +324,16 @@
     "screenshotLabel": "Bispeelansicht"
   },
   "releases": {
+    "versions[0.89].builds[0.89.0].overview.label": "Lokale Dörsagen un klorere Radio- un Wetteranzeigen",
+    "versions[0.89].builds[0.89.0].overview.text": "Dit Update ergänzt dat optionale Anbinnen vun en extra installeerte eSpeak-NG-Sprachengine. Automatische Saalansagen kriegt en Gong un en sichtbore Kennteken. De Radioutwahl warrt eenfacher; mehr Wetterwarnungen laat sik düütlicher ünnerscheden.",
+    "versions[0.89].builds[0.89.0].sections.new.0.label": "Automatische Dörsagen mit lokale Spraaksynthese",
+    "versions[0.89].builds[0.89.0].sections.new.0.text": "Ünner Einstellungen → Präsentation → Ansagen lett sik en extra installeerte eSpeak-NG-Anwendung utwählen un pröven. De düütsche Stimm arbeidt ahn KI-Modell, Windows-Stimme, Cloudkonto oder API-Schlüssel. Eerst na ausdrückliches Aktiveern loopt fregeven Saaltexte in't instellte Intervall bi ON AIR in't Vör- un Naprogramm. Vör elke Ansage klingt de bereitstellte Gong. Musik warrt relativ daalregelt; bi't tatsächliche Afspeelen verschient baven links en lütt Luutsprekersymbol. OFF AIR un Notfall-Schnellbilder breekt de Ansage af.",
+    "versions[0.89].builds[0.89.0].sections.fixed.0.label": "Eendüdige Radioutwahl un nummereerte Wetterwarnungen",
+    "versions[0.89].builds[0.89.0].sections.fixed.0.text": "Elk Afloopziel blifft een Radiosender toordnet. En nieg dortodanen Sender ersetzt den bisherigen, ahn annere Audiodateien wegtomaken. Hinzufügen maakt de reine Senderutwahl to; de extra Fertig-Schalter fallt dor weg. Mehr güllige Wetterwarnungen wiest ehr Positschoon un en Symbol, dat to't Warnereignis passt. Aflopen Warnungen warrt vör de Utwahl wegmaakt.",
+    "versions[0.89].builds[0.89.0].sections.known.0.label": "Regionalöversetten wiederhen nich vullstännig",
+    "versions[0.89].builds[0.89.0].sections.known.0.text": "Regionalvarianten sünd noch nich vullstännig översett. Fehlende UI-Texte warrt op Hoochdüütsch wiest. Niege Ansagenhinwiesen sünd op Düütsch un Engelsch verfügbor. Dit Update warrt mit dissen apenlegten Ümfang as normales Update veröffentlicht.",
+    "versions[0.89].builds[0.89.0].sections.known.1.label": "Extra Sprachengine un bestahn Pröövgrenzen",
+    "versions[0.89].builds[0.89.0].sections.known.1.text": "eSpeak NG warrt nich mit levert un mutt extra installeert warrn. De Stimm klingt synthetisch. De Windows-Standardinstallationsordner ahn Umlaute warrt anraadt; en nich funktioneerende Installatschoon blifft sperrt. De experimentelle PowerPoint-Originalmodus blifft utschalt. Softwarepröven ersetzt keen Höörproov an de tatsächliche Saalanlaag; bi de automatisierte Rendererprüfung weer de physische Toon stumm schalt.",
     "versions[0.88].builds[0.88.0].overview.label": "Klorere Besucherinformatschonen un synkroniseerde Övergäng",
     "versions[0.88].builds[0.88.0].overview.text": "Dit Update verbetert Mellenfolien, Wettervöransicht un de Folienöversicht. Radio-Metadaten warrt dat aktive Afspeelen toordnet; Utgaavfinstern bruukt en gemeensamen Övergangstietpunkt. Narichten kaamt bloots vun't Westfalen-Blatt.",
     "versions[0.88].builds[0.88.0].sections.new.0.label": "Amtliche Wetterwarnungen un Bildschirmtest-Berichten",

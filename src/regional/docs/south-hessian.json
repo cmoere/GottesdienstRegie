@@ -324,6 +324,16 @@
     "screenshotLabel": "Beispielansicht"
   },
   "releases": {
+    "versions[0.89].builds[0.89.0].overview.label": "Lokale Durchsage un klarere Radio- un Wetteranzeige",
+    "versions[0.89].builds[0.89.0].overview.text": "Des Update ergänzt die optionale Anbindung vun ere separat installierte eSpeak-NG-Sprachengine. Automatische Saalansage krieje en Gong un e sichtbare Kennzeichnung. Die Radioauswahl werd vereinfacht; mehrere Wetterwarnunge sin eindeutiger zu unterscheide.",
+    "versions[0.89].builds[0.89.0].sections.new.0.label": "Automatische Durchsage mit lokaler Sprachsynthese",
+    "versions[0.89].builds[0.89.0].sections.new.0.text": "Unner Einstellunge → Präsentation → Ansage lässt sich e separat installierte eSpeak-NG-Anwendung auswähle un priefe. Die deutsche Stimm schafft ohne KI-Modell, Windows-Stimm, Cloudkonto odder API-Schlüssel. Erscht nach ausdrücklicher Aktivierung laafe freigegebene Saaltexte im eigestellte Intervall während ON AIR im Vor- un Nachprogramm. Vor jeder Ansag ertönt de bereitgestellte Gong. Musik werd relativ abgesenkt; während de tatsächliche Wiedergab erscheint owe links e klaanes Lautsprechersymbol. OFF AIR un Notfall-Schnellbilder breche die Ansag ab.",
+    "versions[0.89].builds[0.89.0].sections.fixed.0.label": "Eindeutige Radioauswahl un nummerierte Wetterwarnunge",
+    "versions[0.89].builds[0.89.0].sections.fixed.0.text": "Pro Ablaufziel bleibt en Radiosender zugeordent. En neu hinzugefügter Sender ersetzt de bisherige, ohne weitere Audiodateie zu entferne. Hinzufüge schließt die reine Senderauswahl; de zusätzliche Fertig-Schalter entfällt dort. Mehrere gültige Wetterwarnunge zeige ihr Position un e zum Warnereignis passendes Symbol. Abgelaafene Warnunge wern vor de Auswahl entfernt.",
+    "versions[0.89].builds[0.89.0].sections.known.0.label": "Regionalübersetzunge weiderhin unvollständig",
+    "versions[0.89].builds[0.89.0].sections.known.0.text": "Regionalvariante sin noch net vollständig übersetzt. Fehlende UI-Texte wern uff Hochdeitsch angezeigt. Neue Ansagehinweise sin uff Deutsch un Englisch verfügbar. Des Update werd mit dem offengelegte Umfang als normales Update veröffentlicht.",
+    "versions[0.89].builds[0.89.0].sections.known.1.label": "Separate Sprachengine un bestehende Priefgrenze",
+    "versions[0.89].builds[0.89.0].sections.known.1.text": "eSpeak NG werd net mitgeliefert un muss separat installiert wern. Die Stimm klingt synthetisch. De Windows-Standardinstallationsordner ohne Umlaut werd empfohle; e net funktionsfähige Installation bleibt gesperrt. De experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Softwarepriefunge ersetze kee Hörprob an de tatsächliche Saalanlag; während de automatisierte Rendererpriefung war de physische Ton stummgeschaltet.",
     "versions[0.88].builds[0.88.0].overview.label": "Klarere Besucherinformatione un synchronisierte Übergäng",
     "versions[0.88].builds[0.88.0].overview.text": "Des Update verbessert Meldungsfolie, Wettervorschau un die Folieübersicht. Radio-Metadate wern de aktive Wiedergab zugeordent; Ausgabefensder verwende en gemeinsame Übergangszeitpunkt. Nachrichte komme ausschließlich vum Westfalen-Blatt.",
     "versions[0.88].builds[0.88.0].sections.new.0.label": "Amtliche Wetterwarnunge un Bildschirmtest-Bericht",

@@ -1,3 +1,33 @@
+# GottesdienstRegie 0.89.0
+
+Veröffentlicht: Sa., 24.10.2026
+
+Dieses Update ergänzt die optionale Anbindung einer separat installierten eSpeak-NG-Sprachengine. Automatische Saalansagen erhalten einen Gong und eine sichtbare Kennzeichnung. Die Radioauswahl wird vereinfacht; mehrere Wetterwarnungen sind eindeutiger unterscheidbar.
+
+## Neu
+
+### Automatische Durchsagen mit lokaler Sprachsynthese
+
+Unter Einstellungen → Präsentation → Ansagen lässt sich eine separat installierte eSpeak-NG-Anwendung auswählen und prüfen. Die deutsche Stimme arbeitet ohne KI-Modell, Windows-Stimme, Cloudkonto oder API-Schlüssel. Erst nach ausdrücklicher Aktivierung laufen freigegebene Saaltexte im eingestellten Intervall während ON AIR im Vor- und Nachprogramm. Vor jeder Ansage ertönt der bereitgestellte Gong. Musik wird relativ abgesenkt; während der tatsächlichen Wiedergabe erscheint oben links ein kleines Lautsprechersymbol. OFF AIR und Notfall-Schnellbilder brechen die Ansage ab.
+
+## Behoben
+
+### Eindeutige Radioauswahl und nummerierte Wetterwarnungen
+
+Pro Ablaufziel bleibt ein Radiosender zugeordnet. Ein neu hinzugefügter Sender ersetzt den bisherigen, ohne weitere Audiodateien zu entfernen. Hinzufügen schließt die reine Senderauswahl; der zusätzliche Fertig-Schalter entfällt dort. Mehrere gültige Wetterwarnungen zeigen ihre Position und ein zum Warnereignis passendes Symbol. Abgelaufene Warnungen werden vor der Auswahl entfernt.
+
+## Bekannte Einschränkungen
+
+### Regionalübersetzungen weiterhin unvollständig
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Neue Ansagenhinweise sind auf Deutsch und Englisch verfügbar. Dieses Update wird mit diesem offengelegten Umfang als normales Update veröffentlicht.
+
+### Separate Sprachengine und bestehende Prüfgrenzen
+
+eSpeak NG wird nicht mitgeliefert und muss separat installiert werden. Die Stimme klingt synthetisch. Der Windows-Standardinstallationsordner ohne Umlaute wird empfohlen; eine nicht funktionsfähige Installation bleibt gesperrt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Softwareprüfungen ersetzen keine Hörprobe an der tatsächlichen Saalanlage; während der automatisierten Rendererprüfung war der physische Ton stummgeschaltet.
+
+---
+
 # GottesdienstRegie 0.88.0
 
 Veröffentlicht: Sa., 24.10.2026

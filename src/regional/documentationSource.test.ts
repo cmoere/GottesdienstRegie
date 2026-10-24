@@ -20,7 +20,8 @@ describe('complete German documentation translation source',()=>{
     expect(source.help['Erste Schritte'].body).toContain('## ');
   });
   it('keeps all historical release text fields keyed by stable version identity',()=>{
-    expect(Object.keys(source.releases)).toHaveLength(1504);
+    expect(Object.keys(source.releases)).toHaveLength(1514);
+    expect(source.releases['versions[0.89].builds[0.89.0].overview.label']).toBe('Lokale Durchsagen und klarere Radio- und Wetteranzeigen');
     expect(source.releases['versions[0.88].builds[0.88.0].overview.label']).toBe('Klarere Besucherinformationen und synchronisierte Übergänge');
     expect(source.releases['versions[0.87].builds[0.87.0].overview.label']).toBe('Nachrichten im Fokus und eigene Wetteranzeige');
     expect(source.releases['versions[0.86].builds[0.86.0].overview.label']).toBe('Lokale Nachrichten, Fußball und vielseitige Uhren');
