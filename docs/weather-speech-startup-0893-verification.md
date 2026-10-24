@@ -25,3 +25,11 @@ Full regression and public release artifact results are recorded below after com
 ## Final local regression
 
 Full suite: 233 files / 996 tests, initially995 passing plus one duplicate-title query failure caused by the newly added test-text option. The query now explicitly checks the source list and option; its entire18-test file passes in work/weather-speech-localization-green.log. All other232 files passed unchanged. Production build, historical guards and native fixture passed as recorded above. Root review found no further material issue. Public package verification remains pending until publication.
+
+Clean complete rerun after the query correction: 233 files / 996 tests PASS, 418.21s, work/weather-speech-final-clean-unit.log. No failures. Source commit e442dfb8c432b1c614deb0fc3fab6c68c6885801. Release workflow40133663599, Pages40133663586 (success).
+
+## Published package verification
+
+Normal/latest v0.89.3 is public at https://github.com/cmoere/GottesdienstRegie/releases/tag/v0.89.3. Release workflow40133663599 passed all platform and publication jobs. Public verification confirmed11 assets, latest.yml/latest-mac.yml/latest-linux.yml version0.89.3 and RSS. Windows installer709051677bytes, SHA256 3afc84d8d9baf8001d7fb086c601b07967e36fc3bdd1ba5e43a6c9b92411df70; SHA512 matches updater manifest and SHA256 matches GitHub digest. Report work/release-verify-bqRj71/report.json.
+
+Targeted extraction of downloaded resources (installer not executed/installed) verified source tag e442dfb, ASAR speech implementation,30 runtime jar checksums, unchanged gong, licenses/sources and normal update provider. The extracted private runtime actually synthesized246436bytes; peak29205 (-0.99985dBFS). Report work/release-verify-bqRj71/speech-package-report.json. No physical playback. Publication and artifact verification complete.

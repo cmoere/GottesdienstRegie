@@ -46,4 +46,4 @@ Files: `src/announcements/AutomaticAnnouncements.tsx`, small request/controller 
 ### Task 5: Verification and delivery
 - [x] Full suite (bounded worker parallelism), build, historical guards, regional/release disclosures if publishing.
 - [x] Separate root author review, record measured proof and unresolved limits. Commit only owned work.
-- [ ] Deliver verified normal update according to established publication authorization; public artifact verification before claiming release.
+- [x] Deliver verified normal update according to established publication authorization; public artifact verification before claiming release.
