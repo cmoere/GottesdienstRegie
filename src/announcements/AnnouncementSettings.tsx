@@ -7,6 +7,8 @@ import type {SpokenAnnouncement} from './types';
 import {useI18n} from '../i18n';
 import type {TranslationKey} from '../i18n';
 import './announcement-preparation.css';
+import {useSpeechStatus} from './AnnouncementIndicator';
+import {usePreferences} from '../preferences';
 
 const service = new AnnouncementService();
 
@@ -23,6 +25,8 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
   const [message, setMessage] = useState<TranslationKey|''>('');
   const [communityRows, setCommunityRows] = useState<SpokenAnnouncement[]>([]);
   const [loaded, setLoaded] = useState(Boolean(rows));
+  const [engine,setEngine]=useState({ready:false,name:''});
+  const status=useSpeechStatus(state=>state.message),german=usePreferences(state=>state.language==='de');
   const refreshTexts = useCallback(() => {
     setLoaded(getCommunityRuntimeSnapshot().loaded?.announcements === true);
     setCommunityRows(service.getSpoken(getCommunityAnnouncementRecords(), new Date()));
@@ -37,6 +41,7 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
   useEffect(() => {
     let active = true;
     setReady(false);
+    void native?.engineStatus?.().then(value=>{if(active)setEngine(value)}).catch(()=>{if(active)setEngine({ready:false,name:''})});
     if (native) void native.readSettings().then(value => {
       if (!active) return;
       const settings = normalizeAnnouncementSettings(value);
@@ -54,7 +59,7 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     let value: Settings;
     try {
       if (!interval.trim() || !percent.trim()) throw Error('empty');
-      value = validateAnnouncementSettings({...saved, enabled:false,
+      value = validateAnnouncementSettings({...saved,
         intervalMinutes:Number(interval), musicRemainingPercent:Number(percent)});
     } catch {
       setError('speechSettingsValidation');
@@ -63,19 +68,33 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     setBusy(true);
     try {
       const stored = validateAnnouncementSettings(await native.writeSettings(value));
-      if (stored.enabled) throw Error('activation refused');
       setSaved(stored);setMessage('speechSettingsSaved');
+      window.dispatchEvent(new Event('gottesdienstregie:announcement-settings'));
     } catch {setError('speechSettingsSaveError');}
     finally {setBusy(false);}
   }
 
+  async function chooseEngine(){
+    if(!native?.chooseEngine||!ready||busy)return;
+    setBusy(true);window.dispatchEvent(new Event('gottesdienstregie:announcement-stop'));
+    try{
+      const result=await native.chooseEngine();setEngine(result);
+      setSaved(value=>({...value,enabled:false,...(result.ready?{voiceId:'espeak-ng:de',speakerId:0,voiceAccepted:true}:{})}));
+      window.dispatchEvent(new Event('gottesdienstregie:announcement-settings'));
+    }catch{setError('speechSettingsLoadError')}
+    finally{setBusy(false)}
+  }
   const texts = rows ?? communityRows;
   return <section className="settings-group announcement-preparation-settings" aria-labelledby="announcement-preparation-title">
     <h3 id="announcement-preparation-title">{t('speechSettingsHeading')}</h3>
     <p>{t('speechSettingsHelp')}</p>
-    <p role="note">{t('speechSettingsPreparation')}</p>
+    <p role="note">{german?'Lokale deutsche eSpeak-NG-Stimme ohne KI-Modell und ohne Windows-Stimme. eSpeak NG separat installieren und das Programm auswählen. Die Stimme klingt synthetisch. Die erste automatische Durchsage erfolgt nach dem gespeicherten Intervall, nur während ON AIR im Vor- oder Nachprogramm.':'Local German eSpeak NG voice, without an AI model or Windows voice. Install eSpeak NG separately and select its executable. The voice sounds synthetic. Automatic announcements start after the saved interval, only ON AIR in pre/post programs.'}</p>
+    <button type="button" disabled={!ready||busy||!native?.chooseEngine} onClick={()=>{void chooseEngine()}}>{german?'eSpeak NG auswählen':'Select eSpeak NG'}</button>
+    <button type="button" onClick={()=>{void window.desktop?.openExternal('https://github.com/espeak-ng/espeak-ng/releases')}}>{german?'eSpeak-NG-Downloadseite':'eSpeak NG downloads'}</button>
+    <p>{engine.name||(german?'eSpeak NG nicht eingerichtet. Keine automatische Ersatzstimme.':'eSpeak NG not configured. No automatic fallback voice.')}</p>
+    {status&&<p role="alert">{status}</p>}
     {!native && <p>{t('speechSettingsDesktopOnly')}</p>}
-    <label><input type="checkbox" checked={false} disabled readOnly/> {t('speechSettingsEnable')}</label>
+    <label><input type="checkbox" checked={saved.enabled&&saved.voiceId==='espeak-ng:de'} disabled={!ready||busy||(!saved.enabled&&(!engine.ready||saved.voiceId!=='espeak-ng:de'))} onChange={event=>setSaved(value=>({...value,enabled:event.target.checked}))}/> {t('speechSettingsEnable')}</label>
     <label>{t('speechSettingsInterval')}<input className="settings-number-input" type="number" min="1" max="120" step="1" disabled={!ready || busy} value={interval} onChange={event => {setIntervalValue(event.target.value);setMessage('');}}/></label>
     <label>{t('speechSettingsMusicLevel')}<input className="settings-number-input" type="number" min="0" max="100" disabled={!ready || busy} value={percent} onChange={event => {setPercent(event.target.value);setMessage('');}}/></label>
     <p>{t('speechSettingsMusicHelp')}</p>

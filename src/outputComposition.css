@@ -1,4 +1,5 @@
 .output-composition{position:absolute;inset:0;isolation:isolate;overflow:hidden;background:#000}
+.announcement-speaker-indicator{position:absolute;top:1.4%;left:1.2%;width:clamp(16px,1.65vw,34px);height:auto;padding:.3%;box-sizing:content-box;background:#0009;border-radius:4px;color:#fff;opacity:.85;z-index:2147483646;pointer-events:none}
 .output-content-area{position:absolute;inset:0;container-type:size;display:grid;place-items:center}
 .output-content-fit{position:relative;width:min(100cqw,177.777778cqh);height:min(56.25cqw,100cqh);overflow:hidden;container-type:inline-size}
 .output-composition[data-banner-position=top]>.output-content-area{top:7.777778%}.output-composition[data-banner-position=bottom]>.output-content-area{bottom:7.777778%}

@@ -1,7 +1,19 @@
-import {cleanup,render,screen} from '@testing-library/react';
+import {act,cleanup,render,screen} from '@testing-library/react';
 import {afterEach,expect,it} from 'vitest';
 import {OutputComposition} from './OutputComposition';
+import {useSpeechStatus} from './announcements/AnnouncementIndicator';
 afterEach(cleanup);
+it('mirrors the speaker in real output previews without an operator-wide overlay',()=>{
+ const view=render(<OutputComposition banner={null}><video/></OutputComposition>);
+ act(()=>useSpeechStatus.setState({active:true}));expect(screen.getByRole('img',{name:'Durchsage läuft'})).toBeVisible();
+ act(()=>useSpeechStatus.setState({active:false}));expect(screen.queryByRole('img',{name:'Durchsage läuft'})).toBeNull();view.unmount();
+});
+it('shows a small speaker above content only during an active announcement without remounting content',()=>{
+ const view=render(<OutputComposition banner={null} announcementActive><video data-testid="kept"/></OutputComposition>),video=screen.getByTestId('kept');
+ expect(screen.getByRole('img',{name:'Durchsage läuft'}).closest('.output-content-fit')).toBeNull();
+ view.rerender(<OutputComposition banner={null} announcementActive={false}><video data-testid="kept"/></OutputComposition>);
+ expect(screen.queryByRole('img',{name:'Durchsage läuft'})).toBeNull();expect(screen.getByTestId('kept')).toBe(video);
+});
 it('reserves independent warning space without remounting content or hiding the test overlay',()=>{
  const now=Date.now(),warning:any={revision:1,cycleStartedAtMs:now,fetchedAt:now,items:[{id:'dwd',event:'Wind',headline:'Amtliche Warnung',description:'Originaltext',validFrom:new Date(now-1000).toISOString(),validUntil:new Date(now+60000).toISOString(),severity:'Minor',areaName:'Bielefeld',source:'DWD'}]};
  const view=render(<OutputComposition banner={null} testOverlay={<span>TESTBETRIEB</span>}><video data-testid="preserved"/></OutputComposition>),video=screen.getByTestId('preserved');

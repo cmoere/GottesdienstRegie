@@ -4,8 +4,10 @@ import {AnnouncementBanner} from './AnnouncementBanner';
 import {AppClock} from './community/AppClock';
 import './outputComposition.css';
 import {ServiceCountdownBadge} from './ServiceCountdownBadge';
+import {AnnouncementIndicator,useSpeechStatus} from './announcements/AnnouncementIndicator';
 import type{WeatherWarningState}from'../shared/weatherWarnings';import{useCurrentWeatherWarning,WeatherWarningBanner}from'./weatherWarnings/WeatherWarningBanner';
-export function OutputComposition({children,banner,testOverlay,serviceCountdownAtMs,hideCountdown=false,weatherWarnings}:{children:ReactNode;banner:BannerOutputState|null;testOverlay?:ReactNode;serviceCountdownAtMs?:number;hideCountdown?:boolean;weatherWarnings?:WeatherWarningState|null}){
+export function OutputComposition({children,banner,testOverlay,serviceCountdownAtMs,hideCountdown=false,weatherWarnings,announcementActive}:{children:ReactNode;banner:BannerOutputState|null;testOverlay?:ReactNode;serviceCountdownAtMs?:number;hideCountdown?:boolean;weatherWarnings?:WeatherWarningState|null;announcementActive?:boolean}){
+  const localAnnouncementActive=useSpeechStatus(state=>state.active);
   const warning=useCurrentWeatherWarning(weatherWarnings);
   const [now,setNow]=useState(()=>AppClock.now().getTime());
   useEffect(()=>{if(!banner?.reserved)return;let frame=0;const tick=()=>{setNow(AppClock.now().getTime());frame=requestAnimationFrame(tick)};frame=requestAnimationFrame(tick);return()=>cancelAnimationFrame(frame)},[banner?.reserved]);
@@ -15,5 +17,6 @@ export function OutputComposition({children,banner,testOverlay,serviceCountdownA
     {!hideCountdown&&<ServiceCountdownBadge startsAtMs={serviceCountdownAtMs}/>}
     {warning&&<div className="output-weather-layer"><WeatherWarningBanner current={warning}/></div>}
     {testOverlay}
+    {(announcementActive??localAnnouncementActive)&&<AnnouncementIndicator/>}
   </div>;
 }

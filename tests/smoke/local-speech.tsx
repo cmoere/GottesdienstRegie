@@ -1,0 +1,11 @@
+import React from 'react';import{createRoot}from'react-dom/client';
+import{AutomaticAnnouncements}from'../../src/announcements/AutomaticAnnouncements';
+import{OutputComposition}from'../../src/OutputComposition';import{usePresentation,createServiceItem}from'../../src/store';
+import{AppClock}from'../../src/community/AppClock';import{startCommunityRuntime}from'../../src/community/communityRuntime';
+import{useSpeechStatus}from'../../src/announcements/AnnouncementIndicator';
+let offset=0;AppClock.now=()=>new Date(Date.now()+offset);
+const trace:boolean[]=[];window.desktop={community:{start:async()=>true,onEvents:()=>{},onRooms:()=>{},onConnection:()=>{},onAnnouncements:(cb:any)=>cb([{messageId:'fixture',titel:'Probe',textDurchsageSaalscreen:'Bitte nehmen Sie im Saal Platz.',status:'public',showDurchsage:true,durchsageSaalscreen:true}])},announcements:{readSettings:async()=>({enabled:true,voiceId:'espeak-ng:de',speakerId:0,voiceAccepted:true,intervalMinutes:1,musicRemainingPercent:20}),synthesize:async()=>new Uint8Array(await(await fetch('/work/v89-espeak/probe/verified-speech.wav')).arrayBuffer()),cancel:async()=>{},setIndicator:async(value:boolean)=>{trace.push(value)}}}as any;
+startCommunityRuntime();const item=createServiceItem('content',{sectionId:'pre'});usePresentation.setState({items:[item],onAir:true,liveItemId:item.id});
+function Probe(){const active=useSpeechStatus(s=>s.active);return <><AutomaticAnnouncements quick={null}/><OutputComposition banner={null} announcementActive={active}><div id="preserved" style={{position:'absolute',inset:0,background:'#608f9a',color:'#fff'}}>Lokale Durchsageprüfung</div></OutputComposition></>}
+createRoot(document.getElementById('root')!).render(<Probe/>);
+(window as any).speechFixture={debug:()=>({speech:useSpeechStatus.getState(),onAir:usePresentation.getState().onAir,item:usePresentation.getState().items.find(i=>i.id===usePresentation.getState().liveItemId)?.sectionId,offset,trace}),advance:()=>{offset+=61_000},cancel:()=>usePresentation.setState({onAir:false}),active:()=>useSpeechStatus.getState().active,trace,reset:()=>{usePresentation.setState({onAir:false});offset=0;trace.length=0;usePresentation.setState({onAir:true})}};

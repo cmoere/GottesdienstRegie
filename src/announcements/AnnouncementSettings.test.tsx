@@ -9,6 +9,25 @@ beforeEach(()=>usePreferences.setState({language:'de',germanRegion:null}));
 afterEach(()=>{cleanup();usePreferences.setState(savedPreferences,true)});
 
 describe('inactive announcement preparation settings',()=>{
+ it('can disable saved announcements even when their engine has become unavailable',async()=>{
+  let stored:Settings={...initial,enabled:true,voiceId:'espeak-ng:de',speakerId:0,voiceAccepted:true};
+  render(<AnnouncementSettings rows={[]} bridge={{readSettings:async()=>stored,writeSettings:async value=>{stored=value;return value},engineStatus:async()=>({ready:false,name:'Nicht verfügbar'})}}/>);
+  await waitFor(()=>expect(screen.getByRole('checkbox',{name:'Automatische Ansagen aktivieren'})).toBeEnabled());
+  fireEvent.click(screen.getByRole('checkbox',{name:'Automatische Ansagen aktivieren'}));fireEvent.click(screen.getByRole('button',{name:'Ansageneinstellungen speichern'}));
+  await screen.findByText('Einstellungen gespeichert.');expect(stored.enabled).toBe(false);
+ });
+ it('allows explicit non-neural engine selection and activation, never an automatic voice migration',async()=>{
+  let stored=initial;
+  render(<AnnouncementSettings rows={[]} bridge={{readSettings:async()=>initial,writeSettings:async value=>{stored=value;return value},engineStatus:async()=>({ready:true,name:'eSpeak NG'}),chooseEngine:async()=>({ready:true,name:'eSpeak NG'})}}/>);
+  await waitFor(()=>expect(screen.getByRole('button',{name:'eSpeak NG auswählen'})).toBeEnabled());
+  expect(screen.getByRole('checkbox',{name:'Automatische Ansagen aktivieren'})).toBeDisabled();
+  fireEvent.click(screen.getByRole('button',{name:'eSpeak NG auswählen'}));
+  await waitFor(()=>expect(screen.getByRole('checkbox',{name:'Automatische Ansagen aktivieren'})).toBeEnabled());
+  fireEvent.click(screen.getByRole('checkbox',{name:'Automatische Ansagen aktivieren'}));
+  fireEvent.click(screen.getByRole('button',{name:'Ansageneinstellungen speichern'}));
+  await screen.findByText('Einstellungen gespeichert.');
+  expect(stored).toEqual({...initial,enabled:true,voiceId:'espeak-ng:de',speakerId:0,voiceAccepted:true});
+ });
  it('loads and saves numeric values without choosing a voice or enabling speech',async()=>{
   let saved=initial;
   const bridge={readSettings:async()=>initial,writeSettings:async(value:Settings)=>{saved=value;return value}};
