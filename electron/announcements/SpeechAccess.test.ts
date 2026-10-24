@@ -1,0 +1,7 @@
+import {describe,expect,it,vi,afterEach} from 'vitest';
+import {SpeechAccess,SpeechIndicator} from './SpeechAccess';
+afterEach(()=>vi.useRealTimers());
+describe('speech control ownership and retained boolean-only indicator',()=>{
+ it('rejects all output-renderer commands before any engine operation',async()=>{const engine={status:async()=>{throw Error('engine touched')},synthesize:async()=>{throw Error('engine touched')},cancel:()=>{throw Error('engine touched')}};const access=new SpeechAccess(engine,(event:boolean)=>event);for(const action of [()=>access.status(false),()=>access.synthesize(false,'Hallo'),()=>access.cancel(false)])await expect(async()=>action()).rejects.toThrow(/Steuerfenster/)});
+ it('retains state for new outputs, ignores invalid payloads and expires a dead owner',()=>{vi.useFakeTimers();const states:unknown[]=[];const indicator=new SpeechIndicator(state=>states.push(state));expect(indicator.snapshot()).toEqual({active:false,revision:0});expect(()=>indicator.set('true')).toThrow();indicator.set(true);const first=indicator.snapshot();expect(first.active).toBe(true);vi.advanceTimersByTime(3000);indicator.set(true);vi.advanceTimersByTime(3000);expect(indicator.snapshot().active).toBe(true);vi.advanceTimersByTime(1000);expect(indicator.snapshot()).toEqual({active:false,revision:2});expect(states).toEqual([{active:true,revision:1},{active:false,revision:2}]);indicator.dispose()});
+});

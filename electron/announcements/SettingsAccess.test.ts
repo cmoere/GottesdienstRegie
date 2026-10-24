@@ -16,6 +16,15 @@ async function setup(){
 }
 
 describe('settings-only announcement access while speech is unavailable',()=>{
+ it('enables only a selected non-neural engine that is available',async()=>{
+  const{repo}=await setup();let ready=false;
+  const access=createAnnouncementSettingsAccess(repo,(event:{control:boolean})=>event.control,async()=>ready);
+  const chosen={...settings,enabled:true,voiceId:'espeak-ng:de',speakerId:0,voiceAccepted:true};
+  await expect(access.write({control:true},chosen)).rejects.toThrow();ready=true;
+  expect(await access.write({control:true},chosen)).toEqual(chosen);
+  await expect(access.write({control:false},chosen)).rejects.toThrow();
+  await expect(access.write({control:true},{...chosen,voiceId:'de_DE-mls-medium'})).rejects.toThrow();
+ });
  it('persists inactive interval and music settings',async()=>{
   const {access,repo}=await setup();
   expect(await access.read({control:true})).toMatchObject({enabled:false,intervalMinutes:5});

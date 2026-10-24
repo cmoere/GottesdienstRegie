@@ -16,6 +16,8 @@ export class DeviceSettingsRepository {
   }
   async readOsb():Promise<unknown>{await this.writes;try{return (await this.readSettings()).osb??null}catch{return null}}
   async readAnnouncements(){await this.writes;return normalizeAnnouncementSettings((await this.readSettings()).announcements)}
+  async readAnnouncementEngine():Promise<string|null>{await this.writes;const value=(await this.readSettings()).announcementEngine;return typeof value==='string'?value:null}
+  async writeAnnouncementEngine(file:string){if(!path.isAbsolute(file)||!/^espeak-ng(?:\.exe)?$/i.test(path.basename(file)))throw Error('Bitte das eSpeak-NG-Programm auswählen.');await this.update({announcementEngine:file})}
   async writeAnnouncements(value:unknown){const normalized=validateAnnouncementSettings(value);await this.update({announcements:normalized});return normalized}
   async readRegionalSelection(){await this.writes;try{return normalizeRegionalSelection((await this.readSettings()).regionalSelection)}catch{return normalizeRegionalSelection(undefined)}}
   async writeRegionalSelection(value:unknown){const normalized=validateRegionalSelection(value);await this.update({regionalSelection:normalized});return normalized}

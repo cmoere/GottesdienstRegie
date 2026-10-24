@@ -2,6 +2,8 @@ import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Men
 import path from 'node:path';
 import {countdownMediaSelection,type CountdownMediaContext} from './countdownMediaSelection';
 import {createAnnouncementSettingsAccess} from './announcements/SettingsAccess';
+import {EspeakService} from './announcements/EspeakService';
+import {SpeechAccess,SpeechIndicator} from './announcements/SpeechAccess';
 import {readBannerOutputState} from '../src/outputState';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs/promises';
@@ -269,9 +271,28 @@ app.whenReady().then(async() => {
   Menu.setApplicationMenu(null);
   const deviceSettings=new DeviceSettingsRepository(path.join(app.getPath('userData'),'device-settings.json'));
   await nativeRegionalText.select(await deviceSettings.readRegionalSelection());
-  const announcementSettings=createAnnouncementSettingsAccess<import('electron').IpcMainInvokeEvent>(deviceSettings,event=>Boolean(controlWindow&&!controlWindow.isDestroyed()&&!controlWindow.webContents.isDestroyed()&&event.sender.id===controlWindow.webContents.id&&event.senderFrame===controlWindow.webContents.mainFrame));
+  const espeak=new EspeakService(()=>deviceSettings.readAnnouncementEngine(),path.join(app.getPath('temp'),'gottesdienstregie-speech'));
+  const isSpeechControl=(event:import('electron').IpcMainInvokeEvent)=>Boolean(controlWindow&&!controlWindow.isDestroyed()&&!controlWindow.webContents.isDestroyed()&&event.sender.id===controlWindow.webContents.id&&event.senderFrame===controlWindow.webContents.mainFrame);
+  const speechAccess=new SpeechAccess(espeak,isSpeechControl);
+  const speechIndicator=new SpeechIndicator(state=>{for(const window of BrowserWindow.getAllWindows())sendToLiveWindow(window,'announcements:indicator',state)});
+  const speechOwners=new Set<number>();
+  const watchSpeechOwner=(event:import('electron').IpcMainInvokeEvent)=>{speechAccess.authorize(event);if(speechOwners.has(event.sender.id))return;speechOwners.add(event.sender.id);const clear=()=>{espeak.cancel();speechIndicator.set(false)};event.sender.on('render-process-gone',clear);event.sender.once('destroyed',()=>{clear();speechOwners.delete(event.sender.id)})};
+  app.once('will-quit',()=>{espeak.cancel();speechIndicator.dispose()});
+  const announcementSettings=createAnnouncementSettingsAccess<import('electron').IpcMainInvokeEvent>(deviceSettings,isSpeechControl,async()=>(await espeak.status()).ready);
   ipcMain.handle('announcements:settings-read',event=>announcementSettings.read(event));
   ipcMain.handle('announcements:settings-write',(event,value:unknown)=>announcementSettings.write(event,value));
+  ipcMain.handle('announcements:engine-status',event=>{watchSpeechOwner(event);return speechAccess.status(event)});
+  ipcMain.handle('announcements:engine-choose',async event=>{
+    watchSpeechOwner(event);espeak.cancel();speechIndicator.set(false);
+    await deviceSettings.writeAnnouncements({...await deviceSettings.readAnnouncements(),enabled:false});
+    const result=await dialog.showOpenDialog(controlWindow!,{title:'Separat installiertes eSpeak NG auswählen',properties:['openFile'],filters:process.platform==='win32'?[{name:'eSpeak NG',extensions:['exe']}]:undefined});
+    if(!result.canceled&&result.filePaths[0])await deviceSettings.writeAnnouncementEngine(result.filePaths[0]);
+    return espeak.status();
+  });
+  ipcMain.handle('announcements:synthesize',(event,text:unknown)=>{watchSpeechOwner(event);return speechAccess.synthesize(event,text)});
+  ipcMain.handle('announcements:cancel',event=>{speechAccess.cancel(event);speechIndicator.set(false)});
+  ipcMain.handle('announcements:indicator-set',(event,value:unknown)=>{speechAccess.authorize(event);speechIndicator.set(value)});
+  ipcMain.handle('announcements:indicator-get',()=>speechIndicator.snapshot());
   const regionalSettings=createRegionalSettingsAccess<import('electron').IpcMainInvokeEvent>(deviceSettings,event=>Boolean(controlWindow&&!controlWindow.isDestroyed()&&!controlWindow.webContents.isDestroyed()&&event.sender.id===controlWindow.webContents.id&&event.senderFrame===controlWindow.webContents.mainFrame));
   ipcMain.handle('regional:selection-read',event=>regionalSettings.read(event));
   ipcMain.handle('regional:selection-set',async(event,value:unknown)=>{const selection=await regionalSettings.write(event,value);await nativeRegionalText.select(selection);return selection});
