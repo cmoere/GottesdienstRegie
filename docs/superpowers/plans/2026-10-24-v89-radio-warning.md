@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-10-24-v89-radio-warning-design.md`
 
+**Status 24.10.2026:** Beide Aufgaben lokal implementiert und geprüft. Abschließende Suite 225 Dateien / 918 Tests, Produktionsbuild erfolgreich. [Nachweise und verbleibende v89-Arbeiten](../evidence/2026-10-24-v89-radio-warning.md). Keine Veröffentlichung.
+
 ## Global Constraints
 
 - Neuer Radiosender ersetzt den bisherigen desselben Ziels; andere Audiodateien bleiben erhalten.
@@ -34,12 +36,12 @@
 
 **Interfaces:** `replaceRadioTrack(tracks: BackgroundAudioTrack[], selected: BackgroundAudioTrack): BackgroundAudioTrack[]` bewahrt normale Dateieinträge und ersetzt alle radio:-Einträge durch selected. Beide Panel-Auswahlwege konsumieren diese Funktion. Bestehende Panel-Props/onChange/onClose bleiben unverändert.
 
-- [ ] RED: Austausch von `[dateiA, radioAlt1, dateiB, radioAlt2]` liefert `[dateiA, radioNeu, dateiB]` (erster Radioplatz), ohne Eingabeobjekte zu verändern. Ohne vorherigen Sender wird hinten angefügt.
-- [ ] RED: echten Dialog mit gefälschter externer Suchantwort bedienen; Hinzufügen speichert genau einen neuen Sender, bewahrt Dateien, schließt den reinen Dialog und bietet dort keinen Fertig-Button. Doppelklick genau einmal. Eingebettete Radiosuche klappt zu, Audioeinstellungen bleiben sichtbar.
-- [ ] RED: echte Präsentationskonfigurationen für PRE/POST/Element verwenden; Änderung betrifft nur ausgewähltes Ziel. Kein automatischer Hörstart durch Auswahl.
-- [ ] Run `npx vitest run src/backgroundAudioSelection.test.ts src/BackgroundAudioPanel.test.tsx --maxWorkers=2`, erwartete fehlende Verhaltensweisen beobachten.
-- [ ] Minimalen Austausch und einmalige Übernahme im Panel implementieren; Vorhör-Lebensdauer prüfen und bei Bedarf unmount-sicher beenden. Engine/Routen unverändert.
-- [ ] GREEN: dieselben Tests plus `src/RadioStationBrowser.test.tsx`, `src/RadioStationBrowserLocalization.test.tsx`, `src/BackgroundAudioEngine.test.ts`, `src/audio/BackgroundAudioRoute.test.ts`; diff selbst prüfen, geprüften Teil committen.
+- [x] RED: Austausch von `[dateiA, radioAlt1, dateiB, radioAlt2]` liefert `[dateiA, radioNeu, dateiB]` (erster Radioplatz), ohne Eingabeobjekte zu verändern. Ohne vorherigen Sender wird hinten angefügt.
+- [x] RED: echten Dialog mit gefälschter externer Suchantwort bedienen; Hinzufügen speichert genau einen neuen Sender, bewahrt Dateien, schließt den reinen Dialog und bietet dort keinen Fertig-Button. Doppelklick genau einmal. Eingebettete Radiosuche klappt zu, Audioeinstellungen bleiben sichtbar.
+- [x] RED: echte Präsentationskonfigurationen für PRE/POST/Element verwenden; Änderung betrifft nur ausgewähltes Ziel. Kein automatischer Hörstart durch Auswahl.
+- [x] Run `npx vitest run src/backgroundAudioSelection.test.ts src/BackgroundAudioPanel.test.tsx --maxWorkers=2`, erwartete fehlende Verhaltensweisen beobachten.
+- [x] Minimalen Austausch und einmalige Übernahme im Panel implementieren; Vorhör-Lebensdauer prüfen und bei Bedarf unmount-sicher beenden. Engine/Routen unverändert.
+- [x] GREEN: dieselben Tests plus `src/RadioStationBrowser.test.tsx`, `src/RadioStationBrowserLocalization.test.tsx`, `src/BackgroundAudioEngine.test.ts`, `src/audio/BackgroundAudioRoute.test.ts`; diff selbst prüfen, geprüften Teil committen.
 
 ## Task 2: Gültiger Warnungszähler und lokale Symbole
 
@@ -47,13 +49,13 @@
 
 **Interfaces:** Bestehender Hook liefert `{item, elapsed, duration, index, total}` aus gültigen Warnungen mit unverändertem gemeinsamen cycleStartedAtMs. `index` nullbasiert, Anzeige `index+1/total`. Lokaler Icon-Typ wird aus event/headline abgeleitet; unbekannt → neutrales Warndreieck.
 
-- [ ] RED: zwei gültige Warnungen am Zyklusanfang und nach erster Lesedauer zeigen `1/2` bzw. `2/2` und zugängliche Positionsbeschriftung. Nach Ablauf einer Warnung zählt ausschließlich die andere; keine abgelaufene Textausgabe.
-- [ ] RED: Wind/Gewitter/Schnee/Frost/Regen/Nebel/Hitze liefern passende zugängliche SVG-Beschriftungen; unbekannter Event erhält generisches Warnsymbol, Originaltexte bleiben unverändert.
-- [ ] RED: einzelne Warnung ohne Mehrfachzähler; null/stale/OFF-AIR-Zustand zeigt weiterhin keine Warnung. Gleiches state/now liefert für MAIN und Vorschau dieselbe Position.
-- [ ] Run `npx vitest run src/weatherWarnings/WeatherWarningBanner.test.tsx src/weatherWarnings/session.test.ts shared/weatherWarnings.test.ts --maxWorkers=2`, RED beobachten.
-- [ ] Selektor/Anzeige minimal erweitern; flexible Headeranordnung ohne gequetschten Titel, keine neuen Providerfelder und keine Renderer-Netzwerkzugriffe.
-- [ ] GREEN: gezielte Tests plus OutputComposition/bannerOutputState/Countdown/Watermark und native isolierte breite/schmale Ausgabe prüfen.
-- [ ] Vollständige Suite mit zwei Workern, danach Produktionsbuild seriell; Logs und verbleibende v89-Arbeiten dokumentieren. Keine vollständige PowerPoint-/Regional-Fertigstellung behaupten.
+- [x] RED: zwei gültige Warnungen am Zyklusanfang und nach erster Lesedauer zeigen `1/2` bzw. `2/2` und zugängliche Positionsbeschriftung. Nach Ablauf einer Warnung zählt ausschließlich die andere; keine abgelaufene Textausgabe.
+- [x] RED: Wind/Gewitter/Schnee/Frost/Regen/Nebel/Hitze liefern passende zugängliche SVG-Beschriftungen; unbekannter Event erhält generisches Warnsymbol, Originaltexte bleiben unverändert.
+- [x] RED: einzelne Warnung ohne Mehrfachzähler; null/stale/OFF-AIR-Zustand zeigt weiterhin keine Warnung. Gleiches state/now liefert für MAIN und Vorschau dieselbe Position.
+- [x] Run `npx vitest run src/weatherWarnings/WeatherWarningBanner.test.tsx src/weatherWarnings/session.test.ts shared/weatherWarnings.test.ts --maxWorkers=2`, RED beobachten.
+- [x] Selektor/Anzeige minimal erweitern; flexible Headeranordnung ohne gequetschten Titel, keine neuen Providerfelder und keine Renderer-Netzwerkzugriffe.
+- [x] GREEN: gezielte Tests plus OutputComposition/bannerOutputState/Countdown/Watermark und native isolierte breite/schmale Ausgabe prüfen.
+- [x] Vollständige Suite mit zwei Workern, danach Produktionsbuild seriell; Logs und verbleibende v89-Arbeiten dokumentieren. Keine vollständige PowerPoint-/Regional-Fertigstellung behaupten.
 
 ## Selbstkontrolle und Fortsetzung
 
