@@ -1,4 +1,4 @@
-# GottesdienstRegie 0.89.0
+# GottesdienstRegie 0.89.1
 
 Veröffentlicht: Sa., 24.10.2026
 
@@ -8,7 +8,7 @@ Dieses Update ergänzt die optionale Anbindung einer separat installierten eSpea
 
 ### Automatische Durchsagen mit lokaler Sprachsynthese
 
-Unter Einstellungen → Präsentation → Ansagen lässt sich eine separat installierte eSpeak-NG-Anwendung auswählen und prüfen. Die deutsche Stimme arbeitet ohne KI-Modell, Windows-Stimme, Cloudkonto oder API-Schlüssel. Erst nach ausdrücklicher Aktivierung laufen freigegebene Saaltexte im eingestellten Intervall während ON AIR im Vor- und Nachprogramm. Vor jeder Ansage ertönt der bereitgestellte Gong. Musik wird relativ abgesenkt; während der tatsächlichen Wiedergabe erscheint oben links ein kleines Lautsprechersymbol. OFF AIR und Notfall-Schnellbilder brechen die Ansage ab.
+Unter Einstellungen → Präsentation → Ansagen lässt sich eine separat installierte eSpeak-NG-Anwendung auswählen und prüfen. Die deutsche Stimme arbeitet ohne KI-Modell, Windows-Stimme oder Cloudkonto. Erst nach ausdrücklicher Aktivierung laufen freigegebene Saaltexte im eingestellten Intervall während ON AIR im Vor- und Nachprogramm. Vor jeder Ansage ertönt der bereitgestellte Gong. Musik wird relativ abgesenkt; während der tatsächlichen Wiedergabe erscheint oben links ein kleines Lautsprechersymbol. OFF AIR und Notfall-Schnellbilder brechen die Ansage ab.
 
 ## Behoben
 

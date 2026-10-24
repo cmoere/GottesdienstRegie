@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": false,
-  "sourceFingerprint": "37307ce65a676ffe47c42cf37cfaa24e6c7d6d0b637169a6aac1b394d5dd84e3",
+  "sourceFingerprint": "16ff88cdc103d53b7d7c547c314c33da1a3bea699e1124c5755672242ca0213d",
   "note": "Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -37533,70 +37533,70 @@
       "status": "review-required"
     },
     {
-      "key": "release.versions[0.89].builds[0.89.0].overview.label",
+      "key": "release.versions[0.89].builds[0.89.1].overview.label",
       "text": "Lokale Durchsagen und klarere Radio- und Wetteranzeigen",
       "source": "public/releases.json",
       "context": "release-history",
       "status": "app-owned"
     },
     {
-      "key": "release.versions[0.89].builds[0.89.0].overview.text",
+      "key": "release.versions[0.89].builds[0.89.1].overview.text",
       "text": "Dieses Update ergänzt die optionale Anbindung einer separat installierten eSpeak-NG-Sprachengine. Automatische Saalansagen erhalten einen Gong und eine sichtbare Kennzeichnung. Die Radioauswahl wird vereinfacht; mehrere Wetterwarnungen sind eindeutiger unterscheidbar.",
       "source": "public/releases.json",
       "context": "release-history",
       "status": "app-owned"
     },
     {
-      "key": "release.versions[0.89].builds[0.89.0].sections.new.0.label",
+      "key": "release.versions[0.89].builds[0.89.1].sections.new.0.label",
       "text": "Automatische Durchsagen mit lokaler Sprachsynthese",
       "source": "public/releases.json",
       "context": "release-history",
       "status": "app-owned"
     },
     {
-      "key": "release.versions[0.89].builds[0.89.0].sections.new.0.text",
-      "text": "Unter Einstellungen → Präsentation → Ansagen lässt sich eine separat installierte eSpeak-NG-Anwendung auswählen und prüfen. Die deutsche Stimme arbeitet ohne KI-Modell, Windows-Stimme, Cloudkonto oder API-Schlüssel. Erst nach ausdrücklicher Aktivierung laufen freigegebene Saaltexte im eingestellten Intervall während ON AIR im Vor- und Nachprogramm. Vor jeder Ansage ertönt der bereitgestellte Gong. Musik wird relativ abgesenkt; während der tatsächlichen Wiedergabe erscheint oben links ein kleines Lautsprechersymbol. OFF AIR und Notfall-Schnellbilder brechen die Ansage ab.",
+      "key": "release.versions[0.89].builds[0.89.1].sections.new.0.text",
+      "text": "Unter Einstellungen → Präsentation → Ansagen lässt sich eine separat installierte eSpeak-NG-Anwendung auswählen und prüfen. Die deutsche Stimme arbeitet ohne KI-Modell, Windows-Stimme oder Cloudkonto. Erst nach ausdrücklicher Aktivierung laufen freigegebene Saaltexte im eingestellten Intervall während ON AIR im Vor- und Nachprogramm. Vor jeder Ansage ertönt der bereitgestellte Gong. Musik wird relativ abgesenkt; während der tatsächlichen Wiedergabe erscheint oben links ein kleines Lautsprechersymbol. OFF AIR und Notfall-Schnellbilder brechen die Ansage ab.",
       "source": "public/releases.json",
       "context": "release-history",
       "status": "app-owned"
     },
     {
-      "key": "release.versions[0.89].builds[0.89.0].sections.fixed.0.label",
+      "key": "release.versions[0.89].builds[0.89.1].sections.fixed.0.label",
       "text": "Eindeutige Radioauswahl und nummerierte Wetterwarnungen",
       "source": "public/releases.json",
       "context": "release-history",
       "status": "app-owned"
     },
     {
-      "key": "release.versions[0.89].builds[0.89.0].sections.fixed.0.text",
+      "key": "release.versions[0.89].builds[0.89.1].sections.fixed.0.text",
       "text": "Pro Ablaufziel bleibt ein Radiosender zugeordnet. Ein neu hinzugefügter Sender ersetzt den bisherigen, ohne weitere Audiodateien zu entfernen. Hinzufügen schließt die reine Senderauswahl; der zusätzliche Fertig-Schalter entfällt dort. Mehrere gültige Wetterwarnungen zeigen ihre Position und ein zum Warnereignis passendes Symbol. Abgelaufene Warnungen werden vor der Auswahl entfernt.",
       "source": "public/releases.json",
       "context": "release-history",
       "status": "app-owned"
     },
     {
-      "key": "release.versions[0.89].builds[0.89.0].sections.known.0.label",
+      "key": "release.versions[0.89].builds[0.89.1].sections.known.0.label",
       "text": "Regionalübersetzungen weiterhin unvollständig",
       "source": "public/releases.json",
       "context": "release-history",
       "status": "app-owned"
     },
     {
-      "key": "release.versions[0.89].builds[0.89.0].sections.known.0.text",
+      "key": "release.versions[0.89].builds[0.89.1].sections.known.0.text",
       "text": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Neue Ansagenhinweise sind auf Deutsch und Englisch verfügbar. Dieses Update wird mit diesem offengelegten Umfang als normales Update veröffentlicht.",
       "source": "public/releases.json",
       "context": "release-history",
       "status": "app-owned"
     },
     {
-      "key": "release.versions[0.89].builds[0.89.0].sections.known.1.label",
+      "key": "release.versions[0.89].builds[0.89.1].sections.known.1.label",
       "text": "Separate Sprachengine und bestehende Prüfgrenzen",
       "source": "public/releases.json",
       "context": "release-history",
       "status": "app-owned"
     },
     {
-      "key": "release.versions[0.89].builds[0.89.0].sections.known.1.text",
+      "key": "release.versions[0.89].builds[0.89.1].sections.known.1.text",
       "text": "eSpeak NG wird nicht mitgeliefert und muss separat installiert werden. Die Stimme klingt synthetisch. Der Windows-Standardinstallationsordner ohne Umlaute wird empfohlen; eine nicht funktionsfähige Installation bleibt gesperrt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Softwareprüfungen ersetzen keine Hörprobe an der tatsächlichen Saalanlage; während der automatisierten Rendererprüfung war der physische Ton stummgeschaltet.",
       "source": "public/releases.json",
       "context": "release-history",

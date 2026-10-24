@@ -40,3 +40,11 @@ Foreign `tests/smoke/startup-diagnostic.cjs` remains untracked and unchanged: SH
 - Production build PASS (`work/v89-shipping-build.log`, Vite 13.87s, Electron compilation and 31 regional asset copies). Existing large-chunk warning remains.
 - V83 metadata and V84 disclosed partial-resource gates PASS. V85 overlay/navigation/RSS gate and V86 external-loop/clock/output guards PASS (`work/v89-v85-gate.log`, `work/v89-v86-gate.log`). Documentation validator: 15 packs, 63 help topics, 1514 release fields, no issues.
 - Source and foreign-file diff checks passed. Public publication/asset verification pending; no claim of public availability until verified below.
+
+## Publication correction: 0.89.1
+
+Source 3dda4c3 started workflow 40077796827. Windows stopped in the historical V62 guard because the newly authored release text contained the prohibited API-key marketing phrase. The guard was not weakened. The same failure was reproduced locally (`work/v89-historical-gates.log`), then corrected in German/English and all 15 regional release texts. No speech/audio behavior changed. Connected GitHub log access required reauthentication, so no access bypass was attempted; public job metadata and the exact local workflow command established the failure.
+
+The failed 0.89.0 remains an unpublished draft, not a normal update. The next publication uses **0.89.1** so artifacts from the failed attempt cannot be mistaken for the corrected source. Release/catalog/region keys and the RSS feed agree on 0.89.1, while the release series stays 0.89. Its exact disclosed partial-UI fingerprint is `16ff88cdc103d53b7d7c547c314c33da1a3bea699e1124c5755672242ca0213d`; 0.89.2 and 0.90.0 remain unapproved.
+
+The complete historical command chain V39–V75 (including patch-version guards), V83 and V84 now passes locally (`work/v891-historical-gates.log`). Production build passed (`work/v891-shipping-build.log`, Vite 14.61s). Final 0.89.1 suite: **230 files / 950 tests PASS**, 209.47s (`work/v891-shipping-full.log`). Publication verification pending below.
