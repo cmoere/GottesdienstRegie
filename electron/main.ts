@@ -23,7 +23,7 @@ import {TranslationPackService} from './TranslationPackService';
 import {platformAppearance} from './platformAppearance';
 import {StorageMaintenanceService,isStorageCategory,type StorageCategory} from './StorageMaintenanceService';
 import {translationPackCatalog} from './translationPackCatalog';
-import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds,UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS} from './windowStartup';
+import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,createSizedOperatorWindow,UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS} from './windowStartup';
 import {SpotifyAuthService} from './SpotifyAuthService';
 import {normalizeSpotifyTrackUrl,SpotifyOEmbedService} from './SpotifyOEmbedService';
 import {RadioMetadataService} from './RadioMetadataService';
@@ -162,13 +162,12 @@ async function load(win: BrowserWindow, route = '') {
 
 function createControlWindow(preferences:AppPreferencesData) {
   const displays=screen.getAllDisplays(),primary=screen.getPrimaryDisplay(),startup=resolveOperatorWindowStartup(preferences,displays,primary.id);
-  const startupDisplay=screen.getDisplayMatching(startup.bounds),splashBounds=resolveSplashWindowBounds(startupDisplay.workArea);
-  controlWindow = new BrowserWindow({
-    ...splashBounds,show:false,minWidth:360,minHeight:520,
-    titleBarStyle:'hidden',titleBarOverlay:process.platform==='win32'?{color:'#282832',symbolColor:'#ffffff',height:28}:false,resizable:false,maximizable:false,
+  controlWindow = createSizedOperatorWindow(startup,geometry=>new BrowserWindow({
+    ...geometry,show:false,
+    titleBarStyle:'hidden',titleBarOverlay:process.platform==='win32'?{color:'#282832',symbolColor:'#ffffff',height:28}:false,
     backgroundColor: '#282832', icon: app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.join(app.getAppPath(), 'build/icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, backgroundThrottling:false }
-  });
+  }));
   controlWindow.setMenu(null);
   controlWindow.webContents.on('will-navigate',(event,url)=>{if(url!==rendererRetryUrl)return;event.preventDefault();void load(controlWindow!)});
   if(process.platform!=='darwin')applySpellCheckerLanguage(controlWindow.webContents,'de');
@@ -181,8 +180,6 @@ function createControlWindow(preferences:AppPreferencesData) {
     if(!controlWindow||controlWindow.isDestroyed()||workspaceReady||controlCloseInProgress)return;
     workspaceReady=true;
     clearTimeout(startupFallback);
-    controlWindow.setResizable(startup.resizable);controlWindow.setMaximizable(startup.maximizable);controlWindow.setMinimumSize(startup.minimumSize.width,startup.minimumSize.height);controlWindow.setBounds(startup.bounds,false);
-    if(startup.startMode==='fullscreen')controlWindow.setFullScreen(true);else if(startup.startMode==='maximized')controlWindow.maximize();
     if(process.platform==='win32')controlWindow.setTitleBarOverlay({color:'#282832',symbolColor:'#ffffff',height:28});
     if(!loginUpdateCheckStarted&&shouldCheckAfterWorkspace(process.argv,appPreferences.get()))automaticUpdateTimer=setTimeout(()=>void checkForUpdates(),UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS);
   };

@@ -22,10 +22,11 @@ it('accepts an explicitly disclosed version-pinned partial release, but not misl
   expect(isRegionalSelectionAvailable({...partial,partialRelease:{...partial.partialRelease,version:'0.89.0'}})).toBe(true);
   expect(isRegionalSelectionAvailable({...partial,partialRelease:{...partial.partialRelease,version:'0.89.1'}})).toBe(true);
   expect(isRegionalSelectionAvailable({...partial,partialRelease:{...partial.partialRelease,version:'0.89.2'}})).toBe(true);
+  expect(isRegionalSelectionAvailable({...partial,partialRelease:{...partial.partialRelease,version:'0.89.3'}})).toBe(true);
   for(const value of [
     {...partial,complete:true},
     {...partial,partialRelease:{...partial.partialRelease,version:'0.90.0'}},
-    {...partial,partialRelease:{...partial.partialRelease,version:'0.89.3'}},
+    {...partial,partialRelease:{...partial.partialRelease,version:'0.89.4'}},
     {...partial,partialRelease:{...partial.partialRelease,notice:'Alle Texte sind vollständig.'}},
     {...partial,partialRelease:{...partial.partialRelease,inventoryFingerprint:'unknown'}},
     {...partial,partialRelease:Object.create(partial.partialRelease)},

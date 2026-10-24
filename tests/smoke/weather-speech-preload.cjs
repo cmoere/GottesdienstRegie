@@ -1,0 +1,2 @@
+const{contextBridge,ipcRenderer}=require('electron');
+contextBridge.exposeInMainWorld('desktop',{announcements:{readSettings:()=>ipcRenderer.invoke('probe:settings'),writeSettings:()=>Promise.reject(Error('Probe never persists settings')),engineStatus:()=>ipcRenderer.invoke('probe:status'),synthesize:text=>ipcRenderer.invoke('probe:speech',text),cancel:()=>ipcRenderer.invoke('probe:cancel'),setIndicator:active=>ipcRenderer.invoke('probe:indicator',active)}});

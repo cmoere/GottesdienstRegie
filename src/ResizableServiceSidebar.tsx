@@ -6,7 +6,7 @@ export function ResizableServiceSidebar({children}:{children:ReactNode}){
  const [viewport,setViewport]=useState(window.innerWidth);
  const [requested,setRequested]=useState(()=>{try{return Number(localStorage.getItem(widthKey))||258}catch{return 258}});
  const width=sidebarWidth(requested,viewport),desktop=viewport>=1100;
- useEffect(()=>{const resize=()=>setViewport(window.innerWidth);window.addEventListener('resize',resize);return()=>window.removeEventListener('resize',resize)},[]);
+ useEffect(()=>{const resize=()=>setViewport(window.innerWidth);window.addEventListener('resize',resize);resize();return()=>window.removeEventListener('resize',resize)},[]);
  useEffect(()=>{
   const app=root.current?.closest<HTMLElement>('.production-app');if(!app||!desktop)return;
   const previous=app.style.getPropertyValue('--service-sidebar-width');app.style.setProperty('--service-sidebar-width',`${width}px`);

@@ -2,6 +2,12 @@ import {fireEvent,render,screen,cleanup} from '@testing-library/react';
 import {afterEach,expect,it} from 'vitest';
 import {ResizableServiceSidebar,sidebarWidth} from './ResizableServiceSidebar';
 afterEach(cleanup);
+it('adopts the real desktop width when the native window changes during mounting',()=>{
+ Object.defineProperty(window,'innerWidth',{configurable:true,value:410});
+ function ChangedViewport(){Object.defineProperty(window,'innerWidth',{configurable:true,value:1920});return <p>Ablauf</p>}
+ render(<ResizableServiceSidebar><ChangedViewport/></ResizableServiceSidebar>);
+ expect(screen.getByRole('separator')).toHaveAttribute('aria-valuemax','288');
+});
 it('caps desktop widths at 15 percent even when the usable minimum cannot fit',()=>{
  expect(sidebarWidth(800,1200)).toBe(180);
  expect(sidebarWidth(20,1200)).toBe(144);

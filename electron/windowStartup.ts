@@ -6,6 +6,13 @@ export type DisplayGeometry={id:number;workArea:Rectangle;bounds:Rectangle};
 export type OperatorWindowStartup={bounds:Rectangle;startMode:Exclude<WindowStartMode,'restore'>;minimumSize:{width:number;height:number};resizable:true;maximizable:true};
 export const UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS=2000;
 
+/** The renderer must never capture the narrow loading-panel width as its workspace. */
+export function createSizedOperatorWindow<T extends {setFullScreen(value:boolean):void;maximize():void}>(startup:OperatorWindowStartup,create:(options:Rectangle&{minWidth:number;minHeight:number;resizable:true;maximizable:true})=>T):T{
+  const window=create({...startup.bounds,minWidth:startup.minimumSize.width,minHeight:startup.minimumSize.height,resizable:true,maximizable:true});
+  if(startup.startMode==='fullscreen')window.setFullScreen(true);else if(startup.startMode==='maximized')window.maximize();
+  return window;
+}
+
 const intersects=(a:Rectangle,b:Rectangle)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
 
 export function resolveRendererEntry(_compiledDirectory:string,appRoot:string):string{

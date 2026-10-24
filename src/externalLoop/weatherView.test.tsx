@@ -11,6 +11,15 @@ it('renders native current weather and a separate tomorrow forecast with attribu
  if(snapshot.payload.kind!=='weather')throw Error();const {container}=render(<WeatherView snapshot={snapshot} payload={snapshot.payload}/>);
  expect(screen.getByText('Bielefeld')).toBeInTheDocument();expect(screen.getByText('12 °C')).toBeInTheDocument();expect(screen.getAllByRole('article')).toHaveLength(1);expect(screen.getByText('Morgen')).toBeInTheDocument();expect(screen.getByText(/Open-Meteo/)).toBeInTheDocument();expect(container.querySelector('iframe')).toBeNull();expect(screen.getAllByText('Fr., 23.10.2026').length).toBeGreaterThan(0);
 });
+it('updates the real weather artwork from snow with wind to sunny conditions',()=>{
+ if(snapshot.payload.kind!=='weather')throw Error();
+ const view=render(<WeatherView snapshot={snapshot} payload={{...snapshot.payload,code:73,wind:42}}/>);
+ const current=()=>view.container.querySelector('.weather-current svg')!;
+ expect(current()).toHaveAttribute('data-weather-kind','snow');expect(current()).toHaveAttribute('data-windy','true');
+ expect(current().querySelector('.weather-snow')).not.toBeNull();expect(current().querySelector('.weather-rain')).toBeNull();
+ view.rerender(<WeatherView snapshot={snapshot} payload={{...snapshot.payload,code:0,wind:3}}/>);
+ expect(current()).toHaveAttribute('data-weather-kind','sun');expect(current().querySelector('.weather-snow')).toBeNull();expect(current().querySelector('.weather-sun')).not.toBeNull();
+});
 it('uses the existing frozen take and prepared data for weather rather than an independent output request',async()=>{
  const item=createServiceItem('weather',{sectionId:'pre'}),request=requestForExternalItem(item);expect(request).toEqual({kind:'weather',name:'Bielefeld',latitude:52.0302,longitude:8.5325});
  item.slides[0].elements=[{id:'weather',type:'loop',name:'Wetter',x:0,y:0,width:1920,height:1080,rotation:0,opacity:1,visible:true,locked:true,zIndex:1,properties:{loopType:'weather'}}];

@@ -324,6 +324,16 @@
     "screenshotLabel": "So kann's aussehen"
   },
   "releases": {
+    "versions[0.89].builds[0.89.3].overview.label": "Passende Wetterbilder und klarere Ansagen",
+    "versions[0.89].builds[0.89.3].overview.text": "Dieses Update passt die Wetterdarstellung an die gemeldete Wetterlage an, macht den Inhalt der Wetterwarnungen größer und ergänzt 'ne vollständige Ansagen-Tonprobe. Der Arbeitsbereich startet direkt in seiner vorgesehenen Größe; die lokale Sprachausgabe kriegt 'nen angepassten Pegel.",
+    "versions[0.89].builds[0.89.3].sections.new.0.label": "Wettergerechte Symbole und lesbarere Warnungen",
+    "versions[0.89].builds[0.89.3].sections.new.0.text": "Sonne, Wolken, Nebel, Regen, Schnee, Gewitter und Hagel kriegen eigene native Symbole. Stärkerer Wind wird zusätzlich dargestellt; ruhige Animationen berücksichtigen die reduzierte Bewegung. Das Warnbanner is etwas flacher, Titel und Text sind größer. Nummerierung, Originalhinweise und langsames Scrollen bleiben erhalten. Die Vorschau bezeichnet die Wahrscheinlichkeit korrekt als Niederschlag und schließt damit Schnee ein.",
+    "versions[0.89].builds[0.89.3].sections.new.1.label": "Gong und Ansagetext auch OFF AIR testen",
+    "versions[0.89].builds[0.89.3].sections.new.1.text": "Unter Einstellungen → Präsentation → Ansagen kannste 'ne allgemeine Testdurchsage oder 'nen aktuell freigegebenen Saaltext auswählen und mit Gong abspielen. Die Tonprobe hat 'ne eigene Stoppen-Taste und verwendet den eingestellten Background-Audio-Ausgang. Se schaltet automatische Ansagen nich ein. Beim Schließen der Einstellungen oder beim Wechsel von OFF AIR zu ON AIR endet die Probe; laufende Durchsagen werden nich überlagert.",
+    "versions[0.89].builds[0.89.3].sections.fixed.0.label": "Stabile Startgröße und besserer Sprachpegel",
+    "versions[0.89].builds[0.89.3].sections.fixed.0.text": "Das Hauptfenster wird vor dem Laden der Oberfläche in der vorgesehenen Arbeitsgröße angelegt. Dadurch fällt der Wechsel aus 'nem schmalen Ladefenster weg, der vorübergehend 'nen seitlich zusammengedrückten Arbeitsbereich verursachen konnte. Leise Sprachdateien werden separat mit begrenzter Verstärkung und Übersteuerungsschutz angepasst. Die Musikabsenkung betrifft weiterhin nur die Hintergrundmusik; Ausgangspegel und Stummschaltung bleiben erhalten. Längere Pegelverarbeitung bleibt für Live-Aktionen abbrechbar.",
+    "versions[0.89].builds[0.89.3].sections.known.0.label": "Bestehender Übersetzungs- und Prüfumfang",
+    "versions[0.89].builds[0.89.3].sections.known.0.text": "Regionalvarianten sind noch nich vollständig übersetzt. Fehlende UI-Texte siehste auf Hochdeutsch. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Automatisierte Tonproben laufen mit physisch stummgeschalteter Ausgabe; Aussprache und Lautstärke musste vor öffentlichem Einsatz an der tatsächlichen Saalanlage prüfen.",
     "versions[0.89].builds[0.89.2].overview.label": "Deutsche Durchsagestimme direkt im Update",
     "versions[0.89].builds[0.89.2].overview.text": "Die deutsche Offline-Stimme und ihre private Laufzeit werden jetzt vollständig mit GottesdienstRegie ausgeliefert. 'Ne zusätzliche Sprachinstallation, 'ne Dateiauswahl oder 'n Konto brauchste nich mehr.",
     "versions[0.89].builds[0.89.2].sections.new.0.label": "Mitgelieferte klassische Sprachausgabe",

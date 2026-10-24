@@ -2,11 +2,26 @@ import {describe,it,expect} from 'vitest';
 import {mkdtemp,mkdir,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import {BundledSpeechService,readBundledSpeechWav,runBundledSpeech} from './BundledSpeechService';
+import {BundledSpeechService,readBundledSpeechWav,runBundledSpeech,normalizeAnnouncementSpeech} from './BundledSpeechService';
 
 function wav(){const b=Buffer.alloc(48);b.write('RIFF');b.writeUInt32LE(40,4);b.write('WAVEfmt ',8);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(1,22);b.writeUInt32LE(16000,24);b.writeUInt32LE(32000,28);b.writeUInt16LE(2,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(4,40);b.writeInt16LE(300,44);return b}
 async function resources(){const root=await mkdtemp(path.join(os.tmpdir(),'Stimme Grüße '));for(const name of ['runtime/bin/java.exe','worker/AnnouncementSpeech.class','lib/voice-dfki-pavoque-neutral-5.2.jar','lib/marytts-runtime-5.2.1.jar','lib/marytts-lang-de-5.2.1.jar','lib/voices/dfki-pavoque-neutral/halfphoneFeatures_ac.mry','lib/voices/dfki-pavoque-neutral/halfphoneUnits.mry','lib/voices/dfki-pavoque-neutral/joinCostFeatures.mry','lib/voices/dfki-pavoque-neutral/timeline_basenames.mry','lib/voices/dfki-pavoque-neutral/timeline_waveforms.mry']){await mkdir(path.dirname(path.join(root,name)),{recursive:true});await writeFile(path.join(root,name),'fixture')}await writeFile(path.join(root,'ready.json'),JSON.stringify({platform:'win32',arch:'x64',voice:'marytts:dfki-pavoque-neutral'}));return root}
 describe('bundled classical speech',()=>{
+ it('raises speech to a bounded peak without clipping or changing the original waveform',async()=>{
+   const source=wav();source.writeInt16LE(10000,44);source.writeInt16LE(-5000,46);const original=Buffer.from(source);
+   const normalized=Buffer.from(await normalizeAnnouncementSpeech(source));
+   expect(normalized.readInt16LE(44)).toBe(29205);expect(normalized.readInt16LE(46)).toBe(-14602);expect(source).toEqual(original);
+ });
+ it('caps gain at 18 dB for extremely quiet speech and handles negative full-scale samples',async()=>{
+   const quiet=wav();quiet.writeInt16LE(100,44);expect(Buffer.from(await normalizeAnnouncementSpeech(quiet)).readInt16LE(44)).toBe(794);
+   const loud=wav();loud.writeInt16LE(-32768,44);expect(Buffer.from(await normalizeAnnouncementSpeech(loud)).readInt16LE(44)).toBe(-29205);
+   const silence=wav();silence.fill(0,44);await expect(normalizeAnnouncementSpeech(silence)).rejects.toThrow();
+ });
+ it('yields during a long waveform and cancels gain preparation before any audio can play',async()=>{
+   const long=Buffer.alloc(256*1024);wav().copy(long);long.writeUInt32LE(long.length-8,4);long.writeUInt32LE(long.length-44,40);
+   const controller=new AbortController(),pending=normalizeAnnouncementSpeech(long,controller.signal);controller.abort();
+   await expect(pending).rejects.toThrow(/abgebrochen/);
+ });
  it('bounds actual crashing, oversized and cancelled subprocesses',async()=>{
    await expect(runBundledSpeech(process.execPath,['-e','process.exit(2)'],'',new AbortController().signal)).rejects.toThrow();
    await expect(runBundledSpeech(process.execPath,['-e','process.stdout.write(Buffer.alloc(33*1024*1024))'],'',new AbortController().signal)).rejects.toThrow();

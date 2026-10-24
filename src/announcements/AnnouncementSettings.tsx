@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useState,useRef} from 'react';
 import {AnnouncementService} from '../community/AnnouncementService';
 import {getCommunityAnnouncementRecords, getCommunityRuntimeSnapshot, subscribeCommunityRuntime} from '../community/communityRuntime';
 import {normalizeAnnouncementSettings, validateAnnouncementSettings} from './settings';
@@ -9,6 +9,7 @@ import type {TranslationKey} from '../i18n';
 import './announcement-preparation.css';
 import {useSpeechStatus} from './AnnouncementIndicator';
 import {usePreferences} from '../preferences';
+import {generalAnnouncementProbe,startAnnouncementTest,stopAnnouncementTest} from './AnnouncementTestRequests';
 
 const service = new AnnouncementService();
 
@@ -26,6 +27,8 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
   const [communityRows, setCommunityRows] = useState<SpokenAnnouncement[]>([]);
   const [loaded, setLoaded] = useState(Boolean(rows));
   const [engine,setEngine]=useState({ready:false,name:''});
+  const [testId,setTestId]=useState(''),[testError,setTestError]=useState(''),alive=useRef(true);
+  const testing=useSpeechStatus(state=>state.testing),speaking=useSpeechStatus(state=>state.active);
   const status=useSpeechStatus(state=>state.message),german=usePreferences(state=>state.language==='de');
   const refreshTexts = useCallback(() => {
     setLoaded(getCommunityRuntimeSnapshot().loaded?.announcements === true);
@@ -75,6 +78,13 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
   }
 
   const texts = rows ?? communityRows;
+  useEffect(()=>{alive.current=true;return()=>{alive.current=false;stopAnnouncementTest()}},[]);
+  const selectedMessage=texts.find(row=>row.id===testId),selectedProbe=selectedMessage??generalAnnouncementProbe;
+  async function startProbe(){
+    setTestError('');
+    try{await startAnnouncementTest(selectedMessage?{kind:'message',id:selectedMessage.id}:{kind:'general'},Number(percent))}
+    catch(reason){if(alive.current)setTestError(reason instanceof Error?reason.message:'Tonprobe fehlgeschlagen.')}
+  }
   return <section className="settings-group announcement-preparation-settings" aria-labelledby="announcement-preparation-title">
     <h3 id="announcement-preparation-title">{t('speechSettingsHeading')}</h3>
     <p>{t('speechSettingsHelp')}</p>
@@ -89,6 +99,19 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     <button type="button" disabled={!ready || busy} onClick={() => {void save();}}>{t('speechSettingsSave')}</button>
     {message && <p role="status">{t(message)}</p>}
     {error && <p role="alert">{t(error)}</p>}
+    <fieldset className="announcement-test-controls">
+      <legend>{german?'Ansagen testen':'Test announcements'}</legend>
+      <p>{german?'Tonprobe mit Gong und anschließendem Text über den eingestellten Background-Audio-Ausgang, auch OFF AIR. Laufende Hintergrundmusik wird dabei abgesenkt. Automatische Ansagen werden dadurch nicht eingeschaltet.':'Play the gong and selected text through Background Audio, including OFF AIR. Background music is attenuated; automatic announcements stay unchanged.'}</p>
+      <label>{german?'Testtext':'Test text'}<select value={selectedMessage?.id??''} disabled={testing} onChange={event=>{setTestId(event.target.value);setTestError('')}}>
+        <option value="">{german?'Allgemeine Testdurchsage':'General test announcement'}</option>
+        {texts.map(row=><option key={row.id} value={row.id}>{row.title||row.text}</option>)}
+      </select></label>
+      <p style={{whiteSpace:'pre-wrap'}}>{selectedProbe.text}</p>
+      <div className="announcement-test-actions"><button type="button" disabled={!ready||busy||!engine.ready||!native?.synthesize||testing||speaking} onClick={()=>{void startProbe()}}>{german?'Tonprobe starten':'Start audio test'}</button>
+      <button type="button" disabled={!testing} onClick={stopAnnouncementTest}>{german?'Tonprobe stoppen':'Stop audio test'}</button></div>
+      {testing&&<p role="status">{speaking?(german?'Tonprobe läuft …':'Audio test playing …'):(german?'Tonprobe wird vorbereitet …':'Preparing audio test …')}</p>}
+      {testError&&<p role="alert">{testError}</p>}
+    </fieldset>
     <h4>{t('speechSettingsPublicTexts')}</h4>
     <p>{t('speechSettingsPublicHelp')}</p>
     {!rows && <button type="button" onClick={refreshTexts}>{t('speechSettingsRefresh')}</button>}

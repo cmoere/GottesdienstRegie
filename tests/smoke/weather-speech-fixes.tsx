@@ -1,0 +1,20 @@
+import React,{useState}from'react';import{createRoot}from'react-dom/client';
+import{WeatherView}from'../../src/externalLoop/WeatherView';import{OutputComposition}from'../../src/OutputComposition';
+import{TestModeWatermark}from'../../src/TestModeWatermark';
+import{AutomaticAnnouncements}from'../../src/announcements/AutomaticAnnouncements';import{AnnouncementSettings}from'../../src/announcements/AnnouncementSettings';
+import{useSpeechStatus}from'../../src/announcements/AnnouncementIndicator';import{usePresentation}from'../../src/store';import{AppClock}from'../../src/community/AppClock';
+import'../../src/styles.css';import'../../src/cera-pro.css';import'../../src/externalLoop/styles.css';import'../../src/announcements/announcement-preparation.css';
+import'../../src/version75.css';
+import type{WeatherPayload,ExternalSnapshot}from'../../shared/externalLoop';import type{WeatherWarningState}from'../../shared/weatherWarnings';
+const now=Date.parse('2026-10-24T12:00:00Z');AppClock.now=()=>new Date(now);usePresentation.setState({onAir:false});
+(window as any).fixtureInitialWidth=innerWidth;
+const NativeAudio=window.Audio,trace:string[]=[];
+window.Audio=function(src?:string){const media=new NativeAudio(src);media.addEventListener('playing',()=>trace.push(media.src.includes('gong')?'gong':'speech'));return media}as any;
+const base:WeatherPayload={kind:'weather',location:{name:'Bielefeld · Testdaten',latitude:52,longitude:8},observedAt:new Date(now).toISOString(),temperature:1,wind:42,code:73,hourly:[2,4,6,8,10,12].map((n,i)=>({time:new Date(now+n*3600000).toISOString(),temperature:1-i,code:[73,71,3,45,0,1][i],rainProbability:60-i*10})),days:[{date:'2026-10-25T00:00:00Z',minimum:-2,maximum:6,code:1,rainProbability:20}]};
+const warnings:WeatherWarningState={revision:1,cycleStartedAtMs:now,fetchedAt:now,items:[{id:'one',event:'STURM',headline:'Amtliche Warnung vor Sturmböen · Testdaten',description:'Es treten Windböen auf. Bitte beachten Sie die örtlichen Hinweise und sichern Sie Gegenstände im Freien. Dieser Text dient ausschließlich der Layoutprüfung.',instruction:'Meiden Sie ungeschützte Bereiche. Beachten Sie aktuelle Hinweise des Deutschen Wetterdienstes.',severity:'Moderate',areaName:'Bielefeld',source:'DWD',validFrom:new Date(now-1000).toISOString(),validUntil:new Date(now+3600000).toISOString()},{id:'two',event:'FROST',headline:'Warnung vor Frost',description:'Testwarnung.',severity:'Minor',areaName:'Bielefeld',source:'DWD',validFrom:new Date(now-1000).toISOString(),validUntil:new Date(now+3600000).toISOString()}]};
+function Probe(){const[code,setCode]=useState(73),[showSettings,setShowSettings]=useState(true);const payload={...base,code},snapshot:ExternalSnapshot={version:1,key:'probe',revision:'fixture',fetchedAt:now,stale:false,payload};
+ (window as any).weatherSpeechFixture={setCode,closeSettings:()=>setShowSettings(false),testing:()=>useSpeechStatus.getState().testing,active:()=>useSpeechStatus.getState().active,trace};
+ return<><AutomaticAnnouncements quick={null}/><OutputComposition banner={null} weatherWarnings={warnings} testOverlay={<TestModeWatermark role="main" visible/>}><WeatherView snapshot={snapshot} payload={payload}/></OutputComposition>{showSettings&&<div id="probe-settings"><AnnouncementSettings rows={[]}/></div>}</>;
+}
+document.head.insertAdjacentHTML('beforeend','<style>html,body,#root{margin:0;width:100%;height:100%;overflow:hidden}#root{position:relative;container-type:inline-size}#probe-settings{position:fixed;left:-2500px;top:0;width:650px;padding:20px;background:#fff;color:#18232f;font-family:Cera Pro,sans-serif;--border:#b6bec3;--panel2:#eef2f3}</style>');
+createRoot(document.getElementById('root')!).render(<Probe/>);

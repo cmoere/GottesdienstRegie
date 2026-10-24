@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {spawn} from 'node:child_process';
+import {setImmediate as yieldToMain} from 'node:timers/promises';
 
 export function readBundledSpeechWav(input:Buffer):Uint8Array {
   if(input.length<46||input.length>32*1024*1024||input.toString('ascii',0,4)!=='RIFF'||input.toString('ascii',8,12)!=='WAVE'||input.readUInt32LE(4)+8!==input.length)throw Error('Ungültige Sprachausgabe.');
@@ -14,6 +15,20 @@ export function readBundledSpeechWav(input:Buffer):Uint8Array {
   }
   if(!format||!signal)throw Error('Sprachausgabe enthält kein Audiosignal.');
   return Uint8Array.from(input);
+}
+
+/** Speech-only level correction. Preserve mute/master routing and never amplify the gong. */
+export async function normalizeAnnouncementSpeech(input:Buffer,signal?:AbortSignal):Promise<Uint8Array>{
+  const check=()=>{if(signal?.aborted)throw Error('Durchsage abgebrochen.')};check();
+  const data=Buffer.from(readBundledSpeechWav(input)),ranges:Array<[number,number]>=[];let peak=0;
+  for(let offset=12;offset+8<=data.length;){const size=data.readUInt32LE(offset+4),start=offset+8,end=start+size;
+    if(data.toString('ascii',offset,offset+4)==='data'){ranges.push([start,end]);for(let block=start;block<end;block+=65536){const finish=Math.min(end,block+65536);for(let i=block;i<finish;i+=2)peak=Math.max(peak,Math.abs(data.readInt16LE(i)));if(finish<end){await yieldToMain();check()}}}
+    offset=end+(size%2);
+  }
+  const gain=Math.min(10**(18/20),(10**(-1/20)*32768)/peak);
+  for(const[start,end]of ranges)for(let block=start;block<end;block+=65536){const finish=Math.min(end,block+65536);for(let i=block;i<finish;i+=2)data.writeInt16LE(Math.max(-32768,Math.min(32767,Math.round(data.readInt16LE(i)*gain))),i);if(finish<end){await yieldToMain();check()}}
+  check();
+  return Uint8Array.from(data);
 }
 
 export function runBundledSpeech(file:string,args:string[],text:string,signal:AbortSignal):Promise<Buffer>{
@@ -53,7 +68,7 @@ export class BundledSpeechService {
     try{
       const java=await this.resources();if(controller.signal.aborted)throw Error('Durchsage abgebrochen.');
       const args=['-Xmx512m','-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-Dmary.base='+this.root,'-cp',[path.join(this.root,'worker'),path.join(this.root,'lib','*')].join(this.platform==='win32'?';':':'),'AnnouncementSpeech'];
-      const wav=await this.run(java,args,value,controller.signal);if(controller.signal.aborted)throw Error('Durchsage abgebrochen.');return readBundledSpeechWav(wav);
+      const wav=await this.run(java,args,value,controller.signal);if(controller.signal.aborted)throw Error('Durchsage abgebrochen.');return await normalizeAnnouncementSpeech(wav,controller.signal);
     }finally{if(this.current===controller)this.current=null}
   }
 }

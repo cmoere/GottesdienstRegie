@@ -24,9 +24,72 @@
       "line": "0.89",
       "builds": [
         {
-          "version": "0.89.2",
+          "version": "0.89.3",
           "releaseDate": "2026-10-24",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Passende Wetterbilder und klarere Ansagen",
+              "en": "Accurate weather visuals and clearer announcements"
+            },
+            "text": {
+              "de": "Dieses Update passt die Wetterdarstellung an die gemeldete Wetterlage an, vergrößert den Inhalt der Wetterwarnungen und ergänzt eine vollständige Ansagen-Tonprobe. Der Arbeitsbereich startet direkt in seiner vorgesehenen Größe; die lokale Sprachausgabe erhält einen angepassten Pegel.",
+              "en": "This update adapts weather visuals to reported conditions, enlarges weather-warning content and adds a complete announcement audio test. The workspace starts at its intended size and local speech receives corrected audio levels."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Wettergerechte Symbole und lesbarere Warnungen",
+                  "en": "Condition-specific symbols and more readable warnings"
+                },
+                "text": {
+                  "de": "Sonne, Wolken, Nebel, Regen, Schnee, Gewitter und Hagel erhalten eigene native Symbole. Stärkerer Wind wird zusätzlich dargestellt; ruhige Animationen berücksichtigen die reduzierte Bewegung. Das Warnbanner ist etwas flacher, Titel und Text sind größer. Nummerierung, Originalhinweise und langsames Scrollen bleiben erhalten. Die Vorschau bezeichnet die Wahrscheinlichkeit korrekt als Niederschlag und schließt damit Schnee ein.",
+                  "en": "Sun, clouds, fog, rain, snow, thunderstorms and hail use distinct native symbols. Stronger wind appears as an additional layer; restrained animations respect reduced-motion settings. The warning banner is slightly shorter with larger headings and body text. Numbering, original instructions and slow scrolling remain. Forecast probability is correctly labelled precipitation, including snow."
+                }
+              },
+              {
+                "label": {
+                  "de": "Gong und Ansagetext auch OFF AIR testen",
+                  "en": "Test gong and announcement text even OFF AIR"
+                },
+                "text": {
+                  "de": "Unter Einstellungen → Präsentation → Ansagen kann eine allgemeine Testdurchsage oder ein aktuell freigegebener Saaltext ausgewählt und mit Gong abgespielt werden. Die Tonprobe besitzt eine eigene Stoppen-Taste und verwendet den eingestellten Background-Audio-Ausgang. Sie schaltet automatische Ansagen nicht ein. Beim Schließen der Einstellungen oder beim Wechsel von OFF AIR zu ON AIR endet die Probe; laufende Durchsagen werden nicht überlagert.",
+                  "en": "Under Settings → Presentation → Announcements, choose a general test phrase or a currently approved hall message and play it after the gong. The audio test has its own Stop button and uses the configured Background Audio output. It does not enable automatic announcements. Closing settings or switching from OFF AIR to ON AIR stops the test; existing announcements are never overlapped."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Stabile Startgröße und besserer Sprachpegel",
+                  "en": "Stable startup dimensions and improved speech level"
+                },
+                "text": {
+                  "de": "Das Hauptfenster wird vor dem Laden der Oberfläche in der vorgesehenen Arbeitsgröße angelegt. Dadurch entfällt der Wechsel aus einem schmalen Ladefenster, der vorübergehend einen seitlich zusammengedrückten Arbeitsbereich verursachen konnte. Leise Sprachdateien werden separat mit begrenzter Verstärkung und Übersteuerungsschutz angepasst. Die Musikabsenkung betrifft weiterhin nur die Hintergrundmusik; Ausgangspegel und Stummschaltung bleiben erhalten. Längere Pegelverarbeitung bleibt für Live-Aktionen abbrechbar.",
+                  "en": "The main window receives its intended workspace dimensions before the interface loads. This removes the transition from a narrow loading window that could temporarily leave the workspace compressed to one side. Quiet speech files receive separate bounded amplification with clipping protection. Music ducking still affects background music only; output volume and mute remain in effect. Longer level processing stays interruptible for live actions."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Bestehender Übersetzungs- und Prüfumfang",
+                  "en": "Existing translation and verification scope"
+                },
+                "text": {
+                  "de": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Automatisierte Tonproben laufen mit physisch stummgeschalteter Ausgabe; Aussprache und Lautstärke sind vor öffentlichem Einsatz an der tatsächlichen Saalanlage zu prüfen.",
+                  "en": "Regional variants remain partially translated; missing interface text appears in standard German. The experimental original PowerPoint mode remains disabled. Automated audio tests mute physical playback; rehearse pronunciation and volume on the real hall system before public use."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.89.2",
+          "releaseDate": "2026-10-24",
+          "current": false,
           "overview": {
             "label": {
               "de": "Deutsche Durchsagestimme direkt im Update",

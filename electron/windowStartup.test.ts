@@ -1,10 +1,26 @@
 import {describe,expect,it} from 'vitest';
 import path from 'node:path';
-import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds,UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS} from './windowStartup';
+import {rendererFailureHtml,resolveOperatorWindowStartup,resolveRendererEntry,resolveSplashWindowBounds,UPDATE_CHECK_DELAY_AFTER_WORKSPACE_MS,createSizedOperatorWindow} from './windowStartup';
 
 const displays=[{id:1,workArea:{x:0,y:0,width:1920,height:1040},bounds:{x:0,y:0,width:1920,height:1080}}];
 
 describe('resolveOperatorWindowStartup',()=>{
+  it('constructs the full workspace geometry before any renderer or auth readiness',()=>{
+    const startup=resolveOperatorWindowStartup({windowStartMode:'fullscreen'},displays,1),events:string[]=[];
+    const created=createSizedOperatorWindow(startup,options=>{
+      expect(options).toMatchObject({x:96,y:52,width:1728,height:936,minWidth:960,minHeight:620,resizable:true,maximizable:true});events.push('created-at-working-size');
+      return{setFullScreen:(value:boolean)=>{expect(value).toBe(true);events.push('fullscreen')},maximize:()=>{events.push('maximize')}};
+    });
+    expect(events).toEqual(['created-at-working-size','fullscreen']);expect(created).toBeDefined();
+  });
+  it('preserves maximized and stored window start modes without a later splash resize',()=>{
+    for(const mode of ['maximized','window'] as const){let maximized=false;
+      createSizedOperatorWindow(resolveOperatorWindowStartup({windowStartMode:mode,bounds:{x:10,y:20,width:1280,height:800}},displays,1),options=>{
+        expect(options.width).toBe(1280);expect(options.height).toBe(800);
+        return{setFullScreen:()=>{throw Error('wrong mode')},maximize:()=>{maximized=true}};
+      });expect(maximized).toBe(mode==='maximized');
+    }
+  });
   it('shows the startup screen as a narrow centered window before the workspace',()=>{
     expect(resolveSplashWindowBounds(displays[0].workArea)).toEqual({x:755,y:170,width:410,height:700});
   });

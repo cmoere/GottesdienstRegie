@@ -35,7 +35,8 @@ it('localizes preparatory speech controls and preserves every public source text
  render(<AnnouncementSettings bridge={{readSettings:async()=>settings,writeSettings:async value=>value}} rows={[row]}/>);
  await waitFor(()=>expect(screen.getByRole('button',{name:'Save announcement settings'})).toBeEnabled());
  expect(screen.getByLabelText('Interval (minutes)')).toHaveValue(5);
- expect(screen.getByText('Gemeindehinweis')).toBeInTheDocument();
+ expect(screen.getByText('Gemeindehinweis',{selector:'strong'})).toBeInTheDocument();
+ expect(screen.getByRole('option',{name:'Gemeindehinweis'})).toHaveValue('one');
  expect(screen.getByText(row.text)).toBeInTheDocument();
  expect(screen.getByRole('checkbox',{name:'Enable automatic announcements'})).toBeDisabled();
 });

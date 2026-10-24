@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": false,
-  "sourceFingerprint": "8e8f1e317e9aa53ea27aa73545b9636d2ecf7e4c21901c863f6129217fd49cbd",
+  "sourceFingerprint": "e5d6ab44be3ff65fef45bbeb94978b6f4859c433b23afc396976ed2c7d1865d2",
   "note": "Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -20815,10 +20815,18 @@
       "status": "review-required"
     },
     {
+      "key": "source.56df6ad4bcf3207636b3.1",
+      "text": "Tonprobe fehlgeschlagen.",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 86,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
       "key": "source.cac38df5fb76cc4b7e19.1",
       "text": "Die deutsche Stimme und ihre Laufzeit sind im Update enthalten. Keine zusätzliche Installation, kein Konto und keine Windows-Stimme erforderlich. Die Sprachausgabe arbeitet offline mit klassischen Sprachaufnahmen. Die erste automatische Durchsage erfolgt nach dem gespeicherten Intervall, nur während ON AIR im Vor- oder Nachprogramm.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 81,
+      "line": 91,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -20826,7 +20834,7 @@
       "key": "source.a671ac81612d96ccae90.1",
       "text": "The German voice and its runtime are included in the update. No extra installation, account or Windows voice is needed. Speech is generated offline using classical recorded speech segments. Automatic announcements start after the saved interval, only ON AIR in pre/post programs.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 81,
+      "line": 91,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -20834,7 +20842,7 @@
       "key": "source.baf225b69f7d6f1c1868.1",
       "text": "Mitgelieferte Stimme wird geprüft.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 82,
+      "line": 92,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -20842,7 +20850,135 @@
       "key": "source.0c0bc4cb4b074a5786df.1",
       "text": "Checking the included voice.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 82,
+      "line": 92,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.dc6b1766008b55f3ab90.1",
+      "text": "Ansagen testen",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 103,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.606c949614b35b8e4a8b.1",
+      "text": "Test announcements",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 103,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.3c4b305a49bd0731f6e1.1",
+      "text": "Tonprobe mit Gong und anschließendem Text über den eingestellten Background-Audio-Ausgang, auch OFF AIR. Laufende Hintergrundmusik wird dabei abgesenkt. Automatische Ansagen werden dadurch nicht eingeschaltet.",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 104,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.1b3dd82024f569578719.1",
+      "text": "Play the gong and selected text through Background Audio, including OFF AIR. Background music is attenuated; automatic announcements stay unchanged.",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 104,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.a44eaf03996842294538.1",
+      "text": "Testtext",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 105,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.8236276102543dc1e6e3.1",
+      "text": "Test text",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 105,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.4e5f838409c0eea037e4.1",
+      "text": "Allgemeine Testdurchsage",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 106,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.088cb600691e36cd296b.1",
+      "text": "General test announcement",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 106,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.07731073c25633ac526d.1",
+      "text": "Tonprobe starten",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 110,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.47fff1fa6463a463f4a7.1",
+      "text": "Start audio test",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 110,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.8efc7d107c785a7da8e6.1",
+      "text": "Tonprobe stoppen",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 111,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.66054f62bac327b7fffb.1",
+      "text": "Stop audio test",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 111,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.fe7e17c21a01c187c99b.1",
+      "text": "Tonprobe läuft …",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 112,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.76add4cedc82bcdf7947.1",
+      "text": "Audio test playing …",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 112,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.642bbe35c54a94bc97f8.1",
+      "text": "Tonprobe wird vorbereitet …",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 112,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.46918f5d2257a5c995a7.1",
+      "text": "Preparing audio test …",
+      "source": "src/announcements/AnnouncementSettings.tsx",
+      "line": 112,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -20850,15 +20986,79 @@
       "key": "source.cd457df8992201da294f.1",
       "text": "Durchsage",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 95,
+      "line": 118,
       "context": "BinaryExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.be59b3a21428dd756e7d.1",
+      "text": "Allgemeine Testdurchsage",
+      "source": "src/announcements/AnnouncementTestRequests.ts",
+      "line": 2,
+      "context": "property:title",
+      "status": "review-required"
+    },
+    {
+      "key": "source.3b8162ac479b827b57b1.1",
+      "text": "Dies ist eine Testdurchsage der GottesdienstRegie. Herzlich willkommen zum Gottesdienst.",
+      "source": "src/announcements/AnnouncementTestRequests.ts",
+      "line": 2,
+      "context": "property:text",
+      "status": "review-required"
+    },
+    {
+      "key": "source.1755759035ed8df07122.1",
+      "text": "Die Ansagensteuerung ist nicht verfügbar.",
+      "source": "src/announcements/AnnouncementTestRequests.ts",
+      "line": 9,
+      "context": "CallExpression",
       "status": "review-required"
     },
     {
       "key": "source.c0ae4440adc6a09ba76c.1",
       "text": "Durchsage nicht verfügbar. Mitgelieferte Stimme und Background-Audio-Ausgang prüfen.",
       "source": "src/announcements/AutomaticAnnouncements.tsx",
-      "line": 46,
+      "line": 51,
+      "context": "property:message",
+      "status": "review-required"
+    },
+    {
+      "key": "source.849774785817e3e864fa.1",
+      "text": "Es läuft bereits eine Durchsage.",
+      "source": "src/announcements/AutomaticAnnouncements.tsx",
+      "line": 55,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.03f7d6ecdb3c4ceab305.1",
+      "text": "Während eines laufenden Gottesdienstes oder einer Notfallanzeige ist keine Tonprobe möglich.",
+      "source": "src/announcements/AutomaticAnnouncements.tsx",
+      "line": 56,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.3b22352c48593f5c318e.1",
+      "text": "Bitte einen Musikpegel zwischen 0 und 100 Prozent wählen.",
+      "source": "src/announcements/AutomaticAnnouncements.tsx",
+      "line": 57,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.e7f39391f205d41086f6.1",
+      "text": "Die gewählte Durchsage ist nicht mehr freigegeben.",
+      "source": "src/announcements/AutomaticAnnouncements.tsx",
+      "line": 59,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.bb1e8554bad1d88f4dcb.1",
+      "text": "Tonprobe fehlgeschlagen. Stimme und Background-Audio-Ausgang prüfen.",
+      "source": "src/announcements/AutomaticAnnouncements.tsx",
+      "line": 62,
       "context": "property:message",
       "status": "review-required"
     },
@@ -20866,7 +21066,7 @@
       "key": "source.e23b2edbab788cc0eb14.1",
       "text": "Ansageneinstellungen konnten nicht geladen werden.",
       "source": "src/announcements/AutomaticAnnouncements.tsx",
-      "line": 49,
+      "line": 68,
       "context": "property:message",
       "status": "review-required"
     },
@@ -24405,114 +24605,98 @@
       "status": "review-required"
     },
     {
-      "key": "source.f00cdc84f880ad3b8f42.1",
-      "text": "Sonnig",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 3,
+      "key": "source.e056b325a6b9ca3d1b37.1",
+      "text": "· Wind",
+      "source": "src/externalLoop/WeatherIcon.tsx",
+      "line": 4,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
     {
-      "key": "source.a343503f66a4d699d30f.1",
-      "text": "Heiter bis wolkig",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 3,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.00f1a85f876e42e385e3.1",
-      "text": "Bewölkt",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 3,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.16d78cba7f5de5d92fed.1",
-      "text": "Neblig",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 3,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.0cfaf49f6d80c5480d3f.1",
-      "text": "Nieselregen",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 3,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.4d5792cd9dc42f8de1a8.1",
-      "text": "Regen",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 3,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.64a17f0ab1b81a5ff10a.1",
-      "text": "Schnee",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 3,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.6483cc4496c4760a243d.1",
-      "text": "Regenschauer",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 3,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.6b7d10782fd276165c0c.1",
-      "text": "Schneeschauer",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 3,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.a1233e6b2ffb9dbcc5a1.1",
-      "text": "Gewitter",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 3,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.e9b37fc22a9324342ae5.1",
-      "text": "M{expression1} {expression2}L{expression3} {expression4}",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 6,
+      "key": "source.8203c2b107b245a01ad6.1",
+      "text": "rotate({expression1} 40 36)",
+      "source": "src/externalLoop/WeatherIcon.tsx",
+      "line": 5,
       "context": "JsxExpression",
       "status": "review-required"
     },
     {
-      "key": "source.0b685755a8046ec878cf.1",
-      "text": "M27 75C4 75 7 43 29 44C32 14 77 15 83 47C112 39 121 76 94 76Z",
-      "source": "src/externalLoop/WeatherView.tsx",
-      "line": 7,
+      "key": "source.19694f7244fdc83d50a7.1",
+      "text": "M40 5v6",
+      "source": "src/externalLoop/WeatherIcon.tsx",
+      "line": 5,
       "context": "JsxAttribute",
       "status": "review-required"
     },
     {
-      "key": "source.7603aa54a6965e159e05.1",
-      "text": "M{expression1} 86l-4 9",
-      "source": "src/externalLoop/WeatherView.tsx",
+      "key": "source.719b5485a0a3a1b8881a.1",
+      "text": "M26 73C5 73 8 43 29 44C33 15 77 17 83 47C111 39 120 74 95 74Z",
+      "source": "src/externalLoop/WeatherIcon.tsx",
+      "line": 6,
+      "context": "JsxAttribute",
+      "status": "review-required"
+    },
+    {
+      "key": "source.92760206c3a0af981361.1",
+      "text": "M{expression1} {expression2}h85",
+      "source": "src/externalLoop/WeatherIcon.tsx",
+      "line": 7,
+      "context": "JsxExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.fe08526cdecaf0feab97.1",
+      "text": "M{expression1} 85l-5 {expression2}",
+      "source": "src/externalLoop/WeatherIcon.tsx",
       "line": 8,
       "context": "JsxExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.9b34a9b4d9bd11910354.1",
+      "text": "M53 100h29m-15-6v12",
+      "source": "src/externalLoop/WeatherIcon.tsx",
+      "line": 8,
+      "context": "JsxAttribute",
+      "status": "review-required"
+    },
+    {
+      "key": "source.7831ebee4b0514541318.1",
+      "text": "M{expression1} 84v20m-8-15 16 10m-16 0 16-10",
+      "source": "src/externalLoop/WeatherIcon.tsx",
+      "line": 9,
+      "context": "JsxExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.10b848fce063f9ef3813.1",
+      "text": "m63 75-13 20h12l-4 15 24-27H68l7-8",
+      "source": "src/externalLoop/WeatherIcon.tsx",
+      "line": 10,
+      "context": "JsxAttribute",
+      "status": "review-required"
+    },
+    {
+      "key": "source.dacd6fbc3311c5095fcc.1",
+      "text": "M72 18h28c14 0 14-16 2-16M80 30h32c14 0 14 15 2 15",
+      "source": "src/externalLoop/WeatherIcon.tsx",
+      "line": 11,
+      "context": "JsxAttribute",
+      "status": "review-required"
+    },
+    {
+      "key": "source.ae1f28d16872756ab5d3.1",
+      "text": "M50 54h28",
+      "source": "src/externalLoop/WeatherIcon.tsx",
+      "line": 12,
+      "context": "JsxAttribute",
       "status": "review-required"
     },
     {
       "key": "source.50bd0cb505f0edc530b6.1",
       "text": "WETTER",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 15,
+      "line": 11,
       "context": "jsx-text:p",
       "status": "review-required"
     },
@@ -24520,7 +24704,7 @@
       "key": "source.e84efd5b9b56f39555a7.1",
       "text": "°C",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 16,
+      "line": 12,
       "context": "jsx-text:strong",
       "status": "review-required"
     },
@@ -24528,7 +24712,7 @@
       "key": "source.3e5a5504644efa79c5a0.1",
       "text": "Wind",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 16,
+      "line": 12,
       "context": "jsx-text:div",
       "status": "review-required"
     },
@@ -24536,7 +24720,7 @@
       "key": "source.641f08214162d73e56d0.1",
       "text": "km/h",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 16,
+      "line": 12,
       "context": "jsx-text:strong",
       "status": "review-required"
     },
@@ -24544,7 +24728,7 @@
       "key": "source.f99602033e3ff94041e8.1",
       "text": "Die nächsten zwölf Stunden",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 17,
+      "line": 13,
       "context": "jsx-text:h3",
       "status": "review-required"
     },
@@ -24552,15 +24736,15 @@
       "key": "source.e84efd5b9b56f39555a7.2",
       "text": "°C",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 17,
+      "line": 13,
       "context": "jsx-text:strong",
       "status": "review-required"
     },
     {
-      "key": "source.cbc1be17317c9992b06a.1",
-      "text": "Regen",
+      "key": "source.8073f3a6320dddc4a210.1",
+      "text": "Niederschlag",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 17,
+      "line": 13,
       "context": "jsx-text:small",
       "status": "review-required"
     },
@@ -24568,7 +24752,7 @@
       "key": "source.aaccdd925358329e4c54.1",
       "text": "Stundenvorschau derzeit nicht verfügbar.",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 17,
+      "line": 13,
       "context": "jsx-text:p",
       "status": "review-required"
     },
@@ -24576,15 +24760,15 @@
       "key": "source.7d160a427c9f8c2a61a3.1",
       "text": "Morgen",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 17,
+      "line": 13,
       "context": "jsx-text:h3",
       "status": "review-required"
     },
     {
-      "key": "source.f5fa47826eb6f4465304.1",
-      "text": "Regenwahrscheinlichkeit",
+      "key": "source.fae2cc92431b9348b424.1",
+      "text": "Niederschlagswahrscheinlichkeit",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 17,
+      "line": 13,
       "context": "jsx-text:small",
       "status": "review-required"
     },
@@ -24592,7 +24776,7 @@
       "key": "source.914650ceaf9736a02dcc.1",
       "text": "Vorhersage derzeit nicht verfügbar.",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 17,
+      "line": 13,
       "context": "jsx-text:p",
       "status": "review-required"
     },
@@ -24600,7 +24784,7 @@
       "key": "source.f00618f7469d5a1b691e.1",
       "text": "Wetterdaten: Open-Meteo · Datenstand:",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 18,
+      "line": 14,
       "context": "jsx-text:footer",
       "status": "review-required"
     },
@@ -24608,7 +24792,7 @@
       "key": "source.8714422249e01e55c396.1",
       "text": "· Letzter gültiger Stand",
       "source": "src/externalLoop/WeatherView.tsx",
-      "line": 18,
+      "line": 14,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -24666,6 +24850,110 @@
       "source": "src/externalLoop/model.ts",
       "line": 39,
       "context": "ArrowFunction",
+      "status": "review-required"
+    },
+    {
+      "key": "source.97875adffc145cc7ea5c.1",
+      "text": "Sonnig",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 4,
+      "context": "property:description",
+      "status": "review-required"
+    },
+    {
+      "key": "source.baafedb93a6e1e3c5076.1",
+      "text": "Heiter bis wolkig",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 5,
+      "context": "property:description",
+      "status": "review-required"
+    },
+    {
+      "key": "source.c01adcceaeab7f433684.1",
+      "text": "Bewölkt",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 6,
+      "context": "property:description",
+      "status": "review-required"
+    },
+    {
+      "key": "source.89d9b06cba64e13017c5.1",
+      "text": "Neblig",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 7,
+      "context": "property:description",
+      "status": "review-required"
+    },
+    {
+      "key": "source.03a3e1626026848b601c.1",
+      "text": "Nieselregen",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 8,
+      "context": "property:description",
+      "status": "review-required"
+    },
+    {
+      "key": "source.63938c0abbdf21838172.1",
+      "text": "Gefrierender Regen",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 9,
+      "context": "property:description",
+      "status": "review-required"
+    },
+    {
+      "key": "source.d12f44d0bed832dbe7c1.1",
+      "text": "Regenschauer",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 10,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.547a50b9b853663d67bc.1",
+      "text": "Regen",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 10,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.c271fba496feb641e523.1",
+      "text": "Schneeschauer",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 11,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.88702edbdeed94b519f4.1",
+      "text": "Schnee",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 11,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.a75c49bd3b2d1b62fb18.1",
+      "text": "Gewitter",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 12,
+      "context": "property:description",
+      "status": "review-required"
+    },
+    {
+      "key": "source.7bf1c84146ba45b3a586.1",
+      "text": "Gewitter mit Hagel",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 13,
+      "context": "property:description",
+      "status": "review-required"
+    },
+    {
+      "key": "source.e6d1b7b29f05b7f3afed.1",
+      "text": "Wetterlage nicht verfügbar",
+      "source": "src/externalLoop/weatherCondition.ts",
+      "line": 14,
+      "context": "property:description",
       "status": "review-required"
     },
     {
@@ -36328,7 +36616,7 @@
       "key": "source.7a05c64cd775a2efc938.1",
       "text": "RIFF",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 6,
+      "line": 7,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -36336,7 +36624,7 @@
       "key": "source.7198f1e83db5178a1ae2.1",
       "text": "WAVE",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 6,
+      "line": 7,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -36344,7 +36632,7 @@
       "key": "source.20a0a7fc8cbd65ea79a6.1",
       "text": "Ungültige Sprachausgabe.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 6,
+      "line": 7,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -36352,7 +36640,7 @@
       "key": "source.c44c46a718676ee63589.1",
       "text": "Unvollständige Sprachausgabe.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 10,
+      "line": 11,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -36360,7 +36648,7 @@
       "key": "source.af2b65193cb35f73cf42.1",
       "text": "fmt",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 11,
+      "line": 12,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -36368,7 +36656,7 @@
       "key": "source.d752525d547625a2deeb.1",
       "text": "Nicht unterstütztes Sprachformat.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 11,
+      "line": 12,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -36376,7 +36664,7 @@
       "key": "source.8ab9df71dd6c81a3952a.1",
       "text": "Ungültige Sprachdaten.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 12,
+      "line": 13,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -36384,87 +36672,7 @@
       "key": "source.3d6b4d277e6e9518f5c4.1",
       "text": "Sprachausgabe enthält kein Audiosignal.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 15,
-      "context": "CallExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.58926d016d3770365380.1",
-      "text": "Spracherzeugung hat zu lange gedauert.",
-      "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 26,
-      "context": "CallExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.85bf676a3ce03f06f952.1",
-      "text": "Mitgelieferte Sprachausgabe konnte nicht gestartet werden.",
-      "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 29,
-      "context": "CallExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.c4ce80736cb1b5b6c77f.1",
-      "text": "Sprachausgabe wurde abgebrochen oder ist fehlgeschlagen.",
-      "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 30,
-      "context": "CallExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.857360387c431edd41ee.1",
-      "text": "Sprachpaket fehlt.",
-      "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 39,
-      "context": "CallExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.b71e36e9ded7552622d9.1",
-      "text": "Sprachpaket passt nicht zu diesem Gerät.",
-      "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 41,
-      "context": "CallExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.a8cd1facb6be13807438.1",
-      "text": "Sprachpaket ist unvollständig.",
-      "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 44,
-      "context": "CallExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.3350193b2129b9dede30.1",
-      "text": "Deutsche Stimme ist enthalten · offline verfügbar",
-      "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 47,
-      "context": "property:name",
-      "status": "review-required"
-    },
-    {
-      "key": "source.1d487f7da05fae28e6ec.1",
-      "text": "Mitgeliefertes Sprachpaket fehlt oder ist beschädigt. Bitte das vollständige Update installieren.",
-      "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 47,
-      "context": "property:name",
-      "status": "review-required"
-    },
-    {
-      "key": "source.9883746a76726335849d.1",
-      "text": "Ungültiger Durchsage-Text.",
-      "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 50,
-      "context": "CallExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.06e486c8f46c0c5f9eee.1",
-      "text": "Eine Spracherzeugung läuft bereits.",
-      "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 51,
+      "line": 16,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -36472,7 +36680,87 @@
       "key": "source.ec447a8c93b2e692a6c1.1",
       "text": "Durchsage abgebrochen.",
       "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 22,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.58926d016d3770365380.1",
+      "text": "Spracherzeugung hat zu lange gedauert.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 41,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.85bf676a3ce03f06f952.1",
+      "text": "Mitgelieferte Sprachausgabe konnte nicht gestartet werden.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 44,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.c4ce80736cb1b5b6c77f.1",
+      "text": "Sprachausgabe wurde abgebrochen oder ist fehlgeschlagen.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 45,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.857360387c431edd41ee.1",
+      "text": "Sprachpaket fehlt.",
+      "source": "electron/announcements/BundledSpeechService.ts",
       "line": 54,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.b71e36e9ded7552622d9.1",
+      "text": "Sprachpaket passt nicht zu diesem Gerät.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 56,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.a8cd1facb6be13807438.1",
+      "text": "Sprachpaket ist unvollständig.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 59,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.3350193b2129b9dede30.1",
+      "text": "Deutsche Stimme ist enthalten · offline verfügbar",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 62,
+      "context": "property:name",
+      "status": "review-required"
+    },
+    {
+      "key": "source.1d487f7da05fae28e6ec.1",
+      "text": "Mitgeliefertes Sprachpaket fehlt oder ist beschädigt. Bitte das vollständige Update installieren.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 62,
+      "context": "property:name",
+      "status": "review-required"
+    },
+    {
+      "key": "source.9883746a76726335849d.1",
+      "text": "Ungültiger Durchsage-Text.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 65,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.06e486c8f46c0c5f9eee.1",
+      "text": "Eine Spracherzeugung läuft bereits.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 66,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -36480,7 +36768,15 @@
       "key": "source.ec447a8c93b2e692a6c1.2",
       "text": "Durchsage abgebrochen.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 56,
+      "line": 69,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.ec447a8c93b2e692a6c1.3",
+      "text": "Durchsage abgebrochen.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 71,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -36816,7 +37112,7 @@
       "key": "source.0c0353a9315402f8c655.1",
       "text": "GottesdienstRegie - Audiobrowser",
       "source": "electron/main.ts",
-      "line": 219,
+      "line": 216,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -36824,7 +37120,7 @@
       "key": "source.4211246ea61aeb7dee24.1",
       "text": "GottesdienstRegie - Medienbibliothek",
       "source": "electron/main.ts",
-      "line": 219,
+      "line": 216,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -36832,7 +37128,7 @@
       "key": "source.0c0353a9315402f8c655.2",
       "text": "GottesdienstRegie - Audiobrowser",
       "source": "electron/main.ts",
-      "line": 221,
+      "line": 218,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -36840,7 +37136,7 @@
       "key": "source.4211246ea61aeb7dee24.2",
       "text": "GottesdienstRegie - Medienbibliothek",
       "source": "electron/main.ts",
-      "line": 221,
+      "line": 218,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -36848,7 +37144,7 @@
       "key": "source.b5ee3af9591f0dbb4828.1",
       "text": "GottesdienstRegie - Änderungshistorie",
       "source": "electron/main.ts",
-      "line": 230,
+      "line": 227,
       "context": "property:title",
       "status": "review-required"
     },
@@ -36856,7 +37152,7 @@
       "key": "source.2e830c86c8c088c72759.1",
       "text": "GottesdienstRegie: Update verfügbar",
       "source": "electron/main.ts",
-      "line": 250,
+      "line": 247,
       "context": "property:title",
       "status": "review-required"
     },
@@ -36864,7 +37160,7 @@
       "key": "source.cb0235511348c531a840.1",
       "text": "Version {expression1} ist verfügbar. Öffne GottesdienstRegie, um das Update zu prüfen und zu installieren.",
       "source": "electron/main.ts",
-      "line": 250,
+      "line": 247,
       "context": "property:body",
       "status": "review-required"
     },
@@ -36872,7 +37168,7 @@
       "key": "source.b69ef07ea7f42c889f52.1",
       "text": "ABORT",
       "source": "electron/main.ts",
-      "line": 269,
+      "line": 266,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -36880,7 +37176,7 @@
       "key": "source.c17a796afc00de92556c.1",
       "text": "SPOTIFY_SECURE_STORAGE_UNAVAILABLE",
       "source": "electron/main.ts",
-      "line": 299,
+      "line": 296,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36888,7 +37184,7 @@
       "key": "source.f2b33174c2ee2ac95306.1",
       "text": "Bildschirmtest-Bericht speichern",
       "source": "electron/main.ts",
-      "line": 314,
+      "line": 311,
       "context": "property:title",
       "status": "review-required"
     },
@@ -36896,7 +37192,7 @@
       "key": "source.3f09d569fa7b873c0660.1",
       "text": "Cache",
       "source": "electron/main.ts",
-      "line": 331,
+      "line": 328,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -36904,7 +37200,7 @@
       "key": "source.1ed106b08ec52e84957b.1",
       "text": "private, max-age=3600",
       "source": "electron/main.ts",
-      "line": 339,
+      "line": 336,
       "context": "property:'cache-control'",
       "status": "review-required"
     },
@@ -36912,7 +37208,7 @@
       "key": "source.9f3b5da4859d4f01185c.1",
       "text": "Medium nicht verfügbar.",
       "source": "electron/main.ts",
-      "line": 339,
+      "line": 336,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36920,7 +37216,7 @@
       "key": "source.9af87584412ae97f646c.1",
       "text": "text/plain; charset=utf-8",
       "source": "electron/main.ts",
-      "line": 339,
+      "line": 336,
       "context": "property:'content-type'",
       "status": "review-required"
     },
@@ -36928,7 +37224,7 @@
       "key": "source.76be168bd50f2edf920b.1",
       "text": "UNSUPPORTED_PASSWORD_ALGORITHM",
       "source": "electron/main.ts",
-      "line": 356,
+      "line": 353,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36936,7 +37232,7 @@
       "key": "source.5574d7db42ea21cdb569.1",
       "text": "GAS_NETWORK",
       "source": "electron/main.ts",
-      "line": 358,
+      "line": 355,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36944,7 +37240,7 @@
       "key": "source.5574d7db42ea21cdb569.2",
       "text": "GAS_NETWORK",
       "source": "electron/main.ts",
-      "line": 358,
+      "line": 355,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36952,7 +37248,7 @@
       "key": "source.63fe83e206c381492ec1.1",
       "text": "GAS_RESPONSE_INVALID",
       "source": "electron/main.ts",
-      "line": 358,
+      "line": 355,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36960,7 +37256,7 @@
       "key": "source.63fe83e206c381492ec1.2",
       "text": "GAS_RESPONSE_INVALID",
       "source": "electron/main.ts",
-      "line": 358,
+      "line": 355,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36968,7 +37264,7 @@
       "key": "source.6b06ace66d091cb4ce67.1",
       "text": "SECURE_STORAGE_UNAVAILABLE",
       "source": "electron/main.ts",
-      "line": 382,
+      "line": 379,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36976,7 +37272,7 @@
       "key": "source.69d060a5a91ffefb83a7.1",
       "text": "Windows-Autostart ist nur in der installierten Anwendung verfügbar.",
       "source": "electron/main.ts",
-      "line": 403,
+      "line": 400,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36984,7 +37280,7 @@
       "key": "source.92b41ee7f94aadca116c.1",
       "text": "Philippus Gemeinde Bielefeld e. V.",
       "source": "electron/main.ts",
-      "line": 417,
+      "line": 414,
       "context": "property:organizationName",
       "status": "review-required"
     },
@@ -36992,7 +37288,7 @@
       "key": "source.92b41ee7f94aadca116c.2",
       "text": "Philippus Gemeinde Bielefeld e. V.",
       "source": "electron/main.ts",
-      "line": 418,
+      "line": 415,
       "context": "property:organizationName",
       "status": "review-required"
     },
@@ -37000,7 +37296,7 @@
       "key": "source.651ddbfa0929b7b9c0fb.1",
       "text": "{expression1} {expression2}",
       "source": "electron/main.ts",
-      "line": 418,
+      "line": 415,
       "context": "property:platform",
       "status": "review-required"
     },
@@ -37008,7 +37304,7 @@
       "key": "source.0c060c0ecb0277d4524e.1",
       "text": "Ein Gerätename ist erforderlich.",
       "source": "electron/main.ts",
-      "line": 418,
+      "line": 415,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37016,7 +37312,7 @@
       "key": "source.42add500748b1a62874b.1",
       "text": "Sichere Tokenspeicherung ist auf diesem System nicht verfügbar.",
       "source": "electron/main.ts",
-      "line": 426,
+      "line": 423,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37024,7 +37320,7 @@
       "key": "source.e388e5571d5d073bcf02.1",
       "text": "INVALID_CREDENTIALS",
       "source": "electron/main.ts",
-      "line": 432,
+      "line": 429,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37032,7 +37328,7 @@
       "key": "source.386abc0ea7aab97662b5.1",
       "text": "LOGIN_DISABLED",
       "source": "electron/main.ts",
-      "line": 433,
+      "line": 430,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37040,7 +37336,7 @@
       "key": "source.016183b4e06a842b92bb.1",
       "text": "DISABLED",
       "source": "electron/main.ts",
-      "line": 433,
+      "line": 430,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37048,7 +37344,7 @@
       "key": "source.e388e5571d5d073bcf02.2",
       "text": "INVALID_CREDENTIALS",
       "source": "electron/main.ts",
-      "line": 433,
+      "line": 430,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37056,7 +37352,7 @@
       "key": "source.c286b3e33d7489cd8d2b.1",
       "text": "EMAIL_NOT_VERIFIED",
       "source": "electron/main.ts",
-      "line": 433,
+      "line": 430,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37064,7 +37360,7 @@
       "key": "source.d608021ca4cd59695e5b.1",
       "text": "ACCOUNT_LOCKED",
       "source": "electron/main.ts",
-      "line": 433,
+      "line": 430,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37072,7 +37368,7 @@
       "key": "source.e388e5571d5d073bcf02.3",
       "text": "INVALID_CREDENTIALS",
       "source": "electron/main.ts",
-      "line": 433,
+      "line": 430,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37080,7 +37376,7 @@
       "key": "source.67e5cfcf74fd89b14e89.1",
       "text": "INITIAL_PASSWORD_CHANGE_REQUIRED",
       "source": "electron/main.ts",
-      "line": 433,
+      "line": 430,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37088,7 +37384,7 @@
       "key": "source.06d07f1fb1a578f9cce2.1",
       "text": "SERVICE_ACCESS_UNAVAILABLE",
       "source": "electron/main.ts",
-      "line": 433,
+      "line": 430,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37096,7 +37392,7 @@
       "key": "source.2ce1044b72d5a6fbc8cb.1",
       "text": "NO_SERVICE_ACCESS",
       "source": "electron/main.ts",
-      "line": 433,
+      "line": 430,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37104,7 +37400,7 @@
       "key": "source.eb9ad58a0f915d78d814.1",
       "text": "TWO_FACTOR_COOLDOWN",
       "source": "electron/main.ts",
-      "line": 439,
+      "line": 436,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37112,7 +37408,7 @@
       "key": "source.3c83b06a7f9dc949e2b1.1",
       "text": "TWO_FACTOR_EXPIRED",
       "source": "electron/main.ts",
-      "line": 448,
+      "line": 445,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37120,7 +37416,7 @@
       "key": "source.3e7098fd4bed9601ddf5.1",
       "text": "Der Code ist nicht korrekt.",
       "source": "electron/main.ts",
-      "line": 454,
+      "line": 451,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37128,7 +37424,7 @@
       "key": "source.a5516a031fd8597a6a31.1",
       "text": "SESSION_CHECK_NETWORK",
       "source": "electron/main.ts",
-      "line": 461,
+      "line": 458,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37136,7 +37432,7 @@
       "key": "source.5f8204893a9b9ab25e2c.1",
       "text": "PATCH",
       "source": "electron/main.ts",
-      "line": 462,
+      "line": 459,
       "context": "property:method",
       "status": "review-required"
     },
@@ -37144,7 +37440,7 @@
       "key": "source.aa9868beb0103dbe2398.1",
       "text": "SLIDE_RENDER_FAILED",
       "source": "electron/main.ts",
-      "line": 482,
+      "line": 479,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37152,7 +37448,7 @@
       "key": "source.aa9868beb0103dbe2398.2",
       "text": "SLIDE_RENDER_FAILED",
       "source": "electron/main.ts",
-      "line": 483,
+      "line": 480,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37160,7 +37456,7 @@
       "key": "source.ebad3a56a9b0e470ecd1.1",
       "text": "KEYNOTE_PREVIEW_NOT_FOUND",
       "source": "electron/main.ts",
-      "line": 484,
+      "line": 481,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37168,7 +37464,7 @@
       "key": "source.e7c6eab609c76a20e524.1",
       "text": "Abschnitt {expression1}",
       "source": "electron/main.ts",
-      "line": 497,
+      "line": 494,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37176,7 +37472,7 @@
       "key": "source.6acd20020bd83c8af15d.1",
       "text": "Abschnitt {expression1}",
       "source": "electron/main.ts",
-      "line": 505,
+      "line": 502,
       "context": "property:title",
       "status": "review-required"
     },
@@ -37184,7 +37480,7 @@
       "key": "source.9a15cb6380ac5a90c428.1",
       "text": "Abschnitt 1",
       "source": "electron/main.ts",
-      "line": 507,
+      "line": 504,
       "context": "property:title",
       "status": "review-required"
     },
@@ -37192,7 +37488,7 @@
       "key": "source.85d0028a5be18c86a0e2.1",
       "text": "Bearer {expression1}",
       "source": "electron/main.ts",
-      "line": 520,
+      "line": 517,
       "context": "property:authorization",
       "status": "review-required"
     },
@@ -37200,7 +37496,7 @@
       "key": "source.ce14a1206802048e667b.1",
       "text": "EXTERNAL_URL_NOT_ALLOWED",
       "source": "electron/main.ts",
-      "line": 521,
+      "line": 518,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37208,7 +37504,7 @@
       "key": "source.bb23ffe177ede02b6c76.1",
       "text": "STORAGE_CLEAR_ON_AIR",
       "source": "electron/main.ts",
-      "line": 529,
+      "line": 526,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37216,7 +37512,7 @@
       "key": "source.36eabf757762c8662df7.1",
       "text": "STORAGE_CLEAR_DOWNLOAD_ACTIVE",
       "source": "electron/main.ts",
-      "line": 530,
+      "line": 527,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37224,7 +37520,7 @@
       "key": "source.45ed6f5ad77a50c07a3b.1",
       "text": "UNKNOWN_STORAGE_CATEGORY",
       "source": "electron/main.ts",
-      "line": 531,
+      "line": 528,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37232,7 +37528,7 @@
       "key": "source.337f0d08beb03404accb.1",
       "text": "MEDIA_NOT_FOUND",
       "source": "electron/main.ts",
-      "line": 538,
+      "line": 535,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -37240,7 +37536,7 @@
       "key": "source.011257e557e6a9967b76.1",
       "text": "church worship",
       "source": "electron/main.ts",
-      "line": 544,
+      "line": 541,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37248,7 +37544,7 @@
       "key": "source.ab050b187f2809d509ca.1",
       "text": "Client-ID {expression1}",
       "source": "electron/main.ts",
-      "line": 544,
+      "line": 541,
       "context": "property:authorization",
       "status": "review-required"
     },
@@ -37256,7 +37552,7 @@
       "key": "source.2ef16d872b12b8050d47.1",
       "text": "Foto von {expression1}",
       "source": "electron/main.ts",
-      "line": 544,
+      "line": 541,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37264,7 +37560,7 @@
       "key": "source.ac866c2e56f10d953ec1.1",
       "text": "Foto: {expression1}",
       "source": "electron/main.ts",
-      "line": 544,
+      "line": 541,
       "context": "ArrayLiteralExpression",
       "status": "review-required"
     },
@@ -37272,7 +37568,7 @@
       "key": "source.20e3d4cf8ee8c6771237.1",
       "text": "MEDIA_IN_LIVE_USE",
       "source": "electron/main.ts",
-      "line": 547,
+      "line": 544,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37280,7 +37576,7 @@
       "key": "source.c7e76ee59e78b65b2023.1",
       "text": "MEDIA_NOT_FOUND",
       "source": "electron/main.ts",
-      "line": 547,
+      "line": 544,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37288,7 +37584,7 @@
       "key": "source.4fd4ceb34bb23753cbe7.1",
       "text": "GitHub {expression1}",
       "source": "electron/main.ts",
-      "line": 568,
+      "line": 565,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37296,7 +37592,7 @@
       "key": "source.19448574669d37a3e644.1",
       "text": "NO_PREVIOUS_VERSION",
       "source": "electron/main.ts",
-      "line": 570,
+      "line": 567,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37304,7 +37600,7 @@
       "key": "source.d9c50df3be080116abe7.1",
       "text": "Der Arbeitsbereich antwortet nicht. Bitte erneut schließen.",
       "source": "electron/main.ts",
-      "line": 600,
+      "line": 597,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37640,7 +37936,7 @@
       "key": "source.0c42bd8e491996def89a.1",
       "text": "<!doctype html><html lang=\"de\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\"><title>GottesdienstRegie</title><style>html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#282832;color:#fff;font:16px Inter,system-ui,sans-serif}.panel{max-width:34rem;padding:2rem;text-align:center}h1{font-size:1.45rem}p{color:#cbd2d6;line-height:1.5}a{display:inline-block;margin-top:.7rem;padding:.75rem 1rem;border:1px solid #71bdca;color:#fff;text-decoration:none}a:focus,a:hover{background:#71bdca;color:#14252c}</style><body><main class=\"panel\"><h1>Arbeitsbereich konnte nicht geladen werden</h1><p>Bitte versuche es erneut. Falls der Fehler bestehen bleibt, installiere die aktuelle Version erneut.</p><a href=\"{expression1}\">Erneut versuchen</a></main></body></html>",
       "source": "electron/windowStartup.ts",
-      "line": 16,
+      "line": 23,
       "context": "ReturnStatement",
       "status": "review-required"
     },
@@ -37648,9 +37944,79 @@
       "key": "source.f2c93f626d1fa01890ad.1",
       "text": "NO_DISPLAY",
       "source": "electron/windowStartup.ts",
-      "line": 26,
+      "line": 33,
       "context": "NewExpression",
       "status": "review-required"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.3].overview.label",
+      "text": "Passende Wetterbilder und klarere Ansagen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.3].overview.text",
+      "text": "Dieses Update passt die Wetterdarstellung an die gemeldete Wetterlage an, vergrößert den Inhalt der Wetterwarnungen und ergänzt eine vollständige Ansagen-Tonprobe. Der Arbeitsbereich startet direkt in seiner vorgesehenen Größe; die lokale Sprachausgabe erhält einen angepassten Pegel.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.3].sections.new.0.label",
+      "text": "Wettergerechte Symbole und lesbarere Warnungen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.3].sections.new.0.text",
+      "text": "Sonne, Wolken, Nebel, Regen, Schnee, Gewitter und Hagel erhalten eigene native Symbole. Stärkerer Wind wird zusätzlich dargestellt; ruhige Animationen berücksichtigen die reduzierte Bewegung. Das Warnbanner ist etwas flacher, Titel und Text sind größer. Nummerierung, Originalhinweise und langsames Scrollen bleiben erhalten. Die Vorschau bezeichnet die Wahrscheinlichkeit korrekt als Niederschlag und schließt damit Schnee ein.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.3].sections.new.1.label",
+      "text": "Gong und Ansagetext auch OFF AIR testen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.3].sections.new.1.text",
+      "text": "Unter Einstellungen → Präsentation → Ansagen kann eine allgemeine Testdurchsage oder ein aktuell freigegebener Saaltext ausgewählt und mit Gong abgespielt werden. Die Tonprobe besitzt eine eigene Stoppen-Taste und verwendet den eingestellten Background-Audio-Ausgang. Sie schaltet automatische Ansagen nicht ein. Beim Schließen der Einstellungen oder beim Wechsel von OFF AIR zu ON AIR endet die Probe; laufende Durchsagen werden nicht überlagert.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.3].sections.fixed.0.label",
+      "text": "Stabile Startgröße und besserer Sprachpegel",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.3].sections.fixed.0.text",
+      "text": "Das Hauptfenster wird vor dem Laden der Oberfläche in der vorgesehenen Arbeitsgröße angelegt. Dadurch entfällt der Wechsel aus einem schmalen Ladefenster, der vorübergehend einen seitlich zusammengedrückten Arbeitsbereich verursachen konnte. Leise Sprachdateien werden separat mit begrenzter Verstärkung und Übersteuerungsschutz angepasst. Die Musikabsenkung betrifft weiterhin nur die Hintergrundmusik; Ausgangspegel und Stummschaltung bleiben erhalten. Längere Pegelverarbeitung bleibt für Live-Aktionen abbrechbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.3].sections.known.0.label",
+      "text": "Bestehender Übersetzungs- und Prüfumfang",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.3].sections.known.0.text",
+      "text": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Automatisierte Tonproben laufen mit physisch stummgeschalteter Ausgabe; Aussprache und Lautstärke sind vor öffentlichem Einsatz an der tatsächlichen Saalanlage zu prüfen.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
     },
     {
       "key": "release.versions[0.89].builds[0.89.2].overview.label",

@@ -1,3 +1,33 @@
+# GottesdienstRegie 0.89.3
+
+Veröffentlicht: Sa., 24.10.2026
+
+Dieses Update passt die Wetterdarstellung an die gemeldete Wetterlage an, vergrößert den Inhalt der Wetterwarnungen und ergänzt eine vollständige Ansagen-Tonprobe. Der Arbeitsbereich startet direkt in seiner vorgesehenen Größe; die lokale Sprachausgabe erhält einen angepassten Pegel.
+
+## Neu
+
+### Wettergerechte Symbole und lesbarere Warnungen
+
+Sonne, Wolken, Nebel, Regen, Schnee, Gewitter und Hagel erhalten eigene native Symbole. Stärkerer Wind wird zusätzlich dargestellt; ruhige Animationen berücksichtigen die reduzierte Bewegung. Das Warnbanner ist etwas flacher, Titel und Text sind größer. Nummerierung, Originalhinweise und langsames Scrollen bleiben erhalten. Die Vorschau bezeichnet die Wahrscheinlichkeit korrekt als Niederschlag und schließt damit Schnee ein.
+
+### Gong und Ansagetext auch OFF AIR testen
+
+Unter Einstellungen → Präsentation → Ansagen kann eine allgemeine Testdurchsage oder ein aktuell freigegebener Saaltext ausgewählt und mit Gong abgespielt werden. Die Tonprobe besitzt eine eigene Stoppen-Taste und verwendet den eingestellten Background-Audio-Ausgang. Sie schaltet automatische Ansagen nicht ein. Beim Schließen der Einstellungen oder beim Wechsel von OFF AIR zu ON AIR endet die Probe; laufende Durchsagen werden nicht überlagert.
+
+## Behoben
+
+### Stabile Startgröße und besserer Sprachpegel
+
+Das Hauptfenster wird vor dem Laden der Oberfläche in der vorgesehenen Arbeitsgröße angelegt. Dadurch entfällt der Wechsel aus einem schmalen Ladefenster, der vorübergehend einen seitlich zusammengedrückten Arbeitsbereich verursachen konnte. Leise Sprachdateien werden separat mit begrenzter Verstärkung und Übersteuerungsschutz angepasst. Die Musikabsenkung betrifft weiterhin nur die Hintergrundmusik; Ausgangspegel und Stummschaltung bleiben erhalten. Längere Pegelverarbeitung bleibt für Live-Aktionen abbrechbar.
+
+## Bekannte Einschränkungen
+
+### Bestehender Übersetzungs- und Prüfumfang
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Automatisierte Tonproben laufen mit physisch stummgeschalteter Ausgabe; Aussprache und Lautstärke sind vor öffentlichem Einsatz an der tatsächlichen Saalanlage zu prüfen.
+
+---
+
 # GottesdienstRegie 0.89.2
 
 Veröffentlicht: Sa., 24.10.2026

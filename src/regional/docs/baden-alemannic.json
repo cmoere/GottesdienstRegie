@@ -324,6 +324,16 @@
     "screenshotLabel": "Biispielaasicht"
   },
   "releases": {
+    "versions[0.89].builds[0.89.3].overview.label": "Passendi Wetterbilder un klareri Ansage",
+    "versions[0.89].builds[0.89.3].overview.text": "Des Update passt d Wetterdarstellig an d gmeldeti Wetterlag aa, macht de Inhalt vo de Wetterwarnige größer un ergänzt e vollständigi Ansage-Tonprob. De Arbeitsbereich startet direkt in sinere vorgsehene Größi; d lokali Sprochusgab kriegt e aapasste Pegel.",
+    "versions[0.89].builds[0.89.3].sections.new.0.label": "Wettergerechti Symbole un besser lesbari Warnige",
+    "versions[0.89].builds[0.89.3].sections.new.0.text": "Sunn, Wolke, Nebel, Rege, Schnee, Gwitter un Hagel kriege eigeni nativi Symbole. Stärkerer Wind wird zusätzlich dargestellt; ruehigi Animatione berücksichtige d reduzierti Bewegig. S Warnbanner isch e bissle flacher, Titel un Text sin größer. Nummerierig, Originalhinwiis un langsams Scrolle bliibe erhalte. D Vorschau bezeichnet d Wahrscheinlichkeit korrekt als Niederschlag un schließt demit Schnee ii.",
+    "versions[0.89].builds[0.89.3].sections.new.1.label": "Gong un Ansagetext au OFF AIR probe",
+    "versions[0.89].builds[0.89.3].sections.new.1.text": "Unter Einstellungen → Präsentation → Ansagen kann e allgemeini Testdurchsag oder e aktuell freigegebene Saaltext usgwählt un mit Gong abgspielt werde. D Tonprob het e eigeni Stoppen-Taste un verwendet de iigstellte Background-Audio-Ausgang. Si schaltet automatischi Ansage nit ii. Bim Schließe vo de Iistellige oder bim Wechsel vo OFF AIR zue ON AIR hört d Prob uf; laufendi Durchsage werde nit überlagert.",
+    "versions[0.89].builds[0.89.3].sections.fixed.0.label": "Stabili Startgrößi un bessere Sprochpegel",
+    "versions[0.89].builds[0.89.3].sections.fixed.0.text": "S Hauptfenster wird vor em Lade vo de Oberfläche in de vorgsehene Arbeitsgrößi aagleit. Dodurch entfällt de Wechsel us eme schmale Ladefenster, wo vorübergehend e siitlich zammegdrückte Arbeitsbereich verursache konnte. Liisi Sprochdateie werde separat mit begrenzter Verstärkig un Überstiirigsschutz aapasst. D Musikabsenkig betrifft wiiterhin numme d Hintergrundmusik; Usgangspegel un Stummschaltig bliibe erhalte. Längeri Pegelverarbeitig bliibt für Live-Aktione abbrechbar.",
+    "versions[0.89].builds[0.89.3].sections.known.0.label": "Bestehende Übersetzigs- un Prüefumfang",
+    "versions[0.89].builds[0.89.3].sections.known.0.text": "Regionalvariante sin no nit vollständig übersetzt. Fehlendi UI-Text werde uf Hochdeutsch aazeigt. De experimentelli PowerPoint-Originalmodus bliibt deaktiviert. Automatisierti Tonprobe laufe mit physisch stummgschalteter Usgab; Ussproch un Luutstärki sin vor em öffentliche Iisatz an de tatsächliche Saalanlag z prüefe.",
     "versions[0.89].builds[0.89.2].overview.label": "Dütschi Durchsagestimm direkt im Update",
     "versions[0.89].builds[0.89.2].overview.text": "D dütschi Offline-Stimm un ihr privati Laufziit werde jetzt vollständig mit GottesdienstRegie usgliefert. E zusätzlichi Sprochinstallation, e Dateiauswahl oder e Konto sin nümme erforderlich.",
     "versions[0.89].builds[0.89.2].sections.new.0.label": "Mitglieferti klassischi Sprochusgab",

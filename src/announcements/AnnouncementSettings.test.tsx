@@ -46,7 +46,7 @@ describe('inactive announcement preparation settings',()=>{
   const bridge={readSettings:async()=>initial,writeSettings:async(value:Settings)=>value};
   const rows=[{id:'one',title:'Gemeindehinweis',text:'Bitte nehmen Sie im Saal Platz. <script>alarm()</script>',revision:'1',priority:'normal' as const}];
   const view=render(<AnnouncementSettings bridge={bridge} rows={rows}/>);
-  await screen.findByText('Gemeindehinweis');
+  await screen.findByText('Gemeindehinweis',{selector:'strong'});
   expect(screen.getByText(rows[0].text)).toBeInTheDocument();
   expect(view.container.querySelector('script')).toBeNull();
   expect(screen.getByText(/Durchsagen laufen nur im Vor- und Nachprogramm/)).toBeInTheDocument();

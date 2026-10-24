@@ -324,6 +324,16 @@
     "screenshotLabel": "Bispeelansicht"
   },
   "releases": {
+    "versions[0.89].builds[0.89.3].overview.label": "Passen Wetterbiller un klorere Ansagen",
+    "versions[0.89].builds[0.89.3].overview.text": "Dit Update passt de Wetterdarstellen an de meldte Wetterlaag an, maakt den Inholt vun de Wetterwarnungen grötter un ergänzt en vullstännige Ansagen-Toonproov. De Arbeitsbereich start direkt in sien vörsehn Grött; de lokale Spraakutgaav kriggt en anpassten Pegel.",
+    "versions[0.89].builds[0.89.3].sections.new.0.label": "Wettergerechte Symbole un beter leesbore Warnungen",
+    "versions[0.89].builds[0.89.3].sections.new.0.text": "Sünn, Wulken, Nevel, Regen, Snee, Gewitter un Hagel kriegt egen native Symbole. Starker Wind warrt extra wiest; ruhige Animatschonen berücksichtigt de reduzierte Bewegung. Dat Warnbanner is wat flacher, Titel un Text sünd grötter. Nummerierung, Originalhinwiesen un langsames Scrollen blievt erhollen. De Vöransicht nöömt de Wohrschienlichkeit korrekt Niederschlag un slütt dormit Snee in.",
+    "versions[0.89].builds[0.89.3].sections.new.1.label": "Gong un Ansagetext ok OFF AIR testen",
+    "versions[0.89].builds[0.89.3].sections.new.1.text": "Ünner Einstellungen → Präsentation → Ansagen lett sik en allgemeene Testdörsag oder en aktuell fregeven Saaltext utwählen un mit Gong afspeelen. De Toonproov hett en egen Stoppen-Taste un bruukt den instellten Background-Audio-Ausgang. Se schalt automatische Ansagen nich in. Bi't Tomaken vun de Einstellungen oder bi't Wesseln vun OFF AIR na ON AIR ennt de Proov; lopende Dörsagen warrt nich överlagert.",
+    "versions[0.89].builds[0.89.3].sections.fixed.0.label": "Stabile Startgrött un beter Spraakpegel",
+    "versions[0.89].builds[0.89.3].sections.fixed.0.text": "Dat Hauptfinster warrt vör't Laden vun de Böverfläch in de vörsehn Arbeitsgrött anleggt. Dordör fallt de Wessel ut en smal Ladefinster weg, de vörövergehend en sietlich tosamenquetschten Arbeitsbereich verursaken kunn. Liese Spraakdateien warrt extra mit begrenzte Verstärkung un Översteuerungsschuul anpasst. De Musikabsenkung betrifft wiederhen bloots de Achtergrundmusik; Utgangspegel un Stummschalten blievt erhollen. Längere Pegelverarbeiden blifft för Live-Aktionen afbreekbor.",
+    "versions[0.89].builds[0.89.3].sections.known.0.label": "Bestahn Översettens- un Pröövümfang",
+    "versions[0.89].builds[0.89.3].sections.known.0.text": "Regionalvarianten sünd noch nich vullstännig översett. Fehlende UI-Texte warrt op Hoochdüütsch wiest. De experimentelle PowerPoint-Originalmodus blifft deaktiviert. Automatisierte Toonproven loopt mit physisch stumm schalt Utgaav; Utspraken un Luutstärk sünd vör öffentlichen Insatz an de tatsächliche Saalanlaag to pröven.",
     "versions[0.89].builds[0.89.2].overview.label": "Düütsche Dörsagenstimm direkt in't Update",
     "versions[0.89].builds[0.89.2].overview.text": "De düütsche Offline-Stimm un ehr private Looptiid warrt nu vullstännig mit GottesdienstRegie utlevert. En extra Spraakinstallatschoon, en Dateiutwahl oder en Konto sünd nich mehr nödig.",
     "versions[0.89].builds[0.89.2].sections.new.0.label": "Mitleverte klassische Spraakutgaav",

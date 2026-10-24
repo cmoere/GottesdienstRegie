@@ -6,6 +6,7 @@ import {usePreferences} from '../preferences';
 import {startCommunityRuntime} from '../community/communityRuntime';
 import {useSpeechStatus} from './AnnouncementIndicator';
 import {AnnouncementSettings} from './AnnouncementSettings';
+import {startAnnouncementTest,stopAnnouncementTest} from './AnnouncementTestRequests';
 const boundary=vi.hoisted(()=>({events:[] as string[],hold:false,signal:null as AbortSignal|null}));
 vi.mock('../BackgroundAudioEngine',()=>({backgroundAudioEngine:{setAnnouncementDucking:async(value:number|null)=>{boundary.events.push(`duck:${value}`)}}}));
 vi.mock('./AnnouncementPlayer',()=>({playAnnouncementAudio:async(url:string,signal:AbortSignal,playing:()=>void)=>{boundary.events.push(url.includes('gong')?'gong':'speech');playing();if(boundary.hold){boundary.signal=signal;await new Promise<void>((resolve,reject)=>signal.addEventListener('abort',()=>reject(Error('abort')),{once:true}))}}}));
@@ -18,10 +19,52 @@ beforeEach(()=>{
  if(!started){startCommunityRuntime();started=true}
  messages([{messageId:'one',titel:'Hinweis',textDurchsageSaalscreen:'Bitte kommen.',status:'public',showDurchsage:true,durchsageSaalscreen:true}]);
  URL.createObjectURL=()=> 'blob:speech';URL.revokeObjectURL=()=>{};
- const item=createServiceItem('content',{sectionId:'pre'});usePresentation.setState({items:[item],onAir:true,liveItemId:item.id});useSpeechStatus.setState({active:false,message:''});
+ const item=createServiceItem('content',{sectionId:'pre'});usePresentation.setState({items:[item],onAir:true,liveItemId:item.id});useSpeechStatus.setState({active:false,message:'',testing:false});
 });
 afterEach(async()=>{cleanup();await act(async()=>{});vi.useRealTimers();usePresentation.setState(saved,true);usePreferences.setState(prefs,true);window.desktop=desktop;useSpeechStatus.setState({active:false,message:''})});
 describe('single control shell announcement owner',()=>{
+ it('keeps a Firebase message named general distinct from the built-in test phrase',async()=>{
+  usePresentation.setState({onAir:false});const spoken:string[]=[];
+  messages([{messageId:'general',titel:'Meldung',textDurchsageSaalscreen:'Die tatsächliche Meldung.',status:'public',showDurchsage:true,durchsageSaalscreen:true}]);
+  window.desktop!.announcements!.synthesize=async text=>{spoken.push(text);return new Uint8Array([1])};
+  render(<AutomaticAnnouncements quick={null}/>);await act(async()=>{});
+  await act(async()=>{await startAnnouncementTest({kind:'message',id:'general'},20)});
+  expect(spoken).toEqual(['Die tatsächliche Meldung.']);
+ });
+ it('offers a settings probe with a selected text and stops it when settings close',async()=>{
+  usePreferences.setState({language:'de',germanRegion:null});usePresentation.setState({onAir:false});boundary.hold=true;
+  window.desktop!.announcements!.engineStatus=async()=>({ready:true,name:'Enthalten'});
+  const view=render(<><AutomaticAnnouncements quick={null}/><AnnouncementSettings rows={[]}/></>);await act(async()=>{});
+  fireEvent.click(screen.getByRole('button',{name:'Tonprobe starten'}));await act(async()=>{});
+  expect(useSpeechStatus.getState().testing).toBe(true);expect(screen.getByRole('button',{name:'Tonprobe stoppen'})).toBeEnabled();
+  view.rerender(<AutomaticAnnouncements quick={null}/>);await act(async()=>{});
+  expect(boundary.signal?.aborted).toBe(true);expect(useSpeechStatus.getState().testing).toBe(false);
+ });
+ it('allows a stopped full gong/speech probe OFF AIR without enabling automatic announcements',async()=>{
+  usePresentation.setState({onAir:false});boundary.hold=true;
+  window.desktop!.announcements!.readSettings=async()=>({...settings,enabled:false});
+  render(<AutomaticAnnouncements quick={null}/>);await act(async()=>{});let pending!:Promise<void>;
+  await act(async()=>{pending=startAnnouncementTest({kind:'general'},20)});
+  expect(useSpeechStatus.getState()).toMatchObject({testing:true,active:true});expect(boundary.events).toEqual(['duck:20','gong']);
+  await act(async()=>{stopAnnouncementTest();await pending});
+  expect(boundary.events).toEqual(['duck:20','gong','duck:null']);expect(useSpeechStatus.getState()).toMatchObject({testing:false,active:false});
+ });
+ it('cancels a public-text probe as soon as the chosen message is revoked',async()=>{
+  usePresentation.setState({onAir:false});boundary.hold=true;render(<AutomaticAnnouncements quick={null}/>);await act(async()=>{});let pending!:Promise<void>;
+  await act(async()=>{pending=startAnnouncementTest({kind:'message',id:'one'},25)});act(()=>messages([]));await act(async()=>{await pending});
+  expect(boundary.signal?.aborted).toBe(true);expect(boundary.events.at(-1)).toBe('duck:null');
+ });
+ it('never replaces automatic live speech with a test and rejects tests during the service',async()=>{
+  boundary.hold=true;render(<AutomaticAnnouncements quick={null}/>);await act(async()=>{});await act(async()=>{await vi.advanceTimersByTimeAsync(60000)});
+  await expect(startAnnouncementTest({kind:'general'},20)).rejects.toThrow();expect(useSpeechStatus.getState().testing).toBe(false);expect(boundary.signal?.aborted).toBe(false);
+  act(()=>usePresentation.setState({items:usePresentation.getState().items.map(item=>({...item,sectionId:'service'}))}));await act(async()=>{});
+  await expect(startAnnouncementTest({kind:'general'},20)).rejects.toThrow();
+ });
+ it('stops an OFF AIR probe when the operator goes ON AIR',async()=>{
+  usePresentation.setState({onAir:false});boundary.hold=true;render(<AutomaticAnnouncements quick={null}/>);await act(async()=>{});let pending!:Promise<void>;
+  await act(async()=>{pending=startAnnouncementTest({kind:'general'},20)});act(()=>usePresentation.setState({onAir:true}));await act(async()=>{await pending});
+  expect(boundary.signal?.aborted).toBe(true);expect(useSpeechStatus.getState().testing).toBe(false);
+ });
  it('stops current audio when the operator disables and saves announcements',async()=>{
   usePreferences.setState({language:'de',germanRegion:null});boundary.hold=true;
   window.desktop!.announcements!.engineStatus=async()=>({ready:true,name:'eSpeak NG'});

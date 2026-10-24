@@ -9,11 +9,11 @@
 .banner-moving{display:flex;flex:none;width:max-content;will-change:transform}.banner-moving>[data-banner-unit]{display:block;flex:none;white-space:pre}.banner-static{display:block;text-align:center;width:100%;padding-inline:1.5cqw}
 .service-countdown-badge{position:absolute;left:1.25%;bottom:2.2%;z-index:15;padding:.3em .55em;background:#000b;color:#fff;border-radius:.2em;font:400 1.25cqw/1.3 'Cera Pro',system-ui,sans-serif;pointer-events:none}
 .output-composition[data-banner-position=bottom]>.service-countdown-badge{bottom:10%}
-.output-composition[data-weather-warning=true]>.output-content-area{top:26%}
-.output-composition[data-weather-warning=true][data-banner-position=top]>.output-content-area{top:33.777778%}
-.output-weather-layer{position:absolute;top:0;left:0;right:0;height:26%;z-index:11;container-type:inline-size;overflow:hidden;background:#fff}
+.output-composition[data-weather-warning=true]>.output-content-area{top:24%}
+.output-composition[data-weather-warning=true][data-banner-position=top]>.output-content-area{top:31.777778%}
+.output-weather-layer{position:absolute;top:0;left:0;right:0;height:24%;z-index:11;container-type:inline-size;overflow:hidden;background:#fff}
 .output-composition[data-banner-position=top]>.output-weather-layer{top:7.777778%}
-.weather-warning-banner{height:100%;box-sizing:border-box;border-block:.12cqw solid #a65353;padding:.65cqw 1.5cqw;color:#18232f;background:#fff;display:flex;flex-direction:column;gap:.4cqw;font:400 1.15cqw/1.35 'Cera Pro',system-ui,sans-serif}
-.weather-warning-banner header{display:flex;gap:.4cqw 1cqw;align-items:flex-start;flex-wrap:wrap;justify-content:space-between;flex:none;color:#a65353}.weather-warning-banner header strong{font-size:1.35cqw;min-width:0;overflow-wrap:anywhere}
+.weather-warning-banner{height:100%;box-sizing:border-box;border-block:.12cqw solid #a65353;padding:.45cqw 1.5cqw;color:#18232f;background:#fff;display:flex;flex-direction:column;gap:.3cqw;font:400 1.45cqw/1.3 'Cera Pro',system-ui,sans-serif}
+.weather-warning-banner header{display:flex;gap:.3cqw 1cqw;align-items:flex-start;flex-wrap:wrap;justify-content:space-between;flex:none;color:#a65353}.weather-warning-banner header strong{font-size:1.65cqw;min-width:0;overflow-wrap:anywhere}
 .weather-warning-heading{display:flex;align-items:flex-start;gap:.45cqw;flex:1 1 45%;min-width:0}.weather-warning-icon{width:1.8cqw;height:1.8cqw;flex:none}.weather-warning-counter{flex:none;font-size:1.05cqw;font-weight:600;line-height:1.4;padding:0 .35cqw;border:1px solid currentColor;border-radius:.2cqw}.weather-warning-meta{font-size:.9cqw;flex:0 1 auto;text-align:right}
 .weather-warning-viewport{flex:1;overflow:hidden;min-height:0;white-space:pre-wrap}.weather-warning-viewport p{margin:.35em 0}.weather-warning-banner footer{font-size:.8cqw;flex:none}
