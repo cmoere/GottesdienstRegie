@@ -324,6 +324,12 @@
     "screenshotLabel": "Bispeelansicht"
   },
   "releases": {
+    "versions[0.89].builds[0.89.2].overview.label": "Düütsche Dörsagenstimm direkt in't Update",
+    "versions[0.89].builds[0.89.2].overview.text": "De düütsche Offline-Stimm un ehr private Looptiid warrt nu vullstännig mit GottesdienstRegie utlevert. En extra Spraakinstallatschoon, en Dateiutwahl oder en Konto sünd nich mehr nödig.",
+    "versions[0.89].builds[0.89.2].sections.new.0.label": "Mitleverte klassische Spraakutgaav",
+    "versions[0.89].builds[0.89.2].sections.new.0.text": "Ünner Einstellungen → Präsentation → Ansagen lett sik de enthaltene düütsche Stimm ausdrücklich aktiveern. De Spraakutgaav arbeidt lokaal mit opnahmen Spraaksegmenten. Gong, Musikabsenkung, Luutsprekersymbol un de konfigureerte Background-Audio-Ausgang blievt erhollen. Bestahn deaktivierte Ansagen warrt bi't Update nich inschalt; ole externe Stimmen warrt nich automatisch övernahmen.",
+    "versions[0.89].builds[0.89.2].sections.known.0.label": "Downloadümfang un bestahn Inschränkungen",
+    "versions[0.89].builds[0.89.2].sections.known.0.text": "Dat vullstännige Spraakpaket maakt den Update-Download grötter. Regionalvarianten sünd noch nich vullstännig översett. Fehlende UI-Texte warrt op Hoochdüütsch wiest. De experimentelle PowerPoint-Originalmodus blifft deaktiviert. Vör öffentlichen Insatz sünd Utspraken un Luutstärk an de tatsächliche Saalanlaag to pröven.",
     "versions[0.89].builds[0.89.1].overview.label": "Lokale Dörsagen un klorere Radio- un Wetteranzeigen",
     "versions[0.89].builds[0.89.1].overview.text": "Dit Update ergänzt dat optionale Anbinnen vun en extra installeerte eSpeak-NG-Sprachengine. Automatische Saalansagen kriegt en Gong un en sichtbore Kennteken. De Radioutwahl warrt eenfacher; mehr Wetterwarnungen laat sik düütlicher ünnerscheden.",
     "versions[0.89].builds[0.89.1].sections.new.0.label": "Automatische Dörsagen mit lokale Spraaksynthese",

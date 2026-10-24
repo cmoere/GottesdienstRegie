@@ -24,9 +24,50 @@
       "line": "0.89",
       "builds": [
         {
-          "version": "0.89.1",
+          "version": "0.89.2",
           "releaseDate": "2026-10-24",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Deutsche Durchsagestimme direkt im Update",
+              "en": "German announcement voice included in the update"
+            },
+            "text": {
+              "de": "Die deutsche Offline-Stimme und ihre private Laufzeit werden jetzt vollständig mit GottesdienstRegie ausgeliefert. Eine zusätzliche Sprachinstallation, eine Dateiauswahl oder ein Konto sind nicht mehr erforderlich.",
+              "en": "The German offline voice and its private runtime are now included with GottesdienstRegie. No additional speech installation, executable selection or account is required."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Mitgelieferte klassische Sprachausgabe",
+                  "en": "Included classical speech synthesis"
+                },
+                "text": {
+                  "de": "Unter Einstellungen → Präsentation → Ansagen kann die enthaltene deutsche Stimme ausdrücklich aktiviert werden. Die Sprachausgabe arbeitet lokal mit aufgezeichneten Sprachsegmenten. Gong, Musikabsenkung, Lautsprechersymbol und der konfigurierte Background-Audio-Ausgang bleiben erhalten. Bestehende deaktivierte Ansagen werden beim Update nicht eingeschaltet; alte externe Stimmen werden nicht automatisch übernommen.",
+                  "en": "The included German voice can be explicitly enabled under Settings → Presentation → Announcements. Speech is generated locally from recorded speech segments. The gong, music attenuation, speaker indicator and configured Background Audio output remain in use. Disabled announcements stay disabled after updating; old external voices are not automatically adopted."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Downloadumfang und bestehende Einschränkungen",
+                  "en": "Download size and existing limitations"
+                },
+                "text": {
+                  "de": "Das vollständige Sprachpaket vergrößert den Update-Download. Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Vor öffentlichem Einsatz ist die Aussprache und Lautstärke an der tatsächlichen Saalanlage zu prüfen.",
+                  "en": "The complete speech package increases the update download size. Regional variants remain partially translated; missing interface text appears in standard German. The experimental original PowerPoint mode remains disabled. Rehearse pronunciation and volume on the actual hall system before public use."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.89.1",
+          "releaseDate": "2026-10-24",
+          "current": false,
           "overview": {
             "label": {
               "de": "Lokale Durchsagen und klarere Radio- und Wetteranzeigen",

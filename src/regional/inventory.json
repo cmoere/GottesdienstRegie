@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": false,
-  "sourceFingerprint": "16ff88cdc103d53b7d7c547c314c33da1a3bea699e1124c5755672242ca0213d",
+  "sourceFingerprint": "8e8f1e317e9aa53ea27aa73545b9636d2ecf7e4c21901c863f6129217fd49cbd",
   "note": "Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -20815,58 +20815,34 @@
       "status": "review-required"
     },
     {
-      "key": "source.759216b2bc24dcfcddcc.1",
-      "text": "Lokale deutsche eSpeak-NG-Stimme ohne KI-Modell und ohne Windows-Stimme. eSpeak NG separat installieren und das Programm auswählen. Die Stimme klingt synthetisch. Die erste automatische Durchsage erfolgt nach dem gespeicherten Intervall, nur während ON AIR im Vor- oder Nachprogramm.",
+      "key": "source.cac38df5fb76cc4b7e19.1",
+      "text": "Die deutsche Stimme und ihre Laufzeit sind im Update enthalten. Keine zusätzliche Installation, kein Konto und keine Windows-Stimme erforderlich. Die Sprachausgabe arbeitet offline mit klassischen Sprachaufnahmen. Die erste automatische Durchsage erfolgt nach dem gespeicherten Intervall, nur während ON AIR im Vor- oder Nachprogramm.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 91,
+      "line": 81,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
     {
-      "key": "source.aacc133d5a540ae5f041.1",
-      "text": "Local German eSpeak NG voice, without an AI model or Windows voice. Install eSpeak NG separately and select its executable. The voice sounds synthetic. Automatic announcements start after the saved interval, only ON AIR in pre/post programs.",
+      "key": "source.a671ac81612d96ccae90.1",
+      "text": "The German voice and its runtime are included in the update. No extra installation, account or Windows voice is needed. Speech is generated offline using classical recorded speech segments. Automatic announcements start after the saved interval, only ON AIR in pre/post programs.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 91,
+      "line": 81,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
     {
-      "key": "source.ad0964d0f480381f78c8.1",
-      "text": "eSpeak NG auswählen",
+      "key": "source.baf225b69f7d6f1c1868.1",
+      "text": "Mitgelieferte Stimme wird geprüft.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 92,
+      "line": 82,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
     {
-      "key": "source.e49479ec34cf506f6de1.1",
-      "text": "Select eSpeak NG",
+      "key": "source.0c0bc4cb4b074a5786df.1",
+      "text": "Checking the included voice.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 92,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.35f6a1c804ab9c739d6f.1",
-      "text": "eSpeak NG downloads",
-      "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 93,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.93319cc124e47bd56254.1",
-      "text": "eSpeak NG nicht eingerichtet. Keine automatische Ersatzstimme.",
-      "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 94,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.3bc8be26fee86b51c2da.1",
-      "text": "eSpeak NG not configured. No automatic fallback voice.",
-      "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 94,
+      "line": 82,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -20874,13 +20850,13 @@
       "key": "source.cd457df8992201da294f.1",
       "text": "Durchsage",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 107,
+      "line": 95,
       "context": "BinaryExpression",
       "status": "review-required"
     },
     {
-      "key": "source.549a8780868b3efb80a8.1",
-      "text": "Durchsage nicht verfügbar. eSpeak NG und den Background-Audio-Ausgang prüfen.",
+      "key": "source.c0ae4440adc6a09ba76c.1",
+      "text": "Durchsage nicht verfügbar. Mitgelieferte Stimme und Background-Audio-Ausgang prüfen.",
       "source": "src/announcements/AutomaticAnnouncements.tsx",
       "line": 46,
       "context": "property:message",
@@ -20906,7 +20882,7 @@
       "key": "source.df505d5fba0c38cfe518.1",
       "text": "Ungültige Ansageneinstellungen.",
       "source": "src/announcements/settings.ts",
-      "line": 45,
+      "line": 46,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -20914,7 +20890,7 @@
       "key": "source.737a0b4ba3aff13f7168.1",
       "text": "Bitte Intervall, Musikpegel und eine bewusst gewählte Stimme prüfen.",
       "source": "src/announcements/settings.ts",
-      "line": 53,
+      "line": 54,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -36349,6 +36325,166 @@
       "status": "review-required"
     },
     {
+      "key": "source.7a05c64cd775a2efc938.1",
+      "text": "RIFF",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 6,
+      "context": "BinaryExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.7198f1e83db5178a1ae2.1",
+      "text": "WAVE",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 6,
+      "context": "BinaryExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.20a0a7fc8cbd65ea79a6.1",
+      "text": "Ungültige Sprachausgabe.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 6,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.c44c46a718676ee63589.1",
+      "text": "Unvollständige Sprachausgabe.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 10,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.af2b65193cb35f73cf42.1",
+      "text": "fmt",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 11,
+      "context": "BinaryExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.d752525d547625a2deeb.1",
+      "text": "Nicht unterstütztes Sprachformat.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 11,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.8ab9df71dd6c81a3952a.1",
+      "text": "Ungültige Sprachdaten.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 12,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.3d6b4d277e6e9518f5c4.1",
+      "text": "Sprachausgabe enthält kein Audiosignal.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 15,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.58926d016d3770365380.1",
+      "text": "Spracherzeugung hat zu lange gedauert.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 26,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.85bf676a3ce03f06f952.1",
+      "text": "Mitgelieferte Sprachausgabe konnte nicht gestartet werden.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 29,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.c4ce80736cb1b5b6c77f.1",
+      "text": "Sprachausgabe wurde abgebrochen oder ist fehlgeschlagen.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 30,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.857360387c431edd41ee.1",
+      "text": "Sprachpaket fehlt.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 39,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.b71e36e9ded7552622d9.1",
+      "text": "Sprachpaket passt nicht zu diesem Gerät.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 41,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.a8cd1facb6be13807438.1",
+      "text": "Sprachpaket ist unvollständig.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 44,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.3350193b2129b9dede30.1",
+      "text": "Deutsche Stimme ist enthalten · offline verfügbar",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 47,
+      "context": "property:name",
+      "status": "review-required"
+    },
+    {
+      "key": "source.1d487f7da05fae28e6ec.1",
+      "text": "Mitgeliefertes Sprachpaket fehlt oder ist beschädigt. Bitte das vollständige Update installieren.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 47,
+      "context": "property:name",
+      "status": "review-required"
+    },
+    {
+      "key": "source.9883746a76726335849d.1",
+      "text": "Ungültiger Durchsage-Text.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 50,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.06e486c8f46c0c5f9eee.1",
+      "text": "Eine Spracherzeugung läuft bereits.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 51,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.ec447a8c93b2e692a6c1.1",
+      "text": "Durchsage abgebrochen.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 54,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.ec447a8c93b2e692a6c1.2",
+      "text": "Durchsage abgebrochen.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 56,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
       "key": "source.fbd5a882703f5a3c3e19.1",
       "text": "Spracherzeugung hat zu lange gedauert.",
       "source": "electron/announcements/EspeakService.ts",
@@ -36517,10 +36653,10 @@
       "status": "review-required"
     },
     {
-      "key": "source.6f7eaf46dfd7de95a7d2.1",
-      "text": "Die Sprachausgabe ist noch nicht freigegeben. Bitte eSpeak NG auswählen.",
+      "key": "source.ff9c944dd5c9e0f0241d.1",
+      "text": "Die mitgelieferte Sprachausgabe ist nicht verfügbar. Bitte das vollständige Update installieren.",
       "source": "electron/announcements/SettingsAccess.ts",
-      "line": 21,
+      "line": 22,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36741,26 +36877,10 @@
       "status": "review-required"
     },
     {
-      "key": "source.796e0d2a3e8977303d9e.1",
-      "text": "Separat installiertes eSpeak NG auswählen",
-      "source": "electron/main.ts",
-      "line": 288,
-      "context": "property:title",
-      "status": "review-required"
-    },
-    {
-      "key": "source.26fca4d4a35939bed565.1",
-      "text": "eSpeak NG",
-      "source": "electron/main.ts",
-      "line": 288,
-      "context": "property:name",
-      "status": "review-required"
-    },
-    {
       "key": "source.c17a796afc00de92556c.1",
       "text": "SPOTIFY_SECURE_STORAGE_UNAVAILABLE",
       "source": "electron/main.ts",
-      "line": 301,
+      "line": 299,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36768,7 +36888,7 @@
       "key": "source.f2b33174c2ee2ac95306.1",
       "text": "Bildschirmtest-Bericht speichern",
       "source": "electron/main.ts",
-      "line": 316,
+      "line": 314,
       "context": "property:title",
       "status": "review-required"
     },
@@ -36776,7 +36896,7 @@
       "key": "source.3f09d569fa7b873c0660.1",
       "text": "Cache",
       "source": "electron/main.ts",
-      "line": 333,
+      "line": 331,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -36784,7 +36904,7 @@
       "key": "source.1ed106b08ec52e84957b.1",
       "text": "private, max-age=3600",
       "source": "electron/main.ts",
-      "line": 341,
+      "line": 339,
       "context": "property:'cache-control'",
       "status": "review-required"
     },
@@ -36792,7 +36912,7 @@
       "key": "source.9f3b5da4859d4f01185c.1",
       "text": "Medium nicht verfügbar.",
       "source": "electron/main.ts",
-      "line": 341,
+      "line": 339,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36800,7 +36920,7 @@
       "key": "source.9af87584412ae97f646c.1",
       "text": "text/plain; charset=utf-8",
       "source": "electron/main.ts",
-      "line": 341,
+      "line": 339,
       "context": "property:'content-type'",
       "status": "review-required"
     },
@@ -36808,7 +36928,7 @@
       "key": "source.76be168bd50f2edf920b.1",
       "text": "UNSUPPORTED_PASSWORD_ALGORITHM",
       "source": "electron/main.ts",
-      "line": 358,
+      "line": 356,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36816,7 +36936,7 @@
       "key": "source.5574d7db42ea21cdb569.1",
       "text": "GAS_NETWORK",
       "source": "electron/main.ts",
-      "line": 360,
+      "line": 358,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36824,7 +36944,7 @@
       "key": "source.5574d7db42ea21cdb569.2",
       "text": "GAS_NETWORK",
       "source": "electron/main.ts",
-      "line": 360,
+      "line": 358,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36832,7 +36952,7 @@
       "key": "source.63fe83e206c381492ec1.1",
       "text": "GAS_RESPONSE_INVALID",
       "source": "electron/main.ts",
-      "line": 360,
+      "line": 358,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36840,7 +36960,7 @@
       "key": "source.63fe83e206c381492ec1.2",
       "text": "GAS_RESPONSE_INVALID",
       "source": "electron/main.ts",
-      "line": 360,
+      "line": 358,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36848,7 +36968,7 @@
       "key": "source.6b06ace66d091cb4ce67.1",
       "text": "SECURE_STORAGE_UNAVAILABLE",
       "source": "electron/main.ts",
-      "line": 384,
+      "line": 382,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36856,7 +36976,7 @@
       "key": "source.69d060a5a91ffefb83a7.1",
       "text": "Windows-Autostart ist nur in der installierten Anwendung verfügbar.",
       "source": "electron/main.ts",
-      "line": 405,
+      "line": 403,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36864,7 +36984,7 @@
       "key": "source.92b41ee7f94aadca116c.1",
       "text": "Philippus Gemeinde Bielefeld e. V.",
       "source": "electron/main.ts",
-      "line": 419,
+      "line": 417,
       "context": "property:organizationName",
       "status": "review-required"
     },
@@ -36872,7 +36992,7 @@
       "key": "source.92b41ee7f94aadca116c.2",
       "text": "Philippus Gemeinde Bielefeld e. V.",
       "source": "electron/main.ts",
-      "line": 420,
+      "line": 418,
       "context": "property:organizationName",
       "status": "review-required"
     },
@@ -36880,7 +37000,7 @@
       "key": "source.651ddbfa0929b7b9c0fb.1",
       "text": "{expression1} {expression2}",
       "source": "electron/main.ts",
-      "line": 420,
+      "line": 418,
       "context": "property:platform",
       "status": "review-required"
     },
@@ -36888,7 +37008,7 @@
       "key": "source.0c060c0ecb0277d4524e.1",
       "text": "Ein Gerätename ist erforderlich.",
       "source": "electron/main.ts",
-      "line": 420,
+      "line": 418,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36896,7 +37016,7 @@
       "key": "source.42add500748b1a62874b.1",
       "text": "Sichere Tokenspeicherung ist auf diesem System nicht verfügbar.",
       "source": "electron/main.ts",
-      "line": 428,
+      "line": 426,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36904,7 +37024,7 @@
       "key": "source.e388e5571d5d073bcf02.1",
       "text": "INVALID_CREDENTIALS",
       "source": "electron/main.ts",
-      "line": 434,
+      "line": 432,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36912,7 +37032,7 @@
       "key": "source.386abc0ea7aab97662b5.1",
       "text": "LOGIN_DISABLED",
       "source": "electron/main.ts",
-      "line": 435,
+      "line": 433,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -36920,7 +37040,7 @@
       "key": "source.016183b4e06a842b92bb.1",
       "text": "DISABLED",
       "source": "electron/main.ts",
-      "line": 435,
+      "line": 433,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36928,7 +37048,7 @@
       "key": "source.e388e5571d5d073bcf02.2",
       "text": "INVALID_CREDENTIALS",
       "source": "electron/main.ts",
-      "line": 435,
+      "line": 433,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36936,7 +37056,7 @@
       "key": "source.c286b3e33d7489cd8d2b.1",
       "text": "EMAIL_NOT_VERIFIED",
       "source": "electron/main.ts",
-      "line": 435,
+      "line": 433,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36944,7 +37064,7 @@
       "key": "source.d608021ca4cd59695e5b.1",
       "text": "ACCOUNT_LOCKED",
       "source": "electron/main.ts",
-      "line": 435,
+      "line": 433,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36952,7 +37072,7 @@
       "key": "source.e388e5571d5d073bcf02.3",
       "text": "INVALID_CREDENTIALS",
       "source": "electron/main.ts",
-      "line": 435,
+      "line": 433,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36960,7 +37080,7 @@
       "key": "source.67e5cfcf74fd89b14e89.1",
       "text": "INITIAL_PASSWORD_CHANGE_REQUIRED",
       "source": "electron/main.ts",
-      "line": 435,
+      "line": 433,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36968,7 +37088,7 @@
       "key": "source.06d07f1fb1a578f9cce2.1",
       "text": "SERVICE_ACCESS_UNAVAILABLE",
       "source": "electron/main.ts",
-      "line": 435,
+      "line": 433,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36976,7 +37096,7 @@
       "key": "source.2ce1044b72d5a6fbc8cb.1",
       "text": "NO_SERVICE_ACCESS",
       "source": "electron/main.ts",
-      "line": 435,
+      "line": 433,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36984,7 +37104,7 @@
       "key": "source.eb9ad58a0f915d78d814.1",
       "text": "TWO_FACTOR_COOLDOWN",
       "source": "electron/main.ts",
-      "line": 441,
+      "line": 439,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -36992,7 +37112,7 @@
       "key": "source.3c83b06a7f9dc949e2b1.1",
       "text": "TWO_FACTOR_EXPIRED",
       "source": "electron/main.ts",
-      "line": 450,
+      "line": 448,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37000,7 +37120,7 @@
       "key": "source.3e7098fd4bed9601ddf5.1",
       "text": "Der Code ist nicht korrekt.",
       "source": "electron/main.ts",
-      "line": 456,
+      "line": 454,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37008,7 +37128,7 @@
       "key": "source.a5516a031fd8597a6a31.1",
       "text": "SESSION_CHECK_NETWORK",
       "source": "electron/main.ts",
-      "line": 463,
+      "line": 461,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37016,7 +37136,7 @@
       "key": "source.5f8204893a9b9ab25e2c.1",
       "text": "PATCH",
       "source": "electron/main.ts",
-      "line": 464,
+      "line": 462,
       "context": "property:method",
       "status": "review-required"
     },
@@ -37024,7 +37144,7 @@
       "key": "source.aa9868beb0103dbe2398.1",
       "text": "SLIDE_RENDER_FAILED",
       "source": "electron/main.ts",
-      "line": 484,
+      "line": 482,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37032,7 +37152,7 @@
       "key": "source.aa9868beb0103dbe2398.2",
       "text": "SLIDE_RENDER_FAILED",
       "source": "electron/main.ts",
-      "line": 485,
+      "line": 483,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37040,7 +37160,7 @@
       "key": "source.ebad3a56a9b0e470ecd1.1",
       "text": "KEYNOTE_PREVIEW_NOT_FOUND",
       "source": "electron/main.ts",
-      "line": 486,
+      "line": 484,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37048,7 +37168,7 @@
       "key": "source.e7c6eab609c76a20e524.1",
       "text": "Abschnitt {expression1}",
       "source": "electron/main.ts",
-      "line": 499,
+      "line": 497,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37056,7 +37176,7 @@
       "key": "source.6acd20020bd83c8af15d.1",
       "text": "Abschnitt {expression1}",
       "source": "electron/main.ts",
-      "line": 507,
+      "line": 505,
       "context": "property:title",
       "status": "review-required"
     },
@@ -37064,7 +37184,7 @@
       "key": "source.9a15cb6380ac5a90c428.1",
       "text": "Abschnitt 1",
       "source": "electron/main.ts",
-      "line": 509,
+      "line": 507,
       "context": "property:title",
       "status": "review-required"
     },
@@ -37072,7 +37192,7 @@
       "key": "source.85d0028a5be18c86a0e2.1",
       "text": "Bearer {expression1}",
       "source": "electron/main.ts",
-      "line": 522,
+      "line": 520,
       "context": "property:authorization",
       "status": "review-required"
     },
@@ -37080,7 +37200,7 @@
       "key": "source.ce14a1206802048e667b.1",
       "text": "EXTERNAL_URL_NOT_ALLOWED",
       "source": "electron/main.ts",
-      "line": 523,
+      "line": 521,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37088,7 +37208,7 @@
       "key": "source.bb23ffe177ede02b6c76.1",
       "text": "STORAGE_CLEAR_ON_AIR",
       "source": "electron/main.ts",
-      "line": 531,
+      "line": 529,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37096,7 +37216,7 @@
       "key": "source.36eabf757762c8662df7.1",
       "text": "STORAGE_CLEAR_DOWNLOAD_ACTIVE",
       "source": "electron/main.ts",
-      "line": 532,
+      "line": 530,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37104,7 +37224,7 @@
       "key": "source.45ed6f5ad77a50c07a3b.1",
       "text": "UNKNOWN_STORAGE_CATEGORY",
       "source": "electron/main.ts",
-      "line": 533,
+      "line": 531,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37112,7 +37232,7 @@
       "key": "source.337f0d08beb03404accb.1",
       "text": "MEDIA_NOT_FOUND",
       "source": "electron/main.ts",
-      "line": 540,
+      "line": 538,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -37120,7 +37240,7 @@
       "key": "source.011257e557e6a9967b76.1",
       "text": "church worship",
       "source": "electron/main.ts",
-      "line": 546,
+      "line": 544,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37128,7 +37248,7 @@
       "key": "source.ab050b187f2809d509ca.1",
       "text": "Client-ID {expression1}",
       "source": "electron/main.ts",
-      "line": 546,
+      "line": 544,
       "context": "property:authorization",
       "status": "review-required"
     },
@@ -37136,7 +37256,7 @@
       "key": "source.2ef16d872b12b8050d47.1",
       "text": "Foto von {expression1}",
       "source": "electron/main.ts",
-      "line": 546,
+      "line": 544,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37144,7 +37264,7 @@
       "key": "source.ac866c2e56f10d953ec1.1",
       "text": "Foto: {expression1}",
       "source": "electron/main.ts",
-      "line": 546,
+      "line": 544,
       "context": "ArrayLiteralExpression",
       "status": "review-required"
     },
@@ -37152,7 +37272,7 @@
       "key": "source.20e3d4cf8ee8c6771237.1",
       "text": "MEDIA_IN_LIVE_USE",
       "source": "electron/main.ts",
-      "line": 549,
+      "line": 547,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37160,7 +37280,7 @@
       "key": "source.c7e76ee59e78b65b2023.1",
       "text": "MEDIA_NOT_FOUND",
       "source": "electron/main.ts",
-      "line": 549,
+      "line": 547,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37168,7 +37288,7 @@
       "key": "source.4fd4ceb34bb23753cbe7.1",
       "text": "GitHub {expression1}",
       "source": "electron/main.ts",
-      "line": 570,
+      "line": 568,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37176,7 +37296,7 @@
       "key": "source.19448574669d37a3e644.1",
       "text": "NO_PREVIOUS_VERSION",
       "source": "electron/main.ts",
-      "line": 572,
+      "line": 570,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37184,7 +37304,7 @@
       "key": "source.d9c50df3be080116abe7.1",
       "text": "Der Arbeitsbereich antwortet nicht. Bitte erneut schließen.",
       "source": "electron/main.ts",
-      "line": 602,
+      "line": 600,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37531,6 +37651,48 @@
       "line": 26,
       "context": "NewExpression",
       "status": "review-required"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.2].overview.label",
+      "text": "Deutsche Durchsagestimme direkt im Update",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.2].overview.text",
+      "text": "Die deutsche Offline-Stimme und ihre private Laufzeit werden jetzt vollständig mit GottesdienstRegie ausgeliefert. Eine zusätzliche Sprachinstallation, eine Dateiauswahl oder ein Konto sind nicht mehr erforderlich.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.2].sections.new.0.label",
+      "text": "Mitgelieferte klassische Sprachausgabe",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.2].sections.new.0.text",
+      "text": "Unter Einstellungen → Präsentation → Ansagen kann die enthaltene deutsche Stimme ausdrücklich aktiviert werden. Die Sprachausgabe arbeitet lokal mit aufgezeichneten Sprachsegmenten. Gong, Musikabsenkung, Lautsprechersymbol und der konfigurierte Background-Audio-Ausgang bleiben erhalten. Bestehende deaktivierte Ansagen werden beim Update nicht eingeschaltet; alte externe Stimmen werden nicht automatisch übernommen.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.2].sections.known.0.label",
+      "text": "Downloadumfang und bestehende Einschränkungen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.89].builds[0.89.2].sections.known.0.text",
+      "text": "Das vollständige Sprachpaket vergrößert den Update-Download. Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Vor öffentlichem Einsatz ist die Aussprache und Lautstärke an der tatsächlichen Saalanlage zu prüfen.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
     },
     {
       "key": "release.versions[0.89].builds[0.89.1].overview.label",

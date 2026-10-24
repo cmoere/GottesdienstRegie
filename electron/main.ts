@@ -2,7 +2,7 @@ import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Men
 import path from 'node:path';
 import {countdownMediaSelection,type CountdownMediaContext} from './countdownMediaSelection';
 import {createAnnouncementSettingsAccess} from './announcements/SettingsAccess';
-import {EspeakService} from './announcements/EspeakService';
+import {BundledSpeechService} from './announcements/BundledSpeechService';
 import {SpeechAccess,SpeechIndicator} from './announcements/SpeechAccess';
 import {readBannerOutputState} from '../src/outputState';
 import { pathToFileURL } from 'node:url';
@@ -271,7 +271,7 @@ app.whenReady().then(async() => {
   Menu.setApplicationMenu(null);
   const deviceSettings=new DeviceSettingsRepository(path.join(app.getPath('userData'),'device-settings.json'));
   await nativeRegionalText.select(await deviceSettings.readRegionalSelection());
-  const espeak=new EspeakService(()=>deviceSettings.readAnnouncementEngine(),path.join(app.getPath('temp'),'gottesdienstregie-speech'));
+  const espeak=new BundledSpeechService(app.isPackaged?path.join(process.resourcesPath,'speech'):path.join(app.getAppPath(),'work/bundled-speech',process.platform+'-'+process.arch));
   const isSpeechControl=(event:import('electron').IpcMainInvokeEvent)=>Boolean(controlWindow&&!controlWindow.isDestroyed()&&!controlWindow.webContents.isDestroyed()&&event.sender.id===controlWindow.webContents.id&&event.senderFrame===controlWindow.webContents.mainFrame);
   const speechAccess=new SpeechAccess(espeak,isSpeechControl);
   const speechIndicator=new SpeechIndicator(state=>{for(const window of BrowserWindow.getAllWindows())sendToLiveWindow(window,'announcements:indicator',state)});
@@ -283,10 +283,8 @@ app.whenReady().then(async() => {
   ipcMain.handle('announcements:settings-write',(event,value:unknown)=>announcementSettings.write(event,value));
   ipcMain.handle('announcements:engine-status',event=>{watchSpeechOwner(event);return speechAccess.status(event)});
   ipcMain.handle('announcements:engine-choose',async event=>{
-    watchSpeechOwner(event);espeak.cancel();speechIndicator.set(false);
-    await deviceSettings.writeAnnouncements({...await deviceSettings.readAnnouncements(),enabled:false});
-    const result=await dialog.showOpenDialog(controlWindow!,{title:'Separat installiertes eSpeak NG auswählen',properties:['openFile'],filters:process.platform==='win32'?[{name:'eSpeak NG',extensions:['exe']}]:undefined});
-    if(!result.canceled&&result.filePaths[0])await deviceSettings.writeAnnouncementEngine(result.filePaths[0]);
+    // Compatibility endpoint: older controls can query readiness, never open an executable picker.
+    watchSpeechOwner(event);
     return espeak.status();
   });
   ipcMain.handle('announcements:synthesize',(event,text:unknown)=>{watchSpeechOwner(event);return speechAccess.synthesize(event,text)});

@@ -324,6 +324,12 @@
     "screenshotLabel": "Biispielaasicht"
   },
   "releases": {
+    "versions[0.89].builds[0.89.2].overview.label": "Dütschi Durchsagestimm direkt im Update",
+    "versions[0.89].builds[0.89.2].overview.text": "D dütschi Offline-Stimm un ihr privati Laufziit werde jetzt vollständig mit GottesdienstRegie usgliefert. E zusätzlichi Sprochinstallation, e Dateiauswahl oder e Konto sin nümme erforderlich.",
+    "versions[0.89].builds[0.89.2].sections.new.0.label": "Mitglieferti klassischi Sprochusgab",
+    "versions[0.89].builds[0.89.2].sections.new.0.text": "Unter Einstellungen → Präsentation → Ansagen kann d enthalteni dütschi Stimm ausdrücklich aktiviert werde. D Sprochusgab arbeitet lokal mit ufzeichnete Sprochsegmente. Gong, Musikabsenkig, Lautsprechersymbol un de konfigurierte Background-Audio-Ausgang bliibe erhalte. Bestehendi deaktivierti Ansage werde bim Update nit iigschaltet; alti externi Stimme werde nit automatisch übernomme.",
+    "versions[0.89].builds[0.89.2].sections.known.0.label": "Downloadumfang un bestehendi Einschränkige",
+    "versions[0.89].builds[0.89.2].sections.known.0.text": "S vollständige Sprochpaket macht de Update-Download größer. Regionalvariante sin no nit vollständig übersetzt. Fehlendi UI-Text werde uf Hochdeutsch aazeigt. De experimentelli PowerPoint-Originalmodus bliibt deaktiviert. Vor em öffentliche Iisatz sin d Ussproch un d Luutstärki an de tatsächliche Saalanlag z prüefe.",
     "versions[0.89].builds[0.89.1].overview.label": "Lokali Durchsage un klareri Radio- un Wetteranzeige",
     "versions[0.89].builds[0.89.1].overview.text": "Des Update ergänzt d optionali Aabindig vo ere separat installierte eSpeak-NG-Sprochengine. Automatischi Saalansage kriege e Gong un e sichtbari Kennzeichnig. D Radioauswahl wird vereifacht; mehreri Wetterwarnige sin eindeutiger z unterscheide.",
     "versions[0.89].builds[0.89.1].sections.new.0.label": "Automatischi Durchsage mit lokaler Sprochsynthese",

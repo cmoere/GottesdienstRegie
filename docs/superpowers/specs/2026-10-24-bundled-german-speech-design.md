@@ -50,4 +50,4 @@ Primärquellen:
 
 ## Umfang und offene Freigabe
 
-Dies ist eine Änderung am nativen Sprachdienst, an den Ansageneinstellungen und der plattformübergreifenden Paketierung. PowerPoint und Regionalübersetzungen sind davon unabhängig und werden nicht als fertig bezeichnet. Der Benutzer hat die Mitlieferung im Update gewählt; die Freigabe dieses konkreten technischen Entwurfs steht noch aus. Umsetzung bleibt nativ durch den Hauptagenten, entsprechend der bestehenden Benutzerpräferenz.
+Dies ist eine Änderung am nativen Sprachdienst, an den Ansageneinstellungen und der plattformübergreifenden Paketierung. PowerPoint und Regionalübersetzungen sind davon unabhängig und werden nicht als fertig bezeichnet. Der Benutzer hat diesen konkreten Aufbau mit „ja umsetzten und veröffentlichen!“ freigegeben. Umsetzung bleibt nativ durch den Hauptagenten, entsprechend der bestehenden Benutzerpräferenz; ausschließlich Übersetzungstexte dürfen wie zuvor genehmigt delegiert werden.

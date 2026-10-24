@@ -1,3 +1,23 @@
+# GottesdienstRegie 0.89.2
+
+Veröffentlicht: Sa., 24.10.2026
+
+Die deutsche Offline-Stimme und ihre private Laufzeit werden jetzt vollständig mit GottesdienstRegie ausgeliefert. Eine zusätzliche Sprachinstallation, eine Dateiauswahl oder ein Konto sind nicht mehr erforderlich.
+
+## Neu
+
+### Mitgelieferte klassische Sprachausgabe
+
+Unter Einstellungen → Präsentation → Ansagen kann die enthaltene deutsche Stimme ausdrücklich aktiviert werden. Die Sprachausgabe arbeitet lokal mit aufgezeichneten Sprachsegmenten. Gong, Musikabsenkung, Lautsprechersymbol und der konfigurierte Background-Audio-Ausgang bleiben erhalten. Bestehende deaktivierte Ansagen werden beim Update nicht eingeschaltet; alte externe Stimmen werden nicht automatisch übernommen.
+
+## Bekannte Einschränkungen
+
+### Downloadumfang und bestehende Einschränkungen
+
+Das vollständige Sprachpaket vergrößert den Update-Download. Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Vor öffentlichem Einsatz ist die Aussprache und Lautstärke an der tatsächlichen Saalanlage zu prüfen.
+
+---
+
 # GottesdienstRegie 0.89.1
 
 Veröffentlicht: Sa., 24.10.2026

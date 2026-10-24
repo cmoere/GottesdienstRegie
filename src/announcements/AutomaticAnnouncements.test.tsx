@@ -11,7 +11,7 @@ vi.mock('../BackgroundAudioEngine',()=>({backgroundAudioEngine:{setAnnouncementD
 vi.mock('./AnnouncementPlayer',()=>({playAnnouncementAudio:async(url:string,signal:AbortSignal,playing:()=>void)=>{boundary.events.push(url.includes('gong')?'gong':'speech');playing();if(boundary.hold){boundary.signal=signal;await new Promise<void>((resolve,reject)=>signal.addEventListener('abort',()=>reject(Error('abort')),{once:true}))}}}));
 const saved=usePresentation.getState(),prefs=usePreferences.getState(),desktop=window.desktop;
 let messages:(records:any[])=>void,started=false;
-const settings={enabled:true,intervalMinutes:1,musicRemainingPercent:20,voiceId:'espeak-ng:de',speakerId:0,voiceAccepted:true};
+const settings={enabled:true,intervalMinutes:1,musicRemainingPercent:20,voiceId:'marytts:dfki-pavoque-neutral',speakerId:0,voiceAccepted:true};
 beforeEach(()=>{
  vi.useFakeTimers();vi.setSystemTime(new Date('2026-10-24T10:00:00Z'));boundary.events=[];boundary.hold=false;boundary.signal=null;
  window.desktop={community:{start:async()=>true,onEvents:()=>{},onRooms:()=>{},onConnection:()=>{},onAnnouncements:(callback:any)=>{messages=callback}},announcements:{readSettings:async()=>settings,writeSettings:async(value:import('./settings').AnnouncementSettings)=>value,synthesize:async()=>new Uint8Array([1]),cancel:async()=>{},setIndicator:async()=>{}}} as any;
@@ -22,13 +22,16 @@ beforeEach(()=>{
 });
 afterEach(async()=>{cleanup();await act(async()=>{});vi.useRealTimers();usePresentation.setState(saved,true);usePreferences.setState(prefs,true);window.desktop=desktop;useSpeechStatus.setState({active:false,message:''})});
 describe('single control shell announcement owner',()=>{
- it('stops current audio before opening the engine picker, not after its dialog closes',async()=>{
+ it('stops current audio when the operator disables and saves announcements',async()=>{
   usePreferences.setState({language:'de',germanRegion:null});boundary.hold=true;
   window.desktop!.announcements!.engineStatus=async()=>({ready:true,name:'eSpeak NG'});
-  window.desktop!.announcements!.chooseEngine=async()=>new Promise(()=>{});
+  let selected={...settings};
+  window.desktop!.announcements!.readSettings=async()=>selected;
+  window.desktop!.announcements!.writeSettings=async value=>{selected=value as typeof settings;return value};
   render(<><AutomaticAnnouncements quick={null}/><AnnouncementSettings rows={[]}/></>);await act(async()=>{});
   await act(async()=>{await vi.advanceTimersByTimeAsync(60000)});expect(useSpeechStatus.getState().active).toBe(true);
-  fireEvent.click(screen.getByRole('button',{name:'eSpeak NG auswählen'}));await act(async()=>{});
+  fireEvent.click(screen.getByRole('checkbox',{name:'Automatische Ansagen aktivieren'}));
+  fireEvent.click(screen.getByRole('button',{name:'Ansageneinstellungen speichern'}));await act(async()=>{});
   expect(boundary.signal?.aborted).toBe(true);expect(useSpeechStatus.getState().active).toBe(false);
  });
  it('resets its session even when ON AIR is restarted before cancelled playback has finished cleaning up',async()=>{

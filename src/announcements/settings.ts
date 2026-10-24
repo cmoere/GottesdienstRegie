@@ -22,8 +22,9 @@ export interface AnnouncementSettingsBridge {
 const fields=new Set(['enabled','intervalMinutes','musicRemainingPercent','voiceId','speakerId','voiceAccepted']);
 const modelId='de_DE-mls-medium';
 const validSpeaker=(value:unknown):value is number=>typeof value==='number'&&Number.isInteger(value)&&value>=0&&value<236;
-const supportedVoice=(id:unknown)=>id===modelId||id==='espeak-ng:de';
-const validVoiceSpeaker=(id:unknown,value:unknown)=>id==='espeak-ng:de'?value===0:validSpeaker(value);
+export const bundledAnnouncementVoice='marytts:dfki-pavoque-neutral';
+const supportedVoice=(id:unknown)=>id===modelId||id==='espeak-ng:de'||id===bundledAnnouncementVoice;
+const validVoiceSpeaker=(id:unknown,value:unknown)=>id==='espeak-ng:de'||id===bundledAnnouncementVoice?value===0:validSpeaker(value);
 const inRange=(value:unknown,min:number,max:number):value is number=>typeof value==='number'&&Number.isFinite(value)&&value>=min&&value<=max;
 
 /** Read old/corrupt settings safely, but never activate an unchosen voice. */
@@ -36,7 +37,7 @@ export function normalizeAnnouncementSettings(value:unknown):AnnouncementSetting
     enabled:raw.enabled===true&&voiceAccepted,
     intervalMinutes:inRange(raw.intervalMinutes,1,120)?raw.intervalMinutes:5,
     musicRemainingPercent:inRange(raw.musicRemainingPercent,0,100)?raw.musicRemainingPercent:20,
-    voiceId:raw.voiceId==='espeak-ng:de'?'espeak-ng:de':modelId,speakerId,voiceAccepted,
+    voiceId:raw.voiceId===bundledAnnouncementVoice?bundledAnnouncementVoice:raw.voiceId==='espeak-ng:de'?'espeak-ng:de':modelId,speakerId,voiceAccepted,
   };
 }
 

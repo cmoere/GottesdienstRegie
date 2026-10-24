@@ -1,0 +1,181 @@
+{
+  "voice": {
+    "url": "https://github.com/marytts/voice-dfki-pavoque-neutral/releases/download/v5.2/voice-dfki-pavoque-neutral-5.2.zip",
+    "size": 448866455,
+    "sha256": "076faec327fd107b160f435d170d9c4d582807efbe52e507a19c39b01162edd4"
+  },
+  "jars": [
+    {
+      "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.41.0/error_prone_annotations-2.41.0.jar",
+      "size": 20389,
+      "sha256": "a56e782b5b50811ac204073a355a21d915a2107fce13ec711331ad036f660fcc"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/com/google/guava/failureaccess/1.0.3/failureaccess-1.0.3.jar",
+      "size": 10763,
+      "sha256": "cbfc3906b19b8f55dd7cfd6dfe0aa4532e834250d7f080bd8d211a3e246b59cb"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/com/google/guava/guava/33.5.0-jre/guava-33.5.0-jre.jar",
+      "size": 3017283,
+      "sha256": "1e301f0c52ac248b0b14fdc3d12283c77252d4d6f48521d572e7d8c4c2cc4ac7"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+      "size": 2199,
+      "sha256": "b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/com/google/j2objc/j2objc-annotations/3.1/j2objc-annotations-3.1.jar",
+      "size": 16762,
+      "sha256": "84d3a150518485f8140ea99b8a985656749629f6433c92b80c75b36aba3b099b"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/com/ibm/icu/icu4j/54.1.1/icu4j-54.1.1.jar",
+      "size": 11126868,
+      "sha256": "4b1a7eccf0fe69fb21c8eaa4b182708b507282d55e40ffb7b49204635e45795a"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar",
+      "size": 588337,
+      "sha256": "eeeae917917144a68a741d4c0dff66aa5c5c5fd85593ff217bced3fc8ca783b8"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.20.0/commons-io-2.20.0.jar",
+      "size": 563971,
+      "sha256": "df90bba0fe3cb586b7f164e78fe8f8f4da3f2dd5c27fa645f888100ccc25dd72"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/commons-lang/commons-lang/2.6/commons-lang-2.6.jar",
+      "size": 284220,
+      "sha256": "50f11b09f877c294d56f24463f47d28f929cf5044f648661c0f0cfbae9a2f49c"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/de/dfki/lt/jtok/jtok-core/1.9.4/jtok-core-1.9.4.jar",
+      "size": 72822,
+      "sha256": "092a84612d09d74c5a9b1614aa18f6e59b2b14964cad1082481e9cc4a967b1c9"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/de/dfki/mary/emotionml-checker-java/1.2.2/emotionml-checker-java-1.2.2.jar",
+      "size": 20546,
+      "sha256": "585757b3dee5d84b120140aadc02cde8fe0692f1253180605cdacf12e6125d2c"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/de/dfki/mary/marytts-common/5.2.1/marytts-common-5.2.1.jar",
+      "size": 162291,
+      "sha256": "01d724b3c82a379408e4bc295c45634c6fcae78bd97c5a56c64822386dffc198"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/de/dfki/mary/marytts-lang-de/5.2.1/marytts-lang-de-5.2.1.jar",
+      "size": 5335085,
+      "sha256": "705f6d3c5437f1bc62cc0f60ef80810ef3e4987da439a0c8f5573b460f6204c1"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/de/dfki/mary/marytts-runtime/5.2.1/marytts-runtime-5.2.1.jar",
+      "size": 1002248,
+      "sha256": "0a9da3e31fba66c7d09def94c5fbeab3feece0dc56cf53e9e90b46669d2be962"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/de/dfki/mary/marytts-signalproc/5.2.1/marytts-signalproc-5.2.1.jar",
+      "size": 1100569,
+      "sha256": "1ee88017bbec14f911e0590c46389d958f0e3a7f0b497426a8f3462be7d336c8"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/gov/nist/math/jama/1.0.3/jama-1.0.3.jar",
+      "size": 37424,
+      "sha256": "c7325ee29be1aac1287ddac690f73671f1cd911ca9eca7c619990e86310556fd"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/marytts/marytts/v5.2.1/lib/repo/gov/nist/math/Jampack/1.0/Jampack-1.0.jar",
+      "size": 166556,
+      "sha256": "ed611355e665bed88073f747a1b4506bd76bc76acb6cdcc1651f973223c8e846"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/net/sf/trove4j/trove4j/2.0.2/trove4j-2.0.2.jar",
+      "size": 740642,
+      "sha256": "8b553ad20124b4644c9f001bf2de4214c0debc1bab18a44c0c33a31db283c118"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar",
+      "size": 327891,
+      "sha256": "6c9b3dd142a09dc468e23ad39aad6f75a0f2b85125104469f026e52a474e464f"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore-nio/4.4.16/httpcore-nio-4.4.16.jar",
+      "size": 368896,
+      "sha256": "4018736ede2d321034e8517ea90baefb31831a8608afccc446d8a699fb1d00d4"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-1.2-api/2.25.5/log4j-1.2-api-2.25.5.jar",
+      "size": 359212,
+      "sha256": "4dd812dc5a6343f542a9e0046b1ec78ecf10bdd5a8c15745101cdd8b9aa24974"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar",
+      "size": 351427,
+      "sha256": "64777f73ea0b3104c04eb82befbdccc30a425a19e83ad06cb2f93aa303511863"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.25.5/log4j-core-2.25.5.jar",
+      "size": 2020932,
+      "sha256": "050c4f85deb48b055e9c041ac39043fbb79ce477841a11a1eb2969c86c6a0072"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/opennlp/opennlp-maxent/3.0.3/opennlp-maxent-3.0.3.jar",
+      "size": 130387,
+      "sha256": "6e99fa57b1f3645b4992ab3cfaa8b24abca0921cf2f575d63fca43cd84dd44e6"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/opennlp/opennlp-tools/2.5.9/opennlp-tools-2.5.9.jar",
+      "size": 1396264,
+      "sha256": "bc2d28082607b211fdf3185c1496ea8e130fa1fe1bead85622d38487920017e2"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy-all/2.4.21/groovy-all-2.4.21.jar",
+      "size": 7203079,
+      "sha256": "de65260cf2070442e99882f2f3d72e7531725c1e6a257446cc0cea525c607bd0"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/hsqldb/hsqldb/2.7.3/hsqldb-2.7.3.jar",
+      "size": 1657682,
+      "sha256": "6f2f77eedbe75cfbe26bf30d73b13de0cc57fb7cdb27a92ed8c1a012f0e2363a"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar",
+      "size": 3819,
+      "sha256": "1fad6e6be7557781e4d33729d49ae1cdc8fdda6fe477bb0cc68ce351eafdfbab"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar",
+      "size": 69908,
+      "sha256": "7b751d952061954d5abfed7181c1f645d336091b679891591d63329c622eb832"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/swinglabs/swing-layout/1.0.3/swing-layout-1.0.3.jar",
+      "size": 118119,
+      "sha256": "7b526ac5fabec1e9d1ec6c764e68188bdf4c7bd96c23d91d3450592fc4a6ba85"
+    }
+  ],
+  "runtimes": {
+    "win32-x64": {
+      "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_x64_windows_hotspot_17.0.20.1_1.zip",
+      "size": 43780109,
+      "sha256": "bc21a93923103cdaac93ee337b0ae4365e739fde36df823dd456bc67c8a9d352"
+    },
+    "darwin-x64": {
+      "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_x64_mac_hotspot_17.0.20.1_1.tar.gz",
+      "size": 37635516,
+      "sha256": "333cb81123c36568586646c73c8fa2326dab8badc43f5ea388a90fff59c9df27"
+    },
+    "darwin-arm64": {
+      "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21%2B9/OpenJDK17U-jre_aarch64_mac_hotspot_17.0.21_9.tar.gz",
+      "size": 42822064,
+      "sha256": "a5ab5bacd6e719d5a5570580ed14dceb2ed532208a39af927906b9742da1745e"
+    },
+    "linux-x64": {
+      "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21%2B9/OpenJDK17U-jre_x64_linux_hotspot_17.0.21_9.tar.gz",
+      "size": 46726088,
+      "sha256": "9f41bf88c7900c7097444a1bdeb84146ae692bc08842490ab098063c74bf9a8a"
+    }
+  }
+}

@@ -2,6 +2,12 @@ import {describe,expect,it} from 'vitest';
 import {normalizeAnnouncementSettings,validateAnnouncementSettings} from './settings';
 
 describe('operator-selected announcement voice settings',()=>{
+  it('accepts the bundled classical voice only with explicit activation metadata',()=>{
+    const value={enabled:true,intervalMinutes:5,musicRemainingPercent:20,voiceId:'marytts:dfki-pavoque-neutral',speakerId:0,voiceAccepted:true};
+    expect(validateAnnouncementSettings(value)).toEqual(value);
+    expect(()=>validateAnnouncementSettings({...value,speakerId:1})).toThrow();
+    expect(normalizeAnnouncementSettings({...value,voiceAccepted:false}).enabled).toBe(false);
+  });
   it('accepts only explicitly selected non-neural German eSpeak metadata',()=>{
     const value={enabled:true,intervalMinutes:5,musicRemainingPercent:20,voiceId:'espeak-ng:de',speakerId:0,voiceAccepted:true};
     expect(validateAnnouncementSettings(value)).toEqual(value);

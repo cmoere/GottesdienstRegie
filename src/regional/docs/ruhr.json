@@ -324,6 +324,12 @@
     "screenshotLabel": "So kann's aussehen"
   },
   "releases": {
+    "versions[0.89].builds[0.89.2].overview.label": "Deutsche Durchsagestimme direkt im Update",
+    "versions[0.89].builds[0.89.2].overview.text": "Die deutsche Offline-Stimme und ihre private Laufzeit werden jetzt vollständig mit GottesdienstRegie ausgeliefert. 'Ne zusätzliche Sprachinstallation, 'ne Dateiauswahl oder 'n Konto brauchste nich mehr.",
+    "versions[0.89].builds[0.89.2].sections.new.0.label": "Mitgelieferte klassische Sprachausgabe",
+    "versions[0.89].builds[0.89.2].sections.new.0.text": "Unter Einstellungen → Präsentation → Ansagen kannste die enthaltene deutsche Stimme ausdrücklich aktivieren. Die Sprachausgabe arbeitet lokal mit aufgezeichneten Sprachsegmenten. Gong, Musikabsenkung, Lautsprechersymbol und der konfigurierte Background-Audio-Ausgang bleiben erhalten. Bestehende deaktivierte Ansagen werden beim Update nich eingeschaltet; alte externe Stimmen werden nich automatisch übernommen.",
+    "versions[0.89].builds[0.89.2].sections.known.0.label": "Downloadumfang und bestehende Einschränkungen",
+    "versions[0.89].builds[0.89.2].sections.known.0.text": "Das vollständige Sprachpaket macht den Update-Download größer. Regionalvarianten sind noch nich vollständig übersetzt. Fehlende UI-Texte siehste auf Hochdeutsch. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Vor öffentlichem Einsatz musste die Aussprache und Lautstärke an der tatsächlichen Saalanlage prüfen.",
     "versions[0.89].builds[0.89.1].overview.label": "Lokale Durchsagen und klarere Radio- und Wetteranzeigen",
     "versions[0.89].builds[0.89.1].overview.text": "Dieses Update ergänzt die optionale Anbindung von 'ner separat installierten eSpeak-NG-Sprachengine. Automatische Saalansagen kriegen 'nen Gong und 'ne sichtbare Kennzeichnung. Die Radioauswahl wird einfacher; mehrere Wetterwarnungen kannste eindeutiger unterscheiden.",
     "versions[0.89].builds[0.89.1].sections.new.0.label": "Automatische Durchsagen mit lokaler Sprachsynthese",

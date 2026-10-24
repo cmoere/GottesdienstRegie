@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <!-- This module was also published with a richer model, Gradle metadata,  -->
+  <!-- which should be used instead. Do not delete the following line which  -->
+  <!-- is to indicate to Gradle or any Gradle module metadata file consumer  -->
+  <!-- that they should prefer consuming it instead. -->
+  <!-- do_not_remove: published-with-gradle-metadata -->
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.dfki.lt.jtok</groupId>
+  <artifactId>jtok-core</artifactId>
+  <version>1.9.4</version>
+  <name>JTok</name>
+  <description>A Java-based configurable tokenizer and sentence splitter</description>
+  <url>https://github.com/DFKI-MLT/JTok</url>
+  <organization>
+    <name>Multilinguality and Language Technology (MLT) research department of the German Research Center for Artificial Intelligence, DFKI GmbH</name>
+    <url>https://www.dfki.de/web/forschung/forschungsbereiche/sprachtechnologie-und-multilingualitaet/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License (LGPL) in version 2.1 or higher</name>
+      <url>http://www.gnu.org/licenses/#LGPL</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>steffen</id>
+      <name>Joerg Steffen</name>
+      <email>steffen@dfki.de</email>
+      <url>https://www.dfki.de/web/ueber-uns/mitarbeiter/person/jost02/</url>
+      <organization>German Research Center for Artificial Intelligence (DFKI)</organization>
+      <organizationUrl>https://www.dfki.de/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+  </developers>
+  <scm>
+    <url>https://github.com/DFKI-MLT/JTok</url>
+  </scm>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/DFKI-MLT/JTok/issues</url>
+  </issueManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.36</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>

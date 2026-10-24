@@ -1,0 +1,59 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {spawn} from 'node:child_process';
+
+export function readBundledSpeechWav(input:Buffer):Uint8Array {
+  if(input.length<46||input.length>32*1024*1024||input.toString('ascii',0,4)!=='RIFF'||input.toString('ascii',8,12)!=='WAVE'||input.readUInt32LE(4)+8!==input.length)throw Error('Ungültige Sprachausgabe.');
+  let format=false,signal=false;
+  for(let offset=12;offset+8<=input.length;){
+    const kind=input.toString('ascii',offset,offset+4),size=input.readUInt32LE(offset+4),start=offset+8,end=start+size;
+    if(end>input.length)throw Error('Unvollständige Sprachausgabe.');
+    if(kind==='fmt '){if(size<16||input.readUInt16LE(start)!==1||input.readUInt16LE(start+2)!==1||input.readUInt32LE(start+4)!==16000||input.readUInt16LE(start+14)!==16)throw Error('Nicht unterstütztes Sprachformat.');format=true}
+    if(kind==='data'){if(!size||size%2)throw Error('Ungültige Sprachdaten.');for(let i=start;i<end;i+=2)if(input.readInt16LE(i)!==0){signal=true;break}}
+    offset=end+(size%2);
+  }
+  if(!format||!signal)throw Error('Sprachausgabe enthält kein Audiosignal.');
+  return Uint8Array.from(input);
+}
+
+export function runBundledSpeech(file:string,args:string[],text:string,signal:AbortSignal):Promise<Buffer>{
+  return new Promise((resolve,reject)=>{
+    const env={...process.env};
+    // Do not inherit global Java injection settings from another installation.
+    delete env.JAVA_TOOL_OPTIONS;delete env._JAVA_OPTIONS;delete env.JDK_JAVA_OPTIONS;delete env.CLASSPATH;
+    const child=spawn(file,args,{windowsHide:true,shell:false,stdio:['pipe','pipe','ignore'],signal,env});
+    const chunks:Buffer[]=[];let size=0,failed=false;
+    const timer=setTimeout(()=>{failed=true;child.kill();reject(Error('Spracherzeugung hat zu lange gedauert.'))},90_000);
+    child.stdout.on('data',(chunk:Buffer)=>{size+=chunk.length;if(size>32*1024*1024){failed=true;child.kill()}else chunks.push(chunk)});
+    child.stdin.on('error',()=>{});
+    child.once('error',()=>{clearTimeout(timer);reject(Error('Mitgelieferte Sprachausgabe konnte nicht gestartet werden.'))});
+    child.once('close',code=>{clearTimeout(timer);if(code===0&&!failed&&!signal.aborted)resolve(Buffer.concat(chunks));else reject(Error('Sprachausgabe wurde abgebrochen oder ist fehlgeschlagen.'))});
+    child.stdin.end(text,'utf8');
+  });
+}
+
+export class BundledSpeechService {
+  private current:AbortController|null=null;
+  constructor(private root:string,private platform:NodeJS.Platform=process.platform,private arch:string=process.arch,private run=runBundledSpeech){}
+  private async resources(){
+    if(!path.isAbsolute(this.root))throw Error('Sprachpaket fehlt.');
+    const marker=JSON.parse(await fs.readFile(path.join(this.root,'ready.json'),'utf8'));
+    if(marker.platform!==this.platform||marker.arch!==this.arch||marker.voice!=='marytts:dfki-pavoque-neutral')throw Error('Sprachpaket passt nicht zu diesem Gerät.');
+    const java=path.join(this.root,'runtime/bin',this.platform==='win32'?'java.exe':'java');
+    const files=[java,'worker/AnnouncementSpeech.class','lib/voice-dfki-pavoque-neutral-5.2.jar','lib/marytts-runtime-5.2.1.jar','lib/marytts-lang-de-5.2.1.jar',...['halfphoneFeatures_ac.mry','halfphoneUnits.mry','joinCostFeatures.mry','timeline_basenames.mry','timeline_waveforms.mry'].map(name=>'lib/voices/dfki-pavoque-neutral/'+name)];
+    for(const file of files){const stat=await fs.stat(path.isAbsolute(file)?file:path.join(this.root,file));if(!stat.isFile()||!stat.size)throw Error('Sprachpaket ist unvollständig.')}
+    return java;
+  }
+  async status(){try{await this.resources();return{ready:true,name:'Deutsche Stimme ist enthalten · offline verfügbar'}}catch{return{ready:false,name:'Mitgeliefertes Sprachpaket fehlt oder ist beschädigt. Bitte das vollständige Update installieren.'}}}
+  cancel(){this.current?.abort()}
+  async synthesize(value:unknown):Promise<Uint8Array>{
+    if(typeof value!=='string'||!value.trim()||[...value].length>10_000||/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(value))throw Error('Ungültiger Durchsage-Text.');
+    if(this.current)throw Error('Eine Spracherzeugung läuft bereits.');
+    const controller=new AbortController();this.current=controller;
+    try{
+      const java=await this.resources();if(controller.signal.aborted)throw Error('Durchsage abgebrochen.');
+      const args=['-Xmx512m','-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-Dmary.base='+this.root,'-cp',[path.join(this.root,'worker'),path.join(this.root,'lib','*')].join(this.platform==='win32'?';':':'),'AnnouncementSpeech'];
+      const wav=await this.run(java,args,value,controller.signal);if(controller.signal.aborted)throw Error('Durchsage abgebrochen.');return readBundledSpeechWav(wav);
+    }finally{if(this.current===controller)this.current=null}
+  }
+}

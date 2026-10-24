@@ -1,7 +1,7 @@
 import {describe,expect,it} from 'vitest';
 import {AnnouncementRun,AnnouncementScheduler} from './AnnouncementRun';
 const row={id:'one',revision:'r1',text:'Bitte kommen.',title:'Hinweis',priority:'normal' as const};
-const settings={enabled:true,intervalMinutes:1,musicRemainingPercent:20,voiceId:'espeak-ng:de',speakerId:0,voiceAccepted:true};
+const settings={enabled:true,intervalMinutes:1,musicRemainingPercent:20,voiceId:'marytts:dfki-pavoque-neutral',speakerId:0,voiceAccepted:true};
 describe('automatic announcement lifecycle',()=>{
  it('prepares before ducking, plays gong before speech and always releases only its claim',async()=>{const events:string[]=[];const run=new AnnouncementRun({synthesize:async()=>{events.push('synth');return new Uint8Array([1])},cancelSynthesis:()=>{},duck:async level=>{events.push(`duck:${level}`)},play:async(kind,_data,_signal,playing)=>{events.push(kind);playing()},indicator:active=>events.push(`icon:${active}`)});await run.start(row,20,()=>true);expect(events).toEqual(['synth','duck:20','gong','icon:true','speech','icon:true','icon:false','duck:null']);expect(run.busy).toBe(false)});
  it('never starts gong when the source was revoked during synthesis',async()=>{const events:string[]=[];let valid=true;const run=new AnnouncementRun({synthesize:async()=>{valid=false;return new Uint8Array([1])},cancelSynthesis:()=>{},duck:async level=>{events.push(`duck:${level}`)},play:async()=>{events.push('audio')},indicator:()=>{}});await run.start(row,20,()=>valid);expect(events).toEqual([])});

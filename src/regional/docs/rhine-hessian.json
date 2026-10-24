@@ -324,6 +324,12 @@
     "screenshotLabel": "Beispielansicht"
   },
   "releases": {
+    "versions[0.89].builds[0.89.2].overview.label": "Deitsche Durchsagestimm direkt im Update",
+    "versions[0.89].builds[0.89.2].overview.text": "Die deitsche Offline-Stimm un ihr private Laufzeit wern jetzt vollständig mit GottesdienstRegie ausgeliefert. E zusätzliche Sprachinstallation, e Dateiauswahl odder e Konto sin net mehr erforderlich.",
+    "versions[0.89].builds[0.89.2].sections.new.0.label": "Mitgelieferte klassische Sprachausgab",
+    "versions[0.89].builds[0.89.2].sections.new.0.text": "Unner Einstellungen → Präsentation → Ansagen kann die enthaltene deitsche Stimm ausdrücklich aktiviert wern. Die Sprachausgab schafft lokal mit aufgezeichnete Sprachsegmente. Gong, Musikabsenkung, Lautsprechersymbol un de konfigurierte Background-Audio-Ausgang bleiwe erhalte. Bestehende deaktivierte Ansage wern beim Update net eigeschaltet; alte externe Stimme wern net automatisch iwwernomme.",
+    "versions[0.89].builds[0.89.2].sections.known.0.label": "Downloadumfang un bestehende Einschränkunge",
+    "versions[0.89].builds[0.89.2].sections.known.0.text": "Des vollständige Sprachpaket macht de Update-Download größer. Regionalvariante sin noch net vollständig übersetzt. Fehlende UI-Texte wern uff Hochdeitsch angezeigt. De experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Vor em öffentliche Einsatz sin die Aussprooch un die Lautstärk an de tatsächliche Saalanlag zu priefe.",
     "versions[0.89].builds[0.89.1].overview.label": "Lokale Durchsage un klarere Radio- un Wetteranzeige",
     "versions[0.89].builds[0.89.1].overview.text": "Des Update ergänzt die optionale Anbindung vun ere separat installierte eSpeak-NG-Sprachengine. Automatische Saalansage krieje en Gong un e sichtbare Kennzeichnung. Die Radioauswahl werd vereinfacht; mehrere Wetterwarnunge sin eindeutiger zu unterscheide.",
     "versions[0.89].builds[0.89.1].sections.new.0.label": "Automatische Durchsage mit lokaler Sprachsynthese",

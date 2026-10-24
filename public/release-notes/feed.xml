@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.89.2</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.89.2</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.89.2</guid><pubDate>Sat, 24 Oct 2026 00:00:00 GMT</pubDate><description>Deutsche Durchsagestimme direkt im Update
+Die deutsche Offline-Stimme und ihre private Laufzeit werden jetzt vollständig mit GottesdienstRegie ausgeliefert. Eine zusätzliche Sprachinstallation, eine Dateiauswahl oder ein Konto sind nicht mehr erforderlich.
+
+Mitgelieferte klassische Sprachausgabe
+Unter Einstellungen → Präsentation → Ansagen kann die enthaltene deutsche Stimme ausdrücklich aktiviert werden. Die Sprachausgabe arbeitet lokal mit aufgezeichneten Sprachsegmenten. Gong, Musikabsenkung, Lautsprechersymbol und der konfigurierte Background-Audio-Ausgang bleiben erhalten. Bestehende deaktivierte Ansagen werden beim Update nicht eingeschaltet; alte externe Stimmen werden nicht automatisch übernommen.
+
+Downloadumfang und bestehende Einschränkungen
+Das vollständige Sprachpaket vergrößert den Update-Download. Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Vor öffentlichem Einsatz ist die Aussprache und Lautstärke an der tatsächlichen Saalanlage zu prüfen.</description></item>
 <item><title>GottesdienstRegie 0.89.1</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.89.1</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.89.1</guid><pubDate>Sat, 24 Oct 2026 00:00:00 GMT</pubDate><description>Lokale Durchsagen und klarere Radio- und Wetteranzeigen
 Dieses Update ergänzt die optionale Anbindung einer separat installierten eSpeak-NG-Sprachengine. Automatische Saalansagen erhalten einen Gong und eine sichtbare Kennzeichnung. Die Radioauswahl wird vereinfacht; mehrere Wetterwarnungen sind eindeutiger unterscheidbar.
 

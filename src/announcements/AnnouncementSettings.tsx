@@ -74,27 +74,15 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     finally {setBusy(false);}
   }
 
-  async function chooseEngine(){
-    if(!native?.chooseEngine||!ready||busy)return;
-    setBusy(true);window.dispatchEvent(new Event('gottesdienstregie:announcement-stop'));
-    try{
-      const result=await native.chooseEngine();setEngine(result);
-      setSaved(value=>({...value,enabled:false,...(result.ready?{voiceId:'espeak-ng:de',speakerId:0,voiceAccepted:true}:{})}));
-      window.dispatchEvent(new Event('gottesdienstregie:announcement-settings'));
-    }catch{setError('speechSettingsLoadError')}
-    finally{setBusy(false)}
-  }
   const texts = rows ?? communityRows;
   return <section className="settings-group announcement-preparation-settings" aria-labelledby="announcement-preparation-title">
     <h3 id="announcement-preparation-title">{t('speechSettingsHeading')}</h3>
     <p>{t('speechSettingsHelp')}</p>
-    <p role="note">{german?'Lokale deutsche eSpeak-NG-Stimme ohne KI-Modell und ohne Windows-Stimme. eSpeak NG separat installieren und das Programm auswählen. Die Stimme klingt synthetisch. Die erste automatische Durchsage erfolgt nach dem gespeicherten Intervall, nur während ON AIR im Vor- oder Nachprogramm.':'Local German eSpeak NG voice, without an AI model or Windows voice. Install eSpeak NG separately and select its executable. The voice sounds synthetic. Automatic announcements start after the saved interval, only ON AIR in pre/post programs.'}</p>
-    <button type="button" disabled={!ready||busy||!native?.chooseEngine} onClick={()=>{void chooseEngine()}}>{german?'eSpeak NG auswählen':'Select eSpeak NG'}</button>
-    <button type="button" onClick={()=>{void window.desktop?.openExternal('https://github.com/espeak-ng/espeak-ng/releases')}}>{german?'eSpeak-NG-Downloadseite':'eSpeak NG downloads'}</button>
-    <p>{engine.name||(german?'eSpeak NG nicht eingerichtet. Keine automatische Ersatzstimme.':'eSpeak NG not configured. No automatic fallback voice.')}</p>
+    <p role="note">{german?'Die deutsche Stimme und ihre Laufzeit sind im Update enthalten. Keine zusätzliche Installation, kein Konto und keine Windows-Stimme erforderlich. Die Sprachausgabe arbeitet offline mit klassischen Sprachaufnahmen. Die erste automatische Durchsage erfolgt nach dem gespeicherten Intervall, nur während ON AIR im Vor- oder Nachprogramm.':'The German voice and its runtime are included in the update. No extra installation, account or Windows voice is needed. Speech is generated offline using classical recorded speech segments. Automatic announcements start after the saved interval, only ON AIR in pre/post programs.'}</p>
+    <p role="status">{engine.name||(german?'Mitgelieferte Stimme wird geprüft.':'Checking the included voice.')}</p>
     {status&&<p role="alert">{status}</p>}
     {!native && <p>{t('speechSettingsDesktopOnly')}</p>}
-    <label><input type="checkbox" checked={saved.enabled&&saved.voiceId==='espeak-ng:de'} disabled={!ready||busy||(!saved.enabled&&(!engine.ready||saved.voiceId!=='espeak-ng:de'))} onChange={event=>setSaved(value=>({...value,enabled:event.target.checked}))}/> {t('speechSettingsEnable')}</label>
+    <label><input type="checkbox" checked={saved.enabled} disabled={!ready||busy||(!saved.enabled&&!engine.ready)} onChange={event=>setSaved(value=>({...value,enabled:event.target.checked,...(event.target.checked?{voiceId:'marytts:dfki-pavoque-neutral',speakerId:0,voiceAccepted:true}:{})}))}/> {t('speechSettingsEnable')}</label>
     <label>{t('speechSettingsInterval')}<input className="settings-number-input" type="number" min="1" max="120" step="1" disabled={!ready || busy} value={interval} onChange={event => {setIntervalValue(event.target.value);setMessage('');}}/></label>
     <label>{t('speechSettingsMusicLevel')}<input className="settings-number-input" type="number" min="0" max="100" disabled={!ready || busy} value={percent} onChange={event => {setPercent(event.target.value);setMessage('');}}/></label>
     <p>{t('speechSettingsMusicHelp')}</p>

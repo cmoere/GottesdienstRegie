@@ -43,7 +43,7 @@ export function AutomaticAnnouncements({quick}:{quick:QuickScreenConfig|null}){
    if(useSpeechStatus.getState().active)void bridge.setIndicator!(true).catch(()=>{});
    if(!row)return;
    activeKey=key();activeId=row.id;activeRevision=row.revision;useSpeechStatus.setState({message:''});
-   void run.start(row,settings.musicRemainingPercent,valid).catch(()=>{if(!disposed)useSpeechStatus.setState({message:'Durchsage nicht verfügbar. eSpeak NG und den Background-Audio-Ausgang prüfen.'})});
+   void run.start(row,settings.musicRemainingPercent,valid).catch(()=>{if(!disposed)useSpeechStatus.setState({message:'Durchsage nicht verfügbar. Mitgelieferte Stimme und Background-Audio-Ausgang prüfen.'})});
   };
   let readRevision=0;
   const reload=()=>{const revision=++readRevision;void bridge.readSettings().then(value=>{if(disposed||revision!==readRevision)return;settings=normalizeAnnouncementSettings(value);tick()}).catch(()=>{settings=normalizeAnnouncementSettings(null);run.cancel();if(!disposed)useSpeechStatus.setState({message:'Ansageneinstellungen konnten nicht geladen werden.'})})};

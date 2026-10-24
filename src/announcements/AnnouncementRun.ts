@@ -35,7 +35,7 @@ export class AnnouncementRun{
 export class AnnouncementScheduler{
  private context:string|null=null;private due=0;private lastId='';
  next({now,context,settings,rows,busy}:{now:number;context:string|null;settings:AnnouncementSettings;rows:SpokenAnnouncement[];busy:boolean}):SpokenAnnouncement|null{
-  if(!context||!settings.enabled||settings.voiceId!=='espeak-ng:de'){this.context=null;this.lastId='';return null}
+  if(!context||!settings.enabled||settings.voiceId!=='marytts:dfki-pavoque-neutral'){this.context=null;this.lastId='';return null}
   if(context!==this.context){this.context=context;this.due=now+settings.intervalMinutes*60_000;this.lastId='';return null}
   if(busy||now<this.due)return null;
   this.due=now+settings.intervalMinutes*60_000;

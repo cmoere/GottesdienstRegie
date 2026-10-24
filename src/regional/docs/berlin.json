@@ -324,6 +324,12 @@
   "screenshotLabel":"Beispielansicht"
  },
  "releases":{
+    "versions[0.89].builds[0.89.2].overview.label": "Deutsche Durchsajestimme direkt im Update",
+    "versions[0.89].builds[0.89.2].overview.text": "Die deutsche Offline-Stimme und ihre private Laufzeit werden jetzt vollständich mit GottesdienstRegie ausjeliefert. 'Ne zusätzliche Sprachinstallation, 'ne Dateiauswahl oder 'n Konto sind nich mehr erforderlich.",
+    "versions[0.89].builds[0.89.2].sections.new.0.label": "Mitjelieferte klassische Sprachausjabe",
+    "versions[0.89].builds[0.89.2].sections.new.0.text": "Unter Einstellungen → Präsentation → Ansagen kannste die enthaltene deutsche Stimme ausdrücklich aktivieren. Die Sprachausjabe arbeitet lokal mit uffjezeichneten Sprachsegmenten. Gong, Musikabsenkung, Lautsprechersymbol und der konfigurierte Background-Audio-Ausgang bleiben erhalten. Bestehende deaktivierte Ansagen werden beim Update nich einjeschaltet; alte externe Stimmen werden nich automatisch übernommen.",
+    "versions[0.89].builds[0.89.2].sections.known.0.label": "Downloadumfang und bestehende Einschränkungen",
+    "versions[0.89].builds[0.89.2].sections.known.0.text": "Dit vollständije Sprachpaket verjrößert den Update-Download. Regionalvarianten sind noch nich vollständich übersetzt. Fehlende UI-Texte werden uff Hochdeutsch anjezeigt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Vor öffentlichem Einsatz musste die Aussprache und Lautstärke an der tatsächlichen Saalanlage prüfen.",
     "versions[0.89].builds[0.89.1].overview.label": "Lokale Durchsagen und klarere Radio- und Wetteranzeigen",
     "versions[0.89].builds[0.89.1].overview.text": "Dit Update ergänzt die optionale Anbindung von 'ner separat installierten eSpeak-NG-Sprachengine. Automatische Saalansagen kriejen 'nen Gong und 'ne sichtbare Kennzeichnung. Die Radioauswahl wird einfacher; mehrere Wetterwarnungen lassen sich eindeutijer unterscheiden.",
     "versions[0.89].builds[0.89.1].sections.new.0.label": "Automatische Durchsagen mit lokaler Sprachsynthese",
