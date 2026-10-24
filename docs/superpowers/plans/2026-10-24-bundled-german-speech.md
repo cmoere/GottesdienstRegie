@@ -56,7 +56,7 @@
 - [x] Require build-time resources and package them outside ASAR for each architecture; inspect resulting Windows package and license files. Other architectures are mandatory CI gates before publication.
 - [x] Run real synthesis/playback fixture with physical output muted, gong/speech/icon/cancel; run full unit suite, build and historical release gates.
 - [x] Perform separate author review of diff/security/license boundaries and fix material findings with regression tests.
-- [ ] Publish a fresh normal version, verify public manifests/digests and downloadable installer contains speech resources. Never publish a broken partial package or describe unfinished PowerPoint/regional work as complete.
+- [x] Publish a fresh normal version, verify public manifests/digests and downloadable installer contains speech resources. Normal 0.89.2, all platform jobs successful, public installer actually synthesized using its contained resources; see evidence file. Unfinished PowerPoint/regional UI work remains disclosed.
 
 ## Progress
 

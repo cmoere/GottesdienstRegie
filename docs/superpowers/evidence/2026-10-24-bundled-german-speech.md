@@ -33,3 +33,16 @@ Separate author review performed against approved design and whole diff; no tech
 - Foreign untracked tests/smoke/startup-diagnostic.cjs remains untouched, SHA-256 B7E42819F91D0D2D1BF1BBB5DE782A26749BD1A26E2D802BBC8F5327BB570AB5.
 
 Physical hall pronunciation/audibility is not certified by muted software checks. Publication and downloadable artifact verification are recorded after the CI release completes.
+
+## Published normal update
+
+- Release: https://github.com/cmoere/GottesdienstRegie/releases/tag/v0.89.2 — public, draft=false, prerelease=false, normal latest, 11 assets.
+- Tested source/tag: `1e16634d9b6838aff82650e530de278167c8b68d`.
+- Cross-platform workflow `40096525191`: prepare, Windows, Linux, macOS (Intel/Apple Silicon) and publish all SUCCESS. Each platform's package hook successfully synthesized using its bundled JRE before releasing the package.
+- Pages workflow `40096525251`: SUCCESS. Public RSS contains 0.89.2.
+- All three public update manifests checked against uploaded asset names/sizes. Downloaded Windows installer is **709052929 bytes**, SHA-256 **c83363053e1af7794e087dd8cef8f80b3cd2de67e4a53266be04463483158117**; SHA-512 matches latest.yml and SHA-256 matches GitHub's asset digest.
+- Public downloaded installer was not installed or executed. Its selected payload resources were extracted under `work/release-verify-sKUYWk/`. Verified 30 runtime jar hashes, LGPL/voice licenses, full modified worker sources, private Java and original gong, normal updater provider, source tag and compiled native module.
+- The actual native module from the publicly downloaded ASAR generated **246436 bytes** of valid speech through the downloaded private runtime/data. No system Java, Windows voice or physical audio output was used. Report: `work/release-verify-sKUYWk/speech-package-report.json`.
+- Public release checks: `work/bundled-speech-public-verification.log`; package checks: `work/bundled-speech-public-package.log`.
+
+No remaining required publication work. Real hall listening and unfinished historical PowerPoint/regional UI work remain outside this release's verification claims.
