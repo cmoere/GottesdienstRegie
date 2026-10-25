@@ -20,7 +20,8 @@ describe('complete German documentation translation source',()=>{
     expect(source.help['Erste Schritte'].body).toContain('## ');
   });
   it('keeps all historical release text fields keyed by stable version identity',()=>{
-    expect(Object.keys(source.releases)).toHaveLength(1568);
+    expect(Object.keys(source.releases)).toHaveLength(1586);
+    expect(source.releases['versions[0.92].builds[0.92.0].overview.label']).toBe('Klarere Ansagen und verlässlicherer PowerPoint-Inhaltsimport');
     expect(source.releases['versions[0.91].builds[0.91.0].overview.label']).toBe('Neue lokale Stimmen, Originaldatei-Import und bessere Monitorsteuerung');
     expect(source.releases['versions[0.90].builds[0.90.0].overview.label']).toBe('Verlässlicher Live-Start und gemeinsame Stimmenauswahl');
     expect(source.releases['versions[0.89].builds[0.89.3].overview.label']).toBe('Passende Wetterbilder und klarere Ansagen');

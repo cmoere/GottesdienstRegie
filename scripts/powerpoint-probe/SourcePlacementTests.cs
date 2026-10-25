@@ -1,0 +1,6 @@
+using System;
+using System.Drawing;
+class SourcePlacementTests {
+ static void Check(bool value,string reason){if(!value)throw new Exception(reason);}
+ static int Main(){try{var main=new Rectangle(0,0,1920,1080);var right=new Rectangle(1920,0,1920,1080);var found=SourcePlacement.FindEdge(main,new[]{main,right},1920,1080,64);Check(found.HasValue,"edge not found");Check(Rectangle.Intersect(main,found.Value).Width==64&&Rectangle.Intersect(main,found.Value).Height==64,"unexpected monitor intersection");Check(Rectangle.Intersect(right,found.Value).IsEmpty,"other screen touched");var center=new Rectangle(1920,1080,1920,1080);var all=new System.Collections.Generic.List<Rectangle>();for(int y=0;y<3;y++)for(int x=0;x<3;x++)all.Add(new Rectangle(x*1920,y*1080,1920,1080));Check(!SourcePlacement.FindEdge(center,all.ToArray(),1920,1080,64).HasValue,"unsafe center placement accepted");Check(!SourcePlacement.FindEdge(main,new[]{main},1920,1080,0).HasValue,"invalid inset accepted");var left=new Rectangle(-1920,-100,1920,1080);Check(SourcePlacement.FindEdge(left,new[]{left,main},1920,1080,64).HasValue,"negative coordinate monitor rejected");Console.WriteLine("SOURCE_PLACEMENT_PASS");return 0;}catch(Exception e){Console.Error.WriteLine(e.Message);return 1;}}
+}

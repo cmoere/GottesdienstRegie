@@ -184,7 +184,7 @@ float4 ps(V v):SV_TARGET{float4 c=source.Sample(sampleState,crop.xy+v.uv*crop.zw
     check_hresult(CreateDirect3D11DeviceFromDXGIDevice(gpu.device.as<IDXGIDevice>().get(), wrapped.put()));
     const auto interop = get_activation_factory<GraphicsCaptureItem, IGraphicsCaptureItemInterop>();
     check_hresult(interop->CreateForWindow(reinterpret_cast<HWND>(static_cast<std::uintptr_t>(o.window)), guid_of<GraphicsCaptureItem>(), put_abi(item)));
-    if (item.Size().Width != static_cast<int>(o.outerWidth) || item.Size().Height != static_cast<int>(o.outerHeight)) throw std::runtime_error("SOURCE_GEOMETRY_CHANGED");
+    if (item.Size().Width != static_cast<int>(o.outerWidth) || item.Size().Height != static_cast<int>(o.outerHeight)) throw std::runtime_error("SOURCE_CAPTURE_GEOMETRY_" + std::to_string(item.Size().Width) + "X" + std::to_string(item.Size().Height));
     pool = Direct3D11CaptureFramePool::CreateFreeThreaded(wrapped.as<IDirect3DDevice>(), DirectXPixelFormat::B8G8R8A8UIntNormalized, 3, item.Size());
     session = pool.CreateCaptureSession(item);
     const auto signal = signals;

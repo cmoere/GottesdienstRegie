@@ -56,7 +56,7 @@ async function startGpuProducer({executable, args = [], cwd, owner, sessionId, g
   function message(v) {
     if (fault) return;
     if (!v || typeof v !== 'object' || Array.isArray(v)) throw problem('PROTOCOL');
-    if (v.status === 'error') throw problem('REMOTE_ERROR');
+    if (v.status === 'error') throw problem('REMOTE_ERROR'+(exact(v,['status','code'])&&typeof v.code==='string'&&/^(?:SOURCE|GPU|SLOT)_[A-Z0-9_]{1,70}$/.test(v.code)?'_'+v.code:''));
     if (stage === 'hello') {
       if (!exact(v, ['status', 'protocol', 'parentPid', 'parentCreated', 'nonce']) || v.status !== 'hello' || v.protocol !== 1
           || v.parentPid !== process.pid || !uint64(v.parentCreated) || !token(v.nonce)) throw problem('BOOTSTRAP');

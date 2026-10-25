@@ -1,7 +1,8 @@
 // Standalone diagnostic: never imports the application main process or starts ON AIR.
 const fs=require('node:fs/promises'),path=require('node:path'),{spawn}=require('node:child_process'),readline=require('node:readline');
-async function runProbe({root,monitor,captureAdapter,navigation='gotoClick'}){
+async function runProbe({root,monitor,captureAdapter,navigation='gotoClick',edgePosition=false}){
   if(monitor!==undefined&&monitor!==1)throw Error('PROBE_MONITOR_NOT_AUTHORIZED');
+  if(edgePosition&&monitor!==1)throw Error('PROBE_EDGE_MONITOR_REQUIRED');
   if(!['gotoClick','nativeNext'].includes(navigation))throw Error('PROBE_NAVIGATION_INVALID');
   root=path.resolve(root);
   if(process.platform!=='win32')return {visual:false,audio:'unsupported',results:{reason:'WINDOWS_REQUIRED'}};
@@ -9,11 +10,11 @@ async function runProbe({root,monitor,captureAdapter,navigation='gotoClick'}){
   await fs.writeFile(path.join(folder,'.probe-owned'),'GottesdienstRegie own diagnostic files only\n');
   const compiler=path.join(process.env.SystemRoot||'C:/Windows','Microsoft.NET/Framework64/v4.0.30319/csc.exe'),exe=path.join(folder,'PowerPointProbe.exe');
   const interop=path.join(process.env.SystemRoot||'C:/Windows','assembly/GAC_MSIL/Microsoft.Office.Interop.PowerPoint/15.0.0.0__71e9bce111e9429c/Microsoft.Office.Interop.PowerPoint.dll');
-  const build=spawn(compiler,['/nologo','/target:exe','/out:'+exe,'/r:Microsoft.CSharp.dll','/r:System.Web.Extensions.dll','/r:System.Windows.Forms.dll','/link:'+interop,path.join(root,'scripts/powerpoint-probe/PowerPointProbe.cs')],{windowsHide:true,stdio:['ignore','pipe','pipe']});
+  const build=spawn(compiler,['/nologo','/target:exe','/out:'+exe,'/r:Microsoft.CSharp.dll','/r:System.Web.Extensions.dll','/r:System.Windows.Forms.dll','/link:'+interop,path.join(root,'scripts/powerpoint-probe/PowerPointProbe.cs'),path.join(root,'scripts/powerpoint-probe/SourcePlacement.cs')],{windowsHide:true,stdio:['ignore','pipe','pipe']});
   let compileOutput='';build.stdout.on('data',c=>compileOutput+=c);build.stderr.on('data',c=>compileOutput+=c);
   const buildCode=await new Promise((resolve,reject)=>{build.once('error',reject);build.once('close',resolve)});
   if(buildCode!==0)throw Error('PROBE_COMPILE_FAILED: '+compileOutput);
-  const helper=spawn(exe,[folder,...(monitor===1?['--monitor=1']:[]),...(navigation==='nativeNext'?['--native-next']:[])],{windowsHide:true,stdio:['pipe','pipe','pipe']});
+  const helper=spawn(exe,[folder,...(monitor===1?['--monitor=1']:[]),...(navigation==='nativeNext'?['--native-next']:[]),...(edgePosition?['--edge']:[])],{windowsHide:true,stdio:['pipe','pipe','pipe']});
   const pending=new Map();let serial=0,readyResolve,readyReject;
   const ready=new Promise((resolve,reject)=>{readyResolve=resolve;readyReject=reject});
   const readyTimeout=setTimeout(()=>readyReject(Error('PROBE_OFFICE_TIMEOUT')),30000);

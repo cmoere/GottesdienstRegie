@@ -13,6 +13,7 @@ input.on('line', line => {
   if (w[0] === 'start') {
     if (w.length !== 16 || w[2] !== hello.nonce || w[14] !== String(process.ppid) || w[15] !== hello.parentCreated) process.exit(3);
     sessionId = w[3]; generation = w[4];
+    if(mode==='native-error'||mode==='unsafe-native-error'){emit({status:'error',code:mode==='native-error'?'SOURCE_GEOMETRY_CHANGED':'C:/private/path'});return;}
     const ready = {status: 'ready', sessionId, generation, width: 1920, height: 1080, handles: ['9007199254740993', '9007199254740995', '9007199254740997']};
     if (mode === 'bad-handle') ready.handles[0] = '18446744073709551616';
     if (mode === 'same-handles') ready.handles[1] = ready.handles[0];

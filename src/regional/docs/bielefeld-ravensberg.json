@@ -1891,6 +1891,24 @@
     "versions[0.91].builds[0.91.0].sections.known.2.label": "Monitoriäwerdraigene un Werbeanbeders",
     "versions[0.91].builds[0.91.0].sections.known.2.text": "Persönliche Monitore iäwerdraagt dat echte Output-Bild met begrenzter Bildrate iäwer dat lokale Netzwark; se sind kain latenzfruigen Videooutgang. VAST unnerstütt vorbereidbore Bild-/Videomedien un begrenzte Wrapperketten. Sunder äine fruigegiewene Quelle waiern kaine Werbekampagnen opstellt.",
     "versions[0.91].builds[0.91.0].sections.known.3.label": "PowerPoint-Originalmodus",
-    "versions[0.91].builds[0.91.0].sections.known.3.text": "De ungeprüfte PowerPoint-Originalmodus blifft deaktiveert. De vörhannene Inholtsimport blifft verfügbor."
+    "versions[0.91].builds[0.91.0].sections.known.3.text": "De ungeprüfte PowerPoint-Originalmodus blifft deaktiveert. De vörhannene Inholtsimport blifft verfügbor.",
+    "versions[0.92].builds[0.92.0].overview.label": "Düütlichere Ansagen un teoverlässiger PowerPoint-Inholtsimport",
+    "versions[0.92].builds[0.92.0].overview.text": "Füf metgelieferte düütsche Stimmen, gemeinsame Vorliäsinstellungen un äin högerer Sprachpegel maakt verständliche Dörsagen lichter. Datumsangawen waiern vor't Vorliäsen outschriäwen. De PowerPoint-Inholtsimport erhaalt de tatsächliche Reihenfolge, Notizen un hinnerleggten Tieden.",
+    "versions[0.92].builds[0.92.0].sections.new.0.label": "Füf düütsche Stimmen sunder extra Installation",
+    "versions[0.92].builds[0.92.0].sections.new.0.text": "Neffen Thorsten un Kerstin stoht Karlsson, Ramona un Eva K. teo Verfügung. Alle füf Stimmen un de private Sprachlooptied waiern metgeliefert. De Outwahl unner Einstellungen → Präsentation → Ansagen gellt for alle Präsentationen un Brukers an'n Regie-PC; na't Spiekern bruukt auk de Tonprobe düsse Stimme.",
+    "versions[0.92].builds[0.92.0].sections.new.1.label": "Tempo, Pausen un Betonung gemeinsam instellen",
+    "versions[0.92].builds[0.92.0].sections.new.1.text": "Sprachluutheit van 50 bit 200 Prozent, Sprechtempo van 0,7 bit 1,3 un Satz- un Absatzpausen laat sik zentral instellen. De Presets Ruhig un Deutlich ännert de Synthese behutsam. Spiekerte Instellungen gellt gliekemaoten for automatische Ansagen un Tonproben.",
+    "versions[0.92].builds[0.92.0].sections.improved.0.label": "Högerer Sprachpegel met begrenzten Spitzen",
+    "versions[0.92].builds[0.92.0].sections.improved.0.text": "De nigge Standard van 150 Prozent hewwt luisere Sprachafsnitte stärker an; 100 Prozent entspricht dem bisherigen Sprachpegel. De Spitzenbegrenzung blifft bi höchstens −1 dBFS. Gongpegel, Outgangsteoordnung, Stummschaltung un de Afsenkung, de blaut up Achtergrundmusik wirkt, bluiwet erhaulet.",
+    "versions[0.92].builds[0.92.0].sections.fixed.0.label": "Datum un Uhrtied verständlicher vorliäsen",
+    "versions[0.92].builds[0.92.0].sections.fixed.0.text": "Gültige düütsche Datumsangawen, ISO-Daten, Wochendagskürzel un Uhrtieden waiern vor de Sprachsynthese outschriäwen. So waiern Datumspunkte nich as Satzende behandelt. Ungültige Kalenderdaten un Versionsnummern bluiwet unverännert. De spiekerten un anzeigten Meldungstexte waiern nich ännert.",
+    "versions[0.92].builds[0.92.0].sections.fixed.1.label": "PowerPoint-Reihenfolge, Notizen un Tieden erhaulen",
+    "versions[0.92].builds[0.92.0].sections.fixed.1.text": "PPTX-Dateien waiern anhand van ehre tatsächlichen Folienverknüppungen liäst. Outblendete Folien, Titelplatzhaulers, Regienotizen un ausdrücklich instellte Anzeigetieden bluiwet erhaulet; alternative Dorstellungen waiern nich dubbelt iäwernuommen. De bearbäidbore Textkopie startet van Hand un nennt Dorstellungsgrenzen in'n Importbericht. Quelldateien waiern nich ännert un externe Inholte nich naolaadt.",
+    "versions[0.92].builds[0.92.0].sections.known.0.label": "PowerPoint-Originalweddergaw nau nich fruigegiewen",
+    "versions[0.92].builds[0.92.0].sections.known.0.text": "De PowerPoint-Originalmodus blifft deaktiveert. De originaltruge Live-Inbindung is nau nich afschluotten; de erfolgrieke afgetrennte Weddergawprüfung is kaine Produktfruigaw. De verfügbore bearbäidbore Textkopie kann Layout, Biller un Originalanimationen nich vollständig weddergiewen. Den Import vor ON AIR prüfen.",
+    "versions[0.92].builds[0.92.0].sections.known.1.label": "YouTube-Werbung bi Inbettungen",
+    "versions[0.92].builds[0.92.0].sections.known.1.text": "YouTube bidt kainen offiziellen Player-Schalter teon teoverlässigen Afschalten van Werbung; auk youtube-nocookie.com garanteert kaine werbefruige Weddergaw. For äinen planboren Afloop äine fruigegiewene lokale Videodatei importeeren. GottesdienstRegie laadt dorfor kaine YouTube-Videos dal.",
+    "versions[0.92].builds[0.92.0].sections.known.2.label": "Regionalvarianten",
+    "versions[0.92].builds[0.92.0].sections.known.2.text": "Regionalvarianten sind nau nich vollständig iäwersett. Fehlende UI-Texte waiern up Haugdüütsch wuiset."
   }
 }

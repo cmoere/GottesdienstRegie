@@ -1891,6 +1891,24 @@
     "versions[0.91].builds[0.91.0].sections.known.2.label": "Monitorübertragung und Werbeanbieter",
     "versions[0.91].builds[0.91.0].sections.known.2.text": "Persönliche Monitore übertragen das echte Output-Bild mit begrenzter Bildrate übers lokale Netzwerk; se sind kein latenzfreier Videoausgang. VAST unterstützt vorbereitbare Bild-/Videomedien und begrenzte Wrapperketten. Ohne 'ne freigegebene Quelle werden keine Werbekampagnen erzeugt.",
     "versions[0.91].builds[0.91.0].sections.known.3.label": "PowerPoint-Originalmodus",
-    "versions[0.91].builds[0.91.0].sections.known.3.text": "Der ungeprüfte PowerPoint-Originalmodus bleibt ausgeschaltet. Den vorhandenen Inhaltsimport kannste weiter benutzen."
+    "versions[0.91].builds[0.91.0].sections.known.3.text": "Der ungeprüfte PowerPoint-Originalmodus bleibt ausgeschaltet. Den vorhandenen Inhaltsimport kannste weiter benutzen.",
+    "versions[0.92].builds[0.92.0].overview.label": "Klarere Ansagen und zuverlässigerer PowerPoint-Inhaltsimport",
+    "versions[0.92].builds[0.92.0].overview.text": "Fünf mitgelieferte deutsche Stimmen, gemeinsame Vorleseeinstellungen und 'n höherer Sprachpegel machen verständliche Durchsagen leichter. Datumsangaben werden vorm Vorlesen ausgeschrieben. Der PowerPoint-Inhaltsimport erhält die tatsächliche Reihenfolge, Notizen und hinterlegten Zeiten.",
+    "versions[0.92].builds[0.92.0].sections.new.0.label": "Fünf deutsche Stimmen ohne zusätzliche Installation",
+    "versions[0.92].builds[0.92.0].sections.new.0.text": "Neben Thorsten und Kerstin stehen Karlsson, Ramona und Eva K. zur Verfügung. Alle fünf Stimmen und die private Sprachlaufzeit werden mitgeliefert. Die Auswahl unter Einstellungen → Präsentation → Ansagen gilt für alle Präsentationen und Benutzer am Regie-PC; nachm Speichern nimmt auch die Tonprobe diese Stimme.",
+    "versions[0.92].builds[0.92.0].sections.new.1.label": "Tempo, Pausen und Betonung gemeinsam einstellen",
+    "versions[0.92].builds[0.92.0].sections.new.1.text": "Sprachlautheit von 50 bis 200 Prozent, Sprechtempo von 0,7 bis 1,3 sowie Satz- und Absatzpausen kannste zentral einstellen. Die Presets Ruhig und Deutlich verändern die Synthese behutsam. Gespeicherte Einstellungen gelten gleichermaßen für automatische Ansagen und Tonproben.",
+    "versions[0.92].builds[0.92.0].sections.improved.0.label": "Höherer Sprachpegel mit begrenzten Spitzen",
+    "versions[0.92].builds[0.92.0].sections.improved.0.text": "Der neue Standard von 150 Prozent hebt leisere Sprachabschnitte stärker an; 100 Prozent entspricht dem bisherigen Sprachpegel. Die Spitzenbegrenzung bleibt bei höchstens −1 dBFS. Gongpegel, Ausgangszuordnung, Stummschaltung und die Absenkung, die bloß auf Hintergrundmusik wirkt, bleiben erhalten.",
+    "versions[0.92].builds[0.92.0].sections.fixed.0.label": "Datum und Uhrzeit verständlicher vorlesen",
+    "versions[0.92].builds[0.92.0].sections.fixed.0.text": "Gültige deutsche Datumsangaben, ISO-Daten, Wochentagskürzel und Uhrzeiten werden vor der Sprachsynthese ausgeschrieben. Dadurch werden Datumspunkte nich als Satzende behandelt. Ungültige Kalenderdaten und Versionsnummern bleiben unverändert. Die gespeicherten und angezeigten Meldungstexte werden nich verändert.",
+    "versions[0.92].builds[0.92.0].sections.fixed.1.label": "PowerPoint-Reihenfolge, Notizen und Zeiten erhalten",
+    "versions[0.92].builds[0.92.0].sections.fixed.1.text": "PPTX-Dateien werden anhand ihrer tatsächlichen Folienverknüpfungen gelesen. Ausgeblendete Folien, Titelplatzhalter, Regienotizen und ausdrücklich festgelegte Anzeigezeiten bleiben erhalten; alternative Darstellungen werden nich doppelt übernommen. Die bearbeitbare Textkopie startet von Hand und nennt Darstellungsgrenzen im Importbericht. Quelldateien werden nich verändert und externe Inhalte nich nachgeladen.",
+    "versions[0.92].builds[0.92.0].sections.known.0.label": "PowerPoint-Originalwiedergabe noch nich freigegeben",
+    "versions[0.92].builds[0.92.0].sections.known.0.text": "Der PowerPoint-Originalmodus bleibt deaktiviert. Die originalgetreue Live-Einbindung is noch nich abgeschlossen; die erfolgreiche isolierte Wiedergabeprüfung is keine Produktfreigabe. Die verfügbare bearbeitbare Textkopie kann Layout, Bilder und Originalanimationen nich vollständig wiedergeben. Prüf den Import vor ON AIR.",
+    "versions[0.92].builds[0.92.0].sections.known.1.label": "YouTube-Werbung bei Einbettungen",
+    "versions[0.92].builds[0.92.0].sections.known.1.text": "YouTube bietet keinen offiziellen Player-Schalter zum zuverlässigen Abschalten von Werbung; auch youtube-nocookie.com garantiert keine werbefreie Wiedergabe. Für 'nen planbaren Ablauf 'ne freigegebene lokale Videodatei importieren. GottesdienstRegie lädt dafür keine YouTube-Videos runter.",
+    "versions[0.92].builds[0.92.0].sections.known.2.label": "Regionalvarianten",
+    "versions[0.92].builds[0.92.0].sections.known.2.text": "Regionalvarianten sind noch nich vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt."
   }
 }

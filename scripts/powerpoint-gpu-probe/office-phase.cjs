@@ -4,10 +4,15 @@ function validateOfficeCommand(v){
  const allowed=v?.command==='goto'?['type','id','command','index']:['type','id','command'];
  if(!v||v.type!=='office-command'||!Number.isSafeInteger(v.id)||v.id<=0||!['play','pause','status','next','goto'].includes(v.command)||Object.keys(v).some(k=>!allowed.includes(k))||(v.command==='goto'&&![1,2,3].includes(v.index)))throw Error('OFFICE_GPU_COMMAND_REJECTED');return true;
 }
-async function runOfficeGpuPhase({root,electronPath,producer,digest,navigation='gotoClick',captureHz=30}){
- let folder;
- const office=await require('../probe-powerpoint.cjs').runProbe({root,monitor:1,navigation,captureAdapter:async({folder:ownFolder,state,command})=>{
-  folder=ownFolder;const config={folder,producer,monitor:1,digest,kind:'powerpoint',captureHz,owner:{hwnd:state.rootWindowHandle,pid:state.processId,createdAt:state.createdAt,crop:state.crop}};
+function validateOfficePlacement({offscreen=false,edge=false,covered=false,electronVersion}){
+ if((edge&&offscreen)||(covered&&(edge||offscreen)))throw Error('PROBE_SOURCE_PLACEMENT_CONFLICT');
+ if(covered&&electronVersion!=='45.0.0')throw Error('GPU_COVER_REQUIRES_APPROVED_ELECTRON_PARENT');return true;
+}
+async function runOfficeGpuPhase({root,electronPath,producer,digest,navigation='gotoClick',captureHz=30,offscreen=false,edge=false,covered=false}){
+ validateOfficePlacement({offscreen,edge,covered,electronVersion:process.versions.electron});
+ let folder,cover,office;
+ try{office=await require('../probe-powerpoint.cjs').runProbe({root,monitor:offscreen?undefined:1,navigation,edgePosition:edge,captureAdapter:async({folder:ownFolder,state,command})=>{
+  folder=ownFolder;if(covered){if(!String(state.monitor).endsWith('DISPLAY1'))throw Error('GPU_COVER_MONITOR_REQUIRED');const status=await command('status');cover=await require('./cover-window.cjs').createCoverWindow(status.status.windowGeometry,state.monitorBounds);await fs.writeFile(path.join(folder,'source-cover.png'),(await cover.webContents.capturePage()).toPNG())}const config={folder,producer,monitor:1,digest,kind:'powerpoint',captureHz,owner:{hwnd:state.rootWindowHandle,pid:state.processId,createdAt:state.createdAt,crop:state.crop}};
   const configPath=path.join(folder,'benchmark-config.json');await fs.writeFile(configPath,JSON.stringify(config));
   const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
   const child=spawn(electronPath,[path.join(__dirname,'benchmark.cjs'),'--config='+configPath],{cwd:root,env,windowsHide:true,stdio:['ignore','pipe','pipe','ipc']});let log='',lastCommand=0;const commandLog=[];
@@ -18,11 +23,11 @@ async function runOfficeGpuPhase({root,electronPath,producer,digest,navigation='
   if(code!==0)throw Error('GPU_OFFICE_PHASE_FAILED '+folder);
   const result=JSON.parse(await fs.readFile(path.join(folder,'benchmark-report.json'),'utf8'));
   return{captureReady:result.office?.captureReady===true,metrics:result.office?.metrics,controls:result.controlProof};
- }});
+ }});}finally{if(cover&&!cover.isDestroyed())cover.destroy()}
  if(!folder)return{visual:false,reason:office.results.reason};
  const file=path.join(folder,'benchmark-report.json');if(!await fs.stat(file).catch(()=>null))return{visual:false,reason:office.results.reason,folder};
  const report=JSON.parse(await fs.readFile(file,'utf8'));report.raw.originalUnchanged=office.results.originalUnchanged===true;report.raw.foreignDocumentUnchanged=office.results.foreignDocumentUnchanged===true;
- const measured=evaluateRun(report.raw),result={...measured,visual:measured.visual&&office.visual,controls:report.controlProof,folder,originalUnchanged:report.raw.originalUnchanged,foreignDocumentUnchanged:report.raw.foreignDocumentUnchanged};
+ const measured=evaluateRun(report.raw),result={...measured,visual:measured.visual&&office.visual,sourcePlacement:covered?'covered-monitor1':offscreen?'offscreen':edge?'edge64':'monitor1',controls:report.controlProof,folder,originalUnchanged:report.raw.originalUnchanged,foreignDocumentUnchanged:report.raw.foreignDocumentUnchanged};
  await fs.writeFile(path.join(folder,'office-gpu-report.json'),JSON.stringify(result,null,2));return result;
 }
-module.exports={validateOfficeCommand,runOfficeGpuPhase};
+module.exports={validateOfficeCommand,validateOfficePlacement,runOfficeGpuPhase};

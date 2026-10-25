@@ -6,6 +6,7 @@ import {sanitizeRecoveryDocument} from '../src/presentationRecovery';
 import {atomicRename} from './atomicRename';
 import {DocumentImportService,type ImportedPage} from './DocumentImportService';
 import {importKeynotePath} from './KeynoteImport';
+import {inspectPowerPoint} from './PowerPointImport';
 
 export interface PresentationSummary {
   id:string; title:string; date:string; createdAt:string; updatedAt:string;
@@ -32,10 +33,6 @@ function importedPresentation(title:string,pages:Array<ImportedPage&{transition?
 }
 async function officePages(sourcePath:string,extension:string){
   const archive=await JSZip.loadAsync(await fs.readFile(sourcePath));
-  if(extension==='.pptx'){
-    const names=Object.keys(archive.files).filter(name=>/^ppt\/slides\/slide\d+\.xml$/i.test(name)).sort((a,b)=>Number(a.match(/slide(\d+)/i)?.[1])-Number(b.match(/slide(\d+)/i)?.[1]));
-    return Promise.all(names.map(async(name,index)=>{const xml=await archive.file(name)!.async('string'),texts=[...xml.matchAll(/<a:t[^>]*>([\s\S]*?)<\/a:t>/gi)].map(match=>plainXml(match[1])).filter(Boolean),transitionBlock=xml.match(/<p:transition\b[\s\S]*?<\/p:transition>|<p:transition\b[^>]*\/>/i)?.[0]??'',duration=/spd="slow"/i.test(transitionBlock)?1000:/spd="fast"/i.test(transitionBlock)?300:500,direction=(/dir="r"|from="r"/i.test(transitionBlock)?'right':/dir="u"|from="t"/i.test(transitionBlock)?'up':/dir="d"|from="b"/i.test(transitionBlock)?'down':'left') as ImportedTransition['direction'],type:ImportedTransition['type']=/<p:(?:push|pull)/i.test(transitionBlock)?'slide':/<p:(?:wipe|strips|cover|uncover)/i.test(transitionBlock)?'wipe':/<p:dissolve/i.test(transitionBlock)?'dissolve':/<p:cut/i.test(transitionBlock)?'cut':'fade',transition=transitionBlock?{type,durationMs:duration,direction,easing:'standard' as const,reverseOnPrevious:true}:undefined;return{title:texts[0]||`Folie ${index+1}`,body:texts.join('\n'),transition}}));
-  }
   if(extension==='.odp'){
     const xml=await archive.file('content.xml')?.async('string');if(!xml)return[];
     return [...xml.matchAll(/<draw:page\b[\s\S]*?<\/draw:page>/gi)].map((match,index)=>{const paragraphs=[...match[0].matchAll(/<text:p\b[^>]*>([\s\S]*?)<\/text:p>/gi)].map(value=>plainXml(value[1])).filter(Boolean);return{title:paragraphs[0]||`Folie ${index+1}`,body:paragraphs.join('\n')}});
@@ -108,7 +105,20 @@ export class PresentationRepository {
   }
   async rename(id:string,title:string){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');doc.title=String(title).trim().slice(0,500)||doc.title;await this.save(doc);return this.summary(doc)}
   async setFlag(id:string,flag:'archived'|'trashed',value:boolean){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');doc[flag]=value;await this.save(doc);return this.summary(doc)}
-  async importDocument(sourcePath:string){const extension=path.extname(sourcePath).toLowerCase(),title=path.basename(sourcePath,extension);if(extension==='.key'){
+  async importDocument(sourcePath:string){const extension=path.extname(sourcePath).toLowerCase(),title=path.basename(sourcePath,extension);if(extension==='.pptx'){
+ const stat=await fs.stat(sourcePath);if(!stat.isFile()||stat.size>128*1024*1024)throw Error('Die PowerPoint-Datei ist zu groß oder ungültig.');
+ const result=await inspectPowerPoint(await fs.readFile(sourcePath)),template=importedPresentation(title,result.slides.map(({title,body,hidden})=>({title,body,hidden})),'pptx'),item=template.items[0];
+ item.timing.slideDurationSeconds=0;
+ item.slides=result.slides.map((source,index)=>{
+  const supported=source.transition&&['fade','cut','dissolve','push','pull','wipe'].includes(source.transition.kind),kind=source.transition?.kind;
+  const transition:ImportedTransition|undefined=supported?{type:kind==='push'||kind==='pull'?'slide':kind as ImportedTransition['type'],durationMs:source.transition!.durationMs,direction:source.transition?.direction??'left',easing:'standard',reverseOnPrevious:true}:undefined;
+  return{...item.slides[index],sourceSlideId:source.sourceId,notes:source.notes,timing:source.advanceAfterSeconds===undefined?{}:{durationSeconds:source.advanceAfterSeconds},transitionOverride:transition??null};
+ });
+ Object.assign(item.metadata,{importMode:'editable-copy',powerPointSourceTiming:JSON.stringify(result.slides.map(s=>({sourceId:s.sourceId,advanceOnClick:s.advanceOnClick,advanceAfterSeconds:s.advanceAfterSeconds}))) });
+ const warnings=['Bearbeitbare Textkopie: Layout, Bilder und Originalanimationen werden nicht originalgetreu wiedergegeben. Der Originalmodus ist noch nicht freigegeben.','Originalzeiten sind hinterlegt; die Kopie startet zur sicheren Prüfung mit manueller Navigation.',...result.warnings];
+ if(result.originalBlockers.length)warnings.push('Die Quelle enthält Medien, aktive Inhalte oder externe Verknüpfungen. Diese werden beim Textimport nicht ausgeführt.');
+ return this.create({title,template:{...template,importReport:{sourceFormat:'pptx',sourcePages:result.slides.length,generatedSlides:item.slides.length,sourceSize:result.size,originalBlockers:result.originalBlockers,warnings}}});
+ }if(extension==='.key'){
  const result=await importKeynotePath(sourcePath),pages:ImportedPage[]=[];
  for(const page of result.pages){if(page.image){pages.push(page);continue}pages.push({title:page.title,body:page.body,hidden:page.hidden});for(const image of page.images??[])pages.push({title:page.title,body:image.alt??'',image:image.src,hidden:page.hidden})}
  const warnings=[...result.warnings,...(pages.length>result.pages.length?['Eingebettete Bilder wurden als zusätzliche Bildfolien übernommen.']:[])];

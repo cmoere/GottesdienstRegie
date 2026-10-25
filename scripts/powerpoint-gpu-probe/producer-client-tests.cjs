@@ -97,3 +97,8 @@ for (const mode of ['hang-claim', 'hang-release']) test('stop rejects pending wo
   assert.equal(result.exitCode, 0); assert.equal(result.drained, mode === 'hang-claim');
   await assert.rejects(client.claimLatest(), /GPU_PRODUCER_CLOSED/);
 });
+
+test('retains bounded native diagnostic codes without exposing arbitrary error text',async()=>{
+ await assert.rejects(start('native-error'),/GPU_PRODUCER_REMOTE_ERROR_SOURCE_GEOMETRY_CHANGED$/);
+ await assert.rejects(start('unsafe-native-error'),/GPU_PRODUCER_REMOTE_ERROR$/);
+});

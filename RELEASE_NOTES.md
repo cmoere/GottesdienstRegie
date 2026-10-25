@@ -1,3 +1,51 @@
+# GottesdienstRegie 0.92.0
+
+Veröffentlicht: So., 25.10.2026
+
+Fünf mitgelieferte deutsche Stimmen, gemeinsame Vorleseeinstellungen und ein höherer Sprachpegel erleichtern verständliche Durchsagen. Datumsangaben werden vor dem Vorlesen ausgeschrieben. Der PowerPoint-Inhaltsimport erhält die tatsächliche Reihenfolge, Notizen und hinterlegten Zeiten.
+
+## Neu
+
+### Fünf deutsche Stimmen ohne zusätzliche Installation
+
+Neben Thorsten und Kerstin stehen Karlsson, Ramona und Eva K. zur Verfügung. Alle fünf Stimmen und die private Sprachlaufzeit werden mitgeliefert. Die Auswahl unter Einstellungen → Präsentation → Ansagen gilt für alle Präsentationen und Benutzer am Regie-PC; nach dem Speichern verwendet auch die Tonprobe diese Stimme.
+
+### Tempo, Pausen und Betonung gemeinsam einstellen
+
+Sprachlautheit von 50 bis 200 Prozent, Sprechtempo von 0,7 bis 1,3 sowie Satz- und Absatzpausen lassen sich zentral einstellen. Die Presets Ruhig und Deutlich verändern die Synthese zurückhaltend. Gespeicherte Einstellungen gelten gleichermaßen für automatische Ansagen und Tonproben.
+
+## Verbessert
+
+### Höherer Sprachpegel mit begrenzten Spitzen
+
+Der neue Standard von 150 Prozent hebt leisere Sprachabschnitte stärker an; 100 Prozent entspricht dem bisherigen Sprachpegel. Die Spitzenbegrenzung bleibt bei höchstens −1 dBFS. Gongpegel, Ausgangszuordnung, Stummschaltung und die ausschließlich auf Hintergrundmusik wirkende Absenkung bleiben erhalten.
+
+## Behoben
+
+### Datum und Uhrzeit verständlicher vorlesen
+
+Gültige deutsche Datumsangaben, ISO-Daten, Wochentagskürzel und Uhrzeiten werden vor der Sprachsynthese ausgeschrieben. Dadurch werden Datumspunkte nicht als Satzende behandelt. Ungültige Kalenderdaten und Versionsnummern bleiben unverändert. Die gespeicherten und angezeigten Meldungstexte werden nicht verändert.
+
+### PowerPoint-Reihenfolge, Notizen und Zeiten erhalten
+
+PPTX-Dateien werden anhand ihrer tatsächlichen Folienverknüpfungen gelesen. Ausgeblendete Folien, Titelplatzhalter, Regienotizen und explizite Anzeigezeiten bleiben erhalten; alternative Darstellungen werden nicht doppelt übernommen. Die bearbeitbare Textkopie startet manuell und nennt Darstellungsgrenzen im Importbericht. Quelldateien werden nicht verändert und externe Inhalte nicht nachgeladen.
+
+## Hinweise
+
+### PowerPoint-Originalwiedergabe noch nicht freigegeben
+
+Der PowerPoint-Originalmodus bleibt deaktiviert. Die originalgetreue Live-Einbindung ist noch nicht abgeschlossen; die erfolgreiche isolierte Wiedergabeprüfung ist keine Produktfreigabe. Die verfügbare bearbeitbare Textkopie kann Layout, Bilder und Originalanimationen nicht vollständig wiedergeben. Den Import vor ON AIR prüfen.
+
+### YouTube-Werbung bei Einbettungen
+
+YouTube bietet keinen offiziellen Player-Schalter zum zuverlässigen Abschalten von Werbung; auch youtube-nocookie.com garantiert keine werbefreie Wiedergabe. Für einen planbaren Ablauf eine freigegebene lokale Videodatei importieren. GottesdienstRegie lädt dafür keine YouTube-Videos herunter.
+
+### Regionalvarianten
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.
+
+---
+
 # GottesdienstRegie 0.91.0
 
 Veröffentlicht: So., 25.10.2026

@@ -21,12 +21,122 @@
   ],
   "versions": [
     {
+      "line": "0.92",
+      "builds": [
+        {
+          "version": "0.92.0",
+          "releaseDate": "2026-10-25",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Klarere Ansagen und verlässlicherer PowerPoint-Inhaltsimport",
+              "en": "Clearer announcements and more reliable PowerPoint content import"
+            },
+            "text": {
+              "de": "Fünf mitgelieferte deutsche Stimmen, gemeinsame Vorleseeinstellungen und ein höherer Sprachpegel erleichtern verständliche Durchsagen. Datumsangaben werden vor dem Vorlesen ausgeschrieben. Der PowerPoint-Inhaltsimport erhält die tatsächliche Reihenfolge, Notizen und hinterlegten Zeiten.",
+              "en": "Five bundled German voices, shared reading controls and increased speech loudness make announcements easier to understand. Dates are expanded before synthesis. PowerPoint content import preserves actual slide order, notes and recorded timing."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Fünf deutsche Stimmen ohne zusätzliche Installation",
+                  "en": "Five German voices without a separate installation"
+                },
+                "text": {
+                  "de": "Neben Thorsten und Kerstin stehen Karlsson, Ramona und Eva K. zur Verfügung. Alle fünf Stimmen und die private Sprachlaufzeit werden mitgeliefert. Die Auswahl unter Einstellungen → Präsentation → Ansagen gilt für alle Präsentationen und Benutzer am Regie-PC; nach dem Speichern verwendet auch die Tonprobe diese Stimme.",
+                  "en": "Karlsson, Ramona and Eva K. join Thorsten and Kerstin. All five voices and the private speech runtime are bundled. The selection under Settings → Presentation → Announcements applies to all presentations and users on this computer; after saving, the sound test uses the same voice."
+                }
+              },
+              {
+                "label": {
+                  "de": "Tempo, Pausen und Betonung gemeinsam einstellen",
+                  "en": "Shared speed, pause and delivery controls"
+                },
+                "text": {
+                  "de": "Sprachlautheit von 50 bis 200 Prozent, Sprechtempo von 0,7 bis 1,3 sowie Satz- und Absatzpausen lassen sich zentral einstellen. Die Presets Ruhig und Deutlich verändern die Synthese zurückhaltend. Gespeicherte Einstellungen gelten gleichermaßen für automatische Ansagen und Tonproben.",
+                  "en": "Set speech loudness from 50 to 200 percent, speed from 0.7 to 1.3, and sentence and paragraph pauses centrally. Calm and Clear presets adjust synthesis conservatively. Saved settings apply to both automatic announcements and sound tests."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Höherer Sprachpegel mit begrenzten Spitzen",
+                  "en": "Increased speech loudness with bounded peaks"
+                },
+                "text": {
+                  "de": "Der neue Standard von 150 Prozent hebt leisere Sprachabschnitte stärker an; 100 Prozent entspricht dem bisherigen Sprachpegel. Die Spitzenbegrenzung bleibt bei höchstens −1 dBFS. Gongpegel, Ausgangszuordnung, Stummschaltung und die ausschließlich auf Hintergrundmusik wirkende Absenkung bleiben erhalten.",
+                  "en": "The new 150 percent default raises quieter speech more strongly; 100 percent matches the previous speech level. Peak protection remains capped at −1 dBFS. Gong level, output routing, mute and background-music-only ducking are retained."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Datum und Uhrzeit verständlicher vorlesen",
+                  "en": "Read dates and times more naturally"
+                },
+                "text": {
+                  "de": "Gültige deutsche Datumsangaben, ISO-Daten, Wochentagskürzel und Uhrzeiten werden vor der Sprachsynthese ausgeschrieben. Dadurch werden Datumspunkte nicht als Satzende behandelt. Ungültige Kalenderdaten und Versionsnummern bleiben unverändert. Die gespeicherten und angezeigten Meldungstexte werden nicht verändert.",
+                  "en": "Valid German dates, ISO dates, weekday abbreviations and clock times are expanded before synthesis, preventing date punctuation from becoming sentence breaks. Invalid calendar dates and version numbers remain unchanged. Stored and displayed announcement text is not modified."
+                }
+              },
+              {
+                "label": {
+                  "de": "PowerPoint-Reihenfolge, Notizen und Zeiten erhalten",
+                  "en": "Preserve PowerPoint order, notes and timing"
+                },
+                "text": {
+                  "de": "PPTX-Dateien werden anhand ihrer tatsächlichen Folienverknüpfungen gelesen. Ausgeblendete Folien, Titelplatzhalter, Regienotizen und explizite Anzeigezeiten bleiben erhalten; alternative Darstellungen werden nicht doppelt übernommen. Die bearbeitbare Textkopie startet manuell und nennt Darstellungsgrenzen im Importbericht. Quelldateien werden nicht verändert und externe Inhalte nicht nachgeladen.",
+                  "en": "PPTX files are read using their actual slide relationships. Hidden slides, title placeholders, speaker notes and explicit display times are preserved, without duplicating alternate representations. The editable text copy starts manually and reports fidelity limitations. Source files are not modified and external content is not fetched."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "PowerPoint-Originalwiedergabe noch nicht freigegeben",
+                  "en": "Original PowerPoint playback not yet released"
+                },
+                "text": {
+                  "de": "Der PowerPoint-Originalmodus bleibt deaktiviert. Die originalgetreue Live-Einbindung ist noch nicht abgeschlossen; die erfolgreiche isolierte Wiedergabeprüfung ist keine Produktfreigabe. Die verfügbare bearbeitbare Textkopie kann Layout, Bilder und Originalanimationen nicht vollständig wiedergeben. Den Import vor ON AIR prüfen.",
+                  "en": "Original PowerPoint mode remains disabled. Original-fidelity live integration is not complete; the successful isolated playback test is not product approval. The available editable text copy cannot fully reproduce layouts, images or original animations. Check imported content before ON AIR."
+                }
+              },
+              {
+                "label": {
+                  "de": "YouTube-Werbung bei Einbettungen",
+                  "en": "Advertising in YouTube embeds"
+                },
+                "text": {
+                  "de": "YouTube bietet keinen offiziellen Player-Schalter zum zuverlässigen Abschalten von Werbung; auch youtube-nocookie.com garantiert keine werbefreie Wiedergabe. Für einen planbaren Ablauf eine freigegebene lokale Videodatei importieren. GottesdienstRegie lädt dafür keine YouTube-Videos herunter.",
+                  "en": "YouTube provides no official player switch that reliably disables advertising; youtube-nocookie.com does not guarantee ad-free playback. Import an approved local video for a controlled presentation. GottesdienstRegie does not download YouTube videos for this purpose."
+                }
+              },
+              {
+                "label": {
+                  "de": "Regionalvarianten",
+                  "en": "Regional variants"
+                },
+                "text": {
+                  "de": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.",
+                  "en": "Regional variants are not fully translated. Missing interface text is displayed in standard German."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.91",
       "builds": [
         {
           "version": "0.91.0",
           "releaseDate": "2026-10-25",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Neue lokale Stimmen, Originaldatei-Import und bessere Monitorsteuerung",

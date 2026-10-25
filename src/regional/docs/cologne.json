@@ -1891,6 +1891,24 @@
     "versions[0.91].builds[0.91.0].sections.known.2.label": "Monitorövverdraachung un Werbeaanbeder",
     "versions[0.91].builds[0.91.0].sections.known.2.text": "Persönliche Monitore övverdraache dat echte Output-Beld met bejrenzter Beldrate övver et lokale Netzwerk; se sin keine latenzfreie Videoussjang. VAST ongerstütz vörbereitbare Beld-/Videomedie un bejrenzte Wrapperkette. Ohne en freijejevve Quell wäde kein Werbekampagne erzeugt.",
     "versions[0.91].builds[0.91.0].sections.known.3.label": "PowerPoint-Originalmodus",
-    "versions[0.91].builds[0.91.0].sections.known.3.text": "Dä onjeprüffte PowerPoint-Originalmodus bliev deaktiviert. Dä vörhandene Enhaltsimport bliev verfügbar."
+    "versions[0.91].builds[0.91.0].sections.known.3.text": "Dä onjeprüffte PowerPoint-Originalmodus bliev deaktiviert. Dä vörhandene Enhaltsimport bliev verfügbar.",
+    "versions[0.92].builds[0.92.0].overview.label": "Klarere Ansage un zuverlässigere PowerPoint-Enhaltsimport",
+    "versions[0.92].builds[0.92.0].overview.text": "Fünf metjelieferte dütsche Stemme, jemeinsame Vörleseenstellunge un ene hühere Sprochpegel maache verständliche Dörchsage lichter. Datumsangave wäde vör em Vörlese usjeschrevve. Dä PowerPoint-Enhaltsimport erhäl de tatsächliche Reihefolge, Notize un hingerlejte Zigge.",
+    "versions[0.92].builds[0.92.0].sections.new.0.label": "Fünf dütsche Stemme ohne zosätzliche Installation",
+    "versions[0.92].builds[0.92.0].sections.new.0.text": "Nevve Thorsten un Kerstin stonn Karlsson, Ramona un Eva K. zur Verfügung. All fünf Stemme un de private Sprochlaufzick wäde metjeliefert. De Uswahl onger Einstellungen → Präsentation → Ansagen jilt för all Präsentatione un Benutzer am Regie-PC; noh em Speichere bruch och de Tonprob die Stemm.",
+    "versions[0.92].builds[0.92.0].sections.new.1.label": "Tempo, Pause un Betonung jemeinsam enstelle",
+    "versions[0.92].builds[0.92.0].sections.new.1.text": "Sprochlautheit vun 50 bis 200 Prozent, Sprechtempo vun 0,7 bis 1,3 suwie Satz- un Absatzpause losse sich zentral enstelle. De Presets Ruhig un Deutlich verändere de Synthese behutsam. Jespeicherte Enstellunge jelde jlichermaße för automatische Ansage un Tonprobe.",
+    "versions[0.92].builds[0.92.0].sections.improved.0.label": "Hühere Sprochpegel met bejrenzte Spitze",
+    "versions[0.92].builds[0.92.0].sections.improved.0.text": "Dä neue Standard vun 150 Prozent häv leisere Sprochafschnitt stärker aan; 100 Prozent entspricht em bisherije Sprochpegel. De Spitzenbejrenzung bliev bei höchstens −1 dBFS. Gongpegel, Ausgangszuordnung, Stummschaltung un de Afsenkung, die bloß op Hingerjrundmusik wirk, blieve erhalde.",
+    "versions[0.92].builds[0.92.0].sections.fixed.0.label": "Datum un Uhrzick verständlicher vörlese",
+    "versions[0.92].builds[0.92.0].sections.fixed.0.text": "Jültije dütsche Datumsangave, ISO-Date, Wochentagskürzel un Uhrzigge wäde vör dä Sprochsynthese usjeschrevve. Dodörch wäde Datumspunkte nit als Satzeng behandelt. Onjültije Kalenderdate un Versionsnummern blieve onverändert. De jespeicherte un anjezeigte Meldungstexte wäde nit verändert.",
+    "versions[0.92].builds[0.92.0].sections.fixed.1.label": "PowerPoint-Reihefolge, Notize un Zigge erhalde",
+    "versions[0.92].builds[0.92.0].sections.fixed.1.text": "PPTX-Dateie wäde noh ihre tatsächliche Folienverknüpfunge jelese. Usjeblendete Folie, Titelplatzhalter, Regienotize un ausdrücklich festjelejte Anzeigezigge blieve erhalde; alternative Darstellunge wäde nit doppelt övvernomme. De bearbeitbare Textkopie startet vun Hand un nennt Darstellungsjrenze em Importbericht. Quelldateie wäde nit verändert un externe Enhalte nit nohjelade.",
+    "versions[0.92].builds[0.92.0].sections.known.0.label": "PowerPoint-Originalwiedergabe noch nit freijejevve",
+    "versions[0.92].builds[0.92.0].sections.known.0.text": "Dä PowerPoint-Originalmodus bliev deaktiviert. De originaljetreue Live-Enbindung es noch nit afjeschlosse; de erfoljriche isolierte Wiedergabeprüfung es kein Produktfreijav. De verfügbare bearbeitbare Textkopie kann Layout, Belder un Originalanimatione nit vollständig widderjevve. Dä Import vör ON AIR prüffe.",
+    "versions[0.92].builds[0.92.0].sections.known.1.label": "YouTube-Werbung bei Enbettunge",
+    "versions[0.92].builds[0.92.0].sections.known.1.text": "YouTube beut keine offizielle Player-Schalter för et zuverlässije Usschalte vun Werbung; och youtube-nocookie.com garantiert kein werbefreie Wiedergabe. För ene planbare Afloof en freijejevve lokale Videodatei importiere. GottesdienstRegie läd doför kein YouTube-Videos erunger.",
+    "versions[0.92].builds[0.92.0].sections.known.2.label": "Regionalvariante",
+    "versions[0.92].builds[0.92.0].sections.known.2.text": "Regionalvariante sin noch nit vollständig övversetz. Fählende UI-Texte wäde op Huhdütsch anjezeigt."
   }
 }

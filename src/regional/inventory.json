@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": false,
-  "sourceFingerprint": "8d4099c286959c80c2130cb80be00970ddf50a396c350e30a8de9647af23c065",
+  "sourceFingerprint": "e3d94732feaa1de24274cc52c5ca3fb2a075bfe6d047cb133bdc110c8e00a0ce",
   "note": "Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -21314,7 +21314,7 @@
       "key": "source.56df6ad4bcf3207636b3.1",
       "text": "Tonprobe fehlgeschlagen.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 86,
+      "line": 89,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21322,7 +21322,7 @@
       "key": "source.e6fa3923f18ae7effc02.1",
       "text": "Die deutsche Stimme und ihre Laufzeit sind im Update enthalten. Keine zusätzliche Installation, kein Konto und keine Windows-Stimme erforderlich. Die neuen lokalen KI-Stimmen arbeiten offline mit kurzen Satzpausen und ruhigem Sprechtempo. Die erste automatische Durchsage erfolgt nach dem gespeicherten Intervall, nur während ON AIR im Vor- oder Nachprogramm.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 91,
+      "line": 94,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21330,7 +21330,7 @@
       "key": "source.1352715e938ca9e3a946.1",
       "text": "The German voice and its runtime are included in the update. No extra installation, account or Windows voice is needed. The new local neural voices work offline with short sentence pauses and a calm speaking pace. Automatic announcements start after the saved interval, only ON AIR in pre/post programs.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 91,
+      "line": 94,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21338,7 +21338,7 @@
       "key": "source.baf225b69f7d6f1c1868.1",
       "text": "Mitgelieferte Stimme wird geprüft.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 92,
+      "line": 95,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21346,7 +21346,7 @@
       "key": "source.0c0bc4cb4b074a5786df.1",
       "text": "Checking the included voice.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 92,
+      "line": 95,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21354,7 +21354,7 @@
       "key": "source.2528d3c499a541f4dd7a.1",
       "text": "Ansagenstimme",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 95,
+      "line": 98,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21362,55 +21362,39 @@
       "key": "source.5999c89137c8b13ab3d1.1",
       "text": "Announcement voice",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 95,
+      "line": 98,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
     {
-      "key": "source.2110cd8355cd37db77d7.1",
-      "text": "Männlich · Thorsten · Deutsch",
+      "key": "source.cbacb4b9915fbc448db8.1",
+      "text": "Deutsch",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 95,
+      "line": 98,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
     {
-      "key": "source.01deba15c541f4924f8b.1",
-      "text": "Male · German",
+      "key": "source.4238601b2c76183c4288.1",
+      "text": "German",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 95,
+      "line": 98,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
     {
-      "key": "source.255444c0d8e8f7110693.1",
-      "text": "Weiblich · Kerstin · Deutsch",
+      "key": "source.d8dd2f7a85c81844e5f2.1",
+      "text": "Die gespeicherte Stimme gilt auf diesem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Alle fünf Stimmen sind enthalten. Nach dem Speichern verwendet auch die Tonprobe diese Auswahl.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 95,
+      "line": 99,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
     {
-      "key": "source.99ac37e2191b3b16b578.1",
-      "text": "Female · German",
+      "key": "source.2db1f04e65e3439553eb.1",
+      "text": "The saved voice applies to every presentation and signed-in operator on this control computer. All five voices are included. Save before testing the new selection.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 95,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.c5a258bce8c97ed5f9be.1",
-      "text": "Die gespeicherte Stimme gilt auf diesem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Beide Stimmen sind enthalten. Nach dem Speichern verwendet auch die Tonprobe diese Auswahl.",
-      "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 96,
-      "context": "ConditionalExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.8e33b757089eeb3a7903.1",
-      "text": "The saved voice applies to every presentation and signed-in operator on this control computer. Both voices are included. Save before testing the new selection.",
-      "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 96,
+      "line": 99,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21418,7 +21402,7 @@
       "key": "source.dc6b1766008b55f3ab90.1",
       "text": "Ansagen testen",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 105,
+      "line": 109,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21426,7 +21410,7 @@
       "key": "source.606c949614b35b8e4a8b.1",
       "text": "Test announcements",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 105,
+      "line": 109,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21434,7 +21418,7 @@
       "key": "source.3c4b305a49bd0731f6e1.1",
       "text": "Tonprobe mit Gong und anschließendem Text über den eingestellten Background-Audio-Ausgang, auch OFF AIR. Laufende Hintergrundmusik wird dabei abgesenkt. Automatische Ansagen werden dadurch nicht eingeschaltet.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 106,
+      "line": 110,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21442,7 +21426,7 @@
       "key": "source.1b3dd82024f569578719.1",
       "text": "Play the gong and selected text through Background Audio, including OFF AIR. Background music is attenuated; automatic announcements stay unchanged.",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 106,
+      "line": 110,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21450,7 +21434,7 @@
       "key": "source.a44eaf03996842294538.1",
       "text": "Testtext",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 107,
+      "line": 111,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21458,7 +21442,7 @@
       "key": "source.8236276102543dc1e6e3.1",
       "text": "Test text",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 107,
+      "line": 111,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21466,7 +21450,7 @@
       "key": "source.4e5f838409c0eea037e4.1",
       "text": "Allgemeine Testdurchsage",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 108,
+      "line": 112,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21474,7 +21458,7 @@
       "key": "source.088cb600691e36cd296b.1",
       "text": "General test announcement",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 108,
+      "line": 112,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21482,7 +21466,7 @@
       "key": "source.07731073c25633ac526d.1",
       "text": "Tonprobe starten",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 112,
+      "line": 116,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21490,7 +21474,7 @@
       "key": "source.47fff1fa6463a463f4a7.1",
       "text": "Start audio test",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 112,
+      "line": 116,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21498,7 +21482,7 @@
       "key": "source.8efc7d107c785a7da8e6.1",
       "text": "Tonprobe stoppen",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 113,
+      "line": 117,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21506,7 +21490,7 @@
       "key": "source.66054f62bac327b7fffb.1",
       "text": "Stop audio test",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 113,
+      "line": 117,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21514,7 +21498,7 @@
       "key": "source.fe7e17c21a01c187c99b.1",
       "text": "Tonprobe läuft …",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 114,
+      "line": 118,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21522,7 +21506,7 @@
       "key": "source.76add4cedc82bcdf7947.1",
       "text": "Audio test playing …",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 114,
+      "line": 118,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21530,7 +21514,7 @@
       "key": "source.642bbe35c54a94bc97f8.1",
       "text": "Tonprobe wird vorbereitet …",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 114,
+      "line": 118,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21538,7 +21522,7 @@
       "key": "source.46918f5d2257a5c995a7.1",
       "text": "Preparing audio test …",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 114,
+      "line": 118,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -21546,7 +21530,7 @@
       "key": "source.cd457df8992201da294f.1",
       "text": "Durchsage",
       "source": "src/announcements/AnnouncementSettings.tsx",
-      "line": 120,
+      "line": 124,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -21639,10 +21623,178 @@
       "status": "review-required"
     },
     {
+      "key": "source.25840c0fef27a0fc38b3.1",
+      "text": "Sprachlautheit (%)",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 4,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.005c5376643e9bab577f.1",
+      "text": "Speech loudness (%)",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 4,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.6d4112d4c4f209f1a740.1",
+      "text": "Sprechtempo",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 4,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.3717daa298f5395fea28.1",
+      "text": "Speech speed",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 4,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.a98f2b394c3345751b45.1",
+      "text": "Satzpause (ms)",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 4,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.5624e55a9f1aeea14794.1",
+      "text": "Sentence pause (ms)",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 4,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.6b957463a18547ab0cdb.1",
+      "text": "Absatzpause (ms)",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 4,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.9a2c2eaee7e5164c6454.1",
+      "text": "Paragraph pause (ms)",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 4,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.b82c61456ce690fc9916.1",
+      "text": "Vorlesen",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 5,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.5213dd677644a795ef0a.1",
+      "text": "Reading",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 5,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.a22951d8d3d0af974ff6.1",
+      "text": "Betonung",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 7,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.a8df24f5ec2a79d5562b.1",
+      "text": "Delivery",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 7,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.4d05201b846a7d12d67b.1",
+      "text": "Ruhig",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 7,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.65ade6993ad0c096412d.1",
+      "text": "Calm",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 7,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.0dea5bb545ea0e2c8852.1",
+      "text": "Deutlich",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 7,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.66e1f6440f2be218da2b.1",
+      "text": "Clear",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 7,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.abacc9abbc5d4b1e4842.1",
+      "text": "Die Sprachlautheit hebt leise Silben mit Spitzenbegrenzung an. Gong und Audioausgang bleiben unverändert. 150 % ist der neue Standard; 100 % entspricht dem bisherigen Sprachpegel. Alle Einstellungen gelten nach dem Speichern auch für die Tonprobe.",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 8,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.8e4251dfc6c83629e397.1",
+      "text": "Speech loudness raises quiet syllables with peak protection. The gong and output route stay unchanged. The new default is 150%; 100% matches the previous speech level. Save before testing.",
+      "source": "src/announcements/ReadingSettingsControls.tsx",
+      "line": 8,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.565d27a34520308e24bf.1",
+      "text": "Ungültige Vorleseeinstellungen.",
+      "source": "src/announcements/readingSettings.ts",
+      "line": 5,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.565d27a34520308e24bf.2",
+      "text": "Ungültige Vorleseeinstellungen.",
+      "source": "src/announcements/readingSettings.ts",
+      "line": 7,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.0a61a82e339553b330ab.1",
+      "text": "Vorleseeinstellung außerhalb des erlaubten Bereichs.",
+      "source": "src/announcements/readingSettings.ts",
+      "line": 8,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
       "key": "source.df505d5fba0c38cfe518.1",
       "text": "Ungültige Ansageneinstellungen.",
       "source": "src/announcements/settings.ts",
-      "line": 48,
+      "line": 52,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -21650,7 +21802,7 @@
       "key": "source.737a0b4ba3aff13f7168.1",
       "text": "Bitte Intervall, Musikpegel und eine bewusst gewählte Stimme prüfen.",
       "source": "src/announcements/settings.ts",
-      "line": 56,
+      "line": 61,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -21676,6 +21828,46 @@
       "source": "src/announcements/textSelection.ts",
       "line": 31,
       "context": "property:reason",
+      "status": "review-required"
+    },
+    {
+      "key": "source.3c11813d20af53768c29.1",
+      "text": "Thorsten",
+      "source": "src/announcements/voices.ts",
+      "line": 3,
+      "context": "property:name",
+      "status": "review-required"
+    },
+    {
+      "key": "source.dea9bc108498bde52074.1",
+      "text": "Kerstin",
+      "source": "src/announcements/voices.ts",
+      "line": 4,
+      "context": "property:name",
+      "status": "review-required"
+    },
+    {
+      "key": "source.5af0785de83c78e49d0e.1",
+      "text": "Karlsson",
+      "source": "src/announcements/voices.ts",
+      "line": 5,
+      "context": "property:name",
+      "status": "review-required"
+    },
+    {
+      "key": "source.97050b78648b80c19441.1",
+      "text": "Ramona",
+      "source": "src/announcements/voices.ts",
+      "line": 6,
+      "context": "property:name",
+      "status": "review-required"
+    },
+    {
+      "key": "source.e2d2acc96f2fafd3863a.1",
+      "text": "Eva K.",
+      "source": "src/announcements/voices.ts",
+      "line": 7,
+      "context": "property:name",
       "status": "review-required"
     },
     {
@@ -28276,6 +28468,38 @@
       "source": "src/help/v91.ts",
       "line": 11,
       "context": "property:'Loop-Elemente'",
+      "status": "review-required"
+    },
+    {
+      "key": "source.e1b424bc52a9cd892189.1",
+      "text": "Unter Einstellungen → Präsentation → Ansagen stehen Thorsten, Kerstin, Karlsson, Ramona und Eva K. als mitgelieferte lokale Stimmen zur Auswahl. Speichere die Stimme und die Vorleseeinstellungen vor einer Tonprobe. Sprechtempo, Satzpause, Absatzpause und die ruhige oder deutliche Sprechweise gelten für alle Präsentationen und Benutzer dieses Regie-PCs. Die Sprachlautheit hebt leise Silben mit Spitzenbegrenzung an; Gong, gewählter Ausgang und Stummschaltung bleiben erhalten. 150 Prozent ist der neue Standard, 100 Prozent entspricht dem bisherigen Sprachpegel. Prüfe die Verständlichkeit über die tatsächliche Anlage. Gültige Datumsangaben, Wochentagskürzel und Uhrzeiten werden nur für das Vorlesen ausgeschrieben; die gespeicherte Meldung und ihre sichtbare Darstellung bleiben erhalten.",
+      "source": "src/help/v92.ts",
+      "line": 2,
+      "context": "property:'Audioausgänge'",
+      "status": "review-required"
+    },
+    {
+      "key": "source.001c2ed38993d66bb4d6.1",
+      "text": "YouTube-Einbettungen können Werbung anzeigen. Es gibt keinen offiziellen Player-Parameter, mit dem GottesdienstRegie Werbung zuverlässig abschalten kann; auch die Adresse youtube-nocookie.com garantiert keine werbefreie Wiedergabe. Für einen planbaren Ablauf ohne Plattformwerbung importierst du eine freigegebene lokale Videodatei über Medien → Importieren. Die Software lädt dafür keine YouTube-Videos herunter. Weitere Informationen: https://support.google.com/youtube/answer/132596 und https://developers.google.com/youtube/player_parameters.",
+      "source": "src/help/v92.ts",
+      "line": 3,
+      "context": "property:'Medien'",
+      "status": "review-required"
+    },
+    {
+      "key": "source.1242943bc759265a89e6.1",
+      "text": "Settings → Presentation → Announcements offers five included local voices: Thorsten, Kerstin, Karlsson, Ramona and Eva K. Save the voice and reading preferences before testing. Speech speed, sentence and paragraph pauses, and calm or clear delivery apply to all presentations and operators on this control computer. Speech loudness raises quiet syllables with peak protection; the gong, selected output and mute remain unchanged. The new default is 150 percent; 100 percent matches the previous speech level. Check intelligibility through the actual sound system. Valid dates, weekday abbreviations and times are expanded for German speech only; stored announcements and their visible text stay unchanged.",
+      "source": "src/help/v92.ts",
+      "line": 6,
+      "context": "property:'Audioausgänge'",
+      "status": "review-required"
+    },
+    {
+      "key": "source.3d448d37383936771d72.1",
+      "text": "YouTube embeds may show advertising. No official player parameter lets GottesdienstRegie reliably disable it; youtube-nocookie.com does not guarantee ad-free playback either. For a controlled presentation without platform ads, import an approved local video using Media → Import. The application does not download YouTube videos for this purpose. Official details: https://support.google.com/youtube/answer/132596 and https://developers.google.com/youtube/player_parameters.",
+      "source": "src/help/v92.ts",
+      "line": 7,
+      "context": "property:'Medien'",
       "status": "review-required"
     },
     {
@@ -37037,10 +37261,258 @@
       "status": "review-required"
     },
     {
+      "key": "source.af6c791a6586d97d0e38.1",
+      "text": "Choice",
+      "source": "electron/PowerPointImport.ts",
+      "line": 16,
+      "context": "BinaryExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.5c67e571b70ae8e4fdcf.1",
+      "text": "Fallback",
+      "source": "electron/PowerPointImport.ts",
+      "line": 17,
+      "context": "BinaryExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.c6004439b1a62d1b6f90.1",
+      "text": "Ungültige PowerPoint-XML-Datei.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 28,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.c6004439b1a62d1b6f90.2",
+      "text": "Ungültige PowerPoint-XML-Datei.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 30,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.5bedb1f63ef2ef4d2ab4.1",
+      "text": "PowerPoint-XML ist zu umfangreich.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 32,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.5f5cf33151db5a317a9b.1",
+      "text": "PowerPoint-Text ist zu lang.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 36,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.89020b9c20db04a75f77.1",
+      "text": "Leere PowerPoint-XML-Datei.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 38,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.fcfc1594b3803ad80e87.1",
+      "text": "PowerPoint-Folientext ist zu lang.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 51,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.31e5402a3f222084b255.1",
+      "text": "Ungültige PowerPoint-Verknüpfung.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 55,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.31e5402a3f222084b255.2",
+      "text": "Ungültige PowerPoint-Verknüpfung.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 57,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.0a9eb09a29dd972a462f.1",
+      "text": "Relationships",
+      "source": "electron/PowerPointImport.ts",
+      "line": 60,
+      "context": "BinaryExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.37a9b9ff34d8733d5597.1",
+      "text": "Ungültige PowerPoint-Verknüpfungen.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 60,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.71fc2f09ee6a78f00cde.1",
+      "text": "Relationship",
+      "source": "electron/PowerPointImport.ts",
+      "line": 61,
+      "context": "BinaryExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.31e5402a3f222084b255.3",
+      "text": "Ungültige PowerPoint-Verknüpfung.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 61,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.36f4813cd9304cb9b488.1",
+      "text": "External",
+      "source": "electron/PowerPointImport.ts",
+      "line": 61,
+      "context": "BinaryExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.c07a17afa378c3bcb61e.1",
+      "text": "Die PowerPoint-Datei ist zu groß.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 64,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.2fd6d2a859040666dbed.1",
+      "text": "Zu viele PowerPoint-Dateieinträge.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 65,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.6ef8334285c385f26d3c.1",
+      "text": "Ungültiger PowerPoint-Dateipfad.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 67,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.44ff8aedf78c27214626.1",
+      "text": "Entpackte PowerPoint-Datei ist zu groß.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 68,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.df0bb7efad2d587c88b2.1",
+      "text": "Ein benötigter PowerPoint-Dateiteil fehlt.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 72,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.44ff8aedf78c27214626.2",
+      "text": "Entpackte PowerPoint-Datei ist zu groß.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 74,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.9d24cdfb7dafabf2f23a.1",
+      "text": "Ungültige PowerPoint-Präsentation.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 84,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.76877884a901e4a4dd05.1",
+      "text": "Ungültige PowerPoint-Foliengröße.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 86,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.ae5e00625d1a151c58de.1",
+      "text": "Ungültige PowerPoint-Folienanzahl.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 87,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.43c8d5a4ea9da4acdea3.1",
+      "text": "Ungültige PowerPoint-Folienreihenfolge.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 91,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.c0cc1b7a22f2815686a3.1",
+      "text": "Ungültige PowerPoint-Folie.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 92,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.ea274e05945e48b02702.1",
+      "text": "Folie {expression1}",
+      "source": "electron/PowerPointImport.ts",
+      "line": 98,
+      "context": "BinaryExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.7e90e050b2f251af1767.1",
+      "text": "Ungültige PowerPoint-Folienzeit.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 100,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.4430685bf3406ed68613.1",
+      "text": "Ungültige PowerPoint-Übergangszeit.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 102,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.73d13e4ee709f2127d50.1",
+      "text": "Ein Originalübergang kann in der bearbeitbaren Kopie abweichen.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 103,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.e5378e9520f550b8d301.1",
+      "text": "Originalanimationen bleiben PowerPoint vorbehalten und werden in der bearbeitbaren Kopie nicht nachgebildet.",
+      "source": "electron/PowerPointImport.ts",
+      "line": 105,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
       "key": "source.aa6ff704fded0dfb3563.1",
       "text": "Text",
       "source": "electron/PresentationRepository.ts",
-      "line": 29,
+      "line": 30,
       "context": "property:name",
       "status": "review-required"
     },
@@ -37048,7 +37520,7 @@
       "key": "source.421ff612f522d4c56390.1",
       "text": "Cera Pro",
       "source": "electron/PresentationRepository.ts",
-      "line": 29,
+      "line": 30,
       "context": "property:fontFamily",
       "status": "review-required"
     },
@@ -37056,7 +37528,7 @@
       "key": "source.ff20d186c2b161fab292.1",
       "text": "Importierte Vorschau",
       "source": "electron/PresentationRepository.ts",
-      "line": 29,
+      "line": 30,
       "context": "property:name",
       "status": "review-required"
     },
@@ -37064,7 +37536,7 @@
       "key": "source.76d28623924620da8033.1",
       "text": "Importierte Präsentation",
       "source": "electron/PresentationRepository.ts",
-      "line": 30,
+      "line": 31,
       "context": "property:title",
       "status": "review-required"
     },
@@ -37072,7 +37544,7 @@
       "key": "source.f2183a0481654f16ef54.1",
       "text": "Keine lesbaren Folieninhalte gefunden.",
       "source": "electron/PresentationRepository.ts",
-      "line": 30,
+      "line": 31,
       "context": "property:body",
       "status": "review-required"
     },
@@ -37080,7 +37552,7 @@
       "key": "source.bb0be762a24661197a52.1",
       "text": "Folie {expression1}",
       "source": "electron/PresentationRepository.ts",
-      "line": 30,
+      "line": 31,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37088,7 +37560,7 @@
       "key": "source.bb0be762a24661197a52.2",
       "text": "Folie {expression1}",
       "source": "electron/PresentationRepository.ts",
-      "line": 30,
+      "line": 31,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37096,7 +37568,7 @@
       "key": "source.9b2babe1cbd51fc11293.1",
       "text": "VORPROGRAMM",
       "source": "electron/PresentationRepository.ts",
-      "line": 31,
+      "line": 32,
       "context": "property:title",
       "status": "review-required"
     },
@@ -37104,7 +37576,7 @@
       "key": "source.8e133ec48f1e15771490.1",
       "text": "WARM-UP",
       "source": "electron/PresentationRepository.ts",
-      "line": 31,
+      "line": 32,
       "context": "property:title",
       "status": "review-required"
     },
@@ -37112,7 +37584,7 @@
       "key": "source.00233d5485f90c577782.1",
       "text": "GOTTESDIENST",
       "source": "electron/PresentationRepository.ts",
-      "line": 31,
+      "line": 32,
       "context": "property:title",
       "status": "review-required"
     },
@@ -37120,7 +37592,7 @@
       "key": "source.bed1cd2e3832922d3db6.1",
       "text": "NACHPROGRAMM",
       "source": "electron/PresentationRepository.ts",
-      "line": 31,
+      "line": 32,
       "context": "property:title",
       "status": "review-required"
     },
@@ -37128,7 +37600,7 @@
       "key": "source.608c23327f9f5bb70e5a.1",
       "text": "GOTTESDIENST",
       "source": "electron/PresentationRepository.ts",
-      "line": 31,
+      "line": 32,
       "context": "property:section",
       "status": "review-required"
     },
@@ -37136,15 +37608,7 @@
       "key": "source.bb0be762a24661197a52.3",
       "text": "Folie {expression1}",
       "source": "electron/PresentationRepository.ts",
-      "line": 37,
-      "context": "BinaryExpression",
-      "status": "review-required"
-    },
-    {
-      "key": "source.bb0be762a24661197a52.4",
-      "text": "Folie {expression1}",
-      "source": "electron/PresentationRepository.ts",
-      "line": 41,
+      "line": 38,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37152,7 +37616,7 @@
       "key": "source.d06ea0b8e0d9a82af784.1",
       "text": "PRESENTATION_ID_INVALID",
       "source": "electron/PresentationRepository.ts",
-      "line": 62,
+      "line": 59,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37160,7 +37624,7 @@
       "key": "source.fc2f9ce16a1b8151938c.1",
       "text": "Unbenannte Präsentation",
       "source": "electron/PresentationRepository.ts",
-      "line": 69,
+      "line": 66,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37168,7 +37632,7 @@
       "key": "source.4bfb342cf256efe0f51c.1",
       "text": "ENOENT",
       "source": "electron/PresentationRepository.ts",
-      "line": 70,
+      "line": 67,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37176,7 +37640,7 @@
       "key": "source.bcc4e2a60dc7de0ea0da.1",
       "text": "PRESENTATION_ID_REQUIRED",
       "source": "electron/PresentationRepository.ts",
-      "line": 72,
+      "line": 69,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37184,7 +37648,7 @@
       "key": "source.fc2f9ce16a1b8151938c.2",
       "text": "Unbenannte Präsentation",
       "source": "electron/PresentationRepository.ts",
-      "line": 80,
+      "line": 77,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37192,7 +37656,7 @@
       "key": "source.bd3a50722cc2c4d23ca2.1",
       "text": "RECOVERY_PATH_INVALID",
       "source": "electron/PresentationRepository.ts",
-      "line": 88,
+      "line": 85,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37200,7 +37664,7 @@
       "key": "source.8293c84dbda4e5b0b11e.1",
       "text": "Neue Präsentation",
       "source": "electron/PresentationRepository.ts",
-      "line": 98,
+      "line": 95,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37208,7 +37672,7 @@
       "key": "source.2d4b29d96248eafcf789.1",
       "text": "PRESENTATION_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 100,
+      "line": 97,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37216,7 +37680,7 @@
       "key": "source.0d66989b75ec7c20c9c6.1",
       "text": "{expression1} – Kopie",
       "source": "electron/PresentationRepository.ts",
-      "line": 107,
+      "line": 104,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37224,7 +37688,7 @@
       "key": "source.2d4b29d96248eafcf789.2",
       "text": "PRESENTATION_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 109,
+      "line": 106,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37232,15 +37696,47 @@
       "key": "source.2d4b29d96248eafcf789.3",
       "text": "PRESENTATION_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 110,
+      "line": 107,
       "context": "NewExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.53d91e5c5538779a905f.1",
+      "text": "Die PowerPoint-Datei ist zu groß oder ungültig.",
+      "source": "electron/PresentationRepository.ts",
+      "line": 109,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.9227986272eedeee0880.1",
+      "text": "Bearbeitbare Textkopie: Layout, Bilder und Originalanimationen werden nicht originalgetreu wiedergegeben. Der Originalmodus ist noch nicht freigegeben.",
+      "source": "electron/PresentationRepository.ts",
+      "line": 118,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.4f9764c14dc31f212a7c.1",
+      "text": "Originalzeiten sind hinterlegt; die Kopie startet zur sicheren Prüfung mit manueller Navigation.",
+      "source": "electron/PresentationRepository.ts",
+      "line": 118,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.2200019f7a1f56e4f7ca.1",
+      "text": "Die Quelle enthält Medien, aktive Inhalte oder externe Verknüpfungen. Diese werden beim Textimport nicht ausgeführt.",
+      "source": "electron/PresentationRepository.ts",
+      "line": 119,
+      "context": "CallExpression",
       "status": "review-required"
     },
     {
       "key": "source.d38d2a1bef8b267f8cd8.1",
       "text": "Eingebettete Bilder wurden als zusätzliche Bildfolien übernommen.",
       "source": "electron/PresentationRepository.ts",
-      "line": 114,
+      "line": 124,
       "context": "ArrayLiteralExpression",
       "status": "review-required"
     },
@@ -37248,7 +37744,7 @@
       "key": "source.582f69115dac49dc5cc4.1",
       "text": "Der lokale OneNote-Importer ist nicht verfügbar.",
       "source": "electron/PresentationRepository.ts",
-      "line": 117,
+      "line": 127,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -37256,7 +37752,7 @@
       "key": "source.fcfeffecf4da66f0930b.1",
       "text": "Notizseite",
       "source": "electron/PresentationRepository.ts",
-      "line": 122,
+      "line": 132,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37264,7 +37760,7 @@
       "key": "source.b87accd74b58a82c217a.1",
       "text": "· Fortsetzung",
       "source": "electron/PresentationRepository.ts",
-      "line": 122,
+      "line": 132,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37272,7 +37768,7 @@
       "key": "source.46bfd5865143d9ae8df1.1",
       "text": "Notizbild",
       "source": "electron/PresentationRepository.ts",
-      "line": 123,
+      "line": 133,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37280,7 +37776,7 @@
       "key": "source.e2508e8a6bddff39ac6a.1",
       "text": "KEYNOTE_PREVIEW_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 129,
+      "line": 139,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
@@ -37288,15 +37784,15 @@
       "key": "source.29cef50e7623e0194520.1",
       "text": "PRESENTATION_CONTENT_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 129,
+      "line": 139,
       "context": "ConditionalExpression",
       "status": "review-required"
     },
     {
-      "key": "source.bb0be762a24661197a52.5",
+      "key": "source.bb0be762a24661197a52.4",
       "text": "Folie {expression1}",
       "source": "electron/PresentationRepository.ts",
-      "line": 129,
+      "line": 139,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -37304,7 +37800,7 @@
       "key": "source.2d4b29d96248eafcf789.4",
       "text": "PRESENTATION_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 130,
+      "line": 140,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37312,7 +37808,7 @@
       "key": "source.2d4b29d96248eafcf789.5",
       "text": "PRESENTATION_NOT_FOUND",
       "source": "electron/PresentationRepository.ts",
-      "line": 131,
+      "line": 141,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -37320,7 +37816,7 @@
       "key": "source.cf0a9b50782764be542c.1",
       "text": "RECOVERY_DOCUMENT_INVALID",
       "source": "electron/PresentationRepository.ts",
-      "line": 152,
+      "line": 162,
       "context": "NewExpression",
       "status": "review-required"
     },
@@ -38069,10 +38565,18 @@
       "status": "review-required"
     },
     {
+      "key": "source.a121fbe6ebd8191c2ddc.1",
+      "text": "Ungültiger Sprachpegel.",
+      "source": "electron/announcements/BundledSpeechService.ts",
+      "line": 23,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
       "key": "source.ec447a8c93b2e692a6c1.1",
       "text": "Durchsage abgebrochen.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 23,
+      "line": 24,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38080,7 +38584,7 @@
       "key": "source.af2b65193cb35f73cf42.2",
       "text": "fmt",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 29,
+      "line": 30,
       "context": "BinaryExpression",
       "status": "review-required"
     },
@@ -38088,7 +38592,7 @@
       "key": "source.58926d016d3770365380.1",
       "text": "Spracherzeugung hat zu lange gedauert.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 56,
+      "line": 57,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38096,7 +38600,7 @@
       "key": "source.85bf676a3ce03f06f952.1",
       "text": "Mitgelieferte Sprachausgabe konnte nicht gestartet werden.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 59,
+      "line": 60,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38104,7 +38608,7 @@
       "key": "source.c4ce80736cb1b5b6c77f.1",
       "text": "Sprachausgabe wurde abgebrochen oder ist fehlgeschlagen.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 60,
+      "line": 61,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38112,7 +38616,7 @@
       "key": "source.857360387c431edd41ee.1",
       "text": "Sprachpaket fehlt.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 69,
+      "line": 70,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38120,7 +38624,7 @@
       "key": "source.b71e36e9ded7552622d9.1",
       "text": "Sprachpaket passt nicht zu diesem Gerät.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 71,
+      "line": 72,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38128,7 +38632,7 @@
       "key": "source.a8cd1facb6be13807438.1",
       "text": "Sprachpaket ist unvollständig.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 74,
+      "line": 75,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38136,7 +38640,7 @@
       "key": "source.3f54eb8db5a60886c52a.1",
       "text": "Deutsche Stimmen sind enthalten · männlich und weiblich · offline verfügbar",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 77,
+      "line": 78,
       "context": "property:name",
       "status": "review-required"
     },
@@ -38144,7 +38648,7 @@
       "key": "source.1d487f7da05fae28e6ec.1",
       "text": "Mitgeliefertes Sprachpaket fehlt oder ist beschädigt. Bitte das vollständige Update installieren.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 77,
+      "line": 78,
       "context": "property:name",
       "status": "review-required"
     },
@@ -38152,7 +38656,7 @@
       "key": "source.494ff0247e3d51be7616.1",
       "text": "Ungültige Ansagenstimme.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 80,
+      "line": 81,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38160,7 +38664,7 @@
       "key": "source.9883746a76726335849d.1",
       "text": "Ungültiger Durchsage-Text.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 82,
+      "line": 83,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38168,7 +38672,7 @@
       "key": "source.06e486c8f46c0c5f9eee.1",
       "text": "Eine Spracherzeugung läuft bereits.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 83,
+      "line": 84,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38176,7 +38680,7 @@
       "key": "source.ec447a8c93b2e692a6c1.2",
       "text": "Durchsage abgebrochen.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 86,
+      "line": 87,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38184,7 +38688,7 @@
       "key": "source.ec447a8c93b2e692a6c1.3",
       "text": "Durchsage abgebrochen.",
       "source": "electron/announcements/BundledSpeechService.ts",
-      "line": 88,
+      "line": 89,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38352,7 +38856,7 @@
       "key": "source.59e2fb15e8e2393c6d93.1",
       "text": "Sprachpaket fehlt.",
       "source": "electron/announcements/NeuralSpeechService.ts",
-      "line": 11,
+      "line": 14,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38360,7 +38864,15 @@
       "key": "source.e199fa9aeec2bec59b3f.1",
       "text": "Sprachpaket passt nicht zu diesem Gerät.",
       "source": "electron/announcements/NeuralSpeechService.ts",
-      "line": 13,
+      "line": 16,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.f55adad3ee2f02136a89.1",
+      "text": "Ungültige Ansagenstimme.",
+      "source": "electron/announcements/NeuralSpeechService.ts",
+      "line": 18,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38368,15 +38880,15 @@
       "key": "source.a8dda970a8951219c39a.1",
       "text": "Sprachpaket ist unvollständig.",
       "source": "electron/announcements/NeuralSpeechService.ts",
-      "line": 15,
+      "line": 19,
       "context": "CallExpression",
       "status": "review-required"
     },
     {
-      "key": "source.4b53bc37ce5207b4b43e.1",
-      "text": "Lokale deutsche KI-Stimmen · Thorsten und Kerstin · offline enthalten",
+      "key": "source.c0810b4bf084353d3dc6.1",
+      "text": "Lokale deutsche KI-Stimmen · Thorsten, Kerstin, Karlsson, Ramona und Eva K. · offline enthalten",
       "source": "electron/announcements/NeuralSpeechService.ts",
-      "line": 18,
+      "line": 22,
       "context": "property:name",
       "status": "review-required"
     },
@@ -38384,15 +38896,15 @@
       "key": "source.c5a948d5a5fe8d965da0.1",
       "text": "Das lokale Sprachpaket fehlt oder ist beschädigt. Bitte das vollständige Update installieren.",
       "source": "electron/announcements/NeuralSpeechService.ts",
-      "line": 18,
+      "line": 22,
       "context": "property:name",
       "status": "review-required"
     },
     {
-      "key": "source.f55adad3ee2f02136a89.1",
+      "key": "source.f55adad3ee2f02136a89.2",
       "text": "Ungültige Ansagenstimme.",
       "source": "electron/announcements/NeuralSpeechService.ts",
-      "line": 21,
+      "line": 25,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38400,7 +38912,15 @@
       "key": "source.81b96589c8d209e9d4f8.1",
       "text": "Ungültiger Durchsage-Text.",
       "source": "electron/announcements/NeuralSpeechService.ts",
-      "line": 22,
+      "line": 26,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.73caab00ab58e1a69e10.1",
+      "text": "Der ausgeschriebene Durchsagetext ist zu lang.",
+      "source": "electron/announcements/NeuralSpeechService.ts",
+      "line": 28,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38408,7 +38928,7 @@
       "key": "source.bbc36092edeb7bd7ee22.1",
       "text": "Eine Spracherzeugung läuft bereits.",
       "source": "electron/announcements/NeuralSpeechService.ts",
-      "line": 23,
+      "line": 29,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38416,7 +38936,7 @@
       "key": "source.8eca4a4db65a917940e2.1",
       "text": "Durchsage abgebrochen.",
       "source": "electron/announcements/NeuralSpeechService.ts",
-      "line": 24,
+      "line": 30,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38440,7 +38960,7 @@
       "key": "source.7d779a42deb14adef4ad.1",
       "text": "Sprachausgabe ist nur im Steuerfenster verfügbar.",
       "source": "electron/announcements/SpeechAccess.ts",
-      "line": 10,
+      "line": 11,
       "context": "CallExpression",
       "status": "review-required"
     },
@@ -38448,8 +38968,232 @@
       "key": "source.938f780c366d5d33fd25.1",
       "text": "Ungültiger Durchsagestatus.",
       "source": "electron/announcements/SpeechAccess.ts",
-      "line": 20,
+      "line": 21,
       "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.996341d5b76fcc17aff4.1",
+      "text": "fünf",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 1,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.74c49f58fea5bf1e3b32.1",
+      "text": "zwölf",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 1,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.4fd0c3f0dd21626a1ea6.1",
+      "text": "fünfzehn",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 1,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.7c36c6dbd7a757f086b0.1",
+      "text": "dreißig",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 2,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.4c2470d7b3e6149b1083.1",
+      "text": "fünfzig",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 2,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.194a75e79b34c9e5cf9e.1",
+      "text": "Januar",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.6b76f676e17d2954c43a.1",
+      "text": "Februar",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.b345f2c839c000df52a1.1",
+      "text": "März",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.004bf539237eb463b2c6.1",
+      "text": "April",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.42ad2b7b0578d84d3e16.1",
+      "text": "Mai",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.080ea4cf4d0e05d27c6a.1",
+      "text": "Juni",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.d9a611cbdb90d33e0a24.1",
+      "text": "Juli",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.dcc4a5d085df722893fa.1",
+      "text": "August",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.9d493060d98b964b455e.1",
+      "text": "September",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.24277108eda8aa3a5785.1",
+      "text": "Oktober",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.36c9a6ccc0912b355d0b.1",
+      "text": "November",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.6c29d08e1fb940d71fdb.1",
+      "text": "Dezember",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 3,
+      "context": "ArrayLiteralExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.1bde54ca22d2079ad9d3.1",
+      "text": "zum",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 10,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.84eafe04c39266b8e425.1",
+      "text": "der",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 10,
+      "context": "ConditionalExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.2020cf1253f4a85c24d7.1",
+      "text": "bis",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 15,
+      "context": "CallExpression",
+      "status": "review-required"
+    },
+    {
+      "key": "source.a8e34b9ad80933ab7356.1",
+      "text": "Montag",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 19,
+      "context": "property:Mo",
+      "status": "review-required"
+    },
+    {
+      "key": "source.bd6329804857144280d7.1",
+      "text": "Dienstag",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 19,
+      "context": "property:Di",
+      "status": "review-required"
+    },
+    {
+      "key": "source.f6473af76b300a1b5a42.1",
+      "text": "Mittwoch",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 19,
+      "context": "property:Mi",
+      "status": "review-required"
+    },
+    {
+      "key": "source.86ac2bb69064f97bc89f.1",
+      "text": "Donnerstag",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 19,
+      "context": "property:Do",
+      "status": "review-required"
+    },
+    {
+      "key": "source.34fc495480398a93acbc.1",
+      "text": "Freitag",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 19,
+      "context": "property:Fr",
+      "status": "review-required"
+    },
+    {
+      "key": "source.e894152a943b53f54ecf.1",
+      "text": "Samstag",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 19,
+      "context": "property:Sa",
+      "status": "review-required"
+    },
+    {
+      "key": "source.64b62f32d4e2f7b120c5.1",
+      "text": "Sonntag",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 19,
+      "context": "property:So",
+      "status": "review-required"
+    },
+    {
+      "key": "source.35c552c1caa2b9bad87b.1",
+      "text": "Uhr",
+      "source": "electron/announcements/prepareGermanSpeech.ts",
+      "line": 21,
+      "context": "BinaryExpression",
       "status": "review-required"
     },
     {
@@ -39467,6 +40211,132 @@
       "line": 33,
       "context": "NewExpression",
       "status": "review-required"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].overview.label",
+      "text": "Klarere Ansagen und verlässlicherer PowerPoint-Inhaltsimport",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].overview.text",
+      "text": "Fünf mitgelieferte deutsche Stimmen, gemeinsame Vorleseeinstellungen und ein höherer Sprachpegel erleichtern verständliche Durchsagen. Datumsangaben werden vor dem Vorlesen ausgeschrieben. Der PowerPoint-Inhaltsimport erhält die tatsächliche Reihenfolge, Notizen und hinterlegten Zeiten.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.new.0.label",
+      "text": "Fünf deutsche Stimmen ohne zusätzliche Installation",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.new.0.text",
+      "text": "Neben Thorsten und Kerstin stehen Karlsson, Ramona und Eva K. zur Verfügung. Alle fünf Stimmen und die private Sprachlaufzeit werden mitgeliefert. Die Auswahl unter Einstellungen → Präsentation → Ansagen gilt für alle Präsentationen und Benutzer am Regie-PC; nach dem Speichern verwendet auch die Tonprobe diese Stimme.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.new.1.label",
+      "text": "Tempo, Pausen und Betonung gemeinsam einstellen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.new.1.text",
+      "text": "Sprachlautheit von 50 bis 200 Prozent, Sprechtempo von 0,7 bis 1,3 sowie Satz- und Absatzpausen lassen sich zentral einstellen. Die Presets Ruhig und Deutlich verändern die Synthese zurückhaltend. Gespeicherte Einstellungen gelten gleichermaßen für automatische Ansagen und Tonproben.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.improved.0.label",
+      "text": "Höherer Sprachpegel mit begrenzten Spitzen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.improved.0.text",
+      "text": "Der neue Standard von 150 Prozent hebt leisere Sprachabschnitte stärker an; 100 Prozent entspricht dem bisherigen Sprachpegel. Die Spitzenbegrenzung bleibt bei höchstens −1 dBFS. Gongpegel, Ausgangszuordnung, Stummschaltung und die ausschließlich auf Hintergrundmusik wirkende Absenkung bleiben erhalten.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.fixed.0.label",
+      "text": "Datum und Uhrzeit verständlicher vorlesen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.fixed.0.text",
+      "text": "Gültige deutsche Datumsangaben, ISO-Daten, Wochentagskürzel und Uhrzeiten werden vor der Sprachsynthese ausgeschrieben. Dadurch werden Datumspunkte nicht als Satzende behandelt. Ungültige Kalenderdaten und Versionsnummern bleiben unverändert. Die gespeicherten und angezeigten Meldungstexte werden nicht verändert.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.fixed.1.label",
+      "text": "PowerPoint-Reihenfolge, Notizen und Zeiten erhalten",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.fixed.1.text",
+      "text": "PPTX-Dateien werden anhand ihrer tatsächlichen Folienverknüpfungen gelesen. Ausgeblendete Folien, Titelplatzhalter, Regienotizen und explizite Anzeigezeiten bleiben erhalten; alternative Darstellungen werden nicht doppelt übernommen. Die bearbeitbare Textkopie startet manuell und nennt Darstellungsgrenzen im Importbericht. Quelldateien werden nicht verändert und externe Inhalte nicht nachgeladen.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.known.0.label",
+      "text": "PowerPoint-Originalwiedergabe noch nicht freigegeben",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.known.0.text",
+      "text": "Der PowerPoint-Originalmodus bleibt deaktiviert. Die originalgetreue Live-Einbindung ist noch nicht abgeschlossen; die erfolgreiche isolierte Wiedergabeprüfung ist keine Produktfreigabe. Die verfügbare bearbeitbare Textkopie kann Layout, Bilder und Originalanimationen nicht vollständig wiedergeben. Den Import vor ON AIR prüfen.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.known.1.label",
+      "text": "YouTube-Werbung bei Einbettungen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.known.1.text",
+      "text": "YouTube bietet keinen offiziellen Player-Schalter zum zuverlässigen Abschalten von Werbung; auch youtube-nocookie.com garantiert keine werbefreie Wiedergabe. Für einen planbaren Ablauf eine freigegebene lokale Videodatei importieren. GottesdienstRegie lädt dafür keine YouTube-Videos herunter.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.known.2.label",
+      "text": "Regionalvarianten",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.92].builds[0.92.0].sections.known.2.text",
+      "text": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
     },
     {
       "key": "release.versions[0.91].builds[0.91.0].overview.label",
@@ -52140,7 +53010,7 @@
     },
     {
       "key": "help.Medien.body",
-      "text": "Die Medienbibliothek lädt Bilder, Videos und Audio aus dem Team-Cloudspeicher. Uploads werden erst nach bestätigter Übertragung verwendbar; die Quelldatei bleibt währenddessen erhalten. Unsplash-Bilder werden über die Suche eingebunden. Preflight meldet fehlende oder noch nicht geladene Dateien vor ON AIR.\n\nÖffnen Sie die Medienbibliothek, wählen Sie ein Bild oder Video aus und zeigen Sie eine Vorschau an, bevor Sie es als Hintergrund- oder Vordergrundobjekt verwenden. Wählen Sie die gewünschte Platzierung: Ein Hintergrund füllt die Folie aus, während ein Vordergrundobjekt unabhängig positioniert werden kann.\n\nÜberprüfen Sie den Bildausschnitt, den Textkontrast und die vollständige Wiedergabe des Videos inklusive Ton. Stellen Sie sicher, dass das Original vor dem Dienst verfügbar ist oder heruntergeladen werden kann. Ein Miniaturbild allein ist kein Beweis für die Offline-Verfügbarkeit. Wenn ein Element fehlt, suchen Sie die tatsächliche Quelle und wählen Sie sie erneut aus, anstatt das Folienlayout wiederholt zu ändern.\n\n## Praktisches Vorgehen\n\n1. Wähle eine zur Aufgabe passende Quelle für Hintergrund, Vordergrund, Audio oder ein vollständiges Element.\n2. Prüfe Verfügbarkeit und Nutzungsrechte.\n3. Verwende für zeitgesteuerte Begrüßungen den Bereich „Countdowns“ der Medienbibliothek.\n\n## Probe und Fehlerbehebung\n\nDie lokalen Vorlagen bieten zehn Dauern von zwanzig Minuten bis zehn Sekunden mit jeweils sechs ruhigen Designs. Sie werden als eigenes Ablauf-Element eingefügt und sind standardmäßig stumm. Eine solche Vorlage ist weder ein Hintergrundbild noch eine Audiodatei; die Auswahl macht diesen Unterschied deutlich.\n\nAb Version 0.91 verarbeitet der lokale Inhaltsimport originale OneNote-Dateien (.one und .onepkg) und Keynote-Dateien mit IWA-Folienobjekten. Prüfe den Importbericht: Lange Notiztexte werden auf Fortsetzungsfolien verteilt; unterstützte Bilder können eigene Bildfolien erhalten. Komplexe Layouts, Schriftformatierungen, Animationen und Freihandzeichnungen können abweichen oder fehlen. Dateianlagen werden nicht ausgeführt. Unter Externe Werbung im Medienbrowser kannst du freigegebene Bild-/Videodateien, direkte HTTPS-Medienadressen oder einen VAST-Kampagnenlink vorbereiten. Ohne eine freigegebene Quelle stellt die Software keine Werbekampagnen bereit. Werbung bleibt im Vor- oder Nachprogramm; Bereich und Mindestabstand der Einblendungen sind wählbar.",
+      "text": "Die Medienbibliothek lädt Bilder, Videos und Audio aus dem Team-Cloudspeicher. Uploads werden erst nach bestätigter Übertragung verwendbar; die Quelldatei bleibt währenddessen erhalten. Unsplash-Bilder werden über die Suche eingebunden. Preflight meldet fehlende oder noch nicht geladene Dateien vor ON AIR.\n\nÖffnen Sie die Medienbibliothek, wählen Sie ein Bild oder Video aus und zeigen Sie eine Vorschau an, bevor Sie es als Hintergrund- oder Vordergrundobjekt verwenden. Wählen Sie die gewünschte Platzierung: Ein Hintergrund füllt die Folie aus, während ein Vordergrundobjekt unabhängig positioniert werden kann.\n\nÜberprüfen Sie den Bildausschnitt, den Textkontrast und die vollständige Wiedergabe des Videos inklusive Ton. Stellen Sie sicher, dass das Original vor dem Dienst verfügbar ist oder heruntergeladen werden kann. Ein Miniaturbild allein ist kein Beweis für die Offline-Verfügbarkeit. Wenn ein Element fehlt, suchen Sie die tatsächliche Quelle und wählen Sie sie erneut aus, anstatt das Folienlayout wiederholt zu ändern.\n\n## Praktisches Vorgehen\n\n1. Wähle eine zur Aufgabe passende Quelle für Hintergrund, Vordergrund, Audio oder ein vollständiges Element.\n2. Prüfe Verfügbarkeit und Nutzungsrechte.\n3. Verwende für zeitgesteuerte Begrüßungen den Bereich „Countdowns“ der Medienbibliothek.\n\n## Probe und Fehlerbehebung\n\nDie lokalen Vorlagen bieten zehn Dauern von zwanzig Minuten bis zehn Sekunden mit jeweils sechs ruhigen Designs. Sie werden als eigenes Ablauf-Element eingefügt und sind standardmäßig stumm. Eine solche Vorlage ist weder ein Hintergrundbild noch eine Audiodatei; die Auswahl macht diesen Unterschied deutlich.\n\nAb Version 0.91 verarbeitet der lokale Inhaltsimport originale OneNote-Dateien (.one und .onepkg) und Keynote-Dateien mit IWA-Folienobjekten. Prüfe den Importbericht: Lange Notiztexte werden auf Fortsetzungsfolien verteilt; unterstützte Bilder können eigene Bildfolien erhalten. Komplexe Layouts, Schriftformatierungen, Animationen und Freihandzeichnungen können abweichen oder fehlen. Dateianlagen werden nicht ausgeführt. Unter Externe Werbung im Medienbrowser kannst du freigegebene Bild-/Videodateien, direkte HTTPS-Medienadressen oder einen VAST-Kampagnenlink vorbereiten. Ohne eine freigegebene Quelle stellt die Software keine Werbekampagnen bereit. Werbung bleibt im Vor- oder Nachprogramm; Bereich und Mindestabstand der Einblendungen sind wählbar.\n\nYouTube-Einbettungen können Werbung anzeigen. Es gibt keinen offiziellen Player-Parameter, mit dem GottesdienstRegie Werbung zuverlässig abschalten kann; auch die Adresse youtube-nocookie.com garantiert keine werbefreie Wiedergabe. Für einen planbaren Ablauf ohne Plattformwerbung importierst du eine freigegebene lokale Videodatei über Medien → Importieren. Die Software lädt dafür keine YouTube-Videos herunter. Weitere Informationen: https://support.google.com/youtube/answer/132596 und https://developers.google.com/youtube/player_parameters.",
       "source": "src/help/base.ts",
       "context": "help-assembled",
       "status": "app-owned"
@@ -52252,7 +53122,7 @@
     },
     {
       "key": "help.Audioausgänge.body",
-      "text": "Unter Einstellungen → Audioausgänge werden echte Betriebssystemgeräte anhand ihrer stabilen Device-ID getrennt für Medien/Videos, Background Audio, Systembenachrichtigungen, Preview/Vorhören und Soundeffekte gewählt. Standardausgang verwenden folgt dem zentralen Fallback. TESTEN spielt einen neutralen Ton ausschließlich über die gewählte Route. Lautstärke und Mute gelten nur für diese Route. Fehlt ein Gerät, bleibt seine ID gespeichert und Systemstandard übernimmt sichtbar. Änderungen während ON AIR starten laufende Player nicht neu.\n\nWeisen Sie separate Ausgabegeräte für Videos/Medien, Hintergrundmusik, Vorschau, Benachrichtigungen und Soundeffekte zu. Verwenden Sie Test auf jeder Route und hören Sie am tatsächlichen Ziel. Ein typisches Setup sendet Musik in den Raum, eine Vorschau auf Kopfhörer und Benachrichtigungen an den Bediener.\n\nÜberprüfen Sie die Stumm- und Weiterleitungslautstärke sowie die Ausgabe des Betriebssystems. Geräte werden anhand ihrer ID gespeichert. Wenn einer abwesend ist, überprüfen Sie den sichtbaren Ersatz, bevor Sie öffentlich spielen. Der Systemstandard ist möglicherweise ein anderer Lautsprecher. Schließen Sie das Gerät erneut an und testen Sie es erneut, ohne eine bereits abgespielte Quelle neu zu starten.\n\n## Praktisches Vorgehen\n\n1. Wähle für jede benötigte Audioroute das richtige physische Ausgabegerät.\n2. Probe Hintergrundmusik, Radio und Video über ihre tatsächlichen Routen.\n3. Höre vor dem Eintreffen der Besucher bei angemessener Lautstärke auf der Saalanlage mit.\n\n## Probe und Fehlerbehebung\n\nRadio verwendet die Background-Audio-Route und keinen unabhängigen Browser-Standardausgang. Ein laufender Zeitzähler beweist noch kein hörbares Signal. Prüfe nach dem Entfernen eines Interfaces Gerätestatus und Routenzuordnung, statt die Lautstärke wiederholt anzuheben. Vorhören und Besucherbeschallung sollen klar getrennt bleiben.\n\nDie neuen Ansagenstimmen Thorsten und Kerstin arbeiten als lokal mitgelieferte KI-Stimmen. Stimme und private Laufzeit sind im Update enthalten; eine separate Installation oder eine Windows-Stimme sind nicht erforderlich. Die gemeinsame männliche/weibliche Auswahl bleibt für alle Präsentationen und Benutzer am Regie-PC gültig. Kurze Satzpausen und ein ruhiges Sprechtempo unterstützen die Verständlichkeit. Speichere die Auswahl und prüfe Gong und Text mit der Tonprobe über den vorgesehenen Ausgang. Die Musikabsenkung betrifft weiterhin die Hintergrundmusik, nicht die Ansagenstimme. Master-Lautstärke und Stummschaltung bleiben wirksam.",
+      "text": "Unter Einstellungen → Audioausgänge werden echte Betriebssystemgeräte anhand ihrer stabilen Device-ID getrennt für Medien/Videos, Background Audio, Systembenachrichtigungen, Preview/Vorhören und Soundeffekte gewählt. Standardausgang verwenden folgt dem zentralen Fallback. TESTEN spielt einen neutralen Ton ausschließlich über die gewählte Route. Lautstärke und Mute gelten nur für diese Route. Fehlt ein Gerät, bleibt seine ID gespeichert und Systemstandard übernimmt sichtbar. Änderungen während ON AIR starten laufende Player nicht neu.\n\nWeisen Sie separate Ausgabegeräte für Videos/Medien, Hintergrundmusik, Vorschau, Benachrichtigungen und Soundeffekte zu. Verwenden Sie Test auf jeder Route und hören Sie am tatsächlichen Ziel. Ein typisches Setup sendet Musik in den Raum, eine Vorschau auf Kopfhörer und Benachrichtigungen an den Bediener.\n\nÜberprüfen Sie die Stumm- und Weiterleitungslautstärke sowie die Ausgabe des Betriebssystems. Geräte werden anhand ihrer ID gespeichert. Wenn einer abwesend ist, überprüfen Sie den sichtbaren Ersatz, bevor Sie öffentlich spielen. Der Systemstandard ist möglicherweise ein anderer Lautsprecher. Schließen Sie das Gerät erneut an und testen Sie es erneut, ohne eine bereits abgespielte Quelle neu zu starten.\n\n## Praktisches Vorgehen\n\n1. Wähle für jede benötigte Audioroute das richtige physische Ausgabegerät.\n2. Probe Hintergrundmusik, Radio und Video über ihre tatsächlichen Routen.\n3. Höre vor dem Eintreffen der Besucher bei angemessener Lautstärke auf der Saalanlage mit.\n\n## Probe und Fehlerbehebung\n\nRadio verwendet die Background-Audio-Route und keinen unabhängigen Browser-Standardausgang. Ein laufender Zeitzähler beweist noch kein hörbares Signal. Prüfe nach dem Entfernen eines Interfaces Gerätestatus und Routenzuordnung, statt die Lautstärke wiederholt anzuheben. Vorhören und Besucherbeschallung sollen klar getrennt bleiben.\n\nDie neuen Ansagenstimmen Thorsten und Kerstin arbeiten als lokal mitgelieferte KI-Stimmen. Stimme und private Laufzeit sind im Update enthalten; eine separate Installation oder eine Windows-Stimme sind nicht erforderlich. Die gemeinsame männliche/weibliche Auswahl bleibt für alle Präsentationen und Benutzer am Regie-PC gültig. Kurze Satzpausen und ein ruhiges Sprechtempo unterstützen die Verständlichkeit. Speichere die Auswahl und prüfe Gong und Text mit der Tonprobe über den vorgesehenen Ausgang. Die Musikabsenkung betrifft weiterhin die Hintergrundmusik, nicht die Ansagenstimme. Master-Lautstärke und Stummschaltung bleiben wirksam.\n\nUnter Einstellungen → Präsentation → Ansagen stehen Thorsten, Kerstin, Karlsson, Ramona und Eva K. als mitgelieferte lokale Stimmen zur Auswahl. Speichere die Stimme und die Vorleseeinstellungen vor einer Tonprobe. Sprechtempo, Satzpause, Absatzpause und die ruhige oder deutliche Sprechweise gelten für alle Präsentationen und Benutzer dieses Regie-PCs. Die Sprachlautheit hebt leise Silben mit Spitzenbegrenzung an; Gong, gewählter Ausgang und Stummschaltung bleiben erhalten. 150 Prozent ist der neue Standard, 100 Prozent entspricht dem bisherigen Sprachpegel. Prüfe die Verständlichkeit über die tatsächliche Anlage. Gültige Datumsangaben, Wochentagskürzel und Uhrzeiten werden nur für das Vorlesen ausgeschrieben; die gespeicherte Meldung und ihre sichtbare Darstellung bleiben erhalten.",
       "source": "src/help/base.ts",
       "context": "help-assembled",
       "status": "app-owned"
