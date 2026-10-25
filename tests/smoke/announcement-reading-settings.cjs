@@ -1,0 +1,11 @@
+const {app,BrowserWindow}=require('electron'),path=require('node:path'),fs=require('node:fs'),assert=require('node:assert/strict');
+const folder=fs.mkdtempSync(path.resolve('work/v92-settings-native-'));app.setPath('userData',path.join(folder,'profile'));setTimeout(()=>app.exit(1),45000).unref();
+(async()=>{await app.whenReady();const win=new BrowserWindow({show:false,width:960,height:1600,useContentSize:true,webPreferences:{offscreen:true,backgroundThrottling:false}});win.webContents.on('console-message',e=>{if(e.level>=2)console.log(e.message)});await win.loadURL('http://127.0.0.1:5179/tests/smoke/announcement-reading-settings.html');
+for(let n=0;n<100&&!await win.webContents.executeJavaScript('!!document.querySelector("input[min=\\"50\\"]:not(:disabled)")');n++)await new Promise(r=>setTimeout(r,100));
+const voices=await win.webContents.executeJavaScript('Array.from(document.querySelector("select").options,o=>o.textContent)');assert.equal(voices.length,5);assert(voices.some(v=>v.includes('Ramona')));
+await win.webContents.executeJavaScript('const input=document.querySelector("input[min=\\"50\\"]");input.focus();input.select()');await win.webContents.insertText('175');
+await win.webContents.executeJavaScript('const voice=document.querySelector("select");voice.value="piper:de_DE-ramona-low";voice.dispatchEvent(new Event("change",{bubbles:true}))');
+await win.webContents.executeJavaScript('Array.from(document.querySelectorAll("button")).find(b=>/speichern/i.test(b.textContent)).click()');await new Promise(r=>setTimeout(r,100));
+const saved=await win.webContents.executeJavaScript('window.savedV92');assert.equal(saved.voiceId,'piper:de_DE-ramona-low');assert.equal(saved.reading.loudnessPercent,175);assert.equal(saved.enabled,false);
+const fits=await win.webContents.executeJavaScript('Array.from(document.querySelectorAll("input,select,button,fieldset")).every(e=>e.getBoundingClientRect().right<=innerWidth)');assert(fits);fs.writeFileSync(path.join(folder,'settings.png'),(await win.webContents.capturePage()).toPNG());console.log(JSON.stringify({folder,voices,saved,controlsFit:true,audioPlayed:false}));win.destroy();app.exit(0);
+})().catch(e=>{console.error(e);app.exit(1)});
