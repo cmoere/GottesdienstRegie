@@ -5,8 +5,21 @@ import os from 'node:os';
 import {BundledSpeechService,readBundledSpeechWav,runBundledSpeech,normalizeAnnouncementSpeech} from './BundledSpeechService';
 
 function wav(){const b=Buffer.alloc(48);b.write('RIFF');b.writeUInt32LE(40,4);b.write('WAVEfmt ',8);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(1,22);b.writeUInt32LE(16000,24);b.writeUInt32LE(32000,28);b.writeUInt16LE(2,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(4,40);b.writeInt16LE(300,44);return b}
-async function resources(){const root=await mkdtemp(path.join(os.tmpdir(),'Stimme Grüße '));for(const name of ['runtime/bin/java.exe','worker/AnnouncementSpeech.class','lib/voice-dfki-pavoque-neutral-5.2.jar','lib/marytts-runtime-5.2.1.jar','lib/marytts-lang-de-5.2.1.jar','lib/voices/dfki-pavoque-neutral/halfphoneFeatures_ac.mry','lib/voices/dfki-pavoque-neutral/halfphoneUnits.mry','lib/voices/dfki-pavoque-neutral/joinCostFeatures.mry','lib/voices/dfki-pavoque-neutral/timeline_basenames.mry','lib/voices/dfki-pavoque-neutral/timeline_waveforms.mry']){await mkdir(path.dirname(path.join(root,name)),{recursive:true});await writeFile(path.join(root,name),'fixture')}await writeFile(path.join(root,'ready.json'),JSON.stringify({platform:'win32',arch:'x64',voice:'marytts:dfki-pavoque-neutral'}));return root}
+async function resources(){const root=await mkdtemp(path.join(os.tmpdir(),'Stimme Grüße '));for(const name of ['lib/voice-bits1-hsmm-5.2.jar','runtime/bin/java.exe','worker/AnnouncementSpeech.class','lib/voice-dfki-pavoque-neutral-5.2.jar','lib/marytts-runtime-5.2.1.jar','lib/marytts-lang-de-5.2.1.jar','lib/voices/dfki-pavoque-neutral/halfphoneFeatures_ac.mry','lib/voices/dfki-pavoque-neutral/halfphoneUnits.mry','lib/voices/dfki-pavoque-neutral/joinCostFeatures.mry','lib/voices/dfki-pavoque-neutral/timeline_basenames.mry','lib/voices/dfki-pavoque-neutral/timeline_waveforms.mry']){await mkdir(path.dirname(path.join(root,name)),{recursive:true});await writeFile(path.join(root,name),'fixture')}await writeFile(path.join(root,'ready.json'),JSON.stringify({platform:'win32',arch:'x64',voice:'marytts:dfki-pavoque-neutral'}));return root}
 describe('bundled classical speech',()=>{
+ it('raises quiet speech passages while limiting peaks smoothly below full scale',async()=>{
+   const source=Buffer.alloc(32044);wav().copy(source);source.writeUInt32LE(source.length-8,4);source.writeUInt32LE(source.length-44,40);
+   for(let i=0;i<16000;i++)source.writeInt16LE(Math.round((i>7500&&i<8500?10000:1500)*Math.sin(i*.12)),44+i*2);
+   const original=Buffer.from(source),data=Buffer.from(await normalizeAnnouncementSpeech(source));
+   let energy=0,baseline=0,peak=0;for(let i=44;i<source.length;i+=2){energy+=data.readInt16LE(i)**2;baseline+=(source.readInt16LE(i)*29205/10000)**2;peak=Math.max(peak,Math.abs(data.readInt16LE(i)))}
+   expect(10*Math.log10(energy/baseline)).toBeGreaterThan(1);expect(peak).toBeLessThanOrEqual(29206);expect(source).toEqual(original);
+ });
+ it('uses the whitelisted female worker voice and rejects arbitrary voice names',async()=>{
+   const root=await resources();await writeFile(path.join(root,'lib/voice-bits1-hsmm-5.2.jar'),'fixture');let used:string[]=[];
+   const service=new BundledSpeechService(root,'win32','x64',async(_file,args)=>{used=args;return wav()});
+   await service.synthesize('Guten Tag.','marytts:bits1-hsmm');expect(used.at(-1)).toBe('bits1-hsmm');
+   await expect(service.synthesize('Guten Tag.','../../foreign')).rejects.toThrow();
+ });
  it('raises speech to a bounded peak without clipping or changing the original waveform',async()=>{
    const source=wav();source.writeInt16LE(10000,44);source.writeInt16LE(-5000,46);const original=Buffer.from(source);
    const normalized=Buffer.from(await normalizeAnnouncementSpeech(source));

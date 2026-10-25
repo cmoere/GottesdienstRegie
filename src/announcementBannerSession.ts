@@ -3,6 +3,8 @@ import type {BannerPosition} from './announcementBannerModel';
 import {bannerCycleDurationMs} from './announcementBannerModel';
 import type {BannerOutputState} from './outputState';
 export const BANNER_SEPARATOR='                ·                ';
+export const bannerTextScale=(items:readonly unknown[])=>items.length>1?.72:1;
+export const bannerPhysicalWidth=(width:number,items:readonly unknown[])=>Math.max(64,Math.round(width*bannerTextScale(items)*1000)/1000);
 export const bannerRibbonText=(items:PublicBannerAnnouncement[])=>items.map(item=>item.text.trim()).filter(Boolean).join(BANNER_SEPARATOR)+(items.length?BANNER_SEPARATOR:'');
 export function bannerTextPages(text:string):string[]{
   const pages:string[]=[];let page='';
@@ -15,7 +17,7 @@ export function bannerTextPages(text:string):string[]{
 }
 export function bannerDisplayDuration(state:BannerOutputState):number{
   const text=bannerRibbonText(state.items);
-  return state.reducedMotion?bannerTextPages(text).reduce((sum,page)=>sum+Math.max(4000,page.length*80),0):bannerCycleDurationMs(state.textWidth??text.length*24,1920);
+  return state.reducedMotion?bannerTextPages(text).reduce((sum,page)=>sum+Math.max(4000,page.length*80),0):bannerCycleDurationMs(bannerPhysicalWidth(state.textWidth??text.length*24,state.items),1920);
 }
 export class BannerSession{
   private active:BannerOutputState|null=null;

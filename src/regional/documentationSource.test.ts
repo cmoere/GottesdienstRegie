@@ -20,7 +20,8 @@ describe('complete German documentation translation source',()=>{
     expect(source.help['Erste Schritte'].body).toContain('## ');
   });
   it('keeps all historical release text fields keyed by stable version identity',()=>{
-    expect(Object.keys(source.releases)).toHaveLength(1530);
+    expect(Object.keys(source.releases)).toHaveLength(1542);
+    expect(source.releases['versions[0.90].builds[0.90.0].overview.label']).toBe('Verlässlicher Live-Start und gemeinsame Stimmenauswahl');
     expect(source.releases['versions[0.89].builds[0.89.3].overview.label']).toBe('Passende Wetterbilder und klarere Ansagen');
     expect(source.releases['versions[0.89].builds[0.89.2].overview.label']).toBe('Deutsche Durchsagestimme direkt im Update');
     expect(source.releases['versions[0.89].builds[0.89.1].overview.label']).toBe('Lokale Durchsagen und klarere Radio- und Wetteranzeigen');

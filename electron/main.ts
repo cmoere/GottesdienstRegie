@@ -3,7 +3,7 @@ import path from 'node:path';
 import {countdownMediaSelection,type CountdownMediaContext} from './countdownMediaSelection';
 import {createAnnouncementSettingsAccess} from './announcements/SettingsAccess';
 import {BundledSpeechService} from './announcements/BundledSpeechService';
-import {SpeechAccess,SpeechIndicator} from './announcements/SpeechAccess';
+import {SpeechAccess,SpeechIndicator,deviceSelectedSpeech} from './announcements/SpeechAccess';
 import {readBannerOutputState} from '../src/outputState';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs/promises';
@@ -270,7 +270,7 @@ app.whenReady().then(async() => {
   await nativeRegionalText.select(await deviceSettings.readRegionalSelection());
   const espeak=new BundledSpeechService(app.isPackaged?path.join(process.resourcesPath,'speech'):path.join(app.getAppPath(),'work/bundled-speech',process.platform+'-'+process.arch));
   const isSpeechControl=(event:import('electron').IpcMainInvokeEvent)=>Boolean(controlWindow&&!controlWindow.isDestroyed()&&!controlWindow.webContents.isDestroyed()&&event.sender.id===controlWindow.webContents.id&&event.senderFrame===controlWindow.webContents.mainFrame);
-  const speechAccess=new SpeechAccess(espeak,isSpeechControl);
+  const speechAccess=new SpeechAccess(deviceSelectedSpeech(espeak,deviceSettings),isSpeechControl);
   const speechIndicator=new SpeechIndicator(state=>{for(const window of BrowserWindow.getAllWindows())sendToLiveWindow(window,'announcements:indicator',state)});
   const speechOwners=new Set<number>();
   const watchSpeechOwner=(event:import('electron').IpcMainInvokeEvent)=>{speechAccess.authorize(event);if(speechOwners.has(event.sender.id))return;speechOwners.add(event.sender.id);const clear=()=>{espeak.cancel();speechIndicator.set(false)};event.sender.on('render-process-gone',clear);event.sender.once('destroyed',()=>{clear();speechOwners.delete(event.sender.id)})};

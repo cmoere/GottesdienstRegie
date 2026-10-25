@@ -21,12 +21,90 @@
   ],
   "versions": [
     {
+      "line": "0.90",
+      "builds": [
+        {
+          "version": "0.90.0",
+          "releaseDate": "2026-10-25",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Verlässlicher Live-Start und gemeinsame Stimmenauswahl",
+              "en": "Reliable live startup and shared voice selection"
+            },
+            "text": {
+              "de": "Dieses Update korrigiert den Abbruch von ON AIR und Testbetrieb nach der Ausgabeprüfung. Für automatische Ansagen und Tonproben stehen jetzt eine männliche und eine weibliche deutsche Stimme zentral zur Auswahl.",
+              "en": "This update corrects ON AIR and test sessions being rejected after output checks. Automatic announcements and audio tests now offer a centrally selected male or female German voice."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Männliche oder weibliche Ansagenstimme",
+                  "en": "Male or female announcement voice"
+                },
+                "text": {
+                  "de": "Unter Einstellungen → Präsentation → Ansagen lässt sich die gemeinsame deutsche Stimme auswählen. Die gespeicherte Auswahl gilt auf dem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Beide klassischen TTS-Stimmen und ihre Laufzeit sind im Update enthalten; zusätzliche Installationen sind nicht erforderlich. Nach dem Speichern verwendet auch die Gong-/Text-Tonprobe die gewählte Stimme. Automatische Ansagen bleiben unabhängig davon ein- oder ausschaltbar.",
+                  "en": "Select the shared German voice under Settings → Presentation → Announcements. The saved selection applies to all presentations and signed-in operators on this control computer. Both classical TTS voices and their runtime are included; no additional installation is needed. After saving, the gong/text audio test uses the selected voice. Automatic announcements remain independently enabled or disabled."
+                }
+              },
+              {
+                "label": {
+                  "de": "Schmaleres Laufband bei mehreren Meldungen",
+                  "en": "Condensed ticker for multiple announcements"
+                },
+                "text": {
+                  "de": "Bei mehreren Meldungen wird die kräftige rote Laufbandschrift horizontal schmaler dargestellt. Schrifthöhe, vollständige Texte und gleichmäßige Abstände am mittigen Punkt bleiben erhalten. Die Wiederholung und ihre Dauer berücksichtigen die sichtbare Breite; der Wechsel ins Ankommen oder zum Countdown startet das Laufband weiterhin nicht neu.",
+                  "en": "When several announcements are present, the bold red ticker text uses a horizontally condensed appearance. Font height, complete texts and equal spacing around the middle dot remain. Repetition and cycle duration follow the visible width; entering the arrival period or countdown still does not restart the ticker."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "ON AIR und Testbetrieb nach der Prüfung starten",
+                  "en": "Start ON AIR and test sessions after checks"
+                },
+                "text": {
+                  "de": "Der Start vergleicht die für die Ausgabe relevanten Inhalte statt ausschließlich interner Objektreferenzen. Identische neu eingelesene Daten führen dadurch nicht mehr zur irrtümlichen Meldung, die Präsentation oder Ausgabezuordnung sei geändert worden. Beim Klick wird der aktuelle Speicherstand geprüft. Tatsächliche Änderungen an Folien, Veranstaltung, Servicezeit, Ausgängen oder Berechtigungen brechen den Start weiterhin ab. Die Ausgabeprüfung, physische Bestätigung und Kennzeichnung des Testbetriebs bleiben erhalten.",
+                  "en": "Startup now compares output-relevant content instead of relying solely on internal object references. Reloading identical data no longer incorrectly reports that the presentation or output assignment changed. The current store is checked when the operator clicks. Actual changes to slides, event, service time, outputs or permissions still cancel startup. Preflight, physical-output confirmation and test watermarks are preserved."
+                }
+              },
+              {
+                "label": {
+                  "de": "Höherer Sprachpegel bei begrenzten Spitzen",
+                  "en": "Louder speech with bounded peaks"
+                },
+                "text": {
+                  "de": "Eine behutsame Dynamikbearbeitung hebt leisere Sprachabschnitte an und begrenzt Spitzen mit weichen Pegelübergängen. In den geprüften Texten wurden beide Stimmen gegenüber der bisherigen Pegelanpassung rund 3–4 dB lauter gemessen; die Spitzen bleiben bei höchstens −1 dBFS. Länge, Tonhöhe, Gong, Ausgangszuordnung und Stummschaltung werden nicht verändert. Die Musikabsenkung wirkt weiterhin ausschließlich auf die Hintergrundmusik.",
+                  "en": "Gentle dynamic processing raises quieter speech and limits peaks through smooth level transitions. In the tested texts both voices measured about 3–4 dB louder than the previous level adjustment, with peaks remaining at or below −1 dBFS. Duration, pitch, gong, output routing and mute are unchanged. Music ducking still applies only to background music."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Bestehender Übersetzungs- und Prüfumfang",
+                  "en": "Existing translation and verification scope"
+                },
+                "text": {
+                  "de": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Die Stimmenauswahl ist eine gemeinsame Geräteeinstellung des Regie-PCs. Automatisierte Ausgabe- und Sprachprüfungen verwenden unsichtbare Fenster beziehungsweise stummgeschaltete Wiedergabe; die Saallautstärke ist an der tatsächlichen Anlage zu prüfen.",
+                  "en": "Regional variants remain partially translated; missing interface text appears in standard German. The experimental original PowerPoint mode remains disabled. Voice selection is a shared device setting of the control computer. Automated output and speech checks use hidden windows or muted playback; verify hall volume on the actual sound system."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.89",
       "builds": [
         {
           "version": "0.89.3",
           "releaseDate": "2026-10-24",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Passende Wetterbilder und klarere Ansagen",

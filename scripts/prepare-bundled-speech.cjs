@@ -50,6 +50,7 @@ async function prepare(platform=process.platform,arch=process.arch){
   await fs.mkdir(root,{recursive:true});
   for(const artifact of manifest.jars){const bytes=await download(artifact,cache);await fs.mkdir(path.join(root,'lib'),{recursive:true});await fs.writeFile(path.join(root,'lib',path.basename(artifact.url)),bytes)}
   await extractZip(await download(manifest.voice,cache),root);
+  await extractZip(await download(manifest.femaleVoice,cache),root);
   const runtimeArchive=await download(runtime,cache),runtimeExtract=path.join(root,'runtime-extract');await fs.mkdir(runtimeExtract,{recursive:true});
   if(runtime.url.endsWith('.zip'))await extractZip(runtimeArchive,runtimeExtract);
   else{
@@ -71,7 +72,7 @@ async function prepare(platform=process.platform,arch=process.arch){
   await fs.copyFile(path.join(repo,'build/speech/NOTICE.md'),path.join(root,'NOTICE.md'));
   await fs.copyFile(path.join(repo,'build/speech/SECURITY.md'),path.join(root,'SECURITY.md'));
   await fs.copyFile(path.join(repo,'build/speech/manifest.json'),path.join(root,'manifest.json'));
-  await fs.writeFile(path.join(root,'ready.json'),JSON.stringify({platform,arch,voice:'marytts:dfki-pavoque-neutral'}));
+  await fs.writeFile(path.join(root,'ready.json'),JSON.stringify({platform,arch,voice:'marytts:dfki-pavoque-neutral',voices:['marytts:dfki-pavoque-neutral','marytts:bits1-hsmm']}));
   console.log('Bundled German speech prepared: '+platform+'-'+arch);return root;
 }
 module.exports={verifyBytes,extractZip,safeEntry,prepare};

@@ -1,9 +1,20 @@
 import {cleanup,render,screen} from '@testing-library/react';
 import {afterEach,expect,it} from 'vitest';
 import {AnnouncementBanner} from './AnnouncementBanner';
-import {BannerSession} from './announcementBannerSession';
+import {BannerSession,bannerDisplayDuration,bannerPhysicalWidth} from './announcementBannerSession';
 const item={id:'a',text:'Bitte beachten',priority:'normal' as const};
 afterEach(cleanup);
+it('condenses multiple messages horizontally without shrinking height or breaking the repeat stride',()=>{
+ const state={revision:1,position:'bottom' as const,items:[item,{...item,id:'b',text:'Weitere Nachricht'}],cycleStartedAtMs:1000,reserved:true,textWidth:2000};
+ const view=render(<AnnouncementBanner state={state} nowMs={2000} reducedMotion={false}/>);
+ expect(screen.getByRole('marquee')).toHaveAttribute('data-condensed','true');
+ expect(bannerPhysicalWidth(state.textWidth,state.items)).toBe(1440);
+ expect(view.container.querySelectorAll('[data-banner-unit]')).toHaveLength(4);
+ expect(view.container.querySelector('[data-banner-text]')).toHaveStyle({transform:'scaleX(0.72)'});
+ expect(bannerDisplayDuration(state)).toBe(24000);
+ view.rerender(<AnnouncementBanner state={{...state,items:[item]}} nowMs={2000} reducedMotion={false}/>);
+ expect(screen.getByRole('marquee')).toHaveAttribute('data-condensed','false');
+});
 it('does not restart text on slide takes and stages edits until the cycle finishes',()=>{
   const session=new BannerSession(),input={items:[item],position:'bottom' as const,allowed:true,enabled:true,takeKey:'s1',nowMs:1000,textWidths:[600],reducedMotion:false};
   const first=session.update(input)!;

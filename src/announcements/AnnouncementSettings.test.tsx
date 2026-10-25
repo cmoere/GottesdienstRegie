@@ -9,6 +9,13 @@ beforeEach(()=>usePreferences.setState({language:'de',germanRegion:null}));
 afterEach(()=>{cleanup();usePreferences.setState(savedPreferences,true)});
 
 describe('inactive announcement preparation settings',()=>{
+ it('selects a female voice centrally without enabling automatic announcements',async()=>{
+  let stored:Settings={...initial,voiceId:'marytts:dfki-pavoque-neutral',speakerId:0,voiceAccepted:true};
+  render(<AnnouncementSettings rows={[]} bridge={{readSettings:async()=>stored,writeSettings:async value=>{stored=value;return value},engineStatus:async()=>({ready:true,name:'Stimmen verfügbar'})}}/>);
+  const select=await screen.findByLabelText('Ansagenstimme');await waitFor(()=>expect(select).toBeEnabled());
+  fireEvent.change(select,{target:{value:'marytts:bits1-hsmm'}});fireEvent.click(screen.getByRole('button',{name:'Ansageneinstellungen speichern'}));
+  await screen.findByText('Einstellungen gespeichert.');expect(stored).toMatchObject({enabled:false,voiceId:'marytts:bits1-hsmm',speakerId:0,voiceAccepted:true});
+ });
  it('can disable saved announcements even when their engine has become unavailable',async()=>{
   let stored:Settings={...initial,enabled:true,voiceId:'espeak-ng:de',speakerId:0,voiceAccepted:true};
   render(<AnnouncementSettings rows={[]} bridge={{readSettings:async()=>stored,writeSettings:async value=>{stored=value;return value},engineStatus:async()=>({ready:false,name:'Nicht verfügbar'})}}/>);

@@ -1,3 +1,37 @@
+# GottesdienstRegie 0.90.0
+
+Veröffentlicht: So., 25.10.2026
+
+Dieses Update korrigiert den Abbruch von ON AIR und Testbetrieb nach der Ausgabeprüfung. Für automatische Ansagen und Tonproben stehen jetzt eine männliche und eine weibliche deutsche Stimme zentral zur Auswahl.
+
+## Neu
+
+### Männliche oder weibliche Ansagenstimme
+
+Unter Einstellungen → Präsentation → Ansagen lässt sich die gemeinsame deutsche Stimme auswählen. Die gespeicherte Auswahl gilt auf dem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Beide klassischen TTS-Stimmen und ihre Laufzeit sind im Update enthalten; zusätzliche Installationen sind nicht erforderlich. Nach dem Speichern verwendet auch die Gong-/Text-Tonprobe die gewählte Stimme. Automatische Ansagen bleiben unabhängig davon ein- oder ausschaltbar.
+
+### Schmaleres Laufband bei mehreren Meldungen
+
+Bei mehreren Meldungen wird die kräftige rote Laufbandschrift horizontal schmaler dargestellt. Schrifthöhe, vollständige Texte und gleichmäßige Abstände am mittigen Punkt bleiben erhalten. Die Wiederholung und ihre Dauer berücksichtigen die sichtbare Breite; der Wechsel ins Ankommen oder zum Countdown startet das Laufband weiterhin nicht neu.
+
+## Behoben
+
+### ON AIR und Testbetrieb nach der Prüfung starten
+
+Der Start vergleicht die für die Ausgabe relevanten Inhalte statt ausschließlich interner Objektreferenzen. Identische neu eingelesene Daten führen dadurch nicht mehr zur irrtümlichen Meldung, die Präsentation oder Ausgabezuordnung sei geändert worden. Beim Klick wird der aktuelle Speicherstand geprüft. Tatsächliche Änderungen an Folien, Veranstaltung, Servicezeit, Ausgängen oder Berechtigungen brechen den Start weiterhin ab. Die Ausgabeprüfung, physische Bestätigung und Kennzeichnung des Testbetriebs bleiben erhalten.
+
+### Höherer Sprachpegel bei begrenzten Spitzen
+
+Eine behutsame Dynamikbearbeitung hebt leisere Sprachabschnitte an und begrenzt Spitzen mit weichen Pegelübergängen. In den geprüften Texten wurden beide Stimmen gegenüber der bisherigen Pegelanpassung rund 3–4 dB lauter gemessen; die Spitzen bleiben bei höchstens −1 dBFS. Länge, Tonhöhe, Gong, Ausgangszuordnung und Stummschaltung werden nicht verändert. Die Musikabsenkung wirkt weiterhin ausschließlich auf die Hintergrundmusik.
+
+## Bekannte Einschränkungen
+
+### Bestehender Übersetzungs- und Prüfumfang
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Die Stimmenauswahl ist eine gemeinsame Geräteeinstellung des Regie-PCs. Automatisierte Ausgabe- und Sprachprüfungen verwenden unsichtbare Fenster beziehungsweise stummgeschaltete Wiedergabe; die Saallautstärke ist an der tatsächlichen Anlage zu prüfen.
+
+---
+
 # GottesdienstRegie 0.89.3
 
 Veröffentlicht: Sa., 24.10.2026

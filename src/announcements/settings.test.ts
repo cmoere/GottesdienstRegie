@@ -2,6 +2,12 @@ import {describe,expect,it} from 'vitest';
 import {normalizeAnnouncementSettings,validateAnnouncementSettings} from './settings';
 
 describe('operator-selected announcement voice settings',()=>{
+  it('accepts the explicitly selected bundled female German voice',()=>{
+    const value={enabled:true,intervalMinutes:5,musicRemainingPercent:20,voiceId:'marytts:bits1-hsmm',speakerId:0,voiceAccepted:true};
+    expect(validateAnnouncementSettings(value)).toEqual(value);
+    expect(normalizeAnnouncementSettings(value)).toEqual(value);
+    expect(()=>validateAnnouncementSettings({...value,speakerId:1})).toThrow();
+  });
   it('accepts the bundled classical voice only with explicit activation metadata',()=>{
     const value={enabled:true,intervalMinutes:5,musicRemainingPercent:20,voiceId:'marytts:dfki-pavoque-neutral',speakerId:0,voiceAccepted:true};
     expect(validateAnnouncementSettings(value)).toEqual(value);

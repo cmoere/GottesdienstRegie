@@ -4,6 +4,11 @@
     "size": 448866455,
     "sha256": "076faec327fd107b160f435d170d9c4d582807efbe52e507a19c39b01162edd4"
   },
+  "femaleVoice": {
+    "url": "https://github.com/marytts/voice-bits1-hsmm/releases/download/v5.2/voice-bits1-hsmm-5.2.zip",
+    "size": 1359993,
+    "sha256": "a36d6204e6b10653a96d501a5ef70544d9bbaabf8ef373e5d4ed76f616f6f541"
+  },
   "jars": [
     {
       "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.41.0/error_prone_annotations-2.41.0.jar",

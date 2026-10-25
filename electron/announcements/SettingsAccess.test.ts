@@ -16,6 +16,13 @@ async function setup(){
 }
 
 describe('settings-only announcement access while speech is unavailable',()=>{
+ it('shares the female selection through the same device repository across operators',async()=>{
+  const{repo}=await setup();const access=createAnnouncementSettingsAccess(repo,(event:{control:boolean})=>event.control,async()=>true);
+  const female={...settings,enabled:true,voiceId:'marytts:bits1-hsmm',speakerId:0,voiceAccepted:true};
+  await access.write({control:true},female);
+  const another=createAnnouncementSettingsAccess(repo,(event:{control:boolean})=>event.control,async()=>true);
+  expect(await another.read({control:true})).toEqual(female);
+ });
  it('enables only a selected non-neural engine that is available',async()=>{
   const{repo}=await setup();let ready=false;
   const access=createAnnouncementSettingsAccess(repo,(event:{control:boolean})=>event.control,async()=>ready);

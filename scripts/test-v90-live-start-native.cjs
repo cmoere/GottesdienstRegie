@@ -1,0 +1,3 @@
+const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
+const root=path.resolve(__dirname,'..'),folder=fs.mkdtempSync(path.join(root,'work/v90-live-start-')),env={...process.env,V90_PROBE_FOLDER:folder};delete env.ELECTRON_RUN_AS_NODE;
+const child=spawn(require('electron'),[path.join(root,'tests/smoke/v90-live-start.cjs')],{cwd:root,env,windowsHide:true,stdio:['ignore','pipe','pipe']});let log='';for(const stream of [child.stdout,child.stderr])stream.on('data',chunk=>{log+=chunk;process.stdout.write(chunk)});const timer=setTimeout(()=>child.kill(),100000);child.on('close',code=>{clearTimeout(timer);fs.writeFileSync(path.join(folder,'process.log'),log);console.log(folder);process.exitCode=code===0?0:1});

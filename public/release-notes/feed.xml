@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.90.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.90.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.90.0</guid><pubDate>Sun, 25 Oct 2026 00:00:00 GMT</pubDate><description>Verlässlicher Live-Start und gemeinsame Stimmenauswahl
+Dieses Update korrigiert den Abbruch von ON AIR und Testbetrieb nach der Ausgabeprüfung. Für automatische Ansagen und Tonproben stehen jetzt eine männliche und eine weibliche deutsche Stimme zentral zur Auswahl.
+
+Männliche oder weibliche Ansagenstimme
+Unter Einstellungen → Präsentation → Ansagen lässt sich die gemeinsame deutsche Stimme auswählen. Die gespeicherte Auswahl gilt auf dem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Beide klassischen TTS-Stimmen und ihre Laufzeit sind im Update enthalten; zusätzliche Installationen sind nicht erforderlich. Nach dem Speichern verwendet auch die Gong-/Text-Tonprobe die gewählte Stimme. Automatische Ansagen bleiben unabhängig davon ein- oder ausschaltbar.
+
+Schmaleres Laufband bei mehreren Meldungen
+Bei mehreren Meldungen wird die kräftige rote Laufbandschrift horizontal schmaler dargestellt. Schrifthöhe, vollständige Texte und gleichmäßige Abstände am mittigen Punkt bleiben erhalten. Die Wiederholung und ihre Dauer berücksichtigen die sichtbare Breite; der Wechsel ins Ankommen oder zum Countdown startet das Laufband weiterhin nicht neu.
+
+ON AIR und Testbetrieb nach der Prüfung starten
+Der Start vergleicht die für die Ausgabe relevanten Inhalte statt ausschließlich interner Objektreferenzen. Identische neu eingelesene Daten führen dadurch nicht mehr zur irrtümlichen Meldung, die Präsentation oder Ausgabezuordnung sei geändert worden. Beim Klick wird der aktuelle Speicherstand geprüft. Tatsächliche Änderungen an Folien, Veranstaltung, Servicezeit, Ausgängen oder Berechtigungen brechen den Start weiterhin ab. Die Ausgabeprüfung, physische Bestätigung und Kennzeichnung des Testbetriebs bleiben erhalten.
+
+Höherer Sprachpegel bei begrenzten Spitzen
+Eine behutsame Dynamikbearbeitung hebt leisere Sprachabschnitte an und begrenzt Spitzen mit weichen Pegelübergängen. In den geprüften Texten wurden beide Stimmen gegenüber der bisherigen Pegelanpassung rund 3–4 dB lauter gemessen; die Spitzen bleiben bei höchstens −1 dBFS. Länge, Tonhöhe, Gong, Ausgangszuordnung und Stummschaltung werden nicht verändert. Die Musikabsenkung wirkt weiterhin ausschließlich auf die Hintergrundmusik.
+
+Bestehender Übersetzungs- und Prüfumfang
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt. Der experimentelle PowerPoint-Originalmodus bleibt deaktiviert. Die Stimmenauswahl ist eine gemeinsame Geräteeinstellung des Regie-PCs. Automatisierte Ausgabe- und Sprachprüfungen verwenden unsichtbare Fenster beziehungsweise stummgeschaltete Wiedergabe; die Saallautstärke ist an der tatsächlichen Anlage zu prüfen.</description></item>
 <item><title>GottesdienstRegie 0.89.3</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.89.3</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.89.3</guid><pubDate>Sat, 24 Oct 2026 00:00:00 GMT</pubDate><description>Passende Wetterbilder und klarere Ansagen
 Dieses Update passt die Wetterdarstellung an die gemeldete Wetterlage an, vergrößert den Inhalt der Wetterwarnungen und ergänzt eine vollständige Ansagen-Tonprobe. Der Arbeitsbereich startet direkt in seiner vorgesehenen Größe; die lokale Sprachausgabe erhält einen angepassten Pegel.
 

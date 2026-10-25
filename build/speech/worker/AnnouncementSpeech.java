@@ -7,6 +7,8 @@ import marytts.LocalMaryInterface;
 /** Private, local worker: UTF-8 stdin -> finite WAV stdout. No sound device or HTTP server. */
 public final class AnnouncementSpeech {
   public static void main(String[] args) throws Exception {
+    String voice = args.length == 0 ? "dfki-pavoque-neutral" : args[0];
+    if (args.length > 1 || !(voice.equals("dfki-pavoque-neutral") || voice.equals("bits1-hsmm"))) throw new IOException("Invalid voice");
     // Mary libraries may log to stdout. Reserve the original stream for binary output.
     OutputStream audioOutput = new FileOutputStream(FileDescriptor.out);
     System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.err), true, "UTF-8"));
@@ -21,7 +23,7 @@ public final class AnnouncementSpeech {
     if (text.trim().isEmpty() || text.codePointCount(0, text.length()) > 10000) throw new IOException("Invalid text");
     LocalMaryInterface mary = new LocalMaryInterface();
     mary.setLocale(Locale.GERMAN);
-    mary.setVoice("dfki-pavoque-neutral");
+    mary.setVoice(voice);
     AudioInputStream audio = mary.generateAudio(text);
     // Materialize a finite PCM WAV; never open the machine's audio output here.
     ByteArrayOutputStream pcm = new ByteArrayOutputStream();

@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useState,useRef} from 'react';
 import {AnnouncementService} from '../community/AnnouncementService';
 import {getCommunityAnnouncementRecords, getCommunityRuntimeSnapshot, subscribeCommunityRuntime} from '../community/communityRuntime';
-import {normalizeAnnouncementSettings, validateAnnouncementSettings} from './settings';
+import {normalizeAnnouncementSettings, validateAnnouncementSettings,isBundledAnnouncementVoice,bundledAnnouncementVoice,bundledFemaleAnnouncementVoice} from './settings';
 import type {AnnouncementSettings as Settings, AnnouncementSettingsBridge} from './settings';
 import type {SpokenAnnouncement} from './types';
 import {useI18n} from '../i18n';
@@ -92,7 +92,9 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     <p role="status">{engine.name||(german?'Mitgelieferte Stimme wird geprüft.':'Checking the included voice.')}</p>
     {status&&<p role="alert">{status}</p>}
     {!native && <p>{t('speechSettingsDesktopOnly')}</p>}
-    <label><input type="checkbox" checked={saved.enabled} disabled={!ready||busy||(!saved.enabled&&!engine.ready)} onChange={event=>setSaved(value=>({...value,enabled:event.target.checked,...(event.target.checked?{voiceId:'marytts:dfki-pavoque-neutral',speakerId:0,voiceAccepted:true}:{})}))}/> {t('speechSettingsEnable')}</label>
+    <label>{german?'Ansagenstimme':'Announcement voice'}<select disabled={!ready||busy||!engine.ready||testing||speaking} value={isBundledAnnouncementVoice(saved.voiceId)?saved.voiceId:bundledAnnouncementVoice} onChange={event=>{stopAnnouncementTest();setSaved(value=>({...value,voiceId:event.target.value,speakerId:0,voiceAccepted:true}));setMessage('')}}><option value={bundledAnnouncementVoice}>{german?'Männlich · Deutsch':'Male · German'}</option><option value={bundledFemaleAnnouncementVoice}>{german?'Weiblich · Deutsch':'Female · German'}</option></select></label>
+    <p>{german?'Die gespeicherte Stimme gilt auf diesem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Beide Stimmen sind enthalten. Nach dem Speichern verwendet auch die Tonprobe diese Auswahl.':'The saved voice applies to every presentation and signed-in operator on this control computer. Both voices are included. Save before testing the new selection.'}</p>
+    <label><input type="checkbox" checked={saved.enabled} disabled={!ready||busy||(!saved.enabled&&!engine.ready)} onChange={event=>setSaved(value=>({...value,enabled:event.target.checked,...(event.target.checked?{voiceId:isBundledAnnouncementVoice(value.voiceId)?value.voiceId:bundledAnnouncementVoice,speakerId:0,voiceAccepted:true}:{})}))}/> {t('speechSettingsEnable')}</label>
     <label>{t('speechSettingsInterval')}<input className="settings-number-input" type="number" min="1" max="120" step="1" disabled={!ready || busy} value={interval} onChange={event => {setIntervalValue(event.target.value);setMessage('');}}/></label>
     <label>{t('speechSettingsMusicLevel')}<input className="settings-number-input" type="number" min="0" max="100" disabled={!ready || busy} value={percent} onChange={event => {setPercent(event.target.value);setMessage('');}}/></label>
     <p>{t('speechSettingsMusicHelp')}</p>

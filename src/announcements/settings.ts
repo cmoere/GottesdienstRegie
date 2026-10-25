@@ -23,8 +23,10 @@ const fields=new Set(['enabled','intervalMinutes','musicRemainingPercent','voice
 const modelId='de_DE-mls-medium';
 const validSpeaker=(value:unknown):value is number=>typeof value==='number'&&Number.isInteger(value)&&value>=0&&value<236;
 export const bundledAnnouncementVoice='marytts:dfki-pavoque-neutral';
-const supportedVoice=(id:unknown)=>id===modelId||id==='espeak-ng:de'||id===bundledAnnouncementVoice;
-const validVoiceSpeaker=(id:unknown,value:unknown)=>id==='espeak-ng:de'||id===bundledAnnouncementVoice?value===0:validSpeaker(value);
+export const bundledFemaleAnnouncementVoice='marytts:bits1-hsmm';
+export const isBundledAnnouncementVoice=(id:unknown):id is typeof bundledAnnouncementVoice|typeof bundledFemaleAnnouncementVoice=>id===bundledAnnouncementVoice||id===bundledFemaleAnnouncementVoice;
+const supportedVoice=(id:unknown)=>id===modelId||id==='espeak-ng:de'||isBundledAnnouncementVoice(id);
+const validVoiceSpeaker=(id:unknown,value:unknown)=>id==='espeak-ng:de'||isBundledAnnouncementVoice(id)?value===0:validSpeaker(value);
 const inRange=(value:unknown,min:number,max:number):value is number=>typeof value==='number'&&Number.isFinite(value)&&value>=min&&value<=max;
 
 /** Read old/corrupt settings safely, but never activate an unchosen voice. */
@@ -37,7 +39,7 @@ export function normalizeAnnouncementSettings(value:unknown):AnnouncementSetting
     enabled:raw.enabled===true&&voiceAccepted,
     intervalMinutes:inRange(raw.intervalMinutes,1,120)?raw.intervalMinutes:5,
     musicRemainingPercent:inRange(raw.musicRemainingPercent,0,100)?raw.musicRemainingPercent:20,
-    voiceId:raw.voiceId===bundledAnnouncementVoice?bundledAnnouncementVoice:raw.voiceId==='espeak-ng:de'?'espeak-ng:de':modelId,speakerId,voiceAccepted,
+    voiceId:isBundledAnnouncementVoice(raw.voiceId)?raw.voiceId:raw.voiceId==='espeak-ng:de'?'espeak-ng:de':modelId,speakerId,voiceAccepted,
   };
 }
 

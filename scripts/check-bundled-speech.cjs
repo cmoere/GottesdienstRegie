@@ -1,7 +1,7 @@
 const fs=require('node:fs/promises'),path=require('node:path'),{spawn}=require('node:child_process');
-async function check(root,platform=process.platform){
+async function checkVoice(root,platform,voice){
  const java=path.join(root,'runtime/bin',platform==='win32'?'java.exe':'java');
- const args=['-Xmx512m','-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-Dmary.base='+root,'-cp',[path.join(root,'worker'),path.join(root,'lib/*')].join(platform==='win32'?';':':'),'AnnouncementSpeech'];
+ const args=['-Xmx512m','-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-Dmary.base='+root,'-cp',[path.join(root,'worker'),path.join(root,'lib/*')].join(platform==='win32'?';':':'),'AnnouncementSpeech',voice];
  const wav=await new Promise((resolve,reject)=>{
   const child=spawn(java,args,{shell:false,windowsHide:true,stdio:['pipe','pipe','pipe']});let output=[],bytes=0,errors='';
   const timer=setTimeout(()=>{child.kill();reject(Error('Speech smoke timed out'))},90000);
@@ -12,8 +12,12 @@ async function check(root,platform=process.platform){
  });
  const {readBundledSpeechWav}=require('../dist-electron/electron/announcements/BundledSpeechService.js');
  readBundledSpeechWav(wav);
- await fs.writeFile(path.join(root,'verified-speech.wav'),wav);
- const report={voice:'marytts:dfki-pavoque-neutral',bytes:wav.length,sampleRate:16000,physicalPlayback:false,platform};
+ return {voice:'marytts:'+voice,bytes:wav.length,sampleRate:16000,physicalPlayback:false,platform};
+}
+async function check(root,platform=process.platform){
+ const voices=[];
+ for(const voice of ['dfki-pavoque-neutral','bits1-hsmm'])voices.push(await checkVoice(root,platform,voice));
+ const report={...voices[0],voices};
  await fs.writeFile(path.join(root,'verification.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report));return report;
 }
 module.exports={check};

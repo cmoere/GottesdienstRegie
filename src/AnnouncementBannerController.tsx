@@ -31,8 +31,11 @@ export function AnnouncementBannerController({quick}:{quick:QuickScreenConfig|nu
     tickRef.current=tick;
     const offData=subscribeCommunityRuntime(()=>{records=getCommunityAnnouncementRecords();tick()}),offLive=useLiveOutputPreview.subscribe(tick),offPresentation=usePresentation.subscribe(tick),offSettings=useBannerSettings.subscribe(tick);
     const timer=window.setInterval(tick,250);tick();
-    void document.fonts?.ready.then(()=>{widths.clear();tick()});
-    return()=>{disposed=true;clearInterval(timer);offData();offLive();offPresentation();offSettings();useAnnouncementBanner.setState({banner:null});void(window.desktop as any)?.sendAnnouncementBanner?.(null)};
+    const fontChanged=()=>{if(!disposed){widths.clear();tick()}};
+    void document.fonts?.ready.then(fontChanged);
+    void document.fonts?.load?.('700 44px "Cera Pro"')?.then(fontChanged).catch(()=>{});
+    document.fonts?.addEventListener?.('loadingdone',fontChanged);
+    return()=>{disposed=true;clearInterval(timer);document.fonts?.removeEventListener?.('loadingdone',fontChanged);offData();offLive();offPresentation();offSettings();useAnnouncementBanner.setState({banner:null});void(window.desktop as any)?.sendAnnouncementBanner?.(null)};
   },[]);
   return null;
 }

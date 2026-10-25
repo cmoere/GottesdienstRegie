@@ -1,9 +1,13 @@
 # Deutsche Offline-Sprachausgabe / Bundled German speech
 
 Powered by MaryTTS (DFKI), https://github.com/marytts/marytts, version 5.2.1, LGPL-3.0.
-German voice: dfki-pavoque-neutral 5.2, recorded PAVOQUE corpus, DFKI, CC BY-ND 3.0.
-The voice archive and its data are redistributed unmodified.
+German male voice: dfki-pavoque-neutral 5.2, recorded PAVOQUE corpus, DFKI, CC BY-ND 3.0.
+German female voice: bits1-hsmm 5.2, built from voice recordings supplied by the
+BITS project at the Bavarian Archive of Speech Signals, CC BY-ND 3.0.
+Both voice archives and their data are redistributed unmodified.
 https://github.com/marytts/voice-dfki-pavoque-neutral
+https://github.com/marytts/voice-bits1-hsmm
+https://github.com/marytts/voice-bits1-hsmm/blob/v5.2/LICENSE.md
 
 Private runtime: Eclipse Temurin OpenJDK 17, GPL-2.0 with Classpath Exception and
 additional third-party notices in runtime/legal. The pinned version and original

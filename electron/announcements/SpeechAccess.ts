@@ -1,4 +1,10 @@
 import type {EspeakService} from './EspeakService';
+import type {BundledSpeechService} from './BundledSpeechService';
+import {bundledAnnouncementVoice,isBundledAnnouncementVoice} from '../../src/announcements/settings';
+/** The native device repository owns the selection; renderer requests contain text only. */
+export function deviceSelectedSpeech(engine:Pick<BundledSpeechService,'status'|'synthesize'|'cancel'>,repository:{readAnnouncements:()=>Promise<{voiceId:string}>}){
+ return {status:()=>engine.status(),cancel:()=>engine.cancel(),synthesize:async(text:unknown)=>{const settings=await repository.readAnnouncements();return engine.synthesize(text,isBundledAnnouncementVoice(settings.voiceId)?settings.voiceId:bundledAnnouncementVoice)}};
+}
 export class SpeechAccess<Event>{
  constructor(private engine:Pick<EspeakService,'status'|'synthesize'|'cancel'>,private isControl:(event:Event)=>boolean){}
  authorize(event:Event){if(!this.isControl(event))throw Error('Sprachausgabe ist nur im Steuerfenster verfügbar.')}

@@ -24,6 +24,7 @@ import {translationModes, type SongTranslationMode} from './songTranslation';
 import { LyricScrollingSettings } from './LyricScrollingSettings';
 import { WindowControls } from './WindowControls';
 import { startLiveSession, resolveSessionAction, type LiveSessionMode } from './liveSession';
+import {captureLiveStartGuard} from './liveStartGuard';
 import { LyricScrollRenderer } from './LyricScrollRenderer';
 import type { LyricScrollPacket } from './lyricScrolling';
 import {
@@ -9097,6 +9098,7 @@ function AppShell({
     testScenario: PostProgramTestScenario = 'automatic',
   ) {
     if (airBusy.current || !can("presentationLive") || !window.desktop) return;
+    const state=usePresentation.getState(),startGuard=captureLiveStartGuard(state);
     airBusy.current = true;
     setAirStarting(true);
     try {
@@ -9242,11 +9244,7 @@ function AppShell({
       confirm: message => confirm(message),
       isCurrent: () => {
         const current = usePresentation.getState();
-        return can('presentationLive') && current.presentationId === state.presentationId
-          && current.items === state.items && current.sections === state.sections
-          && current.eventLink?.eventKey === state.eventLink?.eventKey
-          && JSON.stringify(current.displayRoles) === JSON.stringify(startAssignments)
-          && current.onAir === state.onAir;
+        return startGuard(current,can('presentationLive'));
       },
       start: async assignments => {
         const current=usePresentation.getState(),selectedItem=current.items.find(entry=>entry.id===itemId);
