@@ -2,9 +2,13 @@ import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Men
 import path from 'node:path';
 import {countdownMediaSelection,type CountdownMediaContext} from './countdownMediaSelection';
 import {createAnnouncementSettingsAccess} from './announcements/SettingsAccess';
-import {BundledSpeechService} from './announcements/BundledSpeechService';
+import {AdvertisingService} from './advertising/service';
+import {readAdSelection} from '../shared/advertising';
+import {DocumentImportService} from './DocumentImportService';
+import {NeuralSpeechService} from './announcements/NeuralSpeechService';
 import {SpeechAccess,SpeechIndicator,deviceSelectedSpeech} from './announcements/SpeechAccess';
 import {readBannerOutputState} from '../src/outputState';
+import {readAnnotationState} from '../shared/liveAnnotations';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs/promises';
 import os from 'node:os';
@@ -268,7 +272,7 @@ app.whenReady().then(async() => {
   Menu.setApplicationMenu(null);
   const deviceSettings=new DeviceSettingsRepository(path.join(app.getPath('userData'),'device-settings.json'));
   await nativeRegionalText.select(await deviceSettings.readRegionalSelection());
-  const espeak=new BundledSpeechService(app.isPackaged?path.join(process.resourcesPath,'speech'):path.join(app.getAppPath(),'work/bundled-speech',process.platform+'-'+process.arch));
+  const espeak=new NeuralSpeechService(app.isPackaged?path.join(process.resourcesPath,'speech'):path.join(app.getAppPath(),'work/neural-speech',process.platform+'-'+process.arch));
   const isSpeechControl=(event:import('electron').IpcMainInvokeEvent)=>Boolean(controlWindow&&!controlWindow.isDestroyed()&&!controlWindow.webContents.isDestroyed()&&event.sender.id===controlWindow.webContents.id&&event.senderFrame===controlWindow.webContents.mainFrame);
   const speechAccess=new SpeechAccess(deviceSelectedSpeech(espeak,deviceSettings),isSpeechControl);
   const speechIndicator=new SpeechIndicator(state=>{for(const window of BrowserWindow.getAllWindows())sendToLiveWindow(window,'announcements:indicator',state)});
@@ -317,8 +321,9 @@ app.whenReady().then(async() => {
   ipcMain.handle('device-settings:osb-write',(_event,value)=>deviceSettings.writeOsb(value));
   const sessionFile = path.join(app.getPath('userData'), 'community-session.bin');
   const legacyPresentationFile=path.join(app.getPath('userData'),'presentations','default-presentation.json');
-  const presentationRepository=new PresentationRepository(path.join(app.getPath('userData'),'library'));
+  const presentationRepository=new PresentationRepository(path.join(app.getPath('userData'),'library'),new DocumentImportService(app.isPackaged?path.join(process.resourcesPath,'document-import'):path.join(app.getAppPath(),'work/document-import',process.platform+'-'+process.arch)));
   const mediaRepository=new MediaRepository(path.join(app.getPath('userData'),'media-library'));
+  const advertisingService=new AdvertisingService(mediaRepository.directory);
   const storageMaintenance=new StorageMaintenanceService({
     'translation-packs':path.join(app.getPath('userData'),'translation-packs'),
     'transformers-cache':path.join(app.getPath('userData'),'transformers-cache'),
@@ -327,7 +332,7 @@ app.whenReady().then(async() => {
     'temporary-downloads':path.join(app.getPath('userData'),'temporary-downloads'),
     'web-cache':path.join(app.getPath('sessionData'),'Cache'),
   });
-  const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>sendToLiveWindow(controlWindow,'remote:command',payload));
+  const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>sendToLiveWindow(controlWindow,'remote:command',payload),43170,role=>outputManager.captureFrame(role));
   await remoteServer.start().catch(()=>null);
   const onlineMedia=new GitHubStorageProvider('cmoere','GottesdienstRegie','media-library');
   void presentationRepository.initialize();
@@ -478,7 +483,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('service-context:open',(event,position:{x:number;y:number},entries:Array<{id?:string;label?:string;type?:'normal'|'separator';enabled?:boolean;accelerator?:string;submenu?:any[]}>,theme?:'system'|'light'|'dark')=>{const owner=BrowserWindow.fromWebContents(event.sender);if(!owner)return false;const build=(items:typeof entries):MenuItemConstructorOptions[]=>items.map(entry=>entry.type==='separator'?{type:'separator'}:{label:String(entry.label??''),enabled:entry.enabled!==false,accelerator:entry.accelerator,submenu:entry.submenu?build(entry.submenu):undefined,click:()=>event.sender.send('service-context:command',entry.id)});const previous=nativeTheme.themeSource;if(theme)nativeTheme.themeSource=theme;Menu.buildFromTemplate(build(entries)).popup({window:owner,x:Math.round(position.x),y:Math.round(position.y),callback:()=>{nativeTheme.themeSource=previous}});return true});
   ipcMain.handle('slide-export:copy',(_event,dataUrl:string)=>{const image=nativeImage.createFromDataURL(dataUrl);if(image.isEmpty())throw new Error('SLIDE_RENDER_FAILED');clipboard.writeImage(image);return true});
   ipcMain.handle('slide-export:save',async(event,dataUrl:string,suggestedName:string,format:'png'|'jpeg'='png')=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,extension=format==='jpeg'?'jpg':'png',picked=await dialog.showSaveDialog(owner,{title:nativeText('saveSlideTitle'),defaultPath:`${suggestedName.replace(/[<>:"/\\|?*]/g,'-')}.${extension}`,filters:[{name:format==='jpeg'?nativeText('jpegImage'):nativeText('pngImage'),extensions:[extension]}]});if(picked.canceled||!picked.filePath)return null;const image=nativeImage.createFromDataURL(dataUrl);if(image.isEmpty())throw new Error('SLIDE_RENDER_FAILED');await fs.writeFile(picked.filePath,format==='jpeg'?image.toJPEG(94):image.toPNG());return picked.filePath});
-  ipcMain.handle('presentation:import',async(_event,kind:'office'|'text'|'gottesdienstregie'|'all'='all')=>{const groups={office:{name:nativeText('officeFormats'),extensions:['pptx','key','odp']},text:{name:nativeText('textFormats'),extensions:['txt','md']},gottesdienstregie:{name:'GottesdienstRegie',extensions:['json','grpresentation','grbackup']}},selected=kind==='all'?{name:nativeText('presentationFormats'),extensions:['pptx','key','odp','txt','md','json','grpresentation','grbackup']}:groups[kind];const picked=await dialog.showOpenDialog(controlWindow!,{title:nativeText('importPresentationTitle'),properties:['openFile'],filters:[selected,{name:nativeText('allSupportedFormats'),extensions:['pptx','key','odp','txt','md','json','grpresentation','grbackup']}]});if(picked.canceled||!picked.filePaths[0])return null;try{return await presentationRepository.importDocument(picked.filePaths[0])}catch(error){void dialog.showMessageBox(controlWindow!,{type:'error',title:nativeText('importPresentationErrorTitle'),message:nativeText('importPresentationErrorMessage'),detail:error instanceof Error&&error.message==='KEYNOTE_PREVIEW_NOT_FOUND'?nativeText('keynotePreviewMissing'):nativeText('importPresentationErrorHelp')});return null}});
+  ipcMain.handle('presentation:import',async(_event,kind:'office'|'text'|'gottesdienstregie'|'all'='all')=>{const groups={office:{name:nativeText('officeFormats'),extensions:['pptx','key','odp','one','onepkg']},text:{name:nativeText('textFormats'),extensions:['txt','md']},gottesdienstregie:{name:'GottesdienstRegie',extensions:['json','grpresentation','grbackup']}},selected=kind==='all'?{name:nativeText('presentationFormats'),extensions:['pptx','key','odp','one','onepkg','txt','md','json','grpresentation','grbackup']}:groups[kind];const picked=await dialog.showOpenDialog(controlWindow!,{title:nativeText('importPresentationTitle'),properties:['openFile'],filters:[selected,{name:nativeText('allSupportedFormats'),extensions:['pptx','key','odp','one','onepkg','txt','md','json','grpresentation','grbackup']}]});if(picked.canceled||!picked.filePaths[0])return null;try{const document=await presentationRepository.importDocument(picked.filePaths[0]);if(document.importReport)await dialog.showMessageBox(controlWindow!,{type:'info',title:'Importbericht',message:document.importReport.sourcePages+' Originalseite(n) übernommen · '+document.importReport.generatedSlides+' Präsentationsfolie(n)',detail:document.importReport.warnings.join('\n')});return document}catch(error){void dialog.showMessageBox(controlWindow!,{type:'error',title:nativeText('importPresentationErrorTitle'),message:nativeText('importPresentationErrorMessage'),detail:error instanceof Error&&error.message==='KEYNOTE_PREVIEW_NOT_FOUND'?nativeText('keynotePreviewMissing'):nativeText('importPresentationErrorHelp')});return null}});
   ipcMain.handle('songs:import',async(event)=>{
     const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,picked=await dialog.showOpenDialog(owner,{title:nativeText('importSongsTitle'),properties:['openFile','multiSelections'],filters:[{name:nativeText('songTextFormats'),extensions:['txt','md','song','csv','json']},{name:nativeText('allFiles'),extensions:['*']}]});
     if(picked.canceled)return [];
@@ -543,18 +548,21 @@ app.whenReady().then(async() => {
   ipcMain.handle('media:legacy-list',async()=>(await mediaRepository.list()).filter(asset=>asset.syncState!=='synced'));
   ipcMain.handle('media:cloud-remove',async(_event,id:string)=>{if(outputManager.isActive())throw new Error('MEDIA_IN_LIVE_USE');const local=(await mediaRepository.list()).find(asset=>asset.id===id);const remote=(await onlineMedia.list()).find(item=>item.path===local?.github?.path||item.id===id);if(!remote)throw new Error('MEDIA_NOT_FOUND');const references:any[]=[];for(const summary of await presentationRepository.list(true,true)){const doc=await presentationRepository.read(summary.id),raw=JSON.stringify(doc);if(raw.includes(id)||raw.includes(remote.path)||raw.includes(remote.downloadUrl))references.push(summary)}if(references.length)throw new Error(`MEDIA_IN_PRESENTATIONS:${references.map(entry=>entry.title).join('|')}`);await onlineMedia.remove(remote.path,remote.id);if(local)await mediaRepository.remove(local.id);return true});
   ipcMain.handle('media-window:open',(_event,context:'manage'|'select',purpose:'item'|'background'|'foreground'|'audio',targetType?:'section'|'serviceItem',targetId?:string,mediaKind?:string)=>openMediaWindow(context,purpose,targetType,targetId,mediaKind));
+  ipcMain.handle('advertising:read',(event,source:unknown)=>{const allowed=[controlWindow,mediaWindow].some(window=>window&&!window.isDestroyed()&&event.sender.id===window.webContents.id);if(!allowed||event.senderFrame!==event.sender.mainFrame)throw Error('Die Werbequelle ist nur im Medienbrowser verfügbar.');return advertisingService.read(source)});
+  ipcMain.handle('media-window:select-advertising',(event,value:unknown)=>{if(!mediaWindow||mediaWindow.isDestroyed()||event.sender.id!==mediaWindow.webContents.id||event.senderFrame!==event.sender.mainFrame||mediaSelectionContext.purpose!=='item')return false;const selection=readAdSelection(value);const sent=sendToLiveWindow(controlWindow,'media:selected',{kind:'advertising',selection,...mediaSelectionContext});if(sent){controlWindow?.focus();mediaWindow.close()}return sent});
   ipcMain.handle('media-window:close',()=>{mediaWindow?.close();return true});
   ipcMain.handle('media-window:select-countdown',(event,presetId:unknown)=>{if(!mediaWindow||mediaWindow.isDestroyed())return false;const selection=countdownMediaSelection(presetId,event.sender.id,mediaWindow.webContents.id,mediaSelectionContext);if(!selection)return false;const sent=sendToLiveWindow(controlWindow,'media:selected',selection);if(!sent)return false;controlWindow?.focus();mediaWindow.close();return true});
   ipcMain.handle('media-window:select',(_event,asset:unknown,purpose:string)=>{if(sendToLiveWindow(controlWindow,'media:selected',{asset,purpose,...mediaSelectionContext}))controlWindow?.focus();mediaWindow?.close();return true});
   ipcMain.handle('media-window:select-audio',(_event,assets:unknown[],targetType:string,targetId:string)=>{if(sendToLiveWindow(controlWindow,'media:selected',{assets,purpose:'audio',targetType,targetId}))controlWindow?.focus();mediaWindow?.close();return true});
   ipcMain.handle('history-window:open',()=>openHistoryWindow());
   ipcMain.handle('history-window:close',()=>{historyWindow?.close();return true});
-  ipcMain.handle('remote:get',()=>remoteServer.get());
-  ipcMain.handle('remote:save-monitor',(_event,monitor:any)=>remoteServer.saveMonitor(monitor));
-  ipcMain.handle('remote:remove-monitor',(_event,id:string)=>remoteServer.removeMonitor(id));
-  ipcMain.handle('remote:create-session',(_event,input:any)=>remoteServer.createSession(input));
-  ipcMain.handle('remote:revoke-session',(_event,id:string)=>remoteServer.revokeSession(id));
-  ipcMain.handle('remote:update-live',(_event,state:any)=>{remoteServer.updateLive(state);return true});
+  const requireRemoteControl=(event:Electron.IpcMainInvokeEvent)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)throw Error('Remote-Einstellungen sind nur in der Regie verfügbar.')};
+  ipcMain.handle('remote:get',(event)=>{requireRemoteControl(event);return remoteServer.get()});
+  ipcMain.handle('remote:save-monitor',(event,monitor:any)=>{requireRemoteControl(event);return remoteServer.saveMonitor(monitor)});
+  ipcMain.handle('remote:remove-monitor',(event,id:string)=>{requireRemoteControl(event);return remoteServer.removeMonitor(id)});
+  ipcMain.handle('remote:create-session',(event,input:any)=>{requireRemoteControl(event);return remoteServer.createSession(input)});
+  ipcMain.handle('remote:revoke-session',(event,id:string)=>{requireRemoteControl(event);return remoteServer.revokeSession(id)});
+  ipcMain.handle('remote:update-live',(event,state:any)=>{requireRemoteControl(event);remoteServer.updateLive(state);return true});
   ipcMain.handle('updates:current-version',()=>app.getVersion());
   ipcMain.handle('updates:status',()=>lastUpdateStatus);
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});
@@ -586,6 +594,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('outputs:screen-test-restore',(event,runId:string,previous:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;return outputManager.restoreScreenTest(runId,previous)});
   ipcMain.handle('outputs:send-banner',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id)return false;const banner=readBannerOutputState(payload);return banner!==undefined?outputManager.setBanner(banner):false});
   ipcMain.handle('outputs:send-weather-warnings',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;const state=payload===null?null:readWeatherWarningState(payload);return payload!==null&&!state?false:outputManager.setWeatherWarnings(state)});
+  ipcMain.handle('outputs:send-annotations',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;const state=readAnnotationState(payload);return state===undefined?false:outputManager.setAnnotations(state)});
   ipcMain.handle('outputs:set-app-mode',(_event,state:{mode:'normal'|'test';onAir:boolean})=>outputManager.setAppMode(state));
   ipcMain.handle('outputs:get-app-mode',()=>outputManager.getAppMode());
   ipcMain.handle('outputs:get-state',(event)=>outputManager.getStateForSender(event.sender.id));

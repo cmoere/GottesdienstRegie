@@ -91,6 +91,7 @@ interface Window {
     desktop?: {
         weatherWarnings?:{read:(location:import('../shared/externalLoop').WeatherLocation)=>Promise<import('../shared/weatherWarnings').WeatherWarningReply>};
         sendWeatherWarnings?:(state:import('../shared/weatherWarnings').WeatherWarningState|null)=>Promise<boolean>;
+        sendAnnotations?:(state:import('../shared/liveAnnotations').AnnotationState|null)=>Promise<boolean>;
         externalLoop?: {read: (request: import('../shared/externalLoop').ExternalRequest) => Promise<import('../shared/externalLoop').ExternalReply>;searchLocations?:(query:string)=>Promise<import('../shared/externalLoop').WeatherLocation[]>};
         regionalSettings?: import('../shared/regional/selection').RegionalSettingsBridge;
         announcements?: import('./announcements/settings').AnnouncementSettingsBridge;

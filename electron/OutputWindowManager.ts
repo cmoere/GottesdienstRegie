@@ -13,6 +13,13 @@ export class OutputWindowManager{
   private appMode:AppModeState={mode:'normal',onAir:false};
   private states=new Map<OutputRole,OutputStateSnapshot>();
   private revision=0;
+  private frames=new Map<OutputRole,{windowId:number;at:number;value:Promise<Buffer|null>}>();
+  async captureFrame(role:'main'|'stage'|'livestream'):Promise<Buffer|null>{
+    const entry=this.outputs.get(role);if(!entry||entry.window.isDestroyed())return null;
+    const old=this.frames.get(role),now=Date.now();if(old&&old.windowId===entry.window.id&&now-old.at<500)return old.value;
+    const value=entry.window.webContents.capturePage().then(image=>image.isEmpty()?null:image.resize({width:960}).toJPEG(75)).catch(()=>null);
+    this.frames.set(role,{windowId:entry.window.id,at:now,value});return value;
+  }
   getStateForSender(id:number){const entry=[...this.outputs.values()].find(entry=>!entry.window.isDestroyed()&&entry.window.webContents.id===id);return entry?structuredClone(this.states.get(entry.role)??null):null}
   acceptScreenTestResult(senderId:number,value:unknown){
     const main=this.outputs.get('main');if(!main||main.window.isDestroyed()||main.window.webContents.id!==senderId)return null;
@@ -27,11 +34,12 @@ export class OutputWindowManager{
   private update(role:OutputRole,patch:Partial<OutputStateSnapshot>){const old=this.states.get(role)??{revision:0,slide:null,quick:null,appMode:this.appMode},revision=++this.revision;const state={...old,...structuredClone(patch),revision,slideRevision:'slide' in patch?revision:old.slideRevision??0,quickRevision:'quick' in patch?revision:old.quickRevision??0};this.states.set(role,state);const entry=this.outputs.get(role);if(entry&&!entry.window.isDestroyed())entry.window.webContents.send('outputs:state',state)}
   setBanner(banner:BannerOutputState|null){this.update('main',{banner});return true}
   setWeatherWarnings(weatherWarnings:WeatherWarningState|null){this.update('main',{weatherWarnings});return true}
+  setAnnotations(annotations:import('../shared/liveAnnotations').AnnotationState|null){for(const role of outputRoles)this.update(role,{annotations});return true}
   getAppMode(){return {...this.appMode}}
   constructor(private readonly preload:string,private readonly load:(window:BrowserWindow,route:string)=>Promise<void>,private readonly status:(role:OutputRole,state:'ready'|'missing'|'closed')=>void){}
   async start(assignments:DisplayAssignments,payload:unknown){
     await this.stop();
-    for(const role of outputRoles)this.update(role,{slide:payload,quick:null,appMode:this.appMode});
+    for(const role of outputRoles)this.update(role,{slide:payload,quick:null,appMode:this.appMode,annotations:null});
     for(const role of outputRoles){const assigned=Object.entries(assignments).find(([,value])=>value===role);if(!assigned)continue;const display=screen.getAllDisplays().find(item=>item.id===Number(assigned[0]));if(!display){this.status(role,'missing');continue}const window=new BrowserWindow({x:display.bounds.x,y:display.bounds.y,width:display.bounds.width,height:display.bounds.height,frame:false,fullscreen:true,show:false,backgroundColor:'#000000',autoHideMenuBar:true,resizable:false,movable:false,skipTaskbar:true,webPreferences:{preload:this.preload,contextIsolation:true,nodeIntegration:false,backgroundThrottling:false}});window.setMenu(null);this.outputs.set(role,{displayId:display.id,role,window});window.on('closed',()=>{if(this.outputs.get(role)?.window===window){this.outputs.delete(role);this.status(role,'closed')}});await this.load(window,`#output?role=${role}`);window.webContents.send('outputs:app-mode',this.appMode);window.webContents.send('outputs:slide',payload);window.webContents.insertCSS('html,body,#root,.output{background:#000!important;cursor:none!important;overflow:hidden!important}');}
     for(const {window,role} of this.outputs.values())if(!window.isDestroyed()){window.showInactive();window.setFullScreen(true);this.status(role,'ready')}
     return true;

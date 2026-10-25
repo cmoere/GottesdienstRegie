@@ -1,0 +1,25 @@
+import {afterEach,expect,it,vi} from 'vitest';
+import {mkdtemp} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+import {RemoteServer} from './RemoteServer';
+let server:RemoteServer;afterEach(()=>server?.stop());
+it('allows paired annotation commands only on the current live take and revokes them',async()=>{
+ const command=vi.fn();server=new RemoteServer(path.join(await mkdtemp(path.join(tmpdir(),'regie-remote-')),'devices.json'),command,0);await server.start();
+ const base=`http://127.0.0.1:${(server as any).server.address().port}`;
+ const input={name:'Presenter',permissionRole:'view' as const,preferredLanguage:'de' as const,permissions:['remote.view','remote.annotate']};
+ const remote=await server.createSession(input),viewer=await server.createSession({...input,permissions:['remote.view']});
+ server.updateLive({onAir:true,annotationTakeId:'slide:1',notes:'private'} as any);
+ const stroke={id:'one',color:'#ff3b30',width:.004,points:[{x:0,y:0},{x:1,y:1}]};
+ const post=(token:string,extra:Record<string,unknown>={})=>fetch(base+'/api/command',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,action:'annotate',commandId:crypto.randomUUID(),timestamp:Date.now(),takeId:'slide:1',stroke,...extra})});
+ expect((await post(viewer.token)).status).toBe(403);
+ expect((await post('monitor:prediger')).status).toBe(403);
+ expect((await post(remote.token,{takeId:'old'})).status).toBe(409);
+ expect((await post(remote.token,{stroke:{...stroke,width:99}})).status).toBe(400);
+ expect((await post(remote.token)).status).toBe(202);
+ expect(command).toHaveBeenCalledWith(expect.objectContaining({action:'annotate',stroke,takeId:'slide:1'}));
+ const state=await(await fetch(base+'/api/state?token='+viewer.token)).json();expect(state.notes).toBeUndefined();expect(state.current?.notes).toBeUndefined();
+ await server.revokeSession(remote.id);
+ expect(command).toHaveBeenLastCalledWith(expect.objectContaining({action:'annotation-clear'}));
+ expect((await post(remote.token)).status).toBe(403);
+});

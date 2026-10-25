@@ -140,6 +140,12 @@ import {isExternalLoop} from './externalLoop/model';
 import {formatEventDate} from './dynamicEventSlide';
 import {useLiveOutputPreview} from './liveOutputPreview';
 import{WeatherWarningsController}from'./weatherWarnings/controller';
+import {LiveAnnotationsController} from './LiveAnnotations';
+import {remoteLiveMetadata} from './remoteLiveMetadata';
+import {getCommunityRuntimeSnapshot,subscribeCommunityRuntime} from './community/communityRuntime';
+import {AdvertisingController} from './advertising/controller';
+import {advertisingDurationMs,advertisingRuntime,advertisingSlide,isAdvertising} from './advertising/model';
+import {readAdSelection} from '../shared/advertising';
 import {useOutputDisplayProfile} from './useOutputDisplayProfile';
 import {useScheduledOutputSlide} from './outputPresentation';
 import {NowPlayingDesigner} from './NowPlayingDesigner';
@@ -153,6 +159,7 @@ import {AutomaticAnnouncements} from './announcements/AutomaticAnnouncements';
 import {useOutputAnnouncementActive} from './announcements/AnnouncementIndicator';
 import {ServiceOnAirReminder} from './ServiceOnAirReminder';
 import {AnnouncementBannerSettings} from './AnnouncementBannerSettings';
+import {WeatherWarningSettings} from './weatherWarnings/WeatherWarningSettings';
 import {AnnouncementSettings} from './announcements/AnnouncementSettings';
 import {HelpArticleView} from './help/HelpArticleView';
 import {helpScreenshot} from './help/helpAssets';
@@ -5937,6 +5944,7 @@ function SettingsModal({
                   <PresentationTransitionSettings />
                   <TimelineSettings />
                   <AnnouncementBannerSettings />
+                  <WeatherWarningSettings />
                   <AnnouncementSettings />
                   <section className="settings-group"><h3>SONSTIGES · EXTERN · GEMEINWOHL-HINWEISE</h3><p>Optionale, trackingfreie Hinweise offizieller Stellen für Vor- und Nachprogramm. Inhalte können nicht redaktionell verändert werden und sind standardmäßig deaktiviert.</p><label><input type="checkbox" checked={prefs.publicInterest.enabled} onChange={event=>prefs.setPublicInterest({enabled:event.target.checked})}/> Gemeinwohl-Hinweise aktivieren</label><label><input type="checkbox" checked={prefs.publicInterest.preLoop} onChange={event=>prefs.setPublicInterest({preLoop:event.target.checked})}/> Im Vorprogramm</label><label><input type="checkbox" checked={prefs.publicInterest.postLoop} onChange={event=>prefs.setPublicInterest({postLoop:event.target.checked})}/> Im Nachprogramm</label><label>Einblenddauer <input className="settings-number-input" type="number" min="8" max="30" value={prefs.publicInterest.durationSeconds} onChange={event=>prefs.setPublicInterest({durationSeconds:Number(event.target.value)})}/> Sekunden</label><label>Häufigkeit<select value={prefs.publicInterest.interval} onChange={event=>prefs.setPublicInterest({interval:Number(event.target.value) as 3|5|10})}><option value="3">Nach 3 Loop-Elementen</option><option value="5">Nach 5 Loop-Elementen</option><option value="10">Nach 10 Loop-Elementen</option></select></label><label><input type="checkbox" checked={prefs.publicInterest.showQr} onChange={event=>prefs.setPublicInterest({showQr:event.target.checked})}/> QR-Code zur offiziellen Quelle anzeigen</label></section>
                 </>
@@ -7423,7 +7431,7 @@ function AppShell({
   const [protectedSlideOpen,setProtectedSlideOpen]=useState(false);
   useEffect(()=>{const show=()=>setProtectedSlideOpen(true);window.addEventListener('gottesdienstregie:protected-slide',show);return()=>window.removeEventListener('gottesdienstregie:protected-slide',show)},[]);
   useEffect(()=>{const bridge=(window.desktop as unknown as {community?:{onAnnouncements:(listener:(rows:import('./community/AnnouncementService').RawAnnouncement[])=>void)=>()=>void}})?.community;return bridge?.onAnnouncements(rows=>announcementController.current.setRecords(rows))},[]);
-  const availableForOutput=(item:ServiceItem|undefined)=>isLoopCandidateAvailable(item)&&(!isAnnouncementLoop(item)||announcementController.current.hasEligible(item,AppClock.now()))&&(!item||!isExternalLoop(item)||externalController.current.hasEligible(item));
+  const availableForOutput=(item:ServiceItem|undefined)=>isLoopCandidateAvailable(item)&&(!item||advertisingRuntime.eligible(item,usePresentation.getState().liveItemId,AppClock.now().getTime()))&&(!isAnnouncementLoop(item)||announcementController.current.hasEligible(item,AppClock.now()))&&(!item||!isExternalLoop(item)||externalController.current.hasEligible(item));
   const communityEventService=useRef(new EventService());
   const postProgramNoticeController=useRef(new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(communityEventService.current)));
   useEffect(()=>{
@@ -7788,7 +7796,8 @@ function AppShell({
     () =>
       (window.desktop as any)?.mediaWindow?.onSelected(
         (payload: {
-          kind?: 'countdown-preset';
+          kind?: 'countdown-preset'|'advertising';
+          selection?: import('../shared/advertising').AdSelection;
           presetId?: string;
           asset?: CloudMediaAsset;
           assets?: CloudMediaAsset[];
@@ -7797,6 +7806,13 @@ function AppShell({
           targetId?: string;
           mediaKind?: string;
         }) => {
+          if(payload.kind==='advertising'){
+            try{const selection=readAdSelection(payload.selection),current=usePresentation.getState(),sectionId=selection.sectionId??'pre';
+             if(!current.sections.some(section=>section.id===sectionId)){alert('Der ausgewählte Vor-/Nachprogrammbereich wurde nicht gefunden.');return}
+             current.addItem('content',{title:'Externe Werbung',section:'',sectionId,body:'',metadata:{externalAdvertising:true,advertisingIntervalMinutes:selection.intervalMinutes,advertisingCreativesJson:JSON.stringify(selection.creatives),...(selection.source?{advertisingSourceJson:JSON.stringify(selection.source)}:{})}});
+             const latest=usePresentation.getState(),item=latest.items.find(item=>item.id===latest.selectedItemId);if(item)latest.updateItem(item.id,{slides:[advertisingSlide(item.slides[0],selection.creatives[0])],itemCategory:'loop',placementPolicy:'loopOnly',autoAdvance:true,repeat:true,plannedDuration:selection.creatives[0].durationSeconds*1000,timing:{...item.timing,autoAdvance:true,repeat:true,slideDurationSeconds:selection.creatives[0].durationSeconds}});
+            }catch{alert('Die Werbeauswahl konnte nicht übernommen werden. Bitte Quelle und Bereich erneut prüfen.')}return;
+          }
           if(payload.kind==='countdown-preset'){
             const current=usePresentation.getState(),sectionId=payload.targetType==='section'?payload.targetId:current.items.find(item=>item.id===payload.targetId)?.sectionId;
             insertCountdownPreset(payload.presetId??'',sectionId);return;
@@ -7983,9 +7999,9 @@ function AppShell({
           return;
         }
       }
-      const output=isPostProgramSystemItem(item)?postProgramNoticeController.current.outputForTake(base,state.liveTransitionRevision):base;
+      const output=item&&isAdvertising(item)?advertisingRuntime.take(item,base,state.liveTransitionRevision,AppClock.now().getTime()):isPostProgramSystemItem(item)?postProgramNoticeController.current.outputForTake(base,state.liveTransitionRevision):base;
       if(item?.sectionId!=='post')postProgramNoticeController.current.leavePostProgram();
-      void liveEngine.show(output);
+      if(output)void liveEngine.show(output);
     }
   }, [state.liveTransitionRevision,state.liveSlideId,state.liveItemId,state.onAir,state.items,state.transitionDefault,state.lyricScrolling,songTranslationMode]);
   useEffect(()=>{
@@ -8113,7 +8129,9 @@ function AppShell({
         const nextSlide=nextItem?.slides.find(entry=>entry.enabled);
         if (nextItem&&nextSlide) usePresentation.getState().goLive(nextItem.id, nextSlide.id);
         else usePresentation.getState().nextLive();
-      }, item&&isExternalLoop(item)&&slide
+      }, item&&isAdvertising(item)&&slide
+        ? advertisingDurationMs(item,advertisingRuntime.take(item,slide,state.liveTransitionRevision,AppClock.now().getTime()),sectionItems.length===1)
+        : item&&isExternalLoop(item)&&slide
         ? (externalController.current.outputForTake(item,slide,state.liveTransitionRevision,AppClock.now().getTime())?.timing?.durationSeconds??loopDurationMs(item)/1000)*1000
         : isAnnouncementLoop(item)&&slide
         ? (announcementController.current.outputForTake(item,slide,state.liveTransitionRevision,AppClock.now())?.timing?.durationSeconds??loopDurationMs(item)/1000)*1000
@@ -8335,26 +8353,17 @@ function AppShell({
     return dispose;
   }, []);
   useEffect(() => {
-    void (window.desktop as any)?.remote?.updateLive({
-      title: state.title,
-      onAir: state.onAir,
-      serviceTime: state.serviceTime,
-      current:
-        state.items
-          .flatMap((item) => item.slides)
-          .find((slide) => slide.id === state.liveSlideId) ?? null,
-      next:
-        state.items
-          .flatMap((item) => item.slides)
-          .find((slide) => slide.id === state.previewSlideId) ?? null,
-    });
+    const update=()=>void(window.desktop as any)?.remote?.updateLive({...remoteLiveMetadata(state,getCommunityRuntimeSnapshot().events),quickActive:Boolean(previewQuick)});
+    update();return subscribeCommunityRuntime(update);
   }, [
     state.title,
     state.onAir,
     state.serviceTime,
     state.liveSlideId,
+    state.liveTakenAtMs,
     state.previewSlideId,
     state.items,
+    previewQuick,
   ]);
   useEffect(() => {
     if (
@@ -9266,7 +9275,7 @@ function AppShell({
           }
           const nextMode:AppModeState={mode:sessionMode==='test'?'test':'normal',onAir:true};
           await (window.desktop as any)?.setOutputAppMode?.(nextMode);
-          const preparedStart=item&&isExternalLoop(item)?externalController.current.outputForTake(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now().getTime()):isAnnouncementLoop(item)?announcementController.current.outputForTake(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now()):startSlide;
+          const preparedStart=item&&isAdvertising(item)?advertisingRuntime.take(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now().getTime()):item&&isExternalLoop(item)?externalController.current.outputForTake(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now().getTime()):isAnnouncementLoop(item)?announcementController.current.outputForTake(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now()):startSlide;
           if(!preparedStart)throw new Error('Zurzeit sind keine freigegebenen dynamischen Inhalte verfügbar.');
           const started = await liveEngine.start(assignments, {
             ...preparedStart, transitionOverride: resolveTransition(startSlide, item, 'main', current.transitionDefault),
@@ -9340,6 +9349,7 @@ function AppShell({
       <AnnouncementBannerController quick={previewQuick}/>
       <AutomaticAnnouncements quick={previewQuick}/>
       <WeatherWarningsController quick={previewQuick}/>
+      <LiveAnnotationsController quickActive={Boolean(previewQuick)}/><AdvertisingController/>
       {screenTest.dialog}
       <ServiceOnAirReminder/>
       <div className="menubar">
@@ -9712,6 +9722,7 @@ function Output() {
   const reportScreenTest=useCallback((receipt:ScreenTestReceipt)=>{void(window.desktop as any)?.screenTest?.report(receipt).catch(()=>{})},[]);
   const previousStateRef=useRef<OutputStateSnapshot|null>(null);
   const [outputBanner,setOutputBanner]=useState<BannerOutputState|null>(null);
+  const [outputAnnotations,setOutputAnnotations]=useState<import('../shared/liveAnnotations').AnnotationState|null>(null);
   const [outputWeatherWarnings,setOutputWeatherWarnings]=useState<import('../shared/weatherWarnings').WeatherWarningState|null>(null);
   const stateRevisionRef=useRef(-1);
   const outputRevisionRef=useRef(0);
@@ -9733,6 +9744,7 @@ function Output() {
         if(disposed||!state||!Number.isFinite(state.revision)||state.revision<=stateRevisionRef.current)return;
         stateRevisionRef.current=state.revision;
         const changed=changedOutputLayers(previousStateRef.current,state);previousStateRef.current=state;
+        setOutputAnnotations(current=>current?.revision===state.annotations?.revision&&current?.takeId===state.annotations?.takeId?current:state.annotations??null);
         if(changed.slide)setSlide(state.slide as Slide|null);
         if(changed.quick)setQuick(state.quick as QuickScreenConfig|null);
         if(changed.banner)setOutputBanner(state.banner??null);
@@ -9764,7 +9776,7 @@ function Output() {
     <div
       className={`output ${quick?.type === "noText" ? "quick-no-text" : ""}`}
     >
-      <OutputComposition announcementActive={announcementActive} weatherWarnings={role==='main'&&(!quick||quick.type==='countdown')?outputWeatherWarnings:null} hideCountdown={Boolean(quick)} serviceCountdownAtMs={role==='main'?(slide as import('./liveOutputPreview').LiveOutputSlide|null)?._serviceCountdownAtMs:undefined} banner={role==='main'&&quick?.type!=='screenTest'?outputBanner:null} testOverlay={<TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/> }>
+      <OutputComposition annotations={quick?null:outputAnnotations} announcementActive={announcementActive} weatherWarnings={role==='main'&&(!quick||quick.type==='countdown')?outputWeatherWarnings:null} hideCountdown={Boolean(quick)} serviceCountdownAtMs={role==='main'?(slide as import('./liveOutputPreview').LiveOutputSlide|null)?._serviceCountdownAtMs:undefined} banner={role==='main'&&quick?.type!=='screenTest'?outputBanner:null} testOverlay={<TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/> }>
       {slide && role==='stage' && songOutput ? <div className="stage-song-shell"><header className="stage-song-header"><span>STAGE</span><strong>{slide.title}</strong></header><section className="stage-song-current"><small>JETZT</small>{songOutput.showChords && songOutput.stageRows?.length ? <div className="stage-song-rows">{songOutput.stageRows.map((row,index)=><div className="stage-song-row" key={`${index}-${row.lyrics}`}><span className="stage-song-chords">{row.chords}</span><span>{row.lyrics}</span></div>)}</div> : <div className="stage-song-lyrics">{slide.body}</div>}</section>{songOutput.currentNext && <section className="stage-song-next"><small>ALS NÄCHSTES</small><div>{songOutput.next || '—'}</div></section>}</div> : renderedSlide && (
         lyricScroll && role==='main' ? <LyricScrollRenderer packet={lyricScroll} live/> : <TransitionStage
           slide={renderedSlide}

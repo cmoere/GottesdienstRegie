@@ -10,7 +10,7 @@ export function readBundledSpeechWav(input:Buffer):Uint8Array {
   for(let offset=12;offset+8<=input.length;){
     const kind=input.toString('ascii',offset,offset+4),size=input.readUInt32LE(offset+4),start=offset+8,end=start+size;
     if(end>input.length)throw Error('Unvollständige Sprachausgabe.');
-    if(kind==='fmt '){if(size<16||input.readUInt16LE(start)!==1||input.readUInt16LE(start+2)!==1||input.readUInt32LE(start+4)!==16000||input.readUInt16LE(start+14)!==16)throw Error('Nicht unterstütztes Sprachformat.');format=true}
+    if(kind==='fmt '){if(size<16||input.readUInt16LE(start)!==1||input.readUInt16LE(start+2)!==1||![16000,22050].includes(input.readUInt32LE(start+4))||input.readUInt16LE(start+14)!==16)throw Error('Nicht unterstütztes Sprachformat.');format=true}
     if(kind==='data'){if(!size||size%2)throw Error('Ungültige Sprachdaten.');for(let i=start;i<end;i+=2)if(input.readInt16LE(i)!==0){signal=true;break}}
     offset=end+(size%2);
   }
@@ -26,7 +26,8 @@ export async function normalizeAnnouncementSpeech(input:Buffer,signal?:AbortSign
     if(data.toString('ascii',offset,offset+4)==='data'){ranges.push([start,end]);for(let block=start;block<end;block+=65536){const finish=Math.min(end,block+65536);for(let i=block;i<finish;i+=2)peak=Math.max(peak,Math.abs(data.readInt16LE(i)));if(finish<end){await yieldToMain();check()}}}
     offset=end+(size%2);
   }
-  const ceiling=10**(-1/20)*32768,gain=Math.min(10**(18/20),ceiling/peak*1.8),blockBytes=320;
+  let sampleRate=16000;for(let offset=12;offset+8<=data.length;){const size=data.readUInt32LE(offset+4);if(data.toString('ascii',offset,offset+4)==='fmt ')sampleRate=data.readUInt32LE(offset+12);offset+=8+size+(size%2)}
+  const ceiling=10**(-1/20)*32768,gain=Math.min(10**(18/20),ceiling/peak*1.8),blockBytes=Math.round(sampleRate*.01)*2;
   // 10ms blocks, 20ms lookahead and a 60ms release raise quiet syllables while
   // keeping a continuous gain envelope. Duration, pitch, route and gong stay unchanged.
   for(const[start,end]of ranges){
@@ -49,6 +50,7 @@ export function runBundledSpeech(file:string,args:string[],text:string,signal:Ab
     const env={...process.env};
     // Do not inherit global Java injection settings from another installation.
     delete env.JAVA_TOOL_OPTIONS;delete env._JAVA_OPTIONS;delete env.JDK_JAVA_OPTIONS;delete env.CLASSPATH;
+    delete env.PYTHONHOME;delete env.PYTHONPATH;delete env.PYTHONSTARTUP;delete env.ESPEAK_DATA_PATH;
     const child=spawn(file,args,{windowsHide:true,shell:false,stdio:['pipe','pipe','ignore'],signal,env});
     const chunks:Buffer[]=[];let size=0,failed=false;
     const timer=setTimeout(()=>{failed=true;child.kill();reject(Error('Spracherzeugung hat zu lange gedauert.'))},90_000);

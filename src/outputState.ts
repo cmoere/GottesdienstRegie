@@ -3,7 +3,7 @@ import type {PublicBannerAnnouncement} from './community/AnnouncementService';
 import type {BannerPosition} from './announcementBannerModel';
 import type{WeatherWarningState}from'../shared/weatherWarnings';
 export type BannerOutputState={revision:number;position:BannerPosition;items:PublicBannerAnnouncement[];cycleStartedAtMs:number;reserved:boolean;textWidth?:number;reducedMotion?:boolean};
-export type OutputStateSnapshot={revision:number;slide:unknown|null;quick:unknown|null;appMode:AppModeState;slideRevision?:number;quickRevision?:number;banner?:BannerOutputState|null;weatherWarnings?:WeatherWarningState|null};
+export type OutputStateSnapshot={revision:number;slide:unknown|null;quick:unknown|null;appMode:AppModeState;slideRevision?:number;quickRevision?:number;banner?:BannerOutputState|null;weatherWarnings?:WeatherWarningState|null;annotations?:import('../shared/liveAnnotations').AnnotationState|null};
 export function shouldApplyOutputState(currentRevision:number,incomingRevision:number){return Number.isFinite(incomingRevision)&&incomingRevision>currentRevision}
 export function changedOutputLayers(previous:OutputStateSnapshot|null,next:OutputStateSnapshot){
   const none={slide:false,quick:false,banner:false,appMode:false,weatherWarnings:false};

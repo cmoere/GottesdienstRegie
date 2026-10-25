@@ -49,11 +49,11 @@
 .football-logo-pair{display:flex;gap:.52083cqw;flex:none}
 .native-weather header h2{font-size:3.125cqw}
 .native-weather .weather-current{display:flex;align-items:center;gap:3.125cqw;padding:1.5625cqw 3.125cqw;color:#608f9a;flex:none}
-.weather-current>svg{width:12.5cqw;height:9.375cqw}
-.weather-current strong{display:block;font-size:5.20833cqw;font-weight:500;line-height:1.15;color:#000}
-.weather-current p{font-size:1.66667cqw}
-.weather-current .weather-wind{margin-left:auto;font-size:1.45833cqw}
-.weather-current .weather-wind strong{font-size:2.5cqw}
+.weather-current>svg{width:14.5cqw;height:10.875cqw;flex:none}
+.weather-current strong{display:block;font-size:6.1cqw;font-weight:500;line-height:1.15;color:#000}
+.weather-current p{font-size:1.9cqw}
+.weather-current .weather-wind{margin-left:auto;font-size:1.6cqw}
+.weather-current .weather-wind strong{font-size:2.8cqw;white-space:nowrap}
 .weather-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.08333cqw;flex:1;min-height:0}
 .weather-days article{border-top:.20833cqw solid #699f3e;background:#f3f5f4;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.04167cqw;gap:.52083cqw}
 .weather-days h3{font-size:1.66667cqw;font-weight:500;margin:0}
@@ -63,11 +63,11 @@
 .weather-days small{font-size:1.14583cqw;margin-top:.52083cqw}
 .native-weather header h2{overflow-wrap:anywhere;font-size:2.6cqw;max-width:67cqw}
 .weather-forecast{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,1fr);gap:2cqw;flex:1;min-height:0}
-.weather-forecast h3{font-size:1.55cqw;font-weight:500;margin:.5cqw 0 1cqw;color:#608f9a}
+.weather-forecast h3{font-size:1.65cqw;font-weight:500;margin:.5cqw 0 1cqw;color:#608f9a}
 .weather-hours{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.6cqw}
 .weather-forecast article{border-top:.16cqw solid #699f3e;padding:.8cqw .35cqw;display:flex;align-items:center;flex-direction:column;gap:.8cqw;min-width:0}
 .weather-forecast h4{font-size:1.4cqw;font-weight:500;margin:0}.weather-hours svg{width:6.5cqw;height:5.4cqw;color:#608f9a}
-.weather-forecast strong{font-size:1.9cqw;font-weight:500;white-space:nowrap}.weather-forecast small{font-size:1cqw;line-height:1.3;text-align:center}
+.weather-forecast strong{font-size:2.05cqw;font-weight:500;white-space:nowrap}.weather-forecast small{font-size:1.08cqw;line-height:1.3;text-align:center}
 .weather-tomorrow{border-left:.1cqw solid #b6bec3;padding-left:1.5cqw}.weather-tomorrow svg{width:7cqw;height:6cqw;color:#608f9a}.weather-tomorrow p{font-size:1.2cqw;line-height:1.3}
 .native-weather[data-weather-condition=sun],.native-weather[data-weather-condition=partly-cloudy]{background:linear-gradient(135deg,#f4f7ed,#fff 65%)}
 .native-weather[data-weather-condition=snow],.native-weather[data-weather-condition=fog]{background:linear-gradient(135deg,#eef2f3,#fff 70%)}
@@ -76,9 +76,14 @@
 .weather-current .weather-snow{animation:weather-snow-drift 5s ease-in-out infinite}
 .weather-current .weather-rain{animation:weather-rain-fall 2.5s ease-in-out infinite}
 .weather-current .weather-wind-lines{animation:weather-wind-flow 3s ease-in-out infinite}
+.weather-current .weather-cloud{animation:weather-cloud-drift 9s ease-in-out infinite}
+.weather-current .weather-fog{animation:weather-cloud-drift 12s ease-in-out infinite}
+.weather-current .weather-lightning{animation:weather-storm-glow 6s ease-in-out infinite}
 .native-weather[data-reduced-motion=true] .weather-icon g{animation:none!important}
 @keyframes weather-sun-turn{to{transform:rotate(360deg)}}
 @keyframes weather-snow-drift{0%,100%{transform:translate(-2px,-2px)}50%{transform:translate(2px,2px)}}
 @keyframes weather-rain-fall{0%,100%{transform:translateY(-1px);opacity:.7}50%{transform:translateY(3px);opacity:1}}
 @keyframes weather-wind-flow{0%,100%{transform:translateX(-2px);opacity:.65}50%{transform:translateX(3px);opacity:1}}
+@keyframes weather-cloud-drift{0%,100%{transform:translateX(-2px)}50%{transform:translateX(3px)}}
+@keyframes weather-storm-glow{0%,100%{opacity:.7}50%{opacity:1}}
 @media(prefers-reduced-motion:reduce){.native-weather .weather-icon g{animation:none!important}}

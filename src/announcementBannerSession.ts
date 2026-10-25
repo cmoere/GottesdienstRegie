@@ -27,7 +27,7 @@ export class BannerSession{
   update(input:{items:PublicBannerAnnouncement[];position:BannerPosition;allowed:boolean;enabled:boolean;takeKey:string;nowMs:number;textWidths:number[];separatorWidth?:number;reducedMotion:boolean}):BannerOutputState|null{
     if(!input.enabled||!input.allowed){this.active=null;this.lastTake='';this.lastCycleIndex=0;return null}
     const safeTake=this.lastTake!==input.takeKey;this.lastTake=input.takeKey;
-    if(!this.active&&!safeTake)return null;
+    if(!this.active&&!input.items.length)return null;
     const textWidth=input.items.reduce((sum,item,index)=>sum+(input.textWidths[index]??item.text.length*24)+(input.separatorWidth??32),0);
     if(this.active?.items.length){
       if(safeTake&&this.active.position!==input.position)this.active={...this.active,position:input.position,revision:++this.revision};

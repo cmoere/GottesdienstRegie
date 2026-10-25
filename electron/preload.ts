@@ -59,6 +59,8 @@ contextBridge.exposeInMainWorld("desktop", {
   sendAnnouncementBanner:(banner:import('../src/outputState').BannerOutputState|null)=>ipcRenderer.invoke('outputs:send-banner',banner),
   weatherWarnings:{read:(location:import('../shared/externalLoop').WeatherLocation)=>ipcRenderer.invoke('weather-warnings:read',location)},
   sendWeatherWarnings:(state:import('../shared/weatherWarnings').WeatherWarningState|null)=>ipcRenderer.invoke('outputs:send-weather-warnings',state),
+  advertising:{read:(source:import('../shared/advertising').AdSource)=>ipcRenderer.invoke('advertising:read',source)},
+  sendAnnotations:(state:import('../shared/liveAnnotations').AnnotationState|null)=>ipcRenderer.invoke('outputs:send-annotations',state),
   onOutputState:(callback:(payload:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('outputs:state',listener);return()=>ipcRenderer.removeListener('outputs:state',listener)},
   onLiveSlide: (callback: (payload: unknown) => void) => {
     const listener = (_event: Electron.IpcRendererEvent, payload: unknown) =>
@@ -195,6 +197,7 @@ contextBridge.exposeInMainWorld("desktop", {
         mediaKind,
       ),
     close: () => ipcRenderer.invoke("media-window:close"),
+    selectAdvertising:(selection:import('../shared/advertising').AdSelection)=>ipcRenderer.invoke('media-window:select-advertising',selection),
     selectCountdown: (presetId:string) => ipcRenderer.invoke('media-window:select-countdown',presetId),
     select: (asset: unknown, purpose: string) =>
       ipcRenderer.invoke("media-window:select", asset, purpose),

@@ -1,3 +1,67 @@
+# GottesdienstRegie 0.91.0
+
+Veröffentlicht: So., 25.10.2026
+
+Dieses Update verbindet neue offline verfügbare Ansagenstimmen mit dem Import originaler Keynote- und OneNote-Dateien. Persönliche Monitore erhalten QR-Codes, echte Ausgabebilder und separat freigebbare Live-Markierungen. Meldungslaufband und Wetterwarnungen werden früher vorbereitet.
+
+## Neu
+
+### Lokale KI-Stimmen für Ansagen
+
+Thorsten und Kerstin ersetzen die bisherigen Ansagenstimmen. Beide Stimmen und eine private Laufzeit sind im Update enthalten; eine Systemstimme, ein Konto oder eine zusätzliche Installation sind nicht erforderlich. Kurze Satzpausen und ein ruhiges Sprechtempo verbessern die Verständlichkeit. Die gemeinsame Auswahl gilt weiterhin für alle Präsentationen und Benutzer am Regie-PC. Gong, Ausgangszuordnung, Musikabsenkung und begrenzte Sprachspitzen bleiben erhalten.
+
+### Originale OneNote- und Keynote-Dateien importieren
+
+Der lokale Import verarbeitet .one-Abschnitte, .onepkg-Notizbücher und Keynote-Dateien mit IWA-Folienobjekten. Die Folien- beziehungsweise Seitenreihenfolge wird aus der Datei gelesen. Notiztexte und unterstützte eingebettete Bilder werden übernommen; lange Notizen erhalten Fortsetzungsfolien. Ein Importbericht nennt Seitenzahl und Einschränkungen. Es werden keine Dateianlagen ausgeführt und keine Dokumente an einen Konvertierungsdienst hochgeladen.
+
+### Personal Monitor mit QR-Code und Live-Markierungen
+
+Monitor- und Steuerungslinks lassen sich zusätzlich als QR-Code anzeigen. Der Monitor kann das tatsächlich gerenderte Bild des gewählten Outputs einschließlich Quick Screens und Testkennzeichnung anzeigen. Notizen bleiben an ihre Freigabe gebunden. Live-Markierungen benötigen eine eigene widerrufbare Geräteberechtigung und erscheinen auf allen Ausgaben. Bei einem neuen Take werden sie gelöscht; Notfallanzeigen behalten Vorrang. Reine Monitor-Links können keine Zeichnungen senden.
+
+### Externe Werbemedien im Medienbrowser
+
+Die neue Ansicht übernimmt freigegebene Bild- und Videodateien, direkte HTTPS-Medienadressen oder VAST-Kampagnen eines Anbieters. Online-Medien werden lokal vorbereitet. Wechselnde Kampagnen werden regelmäßig erneut gelesen; ein laufendes Werbebild bleibt bis zum sicheren Wechsel stabil. Bereich und Mindestabstand der Einblendungen sind wählbar. Werbung bleibt auf Vor- und Nachprogramm beschränkt. Ein Anbieter-Link oder eigenes freigegebenes Material ist erforderlich; Klick-, Script- und Trackingelemente werden nicht ausgeführt.
+
+## Verbessert
+
+### Größeres aktuelles Wetter
+
+Temperatur, aktuelles Wettersymbol, Beschreibung und Wind werden größer dargestellt. Die Vorschau wird ebenfalls leicht vergrößert. Wolken, Nebel und Gewitter erhalten ruhige, passende Bewegungen; reduzierte Bewegung wird weiterhin berücksichtigt.
+
+### Wetterwarnungen bewusst schalten
+
+Unter Einstellungen → Präsentation lassen sich amtliche DWD-Warnungen ein- oder ausschalten. Vor dem Deaktivieren erscheint ein Hinweis mit Bestätigung. Die Ausgabe bleibt auf Vorprogramm, Nachprogramm und Countdown begrenzt.
+
+## Behoben
+
+### Erste Laufbandmeldung ohne weiteren Folienwechsel
+
+Treffen Meldungsdaten erst nach der ersten Live-Folie ein, beginnt das Laufband jetzt unmittelbar mit dem ersten gültigen Stand. Sichtbare Texte werden bei späteren Änderungen weiterhin am Ende ihres laufenden Zyklus aktualisiert. Quick-Screen-Priorität und unterbrechungsfreie Abschnittswechsel bleiben erhalten.
+
+### Wetterwarnungen bereits vor ON AIR vorbereiten
+
+DWD-Daten werden bei aktivierten Warnungen bereits während der Vorbereitung geladen. Ein gültiger Stand steht damit beim ersten passenden Output zur Verfügung. Spät eintreffende Antworten werden unmittelbar berücksichtigt; Antworten für einen inzwischen gewechselten Wetterort werden verworfen. Eine kalte oder nicht erreichbare Netzwerkverbindung kann weiterhin Ladezeit benötigen.
+
+## Hinweise
+
+### Regionalvarianten
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.
+
+### Importtreue und unterstützte Formate
+
+Keynote- und OneNote-Inhaltsimport ersetzt keine vollständige Originalwiedergabe. Komplexe Layouts, Schriftformatierungen, Animationen, Freihandzeichnungen und Dateianlagen können abweichen oder fehlen; der Importbericht nennt Einschränkungen. Unterstützte Bilder können zusätzliche Bildfolien erzeugen. Den Import vor ON AIR prüfen.
+
+### Monitorübertragung und Werbeanbieter
+
+Persönliche Monitore übertragen das echte Output-Bild mit begrenzter Bildrate über das lokale Netzwerk; sie sind kein latenzfreier Videoausgang. VAST unterstützt vorbereitbare Bild-/Videomedien und begrenzte Wrapperketten. Ohne eine freigegebene Quelle werden keine Werbekampagnen erzeugt.
+
+### PowerPoint-Originalmodus
+
+Der ungeprüfte PowerPoint-Originalmodus bleibt deaktiviert. Der vorhandene Inhaltsimport bleibt verfügbar.
+
+---
+
 # GottesdienstRegie 0.90.0
 
 Veröffentlicht: So., 25.10.2026

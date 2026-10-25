@@ -59,6 +59,8 @@ export interface PreferencesState {
   videoInputSources:VideoInputSource[];
   quickScreens:QuickScreenConfig[];
   showServiceCountdown:boolean;
+  weatherWarningsEnabled:boolean;
+  setWeatherWarningsEnabled:(value:boolean)=>void;
   setShowServiceCountdown:(value:boolean)=>void;
   keyboardShortcuts:KeyboardShortcuts;
   defaultFont:string;
@@ -182,6 +184,8 @@ export const usePreferences=create<PreferencesState>()(persist(set=>({
   videoInputSources:[],
   quickScreens:defaultQuickScreens,
   showServiceCountdown:false,
+  weatherWarningsEnabled:true,
+  setWeatherWarningsEnabled:weatherWarningsEnabled=>set({weatherWarningsEnabled}),
   setShowServiceCountdown:showServiceCountdown=>set({showServiceCountdown}),
   keyboardShortcuts:defaultKeyboardShortcuts,
   defaultFont:'Cera Pro',

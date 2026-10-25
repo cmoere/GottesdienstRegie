@@ -4,6 +4,8 @@ import { randomUUID } from 'node:crypto';
 import JSZip from 'jszip';
 import {sanitizeRecoveryDocument} from '../src/presentationRecovery';
 import {atomicRename} from './atomicRename';
+import {DocumentImportService,type ImportedPage} from './DocumentImportService';
+import {importKeynotePath} from './KeynoteImport';
 
 export interface PresentationSummary {
   id:string; title:string; date:string; createdAt:string; updatedAt:string;
@@ -23,9 +25,9 @@ const now=()=>new Date().toISOString();
 const decodeXml=(value:string)=>value.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&');
 const plainXml=(value:string)=>decodeXml(value.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim());
 type ImportedTransition={type:'cut'|'fade'|'crossfade'|'dissolve'|'slide'|'wipe';durationMs:number;direction:'left'|'right'|'up'|'down';easing:'standard';reverseOnPrevious:boolean};
-function importedPresentation(title:string,pages:Array<{title?:string;body?:string;image?:string;transition?:ImportedTransition}>,sourceFormat:string){
+function importedPresentation(title:string,pages:Array<ImportedPage&{transition?:ImportedTransition}>,sourceFormat:string){
   const stamp=now(),itemId=randomUUID(),textElement=(text:string)=>({id:randomUUID(),type:'text',name:'Text',x:180,y:220,width:1560,height:640,rotation:0,opacity:1,locked:false,visible:true,zIndex:1,properties:{text,fontFamily:'Cera Pro',fontSize:58,fontWeight:600,color:'#ffffff',align:'center',verticalAlign:'center',lineHeight:1.18,padding:24}}),imageElement=(src:string)=>({id:randomUUID(),type:'image',name:'Importierte Vorschau',x:0,y:0,width:1920,height:1080,rotation:0,opacity:1,locked:false,visible:true,zIndex:1,properties:{src,fit:'contain'}});
-  const slides=(pages.length?pages:[{title:'Importierte Präsentation',body:'Keine lesbaren Folieninhalte gefunden.'}]).map((page,index)=>{const id=randomUUID(),body=page.body?.trim()||page.title?.trim()||`Folie ${index+1}`;return{id,itemId,order:index,enabled:true,title:page.title?.trim()||`Folie ${index+1}`,body,background:'#263640',elements:page.image?[imageElement(page.image)]:[textElement(body)],transition:'fade',transitionDuration:350,transitionOverride:page.transition??null,notes:'',timing:{}}});
+  const slides=(pages.length?pages:[{title:'Importierte Präsentation',body:'Keine lesbaren Folieninhalte gefunden.'}]).map((page,index)=>{const id=randomUUID(),body=page.body?.trim()||page.title?.trim()||`Folie ${index+1}`;return{id,itemId,order:index,enabled:page.hidden!==true,title:page.title?.trim()||`Folie ${index+1}`,body,background:'#263640',elements:page.image?[imageElement(page.image)]:[textElement(body)],transition:'fade',transitionDuration:350,transitionOverride:page.transition??null,notes:'',timing:{}}});
   return{title,date:stamp.slice(0,10),serviceTime:'10:30',sections:[{id:'pre',title:'VORPROGRAMM',order:0},{id:'warmup',title:'WARM-UP',order:1},{id:'service',title:'GOTTESDIENST',order:2},{id:'post',title:'NACHPROGRAMM',order:3}],items:[{id:itemId,type:'content',title,section:'GOTTESDIENST',sectionId:'service',order:0,enabled:true,plannedDuration:0,metadata:{importSource:sourceFormat},slides,autoAdvance:false,repeat:false,timing:{mode:'manual',slideDurationSeconds:7,autoAdvance:false,repeat:false,shuffle:false,mediaDurationSeconds:0,totalDurationSeconds:0},notes:'',stageDirection:'',createdAt:stamp,updatedAt:stamp}]};
 }
 async function officePages(sourcePath:string,extension:string){
@@ -50,7 +52,7 @@ export class PresentationRepository {
   private recoveryWrites:Promise<unknown>=Promise.resolve();
   private stateWrites:Promise<unknown>=Promise.resolve();
   private sessionStart?:Promise<{summary:PresentationSummary;document:Record<string,any>}|null>;
-  constructor(private readonly root:string){
+  constructor(private readonly root:string,private readonly documentImporter?:DocumentImportService){
     this.presentations=path.join(root,'presentations');
     this.backups=path.join(root,'backups');
     this.recovery=path.join(root,'recovery');
@@ -106,7 +108,25 @@ export class PresentationRepository {
   }
   async rename(id:string,title:string){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');doc.title=String(title).trim().slice(0,500)||doc.title;await this.save(doc);return this.summary(doc)}
   async setFlag(id:string,flag:'archived'|'trashed',value:boolean){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');doc[flag]=value;await this.save(doc);return this.summary(doc)}
-  async importDocument(sourcePath:string){const extension=path.extname(sourcePath).toLowerCase(),title=path.basename(sourcePath,extension);if(['.pptx','.odp','.key'].includes(extension)){const pages=await officePages(sourcePath,extension);if(!pages.length)throw new Error(extension==='.key'?'KEYNOTE_PREVIEW_NOT_FOUND':'PRESENTATION_CONTENT_NOT_FOUND');return this.create({title,template:importedPresentation(title,pages,extension.slice(1))})}if(extension==='.txt'||extension==='.md'){const text=await fs.readFile(sourcePath,'utf8'),pages=text.split(/\r?\n\s*\r?\n+/).map((body,index)=>({title:body.split(/\r?\n/)[0]?.replace(/^#+\s*/,'')||`Folie ${index+1}`,body:body.replace(/^#+\s*/,'').trim()})).filter(page=>page.body);return this.create({title,template:importedPresentation(title,pages,extension.slice(1))})}const parsed=JSON.parse(await fs.readFile(sourcePath,'utf8'));const id=randomUUID();return this.create({title:parsed.title||title,date:parsed.date,template:{...parsed,presentationId:id,createdAt:undefined,updatedAt:undefined}})}
+  async importDocument(sourcePath:string){const extension=path.extname(sourcePath).toLowerCase(),title=path.basename(sourcePath,extension);if(extension==='.key'){
+ const result=await importKeynotePath(sourcePath),pages:ImportedPage[]=[];
+ for(const page of result.pages){if(page.image){pages.push(page);continue}pages.push({title:page.title,body:page.body,hidden:page.hidden});for(const image of page.images??[])pages.push({title:page.title,body:image.alt??'',image:image.src,hidden:page.hidden})}
+ const warnings=[...result.warnings,...(pages.length>result.pages.length?['Eingebettete Bilder wurden als zusätzliche Bildfolien übernommen.']:[])];
+ return this.create({title,template:{...importedPresentation(title,pages,'key'),importReport:{sourceFormat:'key',sourcePages:result.pages.length,generatedSlides:pages.length,warnings}}});
+ }if(['.one','.onepkg'].includes(extension)){
+ if(!this.documentImporter)throw Error('Der lokale OneNote-Importer ist nicht verfügbar.');
+ const result=await this.documentImporter.importOneNote(sourcePath),pages:ImportedPage[]=[];
+ for(const original of result.pages){
+  const paragraphs=(original.body??'').split(/\r?\n/),chunks:string[]=[];let chunk='';
+  for(const paragraph of paragraphs){for(const word of paragraph.split(/\s+/)){if(chunk.length+word.length>950&&chunk){chunks.push(chunk);chunk=''}chunk+=(chunk?' ':'')+word}chunk+='\n'}if(chunk.trim())chunks.push(chunk.trim());
+  chunks.forEach((body,index)=>pages.push({title:(original.title??'Notizseite')+(index?' · Fortsetzung '+(index+1):''),body}));
+  for(const image of original.images??[])pages.push({title:original.title??'Notizbild',body:image.alt??'',image:image.src});
+  if(!chunks.length&&!original.images?.length)pages.push({title:original.title,body:original.title});
+ }
+ const template=importedPresentation(title,pages,extension.slice(1));
+ for(const slide of template.items[0].slides)for(const element of slide.elements)if(element.type==='text')Object.assign(element,{x:120,y:110,width:1680,height:860,properties:{...element.properties,fontSize:42,fontWeight:400,align:'left',verticalAlign:'top',lineHeight:1.2}});
+ return this.create({title,template:{...template,importReport:{sourceFormat:extension.slice(1),sourcePages:result.pages.length,generatedSlides:pages.length,warnings:result.warnings}}});
+ }if(['.pptx','.odp','.key'].includes(extension)){const pages=await officePages(sourcePath,extension);if(!pages.length)throw new Error(extension==='.key'?'KEYNOTE_PREVIEW_NOT_FOUND':'PRESENTATION_CONTENT_NOT_FOUND');return this.create({title,template:importedPresentation(title,pages,extension.slice(1))})}if(extension==='.txt'||extension==='.md'){const text=await fs.readFile(sourcePath,'utf8'),pages=text.split(/\r?\n\s*\r?\n+/).map((body,index)=>({title:body.split(/\r?\n/)[0]?.replace(/^#+\s*/,'')||`Folie ${index+1}`,body:body.replace(/^#+\s*/,'').trim()})).filter(page=>page.body);return this.create({title,template:importedPresentation(title,pages,extension.slice(1))})}const parsed=JSON.parse(await fs.readFile(sourcePath,'utf8'));const id=randomUUID();return this.create({title:parsed.title||title,date:parsed.date,template:{...parsed,presentationId:id,createdAt:undefined,updatedAt:undefined}})}
   async exportDocument(id:string,targetPath:string){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');await this.atomicWrite(targetPath,doc);return targetPath}
   async backup(id:string){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');const stamp=now().replace(/[:.]/g,'-'),target=path.join(this.backups,`${safeName(doc.title).slice(0,40)||'presentation'}-${stamp}.grbackup`);await this.atomicWrite(target,doc);return target}
   private async readRecovery(file:string,id:string){try{const document=sanitizeRecoveryDocument(JSON.parse(await fs.readFile(file,'utf8')));return document&&document.presentationId===id?document:null}catch{return null}}

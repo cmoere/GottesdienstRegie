@@ -1,12 +1,14 @@
 import {useEffect,useState,type ReactNode} from 'react';
 import type {BannerOutputState} from './outputState';
 import {AnnouncementBanner} from './AnnouncementBanner';
+import {LiveAnnotationOverlay,useLiveAnnotations} from './LiveAnnotations';
 import {AppClock} from './community/AppClock';
 import './outputComposition.css';
 import {ServiceCountdownBadge} from './ServiceCountdownBadge';
 import {AnnouncementIndicator,useSpeechStatus} from './announcements/AnnouncementIndicator';
 import type{WeatherWarningState}from'../shared/weatherWarnings';import{useCurrentWeatherWarning,WeatherWarningBanner}from'./weatherWarnings/WeatherWarningBanner';
-export function OutputComposition({children,banner,testOverlay,serviceCountdownAtMs,hideCountdown=false,weatherWarnings,announcementActive}:{children:ReactNode;banner:BannerOutputState|null;testOverlay?:ReactNode;serviceCountdownAtMs?:number;hideCountdown?:boolean;weatherWarnings?:WeatherWarningState|null;announcementActive?:boolean}){
+export function OutputComposition({children,banner,testOverlay,serviceCountdownAtMs,hideCountdown=false,weatherWarnings,announcementActive,annotations}:{children:ReactNode;banner:BannerOutputState|null;testOverlay?:ReactNode;serviceCountdownAtMs?:number;hideCountdown?:boolean;weatherWarnings?:WeatherWarningState|null;announcementActive?:boolean;annotations?:import('../shared/liveAnnotations').AnnotationState|null}){
+  const localAnnotations=useLiveAnnotations(state=>state.state);
   const localAnnouncementActive=useSpeechStatus(state=>state.active);
   const warning=useCurrentWeatherWarning(weatherWarnings);
   const [now,setNow]=useState(()=>AppClock.now().getTime());
@@ -16,6 +18,7 @@ export function OutputComposition({children,banner,testOverlay,serviceCountdownA
     {banner?.reserved&&<div className="output-banner-layer"><AnnouncementBanner state={banner} nowMs={now} reducedMotion={banner.reducedMotion??false}/></div>}
     {!hideCountdown&&<ServiceCountdownBadge startsAtMs={serviceCountdownAtMs}/>}
     {warning&&<div className="output-weather-layer"><WeatherWarningBanner current={warning}/></div>}
+    {!hideCountdown&&<LiveAnnotationOverlay state={annotations===undefined?localAnnotations:annotations}/>}
     {testOverlay}
     {(announcementActive??localAnnouncementActive)&&<AnnouncementIndicator/>}
   </div>;

@@ -23,9 +23,9 @@ it('does not restart text on slide takes and stages edits until the cycle finish
   const next=session.update({...input,items:[{...item,text:'Geändert'}],nowMs:45000})!;
   expect(next.items[0].text).toBe('Geändert');expect(next.cycleStartedAtMs).toBe(45000);
 });
-it('waits for a safe take to reserve or release space and honors quick priority',()=>{
+it('shows the first late snapshot immediately and honors quick priority',()=>{
   const session=new BannerSession(),input={items:[],position:'bottom' as const,allowed:true,enabled:true,takeKey:'s1',nowMs:1000,textWidths:[],reducedMotion:false};
-  expect(session.update(input)).toBeNull();expect(session.update({...input,items:[item],textWidths:[600],nowMs:2000})).toBeNull();
+  expect(session.update(input)).toBeNull();expect(session.update({...input,items:[item],textWidths:[600],nowMs:2000})?.items).toEqual([item]);
   expect(session.update({...input,items:[item],textWidths:[600],takeKey:'s2',nowMs:3000})?.reserved).toBe(true);
   expect(session.update({...input,items:[item],allowed:false,takeKey:'black',nowMs:4000})).toBeNull();
 });

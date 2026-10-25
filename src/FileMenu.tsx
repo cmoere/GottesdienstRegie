@@ -1245,7 +1245,7 @@ export function FileMenu({
                 <button onClick={() => void importPresentation()}>
                   <Icon name="slideshow" />
                   <span>
-                    <b>PowerPoint / Keynote / OpenDocument …</b>
+                    <b>PowerPoint / Keynote / OneNote / OpenDocument …</b>
                     <small>
                       Importiert .pptx und .odp als Folien sowie die
                       eingebettete Vorschau aus .key.

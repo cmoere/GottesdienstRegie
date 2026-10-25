@@ -6,6 +6,8 @@ import {
   type CSSProperties,
 } from "react";
 import QRCode from "qrcode";
+import {isAdvertising} from './advertising/model';
+import {AdvertisingDesigner} from './advertising/AdvertisingDesigner';
 import { lyricPacket } from "./lyricScrolling";
 import { LyricScrollRenderer } from "./LyricScrollRenderer";
 import {
@@ -1541,6 +1543,7 @@ function ContentEditor({
     }
     setQrOpen(false);
   };
+  if(isAdvertising(item))return <AdvertisingDesigner item={item} canEdit={canEdit}/>;
   if (usesAutomaticLoopEditor(item.type)) {
     const durationSeconds = Math.max(
       1,

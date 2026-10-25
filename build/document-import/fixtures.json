@@ -1,0 +1,19 @@
+{
+  "license": "MPL-2.0",
+  "repository": "https://github.com/msiemens/onenote.rs",
+  "revision": "de3a64e8159c684b137ded89c3fef3c17272ec1d",
+  "assets": [
+    {
+      "file": "sample.one",
+      "url": "https://raw.githubusercontent.com/msiemens/onenote.rs/de3a64e8159c684b137ded89c3fef3c17272ec1d/crates/parser/tests/samples/New%20Section%201.one",
+      "size": 264421,
+      "sha256": "e9ec2cc5e234681a3d701145aefcf0c19aea4d2981929da227d103d2dc44aff9"
+    },
+    {
+      "file": "sample.onetoc2",
+      "url": "https://raw.githubusercontent.com/msiemens/onenote.rs/de3a64e8159c684b137ded89c3fef3c17272ec1d/crates/parser/tests/samples/Open%20Notebook.onetoc2",
+      "size": 2245,
+      "sha256": "2f9edeaf7f99736027123826ef12605a59b7bb9b15dce7db3e1014b8d57a7202"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+import {cleanup,fireEvent,render,screen} from '@testing-library/react';
+import {afterEach,beforeEach,expect,it} from 'vitest';
+import {usePreferences} from '../preferences';
+import {WeatherWarningSettings} from './WeatherWarningSettings';
+beforeEach(()=>usePreferences.setState({weatherWarningsEnabled:true}));
+afterEach(cleanup);
+it('requires confirmation before disabling official weather warnings',()=>{
+ render(<WeatherWarningSettings/>);
+ fireEvent.click(screen.getByRole('checkbox'));
+ expect(usePreferences.getState().weatherWarningsEnabled).toBe(true);
+ expect(screen.getByRole('dialog')).toBeInTheDocument();
+ fireEvent.click(screen.getByRole('button',{name:'Abbrechen'}));
+ expect(usePreferences.getState().weatherWarningsEnabled).toBe(true);
+ fireEvent.click(screen.getByRole('checkbox'));
+ fireEvent.click(screen.getByRole('button',{name:'Wetterwarnungen deaktivieren'}));
+ expect(usePreferences.getState().weatherWarningsEnabled).toBe(false);
+ fireEvent.click(screen.getByRole('checkbox'));
+ expect(usePreferences.getState().weatherWarningsEnabled).toBe(true);
+ expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+});

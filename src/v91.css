@@ -1,0 +1,9 @@
+.remote-center button,.remote-center h3,.remote-center h4,.advertising-browser button,.advertising-browser h1,.advertising-browser label,.remote-qr-dialog h3{text-transform:none;letter-spacing:normal}
+.advertising-browser>section>label{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0}
+.advertising-browser input[type=url]{flex:1;min-width:280px;padding:10px}
+.advertising-browser input[type=number]{width:88px;padding:8px}
+.advertising-browser select{padding:8px}
+.remote-center .remote-list article{flex-wrap:wrap}
+.remote-qr-dialog footer{display:flex;justify-content:flex-end;gap:12px}
+.weather-warning-confirm{max-width:560px;padding:24px}
+.weather-warning-confirm .actions{display:flex;justify-content:flex-end;gap:12px;margin-top:24px}

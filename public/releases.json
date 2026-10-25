@@ -21,12 +21,162 @@
   ],
   "versions": [
     {
+      "line": "0.91",
+      "builds": [
+        {
+          "version": "0.91.0",
+          "releaseDate": "2026-10-25",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Neue lokale Stimmen, Originaldatei-Import und bessere Monitorsteuerung",
+              "en": "New local voices, original document imports and improved monitor control"
+            },
+            "text": {
+              "de": "Dieses Update verbindet neue offline verfügbare Ansagenstimmen mit dem Import originaler Keynote- und OneNote-Dateien. Persönliche Monitore erhalten QR-Codes, echte Ausgabebilder und separat freigebbare Live-Markierungen. Meldungslaufband und Wetterwarnungen werden früher vorbereitet.",
+              "en": "This update combines new offline announcement voices with original Keynote and OneNote document imports. Personal monitors gain QR codes, actual output images and separately authorized live annotations. Announcement tickers and weather warnings are prepared earlier."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Lokale KI-Stimmen für Ansagen",
+                  "en": "Local neural announcement voices"
+                },
+                "text": {
+                  "de": "Thorsten und Kerstin ersetzen die bisherigen Ansagenstimmen. Beide Stimmen und eine private Laufzeit sind im Update enthalten; eine Systemstimme, ein Konto oder eine zusätzliche Installation sind nicht erforderlich. Kurze Satzpausen und ein ruhiges Sprechtempo verbessern die Verständlichkeit. Die gemeinsame Auswahl gilt weiterhin für alle Präsentationen und Benutzer am Regie-PC. Gong, Ausgangszuordnung, Musikabsenkung und begrenzte Sprachspitzen bleiben erhalten.",
+                  "en": "Thorsten and Kerstin replace the previous announcement voices. Both models and a private runtime are included, without a system voice, account or separate installation. Short sentence pauses and a calm pace improve intelligibility. The shared selection still applies to every presentation and operator on this computer. Gong playback, routing, music ducking and bounded speech peaks are retained."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originale OneNote- und Keynote-Dateien importieren",
+                  "en": "Import original OneNote and Keynote documents"
+                },
+                "text": {
+                  "de": "Der lokale Import verarbeitet .one-Abschnitte, .onepkg-Notizbücher und Keynote-Dateien mit IWA-Folienobjekten. Die Folien- beziehungsweise Seitenreihenfolge wird aus der Datei gelesen. Notiztexte und unterstützte eingebettete Bilder werden übernommen; lange Notizen erhalten Fortsetzungsfolien. Ein Importbericht nennt Seitenzahl und Einschränkungen. Es werden keine Dateianlagen ausgeführt und keine Dokumente an einen Konvertierungsdienst hochgeladen.",
+                  "en": "Local import processes .one sections, .onepkg notebooks and Keynote documents containing IWA slide objects. Slide or page order is read from the document. Note text and supported embedded images are retained; long notes use continuation slides. An import report lists page counts and limitations. Attachments are never executed and documents are not uploaded to a conversion service."
+                }
+              },
+              {
+                "label": {
+                  "de": "Personal Monitor mit QR-Code und Live-Markierungen",
+                  "en": "Personal monitor QR codes and live annotations"
+                },
+                "text": {
+                  "de": "Monitor- und Steuerungslinks lassen sich zusätzlich als QR-Code anzeigen. Der Monitor kann das tatsächlich gerenderte Bild des gewählten Outputs einschließlich Quick Screens und Testkennzeichnung anzeigen. Notizen bleiben an ihre Freigabe gebunden. Live-Markierungen benötigen eine eigene widerrufbare Geräteberechtigung und erscheinen auf allen Ausgaben. Bei einem neuen Take werden sie gelöscht; Notfallanzeigen behalten Vorrang. Reine Monitor-Links können keine Zeichnungen senden.",
+                  "en": "Monitor and controller links can also be displayed as QR codes. Monitors can show the actual rendered output, including quick screens and test identification. Notes remain permission-controlled. Live annotations require a separate revocable device permission and appear on every output. A new take clears them, and emergency screens retain priority. Read-only monitor links cannot send drawings."
+                }
+              },
+              {
+                "label": {
+                  "de": "Externe Werbemedien im Medienbrowser",
+                  "en": "External advertising in the media browser"
+                },
+                "text": {
+                  "de": "Die neue Ansicht übernimmt freigegebene Bild- und Videodateien, direkte HTTPS-Medienadressen oder VAST-Kampagnen eines Anbieters. Online-Medien werden lokal vorbereitet. Wechselnde Kampagnen werden regelmäßig erneut gelesen; ein laufendes Werbebild bleibt bis zum sicheren Wechsel stabil. Bereich und Mindestabstand der Einblendungen sind wählbar. Werbung bleibt auf Vor- und Nachprogramm beschränkt. Ein Anbieter-Link oder eigenes freigegebenes Material ist erforderlich; Klick-, Script- und Trackingelemente werden nicht ausgeführt.",
+                  "en": "The new browser view accepts approved image/video files, direct HTTPS media addresses or provider VAST campaigns. Online media are prepared locally. Changing campaigns are refreshed regularly while the current ad remains stable until a safe switch. Select the program area and minimum interval between appearances. Advertising is restricted to pre/post programs. An approved provider link or media is required; click, script and tracking elements are not executed."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Größeres aktuelles Wetter",
+                  "en": "Larger current weather display"
+                },
+                "text": {
+                  "de": "Temperatur, aktuelles Wettersymbol, Beschreibung und Wind werden größer dargestellt. Die Vorschau wird ebenfalls leicht vergrößert. Wolken, Nebel und Gewitter erhalten ruhige, passende Bewegungen; reduzierte Bewegung wird weiterhin berücksichtigt.",
+                  "en": "Current temperature, weather symbol, description and wind are larger. Forecast information is slightly enlarged. Clouds, fog and storms gain calm condition-specific motion, with reduced-motion preferences respected."
+                }
+              },
+              {
+                "label": {
+                  "de": "Wetterwarnungen bewusst schalten",
+                  "en": "Explicit weather-warning control"
+                },
+                "text": {
+                  "de": "Unter Einstellungen → Präsentation lassen sich amtliche DWD-Warnungen ein- oder ausschalten. Vor dem Deaktivieren erscheint ein Hinweis mit Bestätigung. Die Ausgabe bleibt auf Vorprogramm, Nachprogramm und Countdown begrenzt.",
+                  "en": "Official DWD warnings can be enabled or disabled under Settings → Presentation. Disabling requires an explanatory confirmation. Display remains restricted to pre/post programs and countdowns."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Erste Laufbandmeldung ohne weiteren Folienwechsel",
+                  "en": "First ticker message without another slide take"
+                },
+                "text": {
+                  "de": "Treffen Meldungsdaten erst nach der ersten Live-Folie ein, beginnt das Laufband jetzt unmittelbar mit dem ersten gültigen Stand. Sichtbare Texte werden bei späteren Änderungen weiterhin am Ende ihres laufenden Zyklus aktualisiert. Quick-Screen-Priorität und unterbrechungsfreie Abschnittswechsel bleiben erhalten.",
+                  "en": "When announcement data arrive after the first live slide, the ticker starts immediately with the first valid snapshot. Later changes still wait for the current ticker cycle to finish. Quick-screen priority and uninterrupted program-area transitions are retained."
+                }
+              },
+              {
+                "label": {
+                  "de": "Wetterwarnungen bereits vor ON AIR vorbereiten",
+                  "en": "Prepare weather warnings before ON AIR"
+                },
+                "text": {
+                  "de": "DWD-Daten werden bei aktivierten Warnungen bereits während der Vorbereitung geladen. Ein gültiger Stand steht damit beim ersten passenden Output zur Verfügung. Spät eintreffende Antworten werden unmittelbar berücksichtigt; Antworten für einen inzwischen gewechselten Wetterort werden verworfen. Eine kalte oder nicht erreichbare Netzwerkverbindung kann weiterhin Ladezeit benötigen.",
+                  "en": "With warnings enabled, DWD data are loaded during preparation. A valid snapshot is therefore available for the first eligible output. Late responses are adopted immediately, while responses for a previous location are discarded. A cold or unavailable network connection can still require loading time."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Regionalvarianten",
+                  "en": "Regional variants"
+                },
+                "text": {
+                  "de": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.",
+                  "en": "Regional variants are not fully translated yet. Missing interface texts are displayed in standard German."
+                }
+              },
+              {
+                "label": {
+                  "de": "Importtreue und unterstützte Formate",
+                  "en": "Import fidelity and supported formats"
+                },
+                "text": {
+                  "de": "Keynote- und OneNote-Inhaltsimport ersetzt keine vollständige Originalwiedergabe. Komplexe Layouts, Schriftformatierungen, Animationen, Freihandzeichnungen und Dateianlagen können abweichen oder fehlen; der Importbericht nennt Einschränkungen. Unterstützte Bilder können zusätzliche Bildfolien erzeugen. Den Import vor ON AIR prüfen.",
+                  "en": "Keynote and OneNote content import does not provide full original playback fidelity. Complex layouts, typography, animation, handwriting and attachments may differ or be missing; the import report lists limitations. Supported images may create additional image slides. Review imported presentations before ON AIR."
+                }
+              },
+              {
+                "label": {
+                  "de": "Monitorübertragung und Werbeanbieter",
+                  "en": "Monitor transport and advertising providers"
+                },
+                "text": {
+                  "de": "Persönliche Monitore übertragen das echte Output-Bild mit begrenzter Bildrate über das lokale Netzwerk; sie sind kein latenzfreier Videoausgang. VAST unterstützt vorbereitbare Bild-/Videomedien und begrenzte Wrapperketten. Ohne eine freigegebene Quelle werden keine Werbekampagnen erzeugt.",
+                  "en": "Personal monitors transmit the actual output at a bounded frame rate over the local network; they are not a zero-latency video output. VAST support covers preparable image/video media and bounded wrapper chains. No ad campaign is invented without an approved source."
+                }
+              },
+              {
+                "label": {
+                  "de": "PowerPoint-Originalmodus",
+                  "en": "Original PowerPoint mode"
+                },
+                "text": {
+                  "de": "Der ungeprüfte PowerPoint-Originalmodus bleibt deaktiviert. Der vorhandene Inhaltsimport bleibt verfügbar.",
+                  "en": "The unverified original PowerPoint playback mode remains disabled. Existing content import remains available."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.90",
       "builds": [
         {
           "version": "0.90.0",
           "releaseDate": "2026-10-25",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Verlässlicher Live-Start und gemeinsame Stimmenauswahl",

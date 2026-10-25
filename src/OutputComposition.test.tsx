@@ -3,6 +3,15 @@ import {afterEach,expect,it} from 'vitest';
 import {OutputComposition} from './OutputComposition';
 import {useSpeechStatus} from './announcements/AnnouncementIndicator';
 afterEach(cleanup);
+it('renders live marks above content while emergency screens hide them and the test layer remains separate',()=>{
+ const annotations={revision:1,takeId:'slide:1',strokes:[{id:'one',color:'#ff3b30',width:.004,points:[{x:0,y:0},{x:1,y:1}]}]};
+ const view=render(<OutputComposition banner={null} annotations={annotations} testOverlay={<span>TESTBETRIEB</span>}><video data-testid="content"/></OutputComposition>);
+ const content=screen.getByTestId('content');
+ expect(view.container.querySelector('.live-annotation-overlay polyline')).toHaveAttribute('points','0,0 1920,1080');
+ expect(screen.getByText('TESTBETRIEB').closest('.live-annotation-overlay')).toBeNull();
+ view.rerender(<OutputComposition banner={null} annotations={annotations} hideCountdown><video data-testid="content"/></OutputComposition>);
+ expect(view.container.querySelector('.live-annotation-overlay')).toBeNull();expect(screen.getByTestId('content')).toBe(content);
+});
 it('mirrors the speaker in real output previews without an operator-wide overlay',()=>{
  const view=render(<OutputComposition banner={null}><video/></OutputComposition>);
  act(()=>useSpeechStatus.setState({active:true}));expect(screen.getByRole('img',{name:'Durchsage läuft'})).toBeVisible();

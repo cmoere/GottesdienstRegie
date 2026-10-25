@@ -1,0 +1,9 @@
+const fs=require('node:fs/promises'),path=require('node:path'),{spawn}=require('node:child_process');
+async function check(root,platform=process.platform){
+ const voices=[];for(const gender of ['male','female']){
+  const bytes=await new Promise((resolve,reject)=>{const child=spawn(path.join(root,'python',platform==='win32'?'python.exe':'bin/python3'),['-I','-S',path.join(root,'worker.py'),gender],{shell:false,windowsHide:true,stdio:['pipe','pipe','pipe']});let output=[],size=0,errors='';const timer=setTimeout(()=>{child.kill();reject(Error('Neural speech timed out'))},90000);child.stdout.on('data',chunk=>{size+=chunk.length;if(size>32*1024*1024){child.kill();reject(Error('Neural output too large'))}else output.push(chunk)});child.stderr.on('data',chunk=>{errors=(errors+chunk).slice(-4000)});child.stdin.on('error',()=>{});child.on('error',error=>{clearTimeout(timer);reject(error)});child.on('close',code=>{clearTimeout(timer);code===0?resolve(Buffer.concat(output)):reject(Error('Neural speech failed '+code+': '+errors))});child.stdin.end('Herzlich willkommen zum Gottesdienst. Die nächste Veranstaltung beginnt um zwölf Uhr dreißig im Gemeindesaal. Grüße aus Bielefeld.','utf8')});
+  const {normalizeAnnouncementSpeech}=require('../dist-electron/electron/announcements/BundledSpeechService.js');const normalized=Buffer.from(await normalizeAnnouncementSpeech(bytes));voices.push({gender,bytes:normalized.length,sampleRate:normalized.readUInt32LE(24),physicalPlayback:false});
+ }
+ const report={engine:'piper-1.8.0',platform,voices};await fs.writeFile(path.join(root,'verification.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report));return report;
+}
+module.exports={check};if(require.main===module)check(path.resolve(process.argv[2]),process.argv[3]).catch(error=>{console.error(error);process.exitCode=1});

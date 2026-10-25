@@ -89,7 +89,7 @@ describe('regional text source inventory', () => {
     expect(entries.find(entry=>entry.key==='ui.shapeGallerySearch')).toMatchObject({text:'2D-Objekte suchen …',source:'shared/regional/shapeControlTemplates.ts',status:'app-owned'});
     expect(entries.find(entry=>entry.key==='ui.radioBrowserSearchFailed')).toMatchObject({text:'Radiosuche fehlgeschlagen: {detail}. Bitte erneut versuchen.',source:'shared/regional/radioControlTemplates.ts',status:'app-owned'});
     expect(inventory.complete).toBe(false);
-  });
+  },20000); // Full repository AST/resource inventory, including the complete release archive.
   it('recognizes the real const-asserted German dictionary rather than losing its stable keys', () => {
     expect(scanOperatorSource('src/i18n.ts', "const de = {close:'SCHLIESSEN'} as const;"))
       .toEqual([expect.objectContaining({key:'ui.close',text:'SCHLIESSEN',status:'app-owned'})]);
