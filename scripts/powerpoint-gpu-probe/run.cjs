@@ -4,16 +4,16 @@ function validateGpuRuntime({version, digest, marked, monitor}) {
   if (version !== '45.0.0' || digest !== archiveDigest || marked !== true || monitor !== 1) throw Error('GPU_RUNTIME_NOT_APPROVED'); return true;
 }
 function assessGpuResult({transport, office}) {return {technicalPass: transport?.transportPass === true && office?.visual === true, productionReady: false, audio: 'unsupported'};}
-async function runGpuProbe({root, electronPath, monitor}) {
+async function runGpuProbe({root, electronPath, monitor, captureHz=30}) {
   root = path.resolve(root); electronPath = path.resolve(root, electronPath);
   if (monitor !== 1 || electronPath !== path.join(root, 'work/gpu-runtime-v45.0.0/runtime/electron.exe')) throw Error('GPU_RUNTIME_NOT_APPROVED');
   const digest = createHash('sha256').update(await fs.readFile(path.resolve(electronPath, '../../electron-v45.0.0-win32-x64.zip'))).digest('hex');
   validateGpuRuntime({version:'45.0.0',digest,marked:true,monitor});
   const {buildGpuProbe} = require('./build.cjs'), {buildProbe} = require('../powerpoint-native-probe/build.cjs');
-  const built = await buildGpuProbe({root,target:'producer'}), source = await buildProbe({root,target:'owned-window'});
+  const built = await buildGpuProbe({root,target:'producer',captureHz}), source = await buildProbe({root,target:'owned-window'});
   const assertOwned = await fs.stat(path.join(built.folder, '.probe-owned')); // Own builder marker, not user data.
   if (!assertOwned.isFile()) throw Error('GPU_RUN_MARKER');
-  const config = {folder:built.folder, producer:built.executable, source:source.executable, sourceFolder:source.folder, monitor, digest};
+  const config = {folder:built.folder, producer:built.executable, source:source.executable, sourceFolder:source.folder, monitor, digest,captureHz};
   const configPath = path.join(built.folder,'benchmark-config.json'); await fs.writeFile(configPath,JSON.stringify(config));
   const child = spawn(electronPath,[path.join(__dirname,'benchmark.cjs'),'--config='+configPath],{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe']});
   let log=''; const append = chunk => {log=(log+chunk).slice(-131072);}; child.stdout.on('data',append); child.stderr.on('data',append);

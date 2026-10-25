@@ -16,7 +16,7 @@ async function prepare(platform=process.platform,arch=process.arch){
  await fs.mkdir(path.join(root,'source'),{recursive:true});for(const source of manifest.sources??[])await fs.writeFile(path.join(root,'source',source.file),await download(source,cache));
  for(const name of ['worker.py','NOTICE.md'])await fs.copyFile(path.join(repo,'build/neural-speech',name),path.join(root,name));
  await fs.copyFile(path.join(repo,'build/neural-speech/manifest.json'),path.join(root,'manifest.json'));
- await fs.writeFile(path.join(root,'ready.json'),JSON.stringify({platform,arch,engine:manifest.engine,voices:['piper:thorsten-high','piper:kerstin-low']}));
+ await fs.writeFile(path.join(root,'ready.json'),JSON.stringify({platform,arch,engine:manifest.engine,voices:Object.keys(manifest.voices)}));
  return root;
 }
 module.exports={prepare,download};if(require.main===module)prepare(process.argv[2],process.argv[3]).then(root=>console.log(root)).catch(error=>{console.error(error);process.exitCode=1});

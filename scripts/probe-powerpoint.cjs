@@ -1,7 +1,8 @@
 // Standalone diagnostic: never imports the application main process or starts ON AIR.
 const fs=require('node:fs/promises'),path=require('node:path'),{spawn}=require('node:child_process'),readline=require('node:readline');
-async function runProbe({root,monitor,captureAdapter}){
+async function runProbe({root,monitor,captureAdapter,navigation='gotoClick'}){
   if(monitor!==undefined&&monitor!==1)throw Error('PROBE_MONITOR_NOT_AUTHORIZED');
+  if(!['gotoClick','nativeNext'].includes(navigation))throw Error('PROBE_NAVIGATION_INVALID');
   root=path.resolve(root);
   if(process.platform!=='win32')return {visual:false,audio:'unsupported',results:{reason:'WINDOWS_REQUIRED'}};
   const folder=await fs.mkdtemp(path.join(root,'work/powerpoint-probe-'));
@@ -12,7 +13,7 @@ async function runProbe({root,monitor,captureAdapter}){
   let compileOutput='';build.stdout.on('data',c=>compileOutput+=c);build.stderr.on('data',c=>compileOutput+=c);
   const buildCode=await new Promise((resolve,reject)=>{build.once('error',reject);build.once('close',resolve)});
   if(buildCode!==0)throw Error('PROBE_COMPILE_FAILED: '+compileOutput);
-  const helper=spawn(exe,[folder,...(monitor===1?['--monitor=1']:[])],{windowsHide:true,stdio:['pipe','pipe','pipe']});
+  const helper=spawn(exe,[folder,...(monitor===1?['--monitor=1']:[]),...(navigation==='nativeNext'?['--native-next']:[])],{windowsHide:true,stdio:['pipe','pipe','pipe']});
   const pending=new Map();let serial=0,readyResolve,readyReject;
   const ready=new Promise((resolve,reject)=>{readyResolve=resolve;readyReject=reject});
   const readyTimeout=setTimeout(()=>readyReject(Error('PROBE_OFFICE_TIMEOUT')),30000);
@@ -29,7 +30,11 @@ async function runProbe({root,monitor,captureAdapter}){
     console.log('POWERPOINT_PROBE_READY '+JSON.stringify({version:state.version,windowHandle:state.windowHandle,status:state.status}));
     const assert=require('node:assert/strict');
     await command('play');
-    const first=await command('next'),second=await command('next'),third=await command('next');
+    const first=await command('next');
+    if(navigation==='nativeNext')await new Promise(resolve=>setTimeout(resolve,300));
+    const second=await command('next');
+    if(navigation==='nativeNext')await new Promise(resolve=>setTimeout(resolve,300));
+    const third=await command('next');
     assert.equal(first.status.clickIndex,1);assert.equal(second.status.clickIndex,2);assert.equal(third.status.slideIndex,2);
     await command('pause');await new Promise(resolve=>setTimeout(resolve,2300));
     assert.equal((await command('status')).status.slideIndex,2);

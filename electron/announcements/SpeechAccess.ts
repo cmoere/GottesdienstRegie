@@ -1,9 +1,10 @@
 import type {EspeakService} from './EspeakService';
 import type {BundledSpeechService} from './BundledSpeechService';
 import {bundledAnnouncementVoice,isBundledAnnouncementVoice} from '../../src/announcements/settings';
+import type {SpeechReadingSettings} from '../../src/announcements/readingSettings';
 /** The native device repository owns the selection; renderer requests contain text only. */
-export function deviceSelectedSpeech(engine:Pick<BundledSpeechService,'status'|'synthesize'|'cancel'>,repository:{readAnnouncements:()=>Promise<{voiceId:string}>}){
- return {status:()=>engine.status(),cancel:()=>engine.cancel(),synthesize:async(text:unknown)=>{const settings=await repository.readAnnouncements();return engine.synthesize(text,isBundledAnnouncementVoice(settings.voiceId)?settings.voiceId:bundledAnnouncementVoice)}};
+export function deviceSelectedSpeech(engine:Pick<BundledSpeechService,'status'|'cancel'>&{synthesize:(text:unknown,voiceId:string,reading?:SpeechReadingSettings)=>Promise<Uint8Array>},repository:{readAnnouncements:()=>Promise<{voiceId:string;reading?:SpeechReadingSettings}>}){
+ return {status:()=>engine.status(),cancel:()=>engine.cancel(),synthesize:async(text:unknown)=>{const settings=await repository.readAnnouncements(),voice=isBundledAnnouncementVoice(settings.voiceId)?settings.voiceId:bundledAnnouncementVoice;return settings.reading?engine.synthesize(text,voice,settings.reading):engine.synthesize(text,voice)}};
 }
 export class SpeechAccess<Event>{
  constructor(private engine:Pick<EspeakService,'status'|'synthesize'|'cancel'>,private isControl:(event:Event)=>boolean){}

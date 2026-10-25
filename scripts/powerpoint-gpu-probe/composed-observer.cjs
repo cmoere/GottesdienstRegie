@@ -1,5 +1,6 @@
 const {createHash} = require('node:crypto');
 const {decode} = require('./frame-stamp.js');
+const {classifyOfficeBackground}=require('./office-proof.cjs');
 // Read-only observer. No broker ACK or native release capability.
 function createComposedObserver({captureStrip, now = () => performance.now(), onObservation}) {
   const records = new Map(); let generation, epoch = 0, closed = false, pending, dirty = false, lastHash, lastSequence = 0;
@@ -22,7 +23,7 @@ function createComposedObserver({captureStrip, now = () => performance.now(), on
           const hash = createHash('sha256').update(image.pixels.subarray(1920 * 8 * 4)).digest('hex');
           if (entry.expectedMotionHash && entry.expectedMotionHash !== hash) throw Error('GPU_OBSERVER_SOURCE');
           lastSequence = sequence;
-          if (hash !== lastHash) {lastHash = hash; onObservation({key: entry.record.key, sequence, sourceFingerprint: hash, presentedMs: observedMs, captureMs});}
+          if (hash !== lastHash) {lastHash = hash; const background=image.pixels[(8*1920+1900)*4+3]>=250?classifyOfficeBackground(image.pixels,1920,9):null;onObservation({key: entry.record.key, sequence, sourceFingerprint: hash, presentedMs: observedMs, captureMs,background});}
           else unchangedSource++;
         } else if (!entry) unmatchedStamp++; else staleStamp++;
       } while (dirty && !closed && epoch === ownEpoch);

@@ -19,7 +19,8 @@ export function readBundledSpeechWav(input:Buffer):Uint8Array {
 }
 
 /** Speech-only level correction. Preserve mute/master routing and never amplify the gong. */
-export async function normalizeAnnouncementSpeech(input:Buffer,signal?:AbortSignal):Promise<Uint8Array>{
+export async function normalizeAnnouncementSpeech(input:Buffer,signal?:AbortSignal,loudnessPercent=100):Promise<Uint8Array>{
+  if(!Number.isFinite(loudnessPercent)||loudnessPercent<50||loudnessPercent>200)throw Error('Ungültiger Sprachpegel.');
   const check=()=>{if(signal?.aborted)throw Error('Durchsage abgebrochen.')};check();
   const data=Buffer.from(readBundledSpeechWav(input)),ranges:Array<[number,number]>=[];let peak=0;
   for(let offset=12;offset+8<=data.length;){const size=data.readUInt32LE(offset+4),start=offset+8,end=start+size;
@@ -27,7 +28,7 @@ export async function normalizeAnnouncementSpeech(input:Buffer,signal?:AbortSign
     offset=end+(size%2);
   }
   let sampleRate=16000;for(let offset=12;offset+8<=data.length;){const size=data.readUInt32LE(offset+4);if(data.toString('ascii',offset,offset+4)==='fmt ')sampleRate=data.readUInt32LE(offset+12);offset+=8+size+(size%2)}
-  const ceiling=10**(-1/20)*32768,gain=Math.min(10**(18/20),ceiling/peak*1.8),blockBytes=Math.round(sampleRate*.01)*2;
+  const ceiling=10**(-1/20)*32768,gain=Math.min(10**(18/20),ceiling/peak*1.8*loudnessPercent/100),blockBytes=Math.round(sampleRate*.01)*2;
   // 10ms blocks, 20ms lookahead and a 60ms release raise quiet syllables while
   // keeping a continuous gain envelope. Duration, pitch, route and gong stay unchanged.
   for(const[start,end]of ranges){

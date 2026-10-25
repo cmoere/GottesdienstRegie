@@ -10,6 +10,9 @@ import './announcement-preparation.css';
 import {useSpeechStatus} from './AnnouncementIndicator';
 import {usePreferences} from '../preferences';
 import {generalAnnouncementProbe,startAnnouncementTest,stopAnnouncementTest} from './AnnouncementTestRequests';
+import {ReadingSettingsControls} from './ReadingSettingsControls';
+import {normalizeReadingSettings} from './readingSettings';
+import {bundledVoices} from './voices';
 
 const service = new AnnouncementService();
 
@@ -92,12 +95,13 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     <p role="status">{engine.name||(german?'Mitgelieferte Stimme wird geprüft.':'Checking the included voice.')}</p>
     {status&&<p role="alert">{status}</p>}
     {!native && <p>{t('speechSettingsDesktopOnly')}</p>}
-    <label>{german?'Ansagenstimme':'Announcement voice'}<select disabled={!ready||busy||!engine.ready||testing||speaking} value={isBundledAnnouncementVoice(saved.voiceId)?saved.voiceId:bundledAnnouncementVoice} onChange={event=>{stopAnnouncementTest();setSaved(value=>({...value,voiceId:event.target.value,speakerId:0,voiceAccepted:true}));setMessage('')}}><option value={bundledAnnouncementVoice}>{german?'Männlich · Thorsten · Deutsch':'Male · German'}</option><option value={bundledFemaleAnnouncementVoice}>{german?'Weiblich · Kerstin · Deutsch':'Female · German'}</option></select></label>
-    <p>{german?'Die gespeicherte Stimme gilt auf diesem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Beide Stimmen sind enthalten. Nach dem Speichern verwendet auch die Tonprobe diese Auswahl.':'The saved voice applies to every presentation and signed-in operator on this control computer. Both voices are included. Save before testing the new selection.'}</p>
+    <label>{german?'Ansagenstimme':'Announcement voice'}<select disabled={!ready||busy||!engine.ready||testing||speaking} value={isBundledAnnouncementVoice(saved.voiceId)?saved.voiceId:bundledAnnouncementVoice} onChange={event=>{stopAnnouncementTest();setSaved(value=>({...value,voiceId:event.target.value,speakerId:0,voiceAccepted:true}));setMessage('')}}>{bundledVoices.map(voice=><option key={voice.id} value={voice.id}>{voice.name} · {german?'Deutsch':'German'}</option>)}</select></label>
+    <p>{german?'Die gespeicherte Stimme gilt auf diesem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Alle fünf Stimmen sind enthalten. Nach dem Speichern verwendet auch die Tonprobe diese Auswahl.':'The saved voice applies to every presentation and signed-in operator on this control computer. All five voices are included. Save before testing the new selection.'}</p>
     <label><input type="checkbox" checked={saved.enabled} disabled={!ready||busy||(!saved.enabled&&!engine.ready)} onChange={event=>setSaved(value=>({...value,enabled:event.target.checked,...(event.target.checked?{voiceId:isBundledAnnouncementVoice(value.voiceId)?value.voiceId:bundledAnnouncementVoice,speakerId:0,voiceAccepted:true}:{})}))}/> {t('speechSettingsEnable')}</label>
     <label>{t('speechSettingsInterval')}<input className="settings-number-input" type="number" min="1" max="120" step="1" disabled={!ready || busy} value={interval} onChange={event => {setIntervalValue(event.target.value);setMessage('');}}/></label>
     <label>{t('speechSettingsMusicLevel')}<input className="settings-number-input" type="number" min="0" max="100" disabled={!ready || busy} value={percent} onChange={event => {setPercent(event.target.value);setMessage('');}}/></label>
     <p>{t('speechSettingsMusicHelp')}</p>
+    <ReadingSettingsControls value={normalizeReadingSettings(saved.reading)} disabled={!ready||busy||testing||speaking} german={german} onChange={reading=>{setSaved(value=>({...value,reading}));setMessage('')}}/>
     <button type="button" disabled={!ready || busy} onClick={() => {void save();}}>{t('speechSettingsSave')}</button>
     {message && <p role="status">{t(message)}</p>}
     {error && <p role="alert">{t(error)}</p>}

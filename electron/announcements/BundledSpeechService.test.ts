@@ -7,6 +7,13 @@ import {BundledSpeechService,readBundledSpeechWav,runBundledSpeech,normalizeAnno
 function wav(){const b=Buffer.alloc(48);b.write('RIFF');b.writeUInt32LE(40,4);b.write('WAVEfmt ',8);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(1,22);b.writeUInt32LE(16000,24);b.writeUInt32LE(32000,28);b.writeUInt16LE(2,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(4,40);b.writeInt16LE(300,44);return b}
 async function resources(){const root=await mkdtemp(path.join(os.tmpdir(),'Stimme Grüße '));for(const name of ['lib/voice-bits1-hsmm-5.2.jar','runtime/bin/java.exe','worker/AnnouncementSpeech.class','lib/voice-dfki-pavoque-neutral-5.2.jar','lib/marytts-runtime-5.2.1.jar','lib/marytts-lang-de-5.2.1.jar','lib/voices/dfki-pavoque-neutral/halfphoneFeatures_ac.mry','lib/voices/dfki-pavoque-neutral/halfphoneUnits.mry','lib/voices/dfki-pavoque-neutral/joinCostFeatures.mry','lib/voices/dfki-pavoque-neutral/timeline_basenames.mry','lib/voices/dfki-pavoque-neutral/timeline_waveforms.mry']){await mkdir(path.dirname(path.join(root,name)),{recursive:true});await writeFile(path.join(root,name),'fixture')}await writeFile(path.join(root,'ready.json'),JSON.stringify({platform:'win32',arch:'x64',voice:'marytts:dfki-pavoque-neutral'}));return root}
 describe('bundled classical speech',()=>{
+ it('raises average speech level with the selected boost while retaining the same peak ceiling',async()=>{
+   const source=Buffer.alloc(32044);wav().copy(source);source.writeUInt32LE(source.length-8,4);source.writeUInt32LE(source.length-44,40);
+   for(let i=0;i<16000;i++)source.writeInt16LE(Math.round((i>7500&&i<8500?10000:1500)*Math.sin(i*.12)),44+i*2);
+   const normal=Buffer.from(await normalizeAnnouncementSpeech(source,undefined,100)),louder=Buffer.from(await normalizeAnnouncementSpeech(source,undefined,150));
+   let first=0,second=0,peak=0;for(let i=44;i<source.length;i+=2){first+=normal.readInt16LE(i)**2;second+=louder.readInt16LE(i)**2;peak=Math.max(peak,Math.abs(louder.readInt16LE(i)))}
+   expect(10*Math.log10(second/first)).toBeGreaterThan(1);expect(peak).toBeLessThanOrEqual(29206);
+ });
  it('raises quiet speech passages while limiting peaks smoothly below full scale',async()=>{
    const source=Buffer.alloc(32044);wav().copy(source);source.writeUInt32LE(source.length-8,4);source.writeUInt32LE(source.length-44,40);
    for(let i=0;i<16000;i++)source.writeInt16LE(Math.round((i>7500&&i<8500?10000:1500)*Math.sin(i*.12)),44+i*2);

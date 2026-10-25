@@ -12,6 +12,7 @@ class PowerPointProbe {
   static dynamic app,source,sentinel,show;
   static string root,sentinelPath,sentinelHash;
   static Screen authorizedScreen;
+  static bool nativeNext;
   [DllImport("user32.dll")] static extern bool MoveWindow(IntPtr hwnd,int x,int y,int w,int h,bool repaint);
   [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr hwnd,out uint processId);
   [DllImport("user32.dll")] static extern IntPtr GetAncestor(IntPtr hwnd,uint flags);
@@ -73,6 +74,7 @@ class PowerPointProbe {
     sentinelPath=Path.Combine(root,"owned-sentinel.pptx");sentinel.SaveAs(sentinelPath,24);sentinelHash=Hash(sentinelPath);
     MakeSource();
     source.SlideShowSettings.ShowType=2;
+    source.SlideShowSettings.ShowScrollbar=0;
     source.SlideShowSettings.AdvanceMode=2;
     source.SlideShowSettings.LoopUntilStopped=0;
     show=source.SlideShowSettings.Run();
@@ -105,11 +107,12 @@ class PowerPointProbe {
   [STAThread] static int Main(string[] args){
     Console.OutputEncoding=new System.Text.UTF8Encoding(false);
     Console.InputEncoding=new System.Text.UTF8Encoding(false);
-    if(args.Length<1||args.Length>2||(args.Length==2&&args[1]!="--monitor=1"))return 2;
+    if(args.Length<1||args.Length>3||(args.Length>=2&&args[1]!="--monitor=1")||(args.Length==3&&args[2]!="--native-next"))return 2;
+    nativeNext=args.Length==3;
     root=Path.GetFullPath(args[0]);
     if(!Directory.Exists(root)||!File.Exists(Path.Combine(root,".probe-owned")))return 2;
     try{
-      if(args.Length==2){
+      if(args.Length>=2){
         foreach(var screen in Screen.AllScreens)if(screen.DeviceName.EndsWith("DISPLAY1",StringComparison.OrdinalIgnoreCase))authorizedScreen=screen;
         if(authorizedScreen==null)throw new Exception("PROBE_MONITOR_1_NOT_FOUND");
       }
@@ -126,9 +129,12 @@ class PowerPointProbe {
           int index=Convert.ToInt32(cmd["index"]);if(index<1||index>3)throw new Exception("PROBE_SLIDE_INVALID");
           show.View.GotoSlide(index,-1);
         }else if(type=="next"){
-          int index=(int)show.View.GetClickIndex(),count=(int)show.View.GetClickCount();
-          if(index<count)show.View.GotoClick(index+1);
-          else if((int)show.View.Slide.SlideIndex<3)show.View.GotoSlide((int)show.View.Slide.SlideIndex+1,-1);
+          if(nativeNext)show.View.Next();
+          else{
+            int index=(int)show.View.GetClickIndex(),count=(int)show.View.GetClickCount();
+            if(index<count)show.View.GotoClick(index+1);
+            else if((int)show.View.Slide.SlideIndex<3)show.View.GotoSlide((int)show.View.Slide.SlideIndex+1,-1);
+          }
         }else if(type!="status")throw new Exception("PROBE_COMMAND_INVALID");
         Application.DoEvents();Emit(new {id=id,status=State()});
       }

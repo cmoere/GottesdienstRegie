@@ -28,6 +28,12 @@ int main() {
     try { gpu_probe::captureAtDeadline(12333333, 10000000, 10000000, next, []()->bool { throw std::runtime_error("source error"); }); }
     catch (const std::runtime_error&) {}
     check(next == 12333333, "failed capture consumed deadline");
+    std::uint64_t sixty = 10000000;
+    check(gpu_probe::captureAtDeadline(10010000, 10000000, 10000000, sixty, copied, 60), "60Hz copy rejected");
+    check(sixty == 10166666, "60Hz absolute phase incorrect");
+    check(!gpu_probe::captureAtDeadline(10166665, 10000000, 10000000, sixty, copied, 60), "60Hz early frame accepted");
+    check(!gpu_probe::captureAtDeadline(10166666, 10000000, 10000000, sixty, copied, 0), "invalid rate accepted");
+    check(sixty == 10166666, "invalid rate consumed a deadline");
     std::cout << "GPU_CADENCE_PASS empty_retry early_gate slot_retry absolute_phase no_catchup exception\n";
     return 0;
   } catch (const std::exception& error) { std::cerr << error.what() << '\n'; return 1; }

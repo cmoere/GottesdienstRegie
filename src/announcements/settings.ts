@@ -1,3 +1,5 @@
+import {normalizeReadingSettings,validateReadingSettings,type SpeechReadingSettings} from './readingSettings';
+import {bundledVoices,type BundledVoiceId} from './voices';
 export interface AnnouncementSettings {
   enabled:boolean;
   intervalMinutes:number;
@@ -5,6 +7,7 @@ export interface AnnouncementSettings {
   voiceId:string;
   speakerId:number|null;
   voiceAccepted:boolean;
+  reading?:SpeechReadingSettings;
 }
 
 export interface AnnouncementSettingsBridge {
@@ -19,12 +22,12 @@ export interface AnnouncementSettingsBridge {
   onIndicator?(callback:(state:{revision:number;active:boolean})=>void):()=>void;
 }
 
-const fields=new Set(['enabled','intervalMinutes','musicRemainingPercent','voiceId','speakerId','voiceAccepted']);
+const fields=new Set(['enabled','intervalMinutes','musicRemainingPercent','voiceId','speakerId','voiceAccepted','reading']);
 const modelId='de_DE-mls-medium';
 const validSpeaker=(value:unknown):value is number=>typeof value==='number'&&Number.isInteger(value)&&value>=0&&value<236;
 export const bundledAnnouncementVoice='marytts:dfki-pavoque-neutral';
 export const bundledFemaleAnnouncementVoice='marytts:bits1-hsmm';
-export const isBundledAnnouncementVoice=(id:unknown):id is typeof bundledAnnouncementVoice|typeof bundledFemaleAnnouncementVoice=>id===bundledAnnouncementVoice||id===bundledFemaleAnnouncementVoice;
+export const isBundledAnnouncementVoice=(id:unknown):id is BundledVoiceId=>bundledVoices.some(voice=>voice.id===id);
 const supportedVoice=(id:unknown)=>id===modelId||id==='espeak-ng:de'||isBundledAnnouncementVoice(id);
 const validVoiceSpeaker=(id:unknown,value:unknown)=>id==='espeak-ng:de'||isBundledAnnouncementVoice(id)?value===0:validSpeaker(value);
 const inRange=(value:unknown,min:number,max:number):value is number=>typeof value==='number'&&Number.isFinite(value)&&value>=min&&value<=max;
@@ -36,6 +39,7 @@ export function normalizeAnnouncementSettings(value:unknown):AnnouncementSetting
   const speakerId=supported&&validVoiceSpeaker(raw.voiceId,raw.speakerId)?raw.speakerId as number:null;
   const voiceAccepted=raw.voiceAccepted===true&&speakerId!==null;
   return {
+    ...(raw.reading!==undefined?{reading:normalizeReadingSettings(raw.reading)}:{}),
     enabled:raw.enabled===true&&voiceAccepted,
     intervalMinutes:inRange(raw.intervalMinutes,1,120)?raw.intervalMinutes:5,
     musicRemainingPercent:inRange(raw.musicRemainingPercent,0,100)?raw.musicRemainingPercent:20,
@@ -47,6 +51,7 @@ export function normalizeAnnouncementSettings(value:unknown):AnnouncementSetting
 export function validateAnnouncementSettings(value:unknown):AnnouncementSettings {
   if(!value||typeof value!=='object'||Array.isArray(value))throw Error('Ungültige Ansageneinstellungen.');
   const raw=value as Record<string,unknown>;
+  if(raw.reading!==undefined)validateReadingSettings(raw.reading);
   if(Object.keys(raw).some(key=>!fields.has(key))
     ||typeof raw.enabled!=='boolean'||typeof raw.voiceAccepted!=='boolean'
     ||!inRange(raw.intervalMinutes,1,120)||!inRange(raw.musicRemainingPercent,0,100)

@@ -13,6 +13,10 @@
 #include <atomic>
 #include <memory>
 #include <sstream>
+#ifndef REGIE_GPU_CAPTURE_HZ
+#define REGIE_GPU_CAPTURE_HZ 30
+#endif
+static_assert(REGIE_GPU_CAPTURE_HZ == 30 || REGIE_GPU_CAPTURE_HZ == 60, "Unsupported capture rate");
 
 using namespace winrt;
 using namespace winrt::Windows::Graphics::Capture;
@@ -248,7 +252,7 @@ float4 ps(V v):SV_TARGET{float4 c=source.Sample(sampleState,crop.xy+v.uv*crop.zw
       gpu.submit(key->slotId);
       return true;
     } catch (...) { if (frame) frame.Close(); throw; }
-    });
+    }, REGIE_GPU_CAPTURE_HZ);
   }
   ~Capture() {
     try { if (framesHooked) pool.FrameArrived(framesToken); } catch (...) {}
