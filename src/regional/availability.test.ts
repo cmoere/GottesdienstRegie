@@ -26,6 +26,7 @@ it('accepts an explicitly disclosed version-pinned partial release, but not misl
   expect(isRegionalSelectionAvailable({...partial,partialRelease:{...partial.partialRelease,version:'0.90.0'}})).toBe(true);
   expect(isRegionalSelectionAvailable({...partial,partialRelease:{...partial.partialRelease,version:'0.91.0'}})).toBe(true);
   expect(isRegionalSelectionAvailable({...partial,partialRelease:{...partial.partialRelease,version:'0.92.0'}})).toBe(true);
+  expect(isRegionalSelectionAvailable({...partial,partialRelease:{...partial.partialRelease,version:'0.93.0'}})).toBe(true);
   for(const value of [
     {...partial,complete:true},
     {...partial,partialRelease:{...partial.partialRelease,version:'0.90.1'}},

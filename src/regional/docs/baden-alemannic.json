@@ -324,6 +324,18 @@
     "screenshotLabel": "Biispielaasicht"
   },
   "releases": {
+    "versions[0.93].builds[0.93.0].overview.label": "Update-Iistellige direkt ufmache un PowerPoint-Originaldateie erhalte",
+    "versions[0.93].builds[0.93.0].overview.text": "De Hiwiis uf e neii Version führt jetzt direkt zu de Update-Iistellige. Bim PPTX-Inhaltsimport werde zusätzlich d unveränderte Originaldateie für Export un Sicherige ufbewahrt. D PowerPoint-Originalwiedergab bliibt wiiterhin deaktiviert.",
+    "versions[0.93].builds[0.93.0].sections.new.0.label": "Update-Iistellige us em Versionshiwiis ufmache",
+    "versions[0.93].builds[0.93.0].sections.new.0.text": "D zusätzligi Schaltflächi „In de Iistellige zeige“ macht Iistellige → Updates uf. Au e scho offes Iistelligsfenschter wechslet zur richtige Siite. E laufender Download un d gwählti Installation bim Beende bliibe erhalte; d Schaltflächi startet kei Installation.",
+    "versions[0.93].builds[0.93.0].sections.improved.0.label": "PowerPoint-Originaldateie in Projekte bewahre",
+    "versions[0.93].builds[0.93.0].sections.improved.0.text": "Nei importierti PPTX-Dateie werde unverändert un mit Integritätsprüefig im lokale Projektbestand ufbewahrt. Projekt-Export, Sicherig un erneute Import nemme die Originaldateie mit. D Schutzkennzeichnig vo abegladene Dateie bliibt erhalte. De verfüegbari Inhaltsimport erstellt wiiterhin e bearbeitbari Textkopie; scho früener importierti Textkopie enthalte dodurch nit nachträglich ihri Originaldatei.",
+    "versions[0.93].builds[0.93.0].sections.fixed.0.label": "Foliebilder mit de aktualisierte Desktop-Laufziit kopiere",
+    "versions[0.93].builds[0.93.0].sections.fixed.0.text": "S Kopiere vo eme Foliebild verwendet d aktuelli asynchroni Zwischenablag-Schnittstell. D Aktion wird erscht nach em abgeschlossene Schriibvorgang als erfolgriich gmeldet. D Desktop-Laufziit isch aktualisiert un mit de bestehende Usgab-, Iistelligs- un Ansageabläuf prüeft worde.",
+    "versions[0.93].builds[0.93.0].sections.known.0.label": "PowerPoint-Originalwiedergab no nit freigäh",
+    "versions[0.93].builds[0.93.0].sections.known.0.text": "De PowerPoint-Originalmodus bliibt deaktiviert. D Iibindig in d normali Bedienoberflächi, Live-Navigation un de vollständige Usgabablauf isch no nit abgeschlossen. Erfolgriichi nativi Einzeltests ersetze die Produktfreigab nit. D verfüegbari bearbeitbari Textkopie bildet Layout, Bilder un Originalanimatione nit vollständig ab. Importierti Inhalt vor ON AIR prüefe.",
+    "versions[0.93].builds[0.93.0].sections.known.1.label": "Regionalvariante",
+    "versions[0.93].builds[0.93.0].sections.known.1.text": "Regionalvariante sin no nit vollständig übersetzt. Fehlendi UI-Text werde uf Hochdütsch zeigt.",
     "versions[0.92].builds[0.92.0].overview.label": "Klareri Aasage un zuverlässigere PowerPoint-Inhaltsimport",
     "versions[0.92].builds[0.92.0].overview.text": "Fünf mitgliefereti dütschi Stimme, gemeinsami Vorläseiistellige un e höhere Sprochpegel mache verständligi Durchsage leichter. Datumsagabe werde vor em Vorläse usgschriebe. De PowerPoint-Inhaltsimport erhalt d tatsächligi Reihenfolg, Notize un hinterleiti Ziite.",
     "versions[0.92].builds[0.92.0].sections.new.0.label": "Fünf dütschi Stimme ohne zuesätzlichi Installation",

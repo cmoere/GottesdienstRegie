@@ -378,6 +378,18 @@
     "screenshotLabel": "Beispielansicht"
   },
   "releases": {
+    "versions[0.93].builds[0.93.0].overview.label": "Update-Einstellunge direkt uffmache un PowerPoint-Originaldateie erhalte",
+    "versions[0.93].builds[0.93.0].overview.text": "De Hinweis uff e neie Version führt jetzt direkt zu de Update-Einstellunge. Beim PPTX-Inhaltsimport werre zusätzlich die unveränderte Originaldateie fer Export un Sicherunge uffbewahrt. Die PowerPoint-Originalwiedergab bleibt weiterhin deaktiviert.",
+    "versions[0.93].builds[0.93.0].sections.new.0.label": "Update-Einstellunge aus em Versionshinweis uffmache",
+    "versions[0.93].builds[0.93.0].sections.new.0.text": "Die zusätzliche Schaltfläch „In de Einstellunge zeiche“ macht Einstellunge → Updates uff. Aach e schun offenes Einstellungsfenschter wechselt zur richtige Seit. E laufender Download un die gewählte Installation beim Beende bleiwe erhalte; die Schaltfläch schdart kei Installation.",
+    "versions[0.93].builds[0.93.0].sections.improved.0.label": "PowerPoint-Originaldateie in Projekte bewahre",
+    "versions[0.93].builds[0.93.0].sections.improved.0.text": "Nei importierte PPTX-Dateie werre unverändert un mit Integritätspriefung im lokale Projektbestand uffbewahrt. Projekt-Export, Sicherung un erneuter Import nemme die Originaldateie mit. Die Schutzkennzeichnung vun runnergeladene Dateie bleibt erhalte. De verfügbare Inhaltsimport erstellt weiterhin e bearbeitbari Textkopie; schun friher importierte Textkopie enthalte dodurch net nachträglich ihre Originaldatei.",
+    "versions[0.93].builds[0.93.0].sections.fixed.0.label": "Foliebilder mit de aktualisierte Desktop-Laufzeit kopiere",
+    "versions[0.93].builds[0.93.0].sections.fixed.0.text": "Beim Kopiere vun eme Foliebild werd die aktuelle asynchrone Zwischenablag-Schnittstell verwendet. Die Aktion werd erscht nach em abgeschlossene Schreibvorgang als erfolgreich gemeldt. Die Desktop-Laufzeit is aktualisiert un mit de bestehende Ausgabe-, Einstellungs- un Ansagenabläuf geprieft worre.",
+    "versions[0.93].builds[0.93.0].sections.known.0.label": "PowerPoint-Originalwiedergab noch net freigewe",
+    "versions[0.93].builds[0.93.0].sections.known.0.text": "De PowerPoint-Originalmodus bleibt deaktiviert. Die Einbindung in die normale Bedienoberfläch, Live-Navigation un de vollständige Ausgabeablauf is noch net abgeschlossen. Erfolgreiche native Einzeltests ersetze die Produktfreigab net. Die verfügbare bearbeitbari Textkopie bildet Layout, Bilder un Originalanimatione net vollständig ab. Importierte Inhalte vor ON AIR priefe.",
+    "versions[0.93].builds[0.93.0].sections.known.1.label": "Regionalvariante",
+    "versions[0.93].builds[0.93.0].sections.known.1.text": "Regionalvariante sin noch net vollständig iwwersetzt. Fehlende UI-Texte werre uff Hochdeitsch angezeigt.",
     "versions[0.92].builds[0.92.0].overview.label": "Klareri Ansage un zuverlässigere PowerPoint-Inhaltsimport",
     "versions[0.92].builds[0.92.0].overview.text": "Fünf mitgelieferte deitsche Stimme, gemeinsame Vorleseeinstellunge un en höhere Sprachpegel mache verständliche Durchsage leichter. Datumsangabe werre vorm Vorlese ausgeschriwwe. De PowerPoint-Inhaltsimport erhält die tatsächliche Reihefolg, Notize un hinterleiti Zeite.",
     "versions[0.92].builds[0.92.0].sections.new.0.label": "Fünf deitsche Stimme ohne zusätzliche Installation",

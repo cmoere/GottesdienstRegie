@@ -324,6 +324,18 @@
     "screenshotLabel": "Bispeelansicht"
   },
   "releases": {
+    "versions[0.93].builds[0.93.0].overview.label": "Update-Instellungen direkt opmaken un PowerPoint-Originaldateien erhollen",
+    "versions[0.93].builds[0.93.0].overview.text": "De Henwies op en niege Verschoon föhrt nu direkt na de Update-Instellungen. Bi den PPTX-Inholtsimport warrt extra de unverännerte Originaldateien för Export un Sekerungen opbewahrt. De PowerPoint-Originalweddergaav blifft wiederhen utschalt.",
+    "versions[0.93].builds[0.93.0].sections.new.0.label": "Update-Instellungen ut den Versionshenwies opmaken",
+    "versions[0.93].builds[0.93.0].sections.new.0.text": "De extra Schaltflach „In de Instellungen wiesen“ maakt Instellungen → Updates op. Ok en al apen Instellungsfinster wesselt na de richtige Siet. En lopend Download un dat utsöchte Installeren bi't Beennen blievt erhollen; de Schaltflach fangt keen Installation an.",
+    "versions[0.93].builds[0.93.0].sections.improved.0.label": "PowerPoint-Originaldateien in Projekten bewahren",
+    "versions[0.93].builds[0.93.0].sections.improved.0.text": "Nieg importeerte PPTX-Dateien warrt unverännert un mit Integritätsprööv in den lokalen Projektbestand opbewahrt. Projekt-Export, Sekerung un nochmaals Importeren nehmt disse Originaldateien mit. De Schutzkennzeichnung vun daallaadte Dateien blifft erhollen. De verfügbore Inholtsimport maakt wiederhen en bearbeitbore Textkopie; al fröher importeerte Textkopien kriegt dordör nich achteran ehr Originaldatei.",
+    "versions[0.93].builds[0.93.0].sections.fixed.0.label": "Folienbiller mit de aktualiseerte Desktop-Looptiet koperen",
+    "versions[0.93].builds[0.93.0].sections.fixed.0.text": "Dat Koperen vun en Folienbild bruukt de aktuelle asynchrone Twischenaflaag-Schnittstell. De Akschoon warrt eerst na den afslaten Schrievvorgang as erfolgriek meldt. De Desktop-Looptiet is aktualiseert un mit de vörhannenen Utgaav-, Instellungs- un Ansagenaflöpen pröövt.",
+    "versions[0.93].builds[0.93.0].sections.known.0.label": "PowerPoint-Originalweddergaav noch nich freegeven",
+    "versions[0.93].builds[0.93.0].sections.known.0.text": "De PowerPoint-Originalmodus blifft utschalt. De Inbinnen in de normale Bedeenoberfläch, Live-Navigation un den vullstännigen Utgaavafloop is noch nich afslaten. Erfolgrieke native Enkeltests ersetzt disse Produktfreegaav nich. De verfügbore bearbeitbore Textkopie kann Layout, Biller un Originalanimationen nich vullstännig weddergeven. Importeerte Inholten vör ON AIR pröven.",
+    "versions[0.93].builds[0.93.0].sections.known.1.label": "Regionalvarianten",
+    "versions[0.93].builds[0.93.0].sections.known.1.text": "Regionalvarianten sünd noch nich vullstännig översett. Fehlende UI-Texte warrt op Hoochdüütsch wiest.",
     "versions[0.90].builds[0.90.0].sections.new.1.label": "Smaller Loopband bi mehr Mellen",
     "versions[0.90].builds[0.90.0].sections.new.1.text": "Bi mehr Mellen warrt de kräftige rode Loopbandschrift horizontal smaller wiest. Schrifthööcht, vullstännige Texte un gliekmäßige Afstänn an'n mittigen Punkt blievt erhollen. De Wedderhalen un ehr Duur berücksichtigt de sichtbore Breed; de Wessel in't Ankommen oder to'n Countdown start dat Loopband wiederhen nich nieg.",
     "versions[0.90].builds[0.90.0].sections.fixed.1.label": "Höger Spraakpegel bi begrenzte Spitzen",

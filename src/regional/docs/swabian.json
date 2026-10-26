@@ -324,6 +324,18 @@
     "screenshotLabel": "Ansicht als Beispiel"
   },
   "releases": {
+    "versions[0.93].builds[0.93.0].overview.label": "Update-Einstellunge direkt aufmache ond PowerPoint-Originaldateie erhalte",
+    "versions[0.93].builds[0.93.0].overview.text": "Dr Hinweis auf a neie Version führt jetzt direkt zu de Update-Einstellunge. Beim PPTX-Inhaltsimport werdet zusätzlich d'unveränderte Originaldateie für Export ond Sicherunge aufbewahrt. D'PowerPoint-Originalwiedergab bleibt weiterhin deaktiviert.",
+    "versions[0.93].builds[0.93.0].sections.new.0.label": "Update-Einstellunge aus em Versionshinweis aufmache",
+    "versions[0.93].builds[0.93.0].sections.new.0.text": "D'zusätzliche Schaltfläche „In de Einstellunge zeige“ macht Einstellunge → Updates auf. Au a bereits offenes Einstellungsfenster wechselt zur richtige Seite. A laufender Download ond d'gewählte Installation beim Beende bleibet erhalte; d'Schaltfläche startet koi Installation.",
+    "versions[0.93].builds[0.93.0].sections.improved.0.label": "PowerPoint-Originaldateie in Projekte bewahre",
+    "versions[0.93].builds[0.93.0].sections.improved.0.text": "Nei importierte PPTX-Dateie werdet unverändert ond mit Integritätsprüfung im lokale Projektbestand aufbewahrt. Projekt-Export, Sicherung ond erneuter Import nehmet die Originaldateie mit. D'Schutzkennzeichnung von runtergladene Dateie bleibt erhalte. Dr verfügbare Inhaltsimport erstellt weiterhin a bearbeitbare Textkopie; scho früher importierte Textkopie enthaltet dadurch net nachträglich ihre Originaldatei.",
+    "versions[0.93].builds[0.93.0].sections.fixed.0.label": "Folienbilder mit dr aktualisierte Desktop-Laufzeit kopiere",
+    "versions[0.93].builds[0.93.0].sections.fixed.0.text": "S'Kopiere von am Folienbild verwendet d'aktuelle asynchrone Zwischenablage-Schnittstelle. D'Aktion wird erscht nach em abgeschlossene Schreibvorgang als erfolgreich gmeldet. D'Desktop-Laufzeit isch aktualisiert ond mit de bestehende Ausgabe-, Einstellungs- ond Ansagenabläufe geprüft worde.",
+    "versions[0.93].builds[0.93.0].sections.known.0.label": "PowerPoint-Originalwiedergab no net freigegebe",
+    "versions[0.93].builds[0.93.0].sections.known.0.text": "Dr PowerPoint-Originalmodus bleibt deaktiviert. D'Einbindung in d'normale Bedienoberfläche, Live-Navigation ond den vollständige Ausgabeablauf isch no net abgschlosse. Erfolgreiche native Einzeltests ersetzet die Produktfreigabe net. D'verfügbare bearbeitbare Textkopie bildet Layout, Bilder ond Originalanimatione net vollständig ab. Importierte Inhalte vor ON AIR prüefe.",
+    "versions[0.93].builds[0.93.0].sections.known.1.label": "Regionalvariante",
+    "versions[0.93].builds[0.93.0].sections.known.1.text": "Regionalvariante send no net vollständig übersetzt. Fehlende UI-Texte werdet auf Hochdeutsch angezeigt.",
     "versions[0.90].builds[0.90.0].sections.new.1.label": "Schmaleres Laufband bei mehrere Meldunge",
     "versions[0.90].builds[0.90.0].sections.new.1.text": "Bei mehrere Meldunge wird d'kräftige rote Laufbandschrift horizontal schmaler dargestellt. Schrifthöhe, vollständige Texte ond gleichmäßige Abständ am mittige Punkt bleibet erhalte. D'Wiederholung ond ihre Dauer berücksichtiget d'sichtbare Breite; dr Wechsel ins Ankommen oder zum Countdown startet des Laufband weiterhin net neu.",
     "versions[0.90].builds[0.90.0].sections.fixed.1.label": "Höherer Sprachpegel bei begrenzte Spitze",

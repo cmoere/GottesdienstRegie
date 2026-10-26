@@ -1,3 +1,39 @@
+# GottesdienstRegie 0.93.0
+
+Veröffentlicht: Mo., 26.10.2026
+
+Der Hinweis auf eine neue Version führt jetzt direkt zu den Update-Einstellungen. Beim PPTX-Inhaltsimport werden zusätzlich die unveränderten Originaldateien für Export und Sicherungen aufbewahrt. Die PowerPoint-Originalwiedergabe bleibt weiterhin deaktiviert.
+
+## Neu
+
+### Update-Einstellungen aus dem Versionshinweis öffnen
+
+Die zusätzliche Schaltfläche „In Einstellungen anzeigen“ öffnet Einstellungen → Updates. Auch ein bereits geöffnetes Einstellungsfenster wechselt zur richtigen Seite. Ein laufender Download und die gewählte Installation beim Beenden bleiben erhalten; die Schaltfläche startet keine Installation.
+
+## Verbessert
+
+### PowerPoint-Originaldateien in Projekten bewahren
+
+Neu importierte PPTX-Dateien werden unverändert und mit Integritätsprüfung im lokalen Projektbestand aufbewahrt. Projekt-Export, Sicherung und erneuter Import nehmen diese Originaldateien mit. Die Schutzkennzeichnung heruntergeladener Dateien bleibt erhalten. Der verfügbare Inhaltsimport erstellt weiterhin eine bearbeitbare Textkopie; bereits früher importierte Textkopien enthalten dadurch nicht nachträglich ihre Originaldatei.
+
+## Behoben
+
+### Folienbilder mit der aktualisierten Desktop-Laufzeit kopieren
+
+Das Kopieren eines Folienbildes verwendet die aktuelle asynchrone Zwischenablage-Schnittstelle. Die Aktion wird erst nach dem abgeschlossenen Schreibvorgang als erfolgreich gemeldet. Die Desktop-Laufzeit wurde aktualisiert und mit den bestehenden Ausgabe-, Einstellungs- und Ansagenabläufen geprüft.
+
+## Hinweise
+
+### PowerPoint-Originalwiedergabe noch nicht freigegeben
+
+Der PowerPoint-Originalmodus bleibt deaktiviert. Die Einbindung in die normale Bedienoberfläche, Live-Navigation und den vollständigen Ausgabeablauf ist noch nicht abgeschlossen. Erfolgreiche native Einzeltests ersetzen diese Produktfreigabe nicht. Die verfügbare bearbeitbare Textkopie bildet Layout, Bilder und Originalanimationen nicht vollständig ab. Importierte Inhalte vor ON AIR prüfen.
+
+### Regionalvarianten
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.
+
+---
+
 # GottesdienstRegie 0.92.0
 
 Veröffentlicht: So., 25.10.2026

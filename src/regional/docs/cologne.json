@@ -324,6 +324,18 @@
     "screenshotLabel": "Beispillaanzicht"
   },
   "releases": {
+    "versions[0.93].builds[0.93.0].overview.label": "Update-Enstellunge direkt opmaache un PowerPoint-Originaldateie erhalde",
+    "versions[0.93].builds[0.93.0].overview.text": "Dä Hinweis op en neue Version föhrt jetz direkt zo de Update-Enstellunge. Beim PPTX-Enhaltsimport wäde zusätzlich de unveränderte Originaldateie för Export un Sicherunge opbewahrt. De PowerPoint-Originalwidderjab bliev weiterhin deaktiviert.",
+    "versions[0.93].builds[0.93.0].sections.new.0.label": "Update-Enstellunge us em Versionshinweis opmaache",
+    "versions[0.93].builds[0.93.0].sections.new.0.text": "De zusätzliche Schaltfläch „En de Enstellunge zeije“ määt Enstellunge → Updates op. Och e ald opjemaat Enstellungsfinster wechselt op de richtige Sick. Ene laufende Download un de jewählte Installation beim Zomaache blieve erhalde; de Schaltfläch startet kein Installation.",
+    "versions[0.93].builds[0.93.0].sections.improved.0.label": "PowerPoint-Originaldateie en Projekte bewahre",
+    "versions[0.93].builds[0.93.0].sections.improved.0.text": "Neu importierte PPTX-Dateie wäde unverändert un met Integritätsprüfung em lokale Projektbestand opbewahrt. Projekt-Export, Sicherung un erneute Import nemme die Originaldateie met. De Schutzkennzeichnung vun erungerjeladene Dateie bliev erhalde. Dä verfügbare Enhaltsimport erstellt weiterhin en bearbeitbare Textkopie; ald fröher importierte Textkopie enthalde dodurch nit nachträglich ehr Originaldatei.",
+    "versions[0.93].builds[0.93.0].sections.fixed.0.label": "Folienbelder met de aktualisierte Desktop-Laufzig kopiere",
+    "versions[0.93].builds[0.93.0].sections.fixed.0.text": "Et Kopiere vun enem Folienbeld benutzt de aktuelle asynchrone Zwischenablag-Schnittstell. De Aktion weed eets noh em afjeschlosse Schrievvorgang als erfoljrich jemeldt. De Desktop-Laufzig wood aktualisiert un met de bestehende Usjav-, Enstellungs- un Ansagenabläuf jeprüf.",
+    "versions[0.93].builds[0.93.0].sections.known.0.label": "PowerPoint-Originalwidderjab noch nit freijejevve",
+    "versions[0.93].builds[0.93.0].sections.known.0.text": "Dä PowerPoint-Originalmodus bliev deaktiviert. De Enbindung en de normale Bedienoberfläch, Live-Navigation un dä vollständije Usjavablauf es noch nit afjeschlosse. Erfoljriche native Einzeltests ersetze die Produktfreijav nit. De verfügbare bearbeitbare Textkopie bildet Layout, Belder un Originalanimatione nit vollständig af. Importierte Enhalde vör ON AIR prüffe.",
+    "versions[0.93].builds[0.93.0].sections.known.1.label": "Regionalvariante",
+    "versions[0.93].builds[0.93.0].sections.known.1.text": "Regionalvariante sin noch nit vollständig övversetz. Fählende UI-Texte wäde op Huhdütsch anjezeigt.",
     "versions[0.90].builds[0.90.0].sections.new.1.label": "Schmalere Laufband bei mehrere Meldunge",
     "versions[0.90].builds[0.90.0].sections.new.1.text": "Bei mehrere Meldunge weed de kräftije rude Laufbandschrift horizontal schmaler darjestellt. Schrifthüh, vollständije Texte un jlichmäßije Afständ am mittije Punkt blieve erhalde. De Widderholung un ihre Duur berücksichtije de sichtbare Breite; dä Wechsel en et Ankommen oder zum Countdown startet dat Laufband weiterhin nit neu.",
     "versions[0.90].builds[0.90.0].sections.fixed.1.label": "Hühere Sprochpegel bei bejrenzte Spitze",

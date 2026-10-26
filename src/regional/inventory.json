@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": false,
-  "sourceFingerprint": "17befb273be9094dbc6247a769285e30c42d8f3428fef9bdc2e10c8c8e629431",
+  "sourceFingerprint": "51fb562f964a977f7fafb58cb355723a316d615d6b8c08b4ed43aaef1febd1d6",
   "note": "Candidate inventory: review-required entries and assembled help/native surfaces must be classified before release. No automatic text replacement.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -41127,6 +41127,90 @@
       "line": 33,
       "context": "NewExpression",
       "status": "review-required"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].overview.label",
+      "text": "Update-Einstellungen direkt öffnen und PowerPoint-Originaldateien erhalten",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].overview.text",
+      "text": "Der Hinweis auf eine neue Version führt jetzt direkt zu den Update-Einstellungen. Beim PPTX-Inhaltsimport werden zusätzlich die unveränderten Originaldateien für Export und Sicherungen aufbewahrt. Die PowerPoint-Originalwiedergabe bleibt weiterhin deaktiviert.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].sections.new.0.label",
+      "text": "Update-Einstellungen aus dem Versionshinweis öffnen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].sections.new.0.text",
+      "text": "Die zusätzliche Schaltfläche „In Einstellungen anzeigen“ öffnet Einstellungen → Updates. Auch ein bereits geöffnetes Einstellungsfenster wechselt zur richtigen Seite. Ein laufender Download und die gewählte Installation beim Beenden bleiben erhalten; die Schaltfläche startet keine Installation.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].sections.improved.0.label",
+      "text": "PowerPoint-Originaldateien in Projekten bewahren",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].sections.improved.0.text",
+      "text": "Neu importierte PPTX-Dateien werden unverändert und mit Integritätsprüfung im lokalen Projektbestand aufbewahrt. Projekt-Export, Sicherung und erneuter Import nehmen diese Originaldateien mit. Die Schutzkennzeichnung heruntergeladener Dateien bleibt erhalten. Der verfügbare Inhaltsimport erstellt weiterhin eine bearbeitbare Textkopie; bereits früher importierte Textkopien enthalten dadurch nicht nachträglich ihre Originaldatei.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].sections.fixed.0.label",
+      "text": "Folienbilder mit der aktualisierten Desktop-Laufzeit kopieren",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].sections.fixed.0.text",
+      "text": "Das Kopieren eines Folienbildes verwendet die aktuelle asynchrone Zwischenablage-Schnittstelle. Die Aktion wird erst nach dem abgeschlossenen Schreibvorgang als erfolgreich gemeldet. Die Desktop-Laufzeit wurde aktualisiert und mit den bestehenden Ausgabe-, Einstellungs- und Ansagenabläufen geprüft.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].sections.known.0.label",
+      "text": "PowerPoint-Originalwiedergabe noch nicht freigegeben",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].sections.known.0.text",
+      "text": "Der PowerPoint-Originalmodus bleibt deaktiviert. Die Einbindung in die normale Bedienoberfläche, Live-Navigation und den vollständigen Ausgabeablauf ist noch nicht abgeschlossen. Erfolgreiche native Einzeltests ersetzen diese Produktfreigabe nicht. Die verfügbare bearbeitbare Textkopie bildet Layout, Bilder und Originalanimationen nicht vollständig ab. Importierte Inhalte vor ON AIR prüfen.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].sections.known.1.label",
+      "text": "Regionalvarianten",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.93].builds[0.93.0].sections.known.1.text",
+      "text": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
     },
     {
       "key": "release.versions[0.92].builds[0.92.0].overview.label",
