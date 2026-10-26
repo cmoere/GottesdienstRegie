@@ -5,7 +5,8 @@ assert(Number(pkg.version.split('.')[1])>=72,'package must include V72 or newer'
 assert(releases.versions.some(line=>line.builds?.some(build=>build.version==='0.72.0')),'release catalog must retain V72');
 assert(notes.includes('# GottesdienstRegie 0.72.0'),'notes must retain V72');
 const nativeBase=fs.readFileSync('shared/regional/nativeBase.ts','utf8');
-assert(main.includes("buttons:[nativeText('updateInstallNow'),nativeText('updateLater'),nativeText('updateInstallOnExit'),nativeText('cancel')]"),'four-way localized update prompt missing or actions reordered');
-for(const label of ['Jetzt installieren','Später','Beim Beenden installieren','Abbrechen'])assert(nativeBase.includes(`'${label}'`),`German update action missing: ${label}`);
+assert(main.includes("buttons:[nativeText('updateInstallNow'),nativeText('updateLater'),nativeText('updateInstallOnExit'),nativeText('cancel'),nativeText('updateShowInSettings')]"),'localized update prompt missing or original actions reordered');
+assert(main.includes('defaultId:0,cancelId:3'),'update install/cancel defaults changed');
+for(const label of ['Jetzt installieren','Später','Beim Beenden installieren','Abbrechen','In Einstellungen anzeigen'])assert(nativeBase.includes(`'${label}'`),`German update action missing: ${label}`);
 assert(prefs.includes('installUpdatesOnQuit')&&app.includes('Heruntergeladene Updates beim Beenden installieren'),'install-on-quit setting missing');
 console.log('V72 release guard passed.');

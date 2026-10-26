@@ -17,6 +17,7 @@
     "build:web": "tsc -b && vite build --mode web --outDir dist-web",
     "start": "electron .",
     "test:unit": "vitest run",
+    "verify:updates": "node scripts/check-version72.cjs",
     "test:web": "playwright test",
     "typecheck": "tsc -b --pretty false",
     "installer": "node scripts/check-version84.cjs && node scripts/check-version85.cjs && node scripts/check-version86.cjs && npm run build && electron-builder --win nsis --publish never",
