@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {PresentationRepository} from './PresentationRepository';
+import {PowerPointSourceStore} from './PowerPointSourceStore';
 
 const dirs:string[]=[];
 afterEach(async()=>{for(const dir of dirs.splice(0)){expect(path.dirname(dir)).toBe(os.tmpdir());await fs.rm(dir,{recursive:true,force:true})}});
@@ -23,4 +24,9 @@ it('imports an honest editable copy in original order with notes and exact sourc
  expect(item.slides[1].timing.durationSeconds).toBeUndefined();expect(item.autoAdvance).toBe(false);expect(item.timing.slideDurationSeconds).toBe(0);
  expect(item.metadata.importMode).toBe('editable-copy');expect(doc.importReport.warnings.join(' ')).toMatch(/Layout/);expect(doc.importReport.sourcePages).toBe(2);
  expect(hash(await fs.readFile(sourcePath))).toBe(hash(bytes));expect((await repo.read(doc.presentationId)).items[0].slides[0].sourceSlideId).toBe('900');
+ expect(item.metadata.powerPointSourceHash).toBe(hash(bytes));
+ const exported=path.join(root,'Portable.grpresentation');await repo.exportDocument(doc.presentationId,exported);const portable=JSON.parse(await fs.readFile(exported,'utf8'));expect(portable.powerPointAssets.sources).toHaveLength(1);expect(JSON.stringify(portable)).not.toContain(root);
+ const secondRoot=path.join(root,'second-data'),second=new PresentationRepository(secondRoot),restored=await second.importDocument(exported);expect(restored.items[0].metadata.powerPointSourceHash).toBe(hash(bytes));expect((await new PowerPointSourceStore(secondRoot).get(hash(bytes))).bytes).toEqual(bytes);
+ const backup=JSON.parse(await fs.readFile(await repo.backup(doc.presentationId),'utf8'));expect(backup.powerPointAssets).toEqual(portable.powerPointAssets);
+ portable.powerPointAssets.sources[0].id='f'.repeat(64);await fs.writeFile(exported,JSON.stringify(portable));await expect(second.importDocument(exported)).rejects.toThrow();
 });

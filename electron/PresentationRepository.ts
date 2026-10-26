@@ -6,7 +6,7 @@ import {sanitizeRecoveryDocument} from '../src/presentationRecovery';
 import {atomicRename} from './atomicRename';
 import {DocumentImportService,type ImportedPage} from './DocumentImportService';
 import {importKeynotePath} from './KeynoteImport';
-import {inspectPowerPoint} from './PowerPointImport';
+import {PowerPointSourceStore} from './PowerPointSourceStore';
 
 export interface PresentationSummary {
   id:string; title:string; date:string; createdAt:string; updatedAt:string;
@@ -25,6 +25,9 @@ const safeName=(value:string)=>value.replace(/[^a-zA-Z0-9_-]/g,'');
 const now=()=>new Date().toISOString();
 const decodeXml=(value:string)=>value.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&');
 const plainXml=(value:string)=>decodeXml(value.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim());
+function powerPointSourceIds(doc:any):string[]{
+ const ids:string[]=[];for(const item of Array.isArray(doc?.items)?doc.items:[]){const id=item?.metadata?.powerPointSourceHash;if(id!==undefined){if(typeof id!=='string'||!/^[a-f0-9]{64}$/.test(id))throw Error('POWERPOINT_SOURCE_ID_INVALID');ids.push(id)}}return[...new Set(ids)];
+}
 type ImportedTransition={type:'cut'|'fade'|'crossfade'|'dissolve'|'slide'|'wipe';durationMs:number;direction:'left'|'right'|'up'|'down';easing:'standard';reverseOnPrevious:boolean};
 function importedPresentation(title:string,pages:Array<ImportedPage&{transition?:ImportedTransition}>,sourceFormat:string){
   const stamp=now(),itemId=randomUUID(),textElement=(text:string)=>({id:randomUUID(),type:'text',name:'Text',x:180,y:220,width:1560,height:640,rotation:0,opacity:1,locked:false,visible:true,zIndex:1,properties:{text,fontFamily:'Cera Pro',fontSize:58,fontWeight:600,color:'#ffffff',align:'center',verticalAlign:'center',lineHeight:1.18,padding:24}}),imageElement=(src:string)=>({id:randomUUID(),type:'image',name:'Importierte Vorschau',x:0,y:0,width:1920,height:1080,rotation:0,opacity:1,locked:false,visible:true,zIndex:1,properties:{src,fit:'contain'}});
@@ -42,6 +45,7 @@ async function officePages(sourcePath:string,extension:string){
 }
 
 export class PresentationRepository {
+  private readonly powerPointSources:PowerPointSourceStore;
   private readonly presentations:string;
   private readonly backups:string;
   private readonly recovery:string;
@@ -50,6 +54,7 @@ export class PresentationRepository {
   private stateWrites:Promise<unknown>=Promise.resolve();
   private sessionStart?:Promise<{summary:PresentationSummary;document:Record<string,any>}|null>;
   constructor(private readonly root:string,private readonly documentImporter?:DocumentImportService){
+      this.powerPointSources=new PowerPointSourceStore(root);
     this.presentations=path.join(root,'presentations');
     this.backups=path.join(root,'backups');
     this.recovery=path.join(root,'recovery');
@@ -107,14 +112,14 @@ export class PresentationRepository {
   async setFlag(id:string,flag:'archived'|'trashed',value:boolean){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');doc[flag]=value;await this.save(doc);return this.summary(doc)}
   async importDocument(sourcePath:string){const extension=path.extname(sourcePath).toLowerCase(),title=path.basename(sourcePath,extension);if(extension==='.pptx'){
  const stat=await fs.stat(sourcePath);if(!stat.isFile()||stat.size>128*1024*1024)throw Error('Die PowerPoint-Datei ist zu groß oder ungültig.');
- const result=await inspectPowerPoint(await fs.readFile(sourcePath)),template=importedPresentation(title,result.slides.map(({title,body,hidden})=>({title,body,hidden})),'pptx'),item=template.items[0];
+ const source=await this.powerPointSources.put(await fs.readFile(sourcePath)),result=source.inspection,template=importedPresentation(title,result.slides.map(({title,body,hidden})=>({title,body,hidden})),'pptx'),item=template.items[0];
  item.timing.slideDurationSeconds=0;
  item.slides=result.slides.map((source,index)=>{
   const supported=source.transition&&['fade','cut','dissolve','push','pull','wipe'].includes(source.transition.kind),kind=source.transition?.kind;
   const transition:ImportedTransition|undefined=supported?{type:kind==='push'||kind==='pull'?'slide':kind as ImportedTransition['type'],durationMs:source.transition!.durationMs,direction:source.transition?.direction??'left',easing:'standard',reverseOnPrevious:true}:undefined;
   return{...item.slides[index],sourceSlideId:source.sourceId,notes:source.notes,timing:source.advanceAfterSeconds===undefined?{}:{durationSeconds:source.advanceAfterSeconds},transitionOverride:transition??null};
  });
- Object.assign(item.metadata,{importMode:'editable-copy',powerPointSourceTiming:JSON.stringify(result.slides.map(s=>({sourceId:s.sourceId,advanceOnClick:s.advanceOnClick,advanceAfterSeconds:s.advanceAfterSeconds}))) });
+ Object.assign(item.metadata,{importMode:'editable-copy',powerPointSourceHash:source.id,powerPointSourceTiming:JSON.stringify(result.slides.map(s=>({sourceId:s.sourceId,advanceOnClick:s.advanceOnClick,advanceAfterSeconds:s.advanceAfterSeconds}))) });
  const warnings=['Bearbeitbare Textkopie: Layout, Bilder und Originalanimationen werden nicht originalgetreu wiedergegeben. Der Originalmodus ist noch nicht freigegeben.','Originalzeiten sind hinterlegt; die Kopie startet zur sicheren Prüfung mit manueller Navigation.',...result.warnings];
  if(result.originalBlockers.length)warnings.push('Die Quelle enthält Medien, aktive Inhalte oder externe Verknüpfungen. Diese werden beim Textimport nicht ausgeführt.');
  return this.create({title,template:{...template,importReport:{sourceFormat:'pptx',sourcePages:result.slides.length,generatedSlides:item.slides.length,sourceSize:result.size,originalBlockers:result.originalBlockers,warnings}}});
@@ -136,9 +141,13 @@ export class PresentationRepository {
  const template=importedPresentation(title,pages,extension.slice(1));
  for(const slide of template.items[0].slides)for(const element of slide.elements)if(element.type==='text')Object.assign(element,{x:120,y:110,width:1680,height:860,properties:{...element.properties,fontSize:42,fontWeight:400,align:'left',verticalAlign:'top',lineHeight:1.2}});
  return this.create({title,template:{...template,importReport:{sourceFormat:extension.slice(1),sourcePages:result.pages.length,generatedSlides:pages.length,warnings:result.warnings}}});
- }if(['.pptx','.odp','.key'].includes(extension)){const pages=await officePages(sourcePath,extension);if(!pages.length)throw new Error(extension==='.key'?'KEYNOTE_PREVIEW_NOT_FOUND':'PRESENTATION_CONTENT_NOT_FOUND');return this.create({title,template:importedPresentation(title,pages,extension.slice(1))})}if(extension==='.txt'||extension==='.md'){const text=await fs.readFile(sourcePath,'utf8'),pages=text.split(/\r?\n\s*\r?\n+/).map((body,index)=>({title:body.split(/\r?\n/)[0]?.replace(/^#+\s*/,'')||`Folie ${index+1}`,body:body.replace(/^#+\s*/,'').trim()})).filter(page=>page.body);return this.create({title,template:importedPresentation(title,pages,extension.slice(1))})}const parsed=JSON.parse(await fs.readFile(sourcePath,'utf8'));const id=randomUUID();return this.create({title:parsed.title||title,date:parsed.date,template:{...parsed,presentationId:id,createdAt:undefined,updatedAt:undefined}})}
-  async exportDocument(id:string,targetPath:string){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');await this.atomicWrite(targetPath,doc);return targetPath}
-  async backup(id:string){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');const stamp=now().replace(/[:.]/g,'-'),target=path.join(this.backups,`${safeName(doc.title).slice(0,40)||'presentation'}-${stamp}.grbackup`);await this.atomicWrite(target,doc);return target}
+ }if(extension==='.odp'){const pages=await officePages(sourcePath,extension);if(!pages.length)throw new Error('PRESENTATION_CONTENT_NOT_FOUND');return this.create({title,template:importedPresentation(title,pages,extension.slice(1))})}if(extension==='.txt'||extension==='.md'){const text=await fs.readFile(sourcePath,'utf8'),pages=text.split(/\r?\n\s*\r?\n+/).map((body,index)=>({title:body.split(/\r?\n/)[0]?.replace(/^#+\s*/,'')||`Folie ${index+1}`,body:body.replace(/^#+\s*/,'').trim()})).filter(page=>page.body);return this.create({title,template:importedPresentation(title,pages,extension.slice(1))})}
+ const stat=await fs.stat(sourcePath);if(!stat.isFile()||stat.size>512*1024*1024)throw Error('PRESENTATION_IMPORT_SIZE');
+ const parsed=JSON.parse(await fs.readFile(sourcePath,'utf8'));if(Object.hasOwn(parsed,'powerPointAssets')){await this.powerPointSources.restore(parsed.powerPointAssets);delete parsed.powerPointAssets}
+ for(const sourceId of powerPointSourceIds(parsed))await this.powerPointSources.get(sourceId);
+ const id=randomUUID();return this.create({title:parsed.title||title,date:parsed.date,template:{...parsed,presentationId:id,createdAt:undefined,updatedAt:undefined}})}
+  async exportDocument(id:string,targetPath:string){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');const ids=powerPointSourceIds(doc),portable=ids.length?{...doc,powerPointAssets:await this.powerPointSources.export(ids)}:doc;await this.atomicWrite(targetPath,portable);return targetPath}
+  async backup(id:string){const doc=await this.read(id);if(!doc)throw new Error('PRESENTATION_NOT_FOUND');const stamp=now().replace(/[:.]/g,'-'),target=path.join(this.backups,`${safeName(doc.title).slice(0,40)||'presentation'}-${stamp}.grbackup`);return this.exportDocument(id,target)}
   private async readRecovery(file:string,id:string){try{const document=sanitizeRecoveryDocument(JSON.parse(await fs.readFile(file,'utf8')));return document&&document.presentationId===id?document:null}catch{return null}}
   async recoveryInfo(){
     const state=await this.getState(),id=state.recoveryPresentationId??state.lastPresentationId;
