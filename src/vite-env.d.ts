@@ -184,6 +184,7 @@ interface Window {
             connection: () => Promise<boolean>;
         };
         updates: {
+            onOpenSettings?: (callback:()=>void)=>()=>void;
             currentVersion: () => Promise<string>;
             status: () => Promise<DesktopUpdateStatus>;
             metadata: () => Promise<DesktopVersionMetadata>;

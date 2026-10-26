@@ -266,6 +266,7 @@ contextBridge.exposeInMainWorld("desktop", {
     },
   },
   updates: {
+    onOpenSettings:(callback:()=>void)=>{const listener=()=>callback();ipcRenderer.on('updates:open-settings',listener);return()=>ipcRenderer.removeListener('updates:open-settings',listener)},
     currentVersion: () => ipcRenderer.invoke("updates:current-version"),
     status: () => ipcRenderer.invoke("updates:status"),
     metadata: () => ipcRenderer.invoke("updates:metadata"),

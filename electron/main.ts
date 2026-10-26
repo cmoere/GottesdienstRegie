@@ -144,10 +144,11 @@ async function promptForAvailableUpdate(info:UpdateInfo){
   if(backgroundUpdateOnly||!appPreferences||promptedUpdateVersions.has(info.version))return;
   promptedUpdateVersions.add(info.version);
   const owner=controlWindow&&!controlWindow.isDestroyed()?controlWindow:undefined;
-  const options:Electron.MessageBoxOptions={type:'info',title:nativeText('updateAvailableTitle'),message:nativeText('updateAvailableMessage',{version:info.version}),detail:nativeText('updateInstallQuestion'),buttons:[nativeText('updateInstallNow'),nativeText('updateLater'),nativeText('updateInstallOnExit'),nativeText('cancel')],defaultId:0,cancelId:3,noLink:true};
+  const options:Electron.MessageBoxOptions={type:'info',title:nativeText('updateAvailableTitle'),message:nativeText('updateAvailableMessage',{version:info.version}),detail:nativeText('updateInstallQuestion'),buttons:[nativeText('updateInstallNow'),nativeText('updateLater'),nativeText('updateInstallOnExit'),nativeText('cancel'),nativeText('updateShowInSettings')],defaultId:0,cancelId:3,noLink:true};
   const result=await (owner?dialog.showMessageBox(owner,options):dialog.showMessageBox(options));
   const action=updatePromptAction(result.response);
-  if(action==='install-now'){installDownloadedUpdateNow=true;autoUpdater.autoInstallOnAppQuit=false;if(lastUpdateStatus.state==='downloaded')setImmediate(()=>autoUpdater.quitAndInstall(false,true));else void downloadAvailableUpdate()}
+  if(action==='open-settings'){sendToLiveWindow(controlWindow,'updates:open-settings')}
+  else if(action==='install-now'){installDownloadedUpdateNow=true;autoUpdater.autoInstallOnAppQuit=false;if(lastUpdateStatus.state==='downloaded')setImmediate(()=>autoUpdater.quitAndInstall(false,true));else void downloadAvailableUpdate()}
   else if(action==='install-on-exit'){installDownloadedUpdateNow=false;autoUpdater.autoInstallOnAppQuit=true;await appPreferences.update({installUpdatesOnQuit:true});void downloadAvailableUpdate()}
   else if(action==='later'){installDownloadedUpdateNow=false;autoUpdater.autoInstallOnAppQuit=false;if(appPreferences.get().autoDownloadUpdates)void downloadAvailableUpdate()}
   else if(updateCancellationToken){updateCancellationToken.cancel()}

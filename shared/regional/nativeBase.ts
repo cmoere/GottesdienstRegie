@@ -6,6 +6,7 @@ export const nativeBaseTemplates={
   updateInstallNow:'Jetzt installieren',
   updateLater:'Später',
   updateInstallOnExit:'Beim Beenden installieren',
+  updateShowInSettings:'In Einstellungen anzeigen',
   cancel:'Abbrechen',
   updateDownloadCancelled:'Der Update-Download wurde abgebrochen.',
   saveSlideTitle:'Folie als Bild speichern',

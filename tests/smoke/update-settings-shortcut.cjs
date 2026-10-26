@@ -1,0 +1,11 @@
+const{app,BrowserWindow}=require('electron'),path=require('node:path'),fs=require('node:fs'),assert=require('node:assert/strict');
+const folder=fs.mkdtempSync(path.resolve('work/v93-update-settings-'));app.setPath('userData',path.join(folder,'profile'));setTimeout(()=>app.exit(1),45000).unref();
+(async()=>{await app.whenReady();const win=new BrowserWindow({show:false,width:1440,height:1000,webPreferences:{offscreen:true,backgroundThrottling:false}});const errors=[];win.webContents.on('console-message',e=>{if(e.level>=2)errors.push(e.message)});await win.loadURL('http://127.0.0.1:5179/tests/smoke/update-settings-shortcut.html');
+ const evaluate=script=>win.webContents.executeJavaScript(script),active=()=>evaluate('document.querySelector(".settings-modal nav button.active")?.textContent');
+ for(let n=0;n<100&&!await evaluate('typeof window.requestUpdateSettings==="function" && !!document.querySelector(".settings-modal nav button.active")');n++)await new Promise(r=>setTimeout(r,100));
+ assert.equal(await active(),'Allgemein');await evaluate('window.requestUpdateSettings()');await new Promise(r=>setTimeout(r,100));assert.equal(await active(),'Updates');
+ await evaluate('Array.from(document.querySelectorAll(".settings-modal nav button")).find(b=>b.textContent==="Allgemein").click()');assert.equal(await active(),'Allgemein');await evaluate('window.requestUpdateSettings()');await new Promise(r=>setTimeout(r,100));assert.equal(await active(),'Updates');
+ assert.deepEqual(await evaluate('window.shortcutStats'),{statusReads:1,download:0,cancel:0});await evaluate('document.fonts.ready');fs.writeFileSync(path.join(folder,'updates.png'),(await win.webContents.capturePage()).toPNG());
+ await evaluate('document.querySelector(".settings-modal header button").click()');await new Promise(r=>setTimeout(r,50));await evaluate('document.querySelector("#reopen").click()');await new Promise(r=>setTimeout(r,100));assert.equal(await active(),'Allgemein');assert.deepEqual(await evaluate('window.shortcutStats'),{statusReads:2,download:0,cancel:0});assert.deepEqual(errors,[]);
+ console.log('NATIVE_UPDATE_SETTINGS_SHORTCUT_PASS '+folder);win.destroy();app.exit(0);
+})().catch(error=>{console.error(error);app.exit(1)});

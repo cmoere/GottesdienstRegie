@@ -1,4 +1,5 @@
 import {settingsExtraTemplateKeys} from "../shared/regional/settingsExtraTemplates";
+import {useUpdateSettingsRequest} from './useUpdateSettingsRequest';
 import {getHelpCatalog} from './help';
 import {startNativeSelectionSync} from './regional/nativeSelectionSync';
 import {RegionalSelector} from './regional/RegionalSelector';
@@ -4986,16 +4987,18 @@ function useUpdateSearchDots(active: boolean) {
   return dots;
 }
 
-function SettingsModal({
+export function SettingsModal({
   close,
   canConfigure,
   onOpenTerms,
   device = null,
+  openUpdatesRequest = 0,
 }: {
   close: () => void;
   canConfigure: boolean;
   onOpenTerms?: () => void;
   device?: RegisteredDevice | null;
+  openUpdatesRequest?: number;
 }) {
   const [registeredDevice] = useRegisteredDevice();
   device = device ?? registeredDevice ?? null;
@@ -5263,6 +5266,7 @@ function SettingsModal({
     if (group) setOpenSettingGroups((current) => ({ ...current, [group.title]: true }));
     requestAnimationFrame(() => contentRef.current?.scrollTo({ top: 0 }));
   };
+  useEffect(()=>{if(openUpdatesRequest>0)switchTab('updates')},[openUpdatesRequest]);
   const installedIsBeta = isPrerelease(currentVersion);
   const safeRollback = async () => {
     if (!previousVersion) return;
@@ -7455,6 +7459,7 @@ function AppShell({
     ),
     [previewQuick, setPreviewQuick] = useState<QuickScreenConfig | null>(null),
     [settingsOpen, setSettingsOpen] = useState(false),
+    [settingsUpdatesRequest,setSettingsUpdatesRequest] = useState(0),
     [bibleTextOpen,setBibleTextOpen]=useState(false),
     [osbSettings,setOsbSettings]=useState<OsbSettings>(DEFAULT_OSB_SETTINGS),
     [termsOpen, setTermsOpen] = useState(false),
@@ -7483,6 +7488,9 @@ function AppShell({
       step: number;
       text: string;
     }>({ state: "idle", step: 0, text: "" });
+  const openUpdateSettings=useCallback(()=>{setSettingsUpdatesRequest(value=>value+1);setSettingsOpen(true)},[]);
+  useUpdateSettingsRequest(openUpdateSettings);
+  useEffect(()=>{if(!settingsOpen)setSettingsUpdatesRequest(0)},[settingsOpen]);
   const screenTestBridge=useMemo<ScreenTestBridge|undefined>(()=>{const bridge=window.desktop as any;return bridge?.screenTest?.onResult&&bridge.screenTest.restore?{sendQuick:(roles,quick)=>bridge.sendQuick(roles,quick),restore:(runId,quick)=>bridge.screenTest.restore(runId,quick),onResult:callback=>bridge.screenTest.onResult(callback)}:undefined},[]);
   const screenTest=useScreenTest({current:previewQuick,onAir:state.onAir,setQuick:setPreviewQuick,bridge:screenTestBridge});
   useEffect(()=>{void (window.desktop as any)?.deviceSettings?.readOsb?.().then((value:unknown)=>setOsbSettings(normalizeOsbSettings(value,[...BIBLE_TRANSLATIONS])))},[]);
@@ -9660,6 +9668,7 @@ function AppShell({
       {settingsOpen && (
         <SettingsModal
           canConfigure={canConfigure}
+          openUpdatesRequest={settingsUpdatesRequest}
           close={() => setSettingsOpen(false)}
           onOpenTerms={() => setTermsOpen(true)}
         />

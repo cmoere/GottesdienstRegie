@@ -392,6 +392,7 @@
     "updateInstallNow": "Jetzt installieren",
     "updateLater": "Später",
     "updateInstallOnExit": "Beim Zumachen installieren",
+    "updateShowInSettings": "In den Einstellungen anzeigen",
     "cancel": "Abbrechen",
     "updateDownloadCancelled": "Das Runterladen vom Update is abgebrochen worden.",
     "saveSlideTitle": "Folie als Bild speichern",

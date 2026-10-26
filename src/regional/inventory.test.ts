@@ -81,7 +81,7 @@ describe('regional text source inventory', () => {
   it('inventories assembled current help and canonical native dialogs rather than retired raw help',()=>{
     const inventory=generateInventory(process.cwd());
     const entries=inventory.entries as Array<{key:string;text:string;status:string}>;
-    expect(entries.filter(entry=>entry.key.startsWith('native.'))).toHaveLength(33);
+    expect(entries.filter(entry=>entry.key.startsWith('native.'))).toHaveLength(34);
     expect(entries.find(entry=>entry.key==='help.Erste Schritte.body')?.text).toContain('## ');
     expect(entries.find(entry=>entry.key==='helpUI.title')?.text).toBe('Hilfe');
     expect(entries.find(entry=>entry.key==='native.updateInstallOnExit')?.text).toBe('Beim Beenden installieren');
