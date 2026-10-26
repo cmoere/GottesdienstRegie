@@ -18,7 +18,7 @@ async function buildGpuProbe({root, target, captureHz=30}) {
   const {compiler, env} = await resolveNativeToolchain();
   const executable = path.join(folder, target + '.exe');
   const source = path.join(root, 'scripts/powerpoint-gpu-probe');
-  const result = await runNativeCommand(compiler, ['/nologo', '/std:c++17', '/EHsc', '/O2', '/W4', '/utf-8', '/DUNICODE', '/D_UNICODE', ...(target==='producer'?['/DREGIE_GPU_CAPTURE_HZ='+captureHz]:[]), '/D_WIN32_WINNT=0x0A00', '/Fe:' + executable, ...targets[target].map(file => path.join(source, file)), '/link', 'd3d11.lib', 'dxgi.lib', 'd3dcompiler.lib', 'windowsapp.lib', 'bcrypt.lib', 'user32.lib'], {cwd: folder, env});
+  const result = await runNativeCommand(compiler, ['/nologo', '/std:c++20', '/EHsc', '/O2', '/W4', '/utf-8', '/DUNICODE', '/D_UNICODE', ...(target==='producer'?['/DREGIE_GPU_CAPTURE_HZ='+captureHz]:[]), '/D_WIN32_WINNT=0x0A00', '/Fe:' + executable, ...targets[target].map(file => path.join(source, file)), '/link', 'd3d11.lib', 'dxgi.lib', 'd3dcompiler.lib', 'windowsapp.lib', 'bcrypt.lib', 'user32.lib'], {cwd: folder, env});
   await fs.writeFile(path.join(folder, 'build.log'), result.stdout + result.stderr);
   if (result.code !== 0) throw Error('NATIVE_BUILD_FAILED: ' + result.stdout + result.stderr);
   return {folder, executable};
