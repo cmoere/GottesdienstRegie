@@ -12,11 +12,17 @@ async function startGpuProducer({executable, args = [], cwd, owner, sessionId, g
   if (!path.isAbsolute(executable) || !Array.isArray(args) || args.length > 8 || args.some(a => typeof a !== 'string' || a.length > 2048 || a.includes('\0'))
       || !token(sessionId) || !token(generation) || !owner || !uint64(owner.hwnd) || !uint64(owner.createdAt)
       || !serial(owner.pid) || owner.pid > 0xffffffff) throw problem('CONFIG');
+  const guarded=['childWindowHandle','lifetimeProperty','lifetimeValue'].some(key=>Object.hasOwn(owner,key));
+  if(guarded&&(!uint64(owner.childWindowHandle)||owner.childWindowHandle===owner.hwnd||owner.lifetimeProperty!=='GDR.PowerPoint.'+generation
+      ||!uint64(owner.lifetimeValue)||BigInt(owner.lifetimeValue)>2147483647n))throw problem('CONFIG');
   const crop = owner.crop;
   if (!exact(crop, ['x', 'y', 'width', 'height', 'outerWidth', 'outerHeight']) || Object.values(crop).some(n => !Number.isSafeInteger(n) || n < 0)
       || !crop.width || !crop.height || crop.outerWidth > 4096 || crop.outerHeight > 2160
       || crop.x + crop.width > crop.outerWidth || crop.y + crop.height > crop.outerHeight) throw problem('CONFIG');
-  const child = spawn(executable, args, {cwd, windowsHide: true, stdio: ['pipe', 'pipe', 'pipe']});
+  // On Windows the native guard must survive its parent long enough to hide
+  // the still-owned source and close itself; never detach from supervision.
+  // Keep the process referenced and retain the normal bounded stop protocol.
+  const child = spawn(executable, args, {cwd, windowsHide: true, detached: process.platform==='win32', stdio: ['pipe', 'pipe', 'pipe']});
   const requests = new Map(), leases = new Map(), latestSubscribers = new Set(), faultSubscribers = new Set();
   let stage = 'hello', tail = Buffer.alloc(0), handles, counter = 0, lastSequence = 0, frequency, lastNotice = 0;
   let fault, lost, pendingNotice, stopping = false, closed, stopPromise, exitCode;
@@ -61,8 +67,8 @@ async function startGpuProducer({executable, args = [], cwd, owner, sessionId, g
       if (!exact(v, ['status', 'protocol', 'parentPid', 'parentCreated', 'nonce']) || v.status !== 'hello' || v.protocol !== 1
           || v.parentPid !== process.pid || !uint64(v.parentCreated) || !token(v.nonce)) throw problem('BOOTSTRAP');
       stage = 'ready';
-      write(['start', 1, v.nonce, sessionId, generation, owner.hwnd, owner.pid, owner.createdAt, crop.x, crop.y, crop.width, crop.height,
-        crop.outerWidth, crop.outerHeight, process.pid, v.parentCreated].join(' ')); return;
+      write(['start', guarded?2:1, v.nonce, sessionId, generation, owner.hwnd, owner.pid, owner.createdAt, crop.x, crop.y, crop.width, crop.height,
+        crop.outerWidth, crop.outerHeight, process.pid, v.parentCreated,...(guarded?[owner.childWindowHandle,owner.lifetimeValue]:[])].join(' ')); return;
     }
     if (stage === 'ready') {
       if (!exact(v, ['status', 'sessionId', 'generation', 'width', 'height', 'handles']) || v.status !== 'ready' || v.sessionId !== sessionId

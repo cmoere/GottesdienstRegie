@@ -55,7 +55,22 @@ std::string randomNonce() {
   constexpr char digits[] = "0123456789abcdef"; std::string value;
   for (auto b : bytes) { value += digits[b >> 4]; value += digits[b & 15]; } return value;
 }
-void validateOwner(const SourceOwner& o) {
+void validateLifetime(const StartConfig& config) {
+  const auto& o = config.owner;
+  if (!o.childWindow) return; // Legacy synthetic probe sources only.
+  const auto root = reinterpret_cast<HWND>(static_cast<std::uintptr_t>(o.window));
+  const auto child = reinterpret_cast<HWND>(static_cast<std::uintptr_t>(o.childWindow));
+  const std::wstring marker = L"GDR.PowerPoint." + std::wstring(config.generation.begin(), config.generation.end());
+  const auto cookie = reinterpret_cast<HANDLE>(static_cast<std::uintptr_t>(o.lifetimeValue));
+  DWORD pid = 0;
+  if (!IsWindow(child) || !IsWindowVisible(child) || GetAncestor(child, GA_ROOT) != root
+      || !GetWindowThreadProcessId(child, &pid) || pid != o.pid
+      || GetPropW(root, marker.c_str()) != cookie || GetPropW(child, marker.c_str()) != cookie)
+    throw std::runtime_error("SOURCE_LIFETIME_ENDED");
+}
+void validateOwner(const StartConfig& config) {
+  const auto& o = config.owner;
+  validateLifetime(config);
   const auto window = reinterpret_cast<HWND>(static_cast<std::uintptr_t>(o.window));
   DWORD pid = 0;
   if (!IsWindow(window) || GetAncestor(window, GA_ROOT) != window || !GetWindowThreadProcessId(window, &pid) || pid != o.pid)
@@ -66,6 +81,16 @@ void validateOwner(const SourceOwner& o) {
   RECT bounds{};
   if (!GetWindowRect(window, &bounds) || bounds.right - bounds.left != static_cast<LONG>(o.outerWidth)
       || bounds.bottom - bounds.top != static_cast<LONG>(o.outerHeight)) throw std::runtime_error("SOURCE_GEOMETRY_CHANGED");
+}
+void hideMarkedSourceAfterParentLoss(const StartConfig& config) noexcept {
+  // A generic diagnostic HWND is never authority to hide another app. The
+  // actual child, markers, PID and start time must still match. A slideshow
+  // root recycled for an editor is deliberately left untouched.
+  if (!config.owner.childWindow) return;
+  try {
+    validateOwner(config);
+    ShowWindow(reinterpret_cast<HWND>(static_cast<std::uintptr_t>(config.owner.window)), SW_HIDE);
+  } catch (...) {}
 }
 std::string keyJson(const FrameKey& key) {
   return "{\"sessionId\":\"" + key.sessionId + "\",\"generation\":\"" + key.generation + "\",\"slotId\":"
@@ -136,6 +161,7 @@ struct Capture {
   const StartConfig config;
   SlotPool slots;
   GpuTargets gpu;
+  std::unique_ptr<Handle> sourceHelper;
   const std::shared_ptr<Signals> signals = std::make_shared<Signals>();
   std::uint64_t frequency = 0, nextFrame = 0, origin = 0, ownerCheck = 0;
   bool running = true, framesHooked = false, closedHooked = false, announcedLost = false;
@@ -148,7 +174,12 @@ struct Capture {
   com_ptr<ID3D11SamplerState> sampler; com_ptr<ID3D11Buffer> constants;
   explicit Capture(StartConfig c) : config(std::move(c)), slots(config.sessionId, config.generation) {}
   void initialize(HANDLE parent) {
-    validateOwner(config.owner);
+    validateOwner(config);
+    if(config.owner.childWindow){
+      sourceHelper=std::make_unique<Handle>(OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION|SYNCHRONIZE,FALSE,static_cast<DWORD>(config.owner.lifetimeValue)));
+      if(WaitForSingleObject(sourceHelper->value,0)!=WAIT_TIMEOUT)throw std::runtime_error("SOURCE_HELPER_EXITED");
+      validateOwner(config);
+    }
     if (!GraphicsCaptureSession::IsSupported()) throw std::runtime_error("SOURCE_CAPTURE_UNSUPPORTED");
     LARGE_INTEGER f{}; if (!QueryPerformanceFrequency(&f) || f.QuadPart <= 0) throw std::runtime_error("GPU_CLOCK_FAILED");
     frequency = static_cast<std::uint64_t>(f.QuadPart);
@@ -201,6 +232,8 @@ float4 ps(V v):SV_TARGET{float4 c=source.Sample(sampleState,crop.xy+v.uv*crop.zw
   }
   template<class Published> void tick(Published published) {
     const auto now = qpc();
+    if(running&&sourceHelper&&WaitForSingleObject(sourceHelper->value,0)!=WAIT_TIMEOUT){hideMarkedSourceAfterParentLoss(config);throw std::runtime_error("SOURCE_HELPER_EXITED");}
+    if (running) validateLifetime(config);
     for (unsigned id = 0; id < 3; ++id) if (pending[id].frame) {
       if (now - pending[id].times.acquiredQpc > frequency * 5) throw std::runtime_error("GPU_COPY_TIMEOUT");
       if (gpu.copyDone(id)) {
@@ -211,7 +244,7 @@ float4 ps(V v):SV_TARGET{float4 c=source.Sample(sampleState,crop.xy+v.uv*crop.zw
     }
     if (!running) return;
     if (signals->closed) throw std::runtime_error("SOURCE_WINDOW_CLOSED");
-    if (now >= ownerCheck) { validateOwner(config.owner); ownerCheck = now + frequency / 10; }
+    if (now >= ownerCheck) { validateOwner(config); ownerCheck = now + frequency / 10; }
     captureAtDeadline(now, origin, frequency, nextFrame, [&]() -> bool {
     Direct3D11CaptureFrame frame{nullptr};
     try {
@@ -281,17 +314,20 @@ int main(int argc, char**) {
     pipe.send("{\"status\":\"hello\",\"protocol\":1,\"parentPid\":" + std::to_string(parentPid) + ",\"parentCreated\":\"" + std::to_string(parentCreated) + "\",\"nonce\":\"" + nonce + "\"}");
     std::unique_ptr<Capture> capture;
     NoticeGate notices;
-    bool stop = false, fatal = false; std::uint64_t stopDeadline = 0, lastRequest = 0;
+    bool stop = false, fatal = false, explicitStop = false; std::uint64_t stopDeadline = 0, lastRequest = 0;
     const auto startupDeadline = GetTickCount64() + 10000;
     auto notice = [&](std::uint64_t id) { pipe.send("{\"status\":\"notice\",\"sessionId\":\"" + capture->config.sessionId + "\",\"generation\":\"" + capture->config.generation + "\",\"noticeId\":" + std::to_string(id) + "}"); };
     auto beginStop = [&] { if (!stop) { stop = true; stopDeadline = GetTickCount64() + 2000; if (capture) capture->stopAccepting(); } };
     try {
       while (true) {
-        if (WaitForSingleObject(parent.value, 0) != WAIT_TIMEOUT) throw std::runtime_error("GPU_PARENT_LOST");
+        if (WaitForSingleObject(parent.value, 0) != WAIT_TIMEOUT) {
+          if (capture) hideMarkedSourceAfterParentLoss(capture->config);
+          throw std::runtime_error("GPU_PARENT_LOST");
+        }
         if (pipe.failed || pipe.inbox.failed() || pipe.replies.failed()) throw std::runtime_error("GPU_PROTOCOL_INVALID");
         if (pipe.eof) beginStop();
         while (auto command = pipe.inbox.take()) {
-          if (command->kind == CommandKind::Stop) { beginStop(); continue; }
+          if (command->kind == CommandKind::Stop) { explicitStop = true; beginStop(); continue; }
           if (command->kind == CommandKind::Start) {
             if (capture || stop || !verifyBootstrap(command->start, parentPid, parentCreated, nonce)) throw std::runtime_error("GPU_BOOTSTRAP_INVALID");
             capture = std::make_unique<Capture>(command->start); capture->initialize(parent.value);
@@ -312,6 +348,7 @@ int main(int argc, char**) {
           if (command->key.sessionId != capture->config.sessionId || command->key.generation != capture->config.generation) throw std::runtime_error("GPU_IDENTITY_INVALID");
           const auto id = std::to_string(command->requestId);
           if (command->kind == CommandKind::Claim) {
+            if (capture->running) validateLifetime(capture->config);
             const auto record = capture->slots.claimLatest();
             pipe.send(record ? "{\"status\":\"claimed\",\"requestId\":" + id + ",\"record\":" + recordJson(*record) + "}" : "{\"status\":\"empty\",\"requestId\":" + id + "}");
           } else if (command->kind == CommandKind::Release) {
@@ -335,6 +372,10 @@ int main(int argc, char**) {
       }
     } catch (const std::exception& error) { fatal = true; pipe.send("{\"status\":\"error\",\"code\":\"" + fixedError(error.what()) + "\"}"); }
     catch (...) { fatal = true; pipe.send("{\"status\":\"error\",\"code\":\"GPU_PRODUCER_FAILED\"}"); }
+    // Pipe EOF can arrive just before the parent's process handle signals.
+    // Both an unexpected transport end and a terminal fault revoke the own
+    // marked source. A requested clean stop keeps the source reusable.
+    if (capture && (fatal || !explicitStop || WaitForSingleObject(parent.value, 0) != WAIT_TIMEOUT)) hideMarkedSourceAfterParentLoss(capture->config);
     bool drained = !capture || capture->slots.drained();
     if (capture && drained && !capture->gpu.closeRemoteHandles()) { drained = false; fatal = true; }
     pipe.send(std::string("{\"status\":\"closed\",\"drained\":") + (drained ? "true}" : "false}"));

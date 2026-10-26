@@ -119,6 +119,24 @@
       "context": "ArrayLiteralExpression",
       "text": "16 kHz",
       "reason": "Manually reviewed full equalizerBands.ts 2026-10-16: fixed numeric SI frequency marking, not regional prose. Group names and spoken accessible sentence remain separately pending; no full-file exclusion."
+    },
+    "source.3a4874e688ba88b9fe68.1": {
+      "source": "electron/PresentationRepository.ts",
+      "context": "CallExpression",
+      "text": "POWERPOINT_SOURCE_ID_INVALID",
+      "reason": "Manually reviewed 2026-10-26: invariant repository error identifier for import/integrity handling, not an authored dialog label. Neighboring operator reports and explanations remain inventoried."
+    },
+    "source.872b19e33e7efa6cebc1.1": {
+      "source": "electron/PresentationRepository.ts",
+      "context": "NewExpression",
+      "text": "PRESENTATION_CONTENT_NOT_FOUND",
+      "reason": "Manually reviewed 2026-10-26: invariant repository error identifier for import/integrity handling, not an authored dialog label. Neighboring operator reports and explanations remain inventoried."
+    },
+    "source.67133a82796f6fd0e78d.1": {
+      "source": "electron/PresentationRepository.ts",
+      "context": "CallExpression",
+      "text": "PRESENTATION_IMPORT_SIZE",
+      "reason": "Manually reviewed 2026-10-26: invariant repository error identifier for import/integrity handling, not an authored dialog label. Neighboring operator reports and explanations remain inventoried."
     }
   },
   "reviewedTechnicalFiles": {
@@ -205,6 +223,34 @@
     "src/BibleQuickOverlay.tsx": {
       "sha256": "98f0f0a9eb7ac9e491abdb59e828ada9b9b029a6e522a963af35861c5e10b0a9",
       "reason": "Manually read in full 2026-10-19: Public OSB/Bible output; supplied reference/translation/verses, technical style tokens and page numbering must remain unchanged. Any source content change revokes this exact review."
+    },
+    "electron/PowerPointFrameReceiver.ts": {
+      "sha256": "e67d2f32addcbd2aa082f57bf1c20d2158d332045073838c322d9c71736ba565",
+      "reason": "Manually reviewed complete file 2026-10-26: Isolated preload GPU receiver: shader source, fixed protocol/error identifiers and private canvas binding selectors; no authored operator prose."
+    },
+    "electron/PowerPointHostClient.ts": {
+      "sha256": "42ff126c79067571ad554fc845942aa3412357ec153636566f972e75e253fa33",
+      "reason": "Manually reviewed complete file 2026-10-26: Trusted Main worker protocol: bounded state/error identifiers, session framing and canonical source validation; no display labels or visitor content."
+    },
+    "electron/PowerPointPlayback.ts": {
+      "sha256": "4972e4a5a42c9c5860bfec496e87708dc94f2189497304c1eb2eae8a58e440e4",
+      "reason": "Manually reviewed complete file 2026-10-26: Main-only lifecycle coordinator: stable command/error identifiers and native-resource state; visible PowerPoint copy is separately inventoried through powerPointTemplates."
+    },
+    "electron/PowerPointRuntimeAssets.ts": {
+      "sha256": "c2bea92120d8c5741859e7027d5371e6c80f0c7bb5eb0700cc70b291baf30b6c",
+      "reason": "Manually reviewed complete file 2026-10-26: Private packaged-native integrity reader: platform/binary names, manifest keys and fixed error identifiers; not display copy."
+    },
+    "electron/PowerPointSourceStore.ts": {
+      "sha256": "e78b20a073ac4fd7c90bd00e02c2cf29e939a4c4b59fe14db7ee13f1dbeb5c3f",
+      "reason": "Manually reviewed complete file 2026-10-26: Immutable original asset repository: digests, portable envelope keys, filesystem modes and internal error identifiers; no UI wording or user content."
+    },
+    "electron/fileSecurityZone.ts": {
+      "sha256": "f9ba7aca3ec87d9a6eb5768957d2b064b124a1140b36f4933a3f8993902e36b6",
+      "reason": "Manually reviewed complete file 2026-10-26: Numeric Windows Zone.Identifier persistence: invariant INI schema and filesystem/error identifiers; translating these would break protection preservation."
+    },
+    "electron/slideClipboard.ts": {
+      "sha256": "3372e13f8675fd151ff9b5666b7bef148e2646b534d25d2f36829ba868a8eea6",
+      "reason": "Manually reviewed complete file 2026-10-26: MIME clipboard helper: image/png protocol and one stable internal render-error identifier; no operator prose."
     }
   }
 }

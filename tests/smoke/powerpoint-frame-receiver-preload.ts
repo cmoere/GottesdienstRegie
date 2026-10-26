@@ -1,0 +1,2 @@
+import{ipcRenderer,sharedTexture}from'electron';import{installPowerPointFrameReceiver}from'../../electron/PowerPointFrameReceiver';
+addEventListener('DOMContentLoaded',()=>installPowerPointFrameReceiver({invoke:channel=>ipcRenderer.invoke(channel),send:(channel,value)=>ipcRenderer.send(channel,value),listen:(channel,callback)=>{const handler=(_event:unknown,value:unknown)=>callback(value);ipcRenderer.on(channel,handler);return()=>{ipcRenderer.removeListener(channel,handler)}},receive:callback=>sharedTexture.setSharedTextureReceiver(callback)}));

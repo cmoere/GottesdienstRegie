@@ -7,5 +7,7 @@ module.exports=async context=>{
  await fs.cp(root,path.join(resources,'speech'),{recursive:true,dereference:true,filter:source=>!source.includes(path.sep+'runtime-extract')&&!source.endsWith('verified-speech.wav')});
  const importer=await require('../scripts/prepare-document-import.cjs').prepare(platform,arch);
  await fs.cp(importer,path.join(resources,'document-import'),{recursive:true,dereference:true});
+ const powerpoint=await require('../scripts/prepare-powerpoint.cjs').preparePowerPoint(platform,arch);
+ if(powerpoint){const target=path.join(resources,'powerpoint');await fs.mkdir(target,{recursive:true});for(const file of['PowerPointHost.exe','PowerPointCapture.exe','manifest.json'])await fs.copyFile(path.join(powerpoint,file),path.join(target,file))}
  console.log('Verified offline speech included in '+platform+'-'+arch+' package');
 };

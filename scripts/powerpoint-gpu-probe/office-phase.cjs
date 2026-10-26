@@ -8,10 +8,10 @@ function validateOfficePlacement({offscreen=false,edge=false,covered=false,elect
  if((edge&&offscreen)||(covered&&(edge||offscreen)))throw Error('PROBE_SOURCE_PLACEMENT_CONFLICT');
  if(covered&&electronVersion!=='45.0.0')throw Error('GPU_COVER_REQUIRES_APPROVED_ELECTRON_PARENT');return true;
 }
-async function runOfficeGpuPhase({root,electronPath,producer,digest,navigation='gotoClick',captureHz=30,offscreen=false,edge=false,covered=false}){
+async function runOfficeGpuPhase({root,electronPath,producer,digest,navigation='gotoClick',captureHz=30,offscreen=false,edge=false,covered=false,hiddenApplication=false}){
  validateOfficePlacement({offscreen,edge,covered,electronVersion:process.versions.electron});
  let folder,cover,office;
- try{office=await require('../probe-powerpoint.cjs').runProbe({root,monitor:offscreen?undefined:1,navigation,edgePosition:edge,captureAdapter:async({folder:ownFolder,state,command})=>{
+ try{office=await require('../probe-powerpoint.cjs').runProbe({root,monitor:offscreen?undefined:1,navigation,edgePosition:edge,hiddenApplication,captureAdapter:async({folder:ownFolder,state,command})=>{
   folder=ownFolder;if(covered){if(!String(state.monitor).endsWith('DISPLAY1'))throw Error('GPU_COVER_MONITOR_REQUIRED');const status=await command('status');cover=await require('./cover-window.cjs').createCoverWindow(status.status.windowGeometry,state.monitorBounds);await fs.writeFile(path.join(folder,'source-cover.png'),(await cover.webContents.capturePage()).toPNG())}const config={folder,producer,monitor:1,digest,kind:'powerpoint',captureHz,owner:{hwnd:state.rootWindowHandle,pid:state.processId,createdAt:state.createdAt,crop:state.crop}};
   const configPath=path.join(folder,'benchmark-config.json');await fs.writeFile(configPath,JSON.stringify(config));
   const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;

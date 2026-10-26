@@ -25,6 +25,13 @@ static void parses_exact_start_and_bootstrap() {
   check(!verifyBootstrap(command.start, 68, 133000000000000000ULL, nonce), "foreign parent accepted");
   check(!verifyBootstrap(command.start, 67, 1, nonce), "parent PID reuse accepted");
   check(!verifyBootstrap(command.start, 67, 133000000000000000ULL, std::string(32, 'd')), "bootstrap nonce not bound");
+  auto guarded = startLine(); guarded.replace(6, 1, "2");
+  check(parseCommand(guarded + " 456 789").kind == CommandKind::Start, "marked child-lifetime source rejected");
+  rejects([&] { parseCommand(guarded); });
+  rejects([&] { parseCommand(guarded + " 0 789"); });
+  rejects([&] { parseCommand(guarded + " 456 0"); });
+  rejects([&] { parseCommand(guarded + " 123 789"); });
+  rejects([&] { parseCommand(startLine() + " 456 789"); });
 }
 static void rejects_bad_commands() {
   const std::vector<std::string> invalid{

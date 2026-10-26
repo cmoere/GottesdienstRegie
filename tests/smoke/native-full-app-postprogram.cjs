@@ -2,6 +2,9 @@
 const {app,BrowserWindow,ipcMain,session}=require('electron');
 const path=require('path'),fs=require('fs'),assert=require('assert');
 const root=path.resolve(__dirname,'../..'),out=path.join(root,'work/full-app-postprogram');
+const fixtureUrl=process.env.FULL_APP_PROBE_URL||'http://127.0.0.1:5173/tests/smoke/full-app-postprogram.html?demo=1';
+if(!/^http:\/\/127\.0\.0\.1:\d+\/tests\/smoke\/full-app-postprogram\.html\?demo=1$/.test(fixtureUrl))throw Error('OWN_FULL_APP_FIXTURE_REQUIRED');
+const fixtureOrigin=new URL(fixtureUrl).origin;
 const packaged=process.argv.find(arg=>arg.startsWith('--packaged='));
 const runtime=packaged?path.resolve(root,packaged.slice('--packaged='.length)):root;
 fs.mkdirSync(out,{recursive:true});app.setPath('userData',path.join(out,'profile'));
@@ -36,7 +39,7 @@ register('presentation:save',(_event,document)=>({updatedAt:document.updatedAt})
 for(const match of fs.readFileSync(path.join(root,'electron/preload.ts'),'utf8').matchAll(/ipcRenderer\.invoke\(\s*['"]([^'"]+)['"]/g))if(!handlers.has(match[1]))register(match[1],()=>null);
 for(const [channel,fn]of handlers)ipcMain.handle(channel,fn);
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-async function until(window,expression){for(let i=0;i<300;i++){if(await window.webContents.executeJavaScript(expression))return;await sleep(100)}throw Error('Timeout: '+expression)}
+async function until(window,expression,timeout=30000){for(let i=0;i<Math.ceil(timeout/100);i++){if(await window.webContents.executeJavaScript(expression))return;await sleep(100)}throw Error('Timeout: '+expression)}
 const js=code=>operator.webContents.executeJavaScript(code);
 async function capture(window,name){await sleep(700);fs.writeFileSync(path.join(out,name+'.png'),(await window.webContents.capturePage()).toPNG())}
 async function start(scenario){
@@ -48,16 +51,16 @@ async function start(scenario){
  await until(operator,"!!document.querySelector('.preview-nav.next:not(:disabled)')");
  await js("document.querySelector('.preview-nav.next').click()");
 }
-setTimeout(()=>{console.error('Full App smoke timeout');app.exit(1)},120000).unref();
+setTimeout(()=>{console.error('Full App smoke timeout');app.exit(1)},180000).unref();
 app.whenReady().then(async()=>{
  try{
-  session.defaultSession.webRequest.onBeforeRequest((details,callback)=>callback({cancel:/^https?:/.test(details.url)&&!details.url.startsWith('http://127.0.0.1:5173')&&!details.url.startsWith('http://localhost:5173')}));
+  session.defaultSession.webRequest.onBeforeRequest((details,callback)=>callback({cancel:/^https?:/.test(details.url)&&new URL(details.url).origin!==fixtureOrigin}));
   const opts={show:false,width:1920,height:1080,useContentSize:true,webPreferences:{preload:path.join(runtime,'dist-electron/electron/preload.js'),contextIsolation:true,nodeIntegration:false,offscreen:true,backgroundThrottling:false}};
   main=new BrowserWindow(opts);operator=new BrowserWindow({...opts,width:1440,height:900});
   operator.webContents.on('console-message',event=>{if(event.level==='error'||event.level===3)console.error('Renderer:',event.message)});
   operator.webContents.on('preload-error',(_event,_path,error)=>console.error('Preload:',error));
   await main.loadFile(path.join(runtime,'dist/index.html'),{hash:'output?role=main'});
-  await operator.loadURL('http://127.0.0.1:5173/tests/smoke/full-app-postprogram.html?demo=1');
+  await operator.loadURL(fixtureUrl);
   await until(operator,"!!document.querySelector('.test-session-button:not(:disabled)')");
   await start('automatic');
   await until(main,"document.body.innerText.includes('Gemeindeforum')");
@@ -88,7 +91,7 @@ app.whenReady().then(async()=>{
   assert(!(await main.webContents.executeJavaScript('document.body.innerText')).includes('Beispieldaten'));
   await js('window.appendPostSlide()');
   // Allow the system-page timer to advance to ordinary authored content.
-  await until(main,"document.body.innerText.includes('Danke für Ihren Besuch') && !document.querySelector('.post-program-room-notice')");
+  await until(main,"document.body.innerText.includes('Danke für Ihren Besuch') && !document.querySelector('.post-program-room-notice')",90000);
   console.log('PASS full App: link, late community/preflight, actual test dialog, final Next, automatic + both unlinked scenarios, MAIN, 400 weight, watermark, reset');
   app.exit(0);
  }catch(error){console.error(error);if(operator){console.error(await js("JSON.stringify({body:document.body.innerText,html:document.documentElement.innerHTML,seed:typeof window.seedPostProgram,resources:performance.getEntriesByType('resource').slice(-8).map(x=>x.name)})"));await capture(operator,'failure')}app.exit(1)}

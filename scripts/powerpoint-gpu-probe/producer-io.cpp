@@ -26,12 +26,12 @@ Command parseCommand(std::string_view line) {
   if (line.empty() || line.size() > 1024 || std::any_of(line.begin(), line.end(), [](unsigned char c) { return c < 32 || c > 126; })) invalid();
   std::istringstream input{std::string(line)};
   std::vector<std::string> words; std::string word;
-  while (input >> word) { if (words.size() == 16) invalid(); words.push_back(std::move(word)); }
+  while (input >> word) { if (words.size() == 18) invalid(); words.push_back(std::move(word)); }
   if (words.empty()) invalid();
   Command result;
   if (words[0] == "stop" && words.size() == 1) return result;
-  if (words[0] == "start" && words.size() == 16) {
-    if (words[1] != "1") invalid();
+  if (words[0] == "start" && (words.size() == 16 || words.size() == 18)) {
+    if (!((words[1] == "1" && words.size() == 16) || (words[1] == "2" && words.size() == 18))) invalid();
     result.kind = CommandKind::Start;
     auto& start = result.start;
     start.nonce = token(words[2]); start.sessionId = token(words[3]); start.generation = token(words[4]);
@@ -48,6 +48,11 @@ Command parseCommand(std::string_view line) {
     if (o.x > o.outerWidth || o.y > o.outerHeight || o.width > o.outerWidth - o.x || o.height > o.outerHeight - o.y) invalid();
     start.parentPid = static_cast<std::uint32_t>(number(words[14], UINT32_MAX));
     start.parentCreated = number(words[15], UINT64_MAX);
+    if (words[1] == "2") {
+      o.childWindow = number(words[16], UINT64_MAX);
+      o.lifetimeValue = number(words[17], INT32_MAX);
+      if (o.childWindow == o.window) invalid();
+    }
     return result;
   }
   if (words[0] == "clock" && words.size() == 2) {

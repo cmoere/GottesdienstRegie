@@ -11,7 +11,8 @@ const input = readline.createInterface({input: process.stdin});
 input.on('line', line => {
   const w = line.split(' ');
   if (w[0] === 'start') {
-    if (w.length !== 16 || w[2] !== hello.nonce || w[14] !== String(process.ppid) || w[15] !== hello.parentCreated) process.exit(3);
+    const guarded=mode==='guarded';
+    if (w.length !== (guarded?18:16) || w[1] !== (guarded?'2':'1') || (guarded&&(w[16]!=='456'||w[17]!=='789')) || w[2] !== hello.nonce || w[14] !== String(process.ppid) || w[15] !== hello.parentCreated) process.exit(3);
     sessionId = w[3]; generation = w[4];
     if(mode==='native-error'||mode==='unsafe-native-error'){emit({status:'error',code:mode==='native-error'?'SOURCE_GEOMETRY_CHANGED':'C:/private/path'});return;}
     const ready = {status: 'ready', sessionId, generation, width: 1920, height: 1080, handles: ['9007199254740993', '9007199254740995', '9007199254740997']};

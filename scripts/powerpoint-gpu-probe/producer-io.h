@@ -7,6 +7,7 @@
 namespace gpu_probe {
 struct SourceOwner {
   std::uint64_t window = 0, createdAt = 0;
+  std::uint64_t childWindow = 0, lifetimeValue = 0;
   std::uint32_t pid = 0, x = 0, y = 0, width = 0, height = 0, outerWidth = 0, outerHeight = 0;
 };
 struct StartConfig {

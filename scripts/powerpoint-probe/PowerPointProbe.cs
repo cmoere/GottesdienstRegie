@@ -14,6 +14,10 @@ class PowerPointProbe {
   static Screen authorizedScreen;
   static bool nativeNext;
   static bool edgePosition;
+  static bool hiddenApplication;
+  static IntPtr appFrameBeforeShow;
+  static bool fullscreenSource;
+  [DllImport("user32.dll")] static extern int GetWindowLong(IntPtr hwnd,int index);
   [DllImport("user32.dll")] static extern bool MoveWindow(IntPtr hwnd,int x,int y,int w,int h,bool repaint);
   [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr hwnd,out uint processId);
   [DllImport("user32.dll")] static extern IntPtr GetAncestor(IntPtr hwnd,uint flags);
@@ -30,7 +34,7 @@ class PowerPointProbe {
   static object State(){
     long hwnd=(long)((Microsoft.Office.Interop.PowerPoint.SlideShowWindow)show).HWND;
     Rect current;if(!GetWindowRect(GetAncestor(new IntPtr(hwnd),2),out current))throw new Exception("PROBE_CURRENT_RECT_FAILED");
-    return new {slideId=(int)show.View.Slide.SlideID,slideIndex=(int)show.View.Slide.SlideIndex,clickIndex=(int)show.View.GetClickIndex(),clickCount=(int)show.View.GetClickCount(),state=(int)show.View.State,applicationVisible=(int)app.Visible,windowGeometry=new{left=current.left,top=current.top,width=current.right-current.left,height=current.bottom-current.top},observedQpc=System.Diagnostics.Stopwatch.GetTimestamp().ToString(System.Globalization.CultureInfo.InvariantCulture)};
+    return new {slideId=(int)show.View.Slide.SlideID,slideIndex=(int)show.View.Slide.SlideIndex,clickIndex=(int)show.View.GetClickIndex(),clickCount=(int)show.View.GetClickCount(),state=(int)show.View.State,applicationVisible=(int)app.Visible,appFrameBeforeShow=appFrameBeforeShow.ToInt64().ToString(),appFrameVisible=IsWindowVisible(appFrameBeforeShow),showSharesAppFrame=appFrameBeforeShow==GetAncestor(new IntPtr(hwnd),2),showTopmost=(GetWindowLong(GetAncestor(new IntPtr(hwnd),2),-20)&8)!=0,windowGeometry=new{left=current.left,top=current.top,width=current.right-current.left,height=current.bottom-current.top},observedQpc=System.Diagnostics.Stopwatch.GetTimestamp().ToString(System.Globalization.CultureInfo.InvariantCulture)};
   }
   static void MakeSource(){
     source=app.Presentations.Add(0);
@@ -72,18 +76,20 @@ class PowerPointProbe {
       // Never reposition an Office application containing somebody else's work.
       if((int)app.Presentations.Count!=0)throw new Exception("PROBE_VISIBLE_APP_ALREADY_IN_USE");
       long appHwnd=(long)((Microsoft.Office.Interop.PowerPoint.Application)app).HWND;
+      appFrameBeforeShow=GetAncestor(new IntPtr(appHwnd),2);
       var bounds=authorizedScreen.Bounds;
       var placement=new System.Drawing.Rectangle(bounds.X,bounds.Y,Math.Min(1920,bounds.Width),Math.Min(1080,bounds.Height));
       if(edgePosition){var screens=new System.Collections.Generic.List<System.Drawing.Rectangle>();foreach(var screen in Screen.AllScreens)screens.Add(screen.Bounds);var edge=SourcePlacement.FindEdge(bounds,screens.ToArray(),placement.Width,placement.Height,64);if(!edge.HasValue)throw new Exception("PROBE_EDGE_POSITION_UNAVAILABLE");placement=edge.Value;}
       if(appHwnd!=0&&!MoveWindow(new IntPtr(appHwnd),placement.X,placement.Y,placement.Width,placement.Height,true))throw new Exception("PROBE_APP_POSITION_FAILED");
-      app.Visible=-1;
+      if(!hiddenApplication)app.Visible=-1;
     }
     // No external presentation is opened and no Trust Center setting is changed.
     sentinel=app.Presentations.Add(0);sentinel.Slides.Add(1,12);
     sentinelPath=Path.Combine(root,"owned-sentinel.pptx");sentinel.SaveAs(sentinelPath,24);sentinelHash=Hash(sentinelPath);
     MakeSource();
-    source.SlideShowSettings.ShowType=2;
-    source.SlideShowSettings.ShowScrollbar=0;
+    source.SlideShowSettings.ShowType=fullscreenSource?1:2;
+    if(!fullscreenSource)source.SlideShowSettings.ShowScrollbar=0;
+    if(fullscreenSource)source.SlideShowSettings.ShowPresenterView=0;
     source.SlideShowSettings.AdvanceMode=2;
     source.SlideShowSettings.LoopUntilStopped=0;
     show=source.SlideShowSettings.Run();
@@ -126,6 +132,8 @@ class PowerPointProbe {
       if(args[a]=="--monitor=1"&&!monitorRequested)monitorRequested=true;
       else if(args[a]=="--native-next"&&!nativeNext)nativeNext=true;
       else if(args[a]=="--edge"&&!edgePosition)edgePosition=true;
+      else if(args[a]=="--hidden-app"&&!hiddenApplication)hiddenApplication=true;
+      else if(args[a]=="--fullscreen"&&!fullscreenSource)fullscreenSource=true;
       else return 2;
     }
     if(edgePosition&&!monitorRequested)return 2;
@@ -148,6 +156,11 @@ class PowerPointProbe {
         else if(type=="goto"){
           int index=Convert.ToInt32(cmd["index"]);if(index<1||index>3)throw new Exception("PROBE_SLIDE_INVALID");
           show.View.GotoSlide(index,-1);
+        }else if(type=="show-sentinel"){
+          dynamic otherWindow=sentinel.NewWindow();
+          long otherHwnd=(long)((Microsoft.Office.Interop.PowerPoint.DocumentWindow)otherWindow).HWND;
+          long sourceHwnd=(long)((Microsoft.Office.Interop.PowerPoint.SlideShowWindow)show).HWND;
+          Emit(new{id=id,sentinelRoot=GetAncestor(new IntPtr(otherHwnd),2).ToInt64().ToString(),sourceRoot=GetAncestor(new IntPtr(sourceHwnd),2).ToInt64().ToString(),sourceChildVisible=IsWindowVisible(new IntPtr(sourceHwnd)),status=State()});continue;
         }else if(type=="next"){
           if(nativeNext)show.View.Next();
           else{

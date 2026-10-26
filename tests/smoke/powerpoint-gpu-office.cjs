@@ -13,6 +13,6 @@ const parentApp=process.versions.electron?require('electron').app:null;if(parent
  const digest=createHash('sha256').update(await fs.readFile(path.resolve(electronPath,'../../electron-v45.0.0-win32-x64.zip'))).digest('hex');
  validateGpuRuntime({version:transport.electron,digest,marked:marker.isFile(),monitor:1});
  if(!transport.stop?.drained||!evaluateRun(transport.raw).transportPass)throw Error('TRANSPORT_NOT_PROVEN');
- const result=await runOfficeGpuPhase({root,electronPath,producer:path.join(folder,'producer.exe'),digest,captureHz:transport.captureHz??30,offscreen:args.includes('--offscreen'),edge:args.includes('--edge'),covered:args.includes('--covered'),navigation:args.includes('--native-next')?'nativeNext':'gotoClick'});
+ const result=await runOfficeGpuPhase({root,electronPath,producer:path.join(folder,'producer.exe'),digest,captureHz:transport.captureHz??30,offscreen:args.includes('--offscreen'),edge:args.includes('--edge'),covered:args.includes('--covered'),hiddenApplication:args.includes('--hidden-app'),navigation:args.includes('--native-next')?'nativeNext':'gotoClick'});
  console.log(JSON.stringify(result,null,2));if(!result.visual)process.exitCode=1;
 })().catch(error=>{console.error(error);process.exitCode=1}).finally(()=>{if(parentApp)parentApp.exit(process.exitCode??0)});

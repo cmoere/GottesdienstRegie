@@ -6,6 +6,11 @@ try {({startGpuProducer} = require('./producer-client.cjs'));} catch (e) {if (e.
 const options = mode => ({executable: process.execPath, args: [path.resolve(__dirname, '../../tests/smoke/powerpoint-gpu-protocol-fixture.cjs'), mode], cwd: process.cwd(),
   sessionId: 'aa'.repeat(16), generation: 'bb'.repeat(16), owner: {hwnd: '123', pid: 45, createdAt: '132000000000000000', crop: {x: 0, y: 64, width: 1600, height: 900, outerWidth: 1600, outerHeight: 964}}});
 async function start(mode) {assert.equal(typeof startGpuProducer, 'function', 'Main GPU client is missing'); return startGpuProducer(options(mode));}
+test('marked original sources require the complete root/child lifetime binding',async()=>{
+ const config=options('guarded');config.owner={...config.owner,childWindowHandle:'456',lifetimeProperty:'GDR.PowerPoint.'+config.generation,lifetimeValue:'789'};
+ const client=await startGpuProducer(config);try{const claim=await client.claimLatest();await client.release(claim.record.key);}finally{assert.equal((await client.stop()).drained,true)}
+ for(const patch of [{childWindowHandle:'0'},{childWindowHandle:'123'},{lifetimeProperty:'other'},{lifetimeValue:'0'},{lifetimeValue:'2147483648'},{childWindowHandle:undefined}])await assert.rejects(startGpuProducer({...config,owner:{...config.owner,...patch}}),/GPU_PRODUCER_CONFIG/);
+});
 test('fragmented real pipe preserves uint64 handles and separate source/copy times', async () => {
   const client = await start('fragmented');
   try {
