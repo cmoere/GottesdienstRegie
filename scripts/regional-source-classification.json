@@ -233,8 +233,8 @@
       "reason": "Manually reviewed complete file 2026-10-26: Trusted Main worker protocol: bounded state/error identifiers, session framing and canonical source validation; no display labels or visitor content."
     },
     "electron/PowerPointPlayback.ts": {
-      "sha256": "4972e4a5a42c9c5860bfec496e87708dc94f2189497304c1eb2eae8a58e440e4",
-      "reason": "Manually reviewed complete file 2026-10-26: Main-only lifecycle coordinator: stable command/error identifiers and native-resource state; visible PowerPoint copy is separately inventoried through powerPointTemplates."
+      "sha256": "85e9002bfbf384792ef7b4062ca8933624d279c66e77db4e210de21a828b624a",
+      "reason": "Manually reviewed complete file 2026-10-27: private native source, receiver authorization, resource/thumbnail integrity and runtime identity/state logic; fixed protocol/error identifiers only. Authored operator copy remains separately inventoried through PowerPointPlaybackPanel and powerPointTemplates."
     },
     "electron/PowerPointRuntimeAssets.ts": {
       "sha256": "c2bea92120d8c5741859e7027d5371e6c80f0c7bb5eb0700cc70b291baf30b6c",
@@ -251,6 +251,30 @@
     "electron/slideClipboard.ts": {
       "sha256": "3372e13f8675fd151ff9b5666b7bef148e2646b534d25d2f36829ba868a8eea6",
       "reason": "Manually reviewed complete file 2026-10-26: MIME clipboard helper: image/png protocol and one stable internal render-error identifier; no operator prose."
+    },
+    "electron/PowerPointOutputAccess.ts": {
+      "sha256": "b804bd669234a8be637503f9afa6af87a8fa2997a32263f81c8436e5d5ff759e",
+      "reason": "Manually reviewed complete file 2026-10-27: private native source, receiver authorization, resource/thumbnail integrity and runtime identity/state logic; fixed protocol/error identifiers only. Authored operator copy remains separately inventoried through PowerPointPlaybackPanel and powerPointTemplates."
+    },
+    "electron/PowerPointOutputRuntime.ts": {
+      "sha256": "199bbe9671f35dc4d97792d705a0cfdd1c4d6647fb06d162e42151e94bfd87b5",
+      "reason": "Manually reviewed complete file 2026-10-27: Main-only IPC/source authorization and native resource/play-pause intent; fixed command/error identifiers only. Operator prose remains separately inventoried."
+    },
+    "electron/PowerPointResourceOpener.ts": {
+      "sha256": "7428cceacac96ab8832a93378058c176887ba53c0f104c5f282b742640ddb0c3",
+      "reason": "Manually reviewed complete file 2026-10-27: private native source, receiver authorization, resource/thumbnail integrity and runtime identity/state logic; fixed protocol/error identifiers only. Authored operator copy remains separately inventoried through PowerPointPlaybackPanel and powerPointTemplates."
+    },
+    "electron/PowerPointThumbnailReader.ts": {
+      "sha256": "28f0bfe5d058e05438eaa2b63d1d2b48c83b8a4e5f93284b2423b4f09f5b8949",
+      "reason": "Manually reviewed complete file 2026-10-27: private native source, receiver authorization, resource/thumbnail integrity and runtime identity/state logic; fixed protocol/error identifiers only. Authored operator copy remains separately inventoried through PowerPointPlaybackPanel and powerPointTemplates."
+    },
+    "src/powerPointLiveModel.ts": {
+      "sha256": "edece470f09f91bdcda091cec9ad1eb01b31b28edb4a7b54ae929aac7208b52d",
+      "reason": "Manually reviewed complete file 2026-10-27: private native source, receiver authorization, resource/thumbnail integrity and runtime identity/state logic; fixed protocol/error identifiers only. Authored operator copy remains separately inventoried through PowerPointPlaybackPanel and powerPointTemplates."
+    },
+    "electron/PowerPointPlaybackIntent.ts": {
+      "sha256": "5ed05e38eb81ea8909e858f9abf4bbd3ae0fa753e68b9dc28d2a2926c823716f",
+      "reason": "Manually reviewed complete file 2026-10-27: Main-only IPC/source authorization and native resource/play-pause intent; fixed command/error identifiers only. Operator prose remains separately inventoried."
     }
   }
 }

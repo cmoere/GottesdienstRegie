@@ -5,7 +5,8 @@ const pkg=read('package.json'),build=read('public/releases.json').versions[0].bu
 assert(Number(pkg.version.split('.')[1])>=86);assert.equal(build.version,pkg.version);assert.equal(build.current,true);
 assert.equal(read('package-lock.json').version,pkg.version);assert.equal(read('shared/regional/availability.json').partialRelease.version,pkg.version);
 assert(build.sections.known.some(item=>item.text.de.includes('Regionalvarianten sind noch nicht vollständig übersetzt.')));
-assert(build.sections.known.some(item=>item.text.de.includes('PowerPoint')&&item.text.de.includes('deaktiviert')));
+if(Number(pkg.version.split('.')[1])<94)assert(build.sections.known.some(item=>item.text.de.includes('PowerPoint')&&item.text.de.includes('deaktiviert')));
+else assert(build.sections.known.some(item=>item.text.de.includes('Windows x64')&&item.text.de.includes('installiertes Microsoft PowerPoint')));
 for(const name of ['wdr','westfalen-blatt'])assert(fs.existsSync(path.join(root,'public/news-logos',name+'.svg')));
 const result=spawnSync(process.execPath,[path.join(root,'node_modules/vitest/vitest.mjs'),'run','src/externalLoop','electron/externalLoop','src/clockLoop','src/technicalIssueLanguage.test.tsx','src/technicalQuickScreen.test.tsx','src/quickScreenUi.test.ts','src/screenTest.test.ts','src/regional/availability.test.ts','src/releaseWorkflow.test.ts','src/releaseAssets.test.ts','--maxWorkers=2','--minWorkers=1'],{cwd:root,stdio:'inherit'});
 if(result.error)throw result.error;if(result.status!==0)process.exit(result.status??1);

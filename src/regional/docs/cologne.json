@@ -324,6 +324,18 @@
     "screenshotLabel": "Beispillaanzicht"
   },
   "releases": {
+    "versions[0.94].builds[0.94.0].overview.label": "Originale PowerPoint-Widderjab em Live-Ablauf un klarere Bedienung",
+    "versions[0.94].builds[0.94.0].overview.text": "Unger Windows kann installiertes Microsoft PowerPoint passende PPTX-Dateie jetz met eigene Animatione, Övverjäng un Zigge widderjevve. MAIN un Live-Vorschau krieje dieselve Originalbelder. De Bedienung trennt Originalwidderjab un bearbeitbare Kopie.",
+    "versions[0.94].builds[0.94.0].sections.new.0.label": "PowerPoint-Originalmodus em Joddesdeensablauf",
+    "versions[0.94].builds[0.94.0].sections.new.0.text": "Em PowerPoint-Element kann mer „Original widderjävve“ wähle. NEXT föhrt eets dä nächste Animationsschrett us; de Foliezigge blieve unger de Kontroll vun PowerPoint. Am Engk jeiht dä Ablauf en et nächste Element beziehungsweise et jeschützte Nohprogramm övver. De Originaldatei bliev unverändert.",
+    "versions[0.94].builds[0.94.0].sections.improved.0.label": "Klar jejliederte PowerPoint-Bedienung",
+    "versions[0.94].builds[0.94.0].sections.improved.0.text": "An Apples HIG anjelehnte, jruppierte Bedienelemente trenne Widderjabemodus un Enhaltsbearbeitung. De Originalansicht es schrievjeschütz. En andere Uswahl em Editor verändert dat laufende Original nit. De vorhandene Jemeindefarve un Tastaturbedienung blieve erhalde.",
+    "versions[0.94].builds[0.94.0].sections.fixed.0.label": "Jemeinsame Originalbelder un sichere Usjavwechsel",
+    "versions[0.94].builds[0.94.0].sections.fixed.0.text": "Dä Originalenhalt weed eets noh em bestätijte eetsde Beld övvernomme. MAIN un Live-Vorschau verwende dieselve GPU-Quell. Schnellanzeije pausiere de native Widderjab; Test-Wasserzeiche un wigger Systemebene blieve dodrövver sichtbar. OFF AIR jitt de eigene PowerPoint- un Beldressource kontrolliert frei. De jemeinsame Veröffentlichung sammelt de Plattformdateie vör de Update-Freijav.",
+    "versions[0.94].builds[0.94.0].sections.known.0.label": "Voraussetzunge un unterstützte PowerPoint-Dateie",
+    "versions[0.94].builds[0.94.0].sections.known.0.text": "Originalwidderjab bruch Windows x64 un installiertes Microsoft PowerPoint. PowerPoint vör em Start zomaache. Dateie met enjebettetem Audio oder Video, aktive Enhalde, externe Verknüpfunge oder interaktive Trigger wäde afjewiese. Op macOS, Linux un em Web bliev de bearbeitbare Textkopie verfügbar. De Quellschrefte müsse op em Regie-PC vorhande sin. Ältere Textkopie ohne Originaldatei noch ens us PPTX importiere.",
+    "versions[0.94].builds[0.94.0].sections.known.1.label": "Regionalvariante",
+    "versions[0.94].builds[0.94.0].sections.known.1.text": "Regionalvariante sin noch nit vollständig övversetz. Fählende UI-Texte wäde op Huhdütsch anjezeigt.",
     "versions[0.93].builds[0.93.0].overview.label": "Update-Enstellunge direkt opmaache un PowerPoint-Originaldateie erhalde",
     "versions[0.93].builds[0.93.0].overview.text": "Dä Hinweis op en neue Version föhrt jetz direkt zo de Update-Enstellunge. Beim PPTX-Enhaltsimport wäde zusätzlich de unveränderte Originaldateie för Export un Sicherunge opbewahrt. De PowerPoint-Originalwidderjab bliev weiterhin deaktiviert.",
     "versions[0.93].builds[0.93.0].sections.new.0.label": "Update-Enstellunge us em Versionshinweis opmaache",

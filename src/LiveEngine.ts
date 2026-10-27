@@ -19,6 +19,7 @@ import {upcomingMedia} from './mediaWarmup';
 import type {BannerContext} from './announcementBannerModel';
 import {prepareServiceCountdown} from './ServiceCountdownBadge';
 import {getCommunityRuntimeSnapshot} from './community/communityRuntime';
+import {originalPowerPointRequest,installPowerPointNavigation,withoutPowerPointNavigation,usePowerPointStatus} from './powerPointLiveModel';
 
 function withSongOutputs(slide: Slide): Slide {
   const snapshot=structuredClone(slide),item=usePresentation.getState().items.find(item=>item.id===slide.itemId);
@@ -31,6 +32,53 @@ function withSongOutputs(slide: Slide): Slide {
 }
 
 export class LiveEngine{
+  private originalActive=false;
+  private originalSource='';
+  private originalListeners:Array<()=>void>=[];
+  private originalFault(error:unknown){const value=String(error),code=value.match(/POWERPOINT_[A-Z_]{1,80}/)?.[0]??'POWERPOINT_SOURCE_UNAVAILABLE';usePowerPointStatus.setState({phase:'error',code})}
+  private listenOriginal(){
+    if(this.originalListeners.length)return;
+    const api=window.desktop?.powerPoint;if(!api)throw Error('POWERPOINT_RUNTIME_UNAVAILABLE');
+    this.originalListeners.push(api.onState(native=>{
+      if(!this.originalActive||native.sourceHash!==this.originalSource)return;
+      const phase=native.phase==='playing'?'playing':'paused';const status=usePowerPointStatus.getState();
+      if(status.phase!==phase||status.clickIndex!==native.clickIndex||status.clickCount!==native.clickCount)usePowerPointStatus.setState({phase,clickIndex:native.clickIndex,clickCount:native.clickCount});
+      const state=usePresentation.getState(),item=state.items.find(entry=>entry.id===state.liveItemId);
+      if(!state.onAir||item?.metadata.powerPointSourceHash!==native.sourceHash||item.metadata.importMode!=='original')return;
+      if(native.phase==='ended'){
+        const last=item.slides.filter(slide=>slide.enabled).at(-1);
+        if(last)usePresentation.setState({liveSlideId:last.id});
+        withoutPowerPointNavigation(()=>usePresentation.getState().nextLive());return;
+      }
+      const slide=item.slides.find(slide=>slide.sourceSlideId===String(native.slideId));
+      // Build-only notifications do not invalidate the workspace or its output
+      // composition. GPU frame delivery runs independently in isolated preload.
+      if(slide&&state.liveSlideId!==slide.id)usePresentation.setState({liveSlideId:slide.id,liveTransitionRevision:state.liveTransitionRevision+1});
+    }),api.onFault(code=>{if(this.originalActive)this.originalFault(code)}),installPowerPointNavigation(direction=>{
+      const state=usePresentation.getState(),item=state.items.find(entry=>entry.id===state.liveItemId);
+      if(!state.onAir||!this.originalActive||item?.metadata.importMode!=='original'||item.metadata.powerPointSourceHash!==this.originalSource)return false;
+      void api.command(direction).catch(error=>this.originalFault(error));return true;
+    }),usePresentation.subscribe((state,previous)=>{
+      if(state.liveTimerPausedSlideId===previous.liveTimerPausedSlideId||state.liveSlideId!==previous.liveSlideId||!this.originalActive||!state.onAir)return;
+      const item=state.items.find(entry=>entry.id===state.liveItemId);
+      if(item?.metadata.importMode!=='original'||item.metadata.powerPointSourceHash!==this.originalSource)return;
+      void api.command(state.liveTimerPausedSlideId===state.liveSlideId?'pause':'play').catch(error=>this.originalFault(error));
+    }));
+  }
+  private requestOriginal(slide:Slide){return originalPowerPointRequest(usePresentation.getState().items.find(item=>item.id===slide.itemId),slide)}
+  private originalMode(slide:Slide){return usePresentation.getState().items.find(item=>item.id===slide.itemId)?.metadata.importMode==='original'}
+  private async showOriginal(slide:Slide,delivery:number){
+    const request=this.requestOriginal(slide),api=window.desktop?.powerPoint;
+    if(!request)throw Error('POWERPOINT_SOURCE_MISSING');if(!api)throw Error('POWERPOINT_RUNTIME_UNAVAILABLE');
+    this.listenOriginal();this.originalActive=true;this.originalSource=request.sourceHash;usePowerPointStatus.setState({phase:'preparing',code:''});
+    const native=await api.take(request.sourceHash,request.slideId);
+    if(delivery!==this.delivery)return false;
+    usePowerPointStatus.setState({phase:native.phase==='playing'?'playing':'paused',clickIndex:native.clickIndex,clickCount:native.clickCount});
+    const snapshot={...this.snapshot(slide),transitionOverride:{type:'cut' as const,durationMs:0,direction:'left' as const,easing:'standard' as const,reverseOnPrevious:false},_powerPoint:{sessionId:native.sessionId,generation:native.generation},_presentAtMs:Date.now()+100};
+    const ok=await(window.desktop?.sendLiveSlide(snapshot)??false);
+    if(ok){await this.commit(snapshot,delivery);if(delivery===this.delivery&&native.phase==='paused'&&usePresentation.getState().liveTimerPausedSlideId!==slide.id){const played=await api.command('play');usePowerPointStatus.setState({phase:played.phase==='playing'?'playing':'paused',clickIndex:played.clickIndex,clickCount:played.clickCount})}}
+    return ok;
+  }
   private takeRevision:number|undefined;
   private takeMetadata=new Map<string,{countdownStartedAtMs:number;serviceCountdownAtMs?:number;bannerContext:Pick<BannerContext,'liveSection'|'countdownActive'>}>();
   private revision=0;
@@ -67,9 +115,19 @@ export class LiveEngine{
     }
     return {...attachOutputRevision(rendered,this.revision),_serviceCountdownAtMs:take.serviceCountdownAtMs,_mediaWarmup:upcomingMedia(state.items,slide.id,state.sections.map(section=>section.id)),_presentAtMs:presentAtMs,_countdownStartedAtMs:take.countdownStartedAtMs,bannerContext:{...take.bannerContext}};
   }
-  async start(assignments:Record<string,DisplayRole>,slide:Slide){if(!window.desktop)throw new Error('Die Desktop-Ausgabe ist nicht verfügbar.');this.takeRevision=undefined;this.takeMetadata.clear();const delivery=++this.delivery,snapshot=this.snapshot(slide),ok=await window.desktop.goOnAir(assignments,snapshot);if(ok)await this.commit(snapshot,delivery);return ok}
-  async show(slide:Slide){const delivery=++this.delivery,snapshot=this.snapshot(slide),ok=await(window.desktop?.sendLiveSlide(snapshot)??false);if(ok)await this.commit(snapshot,delivery);return ok}
-  async stop(){++this.delivery;++this.committedDelivery;this.cancelCommit();this.takeRevision=undefined;this.takeMetadata.clear();useLiveOutputPreview.setState({slide:null});return window.desktop?.goOffAir()??false}
+  async start(assignments:Record<string,DisplayRole>,slide:Slide){if(!window.desktop)throw new Error('Die Desktop-Ausgabe ist nicht verfügbar.');this.takeRevision=undefined;this.takeMetadata.clear();const delivery=++this.delivery,snapshot=this.snapshot(slide);
+    if(this.originalMode(slide)){
+      if(!this.requestOriginal(slide)){this.originalFault('POWERPOINT_SOURCE_MISSING');throw Error('POWERPOINT_SOURCE_MISSING')}
+      const safe={...snapshot,body:'',background:'#000000',backgroundImage:undefined,elements:[]};
+      const ok=await window.desktop.goOnAir(assignments,safe);if(!ok)return false;
+      try{return await this.showOriginal(slide,delivery)}catch(error){if(delivery===this.delivery){await this.stop();this.originalFault(error)}throw error}
+    }
+    const ok=await window.desktop.goOnAir(assignments,snapshot);if(ok)await this.commit(snapshot,delivery);return ok}
+  async show(slide:Slide){const delivery=++this.delivery;
+    if(this.originalMode(slide)){try{return await this.showOriginal(slide,delivery)}catch(error){if(delivery===this.delivery)this.originalFault(error);return false}}
+    if(this.originalActive){this.originalActive=false;await window.desktop?.powerPoint?.stop();this.originalSource='';usePowerPointStatus.setState({phase:'idle',code:''})}
+    const snapshot=this.snapshot(slide),ok=await(window.desktop?.sendLiveSlide(snapshot)??false);if(ok)await this.commit(snapshot,delivery);return ok}
+  async stop(){++this.delivery;++this.committedDelivery;this.cancelCommit();this.takeRevision=undefined;this.takeMetadata.clear();this.originalActive=false;this.originalSource='';for(const stop of this.originalListeners.splice(0))stop();usePowerPointStatus.setState({phase:'idle',code:''});useLiveOutputPreview.setState({slide:null});return window.desktop?.goOffAir?.()??false}
 }
 
 export const liveEngine=new LiveEngine();

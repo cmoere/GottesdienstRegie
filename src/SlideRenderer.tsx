@@ -1,4 +1,5 @@
 import {ExternalLoopElement} from './externalLoop/Element';
+import {readPowerPointSurface} from './powerPointLiveModel';
 import {ActiveClockLoopView} from './clockLoop/ClockLoopView';
 import {normalizeClockSettings} from './clockLoop/model';
 import {paginateReducedMotionEvents} from './eventPagination';
@@ -690,6 +691,8 @@ export function SlideRenderer({
     slide.songTranslationMode ?? translationMode,
   ).join("\n\n");
   slide = translatedSlide(slide, translationMode);
+  const original=readPowerPointSurface((slide as Slide&{_powerPoint?:unknown})._powerPoint);
+  if(original)return <div className={`slide-renderer ${mode} powerpoint-original-surface`} data-slide-id={slide.id} data-powerpoint-session={original.sessionId} data-powerpoint-generation={original.generation} style={{width:'100%',height:'100%',background:'#000',overflow:'hidden'}}/>;
   const hasVisibleElements = slide.elements?.some((element) => element.visible);
   const backgroundStyle: CSSProperties = {
     backgroundColor: slide.background,

@@ -8112,6 +8112,7 @@ function AppShell({
       return;
     const item = state.items.find((entry) => entry.id === state.liveItemId),
       slide = item?.slides.find((entry) => entry.id === state.liveSlideId);
+    if(item?.metadata.importMode==='original'&&item.metadata.powerPointSourceHash)return;
     if(item&&shouldSkipNowPlaying(item)){const timer=window.setTimeout(()=>usePresentation.getState().nextLive(),0);return()=>window.clearTimeout(timer)}
     if(item?.type==='countdown'&&slide){
       const duration=Number(slide.elements.find(element=>Number(element.properties.timerDurationSeconds)>0)?.properties.timerDurationSeconds??item.metadata.countdownDurationSeconds??item.metadata.durationSeconds??item.timing.slideDurationSeconds);
@@ -9590,7 +9591,7 @@ function AppShell({
       {state.mode === "edit" && (
         <>
           <OutputTabs />
-          {!isPostProgramSystemItem(state.items.find(item=>item.id===state.selectedItemId))&&<FormatToolbar openBackgroundMedia={() => openMedia("background")} />}
+          {state.items.find(item=>item.id===state.selectedItemId)?.metadata.importMode!=='original'&&!isPostProgramSystemItem(state.items.find(item=>item.id===state.selectedItemId))&&<FormatToolbar openBackgroundMedia={() => openMedia("background")} />}
         </>
       )}
       {target==='web'&&<CapabilityNotice capability="outputMain"/>}

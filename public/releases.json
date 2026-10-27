@@ -21,12 +21,92 @@
   ],
   "versions": [
     {
+      "line": "0.94",
+      "builds": [
+        {
+          "version": "0.94.0",
+          "releaseDate": "2026-10-27",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Originale PowerPoint-Wiedergabe im Live-Ablauf und klarere Bedienung",
+              "en": "Original PowerPoint playback in the live workflow and clearer controls"
+            },
+            "text": {
+              "de": "Unter Windows kann installiertes Microsoft PowerPoint geeignete PPTX-Dateien jetzt mit eigenen Animationen, Übergängen und Zeiten wiedergeben. MAIN und Live-Vorschau erhalten dieselben Originalbilder. Die Bedienung trennt Originalwiedergabe und bearbeitbare Kopie.",
+              "en": "On Windows, installed Microsoft PowerPoint can now play supported PPTX files with its own animations, transitions and timings. MAIN and the live preview receive the same original frames. The interface separates original playback from the editable copy."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "PowerPoint-Originalmodus im Gottesdienstablauf",
+                  "en": "Original PowerPoint mode in the service workflow"
+                },
+                "text": {
+                  "de": "Im PowerPoint-Element lässt sich „Original wiedergeben“ wählen. NEXT führt zunächst den nächsten Animationsschritt aus; Folienzeiten bleiben unter Kontrolle von PowerPoint. Am Ende geht der Ablauf in das folgende Element beziehungsweise das geschützte Nachprogramm über. Die Originaldatei bleibt unverändert.",
+                  "en": "Choose “Play original” in the PowerPoint item. NEXT first executes the next animation build; slide timings remain controlled by PowerPoint. At the end, the workflow continues to the next item or the protected postprogram. The original file remains unchanged."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Klar gegliederte PowerPoint-Bedienung",
+                  "en": "Clearly structured PowerPoint controls"
+                },
+                "text": {
+                  "de": "An Apples HIG angelehnte, gruppierte Bedienelemente trennen Wiedergabemodus und Inhaltsbearbeitung. Die Originalansicht ist schreibgeschützt. Eine andere Auswahl im Editor verändert das laufende Original nicht. Die vorhandenen Gemeindefarben und Tastaturbedienung bleiben erhalten.",
+                  "en": "Grouped controls inspired by Apple’s HIG separate playback mode from content editing. The original view is read-only. Selecting another slide in the editor does not change the running original. The existing congregation colors and keyboard controls are retained."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Gemeinsame Originalbilder und sichere Ausgabewechsel",
+                  "en": "Shared original frames and safe output changes"
+                },
+                "text": {
+                  "de": "Der Originalinhalt wird erst nach dem bestätigten ersten Bild übernommen. MAIN und Live-Vorschau verwenden dieselbe GPU-Quelle. Schnellanzeigen pausieren die native Wiedergabe; Test-Wasserzeichen und weitere Systemebenen bleiben darüber sichtbar. OFF AIR gibt die eigenen PowerPoint- und Bildressourcen kontrolliert frei. Die gemeinsame Veröffentlichung sammelt die Plattformdateien vor der Update-Freigabe.",
+                  "en": "Original content is taken only after the first frame is acknowledged. MAIN and live preview use the same GPU source. Quick screens pause native playback; the test watermark and other system layers stay visible above it. OFF AIR releases the owned PowerPoint and frame resources in a controlled order. Publication collects platform assets before making the update available."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Voraussetzungen und unterstützte PowerPoint-Dateien",
+                  "en": "Requirements and supported PowerPoint files"
+                },
+                "text": {
+                  "de": "Originalwiedergabe benötigt Windows x64 und installiertes Microsoft PowerPoint. PowerPoint vor dem Start schließen. Dateien mit eingebettetem Audio oder Video, aktiven Inhalten, externen Verknüpfungen oder interaktiven Triggern werden abgewiesen. Auf macOS, Linux und im Web bleibt die bearbeitbare Textkopie verfügbar. Quellschriften müssen auf dem Regie-PC vorhanden sein. Ältere Textkopien ohne Originaldatei erneut aus PPTX importieren.",
+                  "en": "Original playback requires Windows x64 and installed Microsoft PowerPoint. Close PowerPoint before starting. Files with embedded audio or video, active content, external links or interactive triggers are rejected. The editable text copy remains available on macOS, Linux and the web. Source fonts must be available on the control PC. Reimport older text copies without a source file from PPTX."
+                }
+              },
+              {
+                "label": {
+                  "de": "Regionalvarianten",
+                  "en": "Regional variants"
+                },
+                "text": {
+                  "de": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.",
+                  "en": "Regional variants are not fully translated. Missing interface text is displayed in standard German."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.93",
       "builds": [
         {
           "version": "0.93.0",
           "releaseDate": "2026-10-26",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Update-Einstellungen direkt öffnen und PowerPoint-Originaldateien erhalten",

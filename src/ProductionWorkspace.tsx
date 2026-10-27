@@ -72,6 +72,7 @@ import {TestModeWatermark} from './TestModeWatermark';
 import { quickScreenShortcut,quickOverridesRoomNotice } from "./quickScreenUi";
 import {ScreenTestPattern} from './ScreenTestPattern';
 import { usesAutomaticLoopEditor } from "./loopEditorModel";
+import {PowerPointPlaybackPanel,PowerPointStaticPreview} from './PowerPointPlaybackPanel';
 import { NowPlayingDesigner } from "./NowPlayingDesigner";
 import { EventSlideDesigner } from "./EventSlideDesigner";
 import { AnnouncementSlideDesigner } from './AnnouncementSlideDesigner';
@@ -3876,7 +3877,7 @@ function PreviewCenter({
         <h2 className="single-preview-title">{(state.onAir&&output?output.title:slide.title)?.trim()||slideLabel(slide,item.slides.indexOf(slide))}</h2>
         <div className="main-preview-surface">
           <OutputComposition weatherWarnings={state.onAir&&(!activeQuick||activeQuick.type==='countdown')?weatherWarnings:null} hideCountdown={Boolean(activeQuick)} serviceCountdownAtMs={state.onAir?output?._serviceCountdownAtMs:undefined} banner={state.onAir?banner:null} testOverlay={<TestModeWatermark role="main"/>}>
-          {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage
+          {!state.onAir&&item.metadata.importMode==='original'?<PowerPointStaticPreview sourceHash={String(item.metadata.powerPointSourceHash)} slideId={slide.sourceSlideId}/>:state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage
             slide={previewSlide(state.onAir&&output?output:slide)}
             transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(
               slide,
@@ -4266,6 +4267,8 @@ export function ProductionWorkspace({
   return (
     <section className="production-workspace">
       <div className="context-editor">
+        {item.metadata.importMode&&<PowerPointPlaybackPanel item={item} canEdit={canEdit}/>}
+        {item.metadata.importMode==='original'?null:<>
         {item.type === "song" ? (
           <SongEditor item={item} canEdit={canEdit} />
         ) : item.type === "liveQuiz" ? (
@@ -4282,14 +4285,15 @@ export function ProductionWorkspace({
           canEdit={canEdit}
           onPreview={() => setTransitionPreview((value) => value + 1)}
         />
+        </>}
       </div>
       <div className="large-output-preview">
-        <PreviewStack
+        {item.metadata.importMode==='original'?<PowerPointStaticPreview sourceHash={String(item.metadata.powerPointSourceHash)} slideId={slide.sourceSlideId}/>:<PreviewStack
           item={item}
           slide={slide}
           previewToken={transitionPreview}
           canEdit={canEdit}
-        />
+        />}
       </div>
     </section>
   );

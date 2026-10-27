@@ -12,6 +12,13 @@ import {OutputWindowManager} from './OutputWindowManager';
 
 describe('OutputWindowManager app mode',()=>{
   beforeEach(()=>{sends.length=0;windows.length=0});
+  it('offers only live managed windows to the Main-only native composition controller',async()=>{
+    const manager=new OutputWindowManager('preload',async()=>{},()=>{});
+    await manager.start({'1':'main','2':'stage'} as any,{});
+    expect(manager.getNativeCompositionWindows().map(entry=>entry.role)).toEqual(['main','stage']);
+    windows[0].destroyed=true;
+    expect(manager.getNativeCompositionWindows().map(entry=>entry.role)).toEqual(['stage']);
+  });
   it('keeps live renderer scheduling enabled even when an output is covered or inactive',async()=>{
     const manager=new OutputWindowManager('preload',async()=>{},()=>{});
     await manager.start({'1':'main'} as any,{id:'slide'});

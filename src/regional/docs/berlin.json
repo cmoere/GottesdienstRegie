@@ -324,6 +324,18 @@
   "screenshotLabel":"Beispielansicht"
  },
  "releases":{
+    "versions[0.94].builds[0.94.0].overview.label": "Originale PowerPoint-Wiederjabe im Live-Ablauf und klarere Bedienung",
+    "versions[0.94].builds[0.94.0].overview.text": "Unter Windows kann installiertes Microsoft PowerPoint passende PPTX-Dateien jetzt mit eigenen Animationen, Überjängen und Zeiten wiederjeben. MAIN und Live-Vorschau kriegen dieselben Originalbilder. Die Bedienung trennt Originalwiederjabe und bearbeitbare Kopie.",
+    "versions[0.94].builds[0.94.0].sections.new.0.label": "PowerPoint-Originalmodus im Gottesdienstablauf",
+    "versions[0.94].builds[0.94.0].sections.new.0.text": "Im PowerPoint-Element kannste „Original wiederjeben“ wählen. NEXT führt erst den nächsten Animationsschritt aus; Folienzeiten bleiben unter Kontrolle von PowerPoint. Am Ende geht der Ablauf ins folgende Element beziehungsweise ins jeschützte Nachprogramm über. Die Originaldatei bleibt unverändert.",
+    "versions[0.94].builds[0.94.0].sections.improved.0.label": "Klar jejliederte PowerPoint-Bedienung",
+    "versions[0.94].builds[0.94.0].sections.improved.0.text": "An Apples HIG anjelehnte, jruppierte Bedienelemente trennen Wiederjabemodus und Inhaltsbearbeitung. Die Originalansicht is schreibjeschützt. 'Ne andere Auswahl im Editor verändert das laufende Original nich. Die vorhandenen Jemeindefarben und Tastaturbedienung bleiben erhalten.",
+    "versions[0.94].builds[0.94.0].sections.fixed.0.label": "Gemeinsame Originalbilder und sichere Ausgabewechsel",
+    "versions[0.94].builds[0.94.0].sections.fixed.0.text": "Der Originalinhalt wird erst nach dem bestätijten ersten Bild übernommen. MAIN und Live-Vorschau verwenden dieselbe GPU-Quelle. Schnellanzeigen pausieren die native Wiederjabe; Test-Wasserzeichen und weitere Systemebenen bleiben drüber sichtbar. OFF AIR gibt die eigenen PowerPoint- und Bildressourcen kontrolliert frei. Die gemeinsame Veröffentlichung sammelt die Plattformdateien vor der Update-Freijabe.",
+    "versions[0.94].builds[0.94.0].sections.known.0.label": "Voraussetzungen und unterstützte PowerPoint-Dateien",
+    "versions[0.94].builds[0.94.0].sections.known.0.text": "Originalwiederjabe braucht Windows x64 und installiertes Microsoft PowerPoint. Mach PowerPoint vorm Start zu. Dateien mit eingebettetem Audio oder Video, aktiven Inhalten, externen Verknüpfungen oder interaktiven Triggern werden abjewiesen. Auf macOS, Linux und im Web bleibt die bearbeitbare Textkopie verfügbar. Die Quellschriften müssen auf dem Regie-PC vorhanden sein. Ältere Textkopien ohne Originaldatei noch mal aus PPTX importieren.",
+    "versions[0.94].builds[0.94.0].sections.known.1.label": "Regionalvarianten",
+    "versions[0.94].builds[0.94.0].sections.known.1.text": "Regionalvarianten sind noch nich vollständig übersetzt. Fehlende UI-Texte werden uff Hochdeutsch anjezeigt.",
     "versions[0.93].builds[0.93.0].overview.label": "Update-Einstellungen direkt öffnen und PowerPoint-Originaldateien erhalten",
     "versions[0.93].builds[0.93.0].overview.text": "Der Hinweis auf 'ne neue Version führt jetzt direkt zu den Update-Einstellungen. Beim PPTX-Inhaltsimport werden zusätzlich die unveränderten Originaldateien für Export und Sicherungen aufbewahrt. Die PowerPoint-Originalwiedergabe bleibt weiterhin deaktiviert.",
     "versions[0.93].builds[0.93.0].sections.new.0.label": "Update-Einstellungen aus dem Versionshinweis öffnen",

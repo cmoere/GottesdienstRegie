@@ -121,7 +121,7 @@ export class PresentationRepository {
   return{...item.slides[index],sourceSlideId:source.sourceId,notes:source.notes,timing:source.advanceAfterSeconds===undefined?{}:{durationSeconds:source.advanceAfterSeconds},transitionOverride:transition??null};
  });
  Object.assign(item.metadata,{importMode:'editable-copy',powerPointSourceHash:source.id,powerPointSourceTiming:JSON.stringify(result.slides.map(s=>({sourceId:s.sourceId,advanceOnClick:s.advanceOnClick,advanceAfterSeconds:s.advanceAfterSeconds}))) });
- const warnings=['Bearbeitbare Textkopie: Layout, Bilder und Originalanimationen werden nicht originalgetreu wiedergegeben. Der Originalmodus ist noch nicht freigegeben.','Originalzeiten sind hinterlegt; die Kopie startet zur sicheren Prüfung mit manueller Navigation.',...result.warnings];
+ const warnings=['Bearbeitbare Textkopie: Layout, Bilder und Originalanimationen werden nicht originalgetreu wiedergegeben. Für Originalwiedergabe im PowerPoint-Element „Original wiedergeben“ wählen; installiertes PowerPoint unter Windows ist erforderlich.','Originalzeiten sind hinterlegt; die Kopie startet zur sicheren Prüfung mit manueller Navigation.',...result.warnings];
  if(result.originalBlockers.length)warnings.push('Die Quelle enthält Medien, aktive Inhalte oder externe Verknüpfungen. Diese werden beim Textimport nicht ausgeführt.');
  return this.create({title,template:{...template,importReport:{sourceFormat:'pptx',sourcePages:result.slides.length,generatedSlides:item.slides.length,sourceSize:result.size,originalBlockers:result.originalBlockers,warnings}}});
  }if(extension==='.key'){

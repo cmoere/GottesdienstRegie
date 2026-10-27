@@ -1,4 +1,11 @@
+import {installPowerPointOutputRuntime} from './PowerPointOutputRuntime';
 import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Menu, shell, dialog, protocol, net, clipboard, ClipboardItem, nativeImage, nativeTheme, Notification, type MenuItemConstructorOptions } from 'electron';
+
+
+
+
+
+
 import{copySlideImage}from'./slideClipboard';
 import path from 'node:path';
 import {countdownMediaSelection,type CountdownMediaContext} from './countdownMediaSelection';
@@ -324,6 +331,14 @@ app.whenReady().then(async() => {
   const sessionFile = path.join(app.getPath('userData'), 'community-session.bin');
   const legacyPresentationFile=path.join(app.getPath('userData'),'presentations','default-presentation.json');
   const presentationRepository=new PresentationRepository(path.join(app.getPath('userData'),'library'),new DocumentImportService(app.isPackaged?path.join(process.resourcesPath,'document-import'):path.join(app.getAppPath(),'work/document-import',process.platform+'-'+process.arch)));
+  const originalRuntime=installPowerPointOutputRuntime({
+    libraryRoot:path.join(app.getPath('userData'),'library'),
+    runtimeFolder:app.isPackaged?path.join(process.resourcesPath,'powerpoint'):path.join(app.getAppPath(),'work/native-powerpoint'),
+    cwd:app.getPath('userData'),control:()=>controlWindow,outputs:()=>outputManager.getNativeCompositionWindows(),
+    isControlUrl:value=>{try{const actual=new URL(value),expected=new URL(rendererUrl||pathToFileURL(resolveRendererEntry(__dirname,app.getAppPath())).toString());return actual.origin===expected.origin&&actual.pathname===expected.pathname}catch{return false}},
+  });
+  const stopOriginalPlayback=()=>originalRuntime.close();
+  stopPresentationOutputs=async()=>{await stopOriginalPlayback();return outputManager.stop()};
   const mediaRepository=new MediaRepository(path.join(app.getPath('userData'),'media-library'));
   const advertisingService=new AdvertisingService(mediaRepository.directory);
   const storageMaintenance=new StorageMaintenanceService({
@@ -587,11 +602,11 @@ app.whenReady().then(async() => {
   screen.on('display-added',notifyDisplays);screen.on('display-removed',(_event,display)=>{outputManager.handleRemoved(display.id);notifyDisplays()});screen.on('display-metrics-changed',notifyDisplays);
   ipcMain.handle('displays:identify',(_event,assignments:DisplayAssignments)=>outputManager.identify(assignments));
   ipcMain.handle('outputs:preflight',(_event,assignments:DisplayAssignments,presentation:{hasPresentation?:boolean;activeSlideCount?:number;media?:string[]})=>displayManager.preflight(assignments,presentation));
-  ipcMain.handle('outputs:on-air',async(_event,assignments:DisplayAssignments,payload:unknown)=>{const preflight=displayManager.preflight(assignments,{hasPresentation:true,activeSlideCount:1});if(!preflight.ok)throw new Error(preflight.errors.join('\n'));remoteServer.updateLive({current:payload,onAir:true});return outputManager.start(assignments,payload)});
+  ipcMain.handle('outputs:on-air',async(_event,assignments:DisplayAssignments,payload:unknown)=>{const preflight=displayManager.preflight(assignments,{hasPresentation:true,activeSlideCount:1});if(!preflight.ok)throw new Error(preflight.errors.join('\n'));await stopOriginalPlayback();remoteServer.updateLive({current:payload,onAir:true});return outputManager.start(assignments,payload)});
   ipcMain.handle('outputs:send-slide',(_event,payload:unknown)=>{outputManager.send(payload);remoteServer.updateLive({current:payload});return true});
   ipcMain.on('outputs:media-ended',(_event,behavior:string)=>{sendToLiveWindow(controlWindow,'outputs:media-ended',behavior)});
   ipcMain.handle('outputs:send-role',(_event,role:OutputRole,payload:unknown)=>outputManager.sendTo(role,payload));
-  ipcMain.handle('outputs:send-quick',(_event,roles:OutputRole[],payload:unknown)=>outputManager.sendQuick(roles,payload));
+  ipcMain.handle('outputs:send-quick',async(_event,roles:OutputRole[],payload:unknown)=>{if(roles.includes('main'))await originalRuntime.setQuick(Boolean(payload));return outputManager.sendQuick(roles,payload)});
   ipcMain.handle('outputs:screen-test-report',(event,value:unknown)=>{if(event.senderFrame!==event.sender.mainFrame)return false;const result=outputManager.acceptScreenTestResult(event.sender.id,value);if(!result)return false;sendToLiveWindow(controlWindow,'outputs:screen-test-result',result);return true});
   ipcMain.handle('outputs:screen-test-restore',(event,runId:string,previous:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;return outputManager.restoreScreenTest(runId,previous)});
   ipcMain.handle('outputs:send-banner',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id)return false;const banner=readBannerOutputState(payload);return banner!==undefined?outputManager.setBanner(banner):false});
@@ -600,7 +615,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('outputs:set-app-mode',(_event,state:{mode:'normal'|'test';onAir:boolean})=>outputManager.setAppMode(state));
   ipcMain.handle('outputs:get-app-mode',()=>outputManager.getAppMode());
   ipcMain.handle('outputs:get-state',(event)=>outputManager.getStateForSender(event.sender.id));
-  ipcMain.handle('outputs:off-air',()=>{remoteServer.updateLive({onAir:false});return outputManager.stop()});
+  ipcMain.handle('outputs:off-air',()=>{remoteServer.updateLive({onAir:false});return stopPresentationOutputs()});
   finishClose=async()=>{
     const owner=controlWindow;if(!owner||owner.isDestroyed())return;
     const document=await new Promise<unknown>((resolve,reject)=>{
@@ -621,7 +636,7 @@ app.whenReady().then(async() => {
   };
   createControlWindow(initialPreferences);
   let cleanQuit=false;
-  app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();if(controlWindow&&!controlCloseInProgress){controlWindow.close();return;}if(controlWindow)return;remoteServer.stop();void outputManager.stop().finally(()=>{cleanQuit=true;app.quit()})});
+  app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();if(controlWindow&&!controlCloseInProgress){controlWindow.close();return;}if(controlWindow)return;remoteServer.stop();void stopPresentationOutputs().finally(()=>{cleanQuit=true;app.quit()})});
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createControlWindow(appPreferences.get()); });
 });
 

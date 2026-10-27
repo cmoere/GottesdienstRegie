@@ -13,6 +13,8 @@ export class OutputWindowManager{
   private appMode:AppModeState={mode:'normal',onAir:false};
   private states=new Map<OutputRole,OutputStateSnapshot>();
   private revision=0;
+  /** Main-process use only; never exposed through preload or output snapshots. */
+  getNativeCompositionWindows(){return [...this.outputs.values()].filter(entry=>!entry.window.isDestroyed()).map(({role,window})=>({role,window}))}
   private frames=new Map<OutputRole,{windowId:number;at:number;value:Promise<Buffer|null>}>();
   async captureFrame(role:'main'|'stage'|'livestream'):Promise<Buffer|null>{
     const entry=this.outputs.get(role);if(!entry||entry.window.isDestroyed())return null;

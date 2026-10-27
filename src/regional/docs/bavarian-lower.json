@@ -324,6 +324,18 @@
     "screenshotLabel": "Beispielansicht"
   },
   "releases": {
+    "versions[0.94].builds[0.94.0].overview.label": "Originale PowerPoint-Wiedergab im Live-Ablauf und klarere Bedienung",
+    "versions[0.94].builds[0.94.0].overview.text": "Unter Windows kann installiertes Microsoft PowerPoint passende PPTX-Dateien jetzt mit eigene Animationen, Übergäng und Zeiten wiedergeben. MAIN und Live-Vorschau kriagn dieselben Originalbilder. De Bedienung trennt Originalwiedergab und bearbeitbare Kopie.",
+    "versions[0.94].builds[0.94.0].sections.new.0.label": "PowerPoint-Originalmodus im Gottesdienstablauf",
+    "versions[0.94].builds[0.94.0].sections.new.0.text": "Im PowerPoint-Element kannst „Original wiedergebn“ auswählen. NEXT führt zerscht den nächsten Animationsschritt aus; de Folienzeiten bleim unter da Kontrolle vo PowerPoint. Am End geht da Ablauf ins nächste Element beziehungsweise ins gschützte Nachprogramm über. De Originaldatei bleibt unverändert.",
+    "versions[0.94].builds[0.94.0].sections.improved.0.label": "Klar gliederte PowerPoint-Bedienung",
+    "versions[0.94].builds[0.94.0].sections.improved.0.text": "An Apples HIG oglehnte, gruppierte Bedienelemente trennen Wiedergabemodus und Inhaltsbearbeitung. De Originalansicht is schreibgschützt. A andere Auswahl im Editor verändert des laufende Original ned. De vorhandenen Gmoandfarben und Tastaturbedienung bleim erhalten.",
+    "versions[0.94].builds[0.94.0].sections.fixed.0.label": "Gmeinsame Originalbilder und sichere Ausgabewechsel",
+    "versions[0.94].builds[0.94.0].sections.fixed.0.text": "Da Originalinhalt werd erst nachm bestätigten ersten Bild übernommen. MAIN und Live-Vorschau nehmen dieselbe GPU-Quelle her. Schnellanzeigen pausieren de native Wiedergab; Test-Wasserzeichen und weitere Systemebenen bleim drüber sichtbar. OFF AIR gibt de eigenen PowerPoint- und Bildressourcen kontrolliert frei. De gemeinsame Veröffentlichung sammelt de Plattformdateien vor da Update-Freigab.",
+    "versions[0.94].builds[0.94.0].sections.known.0.label": "Voraussetzungen und unterstützte PowerPoint-Dateien",
+    "versions[0.94].builds[0.94.0].sections.known.0.text": "De Originalwiedergab braucht Windows x64 und installiertes Microsoft PowerPoint. Mach PowerPoint vorm Start zua. Dateien mit eigbettetem Audio oder Video, aktiven Inhalten, externen Verknüpfungen oder interaktiven Triggern werdn zruckgwiesen. Auf macOS, Linux und im Web bleibt de bearbeitbare Textkopie verfügbar. De Quellschriften müssen aufm Regie-PC vorhanden sei. Ältere Textkopien ohne Originaldatei erneut aus PPTX importieren.",
+    "versions[0.94].builds[0.94.0].sections.known.1.label": "Regionalvarianten",
+    "versions[0.94].builds[0.94.0].sections.known.1.text": "Regionalvarianten san no ned vollständig übersetzt. Fehlende UI-Texte werdn auf Hochdeutsch ogzeigt.",
     "versions[0.93].builds[0.93.0].overview.label": "Update-Einstellungen direkt aufmachen und PowerPoint-Originaldateien erhalten",
     "versions[0.93].builds[0.93.0].overview.text": "Da Hinweis auf a neie Version führt jetzt direkt zu de Update-Einstellungen. Beim PPTX-Inhaltsimport werdn zusätzlich de unveränderten Originaldateien für Export und Sicherungen aufbewahrt. De PowerPoint-Originalwiedergab bleibt weiterhin deaktiviert.",
     "versions[0.93].builds[0.93.0].sections.new.0.label": "Update-Einstellungen ausm Versionshinweis aufmachen",

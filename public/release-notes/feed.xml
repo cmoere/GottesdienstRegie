@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.94.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.94.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.94.0</guid><pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate><description>Originale PowerPoint-Wiedergabe im Live-Ablauf und klarere Bedienung
+Unter Windows kann installiertes Microsoft PowerPoint geeignete PPTX-Dateien jetzt mit eigenen Animationen, Übergängen und Zeiten wiedergeben. MAIN und Live-Vorschau erhalten dieselben Originalbilder. Die Bedienung trennt Originalwiedergabe und bearbeitbare Kopie.
+
+PowerPoint-Originalmodus im Gottesdienstablauf
+Im PowerPoint-Element lässt sich „Original wiedergeben“ wählen. NEXT führt zunächst den nächsten Animationsschritt aus; Folienzeiten bleiben unter Kontrolle von PowerPoint. Am Ende geht der Ablauf in das folgende Element beziehungsweise das geschützte Nachprogramm über. Die Originaldatei bleibt unverändert.
+
+Klar gegliederte PowerPoint-Bedienung
+An Apples HIG angelehnte, gruppierte Bedienelemente trennen Wiedergabemodus und Inhaltsbearbeitung. Die Originalansicht ist schreibgeschützt. Eine andere Auswahl im Editor verändert das laufende Original nicht. Die vorhandenen Gemeindefarben und Tastaturbedienung bleiben erhalten.
+
+Gemeinsame Originalbilder und sichere Ausgabewechsel
+Der Originalinhalt wird erst nach dem bestätigten ersten Bild übernommen. MAIN und Live-Vorschau verwenden dieselbe GPU-Quelle. Schnellanzeigen pausieren die native Wiedergabe; Test-Wasserzeichen und weitere Systemebenen bleiben darüber sichtbar. OFF AIR gibt die eigenen PowerPoint- und Bildressourcen kontrolliert frei. Die gemeinsame Veröffentlichung sammelt die Plattformdateien vor der Update-Freigabe.
+
+Voraussetzungen und unterstützte PowerPoint-Dateien
+Originalwiedergabe benötigt Windows x64 und installiertes Microsoft PowerPoint. PowerPoint vor dem Start schließen. Dateien mit eingebettetem Audio oder Video, aktiven Inhalten, externen Verknüpfungen oder interaktiven Triggern werden abgewiesen. Auf macOS, Linux und im Web bleibt die bearbeitbare Textkopie verfügbar. Quellschriften müssen auf dem Regie-PC vorhanden sein. Ältere Textkopien ohne Originaldatei erneut aus PPTX importieren.
+
+Regionalvarianten
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.</description></item>
 <item><title>GottesdienstRegie 0.93.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.93.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.93.0</guid><pubDate>Mon, 26 Oct 2026 00:00:00 GMT</pubDate><description>Update-Einstellungen direkt öffnen und PowerPoint-Originaldateien erhalten
 Der Hinweis auf eine neue Version führt jetzt direkt zu den Update-Einstellungen. Beim PPTX-Inhaltsimport werden zusätzlich die unveränderten Originaldateien für Export und Sicherungen aufbewahrt. Die PowerPoint-Originalwiedergabe bleibt weiterhin deaktiviert.
 

@@ -89,6 +89,14 @@ interface ImportedSong {
 }
 interface Window {
     desktop?: {
+        powerPoint?:{
+            thumbnail:(sourceHash:string,slideId:number)=>Promise<string|null>;
+            take:(sourceHash:string,slideId:number)=>Promise<import('../electron/PowerPointPlayback').PowerPointTake>;
+            command:(operation:'play'|'pause'|'next'|'previous'|'goto',slideId?:number)=>Promise<import('../electron/PowerPointPlayback').PowerPointTake>;
+            stop:()=>Promise<boolean>;
+            onState:(callback:(state:import('../electron/PowerPointPlayback').PowerPointTake)=>void)=>()=>void;
+            onFault:(callback:(code:string)=>void)=>()=>void;
+        };
         weatherWarnings?:{read:(location:import('../shared/externalLoop').WeatherLocation)=>Promise<import('../shared/weatherWarnings').WeatherWarningReply>};
         sendWeatherWarnings?:(state:import('../shared/weatherWarnings').WeatherWarningState|null)=>Promise<boolean>;
         sendAnnotations?:(state:import('../shared/liveAnnotations').AnnotationState|null)=>Promise<boolean>;

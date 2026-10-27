@@ -18,7 +18,7 @@ export function getRegionalPartialRelease(value:unknown):PartialRelease|null{
   if(!partial||typeof partial!=='object'||Array.isArray(partial))return null;
   if(!['version','inventoryFingerprint','notice'].every(key=>Object.hasOwn(partial,key))||Object.keys(partial).length!==3)return null;
   const item=partial as PartialRelease;
-  return (item.version==='0.84.0'||item.version==='0.85.0'||item.version==='0.86.0'||item.version==='0.87.0'||item.version==='0.88.0'||item.version==='0.89.0'||item.version==='0.89.1'||item.version==='0.89.2'||item.version==='0.89.3'||item.version==='0.90.0'||item.version==='0.91.0'||item.version==='0.92.0'||item.version==='0.93.0')&&typeof item.inventoryFingerprint==='string'&&/^[a-f0-9]{64}$/.test(item.inventoryFingerprint)
+  return (item.version==='0.84.0'||item.version==='0.85.0'||item.version==='0.86.0'||item.version==='0.87.0'||item.version==='0.88.0'||item.version==='0.89.0'||item.version==='0.89.1'||item.version==='0.89.2'||item.version==='0.89.3'||item.version==='0.90.0'||item.version==='0.91.0'||item.version==='0.92.0'||item.version==='0.93.0'||item.version==='0.94.0')&&typeof item.inventoryFingerprint==='string'&&/^[a-f0-9]{64}$/.test(item.inventoryFingerprint)
     &&item.notice===REGIONAL_PARTIAL_NOTICE?item:null;
 }
 

@@ -19,8 +19,8 @@
     "bielefeld-ravensberg"
   ],
   "partialRelease": {
-    "version": "0.93.0",
-    "inventoryFingerprint": "51fb562f964a977f7fafb58cb355723a316d615d6b8c08b4ed43aaef1febd1d6",
+    "version": "0.94.0",
+    "inventoryFingerprint": "de843beb140a5e153cbf7cf5e0b483394d9c8b9655a6a89069765ca7efa5626e",
     "notice": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt."
   }
 }

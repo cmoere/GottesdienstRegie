@@ -324,6 +324,18 @@
     "screenshotLabel": "Bispeelansicht"
   },
   "releases": {
+    "versions[0.94].builds[0.94.0].overview.label": "Originale PowerPoint-Weddergaav in'n Live-Afloop un klarere Bedeenen",
+    "versions[0.94].builds[0.94.0].overview.text": "Ünner Windows kann installeertes Microsoft PowerPoint passende PPTX-Dateien nu mit egen Animationen, Övergäng un Tieden weddergeven. MAIN un Live-Vöransicht kriegt desülvigen Originalbiller. De Bedeenen trennt Originalweddergaav un bearbeitbore Kopie.",
+    "versions[0.94].builds[0.94.0].sections.new.0.label": "PowerPoint-Originalmodus in'n Gottsdenstafloop",
+    "versions[0.94].builds[0.94.0].sections.new.0.text": "In't PowerPoint-Element lett sik „Original weddergeven“ utsöken. NEXT föhrt eerst den nächsten Animatschonsschritt ut; Folientieden blievt ünner de Kontroll vun PowerPoint. An't Enn geiht de Afloop in dat nakamen Element oder dat schützte Naprogramm över. De Originaldatei blifft unverännert.",
+    "versions[0.94].builds[0.94.0].sections.improved.0.label": "Klar opdeelte PowerPoint-Bedeenen",
+    "versions[0.94].builds[0.94.0].sections.improved.0.text": "An Apples HIG anlehnte, gruppeerte Bedeenelementen trennt Weddergaavmodus un Inholtsbearbeiden. De Originalansicht is schrievschützt. En anner Utwahl in'n Editor ännert dat lopende Original nich. De vörhannenen Gemeendklören un Tastatuurbedenen blievt erhollen.",
+    "versions[0.94].builds[0.94.0].sections.fixed.0.label": "Gemeensame Originalbiller un sekere Utgaavwessels",
+    "versions[0.94].builds[0.94.0].sections.fixed.0.text": "De Originalinholt warrt eerst na dat bestätigte eerste Bild övernahmen. MAIN un Live-Vöransicht bruukt desülvige GPU-Quell. Fixanzeigen pausiert de native Weddergaav; Test-Waterteken un wiedere Systeemebenen blievt doröver sichtbor. OFF AIR gifft de egen PowerPoint- un Bildressourcen kontrolliert free. De gemeensame Veröffentlichung sammelt de Plattformdateien vör de Update-Freegaav.",
+    "versions[0.94].builds[0.94.0].sections.known.0.label": "Vörutsettungen un ünnerstütt PowerPoint-Dateien",
+    "versions[0.94].builds[0.94.0].sections.known.0.text": "Originalweddergaav bruukt Windows x64 un installeertes Microsoft PowerPoint. PowerPoint vör den Start tomaken. Dateien mit inbett Audio oder Video, aktive Inholten, externe Verknüppungen oder interaktive Trigger warrt afwiest. Op macOS, Linux un in't Web blifft de bearbeitbore Textkopie verfügbor. De Quellschriften mööt op den Regie-PC vörhannen wesen. Öllere Textkopien ahn Originaldatei nochmaal ut PPTX importeren.",
+    "versions[0.94].builds[0.94.0].sections.known.1.label": "Regionalvarianten",
+    "versions[0.94].builds[0.94.0].sections.known.1.text": "Regionalvarianten sünd noch nich vullstännig översett. Fehlende UI-Texte warrt op Hoochdüütsch wiest.",
     "versions[0.93].builds[0.93.0].overview.label": "Update-Instellungen direkt opmaken un PowerPoint-Originaldateien erhollen",
     "versions[0.93].builds[0.93.0].overview.text": "De Henwies op en niege Verschoon föhrt nu direkt na de Update-Instellungen. Bi den PPTX-Inholtsimport warrt extra de unverännerte Originaldateien för Export un Sekerungen opbewahrt. De PowerPoint-Originalweddergaav blifft wiederhen utschalt.",
     "versions[0.93].builds[0.93.0].sections.new.0.label": "Update-Instellungen ut den Versionshenwies opmaken",

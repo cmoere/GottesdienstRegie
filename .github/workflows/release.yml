@@ -14,6 +14,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: desktop-release
+  cancel-in-progress: false
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -29,6 +33,18 @@ jobs:
           if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then exit 1; fi
           if [[ "$GITHUB_REF_TYPE" == "tag" && "$GITHUB_REF_NAME" != "v$version" ]]; then exit 1; fi
           echo "tag=v$version" >> "$GITHUB_OUTPUT"
+  verify:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Vollständige Tests vor Veröffentlichung
+        run: npm run test:unit -- --maxWorkers=2
   windows:
     needs: prepare
     runs-on: windows-latest
@@ -69,16 +85,13 @@ jobs:
         run: node scripts/check-version75.cjs && node scripts/check-version83.cjs && node scripts/check-version84.cjs && node scripts/check-version85.cjs && node scripts/check-version86.cjs && npm run build
       - name: Windows-Installer erstellen
         run: node scripts/package-ci.cjs --win nsis --publish never
-      - name: Release samt Update-Dateien veröffentlichen
-        uses: softprops/action-gh-release@v2
+      - name: Windows-Dateien für gemeinsame Veröffentlichung sichern
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: ${{ needs.prepare.outputs.tag }}
-          target_commitish: ${{ github.sha }}
-          body_path: RELEASE_NOTES.md
-          prerelease: false
-          draft: true
-          fail_on_unmatched_files: true
-          files: |
+          name: release-windows
+          if-no-files-found: error
+          retention-days: 3
+          path: |
             release/GottesdienstRegie-Setup-*.exe
             release/GottesdienstRegie-Setup-*.exe.blockmap
             release/latest.yml
@@ -99,14 +112,12 @@ jobs:
           java-version: '17'
       - run: npm run build
       - run: node scripts/package-ci.cjs --mac dmg zip --x64 --arm64 --publish never
-      - uses: softprops/action-gh-release@v2
+      - uses: actions/upload-artifact@v4
         with:
-          tag_name: ${{ needs.prepare.outputs.tag }}
-          target_commitish: ${{ github.sha }}
-          body_path: RELEASE_NOTES.md
-          prerelease: false
-          draft: true
-          files: |
+          name: release-macos
+          if-no-files-found: error
+          retention-days: 3
+          path: |
             release/GottesdienstRegie-*.dmg
             release/GottesdienstRegie-*.zip
             release/latest-mac.yml
@@ -127,29 +138,37 @@ jobs:
           java-version: '17'
       - run: npm run build
       - run: node scripts/package-ci.cjs --linux AppImage deb --x64 --publish never
-      - uses: softprops/action-gh-release@v2
+      - uses: actions/upload-artifact@v4
         with:
-          tag_name: ${{ needs.prepare.outputs.tag }}
-          target_commitish: ${{ github.sha }}
-          body_path: RELEASE_NOTES.md
-          prerelease: false
-          draft: true
-          files: |
+          name: release-linux
+          if-no-files-found: error
+          retention-days: 3
+          path: |
             release/GottesdienstRegie-*.AppImage
             release/GottesdienstRegie-*.deb
             release/latest-linux.yml
   publish:
-    needs: [prepare, windows, macos, linux]
-    if: ${{ always() && needs.windows.result == 'success' && (needs.macos.result == 'success' || needs.macos.result == 'skipped') && (needs.linux.result == 'success' || needs.linux.result == 'skipped') }}
+    needs: [prepare, verify, windows, macos, linux]
+    if: ${{ always() && needs.verify.result == 'success' && needs.windows.result == 'success' && (needs.macos.result == 'success' || needs.macos.result == 'skipped') && (needs.linux.result == 'success' || needs.linux.result == 'skipped') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          path: release
+          merge-multiple: true
       - name: Vollständiges normales Update freigeben
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+          RELEASE_SHA: ${{ github.sha }}
         run: |
+          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release create "$RELEASE_TAG" --target "$RELEASE_SHA" --draft --title "$RELEASE_TAG" --notes-file RELEASE_NOTES.md
+          fi
+          gh release upload "$RELEASE_TAG" release/* --clobber
           gh release view "$RELEASE_TAG" --json assets > release-assets.json
           node scripts/check-release-assets.cjs release-assets.json "${RELEASE_TAG#v}"
-          gh release edit "$RELEASE_TAG" --draft=false
+          gh release edit "$RELEASE_TAG" --draft=false --latest

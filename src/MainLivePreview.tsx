@@ -5,6 +5,7 @@ import {useAnnouncementBanner} from './AnnouncementBannerController';
 import {useI18n} from './i18n';
 import {useLiveOutputPreview} from './liveOutputPreview';
 import{useWeatherWarnings}from'./weatherWarnings/controller';
+import {PowerPointPlaybackStatus} from './PowerPointPlaybackPanel';
 
 export function MainLivePreview({ title, children,hideCountdown=false,suppressWeatherWarnings=false }: { title: string; children: ReactNode;hideCountdown?:boolean;suppressWeatherWarnings?:boolean }) {
   const banner=useAnnouncementBanner(state=>state.banner);
@@ -15,5 +16,6 @@ export function MainLivePreview({ title, children,hideCountdown=false,suppressWe
     <h2>{t('livePreviewHeading')}</h2>
     <div style={{position:'relative',containerType:'size'}}><OutputComposition weatherWarnings={suppressWeatherWarnings?null:warnings} hideCountdown={hideCountdown} serviceCountdownAtMs={serviceCountdownAtMs} banner={banner} testOverlay={<TestModeWatermark role="main"/>}>{children}</OutputComposition></div>
     <p>{title}</p>
+    <PowerPointPlaybackStatus/>
   </section>;
 }

@@ -1,3 +1,39 @@
+# GottesdienstRegie 0.94.0
+
+Veröffentlicht: Di., 27.10.2026
+
+Unter Windows kann installiertes Microsoft PowerPoint geeignete PPTX-Dateien jetzt mit eigenen Animationen, Übergängen und Zeiten wiedergeben. MAIN und Live-Vorschau erhalten dieselben Originalbilder. Die Bedienung trennt Originalwiedergabe und bearbeitbare Kopie.
+
+## Neu
+
+### PowerPoint-Originalmodus im Gottesdienstablauf
+
+Im PowerPoint-Element lässt sich „Original wiedergeben“ wählen. NEXT führt zunächst den nächsten Animationsschritt aus; Folienzeiten bleiben unter Kontrolle von PowerPoint. Am Ende geht der Ablauf in das folgende Element beziehungsweise das geschützte Nachprogramm über. Die Originaldatei bleibt unverändert.
+
+## Verbessert
+
+### Klar gegliederte PowerPoint-Bedienung
+
+An Apples HIG angelehnte, gruppierte Bedienelemente trennen Wiedergabemodus und Inhaltsbearbeitung. Die Originalansicht ist schreibgeschützt. Eine andere Auswahl im Editor verändert das laufende Original nicht. Die vorhandenen Gemeindefarben und Tastaturbedienung bleiben erhalten.
+
+## Behoben
+
+### Gemeinsame Originalbilder und sichere Ausgabewechsel
+
+Der Originalinhalt wird erst nach dem bestätigten ersten Bild übernommen. MAIN und Live-Vorschau verwenden dieselbe GPU-Quelle. Schnellanzeigen pausieren die native Wiedergabe; Test-Wasserzeichen und weitere Systemebenen bleiben darüber sichtbar. OFF AIR gibt die eigenen PowerPoint- und Bildressourcen kontrolliert frei. Die gemeinsame Veröffentlichung sammelt die Plattformdateien vor der Update-Freigabe.
+
+## Hinweise
+
+### Voraussetzungen und unterstützte PowerPoint-Dateien
+
+Originalwiedergabe benötigt Windows x64 und installiertes Microsoft PowerPoint. PowerPoint vor dem Start schließen. Dateien mit eingebettetem Audio oder Video, aktiven Inhalten, externen Verknüpfungen oder interaktiven Triggern werden abgewiesen. Auf macOS, Linux und im Web bleibt die bearbeitbare Textkopie verfügbar. Quellschriften müssen auf dem Regie-PC vorhanden sein. Ältere Textkopien ohne Originaldatei erneut aus PPTX importieren.
+
+### Regionalvarianten
+
+Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt.
+
+---
+
 # GottesdienstRegie 0.93.0
 
 Veröffentlicht: Mo., 26.10.2026

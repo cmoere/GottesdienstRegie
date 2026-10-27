@@ -1,6 +1,27 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer, sharedTexture } from "electron";
+import {installPowerPointFrameReceiver} from './PowerPointFrameReceiver';
+
+// No page API for textures, VideoFrames or native window identities. Main
+// authorizes each receiver; auxiliary windows get no binding and remain idle.
+addEventListener('DOMContentLoaded',()=>{
+  if(!sharedTexture?.setSharedTextureReceiver)return;
+  installPowerPointFrameReceiver({
+    invoke:channel=>ipcRenderer.invoke(channel).catch(()=>null),
+    send:(channel,value)=>ipcRenderer.send(channel,value),
+    listen:(channel,callback)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on(channel,listener);return()=>{ipcRenderer.removeListener(channel,listener)}},
+    receive:callback=>sharedTexture.setSharedTextureReceiver(callback),
+  });
+});
 
 contextBridge.exposeInMainWorld("desktop", {
+  powerPoint:{
+    thumbnail:(sourceHash:string,slideId:number)=>ipcRenderer.invoke('powerpoint:thumbnail',sourceHash,slideId),
+    take:(sourceHash:string,slideId:number)=>ipcRenderer.invoke('powerpoint:take',sourceHash,slideId),
+    command:(operation:'play'|'pause'|'next'|'previous'|'goto',slideId?:number)=>ipcRenderer.invoke('powerpoint:command',operation,slideId),
+    stop:()=>ipcRenderer.invoke('powerpoint:stop'),
+    onState:(callback:(value:import('./PowerPointPlayback').PowerPointTake)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:import('./PowerPointPlayback').PowerPointTake)=>callback(value);ipcRenderer.on('powerpoint:state',listener);return()=>ipcRenderer.removeListener('powerpoint:state',listener)},
+    onFault:(callback:(code:string)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,code:string)=>callback(code);ipcRenderer.on('powerpoint:fault',listener);return()=>ipcRenderer.removeListener('powerpoint:fault',listener)},
+  },
   ...(!location.hash.startsWith('#output')?{externalLoop:{read:(request:import('../shared/externalLoop').ExternalRequest)=>ipcRenderer.invoke('external-loop:read',request),searchLocations:(query:string)=>ipcRenderer.invoke('external-loop:weather-locations',query)}}:{}),
   regionalSettings:{read:()=>ipcRenderer.invoke('regional:selection-read'),write:(value:import('../shared/regional/catalog').RegionalSelection)=>ipcRenderer.invoke('regional:selection-set',value)},
   community:{start:()=>ipcRenderer.invoke('community:start'),updateEvent:(eventKey:string,patch:Record<string,unknown>)=>ipcRenderer.invoke('community:update-event',eventKey,patch),onEvents:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('community:events',listener);return()=>ipcRenderer.removeListener('community:events',listener)},onRooms:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('community:rooms',listener);return()=>ipcRenderer.removeListener('community:rooms',listener)},onAnnouncements:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('community:announcements',listener);return()=>ipcRenderer.removeListener('community:announcements',listener)},onConnection:(callback:(value:unknown)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,value:unknown)=>callback(value);ipcRenderer.on('community:connection',listener);return()=>ipcRenderer.removeListener('community:connection',listener)}},
