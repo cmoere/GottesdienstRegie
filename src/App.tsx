@@ -9352,7 +9352,7 @@ function AppShell({
     lastEdit = state.editHistory.at(-1);
   return (
     <div
-      className={`app production-app mode-${state.mode} ${state.onAir ? "is-on-air" : ""}`}
+      className={`app production-app mode-${state.mode} ${state.onAir ? "is-on-air" : ""} ${state.items.find(item=>item.id===state.selectedItemId)?.metadata.importMode==='original'?'has-original-powerpoint':''}`}
       onClick={() => setMenuOpen(null)}
     >
       <AnnouncementBannerController quick={previewQuick}/>

@@ -40,6 +40,9 @@ app.whenReady().then(async()=>{try{
  await until(()=>js('typeof window.seedOriginal==="function" && !!document.querySelector(".production-workspace")'),'App workspace');
  await js(`window.seedOriginal(${JSON.stringify(document)},${display.id})`);
  await until(()=>js('!!document.querySelector(".powerpoint-inspector")'),'real inspector');
+ await sleep(350);
+ const workspaceHeight=await js('document.querySelector(".production-app>.main").getBoundingClientRect().height');
+ assert(workspaceHeight>=280,'Original mode must retain the workspace row when its format toolbar is absent');
  assert.equal(await js('window.startOriginal()'),true);
  const main=outputs.getNativeCompositionWindows().find(entry=>entry.role==='main').window;
  await until(()=>main.webContents.executeJavaScript('!!document.querySelector(".powerpoint-original-surface>canvas")'),'composed MAIN');

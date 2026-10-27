@@ -46,6 +46,20 @@ PowerPoint media compatibility is claimed.
   screen preserves an operator pause, and the original digest is unchanged.
   This targeted final rerun used zero soak seconds; it is separate from the
   preceding 60-second run, not a second 60-second claim.
+- GitHub Actions run `40493073619`, job `122151649836`: the complete final
+  test set passed on Linux (267 files, 1,086 tests). That release run was then
+  deliberately cancelled before publication after visual QA identified a shell
+  grid-row regression in original edit mode.
+- `work/v94-ui-layout-red.log` reproduces the regression: the workspace was only
+  34 px high because the omitted format toolbar still occupied a grid row.
+  `work/v94-ui-layout-green.log` and screenshots under
+  `work/full-app-powerpoint-zi7Gtt/` verify the corrected original-mode grid in
+  dark, light and 1,000 px wide layouts. Computed preview colors are white on
+  black (`work/v94-ui-colors.log`).
+- `work/v94-layout-build.log` and `work/v94-layout-native.log`: the corrected
+  build and full native App test passed again. The permanent native fixture now
+  asserts a workspace height of at least 280 px before starting original playback;
+  report: `work/full-app-powerpoint-2lh368/report.json`.
 
 The tests use an owned fixture deck and profile. They do not close foreign Office
 documents, install the generated update or claim audible embedded-media playback.
