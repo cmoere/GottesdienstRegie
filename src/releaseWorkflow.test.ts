@@ -20,4 +20,6 @@ it('keeps assets in a draft until every requested platform has succeeded',()=>{
  expect(script.indexOf('check-release-assets.cjs')).toBeLessThan(script.indexOf('--draft=false'));
  expect(script).toContain('gh release create');
  expect(script).toContain('gh release upload');
+ expect(script).toContain('scripts/current-release-notes.cjs');
+ expect(script).toContain('--notes-file current-release-notes.md');
 });

@@ -165,8 +165,9 @@ jobs:
           RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
           RELEASE_SHA: ${{ github.sha }}
         run: |
+          node scripts/current-release-notes.cjs "${RELEASE_TAG#v}" > current-release-notes.md
           if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            gh release create "$RELEASE_TAG" --target "$RELEASE_SHA" --draft --title "$RELEASE_TAG" --notes-file RELEASE_NOTES.md
+            gh release create "$RELEASE_TAG" --target "$RELEASE_SHA" --draft --title "$RELEASE_TAG" --notes-file current-release-notes.md
           fi
           gh release upload "$RELEASE_TAG" release/* --clobber
           gh release view "$RELEASE_TAG" --json assets > release-assets.json
