@@ -14,18 +14,7 @@ export const NOW_PLAYING_DESIGNS = [
   "neon",
 ] as const;
 export type NowPlayingDesign = (typeof NOW_PLAYING_DESIGNS)[number];
-export const NOW_PLAYING_DESIGN_LABELS: Record<NowPlayingDesign, string> = {
-  "cover-left": "Cover links",
-  "cover-hero": "Cover groß",
-  minimal: "Minimal",
-  vinyl: "Vinyl",
-  radio: "Radio",
-  gradient: "Verlauf",
-  typography: "Typografie",
-  stage: "Bühne",
-  "split-card": "Split Card",
-  neon: "Neon",
-};
+
 export const NOW_PLAYING_ANIMATIONS = [
   "fade-rise",
   "vinyl-spin",
@@ -39,19 +28,7 @@ export const NOW_PLAYING_ANIMATIONS = [
   "none",
 ] as const;
 export type NowPlayingAnimation = (typeof NOW_PLAYING_ANIMATIONS)[number];
-export const NOW_PLAYING_ANIMATION_LABELS: Record<NowPlayingAnimation, string> =
-  {
-    "fade-rise": "Sanft einblenden",
-    "vinyl-spin": "Vinyl drehen",
-    "cover-zoom": "Cover-Zoom",
-    "slide-left": "Von links",
-    "slide-right": "Von rechts",
-    pulse: "Pulsieren",
-    float: "Schweben",
-    flip: "Aufklappen",
-    glow: "Leuchten",
-    none: "Ohne Animation",
-  };
+
 export type NowPlayingTextCase = "normal" | "uppercase" | "lowercase";
 export type NowPlayingVisualizerPosition =
   "top-left" | "top-right" | "bottom-left" | "bottom-right";

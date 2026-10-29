@@ -5,7 +5,9 @@
   .production-app .menubar button{min-height:44px;white-space:nowrap}
   .production-app .main{min-width:0}
   .production-app .status{display:none}
-  .mobile-workspace-nav{position:fixed;z-index:1000;inset:auto 0 0;display:grid;grid-template-columns:repeat(4,1fr);padding:6px max(6px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));background:var(--surface,#f6f8f9);border-top:1px solid var(--line,#b8c7cd)}
+  /* App navigation stays below modal backdrops (1000), including when it is
+     mounted after a dialog in DOM order. */
+  .mobile-workspace-nav{position:fixed;z-index:900;inset:auto 0 0;display:grid;grid-template-columns:repeat(4,1fr);padding:6px max(6px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));background:var(--surface,#f6f8f9);border-top:1px solid var(--line,#b8c7cd)}
   .mobile-workspace-nav button{min-width:0;min-height:48px;border:0;background:transparent;display:grid;place-items:center;gap:1px;font:inherit;color:inherit}
   .mobile-workspace-nav button[aria-current=page]{color:#087f91;background:#dceff2}
   .mobile-workspace-nav button span:last-child{overflow:hidden;text-overflow:ellipsis;max-width:100%}

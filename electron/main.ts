@@ -97,10 +97,10 @@ app.on('web-contents-created',(_event,contents)=>{
     const items:MenuItemConstructorOptions[]=[];
     if(params.misspelledWord){
       for(const suggestion of params.dictionarySuggestions.slice(0,6))items.push({label:suggestion,click:()=>contents.replaceMisspelling(suggestion)});
-      if(!params.dictionarySuggestions.length)items.push({label:'Keine Korrekturvorschläge',enabled:false});
-      items.push({label:'Schreibweise lernen',click:()=>{contents.session.addWordToSpellCheckerDictionary(params.misspelledWord)}},{label:'Wort online suchen …',click:()=>{void shell.openExternal(`https://www.google.com/search?q=${encodeURIComponent(params.misspelledWord)}`)}},{type:'separator'});
+      if(!params.dictionarySuggestions.length)items.push({label:nativeText('contextNoSuggestions'),enabled:false});
+      items.push({label:nativeText('contextLearnSpelling'),click:()=>{contents.session.addWordToSpellCheckerDictionary(params.misspelledWord)}},{label:nativeText('contextSearchWord'),click:()=>{void shell.openExternal(`https://www.google.com/search?q=${encodeURIComponent(params.misspelledWord)}`)}},{type:'separator'});
     }
-    items.push({role:'undo',label:'Rückgängig'},{role:'redo',label:'Wiederholen'},{type:'separator'},{role:'cut',label:'Ausschneiden'},{role:'copy',label:'Kopieren'},{role:'paste',label:'Einfügen'},{role:'selectAll',label:'Alles auswählen'});
+    items.push({role:'undo',label:nativeText('contextUndo')},{role:'redo',label:nativeText('contextRedo')},{type:'separator'},{role:'cut',label:nativeText('contextCut')},{role:'copy',label:nativeText('contextCopy')},{role:'paste',label:nativeText('contextPaste')},{role:'selectAll',label:nativeText('contextSelectAll')});
     const owner=BrowserWindow.fromWebContents(contents);if(owner)Menu.buildFromTemplate(items).popup({window:owner});
   });
 });
@@ -168,7 +168,7 @@ async function load(win: BrowserWindow, route = '') {
   try{
     return await win.loadFile(resolveRendererEntry(__dirname,app.getAppPath()),{hash:route.replace(/^#/,'')});
   }catch(error){
-    console.error('Renderer konnte nicht geladen werden',error);
+    console.error(nativeText('rendererLoadErrorTitle'),error);
     return win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(rendererFailureHtml(rendererRetryUrl))}`);
   }
 }
@@ -226,9 +226,9 @@ function createControlWindow(preferences:AppPreferencesData) {
 
 function openMediaWindow(context:'manage'|'select'='manage',purpose:'item'|'background'|'foreground'|'audio'='item',targetType?:'section'|'serviceItem',targetId?:string,mediaKind?:string){
   mediaSelectionContext={purpose,targetType,targetId,mediaKind};
-  if(mediaWindow&&!mediaWindow.isDestroyed()){mediaWindow.setTitle(purpose==='audio'?'GottesdienstRegie - Audiobrowser':'GottesdienstRegie - Medienbibliothek');mediaWindow.focus();mediaWindow.webContents.send('media-window:context',{context,purpose,targetType,targetId});return true}
+  if(mediaWindow&&!mediaWindow.isDestroyed()){mediaWindow.setTitle(purpose==='audio'?nativeText('audioBrowserWindowTitle'):nativeText('mediaLibraryWindowTitle'));mediaWindow.focus();mediaWindow.webContents.send('media-window:context',{context,purpose,targetType,targetId});return true}
   const saved=appPreferences.get(),fallback={width:1400,height:850},bounds=saved.mediaBounds??fallback;
-  mediaWindow=new BrowserWindow({...bounds,show:false,minWidth:900,minHeight:600,resizable:true,minimizable:true,maximizable:true,closable:true,skipTaskbar:false,alwaysOnTop:false,backgroundColor:'#f4f7f8',title:purpose==='audio'?'GottesdienstRegie - Audiobrowser':'GottesdienstRegie - Medienbibliothek',icon:app.isPackaged?path.join(process.resourcesPath,'icon.png'):path.join(app.getAppPath(),'build/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
+  mediaWindow=new BrowserWindow({...bounds,show:false,minWidth:900,minHeight:600,resizable:true,minimizable:true,maximizable:true,closable:true,skipTaskbar:false,alwaysOnTop:false,backgroundColor:'#f4f7f8',title:purpose==='audio'?nativeText('audioBrowserWindowTitle'):nativeText('mediaLibraryWindowTitle'),icon:app.isPackaged?path.join(process.resourcesPath,'icon.png'):path.join(app.getAppPath(),'build/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
   mediaWindow.setMenu(null);if(saved.mediaMaximized)mediaWindow.maximize();
   const save=()=>{if(!mediaWindow||mediaWindow.isDestroyed())return;const patch:Partial<AppPreferencesData>={mediaMaximized:mediaWindow.isMaximized()};if(!mediaWindow.isMaximized())patch.mediaBounds=mediaWindow.getBounds();void appPreferences.update(patch)};
   mediaWindow.on('move',save);mediaWindow.on('resize',save);mediaWindow.on('maximize',save);mediaWindow.on('unmaximize',save);mediaWindow.on('closed',()=>{mediaWindow=null});
@@ -237,7 +237,7 @@ function openMediaWindow(context:'manage'|'select'='manage',purpose:'item'|'back
 
 function openHistoryWindow(){
   if(historyWindow&&!historyWindow.isDestroyed()){historyWindow.focus();return true}
-  historyWindow=new BrowserWindow({width:1200,height:760,minWidth:900,minHeight:600,show:false,resizable:true,minimizable:true,maximizable:true,closable:true,skipTaskbar:false,backgroundColor:'#eef3f4',title:'GottesdienstRegie - Änderungshistorie',icon:app.isPackaged?path.join(process.resourcesPath,'icon.png'):path.join(app.getAppPath(),'build/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
+  historyWindow=new BrowserWindow({width:1200,height:760,minWidth:900,minHeight:600,show:false,resizable:true,minimizable:true,maximizable:true,closable:true,skipTaskbar:false,backgroundColor:'#eef3f4',title:nativeText('historyWindowTitle'),icon:app.isPackaged?path.join(process.resourcesPath,'icon.png'):path.join(app.getAppPath(),'build/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
   historyWindow.setMenu(null);historyWindow.on('closed',()=>{historyWindow=null});historyWindow.once('ready-to-show',()=>historyWindow?.show());void load(historyWindow,'#history');return true
 }
 
@@ -257,7 +257,7 @@ app.whenReady().then(async() => {
     // No renderer, output manager, audio, remote server or sleep blocker is started here.
     autoUpdater.autoDownload=false;autoUpdater.autoInstallOnAppQuit=false;
     await runBackgroundUpdateCheck({check:checkForUpdates,openRequested:normalLaunchSignal,shouldOpen:()=>normalLaunchRequested,open:()=>{},notify:version=>{
-      if(Notification.isSupported())new Notification({title:'GottesdienstRegie: Update verfügbar',body:`Version ${version} ist verfügbar. Öffne GottesdienstRegie, um das Update zu prüfen und zu installieren.`}).show();
+      if(Notification.isSupported())new Notification({title:nativeText('backgroundUpdateTitle'),body:nativeText('backgroundUpdateMessage',{version})}).show();
     },quit:()=>app.quit()});
     if(!normalLaunchRequested)return;
     backgroundUpdateOnly=false;
@@ -321,7 +321,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('screen-test:export',async(event,summary:import('../src/screenTest').ScreenTestSummary,format:'html'|'json')=>{
     if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return null;
     const report=screenTestReport(summary,{version:app.getVersion(),createdAt:new Date().toISOString()},format);
-    const picked=await dialog.showSaveDialog(controlWindow,{title:'Bildschirmtest-Bericht speichern',defaultPath:report.filename,filters:[{name:format==='html'?'HTML-Bericht':'JSON-Auswertung',extensions:[format]}]});
+    const picked=await dialog.showSaveDialog(controlWindow,{title:nativeText('saveScreenTestReport'),defaultPath:report.filename,filters:[{name:format==='html'?nativeText('screenTestHtmlFormat'):nativeText('screenTestJsonFormat'),extensions:[format]}]});
     if(picked.canceled||!picked.filePath)return null;await fs.writeFile(picked.filePath,report.text,'utf8');return picked.filePath;
   });
   ipcMain.handle('device-settings:osb-read',()=>deviceSettings.readOsb());
@@ -500,7 +500,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('service-context:open',(event,position:{x:number;y:number},entries:Array<{id?:string;label?:string;type?:'normal'|'separator';enabled?:boolean;accelerator?:string;submenu?:any[]}>,theme?:'system'|'light'|'dark')=>{const owner=BrowserWindow.fromWebContents(event.sender);if(!owner)return false;const build=(items:typeof entries):MenuItemConstructorOptions[]=>items.map(entry=>entry.type==='separator'?{type:'separator'}:{label:String(entry.label??''),enabled:entry.enabled!==false,accelerator:entry.accelerator,submenu:entry.submenu?build(entry.submenu):undefined,click:()=>event.sender.send('service-context:command',entry.id)});const previous=nativeTheme.themeSource;if(theme)nativeTheme.themeSource=theme;Menu.buildFromTemplate(build(entries)).popup({window:owner,x:Math.round(position.x),y:Math.round(position.y),callback:()=>{nativeTheme.themeSource=previous}});return true});
   ipcMain.handle('slide-export:copy',(_event,dataUrl:string)=>copySlideImage(dataUrl,url=>nativeImage.createFromDataURL(url),png=>new ClipboardItem({'image/png':png}),items=>clipboard.write(items)));
   ipcMain.handle('slide-export:save',async(event,dataUrl:string,suggestedName:string,format:'png'|'jpeg'='png')=>{const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,extension=format==='jpeg'?'jpg':'png',picked=await dialog.showSaveDialog(owner,{title:nativeText('saveSlideTitle'),defaultPath:`${suggestedName.replace(/[<>:"/\\|?*]/g,'-')}.${extension}`,filters:[{name:format==='jpeg'?nativeText('jpegImage'):nativeText('pngImage'),extensions:[extension]}]});if(picked.canceled||!picked.filePath)return null;const image=nativeImage.createFromDataURL(dataUrl);if(image.isEmpty())throw new Error('SLIDE_RENDER_FAILED');await fs.writeFile(picked.filePath,format==='jpeg'?image.toJPEG(94):image.toPNG());return picked.filePath});
-  ipcMain.handle('presentation:import',async(_event,kind:'office'|'text'|'gottesdienstregie'|'all'='all')=>{const groups={office:{name:nativeText('officeFormats'),extensions:['pptx','key','odp','one','onepkg']},text:{name:nativeText('textFormats'),extensions:['txt','md']},gottesdienstregie:{name:'GottesdienstRegie',extensions:['json','grpresentation','grbackup']}},selected=kind==='all'?{name:nativeText('presentationFormats'),extensions:['pptx','key','odp','one','onepkg','txt','md','json','grpresentation','grbackup']}:groups[kind];const picked=await dialog.showOpenDialog(controlWindow!,{title:nativeText('importPresentationTitle'),properties:['openFile'],filters:[selected,{name:nativeText('allSupportedFormats'),extensions:['pptx','key','odp','one','onepkg','txt','md','json','grpresentation','grbackup']}]});if(picked.canceled||!picked.filePaths[0])return null;try{const document=await presentationRepository.importDocument(picked.filePaths[0]);if(document.importReport)await dialog.showMessageBox(controlWindow!,{type:'info',title:'Importbericht',message:document.importReport.sourcePages+' Originalseite(n) übernommen · '+document.importReport.generatedSlides+' Präsentationsfolie(n)',detail:document.importReport.warnings.join('\n')});return document}catch(error){void dialog.showMessageBox(controlWindow!,{type:'error',title:nativeText('importPresentationErrorTitle'),message:nativeText('importPresentationErrorMessage'),detail:error instanceof Error&&error.message==='KEYNOTE_PREVIEW_NOT_FOUND'?nativeText('keynotePreviewMissing'):nativeText('importPresentationErrorHelp')});return null}});
+  ipcMain.handle('presentation:import',async(_event,kind:'office'|'text'|'gottesdienstregie'|'all'='all')=>{const groups={office:{name:nativeText('officeFormats'),extensions:['pptx','key','odp','one','onepkg']},text:{name:nativeText('textFormats'),extensions:['txt','md']},gottesdienstregie:{name:'GottesdienstRegie',extensions:['json','grpresentation','grbackup']}},selected=kind==='all'?{name:nativeText('presentationFormats'),extensions:['pptx','key','odp','one','onepkg','txt','md','json','grpresentation','grbackup']}:groups[kind];const picked=await dialog.showOpenDialog(controlWindow!,{title:nativeText('importPresentationTitle'),properties:['openFile'],filters:[selected,{name:nativeText('allSupportedFormats'),extensions:['pptx','key','odp','one','onepkg','txt','md','json','grpresentation','grbackup']}]});if(picked.canceled||!picked.filePaths[0])return null;try{const document=await presentationRepository.importDocument(picked.filePaths[0]);if(document.importReport)await dialog.showMessageBox(controlWindow!,{type:'info',title:nativeText('importReportTitle'),message:nativeText('importReportSummary',{sourceSlides:document.importReport.sourcePages,generatedSlides:document.importReport.generatedSlides}),detail:document.importReport.warnings.join('\n')});return document}catch(error){void dialog.showMessageBox(controlWindow!,{type:'error',title:nativeText('importPresentationErrorTitle'),message:nativeText('importPresentationErrorMessage'),detail:error instanceof Error&&error.message==='KEYNOTE_PREVIEW_NOT_FOUND'?nativeText('keynotePreviewMissing'):nativeText('importPresentationErrorHelp')});return null}});
   ipcMain.handle('songs:import',async(event)=>{
     const owner=BrowserWindow.fromWebContents(event.sender)??controlWindow!,picked=await dialog.showOpenDialog(owner,{title:nativeText('importSongsTitle'),properties:['openFile','multiSelections'],filters:[{name:nativeText('songTextFormats'),extensions:['txt','md','song','csv','json']},{name:nativeText('allFiles'),extensions:['*']}]});
     if(picked.canceled)return [];
@@ -620,7 +620,7 @@ app.whenReady().then(async() => {
     const owner=controlWindow;if(!owner||owner.isDestroyed())return;
     const document=await new Promise<unknown>((resolve,reject)=>{
       const listener=(event:Electron.IpcMainEvent,value:unknown)=>{if(event.sender!==owner.webContents)return;clearTimeout(timer);ipcMain.removeListener('lifecycle:prepared',listener);resolve(value)};
-      const timer=setTimeout(()=>{ipcMain.removeListener('lifecycle:prepared',listener);reject(new Error('Der Arbeitsbereich antwortet nicht. Bitte erneut schließen.'))},10000);
+      const timer=setTimeout(()=>{ipcMain.removeListener('lifecycle:prepared',listener);reject(new Error(nativeText('workspaceNotResponding')))},10000);
       ipcMain.on('lifecycle:prepared',listener);owner.webContents.send('lifecycle:closing');
     });
     owner.setFullScreen(false);owner.unmaximize();owner.setMinimumSize(320,480);owner.setResizable(false);owner.setMaximizable(false);owner.setContentSize(410,700);owner.center();

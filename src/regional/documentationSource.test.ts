@@ -41,10 +41,10 @@ describe('complete German documentation translation source',()=>{
   });
   it('can export repeatedly into the existing ignored working directory',()=>{
     const root=path.resolve('.');
-    execFileSync(process.execPath,['scripts/export-regional-corpus.cjs'],{cwd:root,stdio:'pipe'});
+    execFileSync(process.execPath,['scripts/export-regional-corpus.cjs'],{cwd:root,stdio:'pipe',timeout:10000});
     const before=readFileSync(path.join(root,'work/v84-regional-source.json'),'utf8');
-    execFileSync(process.execPath,['scripts/export-regional-corpus.cjs'],{cwd:root,stdio:'pipe'});
+    execFileSync(process.execPath,['scripts/export-regional-corpus.cjs'],{cwd:root,stdio:'pipe',timeout:10000});
     expect(readFileSync(path.join(root,'work/v84-regional-source.json'),'utf8')).toBe(before);
     expect(Object.keys(JSON.parse(before).help)).toHaveLength(63);
-  });
+  },25000); // Two complete archive exports; each child also has its own hard deadline.
 });

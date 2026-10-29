@@ -1,3 +1,4 @@
+import {useI18n} from './i18n';
 import type { ServiceItem } from "./store";
 import {useEffect,useState} from 'react';
 import {getLatestPublicEvents} from './dynamicEventSlide';
@@ -5,7 +6,6 @@ import {prepareEventOverview} from './eventOverviewPresentation';
 import { usePresentation } from "./store";
 import {
   EVENT_SLIDE_DESIGNS,
-  EVENT_SLIDE_DESIGN_LABELS,
   normalizeEventSlideSettings,
 } from "./dynamicEventSlide";
 
@@ -16,6 +16,8 @@ export function EventSlideDesigner({
   item: ServiceItem;
   canEdit: boolean;
 }) {
+ const {tx}=useI18n();
+ const designLabels={table:tx('Tabelle'),cards:tx('Karten'),timeline:tx('Zeitstrahl'),poster:tx('Plakat'),minimal:tx('Minimal')};
   const state = usePresentation(),
     settings = normalizeEventSlideSettings(item.metadata);
   const [events,setEvents]=useState(getLatestPublicEvents);
@@ -33,8 +35,8 @@ export function EventSlideDesigner({
   };
   return (
     <section className="event-slide-designer">
-      <h4>DESIGN</h4>
-      <p className="field-hint">Tabelle ist die empfohlene Übersicht. Gespeicherte Layouts bleiben auswählbar.</p>
+      <h4>{tx("DESIGN")}</h4>
+      <p className="field-hint">{tx("Tabelle ist die empfohlene Übersicht. Gespeicherte Layouts bleiben auswählbar.")}</p>
       <div className="event-design-cards">
         {EVENT_SLIDE_DESIGNS.map((design) => (
           <button
@@ -49,13 +51,12 @@ export function EventSlideDesigner({
               <i />
               <i />
             </span>
-            <small>{EVENT_SLIDE_DESIGN_LABELS[design]}</small>
+            <small>{designLabels[design]}</small>
           </button>
         ))}
       </div>
       <label>
-        Anzahl Veranstaltungen
-        <input
+        {tx("Anzahl Veranstaltungen")}<input
           type="number"
           min="2"
           max={settings.design==='table'?50:8}
@@ -72,7 +73,7 @@ export function EventSlideDesigner({
           }
         />
       </label>
-      <p className="field-hint">Bei Platzmangel scrollt die Liste automatisch. Mindestdauer aktuell: {Math.ceil(minimum/1000)} Sekunden. Eine längere eingestellte Dauer bleibt erhalten.</p>
+      <p className="field-hint">{tx('Bei Platzmangel scrollt die Liste automatisch. Mindestdauer aktuell: {seconds} Sekunden. Eine längere eingestellte Dauer bleibt erhalten.',{seconds:Math.ceil(minimum/1000)})}</p>
     </section>
   );
 }

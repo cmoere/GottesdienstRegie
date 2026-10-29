@@ -14,7 +14,7 @@ it('selects offline presets without representing them as media files',()=>{
 it('filters by duration and design and hides presets in audio selection',()=>{
   const view=render(<CountdownPresetBrowser purpose="item" onSelect={()=>{}}/>);
   fireEvent.change(screen.getByLabelText('Dauer'),{target:{value:'10'}});
-  fireEvent.change(screen.getByLabelText('Design'),{target:{value:'clear'}});
+  fireEvent.change(screen.getByLabelText(/^Design$/i),{target:{value:'clear'}});
   expect(screen.getAllByRole('button',{name:/Vorschau:/})).toHaveLength(1);
   view.rerender(<CountdownPresetBrowser purpose="audio" onSelect={()=>{}}/>);expect(screen.queryByRole('button',{name:/Vorschau:/})).toBeNull();
 });

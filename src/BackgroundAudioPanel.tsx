@@ -1,3 +1,4 @@
+import {useI18n} from './i18n';
 import { useEffect, useRef, useState } from "react";
 import type {
   AudioContinueUntil,
@@ -49,6 +50,7 @@ export function BackgroundAudioPanel({
   onClose: () => void;
   initialRadio?: boolean;
 }) {
+  const {tx}=useI18n();
   const config = value ?? defaultBackgroundAudio(),
     [dragIndex, setDragIndex] = useState(-1),
     [radioOpen, setRadioOpen] = useState(initialRadio),
@@ -106,18 +108,18 @@ export function BackgroundAudioPanel({
       <div
         className="background-audio-panel radio-only-panel"
         role="dialog"
-        aria-label="Radiosender"
+        aria-label={tx("Radiosender")}
         onClick={(event) => event.stopPropagation()}
       >
         <header>
           <div>
             <Icon name="radio" />
             <span>
-              <b>RADIOSENDER</b>
+              <b>{tx("Radiosender")}</b>
               <small>{title}</small>
             </span>
           </div>
-          <button title="Schließen" onClick={onClose}>
+          <button title={tx("Schließen")} onClick={onClose}>
             <Icon name="close" />
           </button>
         </header>
@@ -135,11 +137,11 @@ export function BackgroundAudioPanel({
         <div>
           <Icon name="volume_up" />
           <span>
-            <b>BACKGROUND AUDIO</b>
+            <b>{tx("BACKGROUND AUDIO")}</b>
             <small>{title}</small>
           </span>
         </div>
-        <button title="Schließen" onClick={onClose}>
+        <button title={tx("Schließen")} onClick={onClose}>
           <Icon name="close" />
         </button>
       </header>
@@ -155,8 +157,7 @@ export function BackgroundAudioPanel({
             )
           }
         >
-          <Icon name="library_music" /> MEDIENBROWSER
-        </button>
+          <Icon name="library_music" /> {" "}{tx("MEDIENBROWSER")}</button>
         <button
           onClick={() =>
             void (window.desktop as any)?.mediaWindow?.open(
@@ -168,8 +169,7 @@ export function BackgroundAudioPanel({
             )
           }
         >
-          <Icon name="schedule" /> GERADE VERWENDET
-        </button>
+          <Icon name="schedule" /> {" "}{tx("GERADE VERWENDET")}</button>
         <button
           onClick={() =>
             void (window.desktop as any)?.mediaWindow?.open(
@@ -181,11 +181,9 @@ export function BackgroundAudioPanel({
             )
           }
         >
-          <Icon name="upload_file" /> IMPORTIEREN
-        </button>
+          <Icon name="upload_file" /> {" "}{tx("IMPORTIEREN")}</button>
         <button onClick={() => {if(!radioOpen)radioSelectionTaken.current=false;setRadioOpen((value) => !value)}}>
-          <Icon name="radio" /> RADIO
-        </button>
+          <Icon name="radio" /> {" "}{tx("RADIO")}</button>
       </div>
       {radioOpen && (
         <RadioStationBrowser add={addRadio}/>
@@ -203,7 +201,7 @@ export function BackgroundAudioPanel({
               <Icon name="drag_indicator" />
               <button
                 className="audio-track-preview"
-                title="In Vorschau anhören"
+                title={tx("In Vorschau anhören")}
                 onClick={() => preview(track)}
               >
                 <Icon
@@ -218,7 +216,7 @@ export function BackgroundAudioPanel({
                 {duration(track.durationSeconds)}
               </small>
               <button
-                title="Entfernen"
+                title={tx("Entfernen")}
                 onClick={() =>
                   update({
                     tracks: config.tracks.filter(
@@ -235,7 +233,7 @@ export function BackgroundAudioPanel({
       ) : (
         <div className="background-audio-empty">
           <Icon name="volume_off" />
-          <span>Noch keine Musik ausgewählt.</span>
+          <span>{tx("Noch keine Musik ausgewählt.")}</span>
         </div>
       )}
       <div className="background-audio-options">
@@ -245,35 +243,30 @@ export function BackgroundAudioPanel({
             checked={config.autoPlay !== false}
             onChange={(event) => update({ autoPlay: event.target.checked })}
           />{" "}
-          Automatisch abspielen
-        </label>
+          {tx("Automatisch abspielen")}</label>
         <label>
           <input
             type="checkbox"
             checked={config.shuffle}
             onChange={(event) => update({ shuffle: event.target.checked })}
           />{" "}
-          Zufällige Reihenfolge
-        </label>
+          {tx("Zufällige Reihenfolge")}</label>
         <label>
           <input
             type="checkbox"
             checked={config.repeat}
             onChange={(event) => update({ repeat: event.target.checked })}
           />{" "}
-          Playlist wiederholen
-        </label>
+          {tx("Playlist wiederholen")}</label>
         <label>
           <input
             type="checkbox"
             checked={config.muted}
             onChange={(event) => update({ muted: event.target.checked })}
           />{" "}
-          Stumm
-        </label>
+          {tx("Stumm")}</label>
         <label>
-          Weiterlaufen / wiederholen bis
-          <select
+          {tx("Weiterlaufen / wiederholen bis")}<select
             value={config.continueUntil}
             onChange={(event) =>
               update({
@@ -281,16 +274,16 @@ export function BackgroundAudioPanel({
               })
             }
           >
-            <option value="playlistEnd">Ende der Playlist (einmal)</option>
-            <option value="sectionEnd">Ende der Section</option>
-            <option value="stopCue">Gestoppt</option>
-            <option value="itemEnd">Ende des Elements</option>
-            <option value="nextSection">In nächste Section weiterlaufen</option>
+            <option value="playlistEnd">{tx("Ende der Playlist (einmal)")}</option>
+            <option value="sectionEnd">{tx("Ende der Section")}</option>
+            <option value="stopCue">{tx("Gestoppt")}</option>
+            <option value="itemEnd">{tx("Ende des Elements")}</option>
+            <option value="nextSection">{tx("In nächste Section weiterlaufen")}</option>
             <option value="offAir">OFF AIR</option>
           </select>
         </label>
         <label>
-          Lautstärke <output>{config.volume}%</output>
+          {tx("Lautstärke")}{" "}<output>{config.volume}%</output>
           <input
             type="range"
             min="0"
@@ -301,8 +294,7 @@ export function BackgroundAudioPanel({
         </label>
         <div className="audio-number-row">
           <label>
-            Einblenden
-            <input
+            {tx("Einblenden")}<input
               type="number"
               min="0"
               max="10"
@@ -312,11 +304,10 @@ export function BackgroundAudioPanel({
                 update({ fadeInSeconds: Number(event.target.value) })
               }
             />
-            <small>Sek.</small>
+            <small>{tx("Sek.")}</small>
           </label>
           <label>
-            Ausblenden
-            <input
+            {tx("Ausblenden")}<input
               type="number"
               min="0"
               max="15"
@@ -326,11 +317,10 @@ export function BackgroundAudioPanel({
                 update({ fadeOutSeconds: Number(event.target.value) })
               }
             />
-            <small>Sek.</small>
+            <small>{tx("Sek.")}</small>
           </label>
           <label>
-            Crossfade
-            <input
+            {tx("Crossfade")}<input
               type="number"
               min="0"
               max="10"
@@ -340,7 +330,7 @@ export function BackgroundAudioPanel({
                 update({ crossfadeSeconds: Number(event.target.value) })
               }
             />
-            <small>Sek.</small>
+            <small>{tx("Sek.")}</small>
           </label>
         </div>
         <label>
@@ -353,11 +343,10 @@ export function BackgroundAudioPanel({
               })
             }
           />{" "}
-          Bei Video-Audio automatisch absenken
-        </label>
+          {tx("Bei Video-Audio automatisch absenken")}</label>
         {config.ducking.enabled && (
           <label>
-            Absenkung <output>{config.ducking.level}%</output>
+            {tx("Absenkung")}{" "}<output>{config.ducking.level}%</output>
             <input
               type="range"
               min="0"
@@ -376,8 +365,7 @@ export function BackgroundAudioPanel({
         )}
       </div>
       <label>
-        Maximale Wiedergabedauer
-        <input
+        {tx("Maximale Wiedergabedauer")}<input
           type="number"
           min="0"
           step="1"
@@ -388,7 +376,7 @@ export function BackgroundAudioPanel({
             })
           }
         />
-        <small>0 = bis zum gewählten Ende</small>
+        <small>{tx("0 = bis zum gewählten Ende")}</small>
       </label>
       <footer>
         <button
@@ -396,11 +384,9 @@ export function BackgroundAudioPanel({
           disabled={!value}
           onClick={() => onChange(undefined)}
         >
-          ALLES ENTFERNEN
-        </button>
+          {tx("ALLES ENTFERNEN")}</button>
         <button className="primary" onClick={onClose}>
-          FERTIG
-        </button>
+          {tx("FERTIG")}</button>
       </footer>
     </div>
   );

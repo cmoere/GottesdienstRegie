@@ -14,13 +14,6 @@ export const EVENT_SLIDE_DESIGNS = [
   "minimal",
 ] as const;
 export type EventSlideDesign = (typeof EVENT_SLIDE_DESIGNS)[number];
-export const EVENT_SLIDE_DESIGN_LABELS: Record<EventSlideDesign, string> = {
-  table: "Tabelle",
-  cards: "Karten",
-  timeline: "Zeitstrahl",
-  poster: "Plakat",
-  minimal: "Minimal",
-};
 export type EventSlideSettings = { design: EventSlideDesign; limit: number };
 
 let latestPublicEvents: LatestPublicEvent[] = [];

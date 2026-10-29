@@ -320,7 +320,7 @@ function Login({
   device: RegisteredDevice;
 }) {
   const {auth}=usePlatform();
-  const { t } = useI18n();
+  const {t, tx} = useI18n();
   const language = usePreferences((state) => state.language),
     setLanguage = usePreferences((state) => state.setLanguage);
   const theme = usePreferences((state) => state.theme),
@@ -502,7 +502,7 @@ function Login({
             <b>{device.organizationName}</b>
             <span>{device.name}</span>
           </p>
-          <h2>Wer verwendet GottesdienstRegie?</h2>
+          <h2>{tx("Wer verwendet GottesdienstRegie?")}</h2>
           <label>
             {t("email")}
             <input
@@ -560,7 +560,7 @@ function Login({
                 else localStorage.removeItem("gottesdienstregie.terms-accepted");
               }}
             />
-            <span>Ich akzeptiere die <button type="button" onClick={() => setTermsOpen(true)}>Nutzungsbedingungen</button>.</span>
+            <span>{tx("Ich akzeptiere die")} <button type="button" onClick={() => setTermsOpen(true)}>{tx("Nutzungsbedingungen")}</button>.</span>
           </label>
           <button className="primary" disabled={busy}>
             {t(busy ? "signingIn" : "signIn")}
@@ -666,12 +666,13 @@ function Login({
 }
 
 function TermsModal({ close }: { close: () => void }) {
+  const {tx}=useI18n();
   const language=usePreferences(state=>state.language),terms=termsDocument(language);
   return (
     <div className="modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && close()}>
       <section className="terms-dialog" role="dialog" aria-modal="true" aria-labelledby="terms-title">
         <header><div><small>GOTTESDIENSTREGIE</small><h2 id="terms-title">{terms.title}</h2></div><button type="button" onClick={close} aria-label={terms.close}><Icon name="close" /></button></header>
-        <div className="terms-body" lang={terms.locale} dir={terms.locale==='ar'?'rtl':'ltr'}><p><b>Version {TERMS_VERSION} · {terms.effective} {TERMS_EFFECTIVE_DATE}</b></p><p>{terms.notice}</p>{terms.sections.map(section=><section key={section.title}><h3>{section.title}</h3><ul>{section.paragraphs.map(paragraph=><li key={paragraph}>{paragraph}</li>)}</ul></section>)}</div>
+        <div className="terms-body" lang={terms.locale} dir={terms.locale==='ar'?'rtl':'ltr'}><p><b>{tx("Version")} {TERMS_VERSION} · {terms.effective} {TERMS_EFFECTIVE_DATE}</b></p><p>{terms.notice}</p>{terms.sections.map(section=><section key={section.title}><h3>{section.title}</h3><ul>{section.paragraphs.map(paragraph=><li key={paragraph}>{paragraph}</li>)}</ul></section>)}</div>
         <footer><button type="button" onClick={()=>void window.desktop?.openExternal(`https://cmoere.github.io/GottesdienstRegie/terms/?lang=${terms.locale}`)}>{terms.open}</button><button type="button" className="primary" onClick={close}>{terms.close}</button></footer>
       </section>
     </div>
@@ -685,7 +686,7 @@ function PresentationLibrary({
   close: () => void;
   opened: (document: PresentationDocument) => void;
 }) {
-  const { locale } = useI18n(),
+  const {locale, tx} = useI18n(),
     [entries, setEntries] = useState<PresentationSummary[]>([]),
     [query, setQuery] = useState(""),
     [showArchived, setShowArchived] = useState(false),
@@ -708,7 +709,7 @@ function PresentationLibrary({
     }
   }
   async function createNew() {
-    const title = prompt("Name der Präsentation", "Sonntagsgottesdienst");
+    const title = prompt(tx("Name der Präsentation"), "Sonntagsgottesdienst");
     if (!title) return;
     setBusy(true);
     try {
@@ -731,8 +732,8 @@ function PresentationLibrary({
       <div className="library-dialog" role="dialog" aria-modal="true">
         <header>
           <div>
-            <h2>Präsentationen</h2>
-            <p>Lokale Präsentationsbibliothek</p>
+            <h2>{tx("Präsentationen")}</h2>
+            <p>{tx("Lokale Präsentationsbibliothek")}</p>
           </div>
           <button onClick={close}>
             <X />
@@ -741,7 +742,7 @@ function PresentationLibrary({
         <div className="library-tools">
           <input
             autoFocus
-            placeholder="Präsentationen durchsuchen"
+            placeholder={tx("Präsentationen durchsuchen")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -750,16 +751,13 @@ function PresentationLibrary({
               type="checkbox"
               checked={showArchived}
               onChange={(e) => setShowArchived(e.target.checked)}
-            />{" "}
-            Archiv anzeigen
-          </label>
+            />{" "}{tx("Archiv anzeigen")}</label>
           <button
             className="primary"
             disabled={busy}
             onClick={() => void createNew()}
           >
-            <Icon name="add" /> NEUE PRÄSENTATION
-          </button>
+            <Icon name="add" /> {tx("NEUE PRÄSENTATION")}</button>
           <button
             onClick={async () => {
               const doc =
@@ -770,8 +768,7 @@ function PresentationLibrary({
               }
             }}
           >
-            <Icon name="upload_file" /> IMPORTIEREN
-          </button>
+            <Icon name="upload_file" /> {tx("IMPORTIEREN")}</button>
         </div>
         <div className="library-list">
           {shown.length ? (
@@ -786,13 +783,12 @@ function PresentationLibrary({
                   <span>
                     {formatEventDate(entry.date || entry.updatedAt)}
                   </span>
-                  <small>
-                    Geändert {new Date(entry.updatedAt).toLocaleString(locale)}
+                  <small>{tx("Geändert")} {new Date(entry.updatedAt).toLocaleString(locale)}
                   </small>
                 </button>
                 <div>
                   <button
-                    title="Duplizieren"
+                    title={tx("Duplizieren")}
                     onClick={async () => {
                       await window.desktop?.presentation.duplicate(entry.id);
                       await refresh();
@@ -801,9 +797,9 @@ function PresentationLibrary({
                     <Icon name="content_copy" />
                   </button>
                   <button
-                    title="Umbenennen"
+                    title={tx("Umbenennen")}
                     onClick={async () => {
-                      const title = prompt("Neuer Name", entry.title);
+                      const title = prompt(tx("Neuer Name"), entry.title);
                       if (title) {
                         await window.desktop?.presentation.rename(
                           entry.id,
@@ -816,7 +812,7 @@ function PresentationLibrary({
                     <Icon name="edit" />
                   </button>
                   <button
-                    title={entry.archived ? "Wiederherstellen" : "Archivieren"}
+                    title={entry.archived ? tx("Wiederherstellen") : tx("Archivieren")}
                     onClick={async () => {
                       await window.desktop?.presentation.archive(
                         entry.id,
@@ -828,7 +824,7 @@ function PresentationLibrary({
                     <Icon name={entry.archived ? "unarchive" : "archive"} />
                   </button>
                   <button
-                    title="Papierkorb"
+                    title={tx("Papierkorb")}
                     onClick={async () => {
                       await window.desktop?.presentation.trash(entry.id, true);
                       await refresh();
@@ -842,11 +838,8 @@ function PresentationLibrary({
           ) : (
             <div className="library-empty">
               <Icon name="folder_open" />
-              <b>Keine Präsentationen gefunden</b>
-              <span>
-                Erstelle eine neue Präsentation oder importiere eine vorhandene
-                Datei.
-              </span>
+              <b>{tx("Keine Präsentationen gefunden")}</b>
+              <span>{tx("Erstelle eine neue Präsentation oder importiere eine vorhandene Datei.")}</span>
             </div>
           )}
         </div>
@@ -862,6 +855,7 @@ function MediaLibrary({
   close: () => void;
   purpose?: "item" | "background";
 }) {
+  const {tx}=useI18n();
   const state = usePresentation(),
     [assets, setAssets] = useState<MediaAsset[]>([]),
     [query, setQuery] = useState(""),
@@ -975,9 +969,7 @@ function MediaLibrary({
       await window.desktop?.media.sync(asset.id);
     } catch (error) {
       alert(
-        error instanceof Error && error.message.includes("TOO_LARGE")
-          ? "Diese Videodatei ist für die kostenlose GitHub-Medienbibliothek zu groß und bleibt lokal."
-          : "Das Medium konnte nicht synchronisiert werden. Prüfe GitHub-Anmeldung und Internetverbindung.",
+        (error instanceof Error && error.message.includes("TOO_LARGE")?tx("Diese Videodatei ist für die kostenlose GitHub-Medienbibliothek zu groß und bleibt lokal."):tx("Das Medium konnte nicht synchronisiert werden. Prüfe GitHub-Anmeldung und Internetverbindung.")),
       );
     } finally {
       setBusyId("");
@@ -996,18 +988,17 @@ function MediaLibrary({
           <div>
             <h2>
               {purpose === "background"
-                ? "Hintergrund auswählen"
-                : "Medienbibliothek"}
+                ? tx("Hintergrund auswählen")
+                : tx("Medienbibliothek")}
             </h2>
             <p>
-              {assets.length} lokal · {onlineCount} in der Cloud
-            </p>
+              {assets.length} {tx("lokal ·")} {onlineCount} {tx("in der Cloud")}</p>
           </div>
           <div
             className={`media-sync-status ${storage?.online ? "online" : "offline"}`}
           >
             <Icon name={storage?.online ? "cloud_done" : "cloud_off"} />
-            <span>{storage?.message ?? "Online-Status wird geprüft …"}</span>
+            <span>{(storage?.message??tx("Online-Status wird geprüft …"))}</span>
           </div>
           <button onClick={close}>
             <X />
@@ -1015,7 +1006,7 @@ function MediaLibrary({
         </header>
         <div className="media-toolbar">
           <input
-            placeholder="Medien durchsuchen"
+            placeholder={tx("Medien durchsuchen")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -1024,15 +1015,14 @@ function MediaLibrary({
             disabled={purpose === "background"}
             onChange={(e) => setKind(e.target.value as typeof kind)}
           >
-            <option value="all">Alle Medien</option>
-            <option value="image">Bilder</option>
-            <option value="video">Videos</option>
-            <option value="audio">Audio</option>
-            <option value="pdf">PDF</option>
+            <option value="all">{tx("Alle Medien")}</option>
+            <option value="image">{tx("Bilder")}</option>
+            <option value="video">{tx("Videos")}</option>
+            <option value="audio">{tx("Audio")}</option>
+            <option value="pdf">{tx("PDF")}</option>
           </select>
           <button className="primary" onClick={() => void importFiles()}>
-            <Icon name="add" /> MEDIEN IMPORTIEREN
-          </button>
+            <Icon name="add" /> {tx("MEDIEN IMPORTIEREN")}</button>
         </div>
         <div className="media-grid">
           {shown.map((asset) => (
@@ -1055,20 +1045,19 @@ function MediaLibrary({
               <div>
                 <b>{asset.name}</b>
                 <small>
-                  {asset.extension} · {(asset.size / 1024 / 1024).toFixed(1)} MB
-                  ·{" "}
+                  {asset.extension} · {(asset.size / 1024 / 1024).toFixed(1)} {tx("MB ·")}{" "}
                   {asset.syncState === "synced"
-                    ? "Cloud ✓"
+                    ? tx("Cloud ✓")
                     : asset.syncState === "error"
-                      ? "Synchronisationsfehler"
-                      : "Wird vorbereitet"}
+                      ? tx("Synchronisationsfehler")
+                      : tx("Wird vorbereitet")}
                 </small>
               </div>
               <button className="media-use" onClick={() => useAsset(asset)}>
-                {purpose === "background" ? "ALS HINTERGRUND" : "VERWENDEN"}
+                {purpose === "background" ? tx("ALS HINTERGRUND") : tx("Verwenden")}
               </button>
               <button
-                title="Mit Cloud synchronisieren"
+                title={tx("Mit Cloud synchronisieren")}
                 disabled={
                   busyId === asset.id ||
                   asset.syncState === "synced" ||
@@ -1087,7 +1076,7 @@ function MediaLibrary({
                 />
               </button>
               <button
-                title="Favorit"
+                title={tx("Favorit")}
                 onClick={async () => {
                   await window.desktop?.media.update(asset.id, {
                     favorite: !asset.favorite,
@@ -1098,11 +1087,11 @@ function MediaLibrary({
                 <Icon name={asset.favorite ? "star" : "star_outline"} />
               </button>
               <button
-                title="Löschen"
+                title={tx("Löschen")}
                 onClick={async () => {
                   if (
                     confirm(
-                      "Medium dauerhaft aus der Medienbibliothek löschen?",
+                      tx("Medium dauerhaft aus der Medienbibliothek löschen?"),
                     )
                   ) {
                     await window.desktop?.media.remove(asset.id);
@@ -1141,7 +1130,7 @@ function SortableItem({
   canEdit: boolean;
   audioTimeline?: AudioTimelineEntry;
 }) {
-  const { t } = useI18n();
+  const {t, tx} = useI18n();
   const state = usePresentation(),
     [editingDuration, setEditingDuration] = useState(false),
     [durationValue, setDurationValue] = useState("");
@@ -1218,7 +1207,7 @@ function SortableItem({
       tabIndex={0}
       aria-selected={active}
       className={`service-item ${active ? "active" : ""} ${live ? "live-item" : ""} ${!item.enabled ? "disabled-slide" : ""} ${isDragging ? "dragging" : ""}`}
-      title={audioTimeline ? `${audioTimeline.state === "stops" ? "Background Audio endet" : "Background Audio läuft"} · Start: ${audioTimeline.sourceTitle}` : undefined}
+      title={(audioTimeline?tx("{value1} · Start: {value2}",{value1:String((audioTimeline.state === "stops"?tx("Background Audio endet"):tx("Background Audio läuft"))),value2:String(audioTimeline.sourceTitle)}):undefined)}
       onClick={onSelect}
       onDoubleClick={onTake}
       onKeyDown={(event) => {
@@ -1238,16 +1227,12 @@ function SortableItem({
           {item.title}
           {item.linkedContentId && <Icon name="link" />}
         </b>
-        {item.timing?.repeat&&<small><Icon name="repeat"/> Wiederholung</small>}
+        {item.timing?.repeat&&<small><Icon name="repeat"/> {tx("Wiederholung")}</small>}
       </span>
       <button
         className={`item-audio-button ${item.backgroundAudio?.tracks.length ? "configured" : ""} ${item.audioStopCue ? "audio-stop-cue" : ""} ${audioIconStateClass(audioTimeline)}`}
         title={
-          item.audioStopCue
-            ? "Background Audio wird hier gestoppt"
-            : item.backgroundAudio?.tracks.length
-              ? `${item.backgroundAudio.tracks.length} Titel · Background Audio`
-              : "Background Audio für dieses Element"
+          (item.audioStopCue?tx("Background Audio wird hier gestoppt"):(item.backgroundAudio?.tracks.length?tx("{value1} Titel · Background Audio",{value1:String(item.backgroundAudio.tracks.length)}):tx("Background Audio für dieses Element")))
         }
         onClick={(event) => {
           event.preventDefault();
@@ -1276,7 +1261,7 @@ function SortableItem({
       ) : (
         <button
           className="item-duration"
-          title="Dauer bearbeiten"
+          title={tx("Dauer bearbeiten")}
           onClick={(event) => {
             event.stopPropagation();
             setDurationValue(formatDuration(itemDurationSeconds(item) || 7));
@@ -1354,6 +1339,7 @@ function QuizCreateDialog({
   cancel: () => void;
   create: (value: QuizCreateValue) => void;
 }) {
+  const {tx}=useI18n();
   const [title, setTitle] = useState("Bibelquiz"),
     [quizType, setQuizType] = useState<QuizCreateValue["quizType"]>("quiz"),
     [participation, setParticipation] =
@@ -1380,37 +1366,31 @@ function QuizCreateDialog({
         <header>
           <div>
             <Icon name="quiz" />
-            <h2 id="quiz-create-title">NEUES LIVEQUIZ</h2>
+            <h2 id="quiz-create-title">{tx("NEUES LIVEQUIZ")}</h2>
           </div>
-          <button type="button" title="Schließen" onClick={cancel}>
+          <button type="button" title={tx("Schließen")} onClick={cancel}>
             <Icon name="close" />
           </button>
         </header>
         <main>
-          <label>
-            Titel *
-            <input
+          <label>{tx("Titel *")}<input
               autoFocus
               required
               value={title}
               onChange={(event) => setTitle(event.target.value)}
             />
           </label>
-          <label>
-            Typ
-            <select
+          <label>{tx("Typ")}<select
               value={quizType}
               onChange={(event) =>
                 setQuizType(event.target.value as QuizCreateValue["quizType"])
               }
             >
-              <option value="quiz">Quiz</option>
-              <option value="poll">Umfrage</option>
+              <option value="quiz">{tx("Quiz")}</option>
+              <option value="poll">{tx("Umfrage")}</option>
             </select>
           </label>
-          <label>
-            Teilnahme
-            <select
+          <label>{tx("Teilnahme")}<select
               value={participation}
               onChange={(event) =>
                 setParticipation(
@@ -1418,23 +1398,15 @@ function QuizCreateDialog({
                 )
               }
             >
-              <option value="anonymous">Anonym</option>
-              <option value="name">Mit Name</option>
+              <option value="anonymous">{tx("Anonym")}</option>
+              <option value="name">{tx("Mit Name")}</option>
             </select>
           </label>
-          <p>
-            Beim Erstellen wird nur die Quizdefinition angelegt. Eine
-            Live-Session und ein Teilnahmecode entstehen erst beim bewussten
-            Live-Start.
-          </p>
+          <p>{tx("Beim Erstellen wird nur die Quizdefinition angelegt. Eine Live-Session und ein Teilnahmecode entstehen erst beim bewussten Live-Start.")}</p>
         </main>
         <footer>
-          <button type="button" onClick={cancel}>
-            ABBRECHEN
-          </button>
-          <button className="primary" type="submit" disabled={!title.trim()}>
-            ERSTELLEN
-          </button>
+          <button type="button" onClick={cancel}>{tx("ABBRECHEN")}</button>
+          <button className="primary" type="submit" disabled={!title.trim()}>{tx("ERSTELLEN")}</button>
         </footer>
       </form>
     </div>
@@ -1498,7 +1470,7 @@ function AddPopover({
   close: () => void;
   targetSectionId?: string;
 }) {
-  const { t } = useI18n();
+  const {t, tx} = useI18n();
   const state = usePresentation(),
     sectionId = resolveInsertionSectionId(targetSectionId,state.items.find((item) => item.id === state.selectedItemId)?.sectionId),
     activeSection = state.sections.find((section) => section.id === sectionId),
@@ -1520,15 +1492,15 @@ function AddPopover({
       title: t("newContent"),
       icon: "title",
     },
-    { type: "image", label: "Bild", title: "Neues Bild", icon: "image" },
-    { type: "video", label: "Video", title: "Neues Video", icon: "movie" },
+    { type: "image", label: tx("Bild"), title: "Neues Bild", icon: "image" },
+    { type: "video", label: tx("Video"), title: "Neues Video", icon: "movie" },
     {
       type: "videoInput",
-      label: "Videoeingang",
+      label: tx("Videoeingang"),
       title: "Neuer Videoeingang",
       icon: "videocam",
     },
-    { type: "audio", label: "Audio", title: "Neues Audio", icon: "audio_file" },
+    { type: "audio", label: tx("Audio"), title: "Neues Audio", icon: "audio_file" },
     { type: "song", label: t("song"), title: t("newSong"), icon: "music_note" },
     {
       type: "bible",
@@ -1544,58 +1516,58 @@ function AddPopover({
     },
     {
       type: "web",
-      label: "Webseite",
+      label: tx("Webseite"),
       title: "Neue Webseite",
       icon: "language",
     },
     { type: "pdf", label: "PDF", title: "Neues PDF", icon: "picture_as_pdf" },
-    { type: "timer", label: "Timer", title: "Neuer Timer", icon: "timer" },
+    { type: "timer", label: tx("Timer"), title: "Neuer Timer", icon: "timer" },
     {
       type: "countdown",
-      label: "Countdown",
+      label: tx("Countdown"),
       title: "Neuer Countdown",
       icon: "hourglass_bottom",
     },
     {
       type: "announcement",
-      label: "Ankündigung",
+      label: tx("Ankündigung"),
       title: "Neue Ankündigung",
       icon: "campaign",
     },
     {
       type: "slideshow",
-      label: "Slideshow",
+      label: tx("Slideshow"),
       title: "Neue Slideshow",
       icon: "slideshow",
     },
     {
       type: "stageMessage",
-      label: "Stage-Nachricht",
+      label: tx("Stage-Nachricht"),
       title: "Neue Stage-Nachricht",
       icon: "speaker_notes",
     },
     {
       type: "quickScreen",
-      label: "Schnellanzeige",
+      label: tx("Schnellanzeige"),
       title: "Neue Schnellanzeige",
       icon: "bolt",
     },
   ];
   const loopOptions: { type: ItemType; label: string; title: string; icon: string }[] = [
-    { type: "announcement", label: "Meldungen", title: "Meldungen", icon: "campaign" },
-    { type: "birthday", label: "Geburtstage", title: "Geburtstage", icon: "cake" },
-    { type: "event", label: "Veranstaltungen", title: "Veranstaltungen", icon: "event" },
-    { type: "weather", label: "Wetter", title: "Wetter", icon: "cloud" },
-    { type: "loopQuiz", label: "Quiz", title: "Loop-Quiz", icon: "quiz" },
-    { type: "loopCountdown", label: "Countdown", title: "Loop-Countdown", icon: "hourglass_bottom" },
-    { type: "clock", label: "Uhrzeit", title: "Uhrzeit", icon: "schedule" },
-    { type: "bibleVerse", label: "Bibelvers", title: "Bibelvers", icon: "menu_book" },
-    { type: "loopQr", label: "QR-Code", title: "QR-Code", icon: "qr_code_2" },
-    { type: "today", label: "Heute bei uns", title: "Heute bei uns", icon: "today" },
-    { type: "nextEvents", label: "Nächste Termine", title: "Nächste Termine", icon: "event_upcoming" },
-    { type: "nowPlaying", label: "Läuft gerade", title: "Läuft gerade", icon: "graphic_eq" },
-    { type: "news", label: "Nachrichten", title: "Nachrichten", icon: "newspaper" },
-    { type: "football", label: "Fußball", title: "Fußball", icon: "sports_soccer" },
+    { type: "announcement", label: tx("Meldungen"), title: "Meldungen", icon: "campaign" },
+    { type: "birthday", label: tx("Geburtstage"), title: "Geburtstage", icon: "cake" },
+    { type: "event", label: tx("Veranstaltungen"), title: "Veranstaltungen", icon: "event" },
+    { type: "weather", label: tx("Wetter"), title: "Wetter", icon: "cloud" },
+    { type: "loopQuiz", label: tx("Quiz"), title: "Loop-Quiz", icon: "quiz" },
+    { type: "loopCountdown", label: tx("Countdown"), title: "Loop-Countdown", icon: "hourglass_bottom" },
+    { type: "clock", label: tx("Uhrzeit"), title: "Uhrzeit", icon: "schedule" },
+    { type: "bibleVerse", label: tx("Bibelvers"), title: "Bibelvers", icon: "menu_book" },
+    { type: "loopQr", label: tx("QR-Code"), title: "QR-Code", icon: "qr_code_2" },
+    { type: "today", label: tx("Heute bei uns"), title: "Heute bei uns", icon: "today" },
+    { type: "nextEvents", label: tx("Nächste Termine"), title: "Nächste Termine", icon: "event_upcoming" },
+    { type: "nowPlaying", label: tx("Läuft gerade"), title: "Läuft gerade", icon: "graphic_eq" },
+    { type: "news", label: tx("Nachrichten"), title: "Nachrichten", icon: "newspaper" },
+    { type: "football", label: tx("Fußball"), title: "Fußball", icon: "sports_soccer" },
   ];
   async function addImported(option: (typeof options)[number]) {
     void option;
@@ -1613,12 +1585,12 @@ function AddPopover({
   function addStructured(option: (typeof options)[number]) {
     if (option.type === "timer" || option.type === "countdown") {
       const duration = parseDuration(
-        prompt("Dauer (Sekunden oder MM:SS)", "05:00") ?? "",
+        prompt(tx("Dauer (Sekunden oder MM:SS)"), "05:00") ?? "",
       );
       if (duration === null) return;
       const endText =
         option.type === "countdown"
-          ? (prompt("Endtext", "Wir beginnen gleich") ?? "")
+          ? (prompt(tx("Endtext"), "Wir beginnen gleich") ?? "")
           : "";
       state.addItem(option.type, {
         title: option.title,
@@ -1665,12 +1637,12 @@ function AddPopover({
       return;
     }
     if (option.type === "announcement") {
-      const title = prompt("Titel der Ankündigung", "Veranstaltung");
+      const title = prompt(tx("Titel der Ankündigung"), "Veranstaltung");
       if (!title) return;
-      const description = prompt("Beschreibung", "Herzliche Einladung") ?? "",
-        date = prompt("Datum und Uhrzeit", "Sonntag, 18:00 Uhr") ?? "",
-        location = prompt("Ort", "Philippusgemeinde Bielefeld") ?? "",
-        link = prompt("Link für QR-Code (optional)", "") ?? "";
+      const description = prompt(tx("Beschreibung"), "Herzliche Einladung") ?? "",
+        date = prompt(tx("Datum und Uhrzeit"), "Sonntag, 18:00 Uhr") ?? "",
+        location = prompt(tx("Ort"), "Philippusgemeinde Bielefeld") ?? "",
+        link = prompt(tx("Link für QR-Code (optional)"), "") ?? "";
       state.addItem("announcement", {
         title,
         section: "",
@@ -1699,12 +1671,12 @@ function AddPopover({
     }
     if (option.type === "stageMessage") {
       const message = prompt(
-        "Nachricht für die Bühne",
+        tx("Nachricht für die Bühne"),
         "Bitte zur Bühne kommen",
       );
       if (!message) return;
       const seconds =
-        parseDuration(prompt("Anzeigedauer in Sekunden", "10") ?? "") ?? 10;
+        parseDuration(prompt(tx("Anzeigedauer in Sekunden"), "10") ?? "") ?? 10;
       state.addItem("stageMessage", {
         title: "Stage-Nachricht",
         section: "",
@@ -1720,7 +1692,7 @@ function AddPopover({
         .getState()
         .quickScreens.filter((entry) => entry.enabled);
       const name = prompt(
-        `Schnellanzeige auswählen:\n${enabled.map((entry) => entry.name).join(", ")}`,
+        tx("Schnellanzeige auswählen:\n{value1}",{value1:(enabled.map((entry) => entry.name).join(", "))}),
         enabled[0]?.name ?? "Schwarz",
       );
       if (!name) return;
@@ -1753,10 +1725,10 @@ function AddPopover({
     let body = "";
     let url = "";
     if (type === "loopQr") {
-      url = prompt("URL für QR-Code", "https://") ?? "";
+      url = prompt(tx("URL für QR-Code"), "https://") ?? "";
       if (!url) return;
     } else if (type === "bibleVerse") {
-      body = prompt("Bibelvers", "Johannes 3,16") ?? "";
+      body = prompt(tx("Bibelvers"), "Johannes 3,16") ?? "";
       if (!body) return;
     }
     if (!consumeInsertionGuard(`${loopSectionId}:${type}`)) return;
@@ -1788,7 +1760,7 @@ function AddPopover({
     }
     if (option.type === "video") {
       const source = prompt(
-        "Videoquelle: Datei, direkte URL, YouTube oder Vimeo",
+        tx("Videoquelle: Datei, direkte URL, YouTube oder Vimeo"),
         "Direkte URL",
       );
       if (!source) return;
@@ -1803,7 +1775,7 @@ function AddPopover({
         void addImported(option);
         return;
       }
-      const url = prompt("Video-URL", "https://");
+      const url = prompt(tx("Video-URL"), "https://");
       if (!url) return;
       metadata.url = url;
       metadata.autoplay = true;
@@ -1868,10 +1840,10 @@ function AddPopover({
     close();
   }
   function addSong() {
-    const title = prompt("Songtitel", "Neuer Song");
+    const title = prompt(tx("Songtitel"), "Neuer Song");
     if (!title) return;
     const lyrics = prompt(
-      "Songtext – Strophen durch eine Leerzeile trennen",
+      tx("Songtext – Strophen durch eine Leerzeile trennen"),
       "Strophe 1\nSongtext\n\nRefrain\nSongtext",
     );
     if (lyrics === null) return;
@@ -1888,7 +1860,7 @@ function AddPopover({
         .getState()
         .updateSlide({ title: `Abschnitt ${index + 2}`, body: part });
     });
-    const author = prompt("Autor / Rechteinhaber (optional)", "");
+    const author = prompt(tx("Autor / Rechteinhaber (optional)"), "");
     usePresentation
       .getState()
       .updateItem(usePresentation.getState().selectedItemId, {
@@ -1901,10 +1873,10 @@ function AddPopover({
     close();
   }
   function addBible() {
-    const reference = prompt("Bibelstelle", "Johannes 3,16–18");
+    const reference = prompt(tx("Bibelstelle"), "Johannes 3,16–18");
     if (!reference) return;
     const text = prompt(
-      "Bibeltext",
+      tx("Bibeltext"),
       "Denn also hat Gott die Welt geliebt, dass er seinen eingeborenen Sohn gab, auf dass alle, die an ihn glauben, nicht verloren werden, sondern das ewige Leben haben.\n\nDenn Gott hat seinen Sohn nicht gesandt in die Welt, dass er die Welt richte, sondern dass die Welt durch ihn selig werde.\n\nWer an ihn glaubt, der wird nicht gerichtet; wer aber nicht glaubt, der ist schon gerichtet, denn er glaubt nicht an den Namen des eingeborenen Sohnes Gottes.",
     );
     if (text === null) return;
@@ -1933,9 +1905,7 @@ function AddPopover({
   const loopGroup = (
     <div className="add-popover-loop-group">
       <strong>
-        {targetSectionId
-          ? `${activeSection?.title ?? "Bereich"} · LOOP-ELEMENTE`
-          : "LOOP-ELEMENTE"}
+        {(targetSectionId?tx("{value1} · LOOP-ELEMENTE",{value1:String((activeSection?.title??tx("Bereich")))}):tx("LOOP-ELEMENTE"))}
       </strong>
       {loopOptions.map((option) => {const entry=catalogGroups[1].entries.find(item=>item.type===option.type);return (
         <button key={`loop-${option.type}`} disabled={entry?.disabled} title={entry?.disabledReason} onClick={() => addLoopElement(option)}>
@@ -1950,12 +1920,12 @@ function AddPopover({
     <>
       <div className="popover add-content-popover" ref={popoverRef}>
         <header>
-          <b>Element hinzufügen</b>
+          <b>{tx("Element hinzufügen")}</b>
           <button onClick={close}>
             <Icon name="close" />
           </button>
         </header>
-        <div className="add-popover-loop-group add-popover-standard-group"><strong>{catalogGroups[0].label}</strong>
+        <div className="add-popover-loop-group add-popover-standard-group"><strong>{tx("Gottesdienst & allgemein")}</strong>
         {visibleOptions.map((option) => (
           <button
             key={option.type}
@@ -2005,6 +1975,7 @@ function ServiceTimePopover({
   onCancel: () => void;
   onSave: (time: string) => void;
 }) {
+  const {tx}=useI18n();
   const state = usePresentation(),
     [event, setEvent] = useState<ChurchEvent | null>(null);
   const [draft, setDraft] = useState(time || "10:30");
@@ -2027,7 +1998,7 @@ function ServiceTimePopover({
         .catch((error) => {
           state.markSaveError();
           alert(
-            `Die Veranstaltung konnte nicht synchronisiert werden.\n\n${String(error)}`,
+            tx("Die Veranstaltung konnte nicht synchronisiert werden.\n\n{value1}",{value1:(String(error))}),
           );
         });
     }
@@ -2046,17 +2017,17 @@ function ServiceTimePopover({
     <div
       className="service-time-popover"
       role="dialog"
-      aria-label="Servicezeit"
+      aria-label={tx("Servicezeit")}
       onClick={(event) => event.stopPropagation()}
       onPointerDown={(event) => event.stopPropagation()}
     >
       <header>
         <Icon name="schedule" />
-        <b>SERVICEZEIT</b>
+        <b>{tx("Servicezeit")}</b>
         <button
           className="help-dot"
           type="button"
-          title="Hilfe: Servicezeit"
+          title={tx("Hilfe: Servicezeit")}
           onClick={() =>
             window.dispatchEvent(
               new CustomEvent("gottesdienstregie:open-help", {
@@ -2070,11 +2041,10 @@ function ServiceTimePopover({
       </header>
       {event && (
         <p>
-          <b>Planmäßig:</b> {event.start_uhrzeit} Uhr
-        </p>
+          <b>{tx("Planmäßig:")}</b> {event.start_uhrzeit} {tx("Uhr")}</p>
       )}
       <label htmlFor="service-time-value">
-        {event ? "Neue Servicezeit" : "Startzeit"}
+        {event ? tx("Neue Servicezeit") : tx("Startzeit")}
       </label>
       <div className="service-time-list">
         <div>
@@ -2093,12 +2063,11 @@ function ServiceTimePopover({
       </div>
       {event && valid && (
         <div className="service-delay-summary">
-          <span>Verspätung:</span>
+          <span>{tx("Verspätung:")}</span>
           <b>
             {minutesBetween(event.start_uhrzeit, draft) >= 0 ? "+" : ""}
-            {minutesBetween(event.start_uhrzeit, draft)} Min.
-          </b>
-          <span>Voraussichtliches Ende:</span>
+            {minutesBetween(event.start_uhrzeit, draft)} {tx("Min.")}</b>
+          <span>{tx("Voraussichtliches Ende:")}</span>
           <b>
             {(() => {
               const [h, m] = event.ende_uhrzeit.split(":").map(Number),
@@ -2116,9 +2085,7 @@ function ServiceTimePopover({
             event.stopPropagation();
             onCancel();
           }}
-        >
-          ABBRECHEN
-        </button>
+        >{tx("ABBRECHEN")}</button>
         <button
           className="primary"
           type="button"
@@ -2128,9 +2095,7 @@ function ServiceTimePopover({
             event.stopPropagation();
             save();
           }}
-        >
-          ÜBERNEHMEN
-        </button>
+        >{tx("ÜBERNEHMEN")}</button>
       </footer>
     </div>
   );
@@ -2143,6 +2108,7 @@ function formatServiceTime(value: string) {
 }
 
 function PresentationEventHeader() {
+  const {tx}=useI18n();
   const state = usePresentation(),
     root = useRef<HTMLElement>(null),
     eventTrigger = useRef<HTMLButtonElement>(null),
@@ -2278,18 +2244,18 @@ function PresentationEventHeader() {
       ) : (
         <button
           className="presentation-title-button"
-          title="Präsentationstitel bearbeiten · maximal 500 Zeichen"
+          title={tx("Präsentationstitel bearbeiten · maximal 500 Zeichen")}
           onClick={() => setEditing(true)}
         >
           {state.title}
         </button>
       )}
-      <PersonalNotesPanel noteKey={{userId:state.historyUserId||'local',presentationId:state.presentationId||'local'}} label="Präsentationsnotizen" presentation />
+      <PersonalNotesPanel noteKey={{userId:state.historyUserId||'local',presentationId:state.presentationId||'local'}} label={tx("Präsentationsnotizen")} presentation />
       <div className="event-link-row">
         <EventLinkStatus buttonRef={eventTrigger} link={state.eventLink} event={linked} onClick={() => (open ? setOpen(false) : showPicker())} />
         <button
           className="event-help-button help-dot"
-          title="Hilfe: Veranstaltungsverknüpfung"
+          title={tx("Hilfe: Veranstaltungsverknüpfung")}
           onClick={() =>
             window.dispatchEvent(
               new CustomEvent("gottesdienstregie:open-help", {
@@ -2304,7 +2270,7 @@ function PresentationEventHeader() {
       {open && (
         <div className="event-picker">
           <header>
-            <b>VERANSTALTUNG VERKNÜPFEN</b>
+            <b>{tx("Veranstaltung verknüpfen")}</b>
             <button onClick={() => setOpen(false)}>
               <Icon name="close" />
             </button>
@@ -2314,12 +2280,10 @@ function PresentationEventHeader() {
               <button
                 onClick={() =>
                   alert(
-                    `${linked.titel}\n${format(linked)} · ${linked.start_uhrzeit}–${linked.ende_uhrzeit} Uhr${isCancelled(linked) ? "\n\nWARNUNG: Diese Veranstaltung fällt aus." : ""}`,
+                    tx("{value1}\n{value2} · {value3}–{value4} Uhr{value5}",{value1:(linked.titel),value2:(format(linked)),value3:(linked.start_uhrzeit),value4:(linked.ende_uhrzeit),value5:((isCancelled(linked)?tx("\n\nWARNUNG: Diese Veranstaltung fällt aus."):""))}),
                   )
                 }
-              >
-                VERANSTALTUNG ANZEIGEN
-              </button>
+              >{tx("VERANSTALTUNG ANZEIGEN")}</button>
               <button
                 onClick={() => {
                   state.updatePresentation({
@@ -2329,25 +2293,21 @@ function PresentationEventHeader() {
                   setLinked(null);
                   setPending(null);
                 }}
-              >
-                VERKNÜPFUNG LÖSEN
-              </button>
+              >{tx("VERKNÜPFUNG LÖSEN")}</button>
             </div>
           )}
           <label>
             <Icon name="search" />
             <input
               autoFocus
-              placeholder="Veranstaltung suchen"
+              placeholder={tx("Veranstaltung suchen")}
               value={query}
               onChange={(event) => setQuery(event.target.value)}
             />
           </label>
           {loading ? (
             <p className="event-loading">
-              <span className="media-loading" /> Veranstaltungen werden geladen
-              …
-            </p>
+              <span className="media-loading" /> {tx("Veranstaltungen werden geladen …")}</p>
           ) : error ? (
             <p className="error">{error}</p>
           ) : visible.length ? (
@@ -2365,7 +2325,7 @@ function PresentationEventHeader() {
                       aria-disabled={cancelled}
                       title={
                         cancelled
-                          ? "Diese Veranstaltung fällt aus und kann nicht mit einer Präsentation verknüpft werden."
+                          ? tx("Diese Veranstaltung fällt aus und kann nicht mit einer Präsentation verknüpft werden.")
                           : ""
                       }
                       onClick={() => setPending(event)}
@@ -2373,14 +2333,12 @@ function PresentationEventHeader() {
                       <strong>
                         {event.titel}
                         {cancelled && (
-                          <em className="event-cancelled-label">Fällt aus!</em>
+                          <em className="event-cancelled-label">{tx("Fällt aus!")}</em>
                         )}
                       </strong>
                       <small>
                         {format(event)} ·{" "}
-                        {event.ganztag
-                          ? "Ganztägig"
-                          : `${event.start_uhrzeit} Uhr`}
+                        {(event.ganztag?tx("Ganztägig"):tx("{value1} Uhr",{value1:String(event.start_uhrzeit)}))}
                       </small>
                     </button>
                   </div>
@@ -2388,14 +2346,10 @@ function PresentationEventHeader() {
               })}
             </div>
           ) : (
-            <p className="event-empty">
-              Keine passende Veranstaltung gefunden.
-            </p>
+            <p className="event-empty">{tx("Keine passende Veranstaltung gefunden.")}</p>
           )}
           <footer>
-            <button type="button" onClick={() => setOpen(false)}>
-              ABBRECHEN
-            </button>
+            <button type="button" onClick={() => setOpen(false)}>{tx("ABBRECHEN")}</button>
             <button
               className="primary"
               type="button"
@@ -2405,9 +2359,7 @@ function PresentationEventHeader() {
                 pending.eventKey === linked?.eventKey
               }
               onClick={saveLink}
-            >
-              ÄNDERUNG SPEICHERN
-            </button>
+            >{tx("ÄNDERUNG SPEICHERN")}</button>
           </footer>
         </div>
       )}
@@ -2422,7 +2374,7 @@ export function OrderOfService({
   canEdit: boolean;
   onTake: (itemId: string, slideId: string) => void;
 }) {
-  const { t, language } = useI18n(),
+  const {t, language, tx} = useI18n(),
     state = usePresentation(),
     items = state.items,
     selected = state.selectedItemId,
@@ -2514,7 +2466,7 @@ export function OrderOfService({
     else if (command === "delete") {
       if (
         ids.length === 1 ||
-        confirm(`${ids.length} Elemente wirklich löschen?`)
+        confirm(tx("{value1} Elemente wirklich löschen?",{value1:(ids.length)}))
       )
         serviceItemCommands.remove(ids);
     } else if (command === "hide") serviceItemCommands.hide(ids, true);
@@ -2648,36 +2600,34 @@ export function OrderOfService({
     const entries: any[] = [];
     if (multiple)
       entries.push(
-        { label: `${current.length} ELEMENTE AUSGEWÄHLT`, enabled: false },
+        { label: tx("{value1} ELEMENTE AUSGEWÄHLT",{value1:String(current.length)}), enabled: false },
         sep,
       );
     entries.push(
-      { id: "cut", label: "Ausschneiden", accelerator: "CmdOrCtrl+X" },
-      { id: "copy", label: "Kopieren", accelerator: "CmdOrCtrl+C" },
+      { id: "cut", label: tx("Ausschneiden"), accelerator: "CmdOrCtrl+X" },
+      { id: "copy", label: tx("Kopieren"), accelerator: "CmdOrCtrl+C" },
       {
         id: "paste",
-        label: "Einfügen",
+        label: tx("Einfügen"),
         accelerator: "CmdOrCtrl+V",
         enabled: serviceItemCommands.canPaste(),
       },
       {
         id: "duplicate",
-        label: multiple
-          ? `${current.length} Elemente duplizieren`
-          : "Duplizieren",
+        label: (multiple?tx("{value1} Elemente duplizieren",{value1:String(current.length)}):tx("Duplizieren")),
         accelerator: "CmdOrCtrl+D",
       },
       {
         id: "delete",
-        label: multiple ? `${current.length} Elemente löschen` : "Löschen",
+        label: (multiple?tx("{value1} Elemente löschen",{value1:String(current.length)}):tx("Löschen")),
       },
       sep,
     );
     if (!multiple && linkable) {
       entries.push(
-        { id: "link", label: "Verknüpftes Element erstellen" },
+        { id: "link", label: tx("Verknüpftes Element erstellen") },
         {
-          label: "Verknüpftes Element in",
+          label: tx("Verknüpftes Element in"),
           submenu: state.sections
             .filter((section) => section.id !== item.sectionId && canPlaceItem(item, section))
             .map((section) => ({
@@ -2691,27 +2641,23 @@ export function OrderOfService({
     entries.push(
       {
         id: hasGroup ? "ungroup" : "group",
-        label: hasGroup ? "Gruppierung aufheben" : "Gruppieren",
+        label: (hasGroup?tx("Gruppierung aufheben"):tx("Gruppieren")),
         enabled: hasGroup || (multiple && sameSection),
       },
       {
         id: allHidden ? "show" : "hide",
-        label: allHidden ? "Einblenden" : "Ausblenden",
+        label: (allHidden?tx("Einblenden"):tx("Ausblenden")),
       },
       sep,
       {
         id: "undo",
-        label: state.history.length
-          ? "Rückgängig: Präsentation bearbeiten"
-          : "Rückgängig",
+        label: (state.history.length?tx("Rückgängig: Präsentation bearbeiten"):tx("Rückgängig")),
         accelerator: "CmdOrCtrl+Z",
         enabled: state.history.length > 0,
       },
       {
         id: "redo",
-        label: state.future.length
-          ? "Wiederholen: Präsentation bearbeiten"
-          : "Wiederholen",
+        label: (state.future.length?tx("Wiederholen: Präsentation bearbeiten"):tx("Wiederholen")),
         accelerator: /Mac|iPhone|iPad/.test(navigator.platform)
           ? "Cmd+Shift+Z"
           : "Ctrl+Y",
@@ -2721,17 +2667,17 @@ export function OrderOfService({
     if (!multiple) {
       entries.push(sep, {
         id: "rename",
-        label: "Element umbenennen …",
+        label: tx("Element umbenennen …"),
         accelerator: "CmdOrCtrl+R",
       });
       if (visual)
         entries.push(
-          { id: "copy-image", label: "Als Bild kopieren" },
-          { id: "save-image", label: "Als Bild speichern …" },
+          { id: "copy-image", label: tx("Als Bild kopieren") },
+          { id: "save-image", label: tx("Als Bild speichern …") },
         );
       entries.push(sep, {
         id: "on-air",
-        label: "Mit dieser Folie ON AIR gehen",
+        label: tx("Mit dieser Folie ON AIR gehen"),
       });
     }
     void (window.desktop as any)?.serviceContext?.open(
@@ -2804,8 +2750,8 @@ export function OrderOfService({
                       type="button"
                       title={
                         isCollapsed
-                          ? "Abschnitt aufklappen"
-                          : "Abschnitt einklappen"
+                          ? tx("Abschnitt aufklappen")
+                          : tx("Abschnitt einklappen")
                       }
                       onClick={(event) => toggleSection(event, section.id)}
                     >
@@ -2825,11 +2771,7 @@ export function OrderOfService({
                       <button
                         className={`audio-header-button ${audio?.tracks.length ? "configured" : ""} ${audio?.muted ? "muted" : ""} ${missing ? "missing" : ""} ${section.audioStopCue?'audio-stop-cue':''}`}
                         title={
-                          missing
-                            ? "Audio konnte nicht vorbereitet werden"
-                            : audio?.tracks.length
-                              ? `${audio.tracks.length} Titel · Background Audio`
-                              : "Background Audio hinzufügen"
+                          (missing?tx("Audio konnte nicht vorbereitet werden"):(audio?.tracks.length?tx("{value1} Titel · Background Audio",{value1:String(audio.tracks.length)}):tx("Background Audio hinzufügen")))
                         }
                         onClick={(event) =>
                           openAudio(
@@ -2880,7 +2822,7 @@ export function OrderOfService({
                       )}
                     </div>
                   </div>
-                  {isCollapsed&&<ServiceDropTarget sectionId={section.id} disabled={!canEdit||!draggingId||!canInsertItem(items.find(item=>item.id===draggingId)!,section)}><span className="service-section-drop-label">{draggingId?'Hier am Abschnittsende einfügen':`${sectionItems.length} Elemente`}</span></ServiceDropTarget>}
+                  {isCollapsed&&<ServiceDropTarget sectionId={section.id} disabled={!canEdit||!draggingId||!canInsertItem(items.find(item=>item.id===draggingId)!,section)}><span className="service-section-drop-label">{(draggingId?tx("Hier am Abschnittsende einfügen"):tx("{value1} Elemente",{value1:String(sectionItems.length)}))}</span></ServiceDropTarget>}
                   {!isCollapsed &&
                     sectionItems.map((item) => (
                       <div className="service-drop-row" key={item.id}>
@@ -2910,7 +2852,7 @@ export function OrderOfService({
                       />
                       </div>
                     ))}
-                  {!isCollapsed&&<ServiceDropTarget sectionId={section.id} disabled={!canEdit||!draggingId||!canInsertItem(items.find(item=>item.id===draggingId)!,section)}>{sectionItems.length===0&&<span className="service-section-drop-label">{draggingId?'Hier einfügen':'Leerer Abschnitt'}</span>}</ServiceDropTarget>}
+                  {!isCollapsed&&<ServiceDropTarget sectionId={section.id} disabled={!canEdit||!draggingId||!canInsertItem(items.find(item=>item.id===draggingId)!,section)}>{sectionItems.length===0&&<span className="service-section-drop-label">{draggingId?tx("Hier einfügen"):tx("Leerer Abschnitt")}</span>}</ServiceDropTarget>}
                 </section>
               );
             })}
@@ -2935,8 +2877,7 @@ export function OrderOfService({
               setAudioMenu(null);
             }}
           >
-            <Icon name="audio_file" /> AUDIO DURCHSUCHEN
-          </button>
+            <Icon name="audio_file" /> {tx("AUDIO DURCHSUCHEN")}</button>
           <button
             onClick={() => {
               void (window.desktop as any)?.mediaWindow?.open(
@@ -2948,16 +2889,14 @@ export function OrderOfService({
               setAudioMenu(null);
             }}
           >
-            <Icon name="upload_file" /> IMPORTIEREN …
-          </button>
+            <Icon name="upload_file" /> {tx("IMPORTIEREN …")}</button>
           <button
             onClick={() => {
               setAudioPanel({targetType:audioMenu.targetType,targetId:audioMenu.targetId,initialRadio:true});
               setAudioMenu(null);
             }}
           >
-            <Icon name="radio" /> RADIOSENDER
-          </button>
+            <Icon name="radio" /> {tx("Radiosender")}</button>
           {(audioMenu.targetType === "serviceItem" || audioMenu.targetType === "section") && (
             <button
               className="separator"
@@ -3025,6 +2964,7 @@ function LazyThumbnail({ slide }: { slide: Slide }) {
 }
 
 function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
+  const {tx}=useI18n();
   const state = usePresentation(),
     frame = useRef<HTMLDivElement>(null),
     drag = useRef<{
@@ -3101,11 +3041,11 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
     };
   }
   const tool: { type: ElementType; icon: string; label: string }[] = [
-    { type: "text", icon: "text_fields", label: "Text" },
-    { type: "image", icon: "image", label: "Bild" },
-    { type: "line", icon: "horizontal_rule", label: "Linie" },
-    { type: "video", icon: "movie", label: "Video" },
-    { type: "qr", icon: "qr_code_2", label: "QR-Code" },
+    { type: "text", icon: "text_fields", label: tx("Text") },
+    { type: "image", icon: "image", label: tx("Bild") },
+    { type: "line", icon: "horizontal_rule", label: tx("Linie") },
+    { type: "video", icon: "movie", label: tx("Video") },
+    { type: "qr", icon: "qr_code_2", label: tx("QR-Code") },
   ];
   const shapes = [
     ["rectangle", "Rechteck", "rectangle"],
@@ -3186,30 +3126,30 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
     elementContextId.current = element.id;
     const isImage = element.type === "image" || element.type === "video";
     const entries = [
-      { id: "element:cut", label: "Ausschneiden", accelerator: "CmdOrCtrl+X" },
-      { id: "element:copy", label: "Kopieren", accelerator: "CmdOrCtrl+C" },
+      { id: "element:cut", label: tx("Ausschneiden"), accelerator: "CmdOrCtrl+X" },
+      { id: "element:copy", label: tx("Kopieren"), accelerator: "CmdOrCtrl+C" },
       {
         id: "element:paste",
-        label: "Einfügen",
+        label: tx("Einfügen"),
         accelerator: "CmdOrCtrl+V",
         enabled: elementClipboard.current.length > 0,
       },
-      { id: "element:duplicate", label: "Duplizieren", accelerator: "CmdOrCtrl+D" },
-      { id: "element:delete", label: "Löschen" },
+      { id: "element:duplicate", label: tx("Duplizieren"), accelerator: "CmdOrCtrl+D" },
+      { id: "element:delete", label: tx("Löschen") },
       { type: "separator" as const },
-      { id: "element:undo", label: "Rückgängig", accelerator: "CmdOrCtrl+Z", enabled: state.history.length > 0 },
-      { id: "element:redo", label: "Wiederholen", accelerator: /Mac|iPhone|iPad/.test(navigator.platform) ? "Cmd+Shift+Z" : "Ctrl+Y", enabled: state.future.length > 0 },
+      { id: "element:undo", label: tx("Rückgängig"), accelerator: "CmdOrCtrl+Z", enabled: state.history.length > 0 },
+      { id: "element:redo", label: tx("Wiederholen"), accelerator: /Mac|iPhone|iPad/.test(navigator.platform) ? "Cmd+Shift+Z" : "Ctrl+Y", enabled: state.future.length > 0 },
       { type: "separator" as const },
-      { id: "element:move-scale", label: "Verschieben und skalieren" },
-      ...(isImage ? [{ id: "element:reset-mask", label: "Maske zurücksetzen" }] : []),
+      { id: "element:move-scale", label: tx("Verschieben und skalieren") },
+      ...(isImage ? [{ id: "element:reset-mask", label: tx("Maske zurücksetzen") }] : []),
       { type: "separator" as const },
-      { id: "element:forward", label: "Eine Ebene nach vorn" },
-      { id: "element:backward", label: "Eine Ebene nach hinten" },
-      { id: "element:front", label: "Ganz nach vorn" },
-      { id: "element:back", label: "Ganz nach hinten" },
+      { id: "element:forward", label: tx("Eine Ebene nach vorn") },
+      { id: "element:backward", label: tx("Eine Ebene nach hinten") },
+      { id: "element:front", label: tx("Ganz nach vorn") },
+      { id: "element:back", label: tx("Ganz nach hinten") },
       { type: "separator" as const },
-      { id: "element:text", label: "Textfeld hinzufügen" },
-      { id: "element:all-slides", label: "Auf allen Folien anzeigen", enabled: (state.items.find((item) => item.slides.some((entry) => entry.id === slide.id))?.slides.length ?? 0) > 1 },
+      { id: "element:text", label: tx("Textfeld hinzufügen") },
+      { id: "element:all-slides", label: tx("Auf allen Folien anzeigen"), enabled: (state.items.find((item) => item.slides.some((entry) => entry.id === slide.id))?.slides.length ?? 0) > 1 },
     ];
     void (window.desktop as any)?.serviceContext?.open(
       { x: event.clientX, y: event.clientY },
@@ -3224,7 +3164,7 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
           <button
             disabled={!canEdit}
             key={entry.type}
-            title={`${entry.label} hinzufügen`}
+            title={tx("{value1} hinzufügen",{value1:String(entry.label)})}
             onClick={() => state.addElement(entry.type)}
           >
             <Icon name={entry.icon} />
@@ -3235,11 +3175,11 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
           <button
             disabled={!canEdit}
             className={shapeMenu ? "active" : ""}
-            title="2D-Objekt hinzufügen"
+            title={tx("2D-Objekt hinzufügen")}
             onClick={() => setShapeMenu((value) => !value)}
           >
             <Icon name="category" />
-            <span>2D-Objekt</span>
+            <span>{tx("2D-OBJEKT")}</span>
             <Icon name="arrow_drop_down" />
           </button>
           {shapeMenu && (
@@ -3247,7 +3187,7 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
               {shapes.map(([kind, name, icon]) => (
                 <button key={kind} onClick={() => addShape(kind, name)}>
                   <Icon name={icon} />
-                  <span>{name}</span>
+                  <span>{tx(name)}</span>
                 </button>
               ))}
             </div>
@@ -3257,7 +3197,7 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
           <button
             disabled={!canEdit}
             key={entry.type}
-            title={`${entry.label} hinzufügen`}
+            title={tx("{value1} hinzufügen",{value1:String(entry.label)})}
             onClick={() => state.addElement(entry.type)}
           >
             <Icon name={entry.icon} />
@@ -3268,7 +3208,7 @@ function CanvasEditor({ slide, canEdit }: { slide: Slide; canEdit: boolean }) {
         <button
           disabled={!state.selectedElementIds.length}
           onClick={state.removeElements}
-          title="Auswahl löschen"
+          title={tx("Auswahl löschen")}
         >
           <Icon name="delete" />
         </button>
@@ -3326,7 +3266,7 @@ function Workspace({
   canEdit: boolean;
   quick?: QuickScreenConfig | null;
 }) {
-  const { t } = useI18n();
+  const { t ,tx} = useI18n();
   const state = usePresentation();
   const audioTimeline = useMemo(() => deriveAudioTimeline(state.sections, state.items), [state.sections, state.items]);
   const itemId =
@@ -3422,7 +3362,7 @@ function Workspace({
                             <div
                               key={current.id}
                               className={`grid-slide ${preview ? "selected" : ""} ${live ? "live-slide" : ""} ${!canTakeLive ? "disabled-slide" : ""}`}
-                              title={audioTimeline[entry.id] ? `${audioTimeline[entry.id].state === "stops" ? "Background Audio endet" : "Background Audio läuft"} · Start: ${audioTimeline[entry.id].sourceTitle}` : undefined}
+                              title={(audioTimeline[entry.id]?tx("{value1} · Start: {value2}",{value1:String((audioTimeline[entry.id].state === "stops"?tx("Background Audio endet"):tx("Background Audio läuft"))),value2:String(audioTimeline[entry.id].sourceTitle)}):undefined)}
                             >
                               <button
                                 className="thumbnail-hit"
@@ -3479,7 +3419,7 @@ function Workspace({
 }
 
 function Inspector({ canEdit }: { canEdit: boolean }) {
-  const { t } = useI18n(),
+  const {t, tx} = useI18n(),
     state = usePresentation(),
     [tab, setTab] = useState<"properties" | "layers">("properties"),
     item = state.items.find((entry) => entry.id === state.selectedItemId),
@@ -3515,9 +3455,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
         <div className="fields">
           {item && (
             <>
-              <label>
-                Elementname
-                <input
+              <label>{tx("Elementname")}<input
                   disabled={!canEdit}
                   value={item.title}
                   onChange={(e) =>
@@ -3525,9 +3463,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                   }
                 />
               </label>
-              <label>
-                Abschnitt
-                <select
+              <label>{tx("Abschnitt")}<select
                   disabled={!canEdit}
                   value={item.sectionId}
                   onChange={(e) =>
@@ -3565,9 +3501,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                 </label>
               )}
               <div className="field-grid">
-                <label>
-                  X
-                  <input
+                <label>{tx("X")}<input
                     type="number"
                     value={Math.round(selectedElement.x)}
                     onChange={(e) =>
@@ -3577,9 +3511,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                     }
                   />
                 </label>
-                <label>
-                  Y
-                  <input
+                <label>{tx("Y")}<input
                     type="number"
                     value={Math.round(selectedElement.y)}
                     onChange={(e) =>
@@ -3589,9 +3521,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                     }
                   />
                 </label>
-                <label>
-                  Breite
-                  <input
+                <label>{tx("Breite")}<input
                     type="number"
                     value={Math.round(selectedElement.width)}
                     onChange={(e) =>
@@ -3601,9 +3531,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                     }
                   />
                 </label>
-                <label>
-                  Höhe
-                  <input
+                <label>{tx("Höhe")}<input
                     type="number"
                     value={Math.round(selectedElement.height)}
                     onChange={(e) =>
@@ -3649,10 +3577,8 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
           )}
           {item && (
             <div className="timing-fields">
-              <h4>WIEDERGABE &amp; ZEIT</h4>
-              <label>
-                Modus
-                <select
+              <h4>{tx("WIEDERGABE & ZEIT")}</h4>
+              <label>{tx("Modus")}<select
                   disabled={!canEdit}
                   value={item.timing.mode}
                   onChange={(e) =>
@@ -3664,15 +3590,13 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                     })
                   }
                 >
-                  <option value="manual">Manuell</option>
-                  <option value="slide-duration">Folienzeit</option>
-                  <option value="media-duration">Mediendauer</option>
-                  <option value="scheduled">Zeitgesteuert</option>
+                  <option value="manual">{tx("Manuell")}</option>
+                  <option value="slide-duration">{tx("Folienzeit")}</option>
+                  <option value="media-duration">{tx("Mediendauer")}</option>
+                  <option value="scheduled">{tx("Zeitgesteuert")}</option>
                 </select>
               </label>
-              <label>
-                Standard-Folienzeit
-                <input
+              <label>{tx("Standard-Folienzeit")}<input
                   disabled={!canEdit || item.itemCategory === "loop"}
                   type="number"
                   min="1"
@@ -3705,7 +3629,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                     })
                   }
                 />
-                <span>Automatisch weiterschalten</span>
+                <span>{tx("Automatisch weiterschalten")}</span>
               </label>
               <label className="setting-check">
                 <input
@@ -3719,7 +3643,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                     })
                   }
                 />
-                <span>Wiederholen</span>
+                <span>{tx("Wiederholen")}</span>
               </label>
               <label className="setting-check">
                 <input
@@ -3732,11 +3656,9 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                     })
                   }
                 />
-                <span>Zufällige Reihenfolge</span>
+                <span>{tx("Zufällige Reihenfolge")}</span>
               </label>
-              <label>
-                Diese Folie (Sekunden)
-                <input
+              <label>{tx("Diese Folie (Sekunden)")}<input
                   disabled={!canEdit}
                   type="number"
                   min="1"
@@ -3757,35 +3679,31 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
           )}
           {item?.itemCategory === "loop" && (
             <div className="loop-item-fields">
-              <h4>LOOP-ELEMENT</h4>
+              <h4>{tx("LOOP-ELEMENT")}</h4>
               <LoopPreview item={item} />
-              <p className="muted">Automatische Anzeige ausschließlich in einem unterstützten Loop-Bereich.</p>
+              <p className="muted">{tx("Automatische Anzeige ausschließlich in einem unterstützten Loop-Bereich.")}</p>
               {item.type === "weather" ? (
                 <>
-                  <label>Quelle<input readOnly value={WEATHER_SCREEN_URL} /></label>
-                  <label>Anzeigedauer (Sekunden)<input disabled={!canEdit} type="number" min="1" max="300" step="1" value={Math.round(loopDurationMs(item) / 1000)} onChange={(event) => { const seconds = Math.max(1, Math.min(300, Number(event.target.value) || 1)); state.updateItem(item.id, { plannedDuration: seconds * 1000, timing: { ...item.timing, slideDurationSeconds: seconds, totalDurationSeconds: seconds, autoAdvance: true }, metadata: { ...item.metadata, weatherDurationMs: seconds * 1000 }, autoAdvance: true }); }} /><span className="field-hint">Empfehlung: 20 Sekunden · änderbar</span></label>
-                  <p className="status-ready">● Wetterscreen wird vor der Anzeige vorgeladen und bei Fehler übersprungen.</p>
+                  <label>{tx("Quelle")}<input readOnly value={WEATHER_SCREEN_URL} /></label>
+                  <label>{tx("Anzeigedauer (Sekunden)")}<input disabled={!canEdit} type="number" min="1" max="300" step="1" value={Math.round(loopDurationMs(item) / 1000)} onChange={(event) => { const seconds = Math.max(1, Math.min(300, Number(event.target.value) || 1)); state.updateItem(item.id, { plannedDuration: seconds * 1000, timing: { ...item.timing, slideDurationSeconds: seconds, totalDurationSeconds: seconds, autoAdvance: true }, metadata: { ...item.metadata, weatherDurationMs: seconds * 1000 }, autoAdvance: true }); }} /><span className="field-hint">{tx("Empfehlung: 20 Sekunden · änderbar")}</span></label>
+                  <p className="status-ready">{tx("● Wetterscreen wird vor der Anzeige vorgeladen und bei Fehler übersprungen.")}</p>
                 </>
               ) : (
-                <label>
-                  Anzeigedauer
-                  <select disabled={!canEdit} value={String(Math.round(loopDurationMs(item) / 1000))} onChange={(event) => { const seconds = Number(event.target.value); state.updateItem(item.id, { plannedDuration: seconds * 1000, timing: { ...item.timing, slideDurationSeconds: seconds, totalDurationSeconds: seconds, autoAdvance: true }, autoAdvance: true }); }}>
-                    {[5, 10, 15, 20, 30, 45, 60].map((seconds) => <option key={seconds} value={seconds}>{seconds} Sekunden</option>)}
+                <label>{tx("Anzeigedauer")}<select disabled={!canEdit} value={String(Math.round(loopDurationMs(item) / 1000))} onChange={(event) => { const seconds = Number(event.target.value); state.updateItem(item.id, { plannedDuration: seconds * 1000, timing: { ...item.timing, slideDurationSeconds: seconds, totalDurationSeconds: seconds, autoAdvance: true }, autoAdvance: true }); }}>
+                    {[5, 10, 15, 20, 30, 45, 60].map((seconds) => <option key={seconds} value={seconds}>{seconds} {tx("Sekunden")}</option>)}
                   </select>
                 </label>
               )}
-              {item.type === "loopQr" && <label>QR-Code-URL<input disabled={!canEdit} value={String(item.metadata.url ?? "")} onChange={(event) => state.updateItem(item.id, { metadata: { ...item.metadata, url: event.target.value } })} /></label>}
+              {item.type === "loopQr" && <label>{tx("QR-Code-URL")}<input disabled={!canEdit} value={String(item.metadata.url ?? "")} onChange={(event) => state.updateItem(item.id, { metadata: { ...item.metadata, url: event.target.value } })} /></label>}
               {item.type === "nowPlaying" && <NowPlayingDesigner item={item} canEdit={canEdit}/>}
               {(item.type === "event" || item.type === "nextEvents") && <EventSlideDesigner item={item} canEdit={canEdit}/>}
               {item.type==='announcement'&&<AnnouncementSlideDesigner item={item} canEdit={canEdit}/>}
-              {(item.type === "announcement" || item.type === "birthday" || item.type === "event") && <p className="muted">Quelle: Firebase · öffentliche Daten werden vor der Ausgabe validiert.</p>}
+              {(item.type === "announcement" || item.type === "birthday" || item.type === "event") && <p className="muted">{tx("Quelle: Firebase · öffentliche Daten werden vor der Ausgabe validiert.")}</p>}
             </div>
           )}
           {item?.type === "web" && (
             <>
-              <label>
-                URL
-                <input
+              <label>{tx("URL")}<input
                   value={String(item.metadata.url ?? "")}
                   onChange={(e) =>
                     state.updateItem(item.id, {
@@ -3794,9 +3712,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                   }
                 />
               </label>
-              <label>
-                Zoom
-                <input
+              <label>{tx("Zoom")}<input
                   type="number"
                   min="25"
                   max="300"
@@ -3815,9 +3731,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
           )}
           {(item?.type === "video" || item?.type === "audio") && (
             <>
-              <label>
-                Medienquelle
-                <input
+              <label>{tx("Medienquelle")}<input
                   value={String(item.metadata.url ?? "")}
                   onChange={(e) =>
                     state.updateItem(item.id, {
@@ -3826,9 +3740,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                   }
                 />
               </label>
-              <label>
-                Lautstärke
-                <input
+              <label>{tx("Lautstärke")}<input
                   type="range"
                   min="0"
                   max="100"
@@ -3873,7 +3785,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                 />
                 <span>{element.name}</span>
                 <button
-                  title="Sichtbarkeit"
+                  title={tx("Sichtbarkeit")}
                   onClick={(event) => {
                     event.stopPropagation();
                     state.toggleElementVisible(element.id);
@@ -3884,7 +3796,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                   />
                 </button>
                 <button
-                  title="Sperren"
+                  title={tx("Sperren")}
                   onClick={(event) => {
                     event.stopPropagation();
                     state.toggleElementLocked(element.id);
@@ -3893,7 +3805,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                   <Icon name={element.locked ? "lock" : "lock_open"} />
                 </button>
                 <button
-                  title="Nach vorn"
+                  title={tx("Nach vorn")}
                   onClick={(event) => {
                     event.stopPropagation();
                     state.moveElementLayer(element.id, 1);
@@ -3902,7 +3814,7 @@ function Inspector({ canEdit }: { canEdit: boolean }) {
                   <Icon name="arrow_upward" />
                 </button>
                 <button
-                  title="Nach hinten"
+                  title={tx("Nach hinten")}
                   onClick={(event) => {
                     event.stopPropagation();
                     state.moveElementLayer(element.id, -1);
@@ -3946,7 +3858,7 @@ function SortableSlide({
   );
 }
 function Filmstrip() {
-  const { t } = useI18n(),
+  const {t, tx} = useI18n(),
     state = usePresentation(),
     item = state.items.find((entry) => entry.id === state.selectedItemId);
   function end(event: DragEndEvent) {
@@ -3958,35 +3870,35 @@ function Filmstrip() {
       <header>
         <b>{t("slides")}</b>
         <div className="slide-actions">
-          <button onClick={state.addSlide} title="Neue Folie">
+          <button onClick={state.addSlide} title={tx("Neue Folie")}>
             <Icon name="add" />
           </button>
-          <button onClick={state.duplicateSlide} title="Duplizieren">
+          <button onClick={state.duplicateSlide} title={tx("Duplizieren")}>
             <Icon name="content_copy" />
           </button>
-          <button onClick={state.copySlide} title="Kopieren">
+          <button onClick={state.copySlide} title={tx("Kopieren")}>
             <Icon name="file_copy" />
           </button>
           <button
             onClick={state.pasteSlide}
             disabled={!state.clipboard}
-            title="Einfügen"
+            title={tx("Einfügen")}
           >
             <Icon name="content_paste" />
           </button>
-          <button onClick={() => state.moveSlide(-1)} title="Nach links">
+          <button onClick={() => state.moveSlide(-1)} title={tx("Nach links")}>
             <Icon name="arrow_back" />
           </button>
-          <button onClick={() => state.moveSlide(1)} title="Nach rechts">
+          <button onClick={() => state.moveSlide(1)} title={tx("Nach rechts")}>
             <Icon name="arrow_forward" />
           </button>
-          <button onClick={state.toggleSlide} title="Aktivieren/Deaktivieren">
+          <button onClick={state.toggleSlide} title={tx("Aktivieren/Deaktivieren")}>
             <Icon name="visibility" />
           </button>
           <button
             className="danger-icon"
             onClick={state.removeSlide}
-            title="Löschen"
+            title={tx("Löschen")}
           >
             <Icon name="delete" />
           </button>
@@ -4035,6 +3947,7 @@ function VersionItem({
   items: { title: string; details: string[] }[];
   latest?: boolean;
 }) {
+  const {tx}=useI18n();
   const [open, setOpen] = useState(latest);
   return (
     <div className={`version-item ${latest ? "latest" : ""}`}>
@@ -4044,7 +3957,7 @@ function VersionItem({
         aria-expanded={open}
       >
         <b>{open ? "−" : "+"}</b>
-        <span>Version {version}</span>
+        <span>{tx("Version")} {version}</span>
         {latest && <Icon name="new_releases" />}
       </button>
       {open && (
@@ -4213,7 +4126,7 @@ function versionLabel(version: string) {
     : `Version ${version}`;
 }
 function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
-  const { language, locale, germanRegion } = useI18n(),
+  const {language, locale, germanRegion, tx} = useI18n(),
     [data, setData] = useState<ReleaseFile | null>(null);
   const releaseIdentity=useMemo(()=>indexReleaseTextObjects(data),[data]);
   const regionalReleaseTexts=regionalDocumentationRuntime.get({language,germanRegion})?.releases;
@@ -4225,14 +4138,14 @@ function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
   const local = (value: ReleaseText) =>
       localizeReleaseText(value,language,releaseIdentity.paths.get(value),regionalReleaseTexts),
     categories: Record<string, string> = {
-      new: language === "de" ? "Neu" : "New",
-      improved: language === "de" ? "Verbessert" : "Improved",
-      fixed: language === "de" ? "Behoben" : "Fixed",
-      security: language === "de" ? "Sicherheit" : "Security",
-      knownIssues: language === "de" ? "Bekannte Probleme" : "Known issues",
-      known: language === "de" ? "Noch offen / Hinweise" : "Limitations / Notes",
+      new: language === "de" ? tx("Neu") : "New",
+      improved: language === "de" ? tx("Verbessert") : "Improved",
+      fixed: language === "de" ? tx("Behoben") : "Fixed",
+      security: language === "de" ? tx("Sicherheit") : "Security",
+      knownIssues: language === "de" ? tx("Bekannte Probleme") : "Known issues",
+      known: language === "de" ? tx("Noch offen / Hinweise") : "Limitations / Notes",
     };
-  if (!data) return <p>Versionsinformationen werden geladen …</p>;
+  if (!data) return <p>{tx("Versionsinformationen werden geladen …")}</p>;
   return (
     <div className="structured-releases">
       {webAction && (
@@ -4243,8 +4156,7 @@ function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
               `https://cmoere.github.io/GottesdienstRegie/release-notes/?lang=${encodeURIComponent(language)}`,
             )
           }
-        >
-          RELEASE NOTES IM WEB ÖFFNEN <Icon name="open_in_new" />
+        >{tx("RELEASE NOTES IM WEB ÖFFNEN")} <Icon name="open_in_new" />
         </button>
       )}
       {data.versions.map((line, lineIndex) => (
@@ -4253,7 +4165,7 @@ function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
           open={lineIndex === 0}
           className="release-line"
         >
-          <summary>Version {line.line}</summary>
+          <summary>{tx("Version")} {line.line}</summary>
           {line.builds.map((build, buildIndex) => (
             <details
               key={build.version}
@@ -4266,12 +4178,12 @@ function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
                 <span>
                   {versionLabel(build.version)}
                   {isPrerelease(build.version) && (
-                    <em className="beta-badge">BETA</em>
+                    <em className="beta-badge">{tx("BETA")}</em>
                   )}
                 </span>
                 <small>
                   {formatEventDate(build.releaseDate)}
-                  {build.current ? " · Aktuelle Version" : ""}
+                  {build.current ? tx("· Aktuelle Version") : ""}
                 </small>
               </summary>
               {build.overview&&<section><h4>{local(build.overview.label)}</h4><p>{local(build.overview.text)}</p></section>}
@@ -4423,90 +4335,92 @@ type SettingsTab =
   | "lightingMidi"
   | "midiInput";
 
-const shortcutRows: Array<{
+
+
+function KeyboardShortcutSettings() {
+  const {tx}=useI18n();
+  const shortcutRows: Array<{
   action: ShortcutAction;
   label: string;
   description: string;
 }> = [
   {
     action: "save",
-    label: "Speichern",
-    description: "Speichert die geöffnete Präsentation sofort.",
+    label: tx("Speichern"),
+    description: tx("Speichert die geöffnete Präsentation sofort."),
   },
   {
     action: "undo",
-    label: "Rückgängig",
-    description: "Nimmt die letzte Änderung im Editor zurück.",
+    label: tx("Rückgängig"),
+    description: tx("Nimmt die letzte Änderung im Editor zurück."),
   },
   {
     action: "redo",
-    label: "Wiederholen",
-    description: "Stellt eine zurückgenommene Änderung wieder her.",
+    label: tx("Wiederholen"),
+    description: tx("Stellt eine zurückgenommene Änderung wieder her."),
   },
   {
     action: "nextLive",
-    label: "Nächste Live-Folie",
-    description: "Schaltet während ON AIR zur nächsten aktiven Folie.",
+    label: tx("Nächste Live-Folie"),
+    description: tx("Schaltet während ON AIR zur nächsten aktiven Folie."),
   },
   {
     action: "previousLive",
-    label: "Vorherige Live-Folie",
-    description: "Schaltet während ON AIR zur vorherigen aktiven Folie.",
+    label: tx("Vorherige Live-Folie"),
+    description: tx("Schaltet während ON AIR zur vorherigen aktiven Folie."),
   },
   {
     action: "toggleMode",
-    label: "Bearbeiten / Vorschau",
-    description: "Wechselt zwischen Bearbeitungs- und Vorschau-Modus.",
+    label: tx("Bearbeiten / Vorschau"),
+    description: tx("Wechselt zwischen Bearbeitungs- und Vorschau-Modus."),
   },
   {
     action: "toggleFullscreen",
-    label: "Vollbild",
+    label: tx("Vollbild"),
     description:
-      "Schaltet das Bedienfenster vorübergehend in den Vollbildmodus.",
+      tx("Schaltet das Bedienfenster vorübergehend in den Vollbildmodus."),
   },
   {
     action: "toggleOnAir",
     label: "ON AIR / OFF AIR",
-    description: "Startet oder beendet die echte Präsentationsausgabe.",
+    description: tx("Startet oder beendet die echte Präsentationsausgabe."),
   },
   {
     action: "renameServiceItem",
-    label: "Element umbenennen",
-    description: "Benennt das ausgewählte Ablauf-Element um.",
+    label: tx("Element umbenennen"),
+    description: tx("Benennt das ausgewählte Ablauf-Element um."),
   },
   {
     action: "openHelp",
-    label: "Hilfe öffnen",
-    description: "Öffnet das integrierte Hilfezentrum.",
+    label: tx("Hilfe öffnen"),
+    description: tx("Öffnet das integrierte Hilfezentrum."),
   },
   {
     action: "openSettings",
-    label: "Einstellungen öffnen",
-    description: "Öffnet die Anwendungseinstellungen.",
+    label: tx("Einstellungen öffnen"),
+    description: tx("Öffnet die Anwendungseinstellungen."),
   },
   {
     action: "openLibrary",
-    label: "Präsentationsbibliothek",
-    description: "Öffnet die vorhandenen Präsentationen.",
+    label: tx("Präsentationsbibliothek"),
+    description: tx("Öffnet die vorhandenen Präsentationen."),
   },
   {
     action: "openMediaLibrary",
-    label: "Medienbibliothek",
-    description: "Öffnet die zentrale Medienbibliothek.",
+    label: tx("Medienbibliothek"),
+    description: tx("Öffnet die zentrale Medienbibliothek."),
   },
   {
     action: "previewGrid",
-    label: "Folienübersicht",
-    description: "Wechselt in Vorschau und öffnet die Folienübersicht.",
+    label: tx("Folienübersicht"),
+    description: tx("Wechselt in Vorschau und öffnet die Folienübersicht."),
   },
   {
     action: "preflight",
-    label: "Preflight prüfen",
-    description: "Prüft Ausgänge und Inhalte, ohne ON AIR zu starten.",
+    label: tx("Preflight prüfen"),
+    description: tx("Prüft Ausgänge und Inhalte, ohne ON AIR zu starten."),
   },
 ];
-
-function KeyboardShortcutSettings() {
   const storedShortcuts = usePreferences((state) => state.keyboardShortcuts),
     shortcuts = useMemo(
       () => ({ ...defaultKeyboardShortcuts, ...storedShortcuts }),
@@ -4532,7 +4446,7 @@ function KeyboardShortcutSettings() {
       (row) => row.action !== action && shortcuts[row.action] === value,
     );
     if (conflict) {
-      alert(`„${value}“ wird bereits für „${conflict.label}“ verwendet.`);
+      alert(tx("„{shortcut}“ wird bereits für „{action}“ verwendet.",{shortcut:value,action:conflict.label}));
       return;
     }
     setShortcut(action, value);
@@ -4540,12 +4454,8 @@ function KeyboardShortcutSettings() {
   };
   return (
     <section className="shortcut-settings">
-      <h3>Tastenkürzel</h3>
-      <p>
-        Klicke auf ein Kürzel und drücke anschließend die gewünschte
-        Tastenkombination. Änderungen werden auf diesem Gerät gespeichert und
-        sofort angewendet. Escape beendet die Eingabe ohne Änderung.
-      </p>
+      <h3>{tx("Tastenkürzel")}</h3>
+      <p>{tx("Klicke auf ein Kürzel und drücke anschließend die gewünschte Tastenkombination. Änderungen werden auf diesem Gerät gespeichert und sofort angewendet. Escape beendet die Eingabe ohne Änderung.")}</p>
       <div className="shortcut-list">
         {shortcutRows.map((row) => (
           <div className="shortcut-row" key={row.action}>
@@ -4561,43 +4471,34 @@ function KeyboardShortcutSettings() {
               }
             >
               {recording === row.action
-                ? "TASTEN DRÜCKEN …"
+                ? tx("TASTEN DRÜCKEN …")
                 : shortcuts[row.action]}
             </button>
           </div>
         ))}
       </div>
       <div className="shortcut-actions">
-        <button onClick={() => setConfirmReset(true)}>
-          AUF STANDARD ZURÜCKSETZEN
-        </button>
+        <button onClick={() => setConfirmReset(true)}>{tx("AUF STANDARD ZURÜCKSETZEN")}</button>
       </div>
       <p className="shortcut-note">
-        <Icon name="warning" /> Das Kürzel für ON AIR sollte bewusst gewählt
-        werden. Der Live-Start führt weiterhin den normalen Preflight durch.
-      </p>
+        <Icon name="warning" /> {tx("Das Kürzel für ON AIR sollte bewusst gewählt werden. Der Live-Start führt weiterhin den normalen Preflight durch.")}</p>
       {confirmReset && (
         <div className="modal-backdrop shortcut-reset-confirm">
           <div className="confirm-dialog" role="alertdialog" aria-modal="true">
             <div className="confirm-icon">
               <Icon name="keyboard" />
             </div>
-            <h2>TASTENKÜRZEL ZURÜCKSETZEN?</h2>
-            <p>
-              Alle eigenen Belegungen werden durch die Standardkürzel ersetzt.
-              Diese Änderung betrifft nur diesen Rechner.
-            </p>
+            <h2>{tx("TASTENKÜRZEL ZURÜCKSETZEN?")}</h2>
+            <p>{tx("Alle eigenen Belegungen werden durch die Standardkürzel ersetzt. Diese Änderung betrifft nur diesen Rechner.")}</p>
             <div>
-              <button onClick={() => setConfirmReset(false)}>ABBRECHEN</button>
+              <button onClick={() => setConfirmReset(false)}>{tx("ABBRECHEN")}</button>
               <button
                 className="primary"
                 onClick={() => {
                   reset();
                   setConfirmReset(false);
                 }}
-              >
-                JETZT ZURÜCKSETZEN
-              </button>
+              >{tx("JETZT ZURÜCKSETZEN")}</button>
             </div>
           </div>
         </div>
@@ -4607,6 +4508,7 @@ function KeyboardShortcutSettings() {
 }
 
 function CeraFontSettings() {
+  const {tx}=useI18n();
   const prefs = usePreferences();
   const pick = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -4615,48 +4517,38 @@ function CeraFontSettings() {
       await saveCeraPro(file);
       prefs.setCeraProFileName(file.name);
     } catch (error) {
-      alert(`Die Schrift konnte nicht eingebettet werden.\n\n${String(error)}`);
+      alert(tx("Die Schrift konnte nicht eingebettet werden.\n\n{value1}",{value1:(String(error))}));
     }
   };
   return (
     <section className="cera-font-settings">
       <h3>Cera Pro</h3>
       <p>
-        <b>Mit der Anwendung bereitgestellt:</b> Thin, Light, Regular, Medium,
-        Bold und Black – jeweils normal und kursiv. Cera Pro funktioniert damit
-        auf jedem Rechner auch ohne Systeminstallation.
-      </p>
-      <p>
-        Optional kannst du bitte eine andere lizenzierte Cera-Pro-Datei nur für
-        dieses Gerät hinterlegen.
-      </p>
+        <b>{tx("Mit der Anwendung bereitgestellt:")}</b> {tx("Thin, Light, Regular, Medium, Bold und Black – jeweils normal und kursiv. Cera Pro funktioniert damit auf jedem Rechner auch ohne Systeminstallation.")}</p>
+      <p>{tx("Optional kannst du bitte eine andere lizenzierte Cera-Pro-Datei nur für dieses Gerät hinterlegen.")}</p>
       <label className="font-file-button">
-        <Icon name="font_download" /> EIGENE CERA-PRO-DATEI AUSWÄHLEN
-        <input
+        <Icon name="font_download" /> {tx("EIGENE CERA-PRO-DATEI AUSWÄHLEN")}<input
           type="file"
           accept=".woff2,.woff,.ttf,.otf"
           onChange={(event) => void pick(event)}
         />
       </label>
       <p>
-        {prefs.ceraProFileName
-          ? `Lokale Ergänzung aktiv: ${prefs.ceraProFileName}`
-          : "Die mitgelieferte vollständige Schriftfamilie ist aktiv."}
+        {(prefs.ceraProFileName?tx("Lokale Ergänzung aktiv: {value1}",{value1:String(prefs.ceraProFileName)}):tx("Die mitgelieferte vollständige Schriftfamilie ist aktiv."))}
       </p>
       {prefs.ceraProFileName && (
         <button
           onClick={() =>
             void removeCeraPro().then(() => prefs.setCeraProFileName(""))
           }
-        >
-          LOKALE ERGÄNZUNG ENTFERNEN
-        </button>
+        >{tx("LOKALE ERGÄNZUNG ENTFERNEN")}</button>
       )}
     </section>
   );
 }
 
 function FontSettings() {
+  const {tx}=useI18n();
   const prefs = usePreferences(),
     state = usePresentation(),
     { defaultFont, defaultFontSize, defaultFontWeight, defaultFontStyle } =
@@ -4680,17 +4572,11 @@ function FontSettings() {
   };
   return (
     <section className="font-settings">
-      <h3>Schriftarten</h3>
-      <p>
-        Lege fest, wie neue Texte und neue Folien beginnen. Cera Pro ist die
-        Standardschrift. Ist sie auf einem Gerät nicht installiert, verwendet
-        GottesdienstRegie automatisch Aptos, Inter oder Segoe UI.
-      </p>
+      <h3>{tx("Schriftarten")}</h3>
+      <p>{tx("Lege fest, wie neue Texte und neue Folien beginnen. Cera Pro ist die Standardschrift. Ist sie auf einem Gerät nicht installiert, verwendet GottesdienstRegie automatisch Aptos, Inter oder Segoe UI.")}</p>
       <div className="settings-group">
-        <h4>STANDARD FÜR NEUE TEXTE</h4>
-        <label>
-          Standardschrift
-          <select
+        <h4>{tx("STANDARD FÜR NEUE TEXTE")}</h4>
+        <label>{tx("Standardschrift")}<select
             value={defaultFont}
             onChange={(event) => prefs.setDefaultFont(event.target.value)}
           >
@@ -4706,9 +4592,7 @@ function FontSettings() {
           </select>
         </label>
         <div className="font-default-grid">
-          <label>
-            Schriftgröße
-            <input
+          <label>{tx("Schriftgröße")}<input
               type="number"
               min="12"
               max="240"
@@ -4718,27 +4602,23 @@ function FontSettings() {
               }
             />
           </label>
-          <label>
-            Schriftgewicht
-            <select
+          <label>{tx("Schriftgewicht")}<select
               value={defaultFontWeight}
               onChange={(event) =>
                 prefs.setDefaultFontWeight(Number(event.target.value))
               }
             >
-              <option value="100">Dünn</option>
-              <option value="300">Leicht</option>
-              <option value="400">Normal</option>
-              <option value="500">Medium</option>
-              <option value="600">Halbfett</option>
-              <option value="700">Fett</option>
-              <option value="800">Extra fett</option>
-              <option value="900">Schwarz</option>
+              <option value="100">{tx("Dünn")}</option>
+              <option value="300">{tx("Leicht")}</option>
+              <option value="400">{tx("Normal")}</option>
+              <option value="500">{tx("Medium")}</option>
+              <option value="600">{tx("Halbfett")}</option>
+              <option value="700">{tx("Fett")}</option>
+              <option value="800">{tx("Extra fett")}</option>
+              <option value="900">{tx("Schwarz")}</option>
             </select>
           </label>
-          <label>
-            Schriftstil
-            <select
+          <label>{tx("Schriftstil")}<select
               value={defaultFontStyle}
               onChange={(event) =>
                 prefs.setDefaultFontStyle(
@@ -4746,8 +4626,8 @@ function FontSettings() {
                 )
               }
             >
-              <option value="normal">Normal</option>
-              <option value="italic">Kursiv</option>
+              <option value="normal">{tx("Normal")}</option>
+              <option value="italic">{tx("Kursiv")}</option>
             </select>
           </label>
         </div>
@@ -4760,23 +4640,19 @@ function FontSettings() {
             fontStyle: defaultFontStyle,
           }}
         >
-          <span>Cera Pro · GottesdienstRegie</span>
-          <small>So sehen neue Texte in der Präsentation aus.</small>
+          <span>{tx("Cera Pro · GottesdienstRegie")}</span>
+          <small>{tx("So sehen neue Texte in der Präsentation aus.")}</small>
         </div>
         <button
           className="primary"
           disabled={!slide?.elements.some((entry) => entry.type === "text")}
           onClick={applyToSlide}
-        >
-          AUF ALLE TEXTE DER AKTUELLEN FOLIE ANWENDEN
-        </button>
+        >{tx("AUF ALLE TEXTE DER AKTUELLEN FOLIE ANWENDEN")}</button>
       </div>
       <div className="settings-group">
-        <h4>VERFÜGBARE SCHRIFTEN</h4>
+        <h4>{tx("VERFÜGBARE SCHRIFTEN")}</h4>
         <p>
-          {editorFonts.length} auswählbare Schriftfamilien. Systemschriften
-          werden verwendet, wenn sie auf diesem Gerät installiert sind.
-        </p>
+          {editorFonts.length} {tx("auswählbare Schriftfamilien. Systemschriften werden verwendet, wenn sie auf diesem Gerät installiert sind.")}</p>
         <div className="font-chip-list">
           {editorFonts.map((font) => (
             <span key={font} style={{ fontFamily: fontStack(font) }}>
@@ -4790,11 +4666,12 @@ function FontSettings() {
 }
 
 function TimelineSettings() {
+  const {tx}=useI18n();
   const enabled = usePreferences((state) => state.timelineThumbnails),
     setEnabled = usePreferences((state) => state.setTimelineThumbnails);
   return (
     <section className="settings-group timeline-settings">
-      <h3>TIMELINE</h3>
+      <h3>{tx("TIMELINE")}</h3>
       <label className="setting-check">
         <input
           type="checkbox"
@@ -4802,11 +4679,8 @@ function TimelineSettings() {
           onChange={(event) => setEnabled(event.target.checked)}
         />
         <span>
-          <b>Kleine Folienvorschaubilder anzeigen</b>
-          <small>
-            Zeigt die erste Folie jedes Ablauf-Elements in der aufgeklappten
-            Timeline. Ausschalten spart Platz und Rechenleistung.
-          </small>
+          <b>{tx("Kleine Folienvorschaubilder anzeigen")}</b>
+          <small>{tx("Zeigt die erste Folie jedes Ablauf-Elements in der aufgeklappten Timeline. Ausschalten spart Platz und Rechenleistung.")}</small>
         </span>
       </label>
     </section>
@@ -4814,6 +4688,7 @@ function TimelineSettings() {
 }
 
 function PresentationTransitionSettings() {
+  const {tx}=useI18n();
   const state = usePresentation(),
     transition = state.transitionDefault,
     slide = state.items
@@ -4839,19 +4714,14 @@ function PresentationTransitionSettings() {
   };
   return (
     <section>
-      <h3>Präsentation</h3>
+      <h3>{tx("Präsentation")}</h3>
       <LyricScrollingSettings />
-      <p>
-        Lege den Standardübergang für MAIN fest. Einzelne Ablauf-Elemente und
-        Folien können ihn im Editor überschreiben.
-      </p>
+      <p>{tx("Lege den Standardübergang für MAIN fest. Einzelne Ablauf-Elemente und Folien können ihn im Editor überschreiben.")}</p>
       <div className="settings-group transition-default-settings">
-        <h4>STANDARDÜBERGANG</h4>
+        <h4>{tx("STANDARDÜBERGANG")}</h4>
         <div className="transition-setting-layout">
           <div className="transition-setting-fields">
-            <label>
-              Effekt
-              <select
+            <label>{tx("Effekt")}<select
                 value={transition.type}
                 onChange={(event) =>
                   update({ type: event.target.value as TransitionType })
@@ -4859,16 +4729,14 @@ function PresentationTransitionSettings() {
               >
                 {Object.entries(transitionLabels).map(([key, label]) => (
                   <option key={key} value={key}>
-                    {label}
+                    {tx(label)}
                   </option>
                 ))}
               </select>
             </label>
-            <label>
-              Dauer
-              <div className="duration-input">
+            <label>{tx("Dauer")}<div className="duration-input">
                 <input
-                  aria-label="Übergangsdauer in Sekunden"
+                  aria-label={tx("Übergangsdauer in Sekunden")}
                   type="number"
                   inputMode="decimal"
                   min="0.1"
@@ -4886,15 +4754,13 @@ function PresentationTransitionSettings() {
                       });
                   }}
                 />
-                <span>Sek.</span>
+                <span>{tx("Sek.")}</span>
               </div>
             </label>
             {(["slide", "wipe", "push", "cube"] as TransitionType[]).includes(
               transition.type,
             ) && (
-              <label>
-                Richtung
-                <select
+              <label>{tx("Richtung")}<select
                   value={transition.direction}
                   onChange={(event) =>
                     update({
@@ -4902,27 +4768,25 @@ function PresentationTransitionSettings() {
                     })
                   }
                 >
-                  <option value="left">Nach links</option>
-                  <option value="right">Nach rechts</option>
-                  <option value="up">Nach oben</option>
-                  <option value="down">Nach unten</option>
+                  <option value="left">{tx("Nach links")}</option>
+                  <option value="right">{tx("Nach rechts")}</option>
+                  <option value="up">{tx("Nach oben")}</option>
+                  <option value="down">{tx("Nach unten")}</option>
                 </select>
               </label>
             )}
-            <label>
-              Bewegung
-              <select
+            <label>{tx("Bewegung")}<select
                 disabled={transition.type === "cut"}
                 value={transition.easing}
                 onChange={(event) =>
                   update({ easing: event.target.value as TransitionEasing })
                 }
               >
-                <option value="standard">Standard</option>
-                <option value="linear">Linear</option>
-                <option value="ease-in">Sanft starten</option>
-                <option value="ease-out">Sanft enden</option>
-                <option value="ease-in-out">Sanft starten &amp; enden</option>
+                <option value="standard">{tx("Standard")}</option>
+                <option value="linear">{tx("Linear")}</option>
+                <option value="ease-in">{tx("Sanft starten")}</option>
+                <option value="ease-out">{tx("Sanft enden")}</option>
+                <option value="ease-in-out">{tx("Sanft starten & enden")}</option>
               </select>
             </label>
             <label className="setting-check">
@@ -4934,12 +4798,12 @@ function PresentationTransitionSettings() {
                 }
               />
               <span>
-                <b>Richtung beim Zurückschalten umkehren</b>
+                <b>{tx("Richtung beim Zurückschalten umkehren")}</b>
               </span>
             </label>
           </div>
           <div className="settings-transition-preview">
-            <b>KLEINE VORSCHAU</b>
+            <b>{tx("KLEINE VORSCHAU")}</b>
             <div>
               <TransitionStage
                 slide={previewSlide}
@@ -4952,8 +4816,7 @@ function PresentationTransitionSettings() {
               disabled={transition.type === "cut"}
               onClick={() => setPreviewToken((value) => value + 1)}
             >
-              <Icon name="play_arrow" /> VORSCHAU ANSEHEN
-            </button>
+              <Icon name="play_arrow" /> {tx("VORSCHAU ANSEHEN")}</button>
           </div>
         </div>
         <button
@@ -4962,13 +4825,8 @@ function PresentationTransitionSettings() {
               transitionDefault: { ...defaultTransition },
             })
           }
-        >
-          AUF STANDARD ZURÜCKSETZEN
-        </button>
-        <p>
-          Die Vorschau funktioniert auch ohne ausgewählte Folie und verändert
-          MAIN nicht.
-        </p>
+        >{tx("AUF STANDARD ZURÜCKSETZEN")}</button>
+        <p>{tx("Die Vorschau funktioniert auch ohne ausgewählte Folie und verändert MAIN nicht.")}</p>
       </div>
     </section>
   );
@@ -5002,7 +4860,7 @@ export function SettingsModal({
 }) {
   const [registeredDevice] = useRegisteredDevice();
   device = device ?? registeredDevice ?? null;
-  const { t, locale } = useI18n();
+  const {t, locale, tx} = useI18n();
   const [tab, setTab] = useState<SettingsTab>("general");
   const [openSettingGroups, setOpenSettingGroups] = useState<Record<string, boolean>>({ AUDIO: false });
   const [displays, setDisplays] = useState<DesktopDisplay[]>([]);
@@ -5275,7 +5133,7 @@ export function SettingsModal({
       .items.some((item) => item.type === "videoInput" || item.type === "web");
     if (incompatible) {
       const backup = confirm(
-        "Diese Präsentation verwendet Funktionen, die die ältere Version eventuell nicht versteht. Vor dem Wechsel wird dringend ein Backup empfohlen. Jetzt Backup erstellen?",
+        tx("Diese Präsentation verwendet Funktionen, die die ältere Version eventuell nicht versteht. Vor dem Wechsel wird dringend ein Backup empfohlen. Jetzt Backup erstellen?"),
       );
       if (!backup) return;
       const id = usePresentation.getState().presentationId;
@@ -5283,7 +5141,7 @@ export function SettingsModal({
     }
     if (
       confirm(
-        `${installedIsBeta ? "ZUR STABILEN VERSION ZURÜCKKEHREN" : "VORHERIGE VERSION INSTALLIEREN"}\n\nDu möchtest GottesdienstRegie ${previousVersion.version} installieren.\n\nDeine Präsentationen und Medien bleiben erhalten. Die Anwendung wird anschließend neu gestartet.`,
+        tx("{value1}\n\nDu möchtest GottesdienstRegie {value2} installieren.\n\nDeine Präsentationen und Medien bleiben erhalten. Die Anwendung wird anschließend neu gestartet.",{value1:((installedIsBeta?tx("ZUR STABILEN VERSION ZURÜCKKEHREN"):tx("VORHERIGE VERSION INSTALLIEREN"))),value2:(previousVersion.version)}),
       )
     )
       await window.desktop?.updates.rollback();
@@ -5303,7 +5161,7 @@ export function SettingsModal({
   };
   const settingGroups: { title: string; tabs: SettingsTab[] }[] = [
     {
-      title: "ALLGEMEIN",
+      title: tx("ALLGEMEIN"),
       tabs: [
         "general",
         "security",
@@ -5313,10 +5171,10 @@ export function SettingsModal({
         "updates",
       ],
     },
-    { title: "AUSGABE", tabs: ["display", "remote", "videoInput"] },
-    { title: "AUDIO", tabs: ["audio", "audioEqualizer", "audioRouting"] },
+    { title: tx("AUSGABE"), tabs: ["display", "remote", "videoInput"] },
+    { title: tx("AUDIO"), tabs: ["audio", "audioEqualizer", "audioRouting"] },
     {
-      title: "PRÄSENTATION",
+      title: tx("PRÄSENTATION"),
       tabs: [
         "presentation",
         "songTranslations",
@@ -5326,7 +5184,7 @@ export function SettingsModal({
         "defaultStage",
       ],
     },
-    { title: "VERBINDUNGEN & STEUERUNG", tabs: ["lightingMidi", "midiInput"] },
+    { title: tx("VERBINDUNGEN & STEUERUNG"), tabs: ["lightingMidi", "midiInput"] },
   ];
   const tabName = (key: SettingsTab) =>
     key === "songTranslations" ? "Song" : key === "midiInput"
@@ -5446,11 +5304,8 @@ export function SettingsModal({
                         }
                       />
                       <span>
-                        <b>Zuletzt geöffnete Präsentation wieder öffnen</b>
-                        <small>
-                          Öffnet beim nächsten Programmstart automatisch das
-                          zuletzt verwendete lokale Dokument.
-                        </small>
+                        <b>{tx("Zuletzt geöffnete Präsentation wieder öffnen")}</b>
+                        <small>{tx("Öffnet beim nächsten Programmstart automatisch das zuletzt verwendete lokale Dokument.")}</small>
                       </span>
                     </label>
                   </div>
@@ -5470,7 +5325,7 @@ export function SettingsModal({
                       <small>{t("reduceMotionHelp")}</small>
                     </span>
                   </label>
-                  <label className="setting-field"><span><b>Anzeigegröße</b><small>Fünf feste Stufen verändern ausschließlich die Bedienoberfläche.</small></span><input type="range" min="0" max="4" step="1" value={prefs.operatorScale} onChange={event=>prefs.setOperatorScale(Number(event.target.value) as 0|1|2|3|4)}/><output>{['Sehr klein','Klein','Standard','Groß','Sehr groß'][prefs.operatorScale]}</output></label>
+                  <label className="setting-field"><span><b>{tx("Anzeigegröße")}</b><small>{tx("Fünf feste Stufen verändern ausschließlich die Bedienoberfläche.")}</small></span><input type="range" min="0" max="4" step="1" value={prefs.operatorScale} onChange={event=>prefs.setOperatorScale(Number(event.target.value) as 0|1|2|3|4)}/><output>{[tx("Sehr klein"),tx("Klein"),tx("Standard"),tx("Groß"),tx("Sehr groß")][prefs.operatorScale]}</output></label>
                   <label className="setting-check">
                     <input
                       type="checkbox"
@@ -5533,7 +5388,7 @@ export function SettingsModal({
                 <>
                   <SharedDeviceSecurity device={device} />
                   <section className="settings-group">
-                    <h4>AUTOMATISCHES ABMELDEN</h4>
+                    <h4>{tx("AUTOMATISCHES ABMELDEN")}</h4>
                     <label className="setting-check">
                       <input
                         type="checkbox"
@@ -5545,16 +5400,11 @@ export function SettingsModal({
                         }
                       />
                       <span>
-                        <b>Benutzer bei Inaktivität automatisch abmelden</b>
-                        <small>
-                          Nie während ON AIR, Recording, Background Audio oder
-                          kritischen Vorgängen.
-                        </small>
+                        <b>{tx("Benutzer bei Inaktivität automatisch abmelden")}</b>
+                        <small>{tx("Nie während ON AIR, Recording, Background Audio oder kritischen Vorgängen.")}</small>
                       </span>
                     </label>
-                    <label>
-                      Nach
-                      <select
+                    <label>{tx("Nach")}<select
                         value={prefs.sharedDeviceTimeoutMinutes}
                         onChange={(e) =>
                           prefs.setSharedDeviceSecurity({
@@ -5562,10 +5412,10 @@ export function SettingsModal({
                           })
                         }
                       >
-                        <option value="15">15 Minuten</option>
-                        <option value="30">30 Minuten</option>
-                        <option value="60">60 Minuten</option>
-                        <option value="120">2 Stunden</option>
+                        <option value="15">{tx("15 Minuten")}</option>
+                        <option value="30">{tx("30 Minuten")}</option>
+                        <option value="60">{tx("60 Minuten")}</option>
+                        <option value="120">{tx("2 Stunden")}</option>
                       </select>
                     </label>
                     <label className="setting-check">
@@ -5579,11 +5429,8 @@ export function SettingsModal({
                         }
                       />
                       <span>
-                        <b>Nach Ende des Livebetriebs automatisch abmelden</b>
-                        <small>
-                          Der Timer beginnt erst nach OFF AIR und nur ohne
-                          laufende kritische Wiedergabe.
-                        </small>
+                        <b>{tx("Nach Ende des Livebetriebs automatisch abmelden")}</b>
+                        <small>{tx("Der Timer beginnt erst nach OFF AIR und nur ohne laufende kritische Wiedergabe.")}</small>
                       </span>
                     </label>
                   </section>
@@ -5645,8 +5492,8 @@ export function SettingsModal({
                       {updateStatus.state === "downloading" && (
                         <button
                           className="update-cancel"
-                          title="Download abbrechen"
-                          aria-label="Update-Download abbrechen"
+                          title={tx("Download abbrechen")}
+                          aria-label={tx("Update-Download abbrechen")}
                           onClick={() =>
                             void window.desktop?.updates.cancelDownload()
                           }
@@ -5688,13 +5535,8 @@ export function SettingsModal({
                   </div>
                   {(updateStatus.state === "available" ||
                     updateStatus.state === "cancelled") && (
-                    <p className="update-terms-notice">
-                      Mit der Aktualisierung stimmst du den{" "}
-                      <button type="button" onClick={onOpenTerms}>
-                        Nutzungsbedingungen
-                      </button>{" "}
-                      zu.
-                    </p>
+                    <p className="update-terms-notice">{tx("Mit der Aktualisierung stimmst du den")}{" "}
+                      <button type="button" onClick={onOpenTerms}>{tx("Nutzungsbedingungen")}</button>{" "}{tx("zu.")}</p>
                   )}
                   <div className="rollback-box">
                     <h4>{L.previousVersion}</h4>
@@ -5844,7 +5686,7 @@ export function SettingsModal({
                     </label>
                     <label className="setting-check audio-preview-setting">
                       <input type="checkbox" checked={playAudioInPreview} onChange={(event)=>prefs.setPlayAudioInPreview(event.target.checked)}/>
-                      <span><b>Radio und Audio in der Vorschau wiedergeben</b><small>Ist diese Option aus, startet verknüpftes Audio erst bei ON AIR. Manuelles Vorhören bleibt möglich.</small></span>
+                      <span><b>{tx("Radio und Audio in der Vorschau wiedergeben")}</b><small>{tx("Ist diese Option aus, startet verknüpftes Audio erst bei ON AIR. Manuelles Vorhören bleibt möglich.")}</small></span>
                     </label>
                     <div className="audio-test">
                       <button onClick={() => void testSpeakers()}>
@@ -5870,16 +5712,15 @@ export function SettingsModal({
                   <h3>{t("displayTitle")}</h3>
                   <p>{t("displayHelp")}</p>
                   <div className="display-heading">
-                    <h4>Bildschirme</h4>
+                    <h4>{tx("Bildschirme")}</h4>
                     <button
-                      title="Anzeigen identifizieren"
+                      title={tx("Anzeigen identifizieren")}
                       disabled={!window.desktop}
                       onClick={() =>
                         void window.desktop?.identifyDisplays(displayRoles)
                       }
                     >
-                      <Icon name="desktop_windows" /> ANZEIGEN IDENTIFIZIEREN
-                    </button>
+                      <Icon name="desktop_windows" /> {tx("Anzeigen identifizieren")}</button>
                   </div>
                   <div className="display-list">
                     {displays.map((display, index) => {
@@ -5898,16 +5739,14 @@ export function SettingsModal({
                             </strong>
                             <span>
                               {display.bounds.width} × {display.bounds.height} ·{" "}
-                              {display.scaleFactor}× · X {display.bounds.x} / Y{" "}
+                              {display.scaleFactor}{tx("× · X")} {display.bounds.x} {tx("/ Y")}{" "}
                               {display.bounds.y} · {display.rotation}°
                             </span>
                             {display.primary && (
                               <small>{t("controlSurface")}</small>
                             )}
                           </div>
-                          <label>
-                            Verwendung
-                            <select
+                          <label>{tx("Verwendung")}<select
                               disabled={!canConfigure || display.primary}
                               value={current}
                               onChange={(event) =>
@@ -5923,9 +5762,9 @@ export function SettingsModal({
                               </option>
                               <option value="main">MAIN</option>
                               <option value="stage">STAGE</option>
-                              <option value="notes">NOTES</option>
+                              <option value="notes">{tx("NOTES")}</option>
                               <option value="livestream">LIVESTREAM</option>
-                              <option value="lobby">LOBBY</option>
+                              <option value="lobby">{tx("LOBBY")}</option>
                             </select>
                           </label>
                         </article>
@@ -5950,7 +5789,7 @@ export function SettingsModal({
                   <AnnouncementBannerSettings />
                   <WeatherWarningSettings />
                   <AnnouncementSettings />
-                  <section className="settings-group"><h3>SONSTIGES · EXTERN · GEMEINWOHL-HINWEISE</h3><p>Optionale, trackingfreie Hinweise offizieller Stellen für Vor- und Nachprogramm. Inhalte können nicht redaktionell verändert werden und sind standardmäßig deaktiviert.</p><label><input type="checkbox" checked={prefs.publicInterest.enabled} onChange={event=>prefs.setPublicInterest({enabled:event.target.checked})}/> Gemeinwohl-Hinweise aktivieren</label><label><input type="checkbox" checked={prefs.publicInterest.preLoop} onChange={event=>prefs.setPublicInterest({preLoop:event.target.checked})}/> Im Vorprogramm</label><label><input type="checkbox" checked={prefs.publicInterest.postLoop} onChange={event=>prefs.setPublicInterest({postLoop:event.target.checked})}/> Im Nachprogramm</label><label>Einblenddauer <input className="settings-number-input" type="number" min="8" max="30" value={prefs.publicInterest.durationSeconds} onChange={event=>prefs.setPublicInterest({durationSeconds:Number(event.target.value)})}/> Sekunden</label><label>Häufigkeit<select value={prefs.publicInterest.interval} onChange={event=>prefs.setPublicInterest({interval:Number(event.target.value) as 3|5|10})}><option value="3">Nach 3 Loop-Elementen</option><option value="5">Nach 5 Loop-Elementen</option><option value="10">Nach 10 Loop-Elementen</option></select></label><label><input type="checkbox" checked={prefs.publicInterest.showQr} onChange={event=>prefs.setPublicInterest({showQr:event.target.checked})}/> QR-Code zur offiziellen Quelle anzeigen</label></section>
+                  <section className="settings-group"><h3>{tx("SONSTIGES · EXTERN · GEMEINWOHL-HINWEISE")}</h3><p>{tx("Optionale, trackingfreie Hinweise offizieller Stellen für Vor- und Nachprogramm. Inhalte können nicht redaktionell verändert werden und sind standardmäßig deaktiviert.")}</p><label><input type="checkbox" checked={prefs.publicInterest.enabled} onChange={event=>prefs.setPublicInterest({enabled:event.target.checked})}/> {tx("Gemeinwohl-Hinweise aktivieren")}</label><label><input type="checkbox" checked={prefs.publicInterest.preLoop} onChange={event=>prefs.setPublicInterest({preLoop:event.target.checked})}/> {tx("Im Vorprogramm")}</label><label><input type="checkbox" checked={prefs.publicInterest.postLoop} onChange={event=>prefs.setPublicInterest({postLoop:event.target.checked})}/> {tx("Im Nachprogramm")}</label><label>{tx("Einblenddauer")} <input className="settings-number-input" type="number" min="8" max="30" value={prefs.publicInterest.durationSeconds} onChange={event=>prefs.setPublicInterest({durationSeconds:Number(event.target.value)})}/> {tx("Sekunden")}</label><label>{tx("Häufigkeit")}<select value={prefs.publicInterest.interval} onChange={event=>prefs.setPublicInterest({interval:Number(event.target.value) as 3|5|10})}><option value="3">{tx("Nach 3 Loop-Elementen")}</option><option value="5">{tx("Nach 5 Loop-Elementen")}</option><option value="10">{tx("Nach 10 Loop-Elementen")}</option></select></label><label><input type="checkbox" checked={prefs.publicInterest.showQr} onChange={event=>prefs.setPublicInterest({showQr:event.target.checked})}/> {tx("QR-Code zur offiziellen Quelle anzeigen")}</label></section>
                 </>
               ) : tab === "remote" ? (
                 <RemoteCenter />
@@ -5970,25 +5809,23 @@ export function SettingsModal({
                 </section>
               )}
               {tab === "songTranslations" && <section className="settings-group">
-                <h3>SONG · ÜBERSETZUNGEN</h3>
-                <p>Füge im Song-Editor unter INHALT eine Übersetzung zu den jeweiligen Lyrics hinzu. Der Originaltext bleibt unverändert; diese Einstellung bestimmt die Darstellung auf diesem Gerät.</p>
-                <label>Übersetzungen anzeigen<select value={prefs.songTranslationMode} onChange={event=>prefs.setSongTranslationMode(event.target.value as SongTranslationMode)}>{translationModes.map(mode=><option key={mode.value} value={mode.value}>{mode.label}</option>)}</select></label>
-                <p>Standard ist die Übersetzung unter der Strophe in Klammern. Ohne Übersetzung erscheint immer der Originaltext, auch bei „Nur Übersetzung“. Bei zeilenweiser Darstellung sollten Original und Übersetzung gleich viele Zeilen haben. Prüfe vor ON AIR, ob beide Texte in die Folienfläche passen.</p>
-                <p>Eine Änderung wird für eine bereits live geschaltete Folie erst beim erneuten Senden wirksam. Die STAGE-Akkordansicht bleibt beim Originaltext.</p>
+                <h3>{tx("SONG · ÜBERSETZUNGEN")}</h3>
+                <p>{tx("Füge im Song-Editor unter INHALT eine Übersetzung zu den jeweiligen Lyrics hinzu. Der Originaltext bleibt unverändert; diese Einstellung bestimmt die Darstellung auf diesem Gerät.")}</p>
+                <label>{tx("Übersetzungen anzeigen")}<select value={prefs.songTranslationMode} onChange={event=>prefs.setSongTranslationMode(event.target.value as SongTranslationMode)}>{translationModes.map(mode=><option key={mode.value} value={mode.value}>{mode.label}</option>)}</select></label>
+                <p>{tx("Standard ist die Übersetzung unter der Strophe in Klammern. Ohne Übersetzung erscheint immer der Originaltext, auch bei „Nur Übersetzung“. Bei zeilenweiser Darstellung sollten Original und Übersetzung gleich viele Zeilen haben. Prüfe vor ON AIR, ob beide Texte in die Folienfläche passen.")}</p>
+                <p>{tx("Eine Änderung wird für eine bereits live geschaltete Folie erst beim erneuten Senden wirksam. Die STAGE-Akkordansicht bleibt beim Originaltext.")}</p>
                 <TranslationPackSettings />
               </section>}
               {tab === "general" && (
                 <>
                 <section className="settings-group window-start-settings">
-                  <h4>FENSTER &amp; START</h4>
-                  <label><input type="checkbox" checked={operatorPrefs.openAtLogin===true} disabled={!operatorPrefs.loginStartupSupported} onChange={event=>void setOperatorPreference({openAtLogin:event.target.checked})}/> GottesdienstRegie bei der Windows-Anmeldung öffnen</label>
-                  <label><input type="checkbox" checked={operatorPrefs.checkUpdatesAtLogin===true} disabled={!operatorPrefs.loginStartupSupported} onChange={event=>void setOperatorPreference({checkUpdatesAtLogin:event.target.checked})}/> Bei der Windows-Anmeldung im Hintergrund nach Updates suchen</label>
-                  <p>Beide Optionen sind standardmäßig aus und gelten für die installierte Windows-App. Die Hintergrundprüfung öffnet keine Bedienoberfläche und keine Ausgänge, startet kein Audio und beendet sich nach der Prüfung. Ein verfügbares Update wird über Windows gemeldet; die Installation wählst du selbst. Sind beide Optionen aktiv, öffnet sich die App einmal normal. Die automatische Updatesuche beim normalen Programmstart bleibt separat unter „Updates“ einstellbar.</p>
-                  <label><input type="checkbox" checked={operatorPrefs.preventDisplaySleep!==false} onChange={event=>void setOperatorPreference({preventDisplaySleep:event.target.checked})}/> Bildschirmschoner und automatisches Ausschalten des Bildschirms verhindern</label>
-                  <p>Standardmäßig aktiv, solange GottesdienstRegie geöffnet ist. Beim Beenden wird der Schutz freigegeben. Manuelles Sperren, Zuklappen und verbindliche Sicherheitsrichtlinien werden nicht umgangen.</p>
-                  <label>
-                    Startmodus
-                    <select
+                  <h4>{tx("FENSTER & START")}</h4>
+                  <label><input type="checkbox" checked={operatorPrefs.openAtLogin===true} disabled={!operatorPrefs.loginStartupSupported} onChange={event=>void setOperatorPreference({openAtLogin:event.target.checked})}/> {tx("GottesdienstRegie bei der Windows-Anmeldung öffnen")}</label>
+                  <label><input type="checkbox" checked={operatorPrefs.checkUpdatesAtLogin===true} disabled={!operatorPrefs.loginStartupSupported} onChange={event=>void setOperatorPreference({checkUpdatesAtLogin:event.target.checked})}/> {tx("Bei der Windows-Anmeldung im Hintergrund nach Updates suchen")}</label>
+                  <p>{tx("Beide Optionen sind standardmäßig aus und gelten für die installierte Windows-App. Die Hintergrundprüfung öffnet keine Bedienoberfläche und keine Ausgänge, startet kein Audio und beendet sich nach der Prüfung. Ein verfügbares Update wird über Windows gemeldet; die Installation wählst du selbst. Sind beide Optionen aktiv, öffnet sich die App einmal normal. Die automatische Updatesuche beim normalen Programmstart bleibt separat unter „Updates“ einstellbar.")}</p>
+                  <label><input type="checkbox" checked={operatorPrefs.preventDisplaySleep!==false} onChange={event=>void setOperatorPreference({preventDisplaySleep:event.target.checked})}/> {tx("Bildschirmschoner und automatisches Ausschalten des Bildschirms verhindern")}</label>
+                  <p>{tx("Standardmäßig aktiv, solange GottesdienstRegie geöffnet ist. Beim Beenden wird der Schutz freigegeben. Manuelles Sperren, Zuklappen und verbindliche Sicherheitsrichtlinien werden nicht umgangen.")}</p>
+                  <label>{tx("Startmodus")}<select
                       value={operatorPrefs.windowStartMode}
                       onChange={(e) =>
                         void setOperatorPreference({
@@ -5997,17 +5834,13 @@ export function SettingsModal({
                         })
                       }
                     >
-                      <option value="fullscreen">Vollbild</option>
-                      <option value="maximized">Maximiert</option>
-                      <option value="window">Fenster</option>
-                      <option value="restore">
-                        Letzten Fensterzustand wiederherstellen
-                      </option>
+                      <option value="fullscreen">{tx("Vollbild")}</option>
+                      <option value="maximized">{tx("Maximiert")}</option>
+                      <option value="window">{tx("Fenster")}</option>
+                      <option value="restore">{tx("Letzten Fensterzustand wiederherstellen")}</option>
                     </select>
                   </label>
-                  <label>
-                    Bedienoberfläche beim Programmstart auf
-                    <select
+                  <label>{tx("Bedienoberfläche beim Programmstart auf")}<select
                       value={operatorPrefs.operatorDisplayTarget}
                       onChange={(e) =>
                         void setOperatorPreference({
@@ -6016,15 +5849,11 @@ export function SettingsModal({
                         })
                       }
                     >
-                      <option value="primary">Primärer Bildschirm</option>
-                      <option value="last">Letzter Bedienbildschirm</option>
+                      <option value="primary">{tx("Primärer Bildschirm")}</option>
+                      <option value="last">{tx("Letzter Bedienbildschirm")}</option>
                     </select>
                   </label>
-                  <p>
-                    F11 schaltet das Bedienfenster vorübergehend in den
-                    Vollbildmodus oder zurück. MAIN, STAGE, Videos und Timer
-                    bleiben dabei unverändert.
-                  </p>
+                  <p>{tx("F11 schaltet das Bedienfenster vorübergehend in den Vollbildmodus oder zurück. MAIN, STAGE, Videos und Timer bleiben dabei unverändert.")}</p>
                 </section>
                 <StorageSettings />
                 </>
@@ -6032,21 +5861,21 @@ export function SettingsModal({
               {tab === "updates" && (
                 <section className="update-product-details">
                   <div className="settings-group">
-                    <h4>AKTUELLE VERSION</h4>
+                    <h4>{tx("AKTUELLE VERSION")}</h4>
                     <dl>
-                      <dt>Produkt</dt>
+                      <dt>{tx("Produkt")}</dt>
                       <dd>
                         {versionLabel(currentVersion)}{" "}
                         {installedIsBeta && (
-                          <em className="beta-badge">BETA</em>
+                          <em className="beta-badge">{tx("BETA")}</em>
                         )}
                       </dd>
-                      <dt>Veröffentlicht</dt>
+                      <dt>{tx("Veröffentlicht")}</dt>
                       <dd>01.09.2026</dd>
-                      <dt>Update-Kanal</dt>
-                      <dd>{operatorPrefs.betaUpdates ? "Beta" : "Stabil"}</dd>
-                      <dt>Status</dt>
-                      <dd>Aktuell</dd>
+                      <dt>{tx("Update-Kanal")}</dt>
+                      <dd>{operatorPrefs.betaUpdates ? tx("BETA") : tx("Stabil")}</dd>
+                      <dt>{tx("Status")}</dt>
+                      <dd>{tx("Aktuell")}</dd>
                     </dl>
                     <label className="setting-check">
                       <input
@@ -6059,7 +5888,7 @@ export function SettingsModal({
                         }
                       />
                       <span>
-                        <b>Automatisch nach Updates suchen</b>
+                        <b>{tx("Automatisch nach Updates suchen")}</b>
                       </span>
                     </label>
                     <label className="setting-check">
@@ -6073,7 +5902,7 @@ export function SettingsModal({
                         }
                       />
                       <span>
-                        <b>Updates automatisch herunterladen</b>
+                        <b>{tx("Updates automatisch herunterladen")}</b>
                       </span>
                     </label>
                     <label className="setting-check">
@@ -6087,17 +5916,17 @@ export function SettingsModal({
                         }
                       />
                       <span>
-                        <b>Heruntergeladene Updates beim Beenden installieren</b>
-                        <small>Die Anwendung installiert das fertige Update automatisch, sobald GottesdienstRegie beendet wird.</small>
+                        <b>{tx("Heruntergeladene Updates beim Beenden installieren")}</b>
+                        <small>{tx("Die Anwendung installiert das fertige Update automatisch, sobald GottesdienstRegie beendet wird.")}</small>
                       </span>
                     </label>
                   </div>
                   <div className="settings-group update-channel">
-                    <h4>UPDATE-KANAL</h4>
+                    <h4>{tx("Update-Kanal")}</h4>
                     <div className="channel-row">
                       <span>
-                        <b>Stabile Updates</b>
-                        <small>Standardmäßig aktiviert</small>
+                        <b>{tx("Stabile Updates")}</b>
+                        <small>{tx("Standardmäßig aktiviert")}</small>
                       </span>
                     </div>
                     <label className="setting-check">
@@ -6113,20 +5942,16 @@ export function SettingsModal({
                         }}
                       />
                       <span>
-                        <b>Beta-Updates erhalten</b>
-                        <small>
-                          Erhalte Vorabversionen mit neuen Funktionen und
-                          Verbesserungen, bevor sie regulär veröffentlicht
-                          werden. Beta-Versionen können noch Fehler enthalten.
-                        </small>
+                        <b>{tx("Beta-Updates erhalten")}</b>
+                        <small>{tx("Erhalte Vorabversionen mit neuen Funktionen und Verbesserungen, bevor sie regulär veröffentlicht werden. Beta-Versionen können noch Fehler enthalten.")}</small>
                       </span>
                     </label>
                     <dl>
-                      <dt>Aktueller Kanal</dt>
+                      <dt>{tx("Aktueller Kanal")}</dt>
                       <dd>
-                        {operatorPrefs.betaUpdates ? "Beta" : "Stabil"}{" "}
+                        {operatorPrefs.betaUpdates ? tx("BETA") : tx("Stabil")}{" "}
                         {operatorPrefs.betaUpdates && (
-                          <em className="beta-badge">BETA</em>
+                          <em className="beta-badge">{tx("BETA")}</em>
                         )}
                       </dd>
                     </dl>
@@ -6135,19 +5960,19 @@ export function SettingsModal({
                     <div className="settings-group previous-version-detail">
                       <h4>
                         {installedIsBeta
-                          ? "STABILE VERSION"
-                          : "VORHERIGE VERSION"}
+                          ? tx("STABILE VERSION")
+                          : tx("Vorherige Version")}
                       </h4>
                       <dl>
-                        <dt>Version</dt>
+                        <dt>{tx("Version")}</dt>
                         <dd>{previousVersion.version}</dd>
-                        <dt>Veröffentlicht</dt>
+                        <dt>{tx("Veröffentlicht")}</dt>
                         <dd>
                           {formatEventDate(previousVersion.publishedAt)}
                         </dd>
-                        <dt>Build</dt>
+                        <dt>{tx("Build")}</dt>
                         <dd>{previousVersion.version}</dd>
-                        <dt>Downloadgröße</dt>
+                        <dt>{tx("Downloadgröße")}</dt>
                         <dd>
                           {new Intl.NumberFormat(locale, {
                             style: "unit",
@@ -6155,26 +5980,21 @@ export function SettingsModal({
                             maximumFractionDigits: 1,
                           }).format(previousVersion.size / 1024 / 1024)}
                         </dd>
-                        <dt>Installierte Architektur</dt>
-                        <dd>Windows x64</dd>
-                        <dt>Veröffentlichungskanal</dt>
-                        <dd>Stabil</dd>
-                        <dt>Status</dt>
-                        <dd>Für eine Wiederherstellung verfügbar</dd>
+                        <dt>{tx("Installierte Architektur")}</dt>
+                        <dd>{tx("Windows x64")}</dd>
+                        <dt>{tx("Veröffentlichungskanal")}</dt>
+                        <dd>{tx("Stabil")}</dd>
+                        <dt>{tx("Status")}</dt>
+                        <dd>{tx("Für eine Wiederherstellung verfügbar")}</dd>
                       </dl>
-                      <p>
-                        Diese Version kann installiert werden, wenn nach einem
-                        Update Probleme auftreten. Vor dem Wechsel werden
-                        Kompatibilität und Präsentationsformat geprüft; bei
-                        möglichen Einschränkungen wird ein Backup angeboten.
-                      </p>
+                      <p>{tx("Diese Version kann installiert werden, wenn nach einem Update Probleme auftreten. Vor dem Wechsel werden Kompatibilität und Präsentationsformat geprüft; bei möglichen Einschränkungen wird ein Backup angeboten.")}</p>
                       <button
                         disabled={updateStatus.state === "rollback-downloading"}
                         onClick={() => void safeRollback()}
                       >
                         {installedIsBeta
-                          ? "ZUR STABILEN VERSION ZURÜCKKEHREN"
-                          : "VORHERIGE VERSION INSTALLIEREN"}
+                          ? tx("ZUR STABILEN VERSION ZURÜCKKEHREN")
+                          : tx("VORHERIGE VERSION INSTALLIEREN")}
                       </button>
                     </div>
                   )}
@@ -6194,17 +6014,12 @@ export function SettingsModal({
           >
             <header>
               <Icon name="experiment" />
-              <h2 id="beta-confirm-title">BETA-UPDATES AKTIVIEREN</h2>
+              <h2 id="beta-confirm-title">{tx("BETA-UPDATES AKTIVIEREN")}</h2>
             </header>
-            <p>
-              Beta-Versionen enthalten neue Funktionen früher, können aber noch
-              Fehler oder unfertige Bereiche enthalten.
-            </p>
-            <p>
-              Du kannst jederzeit wieder zum stabilen Update-Kanal wechseln.
-            </p>
+            <p>{tx("Beta-Versionen enthalten neue Funktionen früher, können aber noch Fehler oder unfertige Bereiche enthalten.")}</p>
+            <p>{tx("Du kannst jederzeit wieder zum stabilen Update-Kanal wechseln.")}</p>
             <footer>
-              <button onClick={() => setBetaConfirm(false)}>ABBRECHEN</button>
+              <button onClick={() => setBetaConfirm(false)}>{tx("ABBRECHEN")}</button>
               <button
                 className="primary"
                 onClick={() => {
@@ -6214,9 +6029,7 @@ export function SettingsModal({
                     betaWarningAccepted: true,
                   });
                 }}
-              >
-                BETA-UPDATES AKTIVIEREN
-              </button>
+              >{tx("BETA-UPDATES AKTIVIEREN")}</button>
             </footer>
           </div>
         </div>
@@ -6299,6 +6112,7 @@ function ServiceItemRenameDialog({
   item: ServiceItem;
   close: () => void;
 }) {
+  const {tx}=useI18n();
   const [title, setTitle] = useState(item.title);
   const save = () => {
     const value = title.trim();
@@ -6327,14 +6141,9 @@ function ServiceItemRenameDialog({
           save();
         }}
       >
-        <h2>ELEMENT UMBENENNEN</h2>
-        <p>
-          Der neue Name erscheint sofort im Ablauf und wird über Autosave und
-          Synchronisation gespeichert.
-        </p>
-        <label>
-          ELEMENTNAME
-          <input
+        <h2>{tx("ELEMENT UMBENENNEN")}</h2>
+        <p>{tx("Der neue Name erscheint sofort im Ablauf und wird über Autosave und Synchronisation gespeichert.")}</p>
+        <label>{tx("Elementname")}<input
             autoFocus
             maxLength={160}
             value={title}
@@ -6343,98 +6152,97 @@ function ServiceItemRenameDialog({
           />
         </label>
         <footer>
-          <button type="button" onClick={close}>
-            ABBRECHEN
-          </button>
-          <button className="primary" disabled={!title.trim()}>
-            UMBENENNEN
-          </button>
+          <button type="button" onClick={close}>{tx("ABBRECHEN")}</button>
+          <button className="primary" disabled={!title.trim()}>{tx("Umbenennen")}</button>
         </footer>
       </form>
     </div>
   );
 }
 
+
+function InterfaceTour({ close }: { close: () => void }) {
+  const {tx}=useI18n();
 const tourSteps = [
   {
-    title: "Willkommen in GottesdienstRegie",
+    title: tx("Willkommen in GottesdienstRegie"),
     image: "./help/operator-workspace.png",
     focus: "center",
-    text: "Hier planst du den vollständigen Gottesdienst, bereitest Folien vor und steuerst die getrennte Publikumsausgabe. Auswahl, Vorschau und MAIN sind bewusst voneinander getrennt.",
+    text: tx("Hier planst du den vollständigen Gottesdienst, bereitest Folien vor und steuerst die getrennte Publikumsausgabe. Auswahl, Vorschau und MAIN sind bewusst voneinander getrennt."),
     points: [
-      "Links: Ablauf mit Vor-, Haupt- und Nachprogramm",
-      "Mitte: Folien und große Arbeitsvorschau",
-      "Oben: Bearbeiten, Vorschau, Preflight und ON AIR",
+      tx("Links: Ablauf mit Vor-, Haupt- und Nachprogramm"),
+      tx("Mitte: Folien und große Arbeitsvorschau"),
+      tx("Oben: Bearbeiten, Vorschau, Preflight und ON AIR"),
     ],
   },
   {
-    title: "Minimum Viable Product (MVP)",
+    title: tx("Minimum Viable Product (MVP)"),
     image: "./help/operator-workspace.png",
     focus: "center",
-    text: "Die Software wurde als Minimum Viable Product (MVP) entwickelt. Sie wurde als erste minimal funktionsfähige Version veröffentlicht, um Nutzerfeedback zu sammeln und die Weiterentwicklung direkt an den Anforderungen der Nutzer:innen auszurichten.",
+    text: tx("Die Software wurde als Minimum Viable Product (MVP) entwickelt. Sie wurde als erste minimal funktionsfähige Version veröffentlicht, um Nutzerfeedback zu sammeln und die Weiterentwicklung direkt an den Anforderungen der Nutzer:innen auszurichten."),
     points: [
-      "Rückmeldungen helfen, Fehlentwicklungen zu vermeiden",
-      "Die Weiterentwicklung orientiert sich am tatsächlichen Bedarf",
-      "Wir freuen uns über jede Rückmeldung, damit die Software so wird, wie ihr sie braucht",
+      tx("Rückmeldungen helfen, Fehlentwicklungen zu vermeiden"),
+      tx("Die Weiterentwicklung orientiert sich am tatsächlichen Bedarf"),
+      tx("Wir freuen uns über jede Rückmeldung, damit die Software so wird, wie ihr sie braucht"),
     ],
   },
   {
-    title: "Präsentation und Veranstaltung",
+    title: tx("Präsentation und Veranstaltung"),
     image: "./help/operator-workspace.png",
     focus: "left",
-    text: "Der Präsentationskopf verbindet den geöffneten Ablauf mit dem passenden Termin. Die Verknüpfung ist Voraussetzung für ON AIR und übernimmt Datum sowie planmäßige Servicezeit.",
+    text: tx("Der Präsentationskopf verbindet den geöffneten Ablauf mit dem passenden Termin. Die Verknüpfung ist Voraussetzung für ON AIR und übernimmt Datum sowie planmäßige Servicezeit."),
     points: [
-      "Titel anklicken, um ihn direkt zu bearbeiten",
-      "Veranstaltung auswählen und Änderung speichern",
-      "Ausfallende Termine bleiben sichtbar, sind aber gesperrt",
+      tx("Titel anklicken, um ihn direkt zu bearbeiten"),
+      tx("Veranstaltung auswählen und Änderung speichern"),
+      tx("Ausfallende Termine bleiben sichtbar, sind aber gesperrt"),
     ],
   },
   {
-    title: "Inhalte sicher vorbereiten",
+    title: tx("Inhalte sicher vorbereiten"),
     image: "./help/operator-workspace.png",
     focus: "left",
-    text: "ServiceItems lassen sich auswählen, ziehen, gruppieren, ausblenden oder über das Rechtsklickmenü bearbeiten. Editoränderungen verändern eine bereits live sichtbare Folie nicht rückwirkend.",
+    text: tx("ServiceItems lassen sich auswählen, ziehen, gruppieren, ausblenden oder über das Rechtsklickmenü bearbeiten. Editoränderungen verändern eine bereits live sichtbare Folie nicht rückwirkend."),
     points: [
-      "Strg-Klick für Mehrfachauswahl",
-      "Strg+R öffnet den eigenen Umbenennen-Dialog",
-      "Rechtsklick bietet nur passende Aktionen",
+      tx("Strg-Klick für Mehrfachauswahl"),
+      tx("Strg+R öffnet den eigenen Umbenennen-Dialog"),
+      tx("Rechtsklick bietet nur passende Aktionen"),
     ],
   },
   {
-    title: "Medien finden und verwenden",
+    title: tx("Medien finden und verwenden"),
     image: "./help/media-library.png",
     focus: "center",
-    text: "Die Medienbibliothek trennt Team-Cloud, Community und Unsplash. Suche, Dateityp, Favoriten und zuletzt verwendete Medien können kombiniert werden.",
+    text: tx("Die Medienbibliothek trennt Team-Cloud, Community und Unsplash. Suche, Dateityp, Favoriten und zuletzt verwendete Medien können kombiniert werden."),
     points: [
-      "Unsplash besitzt einen eingerichteten App-Zugang",
-      "Filter ohne Treffer lassen sich mit einem Klick zurücksetzen",
-      "Mehr laden erweitert die Ergebnisliste in überschaubaren Schritten",
+      tx("Unsplash besitzt einen eingerichteten App-Zugang"),
+      tx("Filter ohne Treffer lassen sich mit einem Klick zurücksetzen"),
+      tx("Mehr laden erweitert die Ergebnisliste in überschaubaren Schritten"),
     ],
   },
   {
-    title: "Ausgänge und Audio prüfen",
+    title: tx("Ausgänge und Audio prüfen"),
     image: "./help/settings-window.png",
     focus: "center",
-    text: "Richte MAIN und die getrennten Audioausgänge vor dem Gottesdienst ein. Preflight meldet fehlende Geräte, Medien und Verknüpfungen, bevor etwas live geschaltet wird.",
+    text: tx("Richte MAIN und die getrennten Audioausgänge vor dem Gottesdienst ein. Preflight meldet fehlende Geräte, Medien und Verknüpfungen, bevor etwas live geschaltet wird."),
     points: [
-      "MAIN ist die Publikumsausgabe",
-      "Preview/Vorhören gehört auf den Bedienkopfhörer",
-      "Ein grüner Status erscheint erst nach echter Bestätigung",
+      tx("MAIN ist die Publikumsausgabe"),
+      tx("Preview/Vorhören gehört auf den Bedienkopfhörer"),
+      tx("Ein grüner Status erscheint erst nach echter Bestätigung"),
     ],
   },
   {
-    title: "Vorschau und ON AIR",
+    title: tx("Vorschau und ON AIR"),
     image: "./help/operator-workspace.png",
     focus: "top",
-    text: "In der Vorschau kontrollierst du Folien, ohne MAIN zu verändern. Erst ON AIR beziehungsweise „Mit dieser Folie ON AIR gehen“ übernimmt den Inhalt in die Live-Ausgabe.",
+    text: tx("In der Vorschau kontrollierst du Folien, ohne MAIN zu verändern. Erst ON AIR beziehungsweise „Mit dieser Folie ON AIR gehen“ übernimmt den Inhalt in die Live-Ausgabe."),
     points: [
-      "Umschalt+F5 startet oder beendet ON AIR",
-      "Pfeiltasten navigieren während des Livebetriebs",
-      "OFF AIR beendet auch Background Audio sicher",
+      tx("Umschalt+F5 startet oder beendet ON AIR"),
+      tx("Pfeiltasten navigieren während des Livebetriebs"),
+      tx("OFF AIR beendet auch Background Audio sicher"),
     ],
   },
 ];
-function InterfaceTour({ close }: { close: () => void }) {
+
   const [step, setStep] = useState(0),
     current = tourSteps[step];
   const finish = () => {
@@ -6457,7 +6265,7 @@ function InterfaceTour({ close }: { close: () => void }) {
         <header>
           <div>
             <Icon name="explore" />
-            <h2>BENUTZEROBERFLÄCHE KENNENLERNEN</h2>
+            <h2>{tx("BENUTZEROBERFLÄCHE KENNENLERNEN")}</h2>
           </div>
           <small>
             {step + 1} / {tourSteps.length}
@@ -6467,11 +6275,11 @@ function InterfaceTour({ close }: { close: () => void }) {
           <div className={`tour-visual tour-focus-${current.focus}`}>
             <img
               src={current.image}
-              alt="Echte Aufnahme der GottesdienstRegie-Oberfläche"
+              alt={tx("Echte Aufnahme der GottesdienstRegie-Oberfläche")}
             />
           </div>
           <article className="tour-copy">
-            <span className="eyebrow">SCHRITT {step + 1}</span>
+            <span className="eyebrow">{tx("SCHRITT")} {step + 1}</span>
             <h3>{current.title}</h3>
             <p>{current.text}</p>
             <ul>
@@ -6480,9 +6288,7 @@ function InterfaceTour({ close }: { close: () => void }) {
               ))}
             </ul>
             <p>
-              <b>Tipp:</b> Öffne später Hilfe → Benutzeroberfläche kennenlernen,
-              um diese Einführung jederzeit erneut anzusehen.
-            </p>
+              <b>{tx("Tipp:")}</b> {tx("Öffne später Hilfe → Benutzeroberfläche kennenlernen, um diese Einführung jederzeit erneut anzusehen.")}</p>
           </article>
         </div>
         <footer>
@@ -6491,24 +6297,18 @@ function InterfaceTour({ close }: { close: () => void }) {
               <i className={index === step ? "active" : ""} key={index} />
             ))}
           </div>
-          <button onClick={finish}>ÜBERSPRINGEN</button>
+          <button onClick={finish}>{tx("ÜBERSPRINGEN")}</button>
           <button
             disabled={step === 0}
             onClick={() => setStep((value) => value - 1)}
-          >
-            ZURÜCK
-          </button>
+          >{tx("ZURÜCK")}</button>
           {step < tourSteps.length - 1 ? (
             <button
               className="primary"
               onClick={() => setStep((value) => value + 1)}
-            >
-              WEITER
-            </button>
+            >{tx("WEITER")}</button>
           ) : (
-            <button className="primary" onClick={finish}>
-              FERTIG
-            </button>
+            <button className="primary" onClick={finish}>{tx("FERTIG")}</button>
           )}
         </footer>
       </section>
@@ -6716,8 +6516,9 @@ function ReportIssueDialog({
   close: () => void;
   initialType?: FeedbackType;
 }) {
+  const {tx}=useI18n();
   const language = usePreferences((state) => state.language),
-    T = reportText[language] ?? reportText.en,
+    T = language === "de" ? reportText.de.map(text=>tx(text)) : reportText[language] ?? reportText.en,
     [type, setType] = useState<FeedbackType>(initialType),
     [title, setTitle] = useState(""),
     [actual, setActual] = useState(""),
@@ -6790,8 +6591,8 @@ function ReportIssueDialog({
               {type === "bug"
                 ? T[0]
                 : type === "feature"
-                  ? "FEATUREWUNSCH EINREICHEN"
-                  : "ÄNDERUNG VORSCHLAGEN"}
+                  ? tx("FEATUREWUNSCH EINREICHEN")
+                  : tx("ÄNDERUNG VORSCHLAGEN")}
             </h2>
           </div>
           <button type="button" onClick={close}>
@@ -6804,25 +6605,22 @@ function ReportIssueDialog({
             className={type === "bug" ? "active" : ""}
             onClick={() => setType("bug")}
           >
-            <Icon name="bug_report" /> FEHLER
-          </button>
+            <Icon name="bug_report" /> {tx("FEHLER")}</button>
           <button
             type="button"
             className={type === "change" ? "active" : ""}
             onClick={() => setType("change")}
           >
-            <Icon name="rate_review" /> ÄNDERUNG
-          </button>
+            <Icon name="rate_review" /> {tx("ÄNDERUNG")}</button>
           <button
             type="button"
             className={type === "feature" ? "active" : ""}
             onClick={() => setType("feature")}
           >
-            <Icon name="lightbulb" /> FEATUREWUNSCH
-          </button>
+            <Icon name="lightbulb" /> {tx("FEATUREWUNSCH")}</button>
         </div>
         <label>
-          {isBug ? T[2] : "Kurzer Titel"}
+          {isBug ? T[2] : tx("Kurzer Titel")}
           <input
             autoFocus
             required
@@ -6831,15 +6629,15 @@ function ReportIssueDialog({
             onChange={(event) => setTitle(event.target.value)}
             placeholder={
               isBug
-                ? "Kurz zusammenfassen, was nicht funktioniert"
+                ? tx("Kurz zusammenfassen, was nicht funktioniert")
                 : type === "feature"
-                  ? "Welche neue Funktion wünschst du dir?"
-                  : "Was sollte geändert werden?"
+                  ? tx("Welche neue Funktion wünschst du dir?")
+                  : tx("Was sollte geändert werden?")
             }
           />
         </label>
         <label>
-          {isBug ? T[3] : "Beschreibe deinen Wunsch möglichst genau"}
+          {isBug ? T[3] : tx("Beschreibe deinen Wunsch möglichst genau")}
           <textarea
             required
             rows={5}
@@ -6847,13 +6645,13 @@ function ReportIssueDialog({
             onChange={(event) => setActual(event.target.value)}
             placeholder={
               isBug
-                ? "Was hast du gesehen? Nenne bitte auch die betroffene Ansicht oder das Element."
-                : "Was soll künftig möglich sein und wie soll es sich bedienen lassen?"
+                ? tx("Was hast du gesehen? Nenne bitte auch die betroffene Ansicht oder das Element.")
+                : tx("Was soll künftig möglich sein und wie soll es sich bedienen lassen?")
             }
           />
         </label>
         <label>
-          {isBug ? T[4] : "Warum ist diese Änderung hilfreich?"}
+          {isBug ? T[4] : tx("Warum ist diese Änderung hilfreich?")}
           <textarea
             required
             rows={4}
@@ -6861,27 +6659,26 @@ function ReportIssueDialog({
             onChange={(event) => setSteps(event.target.value)}
             placeholder={
               isBug
-                ? "1. Ansicht öffnen\n2. Aktion ausführen\n3. Fehler beobachten"
-                : "Beschreibe bitte den konkreten Einsatzfall."
+                ? tx("1. Ansicht öffnen\n2. Aktion ausführen\n3. Fehler beobachten")
+                : tx("Beschreibe bitte den konkreten Einsatzfall.")
             }
           />
         </label>
         <label>
-          {isBug ? T[5] : "Gewünschtes Verhalten oder Beispiel"}
+          {isBug ? T[5] : tx("Gewünschtes Verhalten oder Beispiel")}
           <textarea
             rows={3}
             value={expected}
             onChange={(event) => setExpected(event.target.value)}
             placeholder={
               isBug
-                ? "Was sollte nach dieser Aktion korrekt passieren?"
-                : "Optional: Beispiel, Ablauf oder gewünschte Darstellung"
+                ? tx("Was sollte nach dieser Aktion korrekt passieren?")
+                : tx("Optional: Beispiel, Ablauf oder gewünschte Darstellung")
             }
           />
         </label>
         <label className="report-media">
-          <span>
-            Medien beifügen <small>{media.length}/4</small>
+          <span>{tx("Medien beifügen")} <small>{media.length}/4</small>
           </span>
           <input
             type="file"
@@ -6891,12 +6688,10 @@ function ReportIssueDialog({
               const next = Array.from(event.target.files ?? []).slice(0, 4);
               setMedia(next);
               if ((event.target.files?.length ?? 0) > 4)
-                alert("Du kannst höchstens vier Medien beifügen.");
+                alert(tx("Du kannst höchstens vier Medien beifügen."));
             }}
           />
-          <small>
-            Bis zu vier Screenshots, Bilder oder kurze Videos auswählen.
-          </small>
+          <small>{tx("Bis zu vier Screenshots, Bilder oder kurze Videos auswählen.")}</small>
         </label>
         {media.length > 0 && (
           <div className="report-media-list">
@@ -6908,7 +6703,7 @@ function ReportIssueDialog({
                 {file.name}
                 <button
                   type="button"
-                  title="Entfernen"
+                  title={tx("Entfernen")}
                   onClick={() =>
                     setMedia((files) =>
                       files.filter((_, fileIndex) => fileIndex !== index),
@@ -6936,9 +6731,7 @@ function ReportIssueDialog({
           <button
             className="primary"
             disabled={!title.trim() || !actual.trim() || !steps.trim()}
-          >
-            ANLIEGEN PRÜFEN UND SENDEN
-          </button>
+          >{tx("ANLIEGEN PRÜFEN UND SENDEN")}</button>
         </footer>
       </form>
     </div>
@@ -6954,6 +6747,7 @@ function UserProfileDialog({
   close: () => void;
   opened: (document: PresentationDocument) => void;
 }) {
+  const {tx}=useI18n();
   const displayName =
       [user.firstname, user.lastName].filter(Boolean).join(" ") || user.email,
     username = String(
@@ -7022,8 +6816,8 @@ function UserProfileDialog({
         aria-modal="true"
       >
         <header>
-          <b>{showPresentations ? "MEINE PRÄSENTATIONEN" : "MEIN PROFIL"}</b>
-          <button onClick={close} aria-label="Schließen">
+          <b>{showPresentations ? tx("MEINE PRÄSENTATIONEN") : tx("MEIN PROFIL")}</b>
+          <button onClick={close} aria-label={tx("Schließen")}>
             <Icon name="close" />
           </button>
         </header>
@@ -7031,7 +6825,7 @@ function UserProfileDialog({
           <>
             <div className="user-profile-hero">
               {photoUrl ? (
-                <img src={photoUrl} alt="Profilbild" />
+                <img src={photoUrl} alt={tx("Profilbild")} />
               ) : (
                 <span>{displayName.slice(0, 1).toUpperCase()}</span>
               )}
@@ -7041,15 +6835,15 @@ function UserProfileDialog({
               </div>
             </div>
             <dl>
-              <dt>E-Mail-Adresse</dt>
+              <dt>{tx("E-Mail-Adresse")}</dt>
               <dd>{user.email}</dd>
-              <dt>Benutzername</dt>
+              <dt>{tx("Benutzername")}</dt>
               <dd>@{username}</dd>
-              <dt>Rolle</dt>
+              <dt>{tx("Rolle")}</dt>
               <dd>{user.appAccess.gottesdienstRegie.role}</dd>
-              <dt>Organisation</dt>
-              <dd>Philippus Gemeinde Bielefeld e. V.</dd>
-              <dt>Benutzer-ID</dt>
+              <dt>{tx("Organisation")}</dt>
+              <dd>{tx("Philippus Gemeinde Bielefeld e. V.")}</dd>
+              <dt>{tx("Benutzer-ID")}</dt>
               <dd title={user.uid}>{user.uid}</dd>
             </dl>
             <div className="profile-actions">
@@ -7057,8 +6851,7 @@ function UserProfileDialog({
                 className="primary"
                 onClick={() => setShowPresentations(true)}
               >
-                <Icon name="slideshow" /> MEINE PRÄSENTATIONEN
-              </button>
+                <Icon name="slideshow" /> {tx("MEINE PRÄSENTATIONEN")}</button>
             </div>
           </>
         ) : (
@@ -7068,7 +6861,7 @@ function UserProfileDialog({
                 <Icon name="search" />
                 <input
                   autoFocus
-                  placeholder="Präsentationen durchsuchen"
+                  placeholder={tx("Präsentationen durchsuchen")}
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                 />
@@ -7079,16 +6872,14 @@ function UserProfileDialog({
                   setFilter(event.target.value as typeof filter)
                 }
               >
-                <option value="active">Aktive Präsentationen</option>
-                <option value="archived">Archivierte Präsentationen</option>
-                <option value="all">Alle Präsentationen</option>
+                <option value="active">{tx("Aktive Präsentationen")}</option>
+                <option value="archived">{tx("Archivierte Präsentationen")}</option>
+                <option value="all">{tx("Alle Präsentationen")}</option>
               </select>
             </div>
             {loading ? (
               <div className="profile-presentations-empty">
-                <span className="media-loading" /> Präsentationen werden geladen
-                …
-              </div>
+                <span className="media-loading" /> {tx("Präsentationen werden geladen …")}</div>
             ) : shown.length ? (
               <div className="profile-presentations">
                 {shown.map((entry) => {
@@ -7112,15 +6903,9 @@ function UserProfileDialog({
                       <span>
                         <b>{entry.title}</b>
                         <small>
-                          {formatEventDate(entry.date || entry.updatedAt)}{" "}
-                          · Präsentation
-                        </small>
+                          {formatEventDate(entry.date || entry.updatedAt)}{" "}{tx("· Präsentation")}</small>
                         <small>
-                          {size
-                            ? `${Math.max(1, Math.round(size / 1024))} KB · `
-                            : ""}
-                          Geändert $
-                          {new Date(entry.updatedAt).toLocaleString("de-DE")}
+                          {(size?tx("{value1} KB · ",{value1:String(Math.max(1, Math.round(size / 1024)))}):"")}{tx("Geändert $")}{new Date(entry.updatedAt).toLocaleString("de-DE")}
                         </small>
                       </span>
                       <Icon name="arrow_forward" />
@@ -7130,18 +6915,15 @@ function UserProfileDialog({
               </div>
             ) : (
               <div className="profile-presentations-empty">
-                <Icon name="search_off" /> Keine passende Präsentation gefunden.
-              </div>
+                <Icon name="search_off" /> {tx("Keine passende Präsentation gefunden.")}</div>
             )}
           </>
         )}
         <footer>
           {showPresentations && (
-            <button onClick={() => setShowPresentations(false)}>
-              ZURÜCK ZUM PROFIL
-            </button>
+            <button onClick={() => setShowPresentations(false)}>{tx("ZURÜCK ZUM PROFIL")}</button>
           )}
-          <button onClick={close}>SCHLIESSEN</button>
+          <button onClick={close}>{tx("SCHLIESSEN")}</button>
         </footer>
       </section>
     </div>
@@ -7195,6 +6977,7 @@ function MenuPopup({
 }
 
 function BackgroundAudioController() {
+  const {tx}=useI18n();
   const [audio, setAudio] = useState<BackgroundAudioState>(() =>
     backgroundAudioEngine.snapshot(),
   );
@@ -7218,7 +7001,7 @@ function BackgroundAudioController() {
         </small>
       </span>
       <button
-        title={audio.paused ? "Fortsetzen" : "Pause"}
+        title={audio.paused ? tx("Fortsetzen") : tx("Pause")}
         onClick={() =>
           audio.paused
             ? void backgroundAudioEngine.resume()
@@ -7228,22 +7011,22 @@ function BackgroundAudioController() {
         <Icon name={audio.paused ? "play_arrow" : "pause"} />
       </button>
       <button
-        title="Nächster Titel"
+        title={tx("Nächster Titel")}
         onClick={() => void backgroundAudioEngine.next()}
       >
         <Icon name="skip_next" />
       </button>
-      <button title="Stoppen" onClick={() => void backgroundAudioEngine.stop()}>
+      <button title={tx("Stoppen")} onClick={() => void backgroundAudioEngine.stop()}>
         <Icon name="stop" />
       </button>
       <button
-        title="Stumm"
+        title={tx("Stumm")}
         onClick={() => backgroundAudioEngine.setMuted(!audio.muted)}
       >
         <Icon name={audio.muted ? "volume_off" : "volume_up"} />
       </button>
       <input
-        aria-label="Background-Audio-Lautstärke"
+        aria-label={tx("Background-Audio-Lautstärke")}
         type="range"
         min="0"
         max="100"
@@ -7259,6 +7042,7 @@ function BackgroundAudioController() {
 }
 
 function PresentationInfoDialog({ close }: { close: () => void }) {
+  const {tx}=useI18n();
   const state = usePresentation(),
     [title, setTitle] = useState(state.title),
     [date, setDate] = useState(state.date),
@@ -7296,79 +7080,71 @@ function PresentationInfoDialog({ close }: { close: () => void }) {
           <div>
             <Icon name="info" />
             <span>
-              <h2 id="presentation-info-title">PRÄSENTATIONSINFORMATIONEN</h2>
-              <small>Details und letzte Bearbeitungen</small>
+              <h2 id="presentation-info-title">{tx("PRÄSENTATIONSINFORMATIONEN")}</h2>
+              <small>{tx("Details und letzte Bearbeitungen")}</small>
             </span>
           </div>
-          <button type="button" onClick={close} title="Schließen">
+          <button type="button" onClick={close} title={tx("Schließen")}>
             <X />
           </button>
         </header>
         <main>
           <section className="presentation-info-fields">
-            <label>
-              Titel
-              <input
+            <label>{tx("Titel")}<input
                 autoFocus
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
               />
             </label>
-            <label>
-              Datum
-              <input
+            <label>{tx("Datum")}<input
                 type="date"
                 value={date}
                 onChange={(event) => setDate(event.target.value)}
               />
             </label>
-            <label>
-              Erstellt von
-              <input
+            <label>{tx("Erstellt von")}<input
                 value={createdBy}
-                placeholder="Name des Erstellers"
+                placeholder={tx("Name des Erstellers")}
                 onChange={(event) => setCreatedBy(event.target.value)}
               />
             </label>
-            <label>
-              Veranstaltungs-ID
-              <input
+            <label>{tx("Veranstaltungs-ID")}<input
                 value={eventId}
-                placeholder="Optional"
+                placeholder={tx("Optional")}
                 onChange={(event) => setEventId(event.target.value)}
               />
             </label>
           </section>
           <section className="presentation-info-facts">
             <div>
-              <small>ERSTELLT AM</small>
+              <small>{tx("ERSTELLT AM")}</small>
               <b>{format(state.createdAt)}</b>
             </div>
             <div>
-              <small>ZULETZT BEARBEITET</small>
+              <small>{tx("ZULETZT BEARBEITET")}</small>
               <b>{format(state.updatedAt)}</b>
             </div>
             <div>
-              <small>INHALT</small>
-              <b>Präsentation</b>
+              <small>{tx("Inhalt")}</small>
+              <b>{tx("Präsentation")}</b>
             </div>
             <div>
-              <small>GEPLANTE DAUER</small>
+              <small>{tx("GEPLANTE DAUER")}</small>
               <b>{formatDuration(duration)}</b>
             </div>
             <div>
-              <small>PRÄSENTATIONS-ID</small>
+              <small>{tx("PRÄSENTATIONS-ID")}</small>
               <b title={state.presentationId}>{state.presentationId || "—"}</b>
             </div>
             <div>
-              <small>VORLAGE</small>
-              <b>{state.templateId ? "Eigene Vorlage" : "Standard / keine"}</b>
+              <small>{tx("VORLAGE")}</small>
+              <b>{state.templateId ? tx("Eigene Vorlage") : tx("Standard / keine")}</b>
             </div>
           </section>
           <section className="presentation-history">
             <header>
-              <h3>BEARBEITUNGSHISTORIE</h3>
-              <span>{state.editHistory.length} von 60 Einträgen</span>
+              <h3>{tx("BEARBEITUNGSHISTORIE")}</h3>
+              <span>{state.editHistory.length} {tx("von 60 Einträgen")}</span>
             </header>
             {state.editHistory.length ? (
               <ol>
@@ -7385,17 +7161,13 @@ function PresentationInfoDialog({ close }: { close: () => void }) {
                 ))}
               </ol>
             ) : (
-              <p>
-                Noch keine Bearbeitungen in dieser Präsentation gespeichert.
-              </p>
+              <p>{tx("Noch keine Bearbeitungen in dieser Präsentation gespeichert.")}</p>
             )}
           </section>
         </main>
         <footer>
-          <button type="button" onClick={close}>
-            ABBRECHEN
-          </button>
-          <button className="primary">ÄNDERUNGEN SPEICHERN</button>
+          <button type="button" onClick={close}>{tx("ABBRECHEN")}</button>
+          <button className="primary">{tx("ÄNDERUNGEN SPEICHERN")}</button>
         </footer>
       </form>
     </div>
@@ -7403,11 +7175,12 @@ function PresentationInfoDialog({ close }: { close: () => void }) {
 }
 
 function CloudHealth({ status }: { status: MediaStorageStatus | null }) {
+ const {tx}=useI18n();
   return (
     <div
       className={`top-cloud-health ${status?.online ? "online" : "offline"}`}
-      title={status?.message ?? "Cloudstatus wird geprüft"}
-      aria-label={status?.online ? "Cloud verfügbar" : "Cloud offline"}
+      title={(status?.message??tx("Cloudstatus wird geprüft"))}
+      aria-label={status?.online ? tx("Cloud verfügbar") : tx("Cloud offline")}
     >
       <Icon name={status?.online ? "cloud_done" : "cloud_off"} />
     </div>
@@ -7424,7 +7197,7 @@ function AppShell({
   device: RegisteredDevice | null;
 }) {
   const {auth,presentations,media,desktop,target}=usePlatform();
-  const { t, locale } = useI18n();
+  const {t, locale, tx} = useI18n();
   const state = usePresentation();
   const outputProfileWarning=useOutputDisplayProfile();
   const loopController = useRef(new LoopController<ServiceItem>());
@@ -7816,10 +7589,10 @@ function AppShell({
         }) => {
           if(payload.kind==='advertising'){
             try{const selection=readAdSelection(payload.selection),current=usePresentation.getState(),sectionId=selection.sectionId??'pre';
-             if(!current.sections.some(section=>section.id===sectionId)){alert('Der ausgewählte Vor-/Nachprogrammbereich wurde nicht gefunden.');return}
+             if(!current.sections.some(section=>section.id===sectionId)){alert(tx("Der ausgewählte Vor-/Nachprogrammbereich wurde nicht gefunden."));return}
              current.addItem('content',{title:'Externe Werbung',section:'',sectionId,body:'',metadata:{externalAdvertising:true,advertisingIntervalMinutes:selection.intervalMinutes,advertisingCreativesJson:JSON.stringify(selection.creatives),...(selection.source?{advertisingSourceJson:JSON.stringify(selection.source)}:{})}});
              const latest=usePresentation.getState(),item=latest.items.find(item=>item.id===latest.selectedItemId);if(item)latest.updateItem(item.id,{slides:[advertisingSlide(item.slides[0],selection.creatives[0])],itemCategory:'loop',placementPolicy:'loopOnly',autoAdvance:true,repeat:true,plannedDuration:selection.creatives[0].durationSeconds*1000,timing:{...item.timing,autoAdvance:true,repeat:true,slideDurationSeconds:selection.creatives[0].durationSeconds}});
-            }catch{alert('Die Werbeauswahl konnte nicht übernommen werden. Bitte Quelle und Bereich erneut prüfen.')}return;
+            }catch{alert(tx("Die Werbeauswahl konnte nicht übernommen werden. Bitte Quelle und Bereich erneut prüfen."))}return;
           }
           if(payload.kind==='countdown-preset'){
             const current=usePresentation.getState(),sectionId=payload.targetType==='section'?payload.targetId:current.items.find(item=>item.id===payload.targetId)?.sectionId;
@@ -7863,7 +7636,7 @@ function AppShell({
           }
           const asset = payload.asset;
           if (!asset) return;
-          if (payload.mediaKind && payload.mediaKind !== 'slideshow' && asset.kind !== payload.mediaKind) { alert('Bitte wähle ein Medium des angeforderten Typs aus.'); return; }
+          if (payload.mediaKind && payload.mediaKind !== 'slideshow' && asset.kind !== payload.mediaKind) { alert(tx("Bitte wähle ein Medium des angeforderten Typs aus.")); return; }
           const url = asset.downloadUrl;
           if (payload.purpose === "background") {
             const current = usePresentation.getState();
@@ -8469,15 +8242,15 @@ function AppShell({
       }
     }
     state.setMode("edit");
-    alert(`${imported.length} Song${imported.length === 1 ? "" : "s"} importiert.`);
+    alert(tx("{value1} Song{value2} importiert.",{value1:(imported.length),value2:((imported.length === 1?"":"s"))}));
   };
   const menuItems: Record<string, MenuAction[]> = {
     file: [
       {
-        label: "Neue Präsentation",
+        label: tx("Neue Präsentation"),
         icon: "note_add",
         action: async () => {
-          const title = prompt("Name der Präsentation", "Sonntagsgottesdienst");
+          const title = prompt(tx("Name der Präsentation"), "Sonntagsgottesdienst");
           if (!title) return;
           const doc = (await window.desktop?.presentation.create({
             title,
@@ -8488,12 +8261,12 @@ function AppShell({
         },
       },
       {
-        label: "Präsentation öffnen",
+        label: tx("Präsentation öffnen"),
         icon: "folder_open",
         action: () => setLibraryOpen(true),
       },
       {
-        label: "Duplizieren",
+        label: tx("Duplizieren"),
         icon: "content_copy",
         disabled: !state.presentationId,
         action: async () => {
@@ -8504,11 +8277,11 @@ function AppShell({
         },
       },
       {
-        label: "Umbenennen",
+        label: tx("Umbenennen"),
         icon: "edit",
         disabled: !state.presentationId,
         action: async () => {
-          const title = prompt("Neuer Name", state.title);
+          const title = prompt(tx("Neuer Name"), state.title);
           if (title) {
             await window.desktop?.presentation.rename(
               state.presentationId,
@@ -8519,7 +8292,7 @@ function AppShell({
         },
       },
       {
-        label: "Importieren",
+        label: tx("Importieren"),
         icon: "upload_file",
         separator: true,
         action: async () => {
@@ -8529,25 +8302,25 @@ function AppShell({
         },
       },
       {
-        label: "Exportieren",
+        label: tx("Exportieren"),
         icon: "download",
         disabled: !state.presentationId,
         action: () =>
           void window.desktop?.presentation.export(state.presentationId),
       },
       {
-        label: "Backup erstellen",
+        label: tx("Backup erstellen"),
         icon: "backup",
         disabled: !state.presentationId,
         action: async () => {
           const target = await window.desktop?.presentation.backup(
             state.presentationId,
           );
-          alert(`Backup erstellt:\n${target}`);
+          if(target)alert(tx("Backup erstellt:\n{value1}",{value1:target}));
         },
       },
       {
-        label: "Präsentation schließen",
+        label: tx("Präsentation schließen"),
         icon: "close",
         separator: true,
         disabled: !state.presentationId,
@@ -8558,55 +8331,55 @@ function AppShell({
         },
       },
       {
-        label: "Beenden",
+        label: tx("Beenden"),
         icon: "power_settings_new",
         action: () => window.close(),
       },
     ],
     media: [
       {
-        label: "Medienbibliothek",
+        label: tx("Medienbibliothek"),
         icon: "photo_library",
         action: () => openMedia("item", "manage"),
       },
       {
-        label: "Medien hochladen",
+        label: tx("Medien hochladen"),
         icon: "cloud_upload",
         action: () => openMedia("item", "manage"),
       },
       {
-        label: "Zuletzt verwendet",
+        label: tx("Zuletzt verwendet"),
         icon: "history",
         action: () => openMedia("item", "manage"),
       },
       {
-        label: "Favoriten",
+        label: tx("Favoriten"),
         icon: "star",
         action: () => openMedia("item", "manage"),
       },
       {
-        label: "Fehlende Medien anzeigen",
+        label: tx("Fehlende Medien anzeigen"),
         icon: "broken_image",
         action: () => void air(true),
       },
     ],
     edit: [
       {
-        label: "Rückgängig",
+        label: tx("Rückgängig"),
         icon: "undo",
         shortcut: "Strg+Z",
         disabled: !state.history.length,
         action: state.undo,
       },
       {
-        label: "Wiederholen",
+        label: tx("Wiederholen"),
         icon: "redo",
         shortcut: "Strg+Y",
         disabled: !state.future.length,
         action: state.redo,
       },
       {
-        label: "Ausschneiden",
+        label: tx("Ausschneiden"),
         icon: "content_cut",
         shortcut: "Strg+X",
         separator: true,
@@ -8619,7 +8392,7 @@ function AppShell({
           ),
       },
       {
-        label: "Kopieren",
+        label: tx("Kopieren"),
         icon: "content_copy",
         shortcut: "Strg+C",
         disabled: !state.selectedItemId,
@@ -8631,14 +8404,14 @@ function AppShell({
           ),
       },
       {
-        label: "Einfügen",
+        label: tx("Einfügen"),
         icon: "content_paste",
         shortcut: "Strg+V",
         disabled: !state.selectedItemId || !serviceItemCommands.canPaste(),
         action: () => serviceItemCommands.paste(state.selectedItemId),
       },
       {
-        label: "Duplizieren",
+        label: tx("Duplizieren"),
         icon: "file_copy",
         shortcut: "Strg+D",
         disabled: !state.selectedItemId,
@@ -8650,20 +8423,20 @@ function AppShell({
           ),
       },
       {
-        label: "Folie hinzufügen",
+        label: tx("Folie hinzufügen"),
         icon: "add_to_photos",
         separator: true,
         disabled: !state.selectedItemId,
         action: state.addSlide,
       },
       {
-        label: "Folie duplizieren",
+        label: tx("Folie duplizieren"),
         icon: "control_point_duplicate",
         disabled: !state.selectedSlideId,
         action: state.duplicateSlide,
       },
       {
-        label: "Auswahl löschen",
+        label: tx("Auswahl löschen"),
         icon: "delete",
         disabled: !state.selectedItemId,
         action: () =>
@@ -8676,7 +8449,7 @@ function AppShell({
     ],
     add: [
       {
-        label: "Inhalt",
+        label: tx("Inhalt"),
         icon: "title",
         action: () =>
           state.addItem("content", {
@@ -8686,7 +8459,7 @@ function AppShell({
           }),
       },
       {
-        label: "Ankündigung",
+        label: tx("Ankündigung"),
         icon: "campaign",
         action: () =>
           state.addItem("announcement", {
@@ -8696,7 +8469,7 @@ function AppShell({
           }),
       },
       {
-        label: "Song",
+        label: tx("Song"),
         icon: "music_note",
         action: () =>
           state.addItem("song", {
@@ -8706,20 +8479,20 @@ function AppShell({
           }),
       },
       {
-        label: "Bibeltext anzeigen",
+        label: tx("Bibeltext anzeigen"),
         icon: "menu_book",
         action: () => setBibleTextOpen(true),
       },
       {
-        label: "Bild",
+        label: tx("Bild"),
         icon: "image",
         separator: true,
         action: () => openMedia(),
       },
-      { label: "Video", icon: "movie", action: () => void addVideo() },
-      { label: "Audio", icon: "audio_file", action: () => openMedia() },
+      { label: tx("Video"), icon: "movie", action: () => void addVideo() },
+      { label: tx("Audio"), icon: "audio_file", action: () => openMedia() },
       {
-        label: "Slideshow",
+        label: tx("Slideshow"),
         icon: "slideshow",
         action: () =>
           state.addItem("slideshow", {
@@ -8730,7 +8503,7 @@ function AppShell({
       },
       { label: "PDF", icon: "picture_as_pdf", action: () => openMedia() },
       {
-        label: "Webseite",
+        label: tx("Webseite"),
         icon: "language",
         separator: true,
         action: () => {
@@ -8744,7 +8517,7 @@ function AppShell({
         },
       },
       {
-        label: "Timer",
+        label: tx("Timer"),
         icon: "timer",
         action: () =>
           state.addItem("timer", {
@@ -8755,7 +8528,7 @@ function AppShell({
           }),
       },
       {
-        label: "Countdown",
+        label: tx("Countdown"),
         icon: "hourglass_bottom",
         action: () =>
           state.addItem("countdown", {
@@ -8766,12 +8539,12 @@ function AppShell({
           }),
       },
       {
-        label: "Videoeingang",
+        label: tx("Videoeingang"),
         icon: "videocam",
         action: () => addConfiguredVideoInput("service", () => {}),
       },
       {
-        label: "Stage-Nachricht",
+        label: tx("Stage-Nachricht"),
         icon: "speaker_notes",
         action: () =>
           state.addItem("stageMessage", {
@@ -8781,7 +8554,7 @@ function AppShell({
           }),
       },
       {
-        label: "Schnellanzeige",
+        label: tx("Schnellanzeige"),
         icon: "bolt",
         action: () =>
           state.addItem("quickScreen", {
@@ -8798,7 +8571,7 @@ function AppShell({
     ],
     songs: [
       {
-        label: "Songbibliothek öffnen",
+        label: tx("Songbibliothek öffnen"),
         icon: "library_music",
         action: () => {
           const first = state.items.find((item) => item.type === "song");
@@ -8814,12 +8587,12 @@ function AppShell({
         },
       },
       {
-        label: "Songs importieren …",
+        label: tx("Songs importieren …"),
         icon: "upload_file",
         action: () => void importSongs(),
       },
       {
-        label: "Neuen Song erstellen",
+        label: tx("Neuen Song erstellen"),
         icon: "add",
         action: () =>
           state.addItem("song", {
@@ -8831,26 +8604,26 @@ function AppShell({
     ],
     presentation: [
       {
-        label: "Präsentationsinformationen",
+        label: tx("Präsentationsinformationen"),
         icon: "info",
         action: () => setPresentationInfoOpen(true),
       },
       {
-        label: "Änderungshistorie",
+        label: tx("Änderungshistorie"),
         icon: "history",
         action: () => void window.desktop?.historyWindow?.open(),
       },
       {
-        label: "Belohnungen & Fortschritt",
+        label: tx("Belohnungen & Fortschritt"),
         icon: "workspace_premium",
         action: () => setRewardProfileOpen(true),
       },
       {
-        label: "Servicezeit",
+        label: tx("Servicezeit"),
         icon: "schedule",
         action: () => {
           const value = prompt(
-            "Servicezeit (HH:MM)",
+            tx("Servicezeit (HH:MM)"),
             state.serviceTime || "10:30",
           );
           if (value !== null && /^([01]\d|2[0-3]):[0-5]\d$/.test(value))
@@ -8865,24 +8638,24 @@ function AppShell({
       },
     ],
     view: [
-      { label: "Bearbeiten", action: () => state.setMode("edit") },
-      { label: "Vorschau", action: () => state.setMode("preview") },
+      { label: tx("Bearbeiten"), action: () => state.setMode("edit") },
+      { label: tx("Vorschau"), action: () => state.setMode("preview") },
       {
-        label: "Folienübersicht",
+        label: tx("Folienübersicht"),
         action: () => {
           state.setMode("preview");
           state.setPreviewLayout("grid");
         },
       },
       {
-        label: "Workspace maximieren",
+        label: tx("Workspace maximieren"),
         action: () =>
           document.documentElement.toggleAttribute("data-workspace-maximized"),
       },
     ],
     tools: [
       {
-        label: "Timer",
+        label: tx("Timer"),
         icon: "timer",
         action: () =>
           state.addItem("timer", {
@@ -8892,20 +8665,20 @@ function AppShell({
           }),
       },
       {
-        label: "Stage-Nachricht senden",
+        label: tx("Stage-Nachricht senden"),
         icon: "speaker_notes",
         action: () => {
-          const message = prompt("Stage-Nachricht");
+          const message = prompt(tx("Stage-Nachricht"));
           if (message) void showTemporary("STAGE", message, "#162d36", "stage");
         },
       },
       {
-        label: "Quick Screen: Schwarz",
+        label: tx("Quick Screen: Schwarz"),
         icon: "contrast",
         action: () => void showTemporary("", "", "#000000"),
       },
       {
-        label: "Quick Screen: Logo",
+        label: tx("Quick Screen: Logo"),
         icon: "church",
         action: () =>
           void showTemporary(
@@ -8915,7 +8688,7 @@ function AppShell({
           ),
       },
       {
-        label: "Schnellanzeige beenden",
+        label: tx("Schnellanzeige beenden"),
         icon: "restore",
         action: () => {
           const live = state.items
@@ -8925,35 +8698,37 @@ function AppShell({
         },
       },
       {
-        label: "Preflight",
+        label: tx("Preflight"),
         icon: "fact_check",
         separator: true,
         action: () => void air(true),
       },
       {
-        label: "Ausgänge",
+        label: tx("Ausgänge"),
         icon: "desktop_windows",
         action: () => setSettingsOpen(true),
       },
       {
-        label: "Diagnose",
+        label: tx("Diagnose"),
         icon: "troubleshoot",
-        action: () =>
+        action: async () => {
+          const diagnosticVersion=(await window.desktop?.updates.currentVersion().catch(()=>'?'))??'?';
           alert(
-            `GottesdienstRegie Diagnose\nVersion: 0.9.0\nPräsentation: ${state.title || "keine"}\nElemente: ${state.items.length}\nMAIN: ${state.mainDisplayId ? "zugeordnet" : "nicht zugeordnet"}\nGitHub-Medien: ${mediaStorage?.online ? "verbunden" : "offline"}\nKeine vertraulichen Anmeldeinformationen enthalten.`,
-          ),
+            tx("GottesdienstRegie Diagnose\nVersion: {value1}\nPräsentation: {value2}\nElemente: {value3}\nMAIN: {value4}\nGitHub-Medien: {value5}\nKeine vertraulichen Anmeldeinformationen enthalten.",{value1:(diagnosticVersion),value2:(state.title || "keine"),value3:(state.items.length),value4:((state.mainDisplayId?tx("zugeordnet"):tx("nicht zugeordnet"))),value5:((mediaStorage?.online?tx("verbunden"):tx("offline")))}),
+          );
+        },
       },
     ],
     help: [
       { label: t("helpTitle"), icon: "help", action: () => setHelpOpen(true) },
       ...(window.desktop ? [{
-        label: "Webversion öffnen",
+        label: tx("Webversion öffnen"),
         icon: "language",
         external: true,
         action: () => void window.desktop?.openExternal(WEB_EDITOR_URL),
       }] : []),
       {
-        label: "Nutzungsbedingungen",
+        label: tx("Nutzungsbedingungen"),
         icon: "policy",
         external: true,
         action: () => {
@@ -8962,7 +8737,7 @@ function AppShell({
         },
       },
       {
-        label: "Benutzeroberfläche kennenlernen",
+        label: tx("Benutzeroberfläche kennenlernen"),
         icon: "explore",
         action: () => setTourOpen(true),
       },
@@ -8990,7 +8765,7 @@ function AppShell({
           ),
       },
       {
-        label: "Änderung vorschlagen …",
+        label: tx("Änderung vorschlagen …"),
         icon: "rate_review",
         separator: true,
         action: () => {
@@ -8999,7 +8774,7 @@ function AppShell({
         },
       },
       {
-        label: "Feature wünschen …",
+        label: tx("Feature wünschen …"),
         icon: "lightbulb",
         action: () => {
           setFeedbackType("feature");
@@ -9025,23 +8800,23 @@ function AppShell({
     ],
     profile: [
       {
-        label: "Mein Profil",
+        label: tx("Mein Profil"),
         icon: "account_circle",
         action: () => setProfileOpen(true),
       },
       {
-        label: "Belohnungen & Fortschritt",
+        label: tx("Belohnungen & Fortschritt"),
         icon: "workspace_premium",
         action: () => setRewardProfileOpen(true),
       },
       {
-        label: "Einstellungen",
+        label: tx("Einstellungen"),
         icon: "settings",
         separator: true,
         action: () => setSettingsOpen(true),
       },
       {
-        label: "Abmelden",
+        label: tx("Abmelden"),
         icon: "logout",
         separator: true,
         action: () => setLogoutConfirm(true),
@@ -9121,7 +8896,7 @@ function AppShell({
     setAirStarting(true);
     try {
     const sessionAction=resolveSessionAction({...appMode,onAir:state.onAir},requestedMode);
-    if(!preflightOnly&&sessionAction==='confirm-production'&&!confirm('Testbetrieb beenden und die verknüpfte Veranstaltung wirklich ON AIR starten?'))return;
+    if(!preflightOnly&&sessionAction==='confirm-production'&&!confirm(tx("Testbetrieb beenden und die verknüpfte Veranstaltung wirklich ON AIR starten?")))return;
     if (sessionAction==='stop' && !preflightOnly) {
       screenTest.interrupt();
       await backgroundAudioEngine.stop();
@@ -9332,17 +9107,17 @@ function AppShell({
     });
     } catch (error) { console.warn('Optionale Belohnung konnte nicht gespeichert werden.', error); }
     } catch (error) {
-      alert(error instanceof Error ? error.message : 'Die Ausgabe konnte nicht umgeschaltet werden.');
+      alert((error instanceof Error?error.message:tx("Die Ausgabe konnte nicht umgeschaltet werden.")));
     } finally {
       airBusy.current = false;
       setAirStarting(false);
     }
   }
   const menuOrder: { label?: string; key?: TranslationKey; id: string }[] = [
-    { label: "Bearbeiten", id: "edit" },
-    { label: "Element hinzufügen", id: "add" },
+    { label: tx("Bearbeiten"), id: "edit" },
+    { label: t("operatorAddElement"), id: "add" },
     { key: "media", id: "media" },
-    { label: "Songbibliothek", id: "songs" },
+    { label: t("operatorSongLibrary"), id: "songs" },
     { key: "presentation", id: "presentation" },
     { key: "view", id: "view" },
     { key: "tools", id: "tools" },
@@ -9415,8 +9190,8 @@ function AppShell({
         </div>
         <button
           className="menu-icon"
-          title={canUndo ? "Rückgängig" : "Rückgängig, nicht verfügbar"}
-          aria-label={canUndo ? "Rückgängig" : "Rückgängig, nicht verfügbar"}
+          title={canUndo ? tx("Rückgängig") : tx("Rückgängig, nicht verfügbar")}
+          aria-label={canUndo ? tx("Rückgängig") : tx("Rückgängig, nicht verfügbar")}
           disabled={!canUndo}
           onClick={state.undo}
         >
@@ -9424,8 +9199,8 @@ function AppShell({
         </button>
         <button
           className="menu-icon"
-          title={canRedo ? "Wiederholen" : "Wiederholen, nicht verfügbar"}
-          aria-label={canRedo ? "Wiederholen" : "Wiederholen, nicht verfügbar"}
+          title={canRedo ? tx("Wiederholen") : tx("Wiederholen, nicht verfügbar")}
+          aria-label={canRedo ? tx("Wiederholen") : tx("Wiederholen, nicht verfügbar")}
           disabled={!canRedo}
           onClick={state.redo}
         >
@@ -9434,15 +9209,15 @@ function AppShell({
         <span />
         <button
           className="menu-icon"
-          title="Preflight"
+          title={tx("Preflight")}
           onClick={() => void air(true)}
         >
           <Icon name="fact_check" />
         </button>
         <button
           className="menu-icon contextual-help"
-          title="Hilfe zu Preflight"
-          aria-label="Hilfe zu Preflight"
+          title={tx("Hilfe zu Preflight")}
+          aria-label={tx("Hilfe zu Preflight")}
           onClick={() =>
             window.dispatchEvent(
               new CustomEvent("gottesdienstregie:open-help", {
@@ -9456,8 +9231,8 @@ function AppShell({
         <div className={`sync-control ${syncProgress.state}`}>
           <button
             className="menu-icon"
-            title="Jetzt speichern und Synchronisationsstatus prüfen"
-            aria-label="Speichern und synchronisieren"
+            title={tx("Jetzt speichern und Synchronisationsstatus prüfen")}
+            aria-label={tx("Speichern und synchronisieren")}
             onClick={() => void saveNow()}
           >
             <Icon
@@ -9480,7 +9255,7 @@ function AppShell({
           )}
         </div>
         <button
-          title={`GottesdienstRegie: ${roleLabel(t, access.role)} · ${t("logout")}`}
+          title={tx("GottesdienstRegie: {value1} · {value2}",{value1:String(roleLabel(t, access.role)),value2:String(t("logout"))})}
           onClick={() => setLogoutConfirm(true)}
         >
           <LogOut /> {user.firstname ?? user.email}
@@ -9489,7 +9264,7 @@ function AppShell({
       <div className="top-profile-root">
         <button
           className="top-profile-button"
-          title="Profil öffnen"
+          title={tx("Profil öffnen")}
           onClick={(event) => {
             event.stopPropagation();
             setMenuOpen((value) => (value === "profile" ? null : "profile"));
@@ -9508,16 +9283,16 @@ function AppShell({
       </div>
       <button
         className="edit-history-quick"
-        title="Änderungshistorie in eigenem Fenster öffnen"
+        title={tx("Änderungshistorie in eigenem Fenster öffnen")}
         onClick={() => void window.desktop?.historyWindow?.open()}
       >
         <Icon name="history" />
         <span>
-          <b>ÄNDERUNGEN</b>
+          <b>{tx("ÄNDERUNGEN")}</b>
           <small>
             {lastEdit
               ? `${lastEdit.action} · ${new Date(lastEdit.timestamp).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}`
-              : "Noch keine protokollierten Änderungen"}
+              : tx("Noch keine protokollierten Änderungen")}
           </small>
         </span>
         <em>{state.editHistory.length}</em>
@@ -9536,7 +9311,7 @@ function AppShell({
             className={state.mode === "edit" ? "active" : ""}
             onClick={() => state.setMode("edit")}
           >
-            {t("edit").toUpperCase()}
+            {t("edit")}
           </button>
           <button
             className="mode-toggle"
@@ -9554,16 +9329,16 @@ function AppShell({
             className={state.mode === "preview" ? "active" : ""}
             onClick={() => state.setMode("preview")}
           >
-            {t("preview").toUpperCase()}
+            {t("preview")}
           </button>
         </div>
         {testStartOpen&&<TestStartDialog onClose={()=>setTestStartOpen(false)} onStart={scenario=>{setTestStartOpen(false);void air(false,undefined,'test',scenario)}}/>}
         <div className="live-session-controls">
         <button type="button" className={`test-session-button ${appMode.mode==='test' ? 'active' : ''}`}
           disabled={airStarting || !can('presentationLive') || !window.desktop || (state.onAir&&appMode.mode==='normal')}
-          title="MAIN und STAGE ohne Veranstaltung testen. Echte Bild- und Tonausgabe nach Bestätigung."
+          title={t("operatorTestHint")}
           onClick={()=>state.onAir?void air(false,undefined,'test'):setTestStartOpen(true)}>
-          {appMode.mode==='test'&&state.onAir ? 'TESTBETRIEB BEENDEN' : 'TESTBETRIEB STARTEN'}
+          {appMode.mode==='test'&&state.onAir ? t('operatorTestEnd') : t('operatorTestStart')}
         </button>
         <button
           className={`onair ${state.onAir&&appMode.mode==='normal' ? "live" : ""}`}
@@ -9579,7 +9354,7 @@ function AppShell({
               : !state.onAir && !state.mainDisplayId
                 ? t("assignMain")
                 : (!state.onAir||appMode.mode==='test') && !state.eventLink?.eventKey
-                  ? "Bitte zuerst eine Veranstaltung verknüpfen"
+                  ? t("operatorLinkEventFirst")
                   : ""
           }
           onClick={() => void air()}
@@ -9625,22 +9400,22 @@ function AppShell({
         {outputProfileWarning&&<span title={outputProfileWarning}>⚠ {outputProfileWarning}</span>}
         <span>
           {state.saveState === "saving"
-            ? "SPEICHERT …"
+            ? t("operatorSaving")
             : state.saveState === "error"
-              ? "SPEICHERFEHLER"
-              : "GESPEICHERT ✓"}
+              ? t("operatorSaveError")
+              : t("operatorSaved")}
         </span>
-        <span>{mediaStorage?.online ? "CLOUD ✓" : "CLOUD OFFLINE"}</span>
+        <span>{mediaStorage?.online ? tx("Cloud ✓") : tx("Cloud offline")}</span>
         <CommunityDataStatus connection={communityConnection}/>
         <FontAvailabilityWarning items={state.items}/>
-        {checkpointError&&<span title="Die normale Speicherfunktion bleibt verfügbar.">Wiederherstellung konnte nicht gesichert werden</span>}
+        {checkpointError&&<span title={tx("Die normale Speicherfunktion bleibt verfügbar.")}>{tx("Wiederherstellung konnte nicht gesichert werden")}</span>}
         <span>
           STAGE{" "}
           {Object.entries(state.displayRoles).some(
             ([, role]) => role === "stage",
           )
             ? outputState.stage === "missing"
-              ? "FEHLT"
+              ? tx("FEHLT")
               : t("ready")
             : "—"}
         </span>

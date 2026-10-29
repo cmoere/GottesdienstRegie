@@ -17,7 +17,7 @@ it('has explicit operator-control/status translations in every existing base lan
     expect(validateRegionalPack({id:'ruhr',ui,native:{}},'ruhr',{ui:source,native:{}}),language).toEqual([]);
   }
 });
-it('preserves the31-ID resource catalog and requires complete authored UI/native namespaces for the released15',()=>{
+it('preserves the31-ID resource catalog and requires complete authored UI/native namespaces for all31',()=>{
   const directory=path.resolve('shared/regional/packs');
   expect(readdirSync(directory).filter(file=>file.endsWith('.json')).sort())
     .toEqual(regionalVariants.map(region=>`${region.id}.json`).sort());
@@ -25,7 +25,7 @@ it('preserves the31-ID resource catalog and requires complete authored UI/native
     const pack=JSON.parse(readFileSync(path.join(directory,`${id}.json`),'utf8'));
     expect(validateRegionalPack(pack,id,{ui:germanBaseTemplates,native:nativeBaseTemplates}),id).toEqual([]);
     expect(Object.keys(pack.ui).sort(),id).toEqual(Object.keys(germanBaseTemplates).sort());
-    expect(Object.keys(pack.native),id).toHaveLength(34);
+    expect(Object.keys(pack.native).sort(),id).toEqual(Object.keys(nativeBaseTemplates).sort());
     for(const text of [...Object.values(pack.ui),...Object.values(pack.native)]){
       expect(text,id).not.toMatch(/[\u200B\u200C\u200D\uFEFF]/);
     }

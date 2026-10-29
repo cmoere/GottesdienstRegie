@@ -18,7 +18,7 @@ const service = new AnnouncementService();
 
 /** Preparatory controls remain usable without loading a speech model or starting audio. */
 export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSettingsBridge; rows?: SpokenAnnouncement[]}) {
-  const {t}=useI18n();
+  const {t,tx}=useI18n();
   const native = bridge ?? window.desktop?.announcements;
   const [saved, setSaved] = useState<Settings>(() => normalizeAnnouncementSettings(undefined));
   const [interval, setIntervalValue] = useState('5');
@@ -91,12 +91,12 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
   return <section className="settings-group announcement-preparation-settings" aria-labelledby="announcement-preparation-title">
     <h3 id="announcement-preparation-title">{t('speechSettingsHeading')}</h3>
     <p>{t('speechSettingsHelp')}</p>
-    <p role="note">{german?'Die deutsche Stimme und ihre Laufzeit sind im Update enthalten. Keine zusätzliche Installation, kein Konto und keine Windows-Stimme erforderlich. Die neuen lokalen KI-Stimmen arbeiten offline mit kurzen Satzpausen und ruhigem Sprechtempo. Die erste automatische Durchsage erfolgt nach dem gespeicherten Intervall, nur während ON AIR im Vor- oder Nachprogramm.':'The German voice and its runtime are included in the update. No extra installation, account or Windows voice is needed. The new local neural voices work offline with short sentence pauses and a calm speaking pace. Automatic announcements start after the saved interval, only ON AIR in pre/post programs.'}</p>
-    <p role="status">{engine.name||(german?'Mitgelieferte Stimme wird geprüft.':'Checking the included voice.')}</p>
+    <p role="note">{german?tx("Die deutsche Stimme und ihre Laufzeit sind im Update enthalten. Keine zusätzliche Installation, kein Konto und keine Windows-Stimme erforderlich. Die neuen lokalen KI-Stimmen arbeiten offline mit kurzen Satzpausen und ruhigem Sprechtempo. Die erste automatische Durchsage erfolgt nach dem gespeicherten Intervall, nur während ON AIR im Vor- oder Nachprogramm."):'The German voice and its runtime are included in the update. No extra installation, account or Windows voice is needed. The new local neural voices work offline with short sentence pauses and a calm speaking pace. Automatic announcements start after the saved interval, only ON AIR in pre/post programs.'}</p>
+    <p role="status">{engine.name||(german?tx("Mitgelieferte Stimme wird geprüft."):'Checking the included voice.')}</p>
     {status&&<p role="alert">{status}</p>}
     {!native && <p>{t('speechSettingsDesktopOnly')}</p>}
-    <label>{german?'Ansagenstimme':'Announcement voice'}<select disabled={!ready||busy||!engine.ready||testing||speaking} value={isBundledAnnouncementVoice(saved.voiceId)?saved.voiceId:bundledAnnouncementVoice} onChange={event=>{stopAnnouncementTest();setSaved(value=>({...value,voiceId:event.target.value,speakerId:0,voiceAccepted:true}));setMessage('')}}>{bundledVoices.map(voice=><option key={voice.id} value={voice.id}>{voice.name} · {german?'Deutsch':'German'}</option>)}</select></label>
-    <p>{german?'Die gespeicherte Stimme gilt auf diesem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Alle fünf Stimmen sind enthalten. Nach dem Speichern verwendet auch die Tonprobe diese Auswahl.':'The saved voice applies to every presentation and signed-in operator on this control computer. All five voices are included. Save before testing the new selection.'}</p>
+    <label>{german?tx("Ansagenstimme"):'Announcement voice'}<select disabled={!ready||busy||!engine.ready||testing||speaking} value={isBundledAnnouncementVoice(saved.voiceId)?saved.voiceId:bundledAnnouncementVoice} onChange={event=>{stopAnnouncementTest();setSaved(value=>({...value,voiceId:event.target.value,speakerId:0,voiceAccepted:true}));setMessage('')}}>{bundledVoices.map(voice=><option key={voice.id} value={voice.id}>{voice.name} · {german?tx("Deutsch"):'German'}</option>)}</select></label>
+    <p>{german?tx("Die gespeicherte Stimme gilt auf diesem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Alle fünf Stimmen sind enthalten. Nach dem Speichern verwendet auch die Tonprobe diese Auswahl."):'The saved voice applies to every presentation and signed-in operator on this control computer. All five voices are included. Save before testing the new selection.'}</p>
     <label><input type="checkbox" checked={saved.enabled} disabled={!ready||busy||(!saved.enabled&&!engine.ready)} onChange={event=>setSaved(value=>({...value,enabled:event.target.checked,...(event.target.checked?{voiceId:isBundledAnnouncementVoice(value.voiceId)?value.voiceId:bundledAnnouncementVoice,speakerId:0,voiceAccepted:true}:{})}))}/> {t('speechSettingsEnable')}</label>
     <label>{t('speechSettingsInterval')}<input className="settings-number-input" type="number" min="1" max="120" step="1" disabled={!ready || busy} value={interval} onChange={event => {setIntervalValue(event.target.value);setMessage('');}}/></label>
     <label>{t('speechSettingsMusicLevel')}<input className="settings-number-input" type="number" min="0" max="100" disabled={!ready || busy} value={percent} onChange={event => {setPercent(event.target.value);setMessage('');}}/></label>
@@ -106,16 +106,16 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     {message && <p role="status">{t(message)}</p>}
     {error && <p role="alert">{t(error)}</p>}
     <fieldset className="announcement-test-controls">
-      <legend>{german?'Ansagen testen':'Test announcements'}</legend>
-      <p>{german?'Tonprobe mit Gong und anschließendem Text über den eingestellten Background-Audio-Ausgang, auch OFF AIR. Laufende Hintergrundmusik wird dabei abgesenkt. Automatische Ansagen werden dadurch nicht eingeschaltet.':'Play the gong and selected text through Background Audio, including OFF AIR. Background music is attenuated; automatic announcements stay unchanged.'}</p>
-      <label>{german?'Testtext':'Test text'}<select value={selectedMessage?.id??''} disabled={testing} onChange={event=>{setTestId(event.target.value);setTestError('')}}>
-        <option value="">{german?'Allgemeine Testdurchsage':'General test announcement'}</option>
+      <legend>{german?tx("Ansagen testen"):'Test announcements'}</legend>
+      <p>{german?tx("Tonprobe mit Gong und anschließendem Text über den eingestellten Background-Audio-Ausgang, auch OFF AIR. Laufende Hintergrundmusik wird dabei abgesenkt. Automatische Ansagen werden dadurch nicht eingeschaltet."):'Play the gong and selected text through Background Audio, including OFF AIR. Background music is attenuated; automatic announcements stay unchanged.'}</p>
+      <label>{german?tx("Testtext"):'Test text'}<select value={selectedMessage?.id??''} disabled={testing} onChange={event=>{setTestId(event.target.value);setTestError('')}}>
+        <option value="">{german?tx("Allgemeine Testdurchsage"):'General test announcement'}</option>
         {texts.map(row=><option key={row.id} value={row.id}>{row.title||row.text}</option>)}
       </select></label>
       <p style={{whiteSpace:'pre-wrap'}}>{selectedProbe.text}</p>
-      <div className="announcement-test-actions"><button type="button" disabled={!ready||busy||!engine.ready||!native?.synthesize||testing||speaking} onClick={()=>{void startProbe()}}>{german?'Tonprobe starten':'Start audio test'}</button>
-      <button type="button" disabled={!testing} onClick={stopAnnouncementTest}>{german?'Tonprobe stoppen':'Stop audio test'}</button></div>
-      {testing&&<p role="status">{speaking?(german?'Tonprobe läuft …':'Audio test playing …'):(german?'Tonprobe wird vorbereitet …':'Preparing audio test …')}</p>}
+      <div className="announcement-test-actions"><button type="button" disabled={!ready||busy||!engine.ready||!native?.synthesize||testing||speaking} onClick={()=>{void startProbe()}}>{german?tx("Tonprobe starten"):'Start audio test'}</button>
+      <button type="button" disabled={!testing} onClick={stopAnnouncementTest}>{german?tx("Tonprobe stoppen"):'Stop audio test'}</button></div>
+      {testing&&<p role="status">{speaking?(german?tx("Tonprobe läuft …"):'Audio test playing …'):(german?tx("Tonprobe wird vorbereitet …"):'Preparing audio test …')}</p>}
       {testError&&<p role="alert">{testError}</p>}
     </fieldset>
     <h4>{t('speechSettingsPublicTexts')}</h4>

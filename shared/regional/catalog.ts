@@ -34,11 +34,14 @@ export const regionalVariants = [
 ] as const;
 
 export type GermanRegionId = typeof regionalVariants[number]['id'];
-/** Approved first release: the13 completed documentation variants plus both Hessian packs. */
-const releaseRegionIds:ReadonlySet<GermanRegionId>=new Set(["bavarian-upper","bavarian-lower","upper-palatinate","east-franconian","swabian","baden-alemannic","south-baden-alemannic","palatine","rhine-hessian","south-hessian","cologne","ruhr","hamburg","berlin","bielefeld-ravensberg"]);
+/** Older disclosed partial editions exposed15 variants; v95 targets the full31.
+ * Actual availability still requires a validated completion manifest. */
+const legacyReleaseRegionIds:ReadonlySet<GermanRegionId>=new Set(["bavarian-upper","bavarian-lower","upper-palatinate","east-franconian","swabian","baden-alemannic","south-baden-alemannic","palatine","rhine-hessian","south-hessian","cologne","ruhr","hamburg","berlin","bielefeld-ravensberg"]);
+export const legacyReleaseRegionalVariants=regionalVariants.filter(region=>legacyReleaseRegionIds.has(region.id));
+const releaseRegionIds:ReadonlySet<GermanRegionId>=new Set(regionalVariants.map(region=>region.id));
 export const releaseRegionalVariants=regionalVariants.filter(region=>releaseRegionIds.has(region.id));
 
-/** Keep future catalog IDs stable, but never select an unfinished/deferred variant. */
+/** Normalize stable IDs. The selector's manifest governs which are available. */
 export function normalizeReleasedGermanRegion(value:unknown):GermanRegionId|null{
   const id=normalizeGermanRegion(value);
   return id&&releaseRegionIds.has(id)?id:null;

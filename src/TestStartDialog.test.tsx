@@ -1,9 +1,13 @@
 import {afterEach,expect,it,vi} from 'vitest';
-import {cleanup,fireEvent,render,screen} from '@testing-library/react';
+import {act,cleanup,fireEvent,render,screen} from '@testing-library/react';
 import {TestStartDialog} from './TestStartDialog';
-afterEach(()=>{cleanup();localStorage.clear()});
+import {usePreferences} from './preferences';
+import {loadRegionalInterfacePack} from './regional/resources';
+const savedPreferences=usePreferences.getState();
+afterEach(()=>{cleanup();localStorage.clear();usePreferences.setState(savedPreferences,true)});
 it('selects a test notice explicitly before starting; cancel never starts output',()=>{
  const start=vi.fn(),cancel=vi.fn();
+ usePreferences.setState({language:'de',germanRegion:null});
  render(<TestStartDialog onStart={start} onClose={cancel}/>);
  expect(screen.getByLabelText('Automatisch')).toBeChecked();
  fireEvent.click(screen.getByLabelText('Testveranstaltung'));
@@ -14,6 +18,7 @@ it('selects a test notice explicitly before starting; cancel never starts output
 });
 it('remembers explicit choices but allows changing them before every new test',()=>{
  const start=vi.fn();
+ usePreferences.setState({language:'de',germanRegion:null});
  const first=render(<TestStartDialog onStart={start} onClose={()=>{}}/>);
  fireEvent.click(screen.getByLabelText('Testveranstaltung'));
  fireEvent.change(screen.getByLabelText('Anzahl Veranstaltungen'),{target:{value:'3'}});
@@ -27,4 +32,23 @@ it('remembers explicit choices but allows changing them before every new test',(
  fireEvent.click(screen.getByLabelText('Raum verlassen'));
  fireEvent.click(screen.getByRole('button',{name:'Weiter zur Ausgabeprüfung'}));
  expect(start).toHaveBeenLastCalledWith('leave-room');
+});
+it('keeps the prepared scenario and counts stable when regional wording changes',async()=>{
+ usePreferences.setState({language:'de',germanRegion:null});
+ const start=vi.fn();
+ const {container}=render(<TestStartDialog onStart={start} onClose={()=>{}}/>);
+ fireEvent.click(screen.getByLabelText('Testveranstaltung'));
+ fireEvent.change(screen.getByRole('spinbutton'),{target:{value:'3'}});
+ fireEvent.change(screen.getByRole('combobox'),{target:{value:'mixed'}});
+ await act(async()=>{
+  expect(await loadRegionalInterfacePack('ruhr')).toBe(true);
+  usePreferences.setState({germanRegion:'ruhr'});
+ });
+ expect(container.querySelector<HTMLInputElement>('input[value="next-events"]')).toBeChecked();
+ expect(screen.getByRole('spinbutton')).toHaveValue(3);
+ expect(screen.getByRole('combobox')).toHaveValue('mixed');
+ expect(start).not.toHaveBeenCalled();
+ fireEvent.submit(container.querySelector('form')!);
+ expect(start).toHaveBeenCalledOnce();
+ expect(start).toHaveBeenCalledWith('next-events:3:mixed');
 });

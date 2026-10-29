@@ -4,6 +4,8 @@ import {announcementControlGermanTemplates,announcementControlEnglishTemplates} 
 import {shapeControlGermanTemplates,shapeControlEnglishTemplates} from '../shared/regional/shapeControlTemplates';
 import {radioControlGermanTemplates,radioControlEnglishTemplates} from '../shared/regional/radioControlTemplates';
 import {powerPointGermanTemplates,powerPointEnglishTemplates} from '../shared/regional/powerPointTemplates';
+import {operatorShellGermanTemplates,operatorShellEnglishTemplates} from '../shared/regional/operatorShellTemplates';
+import operatorSourceGermanTemplates from '../shared/regional/operatorSourceTemplates.json';
 
 const de={
   loginSubtitle:'Mit deinem Konto anmelden',email:'E-Mail-Adresse',password:'Passwort',showPassword:'Passwort anzeigen',hidePassword:'Passwort ausblenden',remember:'Angemeldet bleiben',signIn:'ANMELDEN',signingIn:'Anmeldung läuft …',forgotPassword:'Passwort vergessen?',notAvailable:'Noch nicht verfügbar',firebaseChecking:'Firebase wird geprüft …',firebaseConnected:'Mit Firebase verbunden',firebaseDisconnected:'Keine Firebase-Verbindung',
@@ -20,7 +22,7 @@ const de={
   authDesktop:'Die Anmeldung ist nur in der installierten Desktop-App möglich.',authStorage:'Windows konnte die Sitzung nicht sicher verschlüsseln.',authGasNetwork:'Der bestehende PGB-Login-Service ist nicht erreichbar.',authGasResponse:'Der PGB-Login-Service hat eine ungültige Antwort geliefert.',authEmailUnverified:'Bitte bestätige zuerst deine E-Mail-Adresse.',authLocked:'Das Konto ist vorübergehend gesperrt.',authInitialPassword:'Dieses Einmalpasswort muss zuerst auf der Gemeinde-Webseite geändert werden.',authTwoFactorCooldown:'Es wurde bereits ein Bestätigungscode versendet. Bitte warte kurz und starte die Anmeldung erneut.',authTwoFactorExpired:'Die Zwei-Faktor-Anmeldung ist abgelaufen. Bitte melde dich erneut an.',authTwoFactorInvalid:'Der Bestätigungscode ist nicht korrekt.',authTwoFactorError:'Die Zwei-Faktor-Prüfung konnte nicht gestartet werden.',authSessionFailed:'Der PGB-Login war korrekt, aber die Sitzung konnte nicht erstellt werden.',authAlgorithm:'Der Passwortalgorithmus dieses Kontos wird noch nicht unterstützt.',authFirebase:'Firebase ist nicht erreichbar oder die Datenbankabfrage wurde abgelehnt.',authAccessUnavailable:'Deine GottesdienstRegie-Freigabe konnte gerade nicht aus Firebase geladen werden. Bitte prüfe die Verbindung und versuche es erneut.',authDisabled:'Dieses Benutzerkonto ist deaktiviert oder wurde zentral abgemeldet.',authNoAccess:'Das Konto ist gültig, besitzt aber keinen freigeschalteten GottesdienstRegie-Zugang. Bitte wende dich an den Administrator.',authInvalid:'E-Mail-Adresse oder Passwort ist nicht korrekt.',authTechnical:'Technischer Anmeldefehler: {detail}',authUnknown:'Unbekannter Fehler',serverCodeExpired:'Die Anmeldung ist abgelaufen. Bitte melde dich erneut an.',serverTooMany:'Zu viele Fehlversuche. Bitte starte die Anmeldung erneut.',serverRecoveryInvalid:'Der Wiederherstellungscode ist ungültig oder wurde bereits verwendet.',serverTotpInvalid:'Der Code der Authenticator-App ist nicht korrekt.'
 } as const;
 
-export type TranslationKey=keyof typeof de|keyof typeof regionalControlBaseTemplates|keyof typeof announcementControlGermanTemplates|keyof typeof shapeControlGermanTemplates|keyof typeof radioControlGermanTemplates|keyof typeof powerPointGermanTemplates;
+export type TranslationKey=keyof typeof de|keyof typeof regionalControlBaseTemplates|keyof typeof announcementControlGermanTemplates|keyof typeof shapeControlGermanTemplates|keyof typeof radioControlGermanTemplates|keyof typeof powerPointGermanTemplates|keyof typeof operatorShellGermanTemplates|keyof typeof operatorSourceGermanTemplates;
 type Dictionary=Record<keyof typeof de,string>;
 
 const en:Dictionary={
@@ -186,6 +188,8 @@ const localImageCopy:Record<Language,Record<LocalImageKey,string>>={
 };
 
 export function getBaseTemplate(language:Language,key:TranslationKey){
+  if(Object.hasOwn(operatorSourceGermanTemplates,key))return operatorSourceGermanTemplates[key as keyof typeof operatorSourceGermanTemplates];
+  if(Object.hasOwn(operatorShellGermanTemplates,key)){const shellKey=key as keyof typeof operatorShellGermanTemplates;return language==='de'?operatorShellGermanTemplates[shellKey]:operatorShellEnglishTemplates[shellKey];}
   if(Object.hasOwn(powerPointGermanTemplates,key)){const sourceKey=key as keyof typeof powerPointGermanTemplates;return language==='de'?powerPointGermanTemplates[sourceKey]:powerPointEnglishTemplates[sourceKey];}
   if(Object.hasOwn(radioControlGermanTemplates,key)){
     const radioKey=key as keyof typeof radioControlGermanTemplates;
@@ -206,7 +210,7 @@ export function getBaseTemplate(language:Language,key:TranslationKey){
   return key in localImageCopy[language]?localImageCopy[language][key as LocalImageKey]:dictionaries[language][key as keyof typeof de];
 }
 
-export const germanBaseTemplates:Readonly<Record<TranslationKey,string>>={...de,...localImageCopy.de,...regionalControlBaseTemplates,...announcementControlGermanTemplates,...shapeControlGermanTemplates,...radioControlGermanTemplates,...powerPointGermanTemplates};
+export const germanBaseTemplates:Readonly<Record<TranslationKey,string>>={...operatorSourceGermanTemplates,...operatorShellGermanTemplates,...de,...localImageCopy.de,...regionalControlBaseTemplates,...announcementControlGermanTemplates,...shapeControlGermanTemplates,...radioControlGermanTemplates,...powerPointGermanTemplates};
 
 export function translate(language:Language,key:TranslationKey,values:Record<string,string|number>={}){
   const source=getBaseTemplate(language,key);

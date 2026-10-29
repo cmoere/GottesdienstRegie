@@ -1,3 +1,4 @@
+import {useI18n} from './i18n';
 import { useEffect, useMemo, useState } from "react";
 import {
   BIBLE_BOOKS,
@@ -25,6 +26,7 @@ export function BibleTextDialog({
   initialTranslation?: string;
   allowTranslationChange?: boolean;
 }) {
+  const {tx}=useI18n();
   const [translation, setTranslation] = useState(initialTranslation),
     [translationQuery, setTranslationQuery] = useState(""),
     [translations, setTranslations] = useState<BibleTranslation[]>([]),
@@ -132,26 +134,24 @@ export function BibleTextDialog({
       >
         <header>
           <div>
-            <small>MAIN-SCHNELLANZEIGE</small>
-            <h2 id="bible-dialog-title">Bibeltext einblenden</h2>
+            <small>{tx("MAIN-SCHNELLANZEIGE")}</small>
+            <h2 id="bible-dialog-title">{tx("Bibeltext einblenden")}</h2>
           </div>
-          <button onClick={close} aria-label="Schließen">
+          <button onClick={close} aria-label={tx("Schließen")}>
             ×
           </button>
         </header>
         <div className="bible-dialog-body">
           <section className="bible-reference-fields">
             {allowTranslationChange && <label>
-              Übersetzung suchen
-              <input
+              {tx("Übersetzung suchen")}<input
                 value={translationQuery}
                 onChange={(event) => setTranslationQuery(event.target.value)}
-                placeholder="Name, Sprache oder Kürzel"
+                placeholder={tx("Name, Sprache oder Kürzel")}
               />
             </label>}
             {allowTranslationChange && <label>
-              Übersetzung
-              <select
+              {tx("Übersetzung")}<select
                 value={translation}
                 onChange={(event) => setTranslation(event.target.value)}
               >
@@ -165,21 +165,19 @@ export function BibleTextDialog({
                   </optgroup>
                 ))}
               </select>
-              <small>{translations.length} verfügbare Ausgaben</small>
+              <small>{translations.length} {" "}{tx("verfügbare Ausgaben")}</small>
             </label>}
             <label>
-              Buch suchen
-              <input
+              {tx("Buch suchen")}<input
                 autoFocus
                 spellCheck
                 value={bookQuery}
                 onChange={(event) => setBookQuery(event.target.value)}
-                placeholder="z. B. Johannes oder Joh"
+                placeholder={tx("z. B. Johannes oder Joh")}
               />
             </label>
             <label>
-              Buch
-              <select
+              {tx("Buch")}<select
                 className="bible-book-box"
                 size={7}
                 value={book}
@@ -188,14 +186,14 @@ export function BibleTextDialog({
                   setBookQuery("");
                 }}
               >
-                <optgroup label="Altes Testament">
+                <optgroup label={tx("Altes Testament")}>
                   {oldBooks.map((entry) => (
                     <option key={entry.id} value={entry.id}>
                       {entry.name}
                     </option>
                   ))}
                 </optgroup>
-                <optgroup label="Neues Testament">
+                <optgroup label={tx("Neues Testament")}>
                   {newBooks.map((entry) => (
                     <option key={entry.id} value={entry.id}>
                       {entry.name}
@@ -205,15 +203,14 @@ export function BibleTextDialog({
               </select>
             </label>
             <small className="bible-testament-hint">
-              Ausgewählt:{" "}
+              {tx("Ausgewählt:")}{" "}
               {selectedBook.testament === "old"
-                ? "Altes Testament"
-                : "Neues Testament"}
+                ? tx("Altes Testament")
+                : tx("Neues Testament")}
             </small>
             <div className="bible-number-fields">
               <label>
-                Kapitel
-                <input
+                {tx("Kapitel")}<input
                   type="number"
                   list="bible-chapters"
                   min="1"
@@ -228,8 +225,7 @@ export function BibleTextDialog({
                 </datalist>
               </label>
               <label>
-                Vers von
-                <input
+                {tx("Vers von")}<input
                   type="number"
                   list="bible-verses"
                   min="1"
@@ -239,8 +235,7 @@ export function BibleTextDialog({
                 />
               </label>
               <label>
-                Vers bis
-                <input
+                {tx("Vers bis")}<input
                   type="number"
                   list="bible-verses"
                   min={fromVerse}
@@ -256,31 +251,30 @@ export function BibleTextDialog({
               </label>
             </div>
             <small>
-              Kapitel 1–{maxChapter}; Verse werden beim Laden geprüft.
-            </small>
+              {tx("Kapitel 1–")}{maxChapter}{tx("; Verse werden beim Laden geprüft.")}</small>
             <button
               className="primary bible-preview-button"
               disabled={loading}
               onClick={() => void preview()}
             >
-              {loading ? "TEXT WIRD GELADEN …" : "BIBELTEXT LADEN"}
+              {loading ? tx("TEXT WIRD GELADEN …") : tx("BIBELTEXT LADEN")}
             </button>
           </section>
           <section className="bible-passage-preview" aria-live="polite">
             <header>
-              <b>Vorschau</b>
+              <b>{tx("Vorschau")}</b>
               {passage && <small>{passage.translation}</small>}
             </header>
             {loading ? (
               <div className="bible-loading">
                 <i />
-                <span>Bibelstelle wird geladen …</span>
+                <span>{tx("Bibelstelle wird geladen …")}</span>
               </div>
             ) : error ? (
               <div className="bible-error">
                 <span className="material-symbols-outlined">error</span>
                 <p>{error}</p>
-                <button onClick={() => void preview()}>ERNEUT VERSUCHEN</button>
+                <button onClick={() => void preview()}>{tx("Erneut versuchen")}</button>
               </div>
             ) : passage ? (
               <>
@@ -298,19 +292,16 @@ export function BibleTextDialog({
               <div className="bible-empty">
                 <span className="material-symbols-outlined">menu_book</span>
                 <p>
-                  Wähle eine Bibelstelle und lade den Text für die Vorschau.
-                </p>
+                  {tx("Wähle eine Bibelstelle und lade den Text für die Vorschau.")}</p>
               </div>
             )}
           </section>
         </div>
         <footer>
           <small>
-            Der Text wird temporär über MAIN gelegt. Die laufende Folie bleibt
-            erhalten.
-          </small>
+            {tx("Der Text wird temporär über MAIN gelegt. Die laufende Folie bleibt erhalten.")}</small>
           <div>
-            <button onClick={close}>ABBRECHEN</button>
+            <button onClick={close}>{tx("ABBRECHEN")}</button>
             <button
               className="primary"
               disabled={!passage || loading}
@@ -325,8 +316,7 @@ export function BibleTextDialog({
                 })
               }
             >
-              AUF MAIN ANZEIGEN
-            </button>
+              {tx("AUF MAIN ANZEIGEN")}</button>
           </div>
         </footer>
       </section>

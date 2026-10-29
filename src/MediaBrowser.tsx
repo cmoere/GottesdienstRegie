@@ -1,3 +1,4 @@
+import {useI18n} from "./i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePreferences } from "./preferences";
 import { applyAudioRoute, defaultAudioRouting } from "./audioRouting";
@@ -144,6 +145,7 @@ const drawCover = (
   );
 };
 export function MediaBrowser() {
+  const {tx}=useI18n();
   const [countdownsOpen,setCountdownsOpen]=useState(false),[advertisingOpen,setAdvertisingOpen]=useState(false);
   const prefs = usePreferences();
   const initial = useMemo(() => {
@@ -300,7 +302,7 @@ export function MediaBrowser() {
     } catch (error) {
       setOffline(true);
       alert(
-        `Unsplash konnte nicht geladen werden. Bitte prüfe die Internetverbindung und versuche es erneut.\n\n${String(error).replace(/^Error invoking remote method '[^']+':\s*/, "")}`,
+        tx("Unsplash konnte nicht geladen werden. Bitte prüfe die Internetverbindung und versuche es erneut.\n\n{value1}",{value1:(String(error).replace(/^Error invoking remote method '[^']+':\s*/, ""))}),
       );
     } finally {
       if (append) setUnsplashLoadingMore(false);
@@ -484,22 +486,22 @@ export function MediaBrowser() {
   const uploadError = (error: unknown) => {
     const value = String(error);
     if (value.includes("MEDIA_STORAGE_NOT_PRIVATE"))
-      return "Die Medien-Cloud ist noch nicht als privater Team-Speicher eingerichtet.";
+      return tx("Die Medien-Cloud ist noch nicht als privater Team-Speicher eingerichtet.");
     if (
       value.includes("GITHUB_LOGIN_REQUIRED") ||
       value.includes("HTTP_401") ||
       value.includes("HTTP_403")
     )
-      return "Die Anmeldung für die Medien-Cloud fehlt oder besitzt keine Upload-Berechtigung.";
+      return tx("Die Anmeldung für die Medien-Cloud fehlt oder besitzt keine Upload-Berechtigung.");
     if (value.includes("TOO_LARGE"))
-      return "Diese Datei ist für den Cloudspeicher zu groß.";
+      return tx("Diese Datei ist für den Cloudspeicher zu groß.");
     if (
       value.includes("OFFLINE") ||
       value.includes("fetch") ||
       value.includes("timeout")
     )
-      return "Die Medien-Cloud ist momentan nicht erreichbar. Die Quelldatei bleibt erhalten.";
-    return `Der Upload konnte nicht abgeschlossen werden: ${value.replace(/^Error invoking remote method '[^']+':\s*/, "").slice(0, 220)}`;
+      return tx("Die Medien-Cloud ist momentan nicht erreichbar. Die Quelldatei bleibt erhalten.");
+    return tx("Der Upload konnte nicht abgeschlossen werden: {value1}",{value1:String(value.replace(/^Error invoking remote method '[^']+':\s*/, "").slice(0, 220))});
   };
   async function upload() {
     setBusy("upload");
@@ -544,11 +546,7 @@ export function MediaBrowser() {
       const detail = String(error);
       setDeleteTarget(null);
       alert(
-        detail.includes("MEDIA_IN_PRESENTATIONS")
-          ? "Dieses Medium wird noch in einer Präsentation verwendet und kann deshalb nicht gelöscht werden."
-          : detail.includes("MEDIA_IN_LIVE_USE")
-            ? "Während ON AIR können Medien nicht gelöscht werden."
-            : "Das Medium konnte nicht gelöscht werden. Bitte prüfe Cloud-Verbindung und Berechtigung.",
+        (detail.includes("MEDIA_IN_PRESENTATIONS")?tx("Dieses Medium wird noch in einer Präsentation verwendet und kann deshalb nicht gelöscht werden."):(detail.includes("MEDIA_IN_LIVE_USE")?tx("Während ON AIR können Medien nicht gelöscht werden."):tx("Das Medium konnte nicht gelöscht werden. Bitte prüfe Cloud-Verbindung und Berechtigung."))),
       );
     } finally {
       setBusy("");
@@ -810,14 +808,14 @@ export function MediaBrowser() {
       );
     } catch {
       alert(
-        "Der Favorit konnte nicht gespeichert werden. Bitte versuche es erneut.",
+        tx("Der Favorit konnte nicht gespeichert werden. Bitte versuche es erneut."),
       );
     } finally {
       setBusy("");
     }
   }
   if(advertisingOpen&&!isAudio)return <AdvertisingBrowser purpose={purpose} onClose={()=>setAdvertisingOpen(false)}/>;
-  if(countdownsOpen&&!isAudio)return <main className="cloud-media-browser countdown-mode"><header className="media-window-header"><h1>Countdown-Bibliothek</h1><button onClick={()=>setCountdownsOpen(false)}>Zurück zu Medien</button></header><CountdownPresetBrowser purpose={purpose} onSelect={id=>{void(window.desktop as any)?.mediaWindow?.selectCountdown(id)}}/></main>;
+  if(countdownsOpen&&!isAudio)return <main className="cloud-media-browser countdown-mode"><header className="media-window-header"><h1>{tx("Countdown-Bibliothek")}</h1><button onClick={()=>setCountdownsOpen(false)}>{tx("Zurück zu Medien")}</button></header><CountdownPresetBrowser purpose={purpose} onSelect={id=>{void(window.desktop as any)?.mediaWindow?.selectCountdown(id)}}/></main>;
   return (
     <main
       className={`cloud-media-browser ${isAudio ? "audio-browser" : ""} ${generatorOpen ? "generator-active" : ""}`}
@@ -825,36 +823,32 @@ export function MediaBrowser() {
     >
       <header className="media-window-header">
         <div>
-          <h1>{isAudio ? "Audiobrowser" : "Medienbibliothek"}</h1>
+          <h1>{isAudio ? tx("Audiobrowser") : tx("Medienbibliothek")}</h1>
           <p>
             {isAudio
-              ? "Musik aus dem Team-Cloudspeicher auswählen und als Playlist hinzufügen."
-              : "Medien zentral suchen, verwalten und für Präsentationen verwenden."}
+              ? tx("Musik aus dem Team-Cloudspeicher auswählen und als Playlist hinzufügen.")
+              : tx("Medien zentral suchen, verwalten und für Präsentationen verwenden.")}
           </p>
         </div>
         <div
           className={`media-cloud-status ${cloudStatus?.online ? "online" : "offline"}`}
-          title={cloudStatus?.message ?? "Cloudstatus wird geprüft"}
+          title={(cloudStatus?.message??tx("Cloudstatus wird geprüft"))}
         >
           <Icon name={cloudStatus?.online ? "cloud_done" : "cloud_off"} />
         </div>
       </header>
       {isAudio&&<SpotifyBrowser/>}
       {!isAudio && (
-        <nav className="media-tabs"><button onClick={()=>setAdvertisingOpen(true)}>Externe Werbung</button>
-          <button onClick={()=>{setGeneratorOpen(false);setCountdownsOpen(true)}}>COUNTDOWNS</button>
+        <nav className="media-tabs"><button onClick={()=>setAdvertisingOpen(true)}>{tx("Externe Werbung")}</button>
+          <button onClick={()=>{setGeneratorOpen(false);setCountdownsOpen(true)}}>{tx("Countdowns")}</button>
           <button
             className={!generatorOpen && tab === "cloud" ? "active" : ""}
             onClick={() => switchTab("cloud")}
-          >
-            CLOUD-MEDIEN
-          </button>
+          >{tx("Cloud-Medien")}</button>
           <button
             className={!generatorOpen && tab === "community" ? "active" : ""}
             onClick={() => switchTab("community")}
-          >
-            COMMUNITY
-          </button>
+          >{tx("Community")}</button>
           <button
             className={!generatorOpen && tab === "unsplash" ? "active" : ""}
             onClick={() => switchTab("unsplash")}
@@ -862,16 +856,13 @@ export function MediaBrowser() {
             <span className="unsplash-mini-mark" aria-hidden="true">
               <i />
               <i />
-            </span>{" "}
-            UNSPLASH
-          </button>
+            </span>{" "}{tx("Unsplash")}</button>
           {prefs.aiEnabled && (
             <button
               className={generatorOpen ? "active" : ""}
               onClick={() => setGeneratorOpen(true)}
             >
-              <Icon name="auto_awesome" /> KI-MOTIVE
-            </button>
+              <Icon name="auto_awesome" /> {tx("KI-Motive")}</button>
           )}
         </nav>
       )}
@@ -882,10 +873,10 @@ export function MediaBrowser() {
             ref={searchRef}
             placeholder={
               tab === "unsplash"
-                ? "Unsplash durchsuchen"
+                ? tx("Unsplash durchsuchen")
                 : isAudio
-                  ? "Audio durchsuchen"
-                  : "Medien durchsuchen"
+                  ? tx("AUDIO DURCHSUCHEN")
+                  : tx("Medien durchsuchen")
             }
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -897,37 +888,34 @@ export function MediaBrowser() {
         </label>
         {tab === "unsplash" && (
           <button onClick={() => void searchUnsplash(query, 1, false)}>
-            <Icon name="search" /> SUCHEN
-          </button>
+            <Icon name="search" /> {tx("Suchen")}</button>
         )}
         {!isAudio && (
           <select
             value={kind}
             onChange={(event) => setKind(event.target.value as "all"|CloudMediaAsset["kind"])}
           >
-            <option value="all">Alle Medien</option>
-            <option value="image">Bilder</option>
-            <option value="video">Videos</option>
-            <option value="audio">Audio</option>
-            <option value="pdf">PDF</option>
+            <option value="all">{tx("Alle Medien")}</option>
+            <option value="image">{tx("Bilder")}</option>
+            <option value="video">{tx("Videos")}</option>
+            <option value="audio">{tx("Audio")}</option>
+            <option value="pdf">{tx("PDF")}</option>
           </select>
         )}
         <select value={sort} onChange={(event) => setSort(event.target.value)}>
-          <option value="newest">Neueste zuerst</option>
-          <option value="name">Name</option>
-          <option value="size">Dateigröße</option>
+          <option value="newest">{tx("Neueste zuerst")}</option>
+          <option value="name">{tx("Name")}</option>
+          <option value="size">{tx("Dateigröße")}</option>
         </select>
         <button className="primary" onClick={() => void beginUpload()}>
           <Icon name="cloud_upload" />{" "}
-          {isAudio ? "AUDIO HOCHLADEN" : "MEDIEN HOCHLADEN"}
+          {isAudio ? tx("AUDIO HOCHLADEN") : tx("MEDIEN HOCHLADEN")}
         </button>
       </div>
       <div className="media-viewbar">
         <span>
-          <b>{totalMatches}</b> {totalMatches === 1 ? "Medium" : "Medien"}{" "}
-          gefunden
-        </span>
-        <label title="Größe der Medienkacheln">
+          <b>{totalMatches}</b> {totalMatches === 1 ? tx("Medium") : tx("Medien")}{" "}{tx("gefunden")}</span>
+        <label title={tx("Größe der Medienkacheln")}>
           <Icon name="photo_size_select_small" />
           <input
             type="range"
@@ -949,7 +937,7 @@ export function MediaBrowser() {
       </div>
       <div className="media-browser-body">
         <aside className="media-navigation">
-          <b>BIBLIOTHEK</b>
+          <b>{tx("Bibliothek")}</b>
           <button
             className={libraryFilter === "all" ? "active" : ""}
             onClick={() => {
@@ -958,7 +946,7 @@ export function MediaBrowser() {
             }}
           >
             <Icon name={isAudio ? "library_music" : "perm_media"} />{" "}
-            {isAudio ? "Alle Audiodateien" : "Alle Medien"}
+            {isAudio ? tx("Alle Audiodateien") : tx("Alle Medien")}
           </button>
           <button
             className={libraryFilter === "recent" ? "active" : ""}
@@ -967,8 +955,7 @@ export function MediaBrowser() {
               setVisibleCount(30);
             }}
           >
-            <Icon name="schedule" /> Zuletzt verwendet
-          </button>
+            <Icon name="schedule" /> {tx("Zuletzt verwendet")}</button>
           <button
             className={libraryFilter === "favorites" ? "active" : ""}
             onClick={() => {
@@ -976,47 +963,44 @@ export function MediaBrowser() {
               setVisibleCount(30);
             }}
           >
-            <Icon name="star" /> Favoriten
-          </button>
+            <Icon name="star" /> {tx("Favoriten")}</button>
           {isAudio && (
             <>
-              <b>PLAYLIST</b>
-              <p>{audioSelection.length} Titel ausgewählt</p>
+              <b>{tx("Playlist")}</b>
+              <p>{audioSelection.length} {tx("Titel ausgewählt")}</p>
             </>
           )}
         </aside>
         <section className="media-content">
-          {tab === "unsplash" && <p className="unsplash-terms-notice">Mit der Nutzung von Unsplash stimmst du automatisch den <a href="https://unsplash.com/de/nutzungsbedingungen" target="_blank" rel="noopener noreferrer" onClick={event=>{if(window.desktop){event.preventDefault();void window.desktop.openExternal(event.currentTarget.href)}}}>Nutzungsbedingungen</a> und <a href="https://unsplash.com/de/datenschutzregelungen" target="_blank" rel="noopener noreferrer" onClick={event=>{if(window.desktop){event.preventDefault();void window.desktop.openExternal(event.currentTarget.href)}}}>Datenschutzbedingungen</a> von Unsplash zu. <a href="https://unsplash.com/de/plus/lizenz" target="_blank" rel="noopener noreferrer" onClick={event=>{if(window.desktop){event.preventDefault();void window.desktop.openExternal(event.currentTarget.href)}}}>Unsplash+-Lizenz</a></p>}
+          {tab === "unsplash" && <p className="unsplash-terms-notice">{tx("Mit der Nutzung von Unsplash stimmst du automatisch den")} <a href="https://unsplash.com/de/nutzungsbedingungen" target="_blank" rel="noopener noreferrer" onClick={event=>{if(window.desktop){event.preventDefault();void window.desktop.openExternal(event.currentTarget.href)}}}>{tx("Nutzungsbedingungen")}</a> {tx("und")} <a href="https://unsplash.com/de/datenschutzregelungen" target="_blank" rel="noopener noreferrer" onClick={event=>{if(window.desktop){event.preventDefault();void window.desktop.openExternal(event.currentTarget.href)}}}>{tx("Datenschutzbedingungen")}</a> {tx("von Unsplash zu.")} <a href="https://unsplash.com/de/plus/lizenz" target="_blank" rel="noopener noreferrer" onClick={event=>{if(window.desktop){event.preventDefault();void window.desktop.openExternal(event.currentTarget.href)}}}>{tx("Unsplash+-Lizenz")}</a></p>}
           {tab === "unsplash" && !loading && (
             <div className="unsplash-category-brand">
               <span className="unsplash-mini-mark" aria-hidden="true">
                 <i />
                 <i />
               </span>
-              <b>Unsplash</b>
-              <small>Kostenlose Fotos durchsuchen</small>
+              <b>{tx("Unsplash")}</b>
+              <small>{tx("Kostenlose Fotos durchsuchen")}</small>
             </div>
           )}
           {loading ? (
             <div className="media-state">
               <span className="media-loading" />
-              <h2>Medien werden geladen …</h2>
+              <h2>{tx("Medien werden geladen …")}</h2>
             </div>
           ) : offline ? (
             <div className="media-state">
               <Icon name="cloud_off" />
               <h2>
                 {tab === "unsplash"
-                  ? "Unsplash nicht erreichbar"
-                  : "Cloud nicht erreichbar"}
+                  ? tx("Unsplash nicht erreichbar")
+                  : tx("Cloud nicht erreichbar")}
               </h2>
               <button
                 onClick={() =>
                   tab === "unsplash" ? void searchUnsplash() : void refresh()
                 }
-              >
-                ERNEUT VERSUCHEN
-              </button>
+              >{tx("Erneut versuchen")}</button>
             </div>
           ) : shown.length ? (
             <>
@@ -1041,7 +1025,7 @@ export function MediaBrowser() {
                         <span>
                           <b>{item.name}</b>
                           <small>
-                            {item.tags?.join(" · ") || "Team-Audio"}
+                            {(item.tags?.join(" · ")||tx("Team-Audio"))}
                           </small>
                         </span>
                         <small>
@@ -1085,7 +1069,7 @@ export function MediaBrowser() {
                       )}
                       <strong>{item.name}</strong>
                       <small>
-                        {typeName(item.kind)} · {bytes(item.size)}
+                        {tx(typeName(item.kind))} · {bytes(item.size)}
                       </small>
                     </button>
                   ))}
@@ -1097,13 +1081,11 @@ export function MediaBrowser() {
                     disabled={unsplashLoadingMore}
                     onClick={() => setVisibleCount((value) => value + 30)}
                   >
-                    {unsplashLoadingMore ? "WIRD GELADEN …" : "MEHR LADEN"}
+                    {unsplashLoadingMore ? tx("WIRD GELADEN …") : tx("Mehr laden")}
                   </button>
                 )}
                 {visibleCount > 30 && (
-                  <button onClick={() => setVisibleCount(30)}>
-                    WENIGER ANZEIGEN
-                  </button>
+                  <button onClick={() => setVisibleCount(30)}>{tx("Weniger anzeigen")}</button>
                 )}
               </div>
             </>
@@ -1113,29 +1095,27 @@ export function MediaBrowser() {
             libraryFilter !== "all" ? (
             <div className="media-state">
               <Icon name="filter_alt_off" />
-              <h2>Keine passenden Medien gefunden</h2>
-              <p>Bitte ändere den Suchbegriff oder setze die Filter zurück.</p>
-              <button onClick={resetFilters}>FILTER ZURÜCKSETZEN</button>
+              <h2>{tx("Keine passenden Medien gefunden")}</h2>
+              <p>{tx("Bitte ändere den Suchbegriff oder setze die Filter zurück.")}</p>
+              <button onClick={resetFilters}>{tx("Filter zurücksetzen")}</button>
             </div>
           ) : (
             <div className="media-state">
               <Icon name={tab === "community" ? "groups" : "cloud_upload"} />
               <h2>
                 {tab === "community"
-                  ? "Noch keine Community-Medien"
+                  ? tx("Noch keine Community-Medien")
                   : isAudio
-                    ? "Noch keine Audiodateien"
-                    : "Noch keine Medien"}
+                    ? tx("Noch keine Audiodateien")
+                    : tx("Noch keine Medien")}
               </h2>
               <p>
                 {tab === "community"
-                  ? "Noch keine freigegebenen Medien vorhanden."
-                  : "Lade bitte Dateien hoch. Erst nach erfolgreichem Cloud-Upload können sie verwendet werden."}
+                  ? tx("Noch keine freigegebenen Medien vorhanden.")
+                  : tx("Lade bitte Dateien hoch. Erst nach erfolgreichem Cloud-Upload können sie verwendet werden.")}
               </p>
               {tab === "cloud" && (
-                <button className="primary" onClick={() => void beginUpload()}>
-                  HOCHLADEN
-                </button>
+                <button className="primary" onClick={() => void beginUpload()}>{tx("Hochladen")}</button>
               )}
             </div>
           )}
@@ -1143,7 +1123,7 @@ export function MediaBrowser() {
         <aside className="media-details">
           {selected ? (
             <>
-              <button className="detail-preview" onClick={()=>selected.kind==='image'&&setZoomOpen(true)} aria-label="Vorschau vergrößern">
+              <button className="detail-preview" onClick={()=>selected.kind==='image'&&setZoomOpen(true)} aria-label={tx("Vorschau vergrößern")}>
                 {selected.kind === "image" ? (
                   <img src={selected.downloadUrl} alt="" />
                 ) : selected.kind === "video" ? (
@@ -1168,21 +1148,21 @@ export function MediaBrowser() {
                   <Icon name="picture_as_pdf" />
                 )}
               </button>
-              {renaming?<div className="media-rename"><label htmlFor="media-rename-input">Name</label><input id="media-rename-input" autoFocus maxLength={300} value={renameDraft} onChange={event=>setRenameDraft(event.target.value)}/><small>{renameDraft.length}/300</small><span><button onClick={()=>{setRenameDraft(selected.name);setRenaming(false)}}>ABBRECHEN</button><button disabled={!validateMediaName(renameDraft).ok||busy===selected.id} onClick={()=>void renameSelected()}>SPEICHERN</button></span></div>:<button className="media-name-display" onClick={()=>setRenaming(true)} title="Name bearbeiten"><strong>{selected.name}</strong><Icon name="edit"/></button>}
+              {renaming?<div className="media-rename"><label htmlFor="media-rename-input">{tx("Name")}</label><input id="media-rename-input" autoFocus maxLength={300} value={renameDraft} onChange={event=>setRenameDraft(event.target.value)}/><small>{renameDraft.length}/300</small><span><button onClick={()=>{setRenameDraft(selected.name);setRenaming(false)}}>{tx("ABBRECHEN")}</button><button disabled={!validateMediaName(renameDraft).ok||busy===selected.id} onClick={()=>void renameSelected()}>{tx("Speichern")}</button></span></div>:<button className="media-name-display" onClick={()=>setRenaming(true)} title={tx("Name bearbeiten")}><strong>{selected.name}</strong><Icon name="edit"/></button>}
               <dl>
-                <dt>Typ</dt>
-                <dd>{typeName(selected.kind)}</dd>
-                <dt>Dateigröße</dt>
+                <dt>{tx("Typ")}</dt>
+                <dd>{tx(typeName(selected.kind))}</dd>
+                <dt>{tx("Dateigröße")}</dt>
                 <dd>{bytes(selected.size)}</dd>
-                <dt>Format</dt>
+                <dt>{tx("Format")}</dt>
                 <dd>
                   {selected.extension ||
                     selected.path.split(".").at(-1)?.toUpperCase()}
                 </dd>
-                <dt className="ai-metadata"><Icon name="smart_toy"/> KI-generiert</dt>
-                <dd>{isAiGenerated(selected)?'Ja':'Nein'}</dd>
-                <dt>Quelle</dt>
-                <dd>{tab === "unsplash" ? "Unsplash" : "Team-Cloud"}</dd>
+                <dt className="ai-metadata"><Icon name="smart_toy"/> {tx("KI-generiert")}</dt>
+                <dd>{isAiGenerated(selected)?tx("Ja"):tx("Nein")}</dd>
+                <dt>{tx("Quelle")}</dt>
+                <dd>{tab === "unsplash" ? tx("Unsplash") : tx("Team-Cloud")}</dd>
               </dl>
               <div className="detail-actions">
                 <button
@@ -1191,12 +1171,10 @@ export function MediaBrowser() {
                   onClick={() => void toggleFavorite(selected)}
                 >
                   {selected.favorite?<span className="favorite-star-icon"><Icon name="star"/></span>:<Icon name="star_outline"/>}
-                  {selected.favorite ? "FAVORIT ENTFERNEN" : "ALS FAVORIT"}
+                  {selected.favorite ? tx("FAVORIT ENTFERNEN") : tx("ALS FAVORIT")}
                 </button>
                 {context === "select" && !isAudio && (
-                  <button className="primary" onClick={useSelected}>
-                    VERWENDEN
-                  </button>
+                  <button className="primary" onClick={useSelected}>{tx("Verwenden")}</button>
                 )}
                 {tab !== "unsplash" && (
                   <button
@@ -1204,15 +1182,14 @@ export function MediaBrowser() {
                     disabled={busy === selected.id}
                     onClick={() => void remove()}
                   >
-                    <Icon name="delete" /> LÖSCHEN
-                  </button>
+                    <Icon name="delete" /> {tx("Löschen")}</button>
                 )}
               </div>
             </>
           ) : (
             <div className="detail-empty">
               <Icon name="info" />
-              <span>Wähle bitte ein Medium aus.</span>
+              <span>{tx("Wähle bitte ein Medium aus.")}</span>
             </div>
           )}
         </aside>
@@ -1220,8 +1197,8 @@ export function MediaBrowser() {
       {isAudio && context === "select" && (
         <footer className="audio-selection-tray">
           <div>
-            <b>{audioSelection.length} Titel ausgewählt</b>
-            <span>Reihenfolge durch Ziehen ändern</span>
+            <b>{audioSelection.length} {tx("Titel ausgewählt")}</b>
+            <span>{tx("Reihenfolge durch Ziehen ändern")}</span>
           </div>
           <div className="audio-selection-chips">
             {audioSelection.map((item, index) => (
@@ -1253,28 +1230,23 @@ export function MediaBrowser() {
               </span>
             ))}
           </div>
-          <button onClick={() => setAudioSelection([])}>LEEREN</button>
-          <button onClick={() => void mediaWindow?.close()}>ABBRECHEN</button>
+          <button onClick={() => setAudioSelection([])}>{tx("Leeren")}</button>
+          <button onClick={() => void mediaWindow?.close()}>{tx("ABBRECHEN")}</button>
           <button
             className="primary"
             disabled={!audioSelection.length || !targetId}
             onClick={useSelected}
-          >
-            HINZUFÜGEN
-          </button>
+          >{tx("Hinzufügen")}</button>
         </footer>
       )}
-      {zoomOpen&&selected?.kind==='image'&&<div className="media-zoom-backdrop" role="dialog" aria-modal="true" onMouseDown={event=>event.target===event.currentTarget&&setZoomOpen(false)}><section><header><b>{selected.name}</b><button onClick={()=>setZoomOpen(false)}><Icon name="close"/></button></header><div className="media-zoom-canvas"><img src={selected.downloadUrl} alt={selected.name} style={{transform:`scale(${zoom})`}}/></div><footer><button onClick={()=>setZoom(.25)}>ANPASSEN</button><button onClick={()=>setZoom(1)}>100 %</button><button onClick={()=>setZoom(value=>Math.max(.25,value-.25))}><Icon name="remove"/></button><span>{Math.round(zoom*100)} %</span><button onClick={()=>setZoom(value=>Math.min(4,value+.25))}><Icon name="add"/></button></footer></section></div>}
+      {zoomOpen&&selected?.kind==='image'&&<div className="media-zoom-backdrop" role="dialog" aria-modal="true" onMouseDown={event=>event.target===event.currentTarget&&setZoomOpen(false)}><section><header><b>{selected.name}</b><button onClick={()=>setZoomOpen(false)}><Icon name="close"/></button></header><div className="media-zoom-canvas"><img src={selected.downloadUrl} alt={selected.name} style={{transform:`scale(${zoom})`}}/></div><footer><button onClick={()=>setZoom(.25)}>{tx("Anpassen")}</button><button onClick={()=>setZoom(1)}>100 %</button><button onClick={()=>setZoom(value=>Math.max(.25,value-.25))}><Icon name="remove"/></button><span>{Math.round(zoom*100)} %</span><button onClick={()=>setZoom(value=>Math.min(4,value+.25))}><Icon name="add"/></button></footer></section></div>}
       {staged.length > 0 && (
         <div className="media-upload-backdrop">
           <section className="media-upload-dialog">
             <header>
               <div>
-                <h2>{isAudio ? "AUDIO HOCHLADEN" : "MEDIEN HOCHLADEN"}</h2>
-                <p>
-                  Nach erfolgreichem Upload steht die Datei im
-                  Team-Cloudspeicher bereit.
-                </p>
+                <h2>{isAudio ? tx("AUDIO HOCHLADEN") : tx("MEDIEN HOCHLADEN")}</h2>
+                <p>{tx("Nach erfolgreichem Upload steht die Datei im Team-Cloudspeicher bereit.")}</p>
               </div>
               <button onClick={() => setStaged([])}>
                 <Icon name="close" />
@@ -1284,17 +1256,13 @@ export function MediaBrowser() {
               <Icon name={isAudio ? "audio_file" : "cloud_upload"} />
               <span>{staged.map((item) => item.fileName).join(", ")}</span>
             </div>
-            <label>
-              Name
-              <input
+            <label>{tx("Name")}<input
                 value={uploadName}
                 onChange={(event) => setUploadName(event.target.value)}
               />
             </label>
-            <label>
-              Interpret / Schlagwörter
-              <input
-                placeholder="z. B. Instrumental, Worship"
+            <label>{tx("Interpret / Schlagwörter")}<input
+                placeholder={tx("z. B. Instrumental, Worship")}
                 value={uploadTags}
                 onChange={(event) => setUploadTags(event.target.value)}
               />
@@ -1306,13 +1274,13 @@ export function MediaBrowser() {
               </div>
             )}
             <footer>
-              <button disabled={busy === "upload"} onClick={() => setStaged([])}>ABBRECHEN</button>
+              <button disabled={busy === "upload"} onClick={() => setStaged([])}>{tx("ABBRECHEN")}</button>
               <button
                 className="primary"
                 disabled={busy === "upload"}
                 onClick={() => void upload()}
               >
-                {busy === "upload" ? "WIRD HOCHGELADEN …" : "JETZT HOCHLADEN"}
+                {busy === "upload" ? tx("WIRD HOCHGELADEN …") : tx("JETZT HOCHLADEN")}
               </button>
             </footer>
           </section>
@@ -1332,35 +1300,32 @@ export function MediaBrowser() {
             aria-labelledby="media-delete-title"
           >
             <Icon name="delete_forever" />
-            <h2 id="media-delete-title">MEDIUM LÖSCHEN?</h2>
+            <h2 id="media-delete-title">{tx("Medium löschen?")}</h2>
             <p>
-              <b>{deleteTarget.name}</b> wird dauerhaft aus der
-              Team-Medienbibliothek entfernt. Cloud-Dateien, die noch in einer
-              Präsentation verwendet werden, bleiben geschützt.
-            </p>
+              <b>{deleteTarget.name}</b> {tx("wird dauerhaft aus der Team-Medienbibliothek entfernt. Cloud-Dateien, die noch in einer Präsentation verwendet werden, bleiben geschützt.")}</p>
             <footer>
-              <button onClick={() => setDeleteTarget(null)}>ABBRECHEN</button>
+              <button onClick={() => setDeleteTarget(null)}>{tx("ABBRECHEN")}</button>
               <button
                 className="danger"
                 disabled={busy === deleteTarget.id}
                 onClick={() => void remove()}
               >
                 {busy === deleteTarget.id
-                  ? "WIRD GELÖSCHT …"
-                  : "DAUERHAFT LÖSCHEN"}
+                  ? tx("WIRD GELÖSCHT …")
+                  : tx("DAUERHAFT LÖSCHEN")}
               </button>
             </footer>
           </section>
         </div>
       )}
       {generatorOpen && (
-        <section className="media-generator-workspace" aria-label="KI-Motive">
+        <section className="media-generator-workspace" aria-label={tx("KI-Motive")}>
           <header>
             <div>
               <Icon name="auto_awesome" />
               <span>
-                <h2>KI-MOTIVE</h2>
-                <small>Bild oder Videohintergrund gestalten</small>
+                <h2>{tx("KI-Motive")}</h2>
+                <small>{tx("Bild oder Videohintergrund gestalten")}</small>
               </span>
             </div>
           </header>
@@ -1369,27 +1334,23 @@ export function MediaBrowser() {
               className={generatorOutput === "image" ? "active" : ""}
               onClick={() => setGeneratorOutput("image")}
             >
-              <Icon name="image" /> BILD
-            </button>
+              <Icon name="image" /> {tx("Bild")}</button>
             <button
               className={generatorOutput === "video" ? "active" : ""}
               onClick={() => setGeneratorOutput("video")}
             >
-              <Icon name="movie" /> VIDEOHINTERGRUND
-            </button>
+              <Icon name="movie" /> {tx("Videohintergrund")}</button>
           </div>
-          <label>
-            Motivbeschreibung
-            <textarea
+          <label>{tx("Motivbeschreibung")}<textarea
               rows={8}
               maxLength={1600}
               value={generatorPrompt}
               onChange={(event) => setGeneratorPrompt(event.target.value)}
-              placeholder="Beschreibe bitte Landschaft oder Stadt, Tageszeit, Licht, Kameraperspektive, freie Textflächen, Farben und Atmosphäre möglichst genau."
+              placeholder={tx("Beschreibe bitte Landschaft oder Stadt, Tageszeit, Licht, Kameraperspektive, freie Textflächen, Farben und Atmosphäre möglichst genau.")}
             />
           </label>
           <div className="generator-prompt-actions">
-            <small>{generatorPrompt.length} / 1600 Zeichen</small>
+            <small>{generatorPrompt.length} {tx("/ 1600 Zeichen")}</small>
             <button
               onClick={() =>
                 setGeneratorPrompt(
@@ -1399,39 +1360,33 @@ export function MediaBrowser() {
                 )
               }
             >
-              <Icon name="refresh" /> ANDERE BESCHREIBUNG
-            </button>
+              <Icon name="refresh" /> {tx("Andere Beschreibung")}</button>
           </div>
           <div className="generator-select-grid">
-            <label>
-              Szenenkategorie
-              <select
+            <label>{tx("Szenenkategorie")}<select
                 value={generatorScene}
                 onChange={(event) => setGeneratorScene(event.target.value)}
               >
                 {generatorScenes.map(([value, label]) => (
                   <option key={value} value={value}>
-                    {label}
+                    {tx(label)}
                   </option>
                 ))}
               </select>
             </label>
-            <label>
-              Gestaltungsstil
-              <select
+            <label>{tx("Gestaltungsstil")}<select
                 value={generatorStyle}
                 onChange={(event) => setGeneratorStyle(event.target.value)}
               >
                 {generatorStyles.map(([value, label]) => (
                   <option key={value} value={value}>
-                    {label}
+                    {tx(label)}
                   </option>
                 ))}
               </select>
             </label>
             {generatorOutput === "video" && (
-              <label className="generator-duration">
-                Videolänge: <b>{generatorDuration} Sekunden</b>
+              <label className="generator-duration">{tx("Videolänge:")} <b>{generatorDuration} {tx("Sekunden")}</b>
                 <input
                   type="range"
                   min="30"
@@ -1442,27 +1397,27 @@ export function MediaBrowser() {
                     setGeneratorDuration(Number(event.target.value))
                   }
                 />
-                <span>30 s</span>
-                <span>60 s</span>
+                <span>{tx("30 s")}</span>
+                <span>{tx("60 s")}</span>
               </label>
             )}
           </div>
           <div className="generator-advanced-grid">
-            <label>Seitenverhältnis<select value={generatorAspectRatio} onChange={event=>setGeneratorAspectRatio(event.target.value as GeneratorAspectRatio)}><option>16:9</option><option>4:3</option><option>1:1</option><option>9:16</option></select></label>
-            <label>Qualität<select value={generatorQuality} onChange={event=>setGeneratorQuality(event.target.value as GeneratorQuality)}><option value="standard">Standard</option><option value="high">Hoch</option></select></label>
-            <label className="generator-motion">Nicht anzeigen<textarea rows={2} maxLength={300} value={generatorNegativePrompt} onChange={event=>setGeneratorNegativePrompt(event.target.value)} placeholder="Unerwünschte Inhalte, Stilmittel oder Objekte"/><small>{generatorNegativePrompt.length} / 300 Zeichen</small></label>
-            {generatorOutput==='video'&&<label>Bewegung<select value={generatorMotion} onChange={event=>setGeneratorMotion(event.target.value as GeneratorMotion)}><option value="zoom">Sanfter Zoom</option><option value="pan">Kamerafahrt</option><option value="parallax">Parallax</option></select></label>}
+            <label>{tx("Seitenverhältnis")}<select value={generatorAspectRatio} onChange={event=>setGeneratorAspectRatio(event.target.value as GeneratorAspectRatio)}><option>16:9</option><option>4:3</option><option>1:1</option><option>9:16</option></select></label>
+            <label>{tx("Qualität")}<select value={generatorQuality} onChange={event=>setGeneratorQuality(event.target.value as GeneratorQuality)}><option value="standard">{tx("Standard")}</option><option value="high">{tx("Hoch")}</option></select></label>
+            <label className="generator-motion">{tx("Nicht anzeigen")}<textarea rows={2} maxLength={300} value={generatorNegativePrompt} onChange={event=>setGeneratorNegativePrompt(event.target.value)} placeholder={tx("Unerwünschte Inhalte, Stilmittel oder Objekte")}/><small>{generatorNegativePrompt.length} {tx("/ 300 Zeichen")}</small></label>
+            {generatorOutput==='video'&&<label>{tx("Bewegung")}<select value={generatorMotion} onChange={event=>setGeneratorMotion(event.target.value as GeneratorMotion)}><option value="zoom">{tx("Sanfter Zoom")}</option><option value="pan">{tx("Kamerafahrt")}</option><option value="parallax">{tx("Parallax")}</option></select></label>}
           </div>
-          <aside className={`generator-live-preview ratio-${generatorAspectRatio.replace(':','-')}`} aria-label="Motivvorschau">
-            <small className="generator-preview-label">Vorschau</small><div className={`generator-preview-art style-${generatorStyle}${generatedDraft?' has-result':''}`}>
-              {generatedDraft?.kind==='image'?<img src={generatedDraft.downloadUrl} alt="Erstelltes KI-Motiv"/>:generatedDraft?.kind==='video'?<video src={generatedDraft.downloadUrl} autoPlay muted loop playsInline/>:<><Icon name={generatorOutput==='video'?'movie':'image'}/><strong>VORSCHAU</strong><span>{generatorScenes.find(([value])=>value===generatorScene)?.[1]}</span><small>{generatorStyles.find(([value])=>value===generatorStyle)?.[1]}</small></>}
-              {generating&&<span className="generator-mini-spinner" role="status" aria-label="Motiv wird erstellt"/>}
+          <aside className={`generator-live-preview ratio-${generatorAspectRatio.replace(':','-')}`} aria-label={tx("Motivvorschau")}>
+            <small className="generator-preview-label">{tx("Vorschau")}</small><div className={`generator-preview-art style-${generatorStyle}${generatedDraft?' has-result':''}`}>
+              {generatedDraft?.kind==='image'?<img src={generatedDraft.downloadUrl} alt={tx("Erstelltes KI-Motiv")}/>:generatedDraft?.kind==='video'?<video src={generatedDraft.downloadUrl} autoPlay muted loop playsInline/>:<><Icon name={generatorOutput==='video'?'movie':'image'}/><strong>{tx("VORSCHAU")}</strong><span>{tx(generatorScenes.find(([value])=>value===generatorScene)?.[1]??'')}</span><small>{tx(generatorStyles.find(([value])=>value===generatorStyle)?.[1]??'')}</small></>}
+              {generating&&<span className="generator-mini-spinner" role="status" aria-label={tx("Motiv wird erstellt")}/>}
             </div>
-            {generatedDraft&&<p>Das Motiv ist fertig. Speichere es in der Medienbibliothek oder erstelle eine neue Variante.</p>}
+            {generatedDraft&&<p>{tx("Das Motiv ist fertig. Speichere es in der Medienbibliothek oder erstelle eine neue Variante.")}</p>}
           </aside>
           <footer>
             <AiGenerationStatus active={generating} error={generatorError} onRetry={()=>void generateLocal()} reducedMotion={prefs.reduceMotion}/>
-            {generatedDraft?<div className="generator-result-actions"><button disabled={generating||busy==='save-generated'} onClick={()=>void generateLocal()}>NEU GENERIEREN</button><button className="primary" disabled={busy==='save-generated'} onClick={()=>void saveGenerated()}>{busy==='save-generated'?'WIRD GESPEICHERT …':'IN MEDIENBIBLIOTHEK SPEICHERN'}</button></div>:<button className="primary" disabled={!generatorPrompt.trim()||generating} onClick={()=>void generateLocal()}>{generating?`WIRD ERSTELLT · ${generatorDuration} S …`:generatorOutput==='video'?'VIDEO ERSTELLEN':'MOTIV ERSTELLEN'}</button>}
+            {generatedDraft?<div className="generator-result-actions"><button disabled={generating||busy==='save-generated'} onClick={()=>void generateLocal()}>{tx("Neu generieren")}</button><button className="primary" disabled={busy==='save-generated'} onClick={()=>void saveGenerated()}>{busy==='save-generated'?tx("Wird gespeichert …"):tx("IN MEDIENBIBLIOTHEK SPEICHERN")}</button></div>:<button className="primary" disabled={!generatorPrompt.trim()||generating} onClick={()=>void generateLocal()}>{(generating?tx("WIRD ERSTELLT · {value1} S …",{value1:String(generatorDuration)}):(generatorOutput==='video'?tx("VIDEO ERSTELLEN"):tx("MOTIV ERSTELLEN")))}</button>}
           </footer>
         </section>
       )}

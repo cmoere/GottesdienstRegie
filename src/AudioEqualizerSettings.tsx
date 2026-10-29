@@ -1,9 +1,11 @@
+import {useI18n} from "./i18n";
 import { usePreferences, type AudioEqualizerMode } from "./preferences";
 import { equalizerBands } from './equalizerBands';
 
 const bands = equalizerBands.map(band=>band.frequency);
 
 export function AudioEqualizerSettings() {
+ const {tx}=useI18n();
   const { audioEqualizer, setAudioEqualizer } = usePreferences();
   const values = audioEqualizer?.bands ?? bands.map(() => 0);
   const mode: AudioEqualizerMode = audioEqualizer?.mode ?? "standard";
@@ -14,15 +16,13 @@ export function AudioEqualizerSettings() {
   };
   return (
     <section className="audio-equalizer-settings">
-      <h3>EQUALIZER</h3>
-      <p>Eigene Klangkorrekturen werden gespeichert und gelten für Vorschau und Wiedergabe. ON AIR bleibt während einer Änderung ungestört.</p>
-      <div className="equalizer-mode-switch" role="group" aria-label="Equalizer-Modus">
+      <h3>{tx("EQUALIZER")}</h3>
+      <p>{tx("Eigene Klangkorrekturen werden gespeichert und gelten für Vorschau und Wiedergabe. ON AIR bleibt während einer Änderung ungestört.")}</p>
+      <div className="equalizer-mode-switch" role="group" aria-label={tx("Equalizer-Modus")}>
         <button className={mode === "standard" ? "active" : ""} onClick={() => setAudioEqualizer({ mode: "standard" })}>
-          Standard
-        </button>
+          {tx("Standard")}</button>
         <button className={mode === "custom" ? "active" : ""} onClick={() => setAudioEqualizer({ mode: "custom" })}>
-          Eigene Einstellung
-        </button>
+          {tx("Eigene Einstellung")}</button>
       </div>
       <div className={`equalizer-bands ${mode === "standard" ? "disabled" : ""}`}>
         {equalizerBands.map((band, index) => (
@@ -44,10 +44,9 @@ export function AudioEqualizerSettings() {
         ))}
       </div>
       <div className="equalizer-actions">
-        <span>{mode === "standard" ? "Neutraler Standardklang" : "Eigene Kurve aktiv"}</span>
+        <span>{mode === "standard" ? tx("Neutraler Standardklang") : tx("Eigene Kurve aktiv")}</span>
         <button onClick={() => setAudioEqualizer({ mode: "custom", bands: bands.map(() => 0) })}>
-          Zurücksetzen
-        </button>
+          {tx("ZURÜCKSETZEN")}</button>
       </div>
     </section>
   );

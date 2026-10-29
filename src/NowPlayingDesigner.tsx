@@ -1,10 +1,9 @@
+import {useI18n} from './i18n';
 import type { ServiceItem } from "./store";
 import { usePresentation } from "./store";
 import {
   NOW_PLAYING_ANIMATIONS,
-  NOW_PLAYING_ANIMATION_LABELS,
   NOW_PLAYING_DESIGNS,
-  NOW_PLAYING_DESIGN_LABELS,
   normalizeNowPlayingSettings,
   nowPlayingSettingsPatch,
   type NowPlayingPresentationSettings,
@@ -17,6 +16,31 @@ export function NowPlayingDesigner({
   item: ServiceItem;
   canEdit: boolean;
 }) {
+  const {tx}=useI18n();
+  const designLabels = {
+  "cover-left": tx("Cover links"),
+  "cover-hero": tx("Cover groß"),
+  minimal: tx("Minimal"),
+  vinyl: tx("Vinyl"),
+  radio: tx("Radio"),
+  gradient: tx("Verlauf"),
+  typography: tx("Typografie"),
+  stage: tx("Bühne"),
+  "split-card": tx("Split Card"),
+  neon: tx("Neon"),
+};
+  const animationLabels = {
+    "fade-rise": tx("Sanft einblenden"),
+    "vinyl-spin": tx("Vinyl drehen"),
+    "cover-zoom": tx("Cover-Zoom"),
+    "slide-left": tx("Von links"),
+    "slide-right": tx("Von rechts"),
+    pulse: tx("Pulsieren"),
+    float: tx("Schweben"),
+    flip: tx("Aufklappen"),
+    glow: tx("Leuchten"),
+    none: tx("Ohne Animation"),
+  };
   const state = usePresentation(),
     settings = normalizeNowPlayingSettings(item.metadata);
   const change = (patch: Partial<NowPlayingPresentationSettings>) => {
@@ -41,15 +65,15 @@ export function NowPlayingDesigner({
       });
   };
   return (
-    <section className="now-playing-designer" aria-label="Läuft-gerade-Design">
-      <h4>DESIGN</h4>
+    <section className="now-playing-designer" aria-label={tx("Läuft-gerade-Design")}>
+      <h4>{tx("DESIGN")}</h4>
       <div className="now-playing-design-cards">
         {NOW_PLAYING_DESIGNS.map((design) => (
           <button
             type="button"
             key={design}
             disabled={!canEdit}
-            aria-label={`Design: ${NOW_PLAYING_DESIGN_LABELS[design]}`}
+            aria-label={tx("Design: {name}",{name:designLabels[design]})}
             aria-pressed={settings.design === design}
             onClick={() => change({ design })}
           >
@@ -57,11 +81,11 @@ export function NowPlayingDesigner({
               <i />
               <b>Ä Ö Ü</b>
             </span>
-            <small>{NOW_PLAYING_DESIGN_LABELS[design]}</small>
+            <small>{designLabels[design]}</small>
           </button>
         ))}
       </div>
-      <h4>ANIMATION</h4>
+      <h4>{tx("ANIMATION")}</h4>
       <div className="now-playing-animation-cards">
         {NOW_PLAYING_ANIMATIONS.map((animation) => (
           <button
@@ -74,15 +98,14 @@ export function NowPlayingDesigner({
             <span className={`animation-preview animation-${animation}`}>
               <i />
             </span>
-            <small>{NOW_PLAYING_ANIMATION_LABELS[animation]}</small>
+            <small>{animationLabels[animation]}</small>
           </button>
         ))}
       </div>
       <div className="now-playing-controls">
         <label>
-          Hintergrundfarbe
-          <input
-            aria-label="Hintergrundfarbe"
+          {tx("Hintergrundfarbe")}<input
+            aria-label={tx("Hintergrundfarbe")}
             type="color"
             disabled={!canEdit}
             value={settings.backgroundColor}
@@ -92,9 +115,8 @@ export function NowPlayingDesigner({
           />
         </label>
         <label>
-          Akzentfarbe
-          <input
-            aria-label="Akzentfarbe"
+          {tx("Akzentfarbe")}<input
+            aria-label={tx("Akzentfarbe")}
             type="color"
             disabled={!canEdit}
             value={settings.accentColor}
@@ -102,9 +124,8 @@ export function NowPlayingDesigner({
           />
         </label>
         <label>
-          Textfarbe
-          <input
-            aria-label="Textfarbe"
+          {tx("Textfarbe")}<input
+            aria-label={tx("Textfarbe")}
             type="color"
             disabled={!canEdit}
             value={settings.textColor}
@@ -112,9 +133,8 @@ export function NowPlayingDesigner({
           />
         </label>
         <label>
-          Schreibweise
-          <select
-            aria-label="Schreibweise"
+          {tx("Schreibweise")}<select
+            aria-label={tx("Schreibweise")}
             disabled={!canEdit}
             value={settings.textCase}
             onChange={(event) =>
@@ -124,15 +144,14 @@ export function NowPlayingDesigner({
               })
             }
           >
-            <option value="normal">Wie eingegeben</option>
-            <option value="uppercase">GROSSBUCHSTABEN</option>
-            <option value="lowercase">kleinbuchstaben</option>
+            <option value="normal">{tx("Wie eingegeben")}</option>
+            <option value="uppercase">{tx("GROSSBUCHSTABEN")}</option>
+            <option value="lowercase">{tx("kleinbuchstaben")}</option>
           </select>
         </label>
         <label>
-          Visualizer-Position
-          <select
-            aria-label="Visualizer-Position"
+          {tx("Visualizer-Position")}<select
+            aria-label={tx("Visualizer-Position")}
             disabled={!canEdit}
             value={settings.visualizerPosition}
             onChange={(event) =>
@@ -142,15 +161,14 @@ export function NowPlayingDesigner({
               })
             }
           >
-            <option value="top-left">Oben links</option>
-            <option value="top-right">Oben rechts</option>
-            <option value="bottom-left">Unten links</option>
-            <option value="bottom-right">Unten rechts</option>
+            <option value="top-left">{tx("Oben links")}</option>
+            <option value="top-right">{tx("Oben rechts")}</option>
+            <option value="bottom-left">{tx("Unten links")}</option>
+            <option value="bottom-right">{tx("Unten rechts")}</option>
           </select>
         </label>
         <label>
-          Visualizer-Stil
-          <select
+          {tx("Visualizer-Stil")}<select
             disabled={!canEdit}
             value={settings.visualizerStyle}
             onChange={(event) =>
@@ -160,16 +178,15 @@ export function NowPlayingDesigner({
               })
             }
           >
-            <option value="bars">Balken</option>
-            <option value="wave">Welle</option>
-            <option value="dots">Punkte</option>
-            <option value="ring">Ring</option>
+            <option value="bars">{tx("Balken")}</option>
+            <option value="wave">{tx("Welle")}</option>
+            <option value="dots">{tx("Punkte")}</option>
+            <option value="ring">{tx("Ring")}</option>
           </select>
         </label>
         <label>
-          Anzeigedauer in Sekunden
-          <input
-            aria-label="Anzeigedauer in Sekunden"
+          {tx("Anzeigedauer in Sekunden")}<input
+            aria-label={tx("Anzeigedauer in Sekunden")}
             type="number"
             min="1"
             step="1"

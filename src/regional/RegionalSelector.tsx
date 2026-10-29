@@ -1,6 +1,6 @@
 import {useId} from 'react';
-import {normalizeReleasedGermanRegion,releaseRegionalVariants} from '../../shared/regional/catalog';
-import {getRegionalPartialRelease,isRegionalSelectionAvailable} from '../../shared/regional/availability';
+import {normalizeReleasedGermanRegion} from '../../shared/regional/catalog';
+import {getRegionalPartialRelease,isRegionalSelectionAvailable,getAvailableRegionalVariants} from '../../shared/regional/availability';
 import bundledAvailability from '../../shared/regional/availability.json';
 import {usePreferences} from '../preferences';
 import {useI18n} from '../i18n';
@@ -13,11 +13,12 @@ export function RegionalSelector({availability=bundledAvailability}:{availabilit
   const setGermanRegion=usePreferences(state=>state.setGermanRegion);
   if(language!=='de'||!isRegionalSelectionAvailable(availability))return null;
   const partial=getRegionalPartialRelease(availability);
+  const available=getAvailableRegionalVariants(availability);
   return <div className="regional-selector" lang="de-DE"><label htmlFor={id}>
     {t('germanRegionalVariant')}
-    <select id={id} aria-describedby={partial?noticeId:undefined} value={germanRegion??''} onChange={event=>setGermanRegion(normalizeReleasedGermanRegion(event.target.value))}>
+    <select id={id} aria-describedby={partial?noticeId:undefined} value={germanRegion??''} onChange={event=>setGermanRegion(available.some(region=>region.id===event.target.value)?normalizeReleasedGermanRegion(event.target.value):null)}>
       <option value="">Hochdeutsch</option>
-      {releaseRegionalVariants.map(region=><option key={region.id} value={region.id}>{region.name}</option>)}
+      {available.map(region=><option key={region.id} value={region.id}>{region.name}</option>)}
     </select>
   </label>{partial&&<p id={noticeId} role="note">{partial.notice}</p>}</div>;
 }

@@ -13,9 +13,10 @@ it('never treats complete help alone as a complete regional edition',()=>{
   expect(report.issues.some((issue:string)=>issue.includes('missing documentation pack'))).toBe(true);
 });
 
-it('checks exactly the approved15 release variants without demanding deferred documentation packs',()=>{
+it('checks the entire31-region catalog instead of ignoring formerly deferred documentation packs',()=>{
   const {checkDocumentationCorpus}=require('../../scripts/check-regional-documentation.cjs');
   const report=checkDocumentationCorpus();
-  expect(report.regions).toBe(15);
-  expect(report.issues.some((issue:string)=>issue.startsWith('central-hessian:'))).toBe(false);
+  expect(report.regions).toBe(31);
+  expect(report.sourceHelpArticles).toBe(63);
+  expect(report.sourceReleaseFields).toBe(1610);
 });

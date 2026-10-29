@@ -1,8 +1,12 @@
 import {useState} from 'react';
 import {act,cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react';
-import {afterEach,expect,it,vi} from 'vitest';
+import {afterEach,beforeEach,expect,it,vi} from 'vitest';
 import {useScreenTest} from './useScreenTest';
 import type {QuickScreenConfig} from './preferences';
+import {usePreferences} from './preferences';
+import {loadRegionalInterfacePack} from './regional/resources';
+const initialPreferences=usePreferences.getState();
+beforeEach(()=>usePreferences.setState({language:'de',germanRegion:null}));
 const previous:QuickScreenConfig={id:'previous',type:'custom',name:'Vorher',text:'Eigene Ausgabe',order:0,enabled:true,targets:['main']};
 let listener:(value:unknown)=>void=()=>{};const send=vi.fn().mockResolvedValue(true),off=vi.fn();
 function Fixture({onAir=true}:{onAir?:boolean}){
@@ -10,7 +14,7 @@ function Fixture({onAir=true}:{onAir?:boolean}){
  const test=useScreenTest({current:quick,onAir,setQuick,bridge:{sendQuick:send,restore:async(_runId,value)=>{await send(['main'],value);return true},onResult:cb=>{listener=cb;return off}}});
  return <><button onClick={test.request}>Test öffnen</button><button onClick={()=>{test.interrupt();setQuick({...previous,id:'black',type:'black'})}}>Schwarz</button><output data-testid="current">{quick?.id}:{quick?.testPattern}:{quick?.testRunId}</output>{test.dialog}</>;
 }
-afterEach(()=>{cleanup();send.mockClear();off.mockClear();delete window.desktop});
+afterEach(()=>{cleanup();send.mockClear();off.mockClear();delete window.desktop;usePreferences.setState(initialPreferences,true)});
 it('requires confirmation and existing ON AIR, and cancels back to the exact previous quick screen',async()=>{
  render(<Fixture/>);fireEvent.click(screen.getByText('Test öffnen'));
  expect(send).not.toHaveBeenCalled();fireEvent.click(screen.getByRole('button',{name:'Bildschirmtest starten'}));
@@ -45,4 +49,20 @@ it('exports a completed report in both supported formats through the desktop sav
  fireEvent.click(screen.getByRole('button',{name:'JSON herunterladen'}));
  await waitFor(()=>expect(exportReport).toHaveBeenLastCalledWith(expect.objectContaining({status:'complete'}),'json'));
  expect(await screen.findByText('Bericht gespeichert.')).toBeVisible();
+});
+
+it('changes regional captions during a running test without restarting MAIN or changing the restored content',async()=>{
+ expect(await loadRegionalInterfacePack('bielefeld-ravensberg')).toBe(true);
+ render(<Fixture/>);fireEvent.click(screen.getByText('Test öffnen'));
+ fireEvent.click(screen.getByRole('button',{name:'Bildschirmtest starten'}));
+ await waitFor(()=>expect(send).toHaveBeenCalledTimes(1));
+ const run=screen.getByTestId('current').textContent;
+ act(()=>usePreferences.setState({germanRegion:'bielefeld-ravensberg'}));
+ expect(await screen.findByRole('button',{name:'Test afbreken'})).toBeVisible();
+ expect(screen.getByTestId('current').textContent).toBe(run);
+ expect(send).toHaveBeenCalledTimes(1);
+ fireEvent.click(screen.getByRole('button',{name:'Test afbreken'}));
+ await waitFor(()=>expect(send).toHaveBeenLastCalledWith(['main'],previous));
+ expect(await screen.findByText('Bildschirmtest afbraken.')).toBeVisible();
+ expect(screen.getByTestId('current').textContent).toBe('previous::');
 });

@@ -1,12 +1,22 @@
 import { createRequire } from 'node:module';
 import {createHash} from 'node:crypto';
 import { describe, expect, it,vi } from 'vitest';
+import {nativeBaseTemplates} from '../../shared/regional/nativeBase';
 
 const require = createRequire(import.meta.url);
 // The scanner must retain ambiguous text for review, never localize user data itself.
 const { scanOperatorSource, collectGermanResources, generateInventory,applyReviewedTechnicalFile,applyReviewedSourceEntries,inventorySourceFingerprint } = require('../../scripts/inventory-regional-texts.cjs');
 
 describe('regional text source inventory', () => {
+  it('links only registered operator-copy literals inside a real useI18n binding',()=>{
+    const source=`import {useI18n} from './i18n';
+      function Browser(){const {tx}=useI18n();return <><button>{tx('Medien durchsuchen')}</button><p>{tx('Noch nicht erfasst')}</p></>}
+      function Other(){const tx=(x:string)=>x;return <p>{tx('Medien durchsuchen')}</p>}`;
+    const rows=scanOperatorSource('src/Browser.tsx',source,{operatorCopyResources:{'Medien durchsuchen':'ui.mediaSearch'}});
+    expect(rows.find((row:any)=>row.text==='Medien durchsuchen'&&row.status==='excluded')).toMatchObject({resourceKey:'ui.mediaSearch'});
+    expect(rows.filter((row:any)=>row.text==='Medien durchsuchen'&&row.status==='review-required')).toHaveLength(1);
+    expect(rows.find((row:any)=>row.text==='Noch nicht erfasst')).toMatchObject({status:'review-required'});
+  });
   it('still scans help UI renderers and helpers while imported article data is separately inventoried',()=>{
     const fs=require('node:fs'),read=fs.readFileSync;
     // Exercise directory-selection policy with the two real help modules, not a
@@ -81,7 +91,8 @@ describe('regional text source inventory', () => {
   it('inventories assembled current help and canonical native dialogs rather than retired raw help',()=>{
     const inventory=generateInventory(process.cwd());
     const entries=inventory.entries as Array<{key:string;text:string;status:string}>;
-    expect(entries.filter(entry=>entry.key.startsWith('native.'))).toHaveLength(34);
+    expect(entries.filter(entry=>entry.key.startsWith('native.')).map(entry=>entry.key).sort())
+      .toEqual(Object.keys(nativeBaseTemplates).map(key=>`native.${key}`).sort());
     expect(entries.find(entry=>entry.key==='help.Erste Schritte.body')?.text).toContain('## ');
     expect(entries.find(entry=>entry.key==='helpUI.title')?.text).toBe('Hilfe');
     expect(entries.find(entry=>entry.key==='native.updateInstallOnExit')?.text).toBe('Beim Beenden installieren');

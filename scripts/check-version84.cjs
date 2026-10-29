@@ -3,6 +3,10 @@ const fs=require('node:fs');
 const path=require('node:path');
 const {loadLocalDataModule}=require('./export-regional-corpus.cjs');
 const {getRegionalPartialRelease}=loadLocalDataModule(path.resolve(__dirname,'..'),'shared/regional/availability.ts');
+function requiresFullRegionalCatalog(version){
+  const match=/^(\d+)\.(\d+)\.(\d+)(?:-[\w.-]+)?$/.exec(version);
+  return Boolean(match&&(Number(match[1])>0||Number(match[2])>=95));
+}
 function regionalPublicationIssues(version,interfaceIssues,documentationIssues,partialScope){
   const match=/^(\d+)\.(\d+)\.(\d+)(?:-[\w.-]+)?$/.exec(version);
   if(!match)return ['invalid release version'];
@@ -19,6 +23,12 @@ function regionalPublicationIssues(version,interfaceIssues,documentationIssues,p
 function runRegionalPublicationGate(directory=path.resolve(__dirname,'..')){
   const read=filename=>JSON.parse(fs.readFileSync(path.join(directory,filename),'utf8'));
   const version=read('package.json').version;
+  if(requiresFullRegionalCatalog(version)){
+    const result=require('./check-v95-regional-completion.cjs').checkV95Completion(directory);
+    if(result.complete)console.log('Complete31-region publication gate passed.');
+    else console.error(`Publication blocked: ${result.issues.length} incomplete entries in the full31-region catalog.`);
+    return result.issues;
+  }
   if(regionalPublicationIssues(version,['required'],[]).length===0){
     console.log(`v84 completeness gate not activated for package ${version}; this does not certify v84 resources.`);return [];
   }
@@ -49,7 +59,7 @@ function runRegionalPublicationGate(directory=path.resolve(__dirname,'..')){
   }else console.log(partial?'v84 disclosed partial UI release gate passed; this does not certify complete localization.':'v84 complete regional resource gate passed.');
   return issues;
 }
-module.exports={regionalPublicationIssues,runRegionalPublicationGate};
+module.exports={regionalPublicationIssues,runRegionalPublicationGate,requiresFullRegionalCatalog};
 if(require.main===module){
   try{if(runRegionalPublicationGate().length)process.exitCode=1}catch(error){console.error(error);process.exitCode=1}
 }

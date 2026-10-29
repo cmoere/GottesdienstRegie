@@ -3,8 +3,9 @@ import {afterEach,expect,it,vi} from 'vitest';
 import {getHelpCatalog} from '../help';
 import {loadRegionalDocumentation,regionalDocumentationRuntime} from './documentationRuntime';
 import {indexReleaseTextObjects,localizeReleaseText} from './releaseIdentity';
+import {regionalVariants} from '../../shared/regional/catalog';
 afterEach(()=>vi.unstubAllGlobals());
-it.each(['bavarian-upper','ruhr','bielefeld-ravensberg','berlin','hamburg','cologne','bavarian-lower','upper-palatinate','swabian','east-franconian','baden-alemannic','palatine','south-baden-alemannic','rhine-hessian','south-hessian'] as const)('loads complete authored %s help/history offline without mutating other languages',async id=>{
+it.each(regionalVariants.map(region=>region.id))('loads complete authored %s help/history offline without mutating other languages',async id=>{
   const releaseFile=JSON.parse(readFileSync('public/releases.json','utf8'));
   vi.stubGlobal('fetch',async(url:string)=>{
     expect(url).toBe('./releases.json');

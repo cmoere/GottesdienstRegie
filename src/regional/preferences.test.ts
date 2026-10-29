@@ -17,10 +17,9 @@ describe('regional interface preference', () => {
     expect(previous).not.toHaveProperty('germanRegion');
   });
 
-  it('accepts the released15 and falls back safely for deferred or malformed saved selections', () => {
-    const released=["bavarian-upper","bavarian-lower","upper-palatinate","east-franconian","swabian","baden-alemannic","south-baden-alemannic","palatine","rhine-hessian","south-hessian","cologne","ruhr","hamburg","berlin","bielefeld-ravensberg"];
+  it('accepts all31 stable IDs and falls back safely for malformed saved selections', () => {
     for (const region of regionalVariants) {
-      const expected=released.includes(region.id)?region.id:null;
+      const expected=region.id;
       expect(migratePreferencesForV84({germanRegion:region.id})).toMatchObject({germanRegion:expected});
       usePreferences.getState().setGermanRegion(region.id);
       expect(usePreferences.getState().germanRegion).toBe(expected);

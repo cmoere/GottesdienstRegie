@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { DeviceSettingsRepository } from './DeviceSettingsRepository';
 import { createRegionalSettingsAccess } from './regionalSettings';
 import { normalizeRegionalSelection, validateRegionalSelection } from '../shared/regional/selection';
+import {regionalVariants} from '../shared/regional/catalog';
 
 const directories:string[]=[];
 afterEach(async()=>{for(const directory of directories.splice(0))await rm(directory,{recursive:true,force:true})});
@@ -20,10 +21,13 @@ describe('regional selection shared contract',()=>{
   it('accepts valid selections but rejects foreign fields, invalid IDs and inherited payload fields',()=>{
     expect(validateRegionalSelection({language:'de',germanRegion:'bielefeld-ravensberg'}))
       .toEqual({language:'de',germanRegion:'bielefeld-ravensberg'});
-    expect(normalizeRegionalSelection({language:'de',germanRegion:'central-hessian'}))
-      .toEqual({language:'de',germanRegion:null});
+    for(const {id}of regionalVariants){
+      const selection={language:'de',germanRegion:id};
+      expect(normalizeRegionalSelection(selection)).toEqual(selection);
+      expect(validateRegionalSelection(selection)).toEqual(selection);
+    }
     for(const value of [null,[],{language:'de'}, {language:'de',germanRegion:'de-DE'},
-      {language:'de',germanRegion:'central-hessian'},
+      {language:'de',germanRegion:'unregistered-hessian'},
       {language:'invalid',germanRegion:null}, {language:'de',germanRegion:null,path:'C:/outside'},
       Object.create({language:'de',germanRegion:'ruhr'})]){
       expect(()=>validateRegionalSelection(value)).toThrow();

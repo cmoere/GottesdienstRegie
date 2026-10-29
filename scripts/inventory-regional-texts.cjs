@@ -7,7 +7,7 @@ const { createHash } = require('node:crypto');
 const dictionaryNames = new Set(['en','nl','da','no','sv','fi','fr','it','es','uk','ru','tr','ar','pl','ptBR','gsw']);
 const technicalAttributes = new Set(['className','id','key','ref','type','name','value','src','href','role','style','target','rel','data-testid']);
 const visibleAttributes = new Set(['title','placeholder','aria-label','alt','label']);
-const assembledHelpDataModules=new Set(['src/help/base.ts','src/help/english.ts','src/help/legacyGerman.ts','src/help/localesWest.ts','src/help/enhancementsEnglish.ts','src/help/enhancementsGerman.ts']);
+const assembledHelpDataModules=new Set(['src/help/base.ts','src/help/english.ts','src/help/legacyGerman.ts','src/help/localesWest.ts','src/help/enhancementsEnglish.ts','src/help/enhancementsGerman.ts','src/help/v91.ts','src/help/v92.ts']);
 
 function applyReviewedTechnicalFile(rows,filename,source,reviews){
   const review=reviews[filename];
@@ -28,21 +28,54 @@ function applyReviewedSourceEntries(rows,reviews={}){
   });
 }
 
-function scanOperatorSource(filename, source) {
+function scanOperatorSource(filename, source, options={}) {
   const file = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true,
     filename.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
   const rows = [];
   const duplicates = new Map();
+  const importedOperatorHook=file.statements.some(node=>ts.isImportDeclaration(node)
+    &&ts.isStringLiteral(node.moduleSpecifier)&&/^(?:\.\.\/|\.\/)+i18n$/.test(node.moduleSpecifier.text)
+    &&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)
+    &&node.importClause.namedBindings.elements.some(entry=>entry.name.text==='useI18n'&&!entry.propertyName));
+  function boundOperatorCopy(node){
+    if(!importedOperatorHook)return false;
+    for(let parent=node.parent;parent;parent=parent.parent){
+      if(!ts.isFunctionLike(parent))continue;
+      if(parent.parameters.some(parameter=>ts.isIdentifier(parameter.name)&&parameter.name.text==='tx'))return false;
+      if(!parent.body||!ts.isBlock(parent.body))continue;
+      for(const statement of parent.body.statements){
+        if(!ts.isVariableStatement(statement))continue;
+        for(const declaration of statement.declarationList.declarations){
+          if(ts.isIdentifier(declaration.name)&&declaration.name.text==='tx')return false;
+          if(ts.isObjectBindingPattern(declaration.name)&&declaration.name.elements.some(entry=>entry.name.getText(file)==='tx')){
+            return Boolean(declaration.initializer&&ts.isCallExpression(declaration.initializer)
+              &&ts.isIdentifier(declaration.initializer.expression)&&declaration.initializer.expression.text==='useI18n');
+          }
+        }
+      }
+    }
+    return false;
+  }
   function add(node, text, context, status = 'review-required', key) {
     text = text.replace(/\r\n/g, '\n').trim();
     if (!text || !/\p{L}/u.test(text)) return;
     const digest = createHash('sha256').update(`${filename}\0${context}\0${text}`).digest('hex').slice(0, 20);
     const ordinal = (duplicates.get(digest) ?? 0) + 1;
     duplicates.set(digest, ordinal);
-    rows.push({ key:key ?? `source.${digest}.${ordinal}`, text, source:filename,
-      line:file.getLineAndCharacterOfPosition(node.getStart(file)).line + 1, context, status });
+    const row={ key:key ?? `source.${digest}.${ordinal}`, text, source:filename,
+      line:file.getLineAndCharacterOfPosition(node.getStart(file)).line + 1, context, status };
+    rows.push(row);return row;
   }
   function visit(node) {
+    if(ts.isStringLiteral(node)&&ts.isCallExpression(node.parent)&&node.parent.arguments[0]===node
+      &&ts.isIdentifier(node.parent.expression)&&node.parent.expression.text==='tx'
+      &&Object.hasOwn(options.operatorCopyResources??{},node.text)&&boundOperatorCopy(node)){
+      const resourceKey=options.operatorCopyResources[node.text];
+      const row=add(node,node.text,'operator-copy-resource','excluded');
+      if(row){row.resourceKey=resourceKey;row.exclusionReason=`Explicit operator-copy binding resolves canonical resource ${resourceKey}; locale coverage is validated against that resource.`;
+        row.technicalReviewHash=createHash('sha256').update(JSON.stringify({resourceKey,text:node.text})).digest('hex')}
+      return;
+    }
     if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && dictionaryNames.has(node.name.text)) return;
     if(ts.isPropertyAssignment(node)&&ts.isObjectLiteralExpression(node.parent)){
       const propertyName=node.name.getText(file).replace(/^['"]|['"]$/g,'');
@@ -110,6 +143,10 @@ function inventorySourceFingerprint(entries){
 
 function generateInventory(root) {
   const entries = [];
+  const {getGermanDocumentationSource,loadLocalDataModule}=require('./export-regional-corpus.cjs');
+  const canonical=loadLocalDataModule(root,'src/i18nBase.ts').germanBaseTemplates;
+  const operatorCopyResources={};
+  for(const [key,text]of Object.entries(canonical))if(!Object.hasOwn(operatorCopyResources,text))operatorCopyResources[text]=`ui.${key}`;
   const classification=JSON.parse(fs.readFileSync(path.join(root,'scripts/regional-source-classification.json'),'utf8'));
   const reviews=classification.reviewedTechnicalFiles;
   function walk(directory) {
@@ -121,7 +158,7 @@ function generateInventory(root) {
       // Imported article data is inventoried separately; help UI must still be scanned.
       if (assembledHelpDataModules.has(relative)||relative.startsWith('src/help/enhancements/')) continue;
       const source=fs.readFileSync(absolute,'utf8');
-      entries.push(...applyReviewedTechnicalFile(scanOperatorSource(relative,source),relative,source,reviews));
+      entries.push(...applyReviewedTechnicalFile(scanOperatorSource(relative,source,{operatorCopyResources}),relative,source,reviews));
     }
   }
   walk(path.join(root,'src'));
@@ -129,14 +166,19 @@ function generateInventory(root) {
   const releases = JSON.parse(fs.readFileSync(path.join(root,'public/releases.json'),'utf8'));
   for (const row of collectGermanResources(releases)) entries.push({ ...row, key:`release.${row.key}`,
     source:'public/releases.json', context:'release-history', status:'app-owned' });
-  const {getGermanDocumentationSource,loadLocalDataModule}=require('./export-regional-corpus.cjs');
   const documentation=getGermanDocumentationSource(root);
+  const operatorSourceTemplates=JSON.parse(fs.readFileSync(path.join(root,'shared/regional/operatorSourceTemplates.json'),'utf8'));
+  for(const [key,text]of Object.entries(operatorSourceTemplates))entries.push({key:`ui.${key}`,text,
+    source:'shared/regional/operatorSourceTemplates.json',context:'operator-source',status:'app-owned'});
   const {nativeBaseTemplates}=loadLocalDataModule(root,'shared/regional/nativeBase.ts');
   const {regionalControlBaseTemplates}=loadLocalDataModule(root,'shared/regional/interfaceBaseExtras.ts');
   const {announcementControlGermanTemplates}=loadLocalDataModule(root,'shared/regional/announcementControlTemplates.ts');
   const {shapeControlGermanTemplates}=loadLocalDataModule(root,'shared/regional/shapeControlTemplates.ts');
   const {radioControlGermanTemplates}=loadLocalDataModule(root,'shared/regional/radioControlTemplates.ts');
   const {powerPointGermanTemplates}=loadLocalDataModule(root,'shared/regional/powerPointTemplates.ts');
+  const {operatorShellGermanTemplates}=loadLocalDataModule(root,'shared/regional/operatorShellTemplates.ts');
+  for(const [key,text] of Object.entries(operatorShellGermanTemplates))entries.push({key:`ui.${key}`,text,
+    source:'shared/regional/operatorShellTemplates.ts',context:'regional-controls',status:'app-owned'});
   for(const [key,text] of Object.entries(powerPointGermanTemplates))entries.push({key:`ui.${key}`,text,
     source:'shared/regional/powerPointTemplates.ts',context:'regional-controls',status:'app-owned'});
   for(const [key,text] of Object.entries(radioControlGermanTemplates))entries.push({key:`ui.${key}`,text,

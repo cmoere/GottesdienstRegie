@@ -1,0 +1,161 @@
+/* Shared operator design. Deliberately no body, .slide, .output, canvas, video,
+   iframe or watermark selectors: visitor content keeps its authored design. */
+:root {
+  --operator-space-1:4px;
+  --operator-space-2:8px;
+  --operator-space-3:12px;
+  --operator-space-4:16px;
+  --operator-space-6:24px;
+  --operator-radius-control:7px;
+  --operator-radius-panel:12px;
+  --operator-accent:#608f9a;
+  --operator-positive:#699f3e;
+  --operator-neutral:#b6bec3;
+  --operator-surface:#292d32;
+  --operator-sidebar:#24282d;
+  --operator-field:#343a40;
+  --operator-text:#f4f5f6;
+  --operator-secondary:#bdc5cb;
+  --operator-divider:#485058;
+  --operator-selection:#3a535b;
+  --operator-shadow:0 18px 56px #0005;
+}
+:root[data-theme=light] {
+  --operator-surface:#fafbfc;
+  --operator-sidebar:#edf0f2;
+  --operator-field:#fff;
+  --operator-text:#20292f;
+  --operator-secondary:#52616c;
+  --operator-divider:#c8d0d5;
+  --operator-selection:#dce8eb;
+  --operator-shadow:0 18px 56px #18252b24;
+}
+
+/* Named rows preserve the main workspace when a contextual toolbar is absent.
+   Empty auto rows consume no space in preview, original and protected modes. */
+.app.production-app:is(.mode-edit,.mode-preview) {
+  grid-template-areas:"menu" "commands" "outputs" "format" "notice" "workspace" "audio" "timeline" "status";
+  grid-template-rows:auto auto auto auto auto minmax(0,1fr) auto auto auto!important;
+  grid-template-columns:minmax(0,1fr);
+}
+.production-app>.menubar{grid-area:menu;min-height:32px}
+.production-app>.toolbar{grid-area:commands;min-height:56px!important;height:auto!important;gap:16px;padding:8px 16px;background:var(--operator-surface);color:var(--operator-text)}
+.production-app>.output-tabs{grid-area:outputs;min-height:34px}
+.production-app>.format-toolbar{grid-area:format;min-height:40px;align-items:center;gap:6px}
+.production-app>.main{grid-area:workspace;min-height:0;overflow:hidden}
+.production-app>.capability-notice{grid-area:notice}
+.production-app>.background-audio-controller{grid-area:audio}
+.production-app>.production-timeline{grid-area:timeline;min-height:28px}
+.production-app>.status{grid-area:status;min-height:25px}
+.production-app>.toolbar>div:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.production-app>.toolbar>div:first-child>b{font-size:15px;font-weight:600}
+.production-app>.toolbar>div:first-child>span{font-size:12px;color:var(--operator-secondary)}
+
+/* Explicit control surfaces cover all operator windows, including standalone
+   media/help dialogs. Nested preview content receives none of these selectors. */
+:is(.menubar,.toolbar,.format-toolbar,.service-order,.context-editor,.preview-mode-toolbar,.settings-modal,.cloud-media-browser,.help-dialog,.menu-popup,.modal,.production-timeline) button {
+  border-radius:var(--operator-radius-control)!important;
+  text-transform:none;
+  letter-spacing:normal;
+}
+:is(.menubar,.toolbar,.format-toolbar,.service-order,.context-editor,.preview-mode-toolbar,.settings-modal,.cloud-media-browser,.help-dialog,.menu-popup,.modal,.production-timeline) :is(button,input,textarea,select):focus-visible {
+  outline:3px solid var(--operator-accent);
+  outline-offset:2px;
+}
+:is(.context-editor,.settings-modal,.cloud-media-browser,.help-dialog,.modal) :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),select,textarea) {
+  border:1px solid var(--operator-divider);
+  border-radius:var(--operator-radius-control)!important;
+  background:var(--operator-field);
+  color:var(--operator-text);
+  min-height:32px;
+  padding:6px 10px;
+}
+:is(.settings-modal,.cloud-media-browser,.help-dialog,.modal) :is(input[type=checkbox],input[type=radio],input[type=range]){accent-color:var(--operator-accent)}
+:is(.toolbar,.format-toolbar,.preview-mode-toolbar) button{min-height:30px;padding-inline:10px}
+.production-app .live-session-controls{gap:8px;flex-shrink:0}
+.production-app .live-session-controls>button{min-height:34px;padding:7px 12px;font-size:12px;font-weight:600;white-space:nowrap}
+.production-app .onair:not(:disabled){border:1px solid var(--operator-accent);color:var(--operator-text)}
+.production-app .onair.live{color:#fff;background:#973b3d;border-color:#bd5658}
+.production-app .mode-switch{background:var(--operator-sidebar);border:1px solid var(--operator-divider);border-radius:9px;padding:3px;gap:4px}
+.production-app .mode-switch>button:not(.mode-toggle){font-size:12px;min-height:30px;color:var(--operator-secondary);padding:5px 10px}
+.production-app .mode-switch>button.active{background:var(--operator-field);color:var(--operator-text);box-shadow:0 1px 3px #0002}
+
+.production-app .service-order{background:var(--operator-sidebar);color:var(--operator-text)}
+.production-app .service-sidebar-shell>.service{background:var(--operator-sidebar);color:var(--operator-text)}
+.production-app .service-sidebar-shell .service-item{border-radius:7px;margin:2px 5px;width:calc(100% - 10px);min-height:40px}
+.production-app .service-sidebar-shell .service-item.active{background:var(--operator-selection);color:var(--operator-text)}
+.production-app .service-sidebar-shell .service-item:focus-visible{outline:3px solid var(--operator-accent);outline-offset:-3px}
+.production-app .service-sidebar-shell .section-label{font-size:11px;letter-spacing:normal;color:var(--operator-secondary)}
+.production-app .service-order>header{padding:16px 12px}
+.production-app .context-editor{background:var(--operator-surface);color:var(--operator-text)}
+.production-app .context-editor>header{padding:12px 16px;border-bottom:1px solid var(--operator-divider)}
+.production-app .preview-mode-toolbar{background:var(--operator-surface);border-color:var(--operator-divider);padding:8px 12px;gap:8px}
+.production-app .quick-screens-panel>header,.production-app .preview-right>header{font-size:12px;font-weight:600;letter-spacing:normal;color:var(--operator-secondary)}
+.production-app .production-timeline{background:var(--operator-sidebar);color:var(--operator-secondary);border-top-color:var(--operator-divider)}
+.production-app .timeline-toggle{min-height:28px;font-size:11px;letter-spacing:normal}
+
+.modal-backdrop{backdrop-filter:none;background:#10191f66}
+:is(.modal,.help-dialog){border:1px solid var(--operator-divider);border-radius:var(--operator-radius-panel)!important;box-shadow:var(--operator-shadow);background:var(--operator-surface);color:var(--operator-text);overflow:hidden}
+:is(.modal,.help-dialog)>header{background:var(--operator-surface);border-bottom:1px solid var(--operator-divider);padding-inline:20px}
+:is(.modal,.help-dialog)>header h2{font-size:18px;font-weight:600;letter-spacing:normal}
+:is(.modal,.help-dialog)>header>button{min-width:32px;min-height:32px}
+:is(.modal,.help-dialog,.cloud-media-browser,.context-editor,.login-panel,.remote-center,.advertising-browser) button.primary:not(:disabled){background:var(--operator-positive);color:#142014;border:1px solid transparent;font-weight:600}
+:is(.modal,.confirm-dialog,.remote-qr-dialog)>footer{gap:8px;padding:12px 20px;border-top:1px solid var(--operator-divider);background:var(--operator-surface)}
+:is(.modal,.confirm-dialog,.remote-qr-dialog)>footer button{min-height:34px;padding:7px 14px}
+.settings-modal{background:var(--operator-surface)!important}
+.settings-modal>header{background:var(--operator-surface)!important}
+.settings-modal>.modal-body{grid-template-columns:220px minmax(0,1fr)!important;background:var(--operator-surface)!important}
+.settings-modal>.modal-body>nav{background:var(--operator-sidebar)!important;padding:12px 8px!important}
+.settings-modal .settings-nav-group>button{margin-block:2px;min-height:32px;padding:7px 10px;text-align:start;color:var(--operator-secondary);font-size:13px}
+.settings-modal .settings-nav-group>button.active{background:var(--operator-selection);color:var(--operator-text);font-weight:600}
+.settings-modal .settings-nav-group-toggle{font-size:11px!important;color:var(--operator-secondary);letter-spacing:normal}
+.settings-modal .settings-content{background:var(--operator-surface)!important;padding:24px!important;scroll-padding:24px}
+.settings-modal .settings-content h3{font-size:22px;font-weight:600;letter-spacing:normal;margin-top:0}
+.settings-modal .settings-group{padding:16px;margin-block:16px;border:1px solid var(--operator-divider);border-radius:10px;background:var(--operator-field)}
+.settings-modal .settings-content p{line-height:1.6;color:var(--operator-secondary)}
+.settings-modal .settings-content label{line-height:1.45}
+.settings-modal .settings-content button{min-height:30px}
+
+.cloud-media-browser{background:var(--operator-surface);color:var(--operator-text)}
+.cloud-media-browser .media-window-header{padding:16px 20px;background:var(--operator-surface);border-bottom-color:var(--operator-divider)}
+.cloud-media-browser .media-window-header h1{font-size:20px;font-weight:600;letter-spacing:normal}
+.cloud-media-browser .media-commandbar{padding:12px 20px;gap:12px;background:var(--operator-surface)}
+.cloud-media-browser .media-navigation{background:var(--operator-sidebar);padding:12px 8px;border-color:var(--operator-divider)}
+.cloud-media-browser .media-navigation button{min-height:34px;margin-block:2px;padding:8px 12px;font-size:13px;text-align:start}
+.cloud-media-browser .media-navigation button.active{background:var(--operator-selection);color:var(--operator-text)}
+.cloud-media-browser .media-content{padding:20px}
+.cloud-media-browser .media-tabs{gap:4px;padding:4px;border-radius:9px;background:var(--operator-sidebar)}
+.cloud-media-browser .media-tabs button{min-height:32px;padding:7px 12px}
+.cloud-media-browser .media-tabs button.active{border-bottom-color:var(--operator-accent);color:var(--operator-text)}
+.cloud-media-browser .primary:not(:disabled){background:var(--operator-positive)!important;border-color:var(--operator-positive)!important;color:#142014}
+.help-dialog .help-layout nav{background:var(--operator-sidebar);padding:12px 8px;border-color:var(--operator-divider)}
+.help-dialog .help-layout nav button{padding:8px 10px;border-radius:7px;line-height:1.4}
+.help-dialog .help-layout nav button.active{background:var(--operator-selection);color:var(--operator-text)}
+.help-dialog .help-layout article{padding:24px 28px;background:var(--operator-surface)}
+.help-dialog .help-layout article p{font-size:14px;line-height:1.7;color:var(--operator-secondary)}
+.menu-popup{border-radius:10px;border-color:var(--operator-divider);padding:6px;background:var(--operator-surface);color:var(--operator-text);box-shadow:var(--operator-shadow)}
+.menu-popup>button{min-height:30px;padding:7px 10px}
+
+:is(.login-panel,.confirm-dialog,.remote-qr-dialog,.weather-warning-confirm,.background-audio-panel,.assigned-audio-popover){
+  border-radius:var(--operator-radius-panel)!important;
+  border:1px solid var(--operator-divider);
+  background:var(--operator-surface);
+  color:var(--operator-text);
+  box-shadow:var(--operator-shadow);
+}
+:is(.login-panel,.confirm-dialog,.remote-center,.remote-qr-dialog,.advertising-browser,.background-audio-panel,.assigned-audio-popover) :is(button,input,select,textarea){border-radius:var(--operator-radius-control)!important}
+:is(.login-panel,.confirm-dialog,.remote-center,.remote-qr-dialog,.advertising-browser,.background-audio-panel,.assigned-audio-popover) :is(button,input,select,textarea):focus-visible{outline:3px solid var(--operator-accent);outline-offset:2px}
+.remote-center,.advertising-browser{color:var(--operator-text);background:var(--operator-surface)}
+
+@media(max-width:1100px){
+  .production-app>.toolbar{gap:8px;padding-inline:10px;flex-wrap:wrap}
+  .production-app .live-session-controls>button{padding-inline:8px}
+  .settings-modal>.modal-body{grid-template-columns:180px minmax(0,1fr)!important}
+  .settings-modal .settings-content{padding:16px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  :is(.menubar,.toolbar,.format-toolbar,.service-order,.context-editor,.settings-modal,.cloud-media-browser,.help-dialog,.menu-popup,.modal) :is(button,input,select,textarea){transition:none;scroll-behavior:auto}
+}
+@media(forced-colors:active){
+  :is(.settings-modal,.cloud-media-browser,.help-dialog,.modal) button.active{outline:2px solid Highlight}
+}

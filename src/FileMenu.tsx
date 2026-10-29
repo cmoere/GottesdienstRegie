@@ -1,3 +1,4 @@
+import {useI18n} from './i18n';
 import {
   useEffect,
   useMemo,
@@ -323,6 +324,7 @@ function NewPresentationDialog({
   onDeleteTemplate: (id: string) => void;
   creatorName?: string;
 }) {
+  const {tx}=useI18n();
   const date = new Date().toISOString().slice(0, 10),
     locale = navigator.language || "de-DE";
   const [title, setTitle] = useState(() => defaultTitle(date, locale)),
@@ -390,15 +392,14 @@ function NewPresentationDialog({
         }}
       >
         <header>
-          <h2 id="new-presentation-title">NEUE PRÄSENTATION</h2>
-          <button type="button" onClick={close} title="Schließen">
+          <h2 id="new-presentation-title">{tx("NEUE PRÄSENTATION")}</h2>
+          <button type="button" onClick={close} title={tx("Schließen")}>
             <Icon name="close" />
           </button>
         </header>
         <main>
           <label>
-            Titel
-            <input
+            {tx("Titel")}<input
               autoFocus
               value={title}
               onChange={(event) => setTitle(event.target.value)}
@@ -407,8 +408,7 @@ function NewPresentationDialog({
           </label>
           <div className="file-form-grid">
             <label>
-              Datum
-              <input
+              {tx("Datum")}<input
                 type="date"
                 value={chosenDate}
                 onChange={(event) => {
@@ -422,8 +422,7 @@ function NewPresentationDialog({
               />
             </label>
             <label>
-              Servicezeit
-              <input
+              {tx("Servicezeit")}<input
                 type="time"
                 value={serviceTime}
                 onChange={(event) => setServiceTime(event.target.value)}
@@ -432,28 +431,26 @@ function NewPresentationDialog({
             </label>
           </div>
           <label>
-            Team
-            <select defaultValue="gottesdiensttechnik">
-              <option value="gottesdiensttechnik">Gottesdiensttechnik</option>
+            {tx("Team")}<select defaultValue="gottesdiensttechnik">
+              <option value="gottesdiensttechnik">{tx("Gottesdiensttechnik")}</option>
             </select>
           </label>
           <div className="file-template-choice">
             <label>
-              Vorlage
-              <select
+              {tx("VORLAGE")}<select
                 value={templateId}
                 onChange={(event) => setTemplateId(event.target.value)}
               >
-                <option value="standard">Standard</option>
-                <optgroup label="GottesdienstRegie Vorlagen">
+                <option value="standard">{tx("Standard")}</option>
+                <optgroup label={tx("GottesdienstRegie Vorlagen")}>
                   {builtInTemplates.map((entry) => (
                     <option key={entry.id} value={entry.id}>
-                      {entry.name}
+                      {tx(entry.name)}
                     </option>
                   ))}
                 </optgroup>
                 {templates.length > 0 && (
-                  <optgroup label="Eigene Vorlagen">
+                  <optgroup label={tx("Eigene Vorlagen")}>
                     {templates.map((entry) => (
                       <option key={entry.id} value={entry.id}>
                         {entry.name}
@@ -467,33 +464,31 @@ function NewPresentationDialog({
               <button
                 type="button"
                 className="danger"
-                title="Eigene Vorlage löschen"
+                title={tx("Eigene Vorlage löschen")}
                 onClick={() => {
                   if (
-                    confirm("Diese selbst angelegte Vorlage wirklich löschen?")
+                    confirm(tx("Diese selbst angelegte Vorlage wirklich löschen?"))
                   ) {
                     onDeleteTemplate(templateId);
                     setTemplateId("standard");
                   }
                 }}
               >
-                <Icon name="delete" /> LÖSCHEN
-              </button>
+                <Icon name="delete" /> {" "}{tx("Löschen")}</button>
             )}
           </div>
           <p>
-            {selectedBuiltIn?.description ??
+            {(selectedBuiltIn?tx(selectedBuiltIn.description):undefined) ??
               (selectedUser
-                ? "Der gespeicherte Ablauf wird als unabhängige neue Präsentation übernommen."
-                : "Es werden die Bereiche Vorprogramm, Warm-Up, Gottesdienst und Nachprogramm angelegt.")}
+                ? tx("Der gespeicherte Ablauf wird als unabhängige neue Präsentation übernommen.")
+                : tx("Es werden die Bereiche Vorprogramm, Warm-Up, Gottesdienst und Nachprogramm angelegt."))}
           </p>
         </main>
         <footer>
           <button type="button" onClick={close}>
-            ABBRECHEN
-          </button>
+            {tx("ABBRECHEN")}</button>
           <button className="primary" disabled={busy || !title.trim()}>
-            {busy ? "WIRD ERSTELLT …" : "ERSTELLEN"}
+            {busy ? tx("WIRD ERSTELLT …") : tx("ERSTELLEN")}
           </button>
         </footer>
       </form>
@@ -512,6 +507,7 @@ function PresentationPicker({
   close: () => void;
   opened: (document: PresentationDocument) => void;
 }) {
+  const {tx}=useI18n();
   const locale = navigator.language || "de-DE",
     [entries, setEntries] = useState<PresentationSummary[]>([]),
     [documents, setDocuments] = useState<Record<string, PresentationDocument>>(
@@ -644,9 +640,9 @@ function PresentationPicker({
       >
         <header>
           <h2 id="file-picker-title">
-            {mode === "open" ? "ÖFFNEN" : "DUPLIZIEREN"}
+            {mode === "open" ? tx("ÖFFNEN") : tx("Duplizieren")}
           </h2>
-          <button onClick={close} title="Schließen">
+          <button onClick={close} title={tx("Schließen")}>
             <Icon name="close" />
           </button>
         </header>
@@ -657,38 +653,36 @@ function PresentationPicker({
                 <Icon name="search" />
                 <input
                   autoFocus
-                  placeholder="Präsentationen durchsuchen …"
+                  placeholder={tx("Präsentationen durchsuchen …")}
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                 />
               </label>
               <select
-                aria-label="Sortieren nach"
+                aria-label={tx("Sortieren nach")}
                 value={sort}
                 onChange={(event) => setSort(event.target.value as SortMode)}
               >
-                <option value="recommended">Empfohlen</option>
-                <option value="recent-opened">Zuletzt geöffnet</option>
-                <option value="modified">Zuletzt geändert</option>
-                <option value="newest">Neueste zuerst</option>
-                <option value="oldest">Älteste zuerst</option>
-                <option value="az">Titel A–Z</option>
-                <option value="za">Titel Z–A</option>
+                <option value="recommended">{tx("Empfohlen")}</option>
+                <option value="recent-opened">{tx("Zuletzt geöffnet")}</option>
+                <option value="modified">{tx("Zuletzt geändert")}</option>
+                <option value="newest">{tx("Neueste zuerst")}</option>
+                <option value="oldest">{tx("Älteste zuerst")}</option>
+                <option value="az">{tx("Titel A–Z")}</option>
+                <option value="za">{tx("Titel Z–A")}</option>
               </select>
             </div>
             <main className="file-picker-list">
               {loading ? (
                 <div className="file-picker-state">
                   <span className="spinner" />
-                  Präsentationen werden geladen …
-                </div>
+                  {tx("Präsentationen werden geladen …")}</div>
               ) : error ? (
                 <div className="file-picker-state">
                   <Icon name="cloud_off" />
-                  <b>PRÄSENTATIONEN KONNTEN NICHT GELADEN WERDEN</b>
+                  <b>{tx("PRÄSENTATIONEN KONNTEN NICHT GELADEN WERDEN")}</b>
                   <button onClick={() => void refresh()}>
-                    ERNEUT VERSUCHEN
-                  </button>
+                    {tx("Erneut versuchen")}</button>
                 </div>
               ) : shown.length ? (
                 shown.map((entry) => (
@@ -702,8 +696,7 @@ function PresentationPicker({
                     <span>
                       <b>{entry.title}</b>
                       <small>
-                        {entry.itemCount} Elemente · {entry.slideCount} Folien ·
-                        geändert{" "}
+                        {entry.itemCount} {" "}{tx("Elemente ·")}{" "}{entry.slideCount} {" "}{tx("Folien · geändert")}{" "}
                         {new Date(entry.updatedAt).toLocaleString(locale)}
                       </small>
                     </span>
@@ -718,21 +711,20 @@ function PresentationPicker({
               ) : (
                 <div className="file-picker-state">
                   <Icon name="folder_open" />
-                  <b>KEINE PRÄSENTATIONEN</b>
+                  <b>{tx("KEINE PRÄSENTATIONEN")}</b>
                   <span>
-                    Du hast noch keine passende Präsentation erstellt.
-                  </span>
+                    {tx("Du hast noch keine passende Präsentation erstellt.")}</span>
                 </div>
               )}
             </main>
             <footer>
-              <button onClick={close}>ABBRECHEN</button>
+              <button onClick={close}>{tx("ABBRECHEN")}</button>
               <button
                 className="primary"
                 disabled={!selected || busy}
                 onClick={() => void act()}
               >
-                {mode === "open" ? "ÖFFNEN" : "WEITER"}
+                {mode === "open" ? tx("ÖFFNEN") : tx("WEITER")}
               </button>
             </footer>
           </>
@@ -744,10 +736,9 @@ function PresentationPicker({
               void duplicate();
             }}
           >
-            <h3>PRÄSENTATION DUPLIZIEREN</h3>
+            <h3>{tx("PRÄSENTATION DUPLIZIEREN")}</h3>
             <label>
-              Name
-              <input
+              {tx("Name")}<input
                 autoFocus
                 value={copyTitle}
                 onChange={(event) => setCopyTitle(event.target.value)}
@@ -755,8 +746,7 @@ function PresentationPicker({
               />
             </label>
             <label>
-              Datum
-              <input
+              {tx("Datum")}<input
                 type="date"
                 value={copyDate}
                 onChange={(event) => setCopyDate(event.target.value)}
@@ -768,7 +758,7 @@ function PresentationPicker({
                 checked={keepServiceTime}
                 onChange={(event) => setKeepServiceTime(event.target.checked)}
               />
-              <span>Servicezeit übernehmen</span>
+              <span>{tx("Servicezeit übernehmen")}</span>
             </label>
             <label className="file-check">
               <input
@@ -776,7 +766,7 @@ function PresentationPicker({
                 checked={keepMedia}
                 onChange={(event) => setKeepMedia(event.target.checked)}
               />
-              <span>Medienreferenzen übernehmen</span>
+              <span>{tx("Medienreferenzen übernehmen")}</span>
             </label>
             <label className="file-check">
               <input
@@ -784,21 +774,17 @@ function PresentationPicker({
                 checked={keepTargets}
                 onChange={(event) => setKeepTargets(event.target.checked)}
               />
-              <span>Target Start Times übernehmen</span>
+              <span>{tx("Target Start Times übernehmen")}</span>
             </label>
             <p>
-              Für die Kopie werden neue eindeutige IDs für Bereiche, Elemente,
-              Folien und Canvas-Elemente erzeugt.
-            </p>
+              {tx("Für die Kopie werden neue eindeutige IDs für Bereiche, Elemente, Folien und Canvas-Elemente erzeugt.")}</p>
             <footer>
               <button type="button" onClick={() => setStep("choose")}>
-                ZURÜCK
-              </button>
+                {tx("ZURÜCK")}</button>
               <button type="button" onClick={close}>
-                ABBRECHEN
-              </button>
+                {tx("ABBRECHEN")}</button>
               <button className="primary" disabled={busy || !copyTitle.trim()}>
-                {busy ? "WIRD DUPLIZIERT …" : "DUPLIZIEREN"}
+                {busy ? tx("WIRD DUPLIZIERT …") : tx("Duplizieren")}
               </button>
             </footer>
           </form>
@@ -822,6 +808,7 @@ export function FileMenu({
   onExit,
   creatorName,
 }: Props) {
+  const {tx}=useI18n();
   const trigger = useRef<HTMLButtonElement>(null),
     menu = useRef<HTMLDivElement>(null),
     hoverTimer = useRef<number | undefined>(undefined),
@@ -924,7 +911,7 @@ export function FileMenu({
     if (!onAir) return false;
     closeMenu();
     alert(
-      "Diese Aktion ist während ON AIR gesperrt, damit die laufende MAIN-Ausgabe unverändert bleibt. Beende zuerst ON AIR.",
+      tx("Diese Aktion ist während ON AIR gesperrt, damit die laufende MAIN-Ausgabe unverändert bleibt. Beende zuerst ON AIR."),
     );
     return true;
   }
@@ -961,7 +948,7 @@ export function FileMenu({
         currentId,
       )) as PresentationDocument | null,
       title = prompt(
-        "Neuer Name der Präsentation",
+        tx("Neuer Name der Präsentation"),
         currentTitle ?? current?.title ?? "",
       );
     if (!title?.trim() || title.trim() === (currentTitle ?? current?.title))
@@ -979,7 +966,7 @@ export function FileMenu({
     closeMenu();
     if (!currentId) return;
     const target = await window.desktop?.presentation.export(currentId);
-    if (target) alert(`Präsentation gesichert:\n${target}`);
+    if (target) alert(tx("Präsentation gesichert:\n{value1}",{value1:(target)}));
   }
   async function restore() {
     if (blockWhileLive()) return;
@@ -1010,7 +997,7 @@ export function FileMenu({
     ];
     try {
       await navigator.clipboard.writeText(lines.join("\n"));
-      alert("Die Ablaufliste wurde als Text in die Zwischenablage kopiert.");
+      alert(tx("Die Ablaufliste wurde als Text in die Zwischenablage kopiert."));
     } catch {
       alert(lines.join("\n"));
     }
@@ -1024,7 +1011,7 @@ export function FileMenu({
     )) as PresentationDocument | null;
     if (!document) return;
     const name = prompt(
-      "Name der neuen Ablaufvorlage",
+      tx("Name der neuen Ablaufvorlage"),
       `${document.title} – Vorlage`,
     )?.trim();
     if (!name) return;
@@ -1038,10 +1025,10 @@ export function FileMenu({
     try {
       writeTemplates(next);
       setTemplates(next);
-      alert(`Die Ablaufvorlage „${name}“ wurde gespeichert.`);
+      alert(tx("Die Ablaufvorlage „{value1}“ wurde gespeichert.",{value1:(name)}));
     } catch {
       alert(
-        "Die Vorlage ist zu groß für den lokalen Vorlagenspeicher. Entferne große eingebettete Medien und versuche es erneut.",
+        tx("Die Vorlage ist zu groß für den lokalen Vorlagenspeicher. Entferne große eingebettete Medien und versuche es erneut."),
       );
     }
   }
@@ -1055,7 +1042,7 @@ export function FileMenu({
       className={`file-flyout recent-flyout recent-${mode}-flyout`}
       role="menu"
     >
-      <h3>{mode === "open" ? "ZULETZT GEÖFFNET" : "ZULETZT DUPLIZIERT"}</h3>
+      <h3>{mode === "open" ? tx("Zuletzt geöffnet") : tx("ZULETZT DUPLIZIERT")}</h3>
       {recent.length ? (
         recent.map((entry) => (
           <button
@@ -1085,7 +1072,7 @@ export function FileMenu({
           </button>
         ))
       ) : (
-        <p>Keine zuletzt verwendeten Präsentationen.</p>
+        <p>{tx("Keine zuletzt verwendeten Präsentationen.")}</p>
       )}
     </div>
   );
@@ -1117,12 +1104,12 @@ export function FileMenu({
               onClick={() => setFlyout("new")}
             >
               <Icon name="note_add" />
-              <span>Neu</span>
+              <span>{tx("Neu")}</span>
               <Icon name="chevron_right" />
             </button>
             <button onClick={() => showDialog("open")}>
               <Icon name="folder_open" />
-              <span>Öffnen …</span>
+              <span>{tx("Öffnen …")}</span>
             </button>
             <button
               data-flyout="recent-open"
@@ -1130,12 +1117,12 @@ export function FileMenu({
               onClick={() => setFlyout("recent-open")}
             >
               <Icon name="history" />
-              <span>Zuletzt öffnen</span>
+              <span>{tx("Zuletzt öffnen")}</span>
               <Icon name="chevron_right" />
             </button>
             <button onClick={() => showDialog("duplicate")}>
               <Icon name="content_copy" />
-              <span>Duplizieren …</span>
+              <span>{tx("Duplizieren …")}</span>
             </button>
             <button
               data-flyout="recent-duplicate"
@@ -1143,7 +1130,7 @@ export function FileMenu({
               onClick={() => setFlyout("recent-duplicate")}
             >
               <Icon name="history_toggle_off" />
-              <span>Zuletzt duplizieren</span>
+              <span>{tx("Zuletzt duplizieren")}</span>
               <Icon name="chevron_right" />
             </button>
             <button
@@ -1152,7 +1139,7 @@ export function FileMenu({
               onClick={() => void renameCurrent()}
             >
               <Icon name="drive_file_rename_outline" />
-              <span>Umbenennen …</span>
+              <span>{tx("Umbenennen …")}</span>
             </button>
             <button
               disabled={!currentId}
@@ -1162,7 +1149,7 @@ export function FileMenu({
               }}
             >
               <Icon name="cloud_done" />
-              <span>Speichern & synchronisieren</span>
+              <span>{tx("Speichern & synchronisieren")}</span>
               <kbd>Strg+S</kbd>
             </button>
             <button
@@ -1172,16 +1159,16 @@ export function FileMenu({
               onClick={() => setFlyout("import")}
             >
               <Icon name="upload_file" />
-              <span>Präsentation importieren</span>
+              <span>{tx("Präsentation importieren")}</span>
               <Icon name="chevron_right" />
             </button>
             <button disabled={!currentId} onClick={() => void backup()}>
               <Icon name="archive" />
-              <span>Präsentation sichern …</span>
+              <span>{tx("Präsentation sichern …")}</span>
             </button>
             <button onClick={() => void restore()}>
               <Icon name="settings_backup_restore" />
-              <span>Präsentation wiederherstellen …</span>
+              <span>{tx("Präsentation wiederherstellen …")}</span>
             </button>
             <button
               className="separator"
@@ -1192,16 +1179,16 @@ export function FileMenu({
               }}
             >
               <Icon name="print" />
-              <span>Präsentation drucken</span>
+              <span>{tx("Präsentation drucken")}</span>
               <kbd>Strg+P</kbd>
             </button>
             <button disabled={!currentId} onClick={() => void share()}>
               <Icon name="share" />
-              <span>Ablaufliste teilen</span>
+              <span>{tx("Ablaufliste teilen")}</span>
             </button>
             <button disabled={!currentId} onClick={() => void saveAsTemplate()}>
               <Icon name="bookmark_add" />
-              <span>Ablauf als Vorlage speichern …</span>
+              <span>{tx("Ablauf als Vorlage speichern …")}</span>
             </button>
             <button
               className="separator"
@@ -1211,7 +1198,7 @@ export function FileMenu({
               }}
             >
               <Icon name="power_settings_new" />
-              <span>Beenden</span>
+              <span>{tx("Beenden")}</span>
               <kbd>Alt+F4</kbd>
             </button>
             {flyout === "new" && (
@@ -1222,17 +1209,15 @@ export function FileMenu({
                   hoverTimer.current && window.clearTimeout(hoverTimer.current)
                 }
               >
-                <h3>PRÄSENTATION</h3>
+                <h3>{tx("Präsentation")}</h3>
                 <button onClick={() => showDialog("new")}>
                   <span className="file-template-icon">
                     <Icon name="co_present" />
                   </span>
                   <span>
-                    <b>Präsentation</b>
+                    <b>{tx("Präsentation")}</b>
                     <small>
-                      Erstelle eine neue Gottesdienst-Präsentation mit eigenen
-                      Elementen, Medien und Abläufen.
-                    </small>
+                      {tx("Erstelle eine neue Gottesdienst-Präsentation mit eigenen Elementen, Medien und Abläufen.")}</small>
                   </span>
                 </button>
               </div>
@@ -1241,35 +1226,29 @@ export function FileMenu({
             {flyout === "recent-duplicate" && recentFlyout("duplicate")}
             {flyout === "import" && (
               <div className="file-flyout import-flyout" role="menu">
-                <h3>PRÄSENTATIONEN</h3>
+                <h3>{tx("Präsentationen")}</h3>
                 <button onClick={() => void importPresentation()}>
                   <Icon name="slideshow" />
                   <span>
-                    <b>PowerPoint / Keynote / OneNote / OpenDocument …</b>
+                    <b>{tx("PowerPoint / Keynote / OneNote / OpenDocument …")}</b>
                     <small>
-                      Importiert .pptx und .odp als Folien sowie die
-                      eingebettete Vorschau aus .key.
-                    </small>
+                      {tx("Importiert .pptx und .odp als Folien sowie die eingebettete Vorschau aus .key.")}</small>
                   </span>
                 </button>
                 <button onClick={() => void importPresentation()}>
                   <Icon name="description" />
                   <span>
-                    <b>Text / Markdown …</b>
+                    <b>{tx("Text / Markdown …")}</b>
                     <small>
-                      Erstellt aus Absätzen in .txt und .md automatisch einzelne
-                      Folien.
-                    </small>
+                      {tx("Erstellt aus Absätzen in .txt und .md automatisch einzelne Folien.")}</small>
                   </span>
                 </button>
                 <button onClick={() => void importPresentation()}>
                   <Icon name="data_object" />
                   <span>
-                    <b>GottesdienstRegie …</b>
+                    <b>{tx("GottesdienstRegie …")}</b>
                     <small>
-                      Importiert .json, .grpresentation und .grbackup als neue
-                      Präsentation.
-                    </small>
+                      {tx("Importiert .json, .grpresentation und .grbackup als neue Präsentation.")}</small>
                   </span>
                 </button>
               </div>
@@ -1307,16 +1286,13 @@ export function FileMenu({
               aria-modal="true"
             >
               <Icon name="cast_connected" />
-              <h2>LIVE-AUSGABE AKTIV</h2>
+              <h2>{tx("LIVE-AUSGABE AKTIV")}</h2>
               <p>
-                GottesdienstRegie ist derzeit ON AIR. Das Beenden würde die
-                Live-Ausgabe unterbrechen.
-              </p>
+                {tx("GottesdienstRegie ist derzeit ON AIR. Das Beenden würde die Live-Ausgabe unterbrechen.")}</p>
               <div>
-                <button onClick={closeDialog}>ABBRECHEN</button>
+                <button onClick={closeDialog}>{tx("ABBRECHEN")}</button>
                 <button className="danger" onClick={() => void onExit()}>
-                  OFF AIR UND BEENDEN
-                </button>
+                  {tx("OFF AIR UND BEENDEN")}</button>
               </div>
             </div>
           </div>,

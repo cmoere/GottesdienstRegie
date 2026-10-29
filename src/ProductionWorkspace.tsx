@@ -1,3 +1,4 @@
+import {useI18n} from './i18n';
 import {
   useEffect,
   useMemo,
@@ -170,6 +171,7 @@ function TransitionControls({
   canEdit: boolean;
   onPreview: () => void;
 }) {
+  const {tx}=useI18n();
   const state = usePresentation(),
     override = slide.transitionOverride ?? null,
     value = override ?? itemTransitionDefault(item, state.transitionDefault),
@@ -187,11 +189,10 @@ function TransitionControls({
       <header>
         <div>
           <Icon name="animation" />
-          <b>ÜBERGANG</b>
+          <b>{tx("ÜBERGANG")}</b>
         </div>
         <button type="button" onClick={onPreview}>
-          <Icon name="play_arrow" /> VORSCHAU
-        </button>
+          <Icon name="play_arrow" /> {tx("VORSCHAU")}</button>
       </header>
       <label className="transition-scope">
         <input
@@ -204,12 +205,10 @@ function TransitionControls({
             })
           }
         />
-        <span>Für diese Folie überschreiben</span>
+        <span>{tx("Für diese Folie überschreiben")}</span>
       </label>
       <div className="transition-grid">
-        <label>
-          Effekt
-          <select
+        <label>{tx("Effekt")}<select
             disabled={!canEdit}
             value={value.type}
             onChange={(event) =>
@@ -220,14 +219,12 @@ function TransitionControls({
           >
             {Object.entries(transitionLabels).map(([key, label]) => (
               <option key={key} value={key}>
-                {label}
+                {tx(label)}
               </option>
             ))}
           </select>
         </label>
-        <label>
-          Dauer
-          <input
+        <label>{tx("Dauer")}<input
             disabled={!canEdit || value.type === "cut"}
             type="number"
             min="0.1"
@@ -243,14 +240,12 @@ function TransitionControls({
               })
             }
           />
-          <small>Sekunden</small>
+          <small>{tx("Sekunden")}</small>
         </label>
         {(["slide", "wipe", "push", "cube"] as TransitionType[]).includes(
           value.type,
         ) && (
-          <label>
-            Richtung
-            <select
+          <label>{tx("Richtung")}<select
               disabled={!canEdit}
               value={value.direction}
               onChange={(event) =>
@@ -259,16 +254,14 @@ function TransitionControls({
                 })
               }
             >
-              <option value="left">Nach links</option>
-              <option value="right">Nach rechts</option>
-              <option value="up">Nach oben</option>
-              <option value="down">Nach unten</option>
+              <option value="left">{tx("Nach links")}</option>
+              <option value="right">{tx("Nach rechts")}</option>
+              <option value="up">{tx("Nach oben")}</option>
+              <option value="down">{tx("Nach unten")}</option>
             </select>
           </label>
         )}
-        <label>
-          Bewegung
-          <select
+        <label>{tx("Bewegung")}<select
             disabled={!canEdit || value.type === "cut"}
             value={value.easing}
             onChange={(event) =>
@@ -277,11 +270,11 @@ function TransitionControls({
               })
             }
           >
-            <option value="standard">Standard</option>
-            <option value="linear">Linear</option>
-            <option value="ease-in">Sanft starten</option>
-            <option value="ease-out">Sanft enden</option>
-            <option value="ease-in-out">Sanft starten &amp; enden</option>
+            <option value="standard">{tx("Standard")}</option>
+            <option value="linear">{tx("Linear")}</option>
+            <option value="ease-in">{tx("Sanft starten")}</option>
+            <option value="ease-out">{tx("Sanft enden")}</option>
+            <option value="ease-in-out">{tx("Sanft starten & enden")}</option>
           </select>
         </label>
       </div>
@@ -296,19 +289,16 @@ function TransitionControls({
             })
           }
         />
-        <span>Beim Zurückschalten Richtung umkehren</span>
+        <span>{tx("Beim Zurückschalten Richtung umkehren")}</span>
       </label>
       <footer>
-        <span>
-          Gilt für: {override ? "nur diese Folie" : "dieses Ablauf-Element"}
+        <span>{tx("Gilt für:")} {override ? tx("nur diese Folie") : tx("dieses Ablauf-Element")}
         </span>
         {override && (
           <button
             type="button"
             onClick={() => state.updateSlide({ transitionOverride: null })}
-          >
-            AUF STANDARD ZURÜCKSETZEN
-          </button>
+          >{tx("AUF STANDARD ZURÜCKSETZEN")}</button>
         )}
       </footer>
     </section>
@@ -322,6 +312,7 @@ export function SongEditor({
   item: ServiceItem;
   canEdit: boolean;
 }) {
+  const {tx}=useI18n();
   const state = usePresentation();
   const [tab, setTab] = useState<
     "content" | "order" | "design" | "chords" | "stage" | "stream" | "metadata"
@@ -440,11 +431,10 @@ export function SongEditor({
     <div className="song-context">
       <header>
         <div>
-          <button type="button" onClick={() => setSearching((value) => !value)}>
-            SONG {searching ? "BEARBEITEN" : "SUCHEN / WECHSELN"}
+          <button type="button" onClick={() => setSearching((value) => !value)}>{tx("Song")} {searching ? tx("BEARBEITEN") : tx("SUCHEN / WECHSELN")}
           </button>
           <input
-            aria-label="Songtitel"
+            aria-label={tx("Songtitel")}
             disabled={!canEdit}
             value={item.title}
             onChange={(event) =>
@@ -453,9 +443,7 @@ export function SongEditor({
           />
           <small>{String(metadata.originalTitle ?? "")}</small>
         </div>
-        <label>
-          Arrangement
-          <select
+        <label>{tx("Arrangement")}<select
             disabled={!canEdit}
             value={String(metadata.arrangement ?? "Kein Arrangement")}
             onChange={(event) =>
@@ -468,19 +456,19 @@ export function SongEditor({
             {metadata.arrangement && (
               <option>{String(metadata.arrangement)}</option>
             )}
-            <option>Kein Arrangement</option>
+                <option value="Kein Arrangement">{tx("Kein Arrangement")}</option>
           </select>
         </label>
       </header>
       {searching && (
         <section className="song-search-panel">
           <input
-            aria-label="Song suchen"
-            placeholder="Bitte Songtitel eingeben"
+            aria-label={tx("Song suchen")}
+            placeholder={tx("Bitte Songtitel eingeben")}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
-          <strong>MEINE SONGS · AUS PRÄSENTATIONEN</strong>
+          <strong>{tx("MEINE SONGS · AUS PRÄSENTATIONEN")}</strong>
           <div>
             {[...state.items, ...savedSongs]
               .filter(
@@ -537,30 +525,25 @@ export function SongEditor({
                 </button>
               ))}
           </div>
-          <button onClick={() => setSearching(false)}>
-            EIGENEN SONG BEARBEITEN
-          </button>
+          <button onClick={() => setSearching(false)}>{tx("EIGENEN SONG BEARBEITEN")}</button>
         </section>
       )}
       <div className="song-status-row">
         <span className={adapted ? "song-adapted" : ""}>
           {adapted
-            ? "● Für diese Präsentation angepasst"
-            : "Präsentationsfassung"}
+            ? tx("● Für diese Präsentation angepasst")
+            : tx("Präsentationsfassung")}
         </span>
         {adapted && (
-          <button type="button" disabled={!canEdit} onClick={resetOverrides}>
-            PRÄSENTATIONSÄNDERUNGEN ZURÜCKSETZEN
-          </button>
+          <button type="button" disabled={!canEdit} onClick={resetOverrides}>{tx("PRÄSENTATIONSÄNDERUNGEN ZURÜCKSETZEN")}</button>
         )}
       </div>
       <div className="arrangement-head">
         <button type="button" onClick={() => setTab("order")}>
-          <Icon name="expand_more" /> ABLAUF BEARBEITEN
-        </button>
+          <Icon name="expand_more" /> {tx("ABLAUF BEARBEITEN")}</button>
         <div className="arrangement-actions">
           <button
-            title="Letzten Abschnitt wiederholen"
+            title={tx("Letzten Abschnitt wiederholen")}
             onClick={() =>
               commitSong({
                 ...structure,
@@ -575,7 +558,7 @@ export function SongEditor({
             <Icon name="content_copy" />
           </button>
           <button
-            title="Abschnitt hinzufügen"
+            title={tx("Abschnitt hinzufügen")}
             onClick={() => {
               const slide = structuredClone(item.slides[0]);
               slide.body = "";
@@ -604,7 +587,7 @@ export function SongEditor({
           </button>
           <button
             type="button"
-            title="Lange Lyrics automatisch auf Folien aufteilen"
+            title={tx("Lange Lyrics automatisch auf Folien aufteilen")}
             disabled={!canEdit}
             onClick={() => {
               const selectedSection = structure.sections.find((section) =>
@@ -620,7 +603,7 @@ export function SongEditor({
                 )
               ) {
                 window.alert(
-                  "Dieser Abschnitt enthält Übersetzungen. Bitte die zweisprachigen Texte mit FOLIENUMBRUCH manuell aufteilen, damit die Zuordnung erhalten bleibt.",
+                  tx("Dieser Abschnitt enthält Übersetzungen. Bitte die zweisprachigen Texte mit FOLIENUMBRUCH manuell aufteilen, damit die Zuordnung erhalten bleibt."),
                 );
                 return;
               }
@@ -642,9 +625,7 @@ export function SongEditor({
             <Icon name="splitscreen" />
           </button>
         </div>
-        <label>
-          Tonart
-          <select
+        <label>{tx("Tonart")}<select
             disabled={!canEdit}
             value={String(metadata.key ?? "–")}
             onChange={(event) =>
@@ -679,7 +660,7 @@ export function SongEditor({
           </select>
         </label>
       </div>
-      <div className="arrangement-sequence" aria-label="Arrangement">
+      <div className="arrangement-sequence" aria-label={tx("Arrangement")}>
         {structure.order.map((id, index) => (
           <button
             key={`${id}-${index}`}
@@ -710,7 +691,7 @@ export function SongEditor({
           </button>
         ))}
       </div>
-      <nav className="song-tabs" aria-label="Songbereiche">
+      <nav className="song-tabs" aria-label={tx("Songbereiche")}>
         {(
           [
             ["content", "INHALT"],
@@ -758,7 +739,7 @@ export function SongEditor({
                 </span>
                 <button
                   disabled={!canEdit || index === 0}
-                  aria-label="Nach links verschieben"
+                  aria-label={tx("Nach links verschieben")}
                   onClick={() => {
                     const order = [...structure.order];
                     [order[index - 1], order[index]] = [
@@ -772,7 +753,7 @@ export function SongEditor({
                 </button>
                 <button
                   disabled={!canEdit || structure.order.length === 1}
-                  aria-label="Aus Ablauf entfernen"
+                  aria-label={tx("Aus Ablauf entfernen")}
                   onClick={() =>
                     commitSong({
                       ...structure,
@@ -802,34 +783,25 @@ export function SongEditor({
             ))}
           </div>
           <small>
-            {item.slides.length} generierte Folien · Abschnitte ziehen oder mit
-            den Pfeilen verschieben.
-          </small>
-          <small>
-            Beispiel: V1 C V2 C B C C · Der Chorus wird einmal gespeichert und
-            kann mehrfach erscheinen.
-          </small>
+            {item.slides.length} {tx("generierte Folien · Abschnitte ziehen oder mit den Pfeilen verschieben.")}</small>
+          <small>{tx("Beispiel: V1 C V2 C B C C · Der Chorus wird einmal gespeichert und kann mehrfach erscheinen.")}</small>
         </section>
       )}
       {tab === "design" && (
         <section className="song-override-panel">
-          <label>
-            Lyrics-Darstellung
-            <select
+          <label>{tx("Lyrics-Darstellung")}<select
               disabled={!canEdit}
               value={String(metadata.lyricScrollingMode || "inherit")}
               onChange={(event) =>
                 changeMeta({ lyricScrollingMode: event.target.value })
               }
             >
-              <option value="inherit">Präsentationsstandard</option>
-              <option value="enabled">Lyric Scrolling</option>
-              <option value="disabled">Normale Slides</option>
+              <option value="inherit">{tx("Präsentationsstandard")}</option>
+              <option value="enabled">{tx("Lyric Scrolling")}</option>
+              <option value="disabled">{tx("Normale Slides")}</option>
             </select>
           </label>
-          <label>
-            Design-Vorlage
-            <button
+          <label>{tx("Design-Vorlage")}<button
               disabled={!canEdit}
               onClick={() =>
                 applyText({
@@ -841,13 +813,9 @@ export function SongEditor({
                   textGlow: "",
                 })
               }
-            >
-              Zentriert mit Schatten anwenden
-            </button>
+            >{tx("Zentriert mit Schatten anwenden")}</button>
           </label>
-          <label>
-            Schriftgröße
-            <input
+          <label>{tx("Schriftgröße")}<input
               type="number"
               min="24"
               max="160"
@@ -866,9 +834,7 @@ export function SongEditor({
               }
             />
           </label>
-          <label>
-            Texteffekt
-            <select
+          <label>{tx("Texteffekt")}<select
               disabled={!canEdit}
               defaultValue=""
               onChange={(event) =>
@@ -882,18 +848,14 @@ export function SongEditor({
                 })
               }
             >
-              <option value="" disabled>
-                Bitte Effekt wählen
-              </option>
-              <option>Kein Effekt</option>
-              <option>Schatten</option>
-              <option>Kontur</option>
-              <option>Glow</option>
+              <option value="" disabled>{tx("Bitte Effekt wählen")}</option>
+              <option value="Kein Effekt">{tx("Kein Effekt")}</option>
+              <option value="Schatten">{tx("Schatten")}</option>
+              <option value="Kontur">{tx("Kontur")}</option>
+              <option value="Glow">{tx("Glow")}</option>
             </select>
           </label>
-          <label>
-            Schriftart
-            <select
+          <label>{tx("Schriftart")}<select
               disabled={!canEdit}
               value={String(
                 structure.sections[0]?.slides[0]?.elements[0]?.properties
@@ -908,9 +870,7 @@ export function SongEditor({
               ))}
             </select>
           </label>
-          <label>
-            Textfarbe
-            <input
+          <label>{tx("Textfarbe")}<input
               type="color"
               disabled={!canEdit}
               value={String(
@@ -920,20 +880,16 @@ export function SongEditor({
               onChange={(event) => applyText({ color: event.target.value })}
             />
           </label>
-          <label>
-            Ausrichtung
-            <select
+          <label>{tx("Ausrichtung")}<select
               disabled={!canEdit}
               onChange={(event) => applyText({ align: event.target.value })}
             >
-              <option value="center">Zentriert</option>
-              <option value="left">Links</option>
-              <option value="right">Rechts</option>
+              <option value="center">{tx("Zentriert")}</option>
+              <option value="left">{tx("Links")}</option>
+              <option value="right">{tx("Rechts")}</option>
             </select>
           </label>
-          <label>
-            Hintergrundfarbe
-            <input
+          <label>{tx("Hintergrundfarbe")}<input
               type="color"
               disabled={!canEdit}
               value={structure.sections[0]?.slides[0]?.background || "#000000"}
@@ -952,30 +908,22 @@ export function SongEditor({
               }
             />
           </label>
-          <small>
-            Diese Designänderungen gelten nur für dieses Song-ServiceItem und
-            verändern die Songbibliothek nicht.
-          </small>
+          <small>{tx("Diese Designänderungen gelten nur für dieses Song-ServiceItem und verändern die Songbibliothek nicht.")}</small>
         </section>
       )}
       {tab === "chords" && (
         <section className="song-override-panel">
-          <label>
-            Akkorde in eckigen Klammern
-            <textarea
+          <label>{tx("Akkorde in eckigen Klammern")}<textarea
               disabled={!canEdit}
               rows={12}
-              placeholder="[G] … [C] …"
+              placeholder={tx("[G] … [C] …")}
               value={String(metadata.chords || "")}
               onChange={(event) =>
                 changeMeta({ chords: event.target.value, songAdjusted: true })
               }
             />
           </label>
-          <p>
-            Beim Tonartwechsel werden Akkorde und Basstöne in eckigen Klammern
-            transponiert. MAIN enthält weiterhin nur die Lyrics.
-          </p>
+          <p>{tx("Beim Tonartwechsel werden Akkorde und Basstöne in eckigen Klammern transponiert. MAIN enthält weiterhin nur die Lyrics.")}</p>
         </section>
       )}
       {tab === "stage" && (
@@ -988,9 +936,7 @@ export function SongEditor({
               onChange={(event) =>
                 changeMeta({ showChordsStage: event.target.checked })
               }
-            />{" "}
-            Akkorde auf STAGE anzeigen
-          </label>
+            />{" "}{tx("Akkorde auf STAGE anzeigen")}</label>
           <label>
             <input
               type="checkbox"
@@ -999,13 +945,8 @@ export function SongEditor({
               onChange={(event) =>
                 changeMeta({ stageCurrentNext: event.target.checked })
               }
-            />{" "}
-            Aktuelle und nächste Folie zeigen
-          </label>
-          <small>
-            MAIN bleibt beim Songtext; STAGE kann zusätzlich Akkorde und
-            Current/Next anzeigen.
-          </small>
+            />{" "}{tx("Aktuelle und nächste Folie zeigen")}</label>
+          <small>{tx("MAIN bleibt beim Songtext; STAGE kann zusätzlich Akkorde und Current/Next anzeigen.")}</small>
         </section>
       )}
       {tab === "stream" && (
@@ -1018,12 +959,8 @@ export function SongEditor({
               onChange={(event) =>
                 changeMeta({ livestreamLowerThird: event.target.checked })
               }
-            />{" "}
-            Livestream-Lower-Third aktivieren
-          </label>
-          <label>
-            Stream-Textzeilen
-            <input
+            />{" "}{tx("Livestream-Lower-Third aktivieren")}</label>
+          <label>{tx("Stream-Textzeilen")}<input
               type="number"
               min="1"
               max="4"
@@ -1039,10 +976,7 @@ export function SongEditor({
               }
             />
           </label>
-          <small>
-            Der Livestream erhält sein eigenes Layout und bleibt mit derselben
-            Songposition synchron.
-          </small>
+          <small>{tx("Der Livestream erhält sein eigenes Layout und bleibt mit derselben Songposition synchron.")}</small>
         </section>
       )}
       {tab === "content" && (
@@ -1065,14 +999,12 @@ export function SongEditor({
                       event.stopPropagation();
                       state.select(item.id, slide.id);
                     }}
-                  >
-                    ⚠ Text überschreitet die Folienfläche
-                  </button>
+                  >{tx("⚠ Text überschreitet die Folienfläche")}</button>
                 )}
                 <input
                   disabled={!canEdit}
                   value={section.label}
-                  aria-label={`Abschnitt ${index + 1}`}
+                  aria-label={tx("Abschnitt {value1}",{value1:String((index+1))})}
                   onChange={(event) => {
                     commitSong({
                       ...structure,
@@ -1153,9 +1085,7 @@ export function SongEditor({
                           ),
                         })
                       }
-                    >
-                      ÜBERSETZUNG HINZUFÜGEN
-                    </button>
+                    >{tx("ÜBERSETZUNG HINZUFÜGEN")}</button>
                   ) : (
                     <>
                       <button
@@ -1194,7 +1124,7 @@ export function SongEditor({
                             });
                           } catch (error) {
                             window.alert(
-                              `Lokale Übersetzung nicht verfügbar: ${error instanceof Error ? error.message : String(error)}`,
+                              tx("Lokale Übersetzung nicht verfügbar: {value1}",{value1:((error instanceof Error?error.message:String(error)))}),
                             );
                           } finally {
                             setTranslationBusy("");
@@ -1202,15 +1132,13 @@ export function SongEditor({
                         }}
                       >
                         {slide.translation.text
-                          ? "NEU ÜBERSETZEN"
-                          : "AUTOMATISCH ÜBERSETZEN"}
+                          ? tx("NEU ÜBERSETZEN")
+                          : tx("AUTOMATISCH ÜBERSETZEN")}
                       </button>
                       {translationBusy && (
                         <small role="status">{translationBusy}</small>
                       )}
-                      <label>
-                        Sprache der Übersetzung
-                        <LanguagePicker
+                      <label>{tx("Sprache der Übersetzung")}<LanguagePicker
                           disabled={!canEdit}
                           source="en"
                           value={slide.translation.language || "de"}
@@ -1241,8 +1169,8 @@ export function SongEditor({
                       </label>
                       <textarea
                         disabled={!canEdit}
-                        aria-label={`Übersetzung · ${section.label}`}
-                        placeholder="Hier die deutsche Übersetzung eingeben …"
+                        aria-label={tx("Übersetzung · {value1}",{value1:String(section.label)})}
+                        placeholder={tx("Hier die deutsche Übersetzung eingeben …")}
                         value={slide.translation.text}
                         rows={Math.max(
                           3,
@@ -1272,11 +1200,7 @@ export function SongEditor({
                           })
                         }
                       />
-                      <small>
-                        Darstellung: Einstellungen → Präsentation → Song.
-                        Wiederholungen dieses Abschnitts verwenden dieselbe
-                        Übersetzung.
-                      </small>
+                      <small>{tx("Darstellung: Einstellungen → Präsentation → Song. Wiederholungen dieses Abschnitts verwenden dieselbe Übersetzung.")}</small>
                       <button
                         type="button"
                         disabled={!canEdit}
@@ -1297,9 +1221,7 @@ export function SongEditor({
                             ),
                           })
                         }
-                      >
-                        ÜBERSETZUNG ENTFERNEN
-                      </button>
+                      >{tx("ÜBERSETZUNG ENTFERNEN")}</button>
                     </>
                   )}
                 </div>
@@ -1335,25 +1257,20 @@ export function SongEditor({
                     });
                   }}
                 >
-                  <Icon name="horizontal_rule" /> FOLIENUMBRUCH
-                </button>
+                  <Icon name="horizontal_rule" /> {tx("FOLIENUMBRUCH")}</button>
               </section>
             ))}
         </div>
       )}
       {tab === "metadata" && (
         <div className="song-meta">
-          <label>
-            Autoren
-            <input
+          <label>{tx("Autoren")}<input
               disabled={!canEdit}
               value={String(metadata.author ?? "")}
               onChange={(event) => changeMeta({ author: event.target.value })}
             />
           </label>
-          <label>
-            Publisher / Copyright
-            <input
+          <label>{tx("Publisher / Copyright")}<input
               disabled={!canEdit}
               value={String(metadata.copyright ?? "")}
               onChange={(event) =>
@@ -1361,9 +1278,7 @@ export function SongEditor({
               }
             />
           </label>
-          <label>
-            CCLI Song Number
-            <input
+          <label>{tx("CCLI Song Number")}<input
               disabled={!canEdit}
               value={String(metadata.ccli ?? "")}
               onChange={(event) => changeMeta({ ccli: event.target.value })}
@@ -1381,9 +1296,7 @@ export function SongEditor({
               onChange={(event) =>
                 changeMeta({ ccliLicensed: event.target.checked })
               }
-            />{" "}
-            Unter CCLI-Lizenz
-          </label>
+            />{" "}{tx("Unter CCLI-Lizenz")}</label>
           <label>
             <input
               type="checkbox"
@@ -1392,9 +1305,7 @@ export function SongEditor({
               onChange={(event) =>
                 changeMeta({ showTitle: event.target.checked })
               }
-            />{" "}
-            Titel auf Titelfolie
-          </label>
+            />{" "}{tx("Titel auf Titelfolie")}</label>
           <label>
             <input
               type="checkbox"
@@ -1403,10 +1314,8 @@ export function SongEditor({
               onChange={(event) =>
                 changeMeta({ showCredits: event.target.checked })
               }
-            />{" "}
-            Credits auf Titelfolie
-          </label>
-          <span>Übergang: Überblenden · 0,5 Sekunden</span>
+            />{" "}{tx("Credits auf Titelfolie")}</label>
+          <span>{tx("Übergang: Überblenden · 0,5 Sekunden")}</span>
         </div>
       )}
     </div>
@@ -1422,6 +1331,7 @@ function ContentEditor({
   slide: Slide;
   canEdit: boolean;
 }) {
+  const {tx}=useI18n();
   const state = usePresentation();
   const primaryText = slide.elements.find((element) => element.type === "text"),
     fadeActive = primaryText?.properties.animation === "fade-in",
@@ -1443,7 +1353,7 @@ function ContentEditor({
               ? "category"
               : "layers";
   const addText = () => {
-    const value = prompt("Text hinzufügen", "Neuer Text");
+    const value = prompt(tx("Text hinzufügen"), "Neuer Text");
     if (!value?.trim()) return;
     state.addElement("text");
     const current = usePresentation.getState(),
@@ -1569,7 +1479,7 @@ function ContentEditor({
       <div className="content-context automatic-loop-content-editor">
         <header>
           <b>{item.title}</b>
-          <span>AUTOMATISCH</span>
+          <span>{tx("Automatisch")}</span>
         </header>
         <section className="automatic-loop-settings web-editor-fields">
           <div className="automatic-loop-heading">
@@ -1577,30 +1487,24 @@ function ContentEditor({
               name={item.type === "nowPlaying" ? "graphic_eq" : "autorenew"}
             />
             <div>
-              <b>Automatische Anzeige</b>
-              <small>
-                Der Inhalt wird zur Laufzeit automatisch aktualisiert.
-              </small>
+              <b>{tx("Automatische Anzeige")}</b>
+              <small>{tx("Der Inhalt wird zur Laufzeit automatisch aktualisiert.")}</small>
             </div>
           </div>
           {item.type === "nowPlaying" ? (
             <NowPlayingDesigner item={item} canEdit={canEdit} />
           ) : item.type==='clock' ? (
-            <><ClockLoopDesigner item={item} canEdit={canEdit}/><label>Anzeigedauer (Sekunden)<input type="number" min="1" step="1" disabled={!canEdit} value={durationSeconds} onChange={event=>changeDuration(Math.max(1,Number(event.target.value)||1))}/></label></>
+            <><ClockLoopDesigner item={item} canEdit={canEdit}/><label>{tx("Anzeigedauer (Sekunden)")}<input type="number" min="1" step="1" disabled={!canEdit} value={durationSeconds} onChange={event=>changeDuration(Math.max(1,Number(event.target.value)||1))}/></label></>
           ) : (item.type==='news'||item.type==='football'||item.type==='weather') ? (
             <ExternalLoopDesigner item={item} canEdit={canEdit}/>
           ) : (item.type === "event" || item.type === "nextEvents") ? (
             <>
               <EventSlideDesigner item={item} canEdit={canEdit} />
-              <label>
-                Anzeigedauer (Sekunden)
-                <input type="number" min="1" step="1" disabled={!canEdit} value={durationSeconds} onChange={(event)=>changeDuration(Math.max(1,Number(event.target.value)||1))}/>
+              <label>{tx("Anzeigedauer (Sekunden)")}<input type="number" min="1" step="1" disabled={!canEdit} value={durationSeconds} onChange={(event)=>changeDuration(Math.max(1,Number(event.target.value)||1))}/>
               </label>
             </>
           ) : (
-            <>{item.type==='announcement'&&<AnnouncementSlideDesigner item={item} canEdit={canEdit}/>}<label>
-              Anzeigedauer (Sekunden)
-              <input
+            <>{item.type==='announcement'&&<AnnouncementSlideDesigner item={item} canEdit={canEdit}/>}<label>{tx("Anzeigedauer (Sekunden)")}<input
                 type="number"
                 min="1"
                 step="1"
@@ -1612,9 +1516,7 @@ function ContentEditor({
               />
             </label></>
           )}
-          <p className="status-ready">
-            ● Wird vor der Ausgabe automatisch vorbereitet.
-          </p>
+          <p className="status-ready">{tx("● Wird vor der Ausgabe automatisch vorbereitet.")}</p>
         </section>
         <PersonalNotesPanel
           noteKey={{
@@ -1622,7 +1524,7 @@ function ContentEditor({
             presentationId: state.presentationId || "local",
             slideId: slide.id,
           }}
-          label="Meine Notiz zu dieser Folie"
+          label={tx("Meine Notiz zu dieser Folie")}
         />
       </div>
     );
@@ -1638,20 +1540,18 @@ function ContentEditor({
       <div className="content-context web-content-editor">
         <header>
           <b>{item.title}</b>
-          <span>WEBSITE</span>
+          <span>{tx("WEBSITE")}</span>
         </header>
         <div className="content-tools">
           <Icon name="language" />
-          <b>WEB-INHALT</b>
+          <b>{tx("WEB-INHALT")}</b>
         </div>
         <div className="web-editor-fields">
-          <h4>ADRESSE & DARSTELLUNG</h4>
-          <label>
-            Webadresse
-            <input
+          <h4>{tx("ADRESSE & DARSTELLUNG")}</h4>
+          <label>{tx("Webadresse")}<input
               disabled={!canEdit}
               type="url"
-              placeholder="https://www.beispiel.de"
+              placeholder={tx("https://www.beispiel.de")}
               value={url}
               onChange={(event) =>
                 change({ url: event.target.value, src: event.target.value })
@@ -1659,9 +1559,7 @@ function ContentEditor({
             />
           </label>
           <div className="web-zoom-row">
-            <label>
-              Zoom
-              <input
+            <label>{tx("Zoom")}<input
                 disabled={!canEdit}
                 type="range"
                 min="50"
@@ -1677,10 +1575,9 @@ function ContentEditor({
               disabled={!canEdit || zoom === 100}
               onClick={() => change({ zoom: 100 })}
             >
-              <Icon name="center_focus_strong" /> AUF 100 %
-            </button>
+              <Icon name="center_focus_strong" /> {tx("AUF 100 %")}</button>
           </div>
-          <h4>WIEDERGABE & BEDIENUNG</h4>
+          <h4>{tx("WIEDERGABE & BEDIENUNG")}</h4>
           <label>
             <input
               disabled={!canEdit}
@@ -1689,9 +1586,7 @@ function ContentEditor({
               onChange={(event) =>
                 change({ reloadOnLive: event.target.checked })
               }
-            />{" "}
-            Beim Live-Schalten neu laden
-          </label>
+            />{" "}{tx("Beim Live-Schalten neu laden")}</label>
           <label>
             <input
               disabled={!canEdit}
@@ -1700,18 +1595,14 @@ function ContentEditor({
               onChange={(event) =>
                 change({ allowInteraction: event.target.checked })
               }
-            />{" "}
-            Interaktion mit der Webseite erlauben
-          </label>
+            />{" "}{tx("Interaktion mit der Webseite erlauben")}</label>
           <label>
             <input
               disabled={!canEdit}
               type="checkbox"
               checked={item.metadata.webAudio === true}
               onChange={(event) => change({ webAudio: event.target.checked })}
-            />{" "}
-            Webseiten-Audio erlauben
-          </label>
+            />{" "}{tx("Webseiten-Audio erlauben")}</label>
           <label>
             <input
               disabled={!canEdit}
@@ -1720,10 +1611,8 @@ function ContentEditor({
               onChange={(event) =>
                 change({ allowPopups: event.target.checked })
               }
-            />{" "}
-            Pop-up-Fenster erlauben
-          </label>
-          <h4>VERBINDUNG & SICHERHEIT</h4>
+            />{" "}{tx("Pop-up-Fenster erlauben")}</label>
+          <h4>{tx("VERBINDUNG & SICHERHEIT")}</h4>
           <label>
             <input
               type="checkbox"
@@ -1733,12 +1622,8 @@ function ContentEditor({
                 false
               }
               onChange={(event) => change({ allowForms: event.target.checked })}
-            />
-            Formulare erlauben
-          </label>
-          <label>
-            Referrer-Information
-            <select
+            />{tx("Formulare erlauben")}</label>
+          <label>{tx("Referrer-Information")}<select
               disabled={!canEdit}
               value={String(
                 web?.properties.referrerPolicy ??
@@ -1749,10 +1634,8 @@ function ContentEditor({
                 change({ referrerPolicy: event.target.value })
               }
             >
-              <option value="no-referrer">Nicht übermitteln</option>
-              <option value="strict-origin-when-cross-origin">
-                Nur Herkunft bei fremden Websites
-              </option>
+              <option value="no-referrer">{tx("Nicht übermitteln")}</option>
+              <option value="strict-origin-when-cross-origin">{tx("Nur Herkunft bei fremden Websites")}</option>
             </select>
           </label>
           <label>
@@ -1763,46 +1646,37 @@ function ContentEditor({
               onChange={(event) =>
                 change({ proxyEnabled: event.target.checked })
               }
-            />{" "}
-            Proxy nur für dieses Element verwenden
-          </label>
+            />{" "}{tx("Proxy nur für dieses Element verwenden")}</label>
           {item.metadata.proxyEnabled === true && (
             <>
-              <label>
-                Proxy-Adresse
-                <input
+              <label>{tx("Proxy-Adresse")}<input
                   disabled={!canEdit}
                   value={String(item.metadata.proxyUrl ?? "")}
-                  placeholder="https://proxy.beispiel.de/?url={url}"
+                  placeholder={tx("https://proxy.beispiel.de/?url={url}")}
                   onChange={(event) => change({ proxyUrl: event.target.value })}
                 />
               </label>
-              <small>
-                Verwende bitte <b>{"{url}"}</b> als Platzhalter. Ohne
-                Platzhalter wird die codierte Zieladresse automatisch angehängt.
-              </small>
+              <small>{tx("Verwende bitte")} <b>{"{url}"}</b> {tx("als Platzhalter. Ohne Platzhalter wird die codierte Zieladresse automatisch angehängt.")}</small>
             </>
           )}
-          <label>
-            Automatisch aktualisieren
-            <select
+          <label>{tx("Automatisch aktualisieren")}<select
               disabled={!canEdit}
               value={Number(item.metadata.refreshSeconds ?? 0)}
               onChange={(event) =>
                 change({ refreshSeconds: Number(event.target.value) })
               }
             >
-              <option value="0">Nicht automatisch</option>
-              <option value="30">Alle 30 Sekunden</option>
-              <option value="60">Jede Minute</option>
-              <option value="300">Alle 5 Minuten</option>
-              <option value="900">Alle 15 Minuten</option>
+              <option value="0">{tx("Nicht automatisch")}</option>
+              <option value="30">{tx("Alle 30 Sekunden")}</option>
+              <option value="60">{tx("Jede Minute")}</option>
+              <option value="300">{tx("Alle 5 Minuten")}</option>
+              <option value="900">{tx("Alle 15 Minuten")}</option>
             </select>
           </label>
           <small>
             {url
-              ? "Die Webvorschau wird rechts sofort aktualisiert. Alle Einstellungen gelten ausschließlich für dieses Element."
-              : "Bitte gib eine vollständige Webadresse ein. Das Element wurde bereits erstellt und kann normal gespeichert, dupliziert oder rückgängig gemacht werden."}
+              ? tx("Die Webvorschau wird rechts sofort aktualisiert. Alle Einstellungen gelten ausschließlich für dieses Element.")
+              : tx("Bitte gib eine vollständige Webadresse ein. Das Element wurde bereits erstellt und kann normal gespeichert, dupliziert oder rückgängig gemacht werden.")}
           </small>
         </div>
       </div>
@@ -1817,24 +1691,21 @@ function ContentEditor({
         </header>
         <div className="content-tools">
           <button disabled={!canEdit} onClick={() => state.addSlide()}>
-            <Icon name="splitscreen" /> SLIDE BREAK
-          </button>
+            <Icon name="splitscreen" /> {tx("SLIDE BREAK")}</button>
           <button disabled={!canEdit} onClick={addText}>
-            <Icon name="text_fields" /> TEXT
-          </button>
+            <Icon name="text_fields" /> {tx("Text")}</button>
           <select
-            aria-label="Vordergrundbild hinzufügen"
+            aria-label={tx("Vordergrundbild hinzufügen")}
             disabled={!canEdit}
             value=""
             onChange={(event) => foregroundAction(event.target.value)}
           >
-            <option value="">＋ VORDERGRUNDBILD</option>
-            <option value="browse">Medien durchsuchen …</option>
-            <option value="import">Bild importieren …</option>
+            <option value="">{tx("＋ VORDERGRUNDBILD")}</option>
+            <option value="browse">{tx("Medien durchsuchen …")}</option>
+            <option value="import">{tx("Bild importieren …")}</option>
           </select>
           <button disabled={!canEdit} onClick={() => openQr()}>
-            <Icon name="qr_code_2" /> QR-CODE
-          </button>
+            <Icon name="qr_code_2" /> {tx("QR-CODE")}</button>
           <ShapeGallery
             disabled={!canEdit}
             onSelect={(kind, name) => state.addShape(kind, name)}
@@ -1852,10 +1723,9 @@ function ContentEditor({
               })
             }
           >
-            <Icon name="animation" /> FADE IN TEXT
-          </button>
+            <Icon name="animation" /> {tx("FADE IN TEXT")}</button>
           <button
-            title="Hilfe zu Folieninhalten"
+            title={tx("Hilfe zu Folieninhalten")}
             onClick={() =>
               window.dispatchEvent(
                 new CustomEvent("open-help", { detail: "slides" }),
@@ -1866,7 +1736,7 @@ function ContentEditor({
           </button>
         </div>
         <textarea
-          aria-label="Folieninhalt"
+          aria-label={tx("Folieninhalt")}
           disabled={!canEdit}
           value={slide.body}
           onChange={(event) => state.updateSlide({ body: event.target.value })}
@@ -1877,14 +1747,14 @@ function ContentEditor({
             presentationId: state.presentationId || "local",
             slideId: slide.id,
           }}
-          label="Meine Notiz zu dieser Folie"
+          label={tx("Meine Notiz zu dieser Folie")}
         />
         {extras.length > 0 && (
           <section className="additional-elements">
             <header>
-              <b>ZUSÄTZLICHE EBENEN</b>
+              <b>{tx("ZUSÄTZLICHE EBENEN")}</b>
               <small>
-                {extras.length} {extras.length === 1 ? "Element" : "Elemente"}
+                {extras.length} {extras.length === 1 ? tx("ELEMENT") : tx("Elemente")}
               </small>
             </header>
             <div>
@@ -1905,20 +1775,12 @@ function ContentEditor({
                     <span>
                       <b>{element.name}</b>
                       <small>
-                        {element.type === "shape"
-                          ? `2D-Objekt · ${String(element.properties.shapeKind ?? "Form")}`
-                          : element.type === "image"
-                            ? "Vordergrundbild"
-                            : element.type === "qr"
-                              ? "QR-Code"
-                              : element.type === "text"
-                                ? "Zusätzlicher Text"
-                                : element.type}
+                        {(element.type === "shape"?tx("2D-Objekt · {value1}",{value1:String(String(element.properties.shapeKind ?? "Form"))}):(element.type === "image"?tx("Vordergrundbild"):(element.type === "qr"?tx("QR-CODE"):(element.type === "text"?tx("Zusätzlicher Text"):element.type))))}
                       </small>
                     </span>
                   </button>
                   <button
-                    title={element.visible ? "Ausblenden" : "Einblenden"}
+                    title={element.visible ? tx("Ausblenden") : tx("Einblenden")}
                     onClick={() => state.toggleElementVisible(element.id)}
                   >
                     <Icon
@@ -1926,7 +1788,7 @@ function ContentEditor({
                     />
                   </button>
                   <button
-                    title="Bearbeiten"
+                    title={tx("BEARBEITEN")}
                     onClick={() =>
                       element.type === "qr"
                         ? openQr(element.id)
@@ -1937,16 +1799,14 @@ function ContentEditor({
                   </button>
                   <button
                     className="danger"
-                    title="Entfernen"
+                    title={tx("Entfernen")}
                     onClick={() => state.removeElement(element.id)}
                   >
                     <Icon name="close" />
                   </button>
                   {element.type === "text" &&
                     state.selectedElementIds.includes(element.id) && (
-                      <label className="element-inline-editor">
-                        Text
-                        <textarea
+                      <label className="element-inline-editor">{tx("Text")}<textarea
                           autoFocus
                           value={String(element.properties.text ?? "")}
                           onChange={(event) =>
@@ -1977,13 +1837,9 @@ function ContentEditor({
                   timing: { ...item.timing, autoAdvance: event.target.checked },
                 })
               }
-            />{" "}
-            Jede Folie für{" "}
+            />{" "}{tx("Jede Folie für")}{" "}
             <button type="button">
-              {item.timing.slideDurationSeconds} Sekunden
-            </button>{" "}
-            anzeigen
-          </label>
+              {item.timing.slideDurationSeconds} {tx("Sekunden")}</button>{" "}{tx("anzeigen")}</label>
           <label>
             <input
               type="checkbox"
@@ -1994,9 +1850,7 @@ function ContentEditor({
                   timing: { ...item.timing, shuffle: event.target.checked },
                 })
               }
-            />{" "}
-            Zufällige Reihenfolge
-          </label>
+            />{" "}{tx("Zufällige Reihenfolge")}</label>
           <label>
             <input
               type="checkbox"
@@ -2008,10 +1862,8 @@ function ContentEditor({
                   timing: { ...item.timing, repeat: event.target.checked },
                 })
               }
-            />{" "}
-            Wiederholen
-          </label>
-          <span>Übergang: Kein Übergang</span>
+            />{" "}{tx("Wiederholen")}</label>
+          <span>{tx("Übergang: Kein Übergang")}</span>
         </div>
       </div>
       {qrOpen && (
@@ -2025,16 +1877,16 @@ function ContentEditor({
             className="qr-editor-dialog"
             role="dialog"
             aria-modal="true"
-            aria-label="QR-Code hinzufügen"
+            aria-label={tx("QR-Code hinzufügen")}
           >
             <header>
               <div>
                 <Icon name="qr_code_2" />
                 <span>
                   <b>
-                    {qrTargetId ? "QR-CODE BEARBEITEN" : "QR-CODE HINZUFÜGEN"}
+                    {qrTargetId ? tx("QR-CODE BEARBEITEN") : tx("QR-Code hinzufügen")}
                   </b>
-                  <small>Adresse oder Text eingeben</small>
+                  <small>{tx("Adresse oder Text eingeben")}</small>
                 </span>
               </div>
               <button onClick={() => setQrOpen(false)}>
@@ -2042,12 +1894,10 @@ function ContentEditor({
               </button>
             </header>
             <main>
-              <label>
-                URL oder Text
-                <input
+              <label>{tx("URL oder Text")}<input
                   autoFocus
                   value={qrDraft}
-                  placeholder="https://www.beispiel.de"
+                  placeholder={tx("https://www.beispiel.de")}
                   onChange={(event) => setQrDraft(event.target.value)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" && qrDraft.trim()) void saveQr();
@@ -2056,20 +1906,20 @@ function ContentEditor({
               </label>
               <div className="qr-live-preview">
                 {qrPreview ? (
-                  <img src={qrPreview} alt="QR-Code-Vorschau" />
+                  <img src={qrPreview} alt={tx("QR-Code-Vorschau")} />
                 ) : (
-                  <span>Bitte eine URL oder einen Text eingeben.</span>
+                  <span>{tx("Bitte eine URL oder einen Text eingeben.")}</span>
                 )}
               </div>
             </main>
             <footer>
-              <button onClick={() => setQrOpen(false)}>ABBRECHEN</button>
+              <button onClick={() => setQrOpen(false)}>{tx("ABBRECHEN")}</button>
               <button
                 className="primary"
                 disabled={!qrDraft.trim()}
                 onClick={() => void saveQr()}
               >
-                {qrTargetId ? "ÄNDERUNG SPEICHERN" : "QR-CODE HINZUFÜGEN"}
+                {qrTargetId ? tx("ÄNDERUNG SPEICHERN") : tx("QR-Code hinzufügen")}
               </button>
             </footer>
           </section>
@@ -2154,6 +2004,7 @@ function QuizRewards({
   locked: boolean;
   onChange: (patch: Partial<QuizDefinition>) => void;
 }) {
+  const {tx}=useI18n();
   const scores = new Map<string, { name: string; points: number }>();
   for (const answer of answers) {
     const question = definition.questions.find(
@@ -2197,7 +2048,7 @@ function QuizRewards({
       <header>
         <span>
           <Icon name="emoji_events" />
-          <b>BELOHNUNGEN & RANGLISTE</b>
+          <b>{tx("BELOHNUNGEN & RANGLISTE")}</b>
         </span>
         <label>
           <input
@@ -2207,38 +2058,30 @@ function QuizRewards({
             onChange={(event) =>
               onChange({ rewardEnabled: event.target.checked })
             }
-          />{" "}
-          Belohnungen verwenden
-        </label>
+          />{" "}{tx("Belohnungen verwenden")}</label>
       </header>
       {definition.rewardEnabled && (
         <div className="quiz-reward-grid">
           {definition.rewards.map((reward, index) => (
             <label key={index}>
-              <b>{index + 1}. PLATZ</b>
+              <b>{index + 1}{tx(". PLATZ")}</b>
               <input
                 disabled={!canEdit || locked}
                 value={reward}
                 placeholder={
-                  index === 0 ? "z. B. Hauptpreis" : "Preis oder Anerkennung"
+                  index === 0 ? tx("z. B. Hauptpreis") : tx("Preis oder Anerkennung")
                 }
                 onChange={(event) => updateReward(index, event.target.value)}
               />
               <span>
-                {ranking[index]
-                  ? `${ranking[index].name} · ${ranking[index].points} Punkte`
-                  : "Noch nicht vergeben"}
+                {(ranking[index]?tx("{value1} · {value2} Punkte",{value1:String(ranking[index].name),value2:String(ranking[index].points)}):tx("Noch nicht vergeben"))}
               </span>
             </label>
           ))}
         </div>
       )}
       {!definition.rewardEnabled && (
-        <p>
-          Optional können für die drei besten Ergebnisse Preise oder
-          Anerkennungen hinterlegt werden. Die Rangliste wird aus den richtigen
-          Antworten und den Punkten je Frage berechnet.
-        </p>
+        <p>{tx("Optional können für die drei besten Ergebnisse Preise oder Anerkennungen hinterlegt werden. Die Rangliste wird aus den richtigen Antworten und den Punkten je Frage berechnet.")}</p>
       )}
     </section>
   );
@@ -2495,6 +2338,7 @@ function QuizEditor({
   item: ServiceItem;
   canEdit: boolean;
 }) {
+  const {tx}=useI18n();
   const state = usePresentation(),
     definition = quizDefinition(item),
     joinSlideId = String(item.metadata.quizJoinSlideId ?? ""),
@@ -2979,7 +2823,7 @@ function QuizEditor({
         <div>
           <Icon name="quiz" />
           <input
-            aria-label="Quiztitel"
+            aria-label={tx("Quiztitel")}
             disabled={!canEdit || !!session}
             value={definition.title}
             onChange={(event) => changeGeneral({ title: event.target.value })}
@@ -2987,80 +2831,68 @@ function QuizEditor({
         </div>
         <span>
           {definition.questions.length}{" "}
-          {definition.questions.length === 1 ? "Frage" : "Fragen"}
+          {definition.questions.length === 1 ? tx("Frage") : tx("Fragen")}
         </span>
       </header>
       {session ? (
         <section className="quiz-live-session">
           <div className="quiz-session-code">
-            <span>TEILNAHMECODE</span>
+            <span>{tx("TEILNAHMECODE")}</span>
             <strong>
               {session.code.slice(0, 3)} {session.code.slice(3)}
             </strong>
             <small>{quizJoinUrl(session.code)}</small>
             <div>
-              <b>{participants}</b> Teilnehmer · <b>{activeAnswers.length}</b>{" "}
-              Antworten
-              {activeAnswers.some((answer) => answer.held) && (
+              <b>{participants}</b> {tx("Teilnehmer ·")} <b>{activeAnswers.length}</b>{" "}{tx("Antworten")}{activeAnswers.some((answer) => answer.held) && (
                 <>
                   {" "}
                   ·{" "}
                   <b>
                     {activeAnswers.filter((answer) => answer.held).length}
-                  </b>{" "}
-                  zurückgehalten
-                </>
+                  </b>{" "}{tx("zurückgehalten")}</>
               )}
             </div>
           </div>
           {qr && (
-            <img src={qr} alt={`QR-Code für Teilnahmecode ${session.code}`} />
+            <img src={qr} alt={tx("QR-Code für Teilnahmecode {value1}",{value1:String(session.code)})} />
           )}
           <div className="quiz-session-actions">
             <button
               disabled={!state.onAir || !qr}
-              title={!state.onAir ? "Zuerst ON AIR starten" : ""}
+              title={!state.onAir ? tx("Zuerst ON AIR starten") : ""}
               onClick={() => showJoin(["main"])}
             >
-              <Icon name="present_to_all" /> AUF MAIN ANZEIGEN
-            </button>
+              <Icon name="present_to_all" /> {tx("AUF MAIN ANZEIGEN")}</button>
             <button
               disabled={!state.onAir || !qr}
-              title={!state.onAir ? "Zuerst ON AIR starten" : ""}
+              title={!state.onAir ? tx("Zuerst ON AIR starten") : ""}
               onClick={() => showJoin(["main", "stage", "livestream", "lobby"])}
             >
-              <Icon name="connected_tv" /> AUF AUSGÄNGEN ANZEIGEN
-            </button>
+              <Icon name="connected_tv" /> {tx("AUF AUSGÄNGEN ANZEIGEN")}</button>
             <button disabled={!qr} onClick={() => void copyJoin()}>
-              <Icon name="content_copy" /> LINK KOPIEREN
-            </button>
+              <Icon name="content_copy" /> {tx("LINK KOPIEREN")}</button>
             <button
               disabled={sessionBusy || !question}
               onClick={takeQuestionLive}
             >
-              <Icon name="podcasts" /> AKTUELLE FRAGE STARTEN
-            </button>
+              <Icon name="podcasts" /> {tx("AKTUELLE FRAGE STARTEN")}</button>
             <button
               disabled={sessionBusy || session.status === "lobby"}
               onClick={() => void returnLiveQuizToLobby(session.id)}
             >
-              <Icon name="pause" /> ANTWORTEN SCHLIESSEN
-            </button>
+              <Icon name="pause" /> {tx("ANTWORTEN SCHLIESSEN")}</button>
             <button
               className="danger"
               disabled={sessionBusy}
               onClick={finishSession}
             >
-              <Icon name="stop_circle" /> QUIZ BEENDEN
-            </button>
+              <Icon name="stop_circle" /> {tx("QUIZ BEENDEN")}</button>
           </div>
         </section>
       ) : null}
       {sessionError && <p className="quiz-session-error">{sessionError}</p>}
       <div className="quiz-general">
-        <label>
-          Typ
-          <select
+        <label>{tx("Typ")}<select
             disabled={!canEdit || !!session}
             value={definition.quizType}
             onChange={(event) =>
@@ -3069,13 +2901,11 @@ function QuizEditor({
               })
             }
           >
-            <option value="quiz">Quiz</option>
-            <option value="poll">Umfrage</option>
+            <option value="quiz">{tx("Quiz")}</option>
+            <option value="poll">{tx("Umfrage")}</option>
           </select>
         </label>
-        <label>
-          Teilnahme
-          <select
+        <label>{tx("Teilnahme")}<select
             disabled={!canEdit || !!session}
             value={definition.participation}
             onChange={(event) =>
@@ -3085,13 +2915,11 @@ function QuizEditor({
               })
             }
           >
-            <option value="anonymous">Anonym</option>
-            <option value="name">Mit Name</option>
+            <option value="anonymous">{tx("Anonym")}</option>
+            <option value="name">{tx("Mit Name")}</option>
           </select>
         </label>
-        <label>
-          Beschreibung
-          <input
+        <label>{tx("Beschreibung")}<input
             disabled={!canEdit || !!session}
             value={definition.description}
             onChange={(event) =>
@@ -3106,8 +2934,7 @@ function QuizEditor({
             className={isJoinSelected ? "active" : ""}
             onClick={() => state.select(item.id, joinSlide.id)}
           >
-            <Icon name="qr_code_2" /> Teilnahme
-          </button>
+            <Icon name="qr_code_2" /> {tx("Teilnahme")}</button>
         )}
         {definition.questions.map((entry, index) => (
           <button
@@ -3133,11 +2960,11 @@ function QuizEditor({
             }}
             onClick={() => state.select(item.id, questionSlides[index]?.id)}
           >
-            <Icon name="drag_indicator" /> Frage {index + 1}
+            <Icon name="drag_indicator" /> {tx("Frage")} {index + 1}
           </button>
         ))}
         <button
-          title="Frage hinzufügen"
+          title={tx("Frage hinzufügen")}
           disabled={!canEdit || !!session}
           onClick={addQuestion}
         >
@@ -3148,43 +2975,26 @@ function QuizEditor({
             className={isAnswerSelected ? "active" : ""}
             onClick={() => state.select(item.id, answerSlide.id)}
           >
-            <Icon name="fact_check" /> Antworten
-          </button>
+            <Icon name="fact_check" /> {tx("Antworten")}</button>
         )}
       </div>
       {isJoinSelected ? (
         <div className="quiz-join-editor">
           <Icon name="qr_code_2" />
-          <b>Teilnahmefolie</b>
-          <p>
-            Diese echte erste Folie zeigt Quizname, Beschreibung, Link,
-            Teilnahmecode und QR-Code. Klicke die Elemente auf der Folie an, um
-            sie frei zu verschieben, zu skalieren und zu gestalten.
-          </p>
-          <small>
-            Vor dem Start erscheint ein deutlich erkennbarer Vorschaucode. ON
-            AIR ersetzt ihn automatisch durch den echten Code.
-          </small>
+          <b>{tx("Teilnahmefolie")}</b>
+          <p>{tx("Diese echte erste Folie zeigt Quizname, Beschreibung, Link, Teilnahmecode und QR-Code. Klicke die Elemente auf der Folie an, um sie frei zu verschieben, zu skalieren und zu gestalten.")}</p>
+          <small>{tx("Vor dem Start erscheint ein deutlich erkennbarer Vorschaucode. ON AIR ersetzt ihn automatisch durch den echten Code.")}</small>
         </div>
       ) : isAnswerSelected ? (
         <div className="quiz-join-editor">
           <Icon name="fact_check" />
-          <b>Antwortenfolie</b>
-          <p>
-            Diese echte Abschlussfolie fasst richtige Antworten beziehungsweise
-            Live-Ergebnisse zusammen. Alle Elemente lassen sich auf der Folie
-            frei positionieren und gestalten.
-          </p>
-          <small>
-            Änderungen an Fragen und richtigen Lösungen werden automatisch
-            übernommen.
-          </small>
+          <b>{tx("Antwortenfolie")}</b>
+          <p>{tx("Diese echte Abschlussfolie fasst richtige Antworten beziehungsweise Live-Ergebnisse zusammen. Alle Elemente lassen sich auf der Folie frei positionieren und gestalten.")}</p>
+          <small>{tx("Änderungen an Fragen und richtigen Lösungen werden automatisch übernommen.")}</small>
         </div>
       ) : question ? (
         <div className="quiz-question-editor">
-          <label>
-            Fragetyp
-            <select
+          <label>{tx("Fragetyp")}<select
               disabled={!canEdit || !!session}
               value={question.type}
               onChange={(event) =>
@@ -3198,18 +3008,16 @@ function QuizEditor({
                 })
               }
             >
-              <option value="single">Single Choice</option>
-              <option value="multiple">Multiple Choice</option>
-              <option value="trueFalse">Richtig / Falsch</option>
-              <option value="yesNo">Ja / Nein</option>
-              <option value="poll">Umfrage</option>
-              <option value="text">Freitext</option>
-              <option value="scale">Skala</option>
+              <option value="single">{tx("Single Choice")}</option>
+              <option value="multiple">{tx("Multiple Choice")}</option>
+              <option value="trueFalse">{tx("Richtig / Falsch")}</option>
+              <option value="yesNo">{tx("Ja / Nein")}</option>
+              <option value="poll">{tx("Umfrage")}</option>
+              <option value="text">{tx("Freitext")}</option>
+              <option value="scale">{tx("Skala")}</option>
             </select>
           </label>
-          <label>
-            Frage
-            <textarea
+          <label>{tx("Frage")}<textarea
               disabled={!canEdit || !!session}
               value={question.question}
               onChange={(event) =>
@@ -3218,11 +3026,11 @@ function QuizEditor({
             />
           </label>
           <div className="quiz-options">
-            <b>ANTWORTEN</b>
+            <b>{tx("Antworten")}</b>
             {question.options.map((option, index) => (
               <div key={option.id}>
                 <input
-                  aria-label={`Antwort ${index + 1} ist richtig`}
+                  aria-label={tx("Antwort {value1} ist richtig",{value1:String((index+1))})}
                   disabled={
                     !canEdit ||
                     !!session ||
@@ -3238,7 +3046,7 @@ function QuizEditor({
                   }
                 />
                 <input
-                  aria-label={`Antwort ${index + 1}`}
+                  aria-label={tx("Antwort {value1}",{value1:String((index+1))})}
                   disabled={!canEdit || !!session}
                   value={option.text}
                   onChange={(event) =>
@@ -3252,7 +3060,7 @@ function QuizEditor({
                   }
                 />
                 <button
-                  title="Antwort entfernen"
+                  title={tx("Antwort entfernen")}
                   disabled={
                     !canEdit || !!session || question.options.length <= 2
                   }
@@ -3290,13 +3098,10 @@ function QuizEditor({
                 })
               }
             >
-              <Icon name="add" /> ANTWORT HINZUFÜGEN
-            </button>
+              <Icon name="add" /> {tx("ANTWORT HINZUFÜGEN")}</button>
           </div>
           <div className="quiz-question-settings">
-            <label>
-              Zeitlimit
-              <input
+            <label>{tx("Zeitlimit")}<input
                 type="number"
                 min="5"
                 max="300"
@@ -3308,11 +3113,9 @@ function QuizEditor({
                   })
                 }
               />
-              <span>Sekunden</span>
+              <span>{tx("Sekunden")}</span>
             </label>
-            <label>
-              Punkte
-              <input
+            <label>{tx("Punkte")}<input
                 type="number"
                 min="0"
                 max="10000"
@@ -3333,9 +3136,7 @@ function QuizEditor({
                 onChange={(event) =>
                   changeQuestion({ allowAnswerChange: event.target.checked })
                 }
-              />{" "}
-              Antwort darf geändert werden
-            </label>
+              />{" "}{tx("Antwort darf geändert werden")}</label>
             {question.type === "text" && (
               <label>
                 <input
@@ -3345,9 +3146,7 @@ function QuizEditor({
                   onChange={(event) =>
                     changeQuestion({ holdTextAnswers: event.target.checked })
                   }
-                />{" "}
-                Freitextantworten bis zur Freigabe zurückhalten
-              </label>
+                />{" "}{tx("Freitextantworten bis zur Freigabe zurückhalten")}</label>
             )}
             <button
               className="quiz-delete"
@@ -3356,25 +3155,22 @@ function QuizEditor({
               }
               onClick={removeQuestion}
             >
-              <Icon name="delete" /> FRAGE LÖSCHEN
-            </button>
+              <Icon name="delete" /> {tx("FRAGE LÖSCHEN")}</button>
           </div>
         </div>
       ) : (
         <div className="quiz-empty">
           <Icon name="quiz" />
-          <p>Noch keine Frage vorhanden.</p>
-          <button disabled={!canEdit || !!session} onClick={addQuestion}>
-            ERSTE FRAGE HINZUFÜGEN
-          </button>
+          <p>{tx("Noch keine Frage vorhanden.")}</p>
+          <button disabled={!canEdit || !!session} onClick={addQuestion}>{tx("ERSTE FRAGE HINZUFÜGEN")}</button>
         </div>
       )}
       <footer>
         <Icon name="info" />
         <span>
           {session
-            ? "Die Quizdefinition ist während der laufenden Sitzung gesperrt, damit alle Teilnehmer dieselben Fragen sehen."
-            : "Beim Wechsel zu diesem Quiz während ON AIR wird die Sitzung gestartet und zuerst die Teilnahmefolie live angezeigt. Zurückgehaltene Freitextantworten erscheinen nicht auf MAIN."}
+            ? tx("Die Quizdefinition ist während der laufenden Sitzung gesperrt, damit alle Teilnehmer dieselben Fragen sehen.")
+            : tx("Beim Wechsel zu diesem Quiz während ON AIR wird die Sitzung gestartet und zuerst die Teilnahmefolie live angezeigt. Zurückgehaltene Freitextantworten erscheinen nicht auf MAIN.")}
         </span>
       </footer>
     </div>
@@ -3392,6 +3188,7 @@ function PreviewStack({
   previewToken: number;
   canEdit: boolean;
 }) {
+  const {tx}=useI18n();
   const [scrollPreview, setScrollPreview] = useState(false),
     [scrollStep, setScrollStep] = useState(0);
   const [draft, setDraft] = useState<{
@@ -3592,26 +3389,21 @@ function PreviewStack({
               setScrollPreview(!scrollPreview);
               setScrollStep(0);
             }}
-          >
-            ↕ Lyric Scrolling ·{" "}
-            {scrollPreview ? "VORSCHAU BEENDEN" : "VORSCHAU"}
+          >{tx("↕ Lyric Scrolling ·")}{" "}
+            {scrollPreview ? tx("VORSCHAU BEENDEN") : tx("VORSCHAU")}
           </button>
           {scrollPreview && (
             <>
               <button
                 onClick={() => setScrollStep((value) => Math.max(0, value - 1))}
-              >
-                ZURÜCK
-              </button>
+              >{tx("ZURÜCK")}</button>
               <button
                 onClick={() =>
                   setScrollStep((value) =>
                     Math.min(item.slides.length - 1, value + 1),
                   )
                 }
-              >
-                WEITER
-              </button>
+              >{tx("WEITER")}</button>
             </>
           )}
         </div>
@@ -3670,7 +3462,7 @@ function PreviewStack({
                 {active && canEdit && !element.locked && (
                   <i
                     className="production-resize-handle"
-                    title="Zum Ändern der Größe ziehen"
+                    title={tx("Zum Ändern der Größe ziehen")}
                     onPointerDown={(event) => begin(event, element, "resize")}
                   />
                 )}
@@ -3693,6 +3485,7 @@ function PreviewSlideCard({
   slide: Slide;
   index: number;
 }) {
+ const {tx}=useI18n();
   const state = usePresentation(),
     selected =
       slide.id === state.previewSlideId && item.id === state.previewItemId,
@@ -3707,10 +3500,10 @@ function PreviewSlideCard({
   return (
     <button
       data-preview-slide={slide.id}
-      aria-label={`${item.title}, Folie ${index + 1}`}
+      aria-label={tx("{value1}, Folie {value2}",{value1:String(item.title),value2:String((index+1))})}
       aria-selected={selected}
       aria-current={live ? "true" : undefined}
-      title={`${slide.title || `Folie ${index + 1}`}${slide.transitionOverride ? ` · ${transitionLabels[transition.type]} · ${(transition.durationMs / 1000).toFixed(1)} s` : ""}`}
+      title={(""+String((slide.title||tx("Folie {value1}",{value1:String((index+1))})))+""+String((slide.transitionOverride?(" · "+String(tx(transitionLabels[transition.type]))+" · "+String((transition.durationMs / 1000).toFixed(1))+" s"):""))+"")}
       className={`preview-slide-card ${selected ? "active" : ""} ${live ? "live" : ""}`}
       onClick={() => state.selectPreview(item.id, slide.id)}
     >
@@ -3721,7 +3514,7 @@ function PreviewSlideCard({
           <Icon name="animation" />
         </i>
       )}
-      </div><span className="preview-slide-caption">{slide.title?.trim()||`Folie ${index+1}`}</span>
+      </div><span className="preview-slide-caption">{(slide.title?.trim()||tx("Folie {value1}",{value1:String((index+1))}))}</span>
     </button>
   );
 }
@@ -3731,6 +3524,7 @@ function PreviewCenter({
 }: {
   activeQuick: QuickScreenConfig | null;
 }) {
+  const {tx}=useI18n();
   const output = useLiveOutputPreview(s=>s.slide);
   const banner=useAnnouncementBanner(s=>s.banner);
   const weatherWarnings=useWeatherWarnings(s=>s.state);
@@ -3842,8 +3636,8 @@ function PreviewCenter({
     return (
       <div className="preview-empty">
         <Icon name="slideshow" />
-        <b>NOCH KEINE ELEMENTE</b>
-        <span>Füge den ersten Inhalt zum Ablauf hinzu.</span>
+        <b>{tx("NOCH KEINE ELEMENTE")}</b>
+        <span>{tx("Füge den ersten Inhalt zum Ablauf hinzu.")}</span>
         <button
           onClick={() =>
             state.addItem("content", {
@@ -3853,8 +3647,7 @@ function PreviewCenter({
             })
           }
         >
-          <Icon name="add" /> ELEMENT HINZUFÜGEN
-        </button>
+          <Icon name="add" /> {tx("Element hinzufügen")}</button>
       </div>
     );
   if (state.previewLayout === "single")
@@ -3863,12 +3656,12 @@ function PreviewCenter({
         className="production-single"
         ref={root}
         tabIndex={0}
-        aria-label="MAIN-Liveansicht. Mit linker und rechter Pfeiltaste live weiterschalten."
+        aria-label={tx("MAIN-Liveansicht. Mit linker und rechter Pfeiltaste live weiterschalten.")}
       >
         <button
           className="preview-nav previous"
           disabled={currentIndex <= 0}
-          title="Vorherige MAIN-Folie"
+          title={tx("Vorherige MAIN-Folie")}
           onClick={() => move(-1)}
         >
           <Icon name="chevron_left" />
@@ -3900,8 +3693,8 @@ function PreviewCenter({
               aria-pressed={pausedSlideId === slide.id || livePaused}
               title={
                 pausedSlideId === slide.id || livePaused
-                  ? "Zeitsteuerung fortsetzen"
-                  : "Folie dauerhaft anzeigen"
+                  ? tx("Zeitsteuerung fortsetzen")
+                  : tx("Folie dauerhaft anzeigen")
               }
               onClick={() => {
                 const wasHeld = pausedSlideId === slide.id || livePaused;
@@ -3934,7 +3727,7 @@ function PreviewCenter({
           <button
             className="preview-nav next"
             disabled={state.onAir ? !canAdvanceLive(state) : currentIndex < 0 || currentIndex >= all.length - 1}
-            title="Nächste MAIN-Folie"
+            title={tx("Nächste MAIN-Folie")}
             onClick={() => move(1)}
           >
             <Icon name="chevron_right" />
@@ -3984,7 +3777,7 @@ function PreviewCenter({
                     <span>{entry.title}</span>
                     <small>
                       {entry.slides.length}{" "}
-                      {entry.slides.length === 1 ? "Folie" : "Folien"} ·{" "}
+                      {entry.slides.length === 1 ? tx("Folie") : tx("Folien")} ·{" "}
                       {formatDuration(itemDurationSeconds(entry))}
                       {entry.timing.repeat && (
                         <>
@@ -4007,7 +3800,7 @@ function PreviewCenter({
                 </div>
               ))
             ) : (
-              <p>Keine Elemente</p>
+              <p>{tx("Keine Elemente")}</p>
             )}
           </section>
         );
@@ -4058,6 +3851,7 @@ function PreviewRightSidebar({
   activeQuick: QuickScreenConfig | null;
   onQuick: (quick: QuickScreenConfig | null) => void;
 }) {
+  const {tx}=useI18n();
   const output = useLiveOutputPreview(s=>s.slide);
   const state = usePresentation(),
     [collapsed, setCollapsed] = useState(
@@ -4083,7 +3877,7 @@ function PreviewRightSidebar({
   if (collapsed)
     return (
       <aside className="preview-right collapsed">
-        <button title="Vorschauleiste einblenden" onClick={toggle}>
+        <button title={tx("Vorschauleiste einblenden")} onClick={toggle}>
           <Icon name="chevron_left" />
         </button>
       </aside>
@@ -4092,7 +3886,7 @@ function PreviewRightSidebar({
     <aside className="preview-right">
       <header>
         <b>MAIN</b>
-        <button title="MAIN-Leiste ausblenden" onClick={toggle}>
+        <button title={tx("MAIN-Leiste ausblenden")} onClick={toggle}>
           <Icon name="chevron_right" />
         </button>
       </header>
@@ -4100,7 +3894,7 @@ function PreviewRightSidebar({
         <MainLivePreview
           hideCountdown={Boolean(activeQuick)}
           suppressWeatherWarnings={Boolean(activeQuick&&activeQuick.type!=='countdown')}
-          title={`${liveItem?.title} · ${live.title || "Live-Folie"}`}
+          title={(""+String(liveItem?.title)+" · "+String((live.title||tx("Live-Folie")))+"")}
         >
           {state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage slide={previewSlide(state.onAir&&output?output:live)} transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(live,liveItem,'main',state.transitionDefault)} role="main" renderMode="mirror" />}
           <QuickOverlay quick={activeQuick} staticPreview={!state.onAir}/>
@@ -4108,12 +3902,12 @@ function PreviewRightSidebar({
         </MainLivePreview>
       ) : (
         <section className="live-slide-panel">
-          <h2>LIVE AUF MAIN</h2>
-          <p>MAIN ist derzeit OFF AIR.</p>
+          <h2>{tx("LIVE AUF MAIN")}</h2>
+          <p>{tx("MAIN ist derzeit OFF AIR.")}</p>
         </section>
       )}
       <section className="quick-screens-panel">
-        <h2>MAIN-SCHNELLANZEIGEN</h2>
+        <h2>{tx("MAIN-SCHNELLANZEIGEN")}</h2>
         <div>
           {quickScreens
             .filter((quick) => quick.enabled)
@@ -4126,8 +3920,8 @@ function PreviewRightSidebar({
                 disabled={quick.type === "noText" && !noTextAvailable}
                 title={
                   quick.type === "noText" && !noTextAvailable
-                    ? "Aktuell befinden sich keine ausblendbaren Inhalte auf der Folie."
-                    : `${quick.name}${state.onAir ? " sofort auf MAIN anzeigen" : " für MAIN vorbereiten"}`
+                    ? tx("Aktuell befinden sich keine ausblendbaren Inhalte auf der Folie.")
+                    : `${quick.name}${state.onAir ? tx("sofort auf MAIN anzeigen") : tx("für MAIN vorbereiten")}`
                 }
                 onClick={() =>
                   quick.type === "noText" && !noTextAvailable
@@ -4157,8 +3951,7 @@ function PreviewRightSidebar({
                       })
                     }
                   >
-                    <Icon name="chevron_left" /> Zurück
-                  </button>
+                    <Icon name="chevron_left" /> {tx("ZURÜCK")}</button>
                   <span>
                     {(activeQuick.pageIndex ?? 0) + 1}/
                     {activeQuick.pages!.length}
@@ -4177,14 +3970,12 @@ function PreviewRightSidebar({
                         ),
                       })
                     }
-                  >
-                    Weiter <Icon name="chevron_right" />
+                  >{tx("WEITER")} <Icon name="chevron_right" />
                   </button>
                 </div>
               )}
             <button className="restore-last" onClick={() => onQuick(null)}>
-              <Icon name="restore" /> MAIN-FOLIE WIEDERHERSTELLEN
-            </button>
+              <Icon name="restore" /> {tx("MAIN-FOLIE WIEDERHERSTELLEN")}</button>
           </>
         )}
       </section>
@@ -4203,6 +3994,7 @@ export function ProductionWorkspace({
   activeQuick?: QuickScreenConfig | null;
   onQuick?: (quick: QuickScreenConfig | null) => void;
 }) {
+  const {tx}=useI18n();
   const state = usePresentation(),
     { item, slide } = selected(state),
     [transitionPreview, setTransitionPreview] = useState(0);
@@ -4214,19 +4006,14 @@ export function ProductionWorkspace({
             className={state.previewLayout === "single" ? "active" : ""}
             aria-pressed={state.previewLayout === "single"}
             onClick={() => state.setPreviewLayout("single")}
-          >
-            EINZELVORSCHAU
-          </button>
+          >{tx("EINZELVORSCHAU")}</button>
           <button
             className={state.previewLayout === "grid" ? "active" : ""}
             aria-pressed={state.previewLayout === "grid"}
             onClick={() => state.setPreviewLayout("grid")}
-          >
-            FOLIENÜBERSICHT
-          </button>
+          >{tx("Folienübersicht")}</button>
           {state.previewLayout === "grid" && (
-            <label>
-              Thumbnailgröße <Icon name="zoom_out" />
+            <label>{tx("Thumbnailgröße")} <Icon name="zoom_out" />
               <input
                 type="range"
                 min="160"
@@ -4259,11 +4046,9 @@ export function ProductionWorkspace({
     );
   if (!item || !slide)
     return (
-      <section className="production-workspace production-empty">
-        Wähle ein Element im Ablauf aus.
-      </section>
+      <section className="production-workspace production-empty">{tx("Wähle ein Element im Ablauf aus.")}</section>
     );
-  if(isPostProgramSystemItem(item))return <section className="production-workspace production-empty"><div className="system-slide-explanation"><h2>Nächste Veranstaltung / Raum verlassen</h2><p>Geschützte Systemfolie · wird automatisch aus der verknüpften Veranstaltung und dem Raum vorbereitet.</p><p>Diese Folie steht immer am Anfang des Nachprogramms. Sie kann nicht bearbeitet, entfernt oder dupliziert werden.</p><p>Zum Prüfen: Testbetrieb starten → Raum verlassen oder Testveranstaltung.</p></div></section>;
+  if(isPostProgramSystemItem(item))return <section className="production-workspace production-empty"><div className="system-slide-explanation"><h2>{tx("Nächste Veranstaltung / Raum verlassen")}</h2><p>{tx("Geschützte Systemfolie · wird automatisch aus der verknüpften Veranstaltung und dem Raum vorbereitet.")}</p><p>{tx("Diese Folie steht immer am Anfang des Nachprogramms. Sie kann nicht bearbeitet, entfernt oder dupliziert werden.")}</p><p>{tx("Zum Prüfen: Testbetrieb starten → Raum verlassen oder Testveranstaltung.")}</p></div></section>;
   return (
     <section className="production-workspace">
       <div className="context-editor">
@@ -4320,6 +4105,7 @@ const palette = [
 ];
 
 function GuidesMenu({ close }: { close: () => void }) {
+  const {tx}=useI18n();
   const state = usePresentation(),
     preferences = usePreferences();
   const row = (
@@ -4336,9 +4122,7 @@ function GuidesMenu({ close }: { close: () => void }) {
       {row("smartGuides", "Intelligente Hilfslinien")}
       {row("marginGuides", "Rand-Hilfslinien")}
       {row("ruleOfThirds", "Drittelraster")}
-      <label className="guide-setting">
-        Rastergröße
-        <select
+      <label className="guide-setting">{tx("Rastergröße")}<select
           value={preferences.canvasGridSize}
           onChange={(event) =>
             preferences.setCanvasGridSize(Number(event.target.value))
@@ -4346,8 +4130,7 @@ function GuidesMenu({ close }: { close: () => void }) {
         >
           {[8, 16, 24, 32, 64].map((value) => (
             <option key={value} value={value}>
-              {value}px
-            </option>
+              {value}{tx("px")}</option>
           ))}
         </select>
       </label>
@@ -4362,9 +4145,7 @@ function GuidesMenu({ close }: { close: () => void }) {
               ? "check_box"
               : "check_box_outline_blank"
           }
-        />{" "}
-        Am Raster einrasten
-      </button>
+        />{" "}{tx("Am Raster einrasten")}</button>
       <button
         onClick={() =>
           preferences.setCanvasSnapGuides(!preferences.canvasSnapGuides)
@@ -4376,17 +4157,15 @@ function GuidesMenu({ close }: { close: () => void }) {
               ? "check_box"
               : "check_box_outline_blank"
           }
-        />{" "}
-        An Mitte und Rändern einrasten
-      </button>
+        />{" "}{tx("An Mitte und Rändern einrasten")}</button>
       <button className="menu-close" onClick={close}>
-        <Icon name="close" /> Schließen
-      </button>
+        <Icon name="close" /> {tx("Schließen")}</button>
     </div>
   );
 }
 
 function ArrangeMenu({ close }: { close: () => void }) {
+  const {tx}=useI18n();
   const state = usePresentation(),
     { slide } = selected(state),
     [dragLayer, setDragLayer] = useState<string | null>(null),
@@ -4418,57 +4197,47 @@ function ArrangeMenu({ close }: { close: () => void }) {
     });
   return (
     <div className="toolbar-popover arrange-menu" role="menu">
-      <h4>EBENEN</h4>
+      <h4>{tx("EBENEN")}</h4>
       <div className="menu-grid">
         <button disabled={!element} onClick={() => layer(true)}>
-          <Icon name="flip_to_front" />
-          Ganz nach vorn
-        </button>
+          <Icon name="flip_to_front" />{tx("Ganz nach vorn")}</button>
         <button disabled={!element} onClick={() => layer(false)}>
-          <Icon name="flip_to_back" />
-          Ganz nach hinten
-        </button>
+          <Icon name="flip_to_back" />{tx("Ganz nach hinten")}</button>
       </div>
-      <h4>MEHRFACHAUSWAHL</h4>
+      <h4>{tx("MEHRFACHAUSWAHL")}</h4>
       <div className="menu-grid">
         <button
           disabled={selectedElements.length < 2}
           onClick={() => state.alignSelectedElements("left")}
         >
-          <Icon name="align_horizontal_left" /> Links ausrichten
-        </button>
+          <Icon name="align_horizontal_left" /> {tx("Links ausrichten")}</button>
         <button
           disabled={selectedElements.length < 2}
           onClick={() => state.alignSelectedElements("centerX")}
         >
-          <Icon name="align_horizontal_center" /> Horizontal zentrieren
-        </button>
+          <Icon name="align_horizontal_center" /> {tx("Horizontal zentrieren")}</button>
         <button
           disabled={selectedElements.length < 2}
           onClick={() => state.alignSelectedElements("top")}
         >
-          <Icon name="align_vertical_top" /> Oben ausrichten
-        </button>
+          <Icon name="align_vertical_top" /> {tx("Oben ausrichten")}</button>
         <button
           disabled={selectedElements.length < 2}
           onClick={() => state.alignSelectedElements("centerY")}
         >
-          <Icon name="align_vertical_center" /> Vertikal zentrieren
-        </button>
+          <Icon name="align_vertical_center" /> {tx("Vertikal zentrieren")}</button>
         <button
           disabled={selectedElements.length < 3}
           onClick={() => state.distributeSelectedElements("horizontal")}
         >
-          <Icon name="space_bar" /> Horizontal verteilen
-        </button>
+          <Icon name="space_bar" /> {tx("Horizontal verteilen")}</button>
         <button
           disabled={selectedElements.length < 3}
           onClick={() => state.distributeSelectedElements("vertical")}
         >
-          <Icon name="height" /> Vertikal verteilen
-        </button>
+          <Icon name="height" /> {tx("Vertikal verteilen")}</button>
       </div>
-      <h4>EBENEN-PANEL</h4>
+      <h4>{tx("EBENEN-PANEL")}</h4>
       <div className="layer-list">
         {[...(slide?.elements ?? [])]
           .sort((a, b) => b.zIndex - a.zIndex)
@@ -4502,13 +4271,13 @@ function ArrangeMenu({ close }: { close: () => void }) {
                 {entry.name}
               </button>
               <button
-                title={entry.visible ? "Ausblenden" : "Einblenden"}
+                title={entry.visible ? tx("Ausblenden") : tx("Einblenden")}
                 onClick={() => state.toggleElementVisible(entry.id)}
               >
                 <Icon name={entry.visible ? "visibility" : "visibility_off"} />
               </button>
               <button
-                title={entry.locked ? "Entsperren" : "Sperren"}
+                title={entry.locked ? tx("Entsperren") : tx("Sperren")}
                 onClick={() => state.toggleElementLocked(entry.id)}
               >
                 <Icon name={entry.locked ? "lock" : "lock_open"} />
@@ -4516,35 +4285,35 @@ function ArrangeMenu({ close }: { close: () => void }) {
             </div>
           ))}
       </div>
-      <h4>AUSRICHTEN</h4>
+      <h4>{tx("AUSRICHTEN")}</h4>
       <div className="icon-grid">
-        <button disabled={!element} title="Links" onClick={() => align(0)}>
+        <button disabled={!element} title={tx("Links")} onClick={() => align(0)}>
           <Icon name="align_horizontal_left" />
         </button>
         <button
           disabled={!element}
-          title="Horizontal zentrieren"
+          title={tx("Horizontal zentrieren")}
           onClick={() => element && align((1920 - element.width) / 2)}
         >
           <Icon name="align_horizontal_center" />
         </button>
         <button
           disabled={!element}
-          title="Rechts"
+          title={tx("Rechts")}
           onClick={() => element && align(1920 - element.width)}
         >
           <Icon name="align_horizontal_right" />
         </button>
         <button
           disabled={!element}
-          title="Oben"
+          title={tx("Oben")}
           onClick={() => align(undefined, 0)}
         >
           <Icon name="align_vertical_top" />
         </button>
         <button
           disabled={!element}
-          title="Vertikal zentrieren"
+          title={tx("Vertikal zentrieren")}
           onClick={() =>
             element && align(undefined, (1080 - element.height) / 2)
           }
@@ -4553,13 +4322,13 @@ function ArrangeMenu({ close }: { close: () => void }) {
         </button>
         <button
           disabled={!element}
-          title="Unten"
+          title={tx("Unten")}
           onClick={() => element && align(undefined, 1080 - element.height)}
         >
           <Icon name="align_vertical_bottom" />
         </button>
       </div>
-      <h4>TRANSFORMIEREN</h4>
+      <h4>{tx("TRANSFORMIEREN")}</h4>
       <div className="menu-grid">
         <button
           disabled={!element}
@@ -4567,9 +4336,7 @@ function ArrangeMenu({ close }: { close: () => void }) {
             element && change({ rotation: (element.rotation + 90) % 360 })
           }
         >
-          <Icon name="rotate_right" />
-          Drehen
-        </button>
+          <Icon name="rotate_right" />{tx("Drehen")}</button>
         <button
           disabled={!element}
           onClick={() =>
@@ -4582,20 +4349,17 @@ function ArrangeMenu({ close }: { close: () => void }) {
             })
           }
         >
-          <Icon name="flip" />
-          Spiegeln
-        </button>
+          <Icon name="flip" />{tx("Spiegeln")}</button>
         <button
           disabled={!element}
           onClick={() => element && state.toggleElementLocked(element.id)}
         >
           <Icon name={element?.locked ? "lock_open" : "lock"} />
-          {element?.locked ? "Entsperren" : "Sperren"}
+          {element?.locked ? tx("Entsperren") : tx("Sperren")}
         </button>
       </div>
       <button className="menu-close" onClick={close}>
-        <Icon name="close" /> Schließen
-      </button>
+        <Icon name="close" /> {tx("Schließen")}</button>
     </div>
   );
 }
@@ -4607,6 +4371,7 @@ function BackgroundMenu({
   close: () => void;
   browse: () => void;
 }) {
+  const {tx}=useI18n();
   const state = usePresentation(),
     { slide } = selected(state),
     [assets, setAssets] = useState<MediaAsset[]>([]);
@@ -4628,14 +4393,10 @@ function BackgroundMenu({
   return (
     <div className="toolbar-popover background-menu" role="menu">
       <button onClick={browse}>
-        <Icon name="photo_library" />
-        Medien durchsuchen
-      </button>
+        <Icon name="photo_library" />{tx("Medien durchsuchen")}</button>
       <button onClick={() => void importImage()}>
-        <Icon name="upload" />
-        Importieren …
-      </button>
-      <h4>BILD</h4>
+        <Icon name="upload" />{tx("IMPORTIEREN …")}</button>
+      <h4>{tx("Bild")}</h4>
       <div className="background-recents">
         {assets.length ? (
           assets.map((asset) => (
@@ -4648,10 +4409,10 @@ function BackgroundMenu({
             </button>
           ))
         ) : (
-          <small>Noch keine Bilder verwendet.</small>
+          <small>{tx("Noch keine Bilder verwendet.")}</small>
         )}
       </div>
-      <h4>FÜLLFARBE</h4>
+      <h4>{tx("FÜLLFARBE")}</h4>
       <div className="color-swatches">
         {palette.map((color) => (
           <button
@@ -4664,7 +4425,7 @@ function BackgroundMenu({
         ))}
       </div>
       <label className="blur-control">
-        <span>Bild weichzeichnen</span>
+        <span>{tx("Bild weichzeichnen")}</span>
         <input
           type="range"
           min="0"
@@ -4675,9 +4436,9 @@ function BackgroundMenu({
             update({ backgroundBlur: Number(event.target.value) })
           }
         />
-        <output>{slide.backgroundBlur ?? 0}px</output>
+        <output>{slide.backgroundBlur ?? 0}{tx("px")}</output>
       </label>
-      <h4>BILDPOSITION</h4>
+      <h4>{tx("BILDPOSITION")}</h4>
       <button
         onClick={() =>
           update({
@@ -4685,10 +4446,8 @@ function BackgroundMenu({
           })
         }
       >
-        <Icon name="rotate_right" />
-        Drehen
-      </button>
-      <strong>An Höhe anpassen</strong>
+        <Icon name="rotate_right" />{tx("Drehen")}</button>
+      <strong>{tx("An Höhe anpassen")}</strong>
       <div className="position-grid">
         {(["left", "center", "right"] as const).map((value) => (
           <button
@@ -4704,14 +4463,14 @@ function BackgroundMenu({
             }
           >
             {value === "left"
-              ? "Links"
+              ? tx("Links")
               : value === "right"
-                ? "Rechts"
-                : "Mitte"}
+                ? tx("Rechts")
+                : tx("Mitte")}
           </button>
         ))}
       </div>
-      <strong>An Breite anpassen</strong>
+      <strong>{tx("An Breite anpassen")}</strong>
       <div className="position-grid">
         {(["top", "center", "bottom"] as const).map((value) => (
           <button
@@ -4726,7 +4485,7 @@ function BackgroundMenu({
               update({ backgroundFit: "100% auto", backgroundPositionY: value })
             }
           >
-            {value === "top" ? "Oben" : value === "bottom" ? "Unten" : "Mitte"}
+            {value === "top" ? tx("Oben") : value === "bottom" ? tx("Unten") : tx("Mitte")}
           </button>
         ))}
       </div>
@@ -4734,26 +4493,19 @@ function BackgroundMenu({
         <button
           className={slide.backgroundFit === "cover" ? "active" : ""}
           onClick={() => update({ backgroundFit: "cover" })}
-        >
-          Ausfüllen
-        </button>
+        >{tx("Ausfüllen")}</button>
         <button
           className={slide.backgroundFit === "contain" ? "active" : ""}
           onClick={() => update({ backgroundFit: "contain" })}
-        >
-          Anpassen
-        </button>
+        >{tx("Anpassen")}</button>
         <button
           className={slide.backgroundFit === "auto" ? "active" : ""}
           onClick={() => update({ backgroundFit: "auto" })}
-        >
-          Originalgröße
-        </button>
+        >{tx("Originalgröße")}</button>
       </div>
-      <small className="scope-note">Gilt für: Nur diese Folie</small>
+      <small className="scope-note">{tx("Gilt für: Nur diese Folie")}</small>
       <button className="menu-close" onClick={close}>
-        <Icon name="close" /> Schließen
-      </button>
+        <Icon name="close" /> {tx("Schließen")}</button>
     </div>
   );
 }
@@ -4763,6 +4515,7 @@ export function FormatToolbar({
 }: {
   openBackgroundMedia: () => void;
 }) {
+  const {tx}=useI18n();
   const state = usePresentation(),
     { slide } = selected(state),
     element =
@@ -4799,59 +4552,51 @@ export function FormatToolbar({
   if (element?.type === "shape")
     return (
       <div className="format-toolbar shape-format-toolbar" ref={root}>
-        <label>
-          2D-Objekt
-          <select
-            aria-label="Form"
+        <label>{tx("2D-OBJEKT")}<select
+            aria-label={tx("Form")}
             value={String(element.properties.shapeKind ?? "rectangle")}
             onChange={(event) => update({ shapeKind: event.target.value })}
           >
-            <option value="rectangle">Rechteck</option>
-            <option value="rounded">Abgerundetes Rechteck</option>
-            <option value="ellipse">Ellipse / Kreis</option>
-            <option value="triangle">Dreieck</option>
-            <option value="diamond">Raute</option>
-            <option value="pentagon">Fünfeck</option>
-            <option value="hexagon">Sechseck</option>
-            <option value="octagon">Achteck</option>
-            <option value="star">Stern</option>
-            <option value="burst">Sternenkranz</option>
-            <option value="arrow">Pfeil</option>
-            <option value="chevron">Chevron</option>
-            <option value="speech">Sprechblase</option>
-            <option value="cross">Kreuz</option>
-            <option value="parallelogram">Parallelogramm</option>
-            <option value="trapezoid">Trapez</option>
-            <option value="heart">Herz</option>
-            <option value="lightning">Blitz</option>
-            <option value="shield">Schild</option>
-            <option value="cloud">Wolke</option>
-            <option value="home">Haus</option>
-            <option value="moon">Halbmond</option>
+            <option value="rectangle">{tx("Rechteck")}</option>
+            <option value="rounded">{tx("Abgerundetes Rechteck")}</option>
+            <option value="ellipse">{tx("Ellipse / Kreis")}</option>
+            <option value="triangle">{tx("Dreieck")}</option>
+            <option value="diamond">{tx("Raute")}</option>
+            <option value="pentagon">{tx("Fünfeck")}</option>
+            <option value="hexagon">{tx("Sechseck")}</option>
+            <option value="octagon">{tx("Achteck")}</option>
+            <option value="star">{tx("Stern")}</option>
+            <option value="burst">{tx("Sternenkranz")}</option>
+            <option value="arrow">{tx("Pfeil")}</option>
+            <option value="chevron">{tx("Chevron")}</option>
+            <option value="speech">{tx("Sprechblase")}</option>
+            <option value="cross">{tx("Kreuz")}</option>
+            <option value="parallelogram">{tx("Parallelogramm")}</option>
+            <option value="trapezoid">{tx("Trapez")}</option>
+            <option value="heart">{tx("Herz")}</option>
+            <option value="lightning">{tx("Blitz")}</option>
+            <option value="shield">{tx("Schild")}</option>
+            <option value="cloud">{tx("Wolke")}</option>
+            <option value="home">{tx("Haus")}</option>
+            <option value="moon">{tx("Halbmond")}</option>
           </select>
         </label>
-        <label>
-          Füllung
-          <input
-            aria-label="Füllfarbe"
+        <label>{tx("Füllung")}<input
+            aria-label={tx("FÜLLFARBE")}
             type="color"
             value={String(element.properties.fill ?? "#ffffff")}
             onChange={(event) => update({ fill: event.target.value })}
           />
         </label>
-        <label>
-          Kontur
-          <input
-            aria-label="Konturfarbe"
+        <label>{tx("Kontur")}<input
+            aria-label={tx("Konturfarbe")}
             type="color"
             value={String(element.properties.stroke ?? "#000000")}
             onChange={(event) => update({ stroke: event.target.value })}
           />
         </label>
-        <label>
-          Stärke
-          <input
-            aria-label="Konturstärke"
+        <label>{tx("Stärke")}<input
+            aria-label={tx("Konturstärke")}
             type="number"
             min="0"
             max="40"
@@ -4861,10 +4606,8 @@ export function FormatToolbar({
             }
           />
         </label>
-        <label>
-          X
-          <input
-            aria-label="X-Position"
+        <label>{tx("X")}<input
+            aria-label={tx("X-Position")}
             type="number"
             min="-1920"
             max="3840"
@@ -4874,10 +4617,8 @@ export function FormatToolbar({
             }
           />
         </label>
-        <label>
-          Y
-          <input
-            aria-label="Y-Position"
+        <label>{tx("Y")}<input
+            aria-label={tx("Y-Position")}
             type="number"
             min="-1080"
             max="2160"
@@ -4887,10 +4628,8 @@ export function FormatToolbar({
             }
           />
         </label>
-        <label>
-          Breite
-          <input
-            aria-label="Breite"
+        <label>{tx("Breite")}<input
+            aria-label={tx("Breite")}
             type="number"
             min="1"
             max="3840"
@@ -4902,10 +4641,8 @@ export function FormatToolbar({
             }
           />
         </label>
-        <label>
-          Höhe
-          <input
-            aria-label="Höhe"
+        <label>{tx("Höhe")}<input
+            aria-label={tx("Höhe")}
             type="number"
             min="1"
             max="2160"
@@ -4917,10 +4654,8 @@ export function FormatToolbar({
             }
           />
         </label>
-        <label>
-          Drehung
-          <input
-            aria-label="Drehung"
+        <label>{tx("Drehung")}<input
+            aria-label={tx("Drehung")}
             type="number"
             min="-360"
             max="360"
@@ -4932,10 +4667,8 @@ export function FormatToolbar({
             }
           />
         </label>
-        <label>
-          Deckkraft
-          <input
-            aria-label="Deckkraft"
+        <label>{tx("Deckkraft")}<input
+            aria-label={tx("Deckkraft")}
             type="range"
             min="0"
             max="100"
@@ -4949,7 +4682,7 @@ export function FormatToolbar({
         </label>
         <button
           className={!element.visible ? "active" : ""}
-          title="Sichtbarkeit umschalten"
+          title={tx("Sichtbarkeit umschalten")}
           onClick={() => state.toggleElementVisible(element.id)}
         >
           <Icon name={element.visible ? "visibility" : "visibility_off"} />
@@ -4959,8 +4692,7 @@ export function FormatToolbar({
           <button
             className={menu === "arrange" ? "active" : ""}
             onClick={() => toggle("arrange")}
-          >
-            Anordnen <Icon name="arrow_drop_down" />
+          >{tx("Anordnen")} <Icon name="arrow_drop_down" />
           </button>
           {menu === "arrange" && <ArrangeMenu close={() => setMenu(null)} />}
         </span>
@@ -4971,9 +4703,9 @@ export function FormatToolbar({
       <div className="format-toolbar element-format-toolbar" ref={root}>
         <strong className="element-kind-label">
           {element.type === "image"
-            ? "BILD"
+            ? tx("Bild")
             : element.type === "qr"
-              ? "QR-CODE"
+              ? tx("QR-CODE")
               : element.type.toUpperCase()}
         </strong>
         {[
@@ -4998,10 +4730,8 @@ export function FormatToolbar({
             />
           </label>
         ))}
-        <label>
-          Deckkraft
-          <input
-            aria-label="Deckkraft"
+        <label>{tx("Deckkraft")}<input
+            aria-label={tx("Deckkraft")}
             type="range"
             min="0"
             max="100"
@@ -5015,7 +4745,7 @@ export function FormatToolbar({
         </label>
         <button
           className={!element.visible ? "active" : ""}
-          title="Sichtbarkeit umschalten"
+          title={tx("Sichtbarkeit umschalten")}
           onClick={() => state.toggleElementVisible(element.id)}
         >
           <Icon name={element.visible ? "visibility" : "visibility_off"} />
@@ -5025,8 +4755,7 @@ export function FormatToolbar({
           <button
             className={menu === "arrange" ? "active" : ""}
             onClick={() => toggle("arrange")}
-          >
-            Anordnen <Icon name="arrow_drop_down" />
+          >{tx("Anordnen")} <Icon name="arrow_drop_down" />
           </button>
           {menu === "arrange" && <ArrangeMenu close={() => setMenu(null)} />}
         </span>
@@ -5035,7 +4764,7 @@ export function FormatToolbar({
   return (
     <div className="format-toolbar" ref={root}>
       <select
-        aria-label="Schriftart"
+        aria-label={tx("Schriftart")}
         value={String(element?.properties.fontFamily ?? "Cera Pro")}
         onChange={(event) => update({ fontFamily: event.target.value })}
       >
@@ -5050,7 +4779,7 @@ export function FormatToolbar({
         ))}
       </select>
       <select
-        aria-label="Textvorlage"
+        aria-label={tx("Textvorlage")}
         value={String(element?.properties.textPreset ?? "normal")}
         onChange={(event) => {
           const preset = event.target.value;
@@ -5092,29 +4821,29 @@ export function FormatToolbar({
           );
         }}
       >
-        <option value="normal">Normal</option>
-        <option value="hero">Große Überschrift</option>
-        <option value="title">Titel</option>
-        <option value="subtitle">Untertitel</option>
-        <option value="caption">Bildunterschrift</option>
+        <option value="normal">{tx("Normal")}</option>
+        <option value="hero">{tx("Große Überschrift")}</option>
+        <option value="title">{tx("Titel")}</option>
+        <option value="subtitle">{tx("Untertitel")}</option>
+        <option value="caption">{tx("Bildunterschrift")}</option>
       </select>
       <select
-        aria-label="Schriftgewicht"
+        aria-label={tx("Schriftgewicht")}
         value={String(element?.properties.fontWeight ?? 500)}
         onChange={(event) => update({ fontWeight: Number(event.target.value) })}
       >
-        <option value="100">Dünn</option>
-        <option value="200">Extra leicht</option>
-        <option value="300">Leicht</option>
-        <option value="400">Normal</option>
-        <option value="500">Medium</option>
-        <option value="600">Halbfett</option>
-        <option value="700">Fett</option>
-        <option value="800">Extra fett</option>
-        <option value="900">Schwarz</option>
+        <option value="100">{tx("Dünn")}</option>
+        <option value="200">{tx("Extra leicht")}</option>
+        <option value="300">{tx("Leicht")}</option>
+        <option value="400">{tx("Normal")}</option>
+        <option value="500">{tx("Medium")}</option>
+        <option value="600">{tx("Halbfett")}</option>
+        <option value="700">{tx("Fett")}</option>
+        <option value="800">{tx("Extra fett")}</option>
+        <option value="900">{tx("Schwarz")}</option>
       </select>
       <input
-        aria-label="Textgröße"
+        aria-label={tx("Textgröße")}
         type="number"
         min="12"
         max="240"
@@ -5122,7 +4851,7 @@ export function FormatToolbar({
         onChange={(event) => update({ fontSize: Number(event.target.value) })}
       />
       <input
-        aria-label="Zeilenhöhe"
+        aria-label={tx("Zeilenhöhe")}
         type="number"
         min="0.7"
         max="2"
@@ -5131,7 +4860,7 @@ export function FormatToolbar({
         onChange={(event) => update({ lineHeight: Number(event.target.value) })}
       />
       <button
-        title="Fett"
+        title={tx("Fett")}
         onClick={() =>
           update({
             fontWeight:
@@ -5139,10 +4868,10 @@ export function FormatToolbar({
           })
         }
       >
-        <b>B</b>
+        <b>{tx("B")}</b>
       </button>
       <button
-        title="Kursiv"
+        title={tx("Kursiv")}
         onClick={() =>
           update({
             fontStyle:
@@ -5150,10 +4879,10 @@ export function FormatToolbar({
           })
         }
       >
-        <i>I</i>
+        <i>{tx("I")}</i>
       </button>
       <button
-        title="Ausrichtung"
+        title={tx("Ausrichtung")}
         onClick={() =>
           update({
             align:
@@ -5172,7 +4901,7 @@ export function FormatToolbar({
       <i />
       <button
         className={element?.properties.textShadow ? "active" : ""}
-        title="Textschatten ein-/ausschalten"
+        title={tx("Textschatten ein-/ausschalten")}
         onClick={() =>
           update({
             textShadow: element?.properties.textShadow
@@ -5180,23 +4909,19 @@ export function FormatToolbar({
               : "0 0.08em 0.28em rgba(0,0,0,.72)",
           })
         }
-      >
-        Schatten
-      </button>
+      >{tx("Schatten")}</button>
       <button
         className={element?.properties.textOutline ? "active" : ""}
-        title="Textkontur ein-/ausschalten"
+        title={tx("Textkontur ein-/ausschalten")}
         onClick={() =>
           update({
             textOutline: element?.properties.textOutline ? "" : ".035em #000",
           })
         }
-      >
-        Kontur
-      </button>
+      >{tx("Kontur")}</button>
       <button
         className={element?.properties.textGlow ? "active" : ""}
-        title="Leuchteffekt ein-/ausschalten"
+        title={tx("Leuchteffekt ein-/ausschalten")}
         onClick={() =>
           update({
             textGlow: element?.properties.textGlow
@@ -5204,13 +4929,9 @@ export function FormatToolbar({
               : "0 0 .24em rgba(255,255,255,.9)",
           })
         }
-      >
-        Leuchten
-      </button>
-      <label>
-        Deckkraft
-        <input
-          aria-label="Textdeckkraft"
+      >{tx("Leuchten")}</button>
+      <label>{tx("Deckkraft")}<input
+          aria-label={tx("Textdeckkraft")}
           type="range"
           min="0"
           max="100"
@@ -5223,10 +4944,8 @@ export function FormatToolbar({
           }
         />
       </label>
-      <label className="toolbar-color">
-        Textfarbe
-        <input
-          aria-label="Textfarbe"
+      <label className="toolbar-color">{tx("Textfarbe")}<input
+          aria-label={tx("Textfarbe")}
           type="color"
           value={String(element?.properties.color ?? "#ffffff")}
           onChange={(event) => update({ color: event.target.value })}
@@ -5236,8 +4955,7 @@ export function FormatToolbar({
         <button
           className={menu === "guides" ? "active" : ""}
           onClick={() => toggle("guides")}
-        >
-          Hilfslinien <Icon name="arrow_drop_down" />
+        >{tx("Hilfslinien")} <Icon name="arrow_drop_down" />
         </button>
         {menu === "guides" && <GuidesMenu close={() => setMenu(null)} />}
       </span>
@@ -5245,8 +4963,7 @@ export function FormatToolbar({
         <button
           className={menu === "arrange" ? "active" : ""}
           onClick={() => toggle("arrange")}
-        >
-          Anordnen <Icon name="arrow_drop_down" />
+        >{tx("Anordnen")} <Icon name="arrow_drop_down" />
         </button>
         {menu === "arrange" && <ArrangeMenu close={() => setMenu(null)} />}
       </span>
@@ -5254,8 +4971,7 @@ export function FormatToolbar({
         <button
           className={menu === "background" ? "active" : ""}
           onClick={() => toggle("background")}
-        >
-          Hintergrund <Icon name="arrow_drop_down" />
+        >{tx("Hintergrund")} <Icon name="arrow_drop_down" />
         </button>
         {menu === "background" && (
           <BackgroundMenu
@@ -5272,6 +4988,7 @@ export function FormatToolbar({
 }
 
 export function OutputTabs() {
+  const {tx}=useI18n();
   const state = usePresentation(),
     item = state.items.find((entry) => entry.id === state.selectedItemId);
   return (
@@ -5281,14 +4998,14 @@ export function OutputTabs() {
         aria-selected="true"
         className="active"
         onClick={() => state.setActiveVirtualScreen("main")}
-      >
-        MAIN ({item?.type === "song" ? "Lyrics" : "Inhalt"})
+      >{tx("MAIN (")}{item?.type === "song" ? tx("Lyrics") : tx("Inhalt")})
       </button>
     </div>
   );
 }
 
 export function ProductionTimeline() {
+  const {tx}=useI18n();
   const state = usePresentation(),
     showThumbnails = usePreferences((value) => value.timelineThumbnails),
     [expanded, setExpanded] = useState(
@@ -5327,10 +5044,9 @@ export function ProductionTimeline() {
       style={expanded ? { height } : undefined}
     >
       <button className="timeline-toggle" onClick={toggle}>
-        <b>TIMELINE</b>
+        <b>{tx("TIMELINE")}</b>
         <span>
-          {state.serviceTime &&
-            `SERVICE ${formatServiceTime(state.serviceTime)}`}
+          {(state.serviceTime&&tx("SERVICE {value1}",{value1:String(formatServiceTime(state.serviceTime))}))}
         </span>
         <Icon name={expanded ? "expand_more" : "expand_less"} />
       </button>
@@ -5338,7 +5054,7 @@ export function ProductionTimeline() {
         <>
           <input
             className="timeline-resize"
-            aria-label="Timeline-Höhe"
+            aria-label={tx("Timeline-Höhe")}
             type="range"
             min="120"
             max="360"
