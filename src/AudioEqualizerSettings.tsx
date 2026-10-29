@@ -27,7 +27,7 @@ export function AudioEqualizerSettings() {
       <div className={`equalizer-bands ${mode === "standard" ? "disabled" : ""}`}>
         {equalizerBands.map((band, index) => (
           <label key={band.frequency}>
-            <b>{band.group}</b>
+            <b>{tx(band.group)}</b>
             <input
               type="range"
               min={-12}
@@ -36,7 +36,7 @@ export function AudioEqualizerSettings() {
               value={values[index] ?? 0}
               disabled={mode === "standard"}
               onChange={(event) => setBand(index, Number(event.target.value))}
-              aria-label={band.accessibleName(values[index] ?? 0)}
+              aria-label={tx("{group}, {frequency}, {value} Dezibel",{group:tx(band.group),frequency:band.spokenFrequency,value:values[index]??0})}
             />
             <output>{values[index] ?? 0} dB</output>
             <small>{band.frequency}</small>

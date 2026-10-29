@@ -210,7 +210,7 @@ export function BackgroundAudioPanel({
               </button>
               <span>
                 <b>{track.name}</b>
-                <small>{track.artist || track.format || "Cloud-Audio"}</small>
+                <small>{((track.artist||track.format)||tx("Cloud-Audio"))}</small>
               </span>
               <small className="audio-track-duration">
                 {duration(track.durationSeconds)}

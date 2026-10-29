@@ -6,7 +6,7 @@ The user requires all 31 variants to be complete before publication. No partial 
 
 Every saved article is checked with `validateRegionalDocumentation` against its exact assembled German source, including placeholders, paragraph count, numbers, links and related article identities. Validation of a subset does **not** establish coverage of missing articles. The complete source has 63 help articles and 1,610 historical release fields (before v95 notes).
 
-To resume: finish the remaining source-copy inventory and operator interface review before marking availability complete. All 31 interface files currently contain 1989 UI and 55 native entries. This namespace coverage does not establish that every remaining source literal is bound. Preserve existing translations. When the German help or release source changes for v95, update runtime translations and validate retained drafts against that source, or retire the integrated drafts deliberately rather than leaving stale fact checks.
+To resume: finish the remaining source-copy inventory and operator interface review before marking availability complete. All 31 interface files currently contain 2016 UI and 55 native entries. This namespace coverage does not establish that every remaining source literal is bound. Preserve existing translations. When the German help or release source changes for v95, update runtime translations and validate retained drafts against that source, or retire the integrated drafts deliberately rather than leaving stale fact checks.
 
 Useful checks:
 

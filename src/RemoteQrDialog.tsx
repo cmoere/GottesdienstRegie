@@ -10,7 +10,7 @@ export function RemoteQrDialog({url,name,onClose}:{url:string;name:string;onClos
  return <div className="modal-backdrop" onMouseDown={event=>{if(event.target===event.currentTarget)onClose()}}>
   <section className="modal remote-qr-dialog" role="dialog" aria-modal="true" aria-labelledby="remote-qr-title" style={{maxWidth:520,padding:24}}>
    <h3 id="remote-qr-title">{name}</h3><p>{tx("Mit der Kamera des Geräts scannen. Beide Geräte müssen im selben lokalen Netzwerk sein.")}</p>
-   {image?<img src={image} alt={`QR-Code für ${name}`} style={{display:'block',width:'min(100%, 340px)',height:'auto',margin:'16px auto'}}/>:<p role="status">{error?tx("QR-Code konnte nicht erstellt werden. Bitte den Link kopieren."):tx("QR-Code wird erstellt …")}</p>}
+   {image?<img src={image} alt={tx("QR-Code für {value1}",{value1:String(name)})} style={{display:'block',width:'min(100%, 340px)',height:'auto',margin:'16px auto'}}/>:<p role="status">{error?tx("QR-Code konnte nicht erstellt werden. Bitte den Link kopieren."):tx("QR-Code wird erstellt …")}</p>}
    <p style={{overflowWrap:'anywhere',userSelect:'text',fontSize:13}}>{url}</p>
    <p>{tx("Ein Steuerungslink erteilt Zugriff mit den freigegebenen Rechten. Teile ihn nur mit der vorgesehenen Person.")}</p>
    <footer><button onClick={()=>void navigator.clipboard.writeText(url)}>{tx("URL kopieren")}</button><button autoFocus onClick={onClose}>{tx("Schließen")}</button></footer>

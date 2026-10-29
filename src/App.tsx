@@ -1,3 +1,4 @@
+import {resolveRegionalText} from './regional/resources';
 import {settingsExtraTemplateKeys} from "../shared/regional/settingsExtraTemplates";
 import {useUpdateSettingsRequest} from './useUpdateSettingsRequest';
 import {getHelpCatalog} from './help';
@@ -546,7 +547,7 @@ function Login({
           {error && (
             <div className="error">
               <Icon name="error" />
-              <span>{error}</span>
+              <span>{error==="Bitte bestätige zuerst die Nutzungsbedingungen."?tx("Bitte bestätige zuerst die Nutzungsbedingungen."):error}</span>
             </div>
           )}
           <label className="terms-consent">
@@ -588,7 +589,7 @@ function Login({
         </div>
         {showLoginBackgrounds && (
           <span className="image-credit">
-            <Icon name="photo_camera" /> {backgroundImage.details}
+            <Icon name="photo_camera" /> {tx(backgroundImage.details)}
           </span>
         )}
       </main>
@@ -1282,7 +1283,7 @@ function addConfiguredVideoInput(sectionId: string, close: () => void) {
     .videoInputSources.find((item) => item.enabled && item.deviceId);
   if (!source) {
     alert(
-      "Es ist keine verfügbare Videoquelle konfiguriert. Wähle zuerst unter Einstellungen → Videoeingang eine Kamera oder Capture Card aus.",
+      resolveRegionalText(usePreferences.getState(),"operatorSource_c7a22d3f72e8a87d"),
     );
     return;
   }

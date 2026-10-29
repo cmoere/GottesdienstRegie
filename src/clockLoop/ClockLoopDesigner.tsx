@@ -20,7 +20,7 @@ export function ClockLoopDesigner({item,canEdit}:{item:ServiceItem;canEdit:boole
    <label><input type="checkbox" checked={settings.showWeekday} onChange={event=>change({showWeekday:event.target.checked})}/>{tx("Wochentag anzeigen")}</label>
    <label>{tx("Datumsformat")}<select value={settings.dateFormat} onChange={event=>change({dateFormat:event.target.value as ClockSettings['dateFormat']})}><option value="dmy">23.10.2026</option><option value="day-month">23.10.</option><option value="long">23. Oktober 2026</option><option value="iso">2026-10-23</option></select></label>
    <label>{tx("Ausrichtung")}<select value={settings.align} onChange={event=>change({align:event.target.value as ClockSettings['align']})}><option value="left">{tx("Links")}</option><option value="center">{tx("Mitte")}</option><option value="right">{tx("Rechts")}</option></select></label>
-   {(['background','color','accent'] as const).map((key,i)=><label key={key}>{['Hintergrundfarbe','Textfarbe','Akzentfarbe'][i]}<input type="color" value={settings[key]} onChange={event=>change({[key]:event.target.value})}/></label>)}
+   {(['background','color','accent'] as const).map((key,i)=><label key={key}>{[tx("Hintergrundfarbe"),tx("Textfarbe"),tx("Akzentfarbe")][i]}<input type="color" value={settings[key]} onChange={event=>change({[key]:event.target.value})}/></label>)}
   </fieldset>
  </section>;
 }

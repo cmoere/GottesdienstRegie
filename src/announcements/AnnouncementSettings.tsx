@@ -121,6 +121,6 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     <h4>{t('speechSettingsPublicTexts')}</h4>
     <p>{t('speechSettingsPublicHelp')}</p>
     {!rows && <button type="button" onClick={refreshTexts}>{t('speechSettingsRefresh')}</button>}
-    {texts.length ? <ol aria-label={t('speechSettingsPublicTexts')}>{texts.map(row => <li key={row.id}><strong>{row.title || 'Durchsage'}</strong><p style={{whiteSpace:'pre-wrap'}}>{row.text}</p></li>)}</ol> : <p>{t(loaded || rows ? 'speechSettingsEmpty' : 'speechSettingsNotLoaded')}</p>}
+    {texts.length ? <ol aria-label={t('speechSettingsPublicTexts')}>{texts.map(row => <li key={row.id}><strong>{(row.title||tx("Durchsage"))}</strong><p style={{whiteSpace:'pre-wrap'}}>{row.text}</p></li>)}</ol> : <p>{t(loaded || rows ? 'speechSettingsEmpty' : 'speechSettingsNotLoaded')}</p>}
   </section>;
 }

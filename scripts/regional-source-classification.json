@@ -3095,6 +3095,426 @@
       "context": "BinaryExpression",
       "text": "Bildschirmtest abgebrochen.",
       "reason": "Manually reviewed 2026-10-29: Canonical screen-test pattern/report descriptor. ScreenTestDialog has explicit, registered patternLabels and summaryMessages mappings for every public coordinator outcome. Keep the receipt protocol, exported factual report and test engine independent of interface language."
+    },
+    "source.b810c22c5cdf46f9f1f9.1": {
+      "source": "src/App.tsx",
+      "text": "Stadtmotiv, Bielefeld, Deutschland",
+      "context": "property:\"bielefeld.png\"",
+      "reason": "Manually reviewed 2026-10-29: Canonical bundled login-photo description. These descriptors are explicitly registered and Login now renders backgroundImage.details through tx; image metadata/source and the selected background remain unchanged."
+    },
+    "source.50e2b8322d6312070a30.1": {
+      "source": "src/App.tsx",
+      "text": "Deutsches Stadtmotiv bei Nacht",
+      "context": "property:\"german-city-night.png\"",
+      "reason": "Manually reviewed 2026-10-29: Canonical bundled login-photo description. These descriptors are explicitly registered and Login now renders backgroundImage.details through tx; image metadata/source and the selected background remain unchanged."
+    },
+    "source.891eeaa9cbfd874b6795.1": {
+      "source": "src/App.tsx",
+      "text": "Deutsche Seenlandschaft",
+      "context": "property:\"german-lake.png\"",
+      "reason": "Manually reviewed 2026-10-29: Canonical bundled login-photo description. These descriptors are explicitly registered and Login now renders backgroundImage.details through tx; image metadata/source and the selected background remain unchanged."
+    },
+    "source.61e22248bb9e80455f57.1": {
+      "source": "src/App.tsx",
+      "text": "Stadt- und Naturmotiv, Deutschland",
+      "context": "BinaryExpression",
+      "reason": "Manually reviewed 2026-10-29: Canonical bundled login-photo description. These descriptors are explicitly registered and Login now renders backgroundImage.details through tx; image metadata/source and the selected background remain unchanged."
+    },
+    "source.c8d45a2c6a18bfbdeec5.1": {
+      "source": "src/App.tsx",
+      "text": "Bitte bestätige zuerst die Nutzungsbedingungen.",
+      "context": "CallExpression",
+      "reason": "Manually reviewed 2026-10-29: Canonical identity for the local consent-validation result. Login explicitly compares this sentinel and renders its registered tx caption, preserving other auth-provider/user-supplied error data."
+    },
+    "source.39ec3e8befe3400f211a.1": {
+      "source": "src/App.tsx",
+      "text": "SERVER",
+      "context": "ConditionalExpression",
+      "reason": "Manually reviewed 2026-10-29: Exact auth/storage error code passed to the existing error mapper or compared against a backend failure. These are control-flow identifiers; translating them would break error classification."
+    },
+    "source.39ec3e8befe3400f211a.2": {
+      "source": "src/App.tsx",
+      "text": "SERVER",
+      "context": "ConditionalExpression",
+      "reason": "Manually reviewed 2026-10-29: Exact auth/storage error code passed to the existing error mapper or compared against a backend failure. These are control-flow identifiers; translating them would break error classification."
+    },
+    "source.3833150aa0e6e0a5fdee.1": {
+      "source": "src/App.tsx",
+      "text": "GR",
+      "context": "jsx-text:div",
+      "reason": "Manually reviewed 2026-10-29: Application wordmark/initials or fixed recovery-code mask; not regional operator prose. Their semantics and required code grouping must remain unchanged."
+    },
+    "source.935b87462ca7040bc34a.1": {
+      "source": "src/App.tsx",
+      "text": "GottesdienstRegie",
+      "context": "jsx-text:h1",
+      "reason": "Manually reviewed 2026-10-29: Application wordmark/initials or fixed recovery-code mask; not regional operator prose. Their semantics and required code grouping must remain unchanged."
+    },
+    "source.4b3c721262731a95d09b.1": {
+      "source": "src/App.tsx",
+      "text": "Bitte bestätige zuerst die Nutzungsbedingungen.",
+      "context": "BinaryExpression",
+      "reason": "Manually reviewed 2026-10-29: Canonical identity for the local consent-validation result. Login explicitly compares this sentinel and renders its registered tx caption, preserving other auth-provider/user-supplied error data."
+    },
+    "source.4f0beaa3a6046798c2cc.1": {
+      "source": "src/App.tsx",
+      "text": "XXXX-XXXX-XXXX",
+      "context": "ConditionalExpression",
+      "reason": "Manually reviewed 2026-10-29: Application wordmark/initials or fixed recovery-code mask; not regional operator prose. Their semantics and required code grouping must remain unchanged."
+    },
+    "source.022adf4355f061692d4a.1": {
+      "source": "src/App.tsx",
+      "text": "GOTTESDIENSTREGIE",
+      "context": "jsx-text:small",
+      "reason": "Manually reviewed 2026-10-29: Application wordmark/initials or fixed recovery-code mask; not regional operator prose. Their semantics and required code grouping must remain unchanged."
+    },
+    "source.aea00522b6965267d808.1": {
+      "source": "src/App.tsx",
+      "text": "TOO_LARGE",
+      "context": "CallExpression",
+      "reason": "Manually reviewed 2026-10-29: Exact auth/storage error code passed to the existing error mapper or compared against a backend failure. These are control-flow identifiers; translating them would break error classification."
+    },
+    "source.38336466b202b75cc929.1": {
+      "source": "src/App.tsx",
+      "text": "MAIN",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preserved output-role/operating-state identifier, language autonym or official competition name. Surrounding picker labels are localized, but these factual names retain the same spelling and stored option value across German regional interfaces."
+    },
+    "source.38336466b202b75cc929.2": {
+      "source": "src/App.tsx",
+      "text": "MAIN",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preserved output-role/operating-state identifier, language autonym or official competition name. Surrounding picker labels are localized, but these factual names retain the same spelling and stored option value across German regional interfaces."
+    },
+    "source.3bc1e17eee2bf0c976e9.1": {
+      "source": "src/App.tsx",
+      "text": "STAGE",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preserved output-role/operating-state identifier, language autonym or official competition name. Surrounding picker labels are localized, but these factual names retain the same spelling and stored option value across German regional interfaces."
+    },
+    "source.c86197b2665fb92fafdc.1": {
+      "source": "src/App.tsx",
+      "text": "LIVESTREAM",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preserved output-role/operating-state identifier, language autonym or official competition name. Surrounding picker labels are localized, but these factual names retain the same spelling and stored option value across German regional interfaces."
+    },
+    "source.ed8438529045614a9888.1": {
+      "source": "src/App.tsx",
+      "text": "GottesdienstRegie",
+      "context": "jsx-attribute:alt",
+      "reason": "Manually reviewed 2026-10-29: Application wordmark/initials or fixed recovery-code mask; not regional operator prose. Their semantics and required code grouping must remain unchanged."
+    },
+    "source.efae0bf31fc7defb9d9a.1": {
+      "source": "src/App.tsx",
+      "text": "GottesdienstRegie",
+      "context": "jsx-text:strong",
+      "reason": "Manually reviewed 2026-10-29: Application wordmark/initials or fixed recovery-code mask; not regional operator prose. Their semantics and required code grouping must remain unchanged."
+    },
+    "source.13abbf1b3297c4747992.1": {
+      "source": "src/AudioEqualizerSettings.tsx",
+      "text": "dB",
+      "context": "jsx-text:output",
+      "reason": "Manually reviewed 2026-10-29: Invariant decibel unit; the surrounding group caption and complete input accessible name now have explicit regional resources."
+    },
+    "source.677b42ab913147d8187c.1": {
+      "source": "src/BackgroundAudioPanel.tsx",
+      "text": "OFF AIR",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preserved output-role/operating-state identifier, language autonym or official competition name. Surrounding picker labels are localized, but these factual names retain the same spelling and stored option value across German regional interfaces."
+    },
+    "source.0d33183fb85174dc79d7.1": {
+      "source": "src/RemoteCenter.tsx",
+      "text": "LIVESTREAM",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preserved output-role/operating-state identifier, language autonym or official competition name. Surrounding picker labels are localized, but these factual names retain the same spelling and stored option value across German regional interfaces."
+    },
+    "source.5feb103439606a7d031d.1": {
+      "source": "src/RemoteCenter.tsx",
+      "text": "English",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preserved output-role/operating-state identifier, language autonym or official competition name. Surrounding picker labels are localized, but these factual names retain the same spelling and stored option value across German regional interfaces."
+    },
+    "source.5feb103439606a7d031d.2": {
+      "source": "src/RemoteCenter.tsx",
+      "text": "English",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preserved output-role/operating-state identifier, language autonym or official competition name. Surrounding picker labels are localized, but these factual names retain the same spelling and stored option value across German regional interfaces."
+    },
+    "source.31e2ec2d7f86e43110ac.1": {
+      "source": "src/VideoInputSettings.tsx",
+      "text": "Kamera 1",
+      "context": "property:name",
+      "reason": "Manually reviewed 2026-10-29: Editable default video-source name saved in VideoInputSource.name when no device label is available; it is model/user content, not a control caption. Device selector fallbacks and all loading/permission/no-signal/connected messages are separately localized."
+    },
+    "source.dd2c4087d48a951a1b15.1": {
+      "source": "src/VideoInputSettings.tsx",
+      "text": "{expression1} × {expression2} · {expression3} fps",
+      "context": "CallExpression",
+      "reason": "Manually reviewed 2026-10-29: Technical video dimensions/frame rate with invariant fps unit, or punctuation joining that receipt to the separately localized signal caption. No prose is embedded in this formatting expression."
+    },
+    "source.080b08afdfdb83a0b8ef.1": {
+      "source": "src/VideoInputSettings.tsx",
+      "text": "inset({expression1}% {expression2}% {expression3}% {expression4}%)",
+      "context": "property:clipPath",
+      "reason": "Manually reviewed 2026-10-29: CSS crop/color-filter syntax assembled exclusively from numeric settings. These functional CSS tokens are consumed by video rendering; translation would change camera geometry/color."
+    },
+    "source.0b5fd10fbbd50427ad2d.1": {
+      "source": "src/VideoInputSettings.tsx",
+      "text": "brightness({expression1}%) contrast({expression2}%) saturate({expression3}%) hue-rotate({expression4}deg)",
+      "context": "property:filter",
+      "reason": "Manually reviewed 2026-10-29: CSS crop/color-filter syntax assembled exclusively from numeric settings. These functional CSS tokens are consumed by video rendering; translation would change camera geometry/color."
+    },
+    "source.6a2c916f885a6a547cb9.1": {
+      "source": "src/VideoInputSettings.tsx",
+      "text": "Kamera 1",
+      "context": "BinaryExpression",
+      "reason": "Manually reviewed 2026-10-29: Editable default video-source name saved in VideoInputSource.name when no device label is available; it is model/user content, not a control caption. Device selector fallbacks and all loading/permission/no-signal/connected messages are separately localized."
+    },
+    "source.976eca56230621b4039a.1": {
+      "source": "src/VideoInputSettings.tsx",
+      "text": "· {expression1}",
+      "context": "ConditionalExpression",
+      "reason": "Manually reviewed 2026-10-29: Technical video dimensions/frame rate with invariant fps unit, or punctuation joining that receipt to the separately localized signal caption. No prose is embedded in this formatting expression."
+    },
+    "source.e5c1eeb1b51e4bb3d581.1": {
+      "source": "src/clockLoop/ClockLoopDesigner.tsx",
+      "text": "23. Oktober 2026",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preview of the actual long German date-format option, paired with the stable long format value. It demonstrates visitor clock formatting; interface dialect selection does not alter the visitor clock date or its authored formatting. The date-format control caption is independently localized."
+    },
+    "source.d519e2029ac834117f1f.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "31 Hertz",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.73aae2b059d6945a2818.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "Tiefen",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.2030298d535cf7dca83b.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "63 Hertz",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.73aae2b059d6945a2818.2": {
+      "source": "src/equalizerBands.ts",
+      "text": "Tiefen",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.4e6b33688ea202e05712.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "125 Hertz",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.73aae2b059d6945a2818.3": {
+      "source": "src/equalizerBands.ts",
+      "text": "Tiefen",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.6650e93288b05937d444.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "250 Hertz",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.8ca7ef54a11ca4cceb5b.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "Untere Mitten",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.9658a1c13fb51edf59c3.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "500 Hertz",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.8ca7ef54a11ca4cceb5b.2": {
+      "source": "src/equalizerBands.ts",
+      "text": "Untere Mitten",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.fe16d882fdd14eb13c35.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "1 Kilohertz",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.624bcfe0dc671be71170.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "Mitten",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.7502300af2aeea37d3ed.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "2 Kilohertz",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.624bcfe0dc671be71170.2": {
+      "source": "src/equalizerBands.ts",
+      "text": "Mitten",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.a47a42550a392d9e3c41.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "4 Kilohertz",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.a4288596fcc3640badfa.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "Höhen",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.9bcfeff3421c9ef1a5f5.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "8 Kilohertz",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.a4288596fcc3640badfa.2": {
+      "source": "src/equalizerBands.ts",
+      "text": "Höhen",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.fbfe69e54f3d937a6021.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "16 Kilohertz",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.a4288596fcc3640badfa.3": {
+      "source": "src/equalizerBands.ts",
+      "text": "Höhen",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.44217fa3560c394fc94a.1": {
+      "source": "src/equalizerBands.ts",
+      "text": "{expression1}, {expression2}, {expression3} Dezibel",
+      "context": "ArrowFunction",
+      "reason": "Manually reviewed 2026-10-29: Immutable physical frequency/group definitions and legacy accessibleName formatter, retained for the existing compatibility test. Actual AudioEqualizerSettings renders group captions with tx(band.group) and an explicitly registered regional accessibility template. Frequencies and Hertz/Kilohertz/Dezibel units remain factual; no gain or band ID is rewritten."
+    },
+    "source.948db0691218933b4c68.1": {
+      "source": "src/externalLoop/Designer.tsx",
+      "text": "1. Bundesliga",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preserved output-role/operating-state identifier, language autonym or official competition name. Surrounding picker labels are localized, but these factual names retain the same spelling and stored option value across German regional interfaces."
+    },
+    "source.da93130aa6cd6f6a3386.1": {
+      "source": "src/externalLoop/Designer.tsx",
+      "text": "2. Bundesliga",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preserved output-role/operating-state identifier, language autonym or official competition name. Surrounding picker labels are localized, but these factual names retain the same spelling and stored option value across German regional interfaces."
+    },
+    "source.d523874b629f5ecfb0da.1": {
+      "source": "src/externalLoop/Designer.tsx",
+      "text": "3. Liga",
+      "context": "jsx-text:option",
+      "reason": "Manually reviewed 2026-10-29: Preserved output-role/operating-state identifier, language autonym or official competition name. Surrounding picker labels are localized, but these factual names retain the same spelling and stored option value across German regional interfaces."
+    },
+    "source.0f249bc2cf0f201ea27c.1": {
+      "source": "src/shortcuts.ts",
+      "text": "F11",
+      "context": "property:toggleFullscreen",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.0a266fade0447b15842f.1": {
+      "source": "src/shortcuts.ts",
+      "text": "F1",
+      "context": "property:openHelp",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.27fc58a04aff1f3cc4d7.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Space",
+      "context": "property:' '",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.de7e2f7cef056c346c01.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Ctrl",
+      "context": "property:Control",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.b21e199099a348d8d012.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Meta",
+      "context": "property:Meta",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.62943d1d5a9c8c1d0008.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Alt",
+      "context": "property:Alt",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.1bcacc47c83c2e3a33c1.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Shift",
+      "context": "property:Shift",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.ad976bead30cd830a989.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Escape",
+      "context": "property:Esc",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.86397726e5fff9c361ca.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Ctrl",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.c4d5cafccd077a00f18f.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Meta",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.0b9dcc084f1c93367c08.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Alt",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.fc3df5163229e52fd0ce.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Shift",
+      "context": "ArrayLiteralExpression",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.560515872607c64eff80.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Ctrl",
+      "context": "CallExpression",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.086183fdcbe058d49729.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Alt",
+      "context": "CallExpression",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
+    },
+    "source.80bf89d1dccc94266cd1.1": {
+      "source": "src/shortcuts.ts",
+      "text": "Shift",
+      "context": "CallExpression",
+      "reason": "Manually reviewed 2026-10-29: Exact keyboard binding tokens, modifier normalization and default shortcut protocol values. Read the complete module: it contains no operator action captions. Regionalizing Ctrl/Alt/Shift, F-keys or event.key aliases would break persisted bindings and matching; the action/description UI is translated separately in KeyboardShortcutSettings."
     }
   },
   "reviewedTechnicalFiles": {
