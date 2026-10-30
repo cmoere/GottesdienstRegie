@@ -49,7 +49,7 @@ Files: `src/operator-design.css`, `src/main.tsx`, shell in `src/App.tsx`; native
 
 - [x] Full unit/type/build/regional strict checks; real native PowerPoint/output smoke regression.
 - [x] Update version/notes/help screenshots only for implemented and verified behavior.
-- [ ] Publish normal update only after all requested completeness gates pass; verify public installer/update metadata.
+- [x] Publish normal update only after all requested completeness gates pass; verify public installer/update metadata.
 
 Initial baseline: 0.94.0 / fc99333, inventory 6977 entries, 4127 require review. Foreign untracked startup diagnostic is excluded from all edits/staging.
 
@@ -90,3 +90,5 @@ Initial baseline: 0.94.0 / fc99333, inventory 6977 entries, 4127 require review.
 ## Final 30 October candidate
 
 All 31 complete variants are enabled; strict audit has 0 pending source entries and 0 issues. Full unit suite (277 files / 1186 tests), renderer/Electron build, 48 shell cases, six actual App cases and 31 regional surfaces pass. Native PowerPoint original playback passes its 60-second soak and protected postprogram handoff. See `docs/v95-verification.md` for evidence and review constraints. Normal update publication remains the final operation.
+
+Normal/latest 0.95.0 publication and public installer/update metadata are verified; see `docs/v95-public-release-verification.md`.

@@ -61,3 +61,7 @@ The unrelated untracked startup diagnostic was not edited; SHA256 remains `B7E42
 - Historical integrated drafts are archived unchanged with SHA256 manifests. The unrelated startup diagnostic is excluded, unchanged at SHA256 `B7E42819F91D0D2D1BF1BBB5DE782A26749BD1A26E2D802BBC8F5327BB570AB5`.
 
 - Nine current help PNGs were refreshed from the isolated native App and visually inspected. Eight operator/settings/media captures come from `work/v95-operator-surfaces-O9zskf/`; the postprogram image is the actual composed MAIN frame from `work/full-app-powerpoint-8w9AHj/postprogram.png`. Historical release screenshots are retained. Image dimensions and SHA256 hashes are recorded in `work/v95-help-images-final.json`. Only trailing blank lines changed after the complete functional suite; strict inventory was regenerated and remains green.
+
+## Public normal update verified
+
+Version 0.95.0 is published as the normal/latest update, source `0c124bbba5e0b53d7982ec60192734374e199e99`. All platform assets, three updater manifests, Windows installer checksums, packaged native resources/all31 language packs, RSS and refreshed help images are verified. See `docs/v95-public-release-verification.md`. No installer was run on the user’s installation.
