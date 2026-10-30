@@ -785,13 +785,13 @@ export function MediaBrowser() {
       setGeneratedDraft(draft);
     } catch (error) {
       setGeneratorError(
-        `Das ${generatorOutput === "video" ? "Video" : "Motiv"} konnte nicht erstellt werden. Bitte versuche es erneut. (${error instanceof Error ? error.message : String(error)})`,
+        generatorOutput === "video" ? tx("Das Video konnte nicht erstellt werden. Bitte versuche es erneut. ({value1})",{value1:error instanceof Error?error.message:String(error)}) : tx("Das Motiv konnte nicht erstellt werden. Bitte versuche es erneut. ({value1})",{value1:error instanceof Error?error.message:String(error)}),
       );
     } finally {
       setGenerating(false);
     }
   }
-  async function saveGenerated(){if(!generatedDraft)return;setBusy('save-generated');try{const response=await fetch(generatedDraft.downloadUrl),data=new Uint8Array(await response.arrayBuffer()),saved=await api?.saveGenerated?.({name:generatedDraft.name,kind:generatedDraft.kind,extension:generatedDraft.extension||(generatedDraft.kind==='video'?'webm':'svg'),data,tags:generatedDraft.tags});if(!saved)throw new Error('MEDIA_SAVE_UNAVAILABLE');setTab('cloud');setQuery('');setLibraryFilter('all');setGeneratorOpen(false);setGeneratedDraft(null);await refresh('cloud');}catch(error){setGeneratorError(`Das Motiv konnte nicht in der Medienbibliothek gespeichert werden. (${error instanceof Error?error.message:String(error)})`)}finally{setBusy('')}}
+  async function saveGenerated(){if(!generatedDraft)return;setBusy('save-generated');try{const response=await fetch(generatedDraft.downloadUrl),data=new Uint8Array(await response.arrayBuffer()),saved=await api?.saveGenerated?.({name:generatedDraft.name,kind:generatedDraft.kind,extension:generatedDraft.extension||(generatedDraft.kind==='video'?'webm':'svg'),data,tags:generatedDraft.tags});if(!saved)throw new Error('MEDIA_SAVE_UNAVAILABLE');setTab('cloud');setQuery('');setLibraryFilter('all');setGeneratorOpen(false);setGeneratedDraft(null);await refresh('cloud');}catch(error){setGeneratorError(tx("Das Motiv konnte nicht in der Medienbibliothek gespeichert werden. ({value1})",{value1:error instanceof Error?error.message:String(error)}))}finally{setBusy('')}}
   async function toggleFavorite(item: CloudMediaAsset) {
     const favorite = !item.favorite;
     setBusy(item.id);
@@ -832,7 +832,7 @@ export function MediaBrowser() {
         </div>
         <div
           className={`media-cloud-status ${cloudStatus?.online ? "online" : "offline"}`}
-          title={(cloudStatus?.message??tx("Cloudstatus wird geprüft"))}
+          title={(cloudStatus?.message?tx(cloudStatus.message):tx("Cloudstatus wird geprüft"))}
         >
           <Icon name={cloudStatus?.online ? "cloud_done" : "cloud_off"} />
         </div>

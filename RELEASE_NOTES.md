@@ -1,3 +1,51 @@
+# GottesdienstRegie 0.95.0
+
+Veröffentlicht: Fr., 30.10.2026
+
+GottesdienstRegie erhält eine durchgängige, an klarer Hierarchie und gruppierten Bedienelementen orientierte Oberfläche. Alle 31 vorgesehenen deutschen Regionalvarianten umfassen Bedienung, native Dialoge, Hilfe und Versionshinweise. Besucherfolien und gespeicherte Inhalte behalten ihre Gestaltung und Sprache.
+
+## Neu
+
+### 31 deutsche Regionalvarianten verfügbar
+
+Die Auswahl enthält jetzt den vollständigen vorgesehenen Katalog einschließlich Bielefeld/Ravensberg. Beschriftungen, Bestätigungen, Statusmeldungen und Hilfen verwenden die gewählte Variante. Die Standardauswahl führt zurück zu neutralem Deutsch; gesprochene Ansagen und vorhandene Dokumenttexte werden nicht umgeschrieben.
+
+### Durchgängige Gestaltung der Bedienoberfläche
+
+Arbeitsbereiche, Einstellungen, Bibliotheken, Medienbrowser und Dialoge verwenden eine gemeinsame Gestaltung mit klaren Gruppen, abgestimmten Abständen und sichtbarem Tastaturfokus. Helle und dunkle Darstellung behalten Cera Pro sowie die Gemeindefarben. Die gestalteten MAIN-Folien bleiben erhalten.
+
+## Verbessert
+
+### Regionale Hilfe, Versionshinweise und Berichte
+
+Die integrierte Hilfe und die historischen Versionshinweise stehen in allen Regionalvarianten bereit. Auch die Update-Kurzfassung und heruntergeladene Bildschirmtest-Berichte verwenden die Auswahl. Deutsche Web-Steuerungen und Personal Monitors erhalten regionale Bedientexte; eine ausdrücklich gewählte englische Monitoransicht bleibt englisch.
+
+### Stabile Arbeitsbereiche in schmalen Fenstern
+
+Die Fensteraufteilung berücksichtigt, ob Formatwerkzeuge sichtbar sind. Arbeitsfläche und Timeline behalten ihre vorgesehenen Bereiche. Die mobile Bereichsnavigation liegt unter geöffneten Dialogen, damit deren Aktionen erreichbar bleiben. Eigene Präsentations-, Geräte- und Dateinamen bleiben unverändert.
+
+## Behoben
+
+### Sprachwechsel ohne erneute Geräteverbindung
+
+Bereits vorbereitete Bedienaktionen verwenden beim Aufruf die aktuelle Regionalauswahl. Kamerastatus und Hinweise zur Bildschirmzuordnung aktualisieren ihre Beschriftungen, ohne den laufenden Kamerastream oder die gespeicherten Ausgänge erneut einzurichten. Auswahl und Live-Ausgabe bleiben getrennt.
+
+### Verständliche Rückmeldung bei fehlgeschlagener Tonprobe
+
+Eine fehlgeschlagene Spracherzeugung wird als übersetzbarer Hinweis zu Stimme und Audioausgang angezeigt. Interne Meldungen des Sprachprozesses werden nicht direkt als Tonprobenfehler durchgereicht. Schlägt bereits die Vorbereitung fehl, wird keine Musikabsenkung gestartet.
+
+## Hinweise und Voraussetzungen
+
+### Voraussetzungen der PowerPoint-Originalwiedergabe
+
+Der bestehende Originalmodus verwendet weiterhin installiertes Microsoft PowerPoint unter Windows. Die Bedienoberflächenumstellung ersetzt diese Voraussetzung nicht. Prüfe geeignete Präsentationen mit ihren Originalanimationen und Zeiten vor dem Live-Einsatz auf dem vorgesehenen Rechner.
+
+### Technischer Bildschirmtest und Sichtprüfung
+
+Der Bildschirmtest und sein Bericht bestätigen Prüfungen im MAIN-Renderer. Kabel, Beamer, tatsächliche Farbwiedergabe und der physische Bild- und Tonweg benötigen weiterhin eine eigene Prüfung. Eine bestandene Renderer-Prüfung ist keine automatische Freigabe der gesamten Anlage.
+
+---
+
 # GottesdienstRegie 0.94.0
 
 Veröffentlicht: Di., 27.10.2026

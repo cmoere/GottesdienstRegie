@@ -26,8 +26,8 @@ it('preserves the31-ID resource catalog and requires complete authored UI/native
     expect(validateRegionalPack(pack,id,{ui:germanBaseTemplates,native:nativeBaseTemplates}),id).toEqual([]);
     expect(Object.keys(pack.ui).sort(),id).toEqual(Object.keys(germanBaseTemplates).sort());
     expect(Object.keys(pack.native).sort(),id).toEqual(Object.keys(nativeBaseTemplates).sort());
-    for(const text of [...Object.values(pack.ui),...Object.values(pack.native)]){
-      expect(text,id).not.toMatch(/[\u200B\u200C\u200D\uFEFF]/);
-    }
+    const hiddenCharacters=[...Object.values(pack.ui),...Object.values(pack.native)]
+      .filter(text=>typeof text==='string'&&/[\u200B\u200C\u200D\uFEFF]/.test(text));
+    expect(hiddenCharacters,id).toEqual([]);
   }
 });

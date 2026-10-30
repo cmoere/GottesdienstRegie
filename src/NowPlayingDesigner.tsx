@@ -218,7 +218,7 @@ export function NowPlayingDesigner({
               checked={settings[key]}
               onChange={(event) => change({ [key]: event.target.checked })}
             />
-            <span>{label}</span>
+            <span>{tx(label)}</span>
           </label>
         ))}
       </div>

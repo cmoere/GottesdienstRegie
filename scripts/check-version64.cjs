@@ -6,6 +6,6 @@ assert(notes.includes('# GottesdienstRegie 0.64.0'),'notes must include V64');
 assert(workflow.includes('check-version64.cjs'),'workflow must run V64 guard');
 assert(ui.includes("bible:'F9'")&&workspace.includes('quick-screen-shortcut'),'quick-screen key badges missing');
 assert(catalog.includes('disabled:false'),'loop elements must remain addable');
-assert(app.includes('<b>Element hinzufügen</b>'),'add-element heading missing');
+assert(app.includes('<b>{tx("Element hinzufügen")}</b>'),'localized add-element heading missing');
 assert(!app.includes('state.mode === "edit" && <QuickOverlay quick={previewQuick}'),'Bible overlay must not cover edit mode');
 console.log('V64 release guard passed.');

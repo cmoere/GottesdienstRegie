@@ -1,15 +1,17 @@
+import {useI18n} from './i18n';
 import {useEffect,useState} from 'react';
 import {usePresentation,type DisplayRole} from './store';
 import type {OutputDisplayProfileState,OutputDisplayRole} from './outputDisplayProfileTypes';
 
 export function useOutputDisplayProfile(){
- const [warning,setWarning]=useState('');
+ const {tx}=useI18n();
+ const [warning,setWarning]=useState<{source:string;values?:Record<string,string>}|null>(null);
  useEffect(()=>{
   const bridge=window.desktop?.outputDisplays;if(!bridge)return;
   let disposed=false,ready=false,applying=false;
   let previous=JSON.stringify(usePresentation.getState().displayRoles);
-  const report=(value:OutputDisplayProfileState)=>{if(!disposed)setWarning(value.unresolved.length?`Ausgabebildschirm fehlt oder ist nicht eindeutig: ${value.unresolved.map(entry=>entry.role.toUpperCase()).join(', ')}. Bitte die Zuordnung prüfen.`:'')};
-  const fail=()=>{if(!disposed)setWarning('Die Bildschirmzuordnung konnte nicht geladen oder gespeichert werden. Bitte in den Einstellungen prüfen.')};
+  const report=(value:OutputDisplayProfileState)=>{if(!disposed)setWarning(value.unresolved.length?{source:"Ausgabebildschirm fehlt oder ist nicht eindeutig: {value1}. Bitte die Zuordnung prüfen.",values:{value1:value.unresolved.map(entry=>entry.role.toUpperCase()).join(', ')}}:null)};
+  const fail=()=>{if(!disposed)setWarning({source:"Die Bildschirmzuordnung konnte nicht geladen oder gespeichert werden. Bitte in den Einstellungen prüfen."})};
   const restore=async()=>{
    const before=JSON.stringify(usePresentation.getState().displayRoles);
    try{
@@ -34,5 +36,5 @@ export function useOutputDisplayProfile(){
   void restore();
   return()=>{disposed=true;off();changed?.()};
  },[]);
- return warning;
+ return warning?tx(warning.source,warning.values):'';
 }

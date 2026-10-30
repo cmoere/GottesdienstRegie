@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "complete": false,
+  "complete": true,
   "regionIds": [
     "bavarian-upper",
     "bavarian-lower",
@@ -12,15 +12,26 @@
     "palatine",
     "rhine-hessian",
     "south-hessian",
+    "central-hessian",
+    "north-hessian",
+    "moselle-trier",
+    "saarbruecken",
     "cologne",
+    "aachen",
+    "lower-rhine",
     "ruhr",
+    "siegerland",
+    "wittgenstein",
+    "muensterland",
+    "sauerland",
+    "lippe",
+    "east-frisian",
     "hamburg",
+    "schleswig-holstein",
+    "mecklenburg",
     "berlin",
+    "thuringian",
+    "upper-saxon",
     "bielefeld-ravensberg"
-  ],
-  "partialRelease": {
-    "version": "0.94.0",
-    "inventoryFingerprint": "de843beb140a5e153cbf7cf5e0b483394d9c8b9655a6a89069765ca7efa5626e",
-    "notice": "Regionalvarianten sind noch nicht vollständig übersetzt. Fehlende UI-Texte werden auf Hochdeutsch angezeigt."
-  }
+  ]
 }

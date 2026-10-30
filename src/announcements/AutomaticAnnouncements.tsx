@@ -59,7 +59,7 @@ export function AutomaticAnnouncements({quick}:{quick:QuickScreenConfig|null}){
     if(!row)throw Error('Die gewählte Durchsage ist nicht mehr freigegeben.');
     probe={row,key:probeKey()};useSpeechStatus.setState({testing:true,message:''});
     try{await run.start(row,musicPercent,valid)}
-    catch(error){if(!disposed)useSpeechStatus.setState({message:'Tonprobe fehlgeschlagen. Stimme und Background-Audio-Ausgang prüfen.'});throw error}
+    catch{const message='Tonprobe fehlgeschlagen. Stimme und Background-Audio-Ausgang prüfen.';if(!disposed)useSpeechStatus.setState({message});throw Error(message)}
     finally{probe=null;quietUntil=AppClock.now().getTime()+settings.intervalMinutes*60_000;if(!disposed)useSpeechStatus.setState({testing:false})}
    },
    stop(){if(probe)run.cancel()},

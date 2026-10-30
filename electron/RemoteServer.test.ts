@@ -23,3 +23,14 @@ it('allows paired annotation commands only on the current live take and revokes 
  expect(command).toHaveBeenLastCalledWith(expect.objectContaining({action:'annotation-clear'}));
  expect((await post(remote.token)).status).toBe(403);
 });
+
+it('passes regional captions to the actual authorized German remote page',async()=>{
+ const command=vi.fn(),copy=vi.fn((key:string)=>'regional:'+key);
+ server=new RemoteServer(path.join(await mkdtemp(path.join(tmpdir(),'regie-remote-copy-')),'devices.json'),command,0,undefined,copy);await server.start();
+ const remote=await server.createSession({name:'Presenter',permissionRole:'view',preferredLanguage:'de',permissions:['remote.view']});
+ const base=`http://127.0.0.1:${(server as any).server.address().port}`;
+ const response=await fetch(base+'/remote/'+remote.token),html=await response.text();
+ expect(response.status).toBe(200);expect(response.headers.get('cache-control')).toBe('no-store');
+ expect(html).toContain('regional:remoteWaiting');expect(copy).toHaveBeenCalledWith('remoteCurrent');
+ expect(command).not.toHaveBeenCalled();
+});

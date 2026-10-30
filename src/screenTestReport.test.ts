@@ -7,3 +7,16 @@ it('exports cancelled and completed technical results in structured JSON with ve
  const output=screenTestReport({status:'cancelled',steps:[],message:'Abgebrochen'},{version:'0.87.0',createdAt:'2026-10-23T12:00:00Z'},'json');
  expect(JSON.parse(output.text)).toMatchObject({version:'0.87.0',createdAt:'2026-10-23T12:00:00.000Z',status:'cancelled',steps:[],physicalDisplayVerified:false});
 });
+
+it('localizes report display without changing the measured results or physical-verification flag',()=>{
+ const summary={status:'error' as const,message:'Angehalten',steps:[{runId:'a'.repeat(32),pattern:'grid' as const,ok:true,width:1920,height:1080,frames:12,elapsedMs:5000}]};
+ const before=structuredClone(summary),metadata={version:'0.95.0',createdAt:'2026-10-30T10:00:00Z'};
+ const copy=(key:string)=>key==='screenReportTitle'?'<script>Test</script>':'regional:'+key;
+ const html=screenTestReport(summary,metadata,'html',copy);
+ expect(html.text).toContain('&lt;script&gt;Test&lt;/script&gt;');
+ expect(html.text).toContain('regional:screenReportPatternGrid');
+ expect(html.text).toContain('regional:screenReportPassed');
+ const json=JSON.parse(screenTestReport(summary,metadata,'json',copy).text);
+ expect(json).toMatchObject({status:'error',physicalDisplayVerified:false,visualInspection:'regional:screenReportInspection',steps:[{pattern:'grid',width:1920,height:1080,frames:12,elapsedMs:5000}]});
+ expect(summary).toEqual(before);
+});

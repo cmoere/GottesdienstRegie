@@ -1,0 +1,25 @@
+import {act,renderHook,waitFor} from '@testing-library/react';
+import {afterEach,expect,it,vi} from 'vitest';
+import {readFileSync} from 'node:fs';
+import {useOutputDisplayProfile} from './useOutputDisplayProfile';
+import {usePreferences} from './preferences';
+import {usePresentation} from './store';
+import {loadRegionalInterfacePack} from './regional/resources';
+const preferences=usePreferences.getState(),presentation=usePresentation.getState(),desktop=window.desktop;
+afterEach(()=>{usePreferences.setState(preferences,true);usePresentation.setState(presentation,true);window.desktop=desktop});
+it('updates a pending screen warning region without restoring or writing the output profile again',async()=>{
+ expect(await loadRegionalInterfacePack('ruhr')).toBe(true);
+ usePreferences.setState({language:'de',germanRegion:null});
+ const assignments={'7':'main' as const};
+ usePresentation.setState({displayRoles:assignments,onAir:true});
+ const read=vi.fn().mockResolvedValue({profile:{},assignments:{},unresolved:[{role:'main'}]}),write=vi.fn(),off=vi.fn();
+ window.desktop={outputDisplays:{read,write},onDisplaysChanged:()=>off} as any;
+ const view=renderHook(()=>useOutputDisplayProfile());
+ await waitFor(()=>expect(view.result.current).toBe('Ausgabebildschirm fehlt oder ist nicht eindeutig: MAIN. Bitte die Zuordnung prüfen.'));
+ const pack=JSON.parse(readFileSync('shared/regional/packs/ruhr.json','utf8'));
+ act(()=>usePreferences.setState({germanRegion:'ruhr'}));
+ expect(view.result.current).toBe(pack.ui.operatorSource_c4d9a3a1375ee7bb.replace('{value1}','MAIN'));
+ expect(read).toHaveBeenCalledTimes(1);expect(write).not.toHaveBeenCalled();
+ expect(usePresentation.getState().displayRoles).toBe(assignments);expect(usePresentation.getState().onAir).toBe(true);
+ view.unmount();expect(off).toHaveBeenCalledTimes(1);
+});

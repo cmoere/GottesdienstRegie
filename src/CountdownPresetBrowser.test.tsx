@@ -1,9 +1,12 @@
 import {cleanup,fireEvent,render,screen} from '@testing-library/react';
-import {afterEach,expect,it} from 'vitest';
+import {afterEach,beforeEach,expect,it} from 'vitest';
+import {usePreferences} from './preferences';
+const savedPreferences=usePreferences.getState();
+beforeEach(()=>usePreferences.setState({language:'de',germanRegion:null}));
 import {CountdownPresetBrowser} from './CountdownPresetBrowser';
 import {insertCountdownPreset} from './countdownInsertion';
 import {usePresentation} from './store';
-afterEach(cleanup);
+afterEach(()=>{cleanup();usePreferences.setState(savedPreferences,true)});
 it('selects offline presets without representing them as media files',()=>{
   const selected:string[]=[];render(<CountdownPresetBrowser purpose="background" onSelect={id=>selected.push(id)}/>);
   expect(screen.getAllByRole('button',{name:/Vorschau:/})).toHaveLength(60);

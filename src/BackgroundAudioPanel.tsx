@@ -90,7 +90,7 @@ export function BackgroundAudioPanel({
       !root?.classList.contains("is-on-air")
     ) {
       alert(
-        "Audio kann nur in der Vorschau oder während ON AIR wiedergegeben werden.",
+        tx("Audio kann nur in der Vorschau oder während ON AIR wiedergegeben werden."),
       );
       return;
     }

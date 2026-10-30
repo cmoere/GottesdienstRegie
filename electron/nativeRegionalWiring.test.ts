@@ -1,8 +1,20 @@
 import {readFileSync} from 'node:fs';
 import {expect,it} from 'vitest';
 import {nativeBaseTemplates} from '../shared/regional/nativeBase';
+import importWarningTemplates from '../shared/regional/importWarningTemplates.json';
+import screenReportTemplates from '../shared/regional/screenReportTemplates.json';
 it('connects every canonical native template to the desktop dialog/status surface',()=>{
   const main=readFileSync('electron/main.ts','utf8');
   const used=new Set([...main.matchAll(/nativeText\('([A-Za-z]+)'/g)].map(match=>match[1]));
+  expect(main).toContain('warnings.map((warning:string)=>localizeImportWarning(warning,nativeText))');
+  for(const key of Object.keys(importWarningTemplates))used.add(key);
+  expect(main).toContain('rendererFailureHtml(rendererRetryUrl,nativeText)');
+  const startup=readFileSync('electron/windowStartup.ts','utf8');
+  for(const match of startup.matchAll(/copy\('([A-Za-z]+)'/g))used.add(match[1]);
+  expect(main).toContain('role=>outputManager.captureFrame(role),nativeText)');
+  const remote=readFileSync('electron/RemotePage.ts','utf8');
+  for(const match of remote.matchAll(/copy\('([A-Za-z]+)'/g))used.add(match[1]);
+  expect(main).toContain('createdAt:new Date().toISOString()},format,nativeText)');
+  for(const key of Object.keys(screenReportTemplates))used.add(key);
   expect([...used].sort()).toEqual(Object.keys(nativeBaseTemplates).sort());
 });

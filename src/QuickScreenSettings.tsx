@@ -1,3 +1,4 @@
+import {operatorQuickScreenName} from './quickScreenUi';
 import { useState } from "react";
 import {
   usePreferences,
@@ -10,7 +11,7 @@ import {ScreenTestPattern} from './ScreenTestPattern';
 import {screenTestPatterns} from './screenTest';
 
 export function QuickScreenSettings() {
-  const {t}=useI18n();
+  const {t,tx}=useI18n();
   const showServiceCountdown=usePreferences(state=>state.showServiceCountdown),setShowServiceCountdown=usePreferences(state=>state.setShowServiceCountdown);
   const items = usePreferences((s) => s.quickScreens),
     save = usePreferences((s) => s.setQuickScreens),
@@ -57,7 +58,7 @@ export function QuickScreenSettings() {
     <section>
       <h3>{t('quickScreens')}</h3>
       <p>{t('quickScreensExplanation')}</p>
-      <label><input type="checkbox" checked={showServiceCountdown} onChange={event=>setShowServiceCountdown(event.target.checked)}/>Kleinen Countdown bis zum Gottesdienst unten links auf MAIN anzeigen</label>
+      <label><input type="checkbox" checked={showServiceCountdown} onChange={event=>setShowServiceCountdown(event.target.checked)}/>{tx("Kleinen Countdown bis zum Gottesdienst unten links auf MAIN anzeigen")}</label>
       <div className="quick-settings-layout">
         <div className="quick-list">
           <h4>{t('quickScreens').toUpperCase()}</h4>
@@ -88,7 +89,7 @@ export function QuickScreenSettings() {
                     patch(item.id, { enabled: e.target.checked })
                   }
                 />
-                <b>{item.name}</b>
+                <b>{operatorQuickScreenName(item,tx)}</b>
                 <small>{item.enabled ? t('quickScreenActive') : t('quickScreenInactive')}</small>
               </button>
             ))}
@@ -98,8 +99,8 @@ export function QuickScreenSettings() {
         </div>
         {active && (
           <div className="quick-details">
-            <h4>{active.name.toUpperCase()}</h4>
-            {active.type==='screenTest'&&<><p>Der automatische Bildschirmtest schaltet erst nach erfolgreicher Rückmeldung aus dem MAIN-Ausgabefenster weiter. Keine feste Anzeigedauer. Bei einer fehlenden Rückmeldung wird der Test mit einem Hinweis beendet. Schärfe, Kabel und Beamerfarben benötigen eine Sichtprüfung.</p><div className="screen-test-tiles">{screenTestPatterns.map(pattern=><button key={pattern.id} type="button" aria-label={pattern.label} aria-pressed={(active.testPattern??'bars')===pattern.id} onClick={()=>patch(active.id,{testPattern:pattern.id})}><ScreenTestPattern pattern={pattern.id}/><span>{pattern.label}</span></button>)}</div><p>Die Auswahl bestimmt das Vorschaubild. Der automatische Durchlauf prüft immer alle acht Muster, ohne Ton und ohne den ON-AIR-Status zu verändern.</p></>}
+            <h4>{operatorQuickScreenName(active,tx)}</h4>
+            {active.type==='screenTest'&&<><p>{tx("Der automatische Bildschirmtest schaltet erst nach erfolgreicher Rückmeldung aus dem MAIN-Ausgabefenster weiter. Keine feste Anzeigedauer. Bei einer fehlenden Rückmeldung wird der Test mit einem Hinweis beendet. Schärfe, Kabel und Beamerfarben benötigen eine Sichtprüfung.")}</p><div className="screen-test-tiles">{screenTestPatterns.map(pattern=><button key={pattern.id} type="button" aria-label={tx(pattern.label)} aria-pressed={(active.testPattern??'bars')===pattern.id} onClick={()=>patch(active.id,{testPattern:pattern.id})}><ScreenTestPattern pattern={pattern.id}/><span>{tx(pattern.label)}</span></button>)}</div><p>{tx("Die Auswahl bestimmt das Vorschaubild. Der automatische Durchlauf prüft immer alle acht Muster, ohne Ton und ohne den ON-AIR-Status zu verändern.")}</p></>}
             <label>
               {t('quickScreenName')}
               <input
@@ -121,7 +122,7 @@ export function QuickScreenSettings() {
                 />
               </label>
             )}
-            {active.id==='technical-issue'&&active.type==='custom'&&<label>English text (automatischer Wechsel alle 8 Sekunden)<textarea value={active.technicalIssueEnglishText??'Technical difficulties\nThank you for your patience.'} maxLength={5000} onChange={event=>patch(active.id,{technicalIssueEnglishText:event.target.value})}/></label>}
+            {active.id==='technical-issue'&&active.type==='custom'&&<label>{tx("English text (automatischer Wechsel alle 8 Sekunden)")}<textarea value={active.technicalIssueEnglishText??'Technical difficulties\nThank you for your patience.'} maxLength={5000} onChange={event=>patch(active.id,{technicalIssueEnglishText:event.target.value})}/></label>}
             {active.type === "logo" && (
               <>
                 <label>

@@ -1,3 +1,4 @@
+import {useI18n} from './i18n';
 import { useEffect, useState } from 'react';
 import {ActiveClockLoopView} from './clockLoop/ClockLoopView';
 import {normalizeClockSettings} from './clockLoop/model';
@@ -8,6 +9,7 @@ import type { PublicAnnouncement } from './loopData';
 import { announcementPlacement } from './announcementLive';
 
 export function LoopPreview({ item }: { item: ServiceItem }) {
+  const {tx}=useI18n();
   const [announcements, setAnnouncements] = useState<PublicAnnouncement[]>([]);
   useEffect(() => {
     if (item.type !== 'announcement') return;
@@ -19,5 +21,5 @@ export function LoopPreview({ item }: { item: ServiceItem }) {
   if (item.type === 'clock') return <ActiveClockLoopView settings={normalizeClockSettings(item.metadata)}/>;
   const announcement = announcements[0];
   const text = announcement?.text || String(item.slides[0]?.body || item.metadata.text || item.title);
-  return <div className="loop-preview"><strong>{announcement?.title || item.title}</strong><p>{text}</p><small>{item.type === 'announcement' ? `${announcements.length} öffentliche Meldungen · Firebase` : 'Loop-Vorschau'}</small></div>;
+  return <div className="loop-preview"><strong>{announcement?.title || item.title}</strong><p>{text}</p><small>{item.type === 'announcement' ? tx("{value1} öffentliche Meldungen · Firebase",{value1:announcements.length}) : tx("Loop-Vorschau")}</small></div>;
 }

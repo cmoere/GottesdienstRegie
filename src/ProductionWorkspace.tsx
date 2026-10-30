@@ -70,7 +70,7 @@ import { nextTimerHold, timerProgress } from "./previewTimer";
 import { shouldHandlePreviewArrow } from "./previewKeyboard";
 import { MainLivePreview } from "./MainLivePreview";
 import {TestModeWatermark} from './TestModeWatermark';
-import { quickScreenShortcut,quickOverridesRoomNotice } from "./quickScreenUi";
+import { quickScreenShortcut,quickOverridesRoomNotice,operatorQuickScreenName } from "./quickScreenUi";
 import {ScreenTestPattern} from './ScreenTestPattern';
 import { usesAutomaticLoopEditor } from "./loopEditorModel";
 import {PowerPointPlaybackPanel,PowerPointStaticPreview} from './PowerPointPlaybackPanel';
@@ -102,8 +102,8 @@ function selected(state: ReturnType<typeof usePresentation.getState>) {
   return { item, slide };
 }
 
-function slideLabel(slide: Slide, index: number) {
-  return slide.title?.trim() || `Folie ${index + 1}`;
+function slideLabel(slide: Slide, index: number, copy: (source:string, values:Record<string,string>)=>string) {
+  return slide.title?.trim() || copy("Folie {value1}",{value1:String(index+1)});
 }
 
 function lyricCapacity(slide: Slide) {
@@ -384,7 +384,7 @@ export function SongEditor({
     });
   };
   const arrangement = item.slides.map((slide, index) =>
-    slideLabel(slide, index),
+    slideLabel(slide, index, tx),
   );
   const metadata = item.metadata;
   const changeMeta = (patch: Record<string, string | number | boolean>) =>
@@ -694,13 +694,13 @@ export function SongEditor({
       <nav className="song-tabs" aria-label={tx("Songbereiche")}>
         {(
           [
-            ["content", "INHALT"],
-            ["order", "ABLAUF"],
-            ["design", "DESIGN"],
-            ["chords", "AKKORDE"],
+            ["content", tx("INHALT")],
+            ["order", tx("ABLAUF")],
+            ["design", tx("DESIGN")],
+            ["chords", tx("AKKORDE")],
             ["stage", "STAGE"],
             ["stream", "LIVESTREAM"],
-            ["metadata", "METADATEN"],
+            ["metadata", tx("METADATEN")],
           ] as const
         ).map(([value, label]) => (
           <button
@@ -1093,13 +1093,14 @@ export function SongEditor({
                         disabled={!canEdit || Boolean(translationBusy)}
                         onClick={async () => {
                           try {
-                            setTranslationBusy("Lokale Übersetzung startet …");
+                            setTranslationBusy(tx("Lokale Übersetzung startet …"));
                             const target = slide.translation?.language || "de",
                               text = await localTranslate(
                                 slide.body,
                                 "en",
                                 target,
                                 setTranslationBusy,
+                                tx,
                               );
                             commitSong({
                               ...structure,
@@ -2687,7 +2688,7 @@ function QuizEditor({
       setSessionError(
         error instanceof Error
           ? error.message
-          : "Die LiveQuiz-Sitzung konnte nicht gestartet werden.",
+          : tx("Die LiveQuiz-Sitzung konnte nicht gestartet werden."),
       );
     } finally {
       setSessionBusy(false);
@@ -2743,7 +2744,7 @@ function QuizEditor({
         0.18,
       ).catch(() => {});
     } catch {
-      setSessionError("Die Frage konnte nicht live geschaltet werden.");
+      setSessionError(tx("Die Frage konnte nicht live geschaltet werden."));
     } finally {
       setSessionBusy(false);
     }
@@ -2890,7 +2891,7 @@ function QuizEditor({
           </div>
         </section>
       ) : null}
-      {sessionError && <p className="quiz-session-error">{sessionError}</p>}
+      {sessionError && <p className="quiz-session-error">{tx(sessionError)}</p>}
       <div className="quiz-general">
         <label>{tx("Typ")}<select
             disabled={!canEdit || !!session}
@@ -3667,7 +3668,7 @@ function PreviewCenter({
           <Icon name="chevron_left" />
         </button>
         <div className="main-preview-with-title">
-        <h2 className="single-preview-title">{(state.onAir&&output?output.title:slide.title)?.trim()||slideLabel(slide,item.slides.indexOf(slide))}</h2>
+        <h2 className="single-preview-title">{(state.onAir&&output?output.title:slide.title)?.trim()||slideLabel(slide,item.slides.indexOf(slide),tx)}</h2>
         <div className="main-preview-surface">
           <OutputComposition weatherWarnings={state.onAir&&(!activeQuick||activeQuick.type==='countdown')?weatherWarnings:null} hideCountdown={Boolean(activeQuick)} serviceCountdownAtMs={state.onAir?output?._serviceCountdownAtMs:undefined} banner={state.onAir?banner:null} testOverlay={<TestModeWatermark role="main"/>}>
           {!state.onAir&&item.metadata.importMode==='original'?<PowerPointStaticPreview sourceHash={String(item.metadata.powerPointSourceHash)} slideId={slide.sourceSlideId}/>:state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage
@@ -3921,7 +3922,7 @@ function PreviewRightSidebar({
                 title={
                   quick.type === "noText" && !noTextAvailable
                     ? tx("Aktuell befinden sich keine ausblendbaren Inhalte auf der Folie.")
-                    : `${quick.name}${state.onAir ? tx("sofort auf MAIN anzeigen") : tx("für MAIN vorbereiten")}`
+                    : `${operatorQuickScreenName(quick,tx)} ${state.onAir ? tx("sofort auf MAIN anzeigen") : tx("für MAIN vorbereiten")}`
                 }
                 onClick={() =>
                   quick.type === "noText" && !noTextAvailable
@@ -3930,7 +3931,7 @@ function PreviewRightSidebar({
                 }
               >
                 <QuickScreenThumb quick={quick} />
-                <span>{quick.name}</span>
+                <span>{operatorQuickScreenName(quick,tx)}</span>
               </button>
             ))}
         </div>
@@ -4119,9 +4120,9 @@ function GuidesMenu({ close }: { close: () => void }) {
   );
   return (
     <div className="toolbar-popover guides-menu" role="menu">
-      {row("smartGuides", "Intelligente Hilfslinien")}
-      {row("marginGuides", "Rand-Hilfslinien")}
-      {row("ruleOfThirds", "Drittelraster")}
+      {row("smartGuides", tx("Intelligente Hilfslinien"))}
+      {row("marginGuides", tx("Rand-Hilfslinien"))}
+      {row("ruleOfThirds", tx("Drittelraster"))}
       <label className="guide-setting">{tx("Rastergröße")}<select
           value={preferences.canvasGridSize}
           onChange={(event) =>
@@ -4711,9 +4712,9 @@ export function FormatToolbar({
         {[
           ["X", "x", element.x, -1920, 3840],
           ["Y", "y", element.y, -1080, 2160],
-          ["Breite", "width", element.width, 1, 3840],
-          ["Höhe", "height", element.height, 1, 2160],
-          ["Drehung", "rotation", element.rotation, -360, 360],
+          [tx("Breite"), "width", element.width, 1, 3840],
+          [tx("Höhe"), "height", element.height, 1, 2160],
+          [tx("Drehung"), "rotation", element.rotation, -360, 360],
         ].map(([label, key, value, min, max]) => (
           <label key={String(key)}>
             {label}

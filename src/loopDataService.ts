@@ -1,3 +1,4 @@
+import {formatRegionalTemplate as sourceCopy} from '../shared/regional/validation';
 import type { AnnouncementPlacement, PublicAnnouncement } from './loopData';
 import { AnnouncementService as DomainAnnouncementService, type RawAnnouncement } from './community/AnnouncementService';
 import {StableLoopSnapshot} from './community/StableLoopSnapshot';
@@ -46,15 +47,15 @@ export async function loadPublicBirthdays(loader: () => Promise<PublicBirthday[]
 
 export interface LoopPreflightResult { warnings: string[]; ready: boolean }
 
-export function loopPreflight(items: ServiceItem[], sections: ServiceSection[]): LoopPreflightResult {
+export function loopPreflight(items: ServiceItem[], sections: ServiceSection[],copy=sourceCopy): LoopPreflightResult {
   const warnings: string[] = [];
   const sectionMap = new Map(sections.map((section) => [section.id, section]));
   for (const item of items.filter((entry) => entry.itemCategory === 'loop')) {
     const section = sectionMap.get(item.sectionId);
-    if (!section?.supportsLoopItems) warnings.push(`Loop-Element „${item.title}“ befindet sich in einem nicht unterstützten Bereich.`);
+    if (!section?.supportsLoopItems) warnings.push(copy("Loop-Element „{value1}“ befindet sich in einem nicht unterstützten Bereich.",{value1:String(item.title)}));
     if (item.type === 'weather') {
-      if (!Number.isFinite(Number(item.plannedDuration)) || Number(item.plannedDuration) < 1_000) warnings.push('Wetter benötigt eine Anzeigedauer von mindestens 1 Sekunde.');
-      if (String(item.metadata.weatherScreenUrl ?? '') !== 'https://weather.crbnm06.workers.dev') warnings.push('Wetterquelle wird auf den festen Systemwert zurückgesetzt.');
+      if (!Number.isFinite(Number(item.plannedDuration)) || Number(item.plannedDuration) < 1_000) warnings.push(copy("Wetter benötigt eine Anzeigedauer von mindestens 1 Sekunde."));
+      if (String(item.metadata.weatherScreenUrl ?? '') !== 'https://weather.crbnm06.workers.dev') warnings.push(copy("Wetterquelle wird auf den festen Systemwert zurückgesetzt."));
     }
   }
   return { warnings, ready: true };

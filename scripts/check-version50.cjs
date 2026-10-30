@@ -8,5 +8,5 @@ assert.doesNotMatch(app,/section-loop-toggle/);
 assert.match(store,/id==='pre'\|\|id==='post'/);
 assert.match(media,/generator-live-preview/);
 assert.match(media,/ai-metadata/);
-assert.match(notes,/aria-label="Durchstreichen"/);
+assert.match(notes,/aria-label=\{tx\("Durchstreichen"\)\}/);
 console.log('Version 0.50 media, notes and loop checks passed.');

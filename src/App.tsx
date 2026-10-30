@@ -2102,8 +2102,8 @@ function ServiceTimePopover({
   );
 }
 
-function formatServiceTime(value: string) {
-  if (!value) return "ZEIT FESTLEGEN";
+function formatServiceTime(value: string, copy:(source:string)=>string) {
+  if (!value) return copy("ZEIT FESTLEGEN");
   const hour = Number(value.split(":")[0]);
   return `${value} (${hour < 12 ? "VORM." : "NACHM."})`;
 }
@@ -2148,7 +2148,7 @@ function PresentationEventHeader() {
       .then(setEvents)
       .catch(() =>
         setError(
-          "Veranstaltungen konnten nicht geladen werden. Bitte prüfe die Verbindung und versuche es erneut.",
+          tx("Veranstaltungen konnten nicht geladen werden. Bitte prüfe die Verbindung und versuche es erneut."),
         ),
       )
       .finally(() => setLoading(false));
@@ -2214,10 +2214,10 @@ function PresentationEventHeader() {
   const tomorrowKey = tomorrow.toLocaleDateString("sv-SE"),
     group = (event: ChurchEvent) =>
       event.start_datum === today
-        ? "HEUTE"
+        ? tx("HEUTE")
         : event.start_datum === tomorrowKey
-          ? "MORGEN"
-          : "KOMMEND";
+          ? tx("MORGEN")
+          : tx("KOMMEND");
   const format = (event: ChurchEvent) =>
       formatEventDate(`${event.start_datum}T12:00:00`);
   return (
@@ -2805,7 +2805,7 @@ export function OrderOfService({
                             onClick={openTimes}
                           >
                             <Icon name="schedule" />
-                            <span>{formatServiceTime(state.serviceTime)}</span>
+                            <span>{formatServiceTime(state.serviceTime,tx)}</span>
                           </button>
                           {timeEditor && (
                             <ServiceTimePopover
@@ -2908,8 +2908,8 @@ export function OrderOfService({
             >
               <Icon name="speaker_notes_off" />{" "}
               {(audioMenu.targetType==='section'?state.sections.find(section=>section.id===audioMenu.targetId)?.audioStopCue:items.find((item) => item.id === audioMenu.targetId)?.audioStopCue)
-                ? backgroundAudioLabel('removeStop',language)
-                : backgroundAudioLabel('stop',language)}
+                ? backgroundAudioLabel('removeStop',language,tx)
+                : backgroundAudioLabel('stop',language,tx)}
             </button>
           )}
         </div>
@@ -4097,20 +4097,22 @@ function conciseReleaseSummary(
   data: ReleaseFile,
   version: string,
   language: Language,
+  germanRegion:ReturnType<typeof usePreferences.getState>["germanRegion"]=null,
+  copy:(source:string)=>string=source=>source,
 ) {
   const build = data.versions
     .flatMap((line) => line.builds)
     .find((entry) => entry.version === version);
   if (!build) return "";
   const labels = updateCategoryLabels[language] ?? updateCategoryLabels.en!,
-    local = (value: ReleaseText) =>
-      value[language] ?? value.en ?? value.de ?? "";
+    identity=indexReleaseTextObjects(data),regional=regionalDocumentationRuntime.get({language,germanRegion})?.releases,
+    local = (value: ReleaseText) =>localizeReleaseText(value,language,identity.paths.get(value),regional);
   return Object.entries(build.sections)
     .filter(([, entries]) => entries.length)
     .slice(0, 3)
     .map(
       ([key, entries]) =>
-        `${labels[key] ?? key}: ${entries
+        `${language==='de'?copy(labels[key]??key):(labels[key]??key)}: ${entries
           .slice(0, 2)
           .map((entry) => local(entry.label))
           .join(", ")}`,
@@ -4987,7 +4989,7 @@ export function SettingsModal({
       .then((data) => {
         if (active)
           setUpdateSummary(
-            conciseReleaseSummary(data, version, language) ||
+            conciseReleaseSummary(data, version, language,prefs.germanRegion,tx) ||
               conciseRemoteSummary(updateStatus.releaseNotes ?? ""),
           );
       })
@@ -5005,6 +5007,8 @@ export function SettingsModal({
     updateStatus.version,
     updateStatus.releaseNotes,
     language,
+    prefs.germanRegion,
+    regionalDocumentationRuntime.getSnapshot(),
   ]);
   async function testSpeakers() {
     const context = new AudioContext(),
@@ -5081,10 +5085,10 @@ export function SettingsModal({
   ];
   const etaText =
     updateStatus.etaSeconds === undefined
-      ? "Restzeit wird berechnet …"
+      ? tx("Restzeit wird berechnet …")
       : updateStatus.etaSeconds < 60
-        ? `ca. ${Math.max(1, updateStatus.etaSeconds)} Sek. verbleibend`
-        : `ca. ${Math.max(1, Math.ceil(updateStatus.etaSeconds / 60))} Min. verbleibend`;
+        ? tx("ca. {value1} Sek. verbleibend",{value1:String(Math.max(1, updateStatus.etaSeconds))})
+        : tx("ca. {value1} Min. verbleibend",{value1:String(Math.max(1, Math.ceil(updateStatus.etaSeconds / 60)))});
   const updateText =
     updateStatus.state === "checking"
       ? `${t("updateChecking").replace(/[\s.…]+$/, "")}${".".repeat(updateSearchDots)}`
@@ -5098,7 +5102,7 @@ export function SettingsModal({
               ? `${L.rollbackDownloading}: ${updateStatus.percent ?? 0} %`
               : updateStatus.state === "cancelled"
                 ? (updateStatus.message ??
-                  "Der Update-Download wurde abgebrochen.")
+                  tx("Der Update-Download wurde abgebrochen."))
                 : updateStatus.state === "downloaded"
                   ? t("updateDownloaded", {
                       version: updateStatus.version ?? "",
@@ -5188,20 +5192,20 @@ export function SettingsModal({
     { title: tx("VERBINDUNGEN & STEUERUNG"), tabs: ["lightingMidi", "midiInput"] },
   ];
   const tabName = (key: SettingsTab) =>
-    key === "songTranslations" ? "Song" : key === "midiInput"
+    key === "songTranslations" ? tx("Song") : key === "midiInput"
       ? "MIDI Input"
       : key === "shortcuts"
-        ? "Tastenkürzel"
+        ? tx("Tastenkürzel")
           : key === "audioRouting"
-            ? "Audioausgänge"
+            ? tx("Audioausgänge")
             : key === "audioEqualizer"
               ? "Equalizer"
           : key === "rewards"
-            ? "Belohnungen"
+            ? tx("Belohnungen")
             : key === "security"
-              ? "Sicherheit"
+              ? tx("Sicherheit")
               : key === "remote"
-                  ? "Personal Monitore & Web-Steuerung"
+                  ? tx("Personal Monitore & Web-Steuerung")
                   : t(key as TranslationKey);
   return (
     <>
@@ -5812,7 +5816,7 @@ export function SettingsModal({
               {tab === "songTranslations" && <section className="settings-group">
                 <h3>{tx("SONG · ÜBERSETZUNGEN")}</h3>
                 <p>{tx("Füge im Song-Editor unter INHALT eine Übersetzung zu den jeweiligen Lyrics hinzu. Der Originaltext bleibt unverändert; diese Einstellung bestimmt die Darstellung auf diesem Gerät.")}</p>
-                <label>{tx("Übersetzungen anzeigen")}<select value={prefs.songTranslationMode} onChange={event=>prefs.setSongTranslationMode(event.target.value as SongTranslationMode)}>{translationModes.map(mode=><option key={mode.value} value={mode.value}>{mode.label}</option>)}</select></label>
+                <label>{tx("Übersetzungen anzeigen")}<select value={prefs.songTranslationMode} onChange={event=>prefs.setSongTranslationMode(event.target.value as SongTranslationMode)}>{translationModes.map(mode=><option key={mode.value} value={mode.value}>{tx(mode.label)}</option>)}</select></label>
                 <p>{tx("Standard ist die Übersetzung unter der Strophe in Klammern. Ohne Übersetzung erscheint immer der Originaltext, auch bei „Nur Übersetzung“. Bei zeilenweiser Darstellung sollten Original und Übersetzung gleich viele Zeilen haben. Prüfe vor ON AIR, ob beide Texte in die Folienfläche passen.")}</p>
                 <p>{tx("Eine Änderung wird für eine bereits live geschaltete Folie erst beim erneuten Senden wirksam. Die STAGE-Akkordansicht bleibt beim Originaltext.")}</p>
                 <TranslationPackSettings />
@@ -7036,7 +7040,7 @@ function BackgroundAudioController() {
           backgroundAudioEngine.setVolume(Number(event.target.value))
         }
       />
-      {audio.error && <small>{audio.error}</small>}
+      {audio.error && <small>{tx(audio.error)}</small>}
       <AudioDiagnostics health={audio.health}/>
     </div>
   );
@@ -8938,8 +8942,8 @@ function AppShell({
         ...state.items.flatMap((item) => item.backgroundAudio?.tracks ?? []),
       ];
     const fonts=await findMissingFonts(state.items);
-    if(fonts.missing.length)warnings.push('Fehlende Schriftarten: '+fonts.missing.join(', ')+'. Die Ausgabe verwendet Ersatzschriften.');
-    if(fonts.unchecked.length)warnings.push('Schriftprüfung nicht vollständig verfügbar: '+fonts.unchecked.join(', '));
+    if(fonts.missing.length)warnings.push(tx("Fehlende Schriftarten: {value1}. Die Ausgabe verwendet Ersatzschriften.",{value1:String(fonts.missing.join(', '))}));
+    if(fonts.unchecked.length)warnings.push(tx("Schriftprüfung nicht vollständig verfügbar: {value1}",{value1:String(fonts.unchecked.join(', '))}));
     const routing = normalizedAudioRouting(
       usePreferences.getState().audioRouting,
     );
@@ -8961,35 +8965,35 @@ function AppShell({
     );
     if (mediaWithAudio && !routeAvailable(routing, "video", audioOutputs))
       warnings.push(
-        "Audioausgang für Medien / Videos ist nicht verfügbar. Fallback: Systemstandard.",
+        tx("Audioausgang für Medien / Videos ist nicht verfügbar. Fallback: Systemstandard."),
       );
     if (
       audioTracks.length &&
       !routeAvailable(routing, "background", audioOutputs)
     )
       warnings.push(
-        "Background-Audio-Ausgang ist nicht verfügbar. Fallback: Systemstandard.",
+        tx("Background-Audio-Ausgang ist nicht verfügbar. Fallback: Systemstandard."),
       );
     if (!routeAvailable(routing, "preview", audioOutputs))
       warnings.push(
-        "Preview-Ausgang ist nicht verfügbar. Dies blockiert MAIN nicht; Fallback: Systemstandard.",
+        tx("Preview-Ausgang ist nicht verfügbar. Dies blockiert MAIN nicht; Fallback: Systemstandard."),
       );
     if (!routeAvailable(routing, "notification", audioOutputs))
       warnings.push(
-        "Systembenachrichtigungsausgang ist nicht verfügbar. Dies blockiert MAIN nicht; Fallback: Systemstandard.",
+        tx("Systembenachrichtigungsausgang ist nicht verfügbar. Dies blockiert MAIN nicht; Fallback: Systemstandard."),
       );
     const linkedEvent = sessionMode !== 'test' && state.eventLink?.eventKey
       ? await getChurchEvent(state.eventLink.eventKey).catch(() => null)
       : null;
-    if(!state.eventLink?.eventKey&&(sessionMode!=='test'||testScenario==='automatic'))warnings.push('Ohne verknüpfte Veranstaltung kann kein automatischer Raumhinweis im Nachprogramm ermittelt werden.');
+    if(!state.eventLink?.eventKey&&(sessionMode!=='test'||testScenario==='automatic'))warnings.push(tx("Ohne verknüpfte Veranstaltung kann kein automatischer Raumhinweis im Nachprogramm ermittelt werden."));
     if (isCancelled(linkedEvent))
       warnings.push(
-        "Die verknüpfte Veranstaltung fällt aus. Die Verbindung bleibt bestehen; bitte prüfe den Live-Start.",
+        tx("Die verknüpfte Veranstaltung fällt aus. Die Verbindung bleibt bestehen; bitte prüfe den Live-Start."),
       );
     for (const track of audioTracks)
       if (!track.url || track.status === "missing")
         warnings.push(
-          `Background Audio „${track.name}“ ist nicht für die Live-Ausgabe verfügbar.`,
+          tx("Background Audio „{value1}“ ist nicht für die Live-Ausgabe verfügbar.",{value1:String(track.name)}),
         );
     if (videoInputElements.length) {
       try {
@@ -9002,11 +9006,11 @@ function AppShell({
         for (const element of videoInputElements)
           if (!ids.has(String(element.properties.deviceId ?? "")))
             warnings.push(
-              `Für den Videoeingang „${element.name}“ ist die konfigurierte Quelle derzeit nicht verfügbar.`,
+              tx("Für den Videoeingang „{value1}“ ist die konfigurierte Quelle derzeit nicht verfügbar.",{value1:String(element.name)}),
             );
       } catch {
         warnings.push(
-          "Die verfügbaren Videoeingänge konnten vor ON AIR nicht geprüft werden.",
+          tx("Die verfügbaren Videoeingänge konnten vor ON AIR nicht geprüft werden."),
         );
       }
     }
@@ -9026,15 +9030,16 @@ function AppShell({
             ),
         )
         .filter(Boolean),
-    });
-    preflight.warnings.push(...warnings,...externalController.current.preflightWarnings(state.items));
+    },tx);
+    preflight.warnings.push(...warnings,...externalController.current.preflightWarnings(state.items,tx));
     if (!slide || !enabledSlides.some(entry => entry.id === slide.id)) {
       preflight.ok = false;
-      preflight.errors.push('Bitte eine aktive Folie für den Start auswählen.');
+      preflight.errors.push(tx("Bitte eine aktive Folie für den Start auswählen."));
     }
     return preflight;
       },
       displays: () => window.desktop!.displays(),
+      copy:tx,
       confirm: message => confirm(message),
       isCurrent: () => {
         const current = usePresentation.getState();
@@ -9047,7 +9052,7 @@ function AppShell({
           fallback=unavailablePostProgramTarget(current.items,availableForOutput)??null;
         }
         if(!fallback){
-          throw new Error('Für den automatischen Raumhinweis fehlen Veranstaltungsdaten. Bitte eine eigene Folie hinzufügen oder im Testbetrieb ein Testszenario wählen.');
+          throw new Error(tx("Für den automatischen Raumhinweis fehlen Veranstaltungsdaten. Bitte eine eigene Folie hinzufügen oder im Testbetrieb ein Testszenario wählen."));
         }
         const startItemId=fallback.itemId,startSlideId=fallback.slideId,item=current.items.find(entry=>entry.id===startItemId),startSlide=item?.slides.find(entry=>entry.id===startSlideId);
         if (!startSlide) return false;
@@ -9061,11 +9066,11 @@ function AppShell({
           const nextMode:AppModeState={mode:sessionMode==='test'?'test':'normal',onAir:true};
           await (window.desktop as any)?.setOutputAppMode?.(nextMode);
           const preparedStart=item&&isAdvertising(item)?advertisingRuntime.take(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now().getTime()):item&&isExternalLoop(item)?externalController.current.outputForTake(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now().getTime()):isAnnouncementLoop(item)?announcementController.current.outputForTake(item,startSlide,(current.liveTransitionRevision??0)+1,AppClock.now()):startSlide;
-          if(!preparedStart)throw new Error('Zurzeit sind keine freigegebenen dynamischen Inhalte verfügbar.');
+          if(!preparedStart)throw new Error(tx("Zurzeit sind keine freigegebenen dynamischen Inhalte verfügbar."));
           const started = await liveEngine.start(assignments, {
             ...preparedStart, transitionOverride: resolveTransition(startSlide, item, 'main', current.transitionDefault),
           });
-          if (!started) throw new Error('Die Ausgabe konnte nicht gestartet werden.');
+          if (!started) throw new Error(tx("Die Ausgabe konnte nicht gestartet werden."));
           state.setTestPostProgramScenario(sessionMode==='test'&&testScenario!=='automatic'?testScenario:undefined);
           setAppMode(nextMode);
           state.goLive(startItemId, startSlideId);
@@ -9084,7 +9089,7 @@ function AppShell({
     });
     const preflight = outcome.preflight;
     if (outcome.error || (preflight && (!preflight.ok || preflightOnly))) {
-      alert(outcome.error ?? `${preflight!.ok ? 'Preflight erfolgreich.' : 'Preflight nicht bestanden.'}${preflight!.errors.length ? '\n\n'+preflight!.errors.join('\n') : ''}${preflight!.warnings.length ? '\n\nHinweise:\n'+preflight!.warnings.join('\n') : ''}`);
+      alert(outcome.error ? tx(outcome.error) : `${preflight!.ok ? tx('Preflight erfolgreich.') : tx('Preflight nicht bestanden.')}${preflight!.errors.length ? '\n\n'+preflight!.errors.join('\n') : ''}${preflight!.warnings.length ? '\n\n'+tx('Hinweise:')+'\n'+preflight!.warnings.join('\n') : ''}`);
     }
     // Optional rewards cannot break a successful output start; tests earn none.
     if (outcome.started && sessionMode === 'live' && preflight?.ok) try {
@@ -9248,7 +9253,7 @@ function AppShell({
           </button>
           {syncProgress.text && (
             <small>
-              <span>{syncProgress.text}</span>
+              <span>{tx(syncProgress.text)}</span>
               {syncProgress.state === "syncing" && (
                 <i style={{ width: `${syncProgress.step * 25}%` }} />
               )}
@@ -9613,7 +9618,7 @@ export function App() {
     strongFocus = usePreferences((state) => state.strongFocus),
     dyslexiaFriendly = usePreferences((state) => state.dyslexiaFriendly);
   const operatorScale=usePreferences(state=>state.operatorScale);
-  const { t } = useI18n();
+  const { t ,tx} = useI18n();
   const output = useMemo(() => location.hash.startsWith("#output"), []),
     mediaBrowser = useMemo(() => location.hash.startsWith("#media"), []),
     historyWindow = useMemo(() => location.hash.startsWith("#history"), []);
@@ -9759,7 +9764,7 @@ export function App() {
       if (
         recoveryCopy && recoveryDocument &&
         confirm(
-          `GottesdienstRegie wurde zuvor nicht ordnungsgemäß beendet.\n\nWiederherstellung für „${recoveryCopy.summary.title}“ öffnen?`,
+          tx("GottesdienstRegie wurde zuvor nicht ordnungsgemäß beendet.\n\nWiederherstellung für „{value1}“ öffnen?",{value1:String(recoveryCopy.summary.title)}),
         )
       ) {
         usePresentation.getState().loadDocument(recoveryDocument);
@@ -9826,7 +9831,7 @@ export function App() {
         <div className="boot-panel">
           {!closing && <button
             className="boot-close"
-            title="Schließen"
+            title={tx("Schließen")}
             onClick={() => window.close()}
           >
             <Icon name="close" />
@@ -9841,15 +9846,7 @@ export function App() {
             <i />
           </div>
           <p>
-            {closing ? "Änderungen werden gespeichert …" : startupProgress < 20
-              ? "Konto wird geprüft …"
-              : startupProgress < 42
-                ? "Cloud wird verbunden …"
-                : startupProgress < 66
-                  ? "Präsentationsdaten werden geladen …"
-                  : startupProgress < 86
-                    ? "Arbeitsbereich wird vorbereitet …"
-                    : "GottesdienstRegie wird gestartet …"}
+            {(closing?tx("Änderungen werden gespeichert …"):(startupProgress < 20?tx("Konto wird geprüft …"):(startupProgress < 42?tx("Cloud wird verbunden …"):(startupProgress < 66?tx("Präsentationsdaten werden geladen …"):(startupProgress < 86?tx("Arbeitsbereich wird vorbereitet …"):tx("GottesdienstRegie wird gestartet …"))))))}
           </p>
           {!closing && <button
             type="button"
@@ -9864,8 +9861,7 @@ export function App() {
               });
             }}
           >
-            SYNCHRONISIERUNG ÜBERSPRINGEN
-          </button>}
+            {tx("SYNCHRONISIERUNG ÜBERSPRINGEN")}</button>}
           <strong>GottesdienstRegie</strong>
         </div>
       </div>

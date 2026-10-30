@@ -58,11 +58,11 @@ export function BibleTextDialog({
     translationGroups = useMemo(() => {
       const groups = new Map<string, BibleTranslation[]>();
       for (const entry of translationMatches) {
-        const language = entry.language || "Weitere Sprachen";
+        const language = entry.language || tx("Weitere Sprachen");
         groups.set(language, [...(groups.get(language) ?? []), entry]);
       }
       return groups;
-    }, [translationMatches]),
+    }, [translationMatches,tx]),
     maxChapter = chapterCountForBook(book),
     chapters = numberSuggestions(maxChapter),
     verses = numberSuggestions(176);
@@ -273,7 +273,7 @@ export function BibleTextDialog({
             ) : error ? (
               <div className="bible-error">
                 <span className="material-symbols-outlined">error</span>
-                <p>{error}</p>
+                <p>{tx(error)}</p>
                 <button onClick={() => void preview()}>{tx("Erneut versuchen")}</button>
               </div>
             ) : passage ? (

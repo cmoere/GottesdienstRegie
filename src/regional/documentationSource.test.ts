@@ -20,7 +20,8 @@ describe('complete German documentation translation source',()=>{
     expect(source.help['Erste Schritte'].body).toContain('## ');
   });
   it('keeps all historical release text fields keyed by stable version identity',()=>{
-    expect(Object.keys(source.releases)).toHaveLength(1610);
+    expect(Object.keys(source.releases)).toHaveLength(1628);
+    expect(source.releases['versions[0.95].builds[0.95.0].overview.label']).toBeTruthy();
     expect(source.releases['versions[0.94].builds[0.94.0].overview.label']).toBeTruthy();
     expect(source.releases['versions[0.93].builds[0.93.0].overview.label']).toBeTruthy();
     expect(source.releases['versions[0.93].builds[0.93.0].sections.known.0.text']).toContain('deaktiviert');

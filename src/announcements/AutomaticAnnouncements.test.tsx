@@ -31,6 +31,14 @@ describe('single control shell announcement owner',()=>{
   await act(async()=>{await startAnnouncementTest({kind:'message',id:'general'},20)});
   expect(spoken).toEqual(['Die tatsächliche Meldung.']);
  });
+ it('shows a regionalizable probe failure instead of leaking a native engine exception',async()=>{
+  usePresentation.setState({onAir:false});
+  window.desktop!.announcements!.synthesize=async()=>{throw Error('native worker failed at C:/private/voice/runtime')};
+  render(<AutomaticAnnouncements quick={null}/>);await act(async()=>{});
+  await act(async()=>{await expect(startAnnouncementTest({kind:'general'},20)).rejects.toThrow('Tonprobe fehlgeschlagen. Stimme und Background-Audio-Ausgang prüfen.')});
+  expect(useSpeechStatus.getState()).toMatchObject({active:false,testing:false,message:'Tonprobe fehlgeschlagen. Stimme und Background-Audio-Ausgang prüfen.'});
+  expect(boundary.events).toEqual([]);
+ });
  it('offers a settings probe with a selected text and stops it when settings close',async()=>{
   usePreferences.setState({language:'de',germanRegion:null});usePresentation.setState({onAir:false});boundary.hold=true;
   window.desktop!.announcements!.engineStatus=async()=>({ready:true,name:'Enthalten'});

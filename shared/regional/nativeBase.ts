@@ -1,5 +1,28 @@
+import screenReportTemplates from './screenReportTemplates.json';
+import importWarningTemplates from './importWarningTemplates.json';
 /** App-owned native dialog templates; OS-owned dialog chrome is not rewritten. */
 export const nativeBaseTemplates={
+  ...importWarningTemplates,
+  ...screenReportTemplates,
+  remoteCurrent:"Aktuell",
+  remoteNext:"Als Nächstes",
+  remoteWaiting:"Warte auf Präsentation …",
+  remoteLost:"Verbindung unterbrochen",
+  remotePrevious:"Zurück",
+  remoteAdvance:"Weiter",
+  remoteDraw:"Markieren",
+  remoteClear:"Markierungen löschen",
+  remoteNotes:"Notizen",
+  remoteOrder:"Ablauf",
+  remoteStart:"Beginn in",
+  remoteColor:"Farbe",
+  remoteRed:"Rot",
+  remoteYellow:"Gelb",
+  remoteGreen:"Grün",
+  remoteWhite:"Weiß",
+  rendererFailureHeading:"Arbeitsbereich konnte nicht geladen werden",
+  rendererFailureHelp:"Bitte versuche es erneut. Falls der Fehler bestehen bleibt, installiere die aktuelle Version erneut.",
+  rendererFailureRetry:"Erneut versuchen",
   updateAvailableTitle:'Neue Version verfügbar',
   updateAvailableMessage:'GottesdienstRegie {version} ist verfügbar.',
   updateInstallQuestion:'Möchtest du die neue Version installieren?',

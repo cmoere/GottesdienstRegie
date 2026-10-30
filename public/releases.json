@@ -21,12 +21,122 @@
   ],
   "versions": [
     {
+      "line": "0.95",
+      "builds": [
+        {
+          "version": "0.95.0",
+          "releaseDate": "2026-10-30",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Einheitliche Bedienung und vollständige deutsche Regionalvarianten",
+              "en": "Consistent controls and complete German regional variants"
+            },
+            "text": {
+              "de": "GottesdienstRegie erhält eine durchgängige, an klarer Hierarchie und gruppierten Bedienelementen orientierte Oberfläche. Alle 31 vorgesehenen deutschen Regionalvarianten umfassen Bedienung, native Dialoge, Hilfe und Versionshinweise. Besucherfolien und gespeicherte Inhalte behalten ihre Gestaltung und Sprache.",
+              "en": "GottesdienstRegie gains a consistent operator interface with clear hierarchy and grouped controls. All 31 planned German regional variants cover controls, native dialogs, help and release notes. Visitor slides and saved content retain their design and language."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "31 deutsche Regionalvarianten verfügbar",
+                  "en": "31 German regional variants available"
+                },
+                "text": {
+                  "de": "Die Auswahl enthält jetzt den vollständigen vorgesehenen Katalog einschließlich Bielefeld/Ravensberg. Beschriftungen, Bestätigungen, Statusmeldungen und Hilfen verwenden die gewählte Variante. Die Standardauswahl führt zurück zu neutralem Deutsch; gesprochene Ansagen und vorhandene Dokumenttexte werden nicht umgeschrieben.",
+                  "en": "The selection now includes the full planned catalogue, including Bielefeld/Ravensberg. Captions, confirmations, statuses and help use the chosen variant. The standard option returns to neutral German; spoken announcements and existing document text are not rewritten."
+                }
+              },
+              {
+                "label": {
+                  "de": "Durchgängige Gestaltung der Bedienoberfläche",
+                  "en": "A consistent operator interface"
+                },
+                "text": {
+                  "de": "Arbeitsbereiche, Einstellungen, Bibliotheken, Medienbrowser und Dialoge verwenden eine gemeinsame Gestaltung mit klaren Gruppen, abgestimmten Abständen und sichtbarem Tastaturfokus. Helle und dunkle Darstellung behalten Cera Pro sowie die Gemeindefarben. Die gestalteten MAIN-Folien bleiben erhalten.",
+                  "en": "Workspaces, settings, libraries, the media browser and dialogs share clear groups, consistent spacing and visible keyboard focus. Light and dark appearance retain Cera Pro and the community colours. Designed MAIN slides are preserved."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Regionale Hilfe, Versionshinweise und Berichte",
+                  "en": "Regional help, release notes and reports"
+                },
+                "text": {
+                  "de": "Die integrierte Hilfe und die historischen Versionshinweise stehen in allen Regionalvarianten bereit. Auch die Update-Kurzfassung und heruntergeladene Bildschirmtest-Berichte verwenden die Auswahl. Deutsche Web-Steuerungen und Personal Monitors erhalten regionale Bedientexte; eine ausdrücklich gewählte englische Monitoransicht bleibt englisch.",
+                  "en": "Integrated help and historical release notes are available in every regional variant. Update summaries and downloaded screen-test reports also use the selection. German web controls and personal monitors receive regional captions; an explicitly selected English monitor interface stays English."
+                }
+              },
+              {
+                "label": {
+                  "de": "Stabile Arbeitsbereiche in schmalen Fenstern",
+                  "en": "Stable workspaces in narrow windows"
+                },
+                "text": {
+                  "de": "Die Fensteraufteilung berücksichtigt, ob Formatwerkzeuge sichtbar sind. Arbeitsfläche und Timeline behalten ihre vorgesehenen Bereiche. Die mobile Bereichsnavigation liegt unter geöffneten Dialogen, damit deren Aktionen erreichbar bleiben. Eigene Präsentations-, Geräte- und Dateinamen bleiben unverändert.",
+                  "en": "The window layout accounts for whether formatting tools are visible. The workspace and timeline retain their intended areas. Mobile area navigation stays below open dialogs so their actions remain accessible. Custom presentation, device and file names remain unchanged."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Sprachwechsel ohne erneute Geräteverbindung",
+                  "en": "Language changes without reconnecting devices"
+                },
+                "text": {
+                  "de": "Bereits vorbereitete Bedienaktionen verwenden beim Aufruf die aktuelle Regionalauswahl. Kamerastatus und Hinweise zur Bildschirmzuordnung aktualisieren ihre Beschriftungen, ohne den laufenden Kamerastream oder die gespeicherten Ausgänge erneut einzurichten. Auswahl und Live-Ausgabe bleiben getrennt.",
+                  "en": "Prepared operator actions use the current regional selection when invoked. Camera status and display-assignment warnings update their captions without reconnecting the camera stream or setting up saved outputs again. Selection and live output remain separate."
+                }
+              },
+              {
+                "label": {
+                  "de": "Verständliche Rückmeldung bei fehlgeschlagener Tonprobe",
+                  "en": "Clear feedback when an announcement test fails"
+                },
+                "text": {
+                  "de": "Eine fehlgeschlagene Spracherzeugung wird als übersetzbarer Hinweis zu Stimme und Audioausgang angezeigt. Interne Meldungen des Sprachprozesses werden nicht direkt als Tonprobenfehler durchgereicht. Schlägt bereits die Vorbereitung fehl, wird keine Musikabsenkung gestartet.",
+                  "en": "Speech-generation failures are shown as a localizable voice/output hint. Internal speech-process exceptions are not passed straight into the audio-test error display. If preparation fails, music attenuation is not started."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Voraussetzungen der PowerPoint-Originalwiedergabe",
+                  "en": "Requirements for original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Der bestehende Originalmodus verwendet weiterhin installiertes Microsoft PowerPoint unter Windows. Die Bedienoberflächenumstellung ersetzt diese Voraussetzung nicht. Prüfe geeignete Präsentationen mit ihren Originalanimationen und Zeiten vor dem Live-Einsatz auf dem vorgesehenen Rechner.",
+                  "en": "The existing original-playback mode still uses installed Microsoft PowerPoint on Windows. The interface update does not replace that requirement. Check supported presentations with their original animations and timings on the intended computer before live use."
+                }
+              },
+              {
+                "label": {
+                  "de": "Technischer Bildschirmtest und Sichtprüfung",
+                  "en": "Technical screen tests and visual inspection"
+                },
+                "text": {
+                  "de": "Der Bildschirmtest und sein Bericht bestätigen Prüfungen im MAIN-Renderer. Kabel, Beamer, tatsächliche Farbwiedergabe und der physische Bild- und Tonweg benötigen weiterhin eine eigene Prüfung. Eine bestandene Renderer-Prüfung ist keine automatische Freigabe der gesamten Anlage.",
+                  "en": "The screen test and its report confirm checks in the MAIN renderer. Cables, projectors, actual colour reproduction and the physical image/audio path still require separate inspection. Passing renderer checks does not automatically certify the whole installation."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.94",
       "builds": [
         {
           "version": "0.94.0",
           "releaseDate": "2026-10-27",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Originale PowerPoint-Wiedergabe im Live-Ablauf und klarere Bedienung",

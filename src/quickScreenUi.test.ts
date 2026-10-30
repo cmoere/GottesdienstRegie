@@ -1,3 +1,4 @@
+import {operatorQuickScreenName} from './quickScreenUi';
 import {describe,expect,it,vi} from 'vitest';
 import {applyQuickScreen} from './quickScreenUi';
 import {quickOverridesRoomNotice} from './quickScreenUi';
@@ -55,4 +56,14 @@ it('limits the new room-notice override to Bildschirmtest and Technische Störun
  expect(quickOverridesRoomNotice({...base,id:'technical-issue'})).toBe(true);
  expect(quickOverridesRoomNotice({...base,type:'noText'})).toBe(false);
  expect(quickOverridesRoomNotice(base)).toBe(false);expect(quickOverridesRoomNotice(null)).toBe(false);
+});
+
+it('localizes built-in control names while retaining custom and saved output data',()=>{
+ const copy=vi.fn((text:string)=>'regional:'+text);
+ const original={id:'black',name:'Schwarz'};
+ expect(operatorQuickScreenName(original,copy)).toBe('regional:Schwarz');
+ expect(original).toEqual({id:'black',name:'Schwarz'});
+ expect(operatorQuickScreenName({id:'black',name:'Meine Pause'},copy)).toBe('Meine Pause');
+ expect(operatorQuickScreenName({id:'custom',name:'Schwarz'},copy)).toBe('Schwarz');
+ expect(copy).toHaveBeenCalledTimes(1);
 });

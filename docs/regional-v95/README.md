@@ -1,12 +1,10 @@
-# v95 regional documentation work in progress
+# v95 regional documentation
 
-The user requires all 31 variants to be complete before publication. No partial v95 release is authorized.
+The user requires all 31 regional variants to be complete before normal publication. No partial v95 release is authorized.
 
-`help-drafts/` and `release-drafts/` preserve authored translations from the translation-only workers outside the runtime import glob. All 16 originally missing documentation packages have now been completed, validated and integrated into `src/regional/docs/`; all 31 runtime packages cover the current German documentation source. Existing committed runtime documentation was preserved.
+All31 runtime packages are in `src/regional/docs/`. The current German source has63 help articles and1628 release fields, including18 new v95 fields. The interface package has2262 UI and110 native resources per region. Source-copy classification now has no remaining review-required candidates; the full-completion manifest is now enabled after the updated interface guide, release translations and strict final verification passed.
 
-Every saved article is checked with `validateRegionalDocumentation` against its exact assembled German source, including placeholders, paragraph count, numbers, links and related article identities. Validation of a subset does **not** establish coverage of missing articles. The complete source has 63 help articles and 1,610 historical release fields (before v95 notes).
-
-To resume: finish the remaining source-copy inventory and operator interface review before marking availability complete. All 31 interface files currently contain 2016 UI and 55 native entries. This namespace coverage does not establish that every remaining source literal is bound. Preserve existing translations. When the German help or release source changes for v95, update runtime translations and validate retained drafts against that source, or retire the integrated drafts deliberately rather than leaving stale fact checks.
+The 16 formerly missing documentation packages were fully integrated. Their original32 draft files have been retired from active authoring and preserved byte-for-byte in `archive/integrated-drafts/`, with a SHA256 manifest and source-history pointer. The strict checker was not weakened; current runtime documentation still requires exact keys, facts, paragraphs, related IDs, links and placeholders for every region.
 
 Useful checks:
 
@@ -17,4 +15,4 @@ node scripts/test-operator-design.cjs --real
 node node_modules/vitest/vitest.mjs run --maxWorkers=2
 ```
 
-The completion check must fail while any requested resource surface is incomplete. Do not weaken the check or copy fallback text to turn the indicator green.
+All current translations and the strict all31 gate pass. Runtime fallback and key counts alone do not establish completed translation. See ../v95-verification.md for the complete verification and publication ledger.

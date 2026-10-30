@@ -1,7 +1,9 @@
+import {useI18n} from './i18n';
 import {useEffect,useRef,useState,type ReactNode} from 'react';
 const widthKey='gottesdienstregie.ui.serviceSidebarWidth';
 export const sidebarWidth=(requested:number,viewport:number)=>Math.min(Math.floor(viewport*.15),Math.max(144,Number.isFinite(requested)?requested:258));
 export function ResizableServiceSidebar({children}:{children:ReactNode}){
+ const {tx}=useI18n();
  const root=useRef<HTMLDivElement>(null),pointer=useRef<number|null>(null);
  const [viewport,setViewport]=useState(window.innerWidth);
  const [requested,setRequested]=useState(()=>{try{return Number(localStorage.getItem(widthKey))||258}catch{return 258}});
@@ -15,7 +17,7 @@ export function ResizableServiceSidebar({children}:{children:ReactNode}){
  const update=(next:number)=>{const value=sidebarWidth(next,window.innerWidth);setRequested(value);try{localStorage.setItem(widthKey,String(value))}catch{/* personal storage may be unavailable */}};
  return <div ref={root} className="service-sidebar-shell" style={desktop?{width}:undefined}>
   {children}
-  {desktop&&<div className="service-sidebar-resize" role="separator" tabIndex={0} aria-label="Ablaufbreite" aria-orientation="vertical" aria-valuemin={Math.min(144,Math.floor(viewport*.15))} aria-valuemax={Math.floor(viewport*.15)} aria-valuenow={width}
+  {desktop&&<div className="service-sidebar-resize" role="separator" tabIndex={0} aria-label={tx("Ablaufbreite")} aria-orientation="vertical" aria-valuemin={Math.min(144,Math.floor(viewport*.15))} aria-valuemax={Math.floor(viewport*.15)} aria-valuenow={width}
    onPointerDown={event=>{if(event.button!==0)return;event.preventDefault();pointer.current=event.pointerId;event.currentTarget.setPointerCapture(event.pointerId)}}
    onPointerMove={event=>{if(pointer.current===event.pointerId&&root.current)update(event.clientX-root.current.getBoundingClientRect().left)}}
    onPointerUp={event=>{if(pointer.current!==event.pointerId)return;pointer.current=null;event.currentTarget.releasePointerCapture(event.pointerId)}}

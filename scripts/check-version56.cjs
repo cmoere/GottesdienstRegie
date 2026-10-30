@@ -4,7 +4,7 @@ const app=fs.readFileSync('src/App.tsx','utf8'),workspace=fs.readFileSync('src/P
 assert.ok(Number(pkg.version.split('.')[1])>=56);
 assert.ok(releases.versions.flatMap(entry=>entry.builds).some(entry=>entry.version==='0.56.0'));
 assert.doesNotMatch(app,/className="section-add-button"/);
-assert.match(app,/RADIOSENDER/);
+assert.match(fs.readFileSync('src/BackgroundAudioPanel.tsx','utf8'),/tx\("Radiosender"\)/);
 assert.match(workspace,/preview-timer-ring/);
 assert.match(workspace,/Aktuell befinden sich keine ausblendbaren Inhalte/);
 assert.match(audio,/audio-browser>\.media-browser-body\{grid-row:auto/);

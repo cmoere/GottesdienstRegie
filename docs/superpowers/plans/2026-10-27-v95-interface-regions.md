@@ -26,9 +26,9 @@ References: [Apple layout](https://developer.apple.com/design/human-interface-gu
 
 - [x] Audit all 31 packs: 15 have 399 UI/34 native keys and documentation; 16 have 209 UI/33 native keys and no documentation.
 - [x] Assign disjoint, translation-only missing-interface/help batches.
-- [ ] Classify actual source prose in the current review-required inventory; migrate authored operator text into resources.
-- [ ] Complete all 31 UI/native/help/release packages with placeholders and markup preserved.
-- [ ] Validate exact coverage, freshness, runtime selection and missing-content rejection before enabling all 31.
+- [x] Classify actual source prose in the current review-required inventory; migrate authored operator text into resources.
+- [x] Complete all 31 UI/native/help/release packages with placeholders and markup preserved.
+- [x] Validate exact coverage, freshness, runtime selection and missing-content rejection before enabling all 31.
 
 ## Task 2 — Operator design foundation and shell
 
@@ -41,14 +41,14 @@ Files: `src/operator-design.css`, `src/main.tsx`, shell in `src/App.tsx`; native
 
 ## Task 3 — Surface integration
 
-- [ ] Apply/review settings, media browser, help, libraries, dialogs, inspectors, timeline and remote/personal-monitor controls.
-- [ ] Remove contradictory legacy visual rules in touched areas; avoid broad selectors affecting output content.
-- [ ] Verify keyboard operation, labels, long strings, scrolling and modal action availability.
+- [x] Apply/review settings, media browser, help, libraries, dialogs, inspectors, timeline and remote/personal-monitor controls.
+- [x] Remove contradictory legacy visual rules in touched areas; avoid broad selectors affecting output content.
+- [x] Verify keyboard operation, labels, long strings, scrolling and modal action availability.
 
 ## Task 4 — Completion and release
 
-- [ ] Full unit/type/build/regional strict checks; real native PowerPoint/output smoke regression.
-- [ ] Update version/notes/help screenshots only for implemented and verified behavior.
+- [x] Full unit/type/build/regional strict checks; real native PowerPoint/output smoke regression.
+- [x] Update version/notes/help screenshots only for implemented and verified behavior.
 - [ ] Publish normal update only after all requested completeness gates pass; verify public installer/update metadata.
 
 Initial baseline: 0.94.0 / fc99333, inventory 6977 entries, 4127 require review. Foreign untracked startup diagnostic is excluded from all edits/staging.
@@ -86,3 +86,7 @@ Initial baseline: 0.94.0 / fc99333, inventory 6977 entries, 4127 require review.
 - All 31 packs contain **2016 UI / 55 native** entries, with old values preserved and root schema checks clean. Camera message identities remain stable while display captions react to regional changes; a red/green test verifies unchanged active stream/track/device configuration. Equalizer labels/accessibility, consent/login descriptions, camera-configuration alert and further small audio/QR/download/clock captions are bound to resources.
 - Full verification exits 0: **274 files / 1174 tests**, build with 31 assets and native six-core/31-region surface checks (`work/v95-signal-final-*.log`, native artifacts `work/v95-operator-surfaces-sVGD0c/`).
 - Inventory: **8647 entries / 1220 awaiting review**; strict audit exits 1 with 1222 issues (`work/v95-signal-final-readiness.json`). The full-catalog availability manifest and publication remain unopened. The prior verified source milestone was saved locally as `d23d62d`; this is not a release tag or remote publication.
+
+## Final 30 October candidate
+
+All 31 complete variants are enabled; strict audit has 0 pending source entries and 0 issues. Full unit suite (277 files / 1186 tests), renderer/Electron build, 48 shell cases, six actual App cases and 31 regional surfaces pass. Native PowerPoint original playback passes its 60-second soak and protected postprogram handoff. See `docs/v95-verification.md` for evidence and review constraints. Normal update publication remains the final operation.

@@ -1,0 +1,162 @@
+[
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/aachen.json",
+    "source": "docs/regional-v95/help-drafts/aachen.json",
+    "sha256": "E85E9022F3F915CCFE4BF45BF0FD42A09DC24EC8953FD633B2B53B6AAB3717A4"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/central-hessian.json",
+    "source": "docs/regional-v95/help-drafts/central-hessian.json",
+    "sha256": "6F9E8407EF274B13E743DF494246F1A3A2BD582D7A60828B5BC8F9BD87822E3B"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/east-frisian.json",
+    "source": "docs/regional-v95/help-drafts/east-frisian.json",
+    "sha256": "5C0331CE4512D5C529074876F8C4A63BF2AA6F7133ED48BC7557584AEF30CE05"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/lippe.json",
+    "source": "docs/regional-v95/help-drafts/lippe.json",
+    "sha256": "C9B635CAB56EF288999087E57FB21E6E12126B01A645413754AB03958173FAF2"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/lower-rhine.json",
+    "source": "docs/regional-v95/help-drafts/lower-rhine.json",
+    "sha256": "6C47C18906487918208C70E30F29BD9B8788D3F82D627FE0F978F225D12754A4"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/mecklenburg.json",
+    "source": "docs/regional-v95/help-drafts/mecklenburg.json",
+    "sha256": "5A8E47648D531C529EC1016618C4BF7722A3BD3C753599FEE9EEEFBACA0291BE"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/moselle-trier.json",
+    "source": "docs/regional-v95/help-drafts/moselle-trier.json",
+    "sha256": "193FC6D94FDBF3E4C842ED28610F4F5226A99DC4BAAF2A17E7064281C442581A"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/muensterland.json",
+    "source": "docs/regional-v95/help-drafts/muensterland.json",
+    "sha256": "D906C4DD7934B5D4378B653301AB69CAE1BEE241EB5A19AE2CE45FDA43C18070"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/north-hessian.json",
+    "source": "docs/regional-v95/help-drafts/north-hessian.json",
+    "sha256": "F59CF3CA8E7485935DBD7973E32838C034EE5EAFB886AEE753F8876A5D8D48B4"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/saarbruecken.json",
+    "source": "docs/regional-v95/help-drafts/saarbruecken.json",
+    "sha256": "9C33C9469386F16442688BAB26125AD231C7B9816EB1E25BCFBF978438B6A00E"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/sauerland.json",
+    "source": "docs/regional-v95/help-drafts/sauerland.json",
+    "sha256": "2519AC3C690C1F06C44F16CC5C88FAEF323F18898CAD84CBD03559042E417EBB"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/schleswig-holstein.json",
+    "source": "docs/regional-v95/help-drafts/schleswig-holstein.json",
+    "sha256": "F8BC58343AF1C02DE60B268010803B4ECACA7A18DF304DA41091656617C83AF5"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/siegerland.json",
+    "source": "docs/regional-v95/help-drafts/siegerland.json",
+    "sha256": "42F580EE7B4BC1FC67F0DB2B320C870980B3C185AB20DE962D46B9B4F83646C8"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/thuringian.json",
+    "source": "docs/regional-v95/help-drafts/thuringian.json",
+    "sha256": "CF8FA0EF08E735BC6045319056EBABF453393074E4E5BF3CFB998E077A949CD7"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/upper-saxon.json",
+    "source": "docs/regional-v95/help-drafts/upper-saxon.json",
+    "sha256": "0307C0DB3DADAB4506D82F259AFA39D6213B74CFA514E4E9D3AC09A33DE01BDD"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/help-drafts/wittgenstein.json",
+    "source": "docs/regional-v95/help-drafts/wittgenstein.json",
+    "sha256": "ADA7C700B3F4F92CCC8346FEA86D252C24572770FC43BA5DA144863988134C97"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/aachen.json",
+    "source": "docs/regional-v95/release-drafts/aachen.json",
+    "sha256": "C648C7B7BE0C437A19EE142BB9F300BA11DCFCBBACF587E70E7D5046854A22CB"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/central-hessian.json",
+    "source": "docs/regional-v95/release-drafts/central-hessian.json",
+    "sha256": "4D31C3B2C32585401EBB0FE2371BE2921850A20F724AC2F83D38E48E7696E8E9"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/east-frisian.json",
+    "source": "docs/regional-v95/release-drafts/east-frisian.json",
+    "sha256": "3A072BB07CD5055C00996D70BCBEA2C730ADFB16A0D78AAD65451C726FBB63E8"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/lippe.json",
+    "source": "docs/regional-v95/release-drafts/lippe.json",
+    "sha256": "E35ACC3109C78049FCC1867C54A09D5AD04239F2FBBD278C6FE0C284D4B36E1C"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/lower-rhine.json",
+    "source": "docs/regional-v95/release-drafts/lower-rhine.json",
+    "sha256": "59B74C5064E258DE1C407CF7B27C77694FE486B044EE32E87ABD4E06DCAC45BA"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/mecklenburg.json",
+    "source": "docs/regional-v95/release-drafts/mecklenburg.json",
+    "sha256": "7ED45CB9D1B8CBD7B3A04BA6BCEFCE24789FD0F2EBAB7DE814AB90F2725CD97D"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/moselle-trier.json",
+    "source": "docs/regional-v95/release-drafts/moselle-trier.json",
+    "sha256": "9AD6E350FB99DE06118BAA807F5DE402BFF49C637A739E35B89A783B782B6F29"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/muensterland.json",
+    "source": "docs/regional-v95/release-drafts/muensterland.json",
+    "sha256": "DB0024CB8573D96D419ED01E829D86EBC621A15914D63D52D781B9C824DA14A7"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/north-hessian.json",
+    "source": "docs/regional-v95/release-drafts/north-hessian.json",
+    "sha256": "2196DAC4CFBD2E33D3819292DB1AA745CFF010A3EF054169430C7C9BBD5DF940"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/saarbruecken.json",
+    "source": "docs/regional-v95/release-drafts/saarbruecken.json",
+    "sha256": "A3E8F2762F36071DF50FF22F88FB97677EBB0AF3383656132893FE6320181E32"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/sauerland.json",
+    "source": "docs/regional-v95/release-drafts/sauerland.json",
+    "sha256": "57D0831DD68370ADC0E3E67857F99D0963324ECD0CC62C2F7347201EF7C3A0BF"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/schleswig-holstein.json",
+    "source": "docs/regional-v95/release-drafts/schleswig-holstein.json",
+    "sha256": "E9BE05A6C710212EA0B47F3F5C890064C4F438A5EDF124847FB535DDA51791A3"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/siegerland.json",
+    "source": "docs/regional-v95/release-drafts/siegerland.json",
+    "sha256": "23CC0CAF3D04AE0220581D3D0EB0CFF5DA177DB470ADAB0864D2D67A8BDE3794"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/thuringian.json",
+    "source": "docs/regional-v95/release-drafts/thuringian.json",
+    "sha256": "6E073CDF1DF58B26C05C238B05F7C2ACB05C014554E3B11A1880B6D37D0BBDC5"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/upper-saxon.json",
+    "source": "docs/regional-v95/release-drafts/upper-saxon.json",
+    "sha256": "5303C3C211A699E29FE0B5E1D79FF5F72641EE10A40F22C7B87A5FCD786EA992"
+  },
+  {
+    "archive": "docs/regional-v95/archive/integrated-drafts/release-drafts/wittgenstein.json",
+    "source": "docs/regional-v95/release-drafts/wittgenstein.json",
+    "sha256": "FBBA22869AC70D45552C773BEA776C94E91982465C6EBA140210083A931243FD"
+  }
+]

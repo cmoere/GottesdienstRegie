@@ -1,3 +1,4 @@
+import {nativeBaseTemplates} from '../shared/regional/nativeBase';
 import path from 'node:path';
 import type {AppPreferencesData,WindowStartMode} from './AppPreferences';
 
@@ -19,8 +20,10 @@ export function resolveRendererEntry(_compiledDirectory:string,appRoot:string):s
   return path.join(appRoot,'dist','index.html');
 }
 
-export function rendererFailureHtml(retryUrl:string):string{
-  return `<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>GottesdienstRegie</title><style>html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#282832;color:#fff;font:16px Inter,system-ui,sans-serif}.panel{max-width:34rem;padding:2rem;text-align:center}h1{font-size:1.45rem}p{color:#cbd2d6;line-height:1.5}a{display:inline-block;margin-top:.7rem;padding:.75rem 1rem;border:1px solid #71bdca;color:#fff;text-decoration:none}a:focus,a:hover{background:#71bdca;color:#14252c}</style><body><main class="panel"><h1>Arbeitsbereich konnte nicht geladen werden</h1><p>Bitte versuche es erneut. Falls der Fehler bestehen bleibt, installiere die aktuelle Version erneut.</p><a href="${retryUrl}">Erneut versuchen</a></main></body></html>`;
+type FailureKey='rendererFailureHeading'|'rendererFailureHelp'|'rendererFailureRetry';
+const escapeFailureText=(value:string)=>value.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]!));
+export function rendererFailureHtml(retryUrl:string,copy:(key:FailureKey)=>string=key=>nativeBaseTemplates[key]):string{
+  return `<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>GottesdienstRegie</title><style>html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#282832;color:#fff;font:16px Inter,system-ui,sans-serif}.panel{max-width:34rem;padding:2rem;text-align:center}h1{font-size:1.45rem}p{color:#cbd2d6;line-height:1.5}a{display:inline-block;margin-top:.7rem;padding:.75rem 1rem;border:1px solid #608f9a;color:#fff;text-decoration:none}a:focus,a:hover{background:#608f9a;color:#14252c}</style><body><main class="panel"><h1>${escapeFailureText(copy('rendererFailureHeading'))}</h1><p>${escapeFailureText(copy('rendererFailureHelp'))}</p><a href="${escapeFailureText(retryUrl)}">${escapeFailureText(copy('rendererFailureRetry'))}</a></main></body></html>`;
 }
 
 export function resolveSplashWindowBounds(workArea:Rectangle):Rectangle{

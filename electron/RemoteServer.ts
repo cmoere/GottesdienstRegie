@@ -1,3 +1,4 @@
+import type {NativeRegionalTextKey} from '../shared/regional/nativeBase';
 import http from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -16,7 +17,7 @@ function publicSlide(value:unknown){if(!value||typeof value!=='object')return ty
 
 export class RemoteServer{
  private value:Stored={monitors:[],remotes:[]};private live:LiveState={};private server?:http.Server;private seen=new Map<string,number>();private annotationRate=new Map<string,number>();
- constructor(private file:string,private command:(payload:unknown)=>void,private port=43170,private frame?:(role:'main'|'stage'|'livestream')=>Promise<Buffer|null>){}
+ constructor(private file:string,private command:(payload:unknown)=>void,private port=43170,private frame?:(role:'main'|'stage'|'livestream')=>Promise<Buffer|null>,private copy?:(key:NativeRegionalTextKey)=>string){}
  async start(){
   try{const value=JSON.parse(await fs.readFile(this.file,'utf8'));if(Array.isArray(value.monitors)&&Array.isArray(value.remotes))this.value=value}catch{}
   this.server=http.createServer((req,res)=>{void this.handle(req,res).catch(()=>{if(!res.headersSent)this.json(res,400,{error:'invalid'});else res.end()})});
@@ -51,7 +52,7 @@ export class RemoteServer{
    const monitorRoute=url.pathname.startsWith('/monitor/'),id=decodeURIComponent(url.pathname.slice(monitorRoute?9:8)),access=this.access(monitorRoute?`monitor:${id}`:id);
    if(!access){this.json(res,403,{error:'forbidden'});return}
    const entry=access.monitor??access.remote!,language=access.monitor?.defaultLanguage??access.remote!.preferredLanguage;
-   res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff'});res.end(remotePage(monitorRoute?'monitor':'remote',entry.name,language,monitorRoute?`monitor:${id}`:id));return;
+   res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff'});res.end(remotePage(monitorRoute?'monitor':'remote',entry.name,language,monitorRoute?`monitor:${id}`:id,this.copy));return;
   }
   if(req.method==='GET'&&(url.pathname==='/api/state'||url.pathname==='/api/frame')){
    const access=this.access(url.searchParams.get('token')??'');if(!access){this.json(res,403,{error:'forbidden'});return}

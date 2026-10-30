@@ -8,6 +8,11 @@ import {resolveOperatorCopy} from './regional/operatorCopy';
 export { locales, translate } from './i18nBase';
 export type { TranslationKey, Translator } from './i18nBase';
 
+// Async actions may retain this function across renders. Read the selected
+// interface at invocation time; resource subscriptions still drive UI renders.
+const currentOperatorCopy=(source:string,values:Record<string,string|number>={})=>
+  resolveOperatorCopy(usePreferences.getState(),source,values);
+
 export function useI18n(){
   const language=usePreferences(state=>state.language);
   const germanRegion=usePreferences(state=>state.germanRegion);
@@ -17,6 +22,6 @@ export function useI18n(){
     if(language==='de'&&germanRegion){void loadRegionalInterfacePack(germanRegion);void loadRegionalDocumentation(germanRegion)}
   },[language,germanRegion]);
   const t:Translator=(key,values)=>resolveRegionalText({language,germanRegion},key,values);
-  const tx=(source:string,values:Record<string,string|number>={})=>resolveOperatorCopy({language,germanRegion},source,values);
+  const tx=currentOperatorCopy;
   return {language,germanRegion,locale:locales[language],t,tx};
 }

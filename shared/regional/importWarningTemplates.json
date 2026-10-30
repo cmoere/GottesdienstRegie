@@ -1,0 +1,15 @@
+{
+  "importWarning_780462b113da": "Ein Originalübergang kann in der bearbeitbaren Kopie abweichen.",
+  "importWarning_376b4432cf9c": "Originalanimationen bleiben PowerPoint vorbehalten und werden in der bearbeitbaren Kopie nicht nachgebildet.",
+  "importWarning_48626952bc19": "Keynote-Inhalte werden lokal in der Folienreihenfolge übernommen. Komplexe Layouts, Schriftformatierung, Animationen und Übergänge können abweichen.",
+  "importWarning_3f439a985302": "Ein nicht unterstützter Keynote-Objekttyp wurde ausgelassen.",
+  "importWarning_65973b199563": "Ein Keynote-Objekt konnte nicht vollständig gelesen werden.",
+  "importWarning_cc273c873e94": "Die Keynote-Datei enthält nachträgliche Objektänderungen. Den vollständigen Import vor ON AIR prüfen.",
+  "importWarning_2a38e5c72d9c": "Eine Folie konnte nicht vollständig gelesen werden.",
+  "importWarning_f30a6cf235c6": "Folie {slide} enthält keine unterstützten Text- oder Bildobjekte.",
+  "importWarning_faea2d707f59": "Ältere Keynote-XML-Datei als geordnete Textfolien importiert. Layouts, Bilder, Animationen und Übergänge können fehlen; den Import vor ON AIR prüfen.",
+  "importWarning_1cbb5b107f72": "Bearbeitbare Textkopie: Layout, Bilder und Originalanimationen werden nicht originalgetreu wiedergegeben. Für Originalwiedergabe im PowerPoint-Element „Original wiedergeben“ wählen; installiertes PowerPoint unter Windows ist erforderlich.",
+  "importWarning_18603f408114": "Originalzeiten sind hinterlegt; die Kopie startet zur sicheren Prüfung mit manueller Navigation.",
+  "importWarning_dbc2fb07d92d": "Die Quelle enthält Medien, aktive Inhalte oder externe Verknüpfungen. Diese werden beim Textimport nicht ausgeführt.",
+  "importWarning_8264ceb95af5": "Eingebettete Bilder wurden als zusätzliche Bildfolien übernommen."
+}

@@ -18,5 +18,5 @@ it('checks the entire31-region catalog instead of ignoring formerly deferred doc
   const report=checkDocumentationCorpus();
   expect(report.regions).toBe(31);
   expect(report.sourceHelpArticles).toBe(63);
-  expect(report.sourceReleaseFields).toBe(1610);
+  expect(report.sourceReleaseFields).toBe(1628);
 });

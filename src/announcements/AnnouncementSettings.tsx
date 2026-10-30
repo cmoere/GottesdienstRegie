@@ -92,8 +92,8 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     <h3 id="announcement-preparation-title">{t('speechSettingsHeading')}</h3>
     <p>{t('speechSettingsHelp')}</p>
     <p role="note">{german?tx("Die deutsche Stimme und ihre Laufzeit sind im Update enthalten. Keine zusätzliche Installation, kein Konto und keine Windows-Stimme erforderlich. Die neuen lokalen KI-Stimmen arbeiten offline mit kurzen Satzpausen und ruhigem Sprechtempo. Die erste automatische Durchsage erfolgt nach dem gespeicherten Intervall, nur während ON AIR im Vor- oder Nachprogramm."):'The German voice and its runtime are included in the update. No extra installation, account or Windows voice is needed. The new local neural voices work offline with short sentence pauses and a calm speaking pace. Automatic announcements start after the saved interval, only ON AIR in pre/post programs.'}</p>
-    <p role="status">{engine.name||(german?tx("Mitgelieferte Stimme wird geprüft."):'Checking the included voice.')}</p>
-    {status&&<p role="alert">{status}</p>}
+    <p role="status">{(engine.name?tx(engine.name):null)||(german?tx("Mitgelieferte Stimme wird geprüft."):'Checking the included voice.')}</p>
+    {status&&<p role="alert">{tx(status)}</p>}
     {!native && <p>{t('speechSettingsDesktopOnly')}</p>}
     <label>{german?tx("Ansagenstimme"):'Announcement voice'}<select disabled={!ready||busy||!engine.ready||testing||speaking} value={isBundledAnnouncementVoice(saved.voiceId)?saved.voiceId:bundledAnnouncementVoice} onChange={event=>{stopAnnouncementTest();setSaved(value=>({...value,voiceId:event.target.value,speakerId:0,voiceAccepted:true}));setMessage('')}}>{bundledVoices.map(voice=><option key={voice.id} value={voice.id}>{voice.name} · {german?tx("Deutsch"):'German'}</option>)}</select></label>
     <p>{german?tx("Die gespeicherte Stimme gilt auf diesem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Alle fünf Stimmen sind enthalten. Nach dem Speichern verwendet auch die Tonprobe diese Auswahl."):'The saved voice applies to every presentation and signed-in operator on this control computer. All five voices are included. Save before testing the new selection.'}</p>
@@ -116,7 +116,7 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
       <div className="announcement-test-actions"><button type="button" disabled={!ready||busy||!engine.ready||!native?.synthesize||testing||speaking} onClick={()=>{void startProbe()}}>{german?tx("Tonprobe starten"):'Start audio test'}</button>
       <button type="button" disabled={!testing} onClick={stopAnnouncementTest}>{german?tx("Tonprobe stoppen"):'Stop audio test'}</button></div>
       {testing&&<p role="status">{speaking?(german?tx("Tonprobe läuft …"):'Audio test playing …'):(german?tx("Tonprobe wird vorbereitet …"):'Preparing audio test …')}</p>}
-      {testError&&<p role="alert">{testError}</p>}
+      {testError&&<p role="alert">{tx(testError)}</p>}
     </fieldset>
     <h4>{t('speechSettingsPublicTexts')}</h4>
     <p>{t('speechSettingsPublicHelp')}</p>

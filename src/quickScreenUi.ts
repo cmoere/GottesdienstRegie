@@ -13,3 +13,7 @@ export async function applyQuickScreen(quick:QuickScreenConfig|null,actions:{onA
   actions.setQuick(next);
   if(actions.onAir)await actions.sendQuick(next?.targets??['main'],next);
 }
+
+const builtinOperatorNames:Record<string,string>={"screen-test":"Bildschirmtest","technical-issue":"Technische Störung","logo":"Logo","black":"Schwarz","empty":"Leer","no-text":"Ohne Text","amen":"Amen","countdown":"Countdown","bible":"Bibel einblenden"};
+/** Localize only unchanged built-in control names; saved/custom names and output stay verbatim. */
+export function operatorQuickScreenName(quick:Pick<QuickScreenConfig,"id"|"name">,copy:(source:string)=>string):string{const original=Object.hasOwn(builtinOperatorNames,quick.id)?builtinOperatorNames[quick.id]:undefined;return original===quick.name?copy(original):quick.name}
