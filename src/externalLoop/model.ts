@@ -16,7 +16,7 @@ export function normalizeExternalSettings(metadata:Record<string,unknown>):Exter
  if(metadata.externalKind==='football')return{kind:'football',league:['bl1','bl2','bl3'].includes(String(metadata.footballLeague))?metadata.footballLeague as 'bl1'|'bl2'|'bl3':'bl1',mode:['matchday','upcoming','table'].includes(String(metadata.footballMode))?metadata.footballMode as 'matchday'|'upcoming'|'table':'matchday',teamId:Number.isSafeInteger(Number(metadata.footballTeamId))&&Number(metadata.footballTeamId)>0?Number(metadata.footballTeamId):null,durationSeconds};
  const raw=metadata.newsSources===undefined?['westfalen-blatt']:Array.isArray(metadata.newsSources)?metadata.newsSources:String(metadata.newsSources).split(','),sources=currentNewsSources(raw);
  const limit=Number(metadata.newsLimit??10);
- return{kind:'news',sources,limit:Number.isFinite(limit)?Math.max(1,Math.min(10,Math.floor(limit))):10,durationSeconds};
+ return{kind:'news',sources,limit:Number.isFinite(limit)?Math.max(1,Math.min(10,Math.floor(limit))):10,durationSeconds,newsRotation:metadata.newsRotation==='interval'?'interval':'per-take',newsIntervalSeconds:Math.max(1,Math.min(86400,Number(metadata.newsIntervalSeconds)||20))};
 }
 export function externalSettingsForItem(item:Pick<ServiceItem,'type'|'metadata'>):ExternalSettings{return normalizeExternalSettings({...item.metadata,externalKind:item.type})}
 export function requestForExternalItem(item:Pick<ServiceItem,'type'|'metadata'>):ExternalRequest|null{
@@ -55,7 +55,7 @@ export function externalReducedPages(snapshot:ExternalSnapshot,settings:External
  const titles=payload.kind==='news'?payload.entries.map(entry=>entry.title):table?payload.table.map(row=>row.team.name):payload.matches.map(match=>match.home.name+' – '+match.away.name);
  return paginateReducedMotionEvents(titles.map((title,index)=>({title,index})),table?840:1650);
 }
-export function externalLoopMinimumDuration(snapshot:ExternalSnapshot,settings:ExternalSettings):number{const payload=visibleExternalPayload(snapshot,settings);return payload.kind==='news'?prepareNewsPresentation(payload.entries,settings.durationSeconds).minDurationMs:prepareExternalPresentation(snapshot,settings).minDurationMs}
+export function externalLoopMinimumDuration(snapshot:ExternalSnapshot,settings:ExternalSettings):number{const payload=visibleExternalPayload(snapshot,settings);return payload.kind==='news'?prepareNewsPresentation(settings.kind==='news'&&settings.newsRotation==='interval'?payload.entries:payload.entries.slice(0,1),settings.kind==='news'&&settings.newsRotation==='interval'?settings.newsIntervalSeconds??20:settings.durationSeconds,settings.kind==='news'&&settings.newsRotation==='interval').minDurationMs:prepareExternalPresentation(snapshot,settings).minDurationMs}
 export function hydrateExternalLoopData(slide:Slide,snapshot:ExternalSnapshot,startedAt:number,settings?:ExternalSettings):Slide{
  return{...structuredClone(slide),elements:slide.elements.map(element=>element.type==='loop'&&element.properties.loopType===snapshot.payload.kind?{...structuredClone(element),properties:{...element.properties,externalSnapshotJson:JSON.stringify(snapshot),externalRevision:snapshot.revision,externalStartedAtMs:startedAt,...(settings?{externalSettingsJson:JSON.stringify(settings)}:{})}}:structuredClone(element))};
 }

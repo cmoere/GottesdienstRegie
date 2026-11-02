@@ -1,5 +1,8 @@
 import type {NativeRegionalTextKey} from '../shared/regional/nativeBase';
 import http from 'node:http';
+import https from 'node:https';
+import {ScreenShareBroker} from './ScreenShareBroker';
+import type {LocalTlsIdentity} from './LocalTlsIdentity';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {networkInterfaces} from 'node:os';
@@ -11,21 +14,24 @@ export interface PersonalMonitor{id:string;slug:string;name:string;sourceType:'m
 export interface RemoteDevice{id:string;name:string;permissionRole:'view'|'preacher'|'control'|'advanced';preferredLanguage:'de'|'en';permissions:string[];token:string;revoked:boolean;createdAt:string;lastSeenAt?:string}
 interface Stored{monitors:PersonalMonitor[];remotes:RemoteDevice[]}
 interface LiveState{quickActive?:boolean;title?:string;current?:unknown;next?:unknown;onAir?:boolean;serviceTime?:string;clock?:string;notes?:string;order?:string[];annotationTakeId?:string;serviceCountdownAtMs?:number}
-const permissions=new Set(['remote.view','remote.viewNotes','remote.next','remote.previous','remote.selectSlide','remote.selectItem','remote.quickScreen','remote.stageMessage','remote.viewRecording','remote.annotate']);
+const permissions=new Set(['remote.view','remote.viewNotes','remote.next','remote.previous','remote.selectSlide','remote.selectItem','remote.quickScreen','remote.stageMessage','remote.viewRecording','remote.annotate','remote.share']);
 function address(){for(const group of Object.values(networkInterfaces()))for(const item of group??[])if(item.family==='IPv4'&&!item.internal)return item.address;return '127.0.0.1'}
 function publicSlide(value:unknown){if(!value||typeof value!=='object')return typeof value==='string'?value.slice(0,50000):null;const slide=value as Record<string,unknown>;return{id:typeof slide.id==='string'?slide.id:'',title:typeof slide.title==='string'?slide.title.slice(0,1000):'',body:typeof slide.body==='string'?slide.body.slice(0,50000):''}}
 
 export class RemoteServer{
+ readonly sharing=new ScreenShareBroker(event=>this.command({action:'screen-share',event}));
+ private secureServer?:https.Server;private fingerprint?:string;private shareTimer?:ReturnType<typeof setInterval>;
  private value:Stored={monitors:[],remotes:[]};private live:LiveState={};private server?:http.Server;private seen=new Map<string,number>();private annotationRate=new Map<string,number>();
- constructor(private file:string,private command:(payload:unknown)=>void,private port=43170,private frame?:(role:'main'|'stage'|'livestream')=>Promise<Buffer|null>,private copy?:(key:NativeRegionalTextKey)=>string){}
+ constructor(private file:string,private command:(payload:unknown)=>void,private port=43170,private frame?:(role:'main'|'stage'|'livestream')=>Promise<Buffer|null>,private copy?:(key:NativeRegionalTextKey)=>string,private nextFrame?:()=>Promise<Buffer|null>){}
  async start(){
   try{const value=JSON.parse(await fs.readFile(this.file,'utf8'));if(Array.isArray(value.monitors)&&Array.isArray(value.remotes))this.value=value}catch{}
   this.server=http.createServer((req,res)=>{void this.handle(req,res).catch(()=>{if(!res.headersSent)this.json(res,400,{error:'invalid'});else res.end()})});
   await new Promise<void>((resolve,reject)=>{this.server!.once('error',reject);this.server!.listen(this.port,'0.0.0.0',()=>resolve())});return this.get();
  }
- stop(){this.server?.close();this.server?.closeAllConnections()}
- get(){const endpoint=this.server?.address();return{active:!!this.server?.listening,address:address(),port:endpoint&&typeof endpoint==='object'?endpoint.port:this.port,monitors:this.value.monitors.map(item=>({...item,connected:0})),remotes:this.value.remotes}}
- updateLive(live:LiveState){this.live={...this.live,...live}}
+ async enableSecure(identity:LocalTlsIdentity,port=43171){if(this.secureServer)return;const server=https.createServer({cert:identity.cert,key:identity.key,minVersion:'TLSv1.2'},(req,res)=>{void this.handle(req,res).catch(()=>{if(!res.headersSent)this.json(res,400,{error:'invalid'});else res.end()})});await new Promise<void>((resolve,reject)=>{server.once('error',reject);server.listen(port,'0.0.0.0',resolve)});this.secureServer=server;this.fingerprint=identity.fingerprint;this.shareTimer=setInterval(()=>this.sharing.expire(),5000);this.shareTimer.unref()}
+ stop(){this.sharing.stop();if(this.shareTimer)clearInterval(this.shareTimer);this.secureServer?.close();this.secureServer?.closeAllConnections();this.server?.close();this.server?.closeAllConnections()}
+ get(){const endpoint=this.server?.address();const secure=this.secureServer?.address();return{securePort:secure&&typeof secure==='object'?secure.port:undefined,fingerprint:this.fingerprint,active:!!this.server?.listening,address:address(),port:endpoint&&typeof endpoint==='object'?endpoint.port:this.port,monitors:this.value.monitors.map(item=>({...item,connected:0})),remotes:this.value.remotes}}
+ updateLive(live:LiveState){this.live={...this.live,...live};if(typeof live.onAir==='boolean')this.sharing.setOnAir(live.onAir)}
  async saveMonitor(monitor:PersonalMonitor){
   if(!monitor||typeof monitor.name!=='string'||!monitor.name.trim()||monitor.name.length>200||typeof monitor.slug!=='string'||!['main','stage','livestream'].includes(monitor.sourceType))throw Error('Ungültiger Monitor.');
   const slug=monitor.slug.toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/^-+|-+$/g,'');if(!slug||slug.length>80)throw Error('Ungültige Monitor-Kennung.');
@@ -37,10 +43,10 @@ export class RemoteServer{
   if(!input||typeof input.name!=='string'||!input.name.trim()||input.name.length>200||!Array.isArray(input.permissions)||input.permissions.some(item=>!permissions.has(item)))throw Error('Ungültige Gerätefreigabe.');
   const remote:RemoteDevice={...input,id:randomUUID(),token:randomBytes(24).toString('base64url'),revoked:false,createdAt:new Date().toISOString()};this.value.remotes.push(remote);await this.save();return remote;
  }
- async revokeSession(id:string){this.value.remotes=this.value.remotes.map(item=>item.id===id?{...item,revoked:true}:item);this.command({action:'annotation-clear',deviceId:id});await this.save();return true}
+ async revokeSession(id:string){this.value.remotes=this.value.remotes.map(item=>item.id===id?{...item,revoked:true}:item);this.sharing.revoke(id);this.command({action:'annotation-clear',deviceId:id});await this.save();return true}
  private async save(){await fs.mkdir(path.dirname(this.file),{recursive:true});await fs.writeFile(this.file,JSON.stringify(this.value,null,2),'utf8')}
  private json(res:http.ServerResponse,status:number,data:unknown){res.writeHead(status,{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'});res.end(JSON.stringify(data))}
- private async body(req:http.IncomingMessage){let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>20000)throw Error('too large')}return JSON.parse(raw||'{}')}
+ private async body(req:http.IncomingMessage){let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>65000)throw Error('too large')}return JSON.parse(raw||'{}')}
  private access(token:string){
   const monitor=this.value.monitors.find(item=>item.enabled&&token===`monitor:${item.slug}`);
   const remote=this.value.remotes.find(item=>!item.revoked&&item.token===token&&item.permissions.includes('remote.view'));
@@ -48,16 +54,26 @@ export class RemoteServer{
  }
  private async handle(req:http.IncomingMessage,res:http.ServerResponse){
   const url=new URL(req.url??'/','http://localhost');
+  if(url.pathname==='/api/share'){
+   if(!(req.socket as import('node:tls').TLSSocket).encrypted){this.json(res,403,{error:'https-required'});return}
+   const body=req.method==='POST'?await this.body(req):null;
+   const token=body?.token??url.searchParams.get('token');const remote=this.value.remotes.find(item=>!item.revoked&&item.token===token&&item.permissions.includes('remote.view')&&item.permissions.includes('remote.share'));
+   if(!remote){this.json(res,403,{error:'forbidden'});return}
+   if(req.method==='GET'){const state=this.sharing.poll(remote.id,url.searchParams.get('id')??'');this.json(res,state?200:404,state??{error:'ended'});return}
+   if(req.method==='POST'&&body.action==='offer'){try{this.json(res,201,this.sharing.begin(remote,body.description))}catch{this.json(res,409,{error:'invalid-or-busy'})}return}
+   if(req.method==='POST'&&body.action==='stop'){this.json(res,200,{stopped:this.sharing.stop(body.id,remote.id)});return}
+   this.json(res,400,{error:'invalid'});return;
+  }
   if(req.method==='GET'&&(url.pathname.startsWith('/monitor/')||url.pathname.startsWith('/remote/'))){
    const monitorRoute=url.pathname.startsWith('/monitor/'),id=decodeURIComponent(url.pathname.slice(monitorRoute?9:8)),access=this.access(monitorRoute?`monitor:${id}`:id);
    if(!access){this.json(res,403,{error:'forbidden'});return}
    const entry=access.monitor??access.remote!,language=access.monitor?.defaultLanguage??access.remote!.preferredLanguage;
    res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff'});res.end(remotePage(monitorRoute?'monitor':'remote',entry.name,language,monitorRoute?`monitor:${id}`:id,this.copy));return;
   }
-  if(req.method==='GET'&&(url.pathname==='/api/state'||url.pathname==='/api/frame')){
+  if(req.method==='GET'&&(url.pathname==='/api/state'||url.pathname==='/api/frame'||url.pathname==='/api/next-frame')){
    const access=this.access(url.searchParams.get('token')??'');if(!access){this.json(res,403,{error:'forbidden'});return}
-   if(url.pathname==='/api/frame'){
-    const bytes=this.live.onAir?await this.frame?.(access.monitor?.sourceType??'main'):null;
+   if(url.pathname==='/api/frame'||url.pathname==='/api/next-frame'){
+    const bytes=url.pathname==='/api/next-frame'?await this.nextFrame?.():this.live.onAir?await this.frame?.(access.monitor?.sourceType??'main'):null;
     if(!bytes){this.json(res,503,{error:'output-unavailable'});return}
     res.writeHead(200,{'content-type':'image/jpeg','cache-control':'no-store','x-content-type-options':'nosniff'});res.end(bytes);return;
    }

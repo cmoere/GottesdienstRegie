@@ -11,7 +11,7 @@ describe('external loop settings and shared presentation planning',()=>{
   expect(externalLoopMinimumDuration(snapshot,settings)).toBeGreaterThanOrEqual(pages.length*10000);
  });
  it('normalizes source and football selections independently of other settings',()=>{
-  expect(normalizeExternalSettings({externalKind:'news'})).toEqual({kind:'news',sources:['westfalen-blatt'],limit:10,durationSeconds:15});
+  expect(normalizeExternalSettings({externalKind:'news'})).toEqual({kind:'news',sources:['westfalen-blatt'],limit:10,durationSeconds:15,newsRotation:'per-take',newsIntervalSeconds:20});
   expect(normalizeExternalSettings({externalKind:'football',footballLeague:'bl2',footballMode:'invalid',footballTeamId:42,durationSeconds:0})).toEqual({kind:'football',league:'bl2',mode:'matchday',teamId:42,durationSeconds:1});
   expect(normalizeExternalSettings({externalKind:'news',newsSources:'westfalen-blatt',newsLimit:500})).toMatchObject({sources:['westfalen-blatt'],limit:10});
  });
@@ -27,6 +27,6 @@ describe('external loop settings and shared presentation planning',()=>{
  });
  it('calculates a readable minimum for overflowing content instead of trusting a one-second setting',()=>{
   const snapshot:ExternalSnapshot={version:1,key:'news:westfalen-blatt',revision:'a',fetchedAt:1000,stale:false,payload:{kind:'news',entries:Array.from({length:10},(_,i)=>({id:String(i),title:'Nachricht',source:'westfalen-blatt',publishedAt:null,url:`https://www.westfalen-blatt.de/${i}`}))}};
-  expect(externalLoopMinimumDuration(snapshot,normalizeExternalSettings({externalKind:'news',durationSeconds:1}))).toBeGreaterThan(40000);
+  expect(externalLoopMinimumDuration(snapshot,normalizeExternalSettings({externalKind:'news',durationSeconds:1,newsRotation:'interval',newsIntervalSeconds:20}))).toBeGreaterThan(40000);
  });
 });

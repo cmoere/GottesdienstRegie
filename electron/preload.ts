@@ -15,7 +15,7 @@ addEventListener('DOMContentLoaded',()=>{
 
 contextBridge.exposeInMainWorld("desktop", {
   powerPoint:{
-    thumbnail:(sourceHash:string,slideId:number)=>ipcRenderer.invoke('powerpoint:thumbnail',sourceHash,slideId),
+    thumbnail:(sourceHash:string,slideId:number)=>ipcRenderer.invoke(location.hash.startsWith('#output-next-preview')?'remote:next-thumbnail':'powerpoint:thumbnail',sourceHash,slideId),
     take:(sourceHash:string,slideId:number)=>ipcRenderer.invoke('powerpoint:take',sourceHash,slideId),
     command:(operation:'play'|'pause'|'next'|'previous'|'goto',slideId?:number)=>ipcRenderer.invoke('powerpoint:command',operation,slideId),
     stop:()=>ipcRenderer.invoke('powerpoint:stop'),
@@ -268,6 +268,13 @@ contextBridge.exposeInMainWorld("desktop", {
     register: (input: unknown) => ipcRenderer.invoke("device:register", input),
   },
   remote: {
+    shareOutputReady:()=>ipcRenderer.invoke('remote:share-output-ready'),
+    getNextPreview:()=>ipcRenderer.invoke('remote:next-get'),nextPreviewReady:(revision:number)=>ipcRenderer.invoke('remote:next-ready',revision),
+    onNextPreview:(callback:(payload:any)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('remote:next-preview',listener);return()=>ipcRenderer.removeListener('remote:next-preview',listener)},
+    shareControl:(action:string,id:string,value?:unknown)=>ipcRenderer.invoke('remote:share-control',action,id,value),
+    shareRelay:(payload:unknown)=>ipcRenderer.invoke('remote:share-relay',payload),
+    onShareRelay:(callback:(payload:any)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('remote:share-relay',listener);return()=>ipcRenderer.removeListener('remote:share-relay',listener)},
+    onShareEvent:(callback:(payload:any)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('remote:share-event',listener);return()=>ipcRenderer.removeListener('remote:share-event',listener)},
     get: () => ipcRenderer.invoke("remote:get"),
     saveMonitor: (monitor: unknown) =>
       ipcRenderer.invoke("remote:save-monitor", monitor),

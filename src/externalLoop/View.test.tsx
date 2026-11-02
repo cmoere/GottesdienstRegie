@@ -15,7 +15,7 @@ describe('public external loop frame',()=>{
  it('keeps every row readable as static pages when motion is reduced',()=>{
   vi.useFakeTimers();vi.setSystemTime(1000);vi.stubGlobal('matchMedia',()=>({matches:true,addEventListener(){},removeEventListener(){}}));
   const snapshot=structuredClone(news);if(snapshot.payload.kind==='news'){const entry=snapshot.payload.entries[0];snapshot.payload.entries=Array.from({length:10},(_,i)=>({...entry,id:String(i),title:'Nachricht '+(i+1)}))}
-  render(<ExternalLoopView snapshot={snapshot} startedAt={1000} settings={normalizeExternalSettings({newsSources:'westfalen-blatt'})}/>);
+  render(<ExternalLoopView snapshot={snapshot} startedAt={1000} settings={normalizeExternalSettings({newsSources:'westfalen-blatt',newsRotation:'interval',newsIntervalSeconds:20})}/>);
   expect(screen.queryByText('Nachricht 10')).toBeNull();
   act(()=>vi.advanceTimersByTime(180000));
   expect(screen.getByText('Nachricht 10')).toBeInTheDocument();

@@ -1,0 +1,6 @@
+import {expect,it} from 'vitest';import {mkdtemp,readFile} from 'node:fs/promises';import {tmpdir} from 'node:os';import path from 'node:path';import {X509Certificate,createPrivateKey} from 'node:crypto';import {getLocalTlsIdentity} from './LocalTlsIdentity';
+it('persists a private server identity with local SANs and no certificate-authority privilege',async()=>{
+ const dir=await mkdtemp(path.join(tmpdir(),'regie-tls-'));const a=await getLocalTlsIdentity(dir,['127.0.0.1','192.168.1.22']);const certificate=new X509Certificate(a.cert);expect(certificate.ca).toBe(false);expect(certificate.checkIP('192.168.1.22')).toBe('192.168.1.22');expect(certificate.checkPrivateKey(createPrivateKey(a.key))).toBe(true);expect(a.fingerprint).toBe(certificate.fingerprint256);
+ const before=await readFile(path.join(dir,'local-https.json'),'utf8'),b=await getLocalTlsIdentity(dir,['192.168.1.22','127.0.0.1']);expect(b).toEqual(a);expect(await readFile(path.join(dir,'local-https.json'),'utf8')).toBe(before);
+ const c=await getLocalTlsIdentity(dir,['127.0.0.1','192.168.1.23']);expect(new X509Certificate(c.cert).checkIP('192.168.1.23')).toBe('192.168.1.23');expect(c.fingerprint).not.toBe(a.fingerprint);
+});

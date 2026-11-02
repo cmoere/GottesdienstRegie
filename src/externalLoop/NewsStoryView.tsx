@@ -19,8 +19,8 @@ function Story({frame,reduced,fetchedAt,stale}:{frame:NonNullable<ReturnType<typ
   <footer>Quelle: {source.name}{entry.publishedAt?' · '+new Date(entry.publishedAt).toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}):''} · Datenstand: {new Date(fetchedAt).toLocaleString('de-DE')}{stale?' · Letzter gültiger Stand':''}</footer></>;
 }
 // Pass the source timestamp explicitly; no wall-clock or network reads in a story.
-export function NewsStoryView({snapshot,entries,durationSeconds,elapsed,reduced}:{snapshot:ExternalSnapshot;entries:NewsEntry[];durationSeconds:number;elapsed:number;reduced:boolean}){
- const plan=useMemo(()=>prepareNewsPresentation(entries,durationSeconds),[entries,durationSeconds]);
+export function NewsStoryView({snapshot,entries,durationSeconds,elapsed,reduced,fixedInterval=false}:{snapshot:ExternalSnapshot;entries:NewsEntry[];durationSeconds:number;elapsed:number;reduced:boolean;fixedInterval?:boolean}){
+ const plan=useMemo(()=>prepareNewsPresentation(entries,durationSeconds,fixedInterval),[entries,durationSeconds,fixedInterval]);
  const frame=newsFrameAt(plan,elapsed);if(!frame)return null;
  return <div className="external-loop-frame external-news" data-revision={snapshot.revision} data-reduced={reduced}><Story key={frame.entry.id} frame={frame} reduced={reduced} fetchedAt={snapshot.fetchedAt} stale={snapshot.stale}/></div>;
 }

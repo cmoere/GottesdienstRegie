@@ -1,3 +1,26 @@
+# GottesdienstRegie 0.96.0
+
+v96 verbindet echte Folienvorschauen mit erweiterten Live-Markierungen und einer kontrollierten lokalen Bildschirmfreigabe. Nachrichtenwechsel, Spracheinstellungen und Meldungsdetails werden gezielter bedienbar.
+
+## Neu
+
+- **Bildschirmfreigabe vom verbundenen Gerät:** Eine ausdrücklich berechtigte Gerätesitzung kann über lokales HTTPS ein Fenster oder einen Bildschirm als Video übertragen. Die Regie prüft die Vorschau und übernimmt sie bewusst auf MAIN. Stoppen, Widerruf und OFF AIR beenden die Freigabe.
+- **Zusätzliche Zeichenwerkzeuge:** Linie, Pfeil, Rechteck und Ellipse ergänzen Freihand, Farbe und Linienstärke. Markierungen bleiben an die aktuelle Live-Folie gebunden.
+
+## Verbessert
+
+- **Folienbilder statt Textvorschau:** Folienübersicht und nächste Folie zeigen die tatsächliche Gestaltung. Kleine Ansichtseinstellungen regeln Kachelgröße, Titel und nächste Vorschau. Verbundene Monitore erhalten ebenfalls eine Bildvorschau.
+- **Nachrichten gezielt weiterschalten:** Standardmäßig erscheint bei jedem neuen Live-Aufruf die nächste Nachricht. Alternativ gilt ein einstellbares Sekundenintervall. Vorschauen und Datenaktualisierungen schalten nicht weiter.
+- **Sprache und Vorlesen übersichtlicher:** Stimmen tragen (W) oder (M). Die aktive deutsche Regionalvariante erscheint im Spracheintrag. Eine kleine Vorschau zeigt die Anordnung von Songübersetzungen; eindeutige häufige Tippfehler werden nur im Vorlesetext korrigiert.
+- **Wetter und Meldungen verfeinert:** Dezente wetterabhängige Effekte berücksichtigen reduzierte Bewegung. Meldungs-QR-Codes stehen unten rechts. Der Laufband-Fallback verbindet Titel und Beschreibung mit einem Doppelpunkt.
+
+## Hinweise
+
+- **Lokale Bildschirmfreigabe:** Bildschirmfreigabe benötigt einen unterstützten Desktop-Browser, eine bestätigte lokale HTTPS-Verbindung und ein erreichbares lokales Netzwerk. Sie überträgt keinen Systemton. Das Zertifikat wird nicht automatisch im System-Vertrauensspeicher installiert.
+- **Originalgetreue PowerPoint-Wiedergabe:** Die originalgetreue Wiedergabe benötigt Windows und installiertes Microsoft PowerPoint. Importierte bearbeitbare Folien bleiben eine separate Darstellung.
+
+---
+
 # GottesdienstRegie 0.95.0
 
 Veröffentlicht: Fr., 30.10.2026

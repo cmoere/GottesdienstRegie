@@ -1,3 +1,4 @@
+import {correctGermanAnnouncementText} from '../../shared/germanSpeechCorrections';
 import {useCallback, useEffect, useState,useRef} from 'react';
 import {AnnouncementService} from '../community/AnnouncementService';
 import {getCommunityAnnouncementRecords, getCommunityRuntimeSnapshot, subscribeCommunityRuntime} from '../community/communityRuntime';
@@ -95,7 +96,7 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     <p role="status">{(engine.name?tx(engine.name):null)||(german?tx("Mitgelieferte Stimme wird geprüft."):'Checking the included voice.')}</p>
     {status&&<p role="alert">{tx(status)}</p>}
     {!native && <p>{t('speechSettingsDesktopOnly')}</p>}
-    <label>{german?tx("Ansagenstimme"):'Announcement voice'}<select disabled={!ready||busy||!engine.ready||testing||speaking} value={isBundledAnnouncementVoice(saved.voiceId)?saved.voiceId:bundledAnnouncementVoice} onChange={event=>{stopAnnouncementTest();setSaved(value=>({...value,voiceId:event.target.value,speakerId:0,voiceAccepted:true}));setMessage('')}}>{bundledVoices.map(voice=><option key={voice.id} value={voice.id}>{voice.name} · {german?tx("Deutsch"):'German'}</option>)}</select></label>
+    <label>{german?tx("Ansagenstimme"):'Announcement voice'}<select disabled={!ready||busy||!engine.ready||testing||speaking} value={isBundledAnnouncementVoice(saved.voiceId)?saved.voiceId:bundledAnnouncementVoice} onChange={event=>{stopAnnouncementTest();setSaved(value=>({...value,voiceId:event.target.value,speakerId:0,voiceAccepted:true}));setMessage('')}}>{bundledVoices.map(voice=><option key={voice.id} value={voice.id}>{voice.name} ({voice.gender==='female'?'W':'M'}) · {german?tx("Deutsch"):'German'}</option>)}</select></label>
     <p>{german?tx("Die gespeicherte Stimme gilt auf diesem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Alle fünf Stimmen sind enthalten. Nach dem Speichern verwendet auch die Tonprobe diese Auswahl."):'The saved voice applies to every presentation and signed-in operator on this control computer. All five voices are included. Save before testing the new selection.'}</p>
     <label><input type="checkbox" checked={saved.enabled} disabled={!ready||busy||(!saved.enabled&&!engine.ready)} onChange={event=>setSaved(value=>({...value,enabled:event.target.checked,...(event.target.checked?{voiceId:isBundledAnnouncementVoice(value.voiceId)?value.voiceId:bundledAnnouncementVoice,speakerId:0,voiceAccepted:true}:{})}))}/> {t('speechSettingsEnable')}</label>
     <label>{t('speechSettingsInterval')}<input className="settings-number-input" type="number" min="1" max="120" step="1" disabled={!ready || busy} value={interval} onChange={event => {setIntervalValue(event.target.value);setMessage('');}}/></label>
@@ -120,7 +121,8 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     </fieldset>
     <h4>{t('speechSettingsPublicTexts')}</h4>
     <p>{t('speechSettingsPublicHelp')}</p>
+    <p>{tx('Typische eindeutige Schreibfehler werden nur im Vorlesetext berichtigt. Gespeicherte Meldungen und Namen bleiben erhalten.')}</p>
     {!rows && <button type="button" onClick={refreshTexts}>{t('speechSettingsRefresh')}</button>}
-    {texts.length ? <ol aria-label={t('speechSettingsPublicTexts')}>{texts.map(row => <li key={row.id}><strong>{(row.title||tx("Durchsage"))}</strong><p style={{whiteSpace:'pre-wrap'}}>{row.text}</p></li>)}</ol> : <p>{t(loaded || rows ? 'speechSettingsEmpty' : 'speechSettingsNotLoaded')}</p>}
+    {texts.length ? <ol aria-label={t('speechSettingsPublicTexts')}>{texts.map(row => <li key={row.id}><strong>{(row.title||tx("Durchsage"))}</strong><p style={{whiteSpace:'pre-wrap'}}>{correctGermanAnnouncementText(row.text)}</p></li>)}</ol> : <p>{t(loaded || rows ? 'speechSettingsEmpty' : 'speechSettingsNotLoaded')}</p>}
   </section>;
 }

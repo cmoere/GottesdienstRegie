@@ -1,4 +1,4 @@
-import {useEffect,useRef} from 'react';
+import {useEffect,useRef,useId} from 'react';
 import {create} from 'zustand';
 import {usePresentation} from './store';
 import {readAnnotationStroke,type AnnotationState} from '../shared/liveAnnotations';
@@ -24,8 +24,14 @@ export function LiveAnnotationsController({quickActive=false}:{quickActive?:bool
  },[]);return null;
 }
 export function LiveAnnotationOverlay({state}:{state:AnnotationState|null}){
+ const prefix=useId().replace(/:/g,'');
  if(!state?.strokes.length)return null;
  return <svg className="live-annotation-overlay" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-label="Live-Markierungen" style={{position:'absolute',inset:0,width:'100%',height:'100%',zIndex:20,pointerEvents:'none'}}>
-  {state.strokes.map(stroke=><polyline key={stroke.id} points={stroke.points.map(point=>`${point.x*1920},${point.y*1080}`).join(' ')} fill="none" stroke={stroke.color} strokeWidth={stroke.width*1920} strokeLinecap="round" strokeLinejoin="round"/>)}
+  {state.strokes.map(stroke=>{const a=stroke.points[0],b=stroke.points.at(-1)!,x=a.x*1920,y=a.y*1080,x2=b.x*1920,y2=b.y*1080,width=stroke.width*1920,head=Math.max(14,width*3),id=prefix+'-arrow-'+stroke.id,props={fill:'none',stroke:stroke.color,strokeWidth:width,strokeLinecap:'round' as const,strokeLinejoin:'round' as const};
+   if(stroke.tool==='rectangle')return <rect key={stroke.id} x={Math.min(x,x2)} y={Math.min(y,y2)} width={Math.abs(x2-x)} height={Math.abs(y2-y)} {...props}/>;
+   if(stroke.tool==='ellipse')return <ellipse key={stroke.id} cx={(x+x2)/2} cy={(y+y2)/2} rx={Math.abs(x2-x)/2} ry={Math.abs(y2-y)/2} {...props}/>;
+   if(stroke.tool==='line'||stroke.tool==='arrow')return <g key={stroke.id}>{stroke.tool==='arrow'&&<defs><marker id={id} markerUnits="userSpaceOnUse" markerWidth={head} markerHeight={head} viewBox="0 -12 24 24" refX="24" refY="0" orient="auto"><path d="M3.215 -12L24 0L3.215 12" fill="none" stroke={stroke.color} strokeWidth={width*24/head}/></marker></defs>}<line x1={x} y1={y} x2={x2} y2={y2} markerEnd={stroke.tool==='arrow'?'url(#'+id+')':undefined} {...props}/></g>;
+   return <polyline key={stroke.id} points={stroke.points.map(point=>point.x*1920+','+point.y*1080).join(' ')} {...props}/>;
+  })}
  </svg>;
 }

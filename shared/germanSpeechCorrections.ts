@@ -1,0 +1,5 @@
+/** Conservative speech-only substitutions. No fuzzy matching or name correction. */
+const corrections:Record<string,string>={willkomen:'willkommen',willkommem:'willkommen',gottesdiens:'gottesdienst',gottestdienst:'gottesdienst',veranstalung:'veranstaltung',veranstalltung:'veranstaltung',veranstaltng:'veranstaltung',anmeldng:'anmeldung',anmeldug:'anmeldung',bekantgabe:'bekanntgabe',abendmahlstermiene:'abendmahlstermine',ansagebn:'ansagen',informatonen:'informationen',zurrück:'zurück',zurük:'zurück',herzllich:'herzlich',beschreibug:'beschreibung',geädert:'geändert'};
+export function correctGermanAnnouncementText(text:string):string{
+ return text.split(/(https?:\/\/\S+|[\p{L}\p{N}._%+-]+@[\p{L}\p{N}.-]+\.[\p{L}]{2,})/iu).map((part,index)=>index%2?part:part.replace(/[\p{L}]+/gu,word=>{const replacement=corrections[word.toLocaleLowerCase('de-DE')];if(!replacement)return word;if(word===word.toLocaleUpperCase('de-DE'))return replacement.toLocaleUpperCase('de-DE');return word[0]===word[0].toLocaleUpperCase('de-DE')?replacement[0].toLocaleUpperCase('de-DE')+replacement.slice(1):replacement})).join('');
+}

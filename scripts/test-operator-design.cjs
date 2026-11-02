@@ -3,7 +3,7 @@
  const {createServer}=await import('vite');
  const {spawn}=require('node:child_process'),path=require('node:path');
  const root=path.resolve(__dirname,'..');
- const server=await createServer({root,server:{host:'127.0.0.1',port:0,watch:{ignored:['**/work/**']}},optimizeDeps:{noDiscovery:true}});
+ const server=await createServer({root,server:{host:'127.0.0.1',port:0,watch:{ignored:['**/work/**']}},optimizeDeps:{noDiscovery:true,include:['qrcode','react','react-dom/client','react/jsx-runtime','zustand','zustand/middleware','jszip','bcryptjs']}});
  await server.listen();
  try{
   const env={...process.env,OPERATOR_DESIGN_URL:`http://127.0.0.1:${server.httpServer.address().port}`};delete env.ELECTRON_RUN_AS_NODE;

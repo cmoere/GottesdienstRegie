@@ -12,4 +12,4 @@ export type ExternalPayload={kind:'news';entries:NewsEntry[]}|{kind:'football';l
 export type ExternalRequest={kind:'news';sources:NewsSource[]}|{kind:'football';league:FootballLeague;mode:FootballMode}|({kind:'weather'}&WeatherLocation);
 export type ExternalSnapshot={version:1;key:string;revision:string;fetchedAt:number;stale:boolean;payload:ExternalPayload};
 export type ExternalReply={snapshot:ExternalSnapshot|null;status:'ready'|'stale'|'empty'|'unavailable'};
-export type ExternalSettings=({kind:'news';sources:NewsSource[];limit:number}|{kind:'football';league:FootballLeague;mode:FootballMode;teamId:number|null}|({kind:'weather'}&WeatherLocation))&{durationSeconds:number};
+export type ExternalSettings=({kind:'news';sources:NewsSource[];limit:number;newsRotation?:'per-take'|'interval';newsIntervalSeconds?:number}|{kind:'football';league:FootballLeague;mode:FootballMode;teamId:number|null}|({kind:'weather'}&WeatherLocation))&{durationSeconds:number};

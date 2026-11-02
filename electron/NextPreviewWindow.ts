@@ -1,0 +1,12 @@
+import {BrowserWindow} from 'electron';
+/** Read-only renderer of the actual upcoming slide; never advances the live controller. */
+export class NextPreviewWindow{
+ private window:BrowserWindow|null=null;private packet:unknown=null;private revision=0;private readyRevision=0;private loading:Promise<void>|null=null;private cached:{revision:number;bytes:Buffer}|null=null;private rendering:Promise<Buffer|null>|null=null;
+ constructor(private preload:string,private load:(window:BrowserWindow,route:string)=>Promise<void>){}
+ update(packet:unknown){const serialized=JSON.stringify(packet??null);if(serialized===JSON.stringify(this.packet))return;this.packet=structuredClone(packet??null);this.revision++;this.cached=null;if(this.window&&!this.window.isDestroyed())this.window.webContents.send('remote:next-preview',this.get(this.window.webContents.id))}
+ get(sender:number){return this.window&&!this.window.isDestroyed()&&this.window.webContents.id===sender?{revision:this.revision,packet:this.packet}:null}
+ ready(sender:number,revision:number){if(!this.get(sender)||revision!==this.revision)return false;this.readyRevision=revision;return true}
+ async capture():Promise<Buffer|null>{if(!this.packet)return null;if(this.cached?.revision===this.revision)return this.cached.bytes;if(this.rendering)return this.rendering;this.rendering=this.render().finally(()=>{this.rendering=null});return this.rendering}
+ private async render(){if(!this.window||this.window.isDestroyed()){this.window=new BrowserWindow({width:960,height:540,useContentSize:true,show:false,frame:false,webPreferences:{preload:this.preload,contextIsolation:true,nodeIntegration:false,backgroundThrottling:false}});this.loading=this.load(this.window,'#output-next-preview').then(()=>{});this.window.on('closed',()=>{this.window=null;this.readyRevision=0})}await this.loading;const window=this.window;if(!window||window.isDestroyed())return null;const revision=this.revision;window.webContents.send('remote:next-preview',this.get(window.webContents.id));const end=Date.now()+4000;while(this.readyRevision!==revision&&Date.now()<end){if(window.isDestroyed()||this.revision!==revision)return null;await new Promise(resolve=>setTimeout(resolve,20))}if(this.readyRevision!==revision||window.isDestroyed())return null;const image=await window.webContents.capturePage();if(this.revision!==revision||image.isEmpty())return null;const bytes=image.toJPEG(80);this.cached={revision,bytes};return bytes}
+ stop(){if(this.window&&!this.window.isDestroyed())this.window.close();this.packet=null;this.cached=null}
+}

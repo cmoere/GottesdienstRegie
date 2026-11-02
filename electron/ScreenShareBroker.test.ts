@@ -1,0 +1,9 @@
+import {expect,it} from 'vitest';import {ScreenShareBroker} from './ScreenShareBroker';
+const offer={type:'offer' as const,sdp:'v=0\r\nm=video 9 UDP/TLS/RTP/SAVPF 96\r\n'},answer={...offer,type:'answer' as const};
+it('binds bounded signaling to one authorized owner and closes on expiry, revocation and OFF AIR',()=>{
+ let now=1000;const events:unknown[]=[];const b=new ScreenShareBroker(e=>events.push(e),()=>now);const first=b.begin({id:'a',name:'Presenter'},offer);expect(first.id).toBeTruthy();expect(b.poll('b',first.id)).toBeNull();expect(b.answer('old',answer)).toBe(false);expect(b.answer(first.id,answer)).toBe(true);expect(b.poll('a',first.id)?.answer).toEqual(answer);expect(b.ready(first.id)).toBe(true);expect(b.take(first.id)).toBe(false);b.setOnAir(true);expect(b.take(first.id)).toBe(true);expect(b.current()?.onMain).toBe(true);b.setOnAir(false);expect(b.current()).toBeNull();expect(b.answer(first.id,answer)).toBe(false);
+ const second=b.begin({id:'a',name:'Presenter'},offer);expect(second.id).not.toBe(first.id);expect(()=>b.begin({id:'b',name:'Other'},offer)).toThrow();b.revoke('a');expect(b.current()).toBeNull();const third=b.begin({id:'a',name:'Presenter'},offer);now+=20000;b.expire();expect(b.current()).toBeNull();expect(b.poll('a',third.id)).toBeNull();expect(events.length).toBeGreaterThan(3);
+});
+it('rejects oversized or unrelated SDP and never exposes private descriptions through operator status',()=>{
+ const b=new ScreenShareBroker(()=>{});expect(()=>b.begin({id:'a',name:'Presenter'},{type:'offer',sdp:'x'.repeat(65000)})).toThrow();expect(()=>b.begin({id:'a',name:'Presenter'},{...offer,sdp:offer.sdp+'m=audio 9 RTP/AVP 0\r\n'})).toThrow();const s=b.begin({id:'a',name:'Presenter'},offer);expect(JSON.stringify(b.current())).not.toContain('m=video');expect(b.poll('a',s.id)?.answer).toBeUndefined();
+});

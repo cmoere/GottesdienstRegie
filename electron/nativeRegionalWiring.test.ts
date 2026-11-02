@@ -11,7 +11,7 @@ it('connects every canonical native template to the desktop dialog/status surfac
   expect(main).toContain('rendererFailureHtml(rendererRetryUrl,nativeText)');
   const startup=readFileSync('electron/windowStartup.ts','utf8');
   for(const match of startup.matchAll(/copy\('([A-Za-z]+)'/g))used.add(match[1]);
-  expect(main).toContain('role=>outputManager.captureFrame(role),nativeText)');
+  expect(main).toContain('role=>outputManager.captureFrame(role),nativeText');
   const remote=readFileSync('electron/RemotePage.ts','utf8');
   for(const match of remote.matchAll(/copy\('([A-Za-z]+)'/g))used.add(match[1]);
   expect(main).toContain('createdAt:new Date().toISOString()},format,nativeText)');

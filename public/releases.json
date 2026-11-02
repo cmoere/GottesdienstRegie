@@ -21,12 +21,121 @@
   ],
   "versions": [
     {
+      "line": "0.96",
+      "builds": [
+        {
+          "version": "0.96.0",
+          "releaseDate": "2026-11-02",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Verbesserte Vorschauen und verbundene Geräte",
+              "en": "Improved previews and connected devices"
+            },
+            "text": {
+              "de": "v96 verbindet echte Folienvorschauen mit erweiterten Live-Markierungen und einer kontrollierten lokalen Bildschirmfreigabe. Nachrichtenwechsel, Spracheinstellungen und Meldungsdetails werden gezielter bedienbar.",
+              "en": "v96 combines actual slide previews with extended live annotations and controlled local screen sharing. News rotation, language settings and notice details gain more precise controls."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Bildschirmfreigabe vom verbundenen Gerät",
+                  "en": "Screen sharing from connected devices"
+                },
+                "text": {
+                  "de": "Eine ausdrücklich berechtigte Gerätesitzung kann über lokales HTTPS ein Fenster oder einen Bildschirm als Video übertragen. Die Regie prüft die Vorschau und übernimmt sie bewusst auf MAIN. Stoppen, Widerruf und OFF AIR beenden die Freigabe.",
+                  "en": "An explicitly authorized device session can transmit a window or screen as video over local HTTPS. The operator previews it before showing it on MAIN. Stop, revocation and OFF AIR end the share."
+                }
+              },
+              {
+                "label": {
+                  "de": "Zusätzliche Zeichenwerkzeuge",
+                  "en": "Additional annotation tools"
+                },
+                "text": {
+                  "de": "Linie, Pfeil, Rechteck und Ellipse ergänzen Freihand, Farbe und Linienstärke. Markierungen bleiben an die aktuelle Live-Folie gebunden.",
+                  "en": "Line, arrow, rectangle and ellipse complement the pen, colour and line width. Annotations remain bound to the current live slide."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Folienbilder statt Textvorschau",
+                  "en": "Slide images instead of text previews"
+                },
+                "text": {
+                  "de": "Folienübersicht und nächste Folie zeigen die tatsächliche Gestaltung. Kleine Ansichtseinstellungen regeln Kachelgröße, Titel und nächste Vorschau. Verbundene Monitore erhalten ebenfalls eine Bildvorschau.",
+                  "en": "The overview and next-slide view show the actual design. Compact view settings control tile size, titles and the next preview. Connected monitors also receive a slide image."
+                }
+              },
+              {
+                "label": {
+                  "de": "Nachrichten gezielt weiterschalten",
+                  "en": "Controlled news rotation"
+                },
+                "text": {
+                  "de": "Standardmäßig erscheint bei jedem neuen Live-Aufruf die nächste Nachricht. Alternativ gilt ein einstellbares Sekundenintervall. Vorschauen und Datenaktualisierungen schalten nicht weiter.",
+                  "en": "By default each new live visit shows the next story. A configurable seconds interval is also available. Previews and data refreshes do not advance stories."
+                }
+              },
+              {
+                "label": {
+                  "de": "Sprache und Vorlesen übersichtlicher",
+                  "en": "Clearer language and speech controls"
+                },
+                "text": {
+                  "de": "Stimmen tragen (W) oder (M). Die aktive deutsche Regionalvariante erscheint im Spracheintrag. Eine kleine Vorschau zeigt die Anordnung von Songübersetzungen; eindeutige häufige Tippfehler werden nur im Vorlesetext korrigiert.",
+                  "en": "Voices show (W) or (M). The active German region appears in the language label. A small preview shows song translation layout; common unambiguous typos are corrected only in spoken text."
+                }
+              },
+              {
+                "label": {
+                  "de": "Wetter und Meldungen verfeinert",
+                  "en": "Refined weather and notices"
+                },
+                "text": {
+                  "de": "Dezente wetterabhängige Effekte berücksichtigen reduzierte Bewegung. Meldungs-QR-Codes stehen unten rechts. Der Laufband-Fallback verbindet Titel und Beschreibung mit einem Doppelpunkt.",
+                  "en": "Subtle weather effects respect reduced motion. Notice QR codes sit at the bottom right. The ticker fallback joins title and description with a colon."
+                }
+              }
+            ],
+            "fixed": [],
+            "known": [
+              {
+                "label": {
+                  "de": "Lokale Bildschirmfreigabe",
+                  "en": "Local screen sharing requirements"
+                },
+                "text": {
+                  "de": "Bildschirmfreigabe benötigt einen unterstützten Desktop-Browser, eine bestätigte lokale HTTPS-Verbindung und ein erreichbares lokales Netzwerk. Sie überträgt keinen Systemton. Das Zertifikat wird nicht automatisch im System-Vertrauensspeicher installiert.",
+                  "en": "Screen sharing requires a supported desktop browser, a trusted local HTTPS connection and a reachable local network. System audio is not transmitted. The certificate is not automatically installed in the system trust store."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt Windows und installiertes Microsoft PowerPoint. Importierte bearbeitbare Folien bleiben eine separate Darstellung.",
+                  "en": "Original playback requires Windows and installed Microsoft PowerPoint. Imported editable slides remain a separate representation."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.95",
       "builds": [
         {
           "version": "0.95.0",
           "releaseDate": "2026-10-30",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Einheitliche Bedienung und vollständige deutsche Regionalvarianten",

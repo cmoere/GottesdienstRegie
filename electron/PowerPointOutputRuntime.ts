@@ -53,5 +53,5 @@ export function installPowerPointOutputRuntime(options:Options){
  ipcMain.handle('powerpoint:command',(event,op:'play'|'pause'|'next'|'previous'|'goto',argument?:number)=>{requireControl(event);return command(op,argument)});
  ipcMain.handle('powerpoint:stop',async event=>{requireControl(event);await close();return true});
  ipcMain.handle('powerpoint:thumbnail',async(event,hash:string,slideId:number)=>{requireControl(event);return readPowerPointThumbnail(options.libraryRoot,value=>sourceStore.get(value),hash,slideId)});
- return{close,binding:player.binding,command,async setQuick(active:boolean){const operation=intent.quick(active);if(operation&&player.binding())await player.command(operation)}};
+ return{previewThumbnail:(hash:string,slideId:number)=>readPowerPointThumbnail(options.libraryRoot,value=>sourceStore.get(value),hash,slideId),close,binding:player.binding,command,async setQuick(active:boolean){const operation=intent.quick(active);if(operation&&player.binding())await player.command(operation)}};
 }

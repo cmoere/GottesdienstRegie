@@ -1,3 +1,5 @@
+import {ScreenSharingMirror} from './ScreenSharing';
+import {PreviewOverviewControls,usePreviewOptions} from './PreviewOverviewControls';
 import {useI18n} from './i18n';
 import {
   useEffect,
@@ -3508,7 +3510,7 @@ function PreviewSlideCard({
       className={`preview-slide-card ${selected ? "active" : ""} ${live ? "live" : ""}`}
       onClick={() => state.selectPreview(item.id, slide.id)}
     >
-      <div className="preview-slide-image"><SlideRenderer slide={rendered} mode="thumbnail" />
+      <div className="preview-slide-image">{item.metadata.importMode==='original'?<PowerPointStaticPreview sourceHash={String(item.metadata.powerPointSourceHash)} slideId={slide.sourceSlideId}/>:<SlideRenderer slide={rendered} mode="thumbnail" />}
       <span className="preview-slide-number">{index + 1}</span>
       {slide.transitionOverride && (
         <i className="preview-transition-icon">
@@ -3526,6 +3528,7 @@ function PreviewCenter({
   activeQuick: QuickScreenConfig | null;
 }) {
   const {tx}=useI18n();
+  const showTitles=usePreviewOptions(s=>s.showTitles);
   const output = useLiveOutputPreview(s=>s.slide);
   const banner=useAnnouncementBanner(s=>s.banner);
   const weatherWarnings=useWeatherWarnings(s=>s.state);
@@ -3684,6 +3687,7 @@ function PreviewCenter({
           />}
           <QuickOverlay quick={activeQuick} staticPreview={!state.onAir} />
           {state.onAir&&!quickOverridesRoomNotice(activeQuick)&&output?.postProgramRoomNotice&&<PostProgramRoomNoticeView snapshot={output.postProgramRoomNotice}/>}
+          {state.onAir&&<ScreenSharingMirror hidden={Boolean(activeQuick)}/>}
           </OutputComposition>
         </div>
         </div>
@@ -3739,6 +3743,7 @@ function PreviewCenter({
   return (
     <div
       className="production-grid"
+      data-show-titles={showTitles}
       ref={root}
       tabIndex={0}
       style={{ "--grid-size": `${state.gridSize}px` } as CSSProperties}
@@ -3853,6 +3858,7 @@ function PreviewRightSidebar({
   onQuick: (quick: QuickScreenConfig | null) => void;
 }) {
   const {tx}=useI18n();
+  const options=usePreviewOptions();
   const output = useLiveOutputPreview(s=>s.slide);
   const state = usePresentation(),
     [collapsed, setCollapsed] = useState(
@@ -3867,6 +3873,8 @@ function PreviewRightSidebar({
       (slide) => slide.id === state.previewSlideId,
     ),
     noTextAvailable = canHideSlideContent(live ?? currentPreviewSlide);
+  const targets=state.items.filter(item=>item.enabled&&!item.disabled).flatMap(item=>item.slides.filter(slide=>slide.enabled).map(slide=>({item,slide})));
+  const baseId=state.onAir?state.liveSlideId:state.previewSlideId,index=targets.findIndex(entry=>entry.slide.id===baseId),next=index>=0?targets[index+1]:undefined;
   const toggle = () =>
     setCollapsed((value) => {
       localStorage.setItem(
@@ -3907,6 +3915,7 @@ function PreviewRightSidebar({
           <p>{tx("MAIN ist derzeit OFF AIR.")}</p>
         </section>
       )}
+      {options.showNext&&next&&<section className="preview-next-card"><h2>{tx("Nächste Folie")}</h2><div className="preview-next-image">{next.item.metadata.importMode==='original'?<PowerPointStaticPreview sourceHash={String(next.item.metadata.powerPointSourceHash)} slideId={next.slide.sourceSlideId}/>:<SlideRenderer slide={previewSlide(next.slide)} mode="thumbnail"/>}</div>{options.showTitles&&<p>{next.slide.title||next.item.title}</p>}</section>}
       <section className="quick-screens-panel">
         <h2>{tx("MAIN-SCHNELLANZEIGEN")}</h2>
         <div>
@@ -4013,27 +4022,7 @@ export function ProductionWorkspace({
             aria-pressed={state.previewLayout === "grid"}
             onClick={() => state.setPreviewLayout("grid")}
           >{tx("Folienübersicht")}</button>
-          {state.previewLayout === "grid" && (
-            <label>{tx("Thumbnailgröße")} <Icon name="zoom_out" />
-              <input
-                type="range"
-                min="160"
-                max="440"
-                step="40"
-                list="thumbnail-steps"
-                value={state.gridSize}
-                onChange={(event) =>
-                  state.setGridSize(Number(event.target.value))
-                }
-              />
-              <datalist id="thumbnail-steps">
-                {[160, 200, 240, 280, 320, 360, 400, 440].map((value) => (
-                  <option key={value} value={value} />
-                ))}
-              </datalist>
-              <Icon name="zoom_in" />
-            </label>
-          )}
+          <PreviewOverviewControls/>
         </div>
         <div className="preview-work-area">
           <PreviewCenter activeQuick={activeQuick} />

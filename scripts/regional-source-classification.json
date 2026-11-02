@@ -10427,6 +10427,210 @@
       "context": "NewExpression",
       "text": "GitHub {expression1}",
       "reason": "2026-10-30: Reviewed corresponding main handler: filesystem cache directory, official organization/platform identity, imported song section/default search, provider photo attribution or GitHub HTTP status. These are technical/document/provider data, not operator controls; surrounding picker/import dialogs use nativeText."
+    },
+    "source.0f0afda2ee28fe45e925.1": {
+      "source": "src/LiveAnnotations.tsx",
+      "context": "JsxAttribute",
+      "text": "M3.215 -12L24 0L3.215 12",
+      "reason": "Manually reviewed 2026-11-02: SVG marker path coordinates, not display text; tool controls and accessible labels use regional resources."
+    },
+    "source.e2656ba412cc64a70f0e.1": {
+      "source": "src/NextPreviewOutput.tsx",
+      "context": "CallExpression",
+      "text": ".powerpoint-static-preview img",
+      "reason": "Manually reviewed 2026-11-02: DOM selector used to wait for the original PowerPoint thumbnail before capturing the read-only next frame."
+    },
+    "source.d3374194c9b9e80ea472.1": {
+      "source": "src/PreviewOverviewControls.tsx",
+      "context": "BinaryExpression",
+      "text": "Escape",
+      "reason": "Manually reviewed 2026-11-02: KeyboardEvent.key protocol Escape. Popup labels are explicit localized resources."
+    },
+    "source.55a6025cc61060010423.1": {
+      "source": "src/ScreenSharing.tsx",
+      "context": "CallExpression",
+      "text": "ICE_TIMEOUT",
+      "reason": "Manually reviewed 2026-11-02: Internal bounded ICE negotiation error code; user-facing failure uses the v96ShareError resource."
+    },
+    "source.2cfcc9a58ec77e36467f.1": {
+      "source": "src/SongTranslationPreview.tsx",
+      "context": "property:body",
+      "text": "Wir kommen vor dich, Gott.\nDu schenkst uns neuen Mut.",
+      "reason": "Manually reviewed 2026-11-02: Authored German/English example lyrics rendered as song content to demonstrate translation placement. Interface regional selection must not translate lyrics; caption is localized."
+    },
+    "source.5032dd4f3ff52a3bf272.1": {
+      "source": "src/SongTranslationPreview.tsx",
+      "context": "property:text",
+      "text": "We come before you, God.\nYou give us strength anew.",
+      "reason": "Manually reviewed 2026-11-02: Authored German/English example lyrics rendered as song content to demonstrate translation placement. Interface regional selection must not translate lyrics; caption is localized."
+    },
+    "source.f6d4b569d232523b7e1d.1": {
+      "source": "src/externalLoop/WeatherEffects.tsx",
+      "context": "JsxExpression",
+      "text": "rotate({expression1} 80 0)",
+      "reason": "Manually reviewed 2026-11-02: SVG path/transform geometry for a purely decorative visitor-output effect. No operator labels."
+    },
+    "source.f04258d8940a22293fb6.1": {
+      "source": "src/externalLoop/WeatherEffects.tsx",
+      "context": "JsxAttribute",
+      "text": "M80 0L1920 70L1920 160Z",
+      "reason": "Manually reviewed 2026-11-02: SVG path/transform geometry for a purely decorative visitor-output effect. No operator labels."
+    },
+    "source.855a12202cf5fe338a32.1": {
+      "source": "src/externalLoop/WeatherEffects.tsx",
+      "context": "JsxExpression",
+      "text": "M{expression1} -60l-80 420",
+      "reason": "Manually reviewed 2026-11-02: SVG path/transform geometry for a purely decorative visitor-output effect. No operator labels."
+    },
+    "source.ca586fb31645aa318ce7.1": {
+      "source": "src/externalLoop/WeatherEffects.tsx",
+      "context": "JsxExpression",
+      "text": "M{expression1} {expression2}h650",
+      "reason": "Manually reviewed 2026-11-02: SVG path/transform geometry for a purely decorative visitor-output effect. No operator labels."
+    },
+    "source.2652727d72b1a7e04c4e.1": {
+      "source": "electron/LocalTlsIdentity.ts",
+      "context": "CallExpression",
+      "text": "TLS_ADDRESS_LIMIT",
+      "reason": "Manually reviewed 2026-11-02: Certificate server identity or internal address-bound error code. No system trust-store changes and no user-facing dialog text."
+    },
+    "source.72d4ba567663523ab822.1": {
+      "source": "electron/LocalTlsIdentity.ts",
+      "context": "property:value",
+      "text": "GottesdienstRegie local",
+      "reason": "Manually reviewed 2026-11-02: Certificate server identity or internal address-bound error code. No system trust-store changes and no user-facing dialog text."
+    },
+    "source.92eb13efcb507c8fea10.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:pen",
+      "text": "Pen",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.f0fc2e4e1084800fa0a2.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:line",
+      "text": "Line",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.36d9c7a26c28cc767c15.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:arrow",
+      "text": "Arrow",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.7cde62dbeb23c7ffc335.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:rectangle",
+      "text": "Rectangle",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.84a6c9d30a7e8c21a8b5.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:ellipse",
+      "text": "Ellipse",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.c6c8d6ec646d4a173738.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:thickness",
+      "text": "Line thickness",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.f04ac1128e9ac46c6c07.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:fullscreen",
+      "text": "Fullscreen",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.dfd916700f58c2b6a024.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:shareStart",
+      "text": "Share screen",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.3c54800e250fbad1a20b.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:shareStop",
+      "text": "Stop sharing",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.b98a081d63f7d3735c79.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:shareWaiting",
+      "text": "Waiting for the operator.",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.6f2d1fda7e1f78ade7d2.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:shareUnsupported",
+      "text": "This browser does not support screen sharing. Use a supported desktop browser.",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.9c6459cb0d28683532f4.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:shareSecure",
+      "text": "Screen sharing requires the encrypted HTTPS connection.",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.4aa1d6f01a0c94ec13f5.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:shareError",
+      "text": "Screen sharing could not connect.",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.8b79683daffa968d316d.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "property:nextWaiting",
+      "text": "No next slide prepared yet.",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.db506e103ec41320cab8.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "ReturnStatement",
+      "text": "<!doctype html><html lang=\"{expression1}\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><meta name=\"referrer\" content=\"no-referrer\"><title>{expression2} · GottesdienstRegie</title>\n <style>*{box-sizing:border-box}body{margin:0;background:#1c1c1e;color:#f5f5f7;font:17px system-ui,sans-serif;padding:16px}header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0}h1{font-size:24px;margin:0}#clock{font-size:28px;font-variant-numeric:tabular-nums}.status{color:#699f3e}.lost{color:#ed7373}main{display:grid;grid-template-columns:2fr 1fr;gap:16px}.card{padding:16px;background:#242426;border:1px solid #b6bec3;border-radius:12px;min-width:0}.card h2{font-size:16px;color:#b6bec3;margin:0 0 12px}#frame{position:relative;aspect-ratio:16/9;background:#000}#mirror{width:100%;height:100%;object-fit:contain}#drawing{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;touch-action:none}#drawing.enabled{pointer-events:auto}#next-mirror{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000}.next-frame:has(img[hidden]){display:none}#tools label{display:grid;gap:6px;font-size:14px}#current,#next,#notes{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5;font-size:clamp(20px,3vw,40px)}#current{margin-top:12px}footer,#tools{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}button,select{padding:14px;background:#2c2c2e;color:#fff;border:1px solid #608f9a;border-radius:8px;min-height:44px;font:inherit}button:focus-visible,select:focus-visible{outline:2px solid #608f9a;outline-offset:3px}button[aria-pressed=true]{background:#699f3e}#tools[hidden],footer[hidden],[hidden]{display:none!important}body[data-layout=mirror] main{grid-template-columns:1fr}body[data-layout=mirror] #next-card{display:none}@media(max-width:760px){main{grid-template-columns:1fr}}</style></head>\n <body><header><div><h1 id=\"title\">{expression3}</h1><div class=\"status\" id=\"status\">{expression4}</div></div><div><div id=\"clock\"></div><div id=\"countdown\"></div><button id=\"fullscreen\">{expression5}</button></div></header>\n <main><section class=\"card\" id=\"current-card\"><h2>{expression6}</h2><div id=\"frame\"><img id=\"mirror\" alt=\"{expression7}\"><canvas id=\"drawing\"></canvas></div><div id=\"current\">{expression8}</div></section><section class=\"card\" id=\"next-card\"><h2>{expression9}</h2><div class=\"next-frame\"><img id=\"next-mirror\" alt=\"{expression10}\" hidden></div><div id=\"next\">{expression11}</div></section></main>\n <div id=\"tools\" hidden><button id=\"draw\" aria-pressed=\"false\">{expression12}</button><select id=\"tool\" aria-label=\"{expression13}\"><option value=\"pen\">{expression14}</option><option value=\"line\">{expression15}</option><option value=\"arrow\">{expression16}</option><option value=\"rectangle\">{expression17}</option><option value=\"ellipse\">{expression18}</option></select><label>{expression19}<input id=\"thickness\" type=\"range\" min=\"2\" max=\"16\" step=\"1\" value=\"8\"></label><select id=\"color\" aria-label=\"{expression20}\"><option value=\"#ff3b30\">{expression21}</option><option value=\"#ffd60a\">{expression22}</option><option value=\"#699f3e\">{expression23}</option><option value=\"#ffffff\">{expression24}</option></select><button id=\"clear\">{expression25}</button></div>\n <section id=\"notes-card\" class=\"card\" hidden><h2>{expression26}</h2><div id=\"notes\"></div></section><section id=\"order-card\" class=\"card\" hidden><h2>{expression27}</h2><ol id=\"order\"></ol></section>\n <section id=\"sharing\" class=\"card\" hidden><button id=\"share-start\">{expression28}</button><button id=\"share-stop\" hidden>{expression29}</button><p id=\"share-status\"></p></section>\n <footer {expression30}><button data-action=\"previous\">◀ {expression31}</button><button data-action=\"next\">{expression32} ▶</button></footer>\n <script>\n const token={expression33},labels={expression34},q=s=>document.querySelector(s),canvas=q('#drawing'),ctx=canvas.getContext('2d');let currentTool='pen',currentWidth=.004,currentColor='#ff3b30',state={},draw=false,points=[],take='',alive=true,lastFrame='',frameBusy=false;\n const text=x=>typeof x==='string'?x:x&&typeof x==='object'?(typeof x.body==='string'?x.body:typeof x.title==='string'?x.title:'—'):'—';\n async function command(action,extra={}){try{const r=await fetch('/api/command',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,commandId:crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),action,timestamp:Date.now(),...extra})});if(!r.ok)throw 0;return true}catch{q('#status').className='lost';q('#status').textContent=labels.lost;return false}}\n function clearLocal(){points=[];ctx.clearRect(0,0,canvas.width,canvas.height)}\n function setDraw(next){draw=next;canvas.classList.toggle('enabled',draw);q('#draw').setAttribute('aria-pressed',String(draw));if(!draw)clearLocal()}\n async function poll(){if(!alive)return;try{const r=await fetch('/api/state?token='+encodeURIComponent(token),{cache:'no-store'});if(!r.ok)throw 0;state=await r.json();q('#title').textContent=state.title||{expression35};q('#current').textContent=text(state.current);q('#next').textContent=text(state.next);q('#status').className='status';q('#status').textContent=state.onAir?'● ON AIR':labels.waiting;\n const config=state.monitor||{};document.body.dataset.layout=config.layout||'current-next';for(const [id,key]of [['#current-card','showCurrent'],['#next-card','showNext'],['#clock','showClock'],['#countdown','showCountdown']])q(id).hidden=config[key]===false;\n q('#notes-card').hidden=!state.notes;q('#notes').textContent=state.notes||'';q('#order-card').hidden=!state.order?.length;q('#order').replaceChildren(...(state.order||[]).map(value=>{const li=document.createElement('li');li.textContent=value;return li}));\n q('#sharing').hidden=!(state.permissions||[]).includes('remote.share');q('#tools').hidden=!state.canAnnotate;for(const button of document.querySelectorAll('[data-action]'))button.hidden=!(state.permissions||[]).includes('remote.'+button.dataset.action);\n if(take!==state.annotationTakeId){take=state.annotationTakeId||'';clearLocal()}if(!state.canAnnotate||!state.onAir)setDraw(false);\n }catch{q('#status').className='lost';q('#status').textContent=labels.lost;setDraw(false)}finally{if(alive)setTimeout(poll,500)}}\n async function frame(){if(!alive)return;if(state.onAir&&!frameBusy){frameBusy=true;try{const r=await fetch('/api/frame?token='+encodeURIComponent(token),{cache:'no-store'});if(!r.ok)throw 0;const blob=await r.blob(),url=URL.createObjectURL(blob);q('#mirror').src=url;q('#frame').hidden=false;q('#current').hidden=true;if(lastFrame)URL.revokeObjectURL(lastFrame);lastFrame=url}catch{q('#frame').hidden=true;q('#current').hidden=false;setDraw(false)}finally{frameBusy=false}}else if(!state.onAir){q('#frame').hidden=true;q('#current').hidden=false}if(alive)setTimeout(frame,500)}\n function clock(){q('#clock').textContent=new Date().toLocaleTimeString({expression36},{hour:'2-digit',minute:'2-digit',second:'2-digit'});const seconds=Math.ceil((Number(state.serviceCountdownAtMs)-Date.now())/1000);q('#countdown').textContent=seconds>0?labels.start+' '+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0'):''}clock();setInterval(clock,1000);\n function point(e){const r=canvas.getBoundingClientRect();return{x:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y:Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))}}\n function paint(){canvas.width=1920;canvas.height=1080;if(points.length<2)return;ctx.strokeStyle=currentColor;ctx.lineWidth=currentWidth*1920;ctx.lineCap='round';ctx.lineJoin='round';const a=points[0],b=points.at(-1),x=a.x*1920,y=a.y*1080,x2=b.x*1920,y2=b.y*1080;ctx.beginPath();if(currentTool==='rectangle')ctx.strokeRect(Math.min(x,x2),Math.min(y,y2),Math.abs(x2-x),Math.abs(y2-y));else if(currentTool==='ellipse'){ctx.ellipse((x+x2)/2,(y+y2)/2,Math.abs(x2-x)/2,Math.abs(y2-y)/2,0,0,Math.PI*2);ctx.stroke()}else{if(currentTool==='pen')points.forEach((p,i)=>i?ctx.lineTo(p.x*1920,p.y*1080):ctx.moveTo(p.x*1920,p.y*1080));else{ctx.moveTo(x,y);ctx.lineTo(x2,y2)}ctx.stroke();if(currentTool==='arrow'){const angle=Math.atan2(y2-y,x2-x),head=Math.max(14,currentWidth*1920*3);ctx.beginPath();ctx.moveTo(x2-head*Math.cos(angle-Math.PI/6),y2-head*Math.sin(angle-Math.PI/6));ctx.lineTo(x2,y2);ctx.lineTo(x2-head*Math.cos(angle+Math.PI/6),y2-head*Math.sin(angle+Math.PI/6));ctx.stroke()}}}\n canvas.onpointerdown=e=>{if(!draw||!take||!state.onAir)return;canvas.setPointerCapture(e.pointerId);currentTool=q('#tool').value;currentWidth=Number(q('#thickness').value)/1920;currentColor=q('#color').value;points=[point(e)];paint()};canvas.onpointermove=e=>{if(!draw||!canvas.hasPointerCapture(e.pointerId))return;if(currentTool==='pen'){points.push(point(e));if(points.length>512)points=points.filter((_,i)=>i%2===0)}else points=[points[0],point(e)];paint()};canvas.onpointerup=async e=>{if(!canvas.hasPointerCapture(e.pointerId))return;canvas.releasePointerCapture(e.pointerId);const p=point(e);if(currentTool==='pen')points.push(p);else points=[points[0],p];const stroke={id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),tool:currentTool,color:currentColor,width:currentWidth,points:points.filter((_,i)=>i%Math.max(1,Math.ceil(points.length/256))===0)};await command('annotate',{takeId:take,stroke});clearLocal()};canvas.onpointercancel=clearLocal;\n let sharePc=null,shareStream=null,shareId='',shareGeneration=0,shareTimer=0;\n async function shareRequest(value){const response=await fetch('/api/share',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,...value})});if(!response.ok)throw Error('SHARE_FAILED');return response.json()}\n async function stopShare(notify=true){shareGeneration++;clearTimeout(shareTimer);const oldId=shareId;shareId='';sharePc?.close();sharePc=null;shareStream?.getTracks().forEach(track=>track.stop());shareStream=null;q('#share-stop').hidden=true;q('#share-start').disabled=false;if(notify&&oldId)await shareRequest({action:'stop',id:oldId}).catch(()=>{});}\n async function iceReady(pc){if(pc.iceGatheringState==='complete')return;await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>{pc.removeEventListener('icegatheringstatechange',check);reject(Error('ICE_TIMEOUT'))},10000);function check(){if(pc.iceGatheringState==='complete'){clearTimeout(timeout);pc.removeEventListener('icegatheringstatechange',check);resolve()}}pc.addEventListener('icegatheringstatechange',check);check()})}\n async function pollShare(generation){if(!alive||generation!==shareGeneration||!shareId)return;try{const response=await fetch('/api/share?token='+encodeURIComponent(token)+'&id='+encodeURIComponent(shareId),{cache:'no-store'});if(!response.ok)throw Error('ENDED');const result=await response.json();if(generation!==shareGeneration)return;if(result.answer&&!sharePc.currentRemoteDescription)await sharePc.setRemoteDescription(result.answer);q('#share-status').textContent=labels.shareWaiting;shareTimer=setTimeout(()=>pollShare(generation),1000)}catch{if(generation===shareGeneration){await stopShare(false);q('#share-status').textContent=labels.shareError}}}\n q('#share-start').onclick=async()=>{if(!isSecureContext){q('#share-status').textContent=labels.shareSecure;return}if(!navigator.mediaDevices?.getDisplayMedia){q('#share-status').textContent=labels.shareUnsupported;return}const generation=++shareGeneration;q('#share-start').disabled=true;try{const stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:15,max:30},width:{max:1920},height:{max:1080}},audio:false});if(generation!==shareGeneration||!alive){stream.getTracks().forEach(track=>track.stop());return}shareStream=stream;const pc=new RTCPeerConnection({iceServers:[]});sharePc=pc;stream.getVideoTracks().forEach(track=>{pc.addTrack(track,stream);track.onended=()=>void stopShare()});q('#share-stop').hidden=false;pc.onconnectionstatechange=()=>{if(generation===shareGeneration&&pc.connectionState==='failed'){q('#share-status').textContent=labels.shareError;void stopShare()}};await pc.setLocalDescription(await pc.createOffer());await iceReady(pc);if(generation!==shareGeneration)return;const result=await shareRequest({action:'offer',description:pc.localDescription.toJSON()});if(generation!==shareGeneration){await shareRequest({action:'stop',id:result.id});return}shareId=result.id;void pollShare(generation)}catch{if(generation===shareGeneration){await stopShare();q('#share-status').textContent=labels.shareError}}};q('#share-stop').onclick=()=>void stopShare();window.addEventListener('pagehide',()=>{const id=shareId;void stopShare(false);if(id)navigator.sendBeacon('/api/share',new Blob([JSON.stringify({token,action:'stop',id})],{type:'application/json'}))});\n let nextFrameUrl='';async function nextFrame(){if(!alive)return;try{const response=await fetch('/api/next-frame?token='+encodeURIComponent(token),{cache:'no-store'});if(!response.ok)throw Error('UNAVAILABLE');const url=URL.createObjectURL(await response.blob());if(!alive){URL.revokeObjectURL(url);return}q('#next-mirror').src=url;q('#next-mirror').hidden=false;q('#next').hidden=true;if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl);nextFrameUrl=url}catch{q('#next-mirror').hidden=true;q('#next').hidden=false;q('#next').textContent=state.next?text(state.next):labels.nextWaiting}if(alive)setTimeout(nextFrame,1000)}window.addEventListener('pagehide',()=>{if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl)});void nextFrame();\n q('#fullscreen').onclick=()=>{if(document.fullscreenElement)void document.exitFullscreen();else void document.documentElement.requestFullscreen?.().catch(()=>{})};\n q('#draw').onclick=()=>setDraw(!draw);q('#clear').onclick=()=>{clearLocal();void command('annotation-clear')};for(const button of document.querySelectorAll('[data-action]'))button.onclick=()=>command(button.dataset.action);window.addEventListener('pagehide',()=>{alive=false;if(lastFrame)URL.revokeObjectURL(lastFrame)});poll();frame();\n </script></body></html>",
+      "reason": "Manually reviewed 2026-11-02: Reviewed complete v96 remote page and script: these candidates belong to the explicitly selected English branch or the HTML/JS template. German labels use all fourteen authored native resources through copy(). User names/content remain escaped/textContent; protocol labels MAIN and ON AIR stay technical identifiers."
+    },
+    "source.8014a446eeb700cf5f49.2": {
+      "source": "electron/RemoteServer.ts",
+      "context": "BinaryExpression",
+      "text": "POST",
+      "reason": "Manually reviewed 2026-11-02: HTTP request method protocol comparison (GET/POST); localizing it would break authenticated signaling."
+    },
+    "source.8014a446eeb700cf5f49.3": {
+      "source": "electron/RemoteServer.ts",
+      "context": "BinaryExpression",
+      "text": "POST",
+      "reason": "Manually reviewed 2026-11-02: HTTP request method protocol comparison (GET/POST); localizing it would break authenticated signaling."
+    },
+    "source.b77217f37f4b272ea443.3": {
+      "source": "electron/RemoteServer.ts",
+      "context": "BinaryExpression",
+      "text": "GET",
+      "reason": "Manually reviewed 2026-11-02: HTTP request method protocol comparison (GET/POST); localizing it would break authenticated signaling."
+    },
+    "source.8014a446eeb700cf5f49.4": {
+      "source": "electron/RemoteServer.ts",
+      "context": "BinaryExpression",
+      "text": "POST",
+      "reason": "Manually reviewed 2026-11-02: HTTP request method protocol comparison (GET/POST); localizing it would break authenticated signaling."
+    },
+    "source.0994ecd617d3fc52ae8c.1": {
+      "source": "electron/ScreenShareBroker.ts",
+      "context": "CallExpression",
+      "text": "INVALID_SCREEN_SHARE_DESCRIPTION",
+      "reason": "Manually reviewed 2026-11-02: Internal signaling validation/busy error identifier. Public endpoint exposes fixed error categories, operator UI uses localized status resources."
+    },
+    "source.b37775d1676ad7e6c33d.1": {
+      "source": "electron/ScreenShareBroker.ts",
+      "context": "CallExpression",
+      "text": "SCREEN_SHARE_BUSY",
+      "reason": "Manually reviewed 2026-11-02: Internal signaling validation/busy error identifier. Public endpoint exposes fixed error categories, operator UI uses localized status resources."
+    },
+    "source.871712488c47237a6a4c.1": {
+      "source": "electron/RemotePage.ts",
+      "context": "ReturnStatement",
+      "text": "<!doctype html><html lang=\"{expression1}\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><meta name=\"referrer\" content=\"no-referrer\"><title>{expression2} · GottesdienstRegie</title>\n <style>*{box-sizing:border-box}body{margin:0;background:#1c1c1e;color:#f5f5f7;font:17px system-ui,sans-serif;padding:16px}header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0}h1{font-size:24px;margin:0}#clock{font-size:28px;font-variant-numeric:tabular-nums}.status{color:#699f3e}.lost{color:#ed7373}main{display:grid;grid-template-columns:2fr 1fr;gap:16px}.card{padding:16px;background:#242426;border:1px solid #b6bec3;border-radius:12px;min-width:0}.card h2{font-size:16px;color:#b6bec3;margin:0 0 12px}#frame{position:relative;aspect-ratio:16/9;background:#000}#mirror{width:100%;height:100%;object-fit:contain}#drawing{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;touch-action:none}#drawing.enabled{pointer-events:auto}#next-mirror{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000}.next-frame:has(img[hidden]){display:none}#tools label{display:grid;gap:6px;font-size:14px}#current,#next,#notes{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5;font-size:clamp(20px,3vw,40px)}#current{margin-top:12px}footer,#tools{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}button,select{padding:14px;background:#2c2c2e;color:#fff;border:1px solid #608f9a;border-radius:8px;min-height:44px;font:inherit}button:focus-visible,select:focus-visible{outline:2px solid #608f9a;outline-offset:3px}button[aria-pressed=true]{background:#699f3e}#tools[hidden],footer[hidden],[hidden]{display:none!important}body[data-layout=mirror] main{grid-template-columns:1fr}body[data-layout=mirror] #next-card{display:none}@media(max-width:760px){main{grid-template-columns:1fr}}</style></head>\n <body><header><div><h1 id=\"title\">{expression3}</h1><div class=\"status\" id=\"status\">{expression4}</div></div><div><div id=\"clock\"></div><div id=\"countdown\"></div><button id=\"fullscreen\">{expression5}</button></div></header>\n <main><section class=\"card\" id=\"current-card\"><h2>{expression6}</h2><div id=\"frame\"><img id=\"mirror\" alt=\"{expression7}\"><canvas id=\"drawing\"></canvas></div><div id=\"current\">{expression8}</div></section><section class=\"card\" id=\"next-card\"><h2>{expression9}</h2><div class=\"next-frame\"><img id=\"next-mirror\" alt=\"{expression10}\" hidden></div><div id=\"next\">{expression11}</div></section></main>\n <div id=\"tools\" hidden><button id=\"draw\" aria-pressed=\"false\">{expression12}</button><select id=\"tool\" aria-label=\"{expression13}\"><option value=\"pen\">{expression14}</option><option value=\"line\">{expression15}</option><option value=\"arrow\">{expression16}</option><option value=\"rectangle\">{expression17}</option><option value=\"ellipse\">{expression18}</option></select><label>{expression19}<input id=\"thickness\" type=\"range\" min=\"2\" max=\"16\" step=\"1\" value=\"8\"></label><select id=\"color\" aria-label=\"{expression20}\"><option value=\"#ff3b30\">{expression21}</option><option value=\"#ffd60a\">{expression22}</option><option value=\"#699f3e\">{expression23}</option><option value=\"#ffffff\">{expression24}</option></select><button id=\"clear\">{expression25}</button></div>\n <section id=\"notes-card\" class=\"card\" hidden><h2>{expression26}</h2><div id=\"notes\"></div></section><section id=\"order-card\" class=\"card\" hidden><h2>{expression27}</h2><ol id=\"order\"></ol></section>\n <section id=\"sharing\" class=\"card\" hidden><button id=\"share-start\">{expression28}</button><button id=\"share-stop\" hidden>{expression29}</button><p id=\"share-status\"></p></section>\n <footer {expression30}><button data-action=\"previous\">◀ {expression31}</button><button data-action=\"next\">{expression32} ▶</button></footer>\n <script>\n const token={expression33},labels={expression34},q=s=>document.querySelector(s),canvas=q('#drawing'),ctx=canvas.getContext('2d');let currentTool='pen',currentWidth=.004,currentColor='#ff3b30',state={},draw=false,points=[],take='',alive=true,lastFrame='',frameBusy=false;\n const text=x=>typeof x==='string'?x:x&&typeof x==='object'?(typeof x.body==='string'?x.body:typeof x.title==='string'?x.title:'—'):'—';\n async function command(action,extra={}){try{const r=await fetch('/api/command',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,commandId:crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),action,timestamp:Date.now(),...extra})});if(!r.ok)throw 0;return true}catch{q('#status').className='lost';q('#status').textContent=labels.lost;return false}}\n function clearLocal(){points=[];ctx.clearRect(0,0,canvas.width,canvas.height)}\n function setDraw(next){draw=next;canvas.classList.toggle('enabled',draw);q('#draw').setAttribute('aria-pressed',String(draw));if(!draw)clearLocal()}\n async function poll(){if(!alive)return;try{const r=await fetch('/api/state?token='+encodeURIComponent(token),{cache:'no-store'});if(!r.ok)throw 0;state=await r.json();q('#title').textContent=state.title||{expression35};q('#current').textContent=text(state.current);q('#next').textContent=text(state.next);q('#status').className='status';q('#status').textContent=state.onAir?'● ON AIR':labels.waiting;\n const config=state.monitor||{};document.body.dataset.layout=config.layout||'current-next';for(const [id,key]of [['#current-card','showCurrent'],['#next-card','showNext'],['#clock','showClock'],['#countdown','showCountdown']])q(id).hidden=config[key]===false;\n q('#notes-card').hidden=!state.notes;q('#notes').textContent=state.notes||'';q('#order-card').hidden=!state.order?.length;q('#order').replaceChildren(...(state.order||[]).map(value=>{const li=document.createElement('li');li.textContent=value;return li}));\n q('#sharing').hidden=!(state.permissions||[]).includes('remote.share');q('#tools').hidden=!state.canAnnotate;for(const button of document.querySelectorAll('[data-action]'))button.hidden=!(state.permissions||[]).includes('remote.'+button.dataset.action);\n if(take!==state.annotationTakeId){take=state.annotationTakeId||'';clearLocal()}if(!state.canAnnotate||!state.onAir)setDraw(false);\n }catch{q('#status').className='lost';q('#status').textContent=labels.lost;setDraw(false)}finally{if(alive)setTimeout(poll,500)}}\n async function frame(){if(!alive)return;if(state.onAir&&!frameBusy){frameBusy=true;try{const r=await fetch('/api/frame?token='+encodeURIComponent(token),{cache:'no-store'});if(!r.ok)throw 0;const blob=await r.blob(),url=URL.createObjectURL(blob);q('#mirror').src=url;q('#frame').hidden=false;q('#current').hidden=true;if(lastFrame)URL.revokeObjectURL(lastFrame);lastFrame=url}catch{q('#frame').hidden=true;q('#current').hidden=false;setDraw(false)}finally{frameBusy=false}}else if(!state.onAir){q('#frame').hidden=true;q('#current').hidden=false}if(alive)setTimeout(frame,500)}\n function clock(){q('#clock').textContent=new Date().toLocaleTimeString({expression36},{hour:'2-digit',minute:'2-digit',second:'2-digit'});const seconds=Math.ceil((Number(state.serviceCountdownAtMs)-Date.now())/1000);q('#countdown').textContent=seconds>0?labels.start+' '+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0'):''}clock();setInterval(clock,1000);\n function point(e){const r=canvas.getBoundingClientRect();return{x:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y:Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))}}\n function paint(){canvas.width=1920;canvas.height=1080;if(points.length<2)return;ctx.strokeStyle=currentColor;ctx.lineWidth=currentWidth*1920;ctx.lineCap='round';ctx.lineJoin='round';const a=points[0],b=points.at(-1),x=a.x*1920,y=a.y*1080,x2=b.x*1920,y2=b.y*1080;ctx.beginPath();if(currentTool==='rectangle')ctx.strokeRect(Math.min(x,x2),Math.min(y,y2),Math.abs(x2-x),Math.abs(y2-y));else if(currentTool==='ellipse'){ctx.ellipse((x+x2)/2,(y+y2)/2,Math.abs(x2-x)/2,Math.abs(y2-y)/2,0,0,Math.PI*2);ctx.stroke()}else{if(currentTool==='pen')points.forEach((p,i)=>i?ctx.lineTo(p.x*1920,p.y*1080):ctx.moveTo(p.x*1920,p.y*1080));else{ctx.moveTo(x,y);ctx.lineTo(x2,y2)}ctx.stroke();if(currentTool==='arrow'){const angle=Math.atan2(y2-y,x2-x),head=Math.max(14,currentWidth*1920*3);ctx.beginPath();ctx.moveTo(x2-head*Math.cos(angle-Math.PI/6),y2-head*Math.sin(angle-Math.PI/6));ctx.lineTo(x2,y2);ctx.lineTo(x2-head*Math.cos(angle+Math.PI/6),y2-head*Math.sin(angle+Math.PI/6));ctx.stroke()}}}\n canvas.onpointerdown=e=>{if(!draw||!take||!state.onAir)return;canvas.setPointerCapture(e.pointerId);currentTool=q('#tool').value;currentWidth=Number(q('#thickness').value)/1920;currentColor=q('#color').value;points=[point(e)];paint()};canvas.onpointermove=e=>{if(!draw||!canvas.hasPointerCapture(e.pointerId))return;if(currentTool==='pen'){points.push(point(e));if(points.length>512)points=points.filter((_,i)=>i%2===0)}else points=[points[0],point(e)];paint()};canvas.onpointerup=async e=>{if(!canvas.hasPointerCapture(e.pointerId))return;canvas.releasePointerCapture(e.pointerId);const p=point(e);if(currentTool==='pen')points.push(p);else points=[points[0],p];const stroke={id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),tool:currentTool,color:currentColor,width:currentWidth,points:points.filter((_,i)=>i%Math.max(1,Math.ceil(points.length/256))===0)};await command('annotate',{takeId:take,stroke});clearLocal()};canvas.onpointercancel=clearLocal;\n let sharePc=null,shareStream=null,shareId='',shareGeneration=0,shareTimer=0;\n async function shareRequest(value){const response=await fetch('/api/share',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,...value})});if(!response.ok)throw Error('SHARE_FAILED');return response.json()}\n async function stopShare(notify=true){shareGeneration++;clearTimeout(shareTimer);const oldId=shareId;shareId='';sharePc?.close();sharePc=null;shareStream?.getTracks().forEach(track=>track.stop());shareStream=null;q('#share-stop').hidden=true;q('#share-start').disabled=false;if(notify&&oldId)await shareRequest({action:'stop',id:oldId}).catch(()=>{});}\n async function iceReady(pc){if(pc.iceGatheringState==='complete')return;await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>{pc.removeEventListener('icegatheringstatechange',check);reject(Error('ICE_TIMEOUT'))},10000);function check(){if(pc.iceGatheringState==='complete'){clearTimeout(timeout);pc.removeEventListener('icegatheringstatechange',check);resolve()}}pc.addEventListener('icegatheringstatechange',check);check()})}\n async function pollShare(generation){if(!alive||generation!==shareGeneration||!shareId)return;try{const response=await fetch('/api/share?token='+encodeURIComponent(token)+'&id='+encodeURIComponent(shareId),{cache:'no-store'});if(!response.ok)throw Error('ENDED');const result=await response.json();if(generation!==shareGeneration)return;if(result.answer&&!sharePc.currentRemoteDescription)await sharePc.setRemoteDescription(result.answer);q('#share-status').textContent=labels.shareWaiting;shareTimer=setTimeout(()=>pollShare(generation),1000)}catch{if(generation===shareGeneration){await stopShare(false);q('#share-status').textContent=labels.shareError}}}\n q('#share-start').onclick=async()=>{if(location.protocol!=='https:'||!isSecureContext){q('#share-status').textContent=labels.shareSecure;return}if(!navigator.mediaDevices?.getDisplayMedia){q('#share-status').textContent=labels.shareUnsupported;return}const generation=++shareGeneration;q('#share-start').disabled=true;try{const stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:15,max:30},width:{max:1920},height:{max:1080}},audio:false});if(generation!==shareGeneration||!alive){stream.getTracks().forEach(track=>track.stop());return}shareStream=stream;const pc=new RTCPeerConnection({iceServers:[]});sharePc=pc;stream.getVideoTracks().forEach(track=>{pc.addTrack(track,stream);track.onended=()=>void stopShare()});q('#share-stop').hidden=false;pc.onconnectionstatechange=()=>{if(generation===shareGeneration&&pc.connectionState==='failed'){q('#share-status').textContent=labels.shareError;void stopShare()}};await pc.setLocalDescription(await pc.createOffer());await iceReady(pc);if(generation!==shareGeneration)return;const result=await shareRequest({action:'offer',description:pc.localDescription.toJSON()});if(generation!==shareGeneration){await shareRequest({action:'stop',id:result.id});return}shareId=result.id;void pollShare(generation)}catch{if(generation===shareGeneration){await stopShare();q('#share-status').textContent=labels.shareError}}};q('#share-stop').onclick=()=>void stopShare();window.addEventListener('pagehide',()=>{const id=shareId;void stopShare(false);if(id)navigator.sendBeacon('/api/share',new Blob([JSON.stringify({token,action:'stop',id})],{type:'application/json'}))});\n let nextFrameUrl='';async function nextFrame(){if(!alive)return;try{const response=await fetch('/api/next-frame?token='+encodeURIComponent(token),{cache:'no-store'});if(!response.ok)throw Error('UNAVAILABLE');const url=URL.createObjectURL(await response.blob());if(!alive){URL.revokeObjectURL(url);return}q('#next-mirror').src=url;q('#next-mirror').hidden=false;q('#next').hidden=true;if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl);nextFrameUrl=url}catch{q('#next-mirror').hidden=true;q('#next').hidden=false;q('#next').textContent=state.next?text(state.next):labels.nextWaiting}if(alive)setTimeout(nextFrame,1000)}window.addEventListener('pagehide',()=>{if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl)});void nextFrame();\n q('#fullscreen').onclick=()=>{if(document.fullscreenElement)void document.exitFullscreen();else void document.documentElement.requestFullscreen?.().catch(()=>{})};\n q('#draw').onclick=()=>setDraw(!draw);q('#clear').onclick=()=>{clearLocal();void command('annotation-clear')};for(const button of document.querySelectorAll('[data-action]'))button.onclick=()=>command(button.dataset.action);window.addEventListener('pagehide',()=>{alive=false;if(lastFrame)URL.revokeObjectURL(lastFrame)});poll();frame();\n </script></body></html>",
+      "reason": "Reviewed entire v96 HTML/script and the final HTTPS-only browser capability guard on 2026-11-02. German control/status text resolves the fourteen explicit native templates (validated by nativeRegionalWiring); the remaining literal is protocol/markup, fixed technical labels or explicitly selected English copy. No regional UI text is exempted by a file wildcard."
     }
   },
   "reviewedTechnicalFiles": {
@@ -10547,8 +10751,8 @@
       "reason": "Manually reviewed complete file 2026-10-27: private native source, receiver authorization, resource/thumbnail integrity and runtime identity/state logic; fixed protocol/error identifiers only. Authored operator copy remains separately inventoried through PowerPointPlaybackPanel and powerPointTemplates."
     },
     "electron/PowerPointOutputRuntime.ts": {
-      "sha256": "199bbe9671f35dc4d97792d705a0cfdd1c4d6647fb06d162e42151e94bfd87b5",
-      "reason": "Manually reviewed complete file 2026-10-27: Main-only IPC/source authorization and native resource/play-pause intent; fixed command/error identifiers only. Operator prose remains separately inventoried."
+      "sha256": "1665dda4f804b03a85b42529c9e3f2b4bd7cbdc1f698657730373de74008b637",
+      "reason": "Manually reviewed complete file 2026-10-27: Main-only IPC/source authorization and native resource/play-pause intent; fixed command/error identifiers only. Operator prose remains separately inventoried. Re-reviewed v96 changes on 2026-11-02: added renderer parameters/effect composition or private read-only preview/speech preparation; candidate literals keep the same visitor-content or protocol purpose."
     },
     "electron/PowerPointResourceOpener.ts": {
       "sha256": "7428cceacac96ab8832a93378058c176887ba53c0f104c5f282b742640ddb0c3",
@@ -10611,20 +10815,20 @@
       "reason": "Reviewed 2026-10-29: versioned terms document data (TERMS_VERSION/effective date, sections, existing language editions and plain-document export), not operator controls. Regional interface selection does not rewrite the published document body or its version. Consent/dialog controls live outside this module and remain independently inventoried/localized. No terms content or acceptance behavior was changed."
     },
     "src/externalLoop/View.tsx": {
-      "sha256": "5edc905f21d403d1446e6a022cc7fdeb4486c1876d8c0d0c235a4ace4f6b90e9",
-      "reason": "Reviewed all candidate text, complete render structure and control/dialog AST on 2026-10-29: visitor football standings/results and source attribution output only, with club/provider data. No operator controls. The explicitly preserved visitor-slide design/content remains independent of the operator regional interface."
+      "sha256": "6fde3607b7e795b02ff6e21eb69af996b0f7108ada394c7e3f2c4c63b489f14b",
+      "reason": "Reviewed all candidate text, complete render structure and control/dialog AST on 2026-10-29: visitor football standings/results and source attribution output only, with club/provider data. No operator controls. The explicitly preserved visitor-slide design/content remains independent of the operator regional interface. Re-reviewed v96 changes on 2026-11-02: added renderer parameters/effect composition or private read-only preview/speech preparation; candidate literals keep the same visitor-content or protocol purpose."
     },
     "src/externalLoop/WeatherView.tsx": {
-      "sha256": "2c71b188ffc5d137125976c295af1151565f228db9f48de748d56f0b1e314f4e",
-      "reason": "Reviewed complete module and every candidate literal on 2026-10-29: public weather output, forecast labels, observation data and provider attribution only. No operator controls. Regional UI changes must not rewrite the visitor weather slide."
+      "sha256": "b0d5265b0a3ced1a1eb07d361c00531e3cc0a0f4b2f5370045f3abbd6c816adf",
+      "reason": "Reviewed complete module and every candidate literal on 2026-10-29: public weather output, forecast labels, observation data and provider attribution only. No operator controls. Regional UI changes must not rewrite the visitor weather slide. Re-reviewed v96 changes on 2026-11-02: added renderer parameters/effect composition or private read-only preview/speech preparation; candidate literals keep the same visitor-content or protocol purpose."
     },
     "src/externalLoop/weatherCondition.ts": {
       "sha256": "5a7607d5fe25e5388ebb87e346e4de0a02c120751317f04c5d692cf40741e175",
       "reason": "Reviewed complete WMO-condition mapper on 2026-10-29: code-to-weather-kind/public weather description data for the visitor weather output. These are output-content values, not settings captions. The operator weather controls are separately localized."
     },
     "electron/announcements/prepareGermanSpeech.ts": {
-      "sha256": "2fc7b83e483b7a94141021c9b09bf02bd9eef9a90f894208cf44da6d492f5ba2",
-      "reason": "Reviewed complete speech-only date/weekday/number preparation on 2026-10-29. The user explicitly scoped regional variants to the interface and excluded announcement speech. Spoken German morphology/month/weekday/unit strings must not be dialect-rewritten by a regional UI selection; no operator controls or dialog copy are present."
+      "sha256": "167d5f2b59b73f922d6dab879bf5663dee7fc19347607b845a9c46b527ea5f7c",
+      "reason": "Reviewed complete speech-only date/weekday/number preparation on 2026-10-29. The user explicitly scoped regional variants to the interface and excluded announcement speech. Spoken German morphology/month/weekday/unit strings must not be dialect-rewritten by a regional UI selection; no operator controls or dialog copy are present. Re-reviewed v96 changes on 2026-11-02: added renderer parameters/effect composition or private read-only preview/speech preparation; candidate literals keep the same visitor-content or protocol purpose."
     },
     "src/bible/catalog.ts": {
       "sha256": "0a32770e35f31a452c2f85133f372adedad16bb790964085a0456d0021453b1b",

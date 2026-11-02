@@ -13,8 +13,8 @@ function time(value:string){return new Date(value).toLocaleTimeString('de-DE',{h
 type Props={snapshot:ExternalSnapshot;startedAt:number;settings:ExternalSettings;staticPreview?:boolean};
 function Frame({snapshot,settings,elapsed,reduced}:{snapshot:ExternalSnapshot;settings:ExternalSettings;elapsed:number;reduced:boolean}){
  const prepared=useMemo(()=>prepareExternalPresentation(snapshot,settings),[snapshot,settings]),payload=prepared.payload;
- if(payload.kind==='weather')return <WeatherView snapshot={snapshot} payload={payload}/>;
- if(payload.kind==='news')return <NewsStoryView snapshot={snapshot} entries={payload.entries} durationSeconds={settings.durationSeconds} elapsed={elapsed} reduced={reduced}/>;
+ if(payload.kind==='weather')return <WeatherView snapshot={snapshot} payload={payload} elapsed={elapsed} reduced={reduced}/>;
+ if(payload.kind==='news')return <NewsStoryView snapshot={snapshot} entries={settings.kind==='news'&&settings.newsRotation!=='interval'?payload.entries.slice(0,1):payload.entries} durationSeconds={settings.kind==='news'&&settings.newsRotation==='interval'?settings.newsIntervalSeconds??20:settings.durationSeconds} fixedInterval={settings.kind==='news'&&settings.newsRotation==='interval'} elapsed={elapsed} reduced={reduced}/>;
  const pages=reduced?externalReducedPages(snapshot,settings):[],page=pages[Math.floor(elapsed/10000)%Math.max(1,pages.length)];
  const visible=(index:number)=>!page||page.some(row=>row.index===index);
  const title=(text:string,index:number)=>page?<div className="external-reduced-title">{page.filter(row=>row.index===index).map(row=>row.title).join('\n')}</div>:<EventTitle title={text} elapsed={elapsed} startsAfterMs={prepared.titleStartsAfterMs[index]} designWidth={prepared.titleWidth}/>;

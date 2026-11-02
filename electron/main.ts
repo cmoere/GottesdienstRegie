@@ -1,3 +1,6 @@
+import {NextPreviewWindow} from './NextPreviewWindow';
+import {getLocalTlsIdentity} from './LocalTlsIdentity';
+import {readShareDescription} from './ScreenShareBroker';
 import {localizeImportWarning} from './importReportText';
 import {installPowerPointOutputRuntime} from './PowerPointOutputRuntime';
 import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Menu, shell, dialog, protocol, net, clipboard, ClipboardItem, nativeImage, nativeTheme, Notification, type MenuItemConstructorOptions } from 'electron';
@@ -314,6 +317,7 @@ app.whenReady().then(async() => {
   autoUpdater.allowPrerelease=initialPreferences.betaUpdates;
   const displayManager=new DisplayManager();
   const publishOutputStatus=(role:OutputRole,state:'ready'|'missing'|'closed')=>{sendToLiveWindow(controlWindow,'outputs:status',{role,state})};
+  const nextPreview=new NextPreviewWindow(path.join(__dirname,'preload.js'),load);
   const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
   stopPresentationOutputs=()=>outputManager.stop();
   ipcMain.handle('spelling:set-language',(event,language:string)=>applySpellCheckerLanguage(event.sender,String(language||'de')));
@@ -350,8 +354,9 @@ app.whenReady().then(async() => {
     'temporary-downloads':path.join(app.getPath('userData'),'temporary-downloads'),
     'web-cache':path.join(app.getPath('sessionData'),'Cache'),
   });
-  const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>sendToLiveWindow(controlWindow,'remote:command',payload),43170,role=>outputManager.captureFrame(role),nativeText);
+  const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>{sendToLiveWindow(controlWindow,'remote:command',payload);const p=payload as any;if(p?.action==='screen-share'&&p.event?.type!=='offer')for(const output of outputManager.getNativeCompositionWindows())if(output.role==='main')output.window.webContents.send('remote:share-event',p.event)},43170,role=>outputManager.captureFrame(role),nativeText,()=>nextPreview.capture());
   await remoteServer.start().catch(()=>null);
+  void getLocalTlsIdentity(path.join(app.getPath('userData'),'remote-tls'),Object.values(os.networkInterfaces()).flatMap(list=>(list??[]).filter(i=>i.family==='IPv4').map(i=>i.address))).then(identity=>remoteServer.enableSecure(identity)).catch(()=>null);
   const onlineMedia=new GitHubStorageProvider('cmoere','GottesdienstRegie','media-library');
   void presentationRepository.initialize();
   void mediaRepository.initialize();
@@ -538,7 +543,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('spotify:resolve',(_event,url:string)=>spotifyOEmbed.resolve(url));
   ipcMain.handle('spotify:open',async(_event,url:string)=>{const normalized=normalizeSpotifyTrackUrl(url);await shell.openExternal(normalized.url);return true});
   ipcMain.handle('spotify:search',async(_event,query:string,offset=0)=>{const token=await spotifyAuth!.accessToken(),url=new URL('https://api.spotify.com/v1/search');url.search=new URLSearchParams({q:String(query??'').trim(),type:'track',limit:'20',offset:String(Math.max(0,Math.floor(offset)))}).toString();const response=await fetch(url,{headers:{authorization:`Bearer ${token}`},signal:AbortSignal.timeout(12000)});if(response.status===429)throw new Error(`SPOTIFY_RATE_LIMIT_${response.headers.get('retry-after')??'1'}`);if(!response.ok)throw new Error(`SPOTIFY_SEARCH_FAILED_${response.status}`);const data=await response.json() as any,tracks=data.tracks??{};return{items:(tracks.items??[]).map((track:any)=>({provider:'spotify',id:String(track.id),title:String(track.name),artists:(track.artists??[]).map((artist:any)=>String(artist.name)),album:String(track.album?.name??''),durationMs:Number(track.duration_ms??0),imageUrl:String(track.album?.images?.[0]?.url??''),externalUrl:String(track.external_urls?.spotify??`https://open.spotify.com/track/${track.id}`),uri:String(track.uri??`spotify:track:${track.id}`)})),nextOffset:tracks.next?Number(offset)+20:undefined,total:Number(tracks.total??0)}});
-  ipcMain.handle('external:open',async(_event,url:string)=>{const unsplashTerms=['https://unsplash.com/de/nutzungsbedingungen','https://unsplash.com/de/datenschutzregelungen','https://unsplash.com/de/plus/lizenz'].includes(url);const allowed=unsplashTerms||/^https:\/\/(github\.com\/cmoere\/GottesdienstRegie|cmoere\.github\.io\/GottesdienstRegie)/i.test(url)||new RegExp(`^http:\\/\\/(localhost|127\\.0\\.0\\.1|${remoteServer.get().address.replace(/\./g,'\\.')})(?::\\d+)?\\/`,'i').test(url);if(!allowed)throw new Error('EXTERNAL_URL_NOT_ALLOWED');await shell.openExternal(url);return true});
+  ipcMain.handle('external:open',async(_event,url:string)=>{const unsplashTerms=['https://unsplash.com/de/nutzungsbedingungen','https://unsplash.com/de/datenschutzregelungen','https://unsplash.com/de/plus/lizenz'].includes(url);const allowed=unsplashTerms||/^https:\/\/(github\.com\/cmoere\/GottesdienstRegie|cmoere\.github\.io\/GottesdienstRegie)/i.test(url)||new RegExp(`^https?:\\/\\/(localhost|127\\.0\\.0\\.1|${remoteServer.get().address.replace(/\./g,'\\.')})(?::\\d+)?\\/`,'i').test(url);if(!allowed)throw new Error('EXTERNAL_URL_NOT_ALLOWED');await shell.openExternal(url);return true});
   ipcMain.handle('translation-packs:list',()=>translationPacks.list());
   ipcMain.handle('platform:appearance',()=>platformAppearance(process.platform,os.release()));
   ipcMain.handle('translation-packs:download',(_event,key:string)=>translationPacks.download(key));
@@ -575,12 +580,19 @@ app.whenReady().then(async() => {
   ipcMain.handle('history-window:open',()=>openHistoryWindow());
   ipcMain.handle('history-window:close',()=>{historyWindow?.close();return true});
   const requireRemoteControl=(event:Electron.IpcMainInvokeEvent)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)throw Error('Remote-Einstellungen sind nur in der Regie verfügbar.')};
+  let shareOutputReadyId:number|null=null;
+  ipcMain.handle('remote:share-output-ready',event=>{const main=outputManager.getNativeCompositionWindows().find(e=>e.role==='main')?.window;if(!main||event.sender.id!==main.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;shareOutputReadyId=event.sender.id;return true});
+  ipcMain.handle('remote:share-control',(event,action:string,id:string,value:unknown)=>{requireRemoteControl(event);if(typeof id!=='string')return false;switch(action){case 'answer':return remoteServer.sharing.answer(id,value);case 'ready':return remoteServer.sharing.ready(id);case 'take':return outputManager.getNativeCompositionWindows().some(e=>e.role==='main'&&e.window.webContents.id===shareOutputReadyId)&&remoteServer.sharing.take(id);case 'stop':return remoteServer.sharing.stop(id);default:return false}});
+  ipcMain.handle('remote:share-relay',(event,payload:any)=>{const active=remoteServer.sharing.current();if(!active?.onMain||payload?.id!==active.id)return false;const main=outputManager.getNativeCompositionWindows().find(e=>e.role==='main')?.window;if(!main||main.isDestroyed())return false;if(controlWindow&&!controlWindow.isDestroyed()&&event.sender.id===controlWindow.webContents.id){const description=readShareDescription(payload.description,'offer');if(!description)return false;main.webContents.send('remote:share-relay',{id:active.id,description});return true}if(event.sender.id===main.webContents.id){const description=readShareDescription(payload.description,'answer');if(!description)return false;sendToLiveWindow(controlWindow,'remote:share-relay',{id:active.id,description});return true}return false});
+  ipcMain.handle('remote:next-thumbnail',(event,hash:string,slideId:number)=>{const value=nextPreview.get(event.sender.id)?.packet as any;if(!value||value.sourceHash!==hash||Number(value.slide?.sourceSlideId)!==slideId)return null;return originalRuntime.previewThumbnail(hash,slideId)});
+  ipcMain.handle('remote:next-get',event=>nextPreview.get(event.sender.id));
+  ipcMain.handle('remote:next-ready',(event,revision:number)=>nextPreview.ready(event.sender.id,revision));
   ipcMain.handle('remote:get',(event)=>{requireRemoteControl(event);return remoteServer.get()});
   ipcMain.handle('remote:save-monitor',(event,monitor:any)=>{requireRemoteControl(event);return remoteServer.saveMonitor(monitor)});
   ipcMain.handle('remote:remove-monitor',(event,id:string)=>{requireRemoteControl(event);return remoteServer.removeMonitor(id)});
   ipcMain.handle('remote:create-session',(event,input:any)=>{requireRemoteControl(event);return remoteServer.createSession(input)});
   ipcMain.handle('remote:revoke-session',(event,id:string)=>{requireRemoteControl(event);return remoteServer.revokeSession(id)});
-  ipcMain.handle('remote:update-live',(event,state:any)=>{requireRemoteControl(event);remoteServer.updateLive(state);return true});
+  ipcMain.handle('remote:update-live',(event,state:any)=>{requireRemoteControl(event);remoteServer.updateLive(state);nextPreview.update(state?.next?{slide:state.next,sourceHash:state.nextSourceHash}:null);return true});
   ipcMain.handle('updates:current-version',()=>app.getVersion());
   ipcMain.handle('updates:status',()=>lastUpdateStatus);
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});
@@ -637,7 +649,7 @@ app.whenReady().then(async() => {
   };
   createControlWindow(initialPreferences);
   let cleanQuit=false;
-  app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();if(controlWindow&&!controlCloseInProgress){controlWindow.close();return;}if(controlWindow)return;remoteServer.stop();void stopPresentationOutputs().finally(()=>{cleanQuit=true;app.quit()})});
+  app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();if(controlWindow&&!controlCloseInProgress){controlWindow.close();return;}if(controlWindow)return;remoteServer.stop();nextPreview.stop();void stopPresentationOutputs().finally(()=>{cleanQuit=true;app.quit()})});
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createControlWindow(appPreferences.get()); });
 });
 

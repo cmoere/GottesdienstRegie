@@ -39,7 +39,9 @@ export class AnnouncementService {
     const values=[raw.textBanner,raw.textLaufbanner,raw.textMeldung,raw.beschreibung,raw.titel],cached=this.bannerTextCache.get(raw);
     if(cached&&values.every((value,index)=>value===cached.values[index]))return cached.text;
     let text:string|undefined;
-    for(const value of values){if(typeof value!=='string')continue;const candidate=announcementRunsText(announcementRuns(value)).replace(/\s+/g,' ').trim();if(candidate){text=candidate;break}}
+    const plain=(value:unknown)=>typeof value==='string'?announcementRunsText(announcementRuns(value)).replace(/\s+/g,' ').trim():'';
+    for(const value of values.slice(0,2)){const candidate=plain(value);if(candidate){text=candidate;break}}
+    if(!text){const title=plain(raw.titel),body=plain(raw.textMeldung)||plain(raw.beschreibung);text=title&&body&&title!==body?title.replace(/[:：]\s*$/u,'')+': '+body:title||body||undefined;}
     this.bannerTextCache.set(raw,{values,text});return text;
   }
   private isPublicAndCurrent(raw:RawAnnouncement,now:Date):boolean{

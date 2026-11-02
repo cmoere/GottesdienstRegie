@@ -1,3 +1,4 @@
+import {v96HelpGerman,v96HelpEnglish} from './v96';
 import {v95HelpGerman,v95HelpEnglish} from './v95';
 import { helpEnglish } from './english';
 import {v91HelpGerman,v91HelpEnglish} from './v91';
@@ -73,6 +74,7 @@ for(const [locale,overrides]of Object.entries({de:v95HelpGerman,en:v95HelpEnglis
 // Swiss Standard German: avoids claiming an automatically generated dialect translation.
 packs.gsw = Object.fromEntries(Object.entries(packs.de).map(([id,a])=>[id,{...a,title:a.title.replaceAll('ß','ss'),body:a.body.replaceAll('ß','ss')}]));
 const catalogs = new Map<string, {topics:HelpArticle[];ui:HelpUI}>();
+for(const [locale,overrides]of Object.entries({de:v96HelpGerman,en:v96HelpEnglish}))for(const [id,body]of Object.entries(overrides))if(packs[locale][id])packs[locale][id]={...packs[locale][id],body};
 export function getHelpCatalog(language: string) {
   const locale = Object.hasOwn(packs,language) ? language : 'en';
   let catalog = catalogs.get(locale);

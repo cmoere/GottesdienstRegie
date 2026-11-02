@@ -2,7 +2,7 @@ import type {NewsEntry} from '../../shared/externalLoop';
 import {wrapEventText} from '../eventPagination';
 import {prepareEventScrollPlan} from '../eventScroll';
 export type NewsLine={kind:'title'|'body';text:string;height:number};
-export function prepareNewsPresentation(entries:NewsEntry[],durationSeconds:number){
+export function prepareNewsPresentation(entries:NewsEntry[],durationSeconds:number,fixedInterval=false){
  let total=0;
  const stories=entries.map(entry=>{
   const width=entry.imageDataUrl?910:1770;
@@ -12,7 +12,7 @@ export function prepareNewsPresentation(entries:NewsEntry[],durationSeconds:numb
   for(const line of lines){if(height+line.height>760&&page.length){pages.push(page);page=[];height=0}page.push(line);height+=line.height}if(page.length)pages.push(page);
   const plan=prepareEventScrollPlan({contentHeight:lines.reduce((sum,line)=>sum+line.height,0)+28,viewportHeight:760,roundTrip:true});
   const readingMs=(entry.title+' '+(entry.description??'')).split(/\s+/).filter(Boolean).length*350+4000;
-  const durationMs=Math.max(20000,Math.min(86400,Math.max(1,Number.isFinite(durationSeconds)?durationSeconds:20))*1000,readingMs,plan.minDurationMs,pages.length*10000);
+  const durationMs=fixedInterval?Math.max(1,Math.min(86400,Number.isFinite(durationSeconds)?durationSeconds:20))*1000:Math.max(20000,Math.min(86400,Math.max(1,Number.isFinite(durationSeconds)?durationSeconds:20))*1000,readingMs,plan.minDurationMs,pages.length*10000);
   const story={entry,lines,pages,plan,startMs:total,durationMs};total+=durationMs;return story;
  });
  return{stories,minDurationMs:total};

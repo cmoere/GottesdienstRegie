@@ -43,7 +43,7 @@ export function prepareAnnouncementPages(input:{title:string;body:string;qrCode:
  const background=reference?'#ffffff':design==='green'?'#699f3e':design==='silver'?'#b6bec3':light?'#f4f7f8':'#18232f',color=reference?'#000000':light?'#18232f':'#ffffff';
  const qrSize=Number.isFinite(input.qrSize)?Math.max(120,Math.min(480,Math.round(input.qrSize!))):reference?160:280;
  // Leave the system's bottom-right test watermark outside the QR quiet zone.
- const qrElement={x:1920-(reference?24:AUTO_SLIDE_EDGE)-qrSize,y:reference?1080-84-qrSize:(1080-qrSize)/2,width:qrSize,height:qrSize};
+ const qrElement={x:1920-(reference?24:AUTO_SLIDE_EDGE)-qrSize,y:1080-84-qrSize,width:qrSize,height:qrSize};
  const edge=reference?60:AUTO_SLIDE_EDGE,qrBelow=reference&&qrSize<=280;
  const x=split?610:edge,bodyWidth=(input.qrCode&&!qrBelow?qrElement.x-32:1920-edge)-x;
  const titleWidth=reference?1800:split?528:AUTO_SLIDE_WIDTH;

@@ -1,7 +1,9 @@
+import v96Templates from './v96Templates.json';
 import screenReportTemplates from './screenReportTemplates.json';
 import importWarningTemplates from './importWarningTemplates.json';
 /** App-owned native dialog templates; OS-owned dialog chrome is not rewritten. */
 export const nativeBaseTemplates={
+  ...v96Templates.native,
   ...importWarningTemplates,
   ...screenReportTemplates,
   remoteCurrent:"Aktuell",

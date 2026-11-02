@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.96.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.96.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.96.0</guid><pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate><description>Verbesserte Vorschauen und verbundene Geräte
+v96 verbindet echte Folienvorschauen mit erweiterten Live-Markierungen und einer kontrollierten lokalen Bildschirmfreigabe. Nachrichtenwechsel, Spracheinstellungen und Meldungsdetails werden gezielter bedienbar.
+
+Bildschirmfreigabe vom verbundenen Gerät
+Eine ausdrücklich berechtigte Gerätesitzung kann über lokales HTTPS ein Fenster oder einen Bildschirm als Video übertragen. Die Regie prüft die Vorschau und übernimmt sie bewusst auf MAIN. Stoppen, Widerruf und OFF AIR beenden die Freigabe.
+
+Zusätzliche Zeichenwerkzeuge
+Linie, Pfeil, Rechteck und Ellipse ergänzen Freihand, Farbe und Linienstärke. Markierungen bleiben an die aktuelle Live-Folie gebunden.
+
+Folienbilder statt Textvorschau
+Folienübersicht und nächste Folie zeigen die tatsächliche Gestaltung. Kleine Ansichtseinstellungen regeln Kachelgröße, Titel und nächste Vorschau. Verbundene Monitore erhalten ebenfalls eine Bildvorschau.
+
+Nachrichten gezielt weiterschalten
+Standardmäßig erscheint bei jedem neuen Live-Aufruf die nächste Nachricht. Alternativ gilt ein einstellbares Sekundenintervall. Vorschauen und Datenaktualisierungen schalten nicht weiter.
+
+Sprache und Vorlesen übersichtlicher
+Stimmen tragen (W) oder (M). Die aktive deutsche Regionalvariante erscheint im Spracheintrag. Eine kleine Vorschau zeigt die Anordnung von Songübersetzungen; eindeutige häufige Tippfehler werden nur im Vorlesetext korrigiert.
+
+Wetter und Meldungen verfeinert
+Dezente wetterabhängige Effekte berücksichtigen reduzierte Bewegung. Meldungs-QR-Codes stehen unten rechts. Der Laufband-Fallback verbindet Titel und Beschreibung mit einem Doppelpunkt.
+
+Lokale Bildschirmfreigabe
+Bildschirmfreigabe benötigt einen unterstützten Desktop-Browser, eine bestätigte lokale HTTPS-Verbindung und ein erreichbares lokales Netzwerk. Sie überträgt keinen Systemton. Das Zertifikat wird nicht automatisch im System-Vertrauensspeicher installiert.
+
+Originalgetreue PowerPoint-Wiedergabe
+Die originalgetreue Wiedergabe benötigt Windows und installiertes Microsoft PowerPoint. Importierte bearbeitbare Folien bleiben eine separate Darstellung.</description></item>
 <item><title>GottesdienstRegie 0.95.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.95.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.95.0</guid><pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate><description>Einheitliche Bedienung und vollständige deutsche Regionalvarianten
 GottesdienstRegie erhält eine durchgängige, an klarer Hierarchie und gruppierten Bedienelementen orientierte Oberfläche. Alle 31 vorgesehenen deutschen Regionalvarianten umfassen Bedienung, native Dialoge, Hilfe und Versionshinweise. Besucherfolien und gespeicherte Inhalte behalten ihre Gestaltung und Sprache.
 

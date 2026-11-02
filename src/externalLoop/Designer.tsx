@@ -22,6 +22,8 @@ export function ExternalLoopDesigner({item,canEdit=true}:{item:ServiceItem;canEd
  return <section className="external-loop-designer">
   {settings.kind==='weather'?<WeatherDesigner settings={settings} canEdit={canEdit} onChange={change}/>:settings.kind==='news'?<fieldset disabled={!canEdit}><legend>{tx("Nachrichtenquellen")}</legend>
    <label><input type="checkbox" checked={settings.sources.includes('westfalen-blatt')} onChange={()=>change({newsSources:settings.sources.length?'':'westfalen-blatt'})}/>Westfalen-Blatt · Bielefeld</label>
+   <label>{tx("Nachrichtenwechsel")}<select value={settings.newsRotation??'per-take'} onChange={event=>change({newsRotation:event.target.value})}><option value="per-take">{tx("Bei jedem Folienaufruf eine neue Nachricht")}</option><option value="interval">{tx("Nach Zeitintervall wechseln")}</option></select></label>
+   {settings.newsRotation==='interval'&&<label>{tx("Wechselintervall (Sekunden)")}<input type="number" min="1" max="86400" value={settings.newsIntervalSeconds??20} onChange={event=>change({newsIntervalSeconds:Math.max(1,Math.min(86400,Number(event.target.value)||1))})}/></label>}
    <label>{tx("Anzahl Nachrichten")}<input type="number" min="1" max="10" value={settings.limit} onChange={event=>change({newsLimit:Math.max(1,Math.min(10,Number(event.target.value)||1))})}/></label>
   </fieldset>:<fieldset disabled={!canEdit}><legend>{tx("Fußball")}</legend>
    <label>{tx("Liga")}<select value={settings.league} onChange={event=>change({footballLeague:event.target.value,footballTeamId:0})}><option value="bl1">1. Bundesliga</option><option value="bl2">2. Bundesliga</option><option value="bl3">3. Liga</option></select></label>
@@ -30,7 +32,7 @@ export function ExternalLoopDesigner({item,canEdit=true}:{item:ServiceItem;canEd
    {settings.teamId!==null&&!teams.some(team=>team.id===settings.teamId)&&<p>{tx("Der gewählte Verein ist im aktuellen Datenstand nicht verfügbar.")}</p>}
   </fieldset>}
   <label>{tx("Anzeigedauer in Sekunden")}<input type="number" min="1" max="86400" disabled={!canEdit} value={settings.durationSeconds} onChange={event=>change({durationSeconds:Math.max(1,Math.min(86400,Number(event.target.value)||1))})}/></label>
-  <p>{tx("Lesbare Mindestdauer:")}{" "}{Math.ceil(minimum/1000)} {" "}{tx("Sekunden.")}{" "}{settings.kind==='news'?tx("Die Anzeigedauer gilt je Nachricht, mindestens 20 Sekunden. Jede Nachricht erscheint einzeln; längere Texte erhalten mehr Zeit."):tx("Bei Platzmangel wird automatisch gescrollt; die Ausgabe dauert mindestens so lange.")}</p>
+  <p>{tx("Lesbare Mindestdauer:")}{" "}{Math.ceil(minimum/1000)} {" "}{tx("Sekunden.")}{" "}{settings.kind==='news'?settings.newsRotation==='interval'?tx("Das eingestellte Wechselintervall gilt genau je Nachricht."):tx("Bei jedem neuen Live-Aufruf erscheint die nächste Nachricht. Vorschau und Aktualisierungen schalten nicht weiter."):tx("Bei Platzmangel wird automatisch gescrollt; die Ausgabe dauert mindestens so lange.")}</p>
   {snapshot?<p>{tx("Datenstand:")}{" "}{new Date(snapshot.fetchedAt).toLocaleString('de-DE')}{reply?.status==='stale'?tx("· Offline / letzter gültiger Stand"):''}</p>:<p>{tx("Keine gültigen Daten verfügbar. Das Element wird bei der Ausgabe übersprungen.")}</p>}
  </section>;
 }

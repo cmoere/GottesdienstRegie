@@ -1,3 +1,4 @@
+import {correctGermanAnnouncementText} from '../../shared/germanSpeechCorrections';
 const small=['null','eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf','dreizehn','vierzehn','fünfzehn','sechzehn','siebzehn','achtzehn','neunzehn'];
 const tens=['','','zwanzig','dreißig','vierzig','fünfzig','sechzig','siebzig','achtzig','neunzig'];
 const months=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
@@ -12,7 +13,7 @@ function date(d:number,m:number,y:number|undefined,prefix:string){
 }
 /** Native speech-only preparation: source records and visible text are never rewritten. */
 export function prepareGermanSpeech(text:string):string{
- let result=text.replace(/(?<=[\d.])\s*[–—]\s*(?=\d)/g,' bis ');
+ let result=correctGermanAnnouncementText(text).replace(/(?<=[\d.])\s*[–—]\s*(?=\d)/g,' bis ');
  result=result.replace(/(?<![\d.])\b(\d{1,2})\.(\d{1,2})\.(\d{4})(?!\d|\.\d)/g,(full,d,m,y,offset)=>date(+d,+m,+y,result.slice(Math.max(0,offset-20),offset))??full);
  result=result.replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g,(full,y,m,d,offset)=>date(+d,+m,+y,result.slice(Math.max(0,offset-20),offset))??full);
  result=result.replace(/(?<![\d.])\b(\d{1,2})\.(\d{1,2})\.(?!\d)/g,(full,d,m,offset)=>date(+d,+m,undefined,result.slice(Math.max(0,offset-20),offset))??full);

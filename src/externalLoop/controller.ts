@@ -3,7 +3,7 @@ import type {ExternalReply,ExternalRequest,ExternalSnapshot} from '../../shared/
 import type {ServiceItem,Slide} from '../store';
 import {externalRequestKey} from '../../shared/externalLoopRequest';
 import {readExternalSnapshot} from '../../shared/externalLoopValidation';
-import {externalHasContent,externalLoopMinimumDuration,externalSettingsForItem,hydrateExternalLoopData,requestForExternalItem} from './model';
+import {externalHasContent,externalLoopMinimumDuration,externalSettingsForItem,hydrateExternalLoopData,requestForExternalItem,visibleExternalPayload} from './model';
 const unavailable=():ExternalReply=>({snapshot:null,status:'unavailable'});
 export class ExternalLoopController{
  private readonly prepared=new Map<string,ExternalReply>();
@@ -12,6 +12,7 @@ export class ExternalLoopController{
  private disposed=false;
  private version=0;
  private takeKey='';
+ private newsCursor=new Map<string,string>();
  private output:Slide|null=null;
  constructor(private readonly read:(request:ExternalRequest)=>Promise<ExternalReply>,private readonly now:()=>number=Date.now){}
  async prepare(request:ExternalRequest):Promise<ExternalReply>{
@@ -31,8 +32,13 @@ export class ExternalLoopController{
  outputForTake(item:ServiceItem,slide:Slide,revision:number,now:number):Slide|null{
   const key=`${item.id}:${slide.id}:${revision}`;if(key===this.takeKey)return this.output?structuredClone(this.output):null;
   this.takeKey=key;this.output=null;
-  const request=requestForExternalItem(item),settings=externalSettingsForItem(item),snapshot=request?this.freeze(request,now):null;
+  const request=requestForExternalItem(item),settings=externalSettingsForItem(item);let snapshot=request?this.freeze(request,now):null;
   if(!snapshot||!externalHasContent(snapshot,settings))return null;
+  if(snapshot.payload.kind==='news'&&settings.kind==='news'&&settings.newsRotation!=='interval'){
+   const payload=visibleExternalPayload(snapshot,settings);if(payload.kind!=='news'||!payload.entries.length)return null;
+   const previous=payload.entries.findIndex(entry=>entry.id===this.newsCursor.get(item.id)),entry=payload.entries[(previous+1)%payload.entries.length];
+   snapshot={...snapshot,payload:{...payload,entries:[entry]}};this.newsCursor.set(item.id,entry.id);
+  }
   const output=hydrateExternalLoopData(slide,snapshot,now,settings);
   output.timing={...output.timing,durationSeconds:Math.ceil(externalLoopMinimumDuration(snapshot,settings)/1000)};
   this.output=structuredClone(output);return output;
@@ -43,7 +49,7 @@ export class ExternalLoopController{
  }
  subscribe=(listener:()=>void)=>{this.listeners.add(listener);return()=>this.listeners.delete(listener)};
  getVersion=()=>this.version;
- dispose(){this.disposed=true;this.prepared.clear();this.generations.clear();this.listeners.clear();this.output=null;this.takeKey=''}
+ dispose(){this.disposed=true;this.prepared.clear();this.newsCursor.clear();this.generations.clear();this.listeners.clear();this.output=null;this.takeKey=''}
 }
 export function startExternalLoopDemand(controller:ExternalLoopController,items:ServiceItem[]):()=>void{
  const requests=new Map<string,ExternalRequest>();for(const item of items){if(item.enabled===false||item.disabled===true)continue;const request=requestForExternalItem(item);if(request)requests.set(externalRequestKey(request),request)}

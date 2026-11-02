@@ -7,7 +7,7 @@ const { createHash } = require('node:crypto');
 const dictionaryNames = new Set(['en','nl','da','no','sv','fi','fr','it','es','uk','ru','tr','ar','pl','ptBR','gsw']);
 const technicalAttributes = new Set(['className','id','key','ref','type','name','value','src','href','role','style','target','rel','data-testid']);
 const visibleAttributes = new Set(['title','placeholder','aria-label','alt','label']);
-const assembledHelpDataModules=new Set(['src/help/base.ts','src/help/english.ts','src/help/legacyGerman.ts','src/help/localesWest.ts','src/help/enhancementsEnglish.ts','src/help/enhancementsGerman.ts','src/help/v91.ts','src/help/v92.ts','src/help/v95.ts']);
+const assembledHelpDataModules=new Set(['src/help/base.ts','src/help/english.ts','src/help/legacyGerman.ts','src/help/localesWest.ts','src/help/enhancementsEnglish.ts','src/help/enhancementsGerman.ts','src/help/v91.ts','src/help/v92.ts','src/help/v95.ts','src/help/v96.ts']);
 
 function applyReviewedTechnicalFile(rows,filename,source,reviews){
   const review=reviews[filename];
@@ -170,6 +170,8 @@ function generateInventory(root) {
   const operatorSourceTemplates=JSON.parse(fs.readFileSync(path.join(root,'shared/regional/operatorSourceTemplates.json'),'utf8'));
   for(const [key,text]of Object.entries(operatorSourceTemplates))entries.push({key:`ui.${key}`,text,
     source:'shared/regional/operatorSourceTemplates.json',context:'operator-source',status:'app-owned'});
+  const v96Templates=JSON.parse(fs.readFileSync(path.join(root,'shared/regional/v96Templates.json'),'utf8'));
+  for(const [key,text]of Object.entries(v96Templates.ui))entries.push({key:`ui.${key}`,text,source:'shared/regional/v96Templates.json',context:'regional-controls',status:'app-owned'});
   const {nativeBaseTemplates}=loadLocalDataModule(root,'shared/regional/nativeBase.ts');
   const {regionalControlBaseTemplates}=loadLocalDataModule(root,'shared/regional/interfaceBaseExtras.ts');
   const {announcementControlGermanTemplates}=loadLocalDataModule(root,'shared/regional/announcementControlTemplates.ts');

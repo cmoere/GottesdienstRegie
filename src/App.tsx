@@ -1,3 +1,7 @@
+import {NextPreviewOutput} from './NextPreviewOutput';
+import {ScreenSharingController,ScreenSharingOutput} from './ScreenSharing';
+import {languageOptionName} from './regional/languageOptionName';
+import {SongTranslationPreview} from './SongTranslationPreview';
 import {resolveRegionalText} from './regional/resources';
 import {settingsExtraTemplateKeys} from "../shared/regional/settingsExtraTemplates";
 import {useUpdateSettingsRequest} from './useUpdateSettingsRequest';
@@ -490,7 +494,7 @@ function Login({
                   }}
                 >
                   <Flag country={option.flag} />
-                  <span>{option.nativeName}</span>
+                  <span>{languageOptionName(option.value,option.nativeName,usePreferences.getState())}</span>
                 </button>
               ))}
             </div>
@@ -5254,7 +5258,7 @@ export function SettingsModal({
                       >
                         {languageOptions.map((option) => (
                           <option value={option.value} key={option.value}>
-                            {option.nativeName}
+                            {languageOptionName(option.value,option.nativeName,usePreferences.getState())}
                           </option>
                         ))}
                       </select>
@@ -5816,7 +5820,7 @@ export function SettingsModal({
               {tab === "songTranslations" && <section className="settings-group">
                 <h3>{tx("SONG · ÜBERSETZUNGEN")}</h3>
                 <p>{tx("Füge im Song-Editor unter INHALT eine Übersetzung zu den jeweiligen Lyrics hinzu. Der Originaltext bleibt unverändert; diese Einstellung bestimmt die Darstellung auf diesem Gerät.")}</p>
-                <label>{tx("Übersetzungen anzeigen")}<select value={prefs.songTranslationMode} onChange={event=>prefs.setSongTranslationMode(event.target.value as SongTranslationMode)}>{translationModes.map(mode=><option key={mode.value} value={mode.value}>{tx(mode.label)}</option>)}</select></label>
+                <div className="song-translation-setting"><label>{tx("Übersetzungen anzeigen")}<select value={prefs.songTranslationMode} onChange={event=>prefs.setSongTranslationMode(event.target.value as SongTranslationMode)}>{translationModes.map(mode=><option key={mode.value} value={mode.value}>{tx(mode.label)}</option>)}</select></label><SongTranslationPreview mode={prefs.songTranslationMode}/></div>
                 <p>{tx("Standard ist die Übersetzung unter der Strophe in Klammern. Ohne Übersetzung erscheint immer der Originaltext, auch bei „Nur Übersetzung“. Bei zeilenweiser Darstellung sollten Original und Übersetzung gleich viele Zeilen haben. Prüfe vor ON AIR, ob beide Texte in die Folienfläche passen.")}</p>
                 <p>{tx("Eine Änderung wird für eine bereits live geschaltete Folie erst beim erneuten Senden wirksam. Die STAGE-Akkordansicht bleibt beim Originaltext.")}</p>
                 <TranslationPackSettings />
@@ -9139,7 +9143,7 @@ function AppShell({
       <AnnouncementBannerController quick={previewQuick}/>
       <AutomaticAnnouncements quick={previewQuick}/>
       <WeatherWarningsController quick={previewQuick}/>
-      <LiveAnnotationsController quickActive={Boolean(previewQuick)}/><AdvertisingController/>
+      <ScreenSharingController/><LiveAnnotationsController quickActive={Boolean(previewQuick)}/><AdvertisingController/>
       {screenTest.dialog}
       <ServiceOnAirReminder/>
       <div className="menubar">
@@ -9580,6 +9584,7 @@ function Output() {
       )}
       <QuickOverlay quick={quick} onScreenTestResult={role==='main'?reportScreenTest:undefined}/>
       {postProgramRoomNotice&&!quickOverridesRoomNotice(quick)&&<PostProgramRoomNoticeView snapshot={postProgramRoomNotice}/>}
+      {role==='main'&&<ScreenSharingOutput hidden={Boolean(quick)}/> }
       </OutputComposition>
       <span hidden data-output-mode={outputAppMode.mode} data-output-on-air={String(outputAppMode.onAir)}/>
       <span hidden data-output-banner-revision={outputBanner?.revision}/>
@@ -9822,6 +9827,7 @@ export function App() {
       clearInterval(timer);
     };
   }, [signedIn]);
+  if(location.hash.startsWith('#output-next-preview'))return <NextPreviewOutput/>;
   if (output) return <Output />;
   if (mediaBrowser) return <MediaBrowser />;
   if (historyWindow) return <ChangeHistoryWindow />;

@@ -1,3 +1,4 @@
+import {ScreenSharingMirror} from './ScreenSharing';
 import type { ReactNode } from 'react';
 import {TestModeWatermark} from './TestModeWatermark';
 import {OutputComposition} from './OutputComposition';
@@ -14,7 +15,7 @@ export function MainLivePreview({ title, children,hideCountdown=false,suppressWe
   const {t}=useI18n();
   return <section className="live-slide-panel">
     <h2>{t('livePreviewHeading')}</h2>
-    <div style={{position:'relative',containerType:'size'}}><OutputComposition weatherWarnings={suppressWeatherWarnings?null:warnings} hideCountdown={hideCountdown} serviceCountdownAtMs={serviceCountdownAtMs} banner={banner} testOverlay={<TestModeWatermark role="main"/>}>{children}</OutputComposition></div>
+    <div style={{position:'relative',containerType:'size'}}><OutputComposition weatherWarnings={suppressWeatherWarnings?null:warnings} hideCountdown={hideCountdown} serviceCountdownAtMs={serviceCountdownAtMs} banner={banner} testOverlay={<TestModeWatermark role="main"/>}>{children}<ScreenSharingMirror hidden={hideCountdown}/></OutputComposition></div>
     <p>{title}</p>
     <PowerPointPlaybackStatus/>
   </section>;
