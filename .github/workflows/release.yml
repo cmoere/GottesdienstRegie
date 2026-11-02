@@ -98,7 +98,8 @@ jobs:
   macos:
     needs: prepare
     if: ${{ github.event.inputs.windows_only != 'true' }}
-    runs-on: macos-latest
+    # Avoid the currently capacity-constrained ARM64 host pool; both app architectures remain built.
+    runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

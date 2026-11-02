@@ -52,3 +52,9 @@ Pending final candidate tests and native regression. No v96 release has been pub
 - Root independently reviewed the code changes and trust/permission boundaries. Coding and review were not delegated. The only delegated changes were authored translations.
 
 Normal publication remains pending until the all-platform CI build and public updater/package verification complete. The user-selected existing worktree is retained.
+
+## Hosted runner recovery
+
+The first cross-platform run `41511955029` passed the full unit verification, Windows build and Linux build. GitHub never assigned the macOS ARM64 job a runner and cancelled it with a hosted-runner acquisition failure plus ARM64 capacity notices (`work/v96-macos-cancelled.json`). No application test failed. The existing Windows artifact was downloaded by its exact run/commit identity and inspected without execution: 15 tested native modules, all31 native/interface packs, all62 regional renderer/documentation chunks, selfsigned5.5.0, all nine help PNGs and normal update-provider configuration matched (`work/v96-ci-package-inspection.json`).
+
+The macOS job now uses the officially supported standard `macos-15-intel` runner (https://docs.github.com/en/actions/reference/runners/github-hosted-runners). The command still builds both x64 and arm64. All-platform success and the eleven-asset normal-release guard are unchanged. Only the workflow host selection and this ledger changed; the application code remains the tested v96 candidate. A new full workflow dispatch is required because the push trigger intentionally watches package.json.
