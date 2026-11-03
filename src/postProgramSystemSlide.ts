@@ -12,6 +12,9 @@ export function ensurePostProgramSystemSlide(items:ServiceItem[]):ServiceItem[]{
  const system:ServiceItem={id,type:'infoCard',itemCategory:'loop',placementPolicy:'loopOnly',title:'Nächste Veranstaltung / Raum verlassen',section:'NACHPROGRAMM',sectionId:'post',order:0,enabled:true,plannedDuration:60000,metadata:{automaticRoomNotice:true},autoAdvance:true,repeat:true,timing:{mode:'slide-duration',slideDurationSeconds:60,autoAdvance:true,repeat:true,shuffle:false,mediaDurationSeconds:0,totalDurationSeconds:60},notes:'',stageDirection:'',createdAt:stamp,updatedAt:stamp,slides:[{id:id+'-slide',itemId:id,order:0,enabled:true,title:'Automatischer Raumhinweis',body:'',background:'#000000',elements:[],transition:'fade',transitionDuration:500,notes:'',timing:{durationSeconds:60}}]};
  const rest=items.filter(item=>!isPostProgramSystemItem(item));
  const index=rest.findIndex(item=>item.sectionId==='post');
- rest.splice(index<0?rest.length:index,0,system);
- return rest.map((item,order)=>({...item,order:item===system?-1:order}));
+ const previous=items.find(item=>item.id===id);
+ system.order=-1;
+ const canonical=previous&&JSON.stringify(previous)===JSON.stringify(system)?previous:system;
+ rest.splice(index<0?rest.length:index,0,canonical);
+ return rest.map((item,order)=>{const nextOrder=item===canonical?-1:order;return item.order===nextOrder?item:{...item,order:nextOrder}});
 }

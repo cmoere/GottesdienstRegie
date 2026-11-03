@@ -11,7 +11,7 @@ import {buildAnnouncementSlide} from './announcementLive';
 import {announcementSettings} from './announcementSettings';
 import {AnnouncementRichText} from './AnnouncementRichTextRenderer';
 import {AnnouncementScrollingText} from './AnnouncementScrollingText';
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { memo, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import {CountdownView} from './CountdownView';
 import {remainingCountdownMs} from './countdownClock';
 import {AppClock} from './community/AppClock';
@@ -673,7 +673,7 @@ function NowPlayingLoopElement({
   );
 }
 
-export function SlideRenderer({
+export const SlideRenderer=memo(function SlideRenderer({
   slide,
   mode = "preview",
 }: {
@@ -733,4 +733,4 @@ export function SlideRenderer({
       )}
     </div>
   );
-}
+});

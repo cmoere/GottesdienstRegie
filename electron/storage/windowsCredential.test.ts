@@ -1,0 +1,7 @@
+import {afterEach,beforeEach,expect,it,vi} from 'vitest';
+const execFile=vi.hoisted(()=>vi.fn());vi.mock('node:child_process',()=>({execFile,default:{execFile}}));
+import {readWindowsGitHubCredential} from './windowsCredential';
+beforeEach(()=>vi.stubEnv('SystemRoot','C:\\Windows'));
+afterEach(()=>{vi.clearAllMocks();vi.unstubAllEnvs()});
+it('reads only existing GitHub credential targets in a hidden bounded Windows helper',async()=>{execFile.mockImplementation((_file,_args,_options,done)=>done(null,Buffer.from('test-token','utf16le').toString('base64'),'') );expect(await readWindowsGitHubCredential('team','win32')).toBe('test-token');const [file,args,options]=execFile.mock.calls[0],script=Buffer.from(args.at(-1),'base64').toString('utf16le');expect(file).toMatch(/powershell\.exe$/i);expect(options).toMatchObject({windowsHide:true,timeout:5000,maxBuffer:65536});expect(script).toContain('git:https://github.com');expect(script).toContain('git:https://team@github.com');expect(script).not.toContain('CredWrite');expect(script).toContain('CredFree');});
+it('does not expose process errors or malformed replies as a credential',async()=>{execFile.mockImplementation((_file,_args,_options,done)=>done(new Error('helper failed with private output'),'private','private'));expect(await readWindowsGitHubCredential('team','win32')).toBeNull();execFile.mockImplementation((_file,_args,_options,done)=>done(null,'not valid base64!',''));expect(await readWindowsGitHubCredential('team','win32')).toBeNull();});

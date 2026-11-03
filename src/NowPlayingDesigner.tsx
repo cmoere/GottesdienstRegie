@@ -49,6 +49,7 @@ export function NowPlayingDesigner({
       seconds = Math.max(1, next.durationSeconds);
     state.updateItem(item.id, {
       metadata,
+      slides:item.slides.map(slide=>({...slide,elements:slide.elements.map(element=>element.type==='loop'?{...element,properties:{...element.properties,...nowPlayingSettingsPatch(next)}}:element)})),
       plannedDuration: seconds * 1000,
       timing: {
         ...item.timing,
@@ -56,13 +57,6 @@ export function NowPlayingDesigner({
         totalDurationSeconds: seconds,
       },
     });
-    const element = item.slides[0]?.elements.find(
-      (entry) => entry.type === "loop",
-    );
-    if (element)
-      state.updateElement(element.id, {
-        properties: { ...element.properties, ...nowPlayingSettingsPatch(next) },
-      });
   };
   return (
     <section className="now-playing-designer" aria-label={tx("Läuft-gerade-Design")}>

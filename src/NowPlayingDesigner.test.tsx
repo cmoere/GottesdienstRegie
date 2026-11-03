@@ -22,4 +22,10 @@ describe('NowPlayingDesigner',()=>{
     expect(screen.getByLabelText('Visualizer-Position')).toBeTruthy();
     expect(screen.getByLabelText('Anzeigedauer in Sekunden')).toHaveAttribute('min','1');
   });
+  it('commits settings and every loop property as one design change',()=>{
+    render(<NowPlayingDesigner item={{...item,slides:[item.slides[0],{elements:[{id:'second-loop',type:'loop',properties:{}}]}]} as any} canEdit/>);
+    fireEvent.click(screen.getByRole('button',{name:'Design: Neon'}));
+    expect(updateItem).toHaveBeenCalledTimes(1);expect(updateElement).not.toHaveBeenCalled();
+    expect(updateItem.mock.calls[0][1].slides.every((slide:any)=>slide.elements[0].properties.design==='neon')).toBe(true);
+  });
 });

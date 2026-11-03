@@ -1,3 +1,4 @@
+import {compactPresentationHistory} from '../shared/editHistoryPayload';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
@@ -70,7 +71,7 @@ export class PresentationRepository {
     return result.sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt));
   }
   summary(doc:any):PresentationSummary{return{id:String(doc.presentationId),title:String(doc.title||'Unbenannte Präsentation'),date:String(doc.date||''),createdAt:String(doc.createdAt||now()),updatedAt:String(doc.updatedAt||now()),archived:doc.archived===true,trashed:doc.trashed===true,itemCount:Array.isArray(doc.items)?doc.items.length:0,slideCount:Array.isArray(doc.items)?doc.items.reduce((sum:number,item:any)=>sum+(Array.isArray(item.slides)?item.slides.length:0),0):0}}
-  async read(id:string){try{return JSON.parse(await fs.readFile(this.file(id),'utf8'))}catch(error:any){if(error?.code==='ENOENT')return null;throw error}}
+  async read(id:string){try{return compactPresentationHistory(JSON.parse(await fs.readFile(this.file(id),'utf8')))}catch(error:any){if(error?.code==='ENOENT')return null;throw error}}
   save(document:any){
     if(!document?.presentationId)return Promise.reject(new Error('PRESENTATION_ID_REQUIRED'));
     const snapshot=JSON.parse(JSON.stringify(document));

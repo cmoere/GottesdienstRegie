@@ -231,20 +231,21 @@ export function MediaBrowser() {
     [unsplashHasMore, setUnsplashHasMore] = useState(true),
     [unsplashQuery, setUnsplashQuery] = useState(""),
     [unsplashLoadingMore, setUnsplashLoadingMore] = useState(false);
+  const requestRef=useRef(0);
   const searchRef = useRef<HTMLInputElement>(null),
     api = (window.desktop as any)?.media,
     mediaWindow = (window.desktop as any)?.mediaWindow,
     isAudio = purpose === "audio";
   const audioRouting = usePreferences((state) => state.audioRouting);
   async function refresh(target = tab) {
+    const request=++requestRef.current;
     setLoading(true);
+    void Promise.resolve().then(()=>api?.onlineStatus?.()).then(status=>{
+      if(request===requestRef.current)setCloudStatus(status??null);
+    }).catch(()=>{if(request===requestRef.current)setCloudStatus(null)});
     try {
-      const status = await api?.onlineStatus?.().catch(() => null);
-      if (!status?.online)
-        throw new Error(status?.message || "MEDIA_STORAGE_OFFLINE");
-      const cloud = await (api?.cloudList() ?? Promise.resolve([])).catch(
-        () => [] as CloudMediaAsset[],
-      );
+      const cloud:CloudMediaAsset[] = await (api?.cloudList() ?? Promise.resolve([]));
+      if(request!==requestRef.current)return;
       setCloudItems(cloud);
       setItems(
         target === "community"
@@ -253,7 +254,6 @@ export function MediaBrowser() {
             )
           : cloud,
       );
-      setCloudStatus(status);
       setOffline(false);
       setSelected((current) =>
         current
@@ -266,17 +266,20 @@ export function MediaBrowser() {
           : null,
       );
     } catch {
+      if(request!==requestRef.current)return;
       setCloudStatus(null);
       setOffline(true);
       setItems([]);
     } finally {
-      setLoading(false);
+      if(request===requestRef.current)setLoading(false);
     }
   }
   async function searchUnsplash(search = query, page = 1, append = false) {
+    const request=append?requestRef.current:++requestRef.current;
     const normalizedSearch = search.trim();
     if (append) setUnsplashLoadingMore(true);
     else {
+      setUnsplashLoadingMore(false);
       setLoading(true);
       setVisibleCount(30);
       setUnsplashQuery(normalizedSearch);
@@ -286,6 +289,7 @@ export function MediaBrowser() {
       const key = usePreferences.getState().unsplashAccessKey,
         results: CloudMediaAsset[] =
           (await api?.unsplashSearch(normalizedSearch, key, page)) ?? [];
+      if(request!==requestRef.current)return;
       setItems((current) =>
         append
           ? [
@@ -300,11 +304,13 @@ export function MediaBrowser() {
       setUnsplashHasMore(results.length === 30);
       if (!append) setSelected(null);
     } catch (error) {
+      if(request!==requestRef.current)return;
       setOffline(true);
       alert(
         tx("Unsplash konnte nicht geladen werden. Bitte prüfe die Internetverbindung und versuche es erneut.\n\n{value1}",{value1:(String(error).replace(/^Error invoking remote method '[^']+':\s*/, ""))}),
       );
     } finally {
+      if(request!==requestRef.current)return;
       if (append) setUnsplashLoadingMore(false);
       else setLoading(false);
     }
@@ -326,7 +332,7 @@ export function MediaBrowser() {
         setAudioSelection([]);
       },
     );
-    return () => dispose?.();
+    return () => {requestRef.current++;dispose?.()};
   }, []);
   useEffect(() => {
     if (selected?.kind !== "audio") return;
@@ -443,6 +449,8 @@ export function MediaBrowser() {
     void searchUnsplash(unsplashQuery, unsplashPage + 1, true);
   }, [tab, visibleCount, items.length, unsplashHasMore]);
   function switchTab(next: "cloud" | "community" | "unsplash") {
+    requestRef.current++;
+    setUnsplashLoadingMore(false);
     setGeneratorOpen(false);
     setTab(next);
     setSelected(null);
@@ -457,6 +465,7 @@ export function MediaBrowser() {
     } else if (next === "community") {
       setLoading(false);
       setItems(cloudItems.filter((entry) => entry.visibility === "community"));
+      void refresh("community");
     } else {
       setItems([]);
       setUnsplashPage(1);
@@ -489,6 +498,7 @@ export function MediaBrowser() {
       return tx("Die Medien-Cloud ist noch nicht als privater Team-Speicher eingerichtet.");
     if (
       value.includes("GITHUB_LOGIN_REQUIRED") ||
+      value.includes("UPLOAD_PERMISSION_REQUIRED") ||
       value.includes("HTTP_401") ||
       value.includes("HTTP_403")
     )

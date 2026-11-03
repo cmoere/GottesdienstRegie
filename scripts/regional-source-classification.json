@@ -10949,6 +10949,30 @@
       "context": "CallExpression",
       "text": "SLIDE_DRAFT_BUSY",
       "reason": "Reviewed v97 internal error code at this exact source entry. UI catches failures and renders a localized reviewed message; this code is never visitor content or a caption."
+    },
+    "source.6bda9c5c0907ce5d7edc.1": {
+      "source": "src/MediaBrowser.tsx",
+      "context": "CallExpression",
+      "text": "UPLOAD_PERMISSION_REQUIRED",
+      "reason": "Reviewed v98 exact machine error comparison. Its UI branch renders the existing translated missing-cloud-authentication/upload-permission explanation; the protocol code is not a user caption."
+    },
+    "source.c118e0159b79a34246a8.1": {
+      "source": "electron/storage/gitCredential.ts",
+      "context": "CallExpression",
+      "text": "Programs",
+      "reason": "Reviewed v98 exact Windows installation directory or git-credential protocol input, never operator or visitor copy. No credential value is logged or embedded."
+    },
+    "source.e1af718c8f00311c896b.1": {
+      "source": "electron/storage/gitCredential.ts",
+      "context": "CallExpression",
+      "text": "Git",
+      "reason": "Reviewed v98 exact Windows installation directory or git-credential protocol input, never operator or visitor copy. No credential value is logged or embedded."
+    },
+    "source.5f13f061d7c2ee2e1675.1": {
+      "source": "electron/storage/gitCredential.ts",
+      "context": "CallExpression",
+      "text": "protocol=https\nhost=github.com",
+      "reason": "Reviewed v98 exact Windows installation directory or git-credential protocol input, never operator or visitor copy. No credential value is logged or embedded."
     }
   },
   "reviewedTechnicalFiles": {
@@ -11121,8 +11145,8 @@
       "reason": "Reviewed entire module: visitor announcement scroll composition, supplied public content and geometry only. No settings or other operator controls in this module."
     },
     "src/SlideRenderer.tsx": {
-      "sha256": "b67ecd6156945c7df68de1cf4af9b64b20a3bacee5252df111b4d0b7fe509133",
-      "reason": "Reviewed all candidate literals, module JSX surface and dialog calls on 2026-10-29; verified source unchanged from HEAD. This module renders authored/public slide content, examples, system output placeholders, SVG/CSS geometry and media. It has no operator buttons, fields or dialogs. The user explicitly requires visitor slides to retain their design/content; regional operator selection must not rewrite this output layer."
+      "sha256": "74d6bafdc117ff36dc34463ec132a691604ddce4aba48b5e312a589f35edcd3a",
+      "reason": "Re-reviewed 2026-11-03: exact diff only wraps the existing visitor renderer in React.memo; all output text, media, SVG/CSS geometry and placeholders remain unchanged. Internal dynamic element subscriptions continue independently. This remains public/authored output, with no operator buttons, fields or dialogs."
     },
     "src/languageCatalog.ts": {
       "sha256": "f01c17273e48b2e62eabca71cd1a3f7b5c7d7fe69cc0c8a042f5df36006e7a31",
@@ -11151,6 +11175,10 @@
     "src/bible/catalog.ts": {
       "sha256": "0a32770e35f31a452c2f85133f372adedad16bb790964085a0456d0021453b1b",
       "reason": "Reviewed complete legacy Bible catalogue on 2026-10-29: translation names, edition years, short identifiers, package availability and selection metadata; no operator controls. Edition/reference identities and catalogue records remain unchanged across regional interfaces. Runtime picker controls and help are localized separately."
+    },
+    "electron/storage/windowsCredential.ts": {
+      "sha256": "743e7573a81b427037d6e204a241fdd546dddbf1eb96b1e6144ee94a3262edce",
+      "reason": "Reviewed v98 fixed native Windows current-user credential read bridge against Microsoft CredReadW, CREDENTIALW and CredFree documentation. Only existing GitHub host/repository-owner targets are read, no enumeration or writes. Fixed encoded PowerShell/C# code, API names and validation expressions are technical protocol/runtime implementation, with no operator UI or visitor text. Errors return null and no credential values are logged."
     }
   }
 }

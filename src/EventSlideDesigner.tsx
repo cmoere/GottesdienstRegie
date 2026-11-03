@@ -24,14 +24,10 @@ export function EventSlideDesigner({
   useEffect(()=>{const update=()=>setEvents(getLatestPublicEvents());window.addEventListener('gottesdienstregie:community-events',update);return()=>window.removeEventListener('gottesdienstregie:community-events',update)},[]);
   const minimum=prepareEventOverview({...item.metadata,eventItemsJson:JSON.stringify(events)}).minDurationMs;
   const change = (patch: { eventDesign?: string; eventLimit?: number }) => {
-    state.updateItem(item.id, { metadata: { ...item.metadata, ...patch } });
-    const element = item.slides[0]?.elements.find(
-      (entry) => entry.type === "loop",
-    );
-    if (element)
-      state.updateElement(element.id, {
-        properties: { ...element.properties, ...patch },
-      });
+    state.updateItem(item.id, {
+      metadata: { ...item.metadata, ...patch },
+      slides:item.slides.map(slide=>({...slide,elements:slide.elements.map(element=>element.type==='loop'?{...element,properties:{...element.properties,...patch}}:element)})),
+    });
   };
   return (
     <section className="event-slide-designer">
