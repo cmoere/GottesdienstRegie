@@ -77,6 +77,8 @@ contextBridge.exposeInMainWorld("desktop", {
   setOutputAppMode:(state:{mode:'normal'|'test';onAir:boolean})=>ipcRenderer.invoke('outputs:set-app-mode',state),
   getOutputAppMode:()=>ipcRenderer.invoke('outputs:get-app-mode'),
   getOutputState:()=>ipcRenderer.invoke('outputs:get-state'),
+  outputTiming:{report:(receipt:import('../shared/outputTiming').OutputPaintReceipt)=>ipcRenderer.invoke('outputs:paint-report',receipt),reportPreview:(receipt:import('../shared/outputTiming').OutputPaintReceipt)=>ipcRenderer.invoke('outputs:preview-paint-report',receipt),get:()=>ipcRenderer.invoke('outputs:timings')},
+  localSlides:{status:()=>ipcRenderer.invoke('local-slides:status'),download:()=>ipcRenderer.invoke('local-slides:download'),cancelDownload:()=>ipcRenderer.invoke('local-slides:cancel-download'),remove:()=>ipcRenderer.invoke('local-slides:remove'),generate:(request:import('../shared/localSlideDraft').SlideDraftRequest)=>ipcRenderer.invoke('local-slides:generate',request),cancel:()=>ipcRenderer.invoke('local-slides:cancel')},
   sendAnnouncementBanner:(banner:import('../src/outputState').BannerOutputState|null)=>ipcRenderer.invoke('outputs:send-banner',banner),
   weatherWarnings:{read:(location:import('../shared/externalLoop').WeatherLocation)=>ipcRenderer.invoke('weather-warnings:read',location)},
   sendWeatherWarnings:(state:import('../shared/weatherWarnings').WeatherWarningState|null)=>ipcRenderer.invoke('outputs:send-weather-warnings',state),

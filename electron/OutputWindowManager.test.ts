@@ -11,6 +11,44 @@ vi.mock('electron',()=>({
 import {OutputWindowManager} from './OutputWindowManager';
 
 describe('OutputWindowManager app mode',()=>{
+  it('compares preview and MAIN only for the same current take',async()=>{
+    const manager=new OutputWindowManager('preload',async()=>{},()=>{});
+    await manager.start({'1':'main'} as any,{id:'one',_outputRevision:51});
+    const delivery=manager.getStateForSender(1)!.delivery!,time=delivery.sentAtMs;
+    expect(manager.acceptPreviewReceipt({revision:50,receivedAtMs:time,paintedAtMs:time})).toBe(false);
+    expect(manager.acceptPreviewReceipt({revision:51,receivedAtMs:time,paintedAtMs:time})).toBe(true);
+    expect(manager.acceptPaintReceipt(1,{revision:delivery.revision,receivedAtMs:time,paintedAtMs:time+5})).toBe(true);
+    expect(manager.getTimings()[0].previewDeltaMs).toBe(5);
+    manager.send({id:'two',_outputRevision:52});expect(manager.getTimings()[0].previewDeltaMs).toBeUndefined();
+  });
+  it('does not reuse an old preview measurement when unchanged content is redelivered',async()=>{
+    const manager=new OutputWindowManager('preload',async()=>{},()=>{});
+    const slide={id:'one',_outputRevision:51};await manager.start({'1':'main'} as any,slide);
+    let delivery=manager.getStateForSender(1)!.delivery!;
+    manager.acceptPreviewReceipt({revision:51,receivedAtMs:delivery.sentAtMs,paintedAtMs:delivery.sentAtMs});
+    manager.acceptPaintReceipt(1,{revision:delivery.revision,receivedAtMs:delivery.sentAtMs,paintedAtMs:delivery.sentAtMs});
+    manager.send(slide);delivery=manager.getStateForSender(1)!.delivery!;
+    manager.acceptPaintReceipt(1,{revision:delivery.revision,receivedAtMs:delivery.sentAtMs,paintedAtMs:delivery.sentAtMs});
+    expect(manager.getTimings()[0].previewDeltaMs).toBeUndefined();
+    expect(manager.acceptPreviewReceipt({revision:51,receivedAtMs:delivery.sentAtMs,paintedAtMs:delivery.sentAtMs})).toBe(true);
+    expect(manager.getTimings()[0].previewDeltaMs).toBe(0);
+  });
+  it('accepts paint only from the current owned output and rejects stale/duplicate receipts',async()=>{
+    const manager=new OutputWindowManager('preload',async()=>{},()=>{});
+    await manager.start({'1':'main'} as any,{id:'one'});
+    const state=manager.getStateForSender(1)!;
+    const delivery=state.delivery!;
+    const receipt={revision:delivery.revision,receivedAtMs:delivery.sentAtMs,paintedAtMs:delivery.sentAtMs};
+    expect(manager.acceptPaintReceipt(999,receipt)).toBe(false);
+    expect(manager.acceptPaintReceipt(1,{...receipt,paintedAtMs:Date.now()+5000})).toBe(false);
+    expect(manager.acceptPaintReceipt(1,receipt)).toBe(true);
+    expect(manager.acceptPaintReceipt(1,receipt)).toBe(false);
+    expect(manager.getTimings()[0]).toMatchObject({role:'main',status:'confirmed',samples:1});
+    manager.send({id:'two'});
+    expect(manager.acceptPaintReceipt(1,receipt)).toBe(false);
+    expect(manager.getTimings()[0].status).toBe('pending');
+    await manager.stop();expect(manager.getTimings()).toEqual([]);
+  });
   beforeEach(()=>{sends.length=0;windows.length=0});
   it('offers only live managed windows to the Main-only native composition controller',async()=>{
     const manager=new OutputWindowManager('preload',async()=>{},()=>{});

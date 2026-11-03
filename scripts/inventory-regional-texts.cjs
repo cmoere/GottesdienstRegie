@@ -170,6 +170,8 @@ function generateInventory(root) {
   const operatorSourceTemplates=JSON.parse(fs.readFileSync(path.join(root,'shared/regional/operatorSourceTemplates.json'),'utf8'));
   for(const [key,text]of Object.entries(operatorSourceTemplates))entries.push({key:`ui.${key}`,text,
     source:'shared/regional/operatorSourceTemplates.json',context:'operator-source',status:'app-owned'});
+  const v97Templates=JSON.parse(fs.readFileSync(path.join(root,'shared/regional/v97Templates.json'),'utf8'));
+  for(const [key,text]of Object.entries(v97Templates.ui))entries.push({key:'ui.'+key,text,source:'shared/regional/v97Templates.json',context:'regional-controls',status:'app-owned'});
   const v96Templates=JSON.parse(fs.readFileSync(path.join(root,'shared/regional/v96Templates.json'),'utf8'));
   for(const [key,text]of Object.entries(v96Templates.ui))entries.push({key:`ui.${key}`,text,source:'shared/regional/v96Templates.json',context:'regional-controls',status:'app-owned'});
   const {nativeBaseTemplates}=loadLocalDataModule(root,'shared/regional/nativeBase.ts');

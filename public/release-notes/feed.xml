@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.97.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.97.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.97.0</guid><pubDate>Tue, 03 Nov 2026 00:00:00 GMT</pubDate><description>Lokale Folienentwürfe und nachvollziehbare Live-Diagnose
+v97 ergänzt die Vorbereitung um lokal erzeugte, bearbeitbare KI-Folien und erweitert die Diagnose von Bild und Ton. Ein überarbeiteter Startablauf trennt notwendige Wiederherstellungsschritte von optionalen Hintergrundabfragen.
+
+Folien mit lokaler KI erstellen
+Aus Thema und Stichpunkten entstehen Folienentwürfe mit wählbarem Layout und bearbeitbarer Vorschau. Das zusätzliche Modell wird bei Bedarf in der Anwendung heruntergeladen und arbeitet anschließend offline. Die ausdrückliche Übernahme fügt die Folien mit einem Rückgängig-Schritt in den Ablauf ein.
+
+Ausgabezeiten sichtbar machen
+Die Live-Vorschau zeigt die bestätigte Renderdauer der Ausgabefenster und eine begrenzte Messhistorie. Veraltete oder fremde Bestätigungen werden verworfen. Die Anzeige unterscheidet Softwaremessungen von der nicht erfassten Verzögerung des physischen Bildschirms.
+
+Audio gezielt prüfen
+Audiorouten erhalten eine stoppbare Tonprobe mit Pegelanzeige und einer Höchstdauer von acht Sekunden. Die Hintergrund-Audio-Diagnose zeigt verfügbare Signalpegel, ohne einen zweiten hörbaren Wiedergabepfad zu öffnen.
+
+Start ohne unnötige Wartezeit
+Optionale Geräte-, Versions- und Verbindungsabfragen blockieren nicht mehr die erforderliche Startbereitschaft. Die feste zusätzliche Zehn-Sekunden-Wartezeit entfällt; Anmeldung, Präsentationsladen und Wiederherstellungsentscheidung bleiben geordnet.
+
+Lokale KI benötigt Rechenleistung
+Die Erstellung steht zunächst nur OFF AIR zur Verfügung und kann je nach Rechner mehrere Minuten dauern. Erzeugte Inhalte müssen vor der Übernahme geprüft werden, insbesondere Bibelstellen, Namen und Termine. Das Modell wird nicht beim Programmstart geladen.
+
+Originalgetreue PowerPoint-Wiedergabe
+Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.</description></item>
 <item><title>GottesdienstRegie 0.96.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.96.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.96.0</guid><pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate><description>Verbesserte Vorschauen und verbundene Geräte
 v96 verbindet echte Folienvorschauen mit erweiterten Live-Markierungen und einer kontrollierten lokalen Bildschirmfreigabe. Nachrichtenwechsel, Spracheinstellungen und Meldungsdetails werden gezielter bedienbar.
 

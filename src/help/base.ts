@@ -1,3 +1,4 @@
+import v97Help from './v97.json';
 import {v96HelpGerman,v96HelpEnglish} from './v96';
 import {v95HelpGerman,v95HelpEnglish} from './v95';
 import { helpEnglish } from './english';
@@ -72,9 +73,11 @@ for(const [locale,additions]of Object.entries({de:v91HelpGerman,en:v91HelpEnglis
 for(const [locale,additions]of Object.entries({de:v92HelpGerman,en:v92HelpEnglish}))for(const [id,body]of Object.entries(additions))if(packs[locale][id])packs[locale][id]={...packs[locale][id],body:packs[locale][id].body+'\n\n'+body};
 for(const [locale,overrides]of Object.entries({de:v95HelpGerman,en:v95HelpEnglish}))for(const [id,body]of Object.entries(overrides))if(packs[locale][id])packs[locale][id]={...packs[locale][id],body};
 // Swiss Standard German: avoids claiming an automatically generated dialect translation.
-packs.gsw = Object.fromEntries(Object.entries(packs.de).map(([id,a])=>[id,{...a,title:a.title.replaceAll('ß','ss'),body:a.body.replaceAll('ß','ss')}]));
+
 const catalogs = new Map<string, {topics:HelpArticle[];ui:HelpUI}>();
 for(const [locale,overrides]of Object.entries({de:v96HelpGerman,en:v96HelpEnglish}))for(const [id,body]of Object.entries(overrides))if(packs[locale][id])packs[locale][id]={...packs[locale][id],body};
+for(const [locale,additions]of Object.entries(v97Help))for(const [id,body]of Object.entries(additions))if(packs[locale][id])packs[locale][id]={...packs[locale][id],body:packs[locale][id].body+body};
+packs.gsw = Object.fromEntries(Object.entries(packs.de).map(([id,a])=>[id,{...a,title:a.title.replaceAll('ß','ss'),body:a.body.replaceAll('ß','ss')}]));
 export function getHelpCatalog(language: string) {
   const locale = Object.hasOwn(packs,language) ? language : 'en';
   let catalog = catalogs.get(locale);

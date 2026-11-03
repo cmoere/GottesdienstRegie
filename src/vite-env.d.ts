@@ -125,6 +125,19 @@ interface Window {
         }) => Promise<DesktopPreflight>;
         goOnAir: (assignments: Record<string, string>, payload: unknown) => Promise<boolean>;
         goOffAir: () => Promise<boolean>;
+        outputTiming?: {
+            report: (receipt: import('../shared/outputTiming').OutputPaintReceipt) => Promise<boolean>;
+            reportPreview?: (receipt: import('../shared/outputTiming').OutputPaintReceipt) => Promise<boolean>;
+            get: () => Promise<import('../shared/outputTiming').OutputTimingSummary[]>;
+        };
+        localSlides?: {
+            status: () => Promise<import('../electron/localSlides/SlideModelPack').SlidePackStatus & {busy:boolean}>;
+            download: () => Promise<void>;
+            cancelDownload: () => Promise<void>;
+            remove: () => Promise<void>;
+            generate: (request: import('../shared/localSlideDraft').SlideDraftRequest) => Promise<import('../shared/localSlideDraft').SlideDraft[]>;
+            cancel: () => Promise<void>;
+        };
         sendLiveSlide: (payload: unknown) => Promise<boolean>;
         onLiveSlide: (callback: (payload: unknown) => void) => () => void;
         onOutputStatus: (callback: (payload: DesktopOutputStatus) => void) => () => void;

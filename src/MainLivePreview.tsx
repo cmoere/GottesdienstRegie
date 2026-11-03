@@ -7,6 +7,7 @@ import {useI18n} from './i18n';
 import {useLiveOutputPreview} from './liveOutputPreview';
 import{useWeatherWarnings}from'./weatherWarnings/controller';
 import {PowerPointPlaybackStatus} from './PowerPointPlaybackPanel';
+import {OutputTimingPanel} from './OutputTimingPanel';
 
 export function MainLivePreview({ title, children,hideCountdown=false,suppressWeatherWarnings=false }: { title: string; children: ReactNode;hideCountdown?:boolean;suppressWeatherWarnings?:boolean }) {
   const banner=useAnnouncementBanner(state=>state.banner);
@@ -18,5 +19,6 @@ export function MainLivePreview({ title, children,hideCountdown=false,suppressWe
     <div style={{position:'relative',containerType:'size'}}><OutputComposition weatherWarnings={suppressWeatherWarnings?null:warnings} hideCountdown={hideCountdown} serviceCountdownAtMs={serviceCountdownAtMs} banner={banner} testOverlay={<TestModeWatermark role="main"/>}>{children}<ScreenSharingMirror hidden={hideCountdown}/></OutputComposition></div>
     <p>{title}</p>
     <PowerPointPlaybackStatus/>
+    <OutputTimingPanel/>
   </section>;
 }

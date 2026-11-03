@@ -4,6 +4,7 @@ import type {AppModeState} from '../src/appMode';
 import type {OutputStateSnapshot,BannerOutputState} from '../src/outputState';
 import {readScreenTestReceipt} from '../src/screenTest';
 import type{WeatherWarningState}from'../shared/weatherWarnings';
+import {readOutputPaintReceipt,type OutputTimingSummary,type OutputPaintReceipt} from '../shared/outputTiming';
 
 type ManagedOutput={displayId:number;role:OutputRole;window:BrowserWindow};
 const outputRoles:OutputRole[]=['main','stage','notes','livestream','lobby'];
@@ -13,6 +14,28 @@ export class OutputWindowManager{
   private appMode:AppModeState={mode:'normal',onAir:false};
   private states=new Map<OutputRole,OutputStateSnapshot>();
   private revision=0;
+  private timingHistory=new Map<OutputRole,Array<{revision:number;totalMs:number;renderMs:number;paintedAtMs:number}>>();
+  private previewReceipt?:OutputPaintReceipt;
+  private previewDeliveryRevision?:number;
+  acceptPreviewReceipt(value:unknown){
+    const receipt=readOutputPaintReceipt(value),main=this.states.get('main'),take=main?.slide as {_outputRevision?:number}|null;
+    if(!this.isActive()||!receipt||receipt.revision!==take?._outputRevision||!main?.delivery||(receipt.revision===this.previewReceipt?.revision&&main.delivery.revision===this.previewDeliveryRevision)||receipt.receivedAtMs<main.delivery.sentAtMs||receipt.paintedAtMs>Date.now()+1000||Date.now()-receipt.receivedAtMs>120000)return false;
+    this.previewReceipt=receipt;this.previewDeliveryRevision=main.delivery.revision;return true;
+  }
+  acceptPaintReceipt(senderId:number,value:unknown){
+    const entry=[...this.outputs.values()].find(entry=>!entry.window.isDestroyed()&&entry.window.webContents.id===senderId);
+    const receipt=readOutputPaintReceipt(value);if(!entry||!receipt)return false;
+    const delivery=this.states.get(entry.role)?.delivery,now=Date.now(),history=this.timingHistory.get(entry.role)??[];
+    if(!delivery||delivery.revision!==receipt.revision||history.some(sample=>sample.revision===receipt.revision)||receipt.receivedAtMs<delivery.sentAtMs||receipt.paintedAtMs>now+1000||now-delivery.sentAtMs>120000)return false;
+    history.push({revision:receipt.revision,totalMs:Math.max(0,now-delivery.sentAtMs),renderMs:receipt.paintedAtMs-receipt.receivedAtMs,paintedAtMs:receipt.paintedAtMs});
+    this.timingHistory.set(entry.role,history.slice(-30));return true;
+  }
+  getTimings():OutputTimingSummary[]{return [...this.outputs.values()].filter(entry=>!entry.window.isDestroyed()).map(entry=>{
+    const history=this.timingHistory.get(entry.role)??[],last=history.at(-1),sorted=history.map(sample=>sample.totalMs).sort((a,b)=>a-b);
+    const state=this.states.get(entry.role),take=state?.slide as {_outputRevision?:number}|null,confirmed=last?.revision===state?.delivery?.revision;
+    const previewDeltaMs=entry.role==='main'&&confirmed&&state?.delivery?.revision===this.previewDeliveryRevision&&take?._outputRevision===this.previewReceipt?.revision&&last&&this.previewReceipt?last.paintedAtMs-this.previewReceipt.paintedAtMs:undefined;
+    return{role:entry.role,status:confirmed?'confirmed':'pending',samples:history.length,lastMs:last?.totalMs??null,renderMs:last?.renderMs??null,p95Ms:sorted.length?sorted[Math.ceil(sorted.length*.95)-1]:null,previewDeltaMs};
+  })}
   /** Main-process use only; never exposed through preload or output snapshots. */
   getNativeCompositionWindows(){return [...this.outputs.values()].filter(entry=>!entry.window.isDestroyed()).map(({role,window})=>({role,window}))}
   private frames=new Map<OutputRole,{windowId:number;at:number;value:Promise<Buffer|null>}>();
@@ -33,7 +56,7 @@ export class OutputWindowManager{
     if(typeof runId!=='string'||!/^[a-f0-9]{32}$/.test(runId)||!main||main.window.isDestroyed()||quick?.type!=='screenTest'||quick.testRunId!==runId)return false;
     this.update('main',{quick:previous});return true;
   }
-  private update(role:OutputRole,patch:Partial<OutputStateSnapshot>){const old=this.states.get(role)??{revision:0,slide:null,quick:null,appMode:this.appMode},revision=++this.revision;const state={...old,...structuredClone(patch),revision,slideRevision:'slide' in patch?revision:old.slideRevision??0,quickRevision:'quick' in patch?revision:old.quickRevision??0};this.states.set(role,state);const entry=this.outputs.get(role);if(entry&&!entry.window.isDestroyed())entry.window.webContents.send('outputs:state',state)}
+  private update(role:OutputRole,patch:Partial<OutputStateSnapshot>){const old=this.states.get(role)??{revision:0,slide:null,quick:null,appMode:this.appMode},revision=++this.revision;const state={...old,...structuredClone(patch),revision,delivery:'slide' in patch?{revision,sentAtMs:Date.now()}:old.delivery,slideRevision:'slide' in patch?revision:old.slideRevision??0,quickRevision:'quick' in patch?revision:old.quickRevision??0};this.states.set(role,state);const entry=this.outputs.get(role);if(entry&&!entry.window.isDestroyed())entry.window.webContents.send('outputs:state',state)}
   setBanner(banner:BannerOutputState|null){this.update('main',{banner});return true}
   setWeatherWarnings(weatherWarnings:WeatherWarningState|null){this.update('main',{weatherWarnings});return true}
   setAnnotations(annotations:import('../shared/liveAnnotations').AnnotationState|null){for(const role of outputRoles)this.update(role,{annotations});return true}
@@ -50,7 +73,7 @@ export class OutputWindowManager{
   sendTo(role:OutputRole,payload:unknown){if(!outputRoles.includes(role))return false;this.update(role,{slide:payload});return Boolean(this.outputs.get(role)&&!this.outputs.get(role)!.window.isDestroyed())}
   sendQuick(roles:OutputRole[],payload:unknown){const value=payload as {type?:string;startedAtMs?:number}|null;const quick=value?.type==='countdown'&&!Number.isFinite(value.startedAtMs)?{...value,startedAtMs:Date.now()}:payload;for(const role of roles)if(outputRoles.includes(role))this.update(role,{quick});return true}
   setAppMode(state:AppModeState){this.appMode={...state};for(const role of outputRoles)this.update(role,{appMode:this.appMode});for(const {window} of this.outputs.values())if(!window.isDestroyed())window.webContents.send('outputs:app-mode',this.appMode);return true}
-  async stop(){for(const {window} of this.outputs.values())if(!window.isDestroyed())window.close();this.outputs.clear();return true}
+  async stop(){for(const {window} of this.outputs.values())if(!window.isDestroyed())window.close();this.outputs.clear();this.timingHistory.clear();this.previewReceipt=undefined;this.previewDeliveryRevision=undefined;return true}
   isActive(){return [...this.outputs.values()].some(entry=>!entry.window.isDestroyed())}
   handleRemoved(displayId:number){for(const [role,entry] of this.outputs)if(entry.displayId===displayId){if(!entry.window.isDestroyed())entry.window.close();this.outputs.delete(role);this.status(role,'missing')}}
   identify(assignments:DisplayAssignments){screen.getAllDisplays().forEach((display,index)=>{const role=(assignments[String(display.id)]??(display.id===screen.getPrimaryDisplay().id?'operator':'unused')).toUpperCase(),label=display.label||`Anzeige ${index+1}`,resolution=`${display.bounds.width} × ${display.bounds.height}`;const window=new BrowserWindow({x:display.bounds.x+Math.max(20,Math.round(display.bounds.width/2-190)),y:display.bounds.y+Math.max(20,Math.round(display.bounds.height/2-145)),width:380,height:290,frame:false,transparent:false,alwaysOnTop:true,skipTaskbar:true,focusable:false,show:false,backgroundColor:'#111820',webPreferences:{contextIsolation:true,nodeIntegration:false}});const html=`<!doctype html><meta charset="utf-8"><style>html,body{margin:0;height:100%;display:grid;place-items:center;background:#111820;color:white;font:600 17px Segoe UI,sans-serif}main{text-align:center}.n{font-size:118px;line-height:1;color:#67adb5}.r{margin:10px 0 13px;letter-spacing:.14em;color:#ef5c63}.d{font-size:14px;color:#c2cbd1;line-height:1.5}</style><main><div class=n>${index+1}</div><div class=r>${role}</div><div class=d>${label}<br>${resolution}</div></main>`;void window.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`).then(()=>window.showInactive());setTimeout(()=>{if(!window.isDestroyed())window.close()},5000)});return true}

@@ -11,7 +11,9 @@ import {RegionalSelector} from './regional/RegionalSelector';
 import {regionalDocumentationRuntime} from './regional/documentationRuntime';
 import {indexReleaseTextObjects,localizeReleaseText} from './regional/releaseIdentity';
 import {sanitizeRecoveryDocument} from './presentationRecovery';
-import {initializePresentationStartup} from './presentationStartup';
+import {initializePresentationStartup,prepareStartupSession} from './presentationStartup';
+import {useOutputPaintReport,type PendingOutputPaint} from './outputPaintReport';
+import {LocalSlideDraftDialog} from './localSlides/LocalSlideDraftDialog';
 import {upcomingMedia,useMediaWarmup,type WarmupAsset} from './mediaWarmup';
 import {findMissingFonts} from './fonts';
 import {FontAvailabilityWarning} from './FontAvailabilityWarning';
@@ -1475,6 +1477,8 @@ function AddPopover({
   close: () => void;
   targetSectionId?: string;
 }) {
+  const [aiOpen,setAiOpen]=useState(false);
+  const aiEnabled=usePreferences(state=>state.aiEnabled);
   const {t, tx} = useI18n();
   const state = usePresentation(),
     sectionId = resolveInsertionSectionId(targetSectionId,state.items.find((item) => item.id === state.selectedItemId)?.sectionId),
@@ -1484,7 +1488,7 @@ function AddPopover({
     loopAvailable = sectionCanHostLoop || sectionIsLoopTarget,
     [quizOpen, setQuizOpen] = useState(false),
     popoverRef = useRef<HTMLDivElement>(null);
-  useEffect(()=>{const onPointer=(event:PointerEvent)=>{if(!popoverRef.current?.contains(event.target as Node))close()};window.addEventListener('pointerdown',onPointer);return()=>window.removeEventListener('pointerdown',onPointer)},[close]);
+  useEffect(()=>{if(aiOpen)return;const onPointer=(event:PointerEvent)=>{if(!popoverRef.current?.contains(event.target as Node))close()};window.addEventListener('pointerdown',onPointer);return()=>window.removeEventListener('pointerdown',onPointer)},[close,aiOpen]);
   const options: {
     type: ItemType;
     label: string;
@@ -1923,7 +1927,7 @@ function AddPopover({
   const visibleOptions = options;
   return (
     <>
-      <div className="popover add-content-popover" ref={popoverRef}>
+      {!aiOpen&&<div className="popover add-content-popover" ref={popoverRef}>
         <header>
           <b>{tx("Element hinzufügen")}</b>
           <button onClick={close}>
@@ -1931,6 +1935,7 @@ function AddPopover({
           </button>
         </header>
         <div className="add-popover-loop-group add-popover-standard-group"><strong>{tx("Gottesdienst & allgemein")}</strong>
+        {aiEnabled&&<button disabled={state.onAir} onClick={()=>setAiOpen(true)} title={state.onAir?tx('Die Folien-KI steht nur OFF AIR zur Verfügung.'):undefined}><Icon name="auto_awesome"/><span>{tx('Folien mit KI erstellen')}</span></button>}
         {visibleOptions.map((option) => (
           <button
             key={option.type}
@@ -1955,7 +1960,8 @@ function AddPopover({
           </button>
         ))}</div>
         {loopGroup}
-      </div>
+      </div>}
+      {aiOpen&&<LocalSlideDraftDialog sectionId={sectionId} close={close}/>}
       {quizOpen && (
         <QuizCreateDialog
           cancel={() => setQuizOpen(false)}
@@ -9513,6 +9519,8 @@ function Clock({ locale }: { locale: string }) {
   );
 }
 function Output() {
+  const [pendingPaint,setPendingPaint]=useState<PendingOutputPaint|null>(null);
+  const reportPaint=useCallback((receipt:import('../shared/outputTiming').OutputPaintReceipt)=>{void window.desktop?.outputTiming?.report(receipt).catch(()=>{})},[]);
   const announcementActive=useOutputAnnouncementActive();
   const reportScreenTest=useCallback((receipt:ScreenTestReceipt)=>{void(window.desktop as any)?.screenTest?.report(receipt).catch(()=>{})},[]);
   const previousStateRef=useRef<OutputStateSnapshot|null>(null);
@@ -9531,6 +9539,7 @@ function Output() {
       [],
     );
   useMediaWarmup((slide as (Slide&{_mediaWarmup?:WarmupAsset[]})|null)?._mediaWarmup??[]);
+  useOutputPaintReport(slide,pendingPaint,reportPaint);
   useEffect(() => {
     const bridge=window.desktop as any;
     if(bridge?.getOutputState&&bridge?.onOutputState){
@@ -9540,7 +9549,10 @@ function Output() {
         stateRevisionRef.current=state.revision;
         const changed=changedOutputLayers(previousStateRef.current,state);previousStateRef.current=state;
         setOutputAnnotations(current=>current?.revision===state.annotations?.revision&&current?.takeId===state.annotations?.takeId?current:state.annotations??null);
-        if(changed.slide)setSlide(state.slide as Slide|null);
+        if(changed.slide){
+          setPendingPaint(state.delivery?{slide:state.slide,delivery:state.delivery,receivedAtMs:Date.now()}:null);
+          setSlide(state.slide as Slide|null);
+        }
         if(changed.quick)setQuick(state.quick as QuickScreenConfig|null);
         if(changed.banner)setOutputBanner(state.banner??null);
         if(changed.weatherWarnings)setOutputWeatherWarnings(state.weatherWarnings??null);
@@ -9757,7 +9769,11 @@ export function App() {
       const restoredPromise = restoreWith(auth).catch(() => null);
       const browserLoad=target==='web'?presentations.list().then(async entries=>entries[0]?(await presentations.load(entries[0].id))?.document??null:(await presentations.create({title:'Meine Web-Präsentation'})).document):Promise.resolve(null);
       const ready=initializePresentationStartup(
-        Promise.all([restoredPromise,window.desktop?.displays().catch(() => []),window.desktop?.updates.currentVersion().catch(() => ""),window.desktop?.auth.connection().catch(() => false)]).then(([restored])=>restored),
+        prepareStartupSession(restoredPromise,[
+          ()=>window.desktop?.displays()??Promise.resolve([]),
+          ()=>window.desktop?.updates.currentVersion()??Promise.resolve(""),
+          ()=>window.desktop?.auth.connection()??Promise.resolve(false),
+        ]),
         target==='web'?browserLoad:reopen
           ? window.desktop?.presentation.load().catch(() => null)??Promise.resolve(null)
           : Promise.resolve(null),
@@ -9780,8 +9796,6 @@ export function App() {
       startupReady.current=ready;
       const restored=await ready;
       if(!active)return;
-      const remaining = target==='web'||startupSkipped.current?0:Math.max(0, 10000 - (Date.now() - started));
-      await new Promise((resolve) => setTimeout(resolve, remaining));
       clearInterval(timer);
       startupTimer.current = undefined;
       if (active && !startupSkipped.current) {

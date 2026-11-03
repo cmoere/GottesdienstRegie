@@ -1,3 +1,22 @@
+# GottesdienstRegie 0.97.0
+
+v97 ergänzt die Vorbereitung um lokal erzeugte, bearbeitbare KI-Folien und erweitert die Diagnose von Bild und Ton. Ein überarbeiteter Startablauf trennt notwendige Wiederherstellungsschritte von optionalen Hintergrundabfragen.
+
+## Neu
+
+- **Folien mit lokaler KI erstellen:** Aus Thema und Stichpunkten entstehen Folienentwürfe mit wählbarem Layout und bearbeitbarer Vorschau. Das zusätzliche Modell wird bei Bedarf in der Anwendung heruntergeladen und arbeitet anschließend offline. Die ausdrückliche Übernahme fügt die Folien mit einem Rückgängig-Schritt in den Ablauf ein.
+- **Ausgabezeiten sichtbar machen:** Die Live-Vorschau zeigt die bestätigte Renderdauer der Ausgabefenster und eine begrenzte Messhistorie. Veraltete oder fremde Bestätigungen werden verworfen. Die Anzeige unterscheidet Softwaremessungen von der nicht erfassten Verzögerung des physischen Bildschirms.
+- **Audio gezielt prüfen:** Audiorouten erhalten eine stoppbare Tonprobe mit Pegelanzeige und einer Höchstdauer von acht Sekunden. Die Hintergrund-Audio-Diagnose zeigt verfügbare Signalpegel, ohne einen zweiten hörbaren Wiedergabepfad zu öffnen.
+
+## Behoben
+
+- **Start ohne unnötige Wartezeit:** Optionale Geräte-, Versions- und Verbindungsabfragen blockieren nicht mehr die erforderliche Startbereitschaft. Die feste zusätzliche Zehn-Sekunden-Wartezeit entfällt; Anmeldung, Präsentationsladen und Wiederherstellungsentscheidung bleiben geordnet.
+
+## Hinweise
+
+- **Lokale KI benötigt Rechenleistung:** Die Erstellung steht zunächst nur OFF AIR zur Verfügung und kann je nach Rechner mehrere Minuten dauern. Erzeugte Inhalte müssen vor der Übernahme geprüft werden, insbesondere Bibelstellen, Namen und Termine. Das Modell wird nicht beim Programmstart geladen.
+- **Originalgetreue PowerPoint-Wiedergabe:** Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.
+
 # GottesdienstRegie 0.96.0
 
 v96 verbindet echte Folienvorschauen mit erweiterten Live-Markierungen und einer kontrollierten lokalen Bildschirmfreigabe. Nachrichtenwechsel, Spracheinstellungen und Meldungsdetails werden gezielter bedienbar.

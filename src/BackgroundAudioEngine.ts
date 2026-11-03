@@ -89,6 +89,7 @@ export class BackgroundAudioEngine {
     const now=Date.now();if(this.audio.currentTime>this.lastTime){this.lastProgress=now;this.waiting=false}this.lastTime=this.audio.currentTime;
     const signal=audioLevelProvider.getSignalState();if(signal!=='silent')this.silentSince=0;else if(!this.silentSince)this.silentSince=now;
     const health:BackgroundAudioHealth={status:backgroundAudioStatus({hasSource:Boolean(this.audio.src),paused:this.audio.paused,progressing:this.lastProgress>0&&now-this.lastProgress<3000,waiting:this.waiting,routeReady:this.route.ready,muted:this.audio.muted,volume:this.audio.volume,error:Boolean(this.state.error),signal,silentMs:this.silentSince?now-this.silentSince:0}),signal,route:'background',deviceId:this.route.deviceId,deviceName:this.route.name,volume:Math.round(this.audio.volume*100),muted:this.audio.muted,contextState:audioLevelProvider.getContextState(),fallback:false};
+    health.level=signal==='unavailable'||signal==='idle'?undefined:Math.max(...audioLevelProvider.levels());
     this.state = {
       ...this.state,
       active: Boolean(this.audio.src) && !this.audio.ended,
