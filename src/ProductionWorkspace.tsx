@@ -1,5 +1,5 @@
 import {ScreenSharingMirror} from './ScreenSharing';
-import {PreviewOverviewControls,usePreviewOptions} from './PreviewOverviewControls';
+import {usePreviewOptions} from './PreviewOverviewControls';
 import {useI18n} from './i18n';
 import {
   useEffect,
@@ -4022,7 +4022,6 @@ export function ProductionWorkspace({
             aria-pressed={state.previewLayout === "grid"}
             onClick={() => state.setPreviewLayout("grid")}
           >{tx("Folienübersicht")}</button>
-          <PreviewOverviewControls/>
         </div>
         <div className="preview-work-area">
           <PreviewCenter activeQuick={activeQuick} />

@@ -1,4 +1,6 @@
 import {NextPreviewOutput} from './NextPreviewOutput';
+import {EditorModeControl} from './EditorModeControl';
+import {PreviewViewSettings} from './PreviewOverviewControls';
 import {ScreenSharingController,ScreenSharingOutput} from './ScreenSharing';
 import {languageOptionName} from './regional/languageOptionName';
 import {SongTranslationPreview} from './SongTranslationPreview';
@@ -14,6 +16,7 @@ import {sanitizeRecoveryDocument} from './presentationRecovery';
 import {initializePresentationStartup,prepareStartupSession} from './presentationStartup';
 import {useOutputPaintReport,type PendingOutputPaint} from './outputPaintReport';
 import {LocalSlideDraftDialog} from './localSlides/LocalSlideDraftDialog';
+import {LocalModelSettings} from './localSlides/LocalModelSettings';
 import {upcomingMedia,useMediaWarmup,type WarmupAsset} from './mediaWarmup';
 import {findMissingFonts} from './fonts';
 import {FontAvailabilityWarning} from './FontAvailabilityWarning';
@@ -5799,6 +5802,8 @@ export function SettingsModal({
                 <AudioEqualizerSettings />
               ) : tab === "songTranslations" ? null : tab === "presentation" ? (
                 <>
+                  <PreviewViewSettings />
+                  <LocalModelSettings />
                   <PresentationTransitionSettings />
                   <TimelineSettings />
                   <AnnouncementBannerSettings />
@@ -9319,35 +9324,7 @@ function AppShell({
           <b>{state.title}</b>
           <span> · {formatEventDate(state.date || new Date())}</span>
         </div>
-        <div
-          className={`mode-switch ${state.mode}`}
-          aria-label={`${t("edit")} / ${t("preview")}`}
-        >
-          <button
-            className={state.mode === "edit" ? "active" : ""}
-            onClick={() => state.setMode("edit")}
-          >
-            {t("edit")}
-          </button>
-          <button
-            className="mode-toggle"
-            type="button"
-            role="switch"
-            aria-checked={state.mode === "preview"}
-            aria-label={state.mode === "edit" ? t("preview") : t("edit")}
-            onClick={() =>
-              state.setMode(state.mode === "edit" ? "preview" : "edit")
-            }
-          >
-            <i />
-          </button>
-          <button
-            className={state.mode === "preview" ? "active" : ""}
-            onClick={() => state.setMode("preview")}
-          >
-            {t("preview")}
-          </button>
-        </div>
+        <EditorModeControl />
         {testStartOpen&&<TestStartDialog onClose={()=>setTestStartOpen(false)} onStart={scenario=>{setTestStartOpen(false);void air(false,undefined,'test',scenario)}}/>}
         <div className="live-session-controls">
         <button type="button" className={`test-session-button ${appMode.mode==='test' ? 'active' : ''}`}

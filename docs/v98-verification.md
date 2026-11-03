@@ -1,6 +1,6 @@
 # v98 reliability work — 3 November 2026
 
-User reports continuous editor/design slowness and cloud upload error `UPLOAD_PERMISSION_REQUIRED`. This is a bug-fix candidate; package/release metadata remains 0.97.0 and no v98 desktop release has been published by this task.
+User reports continuous editor/design slowness and cloud upload error `UPLOAD_PERMISSION_REQUIRED`. The initial reliability stage was committed as 7e92e76. The subsequent AI/control extension and current 0.98.0 release-candidate state are recorded in docs/v98-ai-design-verification.md; publication evidence is appended only after public verification.
 
 ## Confirmed causes and fixes
 

@@ -171,6 +171,8 @@ function generateInventory(root) {
   for(const [key,text]of Object.entries(operatorSourceTemplates))entries.push({key:`ui.${key}`,text,
     source:'shared/regional/operatorSourceTemplates.json',context:'operator-source',status:'app-owned'});
   const v97Templates=JSON.parse(fs.readFileSync(path.join(root,'shared/regional/v97Templates.json'),'utf8'));
+  const v98Templates=JSON.parse(fs.readFileSync(path.join(root,'shared/regional/v98Templates.json'),'utf8'));
+  for(const [key,text]of Object.entries(v98Templates.ui))entries.push({key:'ui.'+key,text,source:'shared/regional/v98Templates.json',context:'regional-controls',status:'app-owned'});
   for(const [key,text]of Object.entries(v97Templates.ui))entries.push({key:'ui.'+key,text,source:'shared/regional/v97Templates.json',context:'regional-controls',status:'app-owned'});
   const v96Templates=JSON.parse(fs.readFileSync(path.join(root,'shared/regional/v96Templates.json'),'utf8'));
   for(const [key,text]of Object.entries(v96Templates.ui))entries.push({key:`ui.${key}`,text,source:'shared/regional/v96Templates.json',context:'regional-controls',status:'app-owned'});

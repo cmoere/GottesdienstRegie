@@ -1,6 +1,12 @@
 import {describe,it,expect} from 'vitest';
 import {readSlideDraftRequest,parseSlideDraft} from './localSlideDraft';
 describe('local slide drafting contract',()=>{
+ it('accepts controlled editable design briefs and local image prompts, preserving old text-only drafts',()=>{
+  expect(readSlideDraftRequest({topic:'Gemeinschaft',notes:'',count:1,design:true})).toMatchObject({design:true});
+  const draft={title:'Gemeinsam unterwegs',body:'Einander zuhören und füreinander da sein.',design:{layout:'split-left',accent:'#608f9a',imagePrompt:'A peaceful sunlit country path, no text, no people'}};
+  expect(parseSlideDraft(JSON.stringify({slides:[draft]}),1)).toEqual([draft]);
+  for(const design of [{...draft.design,layout:'javascript'},{...draft.design,imagePrompt:'<lora:../private:1>'},{...draft.design,accent:'url(secret)'},{...draft.design,command:'execute'}])expect(()=>parseSlideDraft(JSON.stringify({slides:[{...draft,design}]}),1)).toThrow();
+ });
  it('bounds requests and preserves supplied German notes',()=>{
   expect(readSlideDraftRequest({topic:'Dankbarkeit',notes:'Für den Gottesdienst',count:3})).toEqual({topic:'Dankbarkeit',notes:'Für den Gottesdienst',count:3});
   for(const value of [{topic:'',notes:'',count:3},{topic:'x',notes:'',count:100},{topic:'x',notes:'x'.repeat(8001),count:2},{topic:'x',notes:'',count:2,url:'https://invalid'}])expect(readSlideDraftRequest(value)).toBeNull();

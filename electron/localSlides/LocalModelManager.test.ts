@@ -1,0 +1,16 @@
+import fs from 'node:fs/promises';import path from 'node:path';import os from 'node:os';
+import {afterEach,expect,it,vi} from 'vitest';
+import {LocalModelManager} from './LocalModelManager';
+const roots:string[]=[];const managers:LocalModelManager[]=[];
+afterEach(async()=>{managers.forEach(manager=>manager.dispose());managers.length=0;vi.useRealTimers();await Promise.all(roots.splice(0).map(root=>fs.rm(root,{recursive:true,force:true})))});
+const pack=()=>({status:vi.fn(async()=>({state:'missing' as const,downloadedBytes:0,totalBytes:10})),download:vi.fn(async()=>{}),cancel:vi.fn(),remove:vi.fn(async()=>{})});
+async function setup(blocked=()=>false){const root=await fs.mkdtemp(path.join(os.tmpdir(),'regie-model-manager-'));roots.push(root);const text=pack(),image=pack(),file=path.join(root,'settings.json'),manager=new LocalModelManager(file,[{id:'text',pack:text},{id:'image',pack:image}],blocked);managers.push(manager);await manager.initialize();return{manager,text,image,file};}
+it('waits for workspace readiness and downloads model packs sequentially, without making status wait',async()=>{
+ const {manager,text,image}=await setup();let finish!:()=>void;text.download.mockImplementation(()=>new Promise<void>(resolve=>{finish=resolve}));await manager.runAutomatic();expect(text.download).not.toHaveBeenCalled();manager.start();const pending=manager.runAutomatic();for(let i=0;i<12&&!finish;i++)await Promise.resolve();expect(text.download).toHaveBeenCalledTimes(1);expect(image.download).not.toHaveBeenCalled();expect((await manager.status()).models).toHaveLength(2);finish();await pending;expect(image.download).toHaveBeenCalledTimes(1);
+});
+it('persists explicit removal across a new session without immediately downloading it again',async()=>{
+ const {manager,text,image,file}=await setup();await manager.remove('image');manager.start();await manager.runAutomatic();expect(text.download).toHaveBeenCalled();expect(image.download).not.toHaveBeenCalled();expect(image.remove).toHaveBeenCalled();const next=new LocalModelManager(file,[{id:'text',pack:pack()},{id:'image',pack:image}],()=>false);managers.push(next);await next.initialize();next.start();await next.runAutomatic();expect(image.download).not.toHaveBeenCalled();await next.download('image');expect(image.download).toHaveBeenCalledTimes(1);
+});
+it('does not start a model download while outputs or another model job are active',async()=>{let blocked=true;const {manager,text}=await setup(()=>blocked);manager.start();await manager.runAutomatic();expect(text.download).not.toHaveBeenCalled();blocked=false;await manager.runAutomatic();expect(text.download).toHaveBeenCalledTimes(1);});
+it('disables automatic downloads on corrupt settings instead of discarding a removal choice silently',async()=>{const {manager,file}=await setup();manager.dispose();await fs.writeFile(file,'{invalid');const next=new LocalModelManager(file,[{id:'text',pack:pack()}],()=>false);managers.push(next);await next.initialize();expect((await next.status()).autoDownload).toBe(false);});
+it('does not undo a live pause when the workspace-ready signal is repeated',async()=>{const {manager,text}=await setup();manager.start();manager.pause();manager.start();await manager.runAutomatic();expect(text.download).not.toHaveBeenCalled();});

@@ -2323,7 +2323,20 @@
     "v97AiAccept": "In den Afloop övernehmen",
     "v97AiTopic": "Thema",
     "v97AiLayout": "Layout",
-    "v97AiWait": "Dat lokale Erstellen kann mehrere Minuten duern. Du kannst dat jederzeit afbrieken."
+    "v97AiWait": "Dat lokale Erstellen kann mehrere Minuten duern. Du kannst dat jederzeit afbrieken.",
+    "v98Models": "Lokale KI-Modelle",
+    "v98Automatic": "Automatisch runnerladen, sobald de Anwendung bereit un OFF AIR is.",
+    "v98Removed": "Wegdaone Modelle bliewt deaktiviert, bit du se nochmaol runnerlädst.",
+    "v98TextDesign": "Text un Gestaltung",
+    "v98Images": "Biller un Motive",
+    "v98AiDesign": "KI-Gestaltung",
+    "v98GenerateImages": "Biller lokal maaken",
+    "v98CreatingImages": "Biller wärt lokal maakt …",
+    "v98ImagesWait": "En Bild kann mehrere Minuten duern. Dat Erstellen blifft OFF AIR.",
+    "v98ImagesFailed": "Biller kunnen nich maakt wäern. De Textentworp blifft behollen.",
+    "v98ModelsHelp": "Modelle wärt automatisch vörbereidt. Status un Wegdoon: Einstellungen → Präsentation → Lokale KI-Modelle.",
+    "v98Downloading": "Download löppt …",
+    "v98NotInstalled": "Nich installeert"
   },
   "native": {
     "updateAvailableTitle": "Niege Version to kriegen",

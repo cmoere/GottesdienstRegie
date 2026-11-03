@@ -2323,7 +2323,20 @@
     "v97AiAccept": "En dä Ablauf övernemme",
     "v97AiTopic": "Thema",
     "v97AiLayout": "Layout",
-    "v97AiWait": "De lokale Erstellung kann mieh Minutte duure. Do kanns se jederzeit affbreche."
+    "v97AiWait": "De lokale Erstellung kann mieh Minutte duure. Do kanns se jederzeit affbreche.",
+    "v98Models": "Lokale KI-Modelle",
+    "v98Automatic": "Automatisch erungerlade, sobald de Anwendung bereit un OFF AIR es.",
+    "v98Removed": "Entfernte Modelle blieve deaktiviert, bis du se noch ens erungerläds.",
+    "v98TextDesign": "Text un Gestaltung",
+    "v98Images": "Bilder un Motive",
+    "v98AiDesign": "KI-Gestaltung",
+    "v98GenerateImages": "Bilder lokal erstelle",
+    "v98CreatingImages": "Bilder wäde lokal erstellt …",
+    "v98ImagesWait": "E Bild kann mehrere Minutte duure. De Erstellung bleibt OFF AIR.",
+    "v98ImagesFailed": "Bilder kunnte nit erstellt wäde. Dä Textentwurf bleibt erhalte.",
+    "v98ModelsHelp": "Modelle wäde automatisch vorbereitet. Status un Entfernen: Einstellungen → Präsentation → Lokale KI-Modelle.",
+    "v98Downloading": "Download lööft …",
+    "v98NotInstalled": "Nit installiert"
   },
   "native": {
     "updateAvailableTitle": "En neue Version es do",

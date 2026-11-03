@@ -1,3 +1,18 @@
+# GottesdienstRegie 0.98.0
+
+Die Bearbeitung umfangreicher Präsentationen vermeidet unnötige Berechnungen und doppelte Verlaufsdaten. Gleichzeitige Medienimporte werden geordnet verarbeitet. Die Windows-Anmeldung für den Cloud-Upload kann vorhandene GitHub-Anmeldedaten zuverlässiger finden; ein fehlgeschlagener Upload lässt sich mit der ausgewählten Datei erneut versuchen.
+
+Die lokale Folien-KI erhält eine zentrale Modellverwaltung mit automatischer Vorbereitung, dauerhafter Entfernung und erneuter Aktivierung. Acht bearbeitbare Gestaltungskompositionen und echte lokal erzeugte Bildmotive erweitern den Folienentwurf. Die Erstellung bleibt OFF AIR; die Übernahme in den Ablauf erfolgt ausdrücklich durch die Regie.
+
+Die Ansichtseinstellungen wurden in den Einstellungsdialog verschoben. Bearbeiten und Vorschau sind als klar auswählbare Schaltflächen dargestellt. Bestehende Besucherfolien, Ausgaberouten und Live-Steuerung bleiben erhalten.
+
+## Hinweise
+
+- **Lokale KI benötigt Rechenleistung:** Die Erstellung steht zunächst nur OFF AIR zur Verfügung und kann je nach Rechner mehrere Minuten dauern. Erzeugte Inhalte müssen vor der Übernahme geprüft werden, insbesondere Bibelstellen, Namen und Termine. Das Modell wird nicht beim Programmstart geladen.
+- **Originalgetreue PowerPoint-Wiedergabe:** Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.
+
+---
+
 # GottesdienstRegie 0.97.0
 
 v97 ergänzt die Vorbereitung um lokal erzeugte, bearbeitbare KI-Folien und erweitert die Diagnose von Bild und Ton. Ein überarbeiteter Startablauf trennt notwendige Wiederherstellungsschritte von optionalen Hintergrundabfragen.
@@ -16,6 +31,8 @@ v97 ergänzt die Vorbereitung um lokal erzeugte, bearbeitbare KI-Folien und erwe
 
 - **Lokale KI benötigt Rechenleistung:** Die Erstellung steht zunächst nur OFF AIR zur Verfügung und kann je nach Rechner mehrere Minuten dauern. Erzeugte Inhalte müssen vor der Übernahme geprüft werden, insbesondere Bibelstellen, Namen und Termine. Das Modell wird nicht beim Programmstart geladen.
 - **Originalgetreue PowerPoint-Wiedergabe:** Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.
+
+---
 
 # GottesdienstRegie 0.96.0
 

@@ -3,6 +3,10 @@ import {LocalSlideService} from './LocalSlideService';
 describe('local drafting does not acquire live output ownership',()=>{
  const request={topic:'Dankbarkeit',notes:'Danke sagen',count:1};
  const result=JSON.stringify({slides:[{title:'Danke sagen',body:'Wem möchtest du heute danken?'}]});
+ it('requires a real validated design brief when design generation is requested',async()=>{
+  const service=new LocalSlideService({verifiedDirectory:async()=>'/owned/model'},async()=>result,()=>false);
+  await expect(service.generate({...request,design:true})).rejects.toThrow('SLIDE_DRAFT_INVALID');
+ });
  it('rejects ON AIR before touching the model and rejects malformed output',async()=>{
   const verify=vi.fn(async()=>'/owned/model'),run=vi.fn(async()=>result),service=new LocalSlideService({verifiedDirectory:verify},run,()=>true);
   await expect(service.generate(request)).rejects.toThrow('SLIDE_DRAFT_ON_AIR');expect(verify).not.toHaveBeenCalled();

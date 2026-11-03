@@ -1,0 +1,37 @@
+{
+  "engine": "stable-diffusion.cpp",
+  "revision": "3be23788fc0c9f35a2c24b1211caae11d4a54dbc",
+  "platforms": {
+    "win32-x64": {
+      "url": "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1043-3be2378/sd-master-3be2378-bin-win-vulkan-x64.zip",
+      "size": 29796631,
+      "sha256": "a5e1fa679561a3bb99b114a8f4a41e67239da29173ff725391ecfa5772e869ee"
+    }
+  },
+  "sources": [
+    {
+      "file": "stable-diffusion.cpp-source.zip",
+      "url": "https://codeload.github.com/leejet/stable-diffusion.cpp/zip/3be23788fc0c9f35a2c24b1211caae11d4a54dbc",
+      "size": 129540194,
+      "sha256": "7e2ad1adefb69f82580961ee647018e3a2e39fbf04d5d5b940d15b0ed8a93131",
+      "revision": "3be23788fc0c9f35a2c24b1211caae11d4a54dbc"
+    },
+    {
+      "file": "ggml-source.zip",
+      "url": "https://codeload.github.com/leejet/ggml/zip/d49c49e1dd361ba3c0a77c90b5b1404b83969aa8",
+      "size": 5582080,
+      "sha256": "3d6cfdda9403a8288d2f91aae744d1a7d11e6b5ff5969d9c499b78f150c04eb1",
+      "revision": "d49c49e1dd361ba3c0a77c90b5b1404b83969aa8"
+    }
+  ],
+  "cpuFallback": {
+    "url": "https://github.com/leejet/stable-diffusion.cpp/releases/download/master-1043-3be2378/sd-master-3be2378-bin-win-cpu-x64.zip",
+    "size": 18067084,
+    "sha256": "10ef877a334c97d014e3e23b4bf6c9077f6b78ff9da3bb157664d2103cb1ae0f"
+  },
+  "sourceBuildTargets": [
+    "darwin-x64",
+    "darwin-arm64",
+    "linux-x64"
+  ]
+}

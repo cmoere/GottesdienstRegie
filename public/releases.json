@@ -21,12 +21,80 @@
   ],
   "versions": [
     {
+      "line": "0.98",
+      "builds": [
+        {
+          "version": "0.98.0",
+          "releaseDate": "2026-11-04",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Stabilere Bearbeitung und lokale KI-Gestaltung",
+              "en": "More stable editing and local AI design"
+            },
+            "text": {
+              "de": "Die Bearbeitung umfangreicher Präsentationen vermeidet unnötige Berechnungen und doppelte Verlaufsdaten. Gleichzeitige Medienimporte werden geordnet verarbeitet. Die Windows-Anmeldung für den Cloud-Upload kann vorhandene GitHub-Anmeldedaten zuverlässiger finden; ein fehlgeschlagener Upload lässt sich mit der ausgewählten Datei erneut versuchen.",
+              "en": "Editing large presentations avoids unnecessary calculations and duplicated history data. Concurrent media imports are processed in order. Windows authentication for cloud uploads can find existing GitHub credentials more reliably; failed uploads can be retried with the selected file."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "KI-Gestaltung",
+                  "en": "AI design"
+                },
+                "text": {
+                  "de": "Die lokale Folien-KI erhält eine zentrale Modellverwaltung mit automatischer Vorbereitung, dauerhafter Entfernung und erneuter Aktivierung. Acht bearbeitbare Gestaltungskompositionen und echte lokal erzeugte Bildmotive erweitern den Folienentwurf. Die Erstellung bleibt OFF AIR; die Übernahme in den Ablauf erfolgt ausdrücklich durch die Regie.",
+                  "en": "Local slide AI gains central model management with automatic preparation, persistent removal and reactivation. Eight editable design compositions and real locally generated images expand the slide draft. Generation remains OFF AIR; the operator explicitly accepts slides into the running order."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Stabilere Bearbeitung und lokale KI-Gestaltung",
+                  "en": "More stable editing and local AI design"
+                },
+                "text": {
+                  "de": "Die Ansichtseinstellungen wurden in den Einstellungsdialog verschoben. Bearbeiten und Vorschau sind als klar auswählbare Schaltflächen dargestellt. Bestehende Besucherfolien, Ausgaberouten und Live-Steuerung bleiben erhalten.",
+                  "en": "View options have moved into Settings. Edit and Preview use clearly selectable buttons. Existing visitor slides, output routes and live controls are preserved."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Lokale KI benötigt Rechenleistung",
+                  "en": "Local AI needs computing resources"
+                },
+                "text": {
+                  "de": "Die Erstellung steht zunächst nur OFF AIR zur Verfügung und kann je nach Rechner mehrere Minuten dauern. Erzeugte Inhalte müssen vor der Übernahme geprüft werden, insbesondere Bibelstellen, Namen und Termine. Das Modell wird nicht beim Programmstart geladen.",
+                  "en": "Generation is initially available only OFF AIR and may take several minutes depending on the computer. Review generated content before accepting it, especially Bible references, names and dates. The model is not loaded at application startup."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.97",
       "builds": [
         {
           "version": "0.97.0",
           "releaseDate": "2026-11-03",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Lokale Folienentwürfe und nachvollziehbare Live-Diagnose",

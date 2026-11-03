@@ -2323,7 +2323,20 @@
     "v97AiAccept": "In den Ablauf übernehmen",
     "v97AiTopic": "Thema",
     "v97AiLayout": "Layout",
-    "v97AiWait": "De lokale Erstellung kann mehrere Minuten dauern. Du kannst se jederzeit abbrechen."
+    "v97AiWait": "De lokale Erstellung kann mehrere Minuten dauern. Du kannst se jederzeit abbrechen.",
+    "v98Models": "Lokale KI-Modelle",
+    "v98Automatic": "Automatisch runterladen, sobald de Anwendung bereit un OFF AIR is.",
+    "v98Removed": "Entfernte Modelle bleiben ausgeschaltet, bis du se erneut runterlädst.",
+    "v98TextDesign": "Text un Gestaltung",
+    "v98Images": "Bilder un Motive",
+    "v98AiDesign": "KI-Gestaltung",
+    "v98GenerateImages": "Bilder lokal erstellen",
+    "v98CreatingImages": "Bilder werden lokal erstellt …",
+    "v98ImagesWait": "Ein Bild kann mehrere Minuten dauern. De Erstellung bleibt OFF AIR.",
+    "v98ImagesFailed": "De Bilder konnten nich erstellt werden. Dein Textentwurf bleibt erhalten.",
+    "v98ModelsHelp": "De Modelle werden automatisch vorbereitet. Status un Entfernen: Einstellungen → Präsentation → Lokale KI-Modelle.",
+    "v98Downloading": "Download läuft …",
+    "v98NotInstalled": "Nich installiert"
   },
   "native": {
     "updateAvailableTitle": "Neie Version is da",

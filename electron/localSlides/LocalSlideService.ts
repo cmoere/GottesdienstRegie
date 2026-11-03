@@ -1,5 +1,5 @@
 import {readSlideDraftRequest,parseSlideDraft,type SlideDraftRequest} from '../../shared/localSlideDraft';
-type ModelPack={verifiedDirectory:()=>Promise<string>};
+type ModelPack={verifiedDirectory:(signal?:AbortSignal)=>Promise<string>};
 type Runner=(directory:string,request:SlideDraftRequest,signal:AbortSignal)=>Promise<string>;
 export class LocalSlideService{
  private controller?:AbortController;
@@ -12,11 +12,13 @@ export class LocalSlideService{
   const request=readSlideDraftRequest(value);if(!request)throw Error('SLIDE_DRAFT_REQUEST_INVALID');
   const controller=new AbortController();this.controller=controller;
   try{
-   const directory=await this.pack.verifiedDirectory();
+   const directory=await this.pack.verifiedDirectory(controller.signal);
    if(controller.signal.aborted||this.isOnAir())throw Error('SLIDE_DRAFT_CANCELLED');
    const text=await this.run(directory,request,controller.signal);
    if(controller.signal.aborted||this.isOnAir())throw Error('SLIDE_DRAFT_CANCELLED');
-   return parseSlideDraft(text,request.count);
+   const drafts=parseSlideDraft(text,request.count);
+   if(request.design&&drafts.some(draft=>!draft.design))throw Error('SLIDE_DRAFT_INVALID');
+   return drafts;
   }finally{if(this.controller===controller)this.controller=undefined}
  }
 }

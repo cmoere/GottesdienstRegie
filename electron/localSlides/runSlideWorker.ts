@@ -5,13 +5,15 @@ export function runSlideWorker(directory:string,request:SlideDraftRequest,signal
  return new Promise((resolve,reject)=>{
   if(signal.aborted){reject(Error('SLIDE_DRAFT_CANCELLED'));return}
   const child=utilityProcess.fork(path.join(__dirname,'..','localSlideWorker.js'),[],{stdio:'pipe',serviceName:'GottesdienstRegie'});
+  // Drain native diagnostics without recording prompts, feeds or generated text.
+  child.stdout?.resume();child.stderr?.resume();
   let settled=false;
   const finish=(error:Error|null,text?:string)=>{
    if(settled)return;settled=true;clearTimeout(timer);signal.removeEventListener('abort',cancel);child.kill();
    if(error)reject(error);else resolve(text!);
   };
   const cancel=()=>finish(Error('SLIDE_DRAFT_CANCELLED'));
-  const timer=setTimeout(()=>finish(Error('SLIDE_DRAFT_TIMEOUT')),600000);
+  const timer=setTimeout(()=>finish(Error('SLIDE_DRAFT_TIMEOUT')),1800000);
   signal.addEventListener('abort',cancel,{once:true});
   child.once('spawn',()=>{if(signal.aborted){cancel();return}child.postMessage({directory,request})});
   child.on('message',(message:unknown)=>{

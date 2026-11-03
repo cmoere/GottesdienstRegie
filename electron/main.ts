@@ -3,6 +3,10 @@ import {SlideModelPack} from './localSlides/SlideModelPack';
 import {LocalSlideService} from './localSlides/LocalSlideService';
 import {runSlideWorker} from './localSlides/runSlideWorker';
 import localSlideModel from '../shared/localSlideModel.json';
+import localImageModel from '../shared/localImageModel.json';
+import {LocalModelManager,type LocalModelId} from './localSlides/LocalModelManager';
+import {LocalImageService} from './localSlides/LocalImageService';
+import {createImageRunner} from './localSlides/runImageWorker';
 import {getLocalTlsIdentity} from './LocalTlsIdentity';
 import {readShareDescription} from './ScreenShareBroker';
 import {localizeImportWarning} from './importReportText';
@@ -87,6 +91,7 @@ let mediaSelectionContext:CountdownMediaContext={};
 let appPreferences:AppPreferences;
 let controlCloseInProgress=false;
 let stopPresentationOutputs:()=>Promise<boolean>=async()=>true;
+let startLocalModels=()=>{};
 let finishClose:()=>Promise<void>=async()=>{};
 let spotifyAuth:SpotifyAuthService|null=null;
 const spotifyOEmbed=new SpotifyOEmbedService();
@@ -207,6 +212,7 @@ function createControlWindow(preferences:AppPreferencesData) {
   const ready= (event:Electron.IpcMainEvent)=>{
     if(event.sender!==controlWindow?.webContents)return;
     revealWorkspace();
+    startLocalModels();
   };
   ipcMain.on('lifecycle:ready',ready);
   const createdWindow=controlWindow;
@@ -327,7 +333,12 @@ app.whenReady().then(async() => {
   const draftingBlocked=()=>outputStarting||outputManager.isActive()||outputManager.getAppMode().onAir;
   const slideModelPack=new SlideModelPack(path.join(app.getPath('userData'),'local-slide-models'),localSlideModel);
   const localSlideService=new LocalSlideService(slideModelPack,runSlideWorker,draftingBlocked);
-  app.once('before-quit',()=>{localSlideService.cancel();slideModelPack.cancel()});
+  const imageModelPack=new SlideModelPack(path.join(app.getPath('userData'),'local-image-models'),localImageModel);
+  let imageProgress=0;
+  const localImageService=new LocalImageService(imageModelPack,createImageRunner(app.isPackaged?path.join(process.resourcesPath,'image-ai'):path.join(app.getAppPath(),'work/image-ai',process.platform+'-'+process.arch),path.join(app.getPath('temp'),'gottesdienstregie-image-ai'),value=>{imageProgress=value}),input=>mediaRepository.importGenerated(input),()=>draftingBlocked()||localSlideService.busy);
+  const localModels=new LocalModelManager(path.join(app.getPath('userData'),'local-model-settings.json'),[{id:'text',pack:slideModelPack},{id:'image',pack:imageModelPack}],()=>draftingBlocked()||localSlideService.busy||localImageService.busy);
+  await localModels.initialize();startLocalModels=()=>localModels.start();
+  app.once('will-quit',()=>{localSlideService.cancel();localImageService.discard();localModels.dispose()});
   stopPresentationOutputs=()=>outputManager.stop();
   ipcMain.handle('spelling:set-language',(event,language:string)=>applySpellCheckerLanguage(event.sender,String(language||'de')));
   ipcMain.handle('radio:metadata-start',(event,stationId:string,streamUrl:string,sessionId?:string,channel?:string)=>{const sender=event.sender,id=typeof sessionId==='string'&&/^[\w-]{1,128}$/.test(sessionId)?sessionId:undefined;return radioMetadataCoordinator.start(sender.id,String(stationId),String(streamUrl),value=>{if(!sender.isDestroyed())sender.send('radio:metadata',value)},id,channel==='background'?'background':'preview')});
@@ -624,7 +635,7 @@ app.whenReady().then(async() => {
   screen.on('display-added',notifyDisplays);screen.on('display-removed',(_event,display)=>{outputManager.handleRemoved(display.id);notifyDisplays()});screen.on('display-metrics-changed',notifyDisplays);
   ipcMain.handle('displays:identify',(_event,assignments:DisplayAssignments)=>outputManager.identify(assignments));
   ipcMain.handle('outputs:preflight',(_event,assignments:DisplayAssignments,presentation:{hasPresentation?:boolean;activeSlideCount?:number;media?:string[]})=>displayManager.preflight(assignments,presentation));
-  ipcMain.handle('outputs:on-air',async(_event,assignments:DisplayAssignments,payload:unknown)=>{const preflight=displayManager.preflight(assignments,{hasPresentation:true,activeSlideCount:1});if(!preflight.ok)throw new Error(preflight.errors.join('\n'));outputStarting=true;localSlideService.cancel();slideModelPack.cancel();try{await stopOriginalPlayback();remoteServer.updateLive({current:payload,onAir:true});return await outputManager.start(assignments,payload)}finally{outputStarting=false}});
+  ipcMain.handle('outputs:on-air',async(_event,assignments:DisplayAssignments,payload:unknown)=>{const preflight=displayManager.preflight(assignments,{hasPresentation:true,activeSlideCount:1});if(!preflight.ok)throw new Error(preflight.errors.join('\n'));outputStarting=true;localSlideService.cancel();localImageService.cancel();localModels.pause();try{await stopOriginalPlayback();remoteServer.updateLive({current:payload,onAir:true});return await outputManager.start(assignments,payload)}finally{outputStarting=false;if(!outputManager.isActive())localModels.resume()}});
   ipcMain.handle('outputs:send-slide',(_event,payload:unknown)=>{outputManager.send(payload);remoteServer.updateLive({current:payload});return true});
   ipcMain.on('outputs:media-ended',(_event,behavior:string)=>{sendToLiveWindow(controlWindow,'outputs:media-ended',behavior)});
   ipcMain.handle('outputs:send-role',(_event,role:OutputRole,payload:unknown)=>outputManager.sendTo(role,payload));
@@ -634,18 +645,28 @@ app.whenReady().then(async() => {
   ipcMain.handle('outputs:send-banner',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id)return false;const banner=readBannerOutputState(payload);return banner!==undefined?outputManager.setBanner(banner):false});
   ipcMain.handle('outputs:send-weather-warnings',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;const state=payload===null?null:readWeatherWarningState(payload);return payload!==null&&!state?false:outputManager.setWeatherWarnings(state)});
   ipcMain.handle('outputs:send-annotations',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;const state=readAnnotationState(payload);return state===undefined?false:outputManager.setAnnotations(state)});
-  ipcMain.handle('outputs:set-app-mode',(_event,state:{mode:'normal'|'test';onAir:boolean})=>{if(state.onAir){localSlideService.cancel();slideModelPack.cancel()}return outputManager.setAppMode(state)});
+  ipcMain.handle('outputs:set-app-mode',(_event,state:{mode:'normal'|'test';onAir:boolean})=>{if(state.onAir){localSlideService.cancel();localImageService.cancel();localModels.pause()}else localModels.resume();return outputManager.setAppMode(state)});
   ipcMain.handle('outputs:get-app-mode',()=>outputManager.getAppMode());
   ipcMain.handle('outputs:get-state',(event)=>outputManager.getStateForSender(event.sender.id));
   const requireDraftOperator=(event:Electron.IpcMainInvokeEvent)=>{
     if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)throw Error('SLIDE_DRAFT_FORBIDDEN');
   };
   ipcMain.handle('local-slides:status',async event=>{requireDraftOperator(event);return{...await slideModelPack.status(),busy:localSlideService.busy}});
-  ipcMain.handle('local-slides:download',async event=>{requireDraftOperator(event);if(draftingBlocked())throw Error('SLIDE_DRAFT_ON_AIR');await slideModelPack.download()});
-  ipcMain.handle('local-slides:cancel-download',event=>{requireDraftOperator(event);slideModelPack.cancel()});
-  ipcMain.handle('local-slides:remove',async event=>{requireDraftOperator(event);if(localSlideService.busy||draftingBlocked())throw Error('SLIDE_DRAFT_BUSY');await slideModelPack.remove()});
-  ipcMain.handle('local-slides:generate',async(event,request:unknown)=>{requireDraftOperator(event);const cancel=()=>localSlideService.cancel();event.sender.once('destroyed',cancel);try{return await localSlideService.generate(request)}finally{event.sender.removeListener('destroyed',cancel)}});
+  ipcMain.handle('local-models:status',event=>{requireDraftOperator(event);return localModels.status()});
+  ipcMain.handle('local-models:configure',(event,value:unknown)=>{requireDraftOperator(event);if(typeof value!=='boolean')throw Error('LOCAL_MODEL_PREFERENCES_INVALID');return localModels.configure(value)});
+  const modelId=(value:unknown):LocalModelId=>{if(value!=='text'&&value!=='image')throw Error('LOCAL_MODEL_UNKNOWN');return value};
+  ipcMain.handle('local-models:download',(event,id:unknown)=>{requireDraftOperator(event);return localModels.download(modelId(id))});
+  ipcMain.handle('local-models:cancel-download',(event,id:unknown)=>{requireDraftOperator(event);return localModels.cancelDownload(modelId(id))});
+  ipcMain.handle('local-models:remove',(event,id:unknown)=>{requireDraftOperator(event);return localModels.remove(modelId(id))});
+  ipcMain.handle('local-slides:download',event=>{requireDraftOperator(event);return localModels.download('text')});
+  ipcMain.handle('local-slides:cancel-download',event=>{requireDraftOperator(event);return localModels.cancelDownload('text')});
+  ipcMain.handle('local-slides:remove',event=>{requireDraftOperator(event);return localModels.remove('text')});
+  ipcMain.handle('local-slides:generate',async(event,request:unknown)=>{requireDraftOperator(event);if(localImageService.busy)throw Error('SLIDE_DRAFT_BUSY');localModels.pause();const cancel=()=>localSlideService.cancel();event.sender.once('destroyed',cancel);try{return await localSlideService.generate(request)}finally{event.sender.removeListener('destroyed',cancel);localModels.resume()}});
   ipcMain.handle('local-slides:cancel',event=>{requireDraftOperator(event);localSlideService.cancel()});
+  ipcMain.handle('local-images:status',async event=>{requireDraftOperator(event);return{...await imageModelPack.status(),busy:localImageService.busy,progress:imageProgress}});
+  ipcMain.handle('local-images:generate',async(event,prompt:unknown)=>{requireDraftOperator(event);localModels.pause();imageProgress=0;const cancel=()=>localImageService.cancel();event.sender.once('destroyed',cancel);try{return await localImageService.generate(prompt)}finally{event.sender.removeListener('destroyed',cancel);localModels.resume()}});
+  ipcMain.handle('local-images:accept',(event,ids:unknown)=>{requireDraftOperator(event);return localImageService.accept(ids)});
+  ipcMain.handle('local-images:discard',event=>{requireDraftOperator(event);localImageService.discard()});
   ipcMain.handle('outputs:paint-report',(event,value:unknown)=>event.senderFrame===event.sender.mainFrame&&outputManager.acceptPaintReceipt(event.sender.id,value));
   ipcMain.handle('outputs:preview-paint-report',(event,value:unknown)=>{
     if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;
@@ -655,7 +676,7 @@ app.whenReady().then(async() => {
     if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return [];
     return outputManager.getTimings();
   });
-  ipcMain.handle('outputs:off-air',()=>{remoteServer.updateLive({onAir:false});return stopPresentationOutputs()});
+  ipcMain.handle('outputs:off-air',()=>{remoteServer.updateLive({onAir:false});return stopPresentationOutputs().finally(()=>localModels.resume())});
   finishClose=async()=>{
     const owner=controlWindow;if(!owner||owner.isDestroyed())return;
     const document=await new Promise<unknown>((resolve,reject)=>{

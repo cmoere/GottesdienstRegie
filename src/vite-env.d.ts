@@ -138,6 +138,19 @@ interface Window {
             generate: (request: import('../shared/localSlideDraft').SlideDraftRequest) => Promise<import('../shared/localSlideDraft').SlideDraft[]>;
             cancel: () => Promise<void>;
         };
+        localModels?: {
+            status:()=>Promise<import('../electron/localSlides/LocalModelManager').LocalModelsStatus>;
+            configure:(automatic:boolean)=>Promise<void>;
+            download:(id:'text'|'image')=>Promise<void>;
+            cancelDownload:(id:'text'|'image')=>Promise<void>;
+            remove:(id:'text'|'image')=>Promise<void>;
+        };
+        localImages?: {
+            status:()=>Promise<import('../electron/localSlides/SlideModelPack').SlidePackStatus&{busy:boolean;progress:number}>;
+            generate:(prompt:string)=>Promise<{id:string;preview:string}>;
+            accept:(ids:string[])=>Promise<string[]>;
+            discard:()=>Promise<void>;
+        };
         sendLiveSlide: (payload: unknown) => Promise<boolean>;
         onLiveSlide: (callback: (payload: unknown) => void) => () => void;
         onOutputStatus: (callback: (payload: DesktopOutputStatus) => void) => () => void;
