@@ -25,3 +25,16 @@ Native credential implementation reference: [Microsoft CredReadW](https://learn.
 - Actual App native functional/layout checks pass for six light/dark/width cases and all31 regional settings surfaces, plus diagnostics, help and media browser mounting, `work/v98-native-dom-verified.log`, `work/v98-native-dom-5Hav8N/report.json`. Screenshot capture is explicitly disabled in this proof: the offscreen test environment returned UnknownVizError during capture, so this is not a pixel/screenshot acceptance claim. Initial private harness dependency scanning/CommonJS configuration and relocated fixture paths were corrected; the production build and visitor CSS were not changed to accommodate those harness issues.
 
 The unrelated untracked `tests/smoke/startup-diagnostic.cjs` is excluded and must remain unchanged. All programming/review is inline; no coding delegation was used.
+
+## Public v98 verification — 4 November 2026
+
+Normal/latest **0.98.0** is public: https://github.com/cmoere/GottesdienstRegie/releases/tag/v0.98.0
+
+- Release source: `edfbc3b4174ad62e0e6d47537a3e8640a3c1b3ad`; cross-platform CI completed successfully: https://github.com/cmoere/GottesdienstRegie/actions/runs/41739602013. Windows NSIS, Linux AppImage/DEB, macOS Intel/Apple Silicon and all three update manifests are present; **11 assets**.
+- Final CI: **320 test files / 1292 tests passed**. The earlier frozen suite and 46 release gates also passed. All 31 regional interface/documentation packages remain complete.
+- Public release is neither draft nor prerelease, is GitHub latest, and carries the expected release notes. Public history and RSS include 0.98.0. Update manifests resolve to existing correctly sized assets.
+- Downloaded public Windows installer verified against latest.yml SHA512 and GitHub SHA256; identical to the CI artifact whose actual packaged modules, renderer, 31 regional packs, native ONNX/Sharp dependencies, image CLI, CPU fallback and five app-local CRT/OpenMP DLLs were inspected. Installer was **not executed or installed**.
+- Actual extracted packaged text worker ran offline with all dependencies restricted to the package and zero fetch calls (187464 ms). Actual extracted packaged native image runtime generated a validated 1024×576 PNG offline (142906 ms); owned temporary files cleaned. No separate runtime installer was used.
+- Larger Q4 text/design and SDXL Lightning Q8 image models total approximately **8.07 GB**, downloaded sequentially after workspace readiness only OFF AIR. The settings retain explicit persistent removal/re-enable. Generation took several minutes on the tested 8GB computer; no physical HDMI, speaker or other-platform image-inference claim is made by these software/package tests.
+
+Private evidence: work/v98-final-public.json, work/v98-public-verification.log, work/v98-ci-package-inspection.json, work/v98-ci-packaged-model-proof.json, work/v98-ci-packaged-image-proof.json.
