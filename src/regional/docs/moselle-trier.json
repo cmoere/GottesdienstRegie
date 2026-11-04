@@ -2182,6 +2182,14 @@
     "versions[0.98].builds[0.98.0].sections.known.0.label": "Lokal KI brauch Recheleeschtung",
     "versions[0.98].builds[0.98.0].sections.known.0.text": "D’Erstellung steet fir d’éischt nëmmen OFF AIR zur Verfügung a ka jee no Rechner e puer Minutten daueren. Erzeugt Inhalter musse virum Iwwerhuele gepréift ginn, besonnesch Bibelstellen, Nimm an Terminer. De Modell gëtt net beim Programmstart gelueden.",
     "versions[0.98].builds[0.98.0].sections.known.1.label": "Originalgetrei PowerPoint-Wiedergab",
-    "versions[0.98].builds[0.98.0].sections.known.1.text": "Déi originalgetrei Wiedergab brauch weiderhin Windows an installéiert Microsoft PowerPoint. Déi nei Virbereedungs- an Diagnosfunktiounen ersetzen dëse Wiedergabewee net."
+    "versions[0.98].builds[0.98.0].sections.known.1.text": "Déi originalgetrei Wiedergab brauch weiderhin Windows an installéiert Microsoft PowerPoint. Déi nei Virbereedungs- an Diagnosfunktiounen ersetzen dëse Wiedergabewee net.",
+    "versions[0.98].builds[0.98.1].overview.label": "Wasserzeichen im Testbetrieb",
+    "versions[0.98].builds[0.98.1].overview.text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+    "versions[0.98].builds[0.98.1].sections.fixed.0.label": "Wasserzeichen im Testbetrieb",
+    "versions[0.98].builds[0.98.1].sections.fixed.0.text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+    "versions[0.98].builds[0.98.1].sections.known.0.label": "Lokal KI brauch Recheleeschtung",
+    "versions[0.98].builds[0.98.1].sections.known.0.text": "D’Erstellung steet fir d’éischt nëmmen OFF AIR zur Verfügung a ka jee no Rechner e puer Minutten daueren. Erzeugt Inhalter musse virum Iwwerhuele gepréift ginn, besonnesch Bibelstellen, Nimm an Terminer. De Modell gëtt net beim Programmstart gelueden.",
+    "versions[0.98].builds[0.98.1].sections.known.1.label": "Originalgetrei PowerPoint-Wiedergab",
+    "versions[0.98].builds[0.98.1].sections.known.1.text": "Déi originalgetrei Wiedergab brauch weiderhin Windows an installéiert Microsoft PowerPoint. Déi nei Virbereedungs- an Diagnosfunktiounen ersetzen dëse Wiedergabewee net."
   }
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": true,
-  "sourceFingerprint": "ff2d0c9e33e4cbf1405f2846e126d59fda2e8fb2078c26e2f82935feca41e83b",
+  "sourceFingerprint": "8d339c3e91d3a55263b84861bd457de42f2ac317b1043b30a1eb918617070e2d",
   "note": "Reviewed complete v98 source inventory; all31 interface/native/help/release resources checked separately. Protocol tokens, internal prompts and generated-document defaults have exact entry-level reviews.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -54364,6 +54364,62 @@
       "status": "excluded",
       "exclusionReason": "Reviewed 2026-10-29 against its concrete AST usage: Stable exception protocol code passed to Error, not a human-language sentence. It must remain exact for error matching; surrounding operator explanation is inventoried separately.",
       "technicalReviewHash": "3f339f0fa63f9118449008515b1dfaec92e86ff4556ba33d31296220889d01b3"
+    },
+    {
+      "key": "release.versions[0.98].builds[0.98.1].overview.label",
+      "text": "Wasserzeichen im Testbetrieb",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.98].builds[0.98.1].overview.text",
+      "text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.98].builds[0.98.1].sections.fixed.0.label",
+      "text": "Wasserzeichen im Testbetrieb",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.98].builds[0.98.1].sections.fixed.0.text",
+      "text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.98].builds[0.98.1].sections.known.0.label",
+      "text": "Lokale KI benötigt Rechenleistung",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.98].builds[0.98.1].sections.known.0.text",
+      "text": "Die Erstellung steht zunächst nur OFF AIR zur Verfügung und kann je nach Rechner mehrere Minuten dauern. Erzeugte Inhalte müssen vor der Übernahme geprüft werden, insbesondere Bibelstellen, Namen und Termine. Das Modell wird nicht beim Programmstart geladen.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.98].builds[0.98.1].sections.known.1.label",
+      "text": "Originalgetreue PowerPoint-Wiedergabe",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.98].builds[0.98.1].sections.known.1.text",
+      "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
     },
     {
       "key": "release.versions[0.98].builds[0.98.0].overview.label",

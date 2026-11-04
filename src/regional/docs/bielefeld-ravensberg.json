@@ -2182,6 +2182,14 @@
     "versions[0.98].builds[0.98.0].sections.known.0.label": "Lokale KI bruukt Rechenleistung",
     "versions[0.98].builds[0.98.0].sections.known.0.text": "Dat Erstellen steiht toeerst blaut OFF AIR tau Verfügung un kann je na Rechner mehr Minuten duern. Erzeugte Inhold mööt vör dat Övernehmen pröövt warrn, besünners Bibelstellen, Namen un Termine. Dat Modell warrt nich bi den Programmstart laden.",
     "versions[0.98].builds[0.98.0].sections.known.1.label": "Originalgetrue PowerPoint-Wiedergave",
-    "versions[0.98].builds[0.98.0].sections.known.1.text": "De originalgetrue Wiedergave bruukt wiederhen Windows un installeert Microsoft PowerPoint. De niegen Vörbereidungs- un Diagnosefunkschonen ersetzt düssen Wiedergaveweg nich."
+    "versions[0.98].builds[0.98.0].sections.known.1.text": "De originalgetrue Wiedergave bruukt wiederhen Windows un installeert Microsoft PowerPoint. De niegen Vörbereidungs- un Diagnosefunkschonen ersetzt düssen Wiedergaveweg nich.",
+    "versions[0.98].builds[0.98.1].overview.label": "Wasserzeichen im Testbetrieb",
+    "versions[0.98].builds[0.98.1].overview.text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+    "versions[0.98].builds[0.98.1].sections.fixed.0.label": "Wasserzeichen im Testbetrieb",
+    "versions[0.98].builds[0.98.1].sections.fixed.0.text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+    "versions[0.98].builds[0.98.1].sections.known.0.label": "Lokale KI bruukt Rechenleistung",
+    "versions[0.98].builds[0.98.1].sections.known.0.text": "Dat Erstellen steiht toeerst blaut OFF AIR tau Verfügung un kann je na Rechner mehr Minuten duern. Erzeugte Inhold mööt vör dat Övernehmen pröövt warrn, besünners Bibelstellen, Namen un Termine. Dat Modell warrt nich bi den Programmstart laden.",
+    "versions[0.98].builds[0.98.1].sections.known.1.label": "Originalgetrue PowerPoint-Wiedergave",
+    "versions[0.98].builds[0.98.1].sections.known.1.text": "De originalgetrue Wiedergave bruukt wiederhen Windows un installeert Microsoft PowerPoint. De niegen Vörbereidungs- un Diagnosefunkschonen ersetzt düssen Wiedergaveweg nich."
   }
 }

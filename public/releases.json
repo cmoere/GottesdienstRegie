@@ -24,9 +24,61 @@
       "line": "0.98",
       "builds": [
         {
-          "version": "0.98.0",
+          "version": "0.98.1",
           "releaseDate": "2026-11-04",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Wasserzeichen im Testbetrieb",
+              "en": "Test mode watermark"
+            },
+            "text": {
+              "de": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+              "en": "When the ticker is at the bottom of the screen, the test mode watermark now sits above the announcements in both full-screen output and previews."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Wasserzeichen im Testbetrieb",
+                  "en": "Test mode watermark"
+                },
+                "text": {
+                  "de": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+                  "en": "When the ticker is at the bottom of the screen, the test mode watermark now sits above the announcements in both full-screen output and previews."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Lokale KI benötigt Rechenleistung",
+                  "en": "Local AI needs computing resources"
+                },
+                "text": {
+                  "de": "Die Erstellung steht zunächst nur OFF AIR zur Verfügung und kann je nach Rechner mehrere Minuten dauern. Erzeugte Inhalte müssen vor der Übernahme geprüft werden, insbesondere Bibelstellen, Namen und Termine. Das Modell wird nicht beim Programmstart geladen.",
+                  "en": "Generation is initially available only OFF AIR and may take several minutes depending on the computer. Review generated content before accepting it, especially Bible references, names and dates. The model is not loaded at application startup."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.98.0",
+          "releaseDate": "2026-11-04",
+          "current": false,
           "overview": {
             "label": {
               "de": "Stabilere Bearbeitung und lokale KI-Gestaltung",

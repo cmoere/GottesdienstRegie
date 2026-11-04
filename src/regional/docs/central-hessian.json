@@ -2182,6 +2182,14 @@
     "versions[0.98].builds[0.98.0].sections.known.0.label": "Lokale KI braucht Rechenleistung",
     "versions[0.98].builds[0.98.0].sections.known.0.text": "Die Erstellung steht ersch emol bloß OFF AIR zur Verfügung un kann je nooch Rechner mehrere Minute dauere. Erzeugte Inhalte müsse vorm Iwwernehme geprüft wern, besonders Bibelstelle, Name un Termine. Des Modell wird net beim Programmstart gelade.",
     "versions[0.98].builds[0.98.0].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergab",
-    "versions[0.98].builds[0.98.0].sections.known.1.text": "Die originalgetreue Wiedergab braucht weider Windows un installiertes Microsoft PowerPoint. Die neue Vorbereitungs- un Diagnosefunktione ersetze den Wiedergabeweg net."
+    "versions[0.98].builds[0.98.0].sections.known.1.text": "Die originalgetreue Wiedergab braucht weider Windows un installiertes Microsoft PowerPoint. Die neue Vorbereitungs- un Diagnosefunktione ersetze den Wiedergabeweg net.",
+    "versions[0.98].builds[0.98.1].overview.label": "Wasserzeichen im Testbetrieb",
+    "versions[0.98].builds[0.98.1].overview.text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+    "versions[0.98].builds[0.98.1].sections.fixed.0.label": "Wasserzeichen im Testbetrieb",
+    "versions[0.98].builds[0.98.1].sections.fixed.0.text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+    "versions[0.98].builds[0.98.1].sections.known.0.label": "Lokale KI braucht Rechenleistung",
+    "versions[0.98].builds[0.98.1].sections.known.0.text": "Die Erstellung steht ersch emol bloß OFF AIR zur Verfügung un kann je nooch Rechner mehrere Minute dauere. Erzeugte Inhalte müsse vorm Iwwernehme geprüft wern, besonders Bibelstelle, Name un Termine. Des Modell wird net beim Programmstart gelade.",
+    "versions[0.98].builds[0.98.1].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergab",
+    "versions[0.98].builds[0.98.1].sections.known.1.text": "Die originalgetreue Wiedergab braucht weider Windows un installiertes Microsoft PowerPoint. Die neue Vorbereitungs- un Diagnosefunktione ersetze den Wiedergabeweg net."
   }
 }

@@ -2182,6 +2182,14 @@
     "versions[0.98].builds[0.98.0].sections.known.0.label": "Lokali KI bruucht Recheleistig",
     "versions[0.98].builds[0.98.0].sections.known.0.text": "D Erstellig steht zerscht numme OFF AIR zur Verfüegig un kann je noch Rechner mehreri Minute duure. Erzeugti Inhalt müesse vor de Übernahm prüeft werde, bsunders Bibelstelle, Name un Termine. S Modell wird nit beim Programmstart glade.",
     "versions[0.98].builds[0.98.0].sections.known.1.label": "Originalgetreui PowerPoint-Wiedergab",
-    "versions[0.98].builds[0.98.0].sections.known.1.text": "D originalgetreui Wiedergab bruucht wiiterhin Windows un installierts Microsoft PowerPoint. D neie Vorbereitigs- un Diagnosefunktione ersetze de Wiedergabewäg nit."
+    "versions[0.98].builds[0.98.0].sections.known.1.text": "D originalgetreui Wiedergab bruucht wiiterhin Windows un installierts Microsoft PowerPoint. D neie Vorbereitigs- un Diagnosefunktione ersetze de Wiedergabewäg nit.",
+    "versions[0.98].builds[0.98.1].overview.label": "Wasserzeichen im Testbetrieb",
+    "versions[0.98].builds[0.98.1].overview.text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+    "versions[0.98].builds[0.98.1].sections.fixed.0.label": "Wasserzeichen im Testbetrieb",
+    "versions[0.98].builds[0.98.1].sections.fixed.0.text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+    "versions[0.98].builds[0.98.1].sections.known.0.label": "Lokali KI bruucht Recheleistig",
+    "versions[0.98].builds[0.98.1].sections.known.0.text": "D Erstellig steht zerscht numme OFF AIR zur Verfüegig un kann je noch Rechner mehreri Minute duure. Erzeugti Inhalt müesse vor de Übernahm prüeft werde, bsunders Bibelstelle, Name un Termine. S Modell wird nit beim Programmstart glade.",
+    "versions[0.98].builds[0.98.1].sections.known.1.label": "Originalgetreui PowerPoint-Wiedergab",
+    "versions[0.98].builds[0.98.1].sections.known.1.text": "D originalgetreui Wiedergab bruucht wiiterhin Windows un installierts Microsoft PowerPoint. D neie Vorbereitigs- un Diagnosefunktione ersetze de Wiedergabewäg nit."
   }
 }

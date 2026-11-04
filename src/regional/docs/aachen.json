@@ -2182,6 +2182,14 @@
     "versions[0.98].builds[0.98.0].sections.known.0.label": "Lokale KI bruuchet Rechenleistung",
     "versions[0.98].builds[0.98.0].sections.known.0.text": "De Erstellung steäht iersch bloß OFF AIR zor Verfügung än kaan je noh Rechner mehrere Minutte duure. Erzeugte Inhalte müsse vör et Övernämme jeprüft werde, besonders Bibelstelle, Name än Termine. Dat Modell wird net beim Programmstart jelade.",
     "versions[0.98].builds[0.98.0].sections.known.1.label": "Originaljetreue PowerPoint-Wiedergav",
-    "versions[0.98].builds[0.98.0].sections.known.1.text": "De originaljetreue Wiedergav bruuchet weiderhin Windows än installiert Microsoft PowerPoint. De nöie Vörbereitungs- än Diagnosefunktione ersetze dä Wiedergabewech net."
+    "versions[0.98].builds[0.98.0].sections.known.1.text": "De originaljetreue Wiedergav bruuchet weiderhin Windows än installiert Microsoft PowerPoint. De nöie Vörbereitungs- än Diagnosefunktione ersetze dä Wiedergabewech net.",
+    "versions[0.98].builds[0.98.1].overview.label": "Wasserzeichen im Testbetrieb",
+    "versions[0.98].builds[0.98.1].overview.text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+    "versions[0.98].builds[0.98.1].sections.fixed.0.label": "Wasserzeichen im Testbetrieb",
+    "versions[0.98].builds[0.98.1].sections.fixed.0.text": "Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.",
+    "versions[0.98].builds[0.98.1].sections.known.0.label": "Lokale KI bruuchet Rechenleistung",
+    "versions[0.98].builds[0.98.1].sections.known.0.text": "De Erstellung steäht iersch bloß OFF AIR zor Verfügung än kaan je noh Rechner mehrere Minutte duure. Erzeugte Inhalte müsse vör et Övernämme jeprüft werde, besonders Bibelstelle, Name än Termine. Dat Modell wird net beim Programmstart jelade.",
+    "versions[0.98].builds[0.98.1].sections.known.1.label": "Originaljetreue PowerPoint-Wiedergav",
+    "versions[0.98].builds[0.98.1].sections.known.1.text": "De originaljetreue Wiedergav bruuchet weiderhin Windows än installiert Microsoft PowerPoint. De nöie Vörbereitungs- än Diagnosefunktione ersetze dä Wiedergabewech net."
   }
 }

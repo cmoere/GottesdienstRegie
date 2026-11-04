@@ -1,3 +1,9 @@
+# GottesdienstRegie 0.98.1
+
+Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.
+
+---
+
 # GottesdienstRegie 0.98.0
 
 Die Bearbeitung umfangreicher Präsentationen vermeidet unnötige Berechnungen und doppelte Verlaufsdaten. Gleichzeitige Medienimporte werden geordnet verarbeitet. Die Windows-Anmeldung für den Cloud-Upload kann vorhandene GitHub-Anmeldedaten zuverlässiger finden; ein fehlgeschlagener Upload lässt sich mit der ausgewählten Datei erneut versuchen.
