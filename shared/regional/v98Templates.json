@@ -28,7 +28,14 @@
     "v99ImageWait": "Ein Bild kann mehrere Minuten dauern.",
     "v99LiveImageMemory": "Zu wenig freier Arbeitsspeicher für das Bild. Der Textentwurf bleibt erhalten.",
     "v99LiveImageModel": "Bildmodell für ON AIR",
-    "v99LiveImageModelMissing": "Das Bildmodell für ON AIR muss vorher bei OFF AIR heruntergeladen werden."
+    "v99LiveImageModelMissing": "Das Bildmodell für ON AIR muss vorher bei OFF AIR heruntergeladen werden.",
+    "settingsReleaseNotesFailed": "Versionshinweise konnten nicht geladen werden.",
+    "settingsPreviousFailed": "Vorherige Version konnte nicht geladen werden.",
+    "settingsPreviousLoading": "Vorherige Version wird gesucht …",
+    "settingsAudioLoading": "Audiogeräte werden geladen …",
+    "settingsDisplaysLoading": "Bildschirme werden geladen …",
+    "settingsModelsLoading": "Modellstatus wird geladen …",
+    "settingsInstallLoading": "Installationsdetails werden geladen …"
   },
   "native": {},
   "en": {
@@ -60,7 +67,14 @@
     "v99ImageWait": "An image may take several minutes.",
     "v99LiveImageMemory": "There is not enough free memory for the image. The text draft is still available.",
     "v99LiveImageModel": "ON AIR image model",
-    "v99LiveImageModelMissing": "Download the ON AIR image model before going live."
+    "v99LiveImageModelMissing": "Download the ON AIR image model before going live.",
+    "settingsReleaseNotesFailed": "Release notes could not be loaded.",
+    "settingsPreviousFailed": "The previous version could not be loaded.",
+    "settingsPreviousLoading": "Looking for the previous version…",
+    "settingsAudioLoading": "Loading audio devices…",
+    "settingsDisplaysLoading": "Loading displays…",
+    "settingsModelsLoading": "Loading model status…",
+    "settingsInstallLoading": "Loading installation details…"
   },
   "documentation": {
     "helpTitle": "Lokale KI: Modelle, Gestaltung und Bilder",

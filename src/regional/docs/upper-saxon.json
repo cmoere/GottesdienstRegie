@@ -2204,6 +2204,14 @@
     "versions[0.99].builds[0.99.0].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.0].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.0].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
-    "versions[0.99].builds[0.99.0].sections.known.1.text": "De originalgetreue Wiedergabe braucht weiterhin Windows un installiertes Microsoft PowerPoint. De neuen Vorbereitungs- un Diagnosefunktionen ersetzen diesen Wiedergabeweg ni."
+    "versions[0.99].builds[0.99.0].sections.known.1.text": "De originalgetreue Wiedergabe braucht weiterhin Windows un installiertes Microsoft PowerPoint. De neuen Vorbereitungs- un Diagnosefunktionen ersetzen diesen Wiedergabeweg ni.",
+    "versions[0.99].builds[0.99.1].overview.label": "Schnellere Einstellungen",
+    "versions[0.99].builds[0.99.1].overview.text": "Die installierte Versionsnummer ist sofort sichtbar. Die Update-Suche zeigt ihr Ergebnis ohne künstliche Wartezeit.",
+    "versions[0.99].builds[0.99.1].sections.fixed.0.label": "Ladeanzeigen und Versionshinweise",
+    "versions[0.99].builds[0.99.1].sections.fixed.0.text": "Ältere Versionshinweise werden beim Aufklappen gerendert. Einheitliche Ladeanzeigen begleiten Versionsdaten, Geräte, Speicher und KI-Modelle. Fehlgeschlagene Abfragen für Versionshinweise und Vorgängerversion lassen sich erneut versuchen.",
+    "versions[0.99].builds[0.99.1].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.1].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.1].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
+    "versions[0.99].builds[0.99.1].sections.known.1.text": "De originalgetreue Wiedergabe braucht weiterhin Windows un installiertes Microsoft PowerPoint. De neuen Vorbereitungs- un Diagnosefunktionen ersetzen diesen Wiedergabeweg ni."
   }
 }

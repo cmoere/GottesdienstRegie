@@ -636,7 +636,15 @@ app.whenReady().then(async() => {
   ipcMain.handle('updates:cancel-download',()=>{if(!updateCancellationToken||lastUpdateStatus.state!=='downloading')return false;updateCancellationToken.cancel();publishUpdateStatus({state:'cancelled',version:pendingUpdateVersion,message:nativeText('updateDownloadCancelled')});return true});
   ipcMain.handle('updates:install',()=>{if(lastUpdateStatus.state!=='downloaded')return false;setImmediate(()=>autoUpdater.quitAndInstall(false,true));return true});
   async function previousRelease(){const response=await fetch('https://api.github.com/repos/cmoere/GottesdienstRegie/releases?per_page=20',{headers:{'user-agent':`GottesdienstRegie/${app.getVersion()}`},signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error(`GitHub ${response.status}`);const releases=await response.json() as any[];for(const release of releases){if(release.draft||release.prerelease||!olderThan(String(release.tag_name),app.getVersion()))continue;const asset=(release.assets??[]).find((entry:any)=>/GottesdienstRegie-Setup-.*\.exe$/i.test(String(entry.name)));if(asset)return{version:String(release.tag_name).replace(/^v/,''),publishedAt:String(release.published_at??''),size:Number(asset.size??0),url:String(asset.browser_download_url)}}return null}
-  ipcMain.handle('updates:previous',()=>previousRelease());
+  let previousRequest:ReturnType<typeof previousRelease>|undefined;
+  let previousExpiresAt=0;
+  ipcMain.handle('updates:previous',()=>{
+    if(!previousRequest||Date.now()>=previousExpiresAt){
+      previousExpiresAt=Date.now()+5*60*1000;
+      previousRequest=previousRelease().catch(error=>{previousRequest=undefined;throw error});
+    }
+    return previousRequest;
+  });
   ipcMain.handle('updates:rollback',async()=>{try{const previous=await previousRelease();if(!previous)throw new Error('NO_PREVIOUS_VERSION');const response=await fetch(previous.url,{signal:AbortSignal.timeout(120000)});if(!response.ok||!response.body)throw new Error(`DOWNLOAD_${response.status}`);const total=Number(response.headers.get('content-length')??previous.size),target=path.join(app.getPath('temp'),`GottesdienstRegie-Setup-${previous.version}.exe`),file=await fs.open(target,'w');let received=0;try{const reader=response.body.getReader();for(;;){const{done,value}=await reader.read();if(done)break;await file.write(value);received+=value.byteLength;publishUpdateStatus({state:'rollback-downloading',version:previous.version,percent:total?Math.round(received/total*100):0})}}finally{await file.close()}publishUpdateStatus({state:'rollback-ready',version:previous.version,percent:100});const opened=await shell.openPath(target);if(opened)throw new Error(opened);setTimeout(()=>app.quit(),1200);return true}catch(error){publishUpdateStatus({state:'error',message:error instanceof Error?error.message:String(error)});return false}});
   const displayInfo=()=>displayManager.list();
   ipcMain.handle('displays:list',displayInfo);

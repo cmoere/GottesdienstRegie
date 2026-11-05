@@ -2352,7 +2352,14 @@
     "v99ImageWait": "Ein Bild kann mehrere Minuten dauern.",
     "v99LiveImageMemory": "Zu wenig freier Arbeitsspeicher für das Bild. Der Textentwurf bleibt erhalten.",
     "v99LiveImageModel": "Bildmodell für ON AIR",
-    "v99LiveImageModelMissing": "Das Bildmodell für ON AIR muss vorher bei OFF AIR heruntergeladen werden."
+    "v99LiveImageModelMissing": "Das Bildmodell für ON AIR muss vorher bei OFF AIR heruntergeladen werden.",
+    "settingsReleaseNotesFailed": "Versionshinweise konnten nicht geladen werden.",
+    "settingsPreviousFailed": "Vorherige Version konnte nicht geladen werden.",
+    "settingsPreviousLoading": "Vorherige Version wird gesucht …",
+    "settingsAudioLoading": "Audiogeräte werden geladen …",
+    "settingsDisplaysLoading": "Bildschirme werden geladen …",
+    "settingsModelsLoading": "Modellstatus wird geladen …",
+    "settingsInstallLoading": "Installationsdetails werden geladen …"
   },
   "native": {
     "updateAvailableTitle": "Nigge Version teo kriegen",

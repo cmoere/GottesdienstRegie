@@ -1,0 +1,5 @@
+.loading-status{display:inline-flex;align-items:center;gap:.55em;min-height:1.5em}
+.loading-status-spinner{box-sizing:border-box;width:1em;height:1em;flex:0 0 1em;border:2px solid var(--border);border-top-color:currentColor;border-radius:50%;animation:loading-status-spin .85s linear infinite}
+@keyframes loading-status-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.loading-status-spinner{animation:none}}
+html[data-reduce-motion=true] .loading-status-spinner{animation:none}

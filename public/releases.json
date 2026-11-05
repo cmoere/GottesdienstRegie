@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
-          "version": "0.99.0",
+          "version": "0.99.1",
           "releaseDate": "2026-11-05",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Schnellere Einstellungen",
+              "en": "Faster Settings"
+            },
+            "text": {
+              "de": "Die installierte Versionsnummer ist sofort sichtbar. Die Update-Suche zeigt ihr Ergebnis ohne künstliche Wartezeit.",
+              "en": "The installed version is visible immediately. Update checks show their results as soon as they are available."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Ladeanzeigen und Versionshinweise",
+                  "en": "Loading indicators and release notes"
+                },
+                "text": {
+                  "de": "Ältere Versionshinweise werden beim Aufklappen gerendert. Einheitliche Ladeanzeigen begleiten Versionsdaten, Geräte, Speicher und KI-Modelle. Fehlgeschlagene Abfragen für Versionshinweise und Vorgängerversion lassen sich erneut versuchen.",
+                  "en": "Older release notes render when expanded. Consistent loading indicators cover version details, devices, storage and AI models. Failed requests for release notes and the previous version can be retried."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.99.0",
+          "releaseDate": "2026-11-05",
+          "current": false,
           "overview": {
             "label": {
               "de": "Live-Regie und Vorbereitung",

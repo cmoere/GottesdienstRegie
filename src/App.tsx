@@ -16,6 +16,9 @@ import {sanitizeRecoveryDocument} from './presentationRecovery';
 import {initializePresentationStartup,prepareStartupSession} from './presentationStartup';
 import {useOutputPaintReport,type PendingOutputPaint} from './outputPaintReport';
 import {LocalSlideDraftDialog} from './localSlides/LocalSlideDraftDialog';
+import {LoadingStatus} from './LoadingStatus';
+import {version as bundledVersion} from '../package.json';
+import type {ReactNode} from 'react';
 import {LocalModelSettings} from './localSlides/LocalModelSettings';
 import {upcomingMedia,useMediaWarmup,type WarmupAsset} from './mediaWarmup';
 import {findMissingFonts} from './fonts';
@@ -4020,6 +4023,18 @@ type ReleaseBuild = {
   sections: Record<string, ReleaseEntry[]>;
 };
 type ReleaseFile = { versions: { line: string; builds: ReleaseBuild[] }[] };
+let releaseFileRequest:Promise<ReleaseFile>|undefined;
+function loadReleaseFile(){
+  releaseFileRequest??=fetch("./releases.json",{signal:AbortSignal.timeout(10000)})
+    .then(response=>{
+      if(!response.ok)throw new Error(String(response.status));
+      return response.json() as Promise<ReleaseFile>;
+    }).then(data=>{
+      if(!Array.isArray(data?.versions))throw new Error();
+      return data;
+    }).catch(error=>{releaseFileRequest=undefined;throw error});
+  return releaseFileRequest;
+}
 const updateCategoryLabels: Partial<Record<Language, Record<string, string>>> =
   {
     de: {
@@ -4160,16 +4175,30 @@ function versionLabel(version: string) {
     ? `Version ${match[1]} ${match[2].toLowerCase() === "beta" ? "Beta" : "RC"} ${match[3]}`
     : `Version ${version}`;
 }
-function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
+function ReleaseDetails({className,initiallyOpen,summary,children}:{
+  className:string;initiallyOpen:boolean;summary:ReactNode;children:()=>ReactNode;
+}){
+  const [open,setOpen]=useState(initiallyOpen);
+  return <details className={className} open={open} onToggle={event=>{
+    if(event.target===event.currentTarget)setOpen(event.currentTarget.open);
+  }}>
+    <summary>{summary}</summary>
+    {open&&children()}
+  </details>;
+}
+function ReleaseNotesView({webAction=true,onLoaded}:{webAction?:boolean;onLoaded?:(data:ReleaseFile)=>void}) {
   const {language, locale, germanRegion, tx} = useI18n(),
     [data, setData] = useState<ReleaseFile | null>(null);
+  const [failed,setFailed]=useState(false),[attempt,setAttempt]=useState(0);
   const releaseIdentity=useMemo(()=>indexReleaseTextObjects(data),[data]);
   const regionalReleaseTexts=regionalDocumentationRuntime.get({language,germanRegion})?.releases;
   useEffect(() => {
-    void fetch("./releases.json")
-      .then((response) => response.json())
-      .then(setData);
-  }, []);
+    let active=true;
+    setFailed(false);
+    void loadReleaseFile().then(value=>{if(active){setData(value);onLoaded?.(value)}})
+      .catch(()=>{if(active)setFailed(true)});
+    return()=>{active=false};
+  }, [attempt,onLoaded]);
   const local = (value: ReleaseText) =>
       localizeReleaseText(value,language,releaseIdentity.paths.get(value),regionalReleaseTexts),
     categories: Record<string, string> = {
@@ -4180,7 +4209,10 @@ function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
       knownIssues: language === "de" ? tx("Bekannte Probleme") : "Known issues",
       known: language === "de" ? tx("Noch offen / Hinweise") : "Limitations / Notes",
     };
-  if (!data) return <p>{tx("Versionsinformationen werden geladen …")}</p>;
+  if(failed)return <p role="alert">{tx("Versionshinweise konnten nicht geladen werden.")}{" "}
+    <button type="button" onClick={()=>setAttempt(value=>value+1)}>{tx("Erneut versuchen")}</button>
+  </p>;
+  if (!data) return <LoadingStatus>{tx("Versionsinformationen werden geladen …")}</LoadingStatus>;
   return (
     <div className="structured-releases">
       {webAction && (
@@ -4195,21 +4227,20 @@ function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
         </button>
       )}
       {data.versions.map((line, lineIndex) => (
-        <details
+        <ReleaseDetails
           key={line.line}
-          open={lineIndex === 0}
+          initiallyOpen={lineIndex === 0}
           className="release-line"
+          summary={<>{tx("Version")} {line.line}</>}
         >
-          <summary>{tx("Version")} {line.line}</summary>
-          {line.builds.map((build, buildIndex) => (
-            <details
+          {()=>line.builds.map((build, buildIndex) => (
+            <ReleaseDetails
               key={build.version}
-              open={
+              initiallyOpen={
                 build.current === true || (lineIndex === 0 && buildIndex === 0)
               }
               className="release-build"
-            >
-              <summary>
+              summary={<>
                 <span>
                   {versionLabel(build.version)}
                   {isPrerelease(build.version) && (
@@ -4220,7 +4251,9 @@ function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
                   {formatEventDate(build.releaseDate)}
                   {build.current ? tx("· Aktuelle Version") : ""}
                 </small>
-              </summary>
+              </>}
+            >
+              {()=> <>
               {build.overview&&<section><h4>{local(build.overview.label)}</h4><p>{local(build.overview.text)}</p></section>}
               {Object.entries(build.sections)
                 .filter(([, entries]) => entries.length)
@@ -4235,9 +4268,10 @@ function ReleaseNotesView({ webAction = true }: { webAction?: boolean }) {
                     ))}
                   </section>
                 ))}
-            </details>
+              </>}
+            </ReleaseDetails>
           ))}
-        </details>
+        </ReleaseDetails>
       ))}
     </div>
   );
@@ -4867,19 +4901,6 @@ function PresentationTransitionSettings() {
   );
 }
 
-function useUpdateSearchDots(active: boolean) {
-  const [dots, setDots] = useState(0);
-  useEffect(() => {
-    if (!active) {
-      setDots(0);
-      return;
-    }
-    const timer = setInterval(() => setDots((value) => (value + 1) % 4), 450);
-    return () => clearInterval(timer);
-  }, [active]);
-  return dots;
-}
-
 export function SettingsModal({
   close,
   canConfigure,
@@ -4899,20 +4920,24 @@ export function SettingsModal({
   const [tab, setTab] = useState<SettingsTab>("general");
   const [openSettingGroups, setOpenSettingGroups] = useState<Record<string, boolean>>({ AUDIO: false });
   const [displays, setDisplays] = useState<DesktopDisplay[]>([]);
-  const [currentVersion, setCurrentVersion] = useState("…");
+  const [displaysLoading,setDisplaysLoading]=useState(false);
+  const [currentVersion, setCurrentVersion] = useState(bundledVersion);
   const [versionMetadata, setVersionMetadata] =
     useState<DesktopVersionMetadata | null>(null);
+  const [versionMetadataFailed,setVersionMetadataFailed]=useState(false);
+  const [settingsReleaseFile,setSettingsReleaseFile]=useState<ReleaseFile|null>(null);
+  const releaseDate=settingsReleaseFile?.versions.flatMap(line=>line.builds).find(build=>build.version===currentVersion)?.releaseDate;
   const [previousVersion, setPreviousVersion] = useState<
     DesktopPreviousVersion | null | undefined
   >(undefined);
+  const [previousVersionFailed,setPreviousVersionFailed]=useState(false);
+  const [previousVersionAttempt,setPreviousVersionAttempt]=useState(0);
   const [updateStatus, setUpdateStatus] = useState<DesktopUpdateStatus>({
     state: "idle",
   });
   const [updateSummary, setUpdateSummary] = useState("");
-  const updateSearchDots = useUpdateSearchDots(
-    updateStatus.state === "checking",
-  );
   const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
+  const [audioDevicesLoading,setAudioDevicesLoading]=useState(false);
   const [micLevel, setMicLevel] = useState(0);
   const [micTesting, setMicTesting] = useState(false);
   const [operatorPrefs, setOperatorPrefs] =
@@ -4931,8 +4956,8 @@ export function SettingsModal({
   const [betaConfirm, setBetaConfirm] = useState(false);
   const microphoneStream = useRef<MediaStream | null>(null);
   const contentRef = useRef<HTMLElement | null>(null);
-  const minimumUpdateCheckUntil = useRef(0);
-  const pendingUpdateStatus = useRef<DesktopUpdateStatus | null>(null);
+  const checkingUpdates=useRef(false);
+  const updateStatusEvents=useRef(0);
   const displayRoles = usePresentation((state) => state.displayRoles),
     setDisplayRole = usePresentation((state) => state.setDisplayRole);
   const prefs = usePreferences();
@@ -4975,29 +5000,13 @@ export function SettingsModal({
     return () => removeEventListener("keydown", onKey);
   }, [betaConfirm, close]);
   useEffect(() => {
-    void window.desktop?.displays().then(setDisplays);
-    void window.desktop?.updates.currentVersion().then(setCurrentVersion);
-    void window.desktop?.updates.metadata().then(setVersionMetadata);
-    void window.desktop?.updates
-      .previous()
-      .then(setPreviousVersion)
-      .catch(() => setPreviousVersion(null));
-    void navigator.mediaDevices
-      ?.enumerateDevices()
-      .then(setAudioDevices)
-      .catch(() => setAudioDevices([]));
     void (window.desktop as any)?.operator
       ?.getPreferences()
-      .then(setOperatorPrefs);
-    const displayDispose = window.desktop?.onDisplaysChanged(setDisplays);
+      .then(setOperatorPrefs).catch(()=>{});
+    const displayDispose = window.desktop?.onDisplaysChanged?.(setDisplays);
     const applyUpdateStatus=(status:DesktopUpdateStatus) => {
-      if (
-        Date.now() < minimumUpdateCheckUntil.current &&
-        status.state !== "checking"
-      ) {
-        pendingUpdateStatus.current = status;
-        return;
-      }
+      if(checkingUpdates.current&&status.state==="idle")return;
+      if(status.state!=="checking")updateStatusEvents.current++;
       setUpdateStatus(status);
     };
     const dispose = window.desktop?.updates
@@ -5009,6 +5018,42 @@ export function SettingsModal({
       microphoneStream.current?.getTracks().forEach((track) => track.stop());
     };
   }, []);
+  useEffect(()=>{
+    if(tab!=="updates"||!window.desktop?.updates)return;
+    let active=true;
+    const updates=window.desktop.updates;
+    void updates.currentVersion().then(value=>{if(active)setCurrentVersion(value)}).catch(()=>{});
+    if(!versionMetadata){
+      setVersionMetadataFailed(false);
+      void updates.metadata().then(value=>{if(active)setVersionMetadata(value)})
+        .catch(()=>{if(active)setVersionMetadataFailed(true)});
+    }
+    return()=>{active=false};
+  },[tab]);
+  useEffect(()=>{
+    if(tab!=="updates"||!window.desktop?.updates||previousVersion!==undefined)return;
+    let active=true;
+    setPreviousVersionFailed(false);
+    void window.desktop.updates.previous().then(value=>{if(active)setPreviousVersion(value)})
+      .catch(()=>{if(active)setPreviousVersionFailed(true)});
+    return()=>{active=false};
+  },[tab,previousVersionAttempt]);
+  useEffect(()=>{
+    if(tab!=="audio"||!navigator.mediaDevices?.enumerateDevices)return;
+    let active=true;
+    setAudioDevicesLoading(true);
+    void navigator.mediaDevices.enumerateDevices().then(value=>{if(active)setAudioDevices(value)})
+      .catch(()=>{}).finally(()=>{if(active)setAudioDevicesLoading(false)});
+    return()=>{active=false};
+  },[tab]);
+  useEffect(()=>{
+    if(tab!=="display"||!window.desktop)return;
+    let active=true;
+    setDisplaysLoading(true);
+    void window.desktop.displays().then(value=>{if(active)setDisplays(value)})
+      .catch(()=>{}).finally(()=>{if(active)setDisplaysLoading(false)});
+    return()=>{active=false};
+  },[tab]);
   useEffect(() => {
     const version = updateStatus.version;
     if (updateStatus.state !== "available" || !version) {
@@ -5016,8 +5061,8 @@ export function SettingsModal({
       return;
     }
     let active = true;
-    void fetch("./releases.json")
-      .then((response) => response.json() as Promise<ReleaseFile>)
+    setUpdateSummary(conciseRemoteSummary(updateStatus.releaseNotes??""));
+    void loadReleaseFile()
       .then((data) => {
         if (active)
           setUpdateSummary(
@@ -5123,7 +5168,7 @@ export function SettingsModal({
         : tx("ca. {value1} Min. verbleibend",{value1:String(Math.max(1, Math.ceil(updateStatus.etaSeconds / 60)))});
   const updateText =
     updateStatus.state === "checking"
-      ? `${t("updateChecking").replace(/[\s.…]+$/, "")}${".".repeat(updateSearchDots)}`
+      ? t("updateChecking")
       : updateStatus.state === "available"
         ? t("updateAvailable", { version: updateStatus.version ?? "" })
         : updateStatus.state === "not-available"
@@ -5159,7 +5204,7 @@ export function SettingsModal({
     setTab(next);
     const group = settingGroups.find((entry) => entry.tabs.includes(next));
     if (group) setOpenSettingGroups((current) => ({ ...current, [group.title]: true }));
-    requestAnimationFrame(() => contentRef.current?.scrollTo({ top: 0 }));
+    requestAnimationFrame(()=>{if(contentRef.current)contentRef.current.scrollTop=0});
   };
   useEffect(()=>{if(openUpdatesRequest>0)switchTab('updates')},[openUpdatesRequest]);
   const installedIsBeta = isPrerelease(currentVersion);
@@ -5184,17 +5229,16 @@ export function SettingsModal({
       await window.desktop?.updates.rollback();
   };
   const checkForUpdates = async () => {
-    if (!window.desktop) return;
-    minimumUpdateCheckUntil.current = Date.now() + 3000;
-    pendingUpdateStatus.current = null;
+    if (!window.desktop||checkingUpdates.current) return;
+    checkingUpdates.current=true;
+    const events=updateStatusEvents.current;
     setUpdateStatus({ state: "checking" });
-    const result = await window.desktop.updates.check();
-    const remaining = Math.max(0, minimumUpdateCheckUntil.current - Date.now());
-    if (remaining)
-      await new Promise((resolve) => setTimeout(resolve, remaining));
-    minimumUpdateCheckUntil.current = 0;
-    setUpdateStatus(pendingUpdateStatus.current ?? result);
-    pendingUpdateStatus.current = null;
+    try{
+      const result=await window.desktop.updates.check();
+      if(updateStatusEvents.current===events)setUpdateStatus(result);
+    }catch(error){
+      if(updateStatusEvents.current===events)setUpdateStatus({state:"error",message:error instanceof Error?error.message:undefined});
+    }finally{checkingUpdates.current=false}
   };
   const settingGroups: { title: string; tabs: SettingsTab[] }[] = [
     {
@@ -5482,6 +5526,9 @@ export function SettingsModal({
                   <p>
                     {t("currentVersion")}: <b>{currentVersion}</b>
                   </p>
+                  {window.desktop?.updates&&!versionMetadata&&!versionMetadataFailed&&
+                    <LoadingStatus>{tx("Installationsdetails werden geladen …")}</LoadingStatus>}
+                  {versionMetadataFailed&&<p>{L.versionDetails} · {tx("Nicht verfügbar")}</p>}
                   {versionMetadata && (
                     <div className="version-details">
                       <h4>{L.versionDetails}</h4>
@@ -5522,7 +5569,7 @@ export function SettingsModal({
                       aria-valuenow={updateStatus.percent}
                     >
                       <i style={{ width: `${updateStatus.percent ?? 0}%` }} />
-                      <span>{updateText}</span>
+                      {updateStatus.state==="checking"?<LoadingStatus>{updateText}</LoadingStatus>:<span>{updateText}</span>}
                       {updateStatus.state === "available" && updateSummary && (
                         <small className="update-brief">{updateSummary}</small>
                       )}
@@ -5601,14 +5648,18 @@ export function SettingsModal({
                           {L.rollback}
                         </button>
                       </>
-                    ) : previousVersion === null ? (
+                    ) : previousVersionFailed ? (
+                      <p role="alert">{tx("Vorherige Version konnte nicht geladen werden.")}{" "}
+                        <button type="button" onClick={()=>setPreviousVersionAttempt(value=>value+1)}>{tx("Erneut versuchen")}</button>
+                      </p>
+                    ) : previousVersion === null||!window.desktop?.updates ? (
                       <p>{L.noPrevious}</p>
                     ) : (
-                      <p>…</p>
+                      <LoadingStatus>{tx("Vorherige Version wird gesucht …")}</LoadingStatus>
                     )}
                   </div>
                   <h4>{t("releaseNotes")}</h4>
-                  <ReleaseNotesView />
+                  <ReleaseNotesView onLoaded={setSettingsReleaseFile}/>
                   {updateStatus.releaseNotes && (
                     <div className="remote-release-notes">
                       <h4>{t("onlineReleaseNotes")}</h4>
@@ -5620,6 +5671,7 @@ export function SettingsModal({
                 <section>
                   <h3>{t("audio")}</h3>
                   <p>{L.audioHelp}</p>
+                  {audioDevicesLoading&&<LoadingStatus>{tx("Audiogeräte werden geladen …")}</LoadingStatus>}
                   <div className="audio-settings">
                     <label>
                       {L.speakers}
@@ -5746,6 +5798,7 @@ export function SettingsModal({
                 </section>
               ) : tab === "display" ? (
                 <section>
+                  {displaysLoading&&<LoadingStatus>{tx("Bildschirme werden geladen …")}</LoadingStatus>}
                   <h3>{t("displayTitle")}</h3>
                   <p>{t("displayHelp")}</p>
                   <div className="display-heading">
@@ -5910,7 +5963,7 @@ export function SettingsModal({
                         )}
                       </dd>
                       <dt>{tx("Veröffentlicht")}</dt>
-                      <dd>01.09.2026</dd>
+                      <dd>{releaseDate?formatEventDate(releaseDate):"—"}</dd>
                       <dt>{tx("Update-Kanal")}</dt>
                       <dd>{operatorPrefs.betaUpdates ? tx("BETA") : tx("Stabil")}</dd>
                       <dt>{tx("Status")}</dt>

@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.1
+
+Die installierte Versionsnummer ist sofort sichtbar. Die Update-Suche zeigt ihr Ergebnis ohne künstliche Wartezeit.
+
+Ältere Versionshinweise werden beim Aufklappen gerendert. Einheitliche Ladeanzeigen begleiten Versionsdaten, Geräte, Speicher und KI-Modelle. Fehlgeschlagene Abfragen für Versionshinweise und Vorgängerversion lassen sich erneut versuchen.
+
+---
+
 # GottesdienstRegie 0.99.0
 
 Der Ablauf lässt sich im laufenden Betrieb ergänzen. Für MAIN steht ein manueller Wechsel auf einen freien Ersatzmonitor zur Verfügung.
