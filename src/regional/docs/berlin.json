@@ -2212,6 +2212,14 @@
     "versions[0.99].builds[0.99.1].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.1].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.1].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
-    "versions[0.99].builds[0.99.1].sections.known.1.text": "De originalgetreue Wiedergabe braucht weiterhin Windows und installiertes Microsoft PowerPoint. De neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nich."
+    "versions[0.99].builds[0.99.1].sections.known.1.text": "De originalgetreue Wiedergabe braucht weiterhin Windows und installiertes Microsoft PowerPoint. De neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nich.",
+    "versions[0.99].builds[0.99.2].overview.label": "Klarerer Dunkelmodus",
+    "versions[0.99].builds[0.99.2].overview.text": "Einstellungen, Medienbrowser, Songeditor und Dialoge nutzen einheitlichere dunkle Flächen. Eingabefelder und Tastaturfokus sind deutlicher erkennbar.",
+    "versions[0.99].builds[0.99.2].sections.fixed.0.label": "Ausgewählte und laufende Folien",
+    "versions[0.99].builds[0.99.2].sections.fixed.0.text": "Petrolfarbene Markierungen heben die Auswahl hervor. Ein rotes LIVE-Label kennzeichnet die gesendete Folie in der Folienübersicht und im Folienstreifen. Die Gestaltung der Besucherausgabe bleibt erhalten.",
+    "versions[0.99].builds[0.99.2].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.2].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.2].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
+    "versions[0.99].builds[0.99.2].sections.known.1.text": "De originalgetreue Wiedergabe braucht weiterhin Windows und installiertes Microsoft PowerPoint. De neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nich."
   }
 }

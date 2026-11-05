@@ -179,3 +179,95 @@
 .settings-modal .preview-view-settings>label{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-start}
 .settings-modal .preview-view-settings input[type=range]{width:min(300px,100%);min-width:140px;margin:0}
 .preview-view-settings output{font-variant-numeric:tabular-nums;color:var(--operator-secondary);min-width:54px}
+
+/* Dark operator controls. Keep the palette outside rendered slide content. */
+:root[data-theme=dark] {
+  --operator-field:#20262c;
+  --operator-field-border:#737e87;
+  --operator-focus:#a6d3dd;
+  --operator-selection:#304c55;
+  --operator-selection-border:#89b6c0;
+  --operator-warning:#ffd391;
+  --operator-error:#ffb3b9;
+}
+
+:root[data-theme=dark][data-contrast=true] {
+  --operator-field-border:CanvasText;
+  --operator-focus:Highlight;
+  --operator-selection-border:Highlight;
+}
+
+:root[data-theme=dark] :is(.add-content-popover,.add-content-toolbar,.song-context,.cloud-media-browser,.settings-modal,.menu-popup,.modal) {
+  background-color:var(--operator-surface);
+  color:var(--operator-text);
+}
+
+:root[data-theme=dark] :is(.add-content-popover,.song-context,.cloud-media-browser,.settings-modal,.menu-popup,.modal) :is(input:not([type=checkbox],[type=radio],[type=range],[type=color]),select,textarea) {
+  background-color:var(--operator-field);
+  border-color:var(--operator-field-border);
+  color:var(--operator-text);
+  color-scheme:dark;
+}
+
+:root[data-theme=dark] :is(.add-content-popover,.song-context,.cloud-media-browser,.settings-modal,.modal) :is(input,textarea)::placeholder {
+  color:var(--operator-secondary);
+  opacity:1;
+}
+
+:root[data-theme=dark] :is(.add-content-popover,.song-context,.cloud-media-browser,.settings-modal,.menu-popup,.modal,.grid-slide,.filmstrip) :is(button,input,select,textarea,a):focus-visible {
+  outline:2px solid var(--operator-focus);
+  outline-offset:2px;
+}
+
+:root[data-theme=dark] :is(.song-tabs,.song-override-panel,.song-search-panel,.media-detail,.detail-empty) {
+  background-color:var(--operator-sidebar);
+  border-color:var(--operator-divider);
+  color:var(--operator-text);
+}
+
+:root[data-theme=dark] .add-content-filters button[aria-pressed=true] {
+  background-color:var(--operator-selection);
+  border-color:var(--operator-selection-border);
+  color:var(--operator-text);
+}
+
+:root[data-theme=dark] :is(.add-content-popover,.song-context,.cloud-media-browser,.settings-modal,.modal) button:disabled {
+  background-color:var(--operator-sidebar);
+  border-color:var(--operator-divider);
+  color:var(--operator-secondary);
+  opacity:.72;
+  cursor:not-allowed;
+}
+
+:root[data-theme=dark] :is(.settings-modal,.cloud-media-browser,.song-context,.modal) :is(.loading-status,.detail-empty) {
+  color:var(--operator-secondary);
+}
+
+:root[data-theme=dark] :is(.lyric-overflow-warning,.unsplash-terms-notice) {
+  color:var(--operator-warning);
+}
+
+:root[data-theme=dark] :is(.settings-modal,.cloud-media-browser,.song-context,.modal) [role=alert] {
+  color:var(--operator-error);
+}
+
+:root[data-theme=dark] :is(.grid-slide.selected,.filmstrip>div>button.active) {
+  border-color:var(--operator-selection-border);
+  box-shadow:0 0 0 2px var(--operator-selection);
+}
+
+:root[data-theme=dark] .grid-slide.selected.live-slide {
+  outline-color:var(--operator-selection-border);
+}
+
+:is(.grid-slide,.filmstrip>div>button) > .slide-live-badge {
+  position:absolute;
+  inset:5px 5px auto auto;
+  z-index:6;
+  padding:2px 5px;
+  border-radius:4px;
+  background:#942a32;
+  color:#fff;
+  font:700 10px/1.25 system-ui,sans-serif;
+  pointer-events:none;
+}

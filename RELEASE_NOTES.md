@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.2
+
+Einstellungen, Medienbrowser, Songeditor und Dialoge nutzen einheitlichere dunkle Flächen. Eingabefelder und Tastaturfokus sind deutlicher erkennbar.
+
+Petrolfarbene Markierungen heben die Auswahl hervor. Ein rotes LIVE-Label kennzeichnet die gesendete Folie in der Folienübersicht und im Folienstreifen. Die Gestaltung der Besucherausgabe bleibt erhalten.
+
+---
+
 # GottesdienstRegie 0.99.1
 
 Die installierte Versionsnummer ist sofort sichtbar. Die Update-Suche zeigt ihr Ergebnis ohne künstliche Wartezeit.

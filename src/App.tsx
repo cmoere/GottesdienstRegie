@@ -3388,6 +3388,7 @@ function Workspace({
                               current.id === state.previewSlideId &&
                               entry.id === state.previewItemId,
                             live =
+                              state.onAir &&
                               current.id === state.liveSlideId &&
                               entry.id === state.liveItemId,
                             canTakeLive =
@@ -3415,7 +3416,7 @@ function Workspace({
                               <span className="thumbnail-number">
                                 {index + 1}
                               </span>
-                              {live && <i className="live-dot" />}
+                              {live && <b className="slide-live-badge">LIVE</b>}
                               <div className="thumbnail-actions">
                                 <button
                                   onClick={() =>
@@ -3882,14 +3883,14 @@ function SortableSlide({
     <button
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`${slide.id === state.selectedSlideId ? "active" : ""} ${slide.id === state.liveSlideId ? "live-slide" : ""} ${!slide.enabled ? "disabled-slide" : ""} ${isDragging ? "dragging" : ""}`}
+      className={`${slide.id === state.selectedSlideId ? "active" : ""} ${state.onAir && slide.id === state.liveSlideId ? "live-slide" : ""} ${!slide.enabled ? "disabled-slide" : ""} ${isDragging ? "dragging" : ""}`}
       onClick={() => state.select(itemId, slide.id)}
       {...attributes}
       {...listeners}
     >
       <SlideRenderer slide={slide} mode="thumbnail" />
       <span>{index + 1}</span>
-      {slide.id === state.liveSlideId && <i className="live-dot" />}
+      {state.onAir && slide.id === state.liveSlideId && <b className="slide-live-badge">LIVE</b>}
     </button>
   );
 }

@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
-          "version": "0.99.1",
+          "version": "0.99.2",
           "releaseDate": "2026-11-05",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Klarerer Dunkelmodus",
+              "en": "Clearer dark mode"
+            },
+            "text": {
+              "de": "Einstellungen, Medienbrowser, Songeditor und Dialoge nutzen einheitlichere dunkle Flächen. Eingabefelder und Tastaturfokus sind deutlicher erkennbar.",
+              "en": "Settings, the media browser, the song editor and dialogs use more consistent dark surfaces. Input fields and keyboard focus are easier to identify."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Ausgewählte und laufende Folien",
+                  "en": "Selected and live slides"
+                },
+                "text": {
+                  "de": "Petrolfarbene Markierungen heben die Auswahl hervor. Ein rotes LIVE-Label kennzeichnet die gesendete Folie in der Folienübersicht und im Folienstreifen. Die Gestaltung der Besucherausgabe bleibt erhalten.",
+                  "en": "Petrol highlights distinguish the selection. A red LIVE badge marks the slide on air in the slide overview and filmstrip. Audience slides retain their authored design."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.99.1",
+          "releaseDate": "2026-11-05",
+          "current": false,
           "overview": {
             "label": {
               "de": "Schnellere Einstellungen",

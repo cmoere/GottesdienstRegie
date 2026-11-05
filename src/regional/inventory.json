@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": true,
-  "sourceFingerprint": "39d421b94fc2ac864a237108f922d73da225b06cd2c5f6a57b70cfa679b3f854",
+  "sourceFingerprint": "d31fec3f19f24532256cd22d2730871fa6c64f91a677f5c332104fd4e29513b1",
   "note": "Reviewed complete v98 source inventory; all31 interface/native/help/release resources checked separately. Protocol tokens, internal prompts and generated-document defaults have exact entry-level reviews.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -83596,6 +83596,82 @@
       "text": "Beispielansicht",
       "source": "src/help/base.ts",
       "context": "help-ui",
+      "status": "app-owned"
+    },
+    {
+      "key": "source.01e0fdd8f028b61e32eb.1",
+      "text": "LIVE",
+      "source": "src/App.tsx",
+      "line": 3419,
+      "context": "jsx-text:b",
+      "status": "excluded",
+      "exclusionReason": "Fixed broadcast status badge used in the operator slide grid and filmstrip.",
+      "technicalReviewHash": "dd07525734a00bd8e90ef6be74ff84a1e04fe5b96bc807da12d3d78f5255da7f"
+    },
+    {
+      "key": "source.01e0fdd8f028b61e32eb.2",
+      "text": "LIVE",
+      "source": "src/App.tsx",
+      "line": 3893,
+      "context": "jsx-text:b",
+      "status": "excluded",
+      "exclusionReason": "Fixed broadcast status badge used in the operator slide grid and filmstrip.",
+      "technicalReviewHash": "1550364b5012ddeeedbc46985ba968ad7d905b3ddb52eed393f984b884b167e2"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.2].overview.label",
+      "text": "Klarerer Dunkelmodus",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.2].overview.text",
+      "text": "Einstellungen, Medienbrowser, Songeditor und Dialoge nutzen einheitlichere dunkle Flächen. Eingabefelder und Tastaturfokus sind deutlicher erkennbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.2].sections.fixed.0.label",
+      "text": "Ausgewählte und laufende Folien",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.2].sections.fixed.0.text",
+      "text": "Petrolfarbene Markierungen heben die Auswahl hervor. Ein rotes LIVE-Label kennzeichnet die gesendete Folie in der Folienübersicht und im Folienstreifen. Die Gestaltung der Besucherausgabe bleibt erhalten.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.2].sections.known.0.label",
+      "text": "Hinweise zum Live-Betrieb",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.2].sections.known.0.text",
+      "text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.2].sections.known.1.label",
+      "text": "Originalgetreue PowerPoint-Wiedergabe",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.2].sections.known.1.text",
+      "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+      "source": "public/releases.json",
+      "context": "release-history",
       "status": "app-owned"
     }
   ]

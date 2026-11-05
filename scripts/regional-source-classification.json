@@ -1,5 +1,17 @@
 {
   "reviewedSourceEntries": {
+    "source.01e0fdd8f028b61e32eb.1": {
+      "source": "src/App.tsx",
+      "context": "jsx-text:b",
+      "text": "LIVE",
+      "reason": "Fixed broadcast status badge used in the operator slide grid and filmstrip."
+    },
+    "source.01e0fdd8f028b61e32eb.2": {
+      "source": "src/App.tsx",
+      "context": "jsx-text:b",
+      "text": "LIVE",
+      "reason": "Fixed broadcast status badge used in the operator slide grid and filmstrip."
+    },
     "source.e28c7cc280b4c1de4e5a.1": {
       "source": "src/RadioStationBrowser.tsx",
       "context": "BinaryExpression",
