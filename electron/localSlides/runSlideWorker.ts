@@ -1,7 +1,8 @@
 import {utilityProcess} from 'electron';
 import path from 'node:path';
+import {constants,setPriority} from 'node:os';
 import type {SlideDraftRequest} from '../../shared/localSlideDraft';
-export function runSlideWorker(directory:string,request:SlideDraftRequest,signal:AbortSignal):Promise<string>{
+export function runSlideWorker(directory:string,request:SlideDraftRequest,signal:AbortSignal,live=false):Promise<string>{
  return new Promise((resolve,reject)=>{
   if(signal.aborted){reject(Error('SLIDE_DRAFT_CANCELLED'));return}
   const child=utilityProcess.fork(path.join(__dirname,'..','localSlideWorker.js'),[],{stdio:'pipe',serviceName:'GottesdienstRegie'});
@@ -15,7 +16,12 @@ export function runSlideWorker(directory:string,request:SlideDraftRequest,signal
   const cancel=()=>finish(Error('SLIDE_DRAFT_CANCELLED'));
   const timer=setTimeout(()=>finish(Error('SLIDE_DRAFT_TIMEOUT')),1800000);
   signal.addEventListener('abort',cancel,{once:true});
-  child.once('spawn',()=>{if(signal.aborted){cancel();return}child.postMessage({directory,request})});
+  child.once('spawn',()=>{
+   if(signal.aborted){cancel();return}
+   try{if(child.pid!==undefined)setPriority(child.pid,constants.priority.PRIORITY_BELOW_NORMAL);else if(live)throw Error()}
+   catch{if(live){finish(Error('SLIDE_DRAFT_GENERATION_FAILED'));return}}
+   child.postMessage({directory,request,live});
+  });
   child.on('message',(message:unknown)=>{
    if(!message||typeof message!=='object')return;
    const value=message as {type?:unknown;text?:unknown};

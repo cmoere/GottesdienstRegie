@@ -21,12 +21,100 @@
   ],
   "versions": [
     {
+      "line": "0.99",
+      "builds": [
+        {
+          "version": "0.99.0",
+          "releaseDate": "2026-11-05",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Live-Regie und Vorbereitung",
+              "en": "Live operation and preparation"
+            },
+            "text": {
+              "de": "Der Ablauf lässt sich im laufenden Betrieb ergänzen. Für MAIN steht ein manueller Wechsel auf einen freien Ersatzmonitor zur Verfügung.",
+              "en": "Operators can prepare additions during a live session and manually switch MAIN to a free backup display."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Ersatzmonitor für MAIN",
+                  "en": "Backup display for MAIN"
+                },
+                "text": {
+                  "de": "Bei ON AIR einen freien Monitor auswählen und MAIN umschalten. Die zuletzt ausgegebene Folie oder Schnellanzeige wird für die laufende Sitzung übernommen.",
+                  "en": "Choose a free monitor while ON AIR and switch MAIN. The current slide or quick screen is transferred for the current session."
+                }
+              },
+              {
+                "label": {
+                  "de": "Lokale KI bei ON AIR",
+                  "en": "Local AI while ON AIR"
+                },
+                "text": {
+                  "de": "Ein kompaktes Textmodell erstellt Entwürfe. Optional erzeugt ein separates Bildmodell ein Bild für die erste Folie. Entwürfe werden geprüft und ausdrücklich in den Ablauf übernommen.",
+                  "en": "A compact text model drafts slides. An optional separate image model can create one image for the first slide. Operators review and explicitly insert drafts into the running order."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Element hinzufügen",
+                  "en": "Add element"
+                },
+                "text": {
+                  "de": "Suche und Filter trennen Standard- und Loop-Elemente. Lange Bezeichnungen werden vollständig umgebrochen.",
+                  "en": "Search and category filters help find standard and loop elements. Long labels wrap in full."
+                }
+              },
+              {
+                "label": {
+                  "de": "Liedtexte und Strophenfolge",
+                  "en": "Lyrics and verse order"
+                },
+                "text": {
+                  "de": "Abschnitte lassen sich in beide Richtungen verschieben und direkt wiederholen. Die Strophenfolge führt zum zugehörigen Liedtext.",
+                  "en": "Move sections in either direction or repeat them directly. The running order links to the corresponding lyrics."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "line": "0.98",
       "builds": [
         {
           "version": "0.98.1",
           "releaseDate": "2026-11-04",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Wasserzeichen im Testbetrieb",

@@ -1,3 +1,33 @@
+# GottesdienstRegie 0.99.0
+
+Der Ablauf lässt sich im laufenden Betrieb ergänzen. Für MAIN steht ein manueller Wechsel auf einen freien Ersatzmonitor zur Verfügung.
+
+## Neu
+
+**Ersatzmonitor für MAIN**
+
+Bei ON AIR einen freien Monitor auswählen und MAIN umschalten. Die zuletzt ausgegebene Folie oder Schnellanzeige wird für die laufende Sitzung übernommen.
+
+**Lokale KI bei ON AIR**
+
+Ein kompaktes Textmodell erstellt Entwürfe. Optional erzeugt ein separates Bildmodell ein Bild für die erste Folie. Entwürfe werden geprüft und ausdrücklich in den Ablauf übernommen.
+
+## Verbessert
+
+**Element hinzufügen**
+
+Suche und Filter trennen Standard- und Loop-Elemente. Lange Bezeichnungen werden vollständig umgebrochen.
+
+**Liedtexte und Strophenfolge**
+
+Abschnitte lassen sich in beide Richtungen verschieben und direkt wiederholen. Die Strophenfolge führt zum zugehörigen Liedtext.
+
+## Hinweise
+
+Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.
+
+---
+
 # GottesdienstRegie 0.98.1
 
 Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.

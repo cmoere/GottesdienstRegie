@@ -74,6 +74,9 @@
 :is(.toolbar,.format-toolbar,.preview-mode-toolbar) button{min-height:30px;padding-inline:10px}
 .production-app .live-session-controls{gap:8px;flex-shrink:0}
 .production-app .live-session-controls>button{min-height:34px;padding:7px 12px;font-size:12px;font-weight:600;white-space:nowrap}
+.main-output-switch{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.main-output-switch select{max-width:16em;min-width:0}
+.main-output-switch small{flex-basis:100%}
 .production-app .onair:not(:disabled){border:1px solid var(--operator-accent);color:var(--operator-text)}
 .production-app .onair.live{color:#fff;background:#973b3d;border-color:#bd5658}
 .production-app .mode-switch{background:var(--operator-sidebar);border:1px solid var(--operator-divider);border-radius:9px;padding:3px;gap:4px}

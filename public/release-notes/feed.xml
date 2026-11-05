@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.99.0</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.0</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.0</guid><pubDate>Thu, 05 Nov 2026 00:00:00 GMT</pubDate><description>Live-Regie und Vorbereitung
+Der Ablauf lässt sich im laufenden Betrieb ergänzen. Für MAIN steht ein manueller Wechsel auf einen freien Ersatzmonitor zur Verfügung.
+
+Ersatzmonitor für MAIN
+Bei ON AIR einen freien Monitor auswählen und MAIN umschalten. Die zuletzt ausgegebene Folie oder Schnellanzeige wird für die laufende Sitzung übernommen.
+
+Lokale KI bei ON AIR
+Ein kompaktes Textmodell erstellt Entwürfe. Optional erzeugt ein separates Bildmodell ein Bild für die erste Folie. Entwürfe werden geprüft und ausdrücklich in den Ablauf übernommen.
+
+Element hinzufügen
+Suche und Filter trennen Standard- und Loop-Elemente. Lange Bezeichnungen werden vollständig umgebrochen.
+
+Liedtexte und Strophenfolge
+Abschnitte lassen sich in beide Richtungen verschieben und direkt wiederholen. Die Strophenfolge führt zum zugehörigen Liedtext.
+
+Hinweise zum Live-Betrieb
+Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.
+
+Originalgetreue PowerPoint-Wiedergabe
+Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.</description></item>
 <item><title>GottesdienstRegie 0.98.1</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.98.1</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.98.1</guid><pubDate>Wed, 04 Nov 2026 00:00:00 GMT</pubDate><description>Wasserzeichen im Testbetrieb
 Bei einem Laufband am unteren Bildschirmrand sitzt das Wasserzeichen „TESTBETRIEB“ jetzt oberhalb der Meldungen. Das gilt für die Vollbildausgabe und die Vorschau.
 

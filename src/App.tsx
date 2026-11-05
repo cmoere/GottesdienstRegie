@@ -1473,7 +1473,7 @@ function addLiveQuiz(value: QuizCreateValue, sectionId = "service") {
   });
 }
 
-function AddPopover({
+export function AddPopover({
   close,
   targetSectionId,
 }: {
@@ -1481,6 +1481,8 @@ function AddPopover({
   targetSectionId?: string;
 }) {
   const [aiOpen,setAiOpen]=useState(false);
+  const [query,setQuery]=useState("");
+  const [category,setCategory]=useState<"all"|"standard"|"loop">("all");
   const aiEnabled=usePreferences(state=>state.aiEnabled);
   const {t, tx} = useI18n();
   const state = usePresentation(),
@@ -1914,12 +1916,19 @@ function AddPopover({
     close();
   }
   const catalogGroups = getAddElementGroups(activeSection);
+  const normalizeSearch=(value:string)=>value.toLocaleLowerCase().normalize("NFKD").replace(/\p{M}/gu,"").replaceAll("ß","ss");
+  const terms=normalizeSearch(query).trim().split(/\s+/).filter(Boolean);
+  const matches=(label:string)=>terms.every(term=>normalizeSearch(label).includes(term));
+  const aiLabel=tx("Folien mit KI erstellen");
+  const showAi=category!=="loop"&&aiEnabled&&matches(aiLabel);
+  const visibleOptions=category==="loop"?[]:options.filter(option=>matches(option.label));
+  const visibleLoops=category==="standard"?[]:loopOptions.filter(option=>matches(option.label));
   const loopGroup = (
     <div className="add-popover-loop-group">
       <strong>
         {(targetSectionId?tx("{value1} · LOOP-ELEMENTE",{value1:String((activeSection?.title??tx("Bereich")))}):tx("LOOP-ELEMENTE"))}
       </strong>
-      {loopOptions.map((option) => {const entry=catalogGroups[1].entries.find(item=>item.type===option.type);return (
+      {visibleLoops.map((option) => {const entry=catalogGroups[1].entries.find(item=>item.type===option.type);return (
         <button key={`loop-${option.type}`} disabled={entry?.disabled} title={entry?.disabledReason} onClick={() => addLoopElement(option)}>
           <Icon name={option.icon} />
           <span>{option.label}</span>
@@ -1927,18 +1936,27 @@ function AddPopover({
       )})}
     </div>
   );
-  const visibleOptions = options;
   return (
     <>
-      {!aiOpen&&<div className="popover add-content-popover" ref={popoverRef}>
+      {!aiOpen&&<div className="popover add-content-popover" ref={popoverRef} onKeyDown={event=>{
+        if(event.key==="Escape"){event.stopPropagation();close()}
+      }}>
+        <div className="add-content-toolbar">
         <header>
           <b>{tx("Element hinzufügen")}</b>
-          <button onClick={close}>
+          <button type="button" aria-label={tx("Schließen")} onClick={close}>
             <Icon name="close" />
           </button>
         </header>
-        <div className="add-popover-loop-group add-popover-standard-group"><strong>{tx("Gottesdienst & allgemein")}</strong>
-        {aiEnabled&&<button disabled={state.onAir} onClick={()=>setAiOpen(true)} title={state.onAir?tx('Die Folien-KI steht nur OFF AIR zur Verfügung.'):undefined}><Icon name="auto_awesome"/><span>{tx('Folien mit KI erstellen')}</span></button>}
+        <input type="search" autoFocus aria-label={tx("Elemente suchen")} placeholder={tx("Elemente suchen")} value={query} onChange={event=>setQuery(event.target.value)}/>
+        <div className="add-content-filters" role="group" aria-label={tx("Filter")}>
+          {([["all",tx("Alle")],["standard",tx("Gottesdienst & allgemein")],["loop",tx("Loop-Elemente")]] as const).map(([value,label])=>
+            <button type="button" key={value} aria-pressed={category===value} onClick={()=>setCategory(value)}>{label}</button>
+          )}
+        </div>
+        </div>
+        {(showAi||visibleOptions.length>0)&&<div className="add-popover-loop-group add-popover-standard-group"><strong>{tx("Gottesdienst & allgemein")}</strong>
+        {showAi&&<button onClick={()=>setAiOpen(true)}><Icon name="auto_awesome"/><span>{aiLabel}</span></button>}
         {visibleOptions.map((option) => (
           <button
             key={option.type}
@@ -1961,8 +1979,9 @@ function AddPopover({
             <Icon name={option.icon} />
             <span>{option.label}</span>
           </button>
-        ))}</div>
-        {loopGroup}
+        ))}</div>}
+        {visibleLoops.length>0&&loopGroup}
+        {!showAi&&!visibleOptions.length&&!visibleLoops.length&&<p className="add-content-empty" role="status">{tx("Keine passenden Elemente gefunden.")}</p>}
       </div>}
       {aiOpen&&<LocalSlideDraftDialog sectionId={sectionId} close={close}/>}
       {quizOpen && (
@@ -7274,6 +7293,10 @@ function AppShell({
     [menuOpen, setMenuOpen] = useState<string | null>(null),
     [displays, setDisplays] = useState<DesktopDisplay[]>([]),
     [outputState, setOutputState] = useState<Record<string, string>>({}),
+    [mainOutputOverride, setMainOutputOverride] = useState<number>(),
+    [replacementDisplay, setReplacementDisplay] = useState(""),
+    [switchingMain, setSwitchingMain] = useState(false),
+    [switchMainFailed, setSwitchMainFailed] = useState(false),
     [mediaStorage, setMediaStorage] = useState<MediaStorageStatus | null>(null),
     [communityConnection,setCommunityConnection]=useState<{connected:boolean;mode:string;updatedAt:number}|null>(null),
     [syncProgress, setSyncProgress] = useState<{
@@ -7282,6 +7305,31 @@ function AppShell({
       text: string;
     }>({ state: "idle", step: 0, text: "" });
   const openUpdateSettings=useCallback(()=>{setSettingsUpdatesRequest(value=>value+1);setSettingsOpen(true)},[]);
+  useEffect(()=>{
+    if(state.onAir)return;
+    setMainOutputOverride(undefined);
+    setReplacementDisplay("");
+    setSwitchMainFailed(false);
+  },[state.onAir]);
+  const mainOutputUnavailable=outputState.main==="missing"||outputState.main==="closed";
+  const replacementDisplays=displays.filter(display=>{
+    const role=state.displayRoles[String(display.id)];
+    return !display.primary&&(!role||role==="unused"||role==="main")
+      &&(mainOutputUnavailable||display.id!==(mainOutputOverride??state.mainDisplayId));
+  });
+  const switchMainOutput=async()=>{
+    const target=replacementDisplays.find(display=>String(display.id)===replacementDisplay);
+    if(!target||switchingMain||!state.onAir||!can("presentationLive"))return;
+    setSwitchingMain(true);
+    setSwitchMainFailed(false);
+    try{
+      if(await window.desktop?.switchMainOutput?.(target.id)){
+        setMainOutputOverride(target.id);
+        setReplacementDisplay("");
+      }else setSwitchMainFailed(true);
+    }catch{setSwitchMainFailed(true)}
+    finally{setSwitchingMain(false)}
+  };
   useUpdateSettingsRequest(openUpdateSettings);
   useEffect(()=>{if(!settingsOpen)setSettingsUpdatesRequest(0)},[settingsOpen]);
   const screenTestBridge=useMemo<ScreenTestBridge|undefined>(()=>{const bridge=window.desktop as any;return bridge?.screenTest?.onResult&&bridge.screenTest.restore?{sendQuick:(roles,quick)=>bridge.sendQuick(roles,quick),restore:(runId,quick)=>bridge.screenTest.restore(runId,quick),onResult:callback=>bridge.screenTest.onResult(callback)}:undefined},[]);
@@ -7762,6 +7810,7 @@ function AppShell({
       ),
     [],
   );
+  const liveOutputItem=state.items.find(entry=>entry.id===state.liveItemId);
   useEffect(() => {
     if (!state.onAir || !state.liveSlideId) return;
     const item = state.items.find((entry) => entry.id === state.liveItemId),
@@ -7804,7 +7853,7 @@ function AppShell({
       if(item?.sectionId!=='post')postProgramNoticeController.current.leavePostProgram();
       if(output)void liveEngine.show(output);
     }
-  }, [state.liveTransitionRevision,state.liveSlideId,state.liveItemId,state.onAir,state.items,state.transitionDefault,state.lyricScrolling,songTranslationMode]);
+  }, [state.liveTransitionRevision,state.liveSlideId,state.liveItemId,state.onAir,liveOutputItem?.slides,liveOutputItem?.metadata,liveOutputItem?.transitionDefault,liveOutputItem?.updatedAt,state.transitionDefault,state.lyricScrolling,songTranslationMode]);
   useEffect(()=>{
     const reconcile=()=>{
       const current=usePresentation.getState(),item=current.items.find(entry=>entry.id===current.liveItemId);
@@ -9327,6 +9376,16 @@ function AppShell({
         <EditorModeControl />
         {testStartOpen&&<TestStartDialog onClose={()=>setTestStartOpen(false)} onStart={scenario=>{setTestStartOpen(false);void air(false,undefined,'test',scenario)}}/>}
         <div className="live-session-controls">
+        {state.onAir&&can("presentationLive")&&window.desktop?.switchMainOutput&&
+          <div className="main-output-switch">
+            {mainOutputUnavailable&&<small role="status">{tx("MAIN ist keinem aktuell vorhandenen Bildschirm zugeordnet.")}</small>}
+            <select aria-label={tx("Ersatzmonitor für MAIN")} value={replacementDisplay} disabled={switchingMain} onChange={event=>setReplacementDisplay(event.target.value)}>
+              <option value="">{tx("Ersatzmonitor für MAIN")}</option>
+              {replacementDisplays.map(display=><option key={display.id} value={display.id}>{display.label} · {display.bounds.width} × {display.bounds.height}</option>)}
+            </select>
+            <button type="button" disabled={switchingMain||!replacementDisplays.some(display=>String(display.id)===replacementDisplay)} onClick={()=>void switchMainOutput()}>{tx("MAIN umschalten")}</button>
+            {switchMainFailed&&<small role="alert">{tx("MAIN konnte nicht umgeschaltet werden.")}</small>}
+          </div>}
         <button type="button" className={`test-session-button ${appMode.mode==='test' ? 'active' : ''}`}
           disabled={airStarting || !can('presentationLive') || !window.desktop || (state.onAir&&appMode.mode==='normal')}
           title={t("operatorTestHint")}

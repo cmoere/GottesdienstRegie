@@ -2,7 +2,7 @@ import {beforeEach,describe,expect,it,vi} from 'vitest';
 
 const sends:unknown[][]=[],windows:any[]=[];
 vi.mock('electron',()=>({
-  screen:{getAllDisplays:()=>[{id:1,bounds:{x:0,y:0,width:1920,height:1080},label:'MAIN'},{id:2,bounds:{x:1920,y:0,width:1920,height:1080},label:'STAGE'}],getPrimaryDisplay:()=>({id:1})},
+  screen:{getAllDisplays:()=>[{id:1,bounds:{x:0,y:0,width:1920,height:1080},label:'Regie'},{id:2,bounds:{x:1920,y:0,width:1920,height:1080},label:'Beamer'},{id:3,bounds:{x:-1280,y:0,width:1280,height:720},label:'Ersatz'}],getPrimaryDisplay:()=>({id:1})},
   BrowserWindow:class{
     destroyed=false;webContents={id:windows.length+1,send:(...args:unknown[])=>sends.push(args),insertCSS:vi.fn()};
     shown=false;constructor(public options:any){windows.push(this)}setMenu(){}on(){}showInactive(){this.shown=true}setFullScreen(){}close(){this.destroyed=true}isDestroyed(){return this.destroyed}loadURL(){return Promise.resolve()}
@@ -50,6 +50,38 @@ describe('OutputWindowManager app mode',()=>{
     await manager.stop();expect(manager.getTimings()).toEqual([]);
   });
   beforeEach(()=>{sends.length=0;windows.length=0});
+  it('recovers MAIN on an available display after removal and delivers the latest live snapshot',async()=>{
+    let finishReplacement!:()=>void;
+    const manager=new OutputWindowManager('preload',async window=>{
+      if(window===windows[1])await new Promise<void>(resolve=>{finishReplacement=resolve});
+    },()=>{});
+    manager.setAppMode({mode:'test',onAir:true});
+    await manager.start({'2':'main'} as any,{id:'first'});
+    manager.handleRemoved(2);
+    expect(await manager.switchMain(1)).toBe(false);
+    const switching=manager.switchMain(3);
+    expect(windows[1].shown).toBe(false);
+    manager.send({id:'current'});
+    manager.sendQuick(['main'],{type:'black'});
+    finishReplacement();
+    expect(await switching).toBe(true);
+    expect(windows[1].options).toMatchObject({x:-1280,width:1280});
+    expect(manager.getStateForSender(windows[1].webContents.id)).toMatchObject({
+      slide:{id:'current'},quick:{type:'black'},appMode:{mode:'test',onAir:true},
+    });
+    expect(windows[1].shown).toBe(true);
+  });
+  it('keeps the original MAIN window when its replacement cannot load',async()=>{
+    const manager=new OutputWindowManager('preload',async window=>{
+      if(window===windows[1])throw Error('load failed');
+    },()=>{});
+    manager.setAppMode({mode:'normal',onAir:true});
+    await manager.start({'2':'main'} as any,{id:'current'});
+    expect(await manager.switchMain(3)).toBe(false);
+    expect(windows[0].destroyed).toBe(false);
+    expect(windows[1].destroyed).toBe(true);
+    expect(manager.getNativeCompositionWindows()[0].window).toBe(windows[0]);
+  });
   it('offers only live managed windows to the Main-only native composition controller',async()=>{
     const manager=new OutputWindowManager('preload',async()=>{},()=>{});
     await manager.start({'1':'main','2':'stage'} as any,{});

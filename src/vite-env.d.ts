@@ -125,6 +125,7 @@ interface Window {
         }) => Promise<DesktopPreflight>;
         goOnAir: (assignments: Record<string, string>, payload: unknown) => Promise<boolean>;
         goOffAir: () => Promise<boolean>;
+        switchMainOutput?: (displayId:number) => Promise<boolean>;
         outputTiming?: {
             report: (receipt: import('../shared/outputTiming').OutputPaintReceipt) => Promise<boolean>;
             reportPreview?: (receipt: import('../shared/outputTiming').OutputPaintReceipt) => Promise<boolean>;
@@ -141,9 +142,9 @@ interface Window {
         localModels?: {
             status:()=>Promise<import('../electron/localSlides/LocalModelManager').LocalModelsStatus>;
             configure:(automatic:boolean)=>Promise<void>;
-            download:(id:'text'|'image')=>Promise<void>;
-            cancelDownload:(id:'text'|'image')=>Promise<void>;
-            remove:(id:'text'|'image')=>Promise<void>;
+            download:(id:import('../electron/localSlides/LocalModelManager').LocalModelId)=>Promise<void>;
+            cancelDownload:(id:import('../electron/localSlides/LocalModelManager').LocalModelId)=>Promise<void>;
+            remove:(id:import('../electron/localSlides/LocalModelManager').LocalModelId)=>Promise<void>;
         };
         localImages?: {
             status:()=>Promise<import('../electron/localSlides/SlideModelPack').SlidePackStatus&{busy:boolean;progress:number}>;

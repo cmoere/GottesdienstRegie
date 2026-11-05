@@ -3,6 +3,9 @@ import {SlideModelPack} from './localSlides/SlideModelPack';
 import {LocalSlideService} from './localSlides/LocalSlideService';
 import {runSlideWorker} from './localSlides/runSlideWorker';
 import localSlideModel from '../shared/localSlideModel.json';
+import liveSlideModel from '../shared/liveSlideModel.json';
+import liveImageModel from '../shared/liveImageModel.json';
+import {readSlideDraftRequest} from '../shared/localSlideDraft';
 import localImageModel from '../shared/localImageModel.json';
 import {LocalModelManager,type LocalModelId} from './localSlides/LocalModelManager';
 import {LocalImageService} from './localSlides/LocalImageService';
@@ -331,14 +334,26 @@ app.whenReady().then(async() => {
   const outputManager=new OutputWindowManager(path.join(__dirname,'preload.js'),load,publishOutputStatus);
   let outputStarting=false;
   const draftingBlocked=()=>outputStarting||outputManager.isActive()||outputManager.getAppMode().onAir;
-  const slideModelPack=new SlideModelPack(path.join(app.getPath('userData'),'local-slide-models'),localSlideModel);
+  const slideModelRoot=path.join(app.getPath('userData'),'local-slide-models');
+  const slideModelPack=new SlideModelPack(slideModelRoot,localSlideModel);
+  const liveSlideModelPack=new SlideModelPack(slideModelRoot,liveSlideModel);
   const localSlideService=new LocalSlideService(slideModelPack,runSlideWorker,draftingBlocked);
+  const liveSlideService=new LocalSlideService(liveSlideModelPack,(directory,request,signal)=>runSlideWorker(directory,request,signal,true),()=>outputStarting);
+  const textDraftBusy=()=>localSlideService.busy||liveSlideService.busy;
   const imageModelPack=new SlideModelPack(path.join(app.getPath('userData'),'local-image-models'),localImageModel);
+  const liveImageModelPack=new SlideModelPack(path.join(app.getPath('userData'),'local-image-models'),liveImageModel);
+  const imagePackForMode=()=>draftingBlocked()?liveImageModelPack:imageModelPack;
   let imageProgress=0;
-  const localImageService=new LocalImageService(imageModelPack,createImageRunner(app.isPackaged?path.join(process.resourcesPath,'image-ai'):path.join(app.getAppPath(),'work/image-ai',process.platform+'-'+process.arch),path.join(app.getPath('temp'),'gottesdienstregie-image-ai'),value=>{imageProgress=value}),input=>mediaRepository.importGenerated(input),()=>draftingBlocked()||localSlideService.busy);
-  const localModels=new LocalModelManager(path.join(app.getPath('userData'),'local-model-settings.json'),[{id:'text',pack:slideModelPack},{id:'image',pack:imageModelPack}],()=>draftingBlocked()||localSlideService.busy||localImageService.busy);
+  const runLocalImage=createImageRunner(app.isPackaged?path.join(process.resourcesPath,'image-ai'):path.join(app.getAppPath(),'work/image-ai',process.platform+'-'+process.arch),path.join(app.getPath('temp'),'gottesdienstregie-image-ai'),value=>{imageProgress=value});
+  const localImageService=new LocalImageService(
+    {verifiedDirectory:signal=>imagePackForMode().verifiedDirectory(signal)},
+    (directory,prompt,signal)=>runLocalImage(directory,prompt,signal,path.basename(directory)===liveImageModel.revision),
+    input=>mediaRepository.importGenerated(input),
+    ()=>outputStarting||textDraftBusy(),
+  );
+  const localModels=new LocalModelManager(path.join(app.getPath('userData'),'local-model-settings.json'),[{id:'text',pack:slideModelPack},{id:'live',pack:liveSlideModelPack},{id:'liveImage',pack:liveImageModelPack},{id:'image',pack:imageModelPack}],()=>draftingBlocked()||textDraftBusy()||localImageService.busy);
   await localModels.initialize();startLocalModels=()=>localModels.start();
-  app.once('will-quit',()=>{localSlideService.cancel();localImageService.discard();localModels.dispose()});
+  app.once('will-quit',()=>{localSlideService.cancel();liveSlideService.cancel();localImageService.discard();localModels.dispose()});
   stopPresentationOutputs=()=>outputManager.stop();
   ipcMain.handle('spelling:set-language',(event,language:string)=>applySpellCheckerLanguage(event.sender,String(language||'de')));
   ipcMain.handle('radio:metadata-start',(event,stationId:string,streamUrl:string,sessionId?:string,channel?:string)=>{const sender=event.sender,id=typeof sessionId==='string'&&/^[\w-]{1,128}$/.test(sessionId)?sessionId:undefined;return radioMetadataCoordinator.start(sender.id,String(stationId),String(streamUrl),value=>{if(!sender.isDestroyed())sender.send('radio:metadata',value)},id,channel==='background'?'background':'preview')});
@@ -636,6 +651,10 @@ app.whenReady().then(async() => {
   ipcMain.handle('displays:identify',(_event,assignments:DisplayAssignments)=>outputManager.identify(assignments));
   ipcMain.handle('outputs:preflight',(_event,assignments:DisplayAssignments,presentation:{hasPresentation?:boolean;activeSlideCount?:number;media?:string[]})=>displayManager.preflight(assignments,presentation));
   ipcMain.handle('outputs:on-air',async(_event,assignments:DisplayAssignments,payload:unknown)=>{const preflight=displayManager.preflight(assignments,{hasPresentation:true,activeSlideCount:1});if(!preflight.ok)throw new Error(preflight.errors.join('\n'));outputStarting=true;localSlideService.cancel();localImageService.cancel();localModels.pause();try{await stopOriginalPlayback();remoteServer.updateLive({current:payload,onAir:true});return await outputManager.start(assignments,payload)}finally{outputStarting=false;if(!outputManager.isActive())localModels.resume()}});
+  ipcMain.handle('outputs:switch-main',(event,displayId:unknown)=>{
+    if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;
+    return outputManager.switchMain(displayId,()=>!outputStarting&&!originalRuntime.binding()&&!remoteServer.sharing.current()?.onMain);
+  });
   ipcMain.handle('outputs:send-slide',(_event,payload:unknown)=>{outputManager.send(payload);remoteServer.updateLive({current:payload});return true});
   ipcMain.on('outputs:media-ended',(_event,behavior:string)=>{sendToLiveWindow(controlWindow,'outputs:media-ended',behavior)});
   ipcMain.handle('outputs:send-role',(_event,role:OutputRole,payload:unknown)=>outputManager.sendTo(role,payload));
@@ -645,25 +664,37 @@ app.whenReady().then(async() => {
   ipcMain.handle('outputs:send-banner',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id)return false;const banner=readBannerOutputState(payload);return banner!==undefined?outputManager.setBanner(banner):false});
   ipcMain.handle('outputs:send-weather-warnings',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;const state=payload===null?null:readWeatherWarningState(payload);return payload!==null&&!state?false:outputManager.setWeatherWarnings(state)});
   ipcMain.handle('outputs:send-annotations',(event,payload:unknown)=>{if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;const state=readAnnotationState(payload);return state===undefined?false:outputManager.setAnnotations(state)});
-  ipcMain.handle('outputs:set-app-mode',(_event,state:{mode:'normal'|'test';onAir:boolean})=>{if(state.onAir){localSlideService.cancel();localImageService.cancel();localModels.pause()}else localModels.resume();return outputManager.setAppMode(state)});
+  ipcMain.handle('outputs:set-app-mode',(_event,state:{mode:'normal'|'test';onAir:boolean})=>{if(state.onAir){if(!outputManager.getAppMode().onAir){localSlideService.cancel();localImageService.cancel()}localModels.pause()}else localModels.resume();return outputManager.setAppMode(state)});
   ipcMain.handle('outputs:get-app-mode',()=>outputManager.getAppMode());
   ipcMain.handle('outputs:get-state',(event)=>outputManager.getStateForSender(event.sender.id));
   const requireDraftOperator=(event:Electron.IpcMainInvokeEvent)=>{
     if(!controlWindow||controlWindow.isDestroyed()||event.sender.id!==controlWindow.webContents.id||event.senderFrame!==event.sender.mainFrame)throw Error('SLIDE_DRAFT_FORBIDDEN');
   };
-  ipcMain.handle('local-slides:status',async event=>{requireDraftOperator(event);return{...await slideModelPack.status(),busy:localSlideService.busy}});
+  ipcMain.handle('local-slides:status',async event=>{requireDraftOperator(event);return{...await (draftingBlocked()?liveSlideModelPack:slideModelPack).status(),busy:textDraftBusy()}});
   ipcMain.handle('local-models:status',event=>{requireDraftOperator(event);return localModels.status()});
   ipcMain.handle('local-models:configure',(event,value:unknown)=>{requireDraftOperator(event);if(typeof value!=='boolean')throw Error('LOCAL_MODEL_PREFERENCES_INVALID');return localModels.configure(value)});
-  const modelId=(value:unknown):LocalModelId=>{if(value!=='text'&&value!=='image')throw Error('LOCAL_MODEL_UNKNOWN');return value};
+  const modelId=(value:unknown):LocalModelId=>{if(value!=='text'&&value!=='image'&&value!=='live'&&value!=='liveImage')throw Error('LOCAL_MODEL_UNKNOWN');return value};
   ipcMain.handle('local-models:download',(event,id:unknown)=>{requireDraftOperator(event);return localModels.download(modelId(id))});
   ipcMain.handle('local-models:cancel-download',(event,id:unknown)=>{requireDraftOperator(event);return localModels.cancelDownload(modelId(id))});
   ipcMain.handle('local-models:remove',(event,id:unknown)=>{requireDraftOperator(event);return localModels.remove(modelId(id))});
   ipcMain.handle('local-slides:download',event=>{requireDraftOperator(event);return localModels.download('text')});
   ipcMain.handle('local-slides:cancel-download',event=>{requireDraftOperator(event);return localModels.cancelDownload('text')});
   ipcMain.handle('local-slides:remove',event=>{requireDraftOperator(event);return localModels.remove('text')});
-  ipcMain.handle('local-slides:generate',async(event,request:unknown)=>{requireDraftOperator(event);if(localImageService.busy)throw Error('SLIDE_DRAFT_BUSY');localModels.pause();const cancel=()=>localSlideService.cancel();event.sender.once('destroyed',cancel);try{return await localSlideService.generate(request)}finally{event.sender.removeListener('destroyed',cancel);localModels.resume()}});
-  ipcMain.handle('local-slides:cancel',event=>{requireDraftOperator(event);localSlideService.cancel()});
-  ipcMain.handle('local-images:status',async event=>{requireDraftOperator(event);return{...await imageModelPack.status(),busy:localImageService.busy,progress:imageProgress}});
+  ipcMain.handle('local-slides:generate',async(event,value:unknown)=>{
+    requireDraftOperator(event);
+    if(localImageService.busy||textDraftBusy())throw Error('SLIDE_DRAFT_BUSY');
+    const request=readSlideDraftRequest(value);
+    if(!request)throw Error('SLIDE_DRAFT_REQUEST_INVALID');
+    const live=draftingBlocked();
+    const service=live?liveSlideService:localSlideService;
+    localModels.pause();
+    const cancel=()=>service.cancel();
+    event.sender.once('destroyed',cancel);
+    try{return await service.generate(live?{...request,design:false}:request)}
+    finally{event.sender.removeListener('destroyed',cancel);localModels.resume()}
+  });
+  ipcMain.handle('local-slides:cancel',event=>{requireDraftOperator(event);localSlideService.cancel();liveSlideService.cancel()});
+  ipcMain.handle('local-images:status',async event=>{requireDraftOperator(event);return{...await imagePackForMode().status(),busy:localImageService.busy,progress:imageProgress}});
   ipcMain.handle('local-images:generate',async(event,prompt:unknown)=>{requireDraftOperator(event);localModels.pause();imageProgress=0;const cancel=()=>localImageService.cancel();event.sender.once('destroyed',cancel);try{return await localImageService.generate(prompt)}finally{event.sender.removeListener('destroyed',cancel);localModels.resume()}});
   ipcMain.handle('local-images:accept',(event,ids:unknown)=>{requireDraftOperator(event);return localImageService.accept(ids)});
   ipcMain.handle('local-images:discard',event=>{requireDraftOperator(event);localImageService.discard()});

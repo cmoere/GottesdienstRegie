@@ -3,7 +3,7 @@ import path from 'node:path';
 import {randomUUID} from 'node:crypto';
 import type {SlidePackStatus} from './SlideModelPack';
 
-export type LocalModelId='text'|'image';
+export type LocalModelId='text'|'image'|'live'|'liveImage';
 type Pack={status:()=>Promise<SlidePackStatus>;download:()=>Promise<void>;cancel:()=>void;remove:()=>Promise<void>};
 type Entry={id:LocalModelId;pack:Pack};
 type Preferences={autoDownload:boolean;disabled:LocalModelId[]};

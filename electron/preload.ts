@@ -67,6 +67,7 @@ contextBridge.exposeInMainWorld("desktop", {
   goOnAir: (assignments: Record<string, string>, payload: unknown) =>
     ipcRenderer.invoke("outputs:on-air", assignments, payload),
   goOffAir: () => ipcRenderer.invoke("outputs:off-air"),
+  switchMainOutput: (displayId:number) => ipcRenderer.invoke('outputs:switch-main',displayId),
   sendLiveSlide: (payload: unknown) =>
     ipcRenderer.invoke("outputs:send-slide", payload),
   sendOutputRole: (role: string, payload: unknown) =>
@@ -79,7 +80,7 @@ contextBridge.exposeInMainWorld("desktop", {
   getOutputState:()=>ipcRenderer.invoke('outputs:get-state'),
   outputTiming:{report:(receipt:import('../shared/outputTiming').OutputPaintReceipt)=>ipcRenderer.invoke('outputs:paint-report',receipt),reportPreview:(receipt:import('../shared/outputTiming').OutputPaintReceipt)=>ipcRenderer.invoke('outputs:preview-paint-report',receipt),get:()=>ipcRenderer.invoke('outputs:timings')},
   localSlides:{status:()=>ipcRenderer.invoke('local-slides:status'),download:()=>ipcRenderer.invoke('local-slides:download'),cancelDownload:()=>ipcRenderer.invoke('local-slides:cancel-download'),remove:()=>ipcRenderer.invoke('local-slides:remove'),generate:(request:import('../shared/localSlideDraft').SlideDraftRequest)=>ipcRenderer.invoke('local-slides:generate',request),cancel:()=>ipcRenderer.invoke('local-slides:cancel')},
-  localModels:{status:()=>ipcRenderer.invoke('local-models:status'),configure:(automatic:boolean)=>ipcRenderer.invoke('local-models:configure',automatic),download:(id:'text'|'image')=>ipcRenderer.invoke('local-models:download',id),cancelDownload:(id:'text'|'image')=>ipcRenderer.invoke('local-models:cancel-download',id),remove:(id:'text'|'image')=>ipcRenderer.invoke('local-models:remove',id)},
+  localModels:{status:()=>ipcRenderer.invoke('local-models:status'),configure:(automatic:boolean)=>ipcRenderer.invoke('local-models:configure',automatic),download:(id:import('./localSlides/LocalModelManager').LocalModelId)=>ipcRenderer.invoke('local-models:download',id),cancelDownload:(id:import('./localSlides/LocalModelManager').LocalModelId)=>ipcRenderer.invoke('local-models:cancel-download',id),remove:(id:import('./localSlides/LocalModelManager').LocalModelId)=>ipcRenderer.invoke('local-models:remove',id)},
   localImages:{status:()=>ipcRenderer.invoke('local-images:status'),generate:(prompt:string)=>ipcRenderer.invoke('local-images:generate',prompt),accept:(ids:string[])=>ipcRenderer.invoke('local-images:accept',ids),discard:()=>ipcRenderer.invoke('local-images:discard')},
   sendAnnouncementBanner:(banner:import('../src/outputState').BannerOutputState|null)=>ipcRenderer.invoke('outputs:send-banner',banner),
   weatherWarnings:{read:(location:import('../shared/externalLoop').WeatherLocation)=>ipcRenderer.invoke('weather-warnings:read',location)},

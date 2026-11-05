@@ -7,13 +7,13 @@ describe('local drafting does not acquire live output ownership',()=>{
   const service=new LocalSlideService({verifiedDirectory:async()=>'/owned/model'},async()=>result,()=>false);
   await expect(service.generate({...request,design:true})).rejects.toThrow('SLIDE_DRAFT_INVALID');
  });
- it('rejects ON AIR before touching the model and rejects malformed output',async()=>{
+ it('rejects new work during output startup and rejects malformed output',async()=>{
   const verify=vi.fn(async()=>'/owned/model'),run=vi.fn(async()=>result),service=new LocalSlideService({verifiedDirectory:verify},run,()=>true);
   await expect(service.generate(request)).rejects.toThrow('SLIDE_DRAFT_ON_AIR');expect(verify).not.toHaveBeenCalled();
   const invalid=new LocalSlideService({verifiedDirectory:verify},async()=>'<script>invalid</script>',()=>false);
   await expect(invalid.generate(request)).rejects.toThrow('SLIDE_DRAFT_INVALID');
  });
- it('cancels pending inference and rejects late output if ON AIR begins',async()=>{
+ it('cancels pending inference and rejects late output on explicit cancellation',async()=>{
   let onAir=false,resolve!:(text:string)=>void,signal:AbortSignal|undefined;
   const service=new LocalSlideService({verifiedDirectory:async()=>'/owned/model'},async(_dir,_request,abort)=>{signal=abort;return new Promise<string>(done=>{resolve=done})},()=>onAir);
   const pending=service.generate(request);for(let i=0;i<8&&!resolve;i++)await Promise.resolve();

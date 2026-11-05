@@ -163,12 +163,12 @@ export const usePresentation=create<State>()(persist((set,get)=>({
     let accepted=false;
     set(state=>{
       const target=state.sections.find(section=>section.id===sectionId);
-      if(state.onAir||state.presentationId!==presentationId||!target||source.type!=='content'||!source.slides.length||!canInsertItem(source,target))return state;
+      if(state.presentationId!==presentationId||!target||source.type!=='content'||!source.slides.length||!canInsertItem(source,target))return state;
       const clone={...cloneItem(source),sectionId,section:sectionName(sectionId)},items=[...state.items];
       const anchor=items.findIndex(item=>item.id===afterId&&item.sectionId===sectionId);
       let index=anchor>=0?anchor+1:items.findIndex(item=>(state.sections.find(section=>section.id===item.sectionId)?.order??99)>target.order);
       if(index<0)index=items.length;items.splice(index,0,clone);accepted=true;
-      return changed(state,{items:items.map((item,order)=>({...item,order})),selectedItemId:clone.id,selectedServiceItemIds:[clone.id],selectedSlideId:clone.slides[0].id,mode:'edit'});
+      return changed(state,{items:items.map((item,order)=>item.order===order?item:{...item,order}),...(state.onAir?{}:{selectedItemId:clone.id,selectedServiceItemIds:[clone.id],selectedSlideId:clone.slides[0].id,mode:'edit'})});
     });
     return accepted;
   },

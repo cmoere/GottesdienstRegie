@@ -358,6 +358,13 @@ export function SongEditor({
     );
   };
   const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [lyricFocus, setLyricFocus] = useState<string|null>(null);
+  const lyricFields = useRef(new Map<string,HTMLTextAreaElement>());
+  useEffect(()=>{
+    if(tab!=="content"||!lyricFocus)return;
+    lyricFields.current.get(lyricFocus)?.focus();
+    setLyricFocus(null);
+  },[tab,lyricFocus]);
   const [translationBusy, setTranslationBusy] = useState("");
   const commitSong = (next: SongStructure) => {
     if (!canEdit) return;
@@ -388,6 +395,14 @@ export function SongEditor({
   const arrangement = item.slides.map((slide, index) =>
     slideLabel(slide, index, tx),
   );
+  let sectionOffset=0;
+  const orderedSections=structure.order.map(id=>{
+    const section=structure.sections.find(entry=>entry.id===id);
+    const start=sectionOffset;
+    sectionOffset+=section?.slides.length??0;
+    return {section,start,end:sectionOffset};
+  });
+  const selectedSongPage=item.slides.findIndex(slide=>slide.id===state.selectedSlideId);
   const metadata = item.metadata;
   const changeMeta = (patch: Record<string, string | number | boolean>) =>
     state.updateItem(item.id, {
@@ -563,6 +578,7 @@ export function SongEditor({
             title={tx("Abschnitt hinzufügen")}
             onClick={() => {
               const slide = structuredClone(item.slides[0]);
+              slide.id = crypto.randomUUID();
               slide.body = "";
               delete slide.translation;
               slide.elements = slide.elements.map((element, index) =>
@@ -663,33 +679,13 @@ export function SongEditor({
         </label>
       </div>
       <div className="arrangement-sequence" aria-label={tx("Arrangement")}>
-        {structure.order.map((id, index) => (
+        {orderedSections.map(({section,start,end},index) => (
           <button
-            key={`${id}-${index}`}
-            className={
-              item.slides[index]?.id === state.selectedSlideId ? "active" : ""
-            }
-            onClick={() =>
-              state.select(
-                item.id,
-                item.slides[
-                  structure.order
-                    .slice(0, index)
-                    .reduce(
-                      (sum, id) =>
-                        sum +
-                        (structure.sections.find((section) => section.id === id)
-                          ?.slides.length ?? 0),
-                      0,
-                    )
-                ]?.id,
-              )
-            }
+            key={`${section?.id}-${index}`}
+            className={selectedSongPage>=start&&selectedSongPage<end?"active":""}
+            onClick={()=>state.select(item.id,item.slides[start]?.id)}
           >
-            {shortSection(
-              structure.sections.find((section) => section.id === id)?.label ||
-                "",
-            )}
+            {shortSection(section?.label||"")}
           </button>
         ))}
       </div>
@@ -718,11 +714,14 @@ export function SongEditor({
       {tab === "order" && (
         <section className="song-override-panel">
           <div className="song-order-chips">
-            {structure.order.map((id, index) => (
+            {structure.order.map((id, index) => {
+              const section=structure.sections.find(entry=>entry.id===id);
+              return (
               <div
                 key={`${id}-${index}`}
                 draggable={canEdit}
                 onDragStart={() => setDragIndex(index)}
+                onDragEnd={() => setDragIndex(null)}
                 onDragOver={(event) => event.preventDefault()}
                 onDrop={() => {
                   if (dragIndex === null) return;
@@ -733,12 +732,13 @@ export function SongEditor({
                   setDragIndex(null);
                 }}
               >
-                <span>
-                  {shortSection(
-                    structure.sections.find((section) => section.id === id)
-                      ?.label || "",
-                  )}
-                </span>
+                <button type="button" onClick={()=>{
+                  state.select(item.id,item.slides[orderedSections[index].start]?.id);
+                  setLyricFocus(id);
+                  setTab("content");
+                }}>
+                  {index+1}. {section?.label}
+                </button>
                 <button
                   disabled={!canEdit || index === 0}
                   aria-label={tx("Nach links verschieben")}
@@ -753,6 +753,20 @@ export function SongEditor({
                 >
                   ←
                 </button>
+                <button type="button"
+                  disabled={!canEdit||index===structure.order.length-1}
+                  aria-label={tx("Nach rechts verschieben")}
+                  onClick={()=>{
+                    const order=[...structure.order];
+                    [order[index],order[index+1]]=[order[index+1],order[index]];
+                    commitSong({...structure,order});
+                  }}>→</button>
+                <button type="button" disabled={!canEdit} aria-label={tx("Wiederholen")}
+                  onClick={()=>{
+                    const order=[...structure.order];
+                    order.splice(index+1,0,id);
+                    commitSong({...structure,order});
+                  }}><Icon name="content_copy"/></button>
                 <button
                   disabled={!canEdit || structure.order.length === 1}
                   aria-label={tx("Aus Ablauf entfernen")}
@@ -766,7 +780,8 @@ export function SongEditor({
                   ×
                 </button>
               </div>
-            ))}
+              );
+            })}
           </div>
           <div className="song-order-chips">
             {structure.sections.map((section) => (
@@ -1019,6 +1034,8 @@ export function SongEditor({
                   }}
                 />
                 <textarea
+                  ref={part===0?field=>{if(field)lyricFields.current.set(section.id,field);else lyricFields.current.delete(section.id)}:undefined}
+                  aria-label={tx("Text")}
                   disabled={!canEdit}
                   value={slide.body}
                   rows={Math.max(3, slide.body.split("\n").length + 1)}

@@ -20,7 +20,9 @@ export class LocalImageService{
    if(data.length>16*1024*1024)throw Error('LOCAL_IMAGE_INVALID');
    const sharp=(await import('sharp')).default;
    const metadata=await sharp(data,{limitInputPixels:1920*1080}).metadata();
-   if(metadata.format!=='png'||metadata.width!==1024||metadata.height!==576)throw Error('LOCAL_IMAGE_INVALID');
+   const fullSize=metadata.width===1024&&metadata.height===576;
+   const liveSize=metadata.width===640&&metadata.height===384;
+   if(metadata.format!=='png'||(!fullSize&&!liveSize))throw Error('LOCAL_IMAGE_INVALID');
    if(controller.signal.aborted||this.blocked())throw Error('LOCAL_IMAGE_CANCELLED');
    const id=randomUUID();this.images.set(id,data);return{id,preview:'data:image/png;base64,'+data.toString('base64')};
   }finally{if(this.controller===controller)this.controller=undefined}

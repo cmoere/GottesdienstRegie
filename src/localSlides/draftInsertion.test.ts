@@ -12,10 +12,10 @@ describe('reviewed AI draft insertion',()=>{
   expect(usePresentation.getState().items).toHaveLength(before+1);expect(usePresentation.getState().liveSlideId).toBe('');
   usePresentation.getState().undo();expect(usePresentation.getState().items).toHaveLength(before);
  });
- it('rejects changed document, ON AIR and invalid section without affecting output',()=>{
+ it('rejects a changed document and invalid section, including ON AIR',()=>{
   const initial=usePresentation.getState(),item=buildDraftItem('Thema',[{title:'Titel',body:'Text'}],'service','light');
   expect(insertDraftItem(item,'other','service')).toBe(false);expect(insertDraftItem(item,initial.presentationId,'missing')).toBe(false);
-  usePresentation.setState({onAir:true});expect(insertDraftItem(item,initial.presentationId,'service')).toBe(false);
+  usePresentation.setState({onAir:true});expect(insertDraftItem(item,'other','service')).toBe(false);
   expect(usePresentation.getState().liveSlideId).toBe('');
  });
  it('can preview temporarily empty edited fields but refuses their insertion',()=>{

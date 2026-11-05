@@ -11303,6 +11303,78 @@
       "context": "CallExpression",
       "text": "SLIDE_MODEL_CANCELLED",
       "reason": "Reviewed v98 2026-11-03: Private fixed error/protocol code used for validation/cancellation only; public operator errors are caught and rendered through canonical translated messages, never sent to MAIN."
+    },
+    "source.e4c8ecaf349c07a0930d.3": {
+      "source": "electron/localSlides/runSlideWorker.ts",
+      "context": "CallExpression",
+      "text": "SLIDE_DRAFT_GENERATION_FAILED",
+      "reason": "Internal worker failure code. The operator dialog shows a translated error message."
+    },
+    "source.61379f9df27a32517726.1": {
+      "source": "electron/main.ts",
+      "context": "CallExpression",
+      "text": "SLIDE_DRAFT_REQUEST_INVALID",
+      "reason": "Internal worker failure code. The operator dialog shows a translated error message."
+    },
+    "source.5c708b235837abe5a626.1": {
+      "source": "src/App.tsx",
+      "context": "CallExpression",
+      "text": "NFKD",
+      "reason": "Search normalization or keyboard control token."
+    },
+    "source.3d9e33641550663ba883.1": {
+      "source": "src/App.tsx",
+      "context": "CallExpression",
+      "text": "ß",
+      "reason": "Search normalization or keyboard control token."
+    },
+    "source.060792baecd55200b6c8.11": {
+      "source": "src/App.tsx",
+      "context": "BinaryExpression",
+      "text": "Escape",
+      "reason": "Search normalization or keyboard control token."
+    },
+    "source.7e96bae9381ff45e710f.1": {
+      "source": "src/localSlides/LocalSlideDraftDialog.tsx",
+      "context": "VariableDeclaration",
+      "text": "A calm illustrative nature or church motif without lettering for this theme: {expression1}",
+      "reason": "Fixed inference prompt fragment sent to the local image worker."
+    },
+    "source.2b00c12f1ac5270c2bfe.1": {
+      "source": "electron/localSlides/runImageWorker.ts",
+      "context": "CallExpression",
+      "text": "LOCAL_IMAGE_LOW_MEMORY",
+      "reason": "Internal native worker failure code."
+    },
+    "source.2b00c12f1ac5270c2bfe.2": {
+      "source": "electron/localSlides/runImageWorker.ts",
+      "context": "CallExpression",
+      "text": "LOCAL_IMAGE_LOW_MEMORY",
+      "reason": "Internal native worker failure code."
+    },
+    "source.fc55d216cc17e8699016.2": {
+      "source": "electron/localSlides/runImageWorker.ts",
+      "context": "CallExpression",
+      "text": "LOCAL_IMAGE_RUNTIME",
+      "reason": "Internal native worker failure code."
+    },
+    "source.1c9a52c3159096eee9de.1": {
+      "source": "src/localSlides/LocalSlideDraftDialog.tsx",
+      "context": "CallExpression",
+      "text": "LOCAL_IMAGE_LOW_MEMORY",
+      "reason": "Worker code mapped to translated operator copy."
+    },
+    "source.df3b23b3bb2240bf9411.1": {
+      "source": "src/localSlides/LocalSlideDraftDialog.tsx",
+      "context": "ConditionalExpression",
+      "text": "Zu wenig freier Arbeitsspeicher für das Bild. Der Textentwurf bleibt erhalten.",
+      "reason": "Canonical operator message translated through tx when rendered."
+    },
+    "source.8828e870193f13669b94.1": {
+      "source": "src/localSlides/LocalSlideDraftDialog.tsx",
+      "context": "ConditionalExpression",
+      "text": "Bilder konnten nicht erstellt werden. Der Textentwurf bleibt erhalten.",
+      "reason": "Canonical operator message translated through tx when rendered."
     }
   },
   "reviewedTechnicalFiles": {
