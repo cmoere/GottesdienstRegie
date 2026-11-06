@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.5
+
+Die Folienübersicht zeigt 16:9-Vorschauen, Foliennummern und umbrechende Titel. Abschnitte, Elemente und Folien folgen der Reihenfolge im Ablauf.
+
+Einzelvorschau und Folienübersicht teilen sich einen Umschalter. Die aktive Ansicht ist hervorgehoben. Ein rotes LIVE-Label kennzeichnet die gesendete Folie getrennt von der ausgewählten Vorschau.
+
+---
+
 # GottesdienstRegie 0.99.4
 
 Loop-Elemente können in jeder Runde oder in einem festen Rundenabstand erscheinen. Die Vorschau „Nächste Folie“ berücksichtigt die Wiederholung und den geplanten Übergang zum Gottesdienst.

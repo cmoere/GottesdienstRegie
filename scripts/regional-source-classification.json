@@ -1,5 +1,11 @@
 {
   "reviewedSourceEntries": {
+    "source.36a427b339dff0f0b7f5.1": {
+      "source": "src/ProductionWorkspace.tsx",
+      "context": "jsx-text:b",
+      "text": "LIVE",
+      "reason": "Fixed broadcast status badge in the operator slide overview."
+    },
     "source.4d1ae1c6d099d4f6f447.1": {
       "source": "electron/localSlideWorker.ts",
       "context": "ConditionalExpression",
@@ -11571,7 +11577,7 @@
       "reason": "Reviewed entire module: visitor announcement scroll composition, supplied public content and geometry only. No settings or other operator controls in this module."
     },
     "src/SlideRenderer.tsx": {
-      "sha256": "74d6bafdc117ff36dc34463ec132a691604ddce4aba48b5e312a589f35edcd3a",
+      "sha256": "920527f4c9e333eabcd07a90762b465f9073121d765329008170be472ae2b6ae",
       "reason": "Re-reviewed 2026-11-03: exact diff only wraps the existing visitor renderer in React.memo; all output text, media, SVG/CSS geometry and placeholders remain unchanged. Internal dynamic element subscriptions continue independently. This remains public/authored output, with no operator buttons, fields or dialogs."
     },
     "src/languageCatalog.ts": {

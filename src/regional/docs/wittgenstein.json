@@ -2236,6 +2236,14 @@
     "versions[0.99].builds[0.99.4].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.4].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.4].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergab",
-    "versions[0.99].builds[0.99.4].sections.known.1.text": "De originalgetreue Wiedergab braucht weirer Windows on installiertes Microsoft PowerPoint. De neie Vierbereitungs- on Diagnosefunktione ersetze den Wiedergabeweg net."
+    "versions[0.99].builds[0.99.4].sections.known.1.text": "De originalgetreue Wiedergab braucht weirer Windows on installiertes Microsoft PowerPoint. De neie Vierbereitungs- on Diagnosefunktione ersetze den Wiedergabeweg net.",
+    "versions[0.99].builds[0.99.5].overview.label": "Übersichtlichere Folienkarten",
+    "versions[0.99].builds[0.99.5].overview.text": "Die Folienübersicht zeigt 16:9-Vorschauen, Foliennummern und umbrechende Titel. Abschnitte, Elemente und Folien folgen der Reihenfolge im Ablauf.",
+    "versions[0.99].builds[0.99.5].sections.fixed.0.label": "Ansicht umschalten und Live-Folien erkennen",
+    "versions[0.99].builds[0.99.5].sections.fixed.0.text": "Einzelvorschau und Folienübersicht teilen sich einen Umschalter. Die aktive Ansicht ist hervorgehoben. Ein rotes LIVE-Label kennzeichnet die gesendete Folie getrennt von der ausgewählten Vorschau.",
+    "versions[0.99].builds[0.99.5].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.5].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.5].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergab",
+    "versions[0.99].builds[0.99.5].sections.known.1.text": "De originalgetreue Wiedergab braucht weirer Windows on installiertes Microsoft PowerPoint. De neie Vierbereitungs- on Diagnosefunktione ersetze den Wiedergabeweg net."
   }
 }

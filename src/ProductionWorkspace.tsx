@@ -2,6 +2,7 @@ import {ScreenSharingMirror} from './ScreenSharing';
 import {usePreviewOptions} from './PreviewOverviewControls';
 import {useI18n} from './i18n';
 import {
+  memo,
   useEffect,
   useMemo,
   useRef,
@@ -3498,7 +3499,7 @@ function PreviewStack({
   );
 }
 
-function PreviewSlideCard({
+const PreviewSlideCard = memo(function PreviewSlideCard({
   item,
   slide,
   index,
@@ -3508,29 +3509,25 @@ function PreviewSlideCard({
   index: number;
 }) {
  const {tx}=useI18n();
-  const state = usePresentation(),
-    selected =
-      slide.id === state.previewSlideId && item.id === state.previewItemId,
-    live = slide.id === state.liveSlideId && item.id === state.liveItemId,
-    transition = resolveTransition(
-      slide,
-      item,
-      "operator",
-      state.transitionDefault,
-    ),
-    rendered = previewSlide(slide);
+  const selected=usePresentation(state=>slide.id===state.previewSlideId&&item.id===state.previewItemId);
+  const live=usePresentation(state=>state.onAir&&slide.id===state.liveSlideId&&item.id===state.liveItemId);
+  const transitionDefault=usePresentation(state=>state.transitionDefault);
+  const selectPreview=usePresentation(state=>state.selectPreview);
+  const transition=resolveTransition(slide,item,"operator",transitionDefault);
+  const rendered=previewSlide(slide);
   return (
     <button
       data-preview-slide={slide.id}
       aria-label={tx("{value1}, Folie {value2}",{value1:String(item.title),value2:String((index+1))})}
-      aria-selected={selected}
+      aria-pressed={selected}
       aria-current={live ? "true" : undefined}
       title={(""+String((slide.title||tx("Folie {value1}",{value1:String((index+1))})))+""+String((slide.transitionOverride?(" · "+String(tx(transitionLabels[transition.type]))+" · "+String((transition.durationMs / 1000).toFixed(1))+" s"):""))+"")}
       className={`preview-slide-card ${selected ? "active" : ""} ${live ? "live" : ""}`}
-      onClick={() => state.selectPreview(item.id, slide.id)}
+      onClick={() => selectPreview(item.id, slide.id)}
     >
       <div className="preview-slide-image">{item.metadata.importMode==='original'?<PowerPointStaticPreview sourceHash={String(item.metadata.powerPointSourceHash)} slideId={slide.sourceSlideId}/>:<SlideRenderer slide={rendered} mode="thumbnail" />}
       <span className="preview-slide-number">{index + 1}</span>
+      {live&&<b className="slide-live-badge">LIVE</b>}
       {slide.transitionOverride && (
         <i className="preview-transition-icon">
           <Icon name="animation" />
@@ -3539,7 +3536,7 @@ function PreviewSlideCard({
       </div><span className="preview-slide-caption">{(slide.title?.trim()||tx("Folie {value1}",{value1:String((index+1))}))}</span>
     </button>
   );
-}
+});
 
 function PreviewCenter({
   activeQuick,
@@ -3777,10 +3774,8 @@ function PreviewCenter({
         }
       }}
     >
-      {state.sections.map((section) => {
-        const entries = state.items.filter(
-            (entry) => entry.sectionId === section.id,
-          ),
+      {[...state.sections].sort((a,b)=>a.order-b.order).map((section) => {
+        const entries = state.items.filter(entry=>entry.sectionId===section.id).sort((a,b)=>a.order-b.order),
           duration = entries.reduce(
             (sum, entry) => sum + itemDurationSeconds(entry),
             0,
@@ -3813,7 +3808,7 @@ function PreviewCenter({
                     </small>
                   </h3>
                   <div>
-                    {entry.slides.map((current, index) => (
+                    {[...entry.slides].sort((a,b)=>a.order-b.order).map((current, index) => (
                       <PreviewSlideCard
                         key={current.id}
                         item={entry}
@@ -4033,16 +4028,18 @@ export function ProductionWorkspace({
     return (
       <section className="production-workspace preview-mode">
         <div className="preview-mode-toolbar">
-          <button
+          <div className="preview-layout-switch" role="group" aria-label={tx("Ansichtseinstellungen")}>
+          <button type="button"
             className={state.previewLayout === "single" ? "active" : ""}
             aria-pressed={state.previewLayout === "single"}
             onClick={() => state.setPreviewLayout("single")}
           >{tx("EINZELVORSCHAU")}</button>
-          <button
+          <button type="button"
             className={state.previewLayout === "grid" ? "active" : ""}
             aria-pressed={state.previewLayout === "grid"}
             onClick={() => state.setPreviewLayout("grid")}
           >{tx("Folienübersicht")}</button>
+          </div>
         </div>
         <div className="preview-work-area">
           <PreviewCenter activeQuick={activeQuick} />

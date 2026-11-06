@@ -6,6 +6,7 @@ import {liveEngine} from './LiveEngine';
 import {withPostProgramRoomNotice} from './community/PostProgramRoomNoticeService';
 import {TestModeContext} from './TestModeWatermark';
 import {AppClock} from './community/AppClock';
+import {usePreferences} from './preferences';
 
 beforeEach(()=>{
   usePresentation.getState().newDocument('Nachprogramm-Test');
@@ -52,4 +53,27 @@ it('mirrors the committed room notice in both live previews without modifying th
   expect(screen.queryByLabelText('Nachprogramm-Raumhinweis')).not.toBeInTheDocument();
   await act(async()=>{await liveEngine.stop();usePresentation.getState().setOnAir(false);usePresentation.getState().setMode('preview')});
   expect(screen.queryByLabelText('Nachprogramm-Raumhinweis')).not.toBeInTheDocument();
+});
+
+it('switches layouts and keeps the preview selection distinct from the live slide',()=>{
+ usePreferences.setState({language:'de',germanRegion:null});
+ const item=createServiceItem('content',{id:'overview',sectionId:'service',title:'Predigt'});
+ const first={...item.slides[0],id:'first',order:0,title:'Ein langer Folientitel für die Übersicht'};
+ const second={...item.slides[0],id:'second',order:1,title:'Zweite Folie'};
+ item.slides=[second,first];
+ usePresentation.setState({items:[item],onAir:true,mode:'preview',previewLayout:'single',liveItemId:item.id,liveSlideId:second.id,previewItemId:item.id,previewSlideId:second.id});
+ const {container}=render(<ProductionWorkspace canEdit/>);
+ fireEvent.click(screen.getByRole('button',{name:'Folienübersicht'}));
+ expect(screen.getByRole('button',{name:'Folienübersicht'})).toHaveAttribute('aria-pressed','true');
+ const cards=[...container.querySelectorAll('.preview-slide-card')];
+ expect(cards.map(card=>card.getAttribute('data-preview-slide'))).toEqual(['first','second']);
+ fireEvent.click(cards[0]);
+ expect(cards[0]).toHaveAttribute('aria-pressed','true');
+ expect(cards[0]).toHaveTextContent(first.title);
+ expect(cards[1]).toHaveAttribute('aria-current','true');
+ expect(cards[1].querySelector('.slide-live-badge')).toHaveTextContent('LIVE');
+ expect(usePresentation.getState().liveSlideId).toBe(second.id);
+ fireEvent.click(screen.getByRole('button',{name:'EINZELVORSCHAU'}));
+ expect(screen.getByRole('button',{name:'EINZELVORSCHAU'})).toHaveAttribute('aria-pressed','true');
+ expect(container.querySelector('.production-grid')).toBeNull();
 });

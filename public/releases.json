@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
-          "version": "0.99.4",
+          "version": "0.99.5",
           "releaseDate": "2026-11-06",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Übersichtlichere Folienkarten",
+              "en": "Clearer slide cards"
+            },
+            "text": {
+              "de": "Die Folienübersicht zeigt 16:9-Vorschauen, Foliennummern und umbrechende Titel. Abschnitte, Elemente und Folien folgen der Reihenfolge im Ablauf.",
+              "en": "The slide overview shows 16:9 previews, slide numbers and wrapping titles. Sections, items and slides follow the running order."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Ansicht umschalten und Live-Folien erkennen",
+                  "en": "Switch views and identify live slides"
+                },
+                "text": {
+                  "de": "Einzelvorschau und Folienübersicht teilen sich einen Umschalter. Die aktive Ansicht ist hervorgehoben. Ein rotes LIVE-Label kennzeichnet die gesendete Folie getrennt von der ausgewählten Vorschau.",
+                  "en": "Single preview and slide overview share a view switch. The active view is highlighted. A red LIVE badge identifies the slide on air separately from the selected preview."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.99.4",
+          "releaseDate": "2026-11-06",
+          "current": false,
           "overview": {
             "label": {
               "de": "Anzeigerunden im Vor- und Nachprogramm",

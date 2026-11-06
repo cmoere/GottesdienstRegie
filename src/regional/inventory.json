@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": true,
-  "sourceFingerprint": "57544c135f2b1e96a766f8faa25114b20b7f3f7549e6f2b503843940adfcaae6",
+  "sourceFingerprint": "7c8b21e998df250f754ea873f44e1261e1c558bebeaa133003c170cb0174b52c",
   "note": "Reviewed complete v98 source inventory; all31 interface/native/help/release resources checked separately. Protocol tokens, internal prompts and generated-document defaults have exact entry-level reviews.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -83785,6 +83785,83 @@
     },
     {
       "key": "release.versions[0.99].builds[0.99.4].sections.known.1.text",
+      "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "source.36a427b339dff0f0b7f5.1",
+      "text": "LIVE",
+      "source": "src/ProductionWorkspace.tsx",
+      "line": 3530,
+      "context": "jsx-text:b",
+      "status": "excluded",
+      "exclusionReason": "Fixed broadcast status badge in the operator slide overview.",
+      "technicalReviewHash": "206448e87fea9614319e32bf692389bd1236ad6dff4e79d1ba2f2e0fe2113e6f"
+    },
+    {
+      "key": "source.a8141420db4c32bfc368.1",
+      "text": "Ansichtseinstellungen",
+      "source": "src/ProductionWorkspace.tsx",
+      "line": 4031,
+      "context": "operator-copy-resource",
+      "status": "excluded",
+      "resourceKey": "ui.v96OverviewSettings",
+      "exclusionReason": "Explicit operator-copy binding resolves canonical resource ui.v96OverviewSettings; locale coverage is validated against that resource.",
+      "technicalReviewHash": "20013502e655126f82147de43db8f979397f6c22587fdc292214a287ff9e456c"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.5].overview.label",
+      "text": "Übersichtlichere Folienkarten",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.5].overview.text",
+      "text": "Die Folienübersicht zeigt 16:9-Vorschauen, Foliennummern und umbrechende Titel. Abschnitte, Elemente und Folien folgen der Reihenfolge im Ablauf.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.5].sections.fixed.0.label",
+      "text": "Ansicht umschalten und Live-Folien erkennen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.5].sections.fixed.0.text",
+      "text": "Einzelvorschau und Folienübersicht teilen sich einen Umschalter. Die aktive Ansicht ist hervorgehoben. Ein rotes LIVE-Label kennzeichnet die gesendete Folie getrennt von der ausgewählten Vorschau.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.5].sections.known.0.label",
+      "text": "Hinweise zum Live-Betrieb",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.5].sections.known.0.text",
+      "text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.5].sections.known.1.label",
+      "text": "Originalgetreue PowerPoint-Wiedergabe",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.5].sections.known.1.text",
       "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
       "source": "public/releases.json",
       "context": "release-history",
