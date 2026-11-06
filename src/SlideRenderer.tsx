@@ -485,6 +485,7 @@ function RenderElement({
     return src ? (
       <img
         className="slide-renderer-element qr"
+        data-announcement-qr={element.id.endsWith("-public-announcement-qr")||undefined}
         style={{ ...style, objectFit: "contain", background: "#fff" }}
         src={src}
         alt="QR-Code"

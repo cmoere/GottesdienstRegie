@@ -2363,7 +2363,8 @@
     "localSlidesBrief": "Beschreibe die gewünschte Folie oder Präsentation",
     "localSlidesQuestions": "Rückfragen zur Folie",
     "localSlidesCheckingBrief": "Die KI prüft die Beschreibung …",
-    "localSlidesCreateDirectly": "Direkt erstellen"
+    "localSlidesCreateDirectly": "Direkt erstellen",
+    "loopRoundInterval": "Anzeigen alle … Runden"
   },
   "native": {
     "updateAvailableTitle": "Nigge Version teo kriegen",

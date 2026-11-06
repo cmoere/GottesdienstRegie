@@ -271,3 +271,30 @@
   font:700 10px/1.25 system-ui,sans-serif;
   pointer-events:none;
 }
+
+.loop-round-setting {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:8px 16px;
+  background:var(--operator-surface);
+  border-bottom:1px solid var(--operator-divider);
+}
+.loop-round-setting input { width:75px; }
+.quick-screens-panel .quick-screen-thumb { background:#162d36; container-type:inline-size; }
+.quick-screen-thumb>.screen-test-pattern { position:absolute; inset:0; }
+.quick-screen-thumb>.technical-issue-message { overflow:hidden; text-shadow:none; }
+.live-slide-panel .output-composition>.test-mode-watermark {
+  font-size:clamp(5px,3cqh,11px);
+  right:1.4cqw;
+  width:max-content;
+  border-width:1px;
+}
+
+.live-slide-panel .output-composition:not([data-banner-position=bottom])>.test-mode-watermark {
+  bottom:1.4cqw;
+}
+.live-slide-panel .output-composition:has([data-announcement-qr])>.test-mode-watermark {
+  right:auto;
+}

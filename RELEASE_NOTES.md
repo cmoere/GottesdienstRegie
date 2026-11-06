@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.4
+
+Loop-Elemente können in jeder Runde oder in einem festen Rundenabstand erscheinen. Die Vorschau „Nächste Folie“ berücksichtigt die Wiederholung und den geplanten Übergang zum Gottesdienst.
+
+Die Schnellanzeige-Kacheln haben einen einheitlichen Hintergrund. „Technische Störung“ zeigt eine Miniatur der tatsächlichen Anzeige. Meldungs-QR-Codes sitzen unten rechts. Das Testwasserzeichen ist in der Regievorschau kleiner.
+
+---
+
 # GottesdienstRegie 0.99.3
 
 Die lokale KI kann gezielt nach fehlenden Angaben fragen. Mit „Direkt erstellen“ lässt sich dieser Schritt überspringen.

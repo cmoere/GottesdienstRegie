@@ -1,5 +1,5 @@
 import {it,expect,beforeEach} from 'vitest';
-import {usePresentation,createServiceItem} from './store';
+import {usePresentation,createServiceItem,nextLiveTarget} from './store';
 import {resolveSessionAction} from './liveSession';
 import {firstActiveTarget} from './release53Model';
 beforeEach(()=>usePresentation.getState().newDocument('Test'));
@@ -47,4 +47,34 @@ it('repeats the ordered post loop without reintroducing disabled items',()=>{
  usePresentation.getState().goLive(last.id,last.slides[0].id);
  usePresentation.getState().nextLive();
  expect(usePresentation.getState().liveItemId).toBe(first.id);
+});
+
+it('shows a third-round item on rounds 3 and 6 and resets at the next session',()=>{
+ const regular=createServiceItem('weather',{id:'regular',sectionId:'pre',order:0});
+ const occasional=createServiceItem('clock',{id:'occasional',sectionId:'pre',order:1,metadata:{loopRoundInterval:3}});
+ usePresentation.setState({items:[regular,occasional]});
+ const state=usePresentation.getState();
+ state.goLive(regular.id,regular.slides[0].id);
+ const takes:string[]=[];
+ for(let step=0;step<8;step++){
+  usePresentation.getState().nextLive();
+  takes.push(usePresentation.getState().liveItemId);
+ }
+ expect(takes).toEqual(['regular','regular','occasional','regular','regular','regular','occasional','regular']);
+ usePresentation.getState().setOnAir(false);
+ usePresentation.getState().goLive(regular.id,regular.slides[0].id);
+ expect(usePresentation.getState().liveLoopRound).toBe(1);
+});
+
+it('forecasts the next loop round only while it fits before the scheduled handoff',()=>{
+ const pre=createServiceItem('weather',{id:'pre-item',sectionId:'pre'});
+ const warmup=createServiceItem('countdown',{id:'warmup-item',sectionId:'warmup',plannedDuration:30000});
+ const service=createServiceItem('content',{id:'service-item',sectionId:'service'});
+ usePresentation.setState({date:'2026-11-06',serviceTime:'10:30',items:[pre,warmup,service]});
+ usePresentation.getState().goLive(pre.id,pre.slides[0].id);
+ const state=usePresentation.getState(),items=[pre];
+ const at=(time:string)=>new Date('2026-11-06T'+time).getTime();
+ expect(nextLiveTarget(state,{items,atMs:at('10:29:29')})).toMatchObject({itemId:pre.id,loopRound:2});
+ expect(nextLiveTarget(state,{items,atMs:at('10:29:30')})).toMatchObject({itemId:warmup.id});
+ expect(nextLiveTarget(state,{items,atMs:at('10:30:00')})).toMatchObject({itemId:service.id});
 });

@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.99.4</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.4</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.4</guid><pubDate>Fri, 06 Nov 2026 00:00:00 GMT</pubDate><description>Anzeigerunden im Vor- und Nachprogramm
+Loop-Elemente können in jeder Runde oder in einem festen Rundenabstand erscheinen. Die Vorschau „Nächste Folie“ berücksichtigt die Wiederholung und den geplanten Übergang zum Gottesdienst.
+
+MAIN-Vorschau und Meldungsfolien
+Die Schnellanzeige-Kacheln haben einen einheitlichen Hintergrund. „Technische Störung“ zeigt eine Miniatur der tatsächlichen Anzeige. Meldungs-QR-Codes sitzen unten rechts. Das Testwasserzeichen ist in der Regievorschau kleiner.
+
+Hinweise zum Live-Betrieb
+Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.
+
+Originalgetreue PowerPoint-Wiedergabe
+Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.</description></item>
 <item><title>GottesdienstRegie 0.99.3</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.3</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.3</guid><pubDate>Fri, 06 Nov 2026 00:00:00 GMT</pubDate><description>Folien per Beschreibung erstellen
 Die lokale KI kann gezielt nach fehlenden Angaben fragen. Mit „Direkt erstellen“ lässt sich dieser Schritt überspringen.
 

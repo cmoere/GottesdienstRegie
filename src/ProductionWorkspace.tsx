@@ -33,6 +33,7 @@ import {
   canAdvanceLive,
   formatDuration,
   itemDurationSeconds,
+  nextLiveTarget, loopRoundInterval, type LiveTarget,
   usePresentation,
   type ServiceItem,
   type Slide,
@@ -74,6 +75,7 @@ import { MainLivePreview } from "./MainLivePreview";
 import {TestModeWatermark} from './TestModeWatermark';
 import { quickScreenShortcut,quickOverridesRoomNotice,operatorQuickScreenName } from "./quickScreenUi";
 import {ScreenTestPattern} from './ScreenTestPattern';
+import {TechnicalIssueScreen} from './TechnicalIssueScreen';
 import { usesAutomaticLoopEditor } from "./loopEditorModel";
 import {PowerPointPlaybackPanel,PowerPointStaticPreview} from './PowerPointPlaybackPanel';
 import { NowPlayingDesigner } from "./NowPlayingDesigner";
@@ -3836,13 +3838,9 @@ function QuickScreenThumb({ quick }: { quick: QuickScreenConfig }) {
   const shortcut = quickScreenShortcut(quick.type);
   return (
     <div
-      className={`quick-screen-thumb quick-${quick.type}`}
-      style={{
-        background:
-          quick.background ?? (quick.type === "black" ? "#000" : "#162d36"),
-      }}
+      className="quick-screen-thumb"
     >
-      {quick.type==='screenTest'?<ScreenTestPattern pattern={quick.testPattern}/>:quick.type === "logo" ? (
+      {quick.id==='technical-issue'&&quick.type==='custom'?<TechnicalIssueScreen quick={quick} staticPreview/>:quick.type==='screenTest'?<ScreenTestPattern pattern={quick.testPattern}/>:quick.type === "logo" ? (
         <img
           src={quick.imageUrl || logoWhite}
           alt="Philippus Gemeinde Bielefeld e. V."
@@ -3854,7 +3852,7 @@ function QuickScreenThumb({ quick }: { quick: QuickScreenConfig }) {
           {quick.type === "noText" ? (
             <Icon name="text_fields_off" />
           ) : quick.type === "countdown" ? (
-            <strong>05:00</strong>
+            <strong>{String(Math.floor((quick.duration??300)/60)).padStart(2,"0")}:{String((quick.duration??300)%60).padStart(2,"0")}</strong>
           ) : quick.type === "empty" || quick.type === "black" ? null : (
             <strong>{quick.text || quick.name}</strong>
           )}
@@ -3869,7 +3867,9 @@ function PreviewRightSidebar({
   quickScreens,
   activeQuick,
   onQuick,
+  loopForecast,
 }: {
+  loopForecast?:{revision:number;target:LiveTarget|undefined};
   quickScreens: QuickScreenConfig[];
   activeQuick: QuickScreenConfig | null;
   onQuick: (quick: QuickScreenConfig | null) => void;
@@ -3891,7 +3891,9 @@ function PreviewRightSidebar({
     ),
     noTextAvailable = canHideSlideContent(live ?? currentPreviewSlide);
   const targets=state.items.filter(item=>item.enabled&&!item.disabled).flatMap(item=>item.slides.filter(slide=>slide.enabled).map(slide=>({item,slide})));
-  const baseId=state.onAir?state.liveSlideId:state.previewSlideId,index=targets.findIndex(entry=>entry.slide.id===baseId),next=index>=0?targets[index+1]:undefined;
+  const index=targets.findIndex(entry=>entry.slide.id===state.previewSlideId);
+  const liveNext=state.onAir?(loopForecast?.revision===state.liveTransitionRevision?loopForecast.target:nextLiveTarget(state)):undefined;
+  const next=state.onAir?targets.find(entry=>entry.item.id===liveNext?.itemId&&entry.slide.id===liveNext?.slideId):index>=0?targets[index+1]:undefined;
   const toggle = () =>
     setCollapsed((value) => {
       localStorage.setItem(
@@ -4015,13 +4017,15 @@ export function ProductionWorkspace({
   quickScreens = [],
   activeQuick = null,
   onQuick = () => {},
+  loopForecast,
 }: {
+  loopForecast?:{revision:number;target:LiveTarget|undefined};
   canEdit: boolean;
   quickScreens?: QuickScreenConfig[];
   activeQuick?: QuickScreenConfig | null;
   onQuick?: (quick: QuickScreenConfig | null) => void;
 }) {
-  const {tx}=useI18n();
+  const {t,tx}=useI18n();
   const state = usePresentation(),
     { item, slide } = selected(state),
     [transitionPreview, setTransitionPreview] = useState(0);
@@ -4046,6 +4050,7 @@ export function ProductionWorkspace({
             quickScreens={quickScreens}
             activeQuick={activeQuick}
             onQuick={onQuick}
+            loopForecast={loopForecast}
           />
         </div>
       </section>
@@ -4058,6 +4063,11 @@ export function ProductionWorkspace({
   return (
     <section className="production-workspace">
       <div className="context-editor">
+        {item.itemCategory==="loop"&&(item.sectionId==="pre"||item.sectionId==="post")&&<label className="loop-round-setting">{t("loopRoundInterval")}<input type="number" min={1} max={999} step={1} disabled={!canEdit} defaultValue={loopRoundInterval(item)} key={item.id+":"+loopRoundInterval(item)} onBlur={event=>{
+          const interval=Number(event.target.value);
+          if(!Number.isInteger(interval)||interval<1||interval>999){event.target.value=String(loopRoundInterval(item));return}
+          if(interval!==loopRoundInterval(item))state.updateItem(item.id,{metadata:{...item.metadata,loopRoundInterval:interval}});
+        }}/></label>}
         {item.metadata.importMode&&<PowerPointPlaybackPanel item={item} canEdit={canEdit}/>}
         {item.metadata.importMode==='original'?null:<>
         {item.type === "song" ? (

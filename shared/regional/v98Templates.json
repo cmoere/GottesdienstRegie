@@ -39,7 +39,8 @@
     "localSlidesBrief": "Beschreibe die gewünschte Folie oder Präsentation",
     "localSlidesQuestions": "Rückfragen zur Folie",
     "localSlidesCheckingBrief": "Die KI prüft die Beschreibung …",
-    "localSlidesCreateDirectly": "Direkt erstellen"
+    "localSlidesCreateDirectly": "Direkt erstellen",
+    "loopRoundInterval": "Anzeigen alle … Runden"
   },
   "native": {},
   "en": {
@@ -82,7 +83,8 @@
     "localSlidesBrief": "Describe the slide or presentation you want",
     "localSlidesQuestions": "Questions about the slide",
     "localSlidesCheckingBrief": "The AI is checking the description…",
-    "localSlidesCreateDirectly": "Create directly"
+    "localSlidesCreateDirectly": "Create directly",
+    "loopRoundInterval": "Show every … rounds"
   },
   "documentation": {
     "helpTitle": "Lokale KI: Modelle, Gestaltung und Bilder",

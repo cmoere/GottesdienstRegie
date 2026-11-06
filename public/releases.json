@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
-          "version": "0.99.3",
+          "version": "0.99.4",
           "releaseDate": "2026-11-06",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Anzeigerunden im Vor- und Nachprogramm",
+              "en": "Display rounds in the pre- and post-program"
+            },
+            "text": {
+              "de": "Loop-Elemente können in jeder Runde oder in einem festen Rundenabstand erscheinen. Die Vorschau „Nächste Folie“ berücksichtigt die Wiederholung und den geplanten Übergang zum Gottesdienst.",
+              "en": "Loop elements can appear every round or at a set round interval. The Next Slide preview accounts for repeats and the scheduled handoff to the service."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "MAIN-Vorschau und Meldungsfolien",
+                  "en": "MAIN preview and announcement slides"
+                },
+                "text": {
+                  "de": "Die Schnellanzeige-Kacheln haben einen einheitlichen Hintergrund. „Technische Störung“ zeigt eine Miniatur der tatsächlichen Anzeige. Meldungs-QR-Codes sitzen unten rechts. Das Testwasserzeichen ist in der Regievorschau kleiner.",
+                  "en": "Quick screen tiles share a common background. The Technical Difficulties tile previews its actual layout. Announcement QR codes sit in the bottom-right corner. The test watermark is smaller in the operator preview."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.99.3",
+          "releaseDate": "2026-11-06",
+          "current": false,
           "overview": {
             "label": {
               "de": "Folien per Beschreibung erstellen",

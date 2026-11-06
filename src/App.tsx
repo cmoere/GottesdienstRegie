@@ -66,6 +66,7 @@ import {
   finishLiveCountdown,
   liveProtectionRemainingMs,
   firstServiceContentTarget,
+  nextLiveTarget, scheduledServiceTarget, loopEntryItems, type LiveTarget,
   releaseUnavailablePostProgramTake,
   presentationDocument,
   blankPresentationDocument,
@@ -85,7 +86,7 @@ import {
   type TransitionType,
 } from "./store";
 import { SlideRenderer } from "./SlideRenderer";
-import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, LoopController, WEATHER_SCREEN_URL, type LoopItemType } from "./loopDomain";
+import { canPlaceItem, isLoopItemType, isLoopSection, loopDurationMs, WEATHER_SCREEN_URL, type LoopItemType } from "./loopDomain";
 import {isPostProgramSystemItem} from './postProgramSystemSlide';
 import {postProgramCandidates,unavailablePostProgramTarget} from './postProgramNavigation';
 import { consumeInsertionGuard, createLoopItem } from "./loopItemFactory";
@@ -7294,7 +7295,7 @@ function AppShell({
   const {t, locale, tx} = useI18n();
   const state = usePresentation();
   const outputProfileWarning=useOutputDisplayProfile();
-  const loopController = useRef(new LoopController<ServiceItem>());
+  const [loopForecast,setLoopForecast]=useState<{revision:number;target:LiveTarget|undefined}>();
   const announcementController=useRef(new AnnouncementLiveController());
   const externalController=useRef(new ExternalLoopController(request=>window.desktop?.externalLoop?.read(request)??Promise.resolve({snapshot:null,status:'unavailable'}),()=>AppClock.now().getTime()));
   useEffect(()=>startExternalLoopDemand(externalController.current,state.items),[state.items,state.presentationId]);
@@ -8023,26 +8024,30 @@ function AppShell({
       const sectionItems = item.sectionId==='post'?postProgramCandidates(state.items.filter(availableForOutput),Boolean(postProgramNoticeController.current.prepare({eventLink:state.eventLink},AppClock.now(),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'}))):state.items
         .filter((entry) => entry.sectionId === item.sectionId && entry.itemCategory === "loop" && availableForOutput(entry)&&!shouldSkipNowPlaying(entry))
         .sort((a, b) => a.order - b.order);
-      loopController.current.setItems(sectionItems);
-      loopController.current.select(item.id);
-      let active = true;
-      const timer = window.setTimeout(() => {
-        if (!active) return;
-        if(isAnnouncementLoop(item)&&slide&&announcementController.current.hasContinuation(item.id)){
-          usePresentation.getState().goLive(item.id,slide.id);return;
-        }
-        const nextId = loopController.current.advance(), nextItem = usePresentation.getState().items.find((entry) => entry.id === nextId);
-        const nextSlide=nextItem?.slides.find(entry=>entry.enabled);
-        if (nextItem&&nextSlide) usePresentation.getState().goLive(nextItem.id, nextSlide.id);
-        else usePresentation.getState().nextLive();
-      }, item&&isAdvertising(item)&&slide
+      const duration=item&&isAdvertising(item)&&slide
         ? advertisingDurationMs(item,advertisingRuntime.take(item,slide,state.liveTransitionRevision,AppClock.now().getTime()),sectionItems.length===1)
         : item&&isExternalLoop(item)&&slide
         ? (externalController.current.outputForTake(item,slide,state.liveTransitionRevision,AppClock.now().getTime())?.timing?.durationSeconds??loopDurationMs(item)/1000)*1000
         : isAnnouncementLoop(item)&&slide
         ? (announcementController.current.outputForTake(item,slide,state.liveTransitionRevision,AppClock.now())?.timing?.durationSeconds??loopDurationMs(item)/1000)*1000
-        : Math.max(loopDurationMs(item),eventOverviewMinimumDuration(slide),liveProtectionRemainingMs(state),isPostProgramSystemItem(item)?postProgramNoticeController.current.current()?.minDurationMs??0:0));
-      return () => { active = false; window.clearTimeout(timer); loopController.current.stop(); };
+        : Math.max(loopDurationMs(item),eventOverviewMinimumDuration(slide),liveProtectionRemainingMs(state),isPostProgramSystemItem(item)?postProgramNoticeController.current.current()?.minDurationMs??0:0);
+      const resolve=(atMs:number)=>nextLiveTarget(usePresentation.getState(),{items:sectionItems.filter(availableForOutput),atMs});
+      const continuation=Boolean(isAnnouncementLoop(item)&&slide&&announcementController.current.hasContinuation(item.id));
+      const dueAt=AppClock.now().getTime()+duration;
+      const forecast=scheduledServiceTarget(state,dueAt)??(continuation&&slide?{itemId:item.id,slideId:slide.id}:resolve(dueAt));
+      setLoopForecast({revision:state.liveTransitionRevision,target:forecast});
+      const timer=window.setTimeout(() => {
+        const current=usePresentation.getState();
+        const now=AppClock.now().getTime();
+        const scheduled=scheduledServiceTarget(current,now);
+        if(!scheduled&&isAnnouncementLoop(item)&&slide&&announcementController.current.hasContinuation(item.id)){
+          current.goLive(item.id,slide.id);return;
+        }
+        const target=scheduled??resolve(now);
+        if(target)current.goLive(target.itemId,target.slideId,target.loopRound);
+        else current.nextLive();
+      },duration);
+      return ()=>window.clearTimeout(timer);
     }
     if (
       !item?.timing.autoAdvance ||
@@ -8068,6 +8073,8 @@ function AppShell({
     state.liveSlideId,
     state.liveTimerPausedSlideId,
     state.liveTransitionRevision,
+    state.serviceTime,
+    state.date,
     state.items,
   ]);
   useEffect(()=>{
@@ -8094,46 +8101,10 @@ function AppShell({
   );
   useEffect(() => {
     if (!state.onAir || !state.serviceTime) return;
-    const tick = () => {
-      const current = usePresentation.getState(),
-        item = current.items.find((entry) => entry.id === current.liveItemId),
-        match = current.serviceTime.match(/^(\d{1,2}):(\d{2})$/);
-      if (!item || !match) return;
-      const now = new Date(),
-        serviceAt = new Date(
-          `${current.date}T${String(match[1]).padStart(2, "0")}:${match[2]}:00`,
-        ).getTime(),
-        warmupSeconds = current.items
-          .filter(
-            (entry) =>
-              entry.sectionId === "warmup" && entry.enabled && !entry.disabled,
-          )
-          .reduce((sum, entry) => sum + itemDurationSeconds(entry), 0),
-        first = (sectionId: string) =>
-          current.items
-            .filter(
-              (entry) =>
-                entry.sectionId === sectionId &&
-                entry.enabled &&
-                !entry.disabled,
-            )
-            .sort((a, b) => a.order - b.order)
-            .flatMap((entry) =>
-              entry.slides
-                .filter((slide) => slide.enabled)
-                .map((slide) => ({ itemId: entry.id, slideId: slide.id })),
-            )[0];
-      if (
-        item.sectionId === "pre" &&
-        now.getTime() >= serviceAt - warmupSeconds * 1000 &&
-        now.getTime() < serviceAt
-      ) {
-        const target = first("warmup");
-        if (target) current.goLive(target.itemId, target.slideId);
-      } else if (item.sectionId === "warmup" && now.getTime() >= serviceAt) {
-        const target = first("service");
-        if (target) current.goLive(target.itemId, target.slideId);
-      }
+    const tick=()=>{
+      const current=usePresentation.getState();
+      const target=scheduledServiceTarget(current,AppClock.now().getTime());
+      if(target)current.goLive(target.itemId,target.slideId);
     };
     tick();
     const timer = setInterval(tick, 1000);
@@ -9032,7 +9003,7 @@ function AppShell({
       return;
     }
     const sessionMode = requestedMode;
-    const first=firstActiveTarget(state.items.filter(availableForOutput)),
+    const first=firstActiveTarget(loopEntryItems(state.items.filter(availableForOutput))),
       itemId = first?.itemId ?? "",
       slideId = first?.slideId ?? "",
       slide = state.items
@@ -9166,7 +9137,7 @@ function AppShell({
       },
       start: async assignments => {
         const current=usePresentation.getState(),selectedItem=current.items.find(entry=>entry.id===itemId);
-        let fallback=availableForOutput(selectedItem)?{itemId,slideId}:firstActiveTarget(current.items.filter(availableForOutput));
+        let fallback=availableForOutput(selectedItem)?{itemId,slideId}:firstActiveTarget(loopEntryItems(current.items.filter(availableForOutput)));
         if(isPostProgramSystemItem(current.items.find(entry=>entry.id===fallback?.itemId))&&!postProgramNoticeController.current.prepare({eventLink:current.eventLink},AppClock.now(),{mode:sessionMode==='test'?'test':'normal',scenario:testScenario})){
           fallback=unavailablePostProgramTarget(current.items,availableForOutput)??null;
         }
@@ -9495,6 +9466,7 @@ function AppShell({
             quickScreens={quickScreens}
             activeQuick={previewQuick}
             onQuick={(quick) => void applyQuick(quick)}
+            loopForecast={loopForecast}
           /></TestModeContext.Provider></ExternalLoopContext.Provider>
         </div>
       </div>

@@ -2228,6 +2228,14 @@
     "versions[0.99].builds[0.99.3].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.3].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.3].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
-    "versions[0.99].builds[0.99.3].sections.known.1.text": "Die originalgetreue Wiedergabe braucht weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nich."
+    "versions[0.99].builds[0.99.3].sections.known.1.text": "Die originalgetreue Wiedergabe braucht weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nich.",
+    "versions[0.99].builds[0.99.4].overview.label": "Anzeigerunden im Vor- und Nachprogramm",
+    "versions[0.99].builds[0.99.4].overview.text": "Loop-Elemente können in jeder Runde oder in einem festen Rundenabstand erscheinen. Die Vorschau „Nächste Folie“ berücksichtigt die Wiederholung und den geplanten Übergang zum Gottesdienst.",
+    "versions[0.99].builds[0.99.4].sections.fixed.0.label": "MAIN-Vorschau und Meldungsfolien",
+    "versions[0.99].builds[0.99.4].sections.fixed.0.text": "Die Schnellanzeige-Kacheln haben einen einheitlichen Hintergrund. „Technische Störung“ zeigt eine Miniatur der tatsächlichen Anzeige. Meldungs-QR-Codes sitzen unten rechts. Das Testwasserzeichen ist in der Regievorschau kleiner.",
+    "versions[0.99].builds[0.99.4].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.4].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.4].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
+    "versions[0.99].builds[0.99.4].sections.known.1.text": "Die originalgetreue Wiedergabe braucht weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nich."
   }
 }
