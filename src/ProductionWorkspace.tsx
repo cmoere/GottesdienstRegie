@@ -4033,7 +4033,7 @@ export function ProductionWorkspace({
             className={state.previewLayout === "single" ? "active" : ""}
             aria-pressed={state.previewLayout === "single"}
             onClick={() => state.setPreviewLayout("single")}
-          >{tx("EINZELVORSCHAU")}</button>
+          >{t("operatorSource_9f105fb77ef1260a")}</button>
           <button type="button"
             className={state.previewLayout === "grid" ? "active" : ""}
             aria-pressed={state.previewLayout === "grid"}

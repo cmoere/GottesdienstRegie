@@ -1,5 +1,6 @@
-import {it,expect,beforeEach} from 'vitest';
+import {it,expect,beforeEach,vi} from 'vitest';
 import {usePresentation,createServiceItem,nextLiveTarget} from './store';
+import {AppClock} from './community/AppClock';
 import {resolveSessionAction} from './liveSession';
 import {firstActiveTarget} from './release53Model';
 beforeEach(()=>usePresentation.getState().newDocument('Test'));
@@ -71,10 +72,29 @@ it('forecasts the next loop round only while it fits before the scheduled handof
  const warmup=createServiceItem('countdown',{id:'warmup-item',sectionId:'warmup',plannedDuration:30000});
  const service=createServiceItem('content',{id:'service-item',sectionId:'service'});
  usePresentation.setState({date:'2026-11-06',serviceTime:'10:30',items:[pre,warmup,service]});
+ const clock=vi.spyOn(AppClock,'now').mockReturnValue(new Date('2026-11-06T10:20:00'));
  usePresentation.getState().goLive(pre.id,pre.slides[0].id);
+ usePresentation.getState().setOnAir(true);
+ clock.mockRestore();
  const state=usePresentation.getState(),items=[pre];
  const at=(time:string)=>new Date('2026-11-06T'+time).getTime();
  expect(nextLiveTarget(state,{items,atMs:at('10:29:29')})).toMatchObject({itemId:pre.id,loopRound:2});
  expect(nextLiveTarget(state,{items,atMs:at('10:29:30')})).toMatchObject({itemId:warmup.id});
  expect(nextLiveTarget(state,{items,atMs:at('10:30:00')})).toMatchObject({itemId:service.id});
+});
+
+it.each(['2026-11-05','2026-11-06'])('keeps looping when the service time on %s already passed before ON AIR',date=>{
+ const first=createServiceItem('clock',{id:'clock',sectionId:'pre',order:0});
+ const second=createServiceItem('weather',{id:'weather',sectionId:'pre',order:1});
+ const service=createServiceItem('content',{id:'service',sectionId:'service'});
+ const items=[first,second,service];
+ const now=new Date('2026-11-06T11:00:00');
+ const clock=vi.spyOn(AppClock,'now').mockReturnValue(now);
+ try{
+  usePresentation.setState({date,serviceTime:'10:30',items});
+  const state=usePresentation.getState();
+  state.goLive(first.id,first.slides[0].id);
+  state.setOnAir(true);
+  expect(nextLiveTarget(usePresentation.getState(),{items:[first,second],atMs:now.getTime()+15000})).toMatchObject({itemId:second.id});
+ }finally{clock.mockRestore()}
 });

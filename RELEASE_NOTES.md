@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.6
+
+Ist die eingestellte Servicezeit beim Start bereits vorbei, läuft das Vorprogramm weiter. Wird die Servicezeit während der Sitzung erreicht, wechselt der Ablauf weiterhin automatisch.
+
+Der Umschalter zeigt „Einzelvorschau“ in normaler Schreibweise.
+
+---
+
 # GottesdienstRegie 0.99.5
 
 Die Folienübersicht zeigt 16:9-Vorschauen, Foliennummern und umbrechende Titel. Abschnitte, Elemente und Folien folgen der Reihenfolge im Ablauf.

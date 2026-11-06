@@ -2244,6 +2244,14 @@
     "versions[0.99].builds[0.99.5].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.5].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.5].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
-    "versions[0.99].builds[0.99.5].sections.known.1.text": "De originalgetreue Wiedergabe braucht weiterhin Windows un installiertes Microsoft PowerPoint. De neuen Vorbereitungs- un Diagnosefunktionen ersetzen diesen Wiedergabeweg nich."
+    "versions[0.99].builds[0.99.5].sections.known.1.text": "De originalgetreue Wiedergabe braucht weiterhin Windows un installiertes Microsoft PowerPoint. De neuen Vorbereitungs- un Diagnosefunktionen ersetzen diesen Wiedergabeweg nich.",
+    "versions[0.99].builds[0.99.6].overview.label": "Vorprogramm bei späterem Start",
+    "versions[0.99].builds[0.99.6].overview.text": "Ist die eingestellte Servicezeit beim Start bereits vorbei, läuft das Vorprogramm weiter. Wird die Servicezeit während der Sitzung erreicht, wechselt der Ablauf weiterhin automatisch.",
+    "versions[0.99].builds[0.99.6].sections.fixed.0.label": "Beschriftung der Einzelvorschau",
+    "versions[0.99].builds[0.99.6].sections.fixed.0.text": "Der Umschalter zeigt „Einzelvorschau“ in normaler Schreibweise.",
+    "versions[0.99].builds[0.99.6].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.6].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.6].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
+    "versions[0.99].builds[0.99.6].sections.known.1.text": "De originalgetreue Wiedergabe braucht weiterhin Windows un installiertes Microsoft PowerPoint. De neuen Vorbereitungs- un Diagnosefunktionen ersetzen diesen Wiedergabeweg nich."
   }
 }

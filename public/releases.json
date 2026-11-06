@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
-          "version": "0.99.5",
+          "version": "0.99.6",
           "releaseDate": "2026-11-06",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Vorprogramm bei späterem Start",
+              "en": "Pre-program after a late start"
+            },
+            "text": {
+              "de": "Ist die eingestellte Servicezeit beim Start bereits vorbei, läuft das Vorprogramm weiter. Wird die Servicezeit während der Sitzung erreicht, wechselt der Ablauf weiterhin automatisch.",
+              "en": "The pre-program continues if the scheduled service time has already passed when starting. If that time is reached during the session, the running order still advances automatically."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Beschriftung der Einzelvorschau",
+                  "en": "Single preview label"
+                },
+                "text": {
+                  "de": "Der Umschalter zeigt „Einzelvorschau“ in normaler Schreibweise.",
+                  "en": "The view switch displays the single preview label in normal case."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.99.5",
+          "releaseDate": "2026-11-06",
+          "current": false,
           "overview": {
             "label": {
               "de": "Übersichtlichere Folienkarten",

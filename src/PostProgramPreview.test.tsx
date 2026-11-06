@@ -73,7 +73,7 @@ it('switches layouts and keeps the preview selection distinct from the live slid
  expect(cards[1]).toHaveAttribute('aria-current','true');
  expect(cards[1].querySelector('.slide-live-badge')).toHaveTextContent('LIVE');
  expect(usePresentation.getState().liveSlideId).toBe(second.id);
- fireEvent.click(screen.getByRole('button',{name:'EINZELVORSCHAU'}));
- expect(screen.getByRole('button',{name:'EINZELVORSCHAU'})).toHaveAttribute('aria-pressed','true');
+ fireEvent.click(screen.getByRole('button',{name:'Einzelvorschau'}));
+ expect(screen.getByRole('button',{name:'Einzelvorschau'})).toHaveAttribute('aria-pressed','true');
  expect(container.querySelector('.production-grid')).toBeNull();
 });
