@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
+          "version": "0.99.3",
+          "releaseDate": "2026-11-06",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Folien per Beschreibung erstellen",
+              "en": "Create slides from a description"
+            },
+            "text": {
+              "de": "Die lokale KI kann gezielt nach fehlenden Angaben fragen. Mit „Direkt erstellen“ lässt sich dieser Schritt überspringen.",
+              "en": "The local AI can ask about missing details. Select “Create directly” to skip this step."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Einstellungen, Update-Dialog und Wetterfolie",
+                  "en": "Settings, update dialog and weather slide"
+                },
+                "text": {
+                  "de": "Versionshinweise werden nur im Updates-Tab geladen. Im Update-Dialog steht „Abbrechen“ ganz rechts, direkt neben „In Einstellungen anzeigen“. Die Wetterfolie zeigt weiche Licht- und Wolkeneffekte sowie einzelne Regen- und Schneepartikel.",
+                  "en": "Release notes load only on the Updates tab. Cancel is the rightmost button in the update dialog, next to Show in Settings. The weather slide now uses soft light and cloud effects with individual rain and snow particles."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
           "version": "0.99.2",
           "releaseDate": "2026-11-05",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Klarerer Dunkelmodus",

@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.3
+
+Die lokale KI kann gezielt nach fehlenden Angaben fragen. Mit „Direkt erstellen“ lässt sich dieser Schritt überspringen.
+
+Versionshinweise werden nur im Updates-Tab geladen. Im Update-Dialog steht „Abbrechen“ ganz rechts, direkt neben „In Einstellungen anzeigen“. Die Wetterfolie zeigt weiche Licht- und Wolkeneffekte sowie einzelne Regen- und Schneepartikel.
+
+---
+
 # GottesdienstRegie 0.99.2
 
 Einstellungen, Medienbrowser, Songeditor und Dialoge nutzen einheitlichere dunkle Flächen. Eingabefelder und Tastaturfokus sind deutlicher erkennbar.

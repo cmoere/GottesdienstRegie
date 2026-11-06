@@ -4927,7 +4927,7 @@ export function SettingsModal({
     useState<DesktopVersionMetadata | null>(null);
   const [versionMetadataFailed,setVersionMetadataFailed]=useState(false);
   const [settingsReleaseFile,setSettingsReleaseFile]=useState<ReleaseFile|null>(null);
-  const releaseDate=settingsReleaseFile?.versions.flatMap(line=>line.builds).find(build=>build.version===currentVersion)?.releaseDate;
+  const releaseDate=useMemo(()=>settingsReleaseFile?.versions.flatMap(line=>line.builds).find(build=>build.version===currentVersion)?.releaseDate,[settingsReleaseFile,currentVersion]);
   const [previousVersion, setPreviousVersion] = useState<
     DesktopPreviousVersion | null | undefined
   >(undefined);
@@ -5057,7 +5057,7 @@ export function SettingsModal({
   },[tab]);
   useEffect(() => {
     const version = updateStatus.version;
-    if (updateStatus.state !== "available" || !version) {
+    if (tab !== "updates" || updateStatus.state !== "available" || !version) {
       setUpdateSummary("");
       return;
     }
@@ -5081,6 +5081,7 @@ export function SettingsModal({
       active = false;
     };
   }, [
+    tab,
     updateStatus.state,
     updateStatus.version,
     updateStatus.releaseNotes,

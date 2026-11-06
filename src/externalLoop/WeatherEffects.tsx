@@ -1,12 +1,27 @@
-import type {CSSProperties} from 'react';import {weatherAppearance} from './weatherCondition';
+import {useId,type CSSProperties} from 'react';
+import {weatherAppearance} from './weatherCondition';
+
 /** Decorative output layer; all windows use their common slide epoch as phase. */
 export function WeatherEffects({code,wind,elapsed=0,reduced=false}:{code:number;wind:number;elapsed?:number;reduced?:boolean}){
- const {kind,windy}=weatherAppearance(code,wind),rain=['rain','drizzle','freezing-rain','thunder','hail'].includes(kind);
+ const id=useId();
+ const {kind,windy}=weatherAppearance(code,wind);
+ const wet=['rain','drizzle','freezing-rain','thunder','hail'].includes(kind);
+ const cloudy=['fog','cloud','partly-cloudy','thunder'].includes(kind);
  return <svg className="weather-effect-layer" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true" data-weather-effect={kind} data-reduced-motion={reduced} style={{'--weather-phase':Math.max(0,elapsed)+'ms'} as CSSProperties}>
-  {(kind==='sun'||kind==='partly-cloudy')&&<g className="weather-effect-sun">{[0,30,60,90,120,150].map(angle=><path key={angle} transform={`rotate(${angle} 80 0)`} d="M80 0L1920 70L1920 160Z" fill="#699f3e"/>)}</g>}
-  {rain&&<g className="weather-effect-rain">{Array.from({length:16},(_,i)=><path key={i} d={`M${i*137} -60l-80 420`} stroke="#608f9a" strokeWidth="3"/>)}</g>}
-  {kind==='snow'&&<g className="weather-effect-snow">{Array.from({length:20},(_,i)=><circle key={i} cx={(i*173)%1920} cy={(i*97)%1080} r={3+i%4} fill="#608f9a"/>)}</g>}
-  {(kind==='fog'||kind==='cloud'||kind==='partly-cloudy')&&<g className="weather-effect-clouds">{[0,1,2].map(i=><ellipse key={i} cx={i*710+100} cy={160+i*90} rx="480" ry="90" fill="#b6bec3"/>)}</g>}
-  {windy&&<g className="weather-effect-wind">{[0,1,2,3].map(i=><path key={i} d={`M${i*410-200} ${i*230+190}h650`} stroke="#608f9a" strokeWidth="4"/>)}</g>}
+  <defs>
+   <radialGradient id={id+'-light'}><stop stopColor="#ffd183"/><stop offset="1" stopColor="#ffd183" stopOpacity="0"/></radialGradient>
+   <radialGradient id={id+'-mist'}><stop stopColor="#b6bec3"/><stop offset="1" stopColor="#b6bec3" stopOpacity="0"/></radialGradient>
+  </defs>
+  {(kind==='sun'||kind==='partly-cloudy')&&<g className="weather-effect-sun"><ellipse cx="1560" cy="105" rx="630" ry="475" fill={'url(#'+id+'-light)'}/></g>}
+  {(cloudy||windy)&&<g className="weather-effect-clouds">
+   <ellipse cx="260" cy="150" rx="660" ry={kind==='fog'?320:180} fill={'url(#'+id+'-mist)'}/>
+   <ellipse cx="1530" cy="820" rx="735" ry={kind==='fog'?365:205} fill={'url(#'+id+'-mist)'}/>
+  </g>}
+  {(wet||kind==='snow')&&Array.from({length:24},(_,index)=>{
+   const snow=kind==='snow';
+   return <g key={index} className={snow?'weather-effect-snow':'weather-effect-rain'} style={{'--particle-offset':index*397+'ms'} as CSSProperties}>
+    <ellipse cx={30+(index*173)%1860} cy={30+(index*113)%1020} rx={snow?4+index%5:2.5} ry={snow?4+index%5:6+index%4} fill="#608f9a"/>
+   </g>;
+  })}
  </svg>;
 }

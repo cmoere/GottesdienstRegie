@@ -2220,6 +2220,14 @@
     "versions[0.99].builds[0.99.2].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.2].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.2].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
-    "versions[0.99].builds[0.99.2].sections.known.1.text": "Die originalgetreue Wiedergabe braucht weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nich."
+    "versions[0.99].builds[0.99.2].sections.known.1.text": "Die originalgetreue Wiedergabe braucht weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nich.",
+    "versions[0.99].builds[0.99.3].overview.label": "Folien per Beschreibung erstellen",
+    "versions[0.99].builds[0.99.3].overview.text": "Die lokale KI kann gezielt nach fehlenden Angaben fragen. Mit „Direkt erstellen“ lässt sich dieser Schritt überspringen.",
+    "versions[0.99].builds[0.99.3].sections.fixed.0.label": "Einstellungen, Update-Dialog und Wetterfolie",
+    "versions[0.99].builds[0.99.3].sections.fixed.0.text": "Versionshinweise werden nur im Updates-Tab geladen. Im Update-Dialog steht „Abbrechen“ ganz rechts, direkt neben „In Einstellungen anzeigen“. Die Wetterfolie zeigt weiche Licht- und Wolkeneffekte sowie einzelne Regen- und Schneepartikel.",
+    "versions[0.99].builds[0.99.3].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.3].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.3].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
+    "versions[0.99].builds[0.99.3].sections.known.1.text": "Die originalgetreue Wiedergabe braucht weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nich."
   }
 }

@@ -136,6 +136,7 @@ interface Window {
             download: () => Promise<void>;
             cancelDownload: () => Promise<void>;
             remove: () => Promise<void>;
+            clarify: (request: import('../shared/localSlideDraft').SlideDraftRequest) => Promise<string[]>;
             generate: (request: import('../shared/localSlideDraft').SlideDraftRequest) => Promise<import('../shared/localSlideDraft').SlideDraft[]>;
             cancel: () => Promise<void>;
         };

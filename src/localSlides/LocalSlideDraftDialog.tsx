@@ -7,13 +7,16 @@ import type {SlideDraft} from '../../shared/localSlideDraft';
 import type {SlidePackStatus} from '../../electron/localSlides/SlideModelPack';
 import './localSlides.css';
 export function LocalSlideDraftDialog({sectionId,close}:{sectionId:string;close:()=>void}){
- const {tx}=useI18n(),api=window.desktop?.localSlides,imageApi=window.desktop?.localImages,onAir=usePresentation(state=>state.onAir);
+ const {t,tx}=useI18n(),api=window.desktop?.localSlides,imageApi=window.desktop?.localImages,onAir=usePresentation(state=>state.onAir);
  const presentationId=useRef(usePresentation.getState().presentationId),anchorId=useRef(usePresentation.getState().selectedItemId),generation=useRef(0),dialog=useRef<HTMLDivElement>(null);
  const [topic,setTopic]=useState(''),[notes,setNotes]=useState(''),[count,setCount]=useState(3),[layout,setLayout]=useState<DraftLayout>('ai');
  const [withImages,setWithImages]=useState(Boolean(imageApi)&&!onAir),[images,setImages]=useState<Record<number,{id:string;preview:string}>>({}),[creatingImages,setCreatingImages]=useState(false);
  const [pack,setPack]=useState<SlidePackStatus|null>(null),[busy,setBusy]=useState(false),[drafts,setDrafts]=useState<SlideDraft[]>([]),[error,setError]=useState('');
  const [imagePack,setImagePack]=useState<SlidePackStatus|null>(null);
  const [elapsed,setElapsed]=useState(0);
+ const [questions,setQuestions]=useState<string[]>([]),[answers,setAnswers]=useState<string[]>([]);
+ const [clarifying,setClarifying]=useState(false);
+ const resetQuestions=()=>{setQuestions([]);setAnswers([])};
  useEffect(()=>{if(!busy){setElapsed(0);return}const started=Date.now(),timer=setInterval(()=>setElapsed(Math.floor((Date.now()-started)/1000)),1000);return()=>clearInterval(timer)},[busy]);
  useEffect(()=>{
   let active=true,polling=false;const previous=document.activeElement as HTMLElement|null;
@@ -22,18 +25,31 @@ export function LocalSlideDraftDialog({sectionId,close}:{sectionId:string;close:
   return()=>{active=false;clearInterval(timer);generation.current++;void api?.cancel().catch(()=>{});void imageApi?.discard().catch(()=>{});previous?.focus()};
  },[api,imageApi]);
  useEffect(()=>{if(onAir){setWithImages(false);setImages({});void imageApi?.discard().catch(()=>{})}},[onAir,imageApi]);
- const item=useMemo(()=>drafts.length?buildDraftItem(topic,drafts,sectionId,layout,Object.fromEntries(Object.entries(images).map(([key,value])=>[key,value.preview]))):null,[topic,drafts,sectionId,layout,images]);
- const generate=async()=>{
+ const draftTopic=topic.trim()||notes.trim().split('\n',1)[0].replace(/[<>]/g,'').slice(0,120).trim();
+ const item=useMemo(()=>drafts.length?buildDraftItem(draftTopic,drafts,sectionId,layout,Object.fromEntries(Object.entries(images).map(([key,value])=>[key,value.preview]))):null,[draftTopic,drafts,sectionId,layout,images]);
+ const generate=async(direct:boolean)=>{
   const generateImages=withImages&&layout==='ai'&&Boolean(imageApi);
-  if(!api||busy||pack?.state!=='ready'||(generateImages&&imagePack?.state!=='ready')||!topic.trim())return;
-  const revision=++generation.current;setBusy(true);setError('');setImages({});
+  if(!api||busy||pack?.state!=='ready'||(generateImages&&imagePack?.state!=='ready')||!draftTopic)return;
+  const revision=++generation.current;setBusy(true);setError('');
+  const request={topic:draftTopic,notes,count,design:!onAir};
+  const needsCheck=!direct&&!questions.length&&Boolean(api.clarify);
   try{
+   if(needsCheck){
+    setClarifying(true);
+    const followUps=await api.clarify(request).catch(()=>[]);
+    if(generation.current!==revision)return;
+    setClarifying(false);
+    if(followUps.length){setQuestions(followUps);return}
+   }
+   setImages({});
    await imageApi?.discard();
    if(generation.current!==revision)return;
-   const result=await api.generate({topic,notes,count,design:!onAir});
+   const details=(direct?[]:questions).flatMap((question,index)=>answers[index]?.trim()?[question+' '+answers[index].trim()]:[]);
+   const result=await api.generate({...request,...(details.length?{answers:details.join('\n')}:{})});
    if(generation.current!==revision)return;
    setDrafts(result);
-   const livePrompt=`A calm illustrative nature or church motif without lettering for this theme: ${topic.replace(/[<>\u0000-\u001f]/g,' ')}`;
+   resetQuestions();
+   const livePrompt=`A calm illustrative nature or church motif without lettering for this theme: ${draftTopic.replace(/[<>\u0000-\u001f]/g,' ')}`;
    const prompts=onAir?[livePrompt]:result.map(draft=>draft.design?.imagePrompt);
    if(generateImages&&onAir===usePresentation.getState().onAir&&imageApi&&prompts.some(Boolean)){
     setCreatingImages(true);
@@ -56,17 +72,18 @@ export function LocalSlideDraftDialog({sectionId,close}:{sectionId:string;close:
    }
   }
   catch{if(generation.current===revision&&(onAir||!usePresentation.getState().onAir))setError('Es konnte kein gültiger Folienentwurf erstellt werden. Bitte kürzere Stichpunkte verwenden und erneut versuchen.')}
-  finally{if(generation.current===revision){setBusy(false);setCreatingImages(false)}}
+  finally{if(generation.current===revision){setBusy(false);setCreatingImages(false);setClarifying(false)}}
  };
  const accept=async()=>{
   if(!item||busy)return;
   const revision=++generation.current;let accepted=item;const entries=layout==='ai'?Object.entries(images):[];setBusy(true);
   try{
-   if(entries.length&&imageApi){const urls=await imageApi.accept(entries.map(([,image])=>image.id));accepted=buildDraftItem(topic,drafts,sectionId,layout,Object.fromEntries(entries.map(([index],order)=>[index,urls[order]])))}
+   if(entries.length&&imageApi){const urls=await imageApi.accept(entries.map(([,image])=>image.id));accepted=buildDraftItem(draftTopic,drafts,sectionId,layout,Object.fromEntries(entries.map(([index],order)=>[index,urls[order]])))}
    if(generation.current!==revision)return;
    if(!insertDraftItem(accepted,presentationId.current,sectionId,anchorId.current)){setError('Die Präsentation oder der Betriebszustand wurde geändert. Bitte den Entwurf erneut öffnen.');return}close();
   }catch{if(generation.current===revision)setError('Das lokale Modell ist derzeit nicht verfügbar.')}finally{if(generation.current===revision)setBusy(false)}
  };
+ const generationUnavailable=busy||!api||pack?.state!=='ready'||Boolean(withImages&&layout==='ai'&&imageApi&&imagePack?.state!=='ready')||!draftTopic||!Number.isInteger(count)||count<1||count>8;
  const update=(index:number,key:'title'|'body',value:string)=>setDrafts(current=>current.map((draft,i)=>i===index?{...draft,[key]:value}:draft));
  return <div className="local-slide-backdrop" onPointerDown={event=>{if(event.target===event.currentTarget)close()}}>
   <div ref={dialog} className="local-slide-dialog" role="dialog" aria-modal="true" aria-labelledby="local-slide-title" onKeyDown={event=>{
@@ -84,14 +101,23 @@ export function LocalSlideDraftDialog({sectionId,close}:{sectionId:string;close:
    {!api&&<p role="alert">{tx('Die lokale Folien-KI ist nur in der Desktop-Anwendung verfügbar.')}</p>}
    <section className="local-slide-model"><p>{tx('Modelle werden automatisch vorbereitet. Status und Entfernen: Einstellungen → Präsentation → Lokale KI-Modelle.')}</p>{[pack,imagePack].map((model,index)=>model?.state==='downloading'&&<div key={index}><span>{index===0?tx('Text und Gestaltung'):tx('Bilder und Motive')}</span><progress max={model.totalBytes} value={model.downloadedBytes}/><span>{Math.floor(model.downloadedBytes/1000000)} / {Math.ceil(model.totalBytes/1000000)} MB</span></div>)}</section>
    <div className="local-slide-inputs">
-    <label>{tx('Thema')}<input maxLength={400} value={topic} onChange={event=>setTopic(event.target.value)} disabled={busy}/></label>
-    <label>{tx('Stichpunkte und vorhandener Text')}<textarea maxLength={8000} value={notes} onChange={event=>setNotes(event.target.value)} disabled={busy} rows={4}/></label>
-    <label>{tx('Anzahl Folien')}<input type="number" min={1} max={8} value={count} onChange={event=>setCount(Number(event.target.value))} disabled={busy}/></label>
+    <label>{tx('Thema')}<input maxLength={400} value={topic} onChange={event=>{setTopic(event.target.value);resetQuestions()}} disabled={busy}/></label>
+    <label>{t('localSlidesBrief')}<textarea maxLength={8000} value={notes} onChange={event=>{setNotes(event.target.value);resetQuestions()}} disabled={busy} rows={4}/></label>
+    <label>{tx('Anzahl Folien')}<input type="number" min={1} max={8} value={count} onChange={event=>{setCount(Number(event.target.value));resetQuestions()}} disabled={busy}/></label>
     <label>{tx('Layout')}<select disabled={busy} value={layout} onChange={event=>setLayout(event.target.value as DraftLayout)}><option value="ai">{onAir?tx('Standard'):tx('KI-Gestaltung')}</option><option value="light">{tx('Hell')}</option><option value="dark">{tx('Dunkel')}</option><option value="accent">{tx('Mit Kopfbereich')}</option></select></label>
     <label><input type="checkbox" checked={withImages&&layout==='ai'} disabled={busy||!imageApi||layout!=='ai'} onChange={event=>setWithImages(event.target.checked)}/>{tx('Bilder lokal erzeugen')}</label>
    </div>
-   <div className="local-slide-actions"><button disabled={busy||!api||pack?.state!=='ready'||Boolean(withImages&&layout==='ai'&&imageApi&&imagePack?.state!=='ready')||!topic.trim()||!Number.isInteger(count)||count<1||count>8} onClick={()=>void generate()}>{busy?tx('Folien werden lokal erstellt …'):tx('Folien erstellen')}</button>
-    {busy&&<><progress aria-label={tx('Folien werden lokal erstellt …')}/><output>{elapsed} s</output><button onClick={()=>{generation.current++;setBusy(false);setCreatingImages(false);setImages({});void api?.cancel();void imageApi?.discard()}}>{tx('Erstellung abbrechen')}</button><p>{creatingImages?tx('Bilder werden lokal erstellt …'):tx('Die lokale Erstellung kann mehrere Minuten dauern. Du kannst sie jederzeit abbrechen.')}</p>{creatingImages&&<p>{tx('Ein Bild kann mehrere Minuten dauern.')}</p>}</>}
+   {questions.length>0&&<fieldset className="local-slide-inputs">
+    <legend>{t('localSlidesQuestions')}</legend>
+    {questions.map((question,index)=><label key={question}>{question}<input maxLength={300} disabled={busy} value={answers[index]??''} onChange={event=>{
+     const value=event.target.value;
+     setAnswers(current=>Object.assign([...current],{[index]:value}));
+    }}/></label>)}
+   </fieldset>}
+   <div className="local-slide-actions">
+    <button disabled={generationUnavailable} onClick={()=>void generate(false)}>{clarifying?t('localSlidesCheckingBrief'):busy?tx('Folien werden lokal erstellt …'):tx('Folien erstellen')}</button>
+    {!busy&&api?.clarify&&<button disabled={generationUnavailable} onClick={()=>void generate(true)}>{t('localSlidesCreateDirectly')}</button>}
+    {busy&&<><progress aria-label={clarifying?t('localSlidesCheckingBrief'):tx('Folien werden lokal erstellt …')}/><output>{elapsed} s</output><button onClick={()=>{generation.current++;setBusy(false);setCreatingImages(false);setClarifying(false);setImages({});void api?.cancel();void imageApi?.discard()}}>{tx('Erstellung abbrechen')}</button><p>{creatingImages?tx('Bilder werden lokal erstellt …'):tx('Die lokale Erstellung kann mehrere Minuten dauern. Du kannst sie jederzeit abbrechen.')}</p>{creatingImages&&<p>{tx('Ein Bild kann mehrere Minuten dauern.')}</p>}</>}
    </div>
    {error&&<p role="alert">{tx(error)}</p>}
    {item&&<><p>{tx('KI-Entwurf: Bitte Inhalt, Bibelstellen und Formulierungen vor der Übernahme prüfen. Alle Folien bleiben bearbeitbar.')}</p>
@@ -100,7 +126,7 @@ export function LocalSlideDraftDialog({sectionId,close}:{sectionId:string;close:
      <label>{tx('Titel')}<input value={drafts[index].title} maxLength={180} onChange={event=>update(index,'title',event.target.value)}/></label>
      <label>{tx('Text')}<textarea value={drafts[index].body} maxLength={1400} rows={4} onChange={event=>update(index,'body',event.target.value)}/></label>
     </article>)}</div>
-    <footer><button disabled={busy||!topic.trim()||drafts.some(draft=>!draft.title.trim()||!draft.body.trim())} onClick={accept}>{tx('In den Ablauf übernehmen')}</button></footer>
+    <footer><button disabled={busy||!draftTopic||drafts.some(draft=>!draft.title.trim()||!draft.body.trim())} onClick={accept}>{tx('In den Ablauf übernehmen')}</button></footer>
    </>}
   </div>
  </div>;

@@ -168,7 +168,7 @@ async function promptForAvailableUpdate(info:UpdateInfo){
   if(backgroundUpdateOnly||!appPreferences||promptedUpdateVersions.has(info.version))return;
   promptedUpdateVersions.add(info.version);
   const owner=controlWindow&&!controlWindow.isDestroyed()?controlWindow:undefined;
-  const options:Electron.MessageBoxOptions={type:'info',title:nativeText('updateAvailableTitle'),message:nativeText('updateAvailableMessage',{version:info.version}),detail:nativeText('updateInstallQuestion'),buttons:[nativeText('updateInstallNow'),nativeText('updateLater'),nativeText('updateInstallOnExit'),nativeText('cancel'),nativeText('updateShowInSettings')],defaultId:0,cancelId:3,noLink:true};
+  const options:Electron.MessageBoxOptions={type:'info',title:nativeText('updateAvailableTitle'),message:nativeText('updateAvailableMessage',{version:info.version}),detail:nativeText('updateInstallQuestion'),buttons:[nativeText('updateInstallNow'),nativeText('updateLater'),nativeText('updateInstallOnExit'),nativeText('updateShowInSettings'),nativeText('cancel')],defaultId:0,cancelId:4,noLink:true};
   const result=await (owner?dialog.showMessageBox(owner,options):dialog.showMessageBox(options));
   const action=updatePromptAction(result.response);
   if(action==='open-settings'){sendToLiveWindow(controlWindow,'updates:open-settings')}
@@ -698,7 +698,7 @@ app.whenReady().then(async() => {
     localModels.pause();
     const cancel=()=>service.cancel();
     event.sender.once('destroyed',cancel);
-    try{return await service.generate(live?{...request,design:false}:request)}
+    try{return request.clarify?await service.clarify(request):await service.generate(live?{...request,design:false}:request)}
     finally{event.sender.removeListener('destroyed',cancel);localModels.resume()}
   });
   ipcMain.handle('local-slides:cancel',event=>{requireDraftOperator(event);localSlideService.cancel();liveSlideService.cancel()});

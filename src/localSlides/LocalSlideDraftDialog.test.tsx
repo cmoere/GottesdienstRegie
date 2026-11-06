@@ -12,6 +12,24 @@ describe('local AI draft review',()=>{
   window.desktop={localSlides:{status:vi.fn(async()=>({state:'ready',downloadedBytes:10,totalBytes:10,busy:false})),generate:vi.fn(async()=>[{title:'Danke sagen',body:'Wem möchtest du heute danken?'}]),cancel:vi.fn(async()=>true)}} as any;
  });
  afterEach(()=>{cleanup();delete window.desktop});
+ it.each([false,true])('uses clarification only when requested by the draft flow (direct=%s)',async direct=>{
+  const ai=window.desktop!.localSlides!;
+  ai.clarify=vi.fn(async()=>['Wann beginnt das Gemeindefest?']);
+  render(<LocalSlideDraftDialog sectionId="service" close={()=>{}}/>);
+  fireEvent.change(screen.getByLabelText('Beschreibe die gewünschte Folie oder Präsentation'),{target:{value:'Einladung zum Gemeindefest'}});
+  const start=screen.getByRole('button',{name:direct?'Direkt erstellen':'Folien erstellen'});
+  await waitFor(()=>expect(start).toBeEnabled());
+  fireEvent.click(start);
+  if(!direct){
+   const answer=await screen.findByLabelText('Wann beginnt das Gemeindefest?');
+   expect(ai.generate).not.toHaveBeenCalled();
+   fireEvent.change(answer,{target:{value:'Am Samstag um 15 Uhr.'}});
+   fireEvent.click(screen.getByRole('button',{name:'Folien erstellen'}));
+  }
+  await screen.findByRole('button',{name:'In den Ablauf übernehmen'});
+  expect(ai.clarify).toHaveBeenCalledTimes(direct?0:1);
+  expect(ai.generate).toHaveBeenCalledWith(expect.objectContaining(direct?{notes:'Einladung zum Gemeindefest'}:{answers:expect.stringContaining('Am Samstag um 15 Uhr.')}));
+ });
  it('requires explicit acceptance and cancels isolated work when closed',async()=>{
   const initial=usePresentation.getState().items.length,close=vi.fn();
   const {unmount}=render(<LocalSlideDraftDialog sectionId="service" close={close}/>);

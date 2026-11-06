@@ -2359,7 +2359,11 @@
     "settingsAudioLoading": "Audiogeräte werden geladen …",
     "settingsDisplaysLoading": "Bildschirme werden geladen …",
     "settingsModelsLoading": "Modellstatus wird geladen …",
-    "settingsInstallLoading": "Installationsdetails werden geladen …"
+    "settingsInstallLoading": "Installationsdetails werden geladen …",
+    "localSlidesBrief": "Beschreibe die gewünschte Folie oder Präsentation",
+    "localSlidesQuestions": "Rückfragen zur Folie",
+    "localSlidesCheckingBrief": "Die KI prüft die Beschreibung …",
+    "localSlidesCreateDirectly": "Direkt erstellen"
   },
   "native": {
     "updateAvailableTitle": "Nigge Version te kriegen",

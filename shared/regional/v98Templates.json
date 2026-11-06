@@ -35,7 +35,11 @@
     "settingsAudioLoading": "Audiogeräte werden geladen …",
     "settingsDisplaysLoading": "Bildschirme werden geladen …",
     "settingsModelsLoading": "Modellstatus wird geladen …",
-    "settingsInstallLoading": "Installationsdetails werden geladen …"
+    "settingsInstallLoading": "Installationsdetails werden geladen …",
+    "localSlidesBrief": "Beschreibe die gewünschte Folie oder Präsentation",
+    "localSlidesQuestions": "Rückfragen zur Folie",
+    "localSlidesCheckingBrief": "Die KI prüft die Beschreibung …",
+    "localSlidesCreateDirectly": "Direkt erstellen"
   },
   "native": {},
   "en": {
@@ -74,7 +78,11 @@
     "settingsAudioLoading": "Loading audio devices…",
     "settingsDisplaysLoading": "Loading displays…",
     "settingsModelsLoading": "Loading model status…",
-    "settingsInstallLoading": "Loading installation details…"
+    "settingsInstallLoading": "Loading installation details…",
+    "localSlidesBrief": "Describe the slide or presentation you want",
+    "localSlidesQuestions": "Questions about the slide",
+    "localSlidesCheckingBrief": "The AI is checking the description…",
+    "localSlidesCreateDirectly": "Create directly"
   },
   "documentation": {
     "helpTitle": "Lokale KI: Modelle, Gestaltung und Bilder",

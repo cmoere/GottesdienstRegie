@@ -87,4 +87,15 @@
 @keyframes weather-cloud-drift{0%,100%{transform:translateX(-2px)}50%{transform:translateX(3px)}}
 @keyframes weather-storm-glow{0%,100%{opacity:.7}50%{opacity:1}}
 @media(prefers-reduced-motion:reduce){.native-weather .weather-icon g{animation:none!important}}
-.native-weather>.weather-effect-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;opacity:.075}.native-weather>:not(.weather-effect-layer){position:relative;z-index:1}.weather-effect-layer g{animation-play-state:paused;animation-delay:calc(0ms - var(--weather-phase,0ms))!important}.weather-effect-sun{transform-origin:80px 0;animation:weather-effect-rays 36s ease-in-out infinite}.weather-effect-rain{animation:weather-effect-fall 5s linear infinite}.weather-effect-snow{animation:weather-effect-flakes 16s linear infinite}.weather-effect-clouds{animation:weather-effect-drift 30s ease-in-out infinite}.weather-effect-wind{animation:weather-effect-breeze 12s linear infinite}.weather-effect-layer[data-reduced-motion=true] g{animation:none!important}@keyframes weather-effect-rays{0%,100%{transform:rotate(-8deg);opacity:.4}50%{transform:rotate(8deg);opacity:1}}@keyframes weather-effect-fall{from{transform:translateY(-350px)}to{transform:translateY(1080px)}}@keyframes weather-effect-flakes{from{transform:translate(-40px,-100px)}to{transform:translate(40px,200px)}}@keyframes weather-effect-drift{0%,100%{transform:translateX(-70px)}50%{transform:translateX(70px)}}@keyframes weather-effect-breeze{from{transform:translateX(-200px)}to{transform:translateX(200px)}}@media(prefers-reduced-motion:reduce){.weather-effect-layer g{animation:none!important}}
+.native-weather>.weather-effect-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;opacity:.2}
+.native-weather>:not(.weather-effect-layer){position:relative;z-index:1}
+.weather-effect-sun{animation:weather-light 24s ease-in-out infinite}
+.weather-effect-clouds{animation:weather-mist 30s ease-in-out infinite}
+.weather-effect-rain{animation:weather-particles 3s linear infinite}
+.weather-effect-snow{animation:weather-particles 9s ease-in-out infinite}
+.weather-effect-layer g{animation-play-state:paused;animation-delay:calc(0ms - var(--weather-phase,0ms) - var(--particle-offset,0ms))}
+@keyframes weather-light{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes weather-mist{0%,100%{transform:translateX(-55px)}50%{transform:translateX(55px)}}
+@keyframes weather-particles{0%{opacity:0;transform:translate(-10px,-40px)}25%,70%{opacity:1}100%{opacity:0;transform:translate(12px,140px)}}
+.weather-effect-layer[data-reduced-motion=true] g{animation:none}
+@media(prefers-reduced-motion:reduce){.weather-effect-layer g{animation:none}}
