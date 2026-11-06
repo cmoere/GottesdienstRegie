@@ -19,3 +19,20 @@
 .event-slide-designer .event-design-cards{grid-template-columns:repeat(5,minmax(0,1fr))}
 .event-slide-designer .event-design-cards button[aria-pressed=true]{border-color:#699f3e}
 @media(prefers-reduced-motion:reduce){.event-table-title-viewport{overflow-x:auto}.event-table-title{will-change:auto}}
+
+.event-loop-surface.event-design-table>small {
+ color:#345d68;
+ font-weight:700;
+}
+.event-table-heading {
+ background:#edf3f4;
+ color:#345d68;
+ font-weight:600;
+}
+.event-table-viewport [role=row]:nth-child(even) {
+ background:#f2f5f6;
+}
+.event-table-date,.event-table-time,.event-table-room {
+ color:#273942;
+ font-variant-numeric:tabular-nums;
+}

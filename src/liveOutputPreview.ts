@@ -5,5 +5,5 @@ import type {LyricScrollPacket} from './lyricScrolling';
 import type {BannerContext} from './announcementBannerModel';
 
 // Runtime-only mirror of the snapshot sent to MAIN; never persisted in a slide.
-export type LiveOutputSlide=Slide&{postProgramRoomNotice?:PostProgramRoomNoticeSnapshot;lyricScroll?:LyricScrollPacket;bannerContext?:Pick<BannerContext,'liveSection'|'countdownActive'>;_countdownStartedAtMs?:number;_serviceCountdownAtMs?:number};
+export type LiveOutputSlide=Slide&{postProgramRoomNotice?:PostProgramRoomNoticeSnapshot;lyricScroll?:LyricScrollPacket;bannerContext?:Pick<BannerContext,'liveSection'|'countdownActive'>;_countdownStartedAtMs?:number;_serviceCountdownAtMs?:number;sectionInfo?:import("../shared/sectionInfoStrip").SectionInfoSnapshot};
 export const useLiveOutputPreview=create<{slide:LiveOutputSlide|null}>(()=>({slide:null}));

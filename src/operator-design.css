@@ -292,7 +292,7 @@
   border-width:1px;
 }
 
-.live-slide-panel .output-composition:not([data-banner-position=bottom])>.test-mode-watermark {
+.live-slide-panel .output-composition:not([data-banner-position=bottom],[data-section-info=bottom])>.test-mode-watermark {
   bottom:1.4cqw;
 }
 .live-slide-panel .output-composition:has([data-announcement-qr])>.test-mode-watermark {

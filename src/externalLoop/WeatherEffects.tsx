@@ -2,7 +2,7 @@ import {useId,type CSSProperties} from 'react';
 import {weatherAppearance} from './weatherCondition';
 
 /** Decorative output layer; all windows use their common slide epoch as phase. */
-export function WeatherEffects({code,wind,elapsed=0,reduced=false}:{code:number;wind:number;elapsed?:number;reduced?:boolean}){
+export function WeatherEffects({code,wind,elapsed=0,reduced=false,isDay=true}:{code:number;wind:number;elapsed?:number;reduced?:boolean;isDay?:boolean}){
  const id=useId();
  const {kind,windy}=weatherAppearance(code,wind);
  const wet=['rain','drizzle','freezing-rain','thunder','hail'].includes(kind);
@@ -12,7 +12,7 @@ export function WeatherEffects({code,wind,elapsed=0,reduced=false}:{code:number;
    <radialGradient id={id+'-light'}><stop stopColor="#ffd183"/><stop offset="1" stopColor="#ffd183" stopOpacity="0"/></radialGradient>
    <radialGradient id={id+'-mist'}><stop stopColor="#b6bec3"/><stop offset="1" stopColor="#b6bec3" stopOpacity="0"/></radialGradient>
   </defs>
-  {(kind==='sun'||kind==='partly-cloudy')&&<g className="weather-effect-sun"><ellipse cx="1560" cy="105" rx="630" ry="475" fill={'url(#'+id+'-light)'}/></g>}
+  {isDay&&(kind==='sun'||kind==='partly-cloudy')&&<g className="weather-effect-sun"><ellipse cx="1560" cy="105" rx="630" ry="475" fill={'url(#'+id+'-light)'}/></g>}
   {(cloudy||windy)&&<g className="weather-effect-clouds">
    <ellipse cx="260" cy="150" rx="660" ry={kind==='fog'?320:180} fill={'url(#'+id+'-mist)'}/>
    <ellipse cx="1530" cy="820" rx="735" ry={kind==='fog'?365:205} fill={'url(#'+id+'-mist)'}/>

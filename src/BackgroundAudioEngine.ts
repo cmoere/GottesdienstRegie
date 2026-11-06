@@ -25,6 +25,7 @@ export interface BackgroundAudioState {
   currentTime: number;
   duration: number;
   volume: number;
+  configuredVolume?: number;
   sourceKey: string;
   error?: string;
   health?: BackgroundAudioHealth;
@@ -106,6 +107,7 @@ export class BackgroundAudioEngine {
         (this.config?.volume ?? 70) *
           this.duckingFactor(),
       ),
+      configuredVolume: this.config?.volume,
       sourceKey: this.sourceKey,
       health,
     };

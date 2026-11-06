@@ -3,7 +3,7 @@ export const WEATHER_SCREEN_DURATION_MS = 20_000;
 export const LOOP_DURATION_PRESETS_MS = [5_000, 10_000, 15_000, 20_000, 30_000, 45_000, 60_000] as const;
 
 export type LoopSectionType = 'preLoop' | 'postLoop' | 'preProgram' | 'warmup' | 'service' | 'custom';
-export type LoopItemType = 'announcement' | 'birthday' | 'event' | 'weather' | 'loopQuiz' | 'loopCountdown' | 'clock' | 'bibleVerse' | 'loopQr' | 'infoCard' | 'today' | 'nextEvents' | 'nowPlaying' | 'news' | 'football';
+export type LoopItemType = 'announcement' | 'birthday' | 'event' | 'weather' | 'loopQuiz' | 'loopCountdown' | 'clock' | 'bibleVerse' | 'loopQr' | 'siteMap' | 'infoCard' | 'today' | 'nextEvents' | 'nowPlaying' | 'news' | 'football';
 export type LoopItemCategory = 'loop' | 'standard';
 export type PlacementPolicy = 'loopOnly' | 'any';
 
@@ -48,7 +48,7 @@ export interface LoopControllerSnapshot {
 const loopSectionIds = new Set(['pre', 'post', 'preLoop', 'postLoop']);
 const loopOnlyTypes = new Set<string>([
   'announcement', 'birthday', 'event', 'weather', 'loopQuiz', 'loopCountdown',
-  'clock', 'bibleVerse', 'loopQr', 'infoCard', 'today', 'nextEvents', 'nowPlaying', 'news', 'football',
+  'clock', 'bibleVerse', 'loopQr', 'siteMap', 'infoCard', 'today', 'nextEvents', 'nowPlaying', 'news', 'football',
 ]);
 
 export function isLoopSection(section: LoopSectionLike | null | undefined): boolean {
@@ -75,6 +75,7 @@ export function isLoopOnlyItem(item: LoopItemLike | null | undefined): boolean {
 
 export function canPlaceItem(item: LoopItemLike | null | undefined, targetSection: LoopSectionLike | null | undefined): boolean {
   if (!item || !targetSection) return false;
+  if(item.type==="siteMap")return loopSectionIds.has(targetSection.id);
   if (!isLoopOnlyItem(item)) return true;
   return sectionSupportsLoopItems(targetSection);
 }

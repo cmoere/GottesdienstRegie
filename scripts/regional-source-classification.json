@@ -1,5 +1,29 @@
 {
   "reviewedSourceEntries": {
+    "source.7a7ab6a6ce1ec5896827.1": {
+      "source": "src/addElementCatalog.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "Lageplan",
+      "reason": "Default site map model title. The Add Element popup and the site map settings display the localized siteMapTitle resource."
+    },
+    "source.7a7ab6a6ce1ec5896827.2": {
+      "source": "src/addElementCatalog.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "Lageplan",
+      "reason": "Default site map model title. The Add Element popup and the site map settings display the localized siteMapTitle resource."
+    },
+    "source.dda096947eeb5a8ec8af.1": {
+      "source": "src/loopItemFactory.ts",
+      "context": "property:siteMap",
+      "text": "Lageplan",
+      "reason": "Default site map model title. The Add Element popup and the site map settings display the localized siteMapTitle resource."
+    },
+    "source.30cef6e7cbcfa4864044.1": {
+      "source": "src/store.ts",
+      "context": "property:siteMap",
+      "text": "Lageplan",
+      "reason": "Default site map model title. The Add Element popup and the site map settings display the localized siteMapTitle resource."
+    },
     "source.36a427b339dff0f0b7f5.1": {
       "source": "src/ProductionWorkspace.tsx",
       "context": "jsx-text:b",
@@ -11553,7 +11577,7 @@
       "reason": "Reviewed whole module2026-10-28: visitor weather-warning illustration, matching weather event categories and their public accessibility descriptions. Preserve public output copy and SVGgeometry independently of operator regional language."
     },
     "src/externalLoop/WeatherIcon.tsx": {
-      "sha256": "6e5d8d9891dd689edd0209c459b4c76b8ab8b3e688bd66a962144d5d6645b30a",
+      "sha256": "4434e0b04134e4c64263e1bb372161e829bc19aa1362218b5516f2bf41ad62df",
       "reason": "Reviewed whole module2026-10-28: native visitor weather illustration and weather accessibility description. SVGpaths/transforms and publicweathercopy are preserved visitor content, not operator UI resources."
     },
     "src/announcements/AnnouncementIndicator.tsx": {
@@ -11593,7 +11617,7 @@
       "reason": "Reviewed all candidate text, complete render structure and control/dialog AST on 2026-10-29: visitor football standings/results and source attribution output only, with club/provider data. No operator controls. The explicitly preserved visitor-slide design/content remains independent of the operator regional interface. Re-reviewed v96 changes on 2026-11-02: added renderer parameters/effect composition or private read-only preview/speech preparation; candidate literals keep the same visitor-content or protocol purpose."
     },
     "src/externalLoop/WeatherView.tsx": {
-      "sha256": "b0d5265b0a3ced1a1eb07d361c00531e3cc0a0f4b2f5370045f3abbd6c816adf",
+      "sha256": "5c2dd5575ae6a4ba4b6641370d120fb907d875d8f56adbe5ec810a5240e8d438",
       "reason": "Reviewed complete module and every candidate literal on 2026-10-29: public weather output, forecast labels, observation data and provider attribution only. No operator controls. Regional UI changes must not rewrite the visitor weather slide. Re-reviewed v96 changes on 2026-11-02: added renderer parameters/effect composition or private read-only preview/speech preparation; candidate literals keep the same visitor-content or protocol purpose."
     },
     "src/externalLoop/weatherCondition.ts": {

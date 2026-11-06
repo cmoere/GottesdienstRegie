@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
+          "version": "0.99.7",
+          "releaseDate": "2026-11-07",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Lageplan und MAIN-Infoleiste",
+              "en": "Site map and MAIN information strip"
+            },
+            "text": {
+              "de": "Das Vor- und Nachprogramm kann einen Lageplan mit einer Grafik aus der Medienbibliothek und einem QR-Code zum öffentlichen Lageplan anzeigen. Für jeden Ablaufabschnitt lässt sich eine Infoleiste mit Uhrzeit, Sekunden, Datum und Folientitel konfigurieren.",
+              "en": "The pre- and post-program can show a site map image from the media library with a QR code for the public map. Each section can display a configurable information strip with time, seconds, date and slide title."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Wetter, Veranstaltungen und Hintergrundaudio",
+                  "en": "Weather, events and background audio"
+                },
+                "text": {
+                  "de": "Die Wetterfolie unterscheidet Tag und Nacht und kann den aktuellen Standort oder Bielefeld verwenden. Die helle Veranstaltungsübersicht hat klarere Überschriften und Zeilen. Die Lautstärke lässt sich für das laufende Element oder den Abschnitt speichern. Der Text im Meldungslaufband ist vertikal ausgerichtet.",
+                  "en": "The weather slide distinguishes day and night and can use the current location or Bielefeld. The light event overview has clearer headings and rows. Background audio volume can be saved for the current item or section. Announcement ticker text is vertically aligned."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
           "version": "0.99.6",
           "releaseDate": "2026-11-06",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Vorprogramm bei späterem Start",

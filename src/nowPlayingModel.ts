@@ -183,6 +183,7 @@ export function isLoopCandidateAvailable(
     item &&
     item.enabled !== false &&
     item.disabled !== true &&
+    (item.type!=="siteMap"||Boolean(item.metadata.siteMapImage)) &&
     !shouldSkipNowPlaying(item, state),
   );
 }

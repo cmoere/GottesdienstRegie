@@ -1,7 +1,7 @@
 import type {ServiceItem,Slide} from './store';
 import {AnnouncementService,type RawAnnouncement} from './community/AnnouncementService';
 import type {AnnouncementPlacement} from './loopData';
-import QRCode from 'qrcode';
+import {qrImage} from './qrImage';
 import {prepareAnnouncementPages,announcementTextElement,type PreparedAnnouncementPage} from './announcementDesign';
 import {announcementRuns,announcementRunsText} from './announcementRichText';
 import {announcementSettings,configuredAnnouncements} from './announcementSettings';
@@ -10,13 +10,6 @@ import communityLogo from'./assets/logo-community.png';import{usePreferences}fro
 export function announcementPlainText(value:string):string{
   return announcementRunsText(announcementRuns(value)).trim();
 }
-function qrImage(reference:string):string{
-  const {modules}=QRCode.create(reference),size=modules.size;
-  const cells:string[]=[];
-  for(let y=0;y<size;y++)for(let x=0;x<size;x++)if(modules.get(y,x))cells.push(`M${x+4},${y+4}h1v1h-1z`);
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size+8} ${size+8}"><path fill="white" d="M0 0h${size+8}v${size+8}H0z"/><path fill="black" d="${cells.join('')}"/></svg>`)}`;
-}
-
 export function announcementPlacement(sectionId:string):AnnouncementPlacement{return sectionId==='post'||sectionId==='postLoop'?'postLoop':'preLoop'}
 export function isAnnouncementLoop(item:ServiceItem|undefined):item is ServiceItem{return item?.type==='announcement'&&item.itemCategory==='loop'}
 export function buildAnnouncementSlide(slide:Slide,message:{title:string;text:string;durationMs:number;qrCode?:boolean;qrReference?:string},page:PreparedAnnouncementPage,index:number,count:number,readingSeconds=0):Slide{

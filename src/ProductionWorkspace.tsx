@@ -1,3 +1,4 @@
+import {SiteMapDesigner} from './SiteMapDesigner';
 import {ScreenSharingMirror} from './ScreenSharing';
 import {usePreviewOptions} from './PreviewOverviewControls';
 import {useI18n} from './i18n';
@@ -1514,7 +1515,9 @@ function ContentEditor({
               <small>{tx("Der Inhalt wird zur Laufzeit automatisch aktualisiert.")}</small>
             </div>
           </div>
-          {item.type === "nowPlaying" ? (
+          {item.type==="siteMap" ? (
+            <><SiteMapDesigner key={item.id} item={item} canEdit={canEdit}/><label>{tx("Anzeigedauer (Sekunden)")}<input type="number" min="1" step="1" disabled={!canEdit} value={durationSeconds} onChange={event=>changeDuration(Math.max(1,Number(event.target.value)||1))}/></label></>
+          ) : item.type === "nowPlaying" ? (
             <NowPlayingDesigner item={item} canEdit={canEdit} />
           ) : item.type==='clock' ? (
             <><ClockLoopDesigner item={item} canEdit={canEdit}/><label>{tx("Anzeigedauer (Sekunden)")}<input type="number" min="1" step="1" disabled={!canEdit} value={durationSeconds} onChange={event=>changeDuration(Math.max(1,Number(event.target.value)||1))}/></label></>
@@ -3689,7 +3692,7 @@ function PreviewCenter({
         <div className="main-preview-with-title">
         <h2 className="single-preview-title">{(state.onAir&&output?output.title:slide.title)?.trim()||slideLabel(slide,item.slides.indexOf(slide),tx)}</h2>
         <div className="main-preview-surface">
-          <OutputComposition weatherWarnings={state.onAir&&(!activeQuick||activeQuick.type==='countdown')?weatherWarnings:null} hideCountdown={Boolean(activeQuick)} serviceCountdownAtMs={state.onAir?output?._serviceCountdownAtMs:undefined} banner={state.onAir?banner:null} testOverlay={<TestModeWatermark role="main"/>}>
+          <OutputComposition sectionInfo={state.onAir&&(!activeQuick||activeQuick.type==="countdown")?output?.sectionInfo:undefined} weatherWarnings={state.onAir&&(!activeQuick||activeQuick.type==='countdown')?weatherWarnings:null} hideCountdown={Boolean(activeQuick)} serviceCountdownAtMs={state.onAir?output?._serviceCountdownAtMs:undefined} banner={state.onAir?banner:null} testOverlay={<TestModeWatermark role="main"/>}>
           {!state.onAir&&item.metadata.importMode==='original'?<PowerPointStaticPreview sourceHash={String(item.metadata.powerPointSourceHash)} slideId={slide.sourceSlideId}/>:state.onAir&&output?.lyricScroll?<LyricScrollRenderer packet={output.lyricScroll} live mirror/>:<TransitionStage
             slide={previewSlide(state.onAir&&output?output:slide)}
             transition={state.onAir&&output?output.transitionOverride??resolveTransition(output,undefined,'main'):resolveTransition(
@@ -3916,6 +3919,7 @@ function PreviewRightSidebar({
       {live ? (
         <MainLivePreview
           hideCountdown={Boolean(activeQuick)}
+          suppressSectionInfo={Boolean(activeQuick&&activeQuick.type!=="countdown")}
           suppressWeatherWarnings={Boolean(activeQuick&&activeQuick.type!=='countdown')}
           title={(""+String(liveItem?.title)+" · "+String((live.title||tx("Live-Folie")))+"")}
         >

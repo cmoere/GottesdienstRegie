@@ -1,5 +1,6 @@
 import {NextPreviewOutput} from './NextPreviewOutput';
 import {EditorModeControl} from './EditorModeControl';
+import {SectionInfoSettings} from './SectionInfoSettings';
 import {PreviewViewSettings} from './PreviewOverviewControls';
 import {ScreenSharingController,ScreenSharingOutput} from './ScreenSharing';
 import {languageOptionName} from './regional/languageOptionName';
@@ -1181,6 +1182,7 @@ function SortableItem({
     clock: "schedule",
     bibleVerse: "menu_book",
     loopQr: "qr_code_2",
+    siteMap: "map",
     infoCard: "info",
     today: "today",
     nextEvents: "event_upcoming",
@@ -1581,6 +1583,7 @@ export function AddPopover({
     { type: "clock", label: tx("Uhrzeit"), title: "Uhrzeit", icon: "schedule" },
     { type: "bibleVerse", label: tx("Bibelvers"), title: "Bibelvers", icon: "menu_book" },
     { type: "loopQr", label: tx("QR-Code"), title: "QR-Code", icon: "qr_code_2" },
+    { type: "siteMap", label: t("siteMapTitle"), title: t("siteMapTitle"), icon: "map" },
     { type: "today", label: tx("Heute bei uns"), title: "Heute bei uns", icon: "today" },
     { type: "nextEvents", label: tx("Nächste Termine"), title: "Nächste Termine", icon: "event_upcoming" },
     { type: "nowPlaying", label: tx("Läuft gerade"), title: "Läuft gerade", icon: "graphic_eq" },
@@ -1738,7 +1741,7 @@ export function AddPopover({
   function addLoopElement(option: (typeof loopOptions)[number]) {
     if (!isLoopItemType(String(option.type))) return;
     const type = option.type as LoopItemType;
-    const loopSectionId=loopAvailable?sectionId:(state.sections.find(section=>section.id==='pre')?.id??state.sections.find(section=>section.id==='post')?.id);
+    const loopSectionId=loopAvailable&&(type!=="siteMap"||sectionIsLoopTarget)?sectionId:(state.sections.find(section=>section.id==='pre')?.id??state.sections.find(section=>section.id==='post')?.id);
     if(!loopSectionId)return;
     let body = "";
     let url = "";
@@ -1759,7 +1762,8 @@ export function AddPopover({
       });
     }
     const draft = createLoopItem(type, loopSectionId, Date.now(), { body, url });
-    state.addItem(type, { title: draft.title, section: "", sectionId:loopSectionId, body: draft.body, metadata: draft.metadata });
+    state.addItem(type, { title: type==="siteMap"?option.title:draft.title, section: "", sectionId:loopSectionId, body: draft.body, metadata: draft.metadata });
+    if(type==="siteMap"){close();return}
     const current = usePresentation.getState();
     current.addElement("loop");
     const latest = usePresentation.getState();
@@ -4906,12 +4910,14 @@ function PresentationTransitionSettings() {
 export function SettingsModal({
   close,
   canConfigure,
+  canEditPresentation=false,
   onOpenTerms,
   device = null,
   openUpdatesRequest = 0,
 }: {
   close: () => void;
   canConfigure: boolean;
+  canEditPresentation?: boolean;
   onOpenTerms?: () => void;
   device?: RegisteredDevice | null;
   openUpdatesRequest?: number;
@@ -5878,6 +5884,7 @@ export function SettingsModal({
               ) : tab === "songTranslations" ? null : tab === "presentation" ? (
                 <>
                   <PreviewViewSettings />
+                  <SectionInfoSettings canEdit={canEditPresentation}/>
                   <LocalModelSettings />
                   <PresentationTransitionSettings />
                   <TimelineSettings />
@@ -7084,6 +7091,17 @@ function BackgroundAudioController() {
       removeEventListener("gottesdienstregie:background-audio", update);
   }, []);
   if (!audio.active && !audio.track) return null;
+  const saveVolume=()=>{
+    const {sourceKey,configuredVolume}=backgroundAudioEngine.snapshot();
+    if(configuredVolume===undefined)return;
+    const [kind,id]=sourceKey.split(":");
+    const state=usePresentation.getState();
+    const config=(kind==="item"?state.items.find(item=>item.id===id):kind==="section"?state.sections.find(section=>section.id===id):undefined)?.backgroundAudio;
+    if(!config||config.volume===configuredVolume)return;
+    const updated={...config,volume:configuredVolume};
+    if(kind==="item")state.updateItemAudio(id,updated);
+    else state.updateSectionAudio(id,updated);
+  };
   const time = (value: number) =>
     `${Math.floor(value / 60)}:${String(Math.floor(value % 60)).padStart(2, "0")}`;
   return (
@@ -7125,11 +7143,12 @@ function BackgroundAudioController() {
         type="range"
         min="0"
         max="100"
-        value={audio.volume}
+        value={audio.configuredVolume??audio.volume}
         onChange={(event) =>
           backgroundAudioEngine.setVolume(Number(event.target.value))
         }
       />
+      {audio.sourceKey&&<button type="button" onClick={saveVolume}>{tx("Speichern")}</button>}
       {audio.error && <small>{tx(audio.error)}</small>}
       <AudioDiagnostics health={audio.health}/>
     </div>
@@ -9522,6 +9541,7 @@ function AppShell({
       )}{" "}
       {settingsOpen && (
         <SettingsModal
+          canEditPresentation={canEdit}
           canConfigure={canConfigure}
           openUpdatesRequest={settingsUpdatesRequest}
           close={() => setSettingsOpen(false)}
@@ -9646,7 +9666,7 @@ function Output() {
     <div
       className={`output ${quick?.type === "noText" ? "quick-no-text" : ""}`}
     >
-      <OutputComposition annotations={quick?null:outputAnnotations} announcementActive={announcementActive} weatherWarnings={role==='main'&&(!quick||quick.type==='countdown')?outputWeatherWarnings:null} hideCountdown={Boolean(quick)} serviceCountdownAtMs={role==='main'?(slide as import('./liveOutputPreview').LiveOutputSlide|null)?._serviceCountdownAtMs:undefined} banner={role==='main'&&quick?.type!=='screenTest'?outputBanner:null} testOverlay={<TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/> }>
+      <OutputComposition sectionInfo={role==="main"&&(!quick||quick.type==="countdown")?(slide as import("./liveOutputPreview").LiveOutputSlide|null)?.sectionInfo:undefined} annotations={quick?null:outputAnnotations} announcementActive={announcementActive} weatherWarnings={role==='main'&&(!quick||quick.type==='countdown')?outputWeatherWarnings:null} hideCountdown={Boolean(quick)} serviceCountdownAtMs={role==='main'?(slide as import('./liveOutputPreview').LiveOutputSlide|null)?._serviceCountdownAtMs:undefined} banner={role==='main'&&quick?.type!=='screenTest'?outputBanner:null} testOverlay={<TestModeWatermark role={role} visible={outputAppMode.mode==='test'}/> }>
       {slide && role==='stage' && songOutput ? <div className="stage-song-shell"><header className="stage-song-header"><span>STAGE</span><strong>{slide.title}</strong></header><section className="stage-song-current"><small>JETZT</small>{songOutput.showChords && songOutput.stageRows?.length ? <div className="stage-song-rows">{songOutput.stageRows.map((row,index)=><div className="stage-song-row" key={`${index}-${row.lyrics}`}><span className="stage-song-chords">{row.chords}</span><span>{row.lyrics}</span></div>)}</div> : <div className="stage-song-lyrics">{slide.body}</div>}</section>{songOutput.currentNext && <section className="stage-song-next"><small>ALS NÄCHSTES</small><div>{songOutput.next || '—'}</div></section>}</div> : renderedSlide && (
         lyricScroll && role==='main' ? <LyricScrollRenderer packet={lyricScroll} live/> : <TransitionStage
           slide={renderedSlide}

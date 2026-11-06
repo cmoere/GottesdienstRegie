@@ -1,0 +1,53 @@
+import {afterEach,expect,it,vi} from 'vitest';
+import {cleanup,fireEvent,render,screen} from '@testing-library/react';
+import {SectionInfoSettings} from './SectionInfoSettings';
+import {OutputComposition} from './OutputComposition';
+import {SiteMapDesigner,publicSiteMapUrl} from './SiteMapDesigner';
+import {usePreferences} from './preferences';
+import {createServiceItem,presentationDocument,usePresentation} from './store';
+import {canInsertItemType} from './itemPlacementPolicy';
+import {isLoopCandidateAvailable} from './nowPlayingModel';
+import {AppClock} from './community/AppClock';
+
+afterEach(()=>{cleanup();vi.restoreAllMocks();delete window.desktop});
+it('saves the information strip per section and displays its configured fields',()=>{
+ usePreferences.setState({language:'de',germanRegion:null});
+ usePresentation.getState().newDocument('Test');
+ const {container}=render(<SectionInfoSettings canEdit/>);
+ const first=container.querySelector('fieldset select')!;
+ fireEvent.change(first,{target:{value:'top'}});
+ fireEvent.click(screen.getByLabelText('Datum'));
+ fireEvent.click(screen.getByLabelText('Sekunden anzeigen'));
+ const state=usePresentation.getState(),id=state.sections[0].id;
+ state.loadDocument(presentationDocument(state));
+ const [section,next]=usePresentation.getState().sections;
+ expect(section.id).toBe(id);
+ expect(section.infoStrip).toMatchObject({position:'top',showTime:true,showDate:true,showSeconds:true});
+ expect(next.infoStrip).toBeUndefined();
+ vi.spyOn(AppClock,'now').mockReturnValue(new Date(2026,10,7,10,30,45));
+ const output=render(<OutputComposition banner={null} sectionInfo={{...section.infoStrip!,showTitle:true,title:'Begrüßung'}}><div>Folie</div></OutputComposition>);
+ expect(output.container.querySelector('[data-section-info]')).toHaveAttribute('data-section-info','top');
+ expect(screen.getByText('10:30:45')).toBeVisible();
+ expect(screen.getByText('Begrüßung')).toBeVisible();
+});
+it('builds a scannable QR element for the public map alongside the selected library image',async()=>{
+ usePreferences.setState({language:'de',germanRegion:null});
+ usePresentation.getState().newDocument('Test');
+ const state=usePresentation.getState(),item=createServiceItem('siteMap',{sectionId:'pre'});
+ expect(canInsertItemType('siteMap',state.sections.find(section=>section.id==='pre'))).toBe(true);
+ expect(canInsertItemType('siteMap',state.sections.find(section=>section.id==='service'))).toBe(false);
+ expect(isLoopCandidateAvailable(item)).toBe(false);
+ usePresentation.setState({items:[item]});
+ window.desktop={media:{onlineList:async()=>[{id:'map',name:'Gebäude',kind:'image',downloadUrl:'https://example.org/map.png'}]}} as unknown as typeof window.desktop;
+ function Editor(){const current=usePresentation(s=>s.items.find(entry=>entry.id===item.id)!);return <SiteMapDesigner item={current} canEdit/>}
+ render(<Editor/>);
+ await screen.findByRole('option',{name:'Gebäude'});
+ fireEvent.change(screen.getByLabelText('Lageplan-Grafik'),{target:{value:'https://example.org/map.png'}});
+ fireEvent.change(screen.getByLabelText('Öffentlicher Link für den QR-Code'),{target:{value:'https://example.org/lageplan'}});
+ fireEvent.click(screen.getByRole('button',{name:'Link übernehmen'}));
+ const saved=usePresentation.getState().items.find(entry=>entry.id===item.id)!;
+ expect(isLoopCandidateAvailable(saved)).toBe(true);
+ expect(saved.slides[0].elements.map(element=>element.type)).toEqual(['image','qr']);
+ expect(saved.slides[0].elements[1].properties).toMatchObject({text:'https://example.org/lageplan',src:expect.stringMatching(/^data:image\/svg\+xml/)});
+ expect(publicSiteMapUrl('javascript:alert(1)')).toBe('');
+});

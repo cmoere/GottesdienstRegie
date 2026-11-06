@@ -25,3 +25,53 @@
   right:auto;
   left:32%;
 }
+
+/* Center the visible Cera Pro glyphs in both ribbon modes. */
+.announcement-banner :is(.banner-moving,.banner-static) {
+ translate:0 -.05em;
+}
+
+.output-composition[data-section-info] {
+ --section-info-height:5%;
+ --section-banner-top:0%;
+ --section-banner-bottom:0%;
+ --section-warning:0%;
+}
+.output-composition[data-section-info][data-banner-position=top] { --section-banner-top:var(--output-banner-height); }
+.output-composition[data-section-info][data-banner-position=bottom] { --section-banner-bottom:var(--output-banner-height); }
+.output-composition[data-section-info][data-weather-warning=true] { --section-warning:24%; }
+.section-info-layer {
+ position:absolute;
+ inset-inline:0;
+ height:var(--section-info-height);
+ container-type:inline-size;
+ z-index:9;
+}
+.output-composition[data-section-info=top]>.section-info-layer {
+ top:calc(var(--section-banner-top) + var(--section-warning));
+}
+.output-composition[data-section-info=bottom]>.section-info-layer { bottom:var(--section-banner-bottom); }
+.output-composition[data-section-info=top][data-weather-warning]>.output-content-area {
+ top:calc(var(--section-banner-top) + var(--section-warning) + var(--section-info-height));
+}
+.output-composition[data-section-info=bottom]>.output-content-area {
+ bottom:calc(var(--section-banner-bottom) + var(--section-info-height));
+}
+.output-composition[data-section-info=bottom]>.test-mode-watermark,
+.output-composition[data-section-info=bottom]>.service-countdown-badge {
+ bottom:calc(var(--section-banner-bottom) + var(--section-info-height) + 2.2%);
+}
+.section-info-strip {
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:1.25cqw;
+ height:100%;
+ padding-inline:1.4cqw;
+ background:#17242d;
+ color:#fff;
+ font:600 1.35cqw/1.1 'Cera Pro',system-ui,sans-serif;
+}
+.section-info-title { min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+.section-info-clock { display:flex;gap:1.25cqw;margin-inline-start:auto;white-space:nowrap;font-variant-numeric:tabular-nums; }
+.section-info-settings fieldset { display:flex;flex-wrap:wrap;gap:10px 16px;margin-block:8px; }

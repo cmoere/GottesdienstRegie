@@ -99,3 +99,14 @@
 @keyframes weather-particles{0%{opacity:0;transform:translate(-10px,-40px)}25%,70%{opacity:1}100%{opacity:0;transform:translate(12px,140px)}}
 .weather-effect-layer[data-reduced-motion=true] g{animation:none}
 @media(prefers-reduced-motion:reduce){.weather-effect-layer g{animation:none}}
+
+.native-weather[data-daylight=night][data-weather-condition] {
+ background:linear-gradient(145deg,#111d2e,#263750);
+ color:#eef3f8;
+}
+.native-weather[data-daylight=night] :is(.weather-current,.weather-forecast article,header,footer) {
+ color:#dce8f3;
+}
+.native-weather[data-daylight=night] .weather-forecast article {
+ background:#18283c;
+}

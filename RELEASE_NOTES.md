@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.7
+
+Das Vor- und Nachprogramm kann einen Lageplan mit einer Grafik aus der Medienbibliothek und einem QR-Code zum öffentlichen Lageplan anzeigen. Für jeden Ablaufabschnitt lässt sich eine Infoleiste mit Uhrzeit, Sekunden, Datum und Folientitel konfigurieren.
+
+Die Wetterfolie unterscheidet Tag und Nacht und kann den aktuellen Standort oder Bielefeld verwenden. Die helle Veranstaltungsübersicht hat klarere Überschriften und Zeilen. Die Lautstärke lässt sich für das laufende Element oder den Abschnitt speichern. Der Text im Meldungslaufband ist vertikal ausgerichtet.
+
+---
+
 # GottesdienstRegie 0.99.6
 
 Ist die eingestellte Servicezeit beim Start bereits vorbei, läuft das Vorprogramm weiter. Wird die Servicezeit während der Sitzung erreicht, wechselt der Ablauf weiterhin automatisch.

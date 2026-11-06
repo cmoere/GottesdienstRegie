@@ -25,6 +25,7 @@ const titles: Record<LoopItemType, string> = {
   clock: 'Uhrzeit',
   bibleVerse: 'Bibelvers',
   loopQr: 'QR-Code',
+  siteMap: 'Lageplan',
   infoCard: 'Infokarte',
   today: 'Heute bei uns',
   nextEvents: 'Nächste Termine',

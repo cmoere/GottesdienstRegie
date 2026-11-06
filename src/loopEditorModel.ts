@@ -5,6 +5,7 @@ const automaticLoopTypes=new Set<ItemType>([
   'birthday',
   'event',
   'weather',
+  'siteMap',
   'clock',
   'today',
   'nextEvents',

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": true,
-  "sourceFingerprint": "aa2cb58dcfb1fe78e56210cb79b02053fe4466a62890f321b17f376417c07ef8",
+  "sourceFingerprint": "61d6ae2aeb9604979f9bb8f2d676a49dffb4049c2a7ce6c5bb1c2ee78f0d871a",
   "note": "Reviewed complete v98 source inventory; all31 interface/native/help/release resources checked separately. Protocol tokens, internal prompts and generated-document defaults have exact entry-level reviews.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -83907,6 +83907,274 @@
     },
     {
       "key": "release.versions[0.99].builds[0.99.6].sections.known.1.text",
+      "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "source.cd67ea640dd989e39145.2",
+      "text": "Speichern",
+      "source": "src/App.tsx",
+      "line": 7144,
+      "context": "operator-copy-resource",
+      "status": "excluded",
+      "resourceKey": "ui.operatorSource_ffec55b75e685824",
+      "exclusionReason": "Explicit operator-copy binding resolves canonical resource ui.operatorSource_ffec55b75e685824; locale coverage is validated against that resource.",
+      "technicalReviewHash": "d133bc6a929646fa19841f57cf6d3bf7ce1fea2a299b2102570d6b4c46f4c274"
+    },
+    {
+      "key": "source.75cf97c8e60728a2d710.1",
+      "text": "M52 17a22 22 0 1 0 17 32A23 23 0 0 1 52 17Z",
+      "source": "src/externalLoop/WeatherIcon.tsx",
+      "line": 5,
+      "context": "JsxAttribute",
+      "status": "excluded",
+      "exclusionReason": "Reviewed whole module2026-10-28: native visitor weather illustration and weather accessibility description. SVGpaths/transforms and publicweathercopy are preserved visitor content, not operator UI resources.",
+      "technicalReviewHash": "4434e0b04134e4c64263e1bb372161e829bc19aa1362218b5516f2bf41ad62df"
+    },
+    {
+      "key": "ui.weatherCurrentLocation",
+      "text": "Aktueller Standort",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.weatherUseCurrentLocation",
+      "text": "Aktuellen Standort verwenden",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.weatherLocationUnavailable",
+      "text": "Standort konnte nicht ermittelt werden. Du kannst einen Ort suchen oder Bielefeld verwenden.",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.weatherLocating",
+      "text": "Standort wird ermittelt …",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "source.563746141b2bf3ff5814.4",
+      "text": "Anzeigedauer (Sekunden)",
+      "source": "src/ProductionWorkspace.tsx",
+      "line": 1533,
+      "context": "operator-copy-resource",
+      "status": "excluded",
+      "resourceKey": "ui.operatorSource_37a3b6d93146f43e",
+      "exclusionReason": "Explicit operator-copy binding resolves canonical resource ui.operatorSource_37a3b6d93146f43e; locale coverage is validated against that resource.",
+      "technicalReviewHash": "489f2b752810c08c6346b37215f2934462d03667c68a5b6f9b3fa94bcca45c22"
+    },
+    {
+      "key": "source.7a7ab6a6ce1ec5896827.1",
+      "text": "Lageplan",
+      "source": "src/addElementCatalog.ts",
+      "line": 7,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Default site map model title. The Add Element popup and the site map settings display the localized siteMapTitle resource.",
+      "technicalReviewHash": "abe863faffba276832caf7ae7700f85647c5db8456b6a81bd65e291d61f4569d"
+    },
+    {
+      "key": "source.7a7ab6a6ce1ec5896827.2",
+      "text": "Lageplan",
+      "source": "src/addElementCatalog.ts",
+      "line": 7,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Default site map model title. The Add Element popup and the site map settings display the localized siteMapTitle resource.",
+      "technicalReviewHash": "f92d2e5862bf80ef2ebfaf8e05f6e62b8e6c6d6ae468d8633aa75326b7b7ce53"
+    },
+    {
+      "key": "source.dda096947eeb5a8ec8af.1",
+      "text": "Lageplan",
+      "source": "src/loopItemFactory.ts",
+      "line": 28,
+      "context": "property:siteMap",
+      "status": "excluded",
+      "exclusionReason": "Default site map model title. The Add Element popup and the site map settings display the localized siteMapTitle resource.",
+      "technicalReviewHash": "8c8c9b282361b3e3435a993468ff9f5e8cdd6a611ad801ab84bfd8be3fa57250"
+    },
+    {
+      "key": "source.30cef6e7cbcfa4864044.1",
+      "text": "Lageplan",
+      "source": "src/store.ts",
+      "line": 244,
+      "context": "property:siteMap",
+      "status": "excluded",
+      "exclusionReason": "Default site map model title. The Add Element popup and the site map settings display the localized siteMapTitle resource.",
+      "technicalReviewHash": "95e7501605b599d9d94fad7d50aa5e939e6ab4dee779157c22fadcab8e2b6476"
+    },
+    {
+      "key": "ui.siteMapTitle",
+      "text": "Lageplan",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.siteMapImage",
+      "text": "Lageplan-Grafik",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.siteMapChooseImage",
+      "text": "Grafik aus der Medienbibliothek wählen",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.siteMapCurrentImage",
+      "text": "Gespeicherte Grafik",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.siteMapPublicUrl",
+      "text": "Öffentlicher Link für den QR-Code",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.siteMapSaveLink",
+      "text": "Link übernehmen",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.siteMapHttpsRequired",
+      "text": "Bitte einen öffentlichen HTTPS-Link eingeben.",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.sectionInfoHeading",
+      "text": "MAIN-Infoleiste pro Abschnitt",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.sectionInfoPosition",
+      "text": "Position",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.sectionInfoOff",
+      "text": "Aus",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.sectionInfoTop",
+      "text": "Oben",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.sectionInfoBottom",
+      "text": "Unten",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.sectionInfoTime",
+      "text": "Uhrzeit",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.sectionInfoSeconds",
+      "text": "Sekunden anzeigen",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.sectionInfoDate",
+      "text": "Datum",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.sectionInfoTitle",
+      "text": "Aktueller Folientitel",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.7].overview.label",
+      "text": "Lageplan und MAIN-Infoleiste",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.7].overview.text",
+      "text": "Das Vor- und Nachprogramm kann einen Lageplan mit einer Grafik aus der Medienbibliothek und einem QR-Code zum öffentlichen Lageplan anzeigen. Für jeden Ablaufabschnitt lässt sich eine Infoleiste mit Uhrzeit, Sekunden, Datum und Folientitel konfigurieren.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.7].sections.fixed.0.label",
+      "text": "Wetter, Veranstaltungen und Hintergrundaudio",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.7].sections.fixed.0.text",
+      "text": "Die Wetterfolie unterscheidet Tag und Nacht und kann den aktuellen Standort oder Bielefeld verwenden. Die helle Veranstaltungsübersicht hat klarere Überschriften und Zeilen. Die Lautstärke lässt sich für das laufende Element oder den Abschnitt speichern. Der Text im Meldungslaufband ist vertikal ausgerichtet.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.7].sections.known.0.label",
+      "text": "Hinweise zum Live-Betrieb",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.7].sections.known.0.text",
+      "text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.7].sections.known.1.label",
+      "text": "Originalgetreue PowerPoint-Wiedergabe",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.7].sections.known.1.text",
       "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
       "source": "public/releases.json",
       "context": "release-history",

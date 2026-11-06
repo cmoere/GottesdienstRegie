@@ -1,9 +1,9 @@
-import { isLoopOnlyItem, sectionSupportsLoopItems } from './loopDomain';
+import { canPlaceItem, isLoopOnlyItem, sectionSupportsLoopItems } from './loopDomain';
 import type { ItemType, ServiceItem, ServiceSection } from './store';
 
 export const loopOnlyItemTypes = [
   'announcement', 'birthday', 'event', 'weather', 'loopQuiz', 'loopCountdown',
-  'clock', 'bibleVerse', 'loopQr', 'infoCard', 'today', 'nextEvents', 'nowPlaying', 'news', 'football',
+  'clock', 'bibleVerse', 'loopQr', 'siteMap', 'infoCard', 'today', 'nextEvents', 'nowPlaying', 'news', 'football',
 ] as const satisfies readonly ItemType[];
 
 export const standardItemTypes = [
@@ -31,18 +31,18 @@ export function canInsertItemType(
   section: ServiceSection | null | undefined,
 ): boolean {
   if (!section) return false;
-  return !loopTypes.has(type) || sectionSupportsLoopItems(section);
+  return !loopTypes.has(type)||canPlaceItem({id:"",type,itemCategory:"loop"},section);
 }
 
 export function allowedItemTypes(section: ServiceSection | null | undefined): ItemType[] {
   if (!section) return [];
   return sectionSupportsLoopItems(section)
-    ? [...standardItemTypes, ...loopOnlyItemTypes]
+    ? [...standardItemTypes, ...loopOnlyItemTypes.filter(type=>canInsertItemType(type,section))]
     : [...standardItemTypes];
 }
 
 export function menuItemTypesForSection(section: ServiceSection | null | undefined): ItemType[] {
-  return section && sectionSupportsLoopItems(section) ? [...loopOnlyItemTypes] : [...standardItemTypes];
+  return section && sectionSupportsLoopItems(section) ? loopOnlyItemTypes.filter(type=>canInsertItemType(type,section)) : [...standardItemTypes];
 }
 
 export function placementViolation(
@@ -51,7 +51,7 @@ export function placementViolation(
 ): PlacementViolation | null {
   if (!section) return { code: 'SECTION_MISSING', message: 'Der Zielbereich wurde nicht gefunden.' };
   const loopOnly = loopTypes.has(item.type) || isLoopOnlyItem({ id: '', ...item });
-  if (loopOnly && !sectionSupportsLoopItems(section)) {
+  if (loopOnly && !canPlaceItem({id:"",...item,itemCategory:"loop"},section)) {
     return {
       code: 'LOOP_SECTION_REQUIRED',
       message: 'Dieses Element ist ausschließlich im Vor- oder Nachprogramm zulässig.',

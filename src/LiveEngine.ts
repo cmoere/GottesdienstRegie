@@ -1,3 +1,4 @@
+import {readSectionInfo,type SectionInfoSnapshot} from '../shared/sectionInfoStrip';
 import {formatRegionalTemplate as sourceCopy} from '../shared/regional/validation';
 import type { DisplayRole, Slide } from './store';
 import { usePresentation } from './store';
@@ -81,7 +82,7 @@ export class LiveEngine{
     return ok;
   }
   private takeRevision:number|undefined;
-  private takeMetadata=new Map<string,{countdownStartedAtMs:number;serviceCountdownAtMs?:number;bannerContext:Pick<BannerContext,'liveSection'|'countdownActive'>}>();
+  private takeMetadata=new Map<string,{countdownStartedAtMs:number;serviceCountdownAtMs?:number;sectionInfo?:SectionInfoSnapshot;bannerContext:Pick<BannerContext,'liveSection'|'countdownActive'>}>();
   private revision=0;
   private lastHash=0;
   private delivery=0;
@@ -109,12 +110,14 @@ export class LiveEngine{
     if(this.takeRevision!==state.liveTransitionRevision){this.takeRevision=state.liveTransitionRevision;this.takeMetadata.clear()}
     let take=this.takeMetadata.get(slide.id);
     if(!take){
-      const type=state.sections.find(section=>section.id===item?.sectionId)?.type;
+      const section=state.sections.find(entry=>entry.id===item?.sectionId),type=section?.type;
+      const info=readSectionInfo(section?.infoStrip);
       const liveSection:BannerContext['liveSection']=type==='preLoop'||type==='preProgram'?'pre':type==='postLoop'?'post':type==='warmup'?'warmup':type==='service'?'service':'other';
       take={countdownStartedAtMs:state.liveSlideId===slide.id?state.liveTakenAtMs??presentAtMs:presentAtMs,serviceCountdownAtMs:prepareServiceCountdown({enabled:usePreferences.getState().showServiceCountdown,sectionId:item?.sectionId??'',eventKey:state.eventLink?.eventKey,date:state.date,serviceTime:state.serviceTime},getCommunityRuntimeSnapshot().events),bannerContext:{liveSection,countdownActive:item?.type==='countdown'||item?.type==='loopCountdown'}};
+      if(info)take.sectionInfo={...info,title:info.showTitle?(slide.title.trim()||item?.title||""):""};
       this.takeMetadata.set(slide.id,take);
     }
-    return {...attachOutputRevision(rendered,this.revision),_serviceCountdownAtMs:take.serviceCountdownAtMs,_mediaWarmup:upcomingMedia(state.items,slide.id,state.sections.map(section=>section.id)),_presentAtMs:presentAtMs,_countdownStartedAtMs:take.countdownStartedAtMs,bannerContext:{...take.bannerContext}};
+    return {...attachOutputRevision(rendered,this.revision),_serviceCountdownAtMs:take.serviceCountdownAtMs,sectionInfo:take.sectionInfo,_mediaWarmup:upcomingMedia(state.items,slide.id,state.sections.map(section=>section.id)),_presentAtMs:presentAtMs,_countdownStartedAtMs:take.countdownStartedAtMs,bannerContext:{...take.bannerContext}};
   }
   async start(assignments:Record<string,DisplayRole>,slide:Slide){if(!window.desktop)throw new Error('Die Desktop-Ausgabe ist nicht verfügbar.');this.takeRevision=undefined;this.takeMetadata.clear();const delivery=++this.delivery,snapshot=this.snapshot(slide);
     if(this.originalMode(slide)){
