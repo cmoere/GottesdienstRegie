@@ -48,6 +48,7 @@
  background:#f0f0f0!important;
  color:#222!important;
  font-family:"Inter Saalscreen",Arial,sans-serif;
+ flex-direction:column;
  justify-content:flex-start;
  padding:0!important;
 }
