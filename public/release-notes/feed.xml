@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.99.8</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.8</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.8</guid><pubDate>Tue, 10 Nov 2026 00:00:00 GMT</pubDate><description>Veranstaltungsfolie im Saalscreen-Design
+Die Tabellenansicht „Nächste Veranstaltungen“ übernimmt die dunkelgrüne Kopfzeile, das Gemeindelogo, Datum und Uhrzeit sowie die Spalten und Fußzeile der Saalscreen-Vorlage. Die Kopfzeile lässt sich im Folieneditor ein- und ausschalten.
+
+Einbindung in die Live-Ausgabe
+Veranstaltungsdaten, Meldungen und die Steuerung der Folie kommen weiterhin aus GottesdienstRegie. Logo und Inter-Schrift sind lokal eingebunden.
+
+Hinweise zum Live-Betrieb
+Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.
+
+Originalgetreue PowerPoint-Wiedergabe
+Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.</description></item>
 <item><title>GottesdienstRegie 0.99.7</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.7</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.7</guid><pubDate>Sat, 07 Nov 2026 00:00:00 GMT</pubDate><description>Lageplan und MAIN-Infoleiste
 Das Vor- und Nachprogramm kann einen Lageplan mit einer Grafik aus der Medienbibliothek und einem QR-Code zum öffentlichen Lageplan anzeigen. Für jeden Ablaufabschnitt lässt sich eine Infoleiste mit Uhrzeit, Sekunden, Datum und Folientitel konfigurieren.
 

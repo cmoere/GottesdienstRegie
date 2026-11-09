@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.8
+
+Die Tabellenansicht „Nächste Veranstaltungen“ übernimmt die dunkelgrüne Kopfzeile, das Gemeindelogo, Datum und Uhrzeit sowie die Spalten und Fußzeile der Saalscreen-Vorlage. Die Kopfzeile lässt sich im Folieneditor ein- und ausschalten.
+
+Veranstaltungsdaten, Meldungen und die Steuerung der Folie kommen weiterhin aus GottesdienstRegie. Logo und Inter-Schrift sind lokal eingebunden.
+
+---
+
 # GottesdienstRegie 0.99.7
 
 Das Vor- und Nachprogramm kann einen Lageplan mit einer Grafik aus der Medienbibliothek und einem QR-Code zum öffentlichen Lageplan anzeigen. Für jeden Ablaufabschnitt lässt sich eine Infoleiste mit Uhrzeit, Sekunden, Datum und Folientitel konfigurieren.

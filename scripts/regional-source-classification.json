@@ -1,5 +1,29 @@
 {
   "reviewedSourceEntries": {
+    "source.38ec016ff81f362024c7.1": {
+      "source": "src/EventOverviewChrome.tsx",
+      "context": "jsx-attribute:alt",
+      "text": "Philippus Gemeinde",
+      "reason": "Visitor-facing German Saalscreen reference copy and congregation name. These labels belong to the slide presentation."
+    },
+    "source.fbc71088c31f1be06c38.1": {
+      "source": "src/EventOverviewChrome.tsx",
+      "context": "BinaryExpression",
+      "text": "Seite",
+      "reason": "Visitor-facing German Saalscreen reference copy and congregation name. These labels belong to the slide presentation."
+    },
+    "source.e176a3d1c30b1f17e56a.1": {
+      "source": "src/EventOverviewChrome.tsx",
+      "context": "BinaryExpression",
+      "text": "Nächste Seite in:",
+      "reason": "Visitor-facing German Saalscreen reference copy and congregation name. These labels belong to the slide presentation."
+    },
+    "source.2ffd8037068299d4955e.1": {
+      "source": "src/EventOverviewChrome.tsx",
+      "context": "BinaryExpression",
+      "text": "Sek.",
+      "reason": "Visitor-facing German Saalscreen reference copy and congregation name. These labels belong to the slide presentation."
+    },
     "source.7a7ab6a6ce1ec5896827.1": {
       "source": "src/addElementCatalog.ts",
       "context": "ArrayLiteralExpression",
@@ -11601,7 +11625,7 @@
       "reason": "Reviewed entire module: visitor announcement scroll composition, supplied public content and geometry only. No settings or other operator controls in this module."
     },
     "src/SlideRenderer.tsx": {
-      "sha256": "920527f4c9e333eabcd07a90762b465f9073121d765329008170be472ae2b6ae",
+      "sha256": "c056b71e6532280941987ba5391ed86b76788d45282beee41882ec9f31ebaa02",
       "reason": "Re-reviewed 2026-11-03: exact diff only wraps the existing visitor renderer in React.memo; all output text, media, SVG/CSS geometry and placeholders remain unchanged. Internal dynamic element subscriptions continue independently. This remains public/authored output, with no operator buttons, fields or dialogs."
     },
     "src/languageCatalog.ts": {

@@ -2384,7 +2384,8 @@
     "sectionInfoTime": "Uhrzeit",
     "sectionInfoSeconds": "Sekunden anzeigen",
     "sectionInfoDate": "Datum",
-    "sectionInfoTitle": "Aktueller Folientitel"
+    "sectionInfoTitle": "Aktueller Folientitel",
+    "eventOverviewHeaderVisible": "Kopfzeile mit Logo, Datum und Uhrzeit anzeigen"
   },
   "native": {
     "updateAvailableTitle": "Nigge Version te kriegen",

@@ -16,14 +16,14 @@ export function EventSlideDesigner({
   item: ServiceItem;
   canEdit: boolean;
 }) {
- const {tx}=useI18n();
+ const {t,tx}=useI18n();
  const designLabels={table:tx('Tabelle'),cards:tx('Karten'),timeline:tx('Zeitstrahl'),poster:tx('Plakat'),minimal:tx('Minimal')};
   const state = usePresentation(),
     settings = normalizeEventSlideSettings(item.metadata);
   const [events,setEvents]=useState(getLatestPublicEvents);
   useEffect(()=>{const update=()=>setEvents(getLatestPublicEvents());window.addEventListener('gottesdienstregie:community-events',update);return()=>window.removeEventListener('gottesdienstregie:community-events',update)},[]);
   const minimum=prepareEventOverview({...item.metadata,eventItemsJson:JSON.stringify(events)}).minDurationMs;
-  const change = (patch: { eventDesign?: string; eventLimit?: number }) => {
+  const change = (patch: { eventDesign?: string; eventLimit?: number; eventHeaderVisible?: boolean }) => {
     state.updateItem(item.id, {
       metadata: { ...item.metadata, ...patch },
       slides:item.slides.map(slide=>({...slide,elements:slide.elements.map(element=>element.type==='loop'?{...element,properties:{...element.properties,...patch}}:element)})),
@@ -51,6 +51,7 @@ export function EventSlideDesigner({
           </button>
         ))}
       </div>
+      {settings.design==="table"&&<label><input type="checkbox" disabled={!canEdit} checked={item.metadata.eventHeaderVisible!==false} onChange={event=>change({eventHeaderVisible:event.target.checked})}/>{t("eventOverviewHeaderVisible")}</label>}
       <label>
         {tx("Anzahl Veranstaltungen")}<input
           type="number"

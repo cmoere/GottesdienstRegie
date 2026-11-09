@@ -2260,6 +2260,14 @@
     "versions[0.99].builds[0.99.7].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.7].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.7].sections.known.1.label": "Originalgetrei PowerPoint-Wiedergab",
-    "versions[0.99].builds[0.99.7].sections.known.1.text": "Déi originalgetrei Wiedergab brauch weiderhin Windows an installéiert Microsoft PowerPoint. Déi nei Virbereedungs- an Diagnosfunktiounen ersetzen dëse Wiedergabewee net."
+    "versions[0.99].builds[0.99.7].sections.known.1.text": "Déi originalgetrei Wiedergab brauch weiderhin Windows an installéiert Microsoft PowerPoint. Déi nei Virbereedungs- an Diagnosfunktiounen ersetzen dëse Wiedergabewee net.",
+    "versions[0.99].builds[0.99.8].overview.label": "Veranstaltungsfolie im Saalscreen-Design",
+    "versions[0.99].builds[0.99.8].overview.text": "Die Tabellenansicht „Nächste Veranstaltungen“ übernimmt die dunkelgrüne Kopfzeile, das Gemeindelogo, Datum und Uhrzeit sowie die Spalten und Fußzeile der Saalscreen-Vorlage. Die Kopfzeile lässt sich im Folieneditor ein- und ausschalten.",
+    "versions[0.99].builds[0.99.8].sections.fixed.0.label": "Einbindung in die Live-Ausgabe",
+    "versions[0.99].builds[0.99.8].sections.fixed.0.text": "Veranstaltungsdaten, Meldungen und die Steuerung der Folie kommen weiterhin aus GottesdienstRegie. Logo und Inter-Schrift sind lokal eingebunden.",
+    "versions[0.99].builds[0.99.8].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.8].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.8].sections.known.1.label": "Originalgetrei PowerPoint-Wiedergab",
+    "versions[0.99].builds[0.99.8].sections.known.1.text": "Déi originalgetrei Wiedergab brauch weiderhin Windows an installéiert Microsoft PowerPoint. Déi nei Virbereedungs- an Diagnosfunktiounen ersetzen dëse Wiedergabewee net."
   }
 }

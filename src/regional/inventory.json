@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": true,
-  "sourceFingerprint": "61d6ae2aeb9604979f9bb8f2d676a49dffb4049c2a7ce6c5bb1c2ee78f0d871a",
+  "sourceFingerprint": "79b0930c566abc976cab452f8d5add7f18931dafc17877534bd1ba8dee15c198",
   "note": "Reviewed complete v98 source inventory; all31 interface/native/help/release resources checked separately. Protocol tokens, internal prompts and generated-document defaults have exact entry-level reviews.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -84178,6 +84178,109 @@
       "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
       "source": "public/releases.json",
       "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "source.38ec016ff81f362024c7.1",
+      "text": "Philippus Gemeinde",
+      "source": "src/EventOverviewChrome.tsx",
+      "line": 19,
+      "context": "jsx-attribute:alt",
+      "status": "excluded",
+      "exclusionReason": "Visitor-facing German Saalscreen reference copy and congregation name. These labels belong to the slide presentation.",
+      "technicalReviewHash": "c1d2dffa193a7c6e77994f32513dba9f04bf38150b43669f82d07d28dc71106c"
+    },
+    {
+      "key": "source.fbc71088c31f1be06c38.1",
+      "text": "Seite",
+      "source": "src/EventOverviewChrome.tsx",
+      "line": 28,
+      "context": "BinaryExpression",
+      "status": "excluded",
+      "exclusionReason": "Visitor-facing German Saalscreen reference copy and congregation name. These labels belong to the slide presentation.",
+      "technicalReviewHash": "2b22340c1576fb937c5aba1a171db5eb316010e4437be3757de78e0fac9de5ca"
+    },
+    {
+      "key": "source.e176a3d1c30b1f17e56a.1",
+      "text": "Nächste Seite in:",
+      "source": "src/EventOverviewChrome.tsx",
+      "line": 28,
+      "context": "BinaryExpression",
+      "status": "excluded",
+      "exclusionReason": "Visitor-facing German Saalscreen reference copy and congregation name. These labels belong to the slide presentation.",
+      "technicalReviewHash": "3cef8bc3fd8fc5ee3d880313444d8048350e323a138f2dee47e2a2022e684c2b"
+    },
+    {
+      "key": "source.2ffd8037068299d4955e.1",
+      "text": "Sek.",
+      "source": "src/EventOverviewChrome.tsx",
+      "line": 28,
+      "context": "BinaryExpression",
+      "status": "excluded",
+      "exclusionReason": "Visitor-facing German Saalscreen reference copy and congregation name. These labels belong to the slide presentation.",
+      "technicalReviewHash": "b1d756d77ec14eb910740855dfcc37a95f3f513aff3dc1f2129254c15ea6f49a"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.8].overview.label",
+      "text": "Veranstaltungsfolie im Saalscreen-Design",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.8].overview.text",
+      "text": "Die Tabellenansicht „Nächste Veranstaltungen“ übernimmt die dunkelgrüne Kopfzeile, das Gemeindelogo, Datum und Uhrzeit sowie die Spalten und Fußzeile der Saalscreen-Vorlage.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.8].sections.fixed.0.label",
+      "text": "Einbindung in die Live-Ausgabe",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.8].sections.fixed.0.text",
+      "text": "Veranstaltungsdaten, Meldungen und die Steuerung der Folie kommen weiterhin aus GottesdienstRegie. Logo und Inter-Schrift sind lokal eingebunden.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.8].sections.known.0.label",
+      "text": "Hinweise zum Live-Betrieb",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.8].sections.known.0.text",
+      "text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.8].sections.known.1.label",
+      "text": "Originalgetreue PowerPoint-Wiedergabe",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.8].sections.known.1.text",
+      "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.eventOverviewHeaderVisible",
+      "text": "Kopfzeile mit Logo, Datum und Uhrzeit anzeigen",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
       "status": "app-owned"
     }
   ]

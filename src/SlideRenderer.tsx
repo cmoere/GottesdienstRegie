@@ -1,3 +1,4 @@
+import {EventOverviewHeader,EventOverviewFooter} from './EventOverviewChrome';
 import {ExternalLoopElement} from './externalLoop/Element';
 import {readPowerPointSurface} from './powerPointLiveModel';
 import {ActiveClockLoopView} from './clockLoop/ClockLoopView';
@@ -542,9 +543,9 @@ function EventLoopElement({
       window.removeEventListener("gottesdienstregie:community-events", update);
   }, [live]);
   const [reducedMotion,setReducedMotion]=useState(()=>window.matchMedia?.("(prefers-reduced-motion: reduce)").matches??false);
-  const [eventPage,setEventPage]=useState(0);
   useEffect(()=>{const query=window.matchMedia?.("(prefers-reduced-motion: reduce)");const update=()=>setReducedMotion(query?.matches??false);query?.addEventListener("change",update);return()=>query?.removeEventListener("change",update)},[]);
-  useEffect(()=>{if(!reducedMotion)return;const timer=setInterval(()=>setEventPage(page=>page+1),8000);return()=>clearInterval(timer)},[reducedMotion]);
+  const pageDurationMs=8000;
+  const eventPage=Math.floor(elapsed/pageDurationMs);
   const settings = normalizeEventSlideSettings(properties),
     source = !live&&events.length
       ? { ...properties, eventItemsJson: JSON.stringify(events) }
@@ -563,7 +564,7 @@ function EventLoopElement({
         color: settings.design==='table'?'#000000':String(properties.color ?? "#ffffff"),
       }}
     >
-      <small>NÄCHSTE VERANSTALTUNGEN</small>
+      {settings.design==="table"?(properties.eventHeaderVisible!==false&&<EventOverviewHeader/>):<small>NÄCHSTE VERANSTALTUNGEN</small>}
       {settings.design==='table'?<EventOverviewTable items={items} plan={prepared.plan} elapsed={elapsed} reduced={reducedMotion}/>:<EventScrollViewport plan={prepared.plan} elapsed={elapsed} reduced={reducedMotion}><div className="event-loop-list">
         {items.map((event, index) => (
           <article key={`${event.title}:${event.details}:${index}`}>
@@ -576,6 +577,7 @@ function EventLoopElement({
         ))}
       </div></EventScrollViewport>}
       {!items.length && <strong>Keine kommenden Veranstaltungen</strong>}
+      {settings.design==="table"&&<EventOverviewFooter page={pages.length?eventPage%pages.length+1:1} total={pages.length} seconds={Math.ceil((pageDurationMs-elapsed%pageDurationMs)/1000)}/>}
     </div>
   );
 }

@@ -1,3 +1,9 @@
+@font-face {
+ font-family:"Inter Saalscreen";
+ src:url("./assets/fonts/inter/Inter-Variable.ttf") format("truetype");
+ font-weight:100 900;
+ font-display:swap;
+}
 .event-loop-surface.event-design-table{background:#fff!important;color:#000!important;font-family:"Cera Pro","Segoe UI",sans-serif;align-items:stretch!important;text-align:left!important;padding:5.729167cqw!important;gap:0!important}
 .event-loop-surface.event-design-table>small{color:#608f9a;font-size:1.354167cqw;font-weight:500;letter-spacing:.08em;margin-bottom:1.666667cqw;text-align:left}
 .event-overview-table{width:100%;min-width:0;font-size:1.770833cqw;font-weight:500;line-height:1.3}
@@ -35,4 +41,71 @@
 .event-table-date,.event-table-time,.event-table-room {
  color:#273942;
  font-variant-numeric:tabular-nums;
+}
+
+/* Saalscreen layout, scaled against the slide rather than the app window. */
+.event-loop-surface.event-design-table {
+ background:#f0f0f0!important;
+ color:#222!important;
+ font-family:"Inter Saalscreen",Arial,sans-serif;
+ justify-content:flex-start;
+ padding:0!important;
+}
+.event-screen-header {
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ flex:none;
+ padding:.416667cqw .833333cqw;
+ background:#1f2d16;
+ color:#fff;
+}
+.event-screen-header img {
+ display:block;
+ width:auto;
+ height:3.125cqw;
+}
+.event-screen-datetime {
+ font-size:2.291667cqw;
+ font-weight:600;
+ font-variant-numeric:tabular-nums;
+ white-space:nowrap;
+}
+.event-overview-table { background:#fff; }
+.event-table-heading {
+ border-bottom:2px solid #cfcfcf;
+ background:#fff;
+ color:#222;
+ font-size:1.458333cqw;
+ font-weight:400;
+}
+.event-table-row>[role=cell],.event-table-row>[role=columnheader] {padding-inline:.833333cqw}
+.event-table-row>[role=columnheader]:last-child,.event-table-room {padding-right:.833333cqw!important}
+.event-table-viewport [role=row] {border-color:#ddd}
+.event-table-viewport [role=row]:nth-child(odd) {background:#f9f9f9}
+.event-table-viewport [role=row]:nth-child(even) {background:#fff}
+.event-table-date,.event-table-time,.event-table-room {color:#222}
+.event-loop-surface.event-design-table .event-table-title {font-weight:700}
+.event-screen-footer {
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ box-sizing:border-box;
+ min-height:2.916667cqw;
+ margin-top:auto;
+ padding:.15cqw .833333cqw;
+ background:#fff;
+ color:#222;
+ font-size:1.233333cqw;
+ font-weight:400;
+}
+.event-design-preview.event-design-table i:first-child {background:#1f2d16}
+
+.event-screen-clock-colon {
+ display:inline-block;
+ width:.38em;
+ text-align:center;
+}
+.event-loop-surface.event-design-table>strong {
+ padding:1cqw .833333cqw;
 }

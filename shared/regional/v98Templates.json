@@ -60,7 +60,8 @@
     "sectionInfoTime": "Uhrzeit",
     "sectionInfoSeconds": "Sekunden anzeigen",
     "sectionInfoDate": "Datum",
-    "sectionInfoTitle": "Aktueller Folientitel"
+    "sectionInfoTitle": "Aktueller Folientitel",
+    "eventOverviewHeaderVisible": "Kopfzeile mit Logo, Datum und Uhrzeit anzeigen"
   },
   "native": {},
   "en": {
@@ -124,7 +125,8 @@
     "sectionInfoTime": "Time",
     "sectionInfoSeconds": "Show seconds",
     "sectionInfoDate": "Date",
-    "sectionInfoTitle": "Current slide title"
+    "sectionInfoTitle": "Current slide title",
+    "eventOverviewHeaderVisible": "Show header with logo, date and time"
   },
   "documentation": {
     "helpTitle": "Lokale KI: Modelle, Gestaltung und Bilder",

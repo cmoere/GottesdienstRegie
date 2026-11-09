@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
+          "version": "0.99.8",
+          "releaseDate": "2026-11-10",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Veranstaltungsfolie im Saalscreen-Design",
+              "en": "Events slide in the hall screen design"
+            },
+            "text": {
+              "de": "Die Tabellenansicht „Nächste Veranstaltungen“ übernimmt die dunkelgrüne Kopfzeile, das Gemeindelogo, Datum und Uhrzeit sowie die Spalten und Fußzeile der Saalscreen-Vorlage. Die Kopfzeile lässt sich im Folieneditor ein- und ausschalten.",
+              "en": "The Upcoming Events table adopts the hall screen template with its dark green header, church logo, date and time, table columns and footer. The slide editor can show or hide the header."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Einbindung in die Live-Ausgabe",
+                  "en": "Live output integration"
+                },
+                "text": {
+                  "de": "Veranstaltungsdaten, Meldungen und die Steuerung der Folie kommen weiterhin aus GottesdienstRegie. Logo und Inter-Schrift sind lokal eingebunden.",
+                  "en": "GottesdienstRegie supplies the event data, announcements and slide controls. The logo and Inter font are bundled locally."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
           "version": "0.99.7",
           "releaseDate": "2026-11-07",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Lageplan und MAIN-Infoleiste",
