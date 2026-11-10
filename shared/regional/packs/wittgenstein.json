@@ -2385,7 +2385,10 @@
     "sectionInfoSeconds": "Sekunden anzeigen",
     "sectionInfoDate": "Datum",
     "sectionInfoTitle": "Aktueller Folientitel",
-    "eventOverviewHeaderVisible": "Kopfzeile mit Logo, Datum und Uhrzeit anzeigen"
+    "eventOverviewHeaderVisible": "Kopfzeile mit Logo, Datum und Uhrzeit anzeigen",
+    "webOnline": "Online",
+    "webOffline": "Offline",
+    "webUnsaved": "Ungespeicherte Änderungen"
   },
   "native": {
     "updateAvailableTitle": "Neie Version äss do",
@@ -2511,6 +2514,11 @@
     "remoteShareUnsupported": "Der Browser kann ken Bildschirm freiege. Nemm en Desktop-Browser, der dat kann.",
     "remoteShareSecure": "Bildschirmfreigaab braucht de verschlüsselte HTTPS-Verbindong.",
     "remoteShareError": "De Bildschirmfreigaab konnt net verbonne wärn.",
-    "remoteNextWaiting": "Noch ken nächste Folie vierbereet."
+    "remoteNextWaiting": "Noch ken nächste Folie vierbereet.",
+    "remoteConnecting": "Verbindung wird aufgebaut …",
+    "remoteConnected": "Verbunden",
+    "remotePending": "Folienwechsel wird verarbeitet …",
+    "remoteUnconfirmed": "Folienwechsel nicht bestätigt.",
+    "remoteCommandError": "Befehl konnte nicht gesendet werden."
   }
 }

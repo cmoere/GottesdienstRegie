@@ -2276,6 +2276,14 @@
     "versions[0.99].builds[0.99.9].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.9].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.9].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
-    "versions[0.99].builds[0.99.9].sections.known.1.text": "Die originalgetreue Wiedergabe braucht weiterhin Windows un installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- un Diagnosefunktionen ersetzen diesen Wiedergabeweg nit."
+    "versions[0.99].builds[0.99.9].sections.known.1.text": "Die originalgetreue Wiedergabe braucht weiterhin Windows un installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- un Diagnosefunktionen ersetzen diesen Wiedergabeweg nit.",
+    "versions[0.99].builds[0.99.10].overview.label": "Web-Editor und Fernsteuerung",
+    "versions[0.99].builds[0.99.10].overview.text": "Der Web-Editor wechselt auf Handy und Tablet direkt zwischen Folienbearbeitung und Vorschau. Verbindungsstatus und Speicherstand bleiben sichtbar.",
+    "versions[0.99].builds[0.99.10].sections.fixed.0.label": "Bedienung des Personal Monitors",
+    "versions[0.99].builds[0.99.10].sections.fixed.0.text": "Der Personal Monitor gruppiert die Zeichenwerkzeuge und zeigt Verbindung und ON AIR getrennt an. Die Fernsteuerung wartet nach einem Folienbefehl auf den neuen Zustand, damit ein Doppelklick keine Folie überspringt.",
+    "versions[0.99].builds[0.99.10].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.10].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.10].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
+    "versions[0.99].builds[0.99.10].sections.known.1.text": "Die originalgetreue Wiedergabe braucht weiterhin Windows un installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- un Diagnosefunktionen ersetzen diesen Wiedergabeweg nit."
   }
 }

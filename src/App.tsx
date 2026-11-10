@@ -117,7 +117,7 @@ import {
 } from "./auth";
 import {usePlatform} from './platform/PlatformContext';
 import {MobileWorkspaceNav} from './responsive/MobileWorkspaceNav';
-import {CapabilityNotice} from './platform/CapabilityNotice';
+import {WebWorkspaceStatus} from './WebWorkspaceStatus';
 import {conciseRemoteSummary} from './updateReleaseSummary';
 import { useI18n, type TranslationKey, type Translator } from "./i18n";
 import {
@@ -9242,7 +9242,7 @@ function AppShell({
     lastEdit = state.editHistory.at(-1);
   return (
     <div
-      className={`app production-app mode-${state.mode} ${state.onAir ? "is-on-air" : ""} ${state.items.find(item=>item.id===state.selectedItemId)?.metadata.importMode==='original'?'has-original-powerpoint':''}`}
+      className={`app production-app ${target==='web'?'web-editor':''} mode-${state.mode} ${state.onAir ? "is-on-air" : ""} ${state.items.find(item=>item.id===state.selectedItemId)?.metadata.importMode==='original'?'has-original-powerpoint':''}`}
       onClick={() => setMenuOpen(null)}
     >
       <AnnouncementBannerController quick={previewQuick}/>
@@ -9466,7 +9466,7 @@ function AppShell({
           {state.items.find(item=>item.id===state.selectedItemId)?.metadata.importMode!=='original'&&!isPostProgramSystemItem(state.items.find(item=>item.id===state.selectedItemId))&&<FormatToolbar openBackgroundMedia={() => openMedia("background")} />}
         </>
       )}
-      {target==='web'&&<CapabilityNotice capability="outputMain"/>}
+      {target==='web'&&<WebWorkspaceStatus saveState={state.saveState}/>}
       <div className="main">
         <ResizableServiceSidebar>
         <OrderOfService
@@ -9580,7 +9580,10 @@ function AppShell({
         />
       )}
       {bibleTextOpen&&<BibleTextDialog initialTranslation={osbSettings.defaultBibleTranslationId} allowTranslationChange={osbSettings.allowTranslationChangeInQuickScreen} close={()=>setBibleTextOpen(false)} onShow={value=>{const quick:QuickScreenConfig={id:`bible-${Date.now()}`,type:'bible',name:value.reference,enabled:true,targets:['main'],text:value.text,pages:paginateBibleVerses(value.text.split('\n').filter(Boolean)),pageIndex:0,reference:value.reference,translation:value.translation,background:'#2d241b',order:0,osb:osbSettings};void(async()=>{if(!usePresentation.getState().onAir)return;setPreviewQuick(quick);await(window.desktop as any)?.sendQuick(['main'],quick);setBibleTextOpen(false)})()}}/>}
-      <MobileWorkspaceNav />
+      <MobileWorkspaceNav mode={state.mode}
+        onModeChange={target==='web' ? state.setMode : undefined}
+        showSong={target!=='web' || state.items.find(item=>item.id===state.selectedItemId)?.type==='song'}
+      />
     </div>
   );
 }

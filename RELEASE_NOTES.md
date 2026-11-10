@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.10
+
+Der Web-Editor wechselt auf Handy und Tablet direkt zwischen Folienbearbeitung und Vorschau. Verbindungsstatus und Speicherstand bleiben sichtbar.
+
+Der Personal Monitor gruppiert die Zeichenwerkzeuge und zeigt Verbindung und ON AIR getrennt an. Die Fernsteuerung wartet nach einem Folienbefehl auf den neuen Zustand, damit ein Doppelklick keine Folie überspringt.
+
+---
+
 # GottesdienstRegie 0.99.9
 
 Die Wetterfolie nutzt abgestimmte Kontrastfarben für Tag und Nacht. Temperatur und Windwert bleiben auch auf dunklem Hintergrund gut lesbar.

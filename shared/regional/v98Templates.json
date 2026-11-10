@@ -61,7 +61,10 @@
     "sectionInfoSeconds": "Sekunden anzeigen",
     "sectionInfoDate": "Datum",
     "sectionInfoTitle": "Aktueller Folientitel",
-    "eventOverviewHeaderVisible": "Kopfzeile mit Logo, Datum und Uhrzeit anzeigen"
+    "eventOverviewHeaderVisible": "Kopfzeile mit Logo, Datum und Uhrzeit anzeigen",
+    "webOnline": "Online",
+    "webOffline": "Offline",
+    "webUnsaved": "Ungespeicherte Änderungen"
   },
   "native": {},
   "en": {
@@ -126,7 +129,10 @@
     "sectionInfoSeconds": "Show seconds",
     "sectionInfoDate": "Date",
     "sectionInfoTitle": "Current slide title",
-    "eventOverviewHeaderVisible": "Show header with logo, date and time"
+    "eventOverviewHeaderVisible": "Show header with logo, date and time",
+    "webOnline": "Online",
+    "webOffline": "Offline",
+    "webUnsaved": "Unsaved changes"
   },
   "documentation": {
     "helpTitle": "Lokale KI: Modelle, Gestaltung und Bilder",

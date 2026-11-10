@@ -17,3 +17,23 @@ for(const viewport of [{name:'tablet',width:900,height:1100},{name:'phone',width
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   });
 }
+
+test('wechselt am Handy den Arbeitsmodus und meldet Offlinebetrieb', async ({page, context}) => {
+  await page.setViewportSize({width: 390, height: 844});
+  await page.addInitScript(() => {
+    localStorage.setItem('gottesdienstregie.interface-tour', 'done');
+    localStorage.setItem('gottesdienstregie.preferences', JSON.stringify({version:84,state:{language:'de',germanRegion:null}}));
+  });
+  await page.goto('/', {waitUntil: 'domcontentloaded'});
+  await page.locator('.service-sidebar-shell').getByRole('button', {name: 'Element hinzufügen'}).click();
+  await page.locator('.add-content-popover').getByRole('button', {name: 'Inhalt', exact: true}).click();
+  const nav = page.getByRole('navigation', {name: 'Arbeitsbereiche'});
+  const preview = nav.getByRole('button', {name: 'Vorschau'});
+  await preview.click();
+  await expect(preview).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('.production-app')).toHaveClass(/mode-preview/);
+  await nav.getByRole('button', {name: 'Folie', exact: true}).click();
+  await expect(page.locator('.production-app')).toHaveClass(/mode-edit/);
+  await context.setOffline(true);
+  await expect(page.locator('.web-status-row')).toContainText('Offline');
+});

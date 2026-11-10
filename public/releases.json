@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
-          "version": "0.99.9",
+          "version": "0.99.10",
           "releaseDate": "2026-11-10",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Web-Editor und Fernsteuerung",
+              "en": "Web editor and remote control"
+            },
+            "text": {
+              "de": "Der Web-Editor wechselt auf Handy und Tablet direkt zwischen Folienbearbeitung und Vorschau. Verbindungsstatus und Speicherstand bleiben sichtbar.",
+              "en": "On phones and tablets, the web editor switches directly between slide editing and preview. Connection and save status remain visible."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Bedienung des Personal Monitors",
+                  "en": "Personal monitor controls"
+                },
+                "text": {
+                  "de": "Der Personal Monitor gruppiert die Zeichenwerkzeuge und zeigt Verbindung und ON AIR getrennt an. Die Fernsteuerung wartet nach einem Folienbefehl auf den neuen Zustand, damit ein Doppelklick keine Folie überspringt.",
+                  "en": "The personal monitor groups annotation tools and displays connection and on-air status separately. Remote controls wait for a slide change to be reflected in the live state so a double-click does not skip a slide."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.99.9",
+          "releaseDate": "2026-11-10",
+          "current": false,
           "overview": {
             "label": {
               "de": "Besser lesbare Wetterfolie",
