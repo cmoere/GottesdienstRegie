@@ -2268,6 +2268,14 @@
     "versions[0.99].builds[0.99.8].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.8].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.8].sections.known.1.label": "Originalgetreui PowerPoint-Wiedergab",
-    "versions[0.99].builds[0.99.8].sections.known.1.text": "D originalgetreui Wiedergab bruucht wiiterhin Windows un installierts Microsoft PowerPoint. D neie Vorbereitigs- un Diagnosefunktione ersetze dr Wiedergabewäg nit."
+    "versions[0.99].builds[0.99.8].sections.known.1.text": "D originalgetreui Wiedergab bruucht wiiterhin Windows un installierts Microsoft PowerPoint. D neie Vorbereitigs- un Diagnosefunktione ersetze dr Wiedergabewäg nit.",
+    "versions[0.99].builds[0.99.9].overview.label": "Besser lesbare Wetterfolie",
+    "versions[0.99].builds[0.99.9].overview.text": "Die Wetterfolie nutzt abgestimmte Kontrastfarben für Tag und Nacht. Temperatur und Windwert bleiben auch auf dunklem Hintergrund gut lesbar.",
+    "versions[0.99].builds[0.99.9].sections.fixed.0.label": "Kontrast von Beschriftungen und Symbolen",
+    "versions[0.99].builds[0.99.9].sections.fixed.0.text": "Datum, Wetterbeschreibungen, Vorhersagekarten, Wettersymbole und Trennlinien sind auf die jeweilige Hintergrundfarbe abgestimmt.",
+    "versions[0.99].builds[0.99.9].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.9].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.9].sections.known.1.label": "Originalgetreui PowerPoint-Wiedergab",
+    "versions[0.99].builds[0.99.9].sections.known.1.text": "D originalgetreui Wiedergab bruucht wiiterhin Windows un installierts Microsoft PowerPoint. D neie Vorbereitigs- un Diagnosefunktione ersetze dr Wiedergabewäg nit."
   }
 }

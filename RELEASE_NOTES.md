@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.9
+
+Die Wetterfolie nutzt abgestimmte Kontrastfarben für Tag und Nacht. Temperatur und Windwert bleiben auch auf dunklem Hintergrund gut lesbar.
+
+Datum, Wetterbeschreibungen, Vorhersagekarten, Wettersymbole und Trennlinien sind auf die jeweilige Hintergrundfarbe abgestimmt.
+
+---
+
 # GottesdienstRegie 0.99.8
 
 Die Tabellenansicht „Nächste Veranstaltungen“ übernimmt die dunkelgrüne Kopfzeile, das Gemeindelogo, Datum und Uhrzeit sowie die Spalten und Fußzeile der Saalscreen-Vorlage. Die Kopfzeile lässt sich im Folieneditor ein- und ausschalten.

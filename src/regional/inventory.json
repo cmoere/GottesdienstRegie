@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": true,
-  "sourceFingerprint": "79b0930c566abc976cab452f8d5add7f18931dafc17877534bd1ba8dee15c198",
+  "sourceFingerprint": "907cb100a690fbc5a702a1b047ed4982c433054211a9f2dedbf48387eb54f71e",
   "note": "Reviewed complete v98 source inventory; all31 interface/native/help/release resources checked separately. Protocol tokens, internal prompts and generated-document defaults have exact entry-level reviews.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -84281,6 +84281,62 @@
       "text": "Kopfzeile mit Logo, Datum und Uhrzeit anzeigen",
       "source": "shared/regional/v98Templates.json",
       "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.9].overview.label",
+      "text": "Besser lesbare Wetterfolie",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.9].overview.text",
+      "text": "Die Wetterfolie nutzt abgestimmte Kontrastfarben für Tag und Nacht. Temperatur und Windwert bleiben auch auf dunklem Hintergrund gut lesbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.9].sections.fixed.0.label",
+      "text": "Kontrast von Beschriftungen und Symbolen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.9].sections.fixed.0.text",
+      "text": "Datum, Wetterbeschreibungen, Vorhersagekarten, Wettersymbole und Trennlinien sind auf die jeweilige Hintergrundfarbe abgestimmt.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.9].sections.known.0.label",
+      "text": "Hinweise zum Live-Betrieb",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.9].sections.known.0.text",
+      "text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.9].sections.known.1.label",
+      "text": "Originalgetreue PowerPoint-Wiedergabe",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.9].sections.known.1.text",
+      "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+      "source": "public/releases.json",
+      "context": "release-history",
       "status": "app-owned"
     }
   ]

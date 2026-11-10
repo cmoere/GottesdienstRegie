@@ -20,7 +20,7 @@ describe('complete German documentation translation source',()=>{
     expect(source.help['Erste Schritte'].body).toContain('## ');
   });
   it('keeps all historical release text fields keyed by stable version identity',()=>{
-    expect(Object.keys(source.releases)).toHaveLength(1756);
+    expect(Object.keys(source.releases)).toHaveLength(1764);
     expect(source.releases['versions[0.96].builds[0.96.0].overview.label']).toBe('Verbesserte Vorschauen und verbundene Geräte');
     expect(source.releases['versions[0.95].builds[0.95.0].overview.label']).toBeTruthy();
     expect(source.releases['versions[0.94].builds[0.94.0].overview.label']).toBeTruthy();

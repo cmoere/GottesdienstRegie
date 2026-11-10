@@ -100,13 +100,39 @@
 .weather-effect-layer[data-reduced-motion=true] g{animation:none}
 @media(prefers-reduced-motion:reduce){.weather-effect-layer g{animation:none}}
 
+.native-weather {
+ --weather-text:#132334;
+ --weather-muted:#385e6a;
+ --weather-icon:#315765;
+ --weather-sun:#4f762c;
+ --weather-rule:#527381;
+ --weather-card:#f3f6f7;
+ color:var(--weather-text);
+}
 .native-weather[data-daylight=night][data-weather-condition] {
+ --weather-text:#eef3f8;
+ --weather-muted:#b5cfdb;
+ --weather-icon:#a4c9dc;
+ --weather-sun:#a0c478;
+ --weather-rule:#819eae;
+ --weather-card:#18283c;
  background:linear-gradient(145deg,#111d2e,#263750);
- color:#eef3f8;
 }
-.native-weather[data-daylight=night] :is(.weather-current,.weather-forecast article,header,footer) {
- color:#dce8f3;
+.native-weather :is(.weather-current,.weather-current strong,.weather-forecast article) {
+ color:var(--weather-text);
 }
-.native-weather[data-daylight=night] .weather-forecast article {
- background:#18283c;
+.native-weather :is(header>span,p,.weather-forecast h3,footer) {
+ color:var(--weather-muted);
+}
+.native-weather .weather-icon {
+ color:var(--weather-icon);
+}
+.native-weather :is(.weather-sun>circle,.weather-lightning>path) {
+ fill:var(--weather-sun);
+}
+.native-weather header {border-bottom-color:var(--weather-rule)}
+.native-weather .weather-tomorrow {border-left-color:var(--weather-rule)}
+.native-weather .weather-forecast article {
+ border-top-color:var(--weather-sun);
+ background:var(--weather-card);
 }

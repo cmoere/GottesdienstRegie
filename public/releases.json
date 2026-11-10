@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
-          "version": "0.99.8",
+          "version": "0.99.9",
           "releaseDate": "2026-11-10",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Besser lesbare Wetterfolie",
+              "en": "More readable weather slide"
+            },
+            "text": {
+              "de": "Die Wetterfolie nutzt abgestimmte Kontrastfarben für Tag und Nacht. Temperatur und Windwert bleiben auch auf dunklem Hintergrund gut lesbar.",
+              "en": "The weather slide uses separate high-contrast palettes for day and night. Temperature and wind readings remain legible on dark backgrounds."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Kontrast von Beschriftungen und Symbolen",
+                  "en": "Contrast for labels and icons"
+                },
+                "text": {
+                  "de": "Datum, Wetterbeschreibungen, Vorhersagekarten, Wettersymbole und Trennlinien sind auf die jeweilige Hintergrundfarbe abgestimmt.",
+                  "en": "The date, weather descriptions, forecast cards, weather icons and dividers have colors matched to their backgrounds."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.99.8",
+          "releaseDate": "2026-11-10",
+          "current": false,
           "overview": {
             "label": {
               "de": "Veranstaltungsfolie im Saalscreen-Design",
