@@ -1,4 +1,5 @@
 import {nativeBaseTemplates,type NativeRegionalTextKey} from '../shared/regional/nativeBase';
+import {annotationColors} from '../shared/liveAnnotations';
 const escapeHtml=(value:string)=>value.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]!));
 export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en',token:string,copy:(key:NativeRegionalTextKey)=>string=key=>nativeBaseTemplates[key]){
  const labels=language==='de'?{current:copy('remoteCurrent'),next:copy('remoteNext'),waiting:copy('remoteWaiting'),lost:copy('remoteLost'),previous:copy('remotePrevious'),advance:copy('remoteAdvance'),draw:copy('remoteDraw'),clear:copy('remoteClear'),notes:copy('remoteNotes'),order:copy('remoteOrder'),start:copy('remoteStart')}:{"current":"Current","next":"Up next","waiting":"Waiting for presentation …","lost":"Connection lost","previous":"Previous","advance":"Next","draw":"Annotate","clear":"Clear annotations","notes":"Notes","order":"Order of service","start":"Starts in"};
@@ -6,6 +7,11 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  Object.assign(labels,language==='de'
    ? {connecting:copy('remoteConnecting'),connected:copy('remoteConnected'),pending:copy('remotePending'),unconfirmed:copy('remoteUnconfirmed'),commandError:copy('remoteCommandError')}
    : {connecting:'Connecting …',connected:'Connected',pending:'Changing slide …',unconfirmed:'Slide change not confirmed.',commandError:'Could not send command.'});
+ const colorNames=language==='de'
+   ? [copy('remoteRed'),copy('remoteGreen'),copy('remoteWhite'),copy('remoteBlack'),copy('remoteYellow'),copy('remoteBlue'),copy('remotePurple'),copy('remoteOrange'),copy('remotePink'),copy('remoteCyan')]
+   : ['Red','Green','White','Black','Yellow','Blue','Purple','Orange','Pink','Cyan'];
+ const exitFullscreen=language==='de'?copy('remoteExitFullscreen'):'Exit fullscreen';
+ const swatches=annotationColors.map((color,index)=>`<button type="button" class="swatch" data-color="${color}" style="--swatch:${color}" aria-pressed="${index===0}" aria-label="${escapeHtml(colorNames[index])}" title="${escapeHtml(colorNames[index])}"><span aria-hidden="true"></span></button>`).join('');
  const safeLabels=Object.fromEntries(Object.entries(labels).map(([id,text])=>[id,escapeHtml(text)]));
  return `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="referrer" content="no-referrer"><title>${escapeHtml(name)} · GottesdienstRegie</title>
  <style>
@@ -40,6 +46,18 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  .extras{display:grid;gap:12px;margin:12px 0}
  .extras:not(:has(>section:not([hidden]))){display:none}
  .tool-row label{display:grid;gap:4px;font-size:14px;color:var(--muted)}
+ .palette{display:flex;flex-wrap:wrap;gap:4px;width:100%}
+ .palette .swatch{padding:0;width:46px;min-height:46px;display:grid;place-items:center}
+ .palette .swatch span{display:block;width:23px;height:23px;border:1px solid #888;border-radius:50%;background:var(--swatch)}
+ .palette .swatch[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--selected-text)}
+ #fullscreen{width:46px;padding:0;display:grid;place-items:center}
+ .fullscreen-icon{position:relative;width:20px;height:20px}
+ .fullscreen-icon i{position:absolute;width:7px;height:7px;border:2px solid currentColor}
+ .fullscreen-icon i:nth-child(1){top:0;left:0;border-right:0;border-bottom:0}
+ .fullscreen-icon i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0}
+ .fullscreen-icon i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0}
+ .fullscreen-icon i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0}
+ #fullscreen[aria-pressed=true] i{transform:rotate(180deg)}
  #thickness{min-height:28px;accent-color:var(--accent);max-width:100%}
  button,select{padding:10px 14px;min-height:46px;max-width:100%;background:var(--control);color:var(--text);border:1px solid var(--border);border-radius:9px;font:inherit}
  button:not(:disabled),select:not(:disabled){cursor:pointer}
@@ -52,18 +70,23 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  #command-status:empty,#share-status:empty,#countdown:empty,[hidden]{display:none!important}
  @media(max-width:680px){main{grid-template-columns:minmax(0,1fr)}}
 </style></head>
- <body><header><div><h1 id="title">${escapeHtml(name)}</h1><div class="status-row"><span id="status" role="status" data-state="loading">${safeLabels.connecting}</span><span id="live-status" hidden></span></div></div><div class="header-actions"><div id="clock"></div><div id="countdown"></div><button id="fullscreen">${safeLabels.fullscreen}</button></div></header>
+ <body><header><div><h1 id="title">${escapeHtml(name)}</h1><div class="status-row"><span id="status" role="status" data-state="loading">${safeLabels.connecting}</span><span id="live-status" hidden></span></div></div><div class="header-actions"><div id="clock"></div><div id="countdown"></div><button id="fullscreen" type="button" aria-label="${safeLabels.fullscreen}" title="${safeLabels.fullscreen}" aria-pressed="false"><span class="fullscreen-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button></div></header>
  <main><section class="card" id="current-card"><h2>${safeLabels.current}</h2><div id="frame" hidden><img id="mirror" alt="${safeLabels.current}"><canvas id="drawing"></canvas></div><div id="current">${safeLabels.waiting}</div></section><section class="card" id="next-card"><h2>${safeLabels.next}</h2><div class="next-frame"><img id="next-mirror" alt="${safeLabels.next}" hidden></div><div id="next">${safeLabels.nextWaiting}</div></section></main>
- <div class="extras"><section class="card" id="tools" hidden><h2>${safeLabels.draw}</h2><div class="tool-row"><button id="draw" aria-pressed="false">${safeLabels.draw}</button><select id="tool" aria-label="${safeLabels.draw}"><option value="pen">${safeLabels.pen}</option><option value="line">${safeLabels.line}</option><option value="arrow">${safeLabels.arrow}</option><option value="rectangle">${safeLabels.rectangle}</option><option value="ellipse">${safeLabels.ellipse}</option></select><label>${safeLabels.thickness}<input id="thickness" type="range" min="2" max="16" step="1" value="8"></label><select id="color" aria-label="${language==='de'?escapeHtml(copy('remoteColor')):'Color'}"><option value="#ff3b30">${language==='de'?escapeHtml(copy('remoteRed')):'Red'}</option><option value="#ffd60a">${language==='de'?escapeHtml(copy('remoteYellow')):'Yellow'}</option><option value="#699f3e">${language==='de'?escapeHtml(copy('remoteGreen')):'Green'}</option><option value="#ffffff">${language==='de'?escapeHtml(copy('remoteWhite')):'White'}</option></select><button id="clear">${safeLabels.clear}</button></div></section>
+ <div class="extras"><section class="card" id="tools" hidden><h2>${safeLabels.draw}</h2><div class="tool-row"><button id="draw" aria-pressed="false">${safeLabels.draw}</button><select id="tool" aria-label="${safeLabels.draw}"><option value="pen">${safeLabels.pen}</option><option value="line">${safeLabels.line}</option><option value="arrow">${safeLabels.arrow}</option><option value="rectangle">${safeLabels.rectangle}</option><option value="ellipse">${safeLabels.ellipse}</option></select><label>${safeLabels.thickness}<input id="thickness" type="range" min="2" max="16" step="1" value="8"></label><div class="palette" role="group" aria-label="${language==='de'?escapeHtml(copy('remoteColor')):'Color'}">${swatches}</div><button id="clear">${safeLabels.clear}</button></div></section>
  <section id="notes-card" class="card" hidden><h2>${safeLabels.notes}</h2><div id="notes"></div></section><section id="order-card" class="card" hidden><h2>${safeLabels.order}</h2><ol id="order"></ol></section>
  <section id="sharing" class="card" hidden><button id="share-start">${safeLabels.shareStart}</button><button id="share-stop" hidden>${safeLabels.shareStop}</button><p id="share-status"></p></section>
  </div><footer ${kind==='monitor'?'hidden':''}><p id="command-status" role="status"></p><button data-action="previous" disabled>◀ ${safeLabels.previous}</button><button data-action="next" disabled>${safeLabels.advance} ▶</button></footer>
  <script>
  const token=${JSON.stringify(token).replaceAll('<','\\u003c')},labels=${JSON.stringify(labels).replaceAll('<','\\u003c')},q=s=>document.querySelector(s),canvas=q('#drawing'),ctx=canvas.getContext('2d');const navigationButtons=[...document.querySelectorAll('[data-action]')];
  let connected=false, pendingNavigation=null;
- let currentTool='pen',currentWidth=.004,currentColor='#ff3b30',state={},draw=false,points=[],take='',alive=true,lastFrame='';
+ let chosenColor=${JSON.stringify(annotationColors[0])};
+ for(const swatch of document.querySelectorAll('.swatch'))swatch.onclick=()=>{
+   chosenColor=swatch.dataset.color;
+   for(const option of document.querySelectorAll('.swatch'))option.setAttribute('aria-pressed',String(option===swatch));
+ };
+ let currentTool='pen',currentWidth=.004,currentColor=chosenColor,state={},draw=false,points=[],take='',alive=true,lastFrame='';
  const text=x=>typeof x==='string'?x:x&&typeof x==='object'?(typeof x.body==='string'&&x.body.trim()?x.body:typeof x.title==='string'?x.title:'—'):'—';
- async function command(action,extra={}){try{const r=await fetch('/api/command',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,commandId:crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),action,timestamp:Date.now(),...extra}),signal:AbortSignal.timeout(4000)});return r.ok}catch{return false}}
+ async function command(action,extra={}){try{const r=await fetch('/api/command',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,commandId:crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),action,timestamp:Date.now(),...extra}),signal:AbortSignal.timeout?.(4000)});return r.ok}catch{return false}}
  function setConnection(status){
    connected=status==='connected';
    q('#status').dataset.state=status;
@@ -97,50 +120,96 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  }
  function clearLocal(){points=[];ctx.clearRect(0,0,canvas.width,canvas.height)}
  function setDraw(next){draw=next;canvas.classList.toggle('enabled',draw);q('#draw').setAttribute('aria-pressed',String(draw));if(!draw)clearLocal()}
- async function poll(){if(!alive)return;try{const r=await fetch('/api/state?token='+encodeURIComponent(token),{cache:'no-store',signal:AbortSignal.timeout(3500)});if(!r.ok)throw 0;state=await r.json();q('#title').textContent=state.title||${JSON.stringify(name).replaceAll('<','\\u003c')};q('#current').textContent=text(state.current);q('#next').textContent=state.next?text(state.next):labels.nextWaiting;setConnection('connected');
+ async function poll(){if(!alive)return;try{const r=await fetch('/api/state?token='+encodeURIComponent(token),{cache:'no-store',signal:AbortSignal.timeout?.(3500)});if(!r.ok)throw 0;state=await r.json();q('#title').textContent=state.title||${JSON.stringify(name).replaceAll('<','\\u003c')};q('#current').textContent=text(state.current);q('#next').textContent=state.next?text(state.next):labels.nextWaiting;setConnection('connected');
  const live=q('#live-status');
  live.dataset.live=String(Boolean(state.onAir));
  live.textContent=state.onAir?'ON AIR':'OFF AIR';
  if(!state.onAir){q('#frame').hidden=true;q('#current').hidden=false;}
  if(pendingNavigation?.accepted&&(pendingNavigation.take!==state.annotationTakeId||pendingNavigation.slide!==state.current?.id))finishNavigation();
+ if(!state.next||shownNext!==nextRevision()){q('#next-mirror').hidden=true;q('#next').hidden=false;}
  const config=state.monitor||{};document.body.dataset.layout=config.layout||'current-next';for(const [id,key]of [['#current-card','showCurrent'],['#next-card','showNext'],['#clock','showClock'],['#countdown','showCountdown']])q(id).hidden=config[key]===false;
  q('#notes-card').hidden=!state.notes;q('#notes').textContent=state.notes||'';q('#order-card').hidden=!state.order?.length;q('#order').replaceChildren(...(state.order||[]).map(value=>{const li=document.createElement('li');li.textContent=value;return li}));
  q('#sharing').hidden=!(state.permissions||[]).includes('remote.share');q('#tools').hidden=!state.canAnnotate;for(const button of document.querySelectorAll('[data-action]'))button.hidden=!(state.permissions||[]).includes('remote.'+button.dataset.action);
- if(take!==state.annotationTakeId){take=state.annotationTakeId||'';clearLocal()}if(!state.canAnnotate||!state.onAir)setDraw(false);
+ if(take!==state.annotationTakeId){take=state.annotationTakeId||'';clearLocal();q('#frame').hidden=true;q('#current').hidden=false}if(!state.canAnnotate||!state.onAir)setDraw(false);
  }catch{setConnection('lost');q('#frame').hidden=true;q('#current').hidden=false;
- q('#next-mirror').hidden=true;q('#next').hidden=false;setDraw(false)}finally{if(alive)setTimeout(poll,500)}}
+ q('#next-mirror').hidden=true;q('#next').hidden=false;shownNext=undefined;setDraw(false)}finally{if(alive)setTimeout(poll,500)}}
+ async function previewImage(path){
+   const response=await fetch(path+'?token='+encodeURIComponent(token),{cache:'no-store',signal:AbortSignal.timeout?.(3500)});
+   if(!response.ok)throw Error('UNAVAILABLE');
+   const url=URL.createObjectURL(await response.blob());
+   const image=new Image();
+   image.src=url;
+   try{await image.decode();return url}
+   catch(error){URL.revokeObjectURL(url);throw error}
+ }
+ let visibleTake, lastLiveFrameAt=0;
  async function frame(){
    if(!alive)return;
+   const started=performance.now();
+   const requestedTake=state.annotationTakeId;
    try{
-     if(!connected||!state.onAir||q('#current-card').hidden)return;
-     const response=await fetch('/api/frame?token='+encodeURIComponent(token),{cache:'no-store',signal:AbortSignal.timeout(3500)});
-     if(!response.ok)throw Error('UNAVAILABLE');
-     const blob=await response.blob();
-     if(!alive||!connected||!state.onAir)return;
-     const url=URL.createObjectURL(blob);
+     if(!connected||!state.onAir||q('#current-card').hidden||document.hidden)return;
+     const url=await previewImage('/api/frame');
+     if(!alive||!connected||!state.onAir||requestedTake!==state.annotationTakeId){URL.revokeObjectURL(url);return}
      q('#mirror').src=url;
      q('#frame').hidden=false;
      q('#current').hidden=true;
      if(lastFrame)URL.revokeObjectURL(lastFrame);
      lastFrame=url;
+     visibleTake=requestedTake;
+     lastLiveFrameAt=performance.now();
    }catch{
-     q('#frame').hidden=true;
-     q('#current').hidden=false;
-     setDraw(false);
-   }finally{if(alive)setTimeout(frame,500)}
+     if(visibleTake!==state.annotationTakeId||performance.now()-lastLiveFrameAt>1500){
+       q('#frame').hidden=true;
+       q('#current').hidden=false;
+       setDraw(false);
+     }
+   }finally{if(alive)setTimeout(frame,Math.max(40,200-(performance.now()-started)))}
  }
  function clock(){q('#clock').textContent=new Date().toLocaleTimeString(${JSON.stringify(language==='de'?'de-DE':'en-GB')},{hour:'2-digit',minute:'2-digit',second:'2-digit'});const seconds=Math.ceil((Number(state.serviceCountdownAtMs)-Date.now())/1000);q('#countdown').textContent=seconds>0?labels.start+' '+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0'):''}clock();setInterval(clock,1000);
  function point(e){const r=canvas.getBoundingClientRect();return{x:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y:Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))}}
  function paint(){canvas.width=1920;canvas.height=1080;if(points.length<2)return;ctx.strokeStyle=currentColor;ctx.lineWidth=currentWidth*1920;ctx.lineCap='round';ctx.lineJoin='round';const a=points[0],b=points.at(-1),x=a.x*1920,y=a.y*1080,x2=b.x*1920,y2=b.y*1080;ctx.beginPath();if(currentTool==='rectangle')ctx.strokeRect(Math.min(x,x2),Math.min(y,y2),Math.abs(x2-x),Math.abs(y2-y));else if(currentTool==='ellipse'){ctx.ellipse((x+x2)/2,(y+y2)/2,Math.abs(x2-x)/2,Math.abs(y2-y)/2,0,0,Math.PI*2);ctx.stroke()}else{if(currentTool==='pen')points.forEach((p,i)=>i?ctx.lineTo(p.x*1920,p.y*1080):ctx.moveTo(p.x*1920,p.y*1080));else{ctx.moveTo(x,y);ctx.lineTo(x2,y2)}ctx.stroke();if(currentTool==='arrow'){const angle=Math.atan2(y2-y,x2-x),head=Math.max(14,currentWidth*1920*3);ctx.beginPath();ctx.moveTo(x2-head*Math.cos(angle-Math.PI/6),y2-head*Math.sin(angle-Math.PI/6));ctx.lineTo(x2,y2);ctx.lineTo(x2-head*Math.cos(angle+Math.PI/6),y2-head*Math.sin(angle+Math.PI/6));ctx.stroke()}}}
- canvas.onpointerdown=e=>{if(!draw||!take||!state.onAir)return;canvas.setPointerCapture(e.pointerId);currentTool=q('#tool').value;currentWidth=Number(q('#thickness').value)/1920;currentColor=q('#color').value;points=[point(e)];paint()};canvas.onpointermove=e=>{if(!draw||!canvas.hasPointerCapture(e.pointerId))return;if(currentTool==='pen'){points.push(point(e));if(points.length>512)points=points.filter((_,i)=>i%2===0)}else points=[points[0],point(e)];paint()};canvas.onpointerup=async e=>{if(!canvas.hasPointerCapture(e.pointerId))return;canvas.releasePointerCapture(e.pointerId);const p=point(e);if(currentTool==='pen')points.push(p);else points=[points[0],p];const stroke={id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),tool:currentTool,color:currentColor,width:currentWidth,points:points.filter((_,i)=>i%Math.max(1,Math.ceil(points.length/256))===0)};await command('annotate',{takeId:take,stroke});clearLocal()};canvas.onpointercancel=clearLocal;
+ canvas.onpointerdown=e=>{if(!draw||!take||!state.onAir)return;canvas.setPointerCapture(e.pointerId);currentTool=q('#tool').value;currentWidth=Number(q('#thickness').value)/1920;currentColor=chosenColor;points=[point(e)];paint()};canvas.onpointermove=e=>{if(!draw||!canvas.hasPointerCapture(e.pointerId))return;if(currentTool==='pen'){points.push(point(e));if(points.length>512)points=points.filter((_,i)=>i%2===0)}else points=[points[0],point(e)];paint()};canvas.onpointerup=async e=>{if(!canvas.hasPointerCapture(e.pointerId))return;canvas.releasePointerCapture(e.pointerId);const p=point(e);if(currentTool==='pen')points.push(p);else points=[points[0],p];const stroke={id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),tool:currentTool,color:currentColor,width:currentWidth,points:points.filter((_,i)=>i%Math.max(1,Math.ceil(points.length/256))===0)};await command('annotate',{takeId:take,stroke});clearLocal()};canvas.onpointercancel=clearLocal;
  let sharePc=null,shareStream=null,shareId='',shareGeneration=0,shareTimer=0;
  async function shareRequest(value){const response=await fetch('/api/share',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,...value})});if(!response.ok)throw Error('SHARE_FAILED');return response.json()}
  async function stopShare(notify=true){shareGeneration++;clearTimeout(shareTimer);const oldId=shareId;shareId='';sharePc?.close();sharePc=null;shareStream?.getTracks().forEach(track=>track.stop());shareStream=null;q('#share-stop').hidden=true;q('#share-start').disabled=false;if(notify&&oldId)await shareRequest({action:'stop',id:oldId}).catch(()=>{});}
  async function iceReady(pc){if(pc.iceGatheringState==='complete')return;await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>{pc.removeEventListener('icegatheringstatechange',check);reject(Error('ICE_TIMEOUT'))},10000);function check(){if(pc.iceGatheringState==='complete'){clearTimeout(timeout);pc.removeEventListener('icegatheringstatechange',check);resolve()}}pc.addEventListener('icegatheringstatechange',check);check()})}
  async function pollShare(generation){if(!alive||generation!==shareGeneration||!shareId)return;try{const response=await fetch('/api/share?token='+encodeURIComponent(token)+'&id='+encodeURIComponent(shareId),{cache:'no-store'});if(!response.ok)throw Error('ENDED');const result=await response.json();if(generation!==shareGeneration)return;if(result.answer&&!sharePc.currentRemoteDescription)await sharePc.setRemoteDescription(result.answer);q('#share-status').textContent=labels.shareWaiting;shareTimer=setTimeout(()=>pollShare(generation),1000)}catch{if(generation===shareGeneration){await stopShare(false);q('#share-status').textContent=labels.shareError}}}
  q('#share-start').onclick=async()=>{if(location.protocol!=='https:'||!isSecureContext){q('#share-status').textContent=labels.shareSecure;return}if(!navigator.mediaDevices?.getDisplayMedia){q('#share-status').textContent=labels.shareUnsupported;return}const generation=++shareGeneration;q('#share-start').disabled=true;try{const stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:15,max:30},width:{max:1920},height:{max:1080}},audio:false});if(generation!==shareGeneration||!alive){stream.getTracks().forEach(track=>track.stop());return}shareStream=stream;const pc=new RTCPeerConnection({iceServers:[]});sharePc=pc;stream.getVideoTracks().forEach(track=>{pc.addTrack(track,stream);track.onended=()=>void stopShare()});q('#share-stop').hidden=false;pc.onconnectionstatechange=()=>{if(generation===shareGeneration&&pc.connectionState==='failed'){q('#share-status').textContent=labels.shareError;void stopShare()}};await pc.setLocalDescription(await pc.createOffer());await iceReady(pc);if(generation!==shareGeneration)return;const result=await shareRequest({action:'offer',description:pc.localDescription.toJSON()});if(generation!==shareGeneration){await shareRequest({action:'stop',id:result.id});return}shareId=result.id;void pollShare(generation)}catch{if(generation===shareGeneration){await stopShare();q('#share-status').textContent=labels.shareError}}};q('#share-stop').onclick=()=>void stopShare();window.addEventListener('pagehide',()=>{const id=shareId;void stopShare(false);if(id)navigator.sendBeacon('/api/share',new Blob([JSON.stringify({token,action:'stop',id})],{type:'application/json'}))});
- let nextFrameUrl='';async function nextFrame(){if(!alive)return;if(!connected||q('#next-card').hidden||document.body.dataset.layout==='mirror'){setTimeout(nextFrame,1000);return}try{const response=await fetch('/api/next-frame?token='+encodeURIComponent(token),{cache:'no-store',signal:AbortSignal.timeout(3500)});if(!response.ok)throw Error('UNAVAILABLE');const url=URL.createObjectURL(await response.blob());if(!alive||!connected){URL.revokeObjectURL(url);if(alive)setTimeout(nextFrame,1000);return}q('#next-mirror').src=url;q('#next-mirror').hidden=false;q('#next').hidden=true;if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl);nextFrameUrl=url}catch{q('#next-mirror').hidden=true;q('#next').hidden=false;q('#next').textContent=state.next?text(state.next):labels.nextWaiting}if(alive)setTimeout(nextFrame,1000)}window.addEventListener('pagehide',()=>{if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl)});void nextFrame();
- q('#fullscreen').onclick=()=>{if(document.fullscreenElement)void document.exitFullscreen();else void document.documentElement.requestFullscreen?.().catch(()=>{})};
+ let nextFrameUrl='', shownNext;
+ const nextRevision=()=>state.nextPreviewRevision??state.next?.id??state.next;
+ async function nextFrame(){
+   if(!alive)return;
+   const revision=nextRevision();
+   let retry=250;
+   try{
+     if(!connected||!state.next||revision===shownNext||q('#next-card').hidden||document.body.dataset.layout==='mirror'||document.hidden)return;
+     const url=await previewImage('/api/next-frame');
+     if(!alive||!connected||revision!==nextRevision()){URL.revokeObjectURL(url);return}
+     q('#next-mirror').src=url;
+     q('#next-mirror').hidden=false;
+     q('#next').hidden=true;
+     if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl);
+     nextFrameUrl=url;
+     shownNext=revision;
+   }catch{retry=600}
+   finally{if(alive)setTimeout(nextFrame,retry)}
+ }
+ window.addEventListener('pagehide',()=>{if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl)});
+ void nextFrame();
+ const fullscreen=q('#fullscreen');
+ fullscreen.hidden=!document.fullscreenEnabled;
+ document.addEventListener('fullscreenchange',()=>{
+   const active=Boolean(document.fullscreenElement);
+   const label=active?${JSON.stringify(exitFullscreen).replaceAll('<','\\u003c')}:labels.fullscreen;
+   fullscreen.setAttribute('aria-pressed',String(active));
+   fullscreen.setAttribute('aria-label',label);
+   fullscreen.title=label;
+ });
+ fullscreen.onclick=()=>{
+   const action=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+   void action.catch(()=>{});
+ };
  q('#draw').onclick=()=>setDraw(!draw);q('#clear').onclick=()=>{clearLocal();void command('annotation-clear')};for(const button of navigationButtons)button.onclick=()=>void navigate(button.dataset.action);window.addEventListener('pagehide',()=>{alive=false;clearTimeout(pendingNavigation?.timer);if(lastFrame)URL.revokeObjectURL(lastFrame)});poll();frame();
  </script></body></html>`;
 }

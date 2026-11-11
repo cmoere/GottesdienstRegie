@@ -2388,7 +2388,10 @@
     "eventOverviewHeaderVisible": "Kopfzeile mit Logo, Datum und Uhrzeit anzeigen",
     "webOnline": "Online",
     "webOffline": "Offline",
-    "webUnsaved": "Ungespeicherte Änderungen"
+    "webUnsaved": "Ungespeicherte Änderungen",
+    "remoteVerifyCertificate": "Vergleiche den SHA-256-Fingerabdruck des Zertifikats auf deinem Gerät mit der Anzeige hier. Richte das Vertrauen nur für dieses geprüfte Zertifikat ein.",
+    "remotePrivateLink": "Dieser Link erteilt Zugriff mit den freigegebenen Rechten. Teile ihn nur mit der vorgesehenen Person.",
+    "remoteExportCertificate": "Öffentliches Zertifikat speichern"
   },
   "native": {
     "updateAvailableTitle": "Niege Verschoon is dor",
@@ -2519,6 +2522,13 @@
     "remoteConnected": "Verbunden",
     "remotePending": "Folienwechsel wird verarbeitet …",
     "remoteUnconfirmed": "Folienwechsel nicht bestätigt.",
-    "remoteCommandError": "Befehl konnte nicht gesendet werden."
+    "remoteCommandError": "Befehl konnte nicht gesendet werden.",
+    "remoteBlack": "Schwarz",
+    "remoteBlue": "Blau",
+    "remotePurple": "Violett",
+    "remoteOrange": "Orange",
+    "remotePink": "Pink",
+    "remoteCyan": "Hellblau",
+    "remoteExitFullscreen": "Vollbild verlassen"
   }
 }

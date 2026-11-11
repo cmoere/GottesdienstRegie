@@ -2284,6 +2284,14 @@
     "versions[0.99].builds[0.99.10].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.10].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.10].sections.known.1.label": "Originalgetreui PowerPoint-Wiedergab",
-    "versions[0.99].builds[0.99.10].sections.known.1.text": "D originalgetreui Wiedergab bruucht wiiterhin Windows un installierts Microsoft PowerPoint. D neie Vorbereitigs- un Diagnosefunktione ersetze de Wiedergabewäg nit."
+    "versions[0.99].builds[0.99.10].sections.known.1.text": "D originalgetreui Wiedergab bruucht wiiterhin Windows un installierts Microsoft PowerPoint. D neie Vorbereitigs- un Diagnosefunktione ersetze de Wiedergabewäg nit.",
+    "versions[0.99].builds[0.99.11].overview.label": "HTTPS für Personal Monitor und Web-Steuerung",
+    "versions[0.99].builds[0.99.11].overview.text": "Personal Monitor und Web-Steuerung verwenden HTTPS im lokalen Netz. Das öffentliche Zertifikat lässt sich in der Regie speichern. Bestehende Monitore bleiben eingerichtet. Kopiere ihre neuen Links oder QR-Codes aus der Regie.",
+    "versions[0.99].builds[0.99.11].sections.fixed.0.label": "Schnellere Vorschau und neue Markierungsfarben",
+    "versions[0.99].builds[0.99.11].sections.fixed.0.text": "Die Live-Vorschau ruft bis zu fünf Bilder pro Sekunde ab. Die nächste Folie wird bei Änderungen neu übertragen. Zehn Farbfelder erleichtern die Auswahl der Markierungsfarbe. Vollbild und Vollbild verlassen haben eigene Symbole.",
+    "versions[0.99].builds[0.99.11].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.11].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.11].sections.known.1.label": "Originalgetreui PowerPoint-Wiedergab",
+    "versions[0.99].builds[0.99.11].sections.known.1.text": "D originalgetreui Wiedergab bruucht wiiterhin Windows un installierts Microsoft PowerPoint. D neie Vorbereitigs- un Diagnosefunktione ersetze de Wiedergabewäg nit."
   }
 }

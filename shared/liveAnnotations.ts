@@ -2,7 +2,7 @@ export type AnnotationTool='pen'|'line'|'arrow'|'rectangle'|'ellipse';
 export type AnnotationPoint={x:number;y:number};
 export type AnnotationStroke={tool?:AnnotationTool;id:string;color:string;width:number;points:AnnotationPoint[]};
 export type AnnotationState={revision:number;takeId:string;strokes:AnnotationStroke[]};
-export const annotationColors=['#ff3b30','#699f3e','#ffffff','#000000','#ffd60a'] as const;
+export const annotationColors=['#ff3b30','#699f3e','#ffffff','#000000','#ffd60a','#0a84ff','#bf5af2','#ff9f0a','#ff375f','#64d2ff'] as const;
 const finite=(value:unknown,min:number,max:number):value is number=>typeof value==='number'&&Number.isFinite(value)&&value>=min&&value<=max;
 export function readAnnotationStroke(value:unknown):AnnotationStroke|undefined{
  if(!value||typeof value!=='object'||Array.isArray(value))return;

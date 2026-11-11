@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": true,
-  "sourceFingerprint": "4e7a001b36814b48eb3cac5b9ac36fb05b1a3b90b265a6f246d60657fc57e118",
+  "sourceFingerprint": "fe24b16ec62401a1667ff8067fe391644d1315494593ce0cfd7ca405d19e1296",
   "note": "Reviewed complete v98 source inventory; all31 interface/native/help/release resources checked separately. Protocol tokens, internal prompts and generated-document defaults have exact entry-level reviews.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -25816,17 +25816,6 @@
       "technicalReviewHash": "f02d47e47183d353fd657dbbee389ed5ff4719b57e4d6b2abd5febb442a443fb"
     },
     {
-      "key": "source.0b798beb8b9b4e42b1d4.1",
-      "text": "Öffne die lokale HTTPS-Adresse und bestätige die Verbindung auf deinem Gerät. Das Zertifikat wird nicht automatisch im System-Vertrauensspeicher installiert.",
-      "source": "src/RemoteCenter.tsx",
-      "line": 25,
-      "context": "operator-copy-resource",
-      "status": "excluded",
-      "resourceKey": "ui.v96HttpsTrust",
-      "exclusionReason": "Explicit operator-copy binding resolves canonical resource ui.v96HttpsTrust; locale coverage is validated against that resource.",
-      "technicalReviewHash": "36c4ca1055a6376666f69126372f54c4a59d9c45e2b7e45311ef60e0a216977f"
-    },
-    {
       "key": "source.574f9d63183891305e29.1",
       "text": "Zertifikat-Fingerabdruck",
       "source": "src/RemoteCenter.tsx",
@@ -25899,16 +25888,6 @@
       "status": "excluded",
       "exclusionReason": "Reviewed 2026-10-28: literal Material Symbols glyph token inside the actual material-symbols span, not a caption. Changing this token would select a different glyph. Adjacent operator labels and accessible names remain independently inventoried.",
       "technicalReviewHash": "b4af830ae254acc2c3a8cba118974dd8825a19d4b3a45f8ccd71ac66f570a78d"
-    },
-    {
-      "key": "source.186ce5044b37b9e53067.1",
-      "text": "· /monitor/",
-      "source": "src/RemoteCenter.tsx",
-      "line": 25,
-      "context": "jsx-text:small",
-      "status": "excluded",
-      "exclusionReason": "2026-10-30: Reviewed monitor/remote creation form: Prediger Monitor/iPad Prediger initialize editable persisted names; /monitor/ is the endpoint path; English is its language autonym. Actual form captions and actions use tx; do not rename user/device identities on UI-region changes.",
-      "technicalReviewHash": "cf1ce6fe29ea29d7d0043f5632c86a590fc573affee755ddfc429b06ad41921d"
     },
     {
       "key": "source.a2bc7387f93e0143f3a0.1",
@@ -26519,17 +26498,6 @@
       "resourceKey": "ui.operatorSource_1df3b84eed06a823",
       "exclusionReason": "Explicit operator-copy binding resolves canonical resource ui.operatorSource_1df3b84eed06a823; locale coverage is validated against that resource.",
       "technicalReviewHash": "44bc31ed25103637d24b64c59f1b44fb9addabe51c3d78b070acfc7795df6f35"
-    },
-    {
-      "key": "source.dde33bc82713ae977143.1",
-      "text": "Ein Steuerungslink erteilt Zugriff mit den freigegebenen Rechten. Teile ihn nur mit der vorgesehenen Person.",
-      "source": "src/RemoteQrDialog.tsx",
-      "line": 15,
-      "context": "operator-copy-resource",
-      "status": "excluded",
-      "resourceKey": "ui.operatorSource_5a5ac8d3fe383d61",
-      "exclusionReason": "Explicit operator-copy binding resolves canonical resource ui.operatorSource_5a5ac8d3fe383d61; locale coverage is validated against that resource.",
-      "technicalReviewHash": "859d85357e6c02dfe274fa8b43a1489abc94c330d908bbd34d818623eacdff3c"
     },
     {
       "key": "source.6c36bfc64ac6b3bafc16.1",
@@ -84319,16 +84287,6 @@
       "technicalReviewHash": "d2640bb75a2f9b5a611b1374985b058e3c523a2a1a854fc58a800641fd7397ae"
     },
     {
-      "key": "source.70bf79b086c67db15cd7.1",
-      "text": "<!doctype html><html lang=\"{expression1}\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><meta name=\"referrer\" content=\"no-referrer\"><title>{expression2} · GottesdienstRegie</title>\n <style>\n :root{color-scheme:light dark;--page:#11161b;--card:#1d252d;--control:#293640;--text:#f4f7f8;--muted:#bfccd2;--border:#52636d;--accent:#aacbd5;--selected:#c5e3a7;--selected-text:#1a3110;--error:#ffb5ae}\n @media(prefers-color-scheme:light){:root{--page:#eef2f4;--card:#fff;--control:#edf3f5;--text:#18252d;--muted:#405865;--border:#889ca5;--accent:#315967;--selected:#dcebd0;--selected-text:#253c18;--error:#8e271e}}\n *{box-sizing:border-box}\n body{max-width:92rem;margin:0 auto;background:var(--page);color:var(--text);font:16px system-ui,sans-serif;padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}\n header,.header-actions,.status-row,.tool-row{display:flex;align-items:center;flex-wrap:wrap;gap:10px}\n header{justify-content:space-between;padding:8px 0 18px}\n h1{font-size:clamp(20px,4vw,28px);margin:0 0 8px;overflow-wrap:anywhere}\n #clock{font-size:clamp(20px,4vw,28px);font-weight:650;font-variant-numeric:tabular-nums}\n #countdown{color:var(--muted);font-variant-numeric:tabular-nums}\n #status,#live-status{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--control);font-size:14px}\n #status::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor}\n #status[data-state=connected],#live-status[data-live=true]{background:var(--selected);color:var(--selected-text)}\n #status[data-state=lost],#command-status[data-error=true]{color:var(--error)}\n #status[data-state=loading]::before{background:none;border:2px solid currentColor;border-right-color:transparent;animation:spin .8s linear infinite}\n @keyframes spin{to{transform:rotate(360deg)}}\n @media(prefers-reduced-motion:reduce){#status[data-state=loading]::before{animation:none}}\n main{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:12px;align-items:start}\n main:has(>section[hidden]),body[data-layout=mirror] main{grid-template-columns:minmax(0,1fr)}\n body[data-layout=mirror] #next-card{display:none}\n .card{padding:clamp(12px,2vw,20px);background:var(--card);border:1px solid var(--border);border-radius:14px;min-width:0}\n .card h2{font-size:16px;color:var(--muted);margin:0 0 10px}\n #frame,.next-frame{position:relative;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden}\n #mirror,#next-mirror{display:block;width:100%;height:100%;object-fit:contain}\n #drawing{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;touch-action:none}\n #drawing.enabled{pointer-events:auto}\n .next-frame:has(img[hidden]){display:none}\n #current,#next,#notes{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}\n #current,#next{font-size:clamp(17px,2.2vw,28px)}\n .extras{display:grid;gap:12px;margin:12px 0}\n .extras:not(:has(>section:not([hidden]))){display:none}\n .tool-row label{display:grid;gap:4px;font-size:14px;color:var(--muted)}\n #thickness{min-height:28px;accent-color:var(--accent);max-width:100%}\n button,select{padding:10px 14px;min-height:46px;max-width:100%;background:var(--control);color:var(--text);border:1px solid var(--border);border-radius:9px;font:inherit}\n button:not(:disabled),select:not(:disabled){cursor:pointer}\n button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}\n button:disabled{opacity:.6}\n button[aria-pressed=true],footer [data-action=next]{background:var(--selected);color:var(--selected-text)}\n footer{position:sticky;bottom:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:10px 0 max(10px,env(safe-area-inset-bottom));background:var(--page)}\n footer:has(>button[hidden]){grid-template-columns:minmax(0,1fr)}\n #command-status{grid-column:1/-1;margin:0;color:var(--muted);font-size:14px}\n #command-status:empty,#share-status:empty,#countdown:empty,[hidden]{display:none!important}\n @media(max-width:680px){main{grid-template-columns:minmax(0,1fr)}}\n</style></head>\n <body><header><div><h1 id=\"title\">{expression3}</h1><div class=\"status-row\"><span id=\"status\" role=\"status\" data-state=\"loading\">{expression4}</span><span id=\"live-status\" hidden></span></div></div><div class=\"header-actions\"><div id=\"clock\"></div><div id=\"countdown\"></div><button id=\"fullscreen\">{expression5}</button></div></header>\n <main><section class=\"card\" id=\"current-card\"><h2>{expression6}</h2><div id=\"frame\" hidden><img id=\"mirror\" alt=\"{expression7}\"><canvas id=\"drawing\"></canvas></div><div id=\"current\">{expression8}</div></section><section class=\"card\" id=\"next-card\"><h2>{expression9}</h2><div class=\"next-frame\"><img id=\"next-mirror\" alt=\"{expression10}\" hidden></div><div id=\"next\">{expression11}</div></section></main>\n <div class=\"extras\"><section class=\"card\" id=\"tools\" hidden><h2>{expression12}</h2><div class=\"tool-row\"><button id=\"draw\" aria-pressed=\"false\">{expression13}</button><select id=\"tool\" aria-label=\"{expression14}\"><option value=\"pen\">{expression15}</option><option value=\"line\">{expression16}</option><option value=\"arrow\">{expression17}</option><option value=\"rectangle\">{expression18}</option><option value=\"ellipse\">{expression19}</option></select><label>{expression20}<input id=\"thickness\" type=\"range\" min=\"2\" max=\"16\" step=\"1\" value=\"8\"></label><select id=\"color\" aria-label=\"{expression21}\"><option value=\"#ff3b30\">{expression22}</option><option value=\"#ffd60a\">{expression23}</option><option value=\"#699f3e\">{expression24}</option><option value=\"#ffffff\">{expression25}</option></select><button id=\"clear\">{expression26}</button></div></section>\n <section id=\"notes-card\" class=\"card\" hidden><h2>{expression27}</h2><div id=\"notes\"></div></section><section id=\"order-card\" class=\"card\" hidden><h2>{expression28}</h2><ol id=\"order\"></ol></section>\n <section id=\"sharing\" class=\"card\" hidden><button id=\"share-start\">{expression29}</button><button id=\"share-stop\" hidden>{expression30}</button><p id=\"share-status\"></p></section>\n </div><footer {expression31}><p id=\"command-status\" role=\"status\"></p><button data-action=\"previous\" disabled>◀ {expression32}</button><button data-action=\"next\" disabled>{expression33} ▶</button></footer>\n <script>\n const token={expression34},labels={expression35},q=s=>document.querySelector(s),canvas=q('#drawing'),ctx=canvas.getContext('2d');const navigationButtons=[...document.querySelectorAll('[data-action]')];\n let connected=false, pendingNavigation=null;\n let currentTool='pen',currentWidth=.004,currentColor='#ff3b30',state={},draw=false,points=[],take='',alive=true,lastFrame='';\n const text=x=>typeof x==='string'?x:x&&typeof x==='object'?(typeof x.body==='string'&&x.body.trim()?x.body:typeof x.title==='string'?x.title:'—'):'—';\n async function command(action,extra={}){try{const r=await fetch('/api/command',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,commandId:crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),action,timestamp:Date.now(),...extra}),signal:AbortSignal.timeout(4000)});return r.ok}catch{return false}}\n function setConnection(status){\n   connected=status==='connected';\n   q('#status').dataset.state=status;\n   const caption=labels[status];\n   if(q('#status').textContent!==caption)q('#status').textContent=caption;\n   q('#live-status').hidden=!connected;\n   for(const button of navigationButtons)button.disabled=!connected||Boolean(pendingNavigation);\n }\n function navigationMessage(message,error=false){\n   const status=q('#command-status');\n   status.dataset.error=String(error);\n   status.textContent=message;\n }\n function finishNavigation(message='',error=false){\n   clearTimeout(pendingNavigation?.timer);\n   pendingNavigation=null;\n   navigationMessage(message,error);\n   for(const button of navigationButtons)button.disabled=!connected;\n }\n async function navigate(action){\n   if(!connected||pendingNavigation)return;\n   const request={take:state.annotationTakeId,slide:state.current?.id,accepted:false,timer:0};\n   pendingNavigation=request;\n   for(const button of navigationButtons)button.disabled=true;\n   navigationMessage(labels.pending);\n   const accepted=await command(action);\n   if(!alive||pendingNavigation!==request)return;\n   if(!accepted){finishNavigation(labels.commandError,true);return}\n   request.accepted=true;\n   request.timer=setTimeout(()=>finishNavigation(labels.unconfirmed,true),2500);\n }\n function clearLocal(){points=[];ctx.clearRect(0,0,canvas.width,canvas.height)}\n function setDraw(next){draw=next;canvas.classList.toggle('enabled',draw);q('#draw').setAttribute('aria-pressed',String(draw));if(!draw)clearLocal()}\n async function poll(){if(!alive)return;try{const r=await fetch('/api/state?token='+encodeURIComponent(token),{cache:'no-store',signal:AbortSignal.timeout(3500)});if(!r.ok)throw 0;state=await r.json();q('#title').textContent=state.title||{expression36};q('#current').textContent=text(state.current);q('#next').textContent=state.next?text(state.next):labels.nextWaiting;setConnection('connected');\n const live=q('#live-status');\n live.dataset.live=String(Boolean(state.onAir));\n live.textContent=state.onAir?'ON AIR':'OFF AIR';\n if(!state.onAir){q('#frame').hidden=true;q('#current').hidden=false;}\n if(pendingNavigation?.accepted&&(pendingNavigation.take!==state.annotationTakeId||pendingNavigation.slide!==state.current?.id))finishNavigation();\n const config=state.monitor||{};document.body.dataset.layout=config.layout||'current-next';for(const [id,key]of [['#current-card','showCurrent'],['#next-card','showNext'],['#clock','showClock'],['#countdown','showCountdown']])q(id).hidden=config[key]===false;\n q('#notes-card').hidden=!state.notes;q('#notes').textContent=state.notes||'';q('#order-card').hidden=!state.order?.length;q('#order').replaceChildren(...(state.order||[]).map(value=>{const li=document.createElement('li');li.textContent=value;return li}));\n q('#sharing').hidden=!(state.permissions||[]).includes('remote.share');q('#tools').hidden=!state.canAnnotate;for(const button of document.querySelectorAll('[data-action]'))button.hidden=!(state.permissions||[]).includes('remote.'+button.dataset.action);\n if(take!==state.annotationTakeId){take=state.annotationTakeId||'';clearLocal()}if(!state.canAnnotate||!state.onAir)setDraw(false);\n }catch{setConnection('lost');q('#frame').hidden=true;q('#current').hidden=false;\n q('#next-mirror').hidden=true;q('#next').hidden=false;setDraw(false)}finally{if(alive)setTimeout(poll,500)}}\n async function frame(){\n   if(!alive)return;\n   try{\n     if(!connected||!state.onAir||q('#current-card').hidden)return;\n     const response=await fetch('/api/frame?token='+encodeURIComponent(token),{cache:'no-store',signal:AbortSignal.timeout(3500)});\n     if(!response.ok)throw Error('UNAVAILABLE');\n     const blob=await response.blob();\n     if(!alive||!connected||!state.onAir)return;\n     const url=URL.createObjectURL(blob);\n     q('#mirror').src=url;\n     q('#frame').hidden=false;\n     q('#current').hidden=true;\n     if(lastFrame)URL.revokeObjectURL(lastFrame);\n     lastFrame=url;\n   }catch{\n     q('#frame').hidden=true;\n     q('#current').hidden=false;\n     setDraw(false);\n   }finally{if(alive)setTimeout(frame,500)}\n }\n function clock(){q('#clock').textContent=new Date().toLocaleTimeString({expression37},{hour:'2-digit',minute:'2-digit',second:'2-digit'});const seconds=Math.ceil((Number(state.serviceCountdownAtMs)-Date.now())/1000);q('#countdown').textContent=seconds>0?labels.start+' '+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0'):''}clock();setInterval(clock,1000);\n function point(e){const r=canvas.getBoundingClientRect();return{x:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y:Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))}}\n function paint(){canvas.width=1920;canvas.height=1080;if(points.length<2)return;ctx.strokeStyle=currentColor;ctx.lineWidth=currentWidth*1920;ctx.lineCap='round';ctx.lineJoin='round';const a=points[0],b=points.at(-1),x=a.x*1920,y=a.y*1080,x2=b.x*1920,y2=b.y*1080;ctx.beginPath();if(currentTool==='rectangle')ctx.strokeRect(Math.min(x,x2),Math.min(y,y2),Math.abs(x2-x),Math.abs(y2-y));else if(currentTool==='ellipse'){ctx.ellipse((x+x2)/2,(y+y2)/2,Math.abs(x2-x)/2,Math.abs(y2-y)/2,0,0,Math.PI*2);ctx.stroke()}else{if(currentTool==='pen')points.forEach((p,i)=>i?ctx.lineTo(p.x*1920,p.y*1080):ctx.moveTo(p.x*1920,p.y*1080));else{ctx.moveTo(x,y);ctx.lineTo(x2,y2)}ctx.stroke();if(currentTool==='arrow'){const angle=Math.atan2(y2-y,x2-x),head=Math.max(14,currentWidth*1920*3);ctx.beginPath();ctx.moveTo(x2-head*Math.cos(angle-Math.PI/6),y2-head*Math.sin(angle-Math.PI/6));ctx.lineTo(x2,y2);ctx.lineTo(x2-head*Math.cos(angle+Math.PI/6),y2-head*Math.sin(angle+Math.PI/6));ctx.stroke()}}}\n canvas.onpointerdown=e=>{if(!draw||!take||!state.onAir)return;canvas.setPointerCapture(e.pointerId);currentTool=q('#tool').value;currentWidth=Number(q('#thickness').value)/1920;currentColor=q('#color').value;points=[point(e)];paint()};canvas.onpointermove=e=>{if(!draw||!canvas.hasPointerCapture(e.pointerId))return;if(currentTool==='pen'){points.push(point(e));if(points.length>512)points=points.filter((_,i)=>i%2===0)}else points=[points[0],point(e)];paint()};canvas.onpointerup=async e=>{if(!canvas.hasPointerCapture(e.pointerId))return;canvas.releasePointerCapture(e.pointerId);const p=point(e);if(currentTool==='pen')points.push(p);else points=[points[0],p];const stroke={id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),tool:currentTool,color:currentColor,width:currentWidth,points:points.filter((_,i)=>i%Math.max(1,Math.ceil(points.length/256))===0)};await command('annotate',{takeId:take,stroke});clearLocal()};canvas.onpointercancel=clearLocal;\n let sharePc=null,shareStream=null,shareId='',shareGeneration=0,shareTimer=0;\n async function shareRequest(value){const response=await fetch('/api/share',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,...value})});if(!response.ok)throw Error('SHARE_FAILED');return response.json()}\n async function stopShare(notify=true){shareGeneration++;clearTimeout(shareTimer);const oldId=shareId;shareId='';sharePc?.close();sharePc=null;shareStream?.getTracks().forEach(track=>track.stop());shareStream=null;q('#share-stop').hidden=true;q('#share-start').disabled=false;if(notify&&oldId)await shareRequest({action:'stop',id:oldId}).catch(()=>{});}\n async function iceReady(pc){if(pc.iceGatheringState==='complete')return;await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>{pc.removeEventListener('icegatheringstatechange',check);reject(Error('ICE_TIMEOUT'))},10000);function check(){if(pc.iceGatheringState==='complete'){clearTimeout(timeout);pc.removeEventListener('icegatheringstatechange',check);resolve()}}pc.addEventListener('icegatheringstatechange',check);check()})}\n async function pollShare(generation){if(!alive||generation!==shareGeneration||!shareId)return;try{const response=await fetch('/api/share?token='+encodeURIComponent(token)+'&id='+encodeURIComponent(shareId),{cache:'no-store'});if(!response.ok)throw Error('ENDED');const result=await response.json();if(generation!==shareGeneration)return;if(result.answer&&!sharePc.currentRemoteDescription)await sharePc.setRemoteDescription(result.answer);q('#share-status').textContent=labels.shareWaiting;shareTimer=setTimeout(()=>pollShare(generation),1000)}catch{if(generation===shareGeneration){await stopShare(false);q('#share-status').textContent=labels.shareError}}}\n q('#share-start').onclick=async()=>{if(location.protocol!=='https:'||!isSecureContext){q('#share-status').textContent=labels.shareSecure;return}if(!navigator.mediaDevices?.getDisplayMedia){q('#share-status').textContent=labels.shareUnsupported;return}const generation=++shareGeneration;q('#share-start').disabled=true;try{const stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:15,max:30},width:{max:1920},height:{max:1080}},audio:false});if(generation!==shareGeneration||!alive){stream.getTracks().forEach(track=>track.stop());return}shareStream=stream;const pc=new RTCPeerConnection({iceServers:[]});sharePc=pc;stream.getVideoTracks().forEach(track=>{pc.addTrack(track,stream);track.onended=()=>void stopShare()});q('#share-stop').hidden=false;pc.onconnectionstatechange=()=>{if(generation===shareGeneration&&pc.connectionState==='failed'){q('#share-status').textContent=labels.shareError;void stopShare()}};await pc.setLocalDescription(await pc.createOffer());await iceReady(pc);if(generation!==shareGeneration)return;const result=await shareRequest({action:'offer',description:pc.localDescription.toJSON()});if(generation!==shareGeneration){await shareRequest({action:'stop',id:result.id});return}shareId=result.id;void pollShare(generation)}catch{if(generation===shareGeneration){await stopShare();q('#share-status').textContent=labels.shareError}}};q('#share-stop').onclick=()=>void stopShare();window.addEventListener('pagehide',()=>{const id=shareId;void stopShare(false);if(id)navigator.sendBeacon('/api/share',new Blob([JSON.stringify({token,action:'stop',id})],{type:'application/json'}))});\n let nextFrameUrl='';async function nextFrame(){if(!alive)return;if(!connected||q('#next-card').hidden||document.body.dataset.layout==='mirror'){setTimeout(nextFrame,1000);return}try{const response=await fetch('/api/next-frame?token='+encodeURIComponent(token),{cache:'no-store',signal:AbortSignal.timeout(3500)});if(!response.ok)throw Error('UNAVAILABLE');const url=URL.createObjectURL(await response.blob());if(!alive||!connected){URL.revokeObjectURL(url);if(alive)setTimeout(nextFrame,1000);return}q('#next-mirror').src=url;q('#next-mirror').hidden=false;q('#next').hidden=true;if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl);nextFrameUrl=url}catch{q('#next-mirror').hidden=true;q('#next').hidden=false;q('#next').textContent=state.next?text(state.next):labels.nextWaiting}if(alive)setTimeout(nextFrame,1000)}window.addEventListener('pagehide',()=>{if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl)});void nextFrame();\n q('#fullscreen').onclick=()=>{if(document.fullscreenElement)void document.exitFullscreen();else void document.documentElement.requestFullscreen?.().catch(()=>{})};\n q('#draw').onclick=()=>setDraw(!draw);q('#clear').onclick=()=>{clearLocal();void command('annotation-clear')};for(const button of navigationButtons)button.onclick=()=>void navigate(button.dataset.action);window.addEventListener('pagehide',()=>{alive=false;clearTimeout(pendingNavigation?.timer);if(lastFrame)URL.revokeObjectURL(lastFrame)});poll();frame();\n </script></body></html>",
-      "source": "electron/RemotePage.ts",
-      "line": 10,
-      "context": "ReturnStatement",
-      "status": "excluded",
-      "exclusionReason": "Reviewed updated remote HTML/CSS/script. Localized markup uses escaped captions and script labels; ON AIR/OFF AIR are fixed operational labels. Remaining strings in the template are protocol, selectors and technical identifiers.",
-      "technicalReviewHash": "8e4ad90259f96de9de6c5a5112982bff28717f5629907c5a81772c333878b213"
-    },
-    {
       "key": "ui.webOnline",
       "text": "Online",
       "source": "shared/regional/v98Templates.json",
@@ -84435,6 +84393,292 @@
     },
     {
       "key": "release.versions[0.99].builds[0.99.10].sections.known.1.text",
+      "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "source.6167a75167fd5f6c75e1.1",
+      "text": "HTTPS",
+      "source": "src/RemoteCenter.tsx",
+      "line": 25,
+      "context": "BinaryExpression",
+      "status": "excluded",
+      "exclusionReason": "Standard protocol name displayed independently of interface language.",
+      "technicalReviewHash": "df1345fd4a8466970707cbf10a76d4b91454ccaf806ca87f60fcefe44712dc21"
+    },
+    {
+      "key": "source.9873ccf36b06269f2b20.1",
+      "text": "Red",
+      "source": "electron/RemotePage.ts",
+      "line": 12,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Explicit English browser captions. German uses the corresponding native resources.",
+      "technicalReviewHash": "21f1a59c8e3421accffef45131edc026e54f13af90c5e6ca23667ddd605649fb"
+    },
+    {
+      "key": "source.8f4695e8754b42d39846.1",
+      "text": "Green",
+      "source": "electron/RemotePage.ts",
+      "line": 12,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Explicit English browser captions. German uses the corresponding native resources.",
+      "technicalReviewHash": "0ac6a6b8c6ce5cafef80303606fbf2425132828f562a13f8cde0076c748b3f12"
+    },
+    {
+      "key": "source.336fa443130c5a397878.1",
+      "text": "White",
+      "source": "electron/RemotePage.ts",
+      "line": 12,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Explicit English browser captions. German uses the corresponding native resources.",
+      "technicalReviewHash": "fe3d88b5278047af4c58bcd24cec6e60e8b3b968cc85be9463d2595d4251b46c"
+    },
+    {
+      "key": "source.51d214b2415d16df5c5f.1",
+      "text": "Black",
+      "source": "electron/RemotePage.ts",
+      "line": 12,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Explicit English browser captions. German uses the corresponding native resources.",
+      "technicalReviewHash": "48f7d1e3433a9efee880976e97e449947271e7172ed5c0456947d94c8fe0397b"
+    },
+    {
+      "key": "source.b66699fec6242c32cdaa.1",
+      "text": "Yellow",
+      "source": "electron/RemotePage.ts",
+      "line": 12,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Explicit English browser captions. German uses the corresponding native resources.",
+      "technicalReviewHash": "b1ab0590dfccd9b79c0bb7e74a64426c32468d0d9af76f288988260d83f18d43"
+    },
+    {
+      "key": "source.eb483dfdb3bd1f1685e6.1",
+      "text": "Blue",
+      "source": "electron/RemotePage.ts",
+      "line": 12,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Explicit English browser captions. German uses the corresponding native resources.",
+      "technicalReviewHash": "65fbdfc97be7fef480377517984483d3fc92782620baae1b1b29c8c5faf83fd7"
+    },
+    {
+      "key": "source.8433e89ff943a9609778.1",
+      "text": "Purple",
+      "source": "electron/RemotePage.ts",
+      "line": 12,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Explicit English browser captions. German uses the corresponding native resources.",
+      "technicalReviewHash": "edce79f850dae5e7e437295981fe216324c7f4997c8d9a8d6c9f8d1d754849d9"
+    },
+    {
+      "key": "source.737b019a34cd781c8b95.1",
+      "text": "Orange",
+      "source": "electron/RemotePage.ts",
+      "line": 12,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Explicit English browser captions. German uses the corresponding native resources.",
+      "technicalReviewHash": "02ffd9e97fcb9ee90323313611445a6fa01f0c25ba9a8ddab0bea792296fb8ac"
+    },
+    {
+      "key": "source.03299abb2d888db4e7c6.1",
+      "text": "Pink",
+      "source": "electron/RemotePage.ts",
+      "line": 12,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Explicit English browser captions. German uses the corresponding native resources.",
+      "technicalReviewHash": "a7274cd42e9e6df4f2f733017a55dca1b7f399f08b2f29f3fcaae23ac7b02ece"
+    },
+    {
+      "key": "source.fc061087913e9c7dd151.1",
+      "text": "Cyan",
+      "source": "electron/RemotePage.ts",
+      "line": 12,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Explicit English browser captions. German uses the corresponding native resources.",
+      "technicalReviewHash": "2375dfa27932d0d52eb8301ffcdc3b4865e66e56fc2933a6084d5a15406dc0ac"
+    },
+    {
+      "key": "source.a76156fe0cadf8b9df46.1",
+      "text": "Exit fullscreen",
+      "source": "electron/RemotePage.ts",
+      "line": 13,
+      "context": "ConditionalExpression",
+      "status": "excluded",
+      "exclusionReason": "Explicit English browser captions. German uses the corresponding native resources.",
+      "technicalReviewHash": "4fb3116eef0998daaa1c721e0790cacaa51a2b38eb25018df28b69fd1ba33420"
+    },
+    {
+      "key": "source.f923aedb2e68a532f741.1",
+      "text": "<button type=\"button\" class=\"swatch\" data-color=\"{expression1}\" style=\"--swatch:{expression2}\" aria-pressed=\"{expression3}\" aria-label=\"{expression4}\" title=\"{expression5}\"><span aria-hidden=\"true\"></span></button>",
+      "source": "electron/RemotePage.ts",
+      "line": 14,
+      "context": "ArrowFunction",
+      "status": "excluded",
+      "exclusionReason": "Browser markup, styles and script. Human-facing captions use escaped language resources, with ON AIR and OFF AIR as fixed operating labels.",
+      "technicalReviewHash": "422fd9b51c2f6865da160b30feab663e3dcb3a0106a74de24834004fb9cb2f0b"
+    },
+    {
+      "key": "source.d0ae847f58a9332ea038.1",
+      "text": "<!doctype html><html lang=\"{expression1}\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><meta name=\"referrer\" content=\"no-referrer\"><title>{expression2} · GottesdienstRegie</title>\n <style>\n :root{color-scheme:light dark;--page:#11161b;--card:#1d252d;--control:#293640;--text:#f4f7f8;--muted:#bfccd2;--border:#52636d;--accent:#aacbd5;--selected:#c5e3a7;--selected-text:#1a3110;--error:#ffb5ae}\n @media(prefers-color-scheme:light){:root{--page:#eef2f4;--card:#fff;--control:#edf3f5;--text:#18252d;--muted:#405865;--border:#889ca5;--accent:#315967;--selected:#dcebd0;--selected-text:#253c18;--error:#8e271e}}\n *{box-sizing:border-box}\n body{max-width:92rem;margin:0 auto;background:var(--page);color:var(--text);font:16px system-ui,sans-serif;padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}\n header,.header-actions,.status-row,.tool-row{display:flex;align-items:center;flex-wrap:wrap;gap:10px}\n header{justify-content:space-between;padding:8px 0 18px}\n h1{font-size:clamp(20px,4vw,28px);margin:0 0 8px;overflow-wrap:anywhere}\n #clock{font-size:clamp(20px,4vw,28px);font-weight:650;font-variant-numeric:tabular-nums}\n #countdown{color:var(--muted);font-variant-numeric:tabular-nums}\n #status,#live-status{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--control);font-size:14px}\n #status::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor}\n #status[data-state=connected],#live-status[data-live=true]{background:var(--selected);color:var(--selected-text)}\n #status[data-state=lost],#command-status[data-error=true]{color:var(--error)}\n #status[data-state=loading]::before{background:none;border:2px solid currentColor;border-right-color:transparent;animation:spin .8s linear infinite}\n @keyframes spin{to{transform:rotate(360deg)}}\n @media(prefers-reduced-motion:reduce){#status[data-state=loading]::before{animation:none}}\n main{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:12px;align-items:start}\n main:has(>section[hidden]),body[data-layout=mirror] main{grid-template-columns:minmax(0,1fr)}\n body[data-layout=mirror] #next-card{display:none}\n .card{padding:clamp(12px,2vw,20px);background:var(--card);border:1px solid var(--border);border-radius:14px;min-width:0}\n .card h2{font-size:16px;color:var(--muted);margin:0 0 10px}\n #frame,.next-frame{position:relative;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden}\n #mirror,#next-mirror{display:block;width:100%;height:100%;object-fit:contain}\n #drawing{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;touch-action:none}\n #drawing.enabled{pointer-events:auto}\n .next-frame:has(img[hidden]){display:none}\n #current,#next,#notes{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}\n #current,#next{font-size:clamp(17px,2.2vw,28px)}\n .extras{display:grid;gap:12px;margin:12px 0}\n .extras:not(:has(>section:not([hidden]))){display:none}\n .tool-row label{display:grid;gap:4px;font-size:14px;color:var(--muted)}\n .palette{display:flex;flex-wrap:wrap;gap:4px;width:100%}\n .palette .swatch{padding:0;width:46px;min-height:46px;display:grid;place-items:center}\n .palette .swatch span{display:block;width:23px;height:23px;border:1px solid #888;border-radius:50%;background:var(--swatch)}\n .palette .swatch[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--selected-text)}\n #fullscreen{width:46px;padding:0;display:grid;place-items:center}\n .fullscreen-icon{position:relative;width:20px;height:20px}\n .fullscreen-icon i{position:absolute;width:7px;height:7px;border:2px solid currentColor}\n .fullscreen-icon i:nth-child(1){top:0;left:0;border-right:0;border-bottom:0}\n .fullscreen-icon i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0}\n .fullscreen-icon i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0}\n .fullscreen-icon i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0}\n #fullscreen[aria-pressed=true] i{transform:rotate(180deg)}\n #thickness{min-height:28px;accent-color:var(--accent);max-width:100%}\n button,select{padding:10px 14px;min-height:46px;max-width:100%;background:var(--control);color:var(--text);border:1px solid var(--border);border-radius:9px;font:inherit}\n button:not(:disabled),select:not(:disabled){cursor:pointer}\n button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}\n button:disabled{opacity:.6}\n button[aria-pressed=true],footer [data-action=next]{background:var(--selected);color:var(--selected-text)}\n footer{position:sticky;bottom:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:10px 0 max(10px,env(safe-area-inset-bottom));background:var(--page)}\n footer:has(>button[hidden]){grid-template-columns:minmax(0,1fr)}\n #command-status{grid-column:1/-1;margin:0;color:var(--muted);font-size:14px}\n #command-status:empty,#share-status:empty,#countdown:empty,[hidden]{display:none!important}\n @media(max-width:680px){main{grid-template-columns:minmax(0,1fr)}}\n</style></head>\n <body><header><div><h1 id=\"title\">{expression3}</h1><div class=\"status-row\"><span id=\"status\" role=\"status\" data-state=\"loading\">{expression4}</span><span id=\"live-status\" hidden></span></div></div><div class=\"header-actions\"><div id=\"clock\"></div><div id=\"countdown\"></div><button id=\"fullscreen\" type=\"button\" aria-label=\"{expression5}\" title=\"{expression6}\" aria-pressed=\"false\"><span class=\"fullscreen-icon\" aria-hidden=\"true\"><i></i><i></i><i></i><i></i></span></button></div></header>\n <main><section class=\"card\" id=\"current-card\"><h2>{expression7}</h2><div id=\"frame\" hidden><img id=\"mirror\" alt=\"{expression8}\"><canvas id=\"drawing\"></canvas></div><div id=\"current\">{expression9}</div></section><section class=\"card\" id=\"next-card\"><h2>{expression10}</h2><div class=\"next-frame\"><img id=\"next-mirror\" alt=\"{expression11}\" hidden></div><div id=\"next\">{expression12}</div></section></main>\n <div class=\"extras\"><section class=\"card\" id=\"tools\" hidden><h2>{expression13}</h2><div class=\"tool-row\"><button id=\"draw\" aria-pressed=\"false\">{expression14}</button><select id=\"tool\" aria-label=\"{expression15}\"><option value=\"pen\">{expression16}</option><option value=\"line\">{expression17}</option><option value=\"arrow\">{expression18}</option><option value=\"rectangle\">{expression19}</option><option value=\"ellipse\">{expression20}</option></select><label>{expression21}<input id=\"thickness\" type=\"range\" min=\"2\" max=\"16\" step=\"1\" value=\"8\"></label><div class=\"palette\" role=\"group\" aria-label=\"{expression22}\">{expression23}</div><button id=\"clear\">{expression24}</button></div></section>\n <section id=\"notes-card\" class=\"card\" hidden><h2>{expression25}</h2><div id=\"notes\"></div></section><section id=\"order-card\" class=\"card\" hidden><h2>{expression26}</h2><ol id=\"order\"></ol></section>\n <section id=\"sharing\" class=\"card\" hidden><button id=\"share-start\">{expression27}</button><button id=\"share-stop\" hidden>{expression28}</button><p id=\"share-status\"></p></section>\n </div><footer {expression29}><p id=\"command-status\" role=\"status\"></p><button data-action=\"previous\" disabled>◀ {expression30}</button><button data-action=\"next\" disabled>{expression31} ▶</button></footer>\n <script>\n const token={expression32},labels={expression33},q=s=>document.querySelector(s),canvas=q('#drawing'),ctx=canvas.getContext('2d');const navigationButtons=[...document.querySelectorAll('[data-action]')];\n let connected=false, pendingNavigation=null;\n let chosenColor={expression34};\n for(const swatch of document.querySelectorAll('.swatch'))swatch.onclick=()=>{\n   chosenColor=swatch.dataset.color;\n   for(const option of document.querySelectorAll('.swatch'))option.setAttribute('aria-pressed',String(option===swatch));\n };\n let currentTool='pen',currentWidth=.004,currentColor=chosenColor,state={},draw=false,points=[],take='',alive=true,lastFrame='';\n const text=x=>typeof x==='string'?x:x&&typeof x==='object'?(typeof x.body==='string'&&x.body.trim()?x.body:typeof x.title==='string'?x.title:'—'):'—';\n async function command(action,extra={}){try{const r=await fetch('/api/command',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,commandId:crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),action,timestamp:Date.now(),...extra}),signal:AbortSignal.timeout?.(4000)});return r.ok}catch{return false}}\n function setConnection(status){\n   connected=status==='connected';\n   q('#status').dataset.state=status;\n   const caption=labels[status];\n   if(q('#status').textContent!==caption)q('#status').textContent=caption;\n   q('#live-status').hidden=!connected;\n   for(const button of navigationButtons)button.disabled=!connected||Boolean(pendingNavigation);\n }\n function navigationMessage(message,error=false){\n   const status=q('#command-status');\n   status.dataset.error=String(error);\n   status.textContent=message;\n }\n function finishNavigation(message='',error=false){\n   clearTimeout(pendingNavigation?.timer);\n   pendingNavigation=null;\n   navigationMessage(message,error);\n   for(const button of navigationButtons)button.disabled=!connected;\n }\n async function navigate(action){\n   if(!connected||pendingNavigation)return;\n   const request={take:state.annotationTakeId,slide:state.current?.id,accepted:false,timer:0};\n   pendingNavigation=request;\n   for(const button of navigationButtons)button.disabled=true;\n   navigationMessage(labels.pending);\n   const accepted=await command(action);\n   if(!alive||pendingNavigation!==request)return;\n   if(!accepted){finishNavigation(labels.commandError,true);return}\n   request.accepted=true;\n   request.timer=setTimeout(()=>finishNavigation(labels.unconfirmed,true),2500);\n }\n function clearLocal(){points=[];ctx.clearRect(0,0,canvas.width,canvas.height)}\n function setDraw(next){draw=next;canvas.classList.toggle('enabled',draw);q('#draw').setAttribute('aria-pressed',String(draw));if(!draw)clearLocal()}\n async function poll(){if(!alive)return;try{const r=await fetch('/api/state?token='+encodeURIComponent(token),{cache:'no-store',signal:AbortSignal.timeout?.(3500)});if(!r.ok)throw 0;state=await r.json();q('#title').textContent=state.title||{expression35};q('#current').textContent=text(state.current);q('#next').textContent=state.next?text(state.next):labels.nextWaiting;setConnection('connected');\n const live=q('#live-status');\n live.dataset.live=String(Boolean(state.onAir));\n live.textContent=state.onAir?'ON AIR':'OFF AIR';\n if(!state.onAir){q('#frame').hidden=true;q('#current').hidden=false;}\n if(pendingNavigation?.accepted&&(pendingNavigation.take!==state.annotationTakeId||pendingNavigation.slide!==state.current?.id))finishNavigation();\n if(!state.next||shownNext!==nextRevision()){q('#next-mirror').hidden=true;q('#next').hidden=false;}\n const config=state.monitor||{};document.body.dataset.layout=config.layout||'current-next';for(const [id,key]of [['#current-card','showCurrent'],['#next-card','showNext'],['#clock','showClock'],['#countdown','showCountdown']])q(id).hidden=config[key]===false;\n q('#notes-card').hidden=!state.notes;q('#notes').textContent=state.notes||'';q('#order-card').hidden=!state.order?.length;q('#order').replaceChildren(...(state.order||[]).map(value=>{const li=document.createElement('li');li.textContent=value;return li}));\n q('#sharing').hidden=!(state.permissions||[]).includes('remote.share');q('#tools').hidden=!state.canAnnotate;for(const button of document.querySelectorAll('[data-action]'))button.hidden=!(state.permissions||[]).includes('remote.'+button.dataset.action);\n if(take!==state.annotationTakeId){take=state.annotationTakeId||'';clearLocal();q('#frame').hidden=true;q('#current').hidden=false}if(!state.canAnnotate||!state.onAir)setDraw(false);\n }catch{setConnection('lost');q('#frame').hidden=true;q('#current').hidden=false;\n q('#next-mirror').hidden=true;q('#next').hidden=false;shownNext=undefined;setDraw(false)}finally{if(alive)setTimeout(poll,500)}}\n async function previewImage(path){\n   const response=await fetch(path+'?token='+encodeURIComponent(token),{cache:'no-store',signal:AbortSignal.timeout?.(3500)});\n   if(!response.ok)throw Error('UNAVAILABLE');\n   const url=URL.createObjectURL(await response.blob());\n   const image=new Image();\n   image.src=url;\n   try{await image.decode();return url}\n   catch(error){URL.revokeObjectURL(url);throw error}\n }\n let visibleTake, lastLiveFrameAt=0;\n async function frame(){\n   if(!alive)return;\n   const started=performance.now();\n   const requestedTake=state.annotationTakeId;\n   try{\n     if(!connected||!state.onAir||q('#current-card').hidden||document.hidden)return;\n     const url=await previewImage('/api/frame');\n     if(!alive||!connected||!state.onAir||requestedTake!==state.annotationTakeId){URL.revokeObjectURL(url);return}\n     q('#mirror').src=url;\n     q('#frame').hidden=false;\n     q('#current').hidden=true;\n     if(lastFrame)URL.revokeObjectURL(lastFrame);\n     lastFrame=url;\n     visibleTake=requestedTake;\n     lastLiveFrameAt=performance.now();\n   }catch{\n     if(visibleTake!==state.annotationTakeId||performance.now()-lastLiveFrameAt>1500){\n       q('#frame').hidden=true;\n       q('#current').hidden=false;\n       setDraw(false);\n     }\n   }finally{if(alive)setTimeout(frame,Math.max(40,200-(performance.now()-started)))}\n }\n function clock(){q('#clock').textContent=new Date().toLocaleTimeString({expression36},{hour:'2-digit',minute:'2-digit',second:'2-digit'});const seconds=Math.ceil((Number(state.serviceCountdownAtMs)-Date.now())/1000);q('#countdown').textContent=seconds>0?labels.start+' '+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0'):''}clock();setInterval(clock,1000);\n function point(e){const r=canvas.getBoundingClientRect();return{x:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y:Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))}}\n function paint(){canvas.width=1920;canvas.height=1080;if(points.length<2)return;ctx.strokeStyle=currentColor;ctx.lineWidth=currentWidth*1920;ctx.lineCap='round';ctx.lineJoin='round';const a=points[0],b=points.at(-1),x=a.x*1920,y=a.y*1080,x2=b.x*1920,y2=b.y*1080;ctx.beginPath();if(currentTool==='rectangle')ctx.strokeRect(Math.min(x,x2),Math.min(y,y2),Math.abs(x2-x),Math.abs(y2-y));else if(currentTool==='ellipse'){ctx.ellipse((x+x2)/2,(y+y2)/2,Math.abs(x2-x)/2,Math.abs(y2-y)/2,0,0,Math.PI*2);ctx.stroke()}else{if(currentTool==='pen')points.forEach((p,i)=>i?ctx.lineTo(p.x*1920,p.y*1080):ctx.moveTo(p.x*1920,p.y*1080));else{ctx.moveTo(x,y);ctx.lineTo(x2,y2)}ctx.stroke();if(currentTool==='arrow'){const angle=Math.atan2(y2-y,x2-x),head=Math.max(14,currentWidth*1920*3);ctx.beginPath();ctx.moveTo(x2-head*Math.cos(angle-Math.PI/6),y2-head*Math.sin(angle-Math.PI/6));ctx.lineTo(x2,y2);ctx.lineTo(x2-head*Math.cos(angle+Math.PI/6),y2-head*Math.sin(angle+Math.PI/6));ctx.stroke()}}}\n canvas.onpointerdown=e=>{if(!draw||!take||!state.onAir)return;canvas.setPointerCapture(e.pointerId);currentTool=q('#tool').value;currentWidth=Number(q('#thickness').value)/1920;currentColor=chosenColor;points=[point(e)];paint()};canvas.onpointermove=e=>{if(!draw||!canvas.hasPointerCapture(e.pointerId))return;if(currentTool==='pen'){points.push(point(e));if(points.length>512)points=points.filter((_,i)=>i%2===0)}else points=[points[0],point(e)];paint()};canvas.onpointerup=async e=>{if(!canvas.hasPointerCapture(e.pointerId))return;canvas.releasePointerCapture(e.pointerId);const p=point(e);if(currentTool==='pen')points.push(p);else points=[points[0],p];const stroke={id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),tool:currentTool,color:currentColor,width:currentWidth,points:points.filter((_,i)=>i%Math.max(1,Math.ceil(points.length/256))===0)};await command('annotate',{takeId:take,stroke});clearLocal()};canvas.onpointercancel=clearLocal;\n let sharePc=null,shareStream=null,shareId='',shareGeneration=0,shareTimer=0;\n async function shareRequest(value){const response=await fetch('/api/share',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,...value})});if(!response.ok)throw Error('SHARE_FAILED');return response.json()}\n async function stopShare(notify=true){shareGeneration++;clearTimeout(shareTimer);const oldId=shareId;shareId='';sharePc?.close();sharePc=null;shareStream?.getTracks().forEach(track=>track.stop());shareStream=null;q('#share-stop').hidden=true;q('#share-start').disabled=false;if(notify&&oldId)await shareRequest({action:'stop',id:oldId}).catch(()=>{});}\n async function iceReady(pc){if(pc.iceGatheringState==='complete')return;await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>{pc.removeEventListener('icegatheringstatechange',check);reject(Error('ICE_TIMEOUT'))},10000);function check(){if(pc.iceGatheringState==='complete'){clearTimeout(timeout);pc.removeEventListener('icegatheringstatechange',check);resolve()}}pc.addEventListener('icegatheringstatechange',check);check()})}\n async function pollShare(generation){if(!alive||generation!==shareGeneration||!shareId)return;try{const response=await fetch('/api/share?token='+encodeURIComponent(token)+'&id='+encodeURIComponent(shareId),{cache:'no-store'});if(!response.ok)throw Error('ENDED');const result=await response.json();if(generation!==shareGeneration)return;if(result.answer&&!sharePc.currentRemoteDescription)await sharePc.setRemoteDescription(result.answer);q('#share-status').textContent=labels.shareWaiting;shareTimer=setTimeout(()=>pollShare(generation),1000)}catch{if(generation===shareGeneration){await stopShare(false);q('#share-status').textContent=labels.shareError}}}\n q('#share-start').onclick=async()=>{if(location.protocol!=='https:'||!isSecureContext){q('#share-status').textContent=labels.shareSecure;return}if(!navigator.mediaDevices?.getDisplayMedia){q('#share-status').textContent=labels.shareUnsupported;return}const generation=++shareGeneration;q('#share-start').disabled=true;try{const stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:15,max:30},width:{max:1920},height:{max:1080}},audio:false});if(generation!==shareGeneration||!alive){stream.getTracks().forEach(track=>track.stop());return}shareStream=stream;const pc=new RTCPeerConnection({iceServers:[]});sharePc=pc;stream.getVideoTracks().forEach(track=>{pc.addTrack(track,stream);track.onended=()=>void stopShare()});q('#share-stop').hidden=false;pc.onconnectionstatechange=()=>{if(generation===shareGeneration&&pc.connectionState==='failed'){q('#share-status').textContent=labels.shareError;void stopShare()}};await pc.setLocalDescription(await pc.createOffer());await iceReady(pc);if(generation!==shareGeneration)return;const result=await shareRequest({action:'offer',description:pc.localDescription.toJSON()});if(generation!==shareGeneration){await shareRequest({action:'stop',id:result.id});return}shareId=result.id;void pollShare(generation)}catch{if(generation===shareGeneration){await stopShare();q('#share-status').textContent=labels.shareError}}};q('#share-stop').onclick=()=>void stopShare();window.addEventListener('pagehide',()=>{const id=shareId;void stopShare(false);if(id)navigator.sendBeacon('/api/share',new Blob([JSON.stringify({token,action:'stop',id})],{type:'application/json'}))});\n let nextFrameUrl='', shownNext;\n const nextRevision=()=>state.nextPreviewRevision??state.next?.id??state.next;\n async function nextFrame(){\n   if(!alive)return;\n   const revision=nextRevision();\n   let retry=250;\n   try{\n     if(!connected||!state.next||revision===shownNext||q('#next-card').hidden||document.body.dataset.layout==='mirror'||document.hidden)return;\n     const url=await previewImage('/api/next-frame');\n     if(!alive||!connected||revision!==nextRevision()){URL.revokeObjectURL(url);return}\n     q('#next-mirror').src=url;\n     q('#next-mirror').hidden=false;\n     q('#next').hidden=true;\n     if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl);\n     nextFrameUrl=url;\n     shownNext=revision;\n   }catch{retry=600}\n   finally{if(alive)setTimeout(nextFrame,retry)}\n }\n window.addEventListener('pagehide',()=>{if(nextFrameUrl)URL.revokeObjectURL(nextFrameUrl)});\n void nextFrame();\n const fullscreen=q('#fullscreen');\n fullscreen.hidden=!document.fullscreenEnabled;\n document.addEventListener('fullscreenchange',()=>{\n   const active=Boolean(document.fullscreenElement);\n   const label=active?{expression37}:labels.fullscreen;\n   fullscreen.setAttribute('aria-pressed',String(active));\n   fullscreen.setAttribute('aria-label',label);\n   fullscreen.title=label;\n });\n fullscreen.onclick=()=>{\n   const action=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();\n   void action.catch(()=>{});\n };\n q('#draw').onclick=()=>setDraw(!draw);q('#clear').onclick=()=>{clearLocal();void command('annotation-clear')};for(const button of navigationButtons)button.onclick=()=>void navigate(button.dataset.action);window.addEventListener('pagehide',()=>{alive=false;clearTimeout(pendingNavigation?.timer);if(lastFrame)URL.revokeObjectURL(lastFrame)});poll();frame();\n </script></body></html>",
+      "source": "electron/RemotePage.ts",
+      "line": 16,
+      "context": "ReturnStatement",
+      "status": "excluded",
+      "exclusionReason": "Browser markup, styles and script. Human-facing captions use escaped language resources, with ON AIR and OFF AIR as fixed operating labels.",
+      "technicalReviewHash": "026fc8cb59e639e5f435afe28319d4cb2edf9326d0f691bbd5ce3447cf6e6b56"
+    },
+    {
+      "key": "source.3a30fbee78ef66f378fa.1",
+      "text": "DENY",
+      "source": "electron/RemoteServer.ts",
+      "line": 78,
+      "context": "property:'x-frame-options'",
+      "status": "excluded",
+      "exclusionReason": "Standard HTTP security header values. Translating them would break browser enforcement.",
+      "technicalReviewHash": "853925886eabbdd0be05932d2d69e7e5436cf17aec82888ed6ee34d7a33a38e4"
+    },
+    {
+      "key": "source.9973ba126e74230ddde6.1",
+      "text": "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+      "source": "electron/RemoteServer.ts",
+      "line": 78,
+      "context": "property:'content-security-policy'",
+      "status": "excluded",
+      "exclusionReason": "Standard HTTP security header values. Translating them would break browser enforcement.",
+      "technicalReviewHash": "f86ca302215238f5285cdae14640f3bcd788cc8730cf830553e7bab439e0e502"
+    },
+    {
+      "key": "ui.remoteVerifyCertificate",
+      "text": "Vergleiche den SHA-256-Fingerabdruck des Zertifikats auf deinem Gerät mit der Anzeige hier. Richte das Vertrauen nur für dieses geprüfte Zertifikat ein.",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.remotePrivateLink",
+      "text": "Dieser Link erteilt Zugriff mit den freigegebenen Rechten. Teile ihn nur mit der vorgesehenen Person.",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.remoteExportCertificate",
+      "text": "Öffentliches Zertifikat speichern",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "native.remoteBlack",
+      "text": "Schwarz",
+      "source": "shared/regional/nativeBase.ts",
+      "context": "native-canonical",
+      "status": "app-owned"
+    },
+    {
+      "key": "native.remoteBlue",
+      "text": "Blau",
+      "source": "shared/regional/nativeBase.ts",
+      "context": "native-canonical",
+      "status": "app-owned"
+    },
+    {
+      "key": "native.remotePurple",
+      "text": "Violett",
+      "source": "shared/regional/nativeBase.ts",
+      "context": "native-canonical",
+      "status": "app-owned"
+    },
+    {
+      "key": "native.remoteOrange",
+      "text": "Orange",
+      "source": "shared/regional/nativeBase.ts",
+      "context": "native-canonical",
+      "status": "app-owned"
+    },
+    {
+      "key": "native.remotePink",
+      "text": "Pink",
+      "source": "shared/regional/nativeBase.ts",
+      "context": "native-canonical",
+      "status": "app-owned"
+    },
+    {
+      "key": "native.remoteCyan",
+      "text": "Hellblau",
+      "source": "shared/regional/nativeBase.ts",
+      "context": "native-canonical",
+      "status": "app-owned"
+    },
+    {
+      "key": "native.remoteExitFullscreen",
+      "text": "Vollbild verlassen",
+      "source": "shared/regional/nativeBase.ts",
+      "context": "native-canonical",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.11].overview.label",
+      "text": "HTTPS für Personal Monitor und Web-Steuerung",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.11].overview.text",
+      "text": "Personal Monitor und Web-Steuerung verwenden HTTPS im lokalen Netz. Das öffentliche Zertifikat lässt sich in der Regie speichern. Bestehende Monitore bleiben eingerichtet. Kopiere ihre neuen Links oder QR-Codes aus der Regie.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.11].sections.fixed.0.label",
+      "text": "Schnellere Vorschau und neue Markierungsfarben",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.11].sections.fixed.0.text",
+      "text": "Die Live-Vorschau ruft bis zu fünf Bilder pro Sekunde ab. Die nächste Folie wird bei Änderungen neu übertragen. Zehn Farbfelder erleichtern die Auswahl der Markierungsfarbe. Vollbild und Vollbild verlassen haben eigene Symbole.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.11].sections.known.0.label",
+      "text": "Hinweise zum Live-Betrieb",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.11].sections.known.0.text",
+      "text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.11].sections.known.1.label",
+      "text": "Originalgetreue PowerPoint-Wiedergabe",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.11].sections.known.1.text",
       "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
       "source": "public/releases.json",
       "context": "release-history",

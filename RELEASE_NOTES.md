@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.11
+
+Personal Monitor und Web-Steuerung verwenden HTTPS im lokalen Netz. Das öffentliche Zertifikat lässt sich in der Regie speichern. Bestehende Monitore bleiben eingerichtet. Kopiere ihre neuen Links oder QR-Codes aus der Regie.
+
+Die Live-Vorschau ruft bis zu fünf Bilder pro Sekunde ab. Die nächste Folie wird bei Änderungen neu übertragen. Zehn Farbfelder erleichtern die Auswahl der Markierungsfarbe. Vollbild und Vollbild verlassen haben eigene Symbole.
+
+---
+
 # GottesdienstRegie 0.99.10
 
 Der Web-Editor wechselt auf Handy und Tablet direkt zwischen Folienbearbeitung und Vorschau. Verbindungsstatus und Speicherstand bleiben sichtbar.

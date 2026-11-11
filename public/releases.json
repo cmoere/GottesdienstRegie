@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
+          "version": "0.99.11",
+          "releaseDate": "2026-11-11",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "HTTPS für Personal Monitor und Web-Steuerung",
+              "en": "HTTPS for personal monitor and remote control"
+            },
+            "text": {
+              "de": "Personal Monitor und Web-Steuerung verwenden HTTPS im lokalen Netz. Das öffentliche Zertifikat lässt sich in der Regie speichern. Bestehende Monitore bleiben eingerichtet. Kopiere ihre neuen Links oder QR-Codes aus der Regie.",
+              "en": "Personal monitors and remote controls use HTTPS on the local network. The operator can save the public certificate. Existing monitors keep their settings. Copy their new links or QR codes from the operator interface."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Schnellere Vorschau und neue Markierungsfarben",
+                  "en": "Faster preview and more annotation colors"
+                },
+                "text": {
+                  "de": "Die Live-Vorschau ruft bis zu fünf Bilder pro Sekunde ab. Die nächste Folie wird bei Änderungen neu übertragen. Zehn Farbfelder erleichtern die Auswahl der Markierungsfarbe. Vollbild und Vollbild verlassen haben eigene Symbole.",
+                  "en": "The live preview requests up to five frames per second. The next slide is transferred when it changes. Ten swatches make it easier to choose an annotation color. Fullscreen uses separate enter and exit icons."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
           "version": "0.99.10",
           "releaseDate": "2026-11-10",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Web-Editor und Fernsteuerung",

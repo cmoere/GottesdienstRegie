@@ -281,6 +281,7 @@ contextBridge.exposeInMainWorld("desktop", {
     onShareRelay:(callback:(payload:any)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('remote:share-relay',listener);return()=>ipcRenderer.removeListener('remote:share-relay',listener)},
     onShareEvent:(callback:(payload:any)=>void)=>{const listener=(_event:Electron.IpcRendererEvent,payload:unknown)=>callback(payload);ipcRenderer.on('remote:share-event',listener);return()=>ipcRenderer.removeListener('remote:share-event',listener)},
     get: () => ipcRenderer.invoke("remote:get"),
+    exportCertificate: () => ipcRenderer.invoke('remote:export-certificate'),
     saveMonitor: (monitor: unknown) =>
       ipcRenderer.invoke("remote:save-monitor", monitor),
     removeMonitor: (id: string) =>

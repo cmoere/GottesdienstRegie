@@ -64,7 +64,10 @@
     "eventOverviewHeaderVisible": "Kopfzeile mit Logo, Datum und Uhrzeit anzeigen",
     "webOnline": "Online",
     "webOffline": "Offline",
-    "webUnsaved": "Ungespeicherte Änderungen"
+    "webUnsaved": "Ungespeicherte Änderungen",
+    "remoteVerifyCertificate": "Vergleiche den SHA-256-Fingerabdruck des Zertifikats auf deinem Gerät mit der Anzeige hier. Richte das Vertrauen nur für dieses geprüfte Zertifikat ein.",
+    "remotePrivateLink": "Dieser Link erteilt Zugriff mit den freigegebenen Rechten. Teile ihn nur mit der vorgesehenen Person.",
+    "remoteExportCertificate": "Öffentliches Zertifikat speichern"
   },
   "native": {},
   "en": {
@@ -132,7 +135,10 @@
     "eventOverviewHeaderVisible": "Show header with logo, date and time",
     "webOnline": "Online",
     "webOffline": "Offline",
-    "webUnsaved": "Unsaved changes"
+    "webUnsaved": "Unsaved changes",
+    "remoteVerifyCertificate": "Compare the SHA-256 certificate fingerprint on your device with the one shown here. Only trust the certificate you verified.",
+    "remotePrivateLink": "This link grants the assigned permissions. Share it only with the intended person.",
+    "remoteExportCertificate": "Save public certificate"
   },
   "documentation": {
     "helpTitle": "Lokale KI: Modelle, Gestaltung und Bilder",

@@ -39,12 +39,16 @@ export class OutputWindowManager{
   })}
   /** Main-process use only; never exposed through preload or output snapshots. */
   getNativeCompositionWindows(){return [...this.outputs.values()].filter(entry=>!entry.window.isDestroyed()).map(({role,window})=>({role,window}))}
-  private frames=new Map<OutputRole,{windowId:number;at:number;value:Promise<Buffer|null>}>();
+  private frames=new Map<OutputRole,{windowId:number;at:number;pending:boolean;value:Promise<Buffer|null>}>();
   async captureFrame(role:'main'|'stage'|'livestream'):Promise<Buffer|null>{
     const entry=this.outputs.get(role);if(!entry||entry.window.isDestroyed())return null;
-    const old=this.frames.get(role),now=Date.now();if(old&&old.windowId===entry.window.id&&now-old.at<500)return old.value;
-    const value=entry.window.webContents.capturePage().then(image=>image.isEmpty()?null:image.resize({width:960}).toJPEG(75)).catch(()=>null);
-    this.frames.set(role,{windowId:entry.window.id,at:now,value});return value;
+    const old=this.frames.get(role),now=Date.now();
+    if(old?.windowId===entry.window.id&&(old.pending||now-old.at<200))return old.value;
+    const capture={windowId:entry.window.id,at:now,pending:true,value:entry.window.webContents.capturePage()
+      .then(image=>image.isEmpty()?null:image.resize({width:Math.min(image.getSize().width,960)}).toJPEG(72))
+      .catch(()=>null).finally(()=>{capture.pending=false;})};
+    this.frames.set(role,capture);
+    return capture.value;
   }
   getStateForSender(id:number){
     const entry=[...this.outputs.values(),this.pendingMain].find(entry=>entry&&!entry.window.isDestroyed()&&entry.window.webContents.id===id);

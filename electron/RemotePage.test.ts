@@ -7,8 +7,8 @@ it('localizes German control chrome while escaping captions and keeping the mirr
  expect(html).toContain('Prediger &lt;Saal&gt;');
  expect(html).toContain('&lt;/script&gt;&lt;img src=x&gt;');
  expect(html).not.toContain('</script><img src=x>');
- expect(html).toContain('value="#699f3e"');
- expect(html).toContain('/api/frame?token=');
+ expect(html).toContain('data-color="#699f3e"');
+ expect(html).toContain("previewImage('/api/frame')");
  const script=html.match(/<script>([\s\S]*?)<\/script>/)![1];
  expect(()=>new Function(script)).not.toThrow();
  expect(script).not.toContain('<img src=x>');

@@ -389,7 +389,7 @@ app.whenReady().then(async() => {
     'temporary-downloads':path.join(app.getPath('userData'),'temporary-downloads'),
     'web-cache':path.join(app.getPath('sessionData'),'Cache'),
   });
-  const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>{sendToLiveWindow(controlWindow,'remote:command',payload);const p=payload as any;if(p?.action==='screen-share'&&p.event?.type!=='offer')for(const output of outputManager.getNativeCompositionWindows())if(output.role==='main')output.window.webContents.send('remote:share-event',p.event)},43170,role=>outputManager.captureFrame(role),nativeText,()=>nextPreview.capture());
+  const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>{sendToLiveWindow(controlWindow,'remote:command',payload);const p=payload as any;if(p?.action==='screen-share'&&p.event?.type!=='offer')for(const output of outputManager.getNativeCompositionWindows())if(output.role==='main')output.window.webContents.send('remote:share-event',p.event)},43171,role=>outputManager.captureFrame(role),nativeText,()=>nextPreview.capture());
   await remoteServer.start().catch(()=>null);
   void getLocalTlsIdentity(path.join(app.getPath('userData'),'remote-tls'),Object.values(os.networkInterfaces()).flatMap(list=>(list??[]).filter(i=>i.family==='IPv4').map(i=>i.address))).then(identity=>remoteServer.enableSecure(identity)).catch(()=>null);
   const onlineMedia=new GitHubStorageProvider('cmoere','GottesdienstRegie','media-library');
@@ -623,11 +623,20 @@ app.whenReady().then(async() => {
   ipcMain.handle('remote:next-get',event=>nextPreview.get(event.sender.id));
   ipcMain.handle('remote:next-ready',(event,revision:number)=>nextPreview.ready(event.sender.id,revision));
   ipcMain.handle('remote:get',(event)=>{requireRemoteControl(event);return remoteServer.get()});
+  ipcMain.handle('remote:export-certificate',async event=>{
+    requireRemoteControl(event);
+    const certificate=remoteServer.getPublicCertificate();
+    if(!certificate||!controlWindow)return false;
+    const picked=await dialog.showSaveDialog(controlWindow,{defaultPath:'GottesdienstRegie-Lokal.crt'});
+    if(picked.canceled||!picked.filePath)return false;
+    await fs.writeFile(picked.filePath,certificate,'utf8');
+    return true;
+  });
   ipcMain.handle('remote:save-monitor',(event,monitor:any)=>{requireRemoteControl(event);return remoteServer.saveMonitor(monitor)});
   ipcMain.handle('remote:remove-monitor',(event,id:string)=>{requireRemoteControl(event);return remoteServer.removeMonitor(id)});
   ipcMain.handle('remote:create-session',(event,input:any)=>{requireRemoteControl(event);return remoteServer.createSession(input)});
   ipcMain.handle('remote:revoke-session',(event,id:string)=>{requireRemoteControl(event);return remoteServer.revokeSession(id)});
-  ipcMain.handle('remote:update-live',(event,state:any)=>{requireRemoteControl(event);remoteServer.updateLive(state);nextPreview.update(state?.next?{slide:state.next,sourceHash:state.nextSourceHash}:null);return true});
+  ipcMain.handle('remote:update-live',(event,state:any)=>{requireRemoteControl(event);const nextPreviewRevision=nextPreview.update(state?.next?{slide:state.next,sourceHash:state.nextSourceHash}:null);remoteServer.updateLive({...state,nextPreviewRevision});return true});
   ipcMain.handle('updates:current-version',()=>app.getVersion());
   ipcMain.handle('updates:status',()=>lastUpdateStatus);
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});
