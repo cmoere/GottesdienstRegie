@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { searchRadioStations, type RadioStation } from "./radioStations";
+import { searchRadioStations, suggestRadioStations, type RadioStation } from "./radioStations";
 import type { BackgroundAudioTrack } from "./store";
 import { startRadioPreview } from "./radioPlayback";
 import {useI18n} from './i18n';
@@ -12,6 +12,9 @@ export function RadioStationBrowser({
   const {t}=useI18n();
   const [query, setQuery] = useState(""),
     [stations, setStations] = useState<RadioStation[]>([]),
+    [suggested, setSuggested] = useState<RadioStation[]>([]),
+    [loadingSuggestions, setLoadingSuggestions] = useState(true),
+    [showSuggestions, setShowSuggestions] = useState(true),
     [visible, setVisible] = useState(PAGE_SIZE),
     [busy, setBusy] = useState(false),
     [error, setError] = useState<{kind:'empty'}|{kind:'search';detail:string}|null>(null),
@@ -26,7 +29,32 @@ export function RadioStationBrowser({
     const media=audioRef.current;
     return()=>{if(media?.getAttribute('src')){media.pause();media.removeAttribute('src');media.load()}};
   },[]);
+  useEffect(() => {
+    const request = new AbortController();
+    void suggestRadioStations(request.signal).then(found => {
+      if (!request.signal.aborted) setSuggested(found);
+    }).catch(() => {
+      // Search remains available if suggestions cannot be loaded.
+    }).finally(() => {
+      if (!request.signal.aborted) setLoadingSuggestions(false);
+    });
+    return () => request.abort();
+  }, []);
+  const results = showSuggestions ? suggested : stations;
+  const clearSearch = () => {
+    setQuery("");
+    setError(null);
+    setVisible(PAGE_SIZE);
+    setShowSuggestions(true);
+  };
   const search = async () => {
+    if (busy) return;
+    if (!query.trim()) {
+      clearSearch();
+      return;
+    }
+    setShowSuggestions(false);
+    setStations([]);
     setBusy(true);
     setError(null);
     setVisible(PAGE_SIZE);
@@ -94,7 +122,8 @@ export function RadioStationBrowser({
               type="button"
               aria-label={t('radioBrowserClear')}
               title={t('radioBrowserClear')}
-              onClick={() => setQuery("")}
+              disabled={busy}
+              onClick={clearSearch}
             >
               <span className="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
@@ -104,9 +133,13 @@ export function RadioStationBrowser({
           {busy ? t('radioBrowserSearching') : t('radioBrowserSearch')}
         </button>
       </div>
+      {showSuggestions && (loadingSuggestions || results.length > 0) && (
+        <h5>{t('radioBrowserSuggestions')}</h5>
+      )}
+      {showSuggestions && loadingSuggestions && <p role="status">{t('radioBrowserLoading')} …</p>}
       {error && <p role="alert">{error.kind==='empty'?t('radioBrowserEmpty'):t('radioBrowserSearchFailed',{detail:error.detail})}</p>}
       <div className="radio-results">
-        {stations.slice(0, visible).map((station) => (
+        {results.slice(0, visible).map((station) => (
           <article key={station.id}>
             <button
               className="radio-play"
@@ -151,13 +184,13 @@ export function RadioStationBrowser({
           </article>
         ))}
       </div>
-      {stations.length > PAGE_SIZE && (
+      {results.length > PAGE_SIZE && (
         <div className="radio-pagination">
-          {visible < stations.length && (
+          {visible < results.length && (
             <button
               onClick={() =>
                 setVisible((value) =>
-                  Math.min(stations.length, value + PAGE_SIZE),
+                  Math.min(results.length, value + PAGE_SIZE),
                 )
               }
             >

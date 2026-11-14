@@ -2292,6 +2292,14 @@
     "versions[0.99].builds[0.99.11].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.11].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.11].sections.known.1.label": "Originalgetrouwe PowerPoint-Wiedergave",
-    "versions[0.99].builds[0.99.11].sections.known.1.text": "De originalgetrouwe Wiedergave bruukt wieter Windows en installiert Microsoft PowerPoint. De nieje Vörbereitungs- en Diagnosefunktione ersetze disse Wiedergaveweg niet."
+    "versions[0.99].builds[0.99.11].sections.known.1.text": "De originalgetrouwe Wiedergave bruukt wieter Windows en installiert Microsoft PowerPoint. De nieje Vörbereitungs- en Diagnosefunktione ersetze disse Wiedergaveweg niet.",
+    "versions[0.99].builds[0.99.12].overview.label": "Sendervorschläge beim Öffnen",
+    "versions[0.99].builds[0.99.12].overview.text": "Die Radioauswahl lädt beim Öffnen beliebte deutsche HTTPS-Sender. Beim Löschen des Suchtexts kehren die Vorschläge zurück.",
+    "versions[0.99].builds[0.99.12].sections.fixed.0.label": "Hinweise zu Zwischenversionen",
+    "versions[0.99].builds[0.99.12].sections.fixed.0.text": "Die Update-Anzeige fasst verfügbare Versionshinweise seit der installierten Version zusammen und hält sie während des Downloads sichtbar.",
+    "versions[0.99].builds[0.99.12].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.12].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.12].sections.known.1.label": "Originalgetrouwe PowerPoint-Wiedergave",
+    "versions[0.99].builds[0.99.12].sections.known.1.text": "De originalgetrouwe Wiedergave bruukt wieter Windows en installiert Microsoft PowerPoint. De nieje Vörbereitungs- en Diagnosefunktione ersetze disse Wiedergaveweg niet."
   }
 }

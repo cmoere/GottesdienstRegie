@@ -1,11 +1,11 @@
 import {act,cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react';
 import {afterEach,beforeEach,expect,it,vi} from 'vitest';
 import {RadioStationBrowser} from './RadioStationBrowser';
-import {searchRadioStations,type RadioStation} from './radioStations';
+import {searchRadioStations,suggestRadioStations,type RadioStation} from './radioStations';
 import {usePreferences} from './preferences';
-vi.mock('./radioStations',()=>({searchRadioStations:vi.fn()}));
+vi.mock('./radioStations',()=>({searchRadioStations:vi.fn(),suggestRadioStations:vi.fn()}));
 const preferences=usePreferences.getState();
-beforeEach(()=>{usePreferences.setState({language:'en',germanRegion:null});vi.mocked(searchRadioStations).mockReset()});
+beforeEach(()=>{usePreferences.setState({language:'en',germanRegion:null});vi.mocked(searchRadioStations).mockReset();vi.mocked(suggestRadioStations).mockResolvedValue([])});
 afterEach(()=>{cleanup();usePreferences.setState(preferences,true)});
 
 it('updates pending and empty-search feedback when the operator language changes',async()=>{
@@ -28,6 +28,7 @@ it('preserves supplied error details while translating only the operator templat
  const detail='https://example.invalid/{station}?id=-Radio_ID';
  vi.mocked(searchRadioStations).mockRejectedValue(new Error(detail));
  render(<RadioStationBrowser add={()=>{}}/>);
+ fireEvent.change(screen.getByPlaceholderText('Station, location or genre'),{target:{value:'Jazz'}});
  fireEvent.click(screen.getByRole('button',{name:'Search'}));
  expect(await screen.findByRole('alert')).toHaveTextContent(`Radio search failed: ${detail}. Please try again.`);
  act(()=>usePreferences.setState({language:'de'}));
@@ -38,6 +39,7 @@ it('localizes result controls without translating station names, stream URLs or 
  const stations=Array.from({length:12},(_,index)=>({id:String(index),name:`Köln ÄÖÜ ${index}`,streamUrl:`https://example.test/stream/${index}`,country:'Deutschland',language:'Deutsch',tags:['Jazz'],codec:'MP3',bitrate:128,artworkUrl:'',homepage:'https://example.test/'}));
  vi.mocked(searchRadioStations).mockResolvedValue(stations);
  const tracks:unknown[]=[];render(<RadioStationBrowser add={track=>tracks.push(track)}/>);
+ fireEvent.change(screen.getByPlaceholderText('Station, location or genre'),{target:{value:'Jazz'}});
  fireEvent.click(screen.getByRole('button',{name:'Search'}));
  await waitFor(()=>expect(screen.getAllByRole('article')).toHaveLength(10));
  expect(screen.getByRole('button',{name:'Play Köln ÄÖÜ 0'})).toBeInTheDocument();

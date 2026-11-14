@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
+          "version": "0.99.12",
+          "releaseDate": "2026-11-14",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Sendervorschläge beim Öffnen",
+              "en": "Station suggestions on opening"
+            },
+            "text": {
+              "de": "Die Radioauswahl lädt beim Öffnen beliebte deutsche HTTPS-Sender. Beim Löschen des Suchtexts kehren die Vorschläge zurück.",
+              "en": "The radio picker loads popular German HTTPS stations on opening. Clearing the search brings back the suggestions."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Hinweise zu Zwischenversionen",
+                  "en": "Notes for skipped versions"
+                },
+                "text": {
+                  "de": "Die Update-Anzeige fasst verfügbare Versionshinweise seit der installierten Version zusammen und hält sie während des Downloads sichtbar.",
+                  "en": "The update screen collects available release notes since the installed version and keeps them visible during download."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
           "version": "0.99.11",
           "releaseDate": "2026-11-11",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "HTTPS für Personal Monitor und Web-Steuerung",

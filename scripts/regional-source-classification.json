@@ -11555,6 +11555,18 @@
       "context": "property:'content-security-policy'",
       "text": "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
       "reason": "Standard HTTP security header values. Translating them would break browser enforcement."
+    },
+    "source.d798257649c1e744bd8c.1": {
+      "source": "src/radioStations.ts",
+      "context": "property:countrycode",
+      "text": "DE",
+      "reason": "ISO country code for Radio Browser request. Not interface text."
+    },
+    "source.b79f1e6a479894407d12.1": {
+      "source": "electron/main.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "GottesdienstRegie {expression1}\n{expression2}",
+      "reason": "Changelog heading combines the product name and version with publisher-authored release notes."
     }
   },
   "reviewedTechnicalFiles": {

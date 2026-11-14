@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": true,
-  "sourceFingerprint": "fe24b16ec62401a1667ff8067fe391644d1315494593ce0cfd7ca405d19e1296",
+  "sourceFingerprint": "00cb52a9a8916bc61b03f52c5635e95b141e34552acb9b44731e2b9f7cd6b6c3",
   "note": "Reviewed complete v98 source inventory; all31 interface/native/help/release resources checked separately. Protocol tokens, internal prompts and generated-document defaults have exact entry-level reviews.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -84679,6 +84679,89 @@
     },
     {
       "key": "release.versions[0.99].builds[0.99.11].sections.known.1.text",
+      "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "source.d798257649c1e744bd8c.1",
+      "text": "DE",
+      "source": "src/radioStations.ts",
+      "line": 18,
+      "context": "property:countrycode",
+      "status": "excluded",
+      "exclusionReason": "ISO country code for Radio Browser request. Not interface text.",
+      "technicalReviewHash": "d411af50a7b974acc2f03db53e910916e51cddce69f1cddfcaeca773add26fb0"
+    },
+    {
+      "key": "source.b79f1e6a479894407d12.1",
+      "text": "GottesdienstRegie {expression1}\n{expression2}",
+      "source": "electron/main.ts",
+      "line": 135,
+      "context": "ArrayLiteralExpression",
+      "status": "excluded",
+      "exclusionReason": "Changelog heading combines the product name and version with publisher-authored release notes.",
+      "technicalReviewHash": "e8cb5f8549fec31e59eeea205c6b77d2648f11aa3cf5f7f8462ddce68679e725"
+    },
+    {
+      "key": "ui.radioBrowserSuggestions",
+      "text": "Vorgeschlagene Sender",
+      "source": "shared/regional/radioControlTemplates.ts",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.12].overview.label",
+      "text": "Sendervorschläge beim Öffnen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.12].overview.text",
+      "text": "Die Radioauswahl lädt beim Öffnen beliebte deutsche HTTPS-Sender. Beim Löschen des Suchtexts kehren die Vorschläge zurück.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.12].sections.fixed.0.label",
+      "text": "Hinweise zu Zwischenversionen",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.12].sections.fixed.0.text",
+      "text": "Die Update-Anzeige fasst verfügbare Versionshinweise seit der installierten Version zusammen und hält sie während des Downloads sichtbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.12].sections.known.0.label",
+      "text": "Hinweise zum Live-Betrieb",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.12].sections.known.0.text",
+      "text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.12].sections.known.1.label",
+      "text": "Originalgetreue PowerPoint-Wiedergabe",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.12].sections.known.1.text",
       "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
       "source": "public/releases.json",
       "context": "release-history",

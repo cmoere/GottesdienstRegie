@@ -10,12 +10,22 @@ export async function discoverRadioBrowserHosts(fetcher:typeof fetch=fetch){
   const servers=await response.json() as {name?:string}[];
   return [...new Set(servers.map(server=>String(server.name??'').trim()).filter(name=>/^[a-z0-9.-]+\.radio-browser\.info$/i.test(name)).map(name=>`https://${name}`))];
 }
-export async function searchRadioStations(query:string,fetcher:typeof fetch=fetch,hosts?:readonly string[]){
+export function searchRadioStations(query:string,fetcher:typeof fetch=fetch,hosts?:readonly string[]){
+  return loadStations({name:query.trim()},fetcher,hosts);
+}
+
+export function suggestRadioStations(signal:AbortSignal,fetcher:typeof fetch=fetch){
+  return loadStations({countrycode:'DE'},fetcher,RADIO_BROWSER_HOSTS,signal);
+}
+
+async function loadStations(filters:Record<string,string>,fetcher:typeof fetch,hosts?:readonly string[],signal?:AbortSignal){
+  const params=new URLSearchParams({hidebroken:'true',limit:'40',order:'clickcount',reverse:'true',...filters});
   let candidates=hosts;
   if(!candidates)try{candidates=await discoverRadioBrowserHosts(fetcher)}catch{candidates=RADIO_BROWSER_HOSTS}
   let lastError:unknown;
   for(const host of candidates.length?candidates:RADIO_BROWSER_HOSTS)try{
-    const response=await fetcher(`${host}/json/stations/search?hidebroken=true&limit=40&order=clickcount&reverse=true&name=${encodeURIComponent(query.trim())}`,{headers:{Accept:'application/json'}});
+    signal?.throwIfAborted();
+    const response=await fetcher(`${host}/json/stations/search?${params}`,{headers:{Accept:'application/json'},signal:signal?AbortSignal.any([signal,AbortSignal.timeout(3500)]):undefined});
     if(!response.ok)throw new Error(`HTTP ${response.status}`);
     const data=await response.json() as Record<string,unknown>[];
     return data.map(normalizeRadioStation).filter((item):item is RadioStation=>Boolean(item));

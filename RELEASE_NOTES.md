@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.12
+
+Die Radioauswahl lädt beim Öffnen beliebte deutsche HTTPS-Sender. Beim Löschen des Suchtexts kehren die Vorschläge zurück.
+
+Die Update-Anzeige fasst verfügbare Versionshinweise seit der installierten Version zusammen und hält sie während des Downloads sichtbar.
+
+---
+
 # GottesdienstRegie 0.99.11
 
 Personal Monitor und Web-Steuerung verwenden HTTPS im lokalen Netz. Das öffentliche Zertifikat lässt sich in der Regie speichern. Bestehende Monitore bleiben eingerichtet. Kopiere ihre neuen Links oder QR-Codes aus der Regie.

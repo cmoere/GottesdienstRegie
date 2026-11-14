@@ -2391,7 +2391,8 @@
     "webUnsaved": "Ungespeicherte Änderungen",
     "remoteVerifyCertificate": "Vergleiche den SHA-256-Fingerabdruck des Zertifikats auf deinem Gerät mit der Anzeige hier. Richte das Vertrauen nur für dieses geprüfte Zertifikat ein.",
     "remotePrivateLink": "Dieser Link erteilt Zugriff mit den freigegebenen Rechten. Teile ihn nur mit der vorgesehenen Person.",
-    "remoteExportCertificate": "Öffentliches Zertifikat speichern"
+    "remoteExportCertificate": "Öffentliches Zertifikat speichern",
+    "radioBrowserSuggestions": "Vorgeschlagene Sender"
   },
   "native": {
     "updateAvailableTitle": "Niege Verschoon is dor",

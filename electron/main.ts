@@ -129,16 +129,23 @@ let installDownloadedUpdateNow=false;
 const promptedUpdateVersions=new Set<string>();
 function releaseNotes(info:UpdateInfo){
   if(typeof info.releaseNotes==='string')return info.releaseNotes;
-  if(Array.isArray(info.releaseNotes))return info.releaseNotes.map(note=>typeof note==='string'?note:note.note).filter(Boolean).join('\n\n');
+  if(Array.isArray(info.releaseNotes))return info.releaseNotes.flatMap(entry=>{
+    if(!entry.note?.trim())return [];
+    return [`GottesdienstRegie ${entry.version}\n${entry.note}`];
+  }).join('\n\n');
   return '';
 }
 function publishUpdateStatus(status:UpdateStatus){
+  if(status.version&&status.version===lastUpdateStatus.version&&!status.releaseNotes&&lastUpdateStatus.releaseNotes){
+    status={...status,releaseNotes:lastUpdateStatus.releaseNotes};
+  }
   lastUpdateStatus=status;
   sendToLiveWindow(controlWindow,'updates:status',status);
   return status;
 }
 
 autoUpdater.autoDownload=false;
+autoUpdater.fullChangelog=true;
 autoUpdater.autoInstallOnAppQuit=false;
 autoUpdater.on('checking-for-update',()=>publishUpdateStatus({state:'checking'}));
 autoUpdater.on('update-available',info=>{pendingUpdateVersion=info.version;publishUpdateStatus({state:'available',version:info.version,releaseNotes:releaseNotes(info)});void promptForAvailableUpdate(info)});
