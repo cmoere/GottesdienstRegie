@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "complete": true,
-  "sourceFingerprint": "00cb52a9a8916bc61b03f52c5635e95b141e34552acb9b44731e2b9f7cd6b6c3",
+  "sourceFingerprint": "0cec1439cbe370ffbbec828778bdb2bdc87e4f490455f68931ddff39c60a81e0",
   "note": "Reviewed complete v98 source inventory; all31 interface/native/help/release resources checked separately. Protocol tokens, internal prompts and generated-document defaults have exact entry-level reviews.",
   "preserveLiteral": [
     "TESTBETRIEB",
@@ -25688,16 +25688,6 @@
       "resourceKey": "ui.operatorSource_f45c5c83a3dc88af",
       "exclusionReason": "Explicit operator-copy binding resolves canonical resource ui.operatorSource_f45c5c83a3dc88af; locale coverage is validated against that resource.",
       "technicalReviewHash": "37ea12f29908aa55497540812cf0be944f8f619c536cc5524b338ee222bce3b9"
-    },
-    {
-      "key": "source.e28c7cc280b4c1de4e5a.1",
-      "text": "Enter",
-      "source": "src/RadioStationBrowser.tsx",
-      "line": 85,
-      "context": "BinaryExpression",
-      "status": "excluded",
-      "exclusionReason": "Manually read complete RadioStationBrowser 2026-10-21: KeyboardEvent.key comparison, not a displayed label. Changing this protocol token to a dialect would break search submission; surrounding operator copy uses explicit radioBrowser keys.",
-      "technicalReviewHash": "37d2826c187de95bc16260df0c9ef8736d9b8a3e00a9f1b05bd1922937bdb91a"
     },
     {
       "key": "source.84c017c20e73512e8c52.1",
@@ -84762,6 +84752,245 @@
     },
     {
       "key": "release.versions[0.99].builds[0.99.12].sections.known.1.text",
+      "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.speechSettingsGong",
+      "text": "Durchsagegong",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.speechGongClassic",
+      "text": "Klassischer Dreiklang",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.speechGongSoft",
+      "text": "Sanfter Dreiklang",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.speechGongBright",
+      "text": "Heller Dreiklang",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.speechGongSingle",
+      "text": "Einzelton",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.speechSettingsGongHelp",
+      "text": "Der zentral gespeicherte Gong gilt auf allen Regie-PCs. Die Tonprobe verwendet die gespeicherte Auswahl.",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "source.5dab8f0fb07b3e3dec2f.1",
+      "text": "INVALID_SHARED_GONG",
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "line": 13,
+      "context": "CallExpression",
+      "status": "excluded",
+      "exclusionReason": "Internal error identifier returned through IPC. The settings UI displays a localized status message.",
+      "technicalReviewHash": "cad07ffc0def1af73b5af769f10e3a15a8bf44605c60208871976e3a4ed8f933"
+    },
+    {
+      "key": "source.5dab8f0fb07b3e3dec2f.2",
+      "text": "INVALID_SHARED_GONG",
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "line": 48,
+      "context": "CallExpression",
+      "status": "excluded",
+      "exclusionReason": "Internal error identifier returned through IPC. The settings UI displays a localized status message.",
+      "technicalReviewHash": "24d3c69dcb522fdfceb2ca3ca9b8abb198cfad1b7b8df08247dcea153117943d"
+    },
+    {
+      "key": "source.af93ef61f981f9eceac2.1",
+      "text": "SHARED_GONG_SAVE_BUSY",
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "line": 49,
+      "context": "CallExpression",
+      "status": "excluded",
+      "exclusionReason": "Internal error identifier returned through IPC. The settings UI displays a localized status message.",
+      "technicalReviewHash": "1681e633651301dfeeaf28bda133cea9d3c5df3dc3c4cba55b92fab386b711ac"
+    },
+    {
+      "key": "source.8e4f01f1a5a4d5678da4.1",
+      "text": "SHARED_GONG_WRITE_PERMISSION",
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "line": 56,
+      "context": "CallExpression",
+      "status": "excluded",
+      "exclusionReason": "Internal error identifier returned through IPC. The settings UI displays a localized status message.",
+      "technicalReviewHash": "d1195e2edbbd463073439ffc3cef813631a89b66ace1ff801ca3bd00cdf0712d"
+    },
+    {
+      "key": "source.a8ad72e52ecf127cd02d.1",
+      "text": "Bearer {expression1}",
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "line": 57,
+      "context": "property:authorization",
+      "status": "excluded",
+      "exclusionReason": "HTTP authorization scheme and runtime credential.",
+      "technicalReviewHash": "f09f127dd43bef33bc784dde0fd749143024df6bebae05d0fcdf000492204a0d"
+    },
+    {
+      "key": "source.1aa3b33f968ed5339496.1",
+      "text": "SHARED_GONG_READ_FAILED",
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "line": 59,
+      "context": "CallExpression",
+      "status": "excluded",
+      "exclusionReason": "Internal error identifier returned through IPC. The settings UI displays a localized status message.",
+      "technicalReviewHash": "3638c93670d10d60acecd9485b0e9d8529a9a5b8fb8d0247be8443363bfcd571"
+    },
+    {
+      "key": "source.1aa3b33f968ed5339496.2",
+      "text": "SHARED_GONG_READ_FAILED",
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "line": 61,
+      "context": "CallExpression",
+      "status": "excluded",
+      "exclusionReason": "Internal error identifier returned through IPC. The settings UI displays a localized status message.",
+      "technicalReviewHash": "4f7b0c50bafc5b725c561b0cfece623da0dd1ed8f0df9e07f80a4aa9848110ae"
+    },
+    {
+      "key": "source.c8d8e2c9956c00b34390.1",
+      "text": "PUT",
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "line": 65,
+      "context": "property:method",
+      "status": "excluded",
+      "exclusionReason": "HTTP request method used by the GitHub Contents API.",
+      "technicalReviewHash": "2d716a2e2f6998249e5d3d4b44e0c8b11ecfe254d0ab0f83554886b3fe537f01"
+    },
+    {
+      "key": "source.05ea4ab1ecb8e2369a85.1",
+      "text": "Update shared announcement chime",
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "line": 66,
+      "context": "property:message",
+      "status": "excluded",
+      "exclusionReason": "Technical commit message sent to the GitHub Contents API.",
+      "technicalReviewHash": "44981f49242fe772920b351b6528c03d741b8a4ad66386a1314872cdc584bec1"
+    },
+    {
+      "key": "source.bde6e8d4ad1052a5c93f.1",
+      "text": "SHARED_GONG_WRITE_FAILED",
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "line": 70,
+      "context": "CallExpression",
+      "status": "excluded",
+      "exclusionReason": "Internal error identifier returned through IPC. The settings UI displays a localized status message.",
+      "technicalReviewHash": "6e0b96b0e06727493d1905c5e97cc25270c36a842457f6b0880c44e9b8bd3457"
+    },
+    {
+      "key": "source.773b7f0f4bee54bef87a.1",
+      "text": "SHARED_GONG_CONTROL_ONLY",
+      "source": "electron/main.ts",
+      "line": 319,
+      "context": "CallExpression",
+      "status": "excluded",
+      "exclusionReason": "Internal error identifier returned through IPC. The settings UI displays a localized status message.",
+      "technicalReviewHash": "264ca1a5826fcac858897eb722f8f6d505aed63902f9c2f0c59a47b7af009f41"
+    },
+    {
+      "key": "source.773b7f0f4bee54bef87a.2",
+      "text": "SHARED_GONG_CONTROL_ONLY",
+      "source": "electron/main.ts",
+      "line": 323,
+      "context": "CallExpression",
+      "status": "excluded",
+      "exclusionReason": "Internal error identifier returned through IPC. The settings UI displays a localized status message.",
+      "technicalReviewHash": "4e9cec020ff68174ea78216ec126a496f7ecfda72465cd466efdbecc63395179"
+    },
+    {
+      "key": "ui.speechGongSave",
+      "text": "Gong für alle Regie-PCs speichern",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.speechGongSaved",
+      "text": "Gong zentral gespeichert.",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "ui.speechGongSaveError",
+      "text": "Der gemeinsame Gong ist derzeit nicht bearbeitbar. Verbindung und Schreibrechte für das GitHub-Repository prüfen.",
+      "source": "shared/regional/v98Templates.json",
+      "context": "regional-controls",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.13].overview.label",
+      "text": "Gemeinsamer Durchsagegong",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.13].overview.text",
+      "text": "Unter Einstellungen → Präsentation → Ansagen stehen vier Durchsagegongs zur Auswahl. Eine zentral gespeicherte Auswahl gilt für alle Regie-PCs und wird für Tonproben und automatische Ansagen verwendet.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.13].sections.fixed.0.label",
+      "text": "Senderlogos in der Radioauswahl",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.13].sections.fixed.0.text",
+      "text": "Vorschläge und Suchtreffer zeigen links das Senderlogo oder ein Radiosymbol. Lange Sendernamen brechen um. Auf schmalen Fenstern bleibt die Schaltfläche zum Hinzufügen gut erreichbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.13].sections.known.0.label",
+      "text": "Hinweise zum Live-Betrieb",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.13].sections.known.0.text",
+      "text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.13].sections.known.1.label",
+      "text": "Originalgetreue PowerPoint-Wiedergabe",
+      "source": "public/releases.json",
+      "context": "release-history",
+      "status": "app-owned"
+    },
+    {
+      "key": "release.versions[0.99].builds[0.99.13].sections.known.1.text",
       "text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
       "source": "public/releases.json",
       "context": "release-history",

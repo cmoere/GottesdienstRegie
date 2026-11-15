@@ -67,7 +67,16 @@
     "webUnsaved": "Ungespeicherte Änderungen",
     "remoteVerifyCertificate": "Vergleiche den SHA-256-Fingerabdruck des Zertifikats auf deinem Gerät mit der Anzeige hier. Richte das Vertrauen nur für dieses geprüfte Zertifikat ein.",
     "remotePrivateLink": "Dieser Link erteilt Zugriff mit den freigegebenen Rechten. Teile ihn nur mit der vorgesehenen Person.",
-    "remoteExportCertificate": "Öffentliches Zertifikat speichern"
+    "remoteExportCertificate": "Öffentliches Zertifikat speichern",
+    "speechSettingsGong": "Durchsagegong",
+    "speechGongClassic": "Klassischer Dreiklang",
+    "speechGongSoft": "Sanfter Dreiklang",
+    "speechGongBright": "Heller Dreiklang",
+    "speechGongSingle": "Einzelton",
+    "speechSettingsGongHelp": "Der zentral gespeicherte Gong gilt auf allen Regie-PCs. Die Tonprobe verwendet die gespeicherte Auswahl.",
+    "speechGongSave": "Gong für alle Regie-PCs speichern",
+    "speechGongSaved": "Gong zentral gespeichert.",
+    "speechGongSaveError": "Der gemeinsame Gong ist derzeit nicht bearbeitbar. Verbindung und Schreibrechte für das GitHub-Repository prüfen."
   },
   "native": {},
   "en": {
@@ -138,7 +147,16 @@
     "webUnsaved": "Unsaved changes",
     "remoteVerifyCertificate": "Compare the SHA-256 certificate fingerprint on your device with the one shown here. Only trust the certificate you verified.",
     "remotePrivateLink": "This link grants the assigned permissions. Share it only with the intended person.",
-    "remoteExportCertificate": "Save public certificate"
+    "remoteExportCertificate": "Save public certificate",
+    "speechSettingsGong": "Announcement chime",
+    "speechGongClassic": "Classic three-tone chime",
+    "speechGongSoft": "Soft three-tone chime",
+    "speechGongBright": "Bright three-tone chime",
+    "speechGongSingle": "Single tone",
+    "speechSettingsGongHelp": "The shared chime applies to all control computers. The audio test uses the saved selection.",
+    "speechGongSave": "Save chime for all control computers",
+    "speechGongSaved": "Shared chime saved.",
+    "speechGongSaveError": "The shared chime is currently unavailable for editing. Check your connection and GitHub repository write access."
   },
   "documentation": {
     "helpTitle": "Lokale KI: Modelle, Gestaltung und Bilder",

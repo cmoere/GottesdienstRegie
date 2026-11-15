@@ -4,6 +4,15 @@ import type { BackgroundAudioTrack } from "./store";
 import { startRadioPreview } from "./radioPlayback";
 import {useI18n} from './i18n';
 const PAGE_SIZE = 10;
+
+function StationArtwork({url}: {url: string}) {
+  const [failed, setFailed] = useState(false);
+  return <span className="radio-station-artwork" aria-hidden="true">
+    {url && !failed
+      ? <img src={url} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(true)} />
+      : <span className="material-symbols-outlined">radio</span>}
+  </span>;
+}
 export function RadioStationBrowser({
   add,
 }: {
@@ -104,17 +113,11 @@ export function RadioStationBrowser({
         <h4>{t('radioBrowserHeading')}</h4>
         <p>{t('radioBrowserIntro')}</p>
       </header>
-      <div className="radio-search">
+      <form className="radio-search" onSubmit={event => {event.preventDefault();void search();}}>
         <span className="radio-query">
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                void search();
-              }
-            }}
             placeholder={t('radioBrowserQuery')}
           />
           {query && (
@@ -129,10 +132,10 @@ export function RadioStationBrowser({
             </button>
           )}
         </span>
-        <button disabled={busy} onClick={() => void search()}>
+        <button type="submit" disabled={busy}>
           {busy ? t('radioBrowserSearching') : t('radioBrowserSearch')}
         </button>
-      </div>
+      </form>
       {showSuggestions && (loadingSuggestions || results.length > 0) && (
         <h5>{t('radioBrowserSuggestions')}</h5>
       )}
@@ -141,6 +144,7 @@ export function RadioStationBrowser({
       <div className="radio-results">
         {results.slice(0, visible).map((station) => (
           <article key={station.id}>
+            <StationArtwork key={station.artworkUrl} url={station.artworkUrl} />
             <button
               className="radio-play"
               onClick={() => play(station)}
@@ -152,7 +156,7 @@ export function RadioStationBrowser({
                   : "play_circle"}
               </span>
             </button>
-            <span>
+            <span className="radio-station-text">
               <b>{station.name}</b>
               <small>
                 {[
@@ -214,11 +218,7 @@ export function RadioStationBrowser({
       />
       {active && (
         <footer className={`radio-now-playing ${status}`} aria-live="polite">
-          {active.artworkUrl ? (
-            <img src={active.artworkUrl} alt="" />
-          ) : (
-            <span className="material-symbols-outlined" aria-hidden="true">radio</span>
-          )}
+          <StationArtwork key={active.artworkUrl} url={active.artworkUrl} />
           <div>
             <small>
               {status === "loading" ? (

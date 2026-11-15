@@ -2392,7 +2392,16 @@
     "remoteVerifyCertificate": "Vergleiche den SHA-256-Fingerabdruck des Zertifikats auf deinem Gerät mit der Anzeige hier. Richte das Vertrauen nur für dieses geprüfte Zertifikat ein.",
     "remotePrivateLink": "Dieser Link erteilt Zugriff mit den freigegebenen Rechten. Teile ihn nur mit der vorgesehenen Person.",
     "remoteExportCertificate": "Öffentliches Zertifikat speichern",
-    "radioBrowserSuggestions": "Vorgeschlagene Sender"
+    "radioBrowserSuggestions": "Vorgeschlagene Sender",
+    "speechSettingsGong": "Durchsagegong",
+    "speechGongClassic": "Klassischer Dreiklang",
+    "speechGongSoft": "Sanfter Dreiklang",
+    "speechGongBright": "Heller Dreiklang",
+    "speechGongSingle": "Einzelton",
+    "speechSettingsGongHelp": "Der zentral gespeicherte Gong gilt auf allen Regie-PCs. Die Tonprobe verwendet die gespeicherte Auswahl.",
+    "speechGongSave": "Gong für alle Regie-PCs speichern",
+    "speechGongSaved": "Gong zentral gespeichert.",
+    "speechGongSaveError": "Der gemeinsame Gong ist derzeit nicht bearbeitbar. Verbindung und Schreibrechte für das GitHub-Repository prüfen."
   },
   "native": {
     "updateAvailableTitle": "Neei Version is to kriegen",

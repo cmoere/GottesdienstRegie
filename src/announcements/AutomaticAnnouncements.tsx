@@ -6,7 +6,7 @@ import {AnnouncementService} from '../community/AnnouncementService';
 import {AppClock} from '../community/AppClock';
 import {getCommunityAnnouncementRecords,subscribeCommunityRuntime} from '../community/communityRuntime';
 import {AnnouncementRun,AnnouncementScheduler} from './AnnouncementRun';
-import {normalizeAnnouncementSettings} from './settings';
+import {announcementGongs,isAnnouncementGong,normalizeAnnouncementSettings,type AnnouncementGong} from './settings';
 import {playAnnouncementAudio} from './AnnouncementPlayer';
 import {useSpeechStatus} from './AnnouncementIndicator';
 import {generalAnnouncementProbe,registerAnnouncementTestController} from './AnnouncementTestRequests';
@@ -20,6 +20,7 @@ export function AutomaticAnnouncements({quick}:{quick:QuickScreenConfig|null}){
   const bridge=window.desktop?.announcements;
   if(!bridge?.synthesize||!bridge.cancel||!bridge.setIndicator)return;
   let disposed=false,settings=normalizeAnnouncementSettings(null),activeKey='',activeRevision='',activeId='';
+  let sharedGong:AnnouncementGong|undefined;
   let probe:{row:SpokenAnnouncement;key:string}|null=null,quietUntil=0;
   const scheduler=new AnnouncementScheduler(),service=new AnnouncementService();
   const context=()=>{
@@ -37,7 +38,7 @@ export function AutomaticAnnouncements({quick}:{quick:QuickScreenConfig|null}){
    duck:percent=>backgroundAudioEngine.setAnnouncementDucking(percent),indicator,
    play:async(kind,data,signal,playing)=>{
     if(!valid())return;
-    const url=kind==='gong'?new URL('audio/announcement-gong.wav',document.baseURI).href:URL.createObjectURL(new Blob([Uint8Array.from(data)],{type:'audio/wav'}));
+    const url=kind==='gong'?new URL(announcementGongs[sharedGong ?? settings.gongId ?? 'classic'],document.baseURI).href:URL.createObjectURL(new Blob([Uint8Array.from(data)],{type:'audio/wav'}));
     try{await playAnnouncementAudio(url,signal,playing,usePreferences.getState().audioRouting)}finally{if(kind==='speech')URL.revokeObjectURL(url)}
    },
   });
@@ -72,8 +73,24 @@ export function AutomaticAnnouncements({quick}:{quick:QuickScreenConfig|null}){
   const offStore=usePresentation.subscribe(tick),offPrefs=usePreferences.subscribe(tick),offCommunity=subscribeCommunityRuntime(tick);
   window.addEventListener('gottesdienstregie:announcement-settings',reload);navigator.mediaDevices?.addEventListener('devicechange',deviceChanged);
   window.addEventListener('gottesdienstregie:announcement-stop',stopForEngineChange);
+  let gongRevision=0;
+  const refreshGong=()=>{
+   const revision=++gongRevision;
+   void bridge.readSharedGong?.().then(value=>{
+    if(!disposed&&revision===gongRevision&&isAnnouncementGong(value))sharedGong=value;
+   }).catch(()=>{});
+  };
+  const onGongSaved=(event:Event)=>{
+   const gong=(event as CustomEvent<unknown>).detail;
+   if(!isAnnouncementGong(gong))return;
+   ++gongRevision;
+   sharedGong=gong;
+  };
+  window.addEventListener('gottesdienstregie:announcement-gong',onGongSaved);
+  const gongTimer=bridge.readSharedGong?window.setInterval(refreshGong,30_000):undefined;
+  refreshGong();
   const timer=window.setInterval(tick,1000);reload();
-  return()=>{disposed=true;tickRef.current=()=>{};clearInterval(timer);offStore();offPrefs();offCommunity();offTest();window.removeEventListener('gottesdienstregie:announcement-settings',reload);window.removeEventListener('gottesdienstregie:announcement-stop',stopForEngineChange);navigator.mediaDevices?.removeEventListener('devicechange',deviceChanged);run.cancel();indicator(false);useSpeechStatus.setState({testing:false})};
+  return()=>{disposed=true;tickRef.current=()=>{};clearInterval(timer);clearInterval(gongTimer);window.removeEventListener('gottesdienstregie:announcement-gong',onGongSaved);offStore();offPrefs();offCommunity();offTest();window.removeEventListener('gottesdienstregie:announcement-settings',reload);window.removeEventListener('gottesdienstregie:announcement-stop',stopForEngineChange);navigator.mediaDevices?.removeEventListener('devicechange',deviceChanged);run.cancel();indicator(false);useSpeechStatus.setState({testing:false})};
  },[]);
  return null;
 }

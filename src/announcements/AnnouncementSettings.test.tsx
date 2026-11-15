@@ -9,6 +9,33 @@ beforeEach(()=>usePreferences.setState({language:'de',germanRegion:null}));
 afterEach(()=>{cleanup();usePreferences.setState(savedPreferences,true)});
 
 describe('inactive announcement preparation settings',()=>{
+ it('saves the gong through the shared service without changing local speech settings',async()=>{
+  const writeSettings=vi.fn(async(value:Settings)=>value);
+  const writeSharedGong=vi.fn(async()=> 'single' as const);
+  render(<AnnouncementSettings rows={[]} bridge={{readSettings:async()=>initial,writeSettings,readSharedGong:async()=> 'bright',writeSharedGong}}/>);
+  const select=screen.getByLabelText('Durchsagegong');
+  await waitFor(()=>expect(select).toHaveValue('bright'));
+  fireEvent.change(select,{target:{value:'single'}});
+  fireEvent.click(screen.getByRole('button',{name:'Gong für alle Regie-PCs speichern'}));
+  await screen.findByText('Gong zentral gespeichert.');
+  expect(writeSharedGong).toHaveBeenCalledWith('single');
+  expect(writeSettings).not.toHaveBeenCalled();
+ });
+ it('persists the selected gong independently of enabled state and voice availability',async()=>{
+  let stored=initial;
+  const bridge={readSettings:async()=>stored,writeSettings:async(value:Settings)=>{stored=value;return value}};
+  const first=render(<AnnouncementSettings rows={[]} bridge={bridge}/>);
+  const select=screen.getByLabelText('Durchsagegong');
+  await waitFor(()=>expect(select).toBeEnabled());
+  expect(select).toHaveValue('classic');
+  fireEvent.change(select,{target:{value:'soft'}});
+  fireEvent.click(screen.getByRole('button',{name:'Ansageneinstellungen speichern'}));
+  await screen.findByText('Einstellungen gespeichert.');
+  expect(stored).toEqual({...initial,gongId:'soft'});
+  first.unmount();
+  render(<AnnouncementSettings rows={[]} bridge={bridge}/>);
+  await waitFor(()=>expect(screen.getByLabelText('Durchsagegong')).toHaveValue('soft'));
+ });
  it('selects a female voice centrally without enabling automatic announcements',async()=>{
   let stored:Settings={...initial,voiceId:'marytts:dfki-pavoque-neutral',speakerId:0,voiceAccepted:true};
   render(<AnnouncementSettings rows={[]} bridge={{readSettings:async()=>stored,writeSettings:async value=>{stored=value;return value},engineStatus:async()=>({ready:true,name:'Stimmen verfügbar'})}}/>);

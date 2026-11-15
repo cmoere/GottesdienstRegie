@@ -1,3 +1,11 @@
+# GottesdienstRegie 0.99.13
+
+Unter Einstellungen → Präsentation → Ansagen stehen vier Durchsagegongs zur Auswahl. Eine zentral gespeicherte Auswahl gilt für alle Regie-PCs und wird für Tonproben und automatische Ansagen verwendet.
+
+Vorschläge und Suchtreffer zeigen links das Senderlogo oder ein Radiosymbol. Lange Sendernamen brechen um. Auf schmalen Fenstern bleibt die Schaltfläche zum Hinzufügen gut erreichbar.
+
+---
+
 # GottesdienstRegie 0.99.12
 
 Die Radioauswahl lädt beim Öffnen beliebte deutsche HTTPS-Sender. Beim Löschen des Suchtexts kehren die Vorschläge zurück.

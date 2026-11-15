@@ -24,9 +24,61 @@
       "line": "0.99",
       "builds": [
         {
+          "version": "0.99.13",
+          "releaseDate": "2026-11-15",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Gemeinsamer Durchsagegong",
+              "en": "Shared announcement chime"
+            },
+            "text": {
+              "de": "Unter Einstellungen → Präsentation → Ansagen stehen vier Durchsagegongs zur Auswahl. Eine zentral gespeicherte Auswahl gilt für alle Regie-PCs und wird für Tonproben und automatische Ansagen verwendet.",
+              "en": "Settings → Presentation → Announcements offers four chimes. The centrally saved choice applies across control computers and is used for sound tests and automatic announcements."
+            }
+          },
+          "sections": {
+            "new": [],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Senderlogos in der Radioauswahl",
+                  "en": "Station logos in the radio picker"
+                },
+                "text": {
+                  "de": "Vorschläge und Suchtreffer zeigen links das Senderlogo oder ein Radiosymbol. Lange Sendernamen brechen um. Auf schmalen Fenstern bleibt die Schaltfläche zum Hinzufügen gut erreichbar.",
+                  "en": "Suggestions and search results show the station logo or a radio icon. Long station names wrap, and the Add button stays accessible in narrow windows."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
           "version": "0.99.12",
           "releaseDate": "2026-11-14",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Sendervorschläge beim Öffnen",

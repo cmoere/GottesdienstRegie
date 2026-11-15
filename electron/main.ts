@@ -24,6 +24,7 @@ import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Men
 import{copySlideImage}from'./slideClipboard';
 import path from 'node:path';
 import {countdownMediaSelection,type CountdownMediaContext} from './countdownMediaSelection';
+import {SharedAnnouncementGong} from './announcements/SharedAnnouncementGong';
 import {createAnnouncementSettingsAccess} from './announcements/SettingsAccess';
 import {AdvertisingService} from './advertising/service';
 import {readAdSelection} from '../shared/advertising';
@@ -313,6 +314,15 @@ app.whenReady().then(async() => {
   const watchSpeechOwner=(event:import('electron').IpcMainInvokeEvent)=>{speechAccess.authorize(event);if(speechOwners.has(event.sender.id))return;speechOwners.add(event.sender.id);const clear=()=>{espeak.cancel();speechIndicator.set(false)};event.sender.on('render-process-gone',clear);event.sender.once('destroyed',()=>{clear();speechOwners.delete(event.sender.id)})};
   app.once('will-quit',()=>{espeak.cancel();speechIndicator.dispose()});
   const announcementSettings=createAnnouncementSettingsAccess<import('electron').IpcMainInvokeEvent>(deviceSettings,isSpeechControl,async()=>(await espeak.status()).ready);
+  const sharedGong=new SharedAnnouncementGong(deviceSettings);
+  ipcMain.handle('announcements:gong-read',event=>{
+    if(!isSpeechControl(event)) throw Error('SHARED_GONG_CONTROL_ONLY');
+    return sharedGong.read();
+  });
+  ipcMain.handle('announcements:gong-write',(event,value:unknown)=>{
+    if(!isSpeechControl(event)) throw Error('SHARED_GONG_CONTROL_ONLY');
+    return sharedGong.write(value);
+  });
   ipcMain.handle('announcements:settings-read',event=>announcementSettings.read(event));
   ipcMain.handle('announcements:settings-write',(event,value:unknown)=>announcementSettings.write(event,value));
   ipcMain.handle('announcements:engine-status',event=>{watchSpeechOwner(event);return speechAccess.status(event)});

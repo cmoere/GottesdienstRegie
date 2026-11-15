@@ -1,4 +1,4 @@
-import {cleanup,fireEvent,render,screen} from '@testing-library/react';
+import {cleanup,fireEvent,render,screen,within} from '@testing-library/react';
 import {afterEach,beforeEach,describe,expect,it,vi} from 'vitest';
 import {RadioStationBrowser} from './RadioStationBrowser';
 import {usePreferences} from './preferences';
@@ -10,14 +10,20 @@ afterEach(()=>{cleanup();usePreferences.setState(preferences,true)});
 
 describe('RadioStationBrowser query',()=>{
   it('shows suggestions on open, lets search replace them and restores them when cleared',async()=>{
-    const station:RadioStation={id:'popular',name:'Beispielsender',streamUrl:'https://example.test/live',country:'Deutschland',language:'Deutsch',tags:[],codec:'MP3',bitrate:128,artworkUrl:'',homepage:''};
+    const station:RadioStation={id:'popular',name:'Beispielsender',streamUrl:'https://example.test/live',country:'Deutschland',language:'Deutsch',tags:[],codec:'MP3',bitrate:128,artworkUrl:'https://example.test/logo.png',homepage:''};
     vi.mocked(suggestRadioStations).mockResolvedValue([station]);
     vi.mocked(searchRadioStations).mockResolvedValue([{...station,id:'jazz',name:'Jazzsender'}]);
     render(<RadioStationBrowser add={()=>{}}/>);
     expect(await screen.findByText('Beispielsender')).toBeVisible();
+    const row=screen.getByRole('article');
+    const logo=within(row).getByAltText('');
+    expect(logo).toHaveAttribute('src',station.artworkUrl);
+    fireEvent.error(logo);
+    expect(within(row).getByText('radio')).toBeVisible();
     fireEvent.change(screen.getByPlaceholderText('Sender, Ort oder Musikrichtung'),{target:{value:'Jazz'}});
     fireEvent.click(screen.getByRole('button',{name:'Suchen'}));
     expect(await screen.findByText('Jazzsender')).toBeVisible();
+    expect(within(screen.getByRole('article')).getByAltText('')).toHaveAttribute('src',station.artworkUrl);
     expect(screen.queryByText('Beispielsender')).toBeNull();
     fireEvent.click(screen.getByRole('button',{name:'Suchtext löschen'}));
     expect(screen.getByText('Beispielsender')).toBeVisible();

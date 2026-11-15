@@ -7,14 +7,14 @@ import {startCommunityRuntime} from '../community/communityRuntime';
 import {useSpeechStatus} from './AnnouncementIndicator';
 import {AnnouncementSettings} from './AnnouncementSettings';
 import {startAnnouncementTest,stopAnnouncementTest} from './AnnouncementTestRequests';
-const boundary=vi.hoisted(()=>({events:[] as string[],hold:false,signal:null as AbortSignal|null}));
+const boundary=vi.hoisted(()=>({events:[] as string[],urls:[] as string[],hold:false,signal:null as AbortSignal|null}));
 vi.mock('../BackgroundAudioEngine',()=>({backgroundAudioEngine:{setAnnouncementDucking:async(value:number|null)=>{boundary.events.push(`duck:${value}`)}}}));
-vi.mock('./AnnouncementPlayer',()=>({playAnnouncementAudio:async(url:string,signal:AbortSignal,playing:()=>void)=>{boundary.events.push(url.includes('gong')?'gong':'speech');playing();if(boundary.hold){boundary.signal=signal;await new Promise<void>((resolve,reject)=>signal.addEventListener('abort',()=>reject(Error('abort')),{once:true}))}}}));
+vi.mock('./AnnouncementPlayer',()=>({playAnnouncementAudio:async(url:string,signal:AbortSignal,playing:()=>void)=>{boundary.urls.push(url);boundary.events.push(url.includes('gong')?'gong':'speech');playing();if(boundary.hold){boundary.signal=signal;await new Promise<void>((resolve,reject)=>signal.addEventListener('abort',()=>reject(Error('abort')),{once:true}))}}}));
 const saved=usePresentation.getState(),prefs=usePreferences.getState(),desktop=window.desktop;
 let messages:(records:any[])=>void,started=false;
 const settings={enabled:true,intervalMinutes:1,musicRemainingPercent:20,voiceId:'marytts:dfki-pavoque-neutral',speakerId:0,voiceAccepted:true};
 beforeEach(()=>{
- vi.useFakeTimers();vi.setSystemTime(new Date('2026-10-24T10:00:00Z'));boundary.events=[];boundary.hold=false;boundary.signal=null;
+ vi.useFakeTimers();vi.setSystemTime(new Date('2026-10-24T10:00:00Z'));boundary.events=[];boundary.urls=[];boundary.hold=false;boundary.signal=null;
  window.desktop={community:{start:async()=>true,onEvents:()=>{},onRooms:()=>{},onConnection:()=>{},onAnnouncements:(callback:any)=>{messages=callback}},announcements:{readSettings:async()=>settings,writeSettings:async(value:import('./settings').AnnouncementSettings)=>value,synthesize:async()=>new Uint8Array([1]),cancel:async()=>{},setIndicator:async()=>{}}} as any;
  if(!started){startCommunityRuntime();started=true}
  messages([{messageId:'one',titel:'Hinweis',textDurchsageSaalscreen:'Bitte kommen.',status:'public',showDurchsage:true,durchsageSaalscreen:true}]);
@@ -23,6 +23,16 @@ beforeEach(()=>{
 });
 afterEach(async()=>{cleanup();await act(async()=>{});vi.useRealTimers();usePresentation.setState(saved,true);usePreferences.setState(prefs,true);window.desktop=desktop;useSpeechStatus.setState({active:false,message:''})});
 describe('single control shell announcement owner',()=>{
+ it('uses the centrally saved gong in the OFF AIR probe and automatic live speech',async()=>{
+  usePresentation.setState({onAir:false});
+  window.desktop!.announcements!.readSharedGong=async()=> 'bright';
+  render(<AutomaticAnnouncements quick={null}/>);await act(async()=>{});
+  await act(async()=>{await startAnnouncementTest({kind:'general'},20)});
+  expect(boundary.urls[0]).toMatch(/\/audio\/announcement-gong-bright\.wav$/);
+  act(()=>usePresentation.setState({onAir:true}));
+  await act(async()=>{await vi.advanceTimersByTimeAsync(60000)});
+  expect(boundary.urls.filter(url=>url.endsWith('announcement-gong-bright.wav'))).toHaveLength(2);
+ });
  it('keeps a Firebase message named general distinct from the built-in test phrase',async()=>{
   usePresentation.setState({onAir:false});const spoken:string[]=[];
   messages([{messageId:'general',titel:'Meldung',textDurchsageSaalscreen:'Die tatsächliche Meldung.',status:'public',showDurchsage:true,durchsageSaalscreen:true}]);

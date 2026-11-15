@@ -2,7 +2,7 @@ import {correctGermanAnnouncementText} from '../../shared/germanSpeechCorrection
 import {useCallback, useEffect, useState,useRef} from 'react';
 import {AnnouncementService} from '../community/AnnouncementService';
 import {getCommunityAnnouncementRecords, getCommunityRuntimeSnapshot, subscribeCommunityRuntime} from '../community/communityRuntime';
-import {normalizeAnnouncementSettings, validateAnnouncementSettings,isBundledAnnouncementVoice,bundledAnnouncementVoice,bundledFemaleAnnouncementVoice} from './settings';
+import {normalizeAnnouncementSettings, validateAnnouncementSettings,isBundledAnnouncementVoice,bundledAnnouncementVoice,isAnnouncementGong,type AnnouncementGong} from './settings';
 import type {AnnouncementSettings as Settings, AnnouncementSettingsBridge} from './settings';
 import type {SpokenAnnouncement} from './types';
 import {useI18n} from '../i18n';
@@ -24,6 +24,10 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
   const [saved, setSaved] = useState<Settings>(() => normalizeAnnouncementSettings(undefined));
   const [interval, setIntervalValue] = useState('5');
   const [percent, setPercent] = useState('20');
+  const [sharedGong,setSharedGong]=useState<AnnouncementGong>();
+  const [chosenGong,setChosenGong]=useState<AnnouncementGong>('classic');
+  const [gongBusy,setGongBusy]=useState(false);
+  const [gongStatus,setGongStatus]=useState<'saved'|'error'|''>('');
   const [ready, setReady] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<TranslationKey|''>('');
@@ -48,6 +52,7 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
   useEffect(() => {
     let active = true;
     setReady(false);
+    void native?.readSharedGong?.().then(gong=>{if(active){setSharedGong(gong);setChosenGong(gong)}}).catch(()=>{if(active)setGongStatus('error')});
     void native?.engineStatus?.().then(value=>{if(active)setEngine(value)}).catch(()=>{if(active)setEngine({ready:false,name:''})});
     if (native) void native.readSettings().then(value => {
       if (!active) return;
@@ -59,6 +64,20 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     }).catch(() => {if (active) setError('speechSettingsLoadError');});
     return () => {active = false;};
   }, [native]);
+
+  async function saveGong(){
+    if(!native?.writeSharedGong||gongBusy||!sharedGong||chosenGong===sharedGong)return;
+    setGongBusy(true);
+    setGongStatus('');
+    try{
+      const gong=await native.writeSharedGong(chosenGong);
+      setSharedGong(gong);
+      setChosenGong(gong);
+      setGongStatus('saved');
+      window.dispatchEvent(new CustomEvent('gottesdienstregie:announcement-gong',{detail:gong}));
+    }catch{setGongStatus('error')}
+    finally{setGongBusy(false)}
+  }
 
   async function save() {
     if (!native || !ready || busy) return;
@@ -98,6 +117,28 @@ export function AnnouncementSettings({bridge, rows}: {bridge?: AnnouncementSetti
     {!native && <p>{t('speechSettingsDesktopOnly')}</p>}
     <label>{german?tx("Ansagenstimme"):'Announcement voice'}<select disabled={!ready||busy||!engine.ready||testing||speaking} value={isBundledAnnouncementVoice(saved.voiceId)?saved.voiceId:bundledAnnouncementVoice} onChange={event=>{stopAnnouncementTest();setSaved(value=>({...value,voiceId:event.target.value,speakerId:0,voiceAccepted:true}));setMessage('')}}>{bundledVoices.map(voice=><option key={voice.id} value={voice.id}>{voice.name} ({voice.gender==='female'?'W':'M'}) · {german?tx("Deutsch"):'German'}</option>)}</select></label>
     <p>{german?tx("Die gespeicherte Stimme gilt auf diesem Regie-PC für alle Präsentationen und alle angemeldeten Benutzer. Alle fünf Stimmen sind enthalten. Nach dem Speichern verwendet auch die Tonprobe diese Auswahl."):'The saved voice applies to every presentation and signed-in operator on this control computer. All five voices are included. Save before testing the new selection.'}</p>
+    <div className="announcement-gong-control">
+      <label>{t('speechSettingsGong')}
+        <select value={native?.readSharedGong ? chosenGong : saved.gongId ?? 'classic'} disabled={!ready || busy || testing || speaking || gongBusy || Boolean(native?.readSharedGong&&!sharedGong)} onChange={event => {
+          const gongId = event.target.value;
+          if (!isAnnouncementGong(gongId)) return;
+          if(native?.readSharedGong){setChosenGong(gongId);setGongStatus('')}
+          else {setSaved(value => ({...value, gongId}));setMessage('')}
+        }}>
+          <option value="classic">{t('speechGongClassic')}</option>
+          <option value="soft">{t('speechGongSoft')}</option>
+          <option value="bright">{t('speechGongBright')}</option>
+          <option value="single">{t('speechGongSingle')}</option>
+        </select>
+      </label>
+      <p className="settings-hint">{t('speechSettingsGongHelp')}</p>
+      {native?.writeSharedGong&&<div className="announcement-test-actions">
+        <button type="button" disabled={!sharedGong||chosenGong===sharedGong||gongBusy||testing||speaking} onClick={()=>void saveGong()}>
+          {t('speechGongSave')}
+        </button>
+      </div>}
+      {gongStatus&&<p role={gongStatus==='saved'?'status':'alert'}>{t(gongStatus==='saved'?'speechGongSaved':'speechGongSaveError')}</p>}
+    </div>
     <label><input type="checkbox" checked={saved.enabled} disabled={!ready||busy||(!saved.enabled&&!engine.ready)} onChange={event=>setSaved(value=>({...value,enabled:event.target.checked,...(event.target.checked?{voiceId:isBundledAnnouncementVoice(value.voiceId)?value.voiceId:bundledAnnouncementVoice,speakerId:0,voiceAccepted:true}:{})}))}/> {t('speechSettingsEnable')}</label>
     <label>{t('speechSettingsInterval')}<input className="settings-number-input" type="number" min="1" max="120" step="1" disabled={!ready || busy} value={interval} onChange={event => {setIntervalValue(event.target.value);setMessage('');}}/></label>
     <label>{t('speechSettingsMusicLevel')}<input className="settings-number-input" type="number" min="0" max="100" disabled={!ready || busy} value={percent} onChange={event => {setPercent(event.target.value);setMessage('');}}/></label>

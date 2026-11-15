@@ -11567,6 +11567,78 @@
       "context": "ArrayLiteralExpression",
       "text": "GottesdienstRegie {expression1}\n{expression2}",
       "reason": "Changelog heading combines the product name and version with publisher-authored release notes."
+    },
+    "source.5dab8f0fb07b3e3dec2f.1": {
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "context": "CallExpression",
+      "text": "INVALID_SHARED_GONG",
+      "reason": "Internal error identifier returned through IPC. The settings UI displays a localized status message."
+    },
+    "source.5dab8f0fb07b3e3dec2f.2": {
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "context": "CallExpression",
+      "text": "INVALID_SHARED_GONG",
+      "reason": "Internal error identifier returned through IPC. The settings UI displays a localized status message."
+    },
+    "source.af93ef61f981f9eceac2.1": {
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "context": "CallExpression",
+      "text": "SHARED_GONG_SAVE_BUSY",
+      "reason": "Internal error identifier returned through IPC. The settings UI displays a localized status message."
+    },
+    "source.8e4f01f1a5a4d5678da4.1": {
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "context": "CallExpression",
+      "text": "SHARED_GONG_WRITE_PERMISSION",
+      "reason": "Internal error identifier returned through IPC. The settings UI displays a localized status message."
+    },
+    "source.a8ad72e52ecf127cd02d.1": {
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "context": "property:authorization",
+      "text": "Bearer {expression1}",
+      "reason": "HTTP authorization scheme and runtime credential."
+    },
+    "source.1aa3b33f968ed5339496.1": {
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "context": "CallExpression",
+      "text": "SHARED_GONG_READ_FAILED",
+      "reason": "Internal error identifier returned through IPC. The settings UI displays a localized status message."
+    },
+    "source.1aa3b33f968ed5339496.2": {
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "context": "CallExpression",
+      "text": "SHARED_GONG_READ_FAILED",
+      "reason": "Internal error identifier returned through IPC. The settings UI displays a localized status message."
+    },
+    "source.c8d8e2c9956c00b34390.1": {
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "context": "property:method",
+      "text": "PUT",
+      "reason": "HTTP request method used by the GitHub Contents API."
+    },
+    "source.05ea4ab1ecb8e2369a85.1": {
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "context": "property:message",
+      "text": "Update shared announcement chime",
+      "reason": "Technical commit message sent to the GitHub Contents API."
+    },
+    "source.bde6e8d4ad1052a5c93f.1": {
+      "source": "electron/announcements/SharedAnnouncementGong.ts",
+      "context": "CallExpression",
+      "text": "SHARED_GONG_WRITE_FAILED",
+      "reason": "Internal error identifier returned through IPC. The settings UI displays a localized status message."
+    },
+    "source.773b7f0f4bee54bef87a.1": {
+      "source": "electron/main.ts",
+      "context": "CallExpression",
+      "text": "SHARED_GONG_CONTROL_ONLY",
+      "reason": "Internal error identifier returned through IPC. The settings UI displays a localized status message."
+    },
+    "source.773b7f0f4bee54bef87a.2": {
+      "source": "electron/main.ts",
+      "context": "CallExpression",
+      "text": "SHARED_GONG_CONTROL_ONLY",
+      "reason": "Internal error identifier returned through IPC. The settings UI displays a localized status message."
     }
   },
   "reviewedTechnicalFiles": {
