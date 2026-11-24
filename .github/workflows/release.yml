@@ -14,6 +14,11 @@ on:
 permissions:
   contents: write
 
+# CI has no NVIDIA device. CPU binaries are already included in the npm package;
+# the optional CUDA archive for this ONNX version is no longer available upstream.
+env:
+  ONNXRUNTIME_NODE_INSTALL_CUDA: skip
+
 concurrency:
   group: desktop-release
   cancel-in-progress: false
