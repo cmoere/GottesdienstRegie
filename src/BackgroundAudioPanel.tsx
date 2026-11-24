@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {useI18n} from './i18n';
 import { useEffect, useRef, useState } from "react";
 import type {
@@ -10,9 +11,7 @@ import { RadioStationBrowser } from "./RadioStationBrowser";
 import {replaceRadioTrack} from './backgroundAudioSelection';
 
 const Icon = ({ name }: { name: string }) => (
-  <span className="material-symbols-outlined" aria-hidden="true">
-    {name}
-  </span>
+  <UiIcon name={name} aria-hidden="true" />
 );
 export const defaultBackgroundAudio = (
   tracks: BackgroundAudioTrack[] = [],

@@ -24,7 +24,6 @@ import { powerSaveBlocker, app, BrowserWindow, ipcMain, screen, safeStorage, Men
 import{copySlideImage}from'./slideClipboard';
 import path from 'node:path';
 import {countdownMediaSelection,type CountdownMediaContext} from './countdownMediaSelection';
-import {SharedAnnouncementGong} from './announcements/SharedAnnouncementGong';
 import {createAnnouncementSettingsAccess} from './announcements/SettingsAccess';
 import {AdvertisingService} from './advertising/service';
 import {readAdSelection} from '../shared/advertising';
@@ -314,15 +313,6 @@ app.whenReady().then(async() => {
   const watchSpeechOwner=(event:import('electron').IpcMainInvokeEvent)=>{speechAccess.authorize(event);if(speechOwners.has(event.sender.id))return;speechOwners.add(event.sender.id);const clear=()=>{espeak.cancel();speechIndicator.set(false)};event.sender.on('render-process-gone',clear);event.sender.once('destroyed',()=>{clear();speechOwners.delete(event.sender.id)})};
   app.once('will-quit',()=>{espeak.cancel();speechIndicator.dispose()});
   const announcementSettings=createAnnouncementSettingsAccess<import('electron').IpcMainInvokeEvent>(deviceSettings,isSpeechControl,async()=>(await espeak.status()).ready);
-  const sharedGong=new SharedAnnouncementGong(deviceSettings);
-  ipcMain.handle('announcements:gong-read',event=>{
-    if(!isSpeechControl(event)) throw Error('SHARED_GONG_CONTROL_ONLY');
-    return sharedGong.read();
-  });
-  ipcMain.handle('announcements:gong-write',(event,value:unknown)=>{
-    if(!isSpeechControl(event)) throw Error('SHARED_GONG_CONTROL_ONLY');
-    return sharedGong.write(value);
-  });
   ipcMain.handle('announcements:settings-read',event=>announcementSettings.read(event));
   ipcMain.handle('announcements:settings-write',(event,value:unknown)=>announcementSettings.write(event,value));
   ipcMain.handle('announcements:engine-status',event=>{watchSpeechOwner(event);return speechAccess.status(event)});
@@ -406,7 +396,7 @@ app.whenReady().then(async() => {
     'temporary-downloads':path.join(app.getPath('userData'),'temporary-downloads'),
     'web-cache':path.join(app.getPath('sessionData'),'Cache'),
   });
-  const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>{sendToLiveWindow(controlWindow,'remote:command',payload);const p=payload as any;if(p?.action==='screen-share'&&p.event?.type!=='offer')for(const output of outputManager.getNativeCompositionWindows())if(output.role==='main')output.window.webContents.send('remote:share-event',p.event)},43171,role=>outputManager.captureFrame(role),nativeText,()=>nextPreview.capture());
+  const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>{sendToLiveWindow(controlWindow,'remote:command',payload);const p=payload as any;if(p?.action==='screen-share'&&p.event?.type!=='offer')for(const output of outputManager.getNativeCompositionWindows())if(output.role==='main')output.window.webContents.send('remote:share-event',p.event)},43171,role=>outputManager.captureFrame(role),nativeText,index=>nextPreview.capture(index));
   await remoteServer.start().catch(()=>null);
   void getLocalTlsIdentity(path.join(app.getPath('userData'),'remote-tls'),Object.values(os.networkInterfaces()).flatMap(list=>(list??[]).filter(i=>i.family==='IPv4').map(i=>i.address))).then(identity=>remoteServer.enableSecure(identity)).catch(()=>null);
   const onlineMedia=new GitHubStorageProvider('cmoere','GottesdienstRegie','media-library');
@@ -636,7 +626,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('remote:share-output-ready',event=>{const main=outputManager.getNativeCompositionWindows().find(e=>e.role==='main')?.window;if(!main||event.sender.id!==main.webContents.id||event.senderFrame!==event.sender.mainFrame)return false;shareOutputReadyId=event.sender.id;return true});
   ipcMain.handle('remote:share-control',(event,action:string,id:string,value:unknown)=>{requireRemoteControl(event);if(typeof id!=='string')return false;switch(action){case 'answer':return remoteServer.sharing.answer(id,value);case 'ready':return remoteServer.sharing.ready(id);case 'take':return outputManager.getNativeCompositionWindows().some(e=>e.role==='main'&&e.window.webContents.id===shareOutputReadyId)&&remoteServer.sharing.take(id);case 'stop':return remoteServer.sharing.stop(id);default:return false}});
   ipcMain.handle('remote:share-relay',(event,payload:any)=>{const active=remoteServer.sharing.current();if(!active?.onMain||payload?.id!==active.id)return false;const main=outputManager.getNativeCompositionWindows().find(e=>e.role==='main')?.window;if(!main||main.isDestroyed())return false;if(controlWindow&&!controlWindow.isDestroyed()&&event.sender.id===controlWindow.webContents.id){const description=readShareDescription(payload.description,'offer');if(!description)return false;main.webContents.send('remote:share-relay',{id:active.id,description});return true}if(event.sender.id===main.webContents.id){const description=readShareDescription(payload.description,'answer');if(!description)return false;sendToLiveWindow(controlWindow,'remote:share-relay',{id:active.id,description});return true}return false});
-  ipcMain.handle('remote:next-thumbnail',(event,hash:string,slideId:number)=>{const value=nextPreview.get(event.sender.id)?.packet as any;if(!value||value.sourceHash!==hash||Number(value.slide?.sourceSlideId)!==slideId)return null;return originalRuntime.previewThumbnail(hash,slideId)});
+  ipcMain.handle('remote:next-thumbnail',(event,hash:string,slideId:number)=>{const packets=nextPreview.get(event.sender.id)?.packets;if(!packets?.some(value=>value.sourceHash===hash&&Number(value.slide?.sourceSlideId)===slideId))return null;return originalRuntime.previewThumbnail(hash,slideId)});
   ipcMain.handle('remote:next-get',event=>nextPreview.get(event.sender.id));
   ipcMain.handle('remote:next-ready',(event,revision:number)=>nextPreview.ready(event.sender.id,revision));
   ipcMain.handle('remote:get',(event)=>{requireRemoteControl(event);return remoteServer.get()});
@@ -653,7 +643,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('remote:remove-monitor',(event,id:string)=>{requireRemoteControl(event);return remoteServer.removeMonitor(id)});
   ipcMain.handle('remote:create-session',(event,input:any)=>{requireRemoteControl(event);return remoteServer.createSession(input)});
   ipcMain.handle('remote:revoke-session',(event,id:string)=>{requireRemoteControl(event);return remoteServer.revokeSession(id)});
-  ipcMain.handle('remote:update-live',(event,state:any)=>{requireRemoteControl(event);const nextPreviewRevision=nextPreview.update(state?.next?{slide:state.next,sourceHash:state.nextSourceHash}:null);remoteServer.updateLive({...state,nextPreviewRevision});return true});
+  ipcMain.handle('remote:update-live',(event,state:any)=>{requireRemoteControl(event);const nextPreviewRevision=nextPreview.update(state?.next?{slide:state.next,sourceHash:state.nextSourceHash}:null,Array.isArray(state?.upcoming)?state.upcoming:undefined);remoteServer.updateLive({...state,nextPreviewRevision});return true});
   ipcMain.handle('updates:current-version',()=>app.getVersion());
   ipcMain.handle('updates:status',()=>lastUpdateStatus);
   ipcMain.handle('updates:metadata',async()=>{const stat=await fs.stat(process.execPath);return{version:app.getVersion(),installedAt:stat.birthtime.toISOString(),modifiedAt:stat.mtime.toISOString(),fileSize:stat.size,executable:path.basename(process.execPath)}});

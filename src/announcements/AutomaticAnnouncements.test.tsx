@@ -23,15 +23,20 @@ beforeEach(()=>{
 });
 afterEach(async()=>{cleanup();await act(async()=>{});vi.useRealTimers();usePresentation.setState(saved,true);usePreferences.setState(prefs,true);window.desktop=desktop;useSpeechStatus.setState({active:false,message:''})});
 describe('single control shell announcement owner',()=>{
- it('uses the centrally saved gong in the OFF AIR probe and automatic live speech',async()=>{
+ it('uses the original three-tone chime even with obsolete local and shared settings',async()=>{
   usePresentation.setState({onAir:false});
-  window.desktop!.announcements!.readSharedGong=async()=> 'bright';
+  const legacyReadSharedGong = vi.fn(async () => 'bright');
+  Object.assign(window.desktop!.announcements!, {
+    readSharedGong: legacyReadSharedGong,
+    readSettings: async () => ({...settings, gongId: 'soft'}),
+  });
   render(<AutomaticAnnouncements quick={null}/>);await act(async()=>{});
   await act(async()=>{await startAnnouncementTest({kind:'general'},20)});
-  expect(boundary.urls[0]).toMatch(/\/audio\/announcement-gong-bright\.wav$/);
+  expect(boundary.urls[0]).toMatch(/\/audio\/announcement-gong\.wav$/);
   act(()=>usePresentation.setState({onAir:true}));
   await act(async()=>{await vi.advanceTimersByTimeAsync(60000)});
-  expect(boundary.urls.filter(url=>url.endsWith('announcement-gong-bright.wav'))).toHaveLength(2);
+  expect(boundary.urls.filter(url=>url.endsWith('announcement-gong.wav'))).toHaveLength(2);
+  expect(legacyReadSharedGong).not.toHaveBeenCalled();
  });
  it('keeps a Firebase message named general distinct from the built-in test phrase',async()=>{
   usePresentation.setState({onAir:false});const spoken:string[]=[];

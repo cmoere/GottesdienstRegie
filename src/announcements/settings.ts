@@ -1,14 +1,6 @@
 import {normalizeReadingSettings,validateReadingSettings,type SpeechReadingSettings} from './readingSettings';
 import {bundledVoices,type BundledVoiceId} from './voices';
-export const announcementGongs = {
-  classic: 'audio/announcement-gong.wav',
-  soft: 'audio/announcement-gong-soft.wav',
-  bright: 'audio/announcement-gong-bright.wav',
-  single: 'audio/announcement-gong-single.wav',
-} as const;
-export type AnnouncementGong = keyof typeof announcementGongs;
-export const isAnnouncementGong = (id: unknown): id is AnnouncementGong =>
-  typeof id === 'string' && Object.hasOwn(announcementGongs, id);
+export const announcementGongPath = 'audio/announcement-gong.wav';
 
 export interface AnnouncementSettings {
   enabled:boolean;
@@ -18,12 +10,9 @@ export interface AnnouncementSettings {
   speakerId:number|null;
   voiceAccepted:boolean;
   reading?:SpeechReadingSettings;
-  gongId?:AnnouncementGong;
 }
 
 export interface AnnouncementSettingsBridge {
-  readSharedGong?(): Promise<AnnouncementGong>;
-  writeSharedGong?(gong:AnnouncementGong): Promise<AnnouncementGong>;
   readSettings(): Promise<AnnouncementSettings>;
   writeSettings(value: AnnouncementSettings): Promise<AnnouncementSettings>;
   engineStatus?():Promise<{ready:boolean;name:string}>;
@@ -35,7 +24,7 @@ export interface AnnouncementSettingsBridge {
   onIndicator?(callback:(state:{revision:number;active:boolean})=>void):()=>void;
 }
 
-const fields=new Set(['enabled','intervalMinutes','musicRemainingPercent','voiceId','speakerId','voiceAccepted','reading','gongId']);
+const fields=new Set(['enabled','intervalMinutes','musicRemainingPercent','voiceId','speakerId','voiceAccepted','reading']);
 const modelId='de_DE-mls-medium';
 const validSpeaker=(value:unknown):value is number=>typeof value==='number'&&Number.isInteger(value)&&value>=0&&value<236;
 export const bundledAnnouncementVoice='marytts:dfki-pavoque-neutral';
@@ -52,7 +41,6 @@ export function normalizeAnnouncementSettings(value:unknown):AnnouncementSetting
   const speakerId=supported&&validVoiceSpeaker(raw.voiceId,raw.speakerId)?raw.speakerId as number:null;
   const voiceAccepted=raw.voiceAccepted===true&&speakerId!==null;
   return {
-    ...(isAnnouncementGong(raw.gongId)?{gongId:raw.gongId}:{}),
     ...(raw.reading!==undefined?{reading:normalizeReadingSettings(raw.reading)}:{}),
     enabled:raw.enabled===true&&voiceAccepted,
     intervalMinutes:inRange(raw.intervalMinutes,1,120)?raw.intervalMinutes:5,
@@ -67,7 +55,6 @@ export function validateAnnouncementSettings(value:unknown):AnnouncementSettings
   const raw=value as Record<string,unknown>;
   if(raw.reading!==undefined)validateReadingSettings(raw.reading);
   if(Object.keys(raw).some(key=>!fields.has(key))
-    ||(raw.gongId!==undefined&&!isAnnouncementGong(raw.gongId))
     ||typeof raw.enabled!=='boolean'||typeof raw.voiceAccepted!=='boolean'
     ||!inRange(raw.intervalMinutes,1,120)||!inRange(raw.musicRemainingPercent,0,100)
     ||!supportedVoice(raw.voiceId)||(raw.speakerId!==null&&!validVoiceSpeaker(raw.voiceId,raw.speakerId))

@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {useI18n} from "./i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePreferences } from "./preferences";
@@ -11,9 +12,7 @@ import {CountdownPresetBrowser} from './CountdownPresetBrowser';
 import {AdvertisingBrowser} from './advertising/AdvertisingBrowser';
 import {generatorDimensions,videoMotionTransform,type GeneratorAspectRatio,type GeneratorMotion,type GeneratorQuality} from './generatorSettingsModel';
 const Icon = ({ name }: { name: string }) => (
-  <span className="material-symbols-outlined" aria-hidden="true">
-    {name}
-  </span>
+  <UiIcon name={name} aria-hidden="true" />
 );
 type Context = "manage" | "select";
 type Purpose = "item" | "background" | "foreground" | "audio";

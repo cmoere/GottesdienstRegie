@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {useI18n} from './i18n';
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -272,7 +273,7 @@ export function BibleTextDialog({
               </div>
             ) : error ? (
               <div className="bible-error">
-                <span className="material-symbols-outlined">error</span>
+                <UiIcon name="error" />
                 <p>{tx(error)}</p>
                 <button onClick={() => void preview()}>{tx("Erneut versuchen")}</button>
               </div>
@@ -290,7 +291,7 @@ export function BibleTextDialog({
               </>
             ) : (
               <div className="bible-empty">
-                <span className="material-symbols-outlined">menu_book</span>
+                <UiIcon name="menu_book" />
                 <p>
                   {tx("Wähle eine Bibelstelle und lade den Text für die Vorschau.")}</p>
               </div>

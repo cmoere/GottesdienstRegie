@@ -12,8 +12,8 @@
   opacity: .62;
 }
 
-.audio-header-button .material-symbols-outlined,
-.item-audio-button .material-symbols-outlined {
+.audio-header-button .ui-icon,
+.item-audio-button .ui-icon {
   font-size: 17px !important;
 }
 
@@ -57,9 +57,9 @@
 
 .audio-context-menu button:hover { background: #44434d; }
 .audio-context-menu button.separator { margin-top: 4px; border-top: 1px solid #55545f; }
-.audio-context-menu .material-symbols-outlined { font-size: 17px; }
+.audio-context-menu .ui-icon { font-size: 17px; }
 .audio-track-preview { display: grid !important; place-items: center; color: #25a6b8; }
-.audio-track-preview .material-symbols-outlined { font-size: 20px; }
+.audio-track-preview .ui-icon { font-size: 20px; }
 .background-audio-tracks > div { grid-template-columns: 22px 24px minmax(0,1fr) 38px 32px; }
 .audio-track-duration { text-align: right; font-variant-numeric: tabular-nums; }
 .production-app .service-item { grid-template-columns: 11px 42px minmax(0,1fr) 30px auto !important; }

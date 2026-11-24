@@ -43,12 +43,12 @@
   background:var(--operator-field);
   font-size:13px;
 }
-.web-status-chip .material-symbols-outlined {font-size:16px}
+.web-status-chip .ui-icon {font-size:16px}
 .web-status-chip[data-online=false] {border:1px solid currentColor}
-.web-status-chip[data-saving=true] .material-symbols-outlined {animation:web-status-spin 1s linear infinite}
+.web-status-chip[data-saving=true] .ui-icon {animation:web-status-spin 1s linear infinite}
 @keyframes web-status-spin {to {transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce) {
-  .web-status-chip[data-saving=true] .material-symbols-outlined {animation:none}
+  .web-status-chip[data-saving=true] .ui-icon {animation:none}
 }
 .web-workspace-status .capability-notice {
   min-height:0;

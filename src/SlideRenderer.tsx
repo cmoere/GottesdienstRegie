@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {EventOverviewHeader,EventOverviewFooter} from './EventOverviewChrome';
 import {ExternalLoopElement} from './externalLoop/Element';
 import {readPowerPointSurface} from './powerPointLiveModel';
@@ -651,9 +652,7 @@ function NowPlayingLoopElement({
               alt=""
             />
           ) : (
-            <span className="material-symbols-outlined">
-              {settings.design === "radio" ? "radio" : "album"}
-            </span>
+            <UiIcon name={settings.design === "radio" ? "radio" : "album"} />
           )}
         </div>
       )}

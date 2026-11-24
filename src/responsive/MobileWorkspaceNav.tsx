@@ -1,3 +1,4 @@
+import {UiIcon} from '../icons/UiIcon';
 import {useI18n} from '../i18n';
 import {useState} from 'react';
 import {useWorkspaceLayout} from './useWorkspaceLayout';
@@ -33,7 +34,7 @@ export function MobileWorkspaceNav({mode, onModeChange, showSong = true}: {
           document.querySelector<HTMLElement>(`.${target}`)?.scrollIntoView({block: 'nearest', inline: 'nearest'});
         });
       }}>
-        <span className="material-symbols-outlined" aria-hidden="true">{icon}</span>
+        <UiIcon name={icon} aria-hidden="true" />
         <span>{labels[area]}</span>
       </button>)}
   </nav>;

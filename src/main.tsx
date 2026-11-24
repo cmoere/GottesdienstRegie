@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {useI18n} from './i18n';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -6,7 +7,7 @@ import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import './cera-pro.css';
-import 'material-symbols/outlined.css';
+import './icons/ui-icons.css';
 import 'flag-icons/css/flag-icons.min.css';
 import { App } from './App';
 import {PlatformProvider} from './platform/PlatformContext';
@@ -56,7 +57,7 @@ import './v91.css';
 import './v94.css';
 import './operator-design.css';
 
-function FatalRenderError({message}:{message:string}){const {tx}=useI18n();return <main className="fatal-render-error"><div><span className="material-symbols-outlined">error</span><h1>{tx("GottesdienstRegie konnte die Oberfläche nicht laden")}</h1><p>{message}</p><button onClick={()=>location.reload()}>{tx("ERNEUT LADEN")}</button></div></main>}
+function FatalRenderError({message}:{message:string}){const {tx}=useI18n();return <main className="fatal-render-error"><div><UiIcon name="error" /><h1>{tx("GottesdienstRegie konnte die Oberfläche nicht laden")}</h1><p>{message}</p><button onClick={()=>location.reload()}>{tx("ERNEUT LADEN")}</button></div></main>}
 
 class AppErrorBoundary extends React.Component<React.PropsWithChildren,{error:string|null}>{
   state:{error:string|null}={error:null};

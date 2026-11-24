@@ -9,32 +9,16 @@ beforeEach(()=>usePreferences.setState({language:'de',germanRegion:null}));
 afterEach(()=>{cleanup();usePreferences.setState(savedPreferences,true)});
 
 describe('inactive announcement preparation settings',()=>{
- it('saves the gong through the shared service without changing local speech settings',async()=>{
+ it('shows only the fixed chime and discards an obsolete saved gong choice',async()=>{
   const writeSettings=vi.fn(async(value:Settings)=>value);
-  const writeSharedGong=vi.fn(async()=> 'single' as const);
-  render(<AnnouncementSettings rows={[]} bridge={{readSettings:async()=>initial,writeSettings,readSharedGong:async()=> 'bright',writeSharedGong}}/>);
-  const select=screen.getByLabelText('Durchsagegong');
-  await waitFor(()=>expect(select).toHaveValue('bright'));
-  fireEvent.change(select,{target:{value:'single'}});
-  fireEvent.click(screen.getByRole('button',{name:'Gong für alle Regie-PCs speichern'}));
-  await screen.findByText('Gong zentral gespeichert.');
-  expect(writeSharedGong).toHaveBeenCalledWith('single');
-  expect(writeSettings).not.toHaveBeenCalled();
- });
- it('persists the selected gong independently of enabled state and voice availability',async()=>{
-  let stored=initial;
-  const bridge={readSettings:async()=>stored,writeSettings:async(value:Settings)=>{stored=value;return value}};
-  const first=render(<AnnouncementSettings rows={[]} bridge={bridge}/>);
-  const select=screen.getByLabelText('Durchsagegong');
-  await waitFor(()=>expect(select).toBeEnabled());
-  expect(select).toHaveValue('classic');
-  fireEvent.change(select,{target:{value:'soft'}});
-  fireEvent.click(screen.getByRole('button',{name:'Ansageneinstellungen speichern'}));
+  render(<AnnouncementSettings rows={[]} bridge={{readSettings:async()=>({...initial,gongId:'soft'}),writeSettings}}/>);
+  expect(screen.queryByLabelText('Durchsagegong')).toBeNull();
+  expect(screen.getByText(/Dreiklang/)).toBeInTheDocument();
+  const save=screen.getByRole('button',{name:'Ansageneinstellungen speichern'});
+  await waitFor(()=>expect(save).toBeEnabled());
+  fireEvent.click(save);
   await screen.findByText('Einstellungen gespeichert.');
-  expect(stored).toEqual({...initial,gongId:'soft'});
-  first.unmount();
-  render(<AnnouncementSettings rows={[]} bridge={bridge}/>);
-  await waitFor(()=>expect(screen.getByLabelText('Durchsagegong')).toHaveValue('soft'));
+  expect(writeSettings).toHaveBeenCalledWith(initial);
  });
  it('selects a female voice centrally without enabling automatic announcements',async()=>{
   let stored:Settings={...initial,voiceId:'marytts:dfki-pavoque-neutral',speakerId:0,voiceAccepted:true};

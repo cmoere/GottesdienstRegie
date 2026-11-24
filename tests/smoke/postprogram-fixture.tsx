@@ -8,7 +8,7 @@ import {EventService} from '../../src/community/EventService';
 import {RoomService} from '../../src/community/RoomService';
 import {PostProgramRoomNoticeController,PostProgramRoomNoticeService} from '../../src/community/PostProgramRoomNoticeService';
 import '../../src/cera-pro.css';
-import 'material-symbols/outlined.css';
+import '../../src/icons/ui-icons.css';
 import '../../src/styles.css';
 import '../../src/settings-v08.css';
 import '../../src/v09.css';

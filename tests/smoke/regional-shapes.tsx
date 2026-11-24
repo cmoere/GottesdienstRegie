@@ -8,7 +8,7 @@ import {normalizeGermanRegion} from '../../shared/regional/catalog';
 import '../../src/cera-pro.css';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/600.css';
-import 'material-symbols/outlined.css';
+import '../../src/icons/ui-icons.css';
 import '../../src/styles.css';
 import '../../src/version41.css';
 import '../../src/version42.css';

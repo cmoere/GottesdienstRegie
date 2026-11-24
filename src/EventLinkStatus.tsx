@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import type { ChurchEvent } from './events';
 import type { EventLink } from './store';
 import type { Ref } from 'react';
@@ -40,7 +41,7 @@ export function EventLinkStatus({ link, event, onClick, buttonRef }: { link?: Ev
   const {t}=useI18n();
   const view = eventLinkViewModel(link, event ? [event] : [],undefined,t);
   return <button ref={buttonRef} type="button" className={`event-link-status ${view.state}`} onClick={onClick} title={view.warning || view.detail}>
-    <span className="material-symbols-outlined" aria-hidden="true">{view.state === 'cancelled' || view.state === 'missing' ? 'warning' : 'event'}</span>
+    <UiIcon name={view.state === 'cancelled' || view.state === 'missing' ? 'warning' : 'event'} aria-hidden="true" />
     <span className="event-link-status-copy"><strong>{view.title}</strong><small>{view.warning || view.detail}</small></span>
     <span className="event-link-change">{view.state === 'unlinked' ? t('eventLinkSelect') : t('eventLinkChange')}</span>
   </button>;

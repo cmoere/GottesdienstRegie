@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {SiteMapDesigner} from './SiteMapDesigner';
 import {ScreenSharingMirror} from './ScreenSharing';
 import {usePreviewOptions} from './PreviewOverviewControls';
@@ -93,9 +94,7 @@ import {PostProgramRoomNoticeView} from './PostProgramRoomNotice';
 import {isPostProgramSystemItem} from './postProgramSystemSlide';
 
 const Icon = ({ name }: { name: string }) => (
-  <span className="material-symbols-outlined" aria-hidden="true">
-    {name}
-  </span>
+  <UiIcon name={name} aria-hidden="true" />
 );
 
 function selected(state: ReturnType<typeof usePresentation.getState>) {

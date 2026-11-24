@@ -24,9 +24,104 @@
       "line": "0.99",
       "builds": [
         {
+          "version": "0.99.14",
+          "releaseDate": "2026-11-24",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Lichtoperator mit vier Folienvorschauen",
+              "en": "Lighting Operator with four slide previews"
+            },
+            "text": {
+              "de": "Der neue Lichtoperator zeigt die aktuelle Ausgabe groß und vier kommende Folien daneben. Zwei Farbkacheln ermitteln die dominanten Farben des aktuellen Ausgabebilds direkt auf dem verbundenen Gerät.",
+              "en": "The new Lighting Operator displays a large current output with four upcoming slides alongside it. Two color tiles identify the dominant colors of the current output image directly on the connected device."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Feste Monitor-Adresse und ON AIR",
+                  "en": "Stable monitor address and ON AIR"
+                },
+                "text": {
+                  "de": "Unter Anzeige & Web-Steuerung lässt sich ein Lichtoperator mit eigenem HTTPS-Link und QR-Code einrichten. Die Adresse bleibt über Präsentationswechsel und Neustarts erhalten. Bildausgabe, Vorschauen und Farbanalyse starten bei ON AIR.",
+                  "en": "Create a Lighting Operator with its own HTTPS link and QR code in Display & Web Control. Its address survives presentation changes and restarts. Output images, previews and color analysis start when ON AIR."
+                }
+              },
+              {
+                "label": {
+                  "de": "Zwei Hauptfarben aus der Ausgabe",
+                  "en": "Two dominant output colors"
+                },
+                "text": {
+                  "de": "Die lokale Bildanalyse zeigt bis zu zwei deutlich unterscheidbare Hauptfarben mit HEX-Werten. Die Farbkacheln folgen dem aktuellen Ausgabebild. Einfarbige Ausgaben werden entsprechend gekennzeichnet.",
+                  "en": "Local image analysis displays up to two distinct dominant colors with HEX values. The color tiles follow the current output image. Solid-color outputs are identified accordingly."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Ansichten und einheitliche Symbole",
+                  "en": "Layouts and consistent icons"
+                },
+                "text": {
+                  "de": "Der Lichtoperator bietet Spalten-, Raster- und Einzelansicht sowie einblendbare Folientitel. Dunkel ist die Standarddarstellung. Hell und Gerätemodus lassen sich im Ansichtsdialog wählen und werden pro Browser gespeichert. Die Bedienoberfläche verwendet lokal mitgelieferte Lucide-Symbole.",
+                  "en": "The Lighting Operator offers column, grid and single-slide layouts with optional slide titles. Dark is the default appearance. Light and Device mode can be selected in the view dialog and are saved per browser. The interface uses locally bundled Lucide icons."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Stabilere Radio-Abfragen",
+                  "en": "More reliable radio requests"
+                },
+                "text": {
+                  "de": "Sender-Abfragen behandeln Weiterleitungen zwischen HTTPS und HTTP korrekt. Fehlerhafte oder nicht unterstützte Ziele werden abgefangen, damit die Anwendung bei der Suche nach Titel- und Coverdaten weiterläuft.",
+                  "en": "Station requests handle redirects between HTTPS and HTTP correctly. Invalid or unsupported destinations are caught so the application continues running while fetching track and artwork metadata."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originaler Dreiklang für Ansagen",
+                  "en": "Original three-tone announcement chime"
+                },
+                "text": {
+                  "de": "Tonproben und automatische Ansagen verwenden den originalen Dreiklang der Gemeinde. Die zusätzlichen Gongvarianten und ihre Auswahl wurden entfernt. Frühere Einstellungen führen automatisch zum originalen Gong.",
+                  "en": "Sound tests and automatic announcements use the congregation’s original three-tone chime. The additional chimes and their picker have been removed. Previous settings automatically use the original chime."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              }
+            ]
+          }
+        },
+        {
           "version": "0.99.13",
           "releaseDate": "2026-11-15",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Gemeinsamer Durchsagegong",

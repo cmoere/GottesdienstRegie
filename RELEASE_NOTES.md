@@ -1,3 +1,17 @@
+# GottesdienstRegie 0.99.14
+
+Der Lichtoperator ergänzt die Webmonitore um eine große aktuelle Ausgabe und vier kommende Folien. Zwei Farbkacheln zeigen die dominanten Farben des aktuellen Ausgabebilds mit HEX-Werten. Die Analyse erfolgt lokal auf dem verbundenen Gerät.
+
+Der feste HTTPS-Link und sein QR-Code bleiben über Präsentationswechsel und Neustarts erhalten. Die Anzeige startet bei ON AIR. Spalten-, Raster- und Einzelansicht, Folientitel sowie Dunkel, Hell und Gerätemodus lassen sich im Ansichtsdialog einstellen.
+
+Die Bedienoberfläche verwendet einheitliche Lucide-Symbole. Dunkel ist die Standarddarstellung in Desktop-App, Web-Editor und Webmonitoren.
+
+Radio-Abfragen verarbeiten HTTPS-/HTTP-Weiterleitungen zuverlässig. Ansagen und Tonproben verwenden ausschließlich den originalen Dreiklang der Gemeinde.
+
+Die originalgetreue PowerPoint-Wiedergabe benötigt Windows und installiertes Microsoft PowerPoint.
+
+---
+
 # GottesdienstRegie 0.99.13
 
 Unter Einstellungen → Präsentation → Ansagen stehen vier Durchsagegongs zur Auswahl. Eine zentral gespeicherte Auswahl gilt für alle Regie-PCs und wird für Tonproben und automatische Ansagen verwendet.

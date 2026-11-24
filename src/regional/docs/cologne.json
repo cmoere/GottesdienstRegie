@@ -2308,6 +2308,22 @@
     "versions[0.99].builds[0.99.13].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.13].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.13].sections.known.1.label": "Originaljetreue PowerPoint-Wiedergab",
-    "versions[0.99].builds[0.99.13].sections.known.1.text": "De originaljetreue Wiedergab bruch wigger Windows un installiert Microsoft PowerPoint. De neue Vörbereitungs- un Diagnosefunktione ersetze dä Wiedergabeweech nit."
+    "versions[0.99].builds[0.99.13].sections.known.1.text": "De originaljetreue Wiedergab bruch wigger Windows un installiert Microsoft PowerPoint. De neue Vörbereitungs- un Diagnosefunktione ersetze dä Wiedergabeweech nit.",
+    "versions[0.99].builds[0.99.14].overview.label": "Lichtoperator mit vier Folienvorschauen",
+    "versions[0.99].builds[0.99.14].overview.text": "Der neue Lichtoperator zeigt die aktuelle Ausgabe groß und vier kommende Folien daneben. Zwei Farbkacheln ermitteln die dominanten Farben des aktuellen Ausgabebilds direkt auf dem verbundenen Gerät.",
+    "versions[0.99].builds[0.99.14].sections.new.0.label": "Feste Monitor-Adresse und ON AIR",
+    "versions[0.99].builds[0.99.14].sections.new.0.text": "Unter Anzeige & Web-Steuerung lässt sich ein Lichtoperator mit eigenem HTTPS-Link und QR-Code einrichten. Die Adresse bleibt über Präsentationswechsel und Neustarts erhalten. Bildausgabe, Vorschauen und Farbanalyse starten bei ON AIR.",
+    "versions[0.99].builds[0.99.14].sections.new.1.label": "Zwei Hauptfarben aus der Ausgabe",
+    "versions[0.99].builds[0.99.14].sections.new.1.text": "Die lokale Bildanalyse zeigt bis zu zwei deutlich unterscheidbare Hauptfarben mit HEX-Werten. Die Farbkacheln folgen dem aktuellen Ausgabebild. Einfarbige Ausgaben werden entsprechend gekennzeichnet.",
+    "versions[0.99].builds[0.99.14].sections.improved.0.label": "Ansichten und einheitliche Symbole",
+    "versions[0.99].builds[0.99.14].sections.improved.0.text": "Der Lichtoperator bietet Spalten-, Raster- und Einzelansicht sowie einblendbare Folientitel. Dunkel ist die Standarddarstellung. Hell und Gerätemodus lassen sich im Ansichtsdialog wählen und werden pro Browser gespeichert. Die Bedienoberfläche verwendet lokal mitgelieferte Lucide-Symbole.",
+    "versions[0.99].builds[0.99.14].sections.fixed.0.label": "Stabilere Radio-Abfragen",
+    "versions[0.99].builds[0.99.14].sections.fixed.0.text": "Sender-Abfragen behandeln Weiterleitungen zwischen HTTPS und HTTP korrekt. Fehlerhafte oder nicht unterstützte Ziele werden abgefangen, damit die Anwendung bei der Suche nach Titel- und Coverdaten weiterläuft.",
+    "versions[0.99].builds[0.99.14].sections.fixed.1.label": "Originaler Dreiklang für Ansagen",
+    "versions[0.99].builds[0.99.14].sections.fixed.1.text": "Tonproben und automatische Ansagen verwenden den originalen Dreiklang der Gemeinde. Die zusätzlichen Gongvarianten und ihre Auswahl wurden entfernt. Frühere Einstellungen führen automatisch zum originalen Gong.",
+    "versions[0.99].builds[0.99.14].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.14].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.14].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
+    "versions[0.99].builds[0.99.14].sections.known.1.text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht."
   }
 }

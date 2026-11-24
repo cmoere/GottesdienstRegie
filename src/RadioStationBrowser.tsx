@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import { useEffect, useRef, useState } from "react";
 import { searchRadioStations, suggestRadioStations, type RadioStation } from "./radioStations";
 import type { BackgroundAudioTrack } from "./store";
@@ -10,7 +11,7 @@ function StationArtwork({url}: {url: string}) {
   return <span className="radio-station-artwork" aria-hidden="true">
     {url && !failed
       ? <img src={url} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(true)} />
-      : <span className="material-symbols-outlined">radio</span>}
+      : <UiIcon name="radio" />}
   </span>;
 }
 export function RadioStationBrowser({
@@ -128,7 +129,7 @@ export function RadioStationBrowser({
               disabled={busy}
               onClick={clearSearch}
             >
-              <span className="material-symbols-outlined" aria-hidden="true">close</span>
+              <UiIcon name="close" aria-hidden="true" />
             </button>
           )}
         </span>
@@ -150,11 +151,9 @@ export function RadioStationBrowser({
               onClick={() => play(station)}
               aria-label={t('radioBrowserPlay',{station:station.name})}
             >
-              <span className="material-symbols-outlined">
-                {active?.id === station.id && status === "playing"
+              <UiIcon name={active?.id === station.id && status === "playing"
                   ? "pause_circle"
-                  : "play_circle"}
-              </span>
+                  : "play_circle"} />
             </button>
             <span className="radio-station-text">
               <b>{station.name}</b>

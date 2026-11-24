@@ -31,24 +31,24 @@ describe('PersonalNotesPanel save status',()=>{
   it('shows sync dots while saving, a success check, then the private lock again',()=>{
     render(<PersonalNotesPanel noteKey={noteKey} label="Notizen"/>);
     expect(screen.getByRole('status')).toHaveTextContent('Diese Notiz ist nur für dich sichtbar.');
-    expect(screen.getByRole('status').querySelector('.material-symbols-outlined')).toHaveTextContent('lock');
+    expect(screen.getByRole('status').querySelector('.ui-icon')).toHaveAttribute('data-icon','lock');
 
     enter('Erste Notiz');
     expect(screen.getByRole('status')).toHaveTextContent('Speichert .');
-    expect(screen.getByRole('status').querySelector('.material-symbols-outlined')).toHaveTextContent('sync');
+    expect(screen.getByRole('status').querySelector('.ui-icon')).toHaveAttribute('data-icon','sync');
 
     act(()=>vi.advanceTimersByTime(400));
     expect(screen.getByRole('status')).toHaveTextContent('Speichert ..');
 
     act(()=>vi.advanceTimersByTime(100));
     expect(screen.getByRole('status')).toHaveTextContent('Gespeichert');
-    expect(screen.getByRole('status').querySelector('.material-symbols-outlined')).toHaveTextContent('check_circle');
+    expect(screen.getByRole('status').querySelector('.ui-icon')).toHaveAttribute('data-icon','check_circle');
 
     act(()=>vi.advanceTimersByTime(4999));
     expect(screen.getByRole('status')).toHaveTextContent('Gespeichert');
     act(()=>vi.advanceTimersByTime(1));
     expect(screen.getByRole('status')).toHaveTextContent('Diese Notiz ist nur für dich sichtbar.');
-    expect(screen.getByRole('status').querySelector('.material-symbols-outlined')).toHaveTextContent('lock');
+    expect(screen.getByRole('status').querySelector('.ui-icon')).toHaveAttribute('data-icon','lock');
   });
 
   it('does not let an older debounce save a newer edit early',()=>{
@@ -74,7 +74,7 @@ describe('PersonalNotesPanel save status',()=>{
     enter('Fehler');
     act(()=>vi.advanceTimersByTime(500));
     expect(screen.getByRole('status')).toHaveTextContent('Speichern fehlgeschlagen');
-    expect(screen.getByRole('status').querySelector('.material-symbols-outlined')).toHaveTextContent('error');
+    expect(screen.getByRole('status').querySelector('.ui-icon')).toHaveAttribute('data-icon','error');
     act(()=>vi.advanceTimersByTime(5000));
     expect(screen.getByRole('status')).toHaveTextContent('Speichern fehlgeschlagen');
   });
@@ -100,7 +100,7 @@ describe('PersonalNotesPanel save status',()=>{
   it('opens presentation notes with a compact text button and extended formatting tools',()=>{
     render(<PersonalNotesPanel noteKey={noteKey} label="Präsentationsnotizen" presentation/>);
     const opener=screen.getByRole('button',{name:'Präsentationsnotizen'});
-    expect(opener.querySelector('.material-symbols-outlined')).toBeNull();
+    expect(opener.querySelector('.ui-icon')).toBeNull();
     fireEvent.click(opener);
     expect(screen.getByRole('toolbar',{name:'Notiz formatieren'})).toBeInTheDocument();
     expect(screen.getByRole('button',{name:'Durchstreichen'})).toBeInTheDocument();

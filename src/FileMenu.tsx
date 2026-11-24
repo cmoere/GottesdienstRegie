@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {useI18n} from './i18n';
 import {
   useEffect,
@@ -17,9 +18,7 @@ import {
 
 function Icon({ name }: { name: string }) {
   return (
-    <span className="material-symbols-outlined" aria-hidden="true">
-      {name}
-    </span>
+    <UiIcon name={name} aria-hidden="true" />
   );
 }
 

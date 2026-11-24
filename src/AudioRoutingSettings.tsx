@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {useI18n} from './i18n';
 import {useEffect,useMemo,useRef,useState} from 'react';
 import {defaultAudioRouting,routeAvailable,type AudioRoute,type AudioRouting} from './audioRouting';
@@ -7,7 +8,7 @@ import {usePreferences} from './preferences';
 import {usePresentation} from './store';
 import {SpotifySettings} from './spotify/SpotifySettings';
 
-const Icon=({name}:{name:string})=><span className="material-symbols-outlined" aria-hidden="true">{name}</span>;
+const Icon=({name}:{name:string})=><UiIcon name={name} aria-hidden="true" />;
 
 
 export function normalizedAudioRouting(value?:Partial<AudioRouting>):AudioRouting{return{

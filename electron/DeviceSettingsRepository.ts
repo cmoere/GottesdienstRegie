@@ -4,7 +4,7 @@ import {atomicRename} from './atomicRename';
 import type {OsbSettings} from '../src/osb/types';
 import {normalizeOutputDisplayProfile,type OutputDisplayProfile} from './outputDisplayProfile';
 import {normalizeBannerPosition} from '../src/bannerSettings';
-import {normalizeAnnouncementSettings,validateAnnouncementSettings,isAnnouncementGong,type AnnouncementGong} from '../src/announcements/settings';
+import {normalizeAnnouncementSettings,validateAnnouncementSettings} from '../src/announcements/settings';
 import {normalizeRegionalSelection,validateRegionalSelection} from '../shared/regional/selection';
 
 export class DeviceSettingsRepository {
@@ -16,14 +16,6 @@ export class DeviceSettingsRepository {
   }
   async readOsb():Promise<unknown>{await this.writes;try{return (await this.readSettings()).osb??null}catch{return null}}
   async readAnnouncements(){await this.writes;return normalizeAnnouncementSettings((await this.readSettings()).announcements)}
-  async readSharedGong(){
-    await this.writes;
-    const value=(await this.readSettings()).sharedAnnouncementGong;
-    return isAnnouncementGong(value)?value:undefined;
-  }
-  async writeSharedGong(gong:AnnouncementGong){
-    if(await this.readSharedGong()!==gong)await this.update({sharedAnnouncementGong:gong});
-  }
   async readAnnouncementEngine():Promise<string|null>{await this.writes;const value=(await this.readSettings()).announcementEngine;return typeof value==='string'?value:null}
   async writeAnnouncementEngine(file:string){if(!path.isAbsolute(file)||!/^espeak-ng(?:\.exe)?$/i.test(path.basename(file)))throw Error('Bitte das eSpeak-NG-Programm auswählen.');await this.update({announcementEngine:file})}
   async writeAnnouncements(value:unknown){const normalized=validateAnnouncementSettings(value);await this.update({announcements:normalized});return normalized}

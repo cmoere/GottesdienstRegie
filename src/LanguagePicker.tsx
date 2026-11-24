@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {useI18n} from "./i18n";
 import { useMemo, useState } from 'react';
 import { languageByCode, searchLanguages } from './languageCatalog';
@@ -26,7 +27,7 @@ export function LanguagePicker({ value, onChange, source = 'en', disabled = fals
     setOpen(false);
   };
   return <div className="language-picker">
-    <button type="button" disabled={disabled} onClick={() => setOpen(value => !value)}><FlagIcon languageCode={selected.code} decorative /> {selected.name} <span className="material-symbols-outlined" aria-hidden="true">arrow_drop_down</span></button>
+    <button type="button" disabled={disabled} onClick={() => setOpen(value => !value)}><FlagIcon languageCode={selected.code} decorative /> {selected.name} <UiIcon name="arrow_drop_down" aria-hidden="true" /></button>
     {open && <div className="language-picker-popover" role="dialog" aria-label={tx("Übersetzungssprache")}>
       <input autoFocus placeholder={tx("Sprache suchen …")} value={query} onChange={event => setQuery(event.target.value)} />
       <div>{languages.map(language => {
@@ -34,7 +35,7 @@ export function LanguagePicker({ value, onChange, source = 'en', disabled = fals
         return <button type="button" key={language.code} onClick={() => void choose(language.code)}>
           <FlagIcon languageCode={language.code} decorative />
           <span><b>{language.name}</b><small>{language.nativeName}{!capability.supported && source !== language.code ? " "+tx("· Kein lokales Modell verfügbar") : ''}</small></span>
-          <span>{busy ? (busy.totalBytes ? `${busy.percent}%` : <span className="material-symbols-outlined rotating" aria-label={tx("Wird geladen")}>progress_activity</span>) : ready ? <span className="material-symbols-outlined" aria-label={tx("BEREIT")}>check_circle</span> : capability.supported ? <span className="material-symbols-outlined" aria-label={tx("Herunterladen")}>cloud_download</span> : <span className="material-symbols-outlined" aria-label={tx("Nur gespeicherten Text verwenden")}>cloud_off</span>}</span>
+          <span>{busy ? (busy.totalBytes ? `${busy.percent}%` : <UiIcon name="progress_activity" className="rotating" aria-label={tx("Wird geladen")} />) : ready ? <UiIcon name="check_circle" aria-label={tx("BEREIT")} /> : capability.supported ? <UiIcon name="cloud_download" aria-label={tx("Herunterladen")} /> : <UiIcon name="cloud_off" aria-label={tx("Nur gespeicherten Text verwenden")} />}</span>
         </button>;
       })}</div>
     </div>}

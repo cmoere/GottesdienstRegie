@@ -1,0 +1,19 @@
+.ui-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  font-size: 20px;
+  line-height: 1;
+  vertical-align: -0.15em;
+}
+.ui-icon > svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+  flex: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ui-icon.rotating,
+  .ui-icon.is-spinning { animation: none; }
+}

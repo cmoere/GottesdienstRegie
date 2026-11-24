@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {NextPreviewOutput} from './NextPreviewOutput';
 import {EditorModeControl} from './EditorModeControl';
 import {SectionInfoSettings} from './SectionInfoSettings';
@@ -246,9 +247,7 @@ import { RemoteCenter } from "./RemoteCenter";
 
 function Icon({ name }: { name: string }) {
   return (
-    <span className="material-symbols-outlined" aria-hidden="true">
-      {name}
-    </span>
+    <UiIcon name={name} aria-hidden="true" />
   );
 }
 const X = () => <Icon name="close" />;
@@ -8249,7 +8248,7 @@ function AppShell({
     return dispose;
   }, []);
   useEffect(() => {
-    const update=()=>void(window.desktop as any)?.remote?.updateLive({...remoteLiveMetadata(state,getCommunityRuntimeSnapshot().events),quickActive:Boolean(previewQuick)});
+    const update=()=>void(window.desktop as any)?.remote?.updateLive({...remoteLiveMetadata(state,getCommunityRuntimeSnapshot().events,loopForecast),quickActive:Boolean(previewQuick)});
     update();return subscribeCommunityRuntime(update);
   }, [
     state.title,
@@ -8260,6 +8259,7 @@ function AppShell({
     state.previewSlideId,
     state.items,
     previewQuick,
+    loopForecast,
   ]);
   useEffect(() => {
     if (

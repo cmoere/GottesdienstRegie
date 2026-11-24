@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import {remainingCountdownMs} from './countdownClock';
 import {AppClock} from './community/AppClock';
@@ -10,7 +11,7 @@ import {TechnicalIssueScreen} from './TechnicalIssueScreen';
 import type {ScreenTestReceipt} from './screenTest';
 import './screenTest.css';
 
-const Icon=({name}:{name:string})=><span className="material-symbols-outlined" aria-hidden="true">{name}</span>;
+const Icon=({name}:{name:string})=><UiIcon name={name} aria-hidden="true" />;
 
 export function QuickOverlay({quick,staticPreview=false,onScreenTestResult}:{quick:QuickScreenConfig|null;staticPreview?:boolean;onScreenTestResult?:(receipt:ScreenTestReceipt)=>void}){
   const reducedMotion=usePreferences(state=>state.reduceMotion);

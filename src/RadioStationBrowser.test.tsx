@@ -19,7 +19,7 @@ describe('RadioStationBrowser query',()=>{
     const logo=within(row).getByAltText('');
     expect(logo).toHaveAttribute('src',station.artworkUrl);
     fireEvent.error(logo);
-    expect(within(row).getByText('radio')).toBeVisible();
+    expect(row.querySelector('[data-icon="radio"] svg')).toBeVisible();
     fireEvent.change(screen.getByPlaceholderText('Sender, Ort oder Musikrichtung'),{target:{value:'Jazz'}});
     fireEvent.click(screen.getByRole('button',{name:'Suchen'}));
     expect(await screen.findByText('Jazzsender')).toBeVisible();

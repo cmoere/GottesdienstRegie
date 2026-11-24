@@ -3,7 +3,7 @@ import {createRoot} from 'react-dom/client';
 import {OrderOfService} from '../src/App';
 import {usePresentation} from '../src/store';
 import entrySource from '../src/main.tsx?raw';
-import 'material-symbols/outlined.css';
+import '../src/icons/ui-icons.css';
 
 async function mount(){
  for(const match of entrySource.matchAll(/import '\.\/([^']+\.css)';/g)) await import(/* @vite-ignore */ '/src/'+match[1]);

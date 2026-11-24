@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {useSyncExternalStore} from 'react';
 import {useI18n} from './i18n';
 import {CapabilityNotice} from './platform/CapabilityNotice';
@@ -20,11 +21,11 @@ export function WebWorkspaceStatus({saveState}: {saveState: string}) {
   return <div className="web-workspace-status">
     <div className="web-status-row" role="status">
       <span className="web-status-chip" data-online={online}>
-        <span className="material-symbols-outlined" aria-hidden="true">{online ? 'wifi' : 'wifi_off'}</span>
+        <UiIcon name={online ? 'wifi' : 'wifi_off'} aria-hidden="true" />
         {online ? t('webOnline') : t('webOffline')}
       </span>
       <span className="web-status-chip" data-saving={saveState === 'saving'}>
-        <span className="material-symbols-outlined" aria-hidden="true">{saveState === 'saving' ? 'progress_activity' : 'save'}</span>
+        <UiIcon name={saveState === 'saving' ? 'progress_activity' : 'save'} aria-hidden="true" />
         {saveLabel}
       </span>
     </div>

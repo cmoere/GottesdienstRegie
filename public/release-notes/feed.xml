@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.99.14</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.14</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.14</guid><pubDate>Tue, 24 Nov 2026 00:00:00 GMT</pubDate><description>Lichtoperator mit vier Folienvorschauen
+Der neue Lichtoperator zeigt die aktuelle Ausgabe groß und vier kommende Folien daneben. Zwei Farbkacheln ermitteln die dominanten Farben des aktuellen Ausgabebilds direkt auf dem verbundenen Gerät.
+
+Feste Monitor-Adresse und ON AIR
+Unter Anzeige &amp; Web-Steuerung lässt sich ein Lichtoperator mit eigenem HTTPS-Link und QR-Code einrichten. Die Adresse bleibt über Präsentationswechsel und Neustarts erhalten. Bildausgabe, Vorschauen und Farbanalyse starten bei ON AIR.
+
+Zwei Hauptfarben aus der Ausgabe
+Die lokale Bildanalyse zeigt bis zu zwei deutlich unterscheidbare Hauptfarben mit HEX-Werten. Die Farbkacheln folgen dem aktuellen Ausgabebild. Einfarbige Ausgaben werden entsprechend gekennzeichnet.
+
+Ansichten und einheitliche Symbole
+Der Lichtoperator bietet Spalten-, Raster- und Einzelansicht sowie einblendbare Folientitel. Dunkel ist die Standarddarstellung. Hell und Gerätemodus lassen sich im Ansichtsdialog wählen und werden pro Browser gespeichert. Die Bedienoberfläche verwendet lokal mitgelieferte Lucide-Symbole.
+
+Stabilere Radio-Abfragen
+Sender-Abfragen behandeln Weiterleitungen zwischen HTTPS und HTTP korrekt. Fehlerhafte oder nicht unterstützte Ziele werden abgefangen, damit die Anwendung bei der Suche nach Titel- und Coverdaten weiterläuft.
+
+Originaler Dreiklang für Ansagen
+Tonproben und automatische Ansagen verwenden den originalen Dreiklang der Gemeinde. Die zusätzlichen Gongvarianten und ihre Auswahl wurden entfernt. Frühere Einstellungen führen automatisch zum originalen Gong.
+
+Hinweise zum Live-Betrieb
+Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.
+
+Originalgetreue PowerPoint-Wiedergabe
+Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.</description></item>
 <item><title>GottesdienstRegie 0.99.13</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.13</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.13</guid><pubDate>Sun, 15 Nov 2026 00:00:00 GMT</pubDate><description>Gemeinsamer Durchsagegong
 Unter Einstellungen → Präsentation → Ansagen stehen vier Durchsagegongs zur Auswahl. Eine zentral gespeicherte Auswahl gilt für alle Regie-PCs und wird für Tonproben und automatische Ansagen verwendet.
 

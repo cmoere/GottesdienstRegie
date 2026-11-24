@@ -3,7 +3,7 @@ import {createRoot} from 'react-dom/client';
 import {ProductionWorkspace,ProductionTimeline} from '../src/ProductionWorkspace';
 import {usePresentation} from '../src/store';
 import entrySource from '../src/main.tsx?raw';
-import 'material-symbols/outlined.css';
+import '../src/icons/ui-icons.css';
 
 // Use the app's actual ordered CSS imports: loading only the inner workspace
 // styles previously missed a later shared-device override of the shell rows.

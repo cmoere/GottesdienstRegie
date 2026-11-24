@@ -1,3 +1,4 @@
+import {UiIcon} from './icons/UiIcon';
 import {operatorQuickScreenName} from './quickScreenUi';
 import { useState } from "react";
 import {
@@ -78,9 +79,7 @@ export function QuickScreenSettings() {
                 key={item.id}
                 onClick={() => setSelected(item.id)}
               >
-                <span className="material-symbols-outlined" aria-hidden="true">
-                  drag_indicator
-                </span>
+                <UiIcon name="drag_indicator" aria-hidden="true" />
                 <input
                   type="checkbox"
                   checked={item.enabled}

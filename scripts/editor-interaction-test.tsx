@@ -1,3 +1,5 @@
+import {UiIcon} from '../src/icons/UiIcon';
+import '../src/icons/ui-icons.css';
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {ProductionWorkspace} from '../src/ProductionWorkspace';
@@ -11,5 +13,5 @@ const state=usePresentation.getState();state.newDocument('Drag test');state.addI
 (window as any).websiteTest=()=>{const state=usePresentation.getState();state.newDocument('Web test');state.addItem('web',{title:'Web',section:'',body:'',metadata:{url:'about:blank'}});state.addElement('web');const current=usePresentation.getState(),page=current.items[0].slides[0],web=page.elements.find(element=>element.type==='web')!;current.updateElement(web.id,{properties:{...web.properties,src:'about:blank',allowForms:false,referrerPolicy:'strict-origin-when-cross-origin'}})};
 if(location.search.includes('window-controls')){
  (window as any).desktop={operator:{fullscreen:async()=>true,onFullscreen:()=>()=>{},control:(action:string)=>(window as any).lastWindowAction=action}};
- createRoot(document.getElementById('root')!).render(<div className="production-app"><div className="menubar"><WindowControls/><div className="sync-control"><button>Sync</button></div></div><div className="top-profile-root"><button className="top-profile-button"><span className="material-symbols-outlined">account_circle</span><span>Sehr langer Benutzername für die Kollisionsprüfung</span><span className="material-symbols-outlined">arrow_drop_down</span></button></div></div>);
+ createRoot(document.getElementById('root')!).render(<div className="production-app"><div className="menubar"><WindowControls/><div className="sync-control"><button>Sync</button></div></div><div className="top-profile-root"><button className="top-profile-button"><UiIcon name="account_circle"/><span>Sehr langer Benutzername für die Kollisionsprüfung</span><UiIcon name="arrow_drop_down"/></button></div></div>);
 }else createRoot(document.getElementById('root')!).render(<div style={{height:'900px'}}><ProductionWorkspace canEdit/></div>);

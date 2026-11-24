@@ -9,12 +9,14 @@ import {networkInterfaces} from 'node:os';
 import {randomBytes,randomUUID} from 'node:crypto';
 import {readAnnotationStroke} from '../shared/liveAnnotations';
 import {remotePage} from './RemotePage';
+import {normalizeMonitorLayout, type MonitorLayout, type MonitorProfile} from '../shared/remoteMonitor';
+import type {NextPreviewPacket} from '../shared/nextPreview';
 
-export interface PersonalMonitor{id:string;slug:string;name:string;sourceType:'main'|'stage'|'livestream';layout:'mirror'|'current-next';defaultLanguage:'de'|'en';showCurrent:boolean;showNext:boolean;showClock:boolean;showCountdown:boolean;showNotes:boolean;showOrderOfService:boolean;enabled:boolean}
+export interface PersonalMonitor{id:string;slug:string;name:string;profile?:MonitorProfile;sourceType:'main'|'stage'|'livestream';layout:MonitorLayout;defaultLanguage:'de'|'en';showCurrent:boolean;showNext:boolean;showClock:boolean;showCountdown:boolean;showNotes:boolean;showOrderOfService:boolean;enabled:boolean}
 type StoredMonitor=PersonalMonitor&{token:string};
 export interface RemoteDevice{id:string;name:string;permissionRole:'view'|'preacher'|'control'|'advanced';preferredLanguage:'de'|'en';permissions:string[];token:string;revoked:boolean;createdAt:string;lastSeenAt?:string}
 interface Stored{monitors:StoredMonitor[];remotes:RemoteDevice[]}
-interface LiveState{nextPreviewRevision?:number;quickActive?:boolean;title?:string;current?:unknown;next?:unknown;onAir?:boolean;serviceTime?:string;clock?:string;notes?:string;order?:string[];annotationTakeId?:string;serviceCountdownAtMs?:number}
+interface LiveState{upcoming?:NextPreviewPacket[];nextPreviewRevision?:number;quickActive?:boolean;title?:string;current?:unknown;next?:unknown;onAir?:boolean;serviceTime?:string;clock?:string;notes?:string;order?:string[];annotationTakeId?:string;serviceCountdownAtMs?:number}
 const permissions=new Set(['remote.view','remote.viewNotes','remote.next','remote.previous','remote.selectSlide','remote.selectItem','remote.quickScreen','remote.stageMessage','remote.viewRecording','remote.annotate','remote.share']);
 function address(){for(const group of Object.values(networkInterfaces()))for(const item of group??[])if(item.family==='IPv4'&&!item.internal)return item.address;return '127.0.0.1'}
 function publicSlide(value:unknown){if(!value||typeof value!=='object')return typeof value==='string'?value.slice(0,50000):null;const slide=value as Record<string,unknown>;return{id:typeof slide.id==='string'?slide.id:'',title:typeof slide.title==='string'?slide.title.slice(0,1000):'',body:typeof slide.body==='string'?slide.body.slice(0,50000):''}}
@@ -23,7 +25,7 @@ export class RemoteServer{
  readonly sharing=new ScreenShareBroker(event=>this.command({action:'screen-share',event}));
  private secureServer?:https.Server;private fingerprint?:string;private certificate?:string;private shareTimer?:ReturnType<typeof setInterval>;
  private value:Stored={monitors:[],remotes:[]};private live:LiveState={};private seen=new Map<string,number>();private annotationRate=new Map<string,number>();
- constructor(private file:string,private command:(payload:unknown)=>void,private port=43171,private frame?:(role:'main'|'stage'|'livestream')=>Promise<Buffer|null>,private copy?:(key:NativeRegionalTextKey)=>string,private nextFrame?:()=>Promise<Buffer|null>){}
+ constructor(private file:string,private command:(payload:unknown)=>void,private port=43171,private frame?:(role:'main'|'stage'|'livestream')=>Promise<Buffer|null>,private copy?:(key:NativeRegionalTextKey)=>string,private nextFrame?:(index?:number)=>Promise<Buffer|null>){}
  async start(){
   let value:Stored;
   try{value=JSON.parse(await fs.readFile(this.file,'utf8'))}catch{return}
@@ -41,8 +43,11 @@ export class RemoteServer{
  async saveMonitor(monitor:PersonalMonitor){
   if(!monitor||typeof monitor.name!=='string'||!monitor.name.trim()||monitor.name.length>200||typeof monitor.slug!=='string'||!['main','stage','livestream'].includes(monitor.sourceType))throw Error('Ungültiger Monitor.');
   const slug=monitor.slug.toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/^-+|-+$/g,'');if(!slug||slug.length>80)throw Error('Ungültige Monitor-Kennung.');
-  const token=this.value.monitors.find(item=>item.id===monitor.id)?.token??randomBytes(24).toString('base64url');
-  const normalized:StoredMonitor={...monitor,token,slug,layout:monitor.layout==='mirror'?'mirror':'current-next',defaultLanguage:monitor.defaultLanguage==='en'?'en':'de'};
+  const profile=monitor.profile==='lighting'?'lighting':'personal';
+  const existing=this.value.monitors.find(item=>item.id===monitor.id)
+   ?? (profile==='lighting'?this.value.monitors.find(item=>item.profile==='lighting'&&item.slug===slug):undefined);
+  const token=existing?.token??randomBytes(24).toString('base64url');
+  const normalized:StoredMonitor={...monitor,id:existing?.id??monitor.id,token,slug,profile,layout:normalizeMonitorLayout(monitor.layout,profile),defaultLanguage:monitor.defaultLanguage==='en'?'en':'de'};
   this.value.monitors=[...this.value.monitors.filter(item=>item.id!==monitor.id&&item.slug!==slug),normalized];await this.save();return normalized;
  }
  async removeMonitor(id:string){this.value.monitors=this.value.monitors.filter(item=>item.id!==id);await this.save();return true}
@@ -79,13 +84,23 @@ export class RemoteServer{
   }
   if(req.method==='GET'&&(url.pathname==='/api/state'||url.pathname==='/api/frame'||url.pathname==='/api/next-frame')){
    const access=this.access(url.searchParams.get('token')??'');if(!access){this.json(res,403,{error:'forbidden'});return}
+   const lightingOffAir=access.monitor?.profile==='lighting'&&this.live.onAir!==true;
    if(url.pathname==='/api/frame'||url.pathname==='/api/next-frame'){
-    const bytes=url.pathname==='/api/next-frame'?await this.nextFrame?.():this.live.onAir?await this.frame?.(access.monitor?.sourceType??'main'):null;
+    if(lightingOffAir){this.json(res,409,{error:'off-air'});return}
+    const index=Number(url.searchParams.get('index')??0),revision=this.live.nextPreviewRevision;
+    if(!Number.isInteger(index)||index<0||index>3){this.json(res,400,{error:'invalid-index'});return}
+    if(index>0&&access.monitor?.profile!=='lighting'){this.json(res,403,{error:'forbidden'});return}
+    const requestedRevision=url.searchParams.get('revision');
+    if(url.pathname==='/api/next-frame'&&requestedRevision!==null&&Number(requestedRevision)!==revision){this.json(res,409,{error:'preview-changed'});return}
+    const bytes=url.pathname==='/api/next-frame'?await this.nextFrame?.(index):this.live.onAir?await this.frame?.(access.monitor?.sourceType??'main'):null;
+    if(access.monitor?.profile==='lighting'&&this.live.onAir!==true){this.json(res,409,{error:'off-air'});return}
+    if(url.pathname==='/api/next-frame'&&revision!==this.live.nextPreviewRevision){this.json(res,409,{error:'preview-changed'});return}
     if(!bytes){this.json(res,503,{error:'output-unavailable'});return}
     res.writeHead(200,{'content-type':'image/jpeg','cache-control':'no-store','x-content-type-options':'nosniff'});res.end(bytes);return;
    }
    const monitor=access.monitor,remote=access.remote,canNotes=monitor?monitor.showNotes:remote!.permissions.includes('remote.viewNotes');
-   this.json(res,200,{title:this.live.title,current:publicSlide(this.live.current),next:publicSlide(this.live.next),onAir:this.live.onAir===true,serviceTime:this.live.serviceTime,serviceCountdownAtMs:this.live.serviceCountdownAtMs,annotationTakeId:this.live.annotationTakeId,nextPreviewRevision:this.live.nextPreviewRevision,canAnnotate:Boolean(remote?.permissions.includes('remote.annotate')&&!this.live.quickActive),permissions:remote?.permissions??[],monitor:monitor?{layout:monitor.layout,showCurrent:monitor.showCurrent,showNext:monitor.showNext,showClock:monitor.showClock,showCountdown:monitor.showCountdown}:undefined,notes:canNotes?this.live.notes:undefined,order:monitor?.showOrderOfService?this.live.order:undefined});return;
+   const upcoming=monitor?.profile==='lighting'?(lightingOffAir?[]:(this.live.upcoming??[]).slice(0,4).map(packet=>({slide:publicSlide(packet.slide),itemTitle:typeof packet.itemTitle==='string'?packet.itemTitle.slice(0,1000):''}))):undefined;
+   this.json(res,200,{title:lightingOffAir?monitor?.name:this.live.title,current:lightingOffAir?null:publicSlide(this.live.current),next:lightingOffAir?null:publicSlide(this.live.next),upcoming,onAir:this.live.onAir===true,serviceTime:this.live.serviceTime,serviceCountdownAtMs:this.live.serviceCountdownAtMs,annotationTakeId:this.live.annotationTakeId,nextPreviewRevision:this.live.nextPreviewRevision,canAnnotate:Boolean(remote?.permissions.includes('remote.annotate')&&!this.live.quickActive),permissions:remote?.permissions??[],monitor:monitor?{profile:monitor.profile??'personal',layout:monitor.layout,showCurrent:monitor.showCurrent,showNext:monitor.showNext,showClock:monitor.showClock,showCountdown:monitor.showCountdown}:undefined,notes:canNotes&&!lightingOffAir?this.live.notes:undefined,order:monitor?.showOrderOfService&&!lightingOffAir?this.live.order:undefined});return;
   }
   if(req.method==='POST'&&url.pathname==='/api/command'){
    try{
