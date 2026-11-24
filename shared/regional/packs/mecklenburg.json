@@ -2408,7 +2408,22 @@
     "operatorSource_e2938f5c59f9ce25": "+ Lichtoperator",
     "operatorSource_de2f37dd41d42ebc": "Lichtoperator",
     "operatorSource_d8a7cc0ead10bcdb": "Aktuelle Folie mit vier Vorschauen rechts",
-    "operatorSource_d197f34cb9fc89bd": "Aktuelle Folie mit Vorschau-Raster"
+    "operatorSource_d197f34cb9fc89bd": "Aktuelle Folie mit Vorschau-Raster",
+    "shapeCategoryChristmas": "Weihnachten",
+    "shapeCategoryEaster": "Ostern",
+    "shapeChristmasStar": "Stern von Bethlehem",
+    "shapeChristmasTree": "Weihnachtsbaum",
+    "shapeAdventWreath": "Adventskranz",
+    "shapeNativity": "Krippe",
+    "shapeChristmasBell": "Weihnachtsglocke",
+    "shapeEasterEgg": "Osterei",
+    "shapeEasterTomb": "Leeres Grab",
+    "shapePalmBranch": "Palmzweig",
+    "shapeEasterLily": "Osterlilie",
+    "shapeLatinCross": "Christliches Kreuz",
+    "liveViewResetTitle": "Liveansicht zurücksetzen",
+    "liveViewResetHelp": "Nur die Vorschau auf diesem Gerät wird neu aufgebaut. Die laufende Präsentation und ihre Ausgabe bleiben unverändert.",
+    "liveViewResetDone": "Die lokale Liveansicht wurde zurückgesetzt."
   },
   "native": {
     "updateAvailableTitle": "Niege Verschoon tau krigen",
@@ -2562,6 +2577,18 @@
     "remoteLightingOffAir": "Die Anzeige startet, sobald die Regie ON AIR geht.",
     "remoteLightingColor": "Hauptfarbe",
     "remoteLightingAnalyzing": "Warte auf Ausgabebild",
-    "remoteLightingSingle": "Keine zweite Hauptfarbe"
+    "remoteLightingSingle": "Keine zweite Hauptfarbe",
+    "remoteLightingCopy": "HEX-Wert kopieren",
+    "remoteLightingCopied": "Farbwert kopiert",
+    "remoteLightingCopyFailed": "Kopieren nicht möglich. Bitte den HEX-Wert manuell kopieren.",
+    "remoteLightingLightPrefix": "Hell",
+    "remoteLightingDarkPrefix": "Dunkel",
+    "remoteLightingGray": "Grau",
+    "remoteLightingCyan": "Türkis",
+    "remoteViewNextColors": "Farben der nächsten Folie anzeigen",
+    "remoteClockSuffix": "Uhr",
+    "remoteResetLiveView": "Liveansicht zurücksetzen",
+    "remoteResetLiveHelp": "Nur diese Ansicht wird neu verbunden. Die laufende Präsentation bleibt unverändert.",
+    "remoteResetLiveDone": "Die Liveansicht wird neu verbunden."
   }
 }

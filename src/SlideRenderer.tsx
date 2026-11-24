@@ -1,3 +1,4 @@
+import {shapeByKind} from './shapeCatalog';
 import {UiIcon} from './icons/UiIcon';
 import {EventOverviewHeader,EventOverviewFooter} from './EventOverviewChrome';
 import {ExternalLoopElement} from './externalLoop/Element';
@@ -423,6 +424,10 @@ function RenderElement({
         sandbox={sandbox}
       />
     );
+  }
+  if(element.type==='shape'&&shapeByKind(String(properties.shapeKind)).vector){
+    const shape=shapeByKind(String(properties.shapeKind));
+    return <svg className={'slide-renderer-element shape shape-'+shape.kind} style={style} viewBox={shape.viewBox} preserveAspectRatio="none" aria-hidden="true">{(shape.parts??[shape.path]).map((path,index)=><path key={index} d={path} fill={String(properties.fill??properties.color??'#fff')} fillRule="evenodd" stroke={String(properties.stroke??'none')} strokeWidth={Math.max(0,Number(properties.strokeWidth??0))}/>) }</svg>;
   }
   if (element.type === "shape") {
     const kind = String(properties.shapeKind ?? "rectangle"),

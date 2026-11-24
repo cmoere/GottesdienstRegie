@@ -43,7 +43,7 @@ export class OutputWindowManager{
   async captureFrame(role:'main'|'stage'|'livestream'):Promise<Buffer|null>{
     const entry=this.outputs.get(role);if(!entry||entry.window.isDestroyed())return null;
     const old=this.frames.get(role),now=Date.now();
-    if(old?.windowId===entry.window.id&&(old.pending||now-old.at<200))return old.value;
+    if(old?.windowId===entry.window.id&&(old.pending||now-old.at<80))return old.value;
     const capture={windowId:entry.window.id,at:now,pending:true,value:entry.window.webContents.capturePage()
       .then(image=>image.isEmpty()?null:image.resize({width:Math.min(image.getSize().width,960)}).toJPEG(72))
       .catch(()=>null).finally(()=>{capture.pending=false;})};

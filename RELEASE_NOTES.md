@@ -1,3 +1,19 @@
+# GottesdienstRegie 0.99.15
+
+Webmonitore verwenden einen fortlaufenden Bildstrom mit automatischer Wiederverbindung. Geräte teilen sich die Bildaufnahme je Ausgabe. Langsame Verbindungen erzeugen keine zusätzliche Bildwarteschlange; ein Einzelbild-Fallback bleibt verfügbar.
+
+„Liveansicht zurücksetzen“ steht in den Webmonitor-Einstellungen und im Web-Editor bereit. Die Funktion erneuert nur die lokale Ansicht. Die laufende Präsentation und ihre Ausgabe bleiben unverändert. Ein Zahnrad ersetzt das bisherige Reglersymbol.
+
+Der Lichtoperator leitet klar benannte Lichtfarben stärker aus Hintergrund und Bild ab. Bei deutlicher Dominanz wird eine Farbe angezeigt, sonst höchstens zwei. Die nächste Folie erhält auf Wunsch eigene Farbkacheln. Ein Kopiersymbol übernimmt HEX-Werte mit Bestätigung. Die Auswahl bleibt pro Browser gespeichert.
+
+Datum und Uhrzeit stehen in den Webansichten nebeneinander, beispielsweise „Mi., 01.01.2020 10:00:05 Uhr“.
+
+Zehn neue Vektorformen ergänzen die Gestaltung: Stern von Bethlehem, Weihnachtsbaum, Adventskranz, Krippe, Weihnachtsglocke, Osterei, leeres Grab, Palmzweig, Osterlilie und christliches Kreuz. Füllung, Kontur, Größe und Position bleiben bearbeitbar.
+
+Die tatsächliche Bildrate hängt von Rechner, Browser und Netzwerk ab. Die originalgetreue PowerPoint-Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint.
+
+---
+
 # GottesdienstRegie 0.99.14
 
 Der Lichtoperator ergänzt die Webmonitore um eine große aktuelle Ausgabe und vier kommende Folien. Zwei Farbkacheln zeigen die dominanten Farben des aktuellen Ausgabebilds mit HEX-Werten. Die Analyse erfolgt lokal auf dem verbundenen Gerät.

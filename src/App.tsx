@@ -1,3 +1,4 @@
+import {LiveViewResetSettings} from './LiveViewResetSettings';
 import {UiIcon} from './icons/UiIcon';
 import {NextPreviewOutput} from './NextPreviewOutput';
 import {EditorModeControl} from './EditorModeControl';
@@ -5883,6 +5884,7 @@ export function SettingsModal({
               ) : tab === "songTranslations" ? null : tab === "presentation" ? (
                 <>
                   <PreviewViewSettings />
+                  <LiveViewResetSettings />
                   <SectionInfoSettings canEdit={canEditPresentation}/>
                   <LocalModelSettings />
                   <PresentationTransitionSettings />

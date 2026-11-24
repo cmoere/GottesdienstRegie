@@ -2324,6 +2324,26 @@
     "versions[0.99].builds[0.99.14].sections.known.0.label": "Hinweise zum Live-Betrieb",
     "versions[0.99].builds[0.99.14].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
     "versions[0.99].builds[0.99.14].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
-    "versions[0.99].builds[0.99.14].sections.known.1.text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht."
+    "versions[0.99].builds[0.99.14].sections.known.1.text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+    "versions[0.99].builds[0.99.15].overview.label": "Flüssigere Webmonitore und neue Gestaltungsmotive",
+    "versions[0.99].builds[0.99.15].overview.text": "Webmonitore erhalten einen fortlaufenden Bildstrom mit automatischer Wiederverbindung. Lichtfarben lassen sich aus aktueller und nächster Folie ableiten. Zehn zusätzliche Weihnachts-, Oster- und Kirchenmotive erweitern die Gestaltung.",
+    "versions[0.99].builds[0.99.15].sections.new.0.label": "Liveansicht auf dem verbundenen Gerät zurücksetzen",
+    "versions[0.99].builds[0.99.15].sections.new.0.text": "Die Einstellungen von Personal Monitor, Lichtoperator und Web-Steuerung enthalten „Liveansicht zurücksetzen“. Im Web-Editor steht die Funktion unter den Präsentationseinstellungen bereit. Sie erneuert nur die lokale Ansicht und verändert weder die laufende Präsentation noch ihre Ausgabe.",
+    "versions[0.99].builds[0.99.15].sections.new.1.label": "Neue Formen für Weihnachten, Ostern und Kirche",
+    "versions[0.99].builds[0.99.15].sections.new.1.text": "Die Formensuche bietet Stern von Bethlehem, Weihnachtsbaum, Adventskranz, Krippe, Weihnachtsglocke, Osterei, leeres Grab, Palmzweig, Osterlilie und christliches Kreuz. Die Motive sind skalierbare Vektorformen mit einstellbarer Füllung und Kontur.",
+    "versions[0.99].builds[0.99.15].sections.improved.0.label": "Lichtfarben aus Hintergrund und Bild",
+    "versions[0.99].builds[0.99.15].sections.improved.0.text": "Die lokale Analyse gewichtet breite Hintergrund- und Bildflächen stärker und stellt feine Schriftzüge zurück. Ähnliche Farbtöne werden zu klar benannten Lichtfarben wie Hellblau, Dunkelblau oder Orange zusammengefasst. Bei deutlicher Dominanz erscheint nur eine Hauptfarbe, andernfalls höchstens zwei.",
+    "versions[0.99].builds[0.99.15].sections.improved.1.label": "Farben der nächsten Folie und HEX-Werte kopieren",
+    "versions[0.99].builds[0.99.15].sections.improved.1.text": "Der Lichtoperator zeigt auf Wunsch auch die Farben der nächsten Folie. Der Schalter im Ansichtsdialog bleibt pro Browser gespeichert. Neben jedem HEX-Wert kopiert ein Symbol den Farbwert und bestätigt den Vorgang. Aktuelle Ausgabe und nächste Folie besitzen getrennte Farbkacheln.",
+    "versions[0.99].builds[0.99.15].sections.improved.2.label": "Datum, Uhrzeit und einheitliches Zahnrad",
+    "versions[0.99].builds[0.99.15].sections.improved.2.text": "Die Webansichten zeigen Datum und Uhrzeit nebeneinander, beispielsweise „Mi., 01.01.2020 10:00:05 Uhr“. Ihre Einstellungen sind auch bei Personal Monitor und Web-Steuerung erreichbar. Ein Zahnrad ersetzt das bisherige Reglersymbol.",
+    "versions[0.99].builds[0.99.15].sections.fixed.0.label": "Fortlaufende, gemeinsam genutzte Bildübertragung",
+    "versions[0.99].builds[0.99.15].sections.fixed.0.text": "Statt fortlaufend einzelne Bilder abzurufen, verwenden unterstützte Browser einen dauerhaften Bildstrom. Mehrere Geräte teilen sich die Bildaufnahme je Ausgabe. Langsame Verbindungen bauen keine zusätzliche Warteschlange auf; veraltete Verbindungen werden neu aufgebaut. Ein Einzelbild-Fallback bleibt verfügbar.",
+    "versions[0.99].builds[0.99.15].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.15].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.15].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
+    "versions[0.99].builds[0.99.15].sections.known.1.text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+    "versions[0.99].builds[0.99.15].sections.known.2.label": "Bildrate im lokalen Netzwerk",
+    "versions[0.99].builds[0.99.15].sections.known.2.text": "Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz."
   }
 }

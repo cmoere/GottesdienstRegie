@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.99.15</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.15</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.15</guid><pubDate>Tue, 24 Nov 2026 00:00:00 GMT</pubDate><description>Flüssigere Webmonitore und neue Gestaltungsmotive
+Webmonitore erhalten einen fortlaufenden Bildstrom mit automatischer Wiederverbindung. Lichtfarben lassen sich aus aktueller und nächster Folie ableiten. Zehn zusätzliche Weihnachts-, Oster- und Kirchenmotive erweitern die Gestaltung.
+
+Liveansicht auf dem verbundenen Gerät zurücksetzen
+Die Einstellungen von Personal Monitor, Lichtoperator und Web-Steuerung enthalten „Liveansicht zurücksetzen“. Im Web-Editor steht die Funktion unter den Präsentationseinstellungen bereit. Sie erneuert nur die lokale Ansicht und verändert weder die laufende Präsentation noch ihre Ausgabe.
+
+Neue Formen für Weihnachten, Ostern und Kirche
+Die Formensuche bietet Stern von Bethlehem, Weihnachtsbaum, Adventskranz, Krippe, Weihnachtsglocke, Osterei, leeres Grab, Palmzweig, Osterlilie und christliches Kreuz. Die Motive sind skalierbare Vektorformen mit einstellbarer Füllung und Kontur.
+
+Lichtfarben aus Hintergrund und Bild
+Die lokale Analyse gewichtet breite Hintergrund- und Bildflächen stärker und stellt feine Schriftzüge zurück. Ähnliche Farbtöne werden zu klar benannten Lichtfarben wie Hellblau, Dunkelblau oder Orange zusammengefasst. Bei deutlicher Dominanz erscheint nur eine Hauptfarbe, andernfalls höchstens zwei.
+
+Farben der nächsten Folie und HEX-Werte kopieren
+Der Lichtoperator zeigt auf Wunsch auch die Farben der nächsten Folie. Der Schalter im Ansichtsdialog bleibt pro Browser gespeichert. Neben jedem HEX-Wert kopiert ein Symbol den Farbwert und bestätigt den Vorgang. Aktuelle Ausgabe und nächste Folie besitzen getrennte Farbkacheln.
+
+Datum, Uhrzeit und einheitliches Zahnrad
+Die Webansichten zeigen Datum und Uhrzeit nebeneinander, beispielsweise „Mi., 01.01.2020 10:00:05 Uhr“. Ihre Einstellungen sind auch bei Personal Monitor und Web-Steuerung erreichbar. Ein Zahnrad ersetzt das bisherige Reglersymbol.
+
+Fortlaufende, gemeinsam genutzte Bildübertragung
+Statt fortlaufend einzelne Bilder abzurufen, verwenden unterstützte Browser einen dauerhaften Bildstrom. Mehrere Geräte teilen sich die Bildaufnahme je Ausgabe. Langsame Verbindungen bauen keine zusätzliche Warteschlange auf; veraltete Verbindungen werden neu aufgebaut. Ein Einzelbild-Fallback bleibt verfügbar.
+
+Hinweise zum Live-Betrieb
+Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.
+
+Originalgetreue PowerPoint-Wiedergabe
+Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.
+
+Bildrate im lokalen Netzwerk
+Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.</description></item>
 <item><title>GottesdienstRegie 0.99.14</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.14</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.14</guid><pubDate>Tue, 24 Nov 2026 00:00:00 GMT</pubDate><description>Lichtoperator mit vier Folienvorschauen
 Der neue Lichtoperator zeigt die aktuelle Ausgabe groß und vier kommende Folien daneben. Zwei Farbkacheln ermitteln die dominanten Farben des aktuellen Ausgabebilds direkt auf dem verbundenen Gerät.
 

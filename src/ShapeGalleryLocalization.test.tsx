@@ -53,7 +53,7 @@ it('labels every gallery item and keeps arrow directions and church symbols dist
  render(<ShapeGallery onSelect={()=>{}}/>);
  fireEvent.click(screen.getByRole('button',{name:'2D OBJECT'}));
  const dialog=screen.getByRole('dialog');
- expect(within(dialog).getAllByRole('img')).toHaveLength(35);
+ expect(within(dialog).getAllByRole('img')).toHaveLength(45);
  expect(within(dialog).queryByRole('img',{name:'Unknown shape'})).toBeNull();
  for(const name of ['Right arrow','Left arrow','Up arrow','Down arrow','Cross','Fish','Church','Bible','Candle','Dove']){
   expect(within(dialog).getByRole('img',{name})).toBeInTheDocument();

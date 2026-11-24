@@ -9,6 +9,7 @@ import {networkInterfaces} from 'node:os';
 import {randomBytes,randomUUID} from 'node:crypto';
 import {readAnnotationStroke} from '../shared/liveAnnotations';
 import {remotePage} from './RemotePage';
+import {streamLiveImages} from './LiveImageStream';
 import {normalizeMonitorLayout, type MonitorLayout, type MonitorProfile} from '../shared/remoteMonitor';
 import type {NextPreviewPacket} from '../shared/nextPreview';
 
@@ -24,6 +25,7 @@ function publicSlide(value:unknown){if(!value||typeof value!=='object')return ty
 export class RemoteServer{
  readonly sharing=new ScreenShareBroker(event=>this.command({action:'screen-share',event}));
  private secureServer?:https.Server;private fingerprint?:string;private certificate?:string;private shareTimer?:ReturnType<typeof setInterval>;
+ private streamTimes=new Map<string,number>();
  private value:Stored={monitors:[],remotes:[]};private live:LiveState={};private seen=new Map<string,number>();private annotationRate=new Map<string,number>();
  constructor(private file:string,private command:(payload:unknown)=>void,private port=43171,private frame?:(role:'main'|'stage'|'livestream')=>Promise<Buffer|null>,private copy?:(key:NativeRegionalTextKey)=>string,private nextFrame?:(index?:number)=>Promise<Buffer|null>){}
  async start(){
@@ -36,7 +38,7 @@ export class RemoteServer{
   if(monitorsNeedingToken.length)await this.save();
  }
  async enableSecure(identity:LocalTlsIdentity,port=this.port){if(this.secureServer)return;const server=https.createServer({cert:identity.cert,key:identity.key,minVersion:'TLSv1.2'},(req,res)=>{void this.handle(req,res).catch(()=>{if(!res.headersSent)this.json(res,400,{error:'invalid'});else res.end()})});await new Promise<void>((resolve,reject)=>{server.once('error',reject);server.listen(port,'0.0.0.0',resolve)});this.secureServer=server;this.fingerprint=identity.fingerprint;this.certificate=identity.cert;this.shareTimer=setInterval(()=>this.sharing.expire(),5000);this.shareTimer.unref()}
- stop(){this.sharing.stop();if(this.shareTimer)clearInterval(this.shareTimer);this.secureServer?.close();this.secureServer?.closeAllConnections()}
+ stop(){this.streamTimes.clear();this.sharing.stop();if(this.shareTimer)clearInterval(this.shareTimer);this.secureServer?.close();this.secureServer?.closeAllConnections()}
  get(){const secure=this.secureServer?.address();return{securePort:secure&&typeof secure==='object'?secure.port:undefined,fingerprint:this.fingerprint,active:!!this.secureServer?.listening,address:address(),monitors:this.value.monitors.map(item=>({...item,connected:0})),remotes:this.value.remotes}}
  getPublicCertificate(){return this.secureServer?.listening?this.certificate:undefined}
  updateLive(live:LiveState){this.live={...this.live,...live};if(typeof live.onAir==='boolean')this.sharing.setOnAir(live.onAir)}
@@ -80,7 +82,21 @@ export class RemoteServer{
    const monitorRoute=url.pathname.startsWith('/monitor/'),id=decodeURIComponent(url.pathname.slice(monitorRoute?9:8)),access=this.access(monitorRoute?`monitor:${id}`:id);
    if(!access){this.json(res,403,{error:'forbidden'});return}
    const entry=access.monitor??access.remote!,language=(access.monitor?access.monitor.defaultLanguage:access.remote?.preferredLanguage)==='en'?'en':'de';
-   res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','referrer-policy':'no-referrer','x-frame-options':'DENY','content-security-policy':"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",'x-content-type-options':'nosniff'});res.end(remotePage(monitorRoute?'monitor':'remote',entry.name,language,monitorRoute?`monitor:${id}`:id,this.copy));return;
+   res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','referrer-policy':'no-referrer','x-frame-options':'DENY','content-security-policy':"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",'x-content-type-options':'nosniff'});res.end(remotePage(monitorRoute?'monitor':'remote',entry.name,language,monitorRoute?`monitor:${id}`:id,this.copy));return;
+  }
+  if(req.method==='GET'&&url.pathname==='/api/live'){
+   const token=url.searchParams.get('token')??'',access=this.access(token);
+   if(!access){this.json(res,403,{error:'forbidden'});return}
+   if(!this.live.onAir){this.json(res,409,{error:'off-air'});return}
+   const view=url.searchParams.get('view')??'';if(!/^[A-Za-z0-9-]{1,64}$/.test(view)){this.json(res,400,{error:'invalid-view'});return}
+   const streamKey=token+'\0'+view;this.streamTimes.set(streamKey,Date.now());const clean=()=>this.streamTimes.delete(streamKey);res.once('close',clean);
+   try{await streamLiveImages(res,async()=>{
+    const fresh=this.access(token);if(!fresh||!this.live.onAir)return null;
+    const role=fresh.monitor?.sourceType??'main',bytes=await this.frame?.(role);
+    const after=this.access(token);
+    if(res.destroyed||!after||!this.live.onAir||(after.monitor?.sourceType??'main')!==role)return null;
+    if(bytes)this.streamTimes.set(streamKey,Date.now());return bytes??null;
+   })}finally{clean();res.removeListener('close',clean)}return;
   }
   if(req.method==='GET'&&(url.pathname==='/api/state'||url.pathname==='/api/frame'||url.pathname==='/api/next-frame')){
    const access=this.access(url.searchParams.get('token')??'');if(!access){this.json(res,403,{error:'forbidden'});return}
@@ -100,7 +116,8 @@ export class RemoteServer{
    }
    const monitor=access.monitor,remote=access.remote,canNotes=monitor?monitor.showNotes:remote!.permissions.includes('remote.viewNotes');
    const upcoming=monitor?.profile==='lighting'?(lightingOffAir?[]:(this.live.upcoming??[]).slice(0,4).map(packet=>({slide:publicSlide(packet.slide),itemTitle:typeof packet.itemTitle==='string'?packet.itemTitle.slice(0,1000):''}))):undefined;
-   this.json(res,200,{title:lightingOffAir?monitor?.name:this.live.title,current:lightingOffAir?null:publicSlide(this.live.current),next:lightingOffAir?null:publicSlide(this.live.next),upcoming,onAir:this.live.onAir===true,serviceTime:this.live.serviceTime,serviceCountdownAtMs:this.live.serviceCountdownAtMs,annotationTakeId:this.live.annotationTakeId,nextPreviewRevision:this.live.nextPreviewRevision,canAnnotate:Boolean(remote?.permissions.includes('remote.annotate')&&!this.live.quickActive),permissions:remote?.permissions??[],monitor:monitor?{profile:monitor.profile??'personal',layout:monitor.layout,showCurrent:monitor.showCurrent,showNext:monitor.showNext,showClock:monitor.showClock,showCountdown:monitor.showCountdown}:undefined,notes:canNotes&&!lightingOffAir?this.live.notes:undefined,order:monitor?.showOrderOfService&&!lightingOffAir?this.live.order:undefined});return;
+   const streamAt=this.streamTimes.get((url.searchParams.get('token')??'')+'\0'+(url.searchParams.get('view')??''));
+   this.json(res,200,{liveFrameAgeMs:streamAt===undefined?null:Date.now()-streamAt,title:lightingOffAir?monitor?.name:this.live.title,current:lightingOffAir?null:publicSlide(this.live.current),next:lightingOffAir?null:publicSlide(this.live.next),upcoming,onAir:this.live.onAir===true,serviceTime:this.live.serviceTime,serviceCountdownAtMs:this.live.serviceCountdownAtMs,annotationTakeId:this.live.annotationTakeId,nextPreviewRevision:this.live.nextPreviewRevision,canAnnotate:Boolean(remote?.permissions.includes('remote.annotate')&&!this.live.quickActive),permissions:remote?.permissions??[],monitor:monitor?{profile:monitor.profile??'personal',layout:monitor.layout,showCurrent:monitor.showCurrent,showNext:monitor.showNext,showClock:monitor.showClock,showCountdown:monitor.showCountdown}:undefined,notes:canNotes&&!lightingOffAir?this.live.notes:undefined,order:monitor?.showOrderOfService&&!lightingOffAir?this.live.order:undefined});return;
   }
   if(req.method==='POST'&&url.pathname==='/api/command'){
    try{

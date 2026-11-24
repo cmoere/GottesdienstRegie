@@ -1,3 +1,4 @@
+import {useLiveViewRevision} from './liveViewRecovery';
 import {UiIcon} from './icons/UiIcon';
 import {SiteMapDesigner} from './SiteMapDesigner';
 import {ScreenSharingMirror} from './ScreenSharing';
@@ -3545,6 +3546,7 @@ function PreviewCenter({
 }: {
   activeQuick: QuickScreenConfig | null;
 }) {
+  const liveViewRevision=useLiveViewRevision();
   const {tx}=useI18n();
   const showTitles=usePreviewOptions(s=>s.showTitles);
   const output = useLiveOutputPreview(s=>s.slide);
@@ -3676,7 +3678,7 @@ function PreviewCenter({
     return (
       <div
         className="production-single"
-        ref={root}
+        key={liveViewRevision} ref={root}
         tabIndex={0}
         aria-label={tx("MAIN-Liveansicht. Mit linker und rechter Pfeiltaste live weiterschalten.")}
       >
@@ -3762,7 +3764,7 @@ function PreviewCenter({
     <div
       className="production-grid"
       data-show-titles={showTitles}
-      ref={root}
+      key={liveViewRevision} ref={root}
       tabIndex={0}
       style={{ "--grid-size": `${state.gridSize}px` } as CSSProperties}
       onKeyDown={(event) => {

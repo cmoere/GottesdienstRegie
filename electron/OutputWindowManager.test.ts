@@ -161,3 +161,6 @@ describe('OutputWindowManager app mode',()=>{
     expect(manager.restoreScreenTest(runId,null)).toBe(true);expect(manager.getStateForSender(1)?.quick).toBeNull();
   });
 });
+it('shares captures between viewers while allowing fresh frames sooner than the old 200 ms limit',async()=>{
+ vi.useFakeTimers();try{const manager=new OutputWindowManager('preload',async()=>{},()=>{});await manager.start({'1':'main'} as any,{});const entry=manager.getNativeCompositionWindows()[0].window as any;entry.id=100;const jpeg=Buffer.from('jpeg'),image={isEmpty:()=>false,getSize:()=>({width:1920}),resize:vi.fn(function(this:any){return this}),toJPEG:()=>jpeg};entry.webContents.capturePage=vi.fn(async()=>image);await Promise.all(Array.from({length:8},()=>manager.captureFrame('main')));expect(entry.webContents.capturePage).toHaveBeenCalledTimes(1);await vi.advanceTimersByTimeAsync(90);await manager.captureFrame('main');expect(entry.webContents.capturePage).toHaveBeenCalledTimes(2);await manager.stop()}finally{vi.useRealTimers()}
+});

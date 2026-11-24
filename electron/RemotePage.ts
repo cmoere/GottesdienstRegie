@@ -25,8 +25,12 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
    : ['Red','Green','White','Black','Yellow','Blue','Purple','Orange','Pink','Cyan'];
  const exitFullscreen=language==='de'?copy('remoteExitFullscreen'):'Exit fullscreen';
  const viewLabels=language==='de'
-  ? {title:copy('remoteViewTitle'),lighting:copy('remoteViewLighting'),column:copy('remoteViewColumn'),grid:copy('remoteViewGrid'),mirror:copy('remoteViewMirror'),pair:copy('remoteViewPair'),theme:copy('remoteViewTheme'),system:copy('remoteViewDevice'),light:copy('remoteViewLight'),dark:copy('remoteViewDark'),captions:copy('remoteViewCaptions'),close:copy('remoteViewClose'),offAir:copy('remoteLightingOffAir'),color:copy('remoteLightingColor'),analyzing:copy('remoteLightingAnalyzing'),single:copy('remoteLightingSingle')}
-  : {title:'View',lighting:'Lighting Operator',column:'Current slide · four previews on the right',grid:'Current slide · preview grid',mirror:'Large current slide',pair:'Current and next slide',theme:'Appearance',system:'Device mode',light:'Light',dark:'Dark',captions:'Show slide titles',close:'Close',offAir:'The display starts when the operator goes ON AIR.',color:'Main color',analyzing:'Waiting for output image',single:'No second main color'};
+  ? {title:copy('remoteViewTitle'),lighting:copy('remoteViewLighting'),column:copy('remoteViewColumn'),grid:copy('remoteViewGrid'),mirror:copy('remoteViewMirror'),pair:copy('remoteViewPair'),theme:copy('remoteViewTheme'),system:copy('remoteViewDevice'),light:copy('remoteViewLight'),dark:copy('remoteViewDark'),captions:copy('remoteViewCaptions'),close:copy('remoteViewClose'),offAir:copy('remoteLightingOffAir'),color:copy('remoteLightingColor'),analyzing:copy('remoteLightingAnalyzing'),single:copy('remoteLightingSingle'),copy:copy('remoteLightingCopy'),copied:copy('remoteLightingCopied'),copyFailed:copy('remoteLightingCopyFailed'),lightPrefix:copy('remoteLightingLightPrefix'),darkPrefix:copy('remoteLightingDarkPrefix'),nextColors:copy('remoteViewNextColors'),reset:copy('remoteResetLiveView'),resetHelp:copy('remoteResetLiveHelp'),resetDone:copy('remoteResetLiveDone')}
+  : {title:'View',lighting:'Lighting Operator',column:'Current slide · four previews on the right',grid:'Current slide · preview grid',mirror:'Large current slide',pair:'Current and next slide',theme:'Appearance',system:'Device mode',light:'Light',dark:'Dark',captions:'Show slide titles',close:'Close',offAir:'The display starts when the operator goes ON AIR.',color:'Main color',analyzing:'Waiting for output image',single:'No second main color',copy:'Copy HEX value',copied:'Color copied',copyFailed:'Could not copy. Please copy the HEX value manually.',lightPrefix:'Light ',darkPrefix:'Dark ',nextColors:'Show next slide colors',reset:'Reset live view',resetHelp:'Reconnect this view only. The running presentation stays unchanged.',resetDone:'Reconnecting the live view.'};
+ const lightingColorNames=language==='de'
+  ? {red:copy('remoteRed'),orange:copy('remoteOrange'),yellow:copy('remoteYellow'),green:copy('remoteGreen'),cyan:copy('remoteLightingCyan'),blue:copy('remoteBlue'),purple:copy('remotePurple'),pink:copy('remotePink'),white:copy('remoteWhite'),gray:copy('remoteLightingGray'),black:copy('remoteBlack')}
+  : {red:'Red',orange:'Orange',yellow:'Yellow',green:'Green',cyan:'Cyan',blue:'Blue',purple:'Purple',pink:'Pink',white:'White',gray:'Gray',black:'Black'};
+ const lightingTiles=(prefix='lighting-color-')=>Array.from({length:2},(_,index)=>`<div class="lighting-color" id="${prefix}${index}"${index?' hidden':''}><small>${escapeHtml(viewLabels.color)} ${index+1}</small><strong class="color-name"></strong><div class="color-value"><output>—</output><button class="copy-color" type="button" disabled aria-label="${escapeHtml(viewLabels.copy)}" title="${escapeHtml(viewLabels.copy)}">${icon('content_copy')}</button></div></div>`).join('');
  const extraPreviews=Array.from({length:3},(_,index)=>{
   const slot=index+1;
   return `<div class="upcoming-preview" id="upcoming-${slot}" hidden><p class="slide-caption" id="next-caption-${slot}"></p><div class="next-frame"><img id="next-mirror-${slot}" alt="${escapeHtml(labels.next)} ${slot+1}" hidden></div><p class="next-text" id="next-text-${slot}"></p></div>`;
@@ -44,7 +48,8 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  header,.header-actions,.status-row,.tool-row{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
  header{justify-content:space-between;padding:8px 0 18px}
  h1{font-size:clamp(20px,4vw,28px);margin:0 0 8px;overflow-wrap:anywhere}
- #clock{font-size:clamp(20px,4vw,28px);font-weight:650;font-variant-numeric:tabular-nums}
+ #clock{display:flex;align-items:baseline;gap:.35em;white-space:nowrap;font-size:clamp(20px,4vw,28px);font-weight:650;font-variant-numeric:tabular-nums}
+ #date{font-size:inherit;font-weight:400;color:var(--muted)}
  #countdown{color:var(--muted);font-variant-numeric:tabular-nums}
  #status,#live-status{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--control);font-size:14px}
  #status::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor}
@@ -64,10 +69,25 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  body[data-layout=lighting] .upcoming-preview{display:flex;flex-direction:column;min-height:0}
  body[data-layout=lighting] .upcoming-preview .next-frame{aspect-ratio:auto;flex:1;min-height:0}
  body[data-layout=lighting] .next-text{overflow:auto;min-height:0}
- body[data-layout=lighting] #frame,body[data-layout=lighting-grid] #frame{max-height:calc(100dvh - 315px)}
+ body[data-layout=lighting] #frame,body[data-layout=lighting-grid] #frame{max-height:calc(100dvh - 430px)}
  .lighting-palette{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+ .lighting-palette[data-count="1"]{grid-template-columns:minmax(0,1fr)}
  .lighting-color{display:grid;gap:5px;padding:12px 16px;min-height:78px;border-radius:9px;border:1px solid var(--border);background:var(--control)}
  .lighting-color small{font-size:13px}
+ #next-palette{margin:0 0 12px;gap:8px}
+ #next-palette .lighting-color{padding:8px;min-height:0;gap:3px}
+ #next-palette small{font-size:11px}
+ #next-palette .color-name,#next-palette output{font-size:14px}
+ #next-palette .color-value{gap:6px}
+ #next-palette .copy-color{width:30px;min-height:30px;padding:5px}
+ #next-palette-status{grid-column:1/-1;margin:0;font-size:13px;color:var(--muted)}
+ #next-palette-status:empty{display:none}
+ body[data-layout=lighting][data-next-colors=true] .next-preview-list{height:calc(100dvh - 340px);min-height:340px}
+ .color-name{font-size:clamp(17px,2vw,24px);font-weight:650}
+ .color-value{display:flex;align-items:center;gap:12px}
+ .lighting-color .copy-color{width:40px;min-height:40px;padding:8px;color:inherit;background:transparent;border-color:currentColor}
+ #palette-status{grid-column:1/-1;margin:0;font-size:14px;color:var(--muted)}
+ #palette-status:empty{display:none}
  .lighting-color output{font-size:clamp(17px,2vw,26px);font-weight:650;font-variant-numeric:tabular-nums}
  body[data-layout=lighting-grid] .next-preview-list{grid-template-columns:repeat(2,minmax(0,1fr))}
  .upcoming-preview{min-width:0}
@@ -83,6 +103,7 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  #view-dialog select{width:100%}
  .card{padding:clamp(12px,2vw,20px);background:var(--card);border:1px solid var(--border);border-radius:14px;min-width:0}
  .card h2{font-size:16px;color:var(--muted);margin:0 0 10px}
+ body[data-profile=lighting] #frame{margin-inline:auto}
  #frame,.next-frame{position:relative;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden}
  #mirror,.next-frame img{display:block;width:100%;height:100%;object-fit:contain}
  #drawing{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;touch-action:none}
@@ -113,11 +134,11 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  footer:has(>button[hidden]){grid-template-columns:minmax(0,1fr)}
  #command-status{grid-column:1/-1;margin:0;color:var(--muted);font-size:14px}
  #command-status:empty,#share-status:empty,#countdown:empty,[hidden]{display:none!important}
- @media(max-width:680px){main,body[data-layout=lighting] main,body[data-layout=lighting-grid] main{grid-template-columns:minmax(0,1fr)}body[data-layout=lighting] .next-preview-list{height:auto;min-height:0;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none}body[data-layout=lighting] .upcoming-preview .next-frame{aspect-ratio:16/9;flex:none}body[data-profile=lighting] #frame{max-height:none}}
+ @media(max-width:680px){main,body[data-layout=lighting] main,body[data-layout=lighting-grid] main{grid-template-columns:minmax(0,1fr)}body[data-layout=lighting] .next-preview-list,body[data-layout=lighting][data-next-colors=true] .next-preview-list{height:auto;min-height:0;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none}body[data-layout=lighting] .upcoming-preview .next-frame{aspect-ratio:16/9;flex:none}body[data-profile=lighting] #frame{max-height:none}}
 </style></head>
- <body><header><div><p id="monitor-role" hidden>${escapeHtml(viewLabels.lighting)}</p><h1 id="title">${escapeHtml(name)}</h1><div class="status-row"><span id="status" role="status" data-state="loading">${safeLabels.connecting}</span><span id="live-status" hidden></span></div></div><div class="header-actions"><div id="clock"></div><div id="countdown"></div><button id="monitor-settings" type="button" hidden aria-label="${escapeHtml(viewLabels.title)}" title="${escapeHtml(viewLabels.title)}">${icon('settings')}</button><button id="fullscreen" type="button" aria-label="${safeLabels.fullscreen}" title="${safeLabels.fullscreen}" aria-pressed="false"><span class="enter-fullscreen">${icon('maximize')}</span><span class="exit-fullscreen">${icon('minimize')}</span></button></div></header>
- <dialog id="view-dialog" aria-labelledby="view-title"><h2 id="view-title">${escapeHtml(viewLabels.title)}</h2><label>${escapeHtml(viewLabels.title)}<select id="monitor-layout"><option value="lighting">${escapeHtml(viewLabels.column)}</option><option value="lighting-grid">${escapeHtml(viewLabels.grid)}</option><option value="mirror">${escapeHtml(viewLabels.mirror)}</option><option value="current-next">${escapeHtml(viewLabels.pair)}</option></select></label><label>${escapeHtml(viewLabels.theme)}<select id="monitor-theme"><option value="system">${escapeHtml(viewLabels.system)}</option><option value="light">${escapeHtml(viewLabels.light)}</option><option value="dark">${escapeHtml(viewLabels.dark)}</option></select></label><label class="checkbox-label"><input id="monitor-captions" type="checkbox" checked>${escapeHtml(viewLabels.captions)}</label><button id="view-close" type="button">${escapeHtml(viewLabels.close)}</button></dialog>
- <main><section class="card" id="current-card"><h2>${safeLabels.current}</h2><div id="frame" hidden><img id="mirror" alt="${safeLabels.current}"><canvas id="drawing"></canvas></div><div id="lighting-palette" class="lighting-palette" hidden aria-label="${escapeHtml(viewLabels.color)}"><div class="lighting-color" id="lighting-color-0"><small>${escapeHtml(viewLabels.color)} 1</small><output>—</output></div><div class="lighting-color" id="lighting-color-1"><small>${escapeHtml(viewLabels.color)} 2</small><output>—</output></div></div><p id="current-caption" class="slide-caption"></p><div id="current">${safeLabels.waiting}</div></section><section class="card" id="next-card"><h2>${safeLabels.next}</h2><div class="next-preview-list"><div class="upcoming-preview" id="upcoming-0"><p id="next-caption-0" class="slide-caption"></p><div class="next-frame"><img id="next-mirror" alt="${safeLabels.next}" hidden></div><div id="next">${safeLabels.nextWaiting}</div></div>${extraPreviews}</div></section></main>
+ <body><header><div><p id="monitor-role" hidden>${escapeHtml(viewLabels.lighting)}</p><h1 id="title">${escapeHtml(name)}</h1><div class="status-row"><span id="status" role="status" data-state="loading">${safeLabels.connecting}</span><span id="live-status" hidden></span></div></div><div class="header-actions"><div id="clock"><span id="date"></span> <span id="time"></span></div><div id="countdown"></div><button id="monitor-settings" type="button" hidden aria-label="${escapeHtml(viewLabels.title)}" title="${escapeHtml(viewLabels.title)}">${icon('settings')}</button><button id="fullscreen" type="button" aria-label="${safeLabels.fullscreen}" title="${safeLabels.fullscreen}" aria-pressed="false"><span class="enter-fullscreen">${icon('maximize')}</span><span class="exit-fullscreen">${icon('minimize')}</span></button></div></header>
+ <dialog id="view-dialog" aria-labelledby="view-title"><h2 id="view-title">${escapeHtml(viewLabels.title)}</h2><label>${escapeHtml(viewLabels.title)}<select id="monitor-layout"><option value="lighting">${escapeHtml(viewLabels.column)}</option><option value="lighting-grid">${escapeHtml(viewLabels.grid)}</option><option value="mirror">${escapeHtml(viewLabels.mirror)}</option><option value="current-next">${escapeHtml(viewLabels.pair)}</option></select></label><label>${escapeHtml(viewLabels.theme)}<select id="monitor-theme"><option value="system">${escapeHtml(viewLabels.system)}</option><option value="light">${escapeHtml(viewLabels.light)}</option><option value="dark">${escapeHtml(viewLabels.dark)}</option></select></label><label class="checkbox-label"><input id="monitor-captions" type="checkbox" checked>${escapeHtml(viewLabels.captions)}</label><label class="checkbox-label"><input id="monitor-next-colors" type="checkbox" checked>${escapeHtml(viewLabels.nextColors)}</label><p>${escapeHtml(viewLabels.resetHelp)}</p><button id="reset-live-view" type="button">${icon('refresh')} ${escapeHtml(viewLabels.reset)}</button><p id="view-feedback" role="status"></p><button id="view-close" type="button">${escapeHtml(viewLabels.close)}</button></dialog>
+ <main><section class="card" id="current-card"><h2>${safeLabels.current}</h2><div id="frame" hidden><img id="mirror" alt="${safeLabels.current}"><canvas id="drawing"></canvas></div><div id="lighting-palette" class="lighting-palette" hidden aria-label="${escapeHtml(viewLabels.color)}">${lightingTiles()}<p id="palette-status" role="status" aria-live="polite"></p></div><p id="current-caption" class="slide-caption"></p><div id="current">${safeLabels.waiting}</div></section><section class="card" id="next-card"><h2>${safeLabels.next}</h2><div id="next-palette" class="lighting-palette" hidden aria-label="${escapeHtml(viewLabels.nextColors)}">${lightingTiles('next-color-')}<p id="next-palette-status" role="status" aria-live="polite"></p></div><div class="next-preview-list"><div class="upcoming-preview" id="upcoming-0"><p id="next-caption-0" class="slide-caption"></p><div class="next-frame"><img id="next-mirror" alt="${safeLabels.next}" hidden></div><div id="next">${safeLabels.nextWaiting}</div></div>${extraPreviews}</div></section></main>
  <div class="extras"><section class="card" id="tools" hidden><h2>${safeLabels.draw}</h2><div class="tool-row"><button id="draw" aria-pressed="false">${icon('pen')} ${safeLabels.draw}</button><select id="tool" aria-label="${safeLabels.draw}"><option value="pen">${safeLabels.pen}</option><option value="line">${safeLabels.line}</option><option value="arrow">${safeLabels.arrow}</option><option value="rectangle">${safeLabels.rectangle}</option><option value="ellipse">${safeLabels.ellipse}</option></select><label>${safeLabels.thickness}<input id="thickness" type="range" min="2" max="16" step="1" value="8"></label><div class="palette" role="group" aria-label="${language==='de'?escapeHtml(copy('remoteColor')):'Color'}">${swatches}</div><button id="clear">${icon('eraser')} ${safeLabels.clear}</button></div></section>
  <section id="notes-card" class="card" hidden><h2>${safeLabels.notes}</h2><div id="notes"></div></section><section id="order-card" class="card" hidden><h2>${safeLabels.order}</h2><ol id="order"></ol></section>
  <section id="sharing" class="card" hidden><button id="share-start">${icon('screen_share')} ${safeLabels.shareStart}</button><button id="share-stop" hidden>${icon('screen_share_off')} ${safeLabels.shareStop}</button><p id="share-status"></p></section>
@@ -133,13 +154,13 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  let currentTool='pen',currentWidth=.004,currentColor=chosenColor,state={},draw=false,points=[],take='',alive=true,lastFrame='';
  const viewStorageKey='gottesdienstregie.monitor-view:'+location.pathname;
  const viewLayouts=['lighting','lighting-grid','mirror','current-next'];
- let viewSettings={layout:null,theme:'dark',captions:true};
+ let viewSettings={layout:null,theme:'dark',captions:true,nextColors:true};
  try{
    const saved=JSON.parse(localStorage.getItem(viewStorageKey)||'null');
    if(saved&&typeof saved==='object')viewSettings={
      layout:viewLayouts.includes(saved.layout)?saved.layout:null,
      theme:['system','light','dark'].includes(saved.theme)?saved.theme:'dark',
-     captions:saved.captions!==false
+     captions:saved.captions!==false,nextColors:saved.nextColors!==false
    };
  }catch{}
  const upcomingViews=Array.from({length:4},(_,index)=>({
@@ -152,8 +173,8 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
    document.body.dataset.profile=lighting?'lighting':'personal';
    document.body.dataset.layout=lighting?(viewSettings.layout||config.layout||'lighting'):(config.layout||'current-next');
    document.body.dataset.captions=String(!lighting||viewSettings.captions);
-   document.documentElement.dataset.theme=lighting?viewSettings.theme:'dark';
-   q('#monitor-settings').hidden=!lighting;q('#monitor-role').hidden=!lighting;
+   document.documentElement.dataset.theme=viewSettings.theme;
+   q('#monitor-settings').hidden=false;q('#monitor-role').hidden=!lighting;for(const id of ['#monitor-layout','#monitor-captions','#monitor-next-colors'])q(id).closest('label').hidden=!lighting;
    const packets=upcomingPackets(),four=lighting&&['lighting','lighting-grid'].includes(document.body.dataset.layout);
    for(const [index,view] of upcomingViews.entries()){
      const packet=packets[index],slide=packet?.slide;
@@ -165,6 +186,10 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
    }
    q('#current-caption').textContent=state.current?.title||'';
    q('#lighting-palette').hidden=!lighting||!state.onAir;
+   q('#next-palette').hidden=!lighting||!state.onAir||!viewSettings.nextColors||!packets[0]?.slide;
+   document.body.dataset.nextColors=String(!q('#next-palette').hidden);
+   if(nextPaletteRevision!==nextRevision()||q('#next-palette').hidden)clearPalette('next');
+   if(!q('#next-palette').hidden)refreshNextColors();
    if(lighting&&!state.onAir){
      q('#next-card').hidden=true;q('#frame').hidden=true;q('#current').hidden=false;
      q('#current').textContent=${JSON.stringify(viewLabels.offAir).replaceAll('<','\\u003c')};
@@ -172,49 +197,92 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
    if(paletteTake!==state.annotationTakeId||!state.onAir)clearPalette();
  }
  function saveView(){
-   viewSettings={layout:q('#monitor-layout').value,theme:q('#monitor-theme').value,captions:q('#monitor-captions').checked};
+   viewSettings={layout:q('#monitor-layout').value,theme:q('#monitor-theme').value,captions:q('#monitor-captions').checked,nextColors:q('#monitor-next-colors').checked};
    try{localStorage.setItem(viewStorageKey,JSON.stringify(viewSettings))}catch{}
    applyView();
  }
  q('#monitor-settings').onclick=()=>{
    q('#monitor-layout').value=viewSettings.layout||state.monitor?.layout||'lighting';
-   q('#monitor-theme').value=viewSettings.theme;q('#monitor-captions').checked=viewSettings.captions;
+   q('#monitor-theme').value=viewSettings.theme;q('#monitor-captions').checked=viewSettings.captions;q('#monitor-next-colors').checked=viewSettings.nextColors;
    q('#view-dialog').showModal();
  };
- for(const id of ['#monitor-layout','#monitor-theme','#monitor-captions'])q(id).onchange=saveView;
+ for(const id of ['#monitor-layout','#monitor-theme','#monitor-captions','#monitor-next-colors'])q(id).onchange=saveView;
  q('#view-close').onclick=()=>q('#view-dialog').close();
+ q('#reset-live-view').onclick=()=>{
+   viewEpoch++;stopLiveStream();streamFailedAt=-Infinity;visibleTake=undefined;
+   if(lastFrame){URL.revokeObjectURL(lastFrame);lastFrame=''}q('#mirror').removeAttribute('src');q('#frame').hidden=true;q('#current').hidden=false;
+   for(const [index,view]of upcomingViews.entries()){if(nextFrameUrls[index])URL.revokeObjectURL(nextFrameUrls[index]);nextFrameUrls[index]='';view.image.removeAttribute('src');view.image.hidden=true;view.text.hidden=false}
+   shownUpcoming.fill(undefined);clearPalette();clearPalette('next');clearLocal();setDraw(false);
+   q('#view-feedback').textContent=${JSON.stringify(viewLabels.resetDone).replaceAll('<','\\u003c')};
+ };
+ const lightingNames=${JSON.stringify(lightingColorNames).replaceAll('<','\\u003c')};
+ const paletteLabels=${JSON.stringify({copy:viewLabels.copy,copied:viewLabels.copied,failed:viewLabels.copyFailed,light:viewLabels.lightPrefix,dark:viewLabels.darkPrefix}).replaceAll('<','\\u003c')};
+ const copyIcon=${JSON.stringify(icon('content_copy'))},copiedIcon=${JSON.stringify(icon('check_circle'))};
+ const copyButtons=[...document.querySelectorAll('.copy-color')],copyResetTimers=[],pendingCopies=new Set();
+ for(const [index,button]of copyButtons.entries())button.onclick=async()=>{
+   const color=button.dataset.color;if(!color||!connected||!state.onAir||pendingCopies.has(index))return;pendingCopies.add(index);
+   const feedback=button.closest('.lighting-palette').querySelector('[role=status]');
+   button.disabled=true;clearTimeout(copyResetTimers[index]);
+   try{
+     if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(color);
+     else {
+       const field=document.createElement('textarea');field.value=color;field.readOnly=true;field.style.cssText='position:fixed;opacity:0;pointer-events:none';document.body.append(field);
+       try{field.select();if(!document.execCommand('copy'))throw new Error('clipboard unavailable')}finally{field.remove();button.focus()}
+     }
+     if(button.dataset.color!==color||!state.onAir||!connected)return;
+     button.innerHTML=copiedIcon;button.title=paletteLabels.copied;button.setAttribute('aria-label',paletteLabels.copied);
+     feedback.textContent=paletteLabels.copied+': '+color;
+     copyResetTimers[index]=setTimeout(()=>{button.innerHTML=copyIcon;button.title=paletteLabels.copy;button.setAttribute('aria-label',paletteLabels.copy);feedback.textContent=''},1600);
+   }catch{
+     if(button.dataset.color===color&&state.onAir&&connected)feedback.textContent=paletteLabels.failed;
+   }finally{pendingCopies.delete(index);button.disabled=!button.dataset.color||!state.onAir||!connected}
+ };
  const analyzeFrameColors=(${dominantFrameColors.toString()});
  const sampleCanvas=document.createElement('canvas');sampleCanvas.width=96;sampleCanvas.height=54;
  const sampleContext=sampleCanvas.getContext('2d',{willReadFrequently:true});
- let paletteTake='',paletteAt=-Infinity;
- function clearPalette(){
-   paletteTake='';paletteAt=-Infinity;
-   for(let index=0;index<2;index++){
-     const tile=q('#lighting-color-'+index);tile.style.background='';tile.style.color='';
+ let paletteTake='',paletteAt=-Infinity,nextPaletteRevision=null;
+ const paletteRoot=target=>q(target==='next'?'#next-palette':'#lighting-palette');
+ function clearPalette(target='current'){
+   if(target==='current'){paletteTake='';paletteAt=-Infinity}else nextPaletteRevision=null;
+   const root=paletteRoot(target);root.dataset.count='1';root.querySelector('[role=status]').textContent='';
+   for(const [index,tile]of [...root.querySelectorAll('.lighting-color')].entries()){
+     tile.style.background='';tile.style.color='';tile.hidden=index>0;tile.querySelector('.color-name').textContent='';
+     const button=tile.querySelector('.copy-color'),buttonIndex=copyButtons.indexOf(button);
+     clearTimeout(copyResetTimers[buttonIndex]);button.disabled=true;delete button.dataset.color;button.innerHTML=copyIcon;button.title=paletteLabels.copy;button.setAttribute('aria-label',paletteLabels.copy);
      tile.querySelector('output').textContent='—';tile.title=${JSON.stringify(viewLabels.analyzing).replaceAll('<','\\u003c')};
    }
  }
- q('#mirror').addEventListener('load',()=>{
+ function paintPalette(colors,target='current'){
+   const root=paletteRoot(target);root.dataset.count=String(colors.length||1);
+   for(const [index,tile]of [...root.querySelectorAll('.lighting-color')].entries()){
+     const recommendation=colors[index],color=recommendation?.hex;tile.hidden=index>0&&!color;
+     const button=tile.querySelector('.copy-color'),buttonIndex=copyButtons.indexOf(button);
+     if(button.dataset.color!==color){clearTimeout(copyResetTimers[buttonIndex]);button.innerHTML=copyIcon;button.title=paletteLabels.copy;button.setAttribute('aria-label',paletteLabels.copy);root.querySelector('[role=status]').textContent=''}
+     button.disabled=!color||pendingCopies.has(buttonIndex);button.dataset.color=color||'';
+     const name=recommendation?lightingNames[recommendation.family]:'';
+     tile.querySelector('.color-name').textContent=!name?'':recommendation.shade==='normal'?name:(recommendation.shade==='light'?paletteLabels.light:paletteLabels.dark)+name.toLocaleLowerCase();
+     tile.style.background=color||'';tile.querySelector('output').textContent=color||'—';
+     tile.title=color||${JSON.stringify(viewLabels.single).replaceAll('<','\\u003c')};
+     if(color){
+       const linear=[1,3,5].map(offset=>{const value=parseInt(color.slice(offset,offset+2),16)/255;return value<=.04045?value/12.92:((value+.055)/1.055)**2.4});
+       const luminance=.2126*linear[0]+.7152*linear[1]+.0722*linear[2];tile.style.color=luminance>.179?'#101820':'#ffffff';
+     }else tile.style.color='';
+   }
+ }
+ function imageColors(image){sampleContext.drawImage(image,0,0,96,54);return analyzeFrameColors(sampleContext.getImageData(0,0,96,54).data,96)}
+ function sampleCurrentColors(){
    const image=q('#mirror');
    if(state.monitor?.profile!=='lighting'||!state.onAir||!connected||!sampleContext||document.hidden||performance.now()-paletteAt<1000)return;
    if(image.dataset.take!==state.annotationTakeId)return;
-   try{
-     sampleContext.drawImage(image,0,0,96,54);
-     const colors=analyzeFrameColors(sampleContext.getImageData(0,0,96,54).data);
-     paletteTake=state.annotationTakeId;paletteAt=performance.now();
-     for(let index=0;index<2;index++){
-       const tile=q('#lighting-color-'+index),color=colors[index];
-       tile.style.background=color||'';
-       tile.querySelector('output').textContent=color||'—';
-       tile.title=color||${JSON.stringify(viewLabels.single).replaceAll('<','\\u003c')};
-       if(color){
-         const linear=[1,3,5].map(offset=>{const value=parseInt(color.slice(offset,offset+2),16)/255;return value<=.04045?value/12.92:((value+.055)/1.055)**2.4});
-         const luminance=.2126*linear[0]+.7152*linear[1]+.0722*linear[2];
-         tile.style.color=luminance>.179?'#101820':'#ffffff';
-       }else tile.style.color='';
-     }
-   }catch{clearPalette()}
- });
+   try{paintPalette(imageColors(image));paletteTake=state.annotationTakeId;paletteAt=performance.now()}catch{clearPalette()}
+ }
+ q('#mirror').addEventListener('load',sampleCurrentColors);const paletteTimer=setInterval(sampleCurrentColors,1000);window.addEventListener('pagehide',()=>clearInterval(paletteTimer));
+ function refreshNextColors(){
+   const image=q('#next-mirror'),revision=nextRevision();
+   if(state.monitor?.profile!=='lighting'||!viewSettings.nextColors||!state.onAir||!connected||!sampleContext||document.hidden||q('#next-palette').hidden||shownUpcoming[0]!==revision||nextPaletteRevision===revision||image.hidden||!image.complete||!image.naturalWidth)return;
+   try{paintPalette(imageColors(image),'next');nextPaletteRevision=revision}catch{clearPalette('next')}
+ }
+ q('#next-mirror').addEventListener('load',refreshNextColors);
  const text=x=>typeof x==='string'?x:x&&typeof x==='object'?(typeof x.body==='string'&&x.body.trim()?x.body:typeof x.title==='string'?x.title:'—'):'—';
  async function command(action,extra={}){try{const r=await fetch('/api/command',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,commandId:crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),action,timestamp:Date.now(),...extra}),signal:AbortSignal.timeout?.(4000)});return r.ok}catch{return false}}
  function setConnection(status){
@@ -250,7 +318,8 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  }
  function clearLocal(){points=[];ctx.clearRect(0,0,canvas.width,canvas.height)}
  function setDraw(next){draw=next;canvas.classList.toggle('enabled',draw);q('#draw').setAttribute('aria-pressed',String(draw));if(!draw)clearLocal()}
- async function poll(){if(!alive)return;try{const r=await fetch('/api/state?token='+encodeURIComponent(token),{cache:'no-store',signal:AbortSignal.timeout?.(3500)});if(!r.ok)throw 0;state=await r.json();q('#title').textContent=state.title||${JSON.stringify(name).replaceAll('<','\\u003c')};q('#current').textContent=text(state.current);q('#next').textContent=state.next?text(state.next):labels.nextWaiting;setConnection('connected');
+ async function poll(){if(!alive)return;try{const r=await fetch('/api/state?token='+encodeURIComponent(token)+(streamId?'&view='+encodeURIComponent(streamId):''),{cache:'no-store',signal:AbortSignal.timeout?.(3500)});if(!r.ok)throw 0;state=await r.json();q('#title').textContent=state.title||${JSON.stringify(name).replaceAll('<','\\u003c')};q('#current').textContent=text(state.current);q('#next').textContent=state.next?text(state.next):labels.nextWaiting;setConnection('connected');
+ if(streamUrl&&performance.now()-streamStartedAt>2500&&(typeof state.liveFrameAgeMs!=='number'||state.liveFrameAgeMs>2500)){stopLiveStream();streamFailedAt=-Infinity}
  const live=q('#live-status');
  live.dataset.live=String(Boolean(state.onAir));
  live.textContent=state.onAir?'ON AIR':'OFF AIR';
@@ -261,7 +330,7 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  q('#sharing').hidden=!(state.permissions||[]).includes('remote.share');q('#tools').hidden=!state.canAnnotate;for(const button of document.querySelectorAll('[data-action]'))button.hidden=!(state.permissions||[]).includes('remote.'+button.dataset.action);
  if(take!==state.annotationTakeId){take=state.annotationTakeId||'';clearLocal();q('#frame').hidden=true;q('#current').hidden=false}if(!state.canAnnotate||!state.onAir)setDraw(false);
  }catch{setConnection('lost');q('#frame').hidden=true;q('#current').hidden=false;
- for(const view of upcomingViews){view.image.hidden=true;view.text.hidden=false;}shownUpcoming.fill(undefined);clearPalette();q('#lighting-palette').hidden=true;setDraw(false)}finally{if(alive)setTimeout(poll,500)}}
+ for(const view of upcomingViews){view.image.hidden=true;view.text.hidden=false;}shownUpcoming.fill(undefined);clearPalette();clearPalette('next');q('#lighting-palette').hidden=true;q('#next-palette').hidden=true;setDraw(false)}finally{if(alive)setTimeout(poll,500)}}
  async function previewImage(path,parameters={}){
    const query=new URLSearchParams({token,...parameters});
    const response=await fetch(path+'?'+query.toString(),{cache:'no-store',signal:AbortSignal.timeout?.(5000)});
@@ -272,15 +341,27 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
    try{await image.decode();return url}
    catch(error){URL.revokeObjectURL(url);throw error}
  }
- let visibleTake, lastLiveFrameAt=0;
+ let visibleTake,lastLiveFrameAt=0,streamUrl='',streamId='',streamFailedAt=-Infinity,streamReady=false,streamStartedAt=0,viewEpoch=0;
+ function stopLiveStream(){if(streamUrl){streamUrl='';streamId='';streamReady=false;q('#mirror').removeAttribute('src')}}
+ q('#mirror').addEventListener('error',()=>{if(streamUrl){streamFailedAt=performance.now();stopLiveStream();clearPalette()}});
+ window.addEventListener('pagehide',stopLiveStream);
  async function frame(){
    if(!alive)return;
    const started=performance.now();
-   const requestedTake=state.annotationTakeId;
+   const requestedTake=state.annotationTakeId,epoch=viewEpoch;
    try{
-     if(!connected||!state.onAir||q('#current-card').hidden||document.hidden)return;
+     if(!connected||!state.onAir||q('#current-card').hidden||document.hidden){stopLiveStream();return}
+     const image=q('#mirror');
+     if(!streamUrl&&performance.now()-streamFailedAt>10000){
+       if(lastFrame){URL.revokeObjectURL(lastFrame);lastFrame=''}
+       image.removeAttribute('src');streamId=crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);streamUrl='/api/live?'+new URLSearchParams({token,view:streamId});streamStartedAt=performance.now();streamReady=false;image.dataset.take=requestedTake||'';image.src=streamUrl;return;
+     }
+     if(streamUrl){
+       if(image.naturalWidth){streamReady=true;image.dataset.take=requestedTake||'';q('#frame').hidden=false;q('#current').hidden=true;visibleTake=requestedTake;lastLiveFrameAt=performance.now()}
+       return;
+     }
      const url=await previewImage('/api/frame');
-     if(!alive||!connected||!state.onAir||requestedTake!==state.annotationTakeId){URL.revokeObjectURL(url);return}
+     if(!alive||!connected||!state.onAir||epoch!==viewEpoch||requestedTake!==state.annotationTakeId){URL.revokeObjectURL(url);return}
      q('#mirror').dataset.take=requestedTake||'';
      q('#mirror').src=url;
      q('#frame').hidden=false;
@@ -296,9 +377,9 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
        clearPalette();
        setDraw(false);
      }
-   }finally{if(alive)setTimeout(frame,Math.max(40,200-(performance.now()-started)))}
+   }finally{if(alive)setTimeout(frame,Math.max(20,80-(performance.now()-started)))}
  }
- function clock(){q('#clock').textContent=new Date().toLocaleTimeString(${JSON.stringify(language==='de'?'de-DE':'en-GB')},{hour:'2-digit',minute:'2-digit',second:'2-digit'});const seconds=Math.ceil((Number(state.serviceCountdownAtMs)-Date.now())/1000);q('#countdown').textContent=seconds>0?labels.start+' '+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0'):''}clock();setInterval(clock,1000);
+ function clock(){const now=new Date();q('#date').textContent=now.toLocaleDateString(${JSON.stringify(language==='de'?'de-DE':'en-GB')},{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'});q('#time').textContent=now.toLocaleTimeString(${JSON.stringify(language==='de'?'de-DE':'en-GB')},{hour:'2-digit',minute:'2-digit',second:'2-digit'})+${JSON.stringify(language==='de'?' '+copy('remoteClockSuffix'):'')};const seconds=Math.ceil((Number(state.serviceCountdownAtMs)-Date.now())/1000);q('#countdown').textContent=seconds>0?labels.start+' '+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0'):''}clock();setInterval(clock,1000);
  function point(e){const r=canvas.getBoundingClientRect();return{x:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y:Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))}}
  function paint(){canvas.width=1920;canvas.height=1080;if(points.length<2)return;ctx.strokeStyle=currentColor;ctx.lineWidth=currentWidth*1920;ctx.lineCap='round';ctx.lineJoin='round';const a=points[0],b=points.at(-1),x=a.x*1920,y=a.y*1080,x2=b.x*1920,y2=b.y*1080;ctx.beginPath();if(currentTool==='rectangle')ctx.strokeRect(Math.min(x,x2),Math.min(y,y2),Math.abs(x2-x),Math.abs(y2-y));else if(currentTool==='ellipse'){ctx.ellipse((x+x2)/2,(y+y2)/2,Math.abs(x2-x)/2,Math.abs(y2-y)/2,0,0,Math.PI*2);ctx.stroke()}else{if(currentTool==='pen')points.forEach((p,i)=>i?ctx.lineTo(p.x*1920,p.y*1080):ctx.moveTo(p.x*1920,p.y*1080));else{ctx.moveTo(x,y);ctx.lineTo(x2,y2)}ctx.stroke();if(currentTool==='arrow'){const angle=Math.atan2(y2-y,x2-x),head=Math.max(14,currentWidth*1920*3);ctx.beginPath();ctx.moveTo(x2-head*Math.cos(angle-Math.PI/6),y2-head*Math.sin(angle-Math.PI/6));ctx.lineTo(x2,y2);ctx.lineTo(x2-head*Math.cos(angle+Math.PI/6),y2-head*Math.sin(angle+Math.PI/6));ctx.stroke()}}}
  canvas.onpointerdown=e=>{if(!draw||!take||!state.onAir)return;canvas.setPointerCapture(e.pointerId);currentTool=q('#tool').value;currentWidth=Number(q('#thickness').value)/1920;currentColor=chosenColor;points=[point(e)];paint()};canvas.onpointermove=e=>{if(!draw||!canvas.hasPointerCapture(e.pointerId))return;if(currentTool==='pen'){points.push(point(e));if(points.length>512)points=points.filter((_,i)=>i%2===0)}else points=[points[0],point(e)];paint()};canvas.onpointerup=async e=>{if(!canvas.hasPointerCapture(e.pointerId))return;canvas.releasePointerCapture(e.pointerId);const p=point(e);if(currentTool==='pen')points.push(p);else points=[points[0],p];const stroke={id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2),tool:currentTool,color:currentColor,width:currentWidth,points:points.filter((_,i)=>i%Math.max(1,Math.ceil(points.length/256))===0)};await command('annotate',{takeId:take,stroke});clearLocal()};canvas.onpointercancel=clearLocal;
@@ -312,7 +393,7 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  const nextRevision=()=>state.nextPreviewRevision??state.next?.id??state.next;
  async function nextFrame(){
    if(!alive)return;
-   const revision=nextRevision();
+   const revision=nextRevision(),epoch=viewEpoch;
    let retry=250;
    try{
      if(!connected||q('#next-card').hidden||document.body.dataset.layout==='mirror'||document.hidden||(state.monitor?.profile==='lighting'&&!state.onAir))return;
@@ -322,7 +403,7 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
        const parameters={index:String(index)};
        if(typeof state.nextPreviewRevision==='number')parameters.revision=String(revision);
        const url=await previewImage('/api/next-frame',parameters);
-       if(!alive||!connected||revision!==nextRevision()||(state.monitor?.profile==='lighting'&&!state.onAir)){URL.revokeObjectURL(url);return}
+       if(!alive||!connected||epoch!==viewEpoch||revision!==nextRevision()||(state.monitor?.profile==='lighting'&&!state.onAir)){URL.revokeObjectURL(url);return}
        view.image.src=url;view.image.hidden=false;view.text.hidden=true;
        if(nextFrameUrls[index])URL.revokeObjectURL(nextFrameUrls[index]);
        nextFrameUrls[index]=url;shownUpcoming[index]=revision;

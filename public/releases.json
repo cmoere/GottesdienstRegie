@@ -24,9 +24,124 @@
       "line": "0.99",
       "builds": [
         {
-          "version": "0.99.14",
+          "version": "0.99.15",
           "releaseDate": "2026-11-24",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Flüssigere Webmonitore und neue Gestaltungsmotive",
+              "en": "Smoother web monitors and new design shapes"
+            },
+            "text": {
+              "de": "Webmonitore erhalten einen fortlaufenden Bildstrom mit automatischer Wiederverbindung. Lichtfarben lassen sich aus aktueller und nächster Folie ableiten. Zehn zusätzliche Weihnachts-, Oster- und Kirchenmotive erweitern die Gestaltung.",
+              "en": "Web monitors now receive a continuous image stream with automatic reconnection. Lighting colors can be derived from the current and next slide. Ten additional Christmas, Easter and church shapes expand the design tools."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Liveansicht auf dem verbundenen Gerät zurücksetzen",
+                  "en": "Reset the live view on the connected device"
+                },
+                "text": {
+                  "de": "Die Einstellungen von Personal Monitor, Lichtoperator und Web-Steuerung enthalten „Liveansicht zurücksetzen“. Im Web-Editor steht die Funktion unter den Präsentationseinstellungen bereit. Sie erneuert nur die lokale Ansicht und verändert weder die laufende Präsentation noch ihre Ausgabe.",
+                  "en": "Personal Monitor, Lighting Operator and Web Control settings now include Reset live view. The web editor provides the same function in presentation settings. It rebuilds only the local view without changing the running presentation or its output."
+                }
+              },
+              {
+                "label": {
+                  "de": "Neue Formen für Weihnachten, Ostern und Kirche",
+                  "en": "New Christmas, Easter and church shapes"
+                },
+                "text": {
+                  "de": "Die Formensuche bietet Stern von Bethlehem, Weihnachtsbaum, Adventskranz, Krippe, Weihnachtsglocke, Osterei, leeres Grab, Palmzweig, Osterlilie und christliches Kreuz. Die Motive sind skalierbare Vektorformen mit einstellbarer Füllung und Kontur.",
+                  "en": "The shape search now offers the Star of Bethlehem, Christmas tree, Advent wreath, nativity manger, Christmas bell, Easter egg, empty tomb, palm branch, Easter lily and Christian cross. These scalable vector shapes support editable fill and outline."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Lichtfarben aus Hintergrund und Bild",
+                  "en": "Lighting colors from backgrounds and images"
+                },
+                "text": {
+                  "de": "Die lokale Analyse gewichtet breite Hintergrund- und Bildflächen stärker und stellt feine Schriftzüge zurück. Ähnliche Farbtöne werden zu klar benannten Lichtfarben wie Hellblau, Dunkelblau oder Orange zusammengefasst. Bei deutlicher Dominanz erscheint nur eine Hauptfarbe, andernfalls höchstens zwei.",
+                  "en": "Local analysis gives more weight to broad background and image areas while reducing the influence of fine text strokes. Similar hues are grouped into clearly named lighting colors such as light blue, dark blue or orange. A strongly dominant color is shown alone; otherwise up to two colors are displayed."
+                }
+              },
+              {
+                "label": {
+                  "de": "Farben der nächsten Folie und HEX-Werte kopieren",
+                  "en": "Next-slide colors and copying HEX values"
+                },
+                "text": {
+                  "de": "Der Lichtoperator zeigt auf Wunsch auch die Farben der nächsten Folie. Der Schalter im Ansichtsdialog bleibt pro Browser gespeichert. Neben jedem HEX-Wert kopiert ein Symbol den Farbwert und bestätigt den Vorgang. Aktuelle Ausgabe und nächste Folie besitzen getrennte Farbkacheln.",
+                  "en": "The Lighting Operator can also show the next slide’s colors. Its view-dialog switch is saved per browser. An icon next to each HEX value copies the color and confirms the action. Current output and next slide use separate color tiles."
+                }
+              },
+              {
+                "label": {
+                  "de": "Datum, Uhrzeit und einheitliches Zahnrad",
+                  "en": "Date, time and a consistent settings gear"
+                },
+                "text": {
+                  "de": "Die Webansichten zeigen Datum und Uhrzeit nebeneinander, beispielsweise „Mi., 01.01.2020 10:00:05 Uhr“. Ihre Einstellungen sind auch bei Personal Monitor und Web-Steuerung erreichbar. Ein Zahnrad ersetzt das bisherige Reglersymbol.",
+                  "en": "Web views display the date and time side by side, for example Wed, 01/01/2020 10:00:05. Settings are also available in Personal Monitor and Web Control. A gear replaces the previous slider-style settings icon."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Fortlaufende, gemeinsam genutzte Bildübertragung",
+                  "en": "Continuous shared image delivery"
+                },
+                "text": {
+                  "de": "Statt fortlaufend einzelne Bilder abzurufen, verwenden unterstützte Browser einen dauerhaften Bildstrom. Mehrere Geräte teilen sich die Bildaufnahme je Ausgabe. Langsame Verbindungen bauen keine zusätzliche Warteschlange auf; veraltete Verbindungen werden neu aufgebaut. Ein Einzelbild-Fallback bleibt verfügbar.",
+                  "en": "Supported browsers use a persistent image stream instead of repeatedly fetching individual snapshots. Devices share capture work for each output. Slow connections do not create an additional frame queue, stale connections reconnect, and a snapshot fallback remains available."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              },
+              {
+                "label": {
+                  "de": "Bildrate im lokalen Netzwerk",
+                  "en": "Frame rate on the local network"
+                },
+                "text": {
+                  "de": "Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.",
+                  "en": "Actual frame rate depends on output performance, browser and network. Checks cover a local browser image stream and native capture; they do not replace testing on the venue’s own network."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.99.14",
+          "releaseDate": "2026-11-24",
+          "current": false,
           "overview": {
             "label": {
               "de": "Lichtoperator mit vier Folienvorschauen",

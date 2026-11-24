@@ -1,32 +1,76 @@
-/** Small sampled RGBA frames are clustered locally, without an external model. */
-export function dominantFrameColors(pixels: Uint8ClampedArray): string[] {
-  type Cluster = {count: number; r: number; g: number; b: number};
-  const bins = new Map<number, Cluster>();
-  for (let index = 0; index + 3 < pixels.length; index += 4) {
-    if (pixels[index + 3] < 240) continue;
-    const r = pixels[index], g = pixels[index + 1], b = pixels[index + 2];
-    const key = (r >> 4) * 256 + (g >> 4) * 16 + (b >> 4);
-    const bin = bins.get(key) ?? {count: 0, r: 0, g: 0, b: 0};
-    bin.count++; bin.r += r; bin.g += g; bin.b += b;
-    bins.set(key, bin);
+export type LightingFrameColor = {
+  hex: string;
+  family: 'red'|'orange'|'yellow'|'green'|'cyan'|'blue'|'purple'|'pink'|'white'|'gray'|'black';
+  shade: 'light'|'normal'|'dark';
+};
+
+/** Local ambient-light recommendations, not exact color-picker samples.
+ * Group gradients by hue; neutral text/framing must not displace image colors.
+ * Keep this function self-contained: the read-only monitor embeds it directly.
+ */
+export function dominantFrameColors(pixels: Uint8ClampedArray, width = 0): LightingFrameColor[] {
+  // Spatial medians remove narrow foreground strokes before measuring the
+  // broad background/image areas. Never hide or alter actual output layers.
+  const height = pixels.length / 4 / width;
+  if (Number.isInteger(width) && width >= 8 && Number.isInteger(height) && height >= 8) {
+    const horizontal = new Uint8ClampedArray(pixels);
+    const filtered = new Uint8ClampedArray(pixels);
+    const pass = (source: Uint8ClampedArray, target: Uint8ClampedArray, alongX: boolean) => {
+      for (let y=0;y<height;y++) for(let x=0;x<width;x++) {
+        const offset=(y*width+x)*4;
+        if(source[offset+3]<240) continue;
+        const red:number[]=[],green:number[]=[],blue:number[]=[];
+        for(let delta=-3;delta<=3;delta++) {
+          const sx=alongX?Math.max(0,Math.min(width-1,x+delta)):x;
+          const sy=alongX?y:Math.max(0,Math.min(height-1,y+delta));
+          const sample=(sy*width+sx)*4;
+          if(source[sample+3]<240)continue;
+          red.push(source[sample]);green.push(source[sample+1]);blue.push(source[sample+2]);
+        }
+        const middle=Math.floor(red.length/2);
+        target[offset]=red.sort((a,b)=>a-b)[middle];
+        target[offset+1]=green.sort((a,b)=>a-b)[middle];
+        target[offset+2]=blue.sort((a,b)=>a-b)[middle];
+      }
+    };
+    pass(pixels,horizontal,true);pass(horizontal,filtered,false);pixels=filtered;
   }
-  const clusters: Cluster[] = [];
-  const distance = (a: Cluster, b: Cluster) =>
-    (a.r / a.count - b.r / b.count) ** 2
-    + (a.g / a.count - b.g / b.count) ** 2
-    + (a.b / a.count - b.b / b.count) ** 2;
-  const ranked = [...bins.values()].sort((a, b) => b.count - a.count).slice(0, 128);
-  for (const bin of ranked) {
-    const cluster = clusters.find(candidate => distance(candidate, bin) < 48 ** 2);
-    if (cluster) {
-      cluster.count += bin.count; cluster.r += bin.r; cluster.g += bin.g; cluster.b += bin.b;
-    } else clusters.push({...bin});
+  type Family = LightingFrameColor['family'];
+  const groups = new Map<Family, {count:number; lightness:number}>();
+  let total = 0, chromatic = 0;
+  for (let index=0; index+3<pixels.length; index+=4) {
+    if (pixels[index+3]<240) continue;
+    const r=pixels[index]/255, g=pixels[index+1]/255, b=pixels[index+2]/255;
+    const max=Math.max(r,g,b), min=Math.min(r,g,b), chroma=max-min, lightness=(max+min)/2;
+    const saturation=chroma===0?0:chroma/(1-Math.abs(2*lightness-1));
+    let family: Family;
+    if (chroma<.14 || saturation<.24 || lightness<.06) {
+      family=lightness<.18?'black':lightness>.82?'white':'gray';
+    } else {
+      let hue=(max===r?(g-b)/chroma+(g<b?6:0):max===g?(b-r)/chroma+2:(r-g)/chroma+4)*60;
+      family=hue<15||hue>=345?'red':hue<45?'orange':hue<75?'yellow':hue<170?'green':hue<200?'cyan':hue<255?'blue':hue<290?'purple':'pink';
+      chromatic++;
+    }
+    const group=groups.get(family)??{count:0,lightness:0};
+    group.count++;group.lightness+=lightness;groups.set(family,group);total++;
   }
-  clusters.sort((a, b) => b.count - a.count);
-  const primary = clusters[0];
-  if (!primary) return [];
-  const secondary = clusters.find(cluster => distance(primary, cluster) >= 64 ** 2);
-  const selected = secondary ? [primary, secondary] : [primary];
-  return selected.map(color => '#' + [color.r, color.g, color.b]
-    .map(value => Math.round(value / color.count).toString(16).padStart(2, '0')).join('').toUpperCase());
+  if (!total) return [];
+  const useChromatic=chromatic/total>=.15;
+  const ranked=[...groups.entries()].filter(([family])=>!useChromatic||!['black','gray','white'].includes(family))
+    .sort((a,b)=>b[1].count-a[1].count);
+  const weight=ranked.reduce((sum,[,group])=>sum+group.count,0);
+  const primary=ranked[0];
+  const selected=primary[1].count/weight>=.78?ranked.slice(0,1):ranked.filter(([,group],index)=>index===0||group.count/weight>=.18).slice(0,2);
+  const palette: Record<Family, [string,string,string]> = {
+    red:['#FF8A80','#E53935','#8F1D24'], orange:['#FFC078','#FF8C1A','#B9540A'],
+    yellow:['#FFF29A','#F9D648','#B58B12'], green:['#A3E56D','#35B24A','#166534'],
+    cyan:['#8DE4EE','#20BED1','#12697A'], blue:['#86C5FF','#2673E8','#173B8F'],
+    purple:['#CCA1F2','#934DDB','#522080'], pink:['#FFA5D5','#E94C9E','#951D5D'],
+    white:['#FFFFFF','#FFFFFF','#FFFFFF'], gray:['#B6BEC3','#B6BEC3','#B6BEC3'], black:['#000000','#000000','#000000']
+  };
+  return selected.map(([family,group])=>{
+    const neutral=['black','gray','white'].includes(family), lightness=group.lightness/group.count;
+    const shade=neutral?'normal':lightness>=.68?'light':lightness<=.30?'dark':'normal';
+    return {hex:palette[family][shade==='light'?0:shade==='normal'?1:2],family,shade};
+  });
 }

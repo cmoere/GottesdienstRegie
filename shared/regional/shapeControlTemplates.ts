@@ -1,5 +1,6 @@
 /** Operator labels only. Document shape IDs, names and geometry stay canonical. */
 export const shapeControlGermanTemplates={
+ shapeCategoryChristmas:'Weihnachten',shapeCategoryEaster:'Ostern',shapeChristmasStar:"Stern von Bethlehem",shapeChristmasTree:"Weihnachtsbaum",shapeAdventWreath:"Adventskranz",shapeNativity:"Krippe",shapeChristmasBell:"Weihnachtsglocke",shapeEasterEgg:"Osterei",shapeEasterTomb:"Leeres Grab",shapePalmBranch:"Palmzweig",shapeEasterLily:"Osterlilie",shapeLatinCross:"Christliches Kreuz",
  shapeGalleryButton:'2D-OBJEKT',shapeGalleryTitle:'2D-Objekte',shapeGallerySearch:'2D-Objekte suchen …',
  shapeCategoryBasic:'Grundformen',shapeCategoryArrows:'Pfeile',shapeCategorySymbols:'Symbole',shapeCategoryChurch:'Kirche',shapeUnknown:'Unbekannte Form',
  shapeRectangle:'Rechteck',shapeRoundedRectangle:'Abgerundetes Rechteck',shapeEllipse:'Kreis / Ellipse',shapeTriangle:'Dreieck',shapeDiamond:'Raute',
@@ -10,6 +11,7 @@ export const shapeControlGermanTemplates={
  shapeCross:'Kreuz',shapeFish:'Fisch',shapeChurch:'Kirche',shapeBible:'Bibel',shapeCandle:'Kerze',shapeDove:'Taube',
 } as const;
 export const shapeControlEnglishTemplates:Record<keyof typeof shapeControlGermanTemplates,string>={
+ shapeCategoryChristmas:'Christmas',shapeCategoryEaster:'Easter',shapeChristmasStar:"Star of Bethlehem",shapeChristmasTree:"Christmas tree",shapeAdventWreath:"Advent wreath",shapeNativity:"Nativity manger",shapeChristmasBell:"Christmas bell",shapeEasterEgg:"Easter egg",shapeEasterTomb:"Empty tomb",shapePalmBranch:"Palm branch",shapeEasterLily:"Easter lily",shapeLatinCross:"Christian cross",
  shapeGalleryButton:'2D OBJECT',shapeGalleryTitle:'2D objects',shapeGallerySearch:'Search 2D objects …',
  shapeCategoryBasic:'Basic shapes',shapeCategoryArrows:'Arrows',shapeCategorySymbols:'Symbols',shapeCategoryChurch:'Church',shapeUnknown:'Unknown shape',
  shapeRectangle:'Rectangle',shapeRoundedRectangle:'Rounded rectangle',shapeEllipse:'Circle / ellipse',shapeTriangle:'Triangle',shapeDiamond:'Diamond',
@@ -20,6 +22,7 @@ export const shapeControlEnglishTemplates:Record<keyof typeof shapeControlGerman
  shapeCross:'Cross',shapeFish:'Fish',shapeChurch:'Church',shapeBible:'Bible',shapeCandle:'Candle',shapeDove:'Dove',
 };
 export const shapeNameKeys:Readonly<Record<string,keyof typeof shapeControlGermanTemplates>>={
+"christmas-star":"shapeChristmasStar","christmas-tree":"shapeChristmasTree","advent-wreath":"shapeAdventWreath","nativity":"shapeNativity","christmas-bell":"shapeChristmasBell","easter-egg":"shapeEasterEgg","easter-tomb":"shapeEasterTomb","palm-branch":"shapePalmBranch","easter-lily":"shapeEasterLily","latin-cross":"shapeLatinCross",
  rectangle:'shapeRectangle',rounded:'shapeRoundedRectangle',ellipse:'shapeEllipse',triangle:'shapeTriangle',diamond:'shapeDiamond',pentagon:'shapePentagon',
  hexagon:'shapeHexagon',octagon:'shapeOctagon',parallelogram:'shapeParallelogram',trapezoid:'shapeTrapezoid',arrow:'shapeArrowRight','arrow-left':'shapeArrowLeft',
  'arrow-up':'shapeArrowUp','arrow-down':'shapeArrowDown',chevron:'shapeChevron','double-arrow':'shapeDoubleArrow',star:'shapeStar',burst:'shapeBurst',speech:'shapeSpeechBubble',
@@ -27,5 +30,5 @@ export const shapeNameKeys:Readonly<Record<string,keyof typeof shapeControlGerma
  info:'shapeInfo',warning:'shapeWarning',cross:'shapeCross',fish:'shapeFish',church:'shapeChurch',bible:'shapeBible',candle:'shapeCandle',dove:'shapeDove',
 };
 export const shapeCategoryKeys:Readonly<Record<string,keyof typeof shapeControlGermanTemplates>>={
- Grundformen:'shapeCategoryBasic',Pfeile:'shapeCategoryArrows',Symbole:'shapeCategorySymbols',Kirche:'shapeCategoryChurch',
+ Weihnachten:'shapeCategoryChristmas',Ostern:'shapeCategoryEaster',Grundformen:'shapeCategoryBasic',Pfeile:'shapeCategoryArrows',Symbole:'shapeCategorySymbols',Kirche:'shapeCategoryChurch',
 };

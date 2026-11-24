@@ -109,3 +109,11 @@ it('migrates monitor links to HTTPS credentials and denies the old readable slug
  expect(state.notes).toBe('Predigtnotizen');
  await expect(fetch('http://127.0.0.1:'+server.get().securePort+'/api/state')).rejects.toThrow();
 });
+it('authorizes the live stream and ends an existing connection when access is revoked',async()=>{
+ const folder=await mkdtemp(path.join(tmpdir(),'regie-stream-')),command=vi.fn(),capture=vi.fn(async()=>Buffer.from('jpeg-frame'));
+ server=new RemoteServer(path.join(folder,'devices.json'),command,0,capture);await server.start();const identity=await getLocalTlsIdentity(folder,['127.0.0.1']);await server.enableSecure(identity);
+ const viewer=await server.createSession({name:'Viewer',permissionRole:'view',preferredLanguage:'de',permissions:['remote.view']});
+ const request=(token:string,revoke=false)=>new Promise<{status:number;type:string;data:string}>((resolve,reject)=>{const req=https.get({hostname:'127.0.0.1',port:server.get().securePort,path:'/api/live?token='+encodeURIComponent(token)+'&view=test',ca:identity.cert},res=>{const chunks:Buffer[]=[];let revoked=false;res.on('data',chunk=>{chunks.push(chunk);if(revoke&&!revoked){revoked=true;void server.revokeSession(viewer.id)}});res.on('end',()=>resolve({status:res.statusCode!,type:String(res.headers['content-type']),data:Buffer.concat(chunks).toString()}));res.on('error',reject)});req.on('error',reject)});
+ expect((await request('invalid')).status).toBe(403);expect((await request(viewer.token)).status).toBe(409);
+ server.updateLive({onAir:true});const result=await request(viewer.token,true);expect(result.status).toBe(200);expect(result.type).toContain('multipart/x-mixed-replace');expect(result.data).toContain('jpeg-frame');expect(capture).toHaveBeenCalledTimes(1);expect((await request(viewer.token)).status).toBe(403);
+});

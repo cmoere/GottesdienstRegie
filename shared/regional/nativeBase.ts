@@ -108,5 +108,17 @@ export const nativeBaseTemplates={
   remoteLightingColor:"Hauptfarbe",
   remoteLightingAnalyzing:"Warte auf Ausgabebild",
   remoteLightingSingle:"Keine zweite Hauptfarbe",
+  remoteLightingCopy:"HEX-Wert kopieren",
+  remoteLightingCopied:"Farbwert kopiert",
+  remoteLightingCopyFailed:"Kopieren nicht möglich. Bitte den HEX-Wert manuell kopieren.",
+  remoteLightingLightPrefix:"Hell",
+  remoteLightingDarkPrefix:"Dunkel",
+  remoteLightingGray:"Grau",
+  remoteLightingCyan:"Türkis",
+  remoteViewNextColors:"Farben der nächsten Folie anzeigen",
+  remoteResetLiveView:"Liveansicht zurücksetzen",
+  remoteResetLiveHelp:"Nur diese Ansicht wird neu verbunden. Die laufende Präsentation bleibt unverändert.",
+  remoteResetLiveDone:"Die Liveansicht wird neu verbunden.",
+  remoteClockSuffix:"Uhr",
 } as const;
 export type NativeRegionalTextKey=keyof typeof nativeBaseTemplates;
