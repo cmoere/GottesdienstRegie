@@ -24,9 +24,134 @@
       "line": "0.99",
       "builds": [
         {
-          "version": "0.99.16",
+          "version": "0.99.17",
           "releaseDate": "2026-11-25",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Feste lokale Monitoradresse und vollständige Loop-Vorschauen",
+              "en": "Fixed local monitor address and complete loop previews"
+            },
+            "text": {
+              "de": "Webmonitore verwenden nach erfolgreicher lokaler Anmeldung regie.local statt einer wechselnden IP-Adresse. Der Lichtoperator zeigt im Vor- und Nachprogramm die tatsächlichen kommenden Loop-Folien und blendet dort Farbempfehlungen aus. Wetterwarnungen erhalten Symbole aus dem vorhandenen Lucide-Iconset.",
+              "en": "After successful local registration, web monitors use regie.local instead of a changing IP address. During pre- and post-program loops, the Lighting Operator shows the actual upcoming loop slides and hides color recommendations. Weather warnings use symbols from the existing Lucide icon set."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "regie.local automatisch im Saalnetz anmelden",
+                  "en": "Register regie.local automatically on the venue network"
+                },
+                "text": {
+                  "de": "Die Software meldet den festen Rechnernamen per mDNS im lokalen Netzwerk an. Kopierlinks, QR-Codes und Vorschauen verwenden nach erfolgreicher Anmeldung HTTPS über regie.local. Für den Lichtoperator lautet die Adresse https://regie.local:43171/lichtoperator. Eine zusätzliche Installation oder eine Änderung des Betriebssystem-Rechnernamens ist dafür nicht erforderlich.",
+                  "en": "The software registers the fixed hostname through mDNS on the local network. Once registration succeeds, copied links, QR codes and previews use HTTPS through regie.local. The Lighting Operator address is https://regie.local:43171/lichtoperator. No additional installation or operating-system hostname change is required."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Passendes HTTPS-Zertifikat und IP-Ausweichadresse",
+                  "en": "Matching HTTPS certificate and fallback IP address"
+                },
+                "text": {
+                  "de": "Das lokale Serverzertifikat berücksichtigt regie.local und localhost zusätzlich zu den bekannten IP-Adressen. Namenskonflikte, Anmeldefehler und Zeitüberschreitungen werden im Operator-Bereich angezeigt. In diesen Fällen bleiben IP-Links verfügbar; ein fremder oder automatisch umbenannter Rechnername wird nicht stillschweigend übernommen.",
+                  "en": "The local server certificate includes regie.local and localhost as well as known IP addresses. Name conflicts, registration failures and timeouts are shown to the operator. IP links remain available in these cases; a different or automatically renamed hostname is not silently substituted."
+                }
+              },
+              {
+                "label": {
+                  "de": "Wetterwarnungen mit konsistenten Standardsymbolen",
+                  "en": "Weather warnings with consistent standard symbols"
+                },
+                "text": {
+                  "de": "Gewitter, Sturm, Regen, Schnee, Frost, Hitze und Nebel verwenden lokal mitgelieferte Lucide-Symbole. Warnungstexte, Gültigkeit, Quellenangabe und die gemeinsame Rotation mehrerer Warnungen bleiben erhalten.",
+                  "en": "Thunderstorms, wind, rain, snow, frost, heat and fog use locally bundled Lucide symbols. Warning text, validity, source attribution and the shared rotation of multiple warnings remain unchanged."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Vier Vorschauen folgen der automatischen Loop-Reihenfolge",
+                  "en": "Four previews follow the automatic loop order"
+                },
+                "text": {
+                  "de": "Der Lichtoperator bereitet die nächsten vier tatsächlichen Folien aus dem Vor- oder Nachprogramm vor. Dabei werden Loop-Runden, Anzeigedauern und der geplante Wechsel zum Gottesdienst berücksichtigt. Meldungen, Nachrichten und Wetter erhalten ihre vorbereiteten Inhalte, ohne die laufende Ausgabe oder ihre Inhaltsrotation weiterzuschalten.",
+                  "en": "The Lighting Operator prepares the next four actual pre- or post-program slides. Loop rounds, display durations and the scheduled service transition are taken into account. Announcements, news and weather receive prepared content without advancing the live output or its content rotation."
+                }
+              },
+              {
+                "label": {
+                  "de": "Keine Lichtfarben im Vor- und Nachprogramm",
+                  "en": "No lighting colors during pre- and post-program loops"
+                },
+                "text": {
+                  "de": "Im Vor- und Nachprogramm verschwinden Farbempfehlungen für aktuelle und kommende Loop-Folien vollständig, einschließlich Kopierschaltflächen und Hinweisen. Im Gottesdienst stehen die Empfehlungen weiterhin zur Verfügung.",
+                  "en": "During pre- and post-program loops, recommendations for current and upcoming loop slides are fully hidden, including copy buttons and status messages. Recommendations remain available during the service."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              },
+              {
+                "label": {
+                  "de": "Bildrate im lokalen Netzwerk",
+                  "en": "Frame rate on the local network"
+                },
+                "text": {
+                  "de": "Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.",
+                  "en": "Actual frame rate depends on output performance, browser and network. Checks cover a local browser image stream and native capture; they do not replace testing on the venue’s own network."
+                }
+              },
+              {
+                "label": {
+                  "de": "Erreichbarkeit der Lichtoperator-Ansicht",
+                  "en": "Lighting Operator view access"
+                },
+                "text": {
+                  "de": "Solange der Lichtoperator aktiviert ist, kann jedes Gerät mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte über die feste Adresse sehen. Die Ansicht erlaubt keine Steuerbefehle. Lichtempfehlungen sind Vorschläge und ersetzen keine Prüfung am eingesetzten Scheinwerfer.",
+                  "en": "While the Lighting Operator is enabled, any device with access to the local control server can view its ON-AIR content at the fixed address. The view does not allow control commands. Lighting recommendations are suggestions and do not replace checking the actual fixture."
+                }
+              },
+              {
+                "label": {
+                  "de": "Lokales Netzwerk und Vertrauen des Zertifikats",
+                  "en": "Local network and certificate trust"
+                },
+                "text": {
+                  "de": "regie.local benötigt ein gemeinsames lokales Netzwerk, das mDNS zulässt. Die erfolgreiche Anmeldung ist keine Prüfung aller verbundenen Geräte. Beim ersten Öffnen kann es nötig sein, das erneuerte lokale Zertifikat anhand des angezeigten Fingerabdrucks zu bestätigen. Die Anwendung installiert kein Vertrauen automatisch. Ein zweites Gerät im tatsächlichen Saalnetz wurde hier nicht geprüft.",
+                  "en": "regie.local requires a shared local network that permits mDNS. Successful registration does not verify every connected device. When first opening the page, the renewed local certificate may need to be confirmed against the displayed fingerprint. The application does not install certificate trust automatically. A second device on the actual venue network was not tested here."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.99.16",
+          "releaseDate": "2026-11-25",
+          "current": false,
           "overview": {
             "label": {
               "de": "Feste Lichtoperator-Adresse und gezielte Lichtempfehlungen",

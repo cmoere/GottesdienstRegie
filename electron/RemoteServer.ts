@@ -1,3 +1,4 @@
+import {LOCAL_MONITOR_HOSTNAME,type LocalMonitorAddressState} from '../shared/localMonitorAddress';
 import type {NativeRegionalTextKey} from '../shared/regional/nativeBase';
 import type http from 'node:http';
 import https from 'node:https';
@@ -17,13 +18,15 @@ export interface PersonalMonitor{id:string;slug:string;name:string;profile?:Moni
 type StoredMonitor=PersonalMonitor&{token:string};
 export interface RemoteDevice{id:string;name:string;permissionRole:'view'|'preacher'|'control'|'advanced';preferredLanguage:'de'|'en';permissions:string[];token:string;revoked:boolean;createdAt:string;lastSeenAt?:string}
 interface Stored{monitors:StoredMonitor[];remotes:RemoteDevice[]}
-interface LiveState{upcoming?:NextPreviewPacket[];nextPreviewRevision?:number;quickActive?:boolean;title?:string;current?:unknown;next?:unknown;onAir?:boolean;serviceTime?:string;clock?:string;notes?:string;order?:string[];annotationTakeId?:string;serviceCountdownAtMs?:number}
+interface LiveState{lightingColorsAllowed?:boolean;upcoming?:NextPreviewPacket[];nextPreviewRevision?:number;quickActive?:boolean;title?:string;current?:unknown;next?:unknown;onAir?:boolean;serviceTime?:string;clock?:string;notes?:string;order?:string[];annotationTakeId?:string;serviceCountdownAtMs?:number}
 const permissions=new Set(['remote.view','remote.viewNotes','remote.next','remote.previous','remote.selectSlide','remote.selectItem','remote.quickScreen','remote.stageMessage','remote.viewRecording','remote.annotate','remote.share']);
 function address(){for(const group of Object.values(networkInterfaces()))for(const item of group??[])if(item.family==='IPv4'&&!item.internal)return item.address;return '127.0.0.1'}
 function publicSlide(value:unknown){if(!value||typeof value!=='object')return typeof value==='string'?value.slice(0,50000):null;const slide=value as Record<string,unknown>;return{id:typeof slide.id==='string'?slide.id:'',title:typeof slide.title==='string'?slide.title.slice(0,1000):'',body:typeof slide.body==='string'?slide.body.slice(0,50000):''}}
 
 export class RemoteServer{
  readonly sharing=new ScreenShareBroker(event=>this.command({action:'screen-share',event}));
+ private localAddress?:LocalMonitorAddressState;
+ setLocalAddress(state:LocalMonitorAddressState){this.localAddress={...state}}
  private secureServer?:https.Server;private fingerprint?:string;private certificate?:string;private shareTimer?:ReturnType<typeof setInterval>;
  private streamTimes=new Map<string,number>();
  private value:Stored={monitors:[],remotes:[]};private live:LiveState={};private seen=new Map<string,number>();private annotationRate=new Map<string,number>();
@@ -43,7 +46,7 @@ export class RemoteServer{
  }
  async enableSecure(identity:LocalTlsIdentity,port=this.port){if(this.secureServer)return;const server=https.createServer({cert:identity.cert,key:identity.key,minVersion:'TLSv1.2'},(req,res)=>{void this.handle(req,res).catch(()=>{if(!res.headersSent)this.json(res,400,{error:'invalid'});else res.end()})});await new Promise<void>((resolve,reject)=>{server.once('error',reject);server.listen(port,'0.0.0.0',resolve)});this.secureServer=server;this.fingerprint=identity.fingerprint;this.certificate=identity.cert;this.shareTimer=setInterval(()=>this.sharing.expire(),5000);this.shareTimer.unref()}
  stop(){this.streamTimes.clear();this.sharing.stop();if(this.shareTimer)clearInterval(this.shareTimer);this.secureServer?.close();this.secureServer?.closeAllConnections()}
- get(){const secure=this.secureServer?.address();return{securePort:secure&&typeof secure==='object'?secure.port:undefined,fingerprint:this.fingerprint,active:!!this.secureServer?.listening,address:address(),monitors:this.value.monitors.map(item=>({...item,connected:0})),remotes:this.value.remotes}}
+ get(){const secure=this.secureServer?.address();return{hostname:this.localAddress?.status==='ready'?LOCAL_MONITOR_HOSTNAME:undefined,localAddressStatus:this.localAddress?.status,securePort:secure&&typeof secure==='object'?secure.port:undefined,fingerprint:this.fingerprint,active:!!this.secureServer?.listening,address:address(),monitors:this.value.monitors.map(item=>({...item,connected:0})),remotes:this.value.remotes}}
  getPublicCertificate(){return this.secureServer?.listening?this.certificate:undefined}
  updateLive(live:LiveState){this.live={...this.live,...live};if(typeof live.onAir==='boolean')this.sharing.setOnAir(live.onAir)}
  async saveMonitor(monitor:PersonalMonitor){
@@ -121,9 +124,9 @@ export class RemoteServer{
     res.writeHead(200,{'content-type':'image/jpeg','cache-control':'no-store','x-content-type-options':'nosniff'});res.end(bytes);return;
    }
    const monitor=access.monitor,remote=access.remote,canNotes=monitor?monitor.showNotes:remote!.permissions.includes('remote.viewNotes');
-   const upcoming=monitor?.profile==='lighting'?(lightingOffAir?[]:(this.live.upcoming??[]).slice(0,4).map(packet=>({slide:publicSlide(packet.slide),itemTitle:typeof packet.itemTitle==='string'?packet.itemTitle.slice(0,1000):''}))):undefined;
+   const upcoming=monitor?.profile==='lighting'?(lightingOffAir?[]:(this.live.upcoming??[]).slice(0,4).map(packet=>({slide:publicSlide(packet.slide),lightingColorsAllowed:packet.lightingColorsAllowed!==false,itemTitle:typeof packet.itemTitle==='string'?packet.itemTitle.slice(0,1000):''}))):undefined;
    const streamAt=this.streamTimes.get((url.searchParams.get('token')??'')+'\0'+(url.searchParams.get('view')??''));
-   this.json(res,200,{liveFrameAgeMs:streamAt===undefined?null:Date.now()-streamAt,title:lightingOffAir?monitor?.name:this.live.title,current:lightingOffAir?null:publicSlide(this.live.current),next:lightingOffAir?null:publicSlide(this.live.next),upcoming,onAir:this.live.onAir===true,serviceTime:lightingOffAir?undefined:this.live.serviceTime,serviceCountdownAtMs:lightingOffAir?undefined:this.live.serviceCountdownAtMs,annotationTakeId:lightingOffAir?undefined:this.live.annotationTakeId,nextPreviewRevision:lightingOffAir?undefined:this.live.nextPreviewRevision,canAnnotate:Boolean(remote?.permissions.includes('remote.annotate')&&!this.live.quickActive),permissions:remote?.permissions??[],monitor:monitor?{profile:monitor.profile??'personal',layout:monitor.layout,showCurrent:monitor.showCurrent,showNext:monitor.showNext,showClock:monitor.showClock,showCountdown:monitor.showCountdown}:undefined,notes:canNotes&&!lightingOffAir?this.live.notes:undefined,order:monitor?.showOrderOfService&&!lightingOffAir?this.live.order:undefined});return;
+   this.json(res,200,{liveFrameAgeMs:streamAt===undefined?null:Date.now()-streamAt,title:lightingOffAir?monitor?.name:this.live.title,current:lightingOffAir?null:publicSlide(this.live.current),next:lightingOffAir?null:publicSlide(this.live.next),upcoming,onAir:this.live.onAir===true,lightingColorsAllowed:!lightingOffAir&&this.live.lightingColorsAllowed!==false,serviceTime:lightingOffAir?undefined:this.live.serviceTime,serviceCountdownAtMs:lightingOffAir?undefined:this.live.serviceCountdownAtMs,annotationTakeId:lightingOffAir?undefined:this.live.annotationTakeId,nextPreviewRevision:lightingOffAir?undefined:this.live.nextPreviewRevision,canAnnotate:Boolean(remote?.permissions.includes('remote.annotate')&&!this.live.quickActive),permissions:remote?.permissions??[],monitor:monitor?{profile:monitor.profile??'personal',layout:monitor.layout,showCurrent:monitor.showCurrent,showNext:monitor.showNext,showClock:monitor.showClock,showCountdown:monitor.showCountdown}:undefined,notes:canNotes&&!lightingOffAir?this.live.notes:undefined,order:monitor?.showOrderOfService&&!lightingOffAir?this.live.order:undefined});return;
   }
   if(req.method==='POST'&&url.pathname==='/api/command'){
    try{

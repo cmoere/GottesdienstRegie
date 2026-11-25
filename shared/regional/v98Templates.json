@@ -76,7 +76,11 @@
     "speechSettingsGongHelp": "Der zentral gespeicherte Gong gilt auf allen Regie-PCs. Die Tonprobe verwendet die gespeicherte Auswahl.",
     "speechGongSave": "Gong für alle Regie-PCs speichern",
     "speechGongSaved": "Gong zentral gespeichert.",
-    "speechGongSaveError": "Der gemeinsame Gong ist derzeit nicht bearbeitbar. Verbindung und Schreibrechte für das GitHub-Repository prüfen."
+    "speechGongSaveError": "Der gemeinsame Gong ist derzeit nicht bearbeitbar. Verbindung und Schreibrechte für das GitHub-Repository prüfen.",
+    "remoteLocalAddressStarting": "Die feste lokale Adresse wird im Netzwerk angemeldet. Bis dahin ist die IP-Adresse erreichbar.",
+    "remoteLocalAddressConflict": "regie.local wird bereits von einem anderen Gerät verwendet. Bitte die IP-Ausweichadresse nutzen.",
+    "remoteLocalAddressUnavailable": "Die feste lokale Adresse konnte nicht angemeldet werden. Bitte die IP-Ausweichadresse nutzen. Das Gerät muss sich im selben lokalen Netzwerk befinden.",
+    "remoteIpFallbackCopy": "IP-Ausweichadresse kopieren"
   },
   "native": {},
   "en": {
@@ -156,7 +160,11 @@
     "speechSettingsGongHelp": "The shared chime applies to all control computers. The audio test uses the saved selection.",
     "speechGongSave": "Save chime for all control computers",
     "speechGongSaved": "Shared chime saved.",
-    "speechGongSaveError": "The shared chime is currently unavailable for editing. Check your connection and GitHub repository write access."
+    "speechGongSaveError": "The shared chime is currently unavailable for editing. Check your connection and GitHub repository write access.",
+    "remoteLocalAddressStarting": "Registering the fixed local address on the network. The IP address remains available in the meantime.",
+    "remoteLocalAddressConflict": "Another device is already using regie.local. Please use the fallback IP address.",
+    "remoteLocalAddressUnavailable": "The fixed local address could not be registered. Please use the fallback IP address. Your device must be on the same local network.",
+    "remoteIpFallbackCopy": "Copy fallback IP address"
   },
   "documentation": {
     "helpTitle": "Lokale KI: Modelle, Gestaltung und Bilder",

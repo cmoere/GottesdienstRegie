@@ -44,6 +44,7 @@ export class ExternalLoopController{
   this.output=structuredClone(output);return output;
  }
  hasEligible(item:ServiceItem):boolean{const request=requestForExternalItem(item),snapshot=request?this.peek(request).snapshot:null;return Boolean(snapshot&&externalHasContent(snapshot,externalSettingsForItem(item)))}
+ forkPreview(){const copy=new ExternalLoopController(this.read,this.now);for(const [key,reply]of this.prepared)copy.prepared.set(key,structuredClone(reply));copy.newsCursor=new Map(this.newsCursor);return copy}
  preflightWarnings(items:ServiceItem[],copy=sourceCopy):string[]{
   return items.flatMap(item=>{if(item.enabled===false||item.disabled===true)return[];const request=requestForExternalItem(item);if(!request)return[];const reply=this.peek(request),label=item.title|| (request.kind==='news'?copy('Nachrichten'):copy('Fußball'));if(!reply.snapshot||!this.hasEligible(item))return[copy("{value1}: derzeit keine gültigen Inhalte vorbereitet; dieses optionale Loop-Element wird übersprungen.",{value1:label})];if(reply.status==='stale')return[copy("{value1}: Offline-Ausfallreserve · letzter Stand {value2} Uhr.",{value1:label,value2:new Date(reply.snapshot.fetchedAt).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})})];return[]});
  }

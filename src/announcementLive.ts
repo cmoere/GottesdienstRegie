@@ -38,6 +38,7 @@ export class AnnouncementLiveController {
   private takeKey='';
   private output:Slide|null=null;
   setRecords(records:RawAnnouncement[]){this.records=structuredClone(records)}
+  forkPreview(){const copy=new AnnouncementLiveController();copy.records=structuredClone(this.records);for(const [id,index]of this.nextIndex)copy.nextIndex.set(id,index);for(const [id,pending]of this.continuation)copy.continuation.set(id,{...pending});return copy}
   hasEligible(item:ServiceItem,now=new Date()){return configuredAnnouncements(this.service.getForPlacement(this.records,now,announcementPlacement(item.sectionId)),item.metadata).length>0}
   hasContinuation(itemId:string){return this.continuation.has(itemId)}
   outputForTake(item:ServiceItem,slide:Slide,revision:number,now=new Date()):Slide|null{

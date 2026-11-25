@@ -7,6 +7,12 @@ import {getLocalTlsIdentity} from './LocalTlsIdentity';
 import {RemoteServer} from './RemoteServer';
 let server:RemoteServer;
 afterEach(()=>server?.stop());
+it('serves verified HTTPS for the fixed hostname and withdraws it from settings on a name conflict',async()=>{
+ await startRemote(path.join(await mkdtemp(path.join(tmpdir(),'regie-local-name-')),'devices.json'),vi.fn());
+ server.setLocalAddress({status:'ready',hostname:'regie.local'});expect(server.get().hostname).toBe('regie.local');
+ const status=await new Promise<number>((resolve,reject)=>{const req=https.get({hostname:'127.0.0.1',servername:'regie.local',port:server.get().securePort,path:'/lichtoperator',ca:server.getPublicCertificate()},res=>{res.resume();res.on('end',()=>resolve(res.statusCode!))});req.on('error',reject)});
+ expect(status).toBe(403);server.setLocalAddress({status:'conflict'});expect(server.get().hostname).toBeUndefined();expect(server.get().active).toBe(true);
+});
 async function startRemote(file:string, command: (message:unknown)=>void, copy?:ConstructorParameters<typeof RemoteServer>[4], nextFrame?:ConstructorParameters<typeof RemoteServer>[5]){
  server=new RemoteServer(file,command,0,undefined,copy,nextFrame);
  await server.start();
@@ -126,6 +132,7 @@ it('serves the read-only lighting view at a fixed path without a device code',as
  const state=await(await request('/api/state?token=lighting')).json();expect(state.current.title).toBe('Visible');expect(state.order).toEqual(['Intro','Song']);expect(state.notes).toBeUndefined();
  expect((await request('/api/command',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token:'lighting',action:'next'})})).status).toBe(403);
  const old=await request('/monitor/'+monitor.token);expect(old.status).toBe(308);expect(old.headers.get('location')).toBe('/lichtoperator');
+ server.updateLive({lightingColorsAllowed:false});expect((await(await request('/api/state?token=lighting')).json()).lightingColorsAllowed).toBe(false);
  server.updateLive({onAir:false,title:'Second'});const off=await(await request('/api/state?token=lighting')).json();expect(off.current).toBeNull();expect(off.order).toBeUndefined();expect((await request('/api/frame?token=lighting')).status).toBe(409);
  expect((await request('/lichtoperator')).status).toBe(200);expect(command).not.toHaveBeenCalled();await server.removeMonitor(monitor.id);expect((await request('/api/state?token=lighting')).status).toBe(403);
 });

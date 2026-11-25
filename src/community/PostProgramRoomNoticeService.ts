@@ -59,6 +59,7 @@ export class PostProgramRoomNoticeController{
     return this.pending;
   }
   current(){return this.active}
+  forkPreview(){const copy=new PostProgramRoomNoticeController(this.service,this.random);copy.active=structuredClone(this.active);copy.pending=structuredClone(this.pending);copy.session=this.session?{...this.session}:null;copy.serial=this.serial;copy.page=this.page;return copy}
   beginTransition(){this.enterPostProgram();if(!this.pending){this.active=null;return null}const pages=this.pending.type==='next-events'?paginatePostEvents(this.pending.events):undefined;const prepared=this.pending.type==='next-events'?preparePostEventPresentation(this.pending.events):undefined;const pageCount=pages?.length||1;this.page=(this.page+1)%pageCount;this.active={sessionId:this.session!.id,headerColor:this.session!.headerColor,notice:structuredClone(this.pending),page:this.page,pageCount,pages,...prepared,startedAtMs:Date.now()};return this.active}
   outputForTake<T extends object>(output:T,take:number):T&{postProgramRoomNotice?:PostProgramRoomNoticeSnapshot}{if(this.lastTake!==take){this.lastTake=take;this.beginTransition()}return this.active?withPostProgramRoomNotice(output,this.active):output}
   leavePostProgram(){this.lastTake=undefined;this.session=null;this.active=null;this.pending=null;this.page=-1}

@@ -9,6 +9,12 @@ const event=(eventKey:string,start:string,extra:Record<string,unknown>={}):Churc
 const service=(events:ChurchEvent[])=>new PostProgramRoomNoticeService(new EventService(events,roomService));
 
 describe('PostProgramRoomNoticeService',()=>{
+ it('previews the next room notice without changing the active post-program snapshot or session color',()=>{
+  const controller=new PostProgramRoomNoticeController(service([event('current','09:00'),event('next','10:30')]),()=>.1);
+  controller.prepare({linkedEventKey:'current'},now);const active=controller.beginTransition()!;
+  const preview=controller.forkPreview();preview.prepare({linkedEventKey:'current'},now);const result=preview.outputForTake({id:'preview'},2);
+  expect(result.postProgramRoomNotice?.headerColor).toBe(active.headerColor);expect(controller.current()).toBe(active);
+ });
   it('prepares one complete overflow traversal and keeps the visible plan stable until a take',()=>{
     const events=new EventService([event('current','09:00'),...Array.from({length:20},(_,i)=>event(`event ${i}`,'10:30'))],roomService),controller=new PostProgramRoomNoticeController(new PostProgramRoomNoticeService(events));
     controller.prepare({linkedEventKey:'current'},now);

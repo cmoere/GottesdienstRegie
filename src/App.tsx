@@ -151,7 +151,7 @@ import {AppClock} from './community/AppClock';
 import {setPostProgramPrepared} from './community/communityRuntime';
 import {EventSlideDesigner} from './EventSlideDesigner';
 import {AnnouncementSlideDesigner} from './AnnouncementSlideDesigner';
-import {eventOverviewMinimumDuration,hydrateNowPlayingData,nowPlayingSnapshotMatches} from './liveDynamicData';
+import {eventOverviewMinimumDuration,hydrateDynamicEventData,hydrateNowPlayingData,nowPlayingSnapshotMatches} from './liveDynamicData';
 import {ExternalLoopController,startExternalLoopDemand} from './externalLoop/controller';
 import {ExternalLoopContext} from './externalLoop/context';
 import {isExternalLoop} from './externalLoop/model';
@@ -7315,7 +7315,7 @@ function AppShell({
   const {t, locale, tx} = useI18n();
   const state = usePresentation();
   const outputProfileWarning=useOutputDisplayProfile();
-  const [loopForecast,setLoopForecast]=useState<{revision:number;target:LiveTarget|undefined}>();
+  const [loopForecast,setLoopForecast]=useState<{revision:number;target:LiveTarget|undefined;dueAtMs?:number}>();
   const announcementController=useRef(new AnnouncementLiveController());
   const externalController=useRef(new ExternalLoopController(request=>window.desktop?.externalLoop?.read(request)??Promise.resolve({snapshot:null,status:'unavailable'}),()=>AppClock.now().getTime()));
   useEffect(()=>startExternalLoopDemand(externalController.current,state.items),[state.items,state.presentationId]);
@@ -8055,7 +8055,7 @@ function AppShell({
       const continuation=Boolean(isAnnouncementLoop(item)&&slide&&announcementController.current.hasContinuation(item.id));
       const dueAt=AppClock.now().getTime()+duration;
       const forecast=scheduledServiceTarget(state,dueAt)??(continuation&&slide?{itemId:item.id,slideId:slide.id}:resolve(dueAt));
-      setLoopForecast({revision:state.liveTransitionRevision,target:forecast});
+      setLoopForecast({revision:state.liveTransitionRevision,target:forecast,dueAtMs:dueAt});
       const timer=window.setTimeout(() => {
         const current=usePresentation.getState();
         const now=AppClock.now().getTime();
@@ -8250,8 +8250,21 @@ function AppShell({
     return dispose;
   }, []);
   useEffect(() => {
-    const update=()=>void(window.desktop as any)?.remote?.updateLive({...remoteLiveMetadata(state,getCommunityRuntimeSnapshot().events,loopForecast),quickActive:Boolean(previewQuick)});
-    update();return subscribeCommunityRuntime(update);
+    const update=()=>{
+      const announcements=announcementController.current.forkPreview(),external=externalController.current.forkPreview(),post=postProgramNoticeController.current.forkPreview();
+      const now=AppClock.now().getTime();
+      const metadata=remoteLiveMetadata(state,getCommunityRuntimeSnapshot().events,loopForecast,{nowMs:now,available:availableForOutput,prepareSlide:(item,slide,index,atMs)=>{
+        const revision=state.liveTransitionRevision+index+1;
+        let output=isAnnouncementLoop(item)?announcements.outputForTake(item,slide,revision,new Date(atMs)):isExternalLoop(item)?external.outputForTake(item,slide,revision,atMs):slide;
+        if(!output)return null;
+        if(isPostProgramSystemItem(item)){post.prepare({eventLink:state.eventLink},new Date(atMs),{mode:state.testPostProgramScenario?'test':'normal',scenario:state.testPostProgramScenario??'automatic'});output=post.outputForTake(output,revision)}
+        const prepared=hydrateDynamicEventData(hydrateNowPlayingData(output));
+        if(item.itemCategory==='loop'&&!isAnnouncementLoop(item)&&!isExternalLoop(item))prepared.timing={...prepared.timing,durationSeconds:Math.ceil(Math.max(loopDurationMs(item),eventOverviewMinimumDuration(prepared),isPostProgramSystemItem(item)?post.current()?.minDurationMs??60000:0)/1000)};
+        return prepared;
+      }});
+      void(window.desktop as any)?.remote?.updateLive({...metadata,quickActive:Boolean(previewQuick)});
+    };
+    update();const offCommunity=subscribeCommunityRuntime(update),offExternal=externalController.current.subscribe(update);return()=>{offCommunity();offExternal()};
   }, [
     state.title,
     state.onAir,
@@ -8262,6 +8275,7 @@ function AppShell({
     state.items,
     previewQuick,
     loopForecast,
+    state.date,state.liveLoopRound,state.liveTransitionRevision,state.eventLink,state.testPostProgramScenario,
   ]);
   useEffect(() => {
     if (

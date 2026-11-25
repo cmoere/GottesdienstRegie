@@ -10,6 +10,7 @@ export interface NextPreviewPacket<TSlide extends PreviewSlide = PreviewSlide> {
   slide: TSlide;
   sourceHash?: string;
   itemTitle?: string;
+  lightingColorsAllowed?: boolean;
 }
 
 export interface NextPreviewState<TSlide extends PreviewSlide = PreviewSlide> {

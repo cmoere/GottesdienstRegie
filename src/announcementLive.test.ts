@@ -6,6 +6,13 @@ const now=new Date('2026-10-11T10:00:00');
 const raw={messageId:'a',titel:'Öffentliche Meldung',textMeldung:'Saaltext',status:'öffentlich',messageScreen:true,internalComment:'Geheim'};
 const item=createServiceItem('announcement',{sectionId:'pre',itemCategory:'loop'});
 describe('announcement live preparation',()=>{
+ it('prepares several future messages without advancing the live message cursor',()=>{
+  const controller=new AnnouncementLiveController();controller.setRecords([raw,{...raw,messageId:'b',titel:'Zweite Meldung'}]);
+  controller.outputForTake(item,item.slides[0],1,now);const preview=controller.forkPreview();
+  const expected=preview.outputForTake(item,item.slides[0],2,now);
+  preview.outputForTake(item,item.slides[0],3,now);
+  expect(controller.outputForTake(item,item.slides[0],2,now)).toEqual(expected);
+ });
   it('suppresses locally disabled QR codes on every page and reclaims their body width',()=>{
     const controller=new AnnouncementLiveController(),body='Diese Meldung braucht ausreichend Platz. '.repeat(150);
     controller.setRecords([{...raw,textMeldung:body,qrCode:true}]);

@@ -11,6 +11,13 @@ function ready(title:string):ExternalReply{return{status:'ready',snapshot:{versi
 function item(){const result=createServiceItem('news' as ItemType,{id:'item',sectionId:'pre',title:'Nachrichten',metadata:{externalKind:'news',newsSources:'westfalen-blatt'}});result.slides[0].elements=[{id:'news-core',type:'loop',name:'News',x:0,y:0,width:1920,height:1080,rotation:0,opacity:1,locked:true,visible:true,zIndex:1,properties:{loopType:'news'}}];return result}
 afterEach(()=>vi.useRealTimers());
 describe('immutable external loop takes',()=>{
+ it('forks cached news for future previews without consuming the live news rotation',async()=>{
+  const reply=ready('Erste');if(reply.snapshot?.payload.kind==='news')reply.snapshot.payload.entries.push({...reply.snapshot.payload.entries[0],id:'two',title:'Zweite'});
+  const read=vi.fn(async()=>reply),controller=new ExternalLoopController(read,()=>1000),current=item();await controller.prepare(request);
+  controller.outputForTake(current,current.slides[0],1,1000);const preview=controller.forkPreview();
+  const expected=preview.outputForTake(current,current.slides[0],2,2000);preview.outputForTake(current,current.slides[0],3,3000);
+  expect(controller.outputForTake(current,current.slides[0],2,2000)).toEqual(expected);expect(read).toHaveBeenCalledTimes(1);
+ });
  it('prepareDoesNotMutateVisibleSnapshot and changes only at a new take',async()=>{
   let title='Alt';const controller=new ExternalLoopController(async()=>ready(title),()=>1000),current=item(),slide=current.slides[0];await controller.prepare(request);
   const first=controller.outputForTake(current,slide,7,1000);expect(first).not.toBeNull();title='Neu';await controller.prepare(request);

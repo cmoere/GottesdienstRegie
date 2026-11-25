@@ -3,13 +3,13 @@ const http=require('node:http'),fs=require('node:fs/promises'),assert=require('n
 const {chromium}=require('playwright');const {remotePage}=require('../../dist-electron/electron/RemotePage.js');
 (async()=>{
  await fs.mkdir('work/lighting-monitor-review',{recursive:true});
- const browser=await chromium.launch({headless:true});let mode='two',futureMode='one',live=true,take='one',revision=1;const errors=[],requests=[];
+ const browser=await chromium.launch({headless:true});let mode='two',futureMode='one',live=true,colorsAllowed=true,take='one',revision=1;const errors=[],requests=[];
  const context=await browser.newContext({viewport:{width:1920,height:1080},locale:'de-DE',timezoneId:'Europe/Berlin'});
  const generator=await context.newPage();
  async function image(parts){return Buffer.from(await generator.evaluate(parts=>{const c=document.createElement('canvas');c.width=960;c.height=540;const ctx=c.getContext('2d');let x=0;for(const [fraction,color]of parts){ctx.fillStyle=color;ctx.fillRect(x,0,960*fraction,540);x+=960*fraction}return c.toDataURL('image/png').split(',')[1]},parts),'base64')}
  const images={two:await image([[.6,'#DC782D'],[.4,'#122350']]),one:await image([[.9,'#6EB4F5'],[.1,'#E63C32']]),neutral:await image([[.5,'#000000'],[.5,'#FFFFFF']])};
  const server=http.createServer((req,res)=>{requests.push(req.url);res.setHeader('Cache-Control','no-store');
-  if(req.url.startsWith('/api/state')){res.setHeader('Content-Type','application/json');res.end(JSON.stringify({onAir:live,title:'Sonntagsgottesdienst',annotationTakeId:take,current:{id:'current',title:'Aktuelle Folie'},order:live?['Ankommen','Lied','Predigt']:undefined,upcoming:Array.from({length:4},(_,index)=>({slide:{id:'next-'+index,title:'Nächste Folie '+(index+1),body:''}})),nextPreviewRevision:revision,monitor:{profile:'lighting',layout:'lighting',showClock:true},permissions:[]}))}
+  if(req.url.startsWith('/api/state')){res.setHeader('Content-Type','application/json');res.end(JSON.stringify({onAir:live,lightingColorsAllowed:colorsAllowed,title:'Sonntagsgottesdienst',annotationTakeId:take,current:{id:'current',title:'Aktuelle Folie'},order:live?['Ankommen','Lied','Predigt']:undefined,upcoming:Array.from({length:4},(_,index)=>({slide:{id:'next-'+index,title:'Nächste Folie '+(index+1),body:''}})),nextPreviewRevision:revision,monitor:{profile:'lighting',layout:'lighting',showClock:true},permissions:[]}))}
   else if(req.url.startsWith('/api/frame')){res.setHeader('Content-Type','image/png');res.end(images[mode])}
   else if(req.url.startsWith('/api/next-frame')){res.setHeader('Content-Type','image/png');res.end(images[futureMode])}
   else{res.setHeader('Content-Type','text/html; charset=utf-8');res.end(remotePage('monitor','Lichtoperator','de','lighting'))}
@@ -57,6 +57,9 @@ const {chromium}=require('playwright');const {remotePage}=require('../../dist-el
   await page.waitForFunction(()=>document.querySelector('#palette-status').textContent==='Keine farbige Lichtempfehlung'&&document.querySelector('#next-palette-status').textContent==='Keine farbige Lichtempfehlung');
   assert.equal(await page.locator('#lighting-color-0').isVisible(),false);assert.equal(await page.locator('#next-color-0').isVisible(),false);assert.equal(await page.locator('.copy-color:visible').count(),0);
   mode='one';futureMode='two';take='restored';revision++;await page.waitForFunction(()=>document.querySelector('#lighting-color-0 .color-name').textContent==='Hellblau');
+  colorsAllowed=false;take='pre-loop';revision++;await page.waitForFunction(()=>document.querySelector('#lighting-palette').hidden&&document.querySelector('#next-palette').hidden);
+  assert.equal(await page.locator('#palette-status').isVisible(),false);assert.equal(await page.locator('.copy-color:visible').count(),0);
+  colorsAllowed=true;take='service';revision++;await page.waitForFunction(()=>!document.querySelector('#lighting-palette').hidden);
   live=false;take='off';await page.waitForFunction(()=>document.querySelector('#lighting-palette').hidden);
   assert.equal(await page.locator('#lighting-color-0 .copy-color').isDisabled(),true);assert.equal(await page.locator('#next-palette').isVisible(),false);assert.equal(await page.locator('#next-color-0 .copy-color').isDisabled(),true);
   live=true;take='three';await page.waitForFunction(()=>document.querySelector('#lighting-color-0 .color-name').textContent==='Hellblau');

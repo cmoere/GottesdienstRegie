@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.99.17</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.17</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.17</guid><pubDate>Wed, 25 Nov 2026 00:00:00 GMT</pubDate><description>Feste lokale Monitoradresse und vollständige Loop-Vorschauen
+Webmonitore verwenden nach erfolgreicher lokaler Anmeldung regie.local statt einer wechselnden IP-Adresse. Der Lichtoperator zeigt im Vor- und Nachprogramm die tatsächlichen kommenden Loop-Folien und blendet dort Farbempfehlungen aus. Wetterwarnungen erhalten Symbole aus dem vorhandenen Lucide-Iconset.
+
+regie.local automatisch im Saalnetz anmelden
+Die Software meldet den festen Rechnernamen per mDNS im lokalen Netzwerk an. Kopierlinks, QR-Codes und Vorschauen verwenden nach erfolgreicher Anmeldung HTTPS über regie.local. Für den Lichtoperator lautet die Adresse https://regie.local:43171/lichtoperator. Eine zusätzliche Installation oder eine Änderung des Betriebssystem-Rechnernamens ist dafür nicht erforderlich.
+
+Passendes HTTPS-Zertifikat und IP-Ausweichadresse
+Das lokale Serverzertifikat berücksichtigt regie.local und localhost zusätzlich zu den bekannten IP-Adressen. Namenskonflikte, Anmeldefehler und Zeitüberschreitungen werden im Operator-Bereich angezeigt. In diesen Fällen bleiben IP-Links verfügbar; ein fremder oder automatisch umbenannter Rechnername wird nicht stillschweigend übernommen.
+
+Wetterwarnungen mit konsistenten Standardsymbolen
+Gewitter, Sturm, Regen, Schnee, Frost, Hitze und Nebel verwenden lokal mitgelieferte Lucide-Symbole. Warnungstexte, Gültigkeit, Quellenangabe und die gemeinsame Rotation mehrerer Warnungen bleiben erhalten.
+
+Vier Vorschauen folgen der automatischen Loop-Reihenfolge
+Der Lichtoperator bereitet die nächsten vier tatsächlichen Folien aus dem Vor- oder Nachprogramm vor. Dabei werden Loop-Runden, Anzeigedauern und der geplante Wechsel zum Gottesdienst berücksichtigt. Meldungen, Nachrichten und Wetter erhalten ihre vorbereiteten Inhalte, ohne die laufende Ausgabe oder ihre Inhaltsrotation weiterzuschalten.
+
+Keine Lichtfarben im Vor- und Nachprogramm
+Im Vor- und Nachprogramm verschwinden Farbempfehlungen für aktuelle und kommende Loop-Folien vollständig, einschließlich Kopierschaltflächen und Hinweisen. Im Gottesdienst stehen die Empfehlungen weiterhin zur Verfügung.
+
+Hinweise zum Live-Betrieb
+Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.
+
+Originalgetreue PowerPoint-Wiedergabe
+Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.
+
+Bildrate im lokalen Netzwerk
+Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.
+
+Erreichbarkeit der Lichtoperator-Ansicht
+Solange der Lichtoperator aktiviert ist, kann jedes Gerät mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte über die feste Adresse sehen. Die Ansicht erlaubt keine Steuerbefehle. Lichtempfehlungen sind Vorschläge und ersetzen keine Prüfung am eingesetzten Scheinwerfer.
+
+Lokales Netzwerk und Vertrauen des Zertifikats
+regie.local benötigt ein gemeinsames lokales Netzwerk, das mDNS zulässt. Die erfolgreiche Anmeldung ist keine Prüfung aller verbundenen Geräte. Beim ersten Öffnen kann es nötig sein, das erneuerte lokale Zertifikat anhand des angezeigten Fingerabdrucks zu bestätigen. Die Anwendung installiert kein Vertrauen automatisch. Ein zweites Gerät im tatsächlichen Saalnetz wurde hier nicht geprüft.</description></item>
 <item><title>GottesdienstRegie 0.99.16</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.16</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.16</guid><pubDate>Wed, 25 Nov 2026 00:00:00 GMT</pubDate><description>Feste Lichtoperator-Adresse und gezielte Lichtempfehlungen
 Der Lichtoperator ist unter /lichtoperator erreichbar. Seine Ansicht benötigt keinen Gerätecode und zeigt Präsentationsinhalte ausschließlich bei ON AIR. Die Lichtanalyse empfiehlt nur farbige Lichttöne. Der Ablauf lässt sich in den Ansichtseinstellungen dauerhaft ein- oder ausblenden.
 

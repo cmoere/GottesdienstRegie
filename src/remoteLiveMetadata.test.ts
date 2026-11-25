@@ -54,3 +54,23 @@ it('forecasts the first service content after the pre-program countdown', () => 
  state.liveSlideId = countdown.slides[0].id;
  expect(remoteUpcomingSlides(state)[0].slide.id).toBe(state.items[2].slides[0].id);
 });
+
+it.each(['pre','post'])('keeps four automatic previews in the %s loop and suppresses lighting recommendations', sectionId => {
+ const state=presentation(),a=createServiceItem('news',{sectionId}),b=createServiceItem('weather',{sectionId});
+ a.order=0;b.order=1;state.items=[a,b,...state.items];state.liveItemId=a.id;state.liveSlideId=a.slides[0].id;state.serviceTime='';
+ const prepareSlide=(_item:any,slide:any)=>({...slide,body:'Prepared loop content'});
+ const metadata=remoteLiveMetadata(state,[],undefined,{nowMs:1000,prepareSlide});
+ expect(metadata.upcoming.map(p=>p.slide.id)).toEqual([b.slides[0].id,a.slides[0].id,b.slides[0].id,a.slides[0].id]);
+ expect(metadata.upcoming.every(p=>p.slide.body==='Prepared loop content')).toBe(true);
+ expect(metadata.lightingColorsAllowed).toBe(false);
+ expect(a.slides[0].body).not.toBe('Prepared loop content');
+});
+
+it('uses forecast times and the configured service start for later loop previews',()=>{
+ const state=presentation(),a=createServiceItem('weather',{sectionId:'pre'}),b=createServiceItem('news',{sectionId:'pre'});
+ a.order=0;b.order=1;b.plannedDuration=20000;state.items=[a,b,...state.items];state.liveItemId=a.id;state.liveSlideId=a.slides[0].id;state.date='2026-11-25';state.serviceTime='10:30';state.liveSessionStartedAtMs=0;
+ const forecast={revision:12,target:{itemId:b.id,slideId:b.slides[0].id},dueAtMs:new Date('2026-11-25T10:29:50').getTime()};
+ const result=remoteUpcomingSlides(state,forecast);
+ expect(result[0].slide.id).toBe(b.slides[0].id);expect(result[1].slide.id).toBe(state.items[2].slides[0].id);
+ expect(remoteLiveMetadata(presentation(),[]).lightingColorsAllowed).toBe(true);
+});

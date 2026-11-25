@@ -21,7 +21,7 @@ it('removes expired warnings from selection and count instead of leaving an empt
  now+=6000;act(()=>vi.advanceTimersByTime(250));expect(hook.result.current).toMatchObject({item:{id:'b'},index:0,total:1});
 });
 it.each([['STURM','Sturm und Wind'],['GEWITTER mit STURMBÖEN','Gewitter'],['STARKREGEN','Regen'],['SCHNEEFALL','Schnee'],['GLÄTTE','Glätte und Frost'],['FROST','Glätte und Frost'],['HITZE','Hitze'],['NEBEL','Nebel'],['UNBEKANNT','Wetterwarnung'],['REISEHINWEIS','Wetterwarnung']])('renders an accessible local icon for %s',(event,label)=>{
- render(<View value={state([make('one',event)])}/>);expect(screen.getByRole('img',{name:label}).tagName.toLowerCase()).toBe('svg');expect(screen.queryByLabelText(/Warnung 1 von/)).toBeNull();
+ render(<View value={state([make('one',event)])}/>);expect(screen.getByRole('img',{name:label})).toHaveAttribute('data-icon');expect(screen.getByRole('img',{name:label}).querySelector('svg')).not.toBeNull();expect(screen.queryByLabelText(/Warnung 1 von/)).toBeNull();
 });
 it('selects identically for two renderers and hides unavailable, future and stale data',()=>{
  const value=state([make('future','STURM',{validFrom:new Date(start+50000).toISOString()}),make('valid','NEBEL')]);

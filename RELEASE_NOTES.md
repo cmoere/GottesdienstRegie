@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.99.17
+
+Die feste lokale Adresse für den Lichtoperator lautet https://regie.local:43171/lichtoperator. Die Software meldet den Rechnernamen im Saalnetz an. Nach erfolgreicher Anmeldung verwenden Kopierlinks, QR-Codes und Vorschauen den Namen anstelle der IP-Adresse. Bei einem Namenskonflikt oder gesperrter Netzwerkerkennung bleibt die IP-Ausweichadresse verfügbar.
+
+Das lokale HTTPS-Zertifikat umfasst regie.local und localhost. Beim ersten Öffnen kann das erneuerte Zertifikat anhand des angezeigten Fingerabdrucks bestätigt werden müssen. Die Anwendung verändert keine Betriebssystem-Vertrauensspeicher. Die lokale Namensauflösung und eine HTTPS-Verbindung mit Zertifikatsprüfung wurden auf dem Entwicklungsrechner geprüft; ein Test von einem zweiten Gerät im tatsächlichen Saalnetz steht noch aus.
+
+Der Lichtoperator zeigt die nächsten vier tatsächlichen Loop-Folien mit vorbereiteten Meldungs-, Nachrichten- und Wetterinhalten. Die Vorschau berücksichtigt die automatische Reihenfolge und den geplanten Gottesdienstbeginn. Ihre Vorbereitung schaltet die laufende Ausgabe nicht weiter.
+
+Im Vor- und Nachprogramm erscheinen keine Lichtfarbempfehlungen. Wetterwarnungen verwenden lokal mitgelieferte Lucide-Symbole anstelle eigener Zeichnungen.
+
+---
+
 # GottesdienstRegie 0.99.16
 
 Der Lichtoperator ist dauerhaft unter /lichtoperator erreichbar. Kopierfunktion, QR-Code und Vorschau verwenden diese feste Adresse. Neue Geräte benötigen keinen Code und keine separate Freischaltung. Die reine Leseansicht zeigt Inhalte nur bei ON AIR und erlaubt keine Steuerbefehle. Persönliche Monitorlinks bleiben geschützt.

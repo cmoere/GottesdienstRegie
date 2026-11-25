@@ -1,3 +1,5 @@
+import {LocalMonitorAddress} from './LocalMonitorAddress';
+import {LOCAL_MONITOR_HOSTNAME} from '../shared/localMonitorAddress';
 import {NextPreviewWindow} from './NextPreviewWindow';
 import {SlideModelPack} from './localSlides/SlideModelPack';
 import {LocalSlideService} from './localSlides/LocalSlideService';
@@ -397,8 +399,10 @@ app.whenReady().then(async() => {
     'web-cache':path.join(app.getPath('sessionData'),'Cache'),
   });
   const remoteServer=new RemoteServer(path.join(app.getPath('userData'),'remote-devices.json'),payload=>{sendToLiveWindow(controlWindow,'remote:command',payload);const p=payload as any;if(p?.action==='screen-share'&&p.event?.type!=='offer')for(const output of outputManager.getNativeCompositionWindows())if(output.role==='main')output.window.webContents.send('remote:share-event',p.event)},43171,role=>outputManager.captureFrame(role),nativeText,index=>nextPreview.capture(index));
+  const localMonitorAddress=new LocalMonitorAddress(state=>remoteServer.setLocalAddress(state));
+  app.once('will-quit',()=>localMonitorAddress.stop());
   await remoteServer.start().catch(()=>null);
-  void getLocalTlsIdentity(path.join(app.getPath('userData'),'remote-tls'),Object.values(os.networkInterfaces()).flatMap(list=>(list??[]).filter(i=>i.family==='IPv4').map(i=>i.address))).then(identity=>remoteServer.enableSecure(identity)).catch(()=>null);
+  void getLocalTlsIdentity(path.join(app.getPath('userData'),'remote-tls'),Object.values(os.networkInterfaces()).flatMap(list=>(list??[]).filter(i=>i.family==='IPv4').map(i=>i.address))).then(async identity=>{await remoteServer.enableSecure(identity);const port=remoteServer.get().securePort;if(port)void localMonitorAddress.start(port)}).catch(()=>null);
   const onlineMedia=new GitHubStorageProvider('cmoere','GottesdienstRegie','media-library');
   void presentationRepository.initialize();
   void mediaRepository.initialize();
@@ -585,7 +589,7 @@ app.whenReady().then(async() => {
   ipcMain.handle('spotify:resolve',(_event,url:string)=>spotifyOEmbed.resolve(url));
   ipcMain.handle('spotify:open',async(_event,url:string)=>{const normalized=normalizeSpotifyTrackUrl(url);await shell.openExternal(normalized.url);return true});
   ipcMain.handle('spotify:search',async(_event,query:string,offset=0)=>{const token=await spotifyAuth!.accessToken(),url=new URL('https://api.spotify.com/v1/search');url.search=new URLSearchParams({q:String(query??'').trim(),type:'track',limit:'20',offset:String(Math.max(0,Math.floor(offset)))}).toString();const response=await fetch(url,{headers:{authorization:`Bearer ${token}`},signal:AbortSignal.timeout(12000)});if(response.status===429)throw new Error(`SPOTIFY_RATE_LIMIT_${response.headers.get('retry-after')??'1'}`);if(!response.ok)throw new Error(`SPOTIFY_SEARCH_FAILED_${response.status}`);const data=await response.json() as any,tracks=data.tracks??{};return{items:(tracks.items??[]).map((track:any)=>({provider:'spotify',id:String(track.id),title:String(track.name),artists:(track.artists??[]).map((artist:any)=>String(artist.name)),album:String(track.album?.name??''),durationMs:Number(track.duration_ms??0),imageUrl:String(track.album?.images?.[0]?.url??''),externalUrl:String(track.external_urls?.spotify??`https://open.spotify.com/track/${track.id}`),uri:String(track.uri??`spotify:track:${track.id}`)})),nextOffset:tracks.next?Number(offset)+20:undefined,total:Number(tracks.total??0)}});
-  ipcMain.handle('external:open',async(_event,url:string)=>{const unsplashTerms=['https://unsplash.com/de/nutzungsbedingungen','https://unsplash.com/de/datenschutzregelungen','https://unsplash.com/de/plus/lizenz'].includes(url);const allowed=unsplashTerms||/^https:\/\/(github\.com\/cmoere\/GottesdienstRegie|cmoere\.github\.io\/GottesdienstRegie)/i.test(url)||new RegExp(`^https?:\\/\\/(localhost|127\\.0\\.0\\.1|${remoteServer.get().address.replace(/\./g,'\\.')})(?::\\d+)?\\/`,'i').test(url);if(!allowed)throw new Error('EXTERNAL_URL_NOT_ALLOWED');await shell.openExternal(url);return true});
+  ipcMain.handle('external:open',async(_event,url:string)=>{const unsplashTerms=['https://unsplash.com/de/nutzungsbedingungen','https://unsplash.com/de/datenschutzregelungen','https://unsplash.com/de/plus/lizenz'].includes(url);const allowed=url.startsWith(`https://${LOCAL_MONITOR_HOSTNAME}:${remoteServer.get().securePort}/`)||unsplashTerms||/^https:\/\/(github\.com\/cmoere\/GottesdienstRegie|cmoere\.github\.io\/GottesdienstRegie)/i.test(url)||new RegExp(`^https?:\\/\\/(localhost|127\\.0\\.0\\.1|${remoteServer.get().address.replace(/\./g,'\\.')})(?::\\d+)?\\/`,'i').test(url);if(!allowed)throw new Error('EXTERNAL_URL_NOT_ALLOWED');await shell.openExternal(url);return true});
   ipcMain.handle('translation-packs:list',()=>translationPacks.list());
   ipcMain.handle('platform:appearance',()=>platformAppearance(process.platform,os.release()));
   ipcMain.handle('translation-packs:download',(_event,key:string)=>translationPacks.download(key));
@@ -752,7 +756,7 @@ app.whenReady().then(async() => {
   };
   createControlWindow(initialPreferences);
   let cleanQuit=false;
-  app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();if(controlWindow&&!controlCloseInProgress){controlWindow.close();return;}if(controlWindow)return;remoteServer.stop();nextPreview.stop();void stopPresentationOutputs().finally(()=>{cleanQuit=true;app.quit()})});
+  app.on('before-quit',event=>{if(cleanQuit)return;event.preventDefault();if(controlWindow&&!controlCloseInProgress){controlWindow.close();return;}if(controlWindow)return;localMonitorAddress.stop();remoteServer.stop();nextPreview.stop();void stopPresentationOutputs().finally(()=>{cleanQuit=true;app.quit()})});
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createControlWindow(appPreferences.get()); });
 });
 

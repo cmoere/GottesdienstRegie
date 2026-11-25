@@ -2423,7 +2423,11 @@
     "shapeLatinCross": "Christliches Kreuz",
     "liveViewResetTitle": "Liveansicht zurücksetzen",
     "liveViewResetHelp": "Nur die Vorschau auf diesem Gerät wird neu aufgebaut. Die laufende Präsentation und ihre Ausgabe bleiben unverändert.",
-    "liveViewResetDone": "Die lokale Liveansicht wurde zurückgesetzt."
+    "liveViewResetDone": "Die lokale Liveansicht wurde zurückgesetzt.",
+    "remoteLocalAddressStarting": "Die feste lokale Adresse wird im Netzwerk angemeldet. Bis dahin ist die IP-Adresse erreichbar.",
+    "remoteLocalAddressConflict": "regie.local wird bereits von einem anderen Gerät verwendet. Bitte die IP-Ausweichadresse nutzen.",
+    "remoteLocalAddressUnavailable": "Die feste lokale Adresse konnte nicht angemeldet werden. Bitte die IP-Ausweichadresse nutzen. Das Gerät muss sich im selben lokalen Netzwerk befinden.",
+    "remoteIpFallbackCopy": "IP-Ausweichadresse kopieren"
   },
   "native": {
     "updateAvailableTitle": "Nigge Version teo kriegen",
