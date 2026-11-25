@@ -17,9 +17,9 @@ it('does not recommend white text or black framing alongside substantial chromat
   const result=dominantFrameColors(frame(...Array(40).fill([230,90,30,255]),...Array(35).fill([20,40,90,255]),...Array(15).fill([255,255,255,255]),...Array(10).fill([0,0,0,255])));
   expect(result.map(color=>color.family)).toEqual(['orange','blue']);
 });
-it('keeps neutral images honest and ignores fully transparent pixels', () => {
-  expect(dominantFrameColors(frame([0,0,0,255],[255,255,255,255])).map(color=>color.hex)).toEqual(['#000000','#FFFFFF']);
-  expect(dominantFrameColors(frame([0,0,0,255]))).toEqual([{hex:'#000000',family:'black',shade:'normal'}]);
+it('never recommends black, white or gray and ignores transparent pixels', () => {
+  expect(dominantFrameColors(frame([0,0,0,255],[255,255,255,255],[120,120,120,255]))).toEqual([]);
+  expect(dominantFrameColors(frame([0,0,0,255]))).toEqual([]);
   expect(dominantFrameColors(frame([255,0,0,0]))).toEqual([]);
 });
 it('runs as a standalone browser function without module dependencies', () => {
@@ -29,10 +29,15 @@ it('runs as a standalone browser function without module dependencies', () => {
 it('downweights narrow colored text strokes over a broad neutral background', () => {
   const width=32,height=24,pixels=new Uint8ClampedArray(width*height*4);
   for(let y=0;y<height;y++)for(let x=0;x<width;x++)pixels.set(x%4===1?[230,40,30,255]:[255,255,255,255],(y*width+x)*4);
-  expect(dominantFrameColors(pixels,width)).toEqual([{hex:'#FFFFFF',family:'white',shade:'normal'}]);
+  expect(dominantFrameColors(pixels,width)).toEqual([]);
 });
 it('keeps broad background color areas when removing fine foreground details', () => {
   const width=32,height=24,pixels=new Uint8ClampedArray(width*height*4);
   for(let y=0;y<height;y++)for(let x=0;x<width;x++)pixels.set(x<16?[220,120,45,255]:[18,35,80,255],(y*width+x)*4);
   expect(dominantFrameColors(pixels,width).map(color=>color.family)).toEqual(['orange','blue']);
+});
+
+it('uses a real colored background area without proposing neutral framing or isolated noise',()=>{
+ expect(dominantFrameColors(frame(...Array(90).fill([0,0,0,255]),...Array(10).fill([20,50,140,255]))).map(color=>color.family)).toEqual(['blue']);
+ expect(dominantFrameColors(frame(...Array(99).fill([0,0,0,255]),[255,0,0,255]))).toEqual([]);
 });

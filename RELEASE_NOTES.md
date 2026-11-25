@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.99.16
+
+Der Lichtoperator ist dauerhaft unter /lichtoperator erreichbar. Kopierfunktion, QR-Code und Vorschau verwenden diese feste Adresse. Neue Geräte benötigen keinen Code und keine separate Freischaltung. Die reine Leseansicht zeigt Inhalte nur bei ON AIR und erlaubt keine Steuerbefehle. Persönliche Monitorlinks bleiben geschützt.
+
+Schwarz, Weiß und Grau werden nicht mehr als Lichtfarben vorgeschlagen. Die Analyse orientiert sich an größeren Hintergrund- und Bildflächen und wertet aktuelle und nächste Folie getrennt aus. Bei neutralen Bildern oder zu wenig Farbfläche erscheint „Keine farbige Lichtempfehlung“. Es wird kein Ersatzfarbwert erfunden.
+
+„Ablauf anzeigen“ lässt sich in den Webmonitor-Einstellungen ein- und ausschalten. Die Auswahl bleibt im jeweiligen Browser nach dem Neuladen gespeichert.
+
+Bestehende Lichtoperator-Konfigurationen bleiben erhalten; alte Monitorseiten werden auf die feste Adresse weitergeleitet. Bei OFF AIR werden Livebild, kommende Folien und Ablauf ausgeblendet. Solange der Lichtoperator aktiviert ist, können Geräte mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte ansehen.
+
+---
+
 # GottesdienstRegie 0.99.15
 
 Webmonitore verwenden einen fortlaufenden Bildstrom mit automatischer Wiederverbindung. Geräte teilen sich die Bildaufnahme je Ausgabe. Langsame Verbindungen erzeugen keine zusätzliche Bildwarteschlange; ein Einzelbild-Fallback bleibt verfügbar.

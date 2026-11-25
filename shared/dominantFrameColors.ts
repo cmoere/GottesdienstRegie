@@ -1,6 +1,6 @@
 export type LightingFrameColor = {
   hex: string;
-  family: 'red'|'orange'|'yellow'|'green'|'cyan'|'blue'|'purple'|'pink'|'white'|'gray'|'black';
+  family: 'red'|'orange'|'yellow'|'green'|'cyan'|'blue'|'purple'|'pink';
   shade: 'light'|'normal'|'dark';
 };
 
@@ -40,24 +40,20 @@ export function dominantFrameColors(pixels: Uint8ClampedArray, width = 0): Light
   let total = 0, chromatic = 0;
   for (let index=0; index+3<pixels.length; index+=4) {
     if (pixels[index+3]<240) continue;
+    total++;
     const r=pixels[index]/255, g=pixels[index+1]/255, b=pixels[index+2]/255;
     const max=Math.max(r,g,b), min=Math.min(r,g,b), chroma=max-min, lightness=(max+min)/2;
     const saturation=chroma===0?0:chroma/(1-Math.abs(2*lightness-1));
-    let family: Family;
-    if (chroma<.14 || saturation<.24 || lightness<.06) {
-      family=lightness<.18?'black':lightness>.82?'white':'gray';
-    } else {
-      let hue=(max===r?(g-b)/chroma+(g<b?6:0):max===g?(b-r)/chroma+2:(r-g)/chroma+4)*60;
-      family=hue<15||hue>=345?'red':hue<45?'orange':hue<75?'yellow':hue<170?'green':hue<200?'cyan':hue<255?'blue':hue<290?'purple':'pink';
-      chromatic++;
-    }
+    if(chroma<.14 || saturation<.24 || lightness<.06)continue;
+    const hue=(max===r?(g-b)/chroma+(g<b?6:0):max===g?(b-r)/chroma+2:(r-g)/chroma+4)*60;
+    const family:Family=hue<15||hue>=345?'red':hue<45?'orange':hue<75?'yellow':hue<170?'green':hue<200?'cyan':hue<255?'blue':hue<290?'purple':'pink';
+    chromatic++;
     const group=groups.get(family)??{count:0,lightness:0};
-    group.count++;group.lightness+=lightness;groups.set(family,group);total++;
+    group.count++;group.lightness+=lightness;groups.set(family,group);
   }
-  if (!total) return [];
-  const useChromatic=chromatic/total>=.15;
-  const ranked=[...groups.entries()].filter(([family])=>!useChromatic||!['black','gray','white'].includes(family))
-    .sort((a,b)=>b[1].count-a[1].count);
+  // A tiny colored detail must not turn a neutral output into a light cue.
+  if(!total || chromatic/total<.05)return [];
+  const ranked=[...groups.entries()].sort((a,b)=>b[1].count-a[1].count);
   const weight=ranked.reduce((sum,[,group])=>sum+group.count,0);
   const primary=ranked[0];
   const selected=primary[1].count/weight>=.78?ranked.slice(0,1):ranked.filter(([,group],index)=>index===0||group.count/weight>=.18).slice(0,2);
@@ -65,12 +61,11 @@ export function dominantFrameColors(pixels: Uint8ClampedArray, width = 0): Light
     red:['#FF8A80','#E53935','#8F1D24'], orange:['#FFC078','#FF8C1A','#B9540A'],
     yellow:['#FFF29A','#F9D648','#B58B12'], green:['#A3E56D','#35B24A','#166534'],
     cyan:['#8DE4EE','#20BED1','#12697A'], blue:['#86C5FF','#2673E8','#173B8F'],
-    purple:['#CCA1F2','#934DDB','#522080'], pink:['#FFA5D5','#E94C9E','#951D5D'],
-    white:['#FFFFFF','#FFFFFF','#FFFFFF'], gray:['#B6BEC3','#B6BEC3','#B6BEC3'], black:['#000000','#000000','#000000']
+    purple:['#CCA1F2','#934DDB','#522080'], pink:['#FFA5D5','#E94C9E','#951D5D']
   };
   return selected.map(([family,group])=>{
-    const neutral=['black','gray','white'].includes(family), lightness=group.lightness/group.count;
-    const shade=neutral?'normal':lightness>=.68?'light':lightness<=.30?'dark':'normal';
+    const lightness=group.lightness/group.count;
+    const shade=lightness>=.68?'light':lightness<=.30?'dark':'normal';
     return {hex:palette[family][shade==='light'?0:shade==='normal'?1:2],family,shade};
   });
 }

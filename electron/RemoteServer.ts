@@ -35,7 +35,11 @@ export class RemoteServer{
   this.value=value;
   const monitorsNeedingToken=value.monitors.filter(monitor=>!/^[A-Za-z0-9_-]{32}$/.test(monitor.token));
   for(const monitor of monitorsNeedingToken)monitor.token=randomBytes(24).toString('base64url');
-  if(monitorsNeedingToken.length)await this.save();
+  let migratedLighting=false;
+  for(const monitor of value.monitors)if(monitor.profile==='lighting'&&(monitor.slug!=='lichtoperator'||monitor.sourceType!=='main')){
+   monitor.slug='lichtoperator';monitor.sourceType='main';migratedLighting=true;
+  }
+  if(monitorsNeedingToken.length||migratedLighting)await this.save();
  }
  async enableSecure(identity:LocalTlsIdentity,port=this.port){if(this.secureServer)return;const server=https.createServer({cert:identity.cert,key:identity.key,minVersion:'TLSv1.2'},(req,res)=>{void this.handle(req,res).catch(()=>{if(!res.headersSent)this.json(res,400,{error:'invalid'});else res.end()})});await new Promise<void>((resolve,reject)=>{server.once('error',reject);server.listen(port,'0.0.0.0',resolve)});this.secureServer=server;this.fingerprint=identity.fingerprint;this.certificate=identity.cert;this.shareTimer=setInterval(()=>this.sharing.expire(),5000);this.shareTimer.unref()}
  stop(){this.streamTimes.clear();this.sharing.stop();if(this.shareTimer)clearInterval(this.shareTimer);this.secureServer?.close();this.secureServer?.closeAllConnections()}
@@ -44,13 +48,13 @@ export class RemoteServer{
  updateLive(live:LiveState){this.live={...this.live,...live};if(typeof live.onAir==='boolean')this.sharing.setOnAir(live.onAir)}
  async saveMonitor(monitor:PersonalMonitor){
   if(!monitor||typeof monitor.name!=='string'||!monitor.name.trim()||monitor.name.length>200||typeof monitor.slug!=='string'||!['main','stage','livestream'].includes(monitor.sourceType))throw Error('Ungültiger Monitor.');
-  const slug=monitor.slug.toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/^-+|-+$/g,'');if(!slug||slug.length>80)throw Error('Ungültige Monitor-Kennung.');
   const profile=monitor.profile==='lighting'?'lighting':'personal';
+  const slug=profile==='lighting'?'lichtoperator':monitor.slug.toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/^-+|-+$/g,'');if(!slug||slug.length>80)throw Error('Ungültige Monitor-Kennung.');
   const existing=this.value.monitors.find(item=>item.id===monitor.id)
-   ?? (profile==='lighting'?this.value.monitors.find(item=>item.profile==='lighting'&&item.slug===slug):undefined);
+   ?? (profile==='lighting'?this.value.monitors.find(item=>item.profile==='lighting'):undefined);
   const token=existing?.token??randomBytes(24).toString('base64url');
-  const normalized:StoredMonitor={...monitor,id:existing?.id??monitor.id,token,slug,profile,layout:normalizeMonitorLayout(monitor.layout,profile),defaultLanguage:monitor.defaultLanguage==='en'?'en':'de'};
-  this.value.monitors=[...this.value.monitors.filter(item=>item.id!==monitor.id&&item.slug!==slug),normalized];await this.save();return normalized;
+  const normalized:StoredMonitor={...monitor,id:existing?.id??monitor.id,token,slug,profile,sourceType:profile==='lighting'?'main':monitor.sourceType,layout:normalizeMonitorLayout(monitor.layout,profile),defaultLanguage:monitor.defaultLanguage==='en'?'en':'de'};
+  this.value.monitors=[...this.value.monitors.filter(item=>item.id!==monitor.id&&item.id!==normalized.id&&(profile==='lighting'?item.profile!=='lighting':item.slug!==slug)),normalized];await this.save();return normalized;
  }
  async removeMonitor(id:string){this.value.monitors=this.value.monitors.filter(item=>item.id!==id);await this.save();return true}
  async createSession(input:Omit<RemoteDevice,'id'|'token'|'revoked'|'createdAt'>){
@@ -62,6 +66,7 @@ export class RemoteServer{
  private json(res:http.ServerResponse,status:number,data:unknown){res.writeHead(status,{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'});res.end(JSON.stringify(data))}
  private async body(req:http.IncomingMessage){let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>65000)throw Error('too large')}return JSON.parse(raw||'{}')}
  private access(token:string){
+  if(token==='lighting'){const configured=this.value.monitors.find(item=>item.enabled&&item.profile==='lighting');return configured?{monitor:{...configured,sourceType:'main' as const,showNotes:false,showOrderOfService:true},remote:undefined}:null}
   const monitor=this.value.monitors.find(item=>item.enabled&&token===`monitor:${item.token}`);
   const remote=this.value.remotes.find(item=>!item.revoked&&item.token===token&&item.permissions.includes('remote.view'));
   return monitor?{monitor,remote:undefined}:remote?{monitor:undefined,remote}:null;
@@ -78,11 +83,12 @@ export class RemoteServer{
    if(req.method==='POST'&&body.action==='stop'){this.json(res,200,{stopped:this.sharing.stop(body.id,remote.id)});return}
    this.json(res,400,{error:'invalid'});return;
   }
-  if(req.method==='GET'&&(url.pathname.startsWith('/monitor/')||url.pathname.startsWith('/remote/'))){
-   const monitorRoute=url.pathname.startsWith('/monitor/'),id=decodeURIComponent(url.pathname.slice(monitorRoute?9:8)),access=this.access(monitorRoute?`monitor:${id}`:id);
+  if(req.method==='GET'&&(url.pathname==='/lichtoperator'||url.pathname.startsWith('/monitor/')||url.pathname.startsWith('/remote/'))){
+   const fixedLighting=url.pathname==='/lichtoperator',monitorRoute=fixedLighting||url.pathname.startsWith('/monitor/'),id=fixedLighting?'':decodeURIComponent(url.pathname.slice(monitorRoute?9:8)),access=this.access(fixedLighting?'lighting':monitorRoute?`monitor:${id}`:id);
    if(!access){this.json(res,403,{error:'forbidden'});return}
+   if((!fixedLighting&&access.monitor?.profile==='lighting')||(fixedLighting&&url.search)){res.writeHead(308,{'location':'/lichtoperator','cache-control':'no-store'});res.end();return}
    const entry=access.monitor??access.remote!,language=(access.monitor?access.monitor.defaultLanguage:access.remote?.preferredLanguage)==='en'?'en':'de';
-   res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','referrer-policy':'no-referrer','x-frame-options':'DENY','content-security-policy':"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",'x-content-type-options':'nosniff'});res.end(remotePage(monitorRoute?'monitor':'remote',entry.name,language,monitorRoute?`monitor:${id}`:id,this.copy));return;
+   res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','referrer-policy':'no-referrer','x-frame-options':'DENY','content-security-policy':"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",'x-content-type-options':'nosniff'});res.end(remotePage(monitorRoute?'monitor':'remote',entry.name,language,fixedLighting?'lighting':monitorRoute?`monitor:${id}`:id,this.copy));return;
   }
   if(req.method==='GET'&&url.pathname==='/api/live'){
    const token=url.searchParams.get('token')??'',access=this.access(token);
@@ -117,7 +123,7 @@ export class RemoteServer{
    const monitor=access.monitor,remote=access.remote,canNotes=monitor?monitor.showNotes:remote!.permissions.includes('remote.viewNotes');
    const upcoming=monitor?.profile==='lighting'?(lightingOffAir?[]:(this.live.upcoming??[]).slice(0,4).map(packet=>({slide:publicSlide(packet.slide),itemTitle:typeof packet.itemTitle==='string'?packet.itemTitle.slice(0,1000):''}))):undefined;
    const streamAt=this.streamTimes.get((url.searchParams.get('token')??'')+'\0'+(url.searchParams.get('view')??''));
-   this.json(res,200,{liveFrameAgeMs:streamAt===undefined?null:Date.now()-streamAt,title:lightingOffAir?monitor?.name:this.live.title,current:lightingOffAir?null:publicSlide(this.live.current),next:lightingOffAir?null:publicSlide(this.live.next),upcoming,onAir:this.live.onAir===true,serviceTime:this.live.serviceTime,serviceCountdownAtMs:this.live.serviceCountdownAtMs,annotationTakeId:this.live.annotationTakeId,nextPreviewRevision:this.live.nextPreviewRevision,canAnnotate:Boolean(remote?.permissions.includes('remote.annotate')&&!this.live.quickActive),permissions:remote?.permissions??[],monitor:monitor?{profile:monitor.profile??'personal',layout:monitor.layout,showCurrent:monitor.showCurrent,showNext:monitor.showNext,showClock:monitor.showClock,showCountdown:monitor.showCountdown}:undefined,notes:canNotes&&!lightingOffAir?this.live.notes:undefined,order:monitor?.showOrderOfService&&!lightingOffAir?this.live.order:undefined});return;
+   this.json(res,200,{liveFrameAgeMs:streamAt===undefined?null:Date.now()-streamAt,title:lightingOffAir?monitor?.name:this.live.title,current:lightingOffAir?null:publicSlide(this.live.current),next:lightingOffAir?null:publicSlide(this.live.next),upcoming,onAir:this.live.onAir===true,serviceTime:lightingOffAir?undefined:this.live.serviceTime,serviceCountdownAtMs:lightingOffAir?undefined:this.live.serviceCountdownAtMs,annotationTakeId:lightingOffAir?undefined:this.live.annotationTakeId,nextPreviewRevision:lightingOffAir?undefined:this.live.nextPreviewRevision,canAnnotate:Boolean(remote?.permissions.includes('remote.annotate')&&!this.live.quickActive),permissions:remote?.permissions??[],monitor:monitor?{profile:monitor.profile??'personal',layout:monitor.layout,showCurrent:monitor.showCurrent,showNext:monitor.showNext,showClock:monitor.showClock,showCountdown:monitor.showCountdown}:undefined,notes:canNotes&&!lightingOffAir?this.live.notes:undefined,order:monitor?.showOrderOfService&&!lightingOffAir?this.live.order:undefined});return;
   }
   if(req.method==='POST'&&url.pathname==='/api/command'){
    try{

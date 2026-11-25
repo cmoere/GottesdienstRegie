@@ -77,7 +77,7 @@ it('persists lighting monitors and serves four authorized public previews with r
  expect(offAir.notes).toBeUndefined();
  expect((await request('/api/next-frame?token='+token+'&index=0')).status).toBe(409);
  server.updateLive({onAir:true,title:'Nächste Präsentation'});
- expect((await request('/monitor/'+monitor.token)).status).toBe(200);
+ expect((await request('/monitor/'+monitor.token)).status).toBe(308);
  expect(command).not.toHaveBeenCalled();
  await server.removeMonitor(monitor.id);
  expect((await request('/api/next-frame?token='+token+'&index=0')).status).toBe(403);
@@ -116,4 +116,19 @@ it('authorizes the live stream and ends an existing connection when access is re
  const request=(token:string,revoke=false)=>new Promise<{status:number;type:string;data:string}>((resolve,reject)=>{const req=https.get({hostname:'127.0.0.1',port:server.get().securePort,path:'/api/live?token='+encodeURIComponent(token)+'&view=test',ca:identity.cert},res=>{const chunks:Buffer[]=[];let revoked=false;res.on('data',chunk=>{chunks.push(chunk);if(revoke&&!revoked){revoked=true;void server.revokeSession(viewer.id)}});res.on('end',()=>resolve({status:res.statusCode!,type:String(res.headers['content-type']),data:Buffer.concat(chunks).toString()}));res.on('error',reject)});req.on('error',reject)});
  expect((await request('invalid')).status).toBe(403);expect((await request(viewer.token)).status).toBe(409);
  server.updateLive({onAir:true});const result=await request(viewer.token,true);expect(result.status).toBe(200);expect(result.type).toContain('multipart/x-mixed-replace');expect(result.data).toContain('jpeg-frame');expect(capture).toHaveBeenCalledTimes(1);expect((await request(viewer.token)).status).toBe(403);
+});
+it('serves the read-only lighting view at a fixed path without a device code',async()=>{
+ const command=vi.fn(),request=await startRemote(path.join(await mkdtemp(path.join(tmpdir(),'regie-fixed-lighting-')),'devices.json'),command);
+ const monitor=await server.saveMonitor({id:'lighting',name:'Lichtoperator',slug:'anything',profile:'lighting',sourceType:'main',layout:'lighting',defaultLanguage:'de',showCurrent:true,showNext:true,showClock:true,showCountdown:true,showNotes:true,showOrderOfService:false,enabled:true});
+ expect(monitor.slug).toBe('lichtoperator');
+ const page=await request('/lichtoperator');expect(page.status).toBe(200);expect(await page.text()).not.toContain(monitor.token);
+ server.updateLive({onAir:true,title:'First',current:{id:'one',title:'Visible'},notes:'Private notes',order:['Intro','Song']});
+ const state=await(await request('/api/state?token=lighting')).json();expect(state.current.title).toBe('Visible');expect(state.order).toEqual(['Intro','Song']);expect(state.notes).toBeUndefined();
+ expect((await request('/api/command',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token:'lighting',action:'next'})})).status).toBe(403);
+ const old=await request('/monitor/'+monitor.token);expect(old.status).toBe(308);expect(old.headers.get('location')).toBe('/lichtoperator');
+ server.updateLive({onAir:false,title:'Second'});const off=await(await request('/api/state?token=lighting')).json();expect(off.current).toBeNull();expect(off.order).toBeUndefined();expect((await request('/api/frame?token=lighting')).status).toBe(409);
+ expect((await request('/lichtoperator')).status).toBe(200);expect(command).not.toHaveBeenCalled();await server.removeMonitor(monitor.id);expect((await request('/api/state?token=lighting')).status).toBe(403);
+});
+it('migrates the lighting path without changing an existing monitor identity',async()=>{
+ const file=path.join(await mkdtemp(path.join(tmpdir(),'regie-lighting-path-')),'devices.json'),token='a'.repeat(32);await writeFile(file,JSON.stringify({monitors:[{id:'existing',name:'Lichtoperator',profile:'lighting',slug:'old-name',sourceType:'stage',token,enabled:true,layout:'lighting'}],remotes:[]}));const restored=new RemoteServer(file,vi.fn());await restored.start();expect(restored.get().monitors[0]).toMatchObject({id:'existing',token,slug:'lichtoperator',sourceType:'main'});
 });

@@ -25,8 +25,8 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
    : ['Red','Green','White','Black','Yellow','Blue','Purple','Orange','Pink','Cyan'];
  const exitFullscreen=language==='de'?copy('remoteExitFullscreen'):'Exit fullscreen';
  const viewLabels=language==='de'
-  ? {title:copy('remoteViewTitle'),lighting:copy('remoteViewLighting'),column:copy('remoteViewColumn'),grid:copy('remoteViewGrid'),mirror:copy('remoteViewMirror'),pair:copy('remoteViewPair'),theme:copy('remoteViewTheme'),system:copy('remoteViewDevice'),light:copy('remoteViewLight'),dark:copy('remoteViewDark'),captions:copy('remoteViewCaptions'),close:copy('remoteViewClose'),offAir:copy('remoteLightingOffAir'),color:copy('remoteLightingColor'),analyzing:copy('remoteLightingAnalyzing'),single:copy('remoteLightingSingle'),copy:copy('remoteLightingCopy'),copied:copy('remoteLightingCopied'),copyFailed:copy('remoteLightingCopyFailed'),lightPrefix:copy('remoteLightingLightPrefix'),darkPrefix:copy('remoteLightingDarkPrefix'),nextColors:copy('remoteViewNextColors'),reset:copy('remoteResetLiveView'),resetHelp:copy('remoteResetLiveHelp'),resetDone:copy('remoteResetLiveDone')}
-  : {title:'View',lighting:'Lighting Operator',column:'Current slide · four previews on the right',grid:'Current slide · preview grid',mirror:'Large current slide',pair:'Current and next slide',theme:'Appearance',system:'Device mode',light:'Light',dark:'Dark',captions:'Show slide titles',close:'Close',offAir:'The display starts when the operator goes ON AIR.',color:'Main color',analyzing:'Waiting for output image',single:'No second main color',copy:'Copy HEX value',copied:'Color copied',copyFailed:'Could not copy. Please copy the HEX value manually.',lightPrefix:'Light ',darkPrefix:'Dark ',nextColors:'Show next slide colors',reset:'Reset live view',resetHelp:'Reconnect this view only. The running presentation stays unchanged.',resetDone:'Reconnecting the live view.'};
+  ? {title:copy('remoteViewTitle'),lighting:copy('remoteViewLighting'),column:copy('remoteViewColumn'),grid:copy('remoteViewGrid'),mirror:copy('remoteViewMirror'),pair:copy('remoteViewPair'),theme:copy('remoteViewTheme'),system:copy('remoteViewDevice'),light:copy('remoteViewLight'),dark:copy('remoteViewDark'),captions:copy('remoteViewCaptions'),close:copy('remoteViewClose'),offAir:copy('remoteLightingOffAir'),color:copy('remoteLightingColor'),analyzing:copy('remoteLightingAnalyzing'),single:copy('remoteLightingSingle'),copy:copy('remoteLightingCopy'),copied:copy('remoteLightingCopied'),copyFailed:copy('remoteLightingCopyFailed'),lightPrefix:copy('remoteLightingLightPrefix'),darkPrefix:copy('remoteLightingDarkPrefix'),nextColors:copy('remoteViewNextColors'),reset:copy('remoteResetLiveView'),resetHelp:copy('remoteResetLiveHelp'),resetDone:copy('remoteResetLiveDone'),showOrder:copy('remoteShowOrder'),noColor:copy('remoteLightingNoColor')}
+  : {title:'View',lighting:'Lighting Operator',column:'Current slide · four previews on the right',grid:'Current slide · preview grid',mirror:'Large current slide',pair:'Current and next slide',theme:'Appearance',system:'Device mode',light:'Light',dark:'Dark',captions:'Show slide titles',close:'Close',offAir:'The display starts when the operator goes ON AIR.',color:'Main color',analyzing:'Waiting for output image',single:'No second main color',copy:'Copy HEX value',copied:'Color copied',copyFailed:'Could not copy. Please copy the HEX value manually.',lightPrefix:'Light ',darkPrefix:'Dark ',nextColors:'Show next slide colors',reset:'Reset live view',resetHelp:'Reconnect this view only. The running presentation stays unchanged.',resetDone:'Reconnecting the live view.',showOrder:'Show order of service',noColor:'No chromatic lighting recommendation'};
  const lightingColorNames=language==='de'
   ? {red:copy('remoteRed'),orange:copy('remoteOrange'),yellow:copy('remoteYellow'),green:copy('remoteGreen'),cyan:copy('remoteLightingCyan'),blue:copy('remoteBlue'),purple:copy('remotePurple'),pink:copy('remotePink'),white:copy('remoteWhite'),gray:copy('remoteLightingGray'),black:copy('remoteBlack')}
   : {red:'Red',orange:'Orange',yellow:'Yellow',green:'Green',cyan:'Cyan',blue:'Blue',purple:'Purple',pink:'Pink',white:'White',gray:'Gray',black:'Black'};
@@ -109,6 +109,7 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  #drawing{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;touch-action:none}
  #drawing.enabled{pointer-events:auto}
  .next-frame:has(img[hidden]){display:none}
+ #order{margin:0;padding-left:1.4em;overflow-wrap:anywhere}
  #current,#next,#notes{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}
  #current,#next{font-size:clamp(17px,2.2vw,28px)}
  .extras{display:grid;gap:12px;margin:12px 0}
@@ -137,7 +138,7 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  @media(max-width:680px){main,body[data-layout=lighting] main,body[data-layout=lighting-grid] main{grid-template-columns:minmax(0,1fr)}body[data-layout=lighting] .next-preview-list,body[data-layout=lighting][data-next-colors=true] .next-preview-list{height:auto;min-height:0;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none}body[data-layout=lighting] .upcoming-preview .next-frame{aspect-ratio:16/9;flex:none}body[data-profile=lighting] #frame{max-height:none}}
 </style></head>
  <body><header><div><p id="monitor-role" hidden>${escapeHtml(viewLabels.lighting)}</p><h1 id="title">${escapeHtml(name)}</h1><div class="status-row"><span id="status" role="status" data-state="loading">${safeLabels.connecting}</span><span id="live-status" hidden></span></div></div><div class="header-actions"><div id="clock"><span id="date"></span> <span id="time"></span></div><div id="countdown"></div><button id="monitor-settings" type="button" hidden aria-label="${escapeHtml(viewLabels.title)}" title="${escapeHtml(viewLabels.title)}">${icon('settings')}</button><button id="fullscreen" type="button" aria-label="${safeLabels.fullscreen}" title="${safeLabels.fullscreen}" aria-pressed="false"><span class="enter-fullscreen">${icon('maximize')}</span><span class="exit-fullscreen">${icon('minimize')}</span></button></div></header>
- <dialog id="view-dialog" aria-labelledby="view-title"><h2 id="view-title">${escapeHtml(viewLabels.title)}</h2><label>${escapeHtml(viewLabels.title)}<select id="monitor-layout"><option value="lighting">${escapeHtml(viewLabels.column)}</option><option value="lighting-grid">${escapeHtml(viewLabels.grid)}</option><option value="mirror">${escapeHtml(viewLabels.mirror)}</option><option value="current-next">${escapeHtml(viewLabels.pair)}</option></select></label><label>${escapeHtml(viewLabels.theme)}<select id="monitor-theme"><option value="system">${escapeHtml(viewLabels.system)}</option><option value="light">${escapeHtml(viewLabels.light)}</option><option value="dark">${escapeHtml(viewLabels.dark)}</option></select></label><label class="checkbox-label"><input id="monitor-captions" type="checkbox" checked>${escapeHtml(viewLabels.captions)}</label><label class="checkbox-label"><input id="monitor-next-colors" type="checkbox" checked>${escapeHtml(viewLabels.nextColors)}</label><p>${escapeHtml(viewLabels.resetHelp)}</p><button id="reset-live-view" type="button">${icon('refresh')} ${escapeHtml(viewLabels.reset)}</button><p id="view-feedback" role="status"></p><button id="view-close" type="button">${escapeHtml(viewLabels.close)}</button></dialog>
+ <dialog id="view-dialog" aria-labelledby="view-title"><h2 id="view-title">${escapeHtml(viewLabels.title)}</h2><label>${escapeHtml(viewLabels.title)}<select id="monitor-layout"><option value="lighting">${escapeHtml(viewLabels.column)}</option><option value="lighting-grid">${escapeHtml(viewLabels.grid)}</option><option value="mirror">${escapeHtml(viewLabels.mirror)}</option><option value="current-next">${escapeHtml(viewLabels.pair)}</option></select></label><label>${escapeHtml(viewLabels.theme)}<select id="monitor-theme"><option value="system">${escapeHtml(viewLabels.system)}</option><option value="light">${escapeHtml(viewLabels.light)}</option><option value="dark">${escapeHtml(viewLabels.dark)}</option></select></label><label class="checkbox-label"><input id="monitor-captions" type="checkbox" checked>${escapeHtml(viewLabels.captions)}</label><label class="checkbox-label"><input id="monitor-next-colors" type="checkbox" checked>${escapeHtml(viewLabels.nextColors)}</label><label class="checkbox-label"><input id="monitor-order" type="checkbox" checked>${escapeHtml(viewLabels.showOrder)}</label><p>${escapeHtml(viewLabels.resetHelp)}</p><button id="reset-live-view" type="button">${icon('refresh')} ${escapeHtml(viewLabels.reset)}</button><p id="view-feedback" role="status"></p><button id="view-close" type="button">${escapeHtml(viewLabels.close)}</button></dialog>
  <main><section class="card" id="current-card"><h2>${safeLabels.current}</h2><div id="frame" hidden><img id="mirror" alt="${safeLabels.current}"><canvas id="drawing"></canvas></div><div id="lighting-palette" class="lighting-palette" hidden aria-label="${escapeHtml(viewLabels.color)}">${lightingTiles()}<p id="palette-status" role="status" aria-live="polite"></p></div><p id="current-caption" class="slide-caption"></p><div id="current">${safeLabels.waiting}</div></section><section class="card" id="next-card"><h2>${safeLabels.next}</h2><div id="next-palette" class="lighting-palette" hidden aria-label="${escapeHtml(viewLabels.nextColors)}">${lightingTiles('next-color-')}<p id="next-palette-status" role="status" aria-live="polite"></p></div><div class="next-preview-list"><div class="upcoming-preview" id="upcoming-0"><p id="next-caption-0" class="slide-caption"></p><div class="next-frame"><img id="next-mirror" alt="${safeLabels.next}" hidden></div><div id="next">${safeLabels.nextWaiting}</div></div>${extraPreviews}</div></section></main>
  <div class="extras"><section class="card" id="tools" hidden><h2>${safeLabels.draw}</h2><div class="tool-row"><button id="draw" aria-pressed="false">${icon('pen')} ${safeLabels.draw}</button><select id="tool" aria-label="${safeLabels.draw}"><option value="pen">${safeLabels.pen}</option><option value="line">${safeLabels.line}</option><option value="arrow">${safeLabels.arrow}</option><option value="rectangle">${safeLabels.rectangle}</option><option value="ellipse">${safeLabels.ellipse}</option></select><label>${safeLabels.thickness}<input id="thickness" type="range" min="2" max="16" step="1" value="8"></label><div class="palette" role="group" aria-label="${language==='de'?escapeHtml(copy('remoteColor')):'Color'}">${swatches}</div><button id="clear">${icon('eraser')} ${safeLabels.clear}</button></div></section>
  <section id="notes-card" class="card" hidden><h2>${safeLabels.notes}</h2><div id="notes"></div></section><section id="order-card" class="card" hidden><h2>${safeLabels.order}</h2><ol id="order"></ol></section>
@@ -154,13 +155,13 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  let currentTool='pen',currentWidth=.004,currentColor=chosenColor,state={},draw=false,points=[],take='',alive=true,lastFrame='';
  const viewStorageKey='gottesdienstregie.monitor-view:'+location.pathname;
  const viewLayouts=['lighting','lighting-grid','mirror','current-next'];
- let viewSettings={layout:null,theme:'dark',captions:true,nextColors:true};
+ let viewSettings={layout:null,theme:'dark',captions:true,nextColors:true,order:true};
  try{
    const saved=JSON.parse(localStorage.getItem(viewStorageKey)||'null');
    if(saved&&typeof saved==='object')viewSettings={
      layout:viewLayouts.includes(saved.layout)?saved.layout:null,
      theme:['system','light','dark'].includes(saved.theme)?saved.theme:'dark',
-     captions:saved.captions!==false,nextColors:saved.nextColors!==false
+     captions:saved.captions!==false,nextColors:saved.nextColors!==false,order:saved.order!==false
    };
  }catch{}
  const upcomingViews=Array.from({length:4},(_,index)=>({
@@ -174,6 +175,8 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
    document.body.dataset.layout=lighting?(viewSettings.layout||config.layout||'lighting'):(config.layout||'current-next');
    document.body.dataset.captions=String(!lighting||viewSettings.captions);
    document.documentElement.dataset.theme=viewSettings.theme;
+
+   q('#order-card').hidden=!viewSettings.order||!state.order?.length||(lighting&&!state.onAir);
    q('#monitor-settings').hidden=false;q('#monitor-role').hidden=!lighting;for(const id of ['#monitor-layout','#monitor-captions','#monitor-next-colors'])q(id).closest('label').hidden=!lighting;
    const packets=upcomingPackets(),four=lighting&&['lighting','lighting-grid'].includes(document.body.dataset.layout);
    for(const [index,view] of upcomingViews.entries()){
@@ -197,16 +200,16 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
    if(paletteTake!==state.annotationTakeId||!state.onAir)clearPalette();
  }
  function saveView(){
-   viewSettings={layout:q('#monitor-layout').value,theme:q('#monitor-theme').value,captions:q('#monitor-captions').checked,nextColors:q('#monitor-next-colors').checked};
+   viewSettings={layout:q('#monitor-layout').value,theme:q('#monitor-theme').value,captions:q('#monitor-captions').checked,nextColors:q('#monitor-next-colors').checked,order:q('#monitor-order').checked};
    try{localStorage.setItem(viewStorageKey,JSON.stringify(viewSettings))}catch{}
    applyView();
  }
  q('#monitor-settings').onclick=()=>{
    q('#monitor-layout').value=viewSettings.layout||state.monitor?.layout||'lighting';
-   q('#monitor-theme').value=viewSettings.theme;q('#monitor-captions').checked=viewSettings.captions;q('#monitor-next-colors').checked=viewSettings.nextColors;
+   q('#monitor-theme').value=viewSettings.theme;q('#monitor-captions').checked=viewSettings.captions;q('#monitor-next-colors').checked=viewSettings.nextColors;q('#monitor-order').checked=viewSettings.order;
    q('#view-dialog').showModal();
  };
- for(const id of ['#monitor-layout','#monitor-theme','#monitor-captions','#monitor-next-colors'])q(id).onchange=saveView;
+ for(const id of ['#monitor-layout','#monitor-theme','#monitor-captions','#monitor-next-colors','#monitor-order'])q(id).onchange=saveView;
  q('#view-close').onclick=()=>q('#view-dialog').close();
  q('#reset-live-view').onclick=()=>{
    viewEpoch++;stopLiveStream();streamFailedAt=-Infinity;visibleTake=undefined;
@@ -254,6 +257,11 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  }
  function paintPalette(colors,target='current'){
    const root=paletteRoot(target);root.dataset.count=String(colors.length||1);
+   if(!colors.length){
+     const message=${JSON.stringify(viewLabels.noColor).replaceAll('<','\\u003c')};
+     if(root.querySelector('[role=status]').textContent!==message){clearPalette(target);for(const tile of root.querySelectorAll('.lighting-color'))tile.hidden=true;root.querySelector('[role=status]').textContent=message}
+     return;
+   }
    for(const [index,tile]of [...root.querySelectorAll('.lighting-color')].entries()){
      const recommendation=colors[index],color=recommendation?.hex;tile.hidden=index>0&&!color;
      const button=tile.querySelector('.copy-color'),buttonIndex=copyButtons.indexOf(button);
@@ -326,7 +334,7 @@ export function remotePage(kind:'monitor'|'remote',name:string,language:'de'|'en
  if(!state.onAir){q('#frame').hidden=true;q('#current').hidden=false;}
  if(pendingNavigation?.accepted&&(pendingNavigation.take!==state.annotationTakeId||pendingNavigation.slide!==state.current?.id))finishNavigation();
  const config=state.monitor||{};applyView();for(const [id,key]of [['#current-card','showCurrent'],['#next-card','showNext'],['#clock','showClock'],['#countdown','showCountdown']])q(id).hidden=config[key]===false||(id==='#next-card'&&config.profile==='lighting'&&!state.onAir);
- q('#notes-card').hidden=!state.notes;q('#notes').textContent=state.notes||'';q('#order-card').hidden=!state.order?.length;q('#order').replaceChildren(...(state.order||[]).map(value=>{const li=document.createElement('li');li.textContent=value;return li}));
+ q('#notes-card').hidden=!state.notes;q('#notes').textContent=state.notes||'';q('#order').replaceChildren(...(state.order||[]).map(value=>{const li=document.createElement('li');li.textContent=value;return li}));
  q('#sharing').hidden=!(state.permissions||[]).includes('remote.share');q('#tools').hidden=!state.canAnnotate;for(const button of document.querySelectorAll('[data-action]'))button.hidden=!(state.permissions||[]).includes('remote.'+button.dataset.action);
  if(take!==state.annotationTakeId){take=state.annotationTakeId||'';clearLocal();q('#frame').hidden=true;q('#current').hidden=false}if(!state.canAnnotate||!state.onAir)setDraw(false);
  }catch{setConnection('lost');q('#frame').hidden=true;q('#current').hidden=false;

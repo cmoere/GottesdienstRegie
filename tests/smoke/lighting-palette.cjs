@@ -7,16 +7,16 @@ const {chromium}=require('playwright');const {remotePage}=require('../../dist-el
  const context=await browser.newContext({viewport:{width:1920,height:1080},locale:'de-DE',timezoneId:'Europe/Berlin'});
  const generator=await context.newPage();
  async function image(parts){return Buffer.from(await generator.evaluate(parts=>{const c=document.createElement('canvas');c.width=960;c.height=540;const ctx=c.getContext('2d');let x=0;for(const [fraction,color]of parts){ctx.fillStyle=color;ctx.fillRect(x,0,960*fraction,540);x+=960*fraction}return c.toDataURL('image/png').split(',')[1]},parts),'base64')}
- const images={two:await image([[.6,'#DC782D'],[.4,'#122350']]),one:await image([[.9,'#6EB4F5'],[.1,'#E63C32']])};
+ const images={two:await image([[.6,'#DC782D'],[.4,'#122350']]),one:await image([[.9,'#6EB4F5'],[.1,'#E63C32']]),neutral:await image([[.5,'#000000'],[.5,'#FFFFFF']])};
  const server=http.createServer((req,res)=>{requests.push(req.url);res.setHeader('Cache-Control','no-store');
-  if(req.url.startsWith('/api/state')){res.setHeader('Content-Type','application/json');res.end(JSON.stringify({onAir:live,title:'Sonntagsgottesdienst',annotationTakeId:take,current:{id:'current',title:'Aktuelle Folie'},upcoming:Array.from({length:4},(_,index)=>({slide:{id:'next-'+index,title:'Nächste Folie '+(index+1),body:''}})),nextPreviewRevision:revision,monitor:{profile:'lighting',layout:'lighting',showClock:true},permissions:[]}))}
+  if(req.url.startsWith('/api/state')){res.setHeader('Content-Type','application/json');res.end(JSON.stringify({onAir:live,title:'Sonntagsgottesdienst',annotationTakeId:take,current:{id:'current',title:'Aktuelle Folie'},order:live?['Ankommen','Lied','Predigt']:undefined,upcoming:Array.from({length:4},(_,index)=>({slide:{id:'next-'+index,title:'Nächste Folie '+(index+1),body:''}})),nextPreviewRevision:revision,monitor:{profile:'lighting',layout:'lighting',showClock:true},permissions:[]}))}
   else if(req.url.startsWith('/api/frame')){res.setHeader('Content-Type','image/png');res.end(images[mode])}
   else if(req.url.startsWith('/api/next-frame')){res.setHeader('Content-Type','image/png');res.end(images[futureMode])}
-  else{res.setHeader('Content-Type','text/html; charset=utf-8');res.end(remotePage('monitor','Lichtoperator','de','monitor:demo'))}
+  else{res.setHeader('Content-Type','text/html; charset=utf-8');res.end(remotePage('monitor','Lichtoperator','de','lighting'))}
  });await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const origin='http://127.0.0.1:'+server.address().port;
  await context.grantPermissions(['clipboard-read','clipboard-write'],{origin});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
  try{
-  await page.goto(origin+'/monitor/demo');
+  await page.goto(origin+'/lichtoperator');
   await page.waitForFunction(()=>document.querySelector('#lighting-color-1 .color-name').textContent==='Dunkelblau');
   assert.equal(await page.locator('#lighting-color-0 .color-name').textContent(),'Orange');
   assert.match(await page.locator('#clock').textContent(),/^\w{2}\., \d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2} Uhr$/);
@@ -49,6 +49,14 @@ const {chromium}=require('playwright');const {remotePage}=require('../../dist-el
   await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async()=>{throw new Error('denied')}}}));
   await page.waitForTimeout(1700);await page.locator('#lighting-color-0 .copy-color').click();
   await page.waitForFunction(()=>document.querySelector('#palette-status').textContent.includes('Kopieren nicht möglich'));
+  await page.locator('#order-card').waitFor({state:'visible'});
+  await page.locator('#monitor-settings').click();await page.locator('#monitor-order').uncheck();await page.locator('#view-close').click();assert.equal(await page.locator('#order-card').isVisible(),false);
+  await page.reload();await page.waitForFunction(()=>document.querySelector('#status').dataset.state==='connected');assert.equal(new URL(page.url()).pathname,'/lichtoperator');assert.equal(new URL(page.url()).search,'');assert.equal(await page.locator('#order-card').isVisible(),false);
+  await page.locator('#monitor-settings').click();assert.equal(await page.locator('#monitor-order').isChecked(),false);await page.locator('#monitor-order').check();await page.locator('#view-close').click();await page.locator('#order-card').waitFor({state:'visible'});
+  mode='neutral';futureMode='neutral';take='neutral';revision++;
+  await page.waitForFunction(()=>document.querySelector('#palette-status').textContent==='Keine farbige Lichtempfehlung'&&document.querySelector('#next-palette-status').textContent==='Keine farbige Lichtempfehlung');
+  assert.equal(await page.locator('#lighting-color-0').isVisible(),false);assert.equal(await page.locator('#next-color-0').isVisible(),false);assert.equal(await page.locator('.copy-color:visible').count(),0);
+  mode='one';futureMode='two';take='restored';revision++;await page.waitForFunction(()=>document.querySelector('#lighting-color-0 .color-name').textContent==='Hellblau');
   live=false;take='off';await page.waitForFunction(()=>document.querySelector('#lighting-palette').hidden);
   assert.equal(await page.locator('#lighting-color-0 .copy-color').isDisabled(),true);assert.equal(await page.locator('#next-palette').isVisible(),false);assert.equal(await page.locator('#next-color-0 .copy-color').isDisabled(),true);
   live=true;take='three';await page.waitForFunction(()=>document.querySelector('#lighting-color-0 .color-name').textContent==='Hellblau');

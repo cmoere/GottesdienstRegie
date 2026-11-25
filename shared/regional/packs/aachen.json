@@ -2589,6 +2589,8 @@
     "remoteClockSuffix": "Uhr",
     "remoteResetLiveView": "Liveansicht zurücksetzen",
     "remoteResetLiveHelp": "Nur diese Ansicht wird neu verbunden. Die laufende Präsentation bleibt unverändert.",
-    "remoteResetLiveDone": "Die Liveansicht wird neu verbunden."
+    "remoteResetLiveDone": "Die Liveansicht wird neu verbunden.",
+    "remoteShowOrder": "Ablauf anzeigen",
+    "remoteLightingNoColor": "Keine farbige Lichtempfehlung"
   }
 }

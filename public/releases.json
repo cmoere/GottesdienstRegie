@@ -24,9 +24,114 @@
       "line": "0.99",
       "builds": [
         {
+          "version": "0.99.16",
+          "releaseDate": "2026-11-25",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Feste Lichtoperator-Adresse und gezielte Lichtempfehlungen",
+              "en": "Fixed Lighting Operator address and focused color recommendations"
+            },
+            "text": {
+              "de": "Der Lichtoperator ist unter /lichtoperator erreichbar. Seine Ansicht benötigt keinen Gerätecode und zeigt Präsentationsinhalte ausschließlich bei ON AIR. Die Lichtanalyse empfiehlt nur farbige Lichttöne. Der Ablauf lässt sich in den Ansichtseinstellungen dauerhaft ein- oder ausblenden.",
+              "en": "The Lighting Operator is available at /lichtoperator. Its view requires no device code and only shows presentation content while ON AIR. Lighting analysis recommends chromatic colors only. The order of service can be persistently shown or hidden in view settings."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Ablauf nach Bedarf anzeigen",
+                  "en": "Show the order of service when needed"
+                },
+                "text": {
+                  "de": "Die Webmonitor-Einstellungen enthalten „Ablauf anzeigen“. Die Auswahl gilt für den jeweiligen Browser und bleibt nach einem Neuladen erhalten. Der Lichtoperator zeigt den Ablauf nur bei ON AIR.",
+                  "en": "Web monitor settings include Show order of service. The choice applies to the current browser and survives a reload. The Lighting Operator only shows the order while ON AIR."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Nur geeignete farbige Lichtempfehlungen",
+                  "en": "Chromatic lighting recommendations only"
+                },
+                "text": {
+                  "de": "Schwarz, Weiß und Grau werden nicht mehr als Hauptfarben vorgeschlagen. Große Hintergrund- und Bildflächen bleiben für die Analyse maßgeblich. Bei neutralen Bildern oder zu wenig farbiger Fläche erscheint „Keine farbige Lichtempfehlung“, ohne erfundenen Farbwert. Aktuelle und nächste Folie werden getrennt ausgewertet.",
+                  "en": "Black, white and gray are no longer suggested as main colors. Broad background and image areas remain the basis of analysis. Neutral images or insufficient chromatic coverage show No chromatic lighting recommendation without an invented color value. Current and next slides are analyzed separately."
+                }
+              },
+              {
+                "label": {
+                  "de": "Feste Adresse ohne zusätzlichen Gerätecode",
+                  "en": "Fixed address without an additional device code"
+                },
+                "text": {
+                  "de": "Kopieren, QR-Code und Vorschau verwenden für den eingerichteten Lichtoperator immer /lichtoperator. Neue Geräte können diese reine Leseansicht im erreichbaren lokalen Netzwerk ohne separate Freischaltung öffnen. Persönliche Monitorlinks und Fernsteuerungsrechte bleiben geschützt.",
+                  "en": "Copy, QR code and preview always use /lichtoperator for the configured Lighting Operator. New devices can open this read-only view on the reachable local network without separate approval. Personal monitor links and remote control permissions remain protected."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Bestehende Lichtoperator-Links übernehmen",
+                  "en": "Preserve existing Lighting Operator links"
+                },
+                "text": {
+                  "de": "Bestehende Lichtoperator-Konfigurationen behalten ihre Identität und verwenden künftig MAIN sowie die feste Adresse. Alte Monitorseiten werden auf /lichtoperator weitergeleitet. Bei OFF AIR werden Livebild, kommende Folien und Ablauf ausgeblendet.",
+                  "en": "Existing Lighting Operator configurations retain their identity and now use MAIN and the fixed address. Old monitor pages redirect to /lichtoperator. Live images, upcoming slides and the order of service are hidden while OFF AIR."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              },
+              {
+                "label": {
+                  "de": "Bildrate im lokalen Netzwerk",
+                  "en": "Frame rate on the local network"
+                },
+                "text": {
+                  "de": "Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.",
+                  "en": "Actual frame rate depends on output performance, browser and network. Checks cover a local browser image stream and native capture; they do not replace testing on the venue’s own network."
+                }
+              },
+              {
+                "label": {
+                  "de": "Erreichbarkeit der Lichtoperator-Ansicht",
+                  "en": "Lighting Operator view access"
+                },
+                "text": {
+                  "de": "Solange der Lichtoperator aktiviert ist, kann jedes Gerät mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte über die feste Adresse sehen. Die Ansicht erlaubt keine Steuerbefehle. Lichtempfehlungen sind Vorschläge und ersetzen keine Prüfung am eingesetzten Scheinwerfer.",
+                  "en": "While the Lighting Operator is enabled, any device with access to the local control server can view its ON-AIR content at the fixed address. The view does not allow control commands. Lighting recommendations are suggestions and do not replace checking the actual fixture."
+                }
+              }
+            ]
+          }
+        },
+        {
           "version": "0.99.15",
           "releaseDate": "2026-11-24",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Flüssigere Webmonitore und neue Gestaltungsmotive",

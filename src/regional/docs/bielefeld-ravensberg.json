@@ -2344,6 +2344,24 @@
     "versions[0.99].builds[0.99.15].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
     "versions[0.99].builds[0.99.15].sections.known.1.text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
     "versions[0.99].builds[0.99.15].sections.known.2.label": "Bildrate im lokalen Netzwerk",
-    "versions[0.99].builds[0.99.15].sections.known.2.text": "Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz."
+    "versions[0.99].builds[0.99.15].sections.known.2.text": "Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.",
+    "versions[0.99].builds[0.99.16].overview.label": "Feste Lichtoperator-Adresse und gezielte Lichtempfehlungen",
+    "versions[0.99].builds[0.99.16].overview.text": "Der Lichtoperator ist unter /lichtoperator erreichbar. Seine Ansicht benötigt keinen Gerätecode und zeigt Präsentationsinhalte ausschließlich bei ON AIR. Die Lichtanalyse empfiehlt nur farbige Lichttöne. Der Ablauf lässt sich in den Ansichtseinstellungen dauerhaft ein- oder ausblenden.",
+    "versions[0.99].builds[0.99.16].sections.new.0.label": "Ablauf nach Bedarf anzeigen",
+    "versions[0.99].builds[0.99.16].sections.new.0.text": "Die Webmonitor-Einstellungen enthalten „Ablauf anzeigen“. Die Auswahl gilt für den jeweiligen Browser und bleibt nach einem Neuladen erhalten. Der Lichtoperator zeigt den Ablauf nur bei ON AIR.",
+    "versions[0.99].builds[0.99.16].sections.improved.0.label": "Nur geeignete farbige Lichtempfehlungen",
+    "versions[0.99].builds[0.99.16].sections.improved.0.text": "Schwarz, Weiß und Grau werden nicht mehr als Hauptfarben vorgeschlagen. Große Hintergrund- und Bildflächen bleiben für die Analyse maßgeblich. Bei neutralen Bildern oder zu wenig farbiger Fläche erscheint „Keine farbige Lichtempfehlung“, ohne erfundenen Farbwert. Aktuelle und nächste Folie werden getrennt ausgewertet.",
+    "versions[0.99].builds[0.99.16].sections.improved.1.label": "Feste Adresse ohne zusätzlichen Gerätecode",
+    "versions[0.99].builds[0.99.16].sections.improved.1.text": "Kopieren, QR-Code und Vorschau verwenden für den eingerichteten Lichtoperator immer /lichtoperator. Neue Geräte können diese reine Leseansicht im erreichbaren lokalen Netzwerk ohne separate Freischaltung öffnen. Persönliche Monitorlinks und Fernsteuerungsrechte bleiben geschützt.",
+    "versions[0.99].builds[0.99.16].sections.fixed.0.label": "Bestehende Lichtoperator-Links übernehmen",
+    "versions[0.99].builds[0.99.16].sections.fixed.0.text": "Bestehende Lichtoperator-Konfigurationen behalten ihre Identität und verwenden künftig MAIN sowie die feste Adresse. Alte Monitorseiten werden auf /lichtoperator weitergeleitet. Bei OFF AIR werden Livebild, kommende Folien und Ablauf ausgeblendet.",
+    "versions[0.99].builds[0.99.16].sections.known.0.label": "Hinweise zum Live-Betrieb",
+    "versions[0.99].builds[0.99.16].sections.known.0.text": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+    "versions[0.99].builds[0.99.16].sections.known.1.label": "Originalgetreue PowerPoint-Wiedergabe",
+    "versions[0.99].builds[0.99.16].sections.known.1.text": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+    "versions[0.99].builds[0.99.16].sections.known.2.label": "Bildrate im lokalen Netzwerk",
+    "versions[0.99].builds[0.99.16].sections.known.2.text": "Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.",
+    "versions[0.99].builds[0.99.16].sections.known.3.label": "Erreichbarkeit der Lichtoperator-Ansicht",
+    "versions[0.99].builds[0.99.16].sections.known.3.text": "Solange der Lichtoperator aktiviert ist, kann jedes Gerät mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte über die feste Adresse sehen. Die Ansicht erlaubt keine Steuerbefehle. Lichtempfehlungen sind Vorschläge und ersetzen keine Prüfung am eingesetzten Scheinwerfer."
   }
 }

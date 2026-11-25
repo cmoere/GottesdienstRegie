@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.99.16</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.16</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.16</guid><pubDate>Wed, 25 Nov 2026 00:00:00 GMT</pubDate><description>Feste Lichtoperator-Adresse und gezielte Lichtempfehlungen
+Der Lichtoperator ist unter /lichtoperator erreichbar. Seine Ansicht benötigt keinen Gerätecode und zeigt Präsentationsinhalte ausschließlich bei ON AIR. Die Lichtanalyse empfiehlt nur farbige Lichttöne. Der Ablauf lässt sich in den Ansichtseinstellungen dauerhaft ein- oder ausblenden.
+
+Ablauf nach Bedarf anzeigen
+Die Webmonitor-Einstellungen enthalten „Ablauf anzeigen“. Die Auswahl gilt für den jeweiligen Browser und bleibt nach einem Neuladen erhalten. Der Lichtoperator zeigt den Ablauf nur bei ON AIR.
+
+Nur geeignete farbige Lichtempfehlungen
+Schwarz, Weiß und Grau werden nicht mehr als Hauptfarben vorgeschlagen. Große Hintergrund- und Bildflächen bleiben für die Analyse maßgeblich. Bei neutralen Bildern oder zu wenig farbiger Fläche erscheint „Keine farbige Lichtempfehlung“, ohne erfundenen Farbwert. Aktuelle und nächste Folie werden getrennt ausgewertet.
+
+Feste Adresse ohne zusätzlichen Gerätecode
+Kopieren, QR-Code und Vorschau verwenden für den eingerichteten Lichtoperator immer /lichtoperator. Neue Geräte können diese reine Leseansicht im erreichbaren lokalen Netzwerk ohne separate Freischaltung öffnen. Persönliche Monitorlinks und Fernsteuerungsrechte bleiben geschützt.
+
+Bestehende Lichtoperator-Links übernehmen
+Bestehende Lichtoperator-Konfigurationen behalten ihre Identität und verwenden künftig MAIN sowie die feste Adresse. Alte Monitorseiten werden auf /lichtoperator weitergeleitet. Bei OFF AIR werden Livebild, kommende Folien und Ablauf ausgeblendet.
+
+Hinweise zum Live-Betrieb
+Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.
+
+Originalgetreue PowerPoint-Wiedergabe
+Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.
+
+Bildrate im lokalen Netzwerk
+Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.
+
+Erreichbarkeit der Lichtoperator-Ansicht
+Solange der Lichtoperator aktiviert ist, kann jedes Gerät mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte über die feste Adresse sehen. Die Ansicht erlaubt keine Steuerbefehle. Lichtempfehlungen sind Vorschläge und ersetzen keine Prüfung am eingesetzten Scheinwerfer.</description></item>
 <item><title>GottesdienstRegie 0.99.15</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.15</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.15</guid><pubDate>Tue, 24 Nov 2026 00:00:00 GMT</pubDate><description>Flüssigere Webmonitore und neue Gestaltungsmotive
 Webmonitore erhalten einen fortlaufenden Bildstrom mit automatischer Wiederverbindung. Lichtfarben lassen sich aus aktueller und nächster Folie ableiten. Zehn zusätzliche Weihnachts-, Oster- und Kirchenmotive erweitern die Gestaltung.
 

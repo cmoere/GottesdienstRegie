@@ -119,6 +119,8 @@ export const nativeBaseTemplates={
   remoteResetLiveView:"Liveansicht zurücksetzen",
   remoteResetLiveHelp:"Nur diese Ansicht wird neu verbunden. Die laufende Präsentation bleibt unverändert.",
   remoteResetLiveDone:"Die Liveansicht wird neu verbunden.",
+  remoteShowOrder:"Ablauf anzeigen",
+  remoteLightingNoColor:"Keine farbige Lichtempfehlung",
   remoteClockSuffix:"Uhr",
 } as const;
 export type NativeRegionalTextKey=keyof typeof nativeBaseTemplates;
