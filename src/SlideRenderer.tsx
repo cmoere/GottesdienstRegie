@@ -1,4 +1,4 @@
-import {shapeByKind} from './shapeCatalog';
+import {shapeByKind,shapeGeometry} from './shapeCatalog';
 import {UiIcon} from './icons/UiIcon';
 import {EventOverviewHeader,EventOverviewFooter} from './EventOverviewChrome';
 import {ExternalLoopElement} from './externalLoop/Element';
@@ -426,8 +426,8 @@ function RenderElement({
     );
   }
   if(element.type==='shape'&&shapeByKind(String(properties.shapeKind)).vector){
-    const shape=shapeByKind(String(properties.shapeKind));
-    return <svg className={'slide-renderer-element shape shape-'+shape.kind} style={style} viewBox={shape.viewBox} preserveAspectRatio="none" aria-hidden="true">{(shape.parts??[shape.path]).map((path,index)=><path key={index} d={path} fill={String(properties.fill??properties.color??'#fff')} fillRule="evenodd" stroke={String(properties.stroke??'none')} strokeWidth={Math.max(0,Number(properties.strokeWidth??0))}/>) }</svg>;
+    const shape=shapeGeometry(String(properties.shapeKind),properties.frameThickness);
+    return <svg className={'slide-renderer-element shape shape-'+shape.kind} style={{...style,overflow:'visible'}} viewBox={shape.viewBox} preserveAspectRatio="none" aria-hidden="true">{(shape.parts??[shape.path]).map((path,index)=><path key={index} d={path} fill={properties.fillEnabled===false?'none':String(properties.fill??properties.color??'#fff')} fillRule="evenodd" stroke={String(properties.stroke??'none')} strokeWidth={Math.max(0,Number(properties.strokeWidth??0))}/>) }</svg>;
   }
   if (element.type === "shape") {
     const kind = String(properties.shapeKind ?? "rectangle"),
@@ -457,13 +457,20 @@ function RenderElement({
         home: "polygon(50% 0,100% 42%,88% 42%,88% 100%,60% 100%,60% 66%,40% 66%,40% 100%,12% 100%,12% 42%,0 42%)",
         moon: "polygon(78% 3%,56% 12%,39% 30%,34% 52%,41% 72%,58% 88%,80% 96%,61% 100%,37% 94%,17% 78%,5% 57%,7% 34%,22% 14%,45% 2%)",
       },
-      clipPath = paths[kind];
+      clipPath = Object.hasOwn(paths,kind)?paths[kind]:undefined;
+    if(clipPath&&(Number(properties.strokeWidth)>0||properties.fillEnabled===false)){
+      // CSS borders are rectangular even when the fill is polygon-clipped.
+      // Draw the outline on the same polygon, in slide units, instead.
+      const width=Math.max(1,element.width),height=Math.max(1,element.height);
+      const points=clipPath.slice(8,-1).split(',').map(pair=>pair.split(' ').map(value=>parseFloat(value))).map(([x,y])=>`${x*width/100},${y*height/100}`).join(' ');
+      return <svg className={`slide-renderer-element shape shape-${kind}`} style={{...style,overflow:'visible'}} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><polygon points={points} fill={properties.fillEnabled===false?'none':String(properties.fill??properties.color??'#fff')} stroke={String(properties.stroke??'none')} strokeWidth={Math.max(0,Number(properties.strokeWidth??0))}/></svg>;
+    }
     return (
       <div
         className={`slide-renderer-element shape shape-${kind}`}
         style={{
           ...style,
-          background: String(properties.fill ?? properties.color ?? "#fff"),
+          background: properties.fillEnabled===false?'transparent':String(properties.fill ?? properties.color ?? "#fff"),
           border: `${Math.max(0, Number(properties.strokeWidth ?? 0)) / 19.2}cqw solid ${String(properties.stroke ?? "transparent")}`,
           borderRadius:
             kind === "ellipse"

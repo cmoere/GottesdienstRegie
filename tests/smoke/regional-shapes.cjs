@@ -20,6 +20,7 @@ app.whenReady().then(async()=>{try{
  for(let n=0;n<100&&!await win.webContents.executeJavaScript('!!window.regionalShapeProbe');n++)await sleep(100);
  assert(await win.webContents.executeJavaScript('!!window.regionalShapeProbe'));
  const {releaseRegionalVariants}=loadLocalDataModule(root,'shared/regional/catalog.ts');
+ const {shapeCatalog}=loadLocalDataModule(root,'src/shapeCatalog.ts');
  const {shapeControlEnglishTemplates,shapeControlGermanTemplates}=loadLocalDataModule(root,'shared/regional/shapeControlTemplates.ts');
  const {radioControlEnglishTemplates,radioControlGermanTemplates}=loadLocalDataModule(root,'shared/regional/radioControlTemplates.ts');
  const scenarios=[{id:null,language:'en',ui:{...shapeControlEnglishTemplates,...radioControlEnglishTemplates}},{id:null,language:'de',ui:{...shapeControlGermanTemplates,...radioControlGermanTemplates}},...releaseRegionalVariants.map(({id})=>({id,language:'de',ui:JSON.parse(fs.readFileSync(path.join(root,'shared/regional/packs',id+'.json'),'utf8')).ui}))];
@@ -28,10 +29,10 @@ app.whenReady().then(async()=>{try{
   await win.webContents.executeJavaScript(`window.regionalShapeProbe.setup(${JSON.stringify(language)},${JSON.stringify(id)})`);
   await waitForDom(`document.querySelector('main')?.dataset.probeSelection===${JSON.stringify(`${language}:${id}:shape`)}`,'fresh shape view');
   await win.webContents.executeJavaScript("document.querySelector('.shape-gallery>button').click()");
-  await waitForDom("document.querySelectorAll('[role=dialog] svg').length===35",'complete shape gallery');
+  await waitForDom(`document.querySelectorAll('[role=dialog] svg').length===${shapeCatalog.length}`,'complete shape gallery');
   const observed=await win.webContents.executeJavaScript(`(()=>{const dialog=document.querySelector('[role=dialog]'),r=dialog.getBoundingClientRect();return {title:dialog.getAttribute('aria-label'),placeholder:dialog.querySelector('input').placeholder,count:dialog.querySelectorAll('svg').length,labels:[...dialog.querySelectorAll('svg')].map(node=>node.getAttribute('aria-label')),fits:r.left>=0&&r.right<=innerWidth&&r.bottom<=innerHeight,scrolls:dialog.querySelector(':scope>div').scrollHeight>dialog.querySelector(':scope>div').clientHeight}})()`);
   assert.equal(observed.title,ui.shapeGalleryTitle);assert.equal(observed.placeholder,ui.shapeGallerySearch);
-  assert.equal(observed.count,35);assert(!observed.labels.includes(ui.shapeUnknown));assert(observed.fits);assert(observed.scrolls);
+  assert.equal(observed.count,shapeCatalog.length);assert(!observed.labels.includes(ui.shapeUnknown));assert(observed.fits);assert(observed.scrolls);
   for(const key of ['shapeCross','shapeFish','shapeChurch','shapeBible','shapeCandle','shapeDove'])assert(observed.labels.includes(ui[key]));
   if(language==='en'||id==='bielefeld-ravensberg'||id==='swabian')fs.writeFileSync(path.join(out,(id??language)+'-gallery.png'),(await win.webContents.capturePage()).toPNG());
   // Hidden offscreen fixtures need explicit keyboard focus, as in desktop-interaction.

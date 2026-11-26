@@ -1,5 +1,11 @@
 /** Operator labels only. Document shape IDs, names and geometry stay canonical. */
 export const shapeControlGermanTemplates={
+ shapeNoFill:'Ohne Füllung',shapeFrameThickness:'Rahmenbreite (%)',
+ shapeHeptagon:'Siebeneck',shapeDecagon:'Zehneck',shapeKite:'Drachenviereck',shapeRoundedDiamond:'Abgerundete Raute',shapeFrameDiamond:'Rautenrahmen',shapeFrameTriangle:'Dreiecksrahmen',shapeFrameOctagon:'Achteckrahmen',shapeFrameBrackets:'Klammerrahmen',shapeBannerFlag:'Fahnenbanner',shapeBannerTab:'Registerbanner',shapeBannerTicket:'Ticketbanner',shapeBannerFolded:'Gefaltetes Banner',
+ shapeCategoryFrames:'Rahmen',shapeCategoryBanners:'Banner',
+ shapeSemicircle:'Halbkreis',shapeQuarterCircle:'Viertelkreis',shapeRing:'Ring',shapeArc:'Bogen',shapePlus:'Pluszeichen',shapeRightTriangle:'Rechtwinkliges Dreieck',shapeCapsule:'Kapsel',shapeTeardrop:'Tropfen',
+ shapeFrameRectangle:'Rechteckiger Rahmen',shapeFrameRounded:'Abgerundeter Rahmen',shapeFrameOval:'Ovaler Rahmen',shapeFrameDouble:'Doppelrahmen',shapeFrameCorners:'Offener Eckrahmen',shapeFrameHexagon:'Sechseck-Rahmen',
+ shapeBannerRibbon:'Banderole',shapeBannerPennant:'Wimpel',shapeBannerBookmark:'Lesezeichen',shapeBannerNotched:'Banner mit Einschnitten',shapeBannerChevron:'Pfeilbanner',shapeBannerWave:'Wellenbanner',
  shapeCategoryChristmas:'Weihnachten',shapeCategoryEaster:'Ostern',shapeChristmasStar:"Stern von Bethlehem",shapeChristmasTree:"Weihnachtsbaum",shapeAdventWreath:"Adventskranz",shapeNativity:"Krippe",shapeChristmasBell:"Weihnachtsglocke",shapeEasterEgg:"Osterei",shapeEasterTomb:"Leeres Grab",shapePalmBranch:"Palmzweig",shapeEasterLily:"Osterlilie",shapeLatinCross:"Christliches Kreuz",
  shapeGalleryButton:'2D-OBJEKT',shapeGalleryTitle:'2D-Objekte',shapeGallerySearch:'2D-Objekte suchen …',
  shapeCategoryBasic:'Grundformen',shapeCategoryArrows:'Pfeile',shapeCategorySymbols:'Symbole',shapeCategoryChurch:'Kirche',shapeUnknown:'Unbekannte Form',
@@ -11,6 +17,12 @@ export const shapeControlGermanTemplates={
  shapeCross:'Kreuz',shapeFish:'Fisch',shapeChurch:'Kirche',shapeBible:'Bibel',shapeCandle:'Kerze',shapeDove:'Taube',
 } as const;
 export const shapeControlEnglishTemplates:Record<keyof typeof shapeControlGermanTemplates,string>={
+ shapeNoFill:'No fill',shapeFrameThickness:'Frame width (%)',
+ shapeHeptagon:'Heptagon',shapeDecagon:'Decagon',shapeKite:'Kite',shapeRoundedDiamond:'Rounded diamond',shapeFrameDiamond:'Diamond frame',shapeFrameTriangle:'Triangular frame',shapeFrameOctagon:'Octagonal frame',shapeFrameBrackets:'Bracket frame',shapeBannerFlag:'Flag banner',shapeBannerTab:'Tab banner',shapeBannerTicket:'Ticket banner',shapeBannerFolded:'Folded banner',
+ shapeCategoryFrames:'Frames',shapeCategoryBanners:'Banners',
+ shapeSemicircle:'Semicircle',shapeQuarterCircle:'Quarter circle',shapeRing:'Ring',shapeArc:'Arc',shapePlus:'Plus sign',shapeRightTriangle:'Right triangle',shapeCapsule:'Capsule',shapeTeardrop:'Teardrop',
+ shapeFrameRectangle:'Rectangular frame',shapeFrameRounded:'Rounded frame',shapeFrameOval:'Oval frame',shapeFrameDouble:'Double frame',shapeFrameCorners:'Open corner frame',shapeFrameHexagon:'Hexagonal frame',
+ shapeBannerRibbon:'Ribbon banner',shapeBannerPennant:'Pennant',shapeBannerBookmark:'Bookmark',shapeBannerNotched:'Notched banner',shapeBannerChevron:'Chevron banner',shapeBannerWave:'Wave banner',
  shapeCategoryChristmas:'Christmas',shapeCategoryEaster:'Easter',shapeChristmasStar:"Star of Bethlehem",shapeChristmasTree:"Christmas tree",shapeAdventWreath:"Advent wreath",shapeNativity:"Nativity manger",shapeChristmasBell:"Christmas bell",shapeEasterEgg:"Easter egg",shapeEasterTomb:"Empty tomb",shapePalmBranch:"Palm branch",shapeEasterLily:"Easter lily",shapeLatinCross:"Christian cross",
  shapeGalleryButton:'2D OBJECT',shapeGalleryTitle:'2D objects',shapeGallerySearch:'Search 2D objects …',
  shapeCategoryBasic:'Basic shapes',shapeCategoryArrows:'Arrows',shapeCategorySymbols:'Symbols',shapeCategoryChurch:'Church',shapeUnknown:'Unknown shape',
@@ -22,6 +34,10 @@ export const shapeControlEnglishTemplates:Record<keyof typeof shapeControlGerman
  shapeCross:'Cross',shapeFish:'Fish',shapeChurch:'Church',shapeBible:'Bible',shapeCandle:'Candle',shapeDove:'Dove',
 };
 export const shapeNameKeys:Readonly<Record<string,keyof typeof shapeControlGermanTemplates>>={
+ heptagon:'shapeHeptagon',decagon:'shapeDecagon',kite:'shapeKite','rounded-diamond':'shapeRoundedDiamond','frame-diamond':'shapeFrameDiamond','frame-triangle':'shapeFrameTriangle','frame-octagon':'shapeFrameOctagon','frame-brackets':'shapeFrameBrackets','banner-flag':'shapeBannerFlag','banner-tab':'shapeBannerTab','banner-ticket':'shapeBannerTicket','banner-folded':'shapeBannerFolded',
+ semicircle:'shapeSemicircle','quarter-circle':'shapeQuarterCircle',ring:'shapeRing',arc:'shapeArc',plus:'shapePlus','right-triangle':'shapeRightTriangle',capsule:'shapeCapsule',teardrop:'shapeTeardrop',
+ 'frame-rectangle':'shapeFrameRectangle','frame-rounded':'shapeFrameRounded','frame-oval':'shapeFrameOval','frame-double':'shapeFrameDouble','frame-corners':'shapeFrameCorners','frame-hexagon':'shapeFrameHexagon',
+ 'banner-ribbon':'shapeBannerRibbon','banner-pennant':'shapeBannerPennant','banner-bookmark':'shapeBannerBookmark','banner-notched':'shapeBannerNotched','banner-chevron':'shapeBannerChevron','banner-wave':'shapeBannerWave',
 "christmas-star":"shapeChristmasStar","christmas-tree":"shapeChristmasTree","advent-wreath":"shapeAdventWreath","nativity":"shapeNativity","christmas-bell":"shapeChristmasBell","easter-egg":"shapeEasterEgg","easter-tomb":"shapeEasterTomb","palm-branch":"shapePalmBranch","easter-lily":"shapeEasterLily","latin-cross":"shapeLatinCross",
  rectangle:'shapeRectangle',rounded:'shapeRoundedRectangle',ellipse:'shapeEllipse',triangle:'shapeTriangle',diamond:'shapeDiamond',pentagon:'shapePentagon',
  hexagon:'shapeHexagon',octagon:'shapeOctagon',parallelogram:'shapeParallelogram',trapezoid:'shapeTrapezoid',arrow:'shapeArrowRight','arrow-left':'shapeArrowLeft',
@@ -30,5 +46,6 @@ export const shapeNameKeys:Readonly<Record<string,keyof typeof shapeControlGerma
  info:'shapeInfo',warning:'shapeWarning',cross:'shapeCross',fish:'shapeFish',church:'shapeChurch',bible:'shapeBible',candle:'shapeCandle',dove:'shapeDove',
 };
 export const shapeCategoryKeys:Readonly<Record<string,keyof typeof shapeControlGermanTemplates>>={
+ Rahmen:'shapeCategoryFrames',Banner:'shapeCategoryBanners',
  Weihnachten:'shapeCategoryChristmas',Ostern:'shapeCategoryEaster',Grundformen:'shapeCategoryBasic',Pfeile:'shapeCategoryArrows',Symbole:'shapeCategorySymbols',Kirche:'shapeCategoryChurch',
 };

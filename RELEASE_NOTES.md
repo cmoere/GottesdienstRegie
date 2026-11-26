@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.99.19
+
+Die Objektbibliothek enthält jetzt 77 Einträge. 32 neue geometrische Formen, transparente Rahmen und Banner erweitern die vorhandene Auswahl, darunter Halbkreis, Ring, Bogen, Tropfen, Doppelrahmen, offene Eckrahmen, Banderolen, Wimpel und Ticketbanner.
+
+Objekte lassen sich über Füllfarbe, Konturfarbe, Konturstärke und Deckkraft gestalten. Bei Rahmen kann die eigentliche Rahmenbreite unabhängig von der zusätzlichen Kontur geändert werden. Die Option „Ohne Füllung“ erhält die gewählte Farbe, damit sich die Füllung später wieder aktivieren lässt.
+
+Galerie und Bearbeitungsleiste greifen auf dieselbe kategorisierte Auswahl zu. Position, Größe, Drehung und Gestaltung bleiben beim Formwechsel erhalten. Gespeicherte Rahmen behalten ihr bisheriges Aussehen, solange ihre Rahmenbreite nicht ausdrücklich bearbeitet wird.
+
+Konturen von Dreiecken und anderen polygonalen Formen folgen dem tatsächlichen Umriss. Rahmenmitten bleiben bei schmalen und breiten Einstellungen transparent. Die Prüfungen umfassen 1.370 automatisierte Tests sowie die Browserdarstellung aller 32 neuen Objekte und zehn Rahmenvarianten in Hell und Dunkel.
+
+---
+
 # GottesdienstRegie 0.99.18
 
 Die Folienübersicht nutzt die verfügbare Breite besser: Einzelfolien stehen innerhalb eines Ablaufabschnitts nebeneinander. Mehrteilige Elemente bleiben als zusammenhängende Gruppe erhalten. Die gewählte Thumbnailgröße, vollständige Titel, Reihenfolge sowie Auswahl- und LIVE-Markierungen bleiben wirksam.

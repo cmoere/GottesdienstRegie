@@ -33,7 +33,8 @@ it('keeps canonical German search aliases while updating an open gallery on lang
  fireEvent.click(screen.getByRole('button',{name:'2D OBJECT'}));
  const search=screen.getByPlaceholderText('Search 2D objects …');
  fireEvent.change(search,{target:{value:'Dreieck'}});
- expect(within(screen.getByRole('dialog')).getAllByRole('button')).toHaveLength(1);
+ expect(within(screen.getByRole('dialog')).getAllByRole('button')).toHaveLength(3);
+ expect(screen.getByText('Right triangle')).toBeInTheDocument();
  expect(screen.getByText('Triangle')).toBeInTheDocument();
  act(()=>usePreferences.setState({language:'de'}));
  expect(screen.getByRole('dialog',{name:'2D-Objekte'})).toBeInTheDocument();
@@ -53,7 +54,7 @@ it('labels every gallery item and keeps arrow directions and church symbols dist
  render(<ShapeGallery onSelect={()=>{}}/>);
  fireEvent.click(screen.getByRole('button',{name:'2D OBJECT'}));
  const dialog=screen.getByRole('dialog');
- expect(within(dialog).getAllByRole('img')).toHaveLength(45);
+ expect(within(dialog).getAllByRole('img')).toHaveLength(shapeCatalog.length);
  expect(within(dialog).queryByRole('img',{name:'Unknown shape'})).toBeNull();
  for(const name of ['Right arrow','Left arrow','Up arrow','Down arrow','Cross','Fish','Church','Bible','Candle','Dove']){
   expect(within(dialog).getByRole('img',{name})).toBeInTheDocument();

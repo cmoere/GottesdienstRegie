@@ -11927,12 +11927,18 @@
       "context": "CallExpression",
       "text": "MDNS_STOPPED",
       "reason": "Internal discovery lifecycle error code, caught locally and mapped to a localized status; never sent to visitor outputs or operator text."
+    },
+    "source.7aab960632fec0233d51.1": {
+      "source": "src/ProductionWorkspace.tsx",
+      "context": "BinaryExpression",
+      "text": "Rahmen",
+      "reason": "Stable canonical category ID compared with the selected shape; visible category names use separately translated shapeCategoryFrames."
     }
   },
   "reviewedTechnicalFiles": {
     "src/shapeCatalog.ts": {
-      "sha256": "b32a0762922f80f5929766d2ac94308936187e18988cdeb2ee34070ad673ba5c",
-      "reason": "Reviewed canonical shape IDs, document names and vector geometry. Adds ten original seasonal/church shapes and two category IDs. All 45 gallery labels, seasonal categories and accessibility labels are translated separately through shapeControlTemplates; canonical persisted document names are deliberately stable."
+      "sha256": "ac1691d5ecc43e2c73c3416981a2cdc4c3226842ecf849a484f236742cd8b816",
+      "reason": "Reviewed stable document shape IDs, canonical saved names, category IDs, frame geometry generation and SVG paths. Operator labels are separately localized through shapeControlTemplates and shapeLabels. Persisted document metadata and geometry remain canonical."
     },
     "src/bible/provider.ts": {
       "sha256": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b",
@@ -12099,8 +12105,8 @@
       "reason": "Reviewed entire module: visitor announcement scroll composition, supplied public content and geometry only. No settings or other operator controls in this module."
     },
     "src/SlideRenderer.tsx": {
-      "sha256": "045cb0476269ba21be886054cf900c7bf9b814810f029fba71e8615145f025b1",
-      "reason": "Reviewed diff: adds rendering of locally authored seasonal SVG geometry with editable fill and stroke. Existing visitor slide rendering remains unchanged. This file renders visitor-authored data and output geometry; it adds no operator prose or settings."
+      "sha256": "6f72b9a37756bedd35b2f5bb0d3d14235c8008a291b019244ded39f6da37bb06",
+      "reason": "Reviewed visitor renderer diff: applies explicit fillEnabled and frameThickness properties, draws polygon outlines along authored geometry, allows complete SVG outlines within the clipped slide. Existing output copy, provider data and geometry strings are visitor content or technical values; this module adds no operator prose."
     },
     "src/languageCatalog.ts": {
       "sha256": "f01c17273e48b2e62eabca71cd1a3f7b5c7d7fe69cc0c8a042f5df36006e7a31",
@@ -12133,6 +12139,14 @@
     "electron/storage/windowsCredential.ts": {
       "sha256": "743e7573a81b427037d6e204a241fdd546dddbf1eb96b1e6144ee94a3262edce",
       "reason": "Reviewed v98 fixed native Windows current-user credential read bridge against Microsoft CredReadW, CREDENTIALW and CredFree documentation. Only existing GitHub host/repository-owner targets are read, no enumeration or writes. Fixed encoded PowerShell/C# code, API names and validation expressions are technical protocol/runtime implementation, with no operator UI or visitor text. Errors return null and no credential values are logged."
+    },
+    "src/additionalShapes.ts": {
+      "sha256": "5211b9047ebe55dc959a5717c86ab74fd7be516b17f1af688221beffe677a824",
+      "reason": "Reviewed stable document shape IDs, canonical saved names, category IDs, frame geometry generation and SVG paths. Operator labels are separately localized through shapeControlTemplates and shapeLabels. Persisted document metadata and geometry remain canonical."
+    },
+    "src/frameGeometry.ts": {
+      "sha256": "82c6e48af1618433168031b3b882cfdc2bddd48eec4f781e55faac0b00ce867c",
+      "reason": "Reviewed stable document shape IDs, canonical saved names, category IDs, frame geometry generation and SVG paths. Operator labels are separately localized through shapeControlTemplates and shapeLabels. Persisted document metadata and geometry remain canonical."
     }
   }
 }

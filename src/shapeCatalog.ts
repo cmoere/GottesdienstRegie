@@ -1,4 +1,6 @@
-export type ShapeDefinition={kind:string;name:string;category:'Grundformen'|'Pfeile'|'Symbole'|'Kirche'|'Weihnachten'|'Ostern';vector?:boolean;parts?:string[];viewBox:string;path:string};
+import {additionalShapes} from './additionalShapes';
+import {framePath} from './frameGeometry';
+export type ShapeDefinition={kind:string;name:string;category:'Grundformen'|'Pfeile'|'Symbole'|'Kirche'|'Weihnachten'|'Ostern'|'Rahmen'|'Banner';vector?:boolean;parts?:string[];viewBox:string;path:string};
 const entries:Array<[string,string,ShapeDefinition['category']]>=[['rectangle','Rechteck','Grundformen'],['rounded','Abgerundetes Rechteck','Grundformen'],['ellipse','Kreis / Ellipse','Grundformen'],['triangle','Dreieck','Grundformen'],['diamond','Raute','Grundformen'],['pentagon','Fünfeck','Grundformen'],['hexagon','Sechseck','Grundformen'],['octagon','Achteck','Grundformen'],['parallelogram','Parallelogramm','Grundformen'],['trapezoid','Trapez','Grundformen'],['arrow','Pfeil rechts','Pfeile'],['arrow-left','Pfeil links','Pfeile'],['arrow-up','Pfeil oben','Pfeile'],['arrow-down','Pfeil unten','Pfeile'],['chevron','Chevron','Pfeile'],['double-arrow','Doppelpfeil','Pfeile'],['star','Stern','Symbole'],['burst','Strahlenform','Symbole'],['speech','Sprechblase','Symbole'],['heart','Herz','Symbole'],['lightning','Blitz','Symbole'],['shield','Schild','Symbole'],['cloud','Wolke','Symbole'],['home','Haus','Symbole'],['moon','Halbmond','Symbole'],['sun','Sonne','Symbole'],['check','Haken','Symbole'],['info','Information','Symbole'],['warning','Warnung','Symbole'],['cross','Kreuz','Kirche'],['fish','Fisch','Kirche'],['church','Kirche','Kirche'],['bible','Bibel','Kirche'],['candle','Kerze','Kirche'],['dove','Taube','Kirche']];
 const paths:Record<string,string>={rectangle:'M8 12h84v76H8z',ellipse:'M50 7a43 43 0 1 0 0 86 43 43 0 1 0 0-86z',triangle:'M50 7 95 91H5z',diamond:'M50 5 95 50 50 95 5 50z',arrow:'M8 42h58V22l28 28-28 28V58H8z',cross:'M39 5h22v30h28v22H61v38H39V57H11V35h28z',church:'M8 43 50 9l42 34v52H62V69H38v26H8zm35-15v12H31v14h12v12h14V54h12V40H57V28z',bible:'M8 10h38q4 0 4 5v76q-6-7-16-7H8zm84 0H54q-4 0-4 5v76q6-7 16-7h26z'};
 const seasonalShapes:Array<[string,string,ShapeDefinition['category']]> = [["christmas-star","Stern von Bethlehem","Weihnachten"],["christmas-tree","Weihnachtsbaum","Weihnachten"],["advent-wreath","Adventskranz","Weihnachten"],["nativity","Krippe","Weihnachten"],["christmas-bell","Weihnachtsglocke","Weihnachten"],["easter-egg","Osterei","Ostern"],["easter-tomb","Leeres Grab","Ostern"],["palm-branch","Palmzweig","Ostern"],["easter-lily","Osterlilie","Ostern"],["latin-cross","Christliches Kreuz","Kirche"]];
@@ -8,5 +10,12 @@ const shapeParts:Record<string,string[]>={
  'advent-wreath':['M50 20a36 36 0 1 0 0 72 36 36 0 0 0 0-72Z M50 33a23 23 0 1 0 0 46 23 23 0 0 0 0-46Z','M13 13h9v28h-9Z M34 5h9v27h-9Z M57 5h9v27h-9Z M78 13h9v28h-9Z'],
  'easter-tomb':['M7 84V53a40 40 0 0 1 80 0v31Z M33 80V54a14 14 0 0 1 28 0v26Z','M82 60a17 17 0 1 0 0 34 17 17 0 0 0 0-34Z']};
 export const shapeCatalog:ShapeDefinition[]=entries.map(([kind,name,category],index)=>({kind,name,category,parts:shapeParts[kind],vector:seasonalShapes.some(shape=>shape[0]===kind),viewBox:'0 0 100 100',path:paths[kind]??`M${6+index%12} 10h80l${index%9} 80H10z`}));
+shapeCatalog.push(...additionalShapes);
 export function shapeByKind(kind:string):ShapeDefinition{return shapeCatalog.find(shape=>shape.kind===kind)??{kind:'unknown',name:'Unbekannte Form',category:'Symbole' as const,path:'M10 10h80v80H10z',viewBox:'0 0 100 100'}}
+export function shapeGeometry(kind:string,width?:unknown):ShapeDefinition{
+ const shape=shapeByKind(kind);
+ // Absent values preserve the exact appearance of existing saved frames.
+ const path=shape.category==='Rahmen'&&width!==undefined?framePath(kind,width):undefined;
+ return path?{...shape,path,parts:undefined}:shape;
+}
 export function searchShapes(query:string){const needle=query.trim().toLocaleLowerCase('de');return shapeCatalog.filter(shape=>!needle||`${shape.name} ${shape.category}`.toLocaleLowerCase('de').includes(needle))}

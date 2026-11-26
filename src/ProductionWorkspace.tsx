@@ -31,6 +31,9 @@ import { PersonalNotesPanel } from "./PersonalNotesPanel";
 import { localTranslate } from "./translationDraft";
 import { LanguagePicker } from "./LanguagePicker";
 import { ShapeGallery } from "./ShapeGallery";
+import {shapeCatalog,shapeByKind} from './shapeCatalog';
+import {frameThickness} from './frameGeometry';
+import {shapeLabel,shapeCategoryLabel} from './shapeLabels';
 import { SlideRenderer } from "./SlideRenderer";
 import {
   defaultTransition,
@@ -4534,7 +4537,7 @@ export function FormatToolbar({
 }: {
   openBackgroundMedia: () => void;
 }) {
-  const {tx}=useI18n();
+  const {tx,t}=useI18n();
   const state = usePresentation(),
     { slide } = selected(state),
     element =
@@ -4576,30 +4579,13 @@ export function FormatToolbar({
             value={String(element.properties.shapeKind ?? "rectangle")}
             onChange={(event) => update({ shapeKind: event.target.value })}
           >
-            <option value="rectangle">{tx("Rechteck")}</option>
-            <option value="rounded">{tx("Abgerundetes Rechteck")}</option>
-            <option value="ellipse">{tx("Ellipse / Kreis")}</option>
-            <option value="triangle">{tx("Dreieck")}</option>
-            <option value="diamond">{tx("Raute")}</option>
-            <option value="pentagon">{tx("Fünfeck")}</option>
-            <option value="hexagon">{tx("Sechseck")}</option>
-            <option value="octagon">{tx("Achteck")}</option>
-            <option value="star">{tx("Stern")}</option>
-            <option value="burst">{tx("Sternenkranz")}</option>
-            <option value="arrow">{tx("Pfeil")}</option>
-            <option value="chevron">{tx("Chevron")}</option>
-            <option value="speech">{tx("Sprechblase")}</option>
-            <option value="cross">{tx("Kreuz")}</option>
-            <option value="parallelogram">{tx("Parallelogramm")}</option>
-            <option value="trapezoid">{tx("Trapez")}</option>
-            <option value="heart">{tx("Herz")}</option>
-            <option value="lightning">{tx("Blitz")}</option>
-            <option value="shield">{tx("Schild")}</option>
-            <option value="cloud">{tx("Wolke")}</option>
-            <option value="home">{tx("Haus")}</option>
-            <option value="moon">{tx("Halbmond")}</option>
+            {[...new Set(shapeCatalog.map(shape=>shape.category))].map(category=><optgroup key={category} label={shapeCategoryLabel(category,t)}>
+              {shapeCatalog.filter(shape=>shape.category===category).map(shape=><option key={shape.kind} value={shape.kind}>{shapeLabel(shape.kind,t)}</option>)}
+            </optgroup>)}
           </select>
         </label>
+        <label><input type="checkbox" checked={element.properties.fillEnabled===false} onChange={event=>update({fillEnabled:!event.target.checked,...(event.target.checked&&!Number(element.properties.strokeWidth)?{strokeWidth:2}:{})})}/>{t('shapeNoFill')}</label>
+        {shapeByKind(String(element.properties.shapeKind)).category==='Rahmen'&&<label>{t('shapeFrameThickness')}<input type="number" aria-label={t('shapeFrameThickness')} min="1" max="24" step="1" value={frameThickness(String(element.properties.shapeKind),element.properties.frameThickness)} onChange={event=>update({frameThickness:frameThickness(String(element.properties.shapeKind),event.target.valueAsNumber)})}/></label>}
         <label>{tx("Füllung")}<input
             aria-label={tx("FÜLLFARBE")}
             type="color"
@@ -4621,7 +4607,7 @@ export function FormatToolbar({
             max="40"
             value={Number(element.properties.strokeWidth ?? 0)}
             onChange={(event) =>
-              update({ strokeWidth: Number(event.target.value) })
+              update({ strokeWidth: Math.min(40,Math.max(0,event.target.valueAsNumber||0)) })
             }
           />
         </label>

@@ -24,9 +24,124 @@
       "line": "0.99",
       "builds": [
         {
-          "version": "0.99.18",
+          "version": "0.99.19",
           "releaseDate": "2026-11-26",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "Mehr Gestaltungsmöglichkeiten für Folienobjekte",
+              "en": "More design options for slide objects"
+            },
+            "text": {
+              "de": "Die Objektbibliothek wächst um 32 Formen, Rahmen und Banner auf insgesamt 77 Einträge. Einstellbare Rahmenbreiten und eine optionale transparente Füllung erweitern die Foliengestaltung. Konturen folgen bei polygonalen Formen jetzt dem tatsächlichen Umriss.",
+              "en": "The object library adds 32 shapes, frames and banners for a total of 77 entries. Adjustable frame widths and optional transparent fills expand slide design options. Polygon outlines now follow the actual shape."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "32 zusätzliche Formen, Rahmen und Banner",
+                  "en": "32 additional shapes, frames and banners"
+                },
+                "text": {
+                  "de": "Halbkreis, Ring, Bogen, Tropfen und weitere geometrische Formen ergänzen die Auswahl. Zehn Rahmenvarianten bieten unter anderem abgerundete, ovale, doppelte und offene Umrisse. Zehn Banner umfassen Banderolen, Wimpel, Lesezeichen, Wellen- und Ticketformen. Alle Objekte bleiben über die vorhandene Suche und die Formauswahl erreichbar.",
+                  "en": "Semicircles, rings, arcs, teardrops and more geometric shapes expand the selection. Ten frame variants include rounded, oval, double and open outlines. Ten banners include ribbons, pennants, bookmarks, wave and ticket shapes. All objects remain available through the existing search and shape selector."
+                }
+              },
+              {
+                "label": {
+                  "de": "Rahmenbreite und Füllung separat einstellen",
+                  "en": "Adjust frame width and fill separately"
+                },
+                "text": {
+                  "de": "Nach Auswahl eines Objekts lassen sich Füllfarbe, Konturfarbe, Konturstärke und Deckkraft bearbeiten. Die Rahmenbreite ist zusätzlich zwischen 1 und 24 Prozent der normalisierten Formbreite einstellbar. Ohne Füllung blendet die Füllfläche aus und behält die gewählte Farbe für eine spätere erneute Aktivierung. Bei zuvor unsichtbarer Kontur wird eine sichtbare Anfangsstärke gesetzt.",
+                  "en": "After selecting an object, its fill color, outline color, outline width and opacity can be edited. Frame width can additionally be set between 1 and 24 percent of the normalized shape width. No fill hides the filled area and retains the selected color for later use. An initially invisible outline receives a visible starting width."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Einheitliche Formauswahl und stabile gespeicherte Objekte",
+                  "en": "Consistent shape selection and stable saved objects"
+                },
+                "text": {
+                  "de": "Galerie und Bearbeitungsleiste verwenden dieselbe Formauswahl; die Bearbeitungsleiste gruppiert sie nach Kategorien. Beim Formwechsel bleiben Position, Größe, Drehung, Deckkraft und Farben erhalten. Bereits gespeicherte Rahmen behalten ihre bisherige Geometrie, bis ihre Rahmenbreite ausdrücklich geändert wird.",
+                  "en": "The gallery and editing toolbar use the same shape selection; the toolbar groups it by category. Changing a shape preserves its position, size, rotation, opacity and colors. Previously saved frames retain their original geometry until their frame width is explicitly changed."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Vollständige Konturen und transparente Rahmenmitten",
+                  "en": "Complete outlines and transparent frame centers"
+                },
+                "text": {
+                  "de": "Bei Dreiecken und anderen polygonalen Formen wird die Kontur am tatsächlichen Umriss gezeichnet. Ein rechteckiger, anschließend abgeschnittener Rand entfällt. SVG-Konturen werden innerhalb der Foliengrenze vollständig dargestellt. Die Innenflächen der Rahmen bleiben auch bei geänderter Rahmenbreite transparent.",
+                  "en": "Triangle and other polygon outlines are drawn along the actual shape instead of clipping a rectangular border. SVG outlines are rendered in full within the slide boundary. Frame interiors remain transparent when their width changes."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              },
+              {
+                "label": {
+                  "de": "Bildrate im lokalen Netzwerk",
+                  "en": "Frame rate on the local network"
+                },
+                "text": {
+                  "de": "Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.",
+                  "en": "Actual frame rate depends on output performance, browser and network. Checks cover a local browser image stream and native capture; they do not replace testing on the venue’s own network."
+                }
+              },
+              {
+                "label": {
+                  "de": "Erreichbarkeit der Lichtoperator-Ansicht",
+                  "en": "Lighting Operator view access"
+                },
+                "text": {
+                  "de": "Solange der Lichtoperator aktiviert ist, kann jedes Gerät mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte über die feste Adresse sehen. Die Ansicht erlaubt keine Steuerbefehle. Lichtempfehlungen sind Vorschläge und ersetzen keine Prüfung am eingesetzten Scheinwerfer.",
+                  "en": "While the Lighting Operator is enabled, any device with access to the local control server can view its ON-AIR content at the fixed address. The view does not allow control commands. Lighting recommendations are suggestions and do not replace checking the actual fixture."
+                }
+              },
+              {
+                "label": {
+                  "de": "Lokales Netzwerk und Vertrauen des Zertifikats",
+                  "en": "Local network and certificate trust"
+                },
+                "text": {
+                  "de": "regie.local benötigt ein gemeinsames lokales Netzwerk, das mDNS zulässt. Die erfolgreiche Anmeldung ist keine Prüfung aller verbundenen Geräte. Beim ersten Öffnen kann es nötig sein, das erneuerte lokale Zertifikat anhand des angezeigten Fingerabdrucks zu bestätigen. Die Anwendung installiert kein Vertrauen automatisch. Ein zweites Gerät im tatsächlichen Saalnetz wurde hier nicht geprüft.",
+                  "en": "regie.local requires a shared local network that permits mDNS. Successful registration does not verify every connected device. When first opening the page, the renewed local certificate may need to be confirmed against the displayed fingerprint. The application does not install certificate trust automatically. A second device on the actual venue network was not tested here."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.99.18",
+          "releaseDate": "2026-11-26",
+          "current": false,
           "overview": {
             "label": {
               "de": "Übersichtlichere Folienvorschau und korrigierte Kontraste",
