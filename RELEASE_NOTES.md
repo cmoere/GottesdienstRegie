@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.99.18
+
+Die Folienübersicht nutzt die verfügbare Breite besser: Einzelfolien stehen innerhalb eines Ablaufabschnitts nebeneinander. Mehrteilige Elemente bleiben als zusammenhängende Gruppe erhalten. Die gewählte Thumbnailgröße, vollständige Titel, Reihenfolge sowie Auswahl- und LIVE-Markierungen bleiben wirksam.
+
+Ältere Übersichtsstile wurden auf die eigentlichen Bedienelemente begrenzt. Sie verändern keine Überschriften, Schaltflächen oder Raster innerhalb eingebetteter Folien mehr. Dadurch bleiben beispielsweise die Farben der Wetterüberschrift und die Spalten der Stundenvorschau erhalten.
+
+Die Ansichtsumschaltung ist im Dunkelmodus wieder gut lesbar. Bearbeiten und Vorschau erscheinen in normaler Schreibweise. Bedienleisten, Tastaturfokus, Oberflächenfarben und deaktivierte Eingabefelder wurden vereinheitlicht.
+
+Die Darstellung wurde in Hell- und Dunkelmodus bei drei Fensterbreiten geprüft. Weitere Prüfungen umfassen Nachtwetter in der hellen Oberfläche, die ausklappbare MAIN-Leiste, die Größeneinstellung sowie 48 Fensterkonfigurationen.
+
+---
+
 # GottesdienstRegie 0.99.17
 
 Die feste lokale Adresse für den Lichtoperator lautet https://regie.local:43171/lichtoperator. Die Software meldet den Rechnernamen im Saalnetz an. Nach erfolgreicher Anmeldung verwenden Kopierlinks, QR-Codes und Vorschauen den Namen anstelle der IP-Adresse. Bei einem Namenskonflikt oder gesperrter Netzwerkerkennung bleibt die IP-Ausweichadresse verfügbar.

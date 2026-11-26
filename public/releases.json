@@ -24,9 +24,123 @@
       "line": "0.99",
       "builds": [
         {
+          "version": "0.99.18",
+          "releaseDate": "2026-11-26",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "Übersichtlichere Folienvorschau und korrigierte Kontraste",
+              "en": "Clearer slide overview and corrected contrast"
+            },
+            "text": {
+              "de": "Die Folienübersicht nutzt die verfügbare Breite mit mehreren Einzelfolien nebeneinander. Mehrteilige Elemente bleiben zusammenhängend gruppiert. Korrigierte Bedienelemente verbessern Lesbarkeit und Abstände in Hell- und Dunkelmodus; ältere Übersichtsstile verändern die eingebetteten Folien nicht mehr.",
+              "en": "The slide overview uses the available width to show several single-slide items side by side. Items with multiple slides remain grouped together. Corrected controls improve readability and spacing in light and dark modes; legacy overview styles no longer alter embedded slide content."
+            }
+          },
+          "sections": {
+            "new": [],
+            "improved": [
+              {
+                "label": {
+                  "de": "Responsive Übersicht mit klarer Gruppierung",
+                  "en": "Responsive overview with clear grouping"
+                },
+                "text": {
+                  "de": "Einzelfolien stehen innerhalb ihres Ablaufabschnitts in einem gemeinsamen Raster. Elemente mit mehreren Folien erhalten eine zusammenhängende Gruppe über die verfügbare Breite. Die eingestellte Thumbnailgröße bleibt wirksam. Titel, Reihenfolge, Auswahl und LIVE-Markierung bleiben erhalten.",
+                  "en": "Single-slide items share a grid within their service section. Items with several slides occupy a continuous group across the available width. The configured thumbnail size remains effective. Titles, order, selection and LIVE indicators are preserved."
+                }
+              },
+              {
+                "label": {
+                  "de": "Ruhigere Bedienelemente und einheitlichere Flächen",
+                  "en": "Calmer controls and more consistent surfaces"
+                },
+                "text": {
+                  "de": "Bearbeiten und Vorschau erscheinen in normaler Schreibweise. Die Ansichtsumschaltung erhält klar lesbare Auswahl- und Tastaturfokuszustände. Bedienleisten passen sich ihrer tatsächlichen Höhe an, und gemeinsame Oberflächen sowie deaktivierte Eingabefelder verwenden konsistente Farben.",
+                  "en": "Edit and Preview use normal capitalization. The view switch has readable selected and keyboard-focus states. Toolbars adapt to their actual height, and shared surfaces and disabled inputs use consistent colors."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Übersichtsstile greifen nicht mehr in Folien hinein",
+                  "en": "Overview styles no longer leak into slides"
+                },
+                "text": {
+                  "de": "Alte Regeln für Überschriften, Schaltflächen und Raster wurden auf die jeweiligen Bedienelemente begrenzt. Damit behalten unter anderem Wetterüberschriften ihre vorgesehenen Farben und die Stundenvorschau ihre Spalten. Die Vorschau wurde auch mit Nachtwetter im hellen Bedienmodus geprüft.",
+                  "en": "Legacy heading, button and grid rules are now limited to the relevant controls. Weather headings retain their intended colors and hourly forecasts retain their columns. The preview was also checked with nighttime weather in the light operator theme."
+                }
+              },
+              {
+                "label": {
+                  "de": "Lesbare Auswahl im Dunkelmodus und weniger ungenutzter Platz",
+                  "en": "Readable dark-mode selection and less wasted space"
+                },
+                "text": {
+                  "de": "Die ausgewählte Folienübersicht verwendet im Dunkelmodus eine passende helle Schrift statt schwarzer Schrift auf dunkler Fläche. Das neue Raster vermeidet eine eigene volle Zeile für jedes einzelne Loop-Element und passt sich schmaleren Fenstern ohne horizontales Überlaufen an.",
+                  "en": "The selected slide overview uses appropriate light text in dark mode instead of black text on a dark surface. The new grid avoids dedicating a full row to every single loop item and adapts to narrower windows without horizontal overflow."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              },
+              {
+                "label": {
+                  "de": "Bildrate im lokalen Netzwerk",
+                  "en": "Frame rate on the local network"
+                },
+                "text": {
+                  "de": "Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.",
+                  "en": "Actual frame rate depends on output performance, browser and network. Checks cover a local browser image stream and native capture; they do not replace testing on the venue’s own network."
+                }
+              },
+              {
+                "label": {
+                  "de": "Erreichbarkeit der Lichtoperator-Ansicht",
+                  "en": "Lighting Operator view access"
+                },
+                "text": {
+                  "de": "Solange der Lichtoperator aktiviert ist, kann jedes Gerät mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte über die feste Adresse sehen. Die Ansicht erlaubt keine Steuerbefehle. Lichtempfehlungen sind Vorschläge und ersetzen keine Prüfung am eingesetzten Scheinwerfer.",
+                  "en": "While the Lighting Operator is enabled, any device with access to the local control server can view its ON-AIR content at the fixed address. The view does not allow control commands. Lighting recommendations are suggestions and do not replace checking the actual fixture."
+                }
+              },
+              {
+                "label": {
+                  "de": "Lokales Netzwerk und Vertrauen des Zertifikats",
+                  "en": "Local network and certificate trust"
+                },
+                "text": {
+                  "de": "regie.local benötigt ein gemeinsames lokales Netzwerk, das mDNS zulässt. Die erfolgreiche Anmeldung ist keine Prüfung aller verbundenen Geräte. Beim ersten Öffnen kann es nötig sein, das erneuerte lokale Zertifikat anhand des angezeigten Fingerabdrucks zu bestätigen. Die Anwendung installiert kein Vertrauen automatisch. Ein zweites Gerät im tatsächlichen Saalnetz wurde hier nicht geprüft.",
+                  "en": "regie.local requires a shared local network that permits mDNS. Successful registration does not verify every connected device. When first opening the page, the renewed local certificate may need to be confirmed against the displayed fingerprint. The application does not install certificate trust automatically. A second device on the actual venue network was not tested here."
+                }
+              }
+            ]
+          }
+        },
+        {
           "version": "0.99.17",
           "releaseDate": "2026-11-25",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Feste lokale Monitoradresse und vollständige Loop-Vorschauen",

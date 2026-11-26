@@ -3791,10 +3791,11 @@ function PreviewCenter({
               <small>{formatDuration(duration)}</small>
             </h2>
             {entries.length ? (
-              entries.map((entry) => (
+              <div className="preview-section-items">{entries.map((entry) => (
                 <div
                   className="preview-item-group"
                   data-preview-item={entry.id}
+                  data-multi-slide={entry.slides.length>1}
                   key={entry.id}
                 >
                   <h3>
@@ -3811,7 +3812,7 @@ function PreviewCenter({
                       )}
                     </small>
                   </h3>
-                  <div>
+                  <div className="preview-item-slides">
                     {[...entry.slides].sort((a,b)=>a.order-b.order).map((current, index) => (
                       <PreviewSlideCard
                         key={current.id}
@@ -3822,7 +3823,7 @@ function PreviewCenter({
                     ))}
                   </div>
                 </div>
-              ))
+              ))}</div>
             ) : (
               <p>{tx("Keine Elemente")}</p>
             )}
