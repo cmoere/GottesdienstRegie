@@ -1,3 +1,15 @@
+# GottesdienstRegie 0.99.20
+
+Die Objektbibliothek wächst auf insgesamt 300 unterschiedliche Geometrien: 240 zweidimensionale Formen, Rahmen, Banner, Verbindungselemente und Symbole sowie 60 räumliche SVG-Formen. Suche, Kategorien, 2D/3D-Filter, Favoriten und zuletzt verwendete Einträge erleichtern die Auswahl. Vollständige Namen und einstellbare Vorschaugrößen bleiben auch bei schmalen Fenstern bedienbar.
+
+Prismen, Pyramiden, Kegel, Zylinder, Kugeln und weitere räumliche Formen erhalten schattierte Flächen. Tiefe und Projektionsrichtung sind einstellbar; die Grafik behält ihre Proportionen im veränderbaren Objektrahmen. Die Darstellung wird vollständig aus lokalen Vektorgrafiken aufgebaut.
+
+Die gemeinsame Farbauswahl für Objektfüllungen und Konturen bietet Gemeindefarben, HEX/RGB, Transparenz, eigene Favoriten und zuletzt verwendete Farben. Füllungen unterstützen lineare und radiale Verläufe. Auf unterstützten Geräten kann eine Systempipette verwendet werden. Abbrechen stellt den vorherigen Zustand wieder her, einschließlich importierter CSS-Farben.
+
+Alle 300 Objektpfade sind unterschiedlich. Die Browserprüfungen umfassen die Standardgeometrien, 80 Prüfungen der Rahmenbreite und 360 Konfigurationen der räumlichen Formen. Weitere Prüfungen betreffen Farbverläufe, Transparenz, Favoriten, Tastaturbedienung und die schmale Ansicht. Eigene Paletten werden lokal am jeweiligen Regie-PC oder Browser gespeichert.
+
+---
+
 # GottesdienstRegie 0.99.19
 
 Die Objektbibliothek enthält jetzt 77 Einträge. 32 neue geometrische Formen, transparente Rahmen und Banner erweitern die vorhandene Auswahl, darunter Halbkreis, Ring, Bogen, Tropfen, Doppelrahmen, offene Eckrahmen, Banderolen, Wimpel und Ticketbanner.

@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.99.20</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.20</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.20</guid><pubDate>Fri, 27 Nov 2026 00:00:00 GMT</pubDate><description>300 Objekte und eine erweiterte Farbauswahl
+Die Bibliothek umfasst jetzt 240 zweidimensionale Objekte und 60 räumliche SVG-Formen. Filter, Favoriten und vergrößerbare Vorschauen erleichtern die Auswahl. Ein gemeinsamer Farbwähler für Objektfüllungen und Konturen bietet HEX/RGB, Transparenz, eigene Farben und Farbverläufe.
+
+Objektbibliothek mit 300 unterschiedlichen Geometrien
+60 Grundformen, 50 Pfeile und Verbindungen, 40 Rahmen, 40 Banner und Sprechblasen, 50 Symbole einschließlich Kirchen- und Festmotiven sowie 60 räumliche Formen stehen bereit. Suche, Kategorien, 2D/3D-Filter, lokale Favoriten und zuletzt verwendete Objekte führen zur passenden Auswahl. Die Vorschaugröße lässt sich anpassen.
+
+Räumliche Formen mit Tiefe und Projektionsrichtung
+Prismen, Pyramiden, Kegel, Zylinder, Kugeln und weitere Körper werden als lokale Vektorgrafiken mit schattierten Flächen dargestellt. Tiefe und Projektionsrichtung lassen sich in der Bearbeitungsleiste einstellen. Die Formen behalten ihre Proportionen innerhalb des veränderbaren Objektrahmens.
+
+Gemeinsame Farbauswahl für Füllung und Kontur
+Gemeindefarben, eigene Favoriten und zuletzt verwendete Farben ergänzen HEX- und RGB-Eingaben. Transparenz ist separat einstellbar. Objektfüllungen unterstützen lineare und radiale Verläufe mit einer zweiten Farbe und einer einstellbaren Richtung. Eine Systempipette steht auf unterstützten Geräten zur Verfügung. Abbrechen stellt die vorherige Farbauswahl wieder her.
+
+Übersichtliche Auswahl und statische Vorschauen
+Die Objektbibliothek nutzt ein begrenztes Dialogfenster mit scrollbarer Auswahl und vollständigen Namen. Favoriten können direkt an den Objekten gesetzt werden. Vorschauen bleiben statisch; eine geschlossene Bibliothek bereitet keine gefilterte Vorschau vor. Darstellung und Bedienung wurden auch bei schmalen Fenstern geprüft.
+
+Geometrie, Transparenz und bestehende Farben abgesichert
+Bisher unvollständig dargestellte Richtungspfeile und Symbole erhalten passende Vektorgeometrien. Gedrehte Pfeile bleiben innerhalb ihres Koordinatenbereichs. Alle 40 Rahmen behalten auch bei geänderter Breite transparente Mitten. Farbverläufe verwenden getrennte SVG-Referenzen, und das Abbrechen des Farbwählers erhält auch importierte CSS-Farben.
+
+Hinweise zum Live-Betrieb
+Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.
+
+Originalgetreue PowerPoint-Wiedergabe
+Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.
+
+Bildrate im lokalen Netzwerk
+Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.
+
+Erreichbarkeit der Lichtoperator-Ansicht
+Solange der Lichtoperator aktiviert ist, kann jedes Gerät mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte über die feste Adresse sehen. Die Ansicht erlaubt keine Steuerbefehle. Lichtempfehlungen sind Vorschläge und ersetzen keine Prüfung am eingesetzten Scheinwerfer.
+
+Lokales Netzwerk und Vertrauen des Zertifikats
+regie.local benötigt ein gemeinsames lokales Netzwerk, das mDNS zulässt. Die erfolgreiche Anmeldung ist keine Prüfung aller verbundenen Geräte. Beim ersten Öffnen kann es nötig sein, das erneuerte lokale Zertifikat anhand des angezeigten Fingerabdrucks zu bestätigen. Die Anwendung installiert kein Vertrauen automatisch. Ein zweites Gerät im tatsächlichen Saalnetz wurde hier nicht geprüft.
+
+Räumliche Darstellung und lokale Farbpaletten
+Die räumlichen Objekte verwenden projizierte SVG-Geometrie mit Schattierung. Eigene Farben, Favoriten und zuletzt verwendete Einträge werden lokal am jeweiligen Regie-PC beziehungsweise Browser gespeichert. Die Verfügbarkeit der Pipette hängt vom Browser und Betriebssystem ab.</description></item>
 <item><title>GottesdienstRegie 0.99.19</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.19</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.19</guid><pubDate>Thu, 26 Nov 2026 00:00:00 GMT</pubDate><description>Mehr Gestaltungsmöglichkeiten für Folienobjekte
 Die Objektbibliothek wächst um 32 Formen, Rahmen und Banner auf insgesamt 77 Einträge. Einstellbare Rahmenbreiten und eine optionale transparente Füllung erweitern die Foliengestaltung. Konturen folgen bei polygonalen Formen jetzt dem tatsächlichen Umriss.
 

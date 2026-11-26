@@ -34,6 +34,8 @@ import { ShapeGallery } from "./ShapeGallery";
 import {shapeCatalog,shapeByKind} from './shapeCatalog';
 import {frameThickness} from './frameGeometry';
 import {shapeLabel,shapeCategoryLabel} from './shapeLabels';
+import {ColorSelection} from './ColorSelection';
+import {readPaint,alpha} from './colorModel';
 import { SlideRenderer } from "./SlideRenderer";
 import {
   defaultTransition,
@@ -4574,7 +4576,7 @@ export function FormatToolbar({
   if (element?.type === "shape")
     return (
       <div className="format-toolbar shape-format-toolbar" ref={root}>
-        <label>{tx("2D-OBJEKT")}<select
+        <label>{t('shapeGalleryTitle')}<select
             aria-label={tx("Form")}
             value={String(element.properties.shapeKind ?? "rectangle")}
             onChange={(event) => update({ shapeKind: event.target.value })}
@@ -4586,19 +4588,10 @@ export function FormatToolbar({
         </label>
         <label><input type="checkbox" checked={element.properties.fillEnabled===false} onChange={event=>update({fillEnabled:!event.target.checked,...(event.target.checked&&!Number(element.properties.strokeWidth)?{strokeWidth:2}:{})})}/>{t('shapeNoFill')}</label>
         {shapeByKind(String(element.properties.shapeKind)).category==='Rahmen'&&<label>{t('shapeFrameThickness')}<input type="number" aria-label={t('shapeFrameThickness')} min="1" max="24" step="1" value={frameThickness(String(element.properties.shapeKind),element.properties.frameThickness)} onChange={event=>update({frameThickness:frameThickness(String(element.properties.shapeKind),event.target.valueAsNumber)})}/></label>}
-        <label>{tx("Füllung")}<input
-            aria-label={tx("FÜLLFARBE")}
-            type="color"
-            value={String(element.properties.fill ?? "#ffffff")}
-            onChange={(event) => update({ fill: event.target.value })}
-          />
+        {shapeByKind(String(element.properties.shapeKind)).dimension==='3d'&&<><label>{t('shapeDepth')}<input type="range" aria-label={t('shapeDepth')} min="0" max="30" value={Number(element.properties.shapeDepth??14)} onChange={event=>update({shapeDepth:Number(event.target.value)})}/></label><label>{t('shapeProjection')}<input type="range" aria-label={t('shapeProjection')} min="-180" max="180" value={Number(element.properties.shapeProjection??-35)} onChange={event=>update({shapeProjection:Number(event.target.value)})}/></label></>}
+        <label>{tx("Füllung")}<ColorSelection key={element.id+'-fill'} label={tx('Füllung')} inputLabel={tx('FÜLLFARBE')} value={String(element.properties.fill??'#ffffff')} opacity={alpha(element.properties.fillOpacity)} mode={readPaint(element.properties).mode} end={readPaint(element.properties).end} angle={readPaint(element.properties).angle} allowGradient onChange={value=>update({fill:value.color,fillOpacity:value.opacity,fillMode:value.mode,fillGradientEnd:value.end,fillGradientAngle:value.angle})}/>
         </label>
-        <label>{tx("Kontur")}<input
-            aria-label={tx("Konturfarbe")}
-            type="color"
-            value={String(element.properties.stroke ?? "#000000")}
-            onChange={(event) => update({ stroke: event.target.value })}
-          />
+        <label>{tx("Kontur")}<ColorSelection key={element.id+'-stroke'} label={tx('Kontur')} inputLabel={tx('Konturfarbe')} value={String(element.properties.stroke??'#000000')} opacity={alpha(element.properties.strokeOpacity)} onChange={value=>update({stroke:value.color,strokeOpacity:value.opacity})}/>
         </label>
         <label>{tx("Stärke")}<input
             aria-label={tx("Konturstärke")}

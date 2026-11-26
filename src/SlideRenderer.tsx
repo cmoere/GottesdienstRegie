@@ -1,4 +1,6 @@
 import {shapeByKind,shapeGeometry} from './shapeCatalog';
+import {ShapeVector} from './ShapeVector';
+import {cssPaint,colorWithAlpha} from './colorModel';
 import {UiIcon} from './icons/UiIcon';
 import {EventOverviewHeader,EventOverviewFooter} from './EventOverviewChrome';
 import {ExternalLoopElement} from './externalLoop/Element';
@@ -426,8 +428,8 @@ function RenderElement({
     );
   }
   if(element.type==='shape'&&shapeByKind(String(properties.shapeKind)).vector){
-    const shape=shapeGeometry(String(properties.shapeKind),properties.frameThickness);
-    return <svg className={'slide-renderer-element shape shape-'+shape.kind} style={{...style,overflow:'visible'}} viewBox={shape.viewBox} preserveAspectRatio="none" aria-hidden="true">{(shape.parts??[shape.path]).map((path,index)=><path key={index} d={path} fill={properties.fillEnabled===false?'none':String(properties.fill??properties.color??'#fff')} fillRule="evenodd" stroke={String(properties.stroke??'none')} strokeWidth={Math.max(0,Number(properties.strokeWidth??0))}/>) }</svg>;
+    const shape=shapeGeometry(String(properties.shapeKind),properties.frameThickness,{depth:properties.shapeDepth,angle:properties.shapeProjection});
+    return <ShapeVector className={'slide-renderer-element shape shape-'+shape.kind} shape={shape} style={style} properties={properties}/>;
   }
   if (element.type === "shape") {
     const kind = String(properties.shapeKind ?? "rectangle"),
@@ -463,15 +465,15 @@ function RenderElement({
       // Draw the outline on the same polygon, in slide units, instead.
       const width=Math.max(1,element.width),height=Math.max(1,element.height);
       const points=clipPath.slice(8,-1).split(',').map(pair=>pair.split(' ').map(value=>parseFloat(value))).map(([x,y])=>`${x*width/100},${y*height/100}`).join(' ');
-      return <svg className={`slide-renderer-element shape shape-${kind}`} style={{...style,overflow:'visible'}} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><polygon points={points} fill={properties.fillEnabled===false?'none':String(properties.fill??properties.color??'#fff')} stroke={String(properties.stroke??'none')} strokeWidth={Math.max(0,Number(properties.strokeWidth??0))}/></svg>;
+      return <ShapeVector className={`slide-renderer-element shape shape-${kind}`} style={style} shape={{kind,name:kind,category:'Grundformen',viewBox:`0 0 ${width} ${height}`,path:'M'+points.replaceAll(' ','L')+'Z'}} properties={properties}/>;
     }
     return (
       <div
         className={`slide-renderer-element shape shape-${kind}`}
         style={{
           ...style,
-          background: properties.fillEnabled===false?'transparent':String(properties.fill ?? properties.color ?? "#fff"),
-          border: `${Math.max(0, Number(properties.strokeWidth ?? 0)) / 19.2}cqw solid ${String(properties.stroke ?? "transparent")}`,
+          background: cssPaint(properties),
+          border: `${Math.max(0, Number(properties.strokeWidth ?? 0)) / 19.2}cqw solid ${properties.strokeOpacity===undefined?String(properties.stroke??'transparent'):colorWithAlpha(String(properties.stroke??'#000000'),properties.strokeOpacity)}`,
           borderRadius:
             kind === "ellipse"
               ? "50%"

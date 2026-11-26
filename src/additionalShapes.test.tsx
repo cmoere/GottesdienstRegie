@@ -13,8 +13,8 @@ const presentation=usePresentation.getState();
 afterEach(()=>{cleanup();usePreferences.setState(preferences,true);usePresentation.setState(presentation,true)});
 
 it('offers distinct real vectors for all additional shapes, frames and banners',()=>{
- expect(searchShapes('Rahmen')).toHaveLength(10);
- expect(searchShapes('Banner')).toHaveLength(10);
+ expect(searchShapes('Rahmen')).toHaveLength(40);
+ expect(searchShapes('Banner')).toHaveLength(40);
  for(const kind of kinds){expect(shapeByKind(kind)).toMatchObject({kind,vector:true,viewBox:'0 0 100 100'})}
  expect(new Set(kinds.map(kind=>shapeByKind(kind).path)).size).toBe(kinds.length);
 });
@@ -23,11 +23,11 @@ it('selects a translated banner using its stable ID and canonical saved name',()
  usePreferences.setState({language:'en',germanRegion:null});
  const selected:string[][]=[];
  render(<ShapeGallery onSelect={(kind,name)=>selected.push([kind,name])}/>);
- fireEvent.click(screen.getByRole('button',{name:'2D OBJECT'}));
- fireEvent.change(screen.getByPlaceholderText('Search 2D objects …'),{target:{value:'Ribbon banner'}});
- const choices=within(screen.getByRole('dialog')).getAllByRole('button');
- expect(choices).toHaveLength(1);
- fireEvent.click(choices[0]);
+ fireEvent.click(screen.getByRole('button',{name:'Objects'}));
+ fireEvent.change(screen.getByPlaceholderText('Search objects'),{target:{value:'Ribbon banner'}});
+ const choices=[...screen.getByRole('dialog').querySelectorAll('.shape-gallery-choice')];
+ expect(choices.length).toBeGreaterThan(0);
+ fireEvent.click(choices.find(button=>button.querySelector('small')?.textContent==='Ribbon banner')!);
  expect(selected).toEqual([['banner-ribbon','Banderole']]);
  expect(screen.queryByRole('dialog')).toBeNull();
 });

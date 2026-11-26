@@ -1,22 +1,26 @@
+import {useEffect,useRef,useState,type CSSProperties} from 'react';
+import {createPortal} from 'react-dom';
 import {UiIcon} from './icons/UiIcon';
-import {useState} from 'react';
 import {shapeCatalog} from './shapeCatalog';
 import {ShapeArtwork} from './ShapeArtwork';
 import {useI18n} from './i18n';
 import {shapeLabel,shapeCategoryLabel} from './shapeLabels';
-
+import {useObjectPalette} from './objectPaletteState';
+import './object-library.css';
 export function ShapeGallery({disabled,onSelect}:{disabled?:boolean;onSelect:(kind:string,name:string)=>void}){
- const [open,setOpen]=useState(false),[query,setQuery]=useState('');
- const {t,locale}=useI18n(),needle=query.trim().toLocaleLowerCase(locale);
- const shapes=shapeCatalog.filter(shape=>!needle||`${shape.name} ${shape.category} ${shapeLabel(shape.kind,t)} ${shapeCategoryLabel(shape.category,t)}`.toLocaleLowerCase(locale).includes(needle));
- return <div className="shape-gallery">
-  <button type="button" disabled={disabled} onClick={()=>setOpen(value=>!value)}><UiIcon name="category" aria-hidden="true" /> {t('shapeGalleryButton')}</button>
-  {open&&<div className="shape-gallery-popover" role="dialog" aria-label={t('shapeGalleryTitle')}>
-   <input autoFocus value={query} onChange={event=>setQuery(event.target.value)} placeholder={t('shapeGallerySearch')}/>
-   <div>{shapes.map(shape=><button type="button" key={shape.kind} title={shapeCategoryLabel(shape.category,t)} onClick={()=>{
-    // Document metadata stays canonical; only the operator labels are regional.
-    onSelect(shape.kind,shape.name);setOpen(false);
-   }}><span><ShapeArtwork kind={shape.kind}/></span><small>{shapeLabel(shape.kind,t)}</small></button>)}</div>
-  </div>}
- </div>;
+ const [open,setOpen]=useState(false),[query,setQuery]=useState(''),[category,setCategory]=useState('all'),[dimension,setDimension]=useState('all'),[collection,setCollection]=useState('all'),[size,setSize]=useState(76);
+ const {t,locale}=useI18n(),palette=useObjectPalette(),trigger=useRef<HTMLButtonElement>(null),panel=useRef<HTMLElement>(null),needle=query.trim().toLocaleLowerCase(locale);
+ const close=()=>{setOpen(false);trigger.current?.focus()};
+ useEffect(()=>{if(!open)return;const previous=document.body.style.overflow;document.body.style.overflow='hidden';return()=>{document.body.style.overflow=previous}},[open]);
+ useEffect(()=>{if(!open)return;panel.current?.querySelector('input')?.focus();const key=(event:KeyboardEvent)=>{if(event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation();close()}if(event.key==='Tab'){const controls=[...panel.current!.querySelectorAll<HTMLElement>('button:not(:disabled),input,select')],first=controls[0],last=controls[controls.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}}};document.addEventListener('keydown',key,true);return()=>document.removeEventListener('keydown',key,true)},[open]);
+ const shapes=(open?shapeCatalog:[]).filter(shape=>(category==='all'||shape.category===category)&&(dimension==='all'||(shape.dimension??'2d')===dimension)&&(collection==='all'||(collection==='favorites'?palette.favoriteObjects:palette.recentObjects).includes(shape.kind))&&(!needle||`${shape.name} ${shape.aliases?.join(' ')??''} ${shape.category} ${shapeLabel(shape.kind,t)} ${shapeCategoryLabel(shape.category,t)}`.toLocaleLowerCase(locale).includes(needle)));
+ if(collection==='recent')shapes.sort((a,b)=>palette.recentObjects.indexOf(a.kind)-palette.recentObjects.indexOf(b.kind));
+ return <div className="shape-gallery"><button ref={trigger} type="button" disabled={disabled} aria-expanded={open} aria-haspopup="dialog" onClick={()=>setOpen(value=>!value)}><UiIcon name="category" aria-hidden="true"/> {t('shapeGalleryButton')}</button>
+ {open&&createPortal(<div className="object-dialog-backdrop" onPointerDown={event=>{if(event.target===event.currentTarget)close()}}><section ref={panel} className="shape-gallery-popover object-library" role="dialog" aria-modal="true" aria-label={t('shapeGalleryTitle')} style={{'--object-preview-size':size+'px'} as CSSProperties}>
+  <header><strong>{t('shapeGalleryTitle')} <small>{shapes.length} / {shapeCatalog.length}</small></strong><button type="button" aria-label={t('shapeClose')} onClick={close}><UiIcon name="close"/></button></header>
+  <input className="object-search" value={query} onChange={event=>setQuery(event.target.value)} placeholder={t('shapeGallerySearch')} aria-label={t('shapeGallerySearch')}/>
+  <div className="shape-library-toolbar"><label>{t('shapeCategory')}<select value={category} onChange={event=>setCategory(event.target.value)}><option value="all">{t('shapeAll')}</option>{[...new Set(shapeCatalog.map(s=>s.category))].map(category=><option key={category} value={category}>{shapeCategoryLabel(category,t)}</option>)}</select></label><label>{t('shapeDimension')}<select value={dimension} onChange={event=>setDimension(event.target.value)}><option value="all">{t('shapeAll')}</option><option value="2d">2D</option><option value="3d">3D</option></select></label><label>{t('shapeBrowse')}<select value={collection} onChange={event=>setCollection(event.target.value)}><option value="all">{t('shapeAll')}</option><option value="favorites">{t('shapeFavorites')}</option><option value="recent">{t('shapeRecent')}</option></select></label><label>{t('shapePreviewSize')}<input type="range" min="48" max="120" value={size} onChange={event=>setSize(Number(event.target.value))}/></label></div>
+  <div className="shape-gallery-results">{shapes.map(shape=><article className="shape-library-card" data-kind={shape.kind} key={shape.kind}><button className="shape-gallery-choice" type="button" disabled={disabled} title={shapeCategoryLabel(shape.category,t)} onClick={()=>{palette.rememberObject(shape.kind);onSelect(shape.kind,shape.name);close()}}><span><ShapeArtwork kind={shape.kind}/></span><small>{shapeLabel(shape.kind,t)}</small>{shape.dimension==='3d'&&<em>3D</em>}</button><button className="shape-favorite" type="button" aria-label={(palette.favoriteObjects.includes(shape.kind)?t('shapeFavoriteRemove'):t('shapeFavoriteAdd'))+' · '+shapeLabel(shape.kind,t)} aria-pressed={palette.favoriteObjects.includes(shape.kind)} onClick={()=>palette.toggleObject(shape.kind)}><UiIcon name="star"/></button></article>)}</div>
+  {shapes.length===0&&<p className="object-empty" role="status">{t('shapeEmpty')}</p>}
+ </section></div>,document.body)}</div>;
 }

@@ -19,8 +19,12 @@ it('changes fill, outline and frame thickness through actual operator controls',
  usePreferences.setState({language:'de',germanRegion:null});const item=frame();
  usePresentation.setState({items:[item],selectedItemId:item.id,selectedSlideId:item.slides[0].id,selectedElementIds:['adjustable']});
  render(<FormatToolbar openBackgroundMedia={()=>{}}/>);
+ fireEvent.click(screen.getByRole('button',{name:/^Füllung /}));
  fireEvent.change(screen.getByLabelText('FÜLLFARBE'),{target:{value:'#ff7700'}});
+ fireEvent.click(screen.getByRole('button',{name:'Übernehmen'}));
+ fireEvent.click(screen.getByRole('button',{name:/^Kontur /}));
  fireEvent.change(screen.getByLabelText('Konturfarbe'),{target:{value:'#334455'}});
+ fireEvent.click(screen.getByRole('button',{name:'Übernehmen'}));
  fireEvent.change(screen.getByLabelText('Konturstärke'),{target:{value:'4'}});
  fireEvent.change(screen.getByLabelText('Rahmenbreite (%)'),{target:{value:'16'}});
  fireEvent.click(screen.getByRole('checkbox',{name:'Ohne Füllung'}));
@@ -50,7 +54,7 @@ it.each(['frame-oval','banner-ribbon','rectangle'])('keeps the outline visible w
 it('draws triangle outlines along the actual shape rather than clipping a rectangular border',()=>{
  const slide=frame().slides[0];slide.elements[0].properties={shapeKind:'triangle',fill:'#699f3e',stroke:'#608f9a',strokeWidth:5,fillEnabled:false};
  const view=render(<SlideRenderer slide={slide} mode="thumbnail"/>);
- const polygon=view.container.querySelector('.shape-triangle polygon');
+ const polygon=view.container.querySelector('.shape-triangle path');
  expect(polygon).toHaveAttribute('fill','none');expect(polygon).toHaveAttribute('stroke','#608f9a');expect(polygon).toHaveAttribute('stroke-width','5');
 });
 

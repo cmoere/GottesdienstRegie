@@ -11933,12 +11933,66 @@
       "context": "BinaryExpression",
       "text": "Rahmen",
       "reason": "Stable canonical category ID compared with the selected shape; visible category names use separately translated shapeCategoryFrames."
+    },
+    "source.6624df039b8f9b06fb0d.1": {
+      "source": "src/ColorSelection.tsx",
+      "context": "BinaryExpression",
+      "text": "Escape",
+      "reason": "Canonical KeyboardEvent.key value; not operator copy."
+    },
+    "source.fbdf300303da9153a3b1.1": {
+      "source": "src/ColorSelection.tsx",
+      "context": "BinaryExpression",
+      "text": "Tab",
+      "reason": "Canonical KeyboardEvent.key value; not operator copy."
+    },
+    "source.748b2ded4ecf20a63e3b.1": {
+      "source": "src/ColorSelection.tsx",
+      "context": "BinaryExpression",
+      "text": "Enter",
+      "reason": "Canonical KeyboardEvent.key value; not operator copy."
+    },
+    "source.a62d6adcd69f475419ba.1": {
+      "source": "src/ShapeGallery.tsx",
+      "context": "BinaryExpression",
+      "text": "Escape",
+      "reason": "Canonical KeyboardEvent.key value; not operator copy."
+    },
+    "source.1f56116c3f3fb0fab46c.1": {
+      "source": "src/ShapeGallery.tsx",
+      "context": "BinaryExpression",
+      "text": "Tab",
+      "reason": "Canonical KeyboardEvent.key value; not operator copy."
+    },
+    "source.2e9b7af9989aa6217b33.1": {
+      "source": "src/ShapeGallery.tsx",
+      "context": "PropertyAccessExpression",
+      "text": "{expression1} {expression2} {expression3} {expression4} {expression5}",
+      "reason": "Search corpus assembled from canonical metadata, aliases and already localized object/category labels; not a separate operator text."
+    },
+    "source.383e95d9aa09536ef8f1.1": {
+      "source": "src/ShapeGallery.tsx",
+      "context": "jsx-text:option",
+      "text": "2D",
+      "reason": "International dimension abbreviation shown unchanged in every language."
+    },
+    "source.8ae4cff74cc968c5ffbb.1": {
+      "source": "src/ShapeGallery.tsx",
+      "context": "jsx-text:option",
+      "text": "3D",
+      "reason": "International dimension abbreviation shown unchanged in every language."
+    },
+    "source.300ff6e4b2e35d2e7632.1": {
+      "source": "src/ShapeGallery.tsx",
+      "context": "jsx-text:em",
+      "text": "3D",
+      "reason": "International dimension abbreviation shown unchanged in every language."
     }
   },
   "reviewedTechnicalFiles": {
     "src/shapeCatalog.ts": {
-      "sha256": "ac1691d5ecc43e2c73c3416981a2cdc4c3226842ecf849a484f236742cd8b816",
-      "reason": "Reviewed stable document shape IDs, canonical saved names, category IDs, frame geometry generation and SVG paths. Operator labels are separately localized through shapeControlTemplates and shapeLabels. Persisted document metadata and geometry remain canonical."
+      "sha256": "f1fa8fc49d9beb369083789b2668496549cd36a67c64404d3ddb3ccab3ad7603",
+      "reason": "Reviewed stable document shape IDs, canonical catalog names, dimensions, original/projected SVG geometry and visitor paint rendering. Operator labels are separately registered in shapeControlTemplates including generated expandedShapeLabels. These canonical metadata and geometry values must not be translated."
     },
     "src/bible/provider.ts": {
       "sha256": "797162a27bfa46998d7113583bdf3812a9c45aae09c144ce78f25defb0cb353b",
@@ -12105,8 +12159,8 @@
       "reason": "Reviewed entire module: visitor announcement scroll composition, supplied public content and geometry only. No settings or other operator controls in this module."
     },
     "src/SlideRenderer.tsx": {
-      "sha256": "6f72b9a37756bedd35b2f5bb0d3d14235c8008a291b019244ded39f6da37bb06",
-      "reason": "Reviewed visitor renderer diff: applies explicit fillEnabled and frameThickness properties, draws polygon outlines along authored geometry, allows complete SVG outlines within the clipped slide. Existing output copy, provider data and geometry strings are visitor content or technical values; this module adds no operator prose."
+      "sha256": "7e067f2a4a1819275a6dd6ce8a041f702589677ed5a57d73dc24d702ce226355",
+      "reason": "Reviewed stable document shape IDs, canonical catalog names, dimensions, original/projected SVG geometry and visitor paint rendering. Operator labels are separately registered in shapeControlTemplates including generated expandedShapeLabels. These canonical metadata and geometry values must not be translated."
     },
     "src/languageCatalog.ts": {
       "sha256": "f01c17273e48b2e62eabca71cd1a3f7b5c7d7fe69cc0c8a042f5df36006e7a31",
@@ -12145,8 +12199,32 @@
       "reason": "Reviewed stable document shape IDs, canonical saved names, category IDs, frame geometry generation and SVG paths. Operator labels are separately localized through shapeControlTemplates and shapeLabels. Persisted document metadata and geometry remain canonical."
     },
     "src/frameGeometry.ts": {
-      "sha256": "82c6e48af1618433168031b3b882cfdc2bddd48eec4f781e55faac0b00ce867c",
-      "reason": "Reviewed stable document shape IDs, canonical saved names, category IDs, frame geometry generation and SVG paths. Operator labels are separately localized through shapeControlTemplates and shapeLabels. Persisted document metadata and geometry remain canonical."
+      "sha256": "122c3aecd394a87bf03ec6d0e9a35ff1923501b50e289f20dddac9833b998e1b",
+      "reason": "Reviewed stable document shape IDs, canonical catalog names, dimensions, original/projected SVG geometry and visitor paint rendering. Operator labels are separately registered in shapeControlTemplates including generated expandedShapeLabels. These canonical metadata and geometry values must not be translated."
+    },
+    "src/expandedShapes.ts": {
+      "sha256": "0923738f56b72489f03947ad4c2045319f054ccb4d72ab447c7fc59b0c663044",
+      "reason": "Reviewed stable document shape IDs, canonical catalog names, dimensions, original/projected SVG geometry and visitor paint rendering. Operator labels are separately registered in shapeControlTemplates including generated expandedShapeLabels. These canonical metadata and geometry values must not be translated."
+    },
+    "src/spatialShapes.ts": {
+      "sha256": "0bbe9447b0c8f215d3bd57adcc3b148510103cd0e7ed41d05726d44339831dd8",
+      "reason": "Reviewed stable document shape IDs, canonical catalog names, dimensions, original/projected SVG geometry and visitor paint rendering. Operator labels are separately registered in shapeControlTemplates including generated expandedShapeLabels. These canonical metadata and geometry values must not be translated."
+    },
+    "src/objectGeometry.ts": {
+      "sha256": "bb9374c301a1f2f1159bfef73a2fba5dbf79044fae5fb9f7687da9c658146b45",
+      "reason": "Reviewed stable document shape IDs, canonical catalog names, dimensions, original/projected SVG geometry and visitor paint rendering. Operator labels are separately registered in shapeControlTemplates including generated expandedShapeLabels. These canonical metadata and geometry values must not be translated."
+    },
+    "src/legacyShapeGeometry.ts": {
+      "sha256": "d1eb892a5f3c95a4d1a5904294d60beeea85401aef4843d3f6716e94acd0f4ea",
+      "reason": "Reviewed stable document shape IDs, canonical catalog names, dimensions, original/projected SVG geometry and visitor paint rendering. Operator labels are separately registered in shapeControlTemplates including generated expandedShapeLabels. These canonical metadata and geometry values must not be translated."
+    },
+    "src/colorModel.ts": {
+      "sha256": "cb94f79a1f5e58a128fa16b37a8c9a2e7a0021124c6980c717533b371a1dee1a",
+      "reason": "Reviewed canonical color parsing, CSS/SVG paint expressions, scoped gradient IDs, alpha and projected-solid shading. Contains geometry/style values only; no operator prose. Actual color/library controls are separately localized."
+    },
+    "src/ShapeVector.tsx": {
+      "sha256": "879f1a5b88d68868a3c3d2715f11f6bfdeafd244441698bd69e09595be76bd2f",
+      "reason": "Reviewed canonical color parsing, CSS/SVG paint expressions, scoped gradient IDs, alpha and projected-solid shading. Contains geometry/style values only; no operator prose. Actual color/library controls are separately localized."
     }
   }
 }

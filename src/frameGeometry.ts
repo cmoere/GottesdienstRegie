@@ -1,3 +1,4 @@
+import {extendedFramePath} from './objectGeometry';
 /** Width is expressed in the shape's 100-unit coordinate system. */
 export function frameThickness(kind:string,value?:unknown):number{
  const fallback=kind==='frame-double'?15:kind==='frame-corners'?6:8;
@@ -27,5 +28,5 @@ export function framePath(kind:string,value?:unknown):string|undefined{
   'frame-triangle':[[50,6],[94,94],[6,94]],
   'frame-octagon':[[32,6],[68,6],[94,32],[94,68],[68,94],[32,94],[6,68],[6,32]],
  };
- return Object.hasOwn(points,kind)?polygon(points[kind])+' '+polygon(points[kind],t):undefined;
+ return Object.hasOwn(points,kind)?polygon(points[kind])+' '+polygon(points[kind],t):extendedFramePath(kind,t);
 }

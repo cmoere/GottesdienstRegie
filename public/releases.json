@@ -24,9 +24,144 @@
       "line": "0.99",
       "builds": [
         {
+          "version": "0.99.20",
+          "releaseDate": "2026-11-27",
+          "current": true,
+          "overview": {
+            "label": {
+              "de": "300 Objekte und eine erweiterte Farbauswahl",
+              "en": "300 objects and expanded color selection"
+            },
+            "text": {
+              "de": "Die Bibliothek umfasst jetzt 240 zweidimensionale Objekte und 60 räumliche SVG-Formen. Filter, Favoriten und vergrößerbare Vorschauen erleichtern die Auswahl. Ein gemeinsamer Farbwähler für Objektfüllungen und Konturen bietet HEX/RGB, Transparenz, eigene Farben und Farbverläufe.",
+              "en": "The library now contains 240 two-dimensional objects and 60 spatial SVG shapes. Filters, favorites and adjustable previews simplify selection. A shared picker for object fills and outlines provides HEX/RGB, transparency, custom palettes and gradients."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Objektbibliothek mit 300 unterschiedlichen Geometrien",
+                  "en": "Object library with 300 distinct geometries"
+                },
+                "text": {
+                  "de": "60 Grundformen, 50 Pfeile und Verbindungen, 40 Rahmen, 40 Banner und Sprechblasen, 50 Symbole einschließlich Kirchen- und Festmotiven sowie 60 räumliche Formen stehen bereit. Suche, Kategorien, 2D/3D-Filter, lokale Favoriten und zuletzt verwendete Objekte führen zur passenden Auswahl. Die Vorschaugröße lässt sich anpassen.",
+                  "en": "The selection includes 60 basic shapes, 50 arrows and connectors, 40 frames, 40 banners and speech bubbles, 50 symbols including church and seasonal motifs, and 60 spatial shapes. Search, categories, 2D/3D filters, local favorites and recently used objects help find the right item. Preview size is adjustable."
+                }
+              },
+              {
+                "label": {
+                  "de": "Räumliche Formen mit Tiefe und Projektionsrichtung",
+                  "en": "Spatial forms with depth and projection direction"
+                },
+                "text": {
+                  "de": "Prismen, Pyramiden, Kegel, Zylinder, Kugeln und weitere Körper werden als lokale Vektorgrafiken mit schattierten Flächen dargestellt. Tiefe und Projektionsrichtung lassen sich in der Bearbeitungsleiste einstellen. Die Formen behalten ihre Proportionen innerhalb des veränderbaren Objektrahmens.",
+                  "en": "Prisms, pyramids, cones, cylinders, spheres and other solids are displayed as local vector graphics with shaded surfaces. Depth and projection direction can be adjusted in the editing toolbar. Shapes retain their proportions within the resizable object box."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Gemeinsame Farbauswahl für Füllung und Kontur",
+                  "en": "Shared color selection for fills and outlines"
+                },
+                "text": {
+                  "de": "Gemeindefarben, eigene Favoriten und zuletzt verwendete Farben ergänzen HEX- und RGB-Eingaben. Transparenz ist separat einstellbar. Objektfüllungen unterstützen lineare und radiale Verläufe mit einer zweiten Farbe und einer einstellbaren Richtung. Eine Systempipette steht auf unterstützten Geräten zur Verfügung. Abbrechen stellt die vorherige Farbauswahl wieder her.",
+                  "en": "Congregation colors, custom favorites and recently used colors complement HEX and RGB entry. Transparency is adjustable separately. Object fills support linear and radial gradients with a second color and adjustable direction. A system eyedropper is available on supported devices. Cancel restores the previous color selection."
+                }
+              },
+              {
+                "label": {
+                  "de": "Übersichtliche Auswahl und statische Vorschauen",
+                  "en": "Clear browsing and static previews"
+                },
+                "text": {
+                  "de": "Die Objektbibliothek nutzt ein begrenztes Dialogfenster mit scrollbarer Auswahl und vollständigen Namen. Favoriten können direkt an den Objekten gesetzt werden. Vorschauen bleiben statisch; eine geschlossene Bibliothek bereitet keine gefilterte Vorschau vor. Darstellung und Bedienung wurden auch bei schmalen Fenstern geprüft.",
+                  "en": "The library uses a bounded dialog with scrollable results and full names. Objects can be marked as favorites directly. Previews remain static, and a closed library does not prepare filtered previews. Layout and controls were also checked in narrow windows."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Geometrie, Transparenz und bestehende Farben abgesichert",
+                  "en": "Geometry, transparency and existing colors protected"
+                },
+                "text": {
+                  "de": "Bisher unvollständig dargestellte Richtungspfeile und Symbole erhalten passende Vektorgeometrien. Gedrehte Pfeile bleiben innerhalb ihres Koordinatenbereichs. Alle 40 Rahmen behalten auch bei geänderter Breite transparente Mitten. Farbverläufe verwenden getrennte SVG-Referenzen, und das Abbrechen des Farbwählers erhält auch importierte CSS-Farben.",
+                  "en": "Previously incomplete direction arrows and symbols now have appropriate vector geometry. Rotated arrows remain within their coordinate bounds. All 40 frames retain transparent centers when their width changes. Gradients use separate SVG references, and canceling the picker preserves imported CSS colors."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              },
+              {
+                "label": {
+                  "de": "Bildrate im lokalen Netzwerk",
+                  "en": "Frame rate on the local network"
+                },
+                "text": {
+                  "de": "Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.",
+                  "en": "Actual frame rate depends on output performance, browser and network. Checks cover a local browser image stream and native capture; they do not replace testing on the venue’s own network."
+                }
+              },
+              {
+                "label": {
+                  "de": "Erreichbarkeit der Lichtoperator-Ansicht",
+                  "en": "Lighting Operator view access"
+                },
+                "text": {
+                  "de": "Solange der Lichtoperator aktiviert ist, kann jedes Gerät mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte über die feste Adresse sehen. Die Ansicht erlaubt keine Steuerbefehle. Lichtempfehlungen sind Vorschläge und ersetzen keine Prüfung am eingesetzten Scheinwerfer.",
+                  "en": "While the Lighting Operator is enabled, any device with access to the local control server can view its ON-AIR content at the fixed address. The view does not allow control commands. Lighting recommendations are suggestions and do not replace checking the actual fixture."
+                }
+              },
+              {
+                "label": {
+                  "de": "Lokales Netzwerk und Vertrauen des Zertifikats",
+                  "en": "Local network and certificate trust"
+                },
+                "text": {
+                  "de": "regie.local benötigt ein gemeinsames lokales Netzwerk, das mDNS zulässt. Die erfolgreiche Anmeldung ist keine Prüfung aller verbundenen Geräte. Beim ersten Öffnen kann es nötig sein, das erneuerte lokale Zertifikat anhand des angezeigten Fingerabdrucks zu bestätigen. Die Anwendung installiert kein Vertrauen automatisch. Ein zweites Gerät im tatsächlichen Saalnetz wurde hier nicht geprüft.",
+                  "en": "regie.local requires a shared local network that permits mDNS. Successful registration does not verify every connected device. When first opening the page, the renewed local certificate may need to be confirmed against the displayed fingerprint. The application does not install certificate trust automatically. A second device on the actual venue network was not tested here."
+                }
+              },
+              {
+                "label": {
+                  "de": "Räumliche Darstellung und lokale Farbpaletten",
+                  "en": "Spatial rendering and local palettes"
+                },
+                "text": {
+                  "de": "Die räumlichen Objekte verwenden projizierte SVG-Geometrie mit Schattierung. Eigene Farben, Favoriten und zuletzt verwendete Einträge werden lokal am jeweiligen Regie-PC beziehungsweise Browser gespeichert. Die Verfügbarkeit der Pipette hängt vom Browser und Betriebssystem ab.",
+                  "en": "Spatial objects use projected SVG geometry with shading. Custom colors, favorites and recently used entries are stored locally on each control PC or browser. Eyedropper availability depends on the browser and operating system."
+                }
+              }
+            ]
+          }
+        },
+        {
           "version": "0.99.19",
           "releaseDate": "2026-11-26",
-          "current": true,
+          "current": false,
           "overview": {
             "label": {
               "de": "Mehr Gestaltungsmöglichkeiten für Folienobjekte",
