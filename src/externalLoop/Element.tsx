@@ -4,6 +4,7 @@ import {ExternalLoopView} from './View';
 import {normalizeExternalSettings,externalRequestForSettings} from './model';
 import {externalRequestKey} from '../../shared/externalLoopRequest';
 import {readExternalSnapshot} from '../../shared/externalLoopValidation';
+import {transitSettingsMetadata} from '../../shared/transit';
 import type {ExternalSettings} from '../../shared/externalLoop';
 
 export function ExternalLoopElement({properties,style,mode}:{properties:Record<string,unknown>;style:CSSProperties;mode:string}){
@@ -13,7 +14,7 @@ export function ExternalLoopElement({properties,style,mode}:{properties:Record<s
  let settings=normalizeExternalSettings({...properties,externalKind:properties.loopType});
  if(live){try{
   const saved=JSON.parse(String(properties.externalSettingsJson??'null')) as ExternalSettings|null;
-  if(saved)settings=normalizeExternalSettings(saved.kind==='weather'?{externalKind:'weather',weatherName:saved.name,weatherLatitude:saved.latitude,weatherLongitude:saved.longitude,durationSeconds:saved.durationSeconds}:saved.kind==='news'?{externalKind:'news',newsSources:saved.sources,newsLimit:saved.limit,newsRotation:saved.newsRotation,newsIntervalSeconds:saved.newsIntervalSeconds,durationSeconds:saved.durationSeconds}:{externalKind:'football',footballLeague:saved.league,footballMode:saved.mode,footballTeamId:saved.teamId,durationSeconds:saved.durationSeconds});
+  if(saved)settings=normalizeExternalSettings(saved.kind==='transit'?transitSettingsMetadata(saved):saved.kind==='weather'?{externalKind:'weather',weatherName:saved.name,weatherLatitude:saved.latitude,weatherLongitude:saved.longitude,durationSeconds:saved.durationSeconds}:saved.kind==='news'?{externalKind:'news',newsSources:saved.sources,newsLimit:saved.limit,newsRotation:saved.newsRotation,newsIntervalSeconds:saved.newsIntervalSeconds,durationSeconds:saved.durationSeconds}:{externalKind:'football',footballLeague:saved.league,footballMode:saved.mode,footballTeamId:saved.teamId,durationSeconds:saved.durationSeconds});
  }catch{/* Invalid frozen settings never trigger a network fallback. */}}
  const request=externalRequestForSettings(settings);
  let snapshot=null;

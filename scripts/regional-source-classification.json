@@ -11987,6 +11987,96 @@
       "context": "jsx-text:em",
       "text": "3D",
       "reason": "International dimension abbreviation shown unchanged in every language."
+    },
+    "source.6c6e5ffbad95cc9be97a.1": {
+      "source": "src/App.tsx",
+      "context": "property:title",
+      "text": "ÖPNV · Beckhausstraße",
+      "reason": "Canonical stored item title or catalog lookup value; the user-facing catalog label resolves through tx. Registered transitTemplates.json resources own its translated operator label; stored presentation titles remain canonical."
+    },
+    "source.a796ffbfa457f90ed93e.1": {
+      "source": "src/addElementCatalog.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "ÖPNV",
+      "reason": "Canonical stored item title or catalog lookup value; the user-facing catalog label resolves through tx. Registered transitTemplates.json resources own its translated operator label; stored presentation titles remain canonical."
+    },
+    "source.c8abac22fff0000437bb.1": {
+      "source": "src/addElementCatalog.ts",
+      "context": "ArrayLiteralExpression",
+      "text": "ÖPNV · Beckhausstraße",
+      "reason": "Canonical stored item title or catalog lookup value; the user-facing catalog label resolves through tx. Registered transitTemplates.json resources own its translated operator label; stored presentation titles remain canonical."
+    },
+    "source.87db00270886649bc968.1": {
+      "source": "src/externalLoop/TransitDesigner.tsx",
+      "context": "property:classic",
+      "text": "Klassisch",
+      "reason": "Duplicate label in a typed design/checkbox table. Runtime explicitly resolves it through tx; the app-owned German/English resource and all31 interface packs are registered in transitTemplates.json."
+    },
+    "source.d3e0ef864fa0ce533acf.1": {
+      "source": "src/externalLoop/TransitDesigner.tsx",
+      "context": "property:board",
+      "text": "Dunkle Abfahrtstafel",
+      "reason": "Duplicate label in a typed design/checkbox table. Runtime explicitly resolves it through tx; the app-owned German/English resource and all31 interface packs are registered in transitTemplates.json."
+    },
+    "source.20b7c5df351fdf592fa0.1": {
+      "source": "src/externalLoop/TransitDesigner.tsx",
+      "context": "property:clear",
+      "text": "Klar",
+      "reason": "Duplicate label in a typed design/checkbox table. Runtime explicitly resolves it through tx; the app-owned German/English resource and all31 interface packs are registered in transitTemplates.json."
+    },
+    "source.aeaff467adc810f95eeb.1": {
+      "source": "src/externalLoop/TransitDesigner.tsx",
+      "context": "property:split",
+      "text": "Zweigeteilt",
+      "reason": "Duplicate label in a typed design/checkbox table. Runtime explicitly resolves it through tx; the app-owned German/English resource and all31 interface packs are registered in transitTemplates.json."
+    },
+    "source.b7c03d72ba4e09d4ae37.1": {
+      "source": "src/externalLoop/TransitDesigner.tsx",
+      "context": "property:tiles",
+      "text": "Kacheln",
+      "reason": "Duplicate label in a typed design/checkbox table. Runtime explicitly resolves it through tx; the app-owned German/English resource and all31 interface packs are registered in transitTemplates.json."
+    },
+    "source.a55ad77fde4a5acf54b5.1": {
+      "source": "src/externalLoop/TransitDesigner.tsx",
+      "context": "property:focus",
+      "text": "Großanzeige",
+      "reason": "Duplicate label in a typed design/checkbox table. Runtime explicitly resolves it through tx; the app-owned German/English resource and all31 interface packs are registered in transitTemplates.json."
+    },
+    "source.a3ef85f559ccdf2384db.1": {
+      "source": "src/externalLoop/TransitDesigner.tsx",
+      "context": "ArrayLiteralExpression",
+      "text": "Gleis / Steig anzeigen",
+      "reason": "Duplicate label in a typed design/checkbox table. Runtime explicitly resolves it through tx; the app-owned German/English resource and all31 interface packs are registered in transitTemplates.json."
+    },
+    "source.f0990fc0bb3e3e4da13f.1": {
+      "source": "src/externalLoop/TransitDesigner.tsx",
+      "context": "ArrayLiteralExpression",
+      "text": "Prognose und Verspätung anzeigen",
+      "reason": "Duplicate label in a typed design/checkbox table. Runtime explicitly resolves it through tx; the app-owned German/English resource and all31 interface packs are registered in transitTemplates.json."
+    },
+    "source.ac2b45592326dee6f1ae.1": {
+      "source": "src/externalLoop/TransitDesigner.tsx",
+      "context": "ArrayLiteralExpression",
+      "text": "Fahrweg anzeigen",
+      "reason": "Duplicate label in a typed design/checkbox table. Runtime explicitly resolves it through tx; the app-owned German/English resource and all31 interface packs are registered in transitTemplates.json."
+    },
+    "source.f6eed1adf101820822da.1": {
+      "source": "src/externalLoop/TransitDesigner.tsx",
+      "context": "ArrayLiteralExpression",
+      "text": "Verkehrsmeldungen anzeigen",
+      "reason": "Duplicate label in a typed design/checkbox table. Runtime explicitly resolves it through tx; the app-owned German/English resource and all31 interface packs are registered in transitTemplates.json."
+    },
+    "source.b1ab2f15ee2db98d3537.1": {
+      "source": "src/loopItemFactory.ts",
+      "context": "property:transit",
+      "text": "ÖPNV · Beckhausstraße",
+      "reason": "Canonical stored item title or catalog lookup value; the user-facing catalog label resolves through tx. Registered transitTemplates.json resources own its translated operator label; stored presentation titles remain canonical."
+    },
+    "source.8fe1542ab72b38c13e47.1": {
+      "source": "src/store.ts",
+      "context": "property:transit",
+      "text": "ÖPNV · Beckhausstraße",
+      "reason": "Canonical stored item title or catalog lookup value; the user-facing catalog label resolves through tx. Registered transitTemplates.json resources own its translated operator label; stored presentation titles remain canonical."
     }
   },
   "reviewedTechnicalFiles": {
@@ -12159,7 +12249,7 @@
       "reason": "Reviewed entire module: visitor announcement scroll composition, supplied public content and geometry only. No settings or other operator controls in this module."
     },
     "src/SlideRenderer.tsx": {
-      "sha256": "7e067f2a4a1819275a6dd6ce8a041f702589677ed5a57d73dc24d702ce226355",
+      "sha256": "269bd37243deef96b2e8f5c3e0e8297aab8f39e78768d23e0823382523e5b7c6",
       "reason": "Reviewed stable document shape IDs, canonical catalog names, dimensions, original/projected SVG geometry and visitor paint rendering. Operator labels are separately registered in shapeControlTemplates including generated expandedShapeLabels. These canonical metadata and geometry values must not be translated."
     },
     "src/languageCatalog.ts": {
@@ -12171,7 +12261,7 @@
       "reason": "Reviewed 2026-10-29: versioned terms document data (TERMS_VERSION/effective date, sections, existing language editions and plain-document export), not operator controls. Regional interface selection does not rewrite the published document body or its version. Consent/dialog controls live outside this module and remain independently inventoried/localized. No terms content or acceptance behavior was changed."
     },
     "src/externalLoop/View.tsx": {
-      "sha256": "6fde3607b7e795b02ff6e21eb69af996b0f7108ada394c7e3f2c4c63b489f14b",
+      "sha256": "36006cf5d1d1f78ff864dc52bf000784a8078fb14d23d493237c5bc9fec4ccc3",
       "reason": "Reviewed all candidate text, complete render structure and control/dialog AST on 2026-10-29: visitor football standings/results and source attribution output only, with club/provider data. No operator controls. The explicitly preserved visitor-slide design/content remains independent of the operator regional interface. Re-reviewed v96 changes on 2026-11-02: added renderer parameters/effect composition or private read-only preview/speech preparation; candidate literals keep the same visitor-content or protocol purpose."
     },
     "src/externalLoop/WeatherView.tsx": {
@@ -12225,6 +12315,10 @@
     "src/ShapeVector.tsx": {
       "sha256": "879f1a5b88d68868a3c3d2715f11f6bfdeafd244441698bd69e09595be76bd2f",
       "reason": "Reviewed canonical color parsing, CSS/SVG paint expressions, scoped gradient IDs, alpha and projected-solid shading. Contains geometry/style values only; no operator prose. Actual color/library controls are separately localized."
+    },
+    "src/externalLoop/TransitView.tsx": {
+      "sha256": "3feb4f8f27f6d1ad0844e7646a12254b4549101a54efa13810d3021ed82d5b51",
+      "reason": "Public visitor-facing transit slide for the fixed Bielefeld stop, not operator copy. Route and stop names, displayed notices and source times must remain canonical across regional operator interfaces."
     }
   }
 }

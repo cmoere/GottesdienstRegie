@@ -1,3 +1,4 @@
+import type {TransitPayload,TransitSettings} from './transit';
 export type NewsSource='westfalen-blatt'|'wdr-owl';
 export type FootballLeague='bl1'|'bl2'|'bl3';
 export type FootballMode='matchday'|'upcoming'|'table';
@@ -8,8 +9,8 @@ export type FootballTableRow={rank:number;team:FootballTeam;played:number;goalsF
 export type WeatherLocation={name:string;latitude:number;longitude:number};
 export type WeatherHour={time:string;temperature:number;code:number;rainProbability:number;isDay?:boolean};
 export type WeatherPayload={kind:'weather';location:WeatherLocation;observedAt:string;temperature:number;code:number;wind:number;isDay?:boolean;hourly?:WeatherHour[];days:Array<{date:string;code:number;minimum:number;maximum:number;rainProbability:number}>};
-export type ExternalPayload={kind:'news';entries:NewsEntry[]}|{kind:'football';league:FootballLeague;season:number;mode:FootballMode;teams:FootballTeam[];matches:FootballMatch[];table:FootballTableRow[]}|WeatherPayload;
-export type ExternalRequest={kind:'news';sources:NewsSource[]}|{kind:'football';league:FootballLeague;mode:FootballMode}|({kind:'weather'}&WeatherLocation);
+export type ExternalPayload=TransitPayload|{kind:'news';entries:NewsEntry[]}|{kind:'football';league:FootballLeague;season:number;mode:FootballMode;teams:FootballTeam[];matches:FootballMatch[];table:FootballTableRow[]}|WeatherPayload;
+export type ExternalRequest={kind:'transit'}|{kind:'news';sources:NewsSource[]}|{kind:'football';league:FootballLeague;mode:FootballMode}|({kind:'weather'}&WeatherLocation);
 export type ExternalSnapshot={version:1;key:string;revision:string;fetchedAt:number;stale:boolean;payload:ExternalPayload};
 export type ExternalReply={snapshot:ExternalSnapshot|null;status:'ready'|'stale'|'empty'|'unavailable'};
-export type ExternalSettings=({kind:'news';sources:NewsSource[];limit:number;newsRotation?:'per-take'|'interval';newsIntervalSeconds?:number}|{kind:'football';league:FootballLeague;mode:FootballMode;teamId:number|null}|({kind:'weather'}&WeatherLocation))&{durationSeconds:number};
+export type ExternalSettings=TransitSettings|({kind:'news';sources:NewsSource[];limit:number;newsRotation?:'per-take'|'interval';newsIntervalSeconds?:number}|{kind:'football';league:FootballLeague;mode:FootballMode;teamId:number|null}|({kind:'weather'}&WeatherLocation))&{durationSeconds:number};

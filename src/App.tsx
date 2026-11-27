@@ -1189,6 +1189,7 @@ function SortableItem({
     nowPlaying: "graphic_eq",
     news: "newspaper",
     football: "sports_soccer",
+    transit: "directions_bus",
   };
   const commit = () => {
     const seconds = parseDuration(durationValue);
@@ -1589,6 +1590,7 @@ export function AddPopover({
     { type: "nowPlaying", label: tx("Läuft gerade"), title: "Läuft gerade", icon: "graphic_eq" },
     { type: "news", label: tx("Nachrichten"), title: "Nachrichten", icon: "newspaper" },
     { type: "football", label: tx("Fußball"), title: "Fußball", icon: "sports_soccer" },
+    { type: "transit", label: tx("ÖPNV"), title: "ÖPNV · Beckhausstraße", icon: "directions_bus" },
   ];
   async function addImported(option: (typeof options)[number]) {
     void option;

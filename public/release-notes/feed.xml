@@ -1,5 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GottesdienstRegie – Versionshinweise</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/</link><description>Neue Versionen, Verbesserungen und Fehlerbehebungen für GottesdienstRegie.</description><language>de</language><atom:link href="https://cmoere.github.io/GottesdienstRegie/release-notes/feed.xml" rel="self" type="application/rss+xml"/>
+<item><title>GottesdienstRegie 0.99.21</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.21</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.21</guid><pubDate>Fri, 27 Nov 2026 00:00:00 GMT</pubDate><description>ÖPNV-Abfahrten mit sechs wählbaren Designs
+Im Vor- und Nachprogramm steht eine native ÖPNV-Folie für Bielefeld, Beckhausstraße zur Verfügung. Sechs Designs, wählbare Linien und passende Verkehrsmeldungen machen die Anzeige flexibel. Planzeiten, Prognosen und Ausfälle bleiben unterscheidbar; die Daten kommen aus dem vorhandenen öffentlichen ÖPNV-Worker.
+
+Sechs Designs für Abfahrten im Vor- und Nachprogramm
+Unter „Element hinzufügen → ÖPNV“ stehen Klassisch, Dunkle Abfahrtstafel, Klar, Zweigeteilt, Kacheln und Großanzeige bereit. Die Großanzeige zeigt zwei Abfahrten gleichzeitig; in den übrigen Designs lassen sich vier bis sechs Abfahrten pro Seite einstellen. Weitere Abfahrten wechseln automatisch. Die Mindestdauer berücksichtigt alle Seiten und die Länge der angezeigten Texte.
+
+Wählbare Linien und Anzeigeoptionen
+Die Linien 2, 27, N8, N12 und SEV können einzeln ein- oder ausgeblendet werden. Zusätzlich sind die Anzahl der Abfahrten, Gleis beziehungsweise Steig, Prognosen und Verspätungen, der Fahrweg und Verkehrsmeldungen einstellbar. Die Bearbeitung weist ausdrücklich auf die Beschränkung auf Bielefeld, Beckhausstraße hin.
+
+Passende Verkehrsmeldungen aus dem vorhandenen Worker
+Linienbezogene Meldungen folgen der gewählten Linienauswahl. Allgemeine Meldungen werden nur übernommen, wenn sie lokal Bielefeld beziehungsweise Beckhausstraße zugeordnet werden können oder ausdrücklich im Worker als manuelle Hinweise gepflegt sind. Lange Texte bewegen sich bei Platzmangel langsam im eigenen Bereich. Das vorhandene Gemeindelaufband und die Testkennzeichnung bleiben davon getrennt.
+
+Zentraler Datenabruf mit stabilen Live-Ausgaben
+Ein zentraler Dienst fragt den bestehenden Worker höchstens alle 20 Sekunden ab und teilt laufende Anfragen zwischen Vorschauen und Ausgaben. Sichtbare Live-Ausgaben verwenden einen festen Datenstand; neue Daten werden beim nächsten Folienaufruf übernommen. Bereits vergangene Abfahrten werden vor einem neuen Aufruf herausgefiltert.
+
+Planzeit, Prognose und Ausfall eindeutig unterscheiden
+Eine leere Statuszeile wird nicht als Nachweis für Pünktlichkeit behandelt. Planzeit und prognostizierte Abfahrt bleiben getrennt erhalten; Ausfälle werden ausdrücklich gekennzeichnet. Verwaltungsfelder und technische Fehlertexte werden nicht an Besucher-Ausgaben weitergegeben. Bei Verbindungsproblemen ist ein gültiger letzter Stand höchstens zwei Minuten als Ausfallreserve nutzbar.
+
+Hinweise zum Live-Betrieb
+Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.
+
+Originalgetreue PowerPoint-Wiedergabe
+Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.
+
+Bildrate im lokalen Netzwerk
+Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.
+
+Erreichbarkeit der Lichtoperator-Ansicht
+Solange der Lichtoperator aktiviert ist, kann jedes Gerät mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte über die feste Adresse sehen. Die Ansicht erlaubt keine Steuerbefehle. Lichtempfehlungen sind Vorschläge und ersetzen keine Prüfung am eingesetzten Scheinwerfer.
+
+Lokales Netzwerk und Vertrauen des Zertifikats
+regie.local benötigt ein gemeinsames lokales Netzwerk, das mDNS zulässt. Die erfolgreiche Anmeldung ist keine Prüfung aller verbundenen Geräte. Beim ersten Öffnen kann es nötig sein, das erneuerte lokale Zertifikat anhand des angezeigten Fingerabdrucks zu bestätigen. Die Anwendung installiert kein Vertrauen automatisch. Ein zweites Gerät im tatsächlichen Saalnetz wurde hier nicht geprüft.
+
+Räumliche Darstellung und lokale Farbpaletten
+Die räumlichen Objekte verwenden projizierte SVG-Geometrie mit Schattierung. Eigene Farben, Favoriten und zuletzt verwendete Einträge werden lokal am jeweiligen Regie-PC beziehungsweise Browser gespeichert. Die Verfügbarkeit der Pipette hängt vom Browser und Betriebssystem ab.
+
+Feste Haltestelle und regionale Fachbegriffe
+Die ÖPNV-Anbindung ist auf Bielefeld, Beckhausstraße und die dort unterstützten Linien begrenzt. Eine freie Haltestellensuche ist nicht enthalten. Neue ÖPNV-Bedientexte verwenden in deutschen Regionalvarianten zunächst standarddeutsche Fachsprache. Der vorhandene Worker und seine Verwaltungsoberfläche werden durch dieses Update nicht verändert.</description></item>
 <item><title>GottesdienstRegie 0.99.20</title><link>https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.20</link><guid isPermaLink="true">https://cmoere.github.io/GottesdienstRegie/release-notes/#version-0.99.20</guid><pubDate>Fri, 27 Nov 2026 00:00:00 GMT</pubDate><description>300 Objekte und eine erweiterte Farbauswahl
 Die Bibliothek umfasst jetzt 240 zweidimensionale Objekte und 60 räumliche SVG-Formen. Filter, Favoriten und vergrößerbare Vorschauen erleichtern die Auswahl. Ein gemeinsamer Farbwähler für Objektfüllungen und Konturen bietet HEX/RGB, Transparenz, eigene Farben und Farbverläufe.
 

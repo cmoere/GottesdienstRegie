@@ -5,6 +5,7 @@ import {EventScrollViewport,useEventPresentationClock} from '../EventScrollViewp
 import {prepareExternalPresentation,externalReducedPages} from './model';
 import './styles.css';
 import {NewsStoryView} from './NewsStoryView';
+import {TransitView} from './TransitView';
 import {WeatherView} from './WeatherView';
 
 function ClubLogo({src,name}:{src?:string;name:string}){const [failed,setFailed]=useState(false);return src&&!failed?<img className="football-club-logo" src={src} alt={'Logo '+name} onError={()=>setFailed(true)}/>:null}
@@ -13,6 +14,7 @@ function time(value:string){return new Date(value).toLocaleTimeString('de-DE',{h
 type Props={snapshot:ExternalSnapshot;startedAt:number;settings:ExternalSettings;staticPreview?:boolean};
 function Frame({snapshot,settings,elapsed,reduced}:{snapshot:ExternalSnapshot;settings:ExternalSettings;elapsed:number;reduced:boolean}){
  const prepared=useMemo(()=>prepareExternalPresentation(snapshot,settings),[snapshot,settings]),payload=prepared.payload;
+ if(payload.kind==='transit')return settings.kind==='transit'?<TransitView snapshot={snapshot} payload={payload} settings={settings} elapsed={elapsed} reduced={reduced}/>:null;
  if(payload.kind==='weather')return <WeatherView snapshot={snapshot} payload={payload} elapsed={elapsed} reduced={reduced}/>;
  if(payload.kind==='news')return <NewsStoryView snapshot={snapshot} entries={settings.kind==='news'&&settings.newsRotation!=='interval'?payload.entries.slice(0,1):payload.entries} durationSeconds={settings.kind==='news'&&settings.newsRotation==='interval'?settings.newsIntervalSeconds??20:settings.durationSeconds} fixedInterval={settings.kind==='news'&&settings.newsRotation==='interval'} elapsed={elapsed} reduced={reduced}/>;
  const pages=reduced?externalReducedPages(snapshot,settings):[],page=pages[Math.floor(elapsed/10000)%Math.max(1,pages.length)];
@@ -34,5 +36,5 @@ function Frame({snapshot,settings,elapsed,reduced}:{snapshot:ExternalSnapshot;se
   <footer>{payload.kind==='football'?'Quelle: OpenLigaDB · ':''}Datenstand: {new Date(snapshot.fetchedAt).toLocaleString('de-DE')}{snapshot.stale?' · Letzter gültiger Stand':''}</footer>
  </div>;
 }
-function AnimatedView(props:Props){const clock=useEventPresentationClock(props.startedAt,false,props.snapshot.payload.kind==='news');return <Frame {...props} {...clock}/>}
+function AnimatedView(props:Props){const clock=useEventPresentationClock(props.startedAt,false,props.snapshot.payload.kind==='news'||props.snapshot.payload.kind==='transit');return <Frame {...props} {...clock}/>}
 export function ExternalLoopView(props:Props){return props.staticPreview?<Frame {...props} elapsed={0} reduced/>:<AnimatedView {...props}/>}

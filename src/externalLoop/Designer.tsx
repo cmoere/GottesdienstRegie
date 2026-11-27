@@ -4,6 +4,7 @@ import {usePresentation,type ServiceItem} from '../store';
 import {ExternalLoopContext} from './context';
 import {externalSettingsForItem,requestForExternalItem,externalLoopMinimumDuration} from './model';
 import './styles.css';
+import {TransitDesigner} from './TransitDesigner';
 import {WeatherDesigner} from './WeatherDesigner';
 
 export function ExternalLoopDesigner({item,canEdit=true}:{item:ServiceItem;canEdit?:boolean}){
@@ -20,7 +21,7 @@ export function ExternalLoopDesigner({item,canEdit=true}:{item:ServiceItem;canEd
  };
  const teams=snapshot?.payload.kind==='football'?snapshot.payload.teams:[];
  return <section className="external-loop-designer">
-  {settings.kind==='weather'?<WeatherDesigner settings={settings} canEdit={canEdit} onChange={change}/>:settings.kind==='news'?<fieldset disabled={!canEdit}><legend>{tx("Nachrichtenquellen")}</legend>
+  {settings.kind==='transit'?<TransitDesigner settings={settings} canEdit={canEdit} onChange={change}/>:settings.kind==='weather'?<WeatherDesigner settings={settings} canEdit={canEdit} onChange={change}/>:settings.kind==='news'?<fieldset disabled={!canEdit}><legend>{tx("Nachrichtenquellen")}</legend>
    <label><input type="checkbox" checked={settings.sources.includes('westfalen-blatt')} onChange={()=>change({newsSources:settings.sources.length?'':'westfalen-blatt'})}/>Westfalen-Blatt · Bielefeld</label>
    <label>{tx("Nachrichtenwechsel")}<select value={settings.newsRotation??'per-take'} onChange={event=>change({newsRotation:event.target.value})}><option value="per-take">{tx("Bei jedem Folienaufruf eine neue Nachricht")}</option><option value="interval">{tx("Nach Zeitintervall wechseln")}</option></select></label>
    {settings.newsRotation==='interval'&&<label>{tx("Wechselintervall (Sekunden)")}<input type="number" min="1" max="86400" value={settings.newsIntervalSeconds??20} onChange={event=>change({newsIntervalSeconds:Math.max(1,Math.min(86400,Number(event.target.value)||1))})}/></label>}

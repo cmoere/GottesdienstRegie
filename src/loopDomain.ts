@@ -3,7 +3,7 @@ export const WEATHER_SCREEN_DURATION_MS = 20_000;
 export const LOOP_DURATION_PRESETS_MS = [5_000, 10_000, 15_000, 20_000, 30_000, 45_000, 60_000] as const;
 
 export type LoopSectionType = 'preLoop' | 'postLoop' | 'preProgram' | 'warmup' | 'service' | 'custom';
-export type LoopItemType = 'announcement' | 'birthday' | 'event' | 'weather' | 'loopQuiz' | 'loopCountdown' | 'clock' | 'bibleVerse' | 'loopQr' | 'siteMap' | 'infoCard' | 'today' | 'nextEvents' | 'nowPlaying' | 'news' | 'football';
+export type LoopItemType = 'announcement' | 'birthday' | 'event' | 'weather' | 'loopQuiz' | 'loopCountdown' | 'clock' | 'bibleVerse' | 'loopQr' | 'siteMap' | 'infoCard' | 'today' | 'nextEvents' | 'nowPlaying' | 'news' | 'football' | 'transit';
 export type LoopItemCategory = 'loop' | 'standard';
 export type PlacementPolicy = 'loopOnly' | 'any';
 
@@ -48,7 +48,7 @@ export interface LoopControllerSnapshot {
 const loopSectionIds = new Set(['pre', 'post', 'preLoop', 'postLoop']);
 const loopOnlyTypes = new Set<string>([
   'announcement', 'birthday', 'event', 'weather', 'loopQuiz', 'loopCountdown',
-  'clock', 'bibleVerse', 'loopQr', 'siteMap', 'infoCard', 'today', 'nextEvents', 'nowPlaying', 'news', 'football',
+  'clock', 'bibleVerse', 'loopQr', 'siteMap', 'infoCard', 'today', 'nextEvents', 'nowPlaying', 'news', 'football', 'transit',
 ]);
 
 export function isLoopSection(section: LoopSectionLike | null | undefined): boolean {
@@ -92,6 +92,7 @@ export function isLoopItemType(type: string): type is LoopItemType {
 
 export function createLoopItemDefaults(type: LoopItemType): Record<string, string | number | boolean> {
   const base = { itemCategory: 'loop' as const, placementPolicy: 'loopOnly' as const, autoAdvance: true };
+  if (type === 'transit') return { ...base, externalKind: 'transit', durationSeconds: 30, durationMs: 30000 };
   if (type === 'weather') return { ...base, refreshMode: 'beforeDisplay', mute: true, durationMs: WEATHER_SCREEN_DURATION_MS };
   if (type === 'announcement') return { ...base, source: 'firebase', rotationMode: 'rotate', durationMs: 15_000 };
   return { ...base, durationMs: 15_000 };

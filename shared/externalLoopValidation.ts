@@ -1,3 +1,4 @@
+import {validTransitPayload} from './transit';
 import type {ExternalSnapshot} from './externalLoop';
 
 const keys=(value:Record<string,unknown>,expected:string[])=>Object.keys(value).length===expected.length&&expected.every(key=>Object.hasOwn(value,key));
@@ -31,6 +32,6 @@ function validWeather(value:unknown,key:string):boolean{
 }
 /** Identical strict public-field boundary for persisted caches and renderer IPC. */
 export function readExternalSnapshot(value:unknown,key:string,now:number):ExternalSnapshot|null{
- const valid=record(value)&&keys(value,['version','key','revision','fetchedAt','stale','payload'])&&value.version===1&&value.key===key&&text(value.key,512)&&text(value.revision,128)&&typeof value.fetchedAt==='number'&&Number.isFinite(value.fetchedAt)&&value.fetchedAt>=0&&value.fetchedAt<=now+60000&&typeof value.stale==='boolean'&&(validNews(value.payload)||validFootball(value.payload,key)||validWeather(value.payload,key));
+ const valid=record(value)&&keys(value,['version','key','revision','fetchedAt','stale','payload'])&&value.version===1&&value.key===key&&text(value.key,512)&&text(value.revision,128)&&typeof value.fetchedAt==='number'&&Number.isFinite(value.fetchedAt)&&value.fetchedAt>=0&&value.fetchedAt<=now+60000&&typeof value.stale==='boolean'&&(validTransitPayload(value.payload,key)||validNews(value.payload)||validFootball(value.payload,key)||validWeather(value.payload,key));
  return valid?value as ExternalSnapshot:null;
 }

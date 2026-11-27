@@ -176,6 +176,8 @@ function generateInventory(root) {
   for(const [key,text]of Object.entries(v97Templates.ui))entries.push({key:'ui.'+key,text,source:'shared/regional/v97Templates.json',context:'regional-controls',status:'app-owned'});
   const v96Templates=JSON.parse(fs.readFileSync(path.join(root,'shared/regional/v96Templates.json'),'utf8'));
   for(const [key,text]of Object.entries(v96Templates.ui))entries.push({key:`ui.${key}`,text,source:'shared/regional/v96Templates.json',context:'regional-controls',status:'app-owned'});
+  const transitTemplates=JSON.parse(fs.readFileSync(path.join(root,'shared/regional/transitTemplates.json'),'utf8'));
+  for(const [key,text]of Object.entries(transitTemplates.ui))entries.push({key:'ui.'+key,text,source:'shared/regional/transitTemplates.json',context:'regional-controls',status:'app-owned'});
   const {nativeBaseTemplates}=loadLocalDataModule(root,'shared/regional/nativeBase.ts');
   const {regionalControlBaseTemplates}=loadLocalDataModule(root,'shared/regional/interfaceBaseExtras.ts');
   const {announcementControlGermanTemplates}=loadLocalDataModule(root,'shared/regional/announcementControlTemplates.ts');

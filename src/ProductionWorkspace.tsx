@@ -1526,7 +1526,7 @@ function ContentEditor({
             <NowPlayingDesigner item={item} canEdit={canEdit} />
           ) : item.type==='clock' ? (
             <><ClockLoopDesigner item={item} canEdit={canEdit}/><label>{tx("Anzeigedauer (Sekunden)")}<input type="number" min="1" step="1" disabled={!canEdit} value={durationSeconds} onChange={event=>changeDuration(Math.max(1,Number(event.target.value)||1))}/></label></>
-          ) : (item.type==='news'||item.type==='football'||item.type==='weather') ? (
+          ) : (item.type==='news'||item.type==='football'||item.type==='weather'||item.type==='transit') ? (
             <ExternalLoopDesigner item={item} canEdit={canEdit}/>
           ) : (item.type === "event" || item.type === "nextEvents") ? (
             <>

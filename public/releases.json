@@ -24,9 +24,154 @@
       "line": "0.99",
       "builds": [
         {
-          "version": "0.99.20",
+          "version": "0.99.21",
           "releaseDate": "2026-11-27",
           "current": true,
+          "overview": {
+            "label": {
+              "de": "ÖPNV-Abfahrten mit sechs wählbaren Designs",
+              "en": "Public transport departures in six selectable designs"
+            },
+            "text": {
+              "de": "Im Vor- und Nachprogramm steht eine native ÖPNV-Folie für Bielefeld, Beckhausstraße zur Verfügung. Sechs Designs, wählbare Linien und passende Verkehrsmeldungen machen die Anzeige flexibel. Planzeiten, Prognosen und Ausfälle bleiben unterscheidbar; die Daten kommen aus dem vorhandenen öffentlichen ÖPNV-Worker.",
+              "en": "A native public transport slide for Bielefeld, Beckhausstraße is available in the pre- and post-program loops. Six designs, selectable routes and relevant service notices provide flexible presentation. Scheduled times, forecasts and cancellations remain distinguishable; data comes from the existing public transport worker."
+            }
+          },
+          "sections": {
+            "new": [
+              {
+                "label": {
+                  "de": "Sechs Designs für Abfahrten im Vor- und Nachprogramm",
+                  "en": "Six departure designs for pre- and post-program loops"
+                },
+                "text": {
+                  "de": "Unter „Element hinzufügen → ÖPNV“ stehen Klassisch, Dunkle Abfahrtstafel, Klar, Zweigeteilt, Kacheln und Großanzeige bereit. Die Großanzeige zeigt zwei Abfahrten gleichzeitig; in den übrigen Designs lassen sich vier bis sechs Abfahrten pro Seite einstellen. Weitere Abfahrten wechseln automatisch. Die Mindestdauer berücksichtigt alle Seiten und die Länge der angezeigten Texte.",
+                  "en": "Choose Add element → Public transport to use Classic, Dark departure board, Clear, Split view, Tiles or Large display. The large display shows two departures at a time; the other designs support four to six departures per page. Additional departures rotate automatically. The minimum duration accounts for all pages and displayed text lengths."
+                }
+              },
+              {
+                "label": {
+                  "de": "Wählbare Linien und Anzeigeoptionen",
+                  "en": "Selectable routes and display options"
+                },
+                "text": {
+                  "de": "Die Linien 2, 27, N8, N12 und SEV können einzeln ein- oder ausgeblendet werden. Zusätzlich sind die Anzahl der Abfahrten, Gleis beziehungsweise Steig, Prognosen und Verspätungen, der Fahrweg und Verkehrsmeldungen einstellbar. Die Bearbeitung weist ausdrücklich auf die Beschränkung auf Bielefeld, Beckhausstraße hin.",
+                  "en": "Routes 2, 27, N8, N12 and replacement services can be selected individually. Departure count, platform, forecasts and delays, route stops and service notices are configurable. The editor explicitly identifies the restriction to Bielefeld, Beckhausstraße."
+                }
+              }
+            ],
+            "improved": [
+              {
+                "label": {
+                  "de": "Passende Verkehrsmeldungen aus dem vorhandenen Worker",
+                  "en": "Relevant service notices from the existing worker"
+                },
+                "text": {
+                  "de": "Linienbezogene Meldungen folgen der gewählten Linienauswahl. Allgemeine Meldungen werden nur übernommen, wenn sie lokal Bielefeld beziehungsweise Beckhausstraße zugeordnet werden können oder ausdrücklich im Worker als manuelle Hinweise gepflegt sind. Lange Texte bewegen sich bei Platzmangel langsam im eigenen Bereich. Das vorhandene Gemeindelaufband und die Testkennzeichnung bleiben davon getrennt.",
+                  "en": "Route-specific notices follow the selected routes. General notices are included only when they can be identified as local to Bielefeld or Beckhausstraße, or when explicitly curated as manual notices in the worker. Long text moves slowly within its own area when necessary. The existing congregation ticker and test watermark remain separate."
+                }
+              },
+              {
+                "label": {
+                  "de": "Zentraler Datenabruf mit stabilen Live-Ausgaben",
+                  "en": "Central data retrieval with stable live output"
+                },
+                "text": {
+                  "de": "Ein zentraler Dienst fragt den bestehenden Worker höchstens alle 20 Sekunden ab und teilt laufende Anfragen zwischen Vorschauen und Ausgaben. Sichtbare Live-Ausgaben verwenden einen festen Datenstand; neue Daten werden beim nächsten Folienaufruf übernommen. Bereits vergangene Abfahrten werden vor einem neuen Aufruf herausgefiltert.",
+                  "en": "A central service queries the existing worker at most every 20 seconds and shares in-flight requests between previews and outputs. Visible live output retains a frozen snapshot; new data is applied on the next slide take. Departures that have already passed are removed before a new take."
+                }
+              }
+            ],
+            "fixed": [
+              {
+                "label": {
+                  "de": "Planzeit, Prognose und Ausfall eindeutig unterscheiden",
+                  "en": "Clearly distinguish schedules, forecasts and cancellations"
+                },
+                "text": {
+                  "de": "Eine leere Statuszeile wird nicht als Nachweis für Pünktlichkeit behandelt. Planzeit und prognostizierte Abfahrt bleiben getrennt erhalten; Ausfälle werden ausdrücklich gekennzeichnet. Verwaltungsfelder und technische Fehlertexte werden nicht an Besucher-Ausgaben weitergegeben. Bei Verbindungsproblemen ist ein gültiger letzter Stand höchstens zwei Minuten als Ausfallreserve nutzbar.",
+                  "en": "An empty status field is not treated as proof that a service is on time. Scheduled and forecast departure times remain separate, and cancellations are explicitly marked. Administrative fields and technical error details are not passed to visitor output. During connection failures, a valid previous snapshot can be retained for up to two minutes."
+                }
+              }
+            ],
+            "known": [
+              {
+                "label": {
+                  "de": "Hinweise zum Live-Betrieb",
+                  "en": "Live operation notes"
+                },
+                "text": {
+                  "de": "Der Monitorwechsel ist bei PowerPoint-Originalwiedergabe und aktiver Bildschirmfreigabe gesperrt. KI-Modelle werden bei OFF AIR vorbereitet. Bei knappem Arbeitsspeicher bleibt der Textentwurf verfügbar.",
+                  "en": "Monitor switching is disabled during original PowerPoint playback and active screen sharing. AI models are prepared OFF AIR. If memory runs low, the text draft remains available."
+                }
+              },
+              {
+                "label": {
+                  "de": "Originalgetreue PowerPoint-Wiedergabe",
+                  "en": "Original PowerPoint playback"
+                },
+                "text": {
+                  "de": "Die originalgetreue Wiedergabe benötigt weiterhin Windows und installiertes Microsoft PowerPoint. Die neuen Vorbereitungs- und Diagnosefunktionen ersetzen diesen Wiedergabeweg nicht.",
+                  "en": "Original playback still requires Windows and installed Microsoft PowerPoint. The new preparation and diagnostics features do not replace this playback path."
+                }
+              },
+              {
+                "label": {
+                  "de": "Bildrate im lokalen Netzwerk",
+                  "en": "Frame rate on the local network"
+                },
+                "text": {
+                  "de": "Die tatsächliche Bildrate hängt von Ausgabeleistung, Browser und Netzwerk ab. Die Prüfungen umfassen einen lokalen Browser-Bildstrom und die native Bildaufnahme; sie ersetzen keine Prüfung im jeweiligen Saalnetz.",
+                  "en": "Actual frame rate depends on output performance, browser and network. Checks cover a local browser image stream and native capture; they do not replace testing on the venue’s own network."
+                }
+              },
+              {
+                "label": {
+                  "de": "Erreichbarkeit der Lichtoperator-Ansicht",
+                  "en": "Lighting Operator view access"
+                },
+                "text": {
+                  "de": "Solange der Lichtoperator aktiviert ist, kann jedes Gerät mit Zugriff auf den lokalen Regieserver seine ON-AIR-Inhalte über die feste Adresse sehen. Die Ansicht erlaubt keine Steuerbefehle. Lichtempfehlungen sind Vorschläge und ersetzen keine Prüfung am eingesetzten Scheinwerfer.",
+                  "en": "While the Lighting Operator is enabled, any device with access to the local control server can view its ON-AIR content at the fixed address. The view does not allow control commands. Lighting recommendations are suggestions and do not replace checking the actual fixture."
+                }
+              },
+              {
+                "label": {
+                  "de": "Lokales Netzwerk und Vertrauen des Zertifikats",
+                  "en": "Local network and certificate trust"
+                },
+                "text": {
+                  "de": "regie.local benötigt ein gemeinsames lokales Netzwerk, das mDNS zulässt. Die erfolgreiche Anmeldung ist keine Prüfung aller verbundenen Geräte. Beim ersten Öffnen kann es nötig sein, das erneuerte lokale Zertifikat anhand des angezeigten Fingerabdrucks zu bestätigen. Die Anwendung installiert kein Vertrauen automatisch. Ein zweites Gerät im tatsächlichen Saalnetz wurde hier nicht geprüft.",
+                  "en": "regie.local requires a shared local network that permits mDNS. Successful registration does not verify every connected device. When first opening the page, the renewed local certificate may need to be confirmed against the displayed fingerprint. The application does not install certificate trust automatically. A second device on the actual venue network was not tested here."
+                }
+              },
+              {
+                "label": {
+                  "de": "Räumliche Darstellung und lokale Farbpaletten",
+                  "en": "Spatial rendering and local palettes"
+                },
+                "text": {
+                  "de": "Die räumlichen Objekte verwenden projizierte SVG-Geometrie mit Schattierung. Eigene Farben, Favoriten und zuletzt verwendete Einträge werden lokal am jeweiligen Regie-PC beziehungsweise Browser gespeichert. Die Verfügbarkeit der Pipette hängt vom Browser und Betriebssystem ab.",
+                  "en": "Spatial objects use projected SVG geometry with shading. Custom colors, favorites and recently used entries are stored locally on each control PC or browser. Eyedropper availability depends on the browser and operating system."
+                }
+              },
+              {
+                "label": {
+                  "de": "Feste Haltestelle und regionale Fachbegriffe",
+                  "en": "Fixed stop and regional terminology"
+                },
+                "text": {
+                  "de": "Die ÖPNV-Anbindung ist auf Bielefeld, Beckhausstraße und die dort unterstützten Linien begrenzt. Eine freie Haltestellensuche ist nicht enthalten. Neue ÖPNV-Bedientexte verwenden in deutschen Regionalvarianten zunächst standarddeutsche Fachsprache. Der vorhandene Worker und seine Verwaltungsoberfläche werden durch dieses Update nicht verändert.",
+                  "en": "The public transport integration is limited to Bielefeld, Beckhausstraße and its supported routes. Arbitrary stop search is not included. New public transport controls initially use standard German terminology in German regional variants. This update does not change the existing worker or its administration interface."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "version": "0.99.20",
+          "releaseDate": "2026-11-27",
+          "current": false,
           "overview": {
             "label": {
               "de": "300 Objekte und eine erweiterte Farbauswahl",

@@ -5,9 +5,11 @@ import {eventTextWidth,paginateReducedMotionEvents} from '../eventPagination';
 import {prepareNewsPresentation} from './newsPresentation';
 import {currentNewsSources,isCurrentNewsEntry} from '../../shared/newsSourcePolicy';
 
+import {transitSettings,visibleTransit,transitMinimumDuration} from '../../shared/transit';
 export const EXTERNAL_VIEWPORT_HEIGHT=760;
-export function isExternalLoop(item:Pick<ServiceItem,'type'>|null|undefined):boolean{return item?.type==='news'||item?.type==='football'||item?.type==='weather'}
+export function isExternalLoop(item:Pick<ServiceItem,'type'>|null|undefined):boolean{return item?.type==='news'||item?.type==='football'||item?.type==='weather'||item?.type==='transit'}
 export function normalizeExternalSettings(metadata:Record<string,unknown>):ExternalSettings{
+ if(metadata.externalKind==='transit')return transitSettings(metadata);
  const seconds=Number(metadata.durationSeconds??15),durationSeconds=Number.isFinite(seconds)?Math.min(86400,Math.max(1,seconds)):15;
  if(metadata.externalKind==='weather'){
   const lat=Number(metadata.weatherLatitude??52.0302),lon=Number(metadata.weatherLongitude??8.5325),name=String(metadata.weatherName??'Bielefeld').trim();
@@ -23,18 +25,20 @@ export function requestForExternalItem(item:Pick<ServiceItem,'type'|'metadata'>)
  if(!isExternalLoop(item))return null;const settings=externalSettingsForItem(item);
  return externalRequestForSettings(settings);
 }
-export function externalRequestForSettings(settings:ExternalSettings):ExternalRequest{return settings.kind==='weather'?{kind:'weather',name:settings.name,latitude:settings.latitude,longitude:settings.longitude}:settings.kind==='news'?{kind:'news',sources:settings.sources}:{kind:'football',league:settings.league,mode:settings.mode}}
+export function externalRequestForSettings(settings:ExternalSettings):ExternalRequest{return settings.kind==='transit'?{kind:'transit'}:settings.kind==='weather'?{kind:'weather',name:settings.name,latitude:settings.latitude,longitude:settings.longitude}:settings.kind==='news'?{kind:'news',sources:settings.sources}:{kind:'football',league:settings.league,mode:settings.mode}}
 export function visibleExternalPayload(snapshot:ExternalSnapshot,settings:ExternalSettings):ExternalPayload{
  const payload=structuredClone(snapshot.payload);
+ if(payload.kind==='transit'&&settings.kind==='transit')return visibleTransit(payload,settings);
  if(payload.kind==='news'&&settings.kind==='news')payload.entries=payload.entries.filter(entry=>isCurrentNewsEntry(entry)&&currentNewsSources(settings.sources).includes(entry.source)).slice(0,settings.limit);
  if(payload.kind==='football'&&settings.kind==='football'&&settings.teamId!==null)payload.matches=payload.matches.filter(match=>match.home.id===settings.teamId||match.away.id===settings.teamId);
  return payload;
 }
 export function externalHasContent(snapshot:ExternalSnapshot,settings:ExternalSettings):boolean{
- const payload=visibleExternalPayload(snapshot,settings);return payload.kind==='weather'?payload.days.length===3:payload.kind==='news'?payload.entries.length>0:payload.mode==='table'?payload.table.length>0:payload.matches.length>0;
+ const payload=visibleExternalPayload(snapshot,settings);return payload.kind==='transit'?settings.kind==='transit'&&settings.lines.length>0:payload.kind==='weather'?payload.days.length===3:payload.kind==='news'?payload.entries.length>0:payload.mode==='table'?payload.table.length>0:payload.matches.length>0;
 }
 export function prepareExternalPresentation(snapshot:ExternalSnapshot,settings:ExternalSettings){
  const payload=visibleExternalPayload(snapshot,settings),table=payload.kind==='football'&&payload.mode==='table';
+ if(payload.kind==='transit')return{payload,plan:prepareEventScrollPlan({contentHeight:0,viewportHeight:760}),rowHeight:0,titleWidth:0,fontSize:0,titleStartsAfterMs:[],minDurationMs:settings.kind==='transit'?transitMinimumDuration(payload,settings):30000};
  if(payload.kind==='weather')return{payload,plan:prepareEventScrollPlan({contentHeight:0,viewportHeight:760}),rowHeight:0,titleWidth:0,fontSize:0,titleStartsAfterMs:[],minDurationMs:Math.max(20000,settings.durationSeconds*1000)};
  const titles=payload.kind==='news'?payload.entries.map(entry=>entry.title):table?payload.table.map(row=>row.team.name):payload.matches.map(match=>`${match.home.name} – ${match.away.name}`);
  const rowHeight=payload.kind==='news'?120:table?76:108,titleWidth=table?760:1480,fontSize=table?34:42;
@@ -51,11 +55,11 @@ export function prepareExternalPresentation(snapshot:ExternalSnapshot,settings:E
 }
 export function externalReducedPages(snapshot:ExternalSnapshot,settings:ExternalSettings){
  const payload=visibleExternalPayload(snapshot,settings),table=payload.kind==='football'&&payload.mode==='table';
- if(payload.kind==='weather')return[];
+ if(payload.kind==='weather'||payload.kind==='transit')return[];
  const titles=payload.kind==='news'?payload.entries.map(entry=>entry.title):table?payload.table.map(row=>row.team.name):payload.matches.map(match=>match.home.name+' – '+match.away.name);
  return paginateReducedMotionEvents(titles.map((title,index)=>({title,index})),table?840:1650);
 }
-export function externalLoopMinimumDuration(snapshot:ExternalSnapshot,settings:ExternalSettings):number{const payload=visibleExternalPayload(snapshot,settings);return payload.kind==='news'?prepareNewsPresentation(settings.kind==='news'&&settings.newsRotation==='interval'?payload.entries:payload.entries.slice(0,1),settings.kind==='news'&&settings.newsRotation==='interval'?settings.newsIntervalSeconds??20:settings.durationSeconds,settings.kind==='news'&&settings.newsRotation==='interval').minDurationMs:prepareExternalPresentation(snapshot,settings).minDurationMs}
+export function externalLoopMinimumDuration(snapshot:ExternalSnapshot,settings:ExternalSettings):number{const payload=visibleExternalPayload(snapshot,settings);return payload.kind==='transit'&&settings.kind==='transit'?transitMinimumDuration(payload,settings):payload.kind==='news'?prepareNewsPresentation(settings.kind==='news'&&settings.newsRotation==='interval'?payload.entries:payload.entries.slice(0,1),settings.kind==='news'&&settings.newsRotation==='interval'?settings.newsIntervalSeconds??20:settings.durationSeconds,settings.kind==='news'&&settings.newsRotation==='interval').minDurationMs:prepareExternalPresentation(snapshot,settings).minDurationMs}
 export function hydrateExternalLoopData(slide:Slide,snapshot:ExternalSnapshot,startedAt:number,settings?:ExternalSettings):Slide{
  return{...structuredClone(slide),elements:slide.elements.map(element=>element.type==='loop'&&element.properties.loopType===snapshot.payload.kind?{...structuredClone(element),properties:{...element.properties,externalSnapshotJson:JSON.stringify(snapshot),externalRevision:snapshot.revision,externalStartedAtMs:startedAt,...(settings?{externalSettingsJson:JSON.stringify(settings)}:{})}}:structuredClone(element))};
 }

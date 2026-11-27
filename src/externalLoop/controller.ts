@@ -4,6 +4,7 @@ import type {ServiceItem,Slide} from '../store';
 import {externalRequestKey} from '../../shared/externalLoopRequest';
 import {readExternalSnapshot} from '../../shared/externalLoopValidation';
 import {externalHasContent,externalLoopMinimumDuration,externalSettingsForItem,hydrateExternalLoopData,requestForExternalItem,visibleExternalPayload} from './model';
+import {TRANSIT_MAX_AGE_MS,visibleTransit} from '../../shared/transit';
 const unavailable=():ExternalReply=>({snapshot:null,status:'unavailable'});
 export class ExternalLoopController{
  private readonly prepared=new Map<string,ExternalReply>();
@@ -25,7 +26,7 @@ export class ExternalLoopController{
  }
  peek(request:ExternalRequest):ExternalReply{
   const value=this.prepared.get(externalRequestKey(request));if(!value)return unavailable();
-  if(value.snapshot&&(this.now()-value.snapshot.fetchedAt>(request.kind==='news'?86400000:21600000)||value.snapshot.fetchedAt>this.now()+60000))return unavailable();
+  if(value.snapshot&&(this.now()-value.snapshot.fetchedAt>(request.kind==='transit'?TRANSIT_MAX_AGE_MS:request.kind==='news'?86400000:21600000)||value.snapshot.fetchedAt>this.now()+60000))return unavailable();
   return structuredClone(value);
  }
  freeze(request:ExternalRequest,_startedAt:number):ExternalSnapshot|null{return this.peek(request).snapshot}
@@ -34,6 +35,7 @@ export class ExternalLoopController{
   this.takeKey=key;this.output=null;
   const request=requestForExternalItem(item),settings=externalSettingsForItem(item);let snapshot=request?this.freeze(request,now):null;
   if(!snapshot||!externalHasContent(snapshot,settings))return null;
+  if(snapshot.payload.kind==='transit'&&settings.kind==='transit')snapshot={...snapshot,payload:visibleTransit(snapshot.payload,settings,now)};
   if(snapshot.payload.kind==='news'&&settings.kind==='news'&&settings.newsRotation!=='interval'){
    const payload=visibleExternalPayload(snapshot,settings);if(payload.kind!=='news'||!payload.entries.length)return null;
    const previous=payload.entries.findIndex(entry=>entry.id===this.newsCursor.get(item.id)),entry=payload.entries[(previous+1)%payload.entries.length];
@@ -55,5 +57,5 @@ export class ExternalLoopController{
 export function startExternalLoopDemand(controller:ExternalLoopController,items:ServiceItem[]):()=>void{
  const requests=new Map<string,ExternalRequest>();for(const item of items){if(item.enabled===false||item.disabled===true)continue;const request=requestForExternalItem(item);if(request)requests.set(externalRequestKey(request),request)}
  if(!requests.size)return()=>{};
- const prepare=()=>{for(const request of requests.values())void controller.prepare(request)};prepare();const timer=setInterval(prepare,60000);return()=>clearInterval(timer);
+ const timers=[...requests.values()].map(request=>{void controller.prepare(request);return setInterval(()=>void controller.prepare(request),request.kind==='transit'?20000:60000)});return()=>timers.forEach(clearInterval);
 }

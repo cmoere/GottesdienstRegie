@@ -12,6 +12,7 @@ const automaticLoopTypes=new Set<ItemType>([
   'nowPlaying',
   'news',
   'football',
+  'transit',
 ]);
 
 export function usesAutomaticLoopEditor(type:ItemType|string):boolean{

@@ -32,6 +32,7 @@ const titles: Record<LoopItemType, string> = {
   nowPlaying: 'Läuft gerade',
   news: 'Nachrichten',
   football: 'Fußball',
+  transit: 'ÖPNV · Beckhausstraße',
 };
 
 export function createLoopItem(
@@ -40,12 +41,14 @@ export function createLoopItem(
   _now = Date.now(),
   input: { body?: string; url?: string } = {},
 ): LoopItemDraft {
-  const durationMs = type === 'weather' ? WEATHER_SCREEN_DURATION_MS : 15_000;
+  const durationMs = type === 'weather' ? WEATHER_SCREEN_DURATION_MS : type==='transit'?30000:15_000;
   let body = input.body ?? '';
   const metadata: Record<string, string | number | boolean> = {
     source: ['announcement', 'birthday', 'event'].includes(type) ? 'firebase' : 'local',
   };
-  if(type==='news'||type==='football'){
+  if(type==='transit'){
+    Object.assign(metadata,{source:'external',externalKind:'transit',durationSeconds:30});
+  } else if(type==='news'||type==='football'){
     Object.assign(metadata,{source:'external',externalKind:type,durationSeconds:15,...(type==='news'?{newsSources:'westfalen-blatt,wdr-owl',newsLimit:10}:{footballLeague:'bl1',footballMode:'matchday',footballTeamId:0})});
   } else if (type === 'weather') {
     metadata.weatherScreenUrl = WEATHER_SCREEN_URL;
